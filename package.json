@@ -19,6 +19,7 @@
     "typescript": "^4.4.2"
   },
   "scripts": {
+    "format": "prettier --write .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -26,8 +27,14 @@
     "postinstall": "husky install"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": "eslint --fix --ignore-path .gitignore",
-    "*.{js,ts,jsx,tsx,css,scss,json,md}": "prettier --write"
+    "*.{js,ts,jsx,tsx}": [
+      "eslint --fix --ignore-path .gitignore",
+      "git add"
+    ],
+    "*": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "browserslist": {
     "production": [

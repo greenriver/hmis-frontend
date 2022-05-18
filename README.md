@@ -1,6 +1,5 @@
 # HMIS Front End
 
-
 ## Developer Installation
 
 ### Install Node, NPM, and Yarn
