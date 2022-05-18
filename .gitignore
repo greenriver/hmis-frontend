@@ -1,4 +1,5 @@
 # dependencies
+/node_modules
 .yarn/*
 !.yarn/cache
 !.yarn/patches
@@ -12,6 +13,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

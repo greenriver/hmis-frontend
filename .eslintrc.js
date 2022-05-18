@@ -3,7 +3,13 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['airbnb/hooks', 'plugin:import/recommended', 'prettier'],
+  extends: [
+    'airbnb/hooks',
+    'plugin:import/recommended',
+    'plugin:jsx-a11y/recommended',
+    'plugin:react-hooks/recommended',
+    'prettier',
+  ],
   plugins: ['react', '@typescript-eslint', 'jest'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -31,7 +37,8 @@ module.exports = {
         project: ['./tsconfig.json'],
       },
       rules: {
-        '@typescript-eslint/no-unused-vars': ['error'],
+        '@typescript-eslint/no-unused-vars': 'error',
+        '@typescript-eslint/no-explicit-any': 'off',
         // Disable rules that are redundant with prettier (found with eslint-config-prettier)
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/brace-style': 'off',
@@ -74,4 +81,5 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
   },
+  "ignorePatterns": ["jest.config.ts"],
 };
