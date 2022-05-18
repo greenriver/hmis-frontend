@@ -26,9 +26,8 @@
     "postinstall": "husky install"
   },
   "lint-staged": {
-    "src/*": [
-      "eslint --fix --ext .js,.ts,.tsx ./src --ignore-path .gitignore"
-    ]
+    "*.{js,ts,jsx,tsx}": "eslint --fix --ignore-path .gitignore",
+    "*.{js,ts,jsx,tsx,css,scss,json,md}": "prettier --write"
   },
   "browserslist": {
     "production": [
@@ -52,7 +51,6 @@
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jest": "latest",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^8.0.0",
