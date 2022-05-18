@@ -1,8 +1,9 @@
-# HMIS Front-End
+# HMIS Front End
 
-## Installation (MacOS)
 
-### Set up Node, NPM, and Yarn
+## Developer Installation
+
+### Install Node, NPM, and Yarn
 
 1. Install NVM
 
@@ -23,3 +24,9 @@
    ```sh
    corepack enable
    ```
+
+### Set up Pre-Commit hooks
+
+```sh
+yarn dlx husky-init --yarn2 && yarn
+```
