@@ -16,12 +16,10 @@
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "eslint --fix --ignore-path .gitignore",
-      "git add"
+      "eslint --fix --ignore-path .gitignore"
     ],
     "*": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "browserslist": {
