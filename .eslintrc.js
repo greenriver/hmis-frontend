@@ -37,6 +37,7 @@ module.exports = {
         project: ['./tsconfig.json'],
       },
       rules: {
+        'import/extensions': 'off',
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
         // Disable rules that are redundant with prettier (found with eslint-config-prettier)
@@ -56,8 +57,8 @@ module.exports = {
         '@typescript-eslint/space-before-blocks': 'off',
         '@typescript-eslint/space-before-function-paren': 'off',
         '@typescript-eslint/space-infix-ops': 'off',
-        '@typescript-eslint/quotes': 'off',
-      },
+        '@typescript-eslint/quotes': 'off'
+      }
     },
   ],
   rules: {
@@ -79,7 +80,7 @@ module.exports = {
     ],
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
-    'import/no-named-as-default': 'off',
+    'import/no-named-as-default': 'off'
   },
   "ignorePatterns": ["jest.config.ts"],
 };
