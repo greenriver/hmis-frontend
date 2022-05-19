@@ -33,7 +33,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
           <Typography variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
-            HMIS
+            {import.meta.env.VITE_APP_NAME}
           </Typography>
           <Button href='#' variant='outlined' sx={{ my: 1, mx: 1.5 }}>
             Log Out

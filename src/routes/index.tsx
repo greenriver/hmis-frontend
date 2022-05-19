@@ -8,12 +8,10 @@ import { publicRoutes } from './public';
 
 export const AppRoutes = () => {
   // const auth = useAuth();
-
-  const commonRoutes = [{ path: '/', element: <div>Hello world</div> }];
-
+  // const commonRoutes = [];
   const routes = [...protectedRoutes, publicRoutes]; // FIXME only protect routes if logged in
 
-  const element = useRoutes([...routes, ...commonRoutes] as RouteObject[]);
+  const element = useRoutes([...routes] as RouteObject[]);
 
   return <>{element}</>;
 };

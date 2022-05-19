@@ -7,7 +7,6 @@ import { defineConfig, loadEnv } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-
   if (mode !== 'production') {
     const commitDate = execSync('git log -1 --format=%cI').toString().trimEnd();
     const branchName = execSync('git rev-parse --abbrev-ref HEAD')

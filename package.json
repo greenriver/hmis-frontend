@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite --clearScreen false",
     "build": "tsc && vite build",
+    "build:staging": "tsc && vite build --mode staging",
     "preview": "vite preview",
     "format": "prettier --write .",
     "lint": "eslint --fix --ext js,ts,jsx,tsx --ignore-path .gitignore .",

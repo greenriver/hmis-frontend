@@ -25,7 +25,7 @@ const App = () => {
 
 export const protectedRoutes = [
   {
-    path: '/app',
+    path: '/',
     element: <App />,
     children: [
       // { path: '/discussions/*', element: <DiscussionsRoutes /> },

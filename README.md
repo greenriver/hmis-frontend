@@ -24,7 +24,36 @@
    corepack enable
    ```
 
-### Set up Pre-Commit hooks
+### Run locally
+
+Run dev server with live reload
+
+```
+yarn dev
+```
+
+Preview staging build
+
+```
+yarn build:staging && yarn preview
+```
+
+Preview production build
+
+```
+yarn build && yarn preview
+```
+
+Testing, linting, formatting, and type checking
+
+```
+yarn test
+yarn lint
+yarn format
+yarn tsc
+```
+
+Set up pre-commit hooks to automatically fix lint and formatting issues
 
 ```sh
 yarn dlx husky-init --yarn2 && yarn
