@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { RouteObject, useRoutes } from 'react-router-dom';
 
 // import { Landing } from '@/features/misc';
 // import { useAuth } from '@/lib/auth';
@@ -11,9 +11,9 @@ export const AppRoutes = () => {
 
   const commonRoutes = [{ path: '/', element: <div>Hello world</div> }];
 
-  const routes = false ? protectedRoutes : publicRoutes;
+  const routes = [...protectedRoutes, publicRoutes]; // FIXME only protect routes if logged in
 
-  const element = useRoutes([...routes, ...commonRoutes]);
+  const element = useRoutes([...routes, ...commonRoutes] as RouteObject[]);
 
   return <>{element}</>;
 };

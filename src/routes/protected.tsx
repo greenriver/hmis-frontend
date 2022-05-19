@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 
 // import { Spinner } from '@/components/Elements';
-// import { MainLayout } from '@/components/Layout';
+import { MainLayout } from '@/components/Layout';
 // import { lazyImport } from '@/utils/lazyImport';
 
 // const { DiscussionsRoutes } = lazyImport(
@@ -15,11 +15,11 @@ import { Navigate } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div>
+    <MainLayout>
       <Suspense fallback={<div>Loading...</div>}>
-        <div>the app</div>
+        <div>hello world</div>
       </Suspense>
-    </div>
+    </MainLayout>
   );
 };
 
