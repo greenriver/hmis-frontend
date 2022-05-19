@@ -11,7 +11,9 @@
     "build:staging": "tsc && vite build --mode staging",
     "preview": "vite preview",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "eslint --fix --ext js,ts,jsx,tsx --ignore-path .gitignore .",
+    "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "test": "NODE_ENV=test jest",
     "postinstall": "husky install"
   },

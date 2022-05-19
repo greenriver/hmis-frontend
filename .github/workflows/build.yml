@@ -18,15 +18,15 @@ jobs:
       with:
         node-version-file: '.nvmrc'
 
-    - name: Install
+    - name: Install dependencies
       run: |
         corepack enable
         yarn
 
     - name: Lint and Format
       run: |
-        yarn format
-        yarn lint
+        yarn format:check
+        yarn lint:check
 
     - name: Test
       run: |
