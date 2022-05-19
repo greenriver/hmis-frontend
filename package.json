@@ -15,6 +15,7 @@
     "lint": "eslint --fix --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "test": "NODE_ENV=test jest",
+    "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
     "postinstall": "husky install"
   },
   "lint-staged": {
