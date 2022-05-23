@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: |
         corepack enable
-        yarn
+        yarn install --offline
 
     - name: Lint and Format
       run: |
