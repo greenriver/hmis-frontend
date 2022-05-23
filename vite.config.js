@@ -26,18 +26,7 @@ export default defineConfig(({ command, mode }) => {
     setGitVariables(process);
   }
 
-  const isDev = mode === 'development';
-
   return {
-    // base: 'https://hmis.dev.test/',
-    server: {
-      open: true,
-      host: 'hmis.dev.test',
-      https: {
-        key: fs.readFileSync('.cert/key.pem'),
-        cert: fs.readFileSync('.cert/cert.pem'),
-      },
-    },
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
@@ -47,5 +36,15 @@ export default defineConfig(({ command, mode }) => {
     define: {
       __APP_ENV__: env.APP_ENV,
     },
+    ...(command !== 'build' && {
+      server: {
+        open: true,
+        host: 'hmis.dev.test',
+        https: {
+          key: fs.readFileSync('.cert/key.pem'),
+          cert: fs.readFileSync('.cert/cert.pem'),
+        },
+      },
+    }),
   };
 });
