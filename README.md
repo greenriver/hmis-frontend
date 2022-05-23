@@ -24,37 +24,47 @@
    corepack enable
    ```
 
-### Run locally
+### Run local development server
 
-Run dev server with live reload
+1. Install npm dependencies
 
-```
-yarn dev
-```
+   ```sh
+   yarn install
+   ```
 
-Preview staging build
+2. Create local certs for development (only need to do this once)
 
-```
-yarn build:staging && yarn preview
-```
+   ```sh
+   brew install mkcert
+   mkcert -install
+   yarn cert
+   ```
 
-Preview production build
+3. Run dev server with live reload
 
-```
-yarn build && yarn preview
-```
+   ```sh
+   yarn dev
+   ```
 
-Testing, linting, formatting, and type checking
+### Test, lint, format, and type check
 
-```
+```sh
 yarn test
 yarn lint
 yarn format
 yarn tsc
 ```
 
-Set up pre-commit hooks to automatically fix lint and formatting issues
+### Build for Production
+
+Preview staging build
 
 ```sh
-yarn dlx husky-init --yarn2 && yarn
+yarn build:staging && yarn preview
+```
+
+Preview production build
+
+```sh
+yarn build && yarn preview
 ```
