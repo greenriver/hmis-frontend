@@ -3,8 +3,9 @@ import React from 'react';
 
 import App from './App';
 
-test('renders learn react link', () => {
+// FIXME add actual tests
+test('renders loading page', () => {
   render(<App />);
-  const linkElement = screen.getByText(/hello world/i);
+  const linkElement = screen.getByText(/loading/i);
   expect(linkElement).toBeInTheDocument();
 });
