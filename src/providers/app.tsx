@@ -1,7 +1,9 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+
+import { AuthProvider } from '@/hooks/useAuth';
 
 const ErrorFallback = () => {
   return (
@@ -25,7 +27,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <React.Suspense fallback={<div>Loading...</div>}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
-          <Router>{children}</Router>
+          <BrowserRouter>
+            <AuthProvider>{children}</AuthProvider>
+          </BrowserRouter>
         </ThemeProvider>
       </ErrorBoundary>
     </React.Suspense>

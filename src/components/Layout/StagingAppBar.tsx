@@ -3,7 +3,11 @@ import * as React from 'react';
 
 export const StagingAppBar = () => {
   return (
-    <AppBar position='static' color='secondary' sx={{ height: 40 }}>
+    <AppBar
+      position='static'
+      color='secondary'
+      sx={{ boxShadow: 0, bgcolor: '#ece3ff', height: 40 }}
+    >
       <Toolbar variant='dense' sx={{ minHeight: 40 }}>
         <Box display='flex' flexGrow={1} sx={{ justifyContent: 'flex-end' }}>
           <Chip

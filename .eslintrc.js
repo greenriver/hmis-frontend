@@ -40,6 +40,7 @@ module.exports = {
         'import/extensions': 'off',
         '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-shadow': 'off',
         // Disable rules that are redundant with prettier (found with eslint-config-prettier)
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/brace-style': 'off',
