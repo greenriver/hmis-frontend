@@ -6,7 +6,7 @@
     "node": "18.2.0"
   },
   "scripts": {
-    "dev": "vite --clearScreen false",
+    "dev": "DEBUG=vite:proxy vite --clearScreen false",
     "build": "tsc && vite build",
     "build:staging": "tsc && vite build --mode staging",
     "preview": "vite preview",

@@ -14,9 +14,13 @@ function getCsrfToken() {
 }
 
 export async function getCurrentUser(): Promise<HmisUser> {
-  const response = await fetch('/hmis-api/user', {
+  const response = await fetch('/hmis-api/user.json', {
     credentials: 'include',
-    headers: { 'X-CSRF-Token': getCsrfToken() },
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': getCsrfToken(),
+    },
   });
   if (!response.ok) {
     return response.json().then((e: HmisErrorResponse) => {
