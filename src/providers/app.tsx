@@ -1,9 +1,40 @@
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 
 import { AuthProvider } from '@/hooks/useAuth';
+import { getCsrfToken } from '@/utils/csrf';
+
+const httpLink = createHttpLink({
+  uri: '/hmis-api/hmis-gql',
+});
+
+const authLink = setContext(
+  (
+    _,
+    { headers }: { headers: { [key: string]: string } }
+  ): { headers: Record<string, string> } => {
+    return {
+      headers: {
+        ...headers,
+        'X-CSRF-Token': getCsrfToken(),
+      },
+    };
+  }
+);
+const client = new ApolloClient({
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache(),
+  credentials: 'same-origin',
+});
 
 const ErrorFallback = () => {
   return (
@@ -27,9 +58,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <React.Suspense fallback={<div>Loading...</div>}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <AuthProvider>{children}</AuthProvider>
-          </BrowserRouter>
+          <ApolloProvider client={client}>
+            <BrowserRouter>
+              <AuthProvider>{children}</AuthProvider>
+            </BrowserRouter>
+          </ApolloProvider>
         </ThemeProvider>
       </ErrorBoundary>
     </React.Suspense>

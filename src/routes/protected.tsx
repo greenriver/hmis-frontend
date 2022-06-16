@@ -1,26 +1,21 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { useLazyQuery } from '@apollo/client';
 import { Box, Button, List, ListItemText, Typography } from '@mui/material';
-import { Suspense, useState } from 'react';
+import { Suspense } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import * as sessionsApi from '../api/sessions';
-
+import { GET_PROJECTS } from '@/api/projects.gql';
 import { MainLayout } from '@/components/Layout';
 import useAuth from '@/hooks/useAuth';
 
 const App = () => {
   const { logout, user, loading } = useAuth();
-  const [projects, setProjects] = useState<string[]>();
-  if (loading || !user) return <div>Loading...</div>;
+  const [getProjects, { data }] = useLazyQuery(GET_PROJECTS);
 
-  function getProjects() {
-    setProjects(undefined);
-    sessionsApi
-      .getProjects(['es', 'so'])
-      .then((result: string[]) => {
-        setProjects(result);
-      })
-      .catch(() => {});
-  }
+  if (loading || !user) return <div>Loading...</div>;
 
   return (
     <MainLayout>
@@ -30,7 +25,8 @@ const App = () => {
           <Button
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
-            onClick={getProjects}
+            // eslint-disable-next-line @typescript-eslint/no-misused-promises
+            onClick={() => getProjects()}
           >
             Fetch Project List
           </Button>
@@ -41,11 +37,16 @@ const App = () => {
           >
             Sign Out
           </Button>
-          {projects && (
+          {data && (
             <List>
-              {projects.map((text, i) => (
-                <ListItemText key={i} primary={text} />
-              ))}
+              {data.projects.map(
+                ({ id, name, projectType }: Record<string, string>) => (
+                  <ListItemText
+                    key={id}
+                    primary={`${name} (${projectType.toLowerCase()})`}
+                  />
+                )
+              )}
             </List>
           )}
         </Box>

@@ -1,17 +1,4 @@
-function getCsrfToken() {
-  const name = 'CSRF-Token=';
-  const ca = document.cookie.split(';');
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == ' ') {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return decodeURIComponent(c.substring(name.length, c.length));
-    }
-  }
-  return '';
-}
+import { getCsrfToken } from '@/utils/csrf';
 
 export async function getCurrentUser(): Promise<HmisUser> {
   const response = await fetch('/hmis-api/user.json', {
@@ -76,25 +63,4 @@ export async function logout() {
   });
 
   return response;
-}
-
-// FIXME remove
-export async function getProjects(project_types: string[]) {
-  const response = await fetch('/hmis-api/projects', {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
-    },
-    body: JSON.stringify({ project_types }),
-  });
-  if (!response.ok) {
-    return response.json().then((e: HmisErrorResponse) => {
-      throw new Error(e.error.type);
-    });
-  } else {
-    return response.json();
-  }
 }
