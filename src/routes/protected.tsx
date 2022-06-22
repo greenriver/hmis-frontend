@@ -26,7 +26,9 @@ const App = () => {
             variant='contained'
             sx={{ mt: 3, mb: 2 }}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onClick={() => getProjects()}
+            onClick={() =>
+              getProjects({ variables: { projectTypes: ['PSH'] } })
+            }
           >
             Fetch Project List
           </Button>
