@@ -6,6 +6,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import fetch from 'cross-fetch';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
@@ -15,6 +16,7 @@ import { getCsrfToken } from '@/utils/csrf';
 
 const httpLink = createHttpLink({
   uri: '/hmis-api/hmis-gql',
+  fetch,
 });
 
 const authLink = setContext(
