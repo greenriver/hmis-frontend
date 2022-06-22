@@ -10,6 +10,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import * as sessionsApi from '../api/sessions';
 
+import Loading from '@/components/elements/Loading';
+
 interface AuthContextType {
   user?: HmisUser;
   loading: boolean;
@@ -103,7 +105,7 @@ export function AuthProvider({
 
   return (
     <AuthContext.Provider value={memoedValue}>
-      {loadingInitial && <div>Loading...</div>}
+      {loadingInitial && <Loading />}
       {!loadingInitial && children}
     </AuthContext.Provider>
   );

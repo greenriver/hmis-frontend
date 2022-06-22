@@ -1,7 +1,6 @@
 import { AppBar, Chip, Toolbar, Box } from '@mui/material';
-import * as React from 'react';
 
-export const StagingAppBar = () => {
+const StagingAppBar = () => {
   return (
     <AppBar
       position='static'
@@ -36,3 +35,5 @@ export const StagingAppBar = () => {
     </AppBar>
   );
 };
+
+export default StagingAppBar;

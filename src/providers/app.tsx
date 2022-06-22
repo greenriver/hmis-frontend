@@ -11,7 +11,8 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 
-import { AuthProvider } from '@/hooks/useAuth';
+import Loading from '@/components/elements/Loading';
+import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 import { getCsrfToken } from '@/utils/csrf';
 
 const httpLink = createHttpLink({
@@ -57,7 +58,7 @@ type AppProviderProps = {
 
 export const AppProvider = ({ children }: AppProviderProps) => {
   return (
-    <React.Suspense fallback={<div>Loading...</div>}>
+    <React.Suspense fallback={<Loading />}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
           <ApolloProvider client={client}>

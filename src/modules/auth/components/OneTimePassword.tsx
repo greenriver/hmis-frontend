@@ -5,7 +5,7 @@ import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react';
 
-import useAuth from '@/hooks/useAuth';
+import useAuth from '@/modules/auth/hooks/useAuth';
 
 export default function OneTimePassword() {
   const [otpAttempt, setOtpAttempt] = useState('');
