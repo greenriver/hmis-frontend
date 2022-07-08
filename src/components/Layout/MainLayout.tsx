@@ -33,22 +33,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           <Typography variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
             {import.meta.env.VITE_APP_NAME}
           </Typography>
-          <Link
-            variant='body2'
-            color='primary'
-            component={RouterLink}
-            to='/'
-            sx={{ ml: 2 }}
-          >
+          <Link component={RouterLink} to='/' sx={{ ml: 2 }}>
             Search
           </Link>
-          <Link
-            variant='body2'
-            color='primary'
-            component={RouterLink}
-            to='/intake'
-            sx={{ ml: 2 }}
-          >
+          <Link component={RouterLink} to='/intake' sx={{ ml: 2 }}>
             New Client
           </Link>
           <Typography variant='body2' sx={{ ml: 8 }}>

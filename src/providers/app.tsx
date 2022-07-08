@@ -6,12 +6,16 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 import fetch from 'cross-fetch';
 import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
+import muiTheme from '@/config/theme';
 import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 import { getCsrfToken } from '@/utils/csrf';
 
@@ -50,7 +54,7 @@ const ErrorFallback = () => {
   );
 };
 
-const theme = createTheme();
+const theme = createTheme(muiTheme);
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -61,11 +65,13 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     <React.Suspense fallback={<Loading />}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
-          <ApolloProvider client={client}>
-            <BrowserRouter>
-              <AuthProvider>{children}</AuthProvider>
-            </BrowserRouter>
-          </ApolloProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <ApolloProvider client={client}>
+              <BrowserRouter>
+                <AuthProvider>{children}</AuthProvider>
+              </BrowserRouter>
+            </ApolloProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       </ErrorBoundary>
     </React.Suspense>

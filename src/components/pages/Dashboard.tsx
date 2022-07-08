@@ -4,17 +4,19 @@
 import { useLazyQuery } from '@apollo/client';
 import { Box, Button, List, ListItemText } from '@mui/material';
 
+import clientSearchConfig from '@/api/clientSearchConfig';
 import { GET_PROJECTS } from '@/api/projects.gql';
+import SearchForm from '@/modules/search/components/SearchForm';
 
 const Dashboard = () => {
   const [getProjects, { data }] = useLazyQuery(GET_PROJECTS);
 
   return (
     <Box sx={{ marginLeft: 4, marginTop: 4 }}>
-      ..client search here..
+      <SearchForm config={clientSearchConfig} />
       <br />
       <Button
-        variant='contained'
+        variant='outlined'
         sx={{ mt: 3, mb: 2 }}
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         onClick={() => getProjects({ variables: { projectTypes: ['PSH'] } })}
