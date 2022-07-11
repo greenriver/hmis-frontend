@@ -25,19 +25,23 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.warn(values);
+    // TODO construct GQL Query
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler}>
+    <Box
+      component='form'
+      onSubmit={submitHandler}
+      sx={{ border: '1px solid #d4d4d4', borderRadius: 2, p: 3 }}
+    >
       <Grid container direction='row' columnSpacing={2}>
         {config.fields.map((field) => (
-          <Grid item xs={2} key={field._uid}>
-            <Field
-              field={field}
-              fieldChanged={fieldChanged}
-              value={values[field._uid] ?? ''}
-            />
-          </Grid>
+          <Field
+            key={field._uid}
+            field={field}
+            fieldChanged={fieldChanged}
+            value={values[field._uid] ?? ''}
+          />
         ))}
         <Grid item xs={0} key='advanced'>
           <Button
@@ -49,7 +53,7 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </Button>
         </Grid>
-        <Grid item xs={2} key='submit' direction='column'>
+        <Grid item xs={2} key='submit'>
           <Button type='submit'>Search</Button>
           <Link
             onClick={() => {
@@ -72,13 +76,12 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
           Advanced Search Options
         </Grid>
         {config.additionalFields.map((field) => (
-          <Grid item xs={2} key={field._uid}>
-            <Field
-              field={field}
-              fieldChanged={fieldChanged}
-              value={values[field._uid] ?? ''}
-            />
-          </Grid>
+          <Field
+            key={field._uid}
+            field={field}
+            fieldChanged={fieldChanged}
+            value={values[field._uid] ?? ''}
+          />
         ))}
       </Grid>
     </Box>

@@ -18,7 +18,7 @@ export default {
     },
     {
       label: 'Projects',
-      type: 'text',
+      type: 'projectMultiSelect',
       _uid: 'projects',
     },
   ],

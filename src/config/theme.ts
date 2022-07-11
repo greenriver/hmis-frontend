@@ -4,7 +4,7 @@ const theme: ThemeOptions = {
   components: {
     MuiDatePicker: {
       defaultProps: {
-        inputFormat: 'dd/MM/yyyy',
+        inputFormat: 'MM/dd/yyyy',
       },
     },
     MuiLink: {
