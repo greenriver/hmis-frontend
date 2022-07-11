@@ -1,3 +1,5 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Box, Grid, Button, Link } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -37,34 +39,38 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             />
           </Grid>
         ))}
-        <Grid item xs={2} sx={{ ml: 3 }} key='submit'>
+        <Grid item xs={0} key='advanced'>
+          <Button
+            variant='outlined'
+            onClick={() => {
+              setExpanded((old) => !old);
+            }}
+          >
+            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </Button>
+        </Grid>
+        <Grid item xs={2} key='submit' direction='column'>
           <Button type='submit'>Search</Button>
+          <Link
+            onClick={() => {
+              setValues({});
+            }}
+            variant='caption'
+            sx={{ display: 'block', mt: 1 }}
+          >
+            Clear Search
+          </Link>
         </Grid>
       </Grid>
-      <Box sx={{ mt: 1, mb: 1 }}>
-        <Link
-          onClick={() => {
-            setValues({});
-          }}
-        >
-          Clear Search
-        </Link>
-        <Link
-          sx={{ ml: 3 }}
-          onClick={() => {
-            setExpanded((old) => !old);
-          }}
-        >
-          {`${expanded ? 'Hide' : 'Show'} Advanced Search`}
-        </Link>
-      </Box>
-
       <Grid
         container
         direction='row'
         columnSpacing={2}
         sx={{ display: expanded ? undefined : 'none' }}
       >
+        <Grid item xs={12} sx={{ mb: 1.5, fontStyle: 'italic', fontSize: 14 }}>
+          Advanced Search Options
+        </Grid>
         {config.additionalFields.map((field) => (
           <Grid item xs={2} key={field._uid}>
             <Field

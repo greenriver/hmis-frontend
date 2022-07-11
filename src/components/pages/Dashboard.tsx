@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { useLazyQuery } from '@apollo/client';
-import { Box, Button, List, ListItemText } from '@mui/material';
+import { Box, Button, List, ListItemText, Typography } from '@mui/material';
 
 import clientSearchConfig from '@/api/clientSearchConfig';
 import { GET_PROJECTS } from '@/api/projects.gql';
@@ -13,6 +13,9 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ marginLeft: 4, marginTop: 4 }}>
+      <Typography variant='h6' sx={{ mb: 2 }}>
+        Clients
+      </Typography>
       <SearchForm config={clientSearchConfig} />
       <br />
       <Button

@@ -30,10 +30,10 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
         <DatePicker
           label={field.label}
           value={value || null}
-          renderInput={(params) => <TextField {...params} />}
           openTo='year'
           disableFuture
           onChange={(newValue) => {
+            console.warn(newValue);
             fieldChanged(field._uid, newValue);
           }}
         />
