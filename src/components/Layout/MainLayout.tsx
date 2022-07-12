@@ -13,11 +13,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
 
-type MainLayoutProps = {
+interface Props {
   children: React.ReactNode;
-};
+}
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout: React.FC<Props> = ({ children }) => {
   const { logout, user, loading } = useAuth();
   if (loading || !user) return <Loading />;
 
@@ -30,7 +30,12 @@ const MainLayout = ({ children }: MainLayoutProps) => {
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography variant='h6' color='inherit' noWrap sx={{ flexGrow: 1 }}>
+          <Typography
+            variant='h6'
+            color='secondary'
+            noWrap
+            sx={{ flexGrow: 1 }}
+          >
             {import.meta.env.VITE_APP_NAME}
           </Typography>
           <Link component={RouterLink} to='/' sx={{ ml: 2 }}>

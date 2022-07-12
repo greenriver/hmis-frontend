@@ -50,7 +50,7 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
       );
     case 'projectMultiSelect':
       return (
-        <Grid item xs={3}>
+        <Grid item xs={5}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value}

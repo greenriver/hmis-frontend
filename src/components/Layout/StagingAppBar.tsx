@@ -1,6 +1,6 @@
 import { AppBar, Chip, Toolbar, Box } from '@mui/material';
 
-const StagingAppBar = () => (
+const StagingAppBar: React.FC = () => (
   <AppBar
     position='static'
     color='secondary'

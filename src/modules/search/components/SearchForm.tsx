@@ -1,5 +1,5 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { Box, Grid, Button, Link } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -13,7 +13,7 @@ interface SearchFormConfig {
 
 const SearchForm = ({ config }: { config: SearchFormConfig }) => {
   const [values, setValues] = useState<Record<string, string>>({});
-  const [expanded, setExpanded] = React.useState(false);
+  // const [expanded, setExpanded] = React.useState(false);
 
   const fieldChanged = (fieldId: string, value: string) => {
     setValues((currentValues) => {
@@ -29,12 +29,8 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
   };
 
   return (
-    <Box
-      component='form'
-      onSubmit={submitHandler}
-      sx={{ border: '1px solid #d4d4d4', borderRadius: 2, p: 3 }}
-    >
-      <Grid container direction='row' columnSpacing={2}>
+    <Box component='form' onSubmit={submitHandler} sx={{ pt: 2, pb: 2 }}>
+      <Grid container direction='row' columnSpacing={2} sx={{ mb: 2 }}>
         {config.fields.map((field) => (
           <Field
             key={field._uid}
@@ -43,7 +39,7 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             value={values[field._uid] ?? ''}
           />
         ))}
-        <Grid item xs={0} key='advanced'>
+        {/* <Grid item xs={0} key='advanced'>
           <Button
             variant='outlined'
             onClick={() => {
@@ -52,29 +48,18 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
           >
             {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </Button>
-        </Grid>
-        <Grid item xs={2} key='submit'>
-          <Button type='submit'>Search</Button>
-          <Link
-            onClick={() => {
-              setValues({});
-            }}
-            variant='caption'
-            sx={{ display: 'block', mt: 1 }}
-          >
-            Clear Search
-          </Link>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Grid
         container
         direction='row'
         columnSpacing={2}
-        sx={{ display: expanded ? undefined : 'none' }}
+        sx={{ mb: 2 }}
+        // sx={{ display: expanded ? undefined : 'none' }}
       >
-        <Grid item xs={12} sx={{ mb: 1.5, fontStyle: 'italic', fontSize: 14 }}>
+        {/* <Grid item xs={12} sx={{ mb: 1.5, fontStyle: 'italic', fontSize: 14 }}>
           Advanced Search Options
-        </Grid>
+        </Grid> */}
         {config.additionalFields.map((field) => (
           <Field
             key={field._uid}
@@ -83,6 +68,18 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             value={values[field._uid] ?? ''}
           />
         ))}
+      </Grid>
+      <Grid item xs={2} key='submit'>
+        <Button type='submit'>Search</Button>
+        <Link
+          onClick={() => {
+            setValues({});
+          }}
+          variant='caption'
+          sx={{ display: 'block', mt: 1 }}
+        >
+          Clear Search
+        </Link>
       </Grid>
     </Box>
   );

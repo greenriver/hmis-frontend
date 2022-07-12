@@ -17,26 +17,26 @@ export default {
       _uid: 'lastName',
     },
     {
-      label: 'Projects',
-      type: 'projectMultiSelect',
-      _uid: 'projects',
-    },
-  ],
-  additionalFields: [
-    {
       label: 'Last 4 Social',
       type: 'text',
       _uid: 'ssn',
     },
     {
-      label: 'Organizations',
-      type: 'text',
-      _uid: 'organizations',
-    },
-    {
       label: 'Date of Birth',
       type: 'date',
       _uid: 'dob',
+    },
+  ],
+  additionalFields: [
+    {
+      label: 'Projects',
+      type: 'projectMultiSelect',
+      _uid: 'projects',
+    },
+    {
+      label: 'Organizations',
+      type: 'projectMultiSelect',
+      _uid: 'organizations',
     },
   ],
 };

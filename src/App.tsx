@@ -5,13 +5,11 @@ import { AppRoutes } from '@/routes';
 
 const StagingAppBar = lazy(() => import('@/components/layout/StagingAppBar'));
 
-function App() {
-  return (
-    <AppProvider>
-      {import.meta.env.DEV && <StagingAppBar />}
-      <AppRoutes />
-    </AppProvider>
-  );
-}
+const App = () => (
+  <AppProvider>
+    {import.meta.env.DEV && <StagingAppBar />}
+    <AppRoutes />
+  </AppProvider>
+);
 
 export default App;
