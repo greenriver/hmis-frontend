@@ -1,9 +1,6 @@
-import { lazy } from 'react';
-
+import StagingAppBar from '@/components/layout/StagingAppBar';
 import { AppProvider } from '@/providers/app';
 import { AppRoutes } from '@/routes';
-
-const StagingAppBar = lazy(() => import('@/components/layout/StagingAppBar'));
 
 const App = () => (
   <AppProvider>

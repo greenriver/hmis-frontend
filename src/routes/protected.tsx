@@ -1,10 +1,10 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
-const MainLayout = lazy(() => import('@/components/layout/MainLayout'));
-const Dashboard = lazy(() => import('@/components/pages/Dashboard'));
-const Intake = lazy(() => import('@/components/pages/Intake'));
+import MainLayout from '@/components/layout/MainLayout';
+import Dashboard from '@/components/pages/Dashboard';
+import Intake from '@/components/pages/Intake';
 
 const App = () => {
   return (
