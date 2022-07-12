@@ -1,4 +1,5 @@
-import StagingAppBar from '@/components/layout/StagingAppBar';
+import StagingAppBar from './components/layout/StagingAppBar';
+
 import { AppProvider } from '@/providers/app';
 import { AppRoutes } from '@/routes';
 
