@@ -1,13 +1,11 @@
 import { Grid } from '@mui/material';
 import React from 'react';
-import { OnChangeValue } from 'react-select';
 
 import { FormFieldDefinition } from './types';
 
 import DatePicker from '@/components/elements/input/DatePicker';
-import ProjectSelect, {
-  ProjectOptionType,
-} from '@/components/elements/input/ProjectSelect';
+import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
+import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextField from '@/components/elements/input/TextField';
 
 interface Props {
@@ -54,12 +52,25 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value}
-            onChange={(
-              selectedOption: OnChangeValue<ProjectOptionType, true>
-            ) => {
+            onChange={(selectedOption) => {
               // const value = selectedOption.value;
               fieldChanged(field._uid, selectedOption);
             }}
+            isMulti
+          />
+        </Grid>
+      );
+    case 'organizationMultiSelect':
+      return (
+        <Grid item xs={5}>
+          <OrganizationSelect
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            value={value}
+            onChange={(selectedOption) => {
+              // const value = selectedOption.value;
+              fieldChanged(field._uid, selectedOption);
+            }}
+            isMulti
           />
         </Grid>
       );

@@ -9,20 +9,34 @@ import Select, { OnChangeValue } from 'react-select';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
 
-export type ProjectOptionType = {
-  label: string;
-  value: string;
-  projectType: string;
-};
+export interface ProjectOption {
+  readonly label: string;
+  readonly value: string;
+  readonly projectType: string;
+}
 
-const formatOptionLabel = ({ label }: ProjectOptionType) => (
+// Organization
+export interface GroupedOption {
+  readonly label: string;
+  readonly value: string;
+  readonly dataSource: string;
+  readonly options: readonly ProjectOption[];
+}
+
+const formatGroupLabel = (data: GroupedOption) => (
+  <Typography variant='body2'>{data.label}</Typography>
+);
+
+const formatOptionLabel = ({ label }: ProjectOption) => (
   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-    <Typography variant='body2'>{label}</Typography>
+    <Typography variant='body2' sx={{ ml: 1 }}>
+      {label}
+    </Typography>
     <Typography
       variant='body2'
       sx={{
-        ml: 2,
-        color: '#ccc',
+        ml: 1,
+        color: '#4d4d4d',
       }}
     >
       ES
@@ -31,11 +45,12 @@ const formatOptionLabel = ({ label }: ProjectOptionType) => (
 );
 
 interface Props {
-  value: ProjectOptionType[] | ProjectOptionType | null | undefined;
-  onChange: (option: OnChangeValue<ProjectOptionType, true>) => void;
+  value: ProjectOption[] | ProjectOption | null;
+  onChange: (option: OnChangeValue<ProjectOption, boolean>) => void;
+  isMulti?: boolean;
 }
 
-const ProjectSelect: React.FC<Props> = ({ value, onChange }) => {
+const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
   const { data: projectData, loading, error } = useQuery(GET_PROJECTS);
 
   if (error) return <Box>{`Error! ${error.message}`}</Box>;
@@ -66,13 +81,13 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange }) => {
   return (
     <Select
       isLoading={loading}
-      placeholder='Projects'
+      placeholder={isMulti ? 'Projects' : 'Project'}
       formatOptionLabel={formatOptionLabel}
-      // formatGroupLabel
+      formatGroupLabel={formatGroupLabel}
       value={value}
       onChange={onChange}
       options={options}
-      isMulti
+      isMulti={isMulti || undefined}
     />
   );
 };

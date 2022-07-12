@@ -35,7 +35,7 @@ export default {
     },
     {
       label: 'Organizations',
-      type: 'projectMultiSelect',
+      type: 'organizationMultiSelect',
       _uid: 'organizations',
     },
   ],
