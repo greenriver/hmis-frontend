@@ -11,8 +11,13 @@ interface SearchFormConfig {
   additionalFields: FormFieldDefinition[];
 }
 
-const SearchForm = ({ config }: { config: SearchFormConfig }) => {
-  const [values, setValues] = useState<Record<string, string>>({});
+interface Props {
+  config: SearchFormConfig;
+  onSubmit: (values: Record<string, any>) => void;
+}
+
+const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
+  const [values, setValues] = useState<Record<string, any>>({});
   // const [expanded, setExpanded] = React.useState(false);
 
   const fieldChanged = (fieldId: string, value: string) => {
@@ -24,8 +29,7 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.warn(values);
-    // TODO construct GQL Query
+    onSubmit(values);
   };
 
   return (
@@ -36,6 +40,7 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             key={field._uid}
             field={field}
             fieldChanged={fieldChanged}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values[field._uid] ?? ''}
           />
         ))}
@@ -65,6 +70,7 @@ const SearchForm = ({ config }: { config: SearchFormConfig }) => {
             key={field._uid}
             field={field}
             fieldChanged={fieldChanged}
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values[field._uid] ?? ''}
           />
         ))}

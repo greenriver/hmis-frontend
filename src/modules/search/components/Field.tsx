@@ -67,7 +67,6 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value}
             onChange={(selectedOption) => {
-              // const value = selectedOption.value;
               fieldChanged(field._uid, selectedOption);
             }}
             isMulti

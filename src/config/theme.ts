@@ -2,6 +2,12 @@ import { ThemeOptions } from '@mui/material';
 
 const theme: ThemeOptions = {
   components: {
+    MuiPaper: {
+      defaultProps: {
+        elevation: 0,
+        variant: 'outlined',
+      },
+    },
     MuiDatePicker: {
       defaultProps: {
         inputFormat: 'MM/dd/yyyy',

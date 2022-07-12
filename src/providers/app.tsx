@@ -1,10 +1,11 @@
 import {
   ApolloClient,
   InMemoryCache,
-  ApolloProvider,
+  // ApolloProvider,
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import { MockedProvider } from '@apollo/client/testing';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -17,6 +18,7 @@ import { BrowserRouter } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
 import muiTheme from '@/config/theme';
 import { AuthProvider } from '@/modules/auth/hooks/useAuth';
+import mocks from '@/test/__mocks__/requests';
 import { getCsrfToken } from '@/utils/csrf';
 
 const httpLink = createHttpLink({
@@ -37,6 +39,8 @@ const authLink = setContext(
     };
   }
 );
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
@@ -66,11 +70,13 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ApolloProvider client={client}>
+            {/* <ApolloProvider client={client}> */}
+            <MockedProvider mocks={mocks} addTypename={false}>
               <BrowserRouter>
                 <AuthProvider>{children}</AuthProvider>
               </BrowserRouter>
-            </ApolloProvider>
+              {/* </ApolloProvider> */}
+            </MockedProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </ErrorBoundary>
