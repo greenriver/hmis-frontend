@@ -30,8 +30,9 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
   const [values, setValues] = useState<Record<string, any>>({});
   const [expanded, setExpanded] = useState(false);
 
-  const fieldChanged = (fieldId: string, value: string) => {
+  const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       currentValues[fieldId] = value;
       return { ...currentValues };
     });
