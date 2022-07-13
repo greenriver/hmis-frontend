@@ -4,7 +4,6 @@ import { GET_PROJECTS } from '@/api/projects.gql';
 const projectsForSelectMock = {
   request: {
     query: GET_PROJECTS,
-    variables: {},
   },
   result: {
     data: {
@@ -12,23 +11,46 @@ const projectsForSelectMock = {
         {
           label: 'Hawthorne Home',
           options: [
-            { label: 'White Ash Center', value: '116', projectType: 'ES' },
+            {
+              label: 'White Ash Center',
+              value: '116',
+              projectType: 'ES',
+            },
             {
               label: 'Eastern Hemlock Lake',
               value: '118',
               projectType: 'ES',
             },
-            { label: 'Scarlet Oak Creek', value: '127', projectType: 'RRH' },
-            { label: 'White Spruce Hill', value: '37518', projectType: 'SO' },
+            {
+              label: 'Scarlet Oak Creek',
+              value: '127',
+              projectType: 'RRH',
+            },
+            {
+              label: 'White Spruce Hill',
+              value: '37518',
+              projectType: 'SO',
+            },
           ],
         },
         {
           label: 'American Chestnut Home',
-          dataSource: 'BM',
           options: [
-            { label: 'The Maples Room', value: '37612', projectType: 'ES' },
-            { label: 'Paper Birch Room', value: '428', projectType: 'PH' },
-            { label: 'Paper Birch Lake', value: '433', projectType: 'ES' },
+            {
+              label: 'The Maples Room',
+              value: '37612',
+              projectType: 'ES',
+            },
+            {
+              label: 'Paper Birch Room',
+              value: '428',
+              projectType: 'PH',
+            },
+            {
+              label: 'Paper Birch Lake',
+              value: '433',
+              projectType: 'ES',
+            },
           ],
         },
       ],
@@ -40,12 +62,17 @@ const clientSearchMock = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      lastName: 'ack',
+      input: { lastName: 'ack' },
+      limit: 10,
+      offset: 0,
     },
   },
   result: {
     data: {
-      clients: [
+      offset: 0,
+      limit: 10,
+      totalCount: 20,
+      nodes: [
         {
           id: '9999',
           ssn: '0001',

@@ -12,8 +12,8 @@ import { gql } from '@apollo/client';
 // `;
 
 export const GET_PROJECTS = gql`
-  query GetProjectsForSelect($projectTypes: [ProjectType!]) {
-    projectsForSelect(projectTypes: $projectTypes) {
+  query GetProjectsForSelect {
+    projectsForSelect {
       label
       options {
         label

@@ -10,7 +10,8 @@ const Dashboard: React.FC = () => {
   const submitHandler = (values: Record<string, any>) => {
     const variables = transformValues(values);
     console.log(JSON.stringify(variables, null, 2));
-    setVariables(variables);
+
+    setVariables({ input: variables, limit: 10, offset: 0 });
   };
 
   return (

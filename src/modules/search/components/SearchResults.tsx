@@ -13,16 +13,18 @@ interface Props {
 }
 
 const SearchResults: React.FC<Props> = ({ variables }) => {
-  const { data, loading, error } = useQuery<{ clients: Client[] }>(
-    GET_CLIENTS,
-    { variables }
-  );
+  const { data, loading, error } = useQuery<{
+    totalCount: number;
+    nodes: Client[];
+  }>(GET_CLIENTS, {
+    variables,
+  });
   const [cards, setCards] = useState(false);
 
   if (loading) return <Loading />;
   if (error) return <Paper sx={{ p: 2 }}>{error.message}</Paper>;
 
-  const rows = data?.clients || [];
+  const rows = data?.nodes || [];
   // if data.totalCount > 25, show table
 
   return (
@@ -39,6 +41,7 @@ const SearchResults: React.FC<Props> = ({ variables }) => {
           label={cards ? 'Switch to table' : 'Switch to cards'}
         />
       </FormGroup>
+      {data && <span>Total Count: {data.totalCount}</span>}
       {cards ? (
         rows.map((client) => <ClientCard key={client.id} client={client} />)
       ) : (

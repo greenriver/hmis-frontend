@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client';
 
 export const GET_CLIENTS = gql`
-  query GetClients($lastName: String) {
-    clients(lastName: $lastName) {
+  query GetClients($input: ClientSearchInput!, $limit: Int!, $offset: Int = 0) {
+    offset
+    limit
+    totalCount
+    nodes {
       id
       ssn
       firstName

@@ -27,7 +27,9 @@ const SearchResultsTable: React.FC<{
         <TableHead>
           <TableRow>
             {headers.map((header) => (
-              <TableCell sx={{ fontWeight: 600 }}>{header}</TableCell>
+              <TableCell sx={{ fontWeight: 600 }} key={header}>
+                {header}
+              </TableCell>
             ))}
           </TableRow>
         </TableHead>

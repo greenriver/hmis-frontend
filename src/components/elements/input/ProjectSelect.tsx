@@ -1,24 +1,16 @@
 import { useQuery } from '@apollo/client';
 import { Typography, Box } from '@mui/material';
-import Select, { OnChangeValue } from 'react-select';
+import Select, { OnChangeValue, GroupBase } from 'react-select';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
 
 export interface ProjectOption {
-  readonly label: string;
   readonly value: string;
+  readonly label: string;
   readonly projectType: string;
 }
 
-// Organization
-export interface GroupedOption {
-  readonly label: string;
-  readonly value: string;
-  readonly dataSource: string;
-  readonly options: readonly ProjectOption[];
-}
-
-const formatGroupLabel = (data: GroupedOption) => (
+const formatGroupLabel = (data: GroupBase<ProjectOption>) => (
   <Typography variant='body2'>{data.label}</Typography>
 );
 
@@ -51,36 +43,12 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
     data: projectData,
     loading,
     error,
-  } = useQuery<{ projectsForSelect: GroupedOption[] }>(GET_PROJECTS);
-
+  } = useQuery<{ projectsForSelect: GroupBase<ProjectOption>[] }>(GET_PROJECTS);
   if (error) console.error(error);
 
   // TEMP using mock provider
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   const options = projectData?.projectsForSelect || [];
-
-  // FIXME replace with GQL query that returns grouped project list
-  // let options;
-  // if (projectData) {
-  //   const grouped = projectData.projects.reduce(function (
-  //     r: { [x: string]: { label: any; value: any }[] },
-  //     a: { projectType: string; name: any; id: any }
-  //   ) {
-  //     const key = a.projectType || 'other';
-  //     const val = { label: a.name, value: a.id };
-  //     r[key] = r[key] || [];
-  //     r[key].push(val);
-  //     return r;
-  //   },
-  //   Object.create(null));
-  //   options = [];
-  //   Object.keys(grouped).forEach((k) => {
-  //     options.push({
-  //       label: k,
-  //       options: grouped[k],
-  //     });
-  //   });
-  // }
 
   return (
     <Select
