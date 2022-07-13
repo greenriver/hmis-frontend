@@ -102,7 +102,7 @@ const clientSearchMock = {
           ssn: '0004',
           firstName: 'Rita',
           preferredName: null,
-          lastName: 'Ackroyd',
+          lastName: 'Acker',
           dob: '12/01/1980',
         },
       ],
