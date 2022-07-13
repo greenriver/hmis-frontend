@@ -15,3 +15,13 @@ interface HmisError {
 interface HmisErrorResponse {
   error: HmisError;
 }
+
+// FIXME code-gen
+interface Client {
+  id: string;
+  ssn?: string;
+  firstName?: string;
+  preferredName?: string;
+  lastName?: string;
+  dob?: string;
+}

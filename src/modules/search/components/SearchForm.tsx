@@ -1,6 +1,6 @@
 // import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 // import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Box, Grid, Button, Link } from '@mui/material';
+import { Box, Grid, Button, Link, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 import Field from './Field';
@@ -34,6 +34,11 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ pt: 2, pb: 2 }}>
+      <Typography
+        sx={{ fontSize: 14, mb: 3, fontStyle: 'italic', color: 'darkgreen' }}
+      >
+        Search 'ack' as Last Name to get mocked results.
+      </Typography>
       <Grid container direction='row' columnSpacing={2} sx={{ mb: 2 }}>
         {config.fields.map((field) => (
           <Field
