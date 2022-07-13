@@ -3,6 +3,7 @@ import fs from 'fs';
 import { resolve } from 'path';
 
 import react from '@vitejs/plugin-react';
+// import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
 
 const setGitVariables = (process) => {
@@ -35,6 +36,13 @@ export default defineConfig(({ command, mode }) => {
     plugins: [react()],
     define: {
       __APP_ENV__: env.APP_ENV,
+    },
+    build: {
+      rollupOptions: {
+        plugins: [
+          // visualizer({ filename: 'bundle_analysis.html' })
+        ],
+      },
     },
     ...(command !== 'build' && {
       server: {
