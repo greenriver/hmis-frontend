@@ -1,5 +1,8 @@
 import { Button, Card, Grid, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
+import { Link as RouterLink } from 'react-router-dom';
+
+import ClickToShow from '@/components/elements/ClickToShow';
 
 const displayName = (client: Client) => {
   if (!client.preferredName && !client.firstName && !client.lastName) {
@@ -26,9 +29,20 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
           <Typography variant='h6'>{displayName(client)}</Typography>
           <Stack spacing={1} direction='row'>
             <img alt='client' src='https://via.placeholder.com/100' />
-            <Stack>
-              <div>DOB: {client.dob}</div>
-              <div>Social: {client.ssn}</div>
+            <Stack spacing={0.5}>
+              <div>
+                <ClickToShow text='Show DOB'>{client.dob}</ClickToShow>
+              </div>
+              <div>
+                <ClickToShow text='Show SSN'>{client.ssn}</ClickToShow>
+              </div>
+              <Button
+                variant='outlined'
+                component={RouterLink}
+                to={`/client/${client.id}`}
+              >
+                Go to Record
+              </Button>
             </Stack>
           </Stack>
           <Typography>{client.id}</Typography>

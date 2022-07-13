@@ -1,14 +1,24 @@
-// import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { Box, Grid, Button, Link, Typography } from '@mui/material';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import {
+  Box,
+  Grid,
+  Button,
+  Stack,
+  Paper,
+  Link,
+  Typography,
+  TextField,
+} from '@mui/material';
 import React, { useState } from 'react';
 
 import Field from './Field';
 import { FormFieldDefinition } from './types';
 
+import ProjectSelect from '@/components/elements/input/ProjectSelect';
+
 interface SearchFormConfig {
   fields: FormFieldDefinition[];
-  additionalFields: FormFieldDefinition[];
 }
 
 interface Props {
@@ -18,7 +28,7 @@ interface Props {
 
 const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
   const [values, setValues] = useState<Record<string, any>>({});
-  // const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const fieldChanged = (fieldId: string, value: string) => {
     setValues((currentValues) => {
@@ -27,71 +37,101 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
     });
   };
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+  const submitHandler = (
+    event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent
+  ) => {
     event.preventDefault();
+    console.log('Searching... ', JSON.stringify(values, null, 2));
     onSubmit(values);
+  };
+  const submitOnEnter = (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      submitHandler(event);
+    }
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler} sx={{ pt: 2, pb: 2 }}>
-      <Typography
-        sx={{ fontSize: 14, mb: 3, fontStyle: 'italic', color: 'darkgreen' }}
-      >
-        Search 'ack' as Last Name to get mocked results.
+    <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
+      <Typography sx={{ mb: 2, fontStyle: 'italic', color: 'darkgreen' }}>
+        Search for 'ack' to get mocked results.
       </Typography>
-      <Grid container direction='row' columnSpacing={2} sx={{ mb: 2 }}>
-        {config.fields.map((field) => (
-          <Field
-            key={field._uid}
-            field={field}
-            fieldChanged={fieldChanged}
+      <Typography sx={{ mb: 2 }}>
+        Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse ID,
+        or PersonalID. It is often most efficient to search using the first few
+        characters of the first name and last name, e.g. to find Jane Smith you
+        might search for ja sm.
+      </Typography>
+      <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label='Search Clients'
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values[field._uid] ?? ''}
-          />
-        ))}
-        {/* <Grid item xs={0} key='advanced'>
-          <Button
-            variant='outlined'
-            onClick={() => {
-              setExpanded((old) => !old);
+            value={values.searchTerm || ''}
+            onChange={(e) => {
+              fieldChanged('searchTerm', e.target.value);
             }}
-          >
-            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </Button>
-        </Grid> */}
-      </Grid>
-      <Grid
-        container
-        direction='row'
-        columnSpacing={2}
-        sx={{ mb: 2 }}
-        // sx={{ display: expanded ? undefined : 'none' }}
-      >
-        {/* <Grid item xs={12} sx={{ mb: 1.5, fontStyle: 'italic', fontSize: 14 }}>
-          Advanced Search Options
-        </Grid> */}
-        {config.additionalFields.map((field) => (
-          <Field
-            key={field._uid}
-            field={field}
-            fieldChanged={fieldChanged}
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values[field._uid] ?? ''}
+            onKeyUp={submitOnEnter}
           />
-        ))}
+        </Grid>
+        <Grid item xs={6}>
+          <ProjectSelect
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            value={values.projects || null}
+            onChange={(selectedOption) => {
+              fieldChanged('projects', selectedOption);
+            }}
+            isMulti
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={2} key='submit'>
-        <Button type='submit'>Search</Button>
-        <Link
-          onClick={() => {
-            setValues({});
-          }}
-          variant='caption'
-          sx={{ display: 'block', mt: 1 }}
-        >
-          Clear Search
-        </Link>
-      </Grid>
+      <Button
+        variant='outlined'
+        onClick={() => {
+          setExpanded((old) => !old);
+        }}
+        sx={{ mb: 2 }}
+        size='small'
+      >
+        Advanced Search{' '}
+        {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+      </Button>
+
+      {expanded && (
+        <Paper sx={{ p: 2 }}>
+          <Grid
+            container
+            direction='row'
+            rowSpacing={2}
+            columnSpacing={2}
+            sx={{ mb: 2 }}
+          >
+            {config.fields.map((field) => (
+              <Field
+                key={field._uid}
+                field={field}
+                fieldChanged={fieldChanged}
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                value={values[field._uid] ?? ''}
+              />
+            ))}
+          </Grid>
+          <Stack direction='row' spacing={1}>
+            <Button variant='outlined' type='submit'>
+              Apply
+            </Button>
+            <Link
+              onClick={() => {
+                setValues({});
+              }}
+              variant='caption'
+              sx={{ display: 'block', pt: 1, pl: 2 }}
+            >
+              Clear Search
+            </Link>
+          </Stack>
+        </Paper>
+      )}
     </Box>
   );
 };

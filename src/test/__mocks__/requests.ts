@@ -62,7 +62,7 @@ const clientSearchMock = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      input: { lastName: 'ack' },
+      input: { searchTerm: 'ack' },
       limit: 10,
       offset: 0,
     },

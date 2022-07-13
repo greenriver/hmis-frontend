@@ -7,12 +7,14 @@ import {
   TableCell,
   Paper,
 } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 // FIXME make generic Table component
 
 const SearchResultsTable: React.FC<{
   rows: Client[];
 }> = ({ rows }) => {
+  const navigate = useNavigate();
   const headers = [
     'ID',
     'Social',
@@ -38,6 +40,7 @@ const SearchResultsTable: React.FC<{
             <TableRow
               key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              onClick={() => navigate(`/client/${row.id}`)}
             >
               <TableCell component='th' scope='row'>
                 {row.id}

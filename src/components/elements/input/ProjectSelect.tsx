@@ -35,6 +35,7 @@ interface Props {
   value: ProjectOption[] | ProjectOption | null;
   onChange: (option: OnChangeValue<ProjectOption, boolean>) => void;
   isMulti?: boolean;
+  onKeyDown?: (event: React.KeyboardEvent) => void;
 }
 
 const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {

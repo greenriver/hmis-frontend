@@ -35,7 +35,7 @@ interface Props {
   isMulti?: boolean;
 }
 
-const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
+const OrganizationSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
   // FIXME replace with GQL query that returns grouped organization list
   const options = fakeOptions;
   const loading = false;
@@ -53,4 +53,4 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
   );
 };
 
-export default ProjectSelect;
+export default OrganizationSelect;

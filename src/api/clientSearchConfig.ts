@@ -3,8 +3,6 @@
 
 import { format } from 'date-fns';
 
-import { OrganizationOption } from '@/components/elements/input/OrganizationSelect';
-import { ProjectOption } from '@/components/elements/input/ProjectSelect';
 const config = {
   fields: [
     {
@@ -31,22 +29,11 @@ const config = {
       label: 'Date of Birth',
       type: 'date',
       _uid: 'dob',
-      transform: (value: Date) => format(value, 'MM/dd/yyyy'),
-    },
-  ],
-  additionalFields: [
-    {
-      label: 'Projects',
-      type: 'projectMultiSelect',
-      _uid: 'projects',
-      transform: (value: ProjectOption[]) => value?.map((item) => item.value),
     },
     {
       label: 'Organizations',
       type: 'organizationMultiSelect',
       _uid: 'organizations',
-      transform: (value: OrganizationOption[]) =>
-        value?.map((item) => item.value),
     },
   ],
 };
@@ -55,15 +42,16 @@ const config = {
 export const transformValues = (values: Record<string, any>) => {
   const variables: Record<string, any> = {};
   Object.keys(values).forEach((k) => {
-    const transform = [...config.fields, ...config.additionalFields].find(
-      (e) => e._uid === k
-    )?.transform;
-    if (transform) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-      variables[k] = transform(values[k]);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const value = values[k];
+    if (value instanceof Date) {
+      variables[k] = format(value, 'MM/dd/yyyy');
+    } else if (value instanceof Array) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
+      variables[k] = value.map((item) => item.value);
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-      variables[k] = values[k];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      variables[k] = value;
     }
   });
   return variables;

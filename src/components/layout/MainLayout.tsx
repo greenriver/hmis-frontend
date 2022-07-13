@@ -1,9 +1,9 @@
 import {
   AppBar,
   CssBaseline,
+  Container,
   Toolbar,
   Typography,
-  Grid,
   Link,
   Button,
 } from '@mui/material';
@@ -53,12 +53,10 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
-      <Grid container component='main' sx={{ height: '100vh' }}>
+      <Container maxWidth='lg' sx={{ pt: 2 }}>
         <CssBaseline />
-        <Grid item xs={false} sm={4} md={10}>
-          {children}
-        </Grid>
-      </Grid>
+        {children}
+      </Container>
     </React.Fragment>
   );
 };

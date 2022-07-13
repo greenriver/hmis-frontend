@@ -1,11 +1,11 @@
-// import { lazyImport } from '@/utils/lazyImport';
+import { Navigate } from 'react-router-dom';
+
 import Login from '@/components/pages/Login';
-// const { AuthRoutes } = lazyImport(() => import('@/features/auth'), 'AuthRoutes');
 
 export const publicRoutes = [
   {
     path: '/',
     element: <Login />,
-    // element: <AuthRoutes />,
   },
+  { path: '*', element: <Navigate to='/' /> },
 ];

@@ -19,8 +19,9 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
     // FIXME ssn needs input mask
     case 'text':
       return (
-        <Grid item xs={2}>
+        <Grid item xs={4}>
           <TextField
+            fullWidth
             id={field._uid}
             name={field._uid}
             label={field.label}
