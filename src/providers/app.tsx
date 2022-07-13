@@ -41,7 +41,7 @@ const authLink = setContext(
 );
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const client = new ApolloClient({
+export const client = new ApolloClient({
   link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
   credentials: 'same-origin',
@@ -70,8 +70,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            {/* <ApolloProvider client={client}> */}
             <MockedProvider mocks={mocks} addTypename={false}>
+              {/* <ApolloProvider client={client}> */}
               <BrowserRouter>
                 <AuthProvider>{children}</AuthProvider>
               </BrowserRouter>
