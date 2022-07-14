@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import dns from 'dns';
 import fs from 'fs';
 import { resolve } from 'path';
 
@@ -20,7 +21,8 @@ const setGitVariables = (process) => {
   process.env.VITE_GIT_COMMIT_HASH = commitHash;
 };
 
-// https://vitejs.dev/config/
+dns.setDefaultResultOrder('ipv4first');
+
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   if (mode !== 'production') {
