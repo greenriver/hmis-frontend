@@ -43,7 +43,7 @@ export async function login({
       'X-CSRF-Token': getCsrfToken(),
     },
     body: JSON.stringify({
-      hmis_api_user: {
+      hmis_user: {
         email,
         password,
         otp_attempt: otpAttempt,
