@@ -22,10 +22,10 @@ const TmpTestConnection = () => {
       {data && (
         <List>
           {data.projects.map(
-            ({ id, name, projectType }: Record<string, string>) => (
+            ({ id, ProjectName, ProjectType }: Record<string, string>) => (
               <ListItemText
                 key={id}
-                primary={`${name} (${projectType.toLowerCase()})`}
+                primary={`${ProjectName} (${ProjectType.toLowerCase()})`}
               />
             )
           )}

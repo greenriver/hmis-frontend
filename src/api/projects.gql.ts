@@ -4,8 +4,8 @@ export const GET_PROJECTS_OLD = gql`
   query GetProjects($projectTypes: [ProjectType!]) {
     projects(projectTypes: $projectTypes) {
       id
-      name
-      projectType
+      ProjectName
+      ProjectType
     }
   }
 `;
@@ -17,7 +17,7 @@ export const GET_PROJECTS = gql`
       options {
         label
         value
-        projectType
+        ProjectType
       }
     }
   }
