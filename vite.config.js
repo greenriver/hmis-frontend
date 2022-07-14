@@ -55,7 +55,7 @@ export default defineConfig(({ command, mode }) => {
           cert: fs.readFileSync('.cert/cert.pem'),
         },
         proxy: {
-          '/hmis-api': {
+          '/hmis': {
             target: 'https://hmis-warehouse.dev.test',
             changeOrigin: true,
             secure: false,
