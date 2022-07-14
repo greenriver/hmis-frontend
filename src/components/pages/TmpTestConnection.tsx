@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { useLazyQuery, ApolloProvider } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { Button, List, ListItemText, Paper } from '@mui/material';
 
 import { GET_PROJECTS_OLD } from '@/api/projects.gql';
-import { client } from '@/providers/app';
+import ConfiguredApolloProvider from '@/providers/ConfiguredApolloProvider';
 
 const TmpTestConnection = () => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -35,8 +35,8 @@ const TmpTestConnection = () => {
   );
 };
 const Comp = () => (
-  <ApolloProvider client={client}>
+  <ConfiguredApolloProvider>
     <TmpTestConnection />
-  </ApolloProvider>
+  </ConfiguredApolloProvider>
 );
 export default Comp;

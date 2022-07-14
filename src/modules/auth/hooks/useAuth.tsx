@@ -77,19 +77,13 @@ export function AuthProvider({
   function logout() {
     sessionsApi
       .logout()
-      .then(() => setUser(undefined))
+      .then(() => {
+        setUser(undefined);
+      })
       .catch((error: Error) => setError(error));
   }
 
-  // Make the provider update only when it should.
-  // We only want to force re-renders if the user,
-  // loading or error states change.
-  //
-  // Whenever the `value` passed into a provider changes,
-  // the whole tree under the provider re-renders, and
-  // that can be very costly! Even in this case, where
-  // you only get re-renders when logging in and out
-  // we want to keep things very performant.
+  // Make the provider update only when it should
   const memoedValue = useMemo(
     () => ({
       user,

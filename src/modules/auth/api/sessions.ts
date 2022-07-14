@@ -1,6 +1,12 @@
+import * as storage from './storage';
+
 import { getCsrfToken } from '@/utils/csrf';
 
 export async function getCurrentUser(): Promise<HmisUser> {
+  const storedUser = storage.getUser();
+  if (storedUser) {
+    return Promise.resolve(JSON.parse(storedUser) as HmisUser);
+  }
   const response = await fetch('/hmis-api/user.json', {
     credentials: 'include',
     headers: {
@@ -52,7 +58,11 @@ export async function login({
       throw new Error(message);
     });
   } else {
-    return response.json() as Promise<HmisUser>;
+    // Store the user info (non-sensitive) in the browser
+    return response.json().then((user: HmisUser) => {
+      storage.setUser(user);
+      return user;
+    });
   }
 }
 
@@ -61,6 +71,6 @@ export async function logout() {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
-
+  storage.removeUser();
   return response;
 }
