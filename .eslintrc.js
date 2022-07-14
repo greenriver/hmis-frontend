@@ -9,6 +9,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:react-hooks/recommended',
     'prettier',
+    'plugin:storybook/recommended',
   ],
   plugins: ['react', '@typescript-eslint', 'jest'],
   parser: '@typescript-eslint/parser',
@@ -22,7 +23,9 @@ module.exports = {
   overrides: [
     {
       files: ['**/*.test.ts', '**/*.test.tx'],
-      env: { 'jest/globals': true },
+      env: {
+        'jest/globals': true,
+      },
       plugins: ['jest'],
       extends: ['plugin:jest/recommended'],
     },
@@ -58,8 +61,15 @@ module.exports = {
         '@typescript-eslint/space-before-blocks': 'off',
         '@typescript-eslint/space-before-function-paren': 'off',
         '@typescript-eslint/space-infix-ops': 'off',
-        '@typescript-eslint/quotes': 'off'
-      }
+        '@typescript-eslint/quotes': 'off',
+        'import/no-extraneous-dependencies': [
+          'error',
+          {
+            devDependencies: ['**/.storybook/**/*.*', '**/*.stories.*'],
+            peerDependencies: true,
+          },
+        ],
+      },
     },
   ],
   rules: {
@@ -76,12 +86,15 @@ module.exports = {
           'object',
         ],
         'newlines-between': 'always',
-        alphabetize: { order: 'asc', caseInsensitive: true },
+        alphabetize: {
+          order: 'asc',
+          caseInsensitive: true,
+        },
       },
     ],
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
-    'import/no-named-as-default': 'off'
+    'import/no-named-as-default': 'off',
   },
-  "ignorePatterns": ["jest.config.ts"],
+  ignorePatterns: ['jest.config.ts'],
 };

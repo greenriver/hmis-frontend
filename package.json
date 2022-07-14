@@ -16,7 +16,9 @@
     "lint:check": "eslint --ext js,ts,jsx,tsx --ignore-path .gitignore .",
     "test": "NODE_ENV=test jest",
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "storybook": "cross-env TS_NODE_PROJECT=.storybook/tsconfig.json NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -73,9 +75,17 @@
     "@babel/preset-env": "^7.17.12",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
+    "@storybook/addon-actions": "^6.5.9",
+    "@storybook/addon-essentials": "^6.5.9",
+    "@storybook/addon-interactions": "^6.5.9",
+    "@storybook/addon-links": "^6.5.9",
+    "@storybook/builder-vite": "^0.2.0",
+    "@storybook/react": "^6.5.9",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/dom": "^8.13.0",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -85,11 +95,13 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-storybook": "^0.6.1",
     "husky": "^8.0.0",
     "identity-obj-proxy": "^3.0.0",
     "lint-staged": "^12.4.1",
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
+    "storybook-addon-apollo-client": "^4.0.12",
     "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0"
   }

@@ -1,4 +1,6 @@
 .*
+!.eslintrc.js
+!.storybook
 yarn.lock
 build
 dist
