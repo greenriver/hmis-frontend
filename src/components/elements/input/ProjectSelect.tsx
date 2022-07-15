@@ -52,6 +52,10 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
       onChange={onChange}
       options={data?.organizations || []}
       isMulti={isMulti || undefined}
+      styles={{
+        menuPortal: (base) => ({ ...base, zIndex: 1900 }),
+        menu: (base) => ({ ...base, zIndex: 1900 }),
+      }}
     />
   );
 };

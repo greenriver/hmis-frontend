@@ -85,24 +85,22 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             isMulti
           />
         </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant='outlined'
-            onClick={() => {
-              setExpanded((old) => !old);
-            }}
-            sx={{ mb: 2 }}
-            size='small'
-          >
-            Advanced Search{' '}
-            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </Button>
-        </Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
-
+      <Button
+        variant='outlined'
+        onClick={() => {
+          setExpanded((old) => !old);
+        }}
+        sx={{ mb: 2 }}
+        size='small'
+      >
+        Advanced Search
+        {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+      </Button>
       {expanded && (
         <Paper sx={{ p: 2 }}>
-          <Typography sx={{ mb: 2 }}>Advanced Search</Typography>
+          {/* <Typography sx={{ mb: 2 }}>Advanced Search</Typography> */}
           <Grid
             container
             direction='row'
