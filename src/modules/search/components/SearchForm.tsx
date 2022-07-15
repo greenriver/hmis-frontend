@@ -63,7 +63,7 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
         might search for ja sm.
       </Typography>
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <TextField
             fullWidth
             label='Search Clients'
@@ -75,7 +75,7 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             onKeyUp={submitOnEnter}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.projects || null}
@@ -85,21 +85,24 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             isMulti
           />
         </Grid>
+        <Grid item xs={2}>
+          <Button
+            variant='outlined'
+            onClick={() => {
+              setExpanded((old) => !old);
+            }}
+            sx={{ mb: 2 }}
+            size='small'
+          >
+            Advanced Search{' '}
+            {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </Button>
+        </Grid>
       </Grid>
-      <Button
-        variant='outlined'
-        onClick={() => {
-          setExpanded((old) => !old);
-        }}
-        sx={{ mb: 2 }}
-        size='small'
-      >
-        Advanced Search{' '}
-        {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-      </Button>
 
       {expanded && (
         <Paper sx={{ p: 2 }}>
+          <Typography sx={{ mb: 2 }}>Advanced Search</Typography>
           <Grid
             container
             direction='row'
@@ -120,6 +123,9 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
           <Stack direction='row' spacing={1}>
             <Button variant='outlined' type='submit'>
               Apply
+            </Button>
+            <Button variant='outlined' disabled>
+              Cancel
             </Button>
             <Link
               onClick={() => {

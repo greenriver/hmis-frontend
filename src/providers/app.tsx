@@ -7,7 +7,8 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 
-// import ConfiguredApolloProvider from './ConfiguredApolloProvider';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import ConfiguredApolloProvider, { cache } from './ConfiguredApolloProvider';
 
 import ErrorFallback from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';

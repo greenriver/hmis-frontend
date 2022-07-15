@@ -53,7 +53,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth='lg' sx={{ pt: 2 }}>
+      <Container maxWidth='lg' sx={{ pt: 2, pb: 4 }}>
         <CssBaseline />
         {children}
       </Container>

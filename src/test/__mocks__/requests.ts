@@ -62,16 +62,16 @@ const clientSearchMock = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      input: { searchTerm: 'ack' },
-      limit: 10,
       offset: 0,
+      input: { searchTerm: 'ack' },
+      limit: 3,
     },
   },
   result: {
     data: {
       offset: 0,
-      limit: 10,
-      totalCount: 20,
+      limit: 3,
+      totalCount: 4,
       nodes: [
         {
           id: '9999',
@@ -97,6 +97,26 @@ const clientSearchMock = {
           lastName: 'Ackman',
           dob: '12/13/1980',
         },
+      ],
+    },
+  },
+};
+
+const clientSearchMockNextPage = {
+  request: {
+    query: GET_CLIENTS,
+    variables: {
+      input: { searchTerm: 'ack' },
+      limit: 3,
+      offset: 3,
+    },
+  },
+  result: {
+    data: {
+      offset: 4,
+      limit: 3,
+      totalCount: 4,
+      nodes: [
         {
           id: '9996',
           ssn: '0004',
@@ -110,6 +130,10 @@ const clientSearchMock = {
   },
 };
 
-const mocks: any[] = [projectsForSelectMock, clientSearchMock];
+const mocks: any[] = [
+  projectsForSelectMock,
+  clientSearchMock,
+  clientSearchMockNextPage,
+];
 
 export default mocks;
