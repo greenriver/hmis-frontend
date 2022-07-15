@@ -17,6 +17,14 @@ interface HmisErrorResponse {
 }
 
 // FIXME code-gen
+interface Enrollment {
+  id: string;
+  entryDate: string;
+  exitDate?: string;
+  project: { projectName: string };
+}
+
+// FIXME code-gen
 interface Client {
   id: string;
   ssn?: string;
@@ -24,4 +32,5 @@ interface Client {
   preferredName?: string;
   lastName?: string;
   dob?: string;
+  enrollments?: Enrollment[];
 }

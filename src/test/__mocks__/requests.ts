@@ -80,6 +80,38 @@ const clientSearchMock = {
           preferredName: null,
           lastName: 'Ackroyd',
           dob: '04/04/1980',
+          enrollments: [
+            {
+              id: 5,
+              entryDate: '07/01/2022',
+              exitDate: null,
+              project: { projectName: 'White Pine' },
+            },
+            {
+              id: 6,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'Spruce Hill' },
+            },
+            {
+              id: 7,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine Terrace' },
+            },
+            {
+              id: 8,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine' },
+            },
+            {
+              id: 9,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine' },
+            },
+          ],
         },
         {
           id: '9998',
@@ -88,6 +120,7 @@ const clientSearchMock = {
           preferredName: 'Leo',
           lastName: 'Acker',
           dob: '04/04/1980',
+          enrollments: null,
         },
         {
           id: '9997',
@@ -96,6 +129,7 @@ const clientSearchMock = {
           preferredName: 'Jay',
           lastName: 'Ackman',
           dob: '12/13/1980',
+          enrollments: null,
         },
       ],
     },
@@ -124,6 +158,7 @@ const clientSearchMockNextPage = {
           preferredName: null,
           lastName: 'Acker',
           dob: '12/01/1980',
+          enrollments: null,
         },
       ],
     },

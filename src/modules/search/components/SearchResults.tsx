@@ -38,9 +38,6 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
         limit,
         offset: 0,
       },
-      onCompleted: () => {
-        console.log('query completed!');
-      },
     }
   );
 

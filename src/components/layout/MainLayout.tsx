@@ -30,14 +30,17 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Typography
+          <Link
             variant='h6'
             color='secondary'
             noWrap
             sx={{ flexGrow: 1 }}
+            component={RouterLink}
+            underline='none'
+            to='/'
           >
             {import.meta.env.VITE_APP_NAME}
-          </Typography>
+          </Link>
           <Link component={RouterLink} to='/' sx={{ ml: 2 }}>
             Search
           </Link>

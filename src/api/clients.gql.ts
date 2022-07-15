@@ -12,6 +12,14 @@ export const GET_CLIENTS = gql`
       preferredName
       lastName
       dob
+      enrollments {
+        id
+        entryDate
+        exitDate
+        project {
+          projectName
+        }
+      }
     }
   }
 `;
