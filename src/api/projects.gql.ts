@@ -12,11 +12,11 @@ export const GET_PROJECTS_OLD = gql`
 
 export const GET_PROJECTS = gql`
   query GetProjectsForSelect {
-    projectsForSelect {
-      label
-      options {
-        label
-        value
+    organizations {
+      label: name
+      options: projects {
+        label: name
+        value: id
         projectType
       }
     }

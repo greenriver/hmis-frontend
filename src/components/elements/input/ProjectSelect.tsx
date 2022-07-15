@@ -38,18 +38,10 @@ interface Props {
 }
 
 const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const {
-    data: projectData,
-    loading,
-    error,
-  } = useQuery<{ projectsForSelect: GroupBase<ProjectOption>[] }>(GET_PROJECTS);
+  const { data, loading, error } = useQuery<{
+    organizations: GroupBase<ProjectOption>[];
+  }>(GET_PROJECTS);
   if (error) console.error(error);
-
-  // TEMP using mock provider
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  const options = projectData?.projectsForSelect || [];
-
   return (
     <Select
       isLoading={loading}
@@ -58,7 +50,7 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
       formatGroupLabel={formatGroupLabel}
       value={value}
       onChange={onChange}
-      options={options}
+      options={data?.organizations || []}
       isMulti={isMulti || undefined}
     />
   );

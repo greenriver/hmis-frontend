@@ -7,7 +7,7 @@ const projectsForSelectMock = {
   },
   result: {
     data: {
-      projectsForSelect: [
+      organizations: [
         {
           label: 'Hawthorne Home',
           options: [
