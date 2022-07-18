@@ -8,7 +8,6 @@ import {
   Paper,
   Link,
   Typography,
-  TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -16,6 +15,7 @@ import Field from './Field';
 import { FormFieldDefinition } from './types';
 
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
+import TextInput from '@/components/elements/input/TextInput';
 
 interface SearchFormConfig {
   fields: FormFieldDefinition[];
@@ -64,9 +64,9 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
       </Typography>
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={5}>
-          <TextField
-            fullWidth
+          <TextInput
             label='Search Clients'
+            placeholder='Search clients...'
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.searchTerm || ''}
             onChange={(e) => {
@@ -78,7 +78,7 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
         <Grid item xs={5}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.projects || null}
+            value={values.projects || []}
             onChange={(selectedOption) => {
               fieldChanged('projects', selectedOption);
             }}

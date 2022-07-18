@@ -1,5 +1,6 @@
-import { Typography, Box } from '@mui/material';
-import Select, { OnChangeValue } from 'react-select';
+import { Typography, Autocomplete } from '@mui/material';
+
+import TextInput from './TextInput';
 
 export interface OrganizationOption {
   readonly label: string;
@@ -21,34 +22,39 @@ const fakeOptions: readonly OrganizationOption[] = [
   },
 ];
 
-const formatOptionLabel = ({ label }: OrganizationOption) => (
-  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-    <Typography variant='body2' sx={{ ml: 1 }}>
-      {label}
-    </Typography>
-  </Box>
+const renderOption = (props: object, option: OrganizationOption) => (
+  <li {...props}>
+    <Typography variant='body2'>{option.label}</Typography>
+  </li>
 );
-
 interface Props {
-  value: OrganizationOption[] | OrganizationOption | null | undefined;
-  onChange: (option: OnChangeValue<OrganizationOption, boolean>) => void;
+  value: OrganizationOption[] | OrganizationOption | null;
+  onChange: (option: OrganizationOption[] | OrganizationOption | null) => void;
   isMulti?: boolean;
 }
 
-const OrganizationSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
+const OrganizationSelect: React.FC<Props> = ({
+  value,
+  onChange,
+  isMulti: multiple,
+}) => {
   // FIXME replace with GQL query that returns grouped organization list
   const options = fakeOptions;
   const loading = false;
 
   return (
-    <Select
-      isLoading={loading}
-      placeholder={isMulti ? 'Organizations' : 'Organization'}
-      formatOptionLabel={formatOptionLabel}
+    <Autocomplete
+      loading={loading}
+      options={options || []}
       value={value}
-      onChange={onChange}
-      options={options}
-      isMulti={isMulti || undefined}
+      onChange={(_, selected) => onChange(selected)}
+      multiple={multiple}
+      renderOption={renderOption}
+      renderInput={(params) => <TextInput {...params} label='Organizations' />}
+      isOptionEqualToValue={(
+        option: OrganizationOption,
+        value: OrganizationOption
+      ) => option.value === value.value}
     />
   );
 };

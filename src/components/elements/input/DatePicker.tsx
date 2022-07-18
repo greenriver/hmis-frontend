@@ -4,7 +4,7 @@ import {
   DatePickerProps,
 } from '@mui/x-date-pickers';
 
-import TextField from './TextField';
+import TextInput from './TextInput';
 
 // interface Props
 //   extends Omit<DatePickerProps<DateType, DateType>, 'value' | 'renderInput'> {
@@ -17,7 +17,7 @@ const DatePicker: React.FC<
 > = (props) => (
   <MuiDatePicker
     {...props}
-    renderInput={(params) => <TextField {...params} />}
+    renderInput={(params) => <TextInput {...params} />}
   />
 );
 

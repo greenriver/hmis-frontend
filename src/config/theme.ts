@@ -35,6 +35,16 @@ const theme: ThemeOptions = {
         disableElevation: true,
       },
     },
+    MuiAutocomplete: {
+      defaultProps: {
+        size: 'small',
+        openOnFocus: true,
+      },
+      styleOverrides: {
+        groupLabel: { lineHeight: 2, paddingLeft: 10 },
+        option: { paddingLeft: 16 },
+      },
+    },
   },
 };
 
