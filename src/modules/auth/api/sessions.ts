@@ -7,7 +7,7 @@ export async function getCurrentUser(): Promise<HmisUser> {
   if (storedUser) {
     return Promise.resolve(JSON.parse(storedUser) as HmisUser);
   }
-  const response = await fetch('/hmis-api/user.json', {
+  const response = await fetch('/hmis/user.json', {
     credentials: 'include',
     headers: {
       Accept: 'application/json',
@@ -35,7 +35,7 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
-  const response = await fetch('/hmis-api/login', {
+  const response = await fetch('/hmis/login', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -43,7 +43,7 @@ export async function login({
       'X-CSRF-Token': getCsrfToken(),
     },
     body: JSON.stringify({
-      hmis_api_user: {
+      hmis_user: {
         email,
         password,
         otp_attempt: otpAttempt,
@@ -67,7 +67,7 @@ export async function login({
 }
 
 export async function logout() {
-  const response = await fetch('/hmis-api/logout', {
+  const response = await fetch('/hmis/logout', {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });

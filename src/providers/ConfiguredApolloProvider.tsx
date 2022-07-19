@@ -15,7 +15,7 @@ import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 
 const httpLink = createHttpLink({
-  uri: '/hmis-api/hmis-gql',
+  uri: '/hmis/hmis-gql',
   fetch,
 });
 
