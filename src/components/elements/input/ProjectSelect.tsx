@@ -1,65 +1,83 @@
 import { useQuery } from '@apollo/client';
-import { Typography, Box } from '@mui/material';
-import Select, { OnChangeValue, GroupBase } from 'react-select';
+import {
+  Typography,
+  Box,
+  Autocomplete,
+  AutocompleteProps,
+} from '@mui/material';
+
+import TextInput from './TextInput';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
 
 export interface ProjectOption {
-  readonly value: string;
-  readonly label: string;
+  readonly id: string;
+  readonly projectName: string;
   readonly projectType: string;
+  readonly organization: { organizationName: string };
 }
 
-const formatGroupLabel = (data: GroupBase<ProjectOption>) => (
-  <Typography variant='body2'>{data.label}</Typography>
+export type ProjectSelectValue = ProjectOption[] | ProjectOption | null;
+
+const renderOption = (props: object, option: ProjectOption) => (
+  <li {...props} key={option.id}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
+      <Typography variant='body2'>{option.projectName}</Typography>
+      <Typography
+        variant='body2'
+        sx={{
+          ml: 1,
+          color: 'text.secondary',
+        }}
+      >
+        {option.projectType}
+      </Typography>
+    </Box>
+  </li>
 );
 
-const formatOptionLabel = ({ label, projectType }: ProjectOption) => (
-  <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-    <Typography variant='body2' sx={{ ml: 1 }}>
-      {label}
-    </Typography>
-    <Typography
-      variant='body2'
-      sx={{
-        ml: 1,
-        color: '#4d4d4d',
-      }}
-    >
-      {projectType}
-    </Typography>
-  </Box>
-);
-
-interface Props {
-  value: ProjectOption[] | ProjectOption | null;
-  onChange: (option: OnChangeValue<ProjectOption, boolean>) => void;
-  isMulti?: boolean;
+interface Props
+  extends Omit<
+    AutocompleteProps<
+      ProjectOption,
+      boolean,
+      undefined,
+      undefined,
+      React.ElementType
+    >,
+    'onChange' | 'renderInput' | 'value' | 'options'
+  > {
+  value: ProjectSelectValue;
+  onChange: (option: ProjectSelectValue) => void;
 }
 
-const ProjectSelect: React.FC<Props> = ({ value, onChange, isMulti }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const {
-    data: projectData,
-    loading,
-    error,
-  } = useQuery<{ projectsForSelect: GroupBase<ProjectOption>[] }>(GET_PROJECTS);
+const ProjectSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
+  const { data, loading, error } = useQuery<{
+    projects: ProjectOption[];
+  }>(GET_PROJECTS);
   if (error) console.error(error);
 
-  // TEMP using mock provider
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
-  const options = projectData?.projectsForSelect || [];
+  // FIXME: sort in graphql, not here
+  const options = (data?.projects || []).slice().sort((a, b) => {
+    const org1 = a.organization.organizationName;
+    const org2 = b.organization.organizationName;
+    return org1.localeCompare(org2);
+  });
 
   return (
-    <Select
-      isLoading={loading}
-      placeholder={error ? 'Error' : `Project${isMulti ? 's' : ''}`}
-      formatOptionLabel={formatOptionLabel}
-      formatGroupLabel={formatGroupLabel}
-      value={value}
-      onChange={onChange}
+    <Autocomplete
+      loading={loading}
       options={options}
-      isMulti={isMulti || undefined}
+      value={value}
+      onChange={(_, selected) => onChange(selected)}
+      groupBy={(option) => option.organization.organizationName}
+      renderOption={renderOption}
+      getOptionLabel={(option) => option.projectName}
+      renderInput={(params) => <TextInput {...params} label='Projects' />}
+      isOptionEqualToValue={(option: ProjectOption, value: ProjectOption) =>
+        option.id === value.id
+      }
+      {...rest}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Stack, Typography } from '@mui/material';
+import { Button, Card, Grid, Link, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 
@@ -40,6 +40,7 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
                 variant='outlined'
                 component={RouterLink}
                 to={`/client/${client.id}`}
+                target='_blank'
               >
                 Go to Record
               </Button>
@@ -54,7 +55,26 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
       <Grid item xs={6} sx={{ pl: 1 }}>
         <Grid container>
           <Grid item xs={8}>
-            Recent Enrollments
+            <Typography sx={{ mb: 1 }}>Recent Enrollments</Typography>
+            {!client.enrollments && <Typography>None found.</Typography>}
+            {client.enrollments && (
+              <Stack>
+                {client.enrollments.map((enrollment) => (
+                  <Stack direction='row' key={enrollment.id}>
+                    <Link
+                      component={RouterLink}
+                      to={`/client/${client.id}/enrollment/${enrollment.id}`}
+                      target='_blank'
+                    >
+                      {enrollment.project.projectName}
+                    </Link>
+                    <Typography sx={{ ml: 1 }}>
+                      {enrollment.entryDate} - {enrollment.exitDate || 'active'}
+                    </Typography>
+                  </Stack>
+                ))}
+              </Stack>
+            )}
           </Grid>
 
           <Grid item xs={4}>

@@ -1,8 +1,9 @@
-import { Box, Button, Alert, TextField } from '@mui/material';
+import { Box, Button, Alert } from '@mui/material';
 import React, { FormEvent, useState } from 'react';
 
 import OneTimePassword from './OneTimePassword';
 
+import TextInput from '@/components/elements/input/TextInput';
 import useAuth from '@/modules/auth/hooks/useAuth';
 
 const LoginForm = () => {
@@ -20,25 +21,23 @@ const LoginForm = () => {
 
   return (
     <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-      <TextField
+      <TextInput
         margin='normal'
         required
         fullWidth
-        id='email'
         label='Email Address'
         name='email'
         autoComplete='email'
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <TextField
+      <TextInput
         margin='normal'
         required
         fullWidth
         name='password'
         label='Password'
         type='password'
-        id='password'
         autoComplete='current-password'
         value={password}
         onChange={(e) => setPassword(e.target.value)}

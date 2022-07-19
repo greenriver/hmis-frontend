@@ -8,7 +8,6 @@ import {
   Paper,
   Link,
   Typography,
-  TextField,
 } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -16,6 +15,7 @@ import Field from './Field';
 import { FormFieldDefinition } from './types';
 
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
+import TextInput from '@/components/elements/input/TextInput';
 
 interface SearchFormConfig {
   fields: FormFieldDefinition[];
@@ -63,10 +63,10 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
         might search for ja sm.
       </Typography>
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={6}>
-          <TextField
-            fullWidth
+        <Grid item xs={5}>
+          <TextInput
             label='Search Clients'
+            placeholder='Search clients...'
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.searchTerm || ''}
             onChange={(e) => {
@@ -75,16 +75,17 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             onKeyUp={submitOnEnter}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={5}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.projects || null}
+            value={values.projects || []}
             onChange={(selectedOption) => {
               fieldChanged('projects', selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
       <Button
         variant='outlined'
@@ -94,12 +95,12 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
         sx={{ mb: 2 }}
         size='small'
       >
-        Advanced Search{' '}
+        Advanced Search
         {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
       </Button>
-
       {expanded && (
         <Paper sx={{ p: 2 }}>
+          {/* <Typography sx={{ mb: 2 }}>Advanced Search</Typography> */}
           <Grid
             container
             direction='row'
@@ -120,6 +121,9 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
           <Stack direction='row' spacing={1}>
             <Button variant='outlined' type='submit'>
               Apply
+            </Button>
+            <Button variant='outlined' disabled>
+              Cancel
             </Button>
             <Link
               onClick={() => {

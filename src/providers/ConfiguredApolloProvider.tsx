@@ -8,6 +8,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import { offsetLimitPagination } from '@apollo/client/utilities';
 import fetch from 'cross-fetch';
 
 import * as storage from '@/modules/auth/api/storage';
@@ -52,9 +53,19 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        clients: offsetLimitPagination(['id']),
+      },
+    },
+  },
+});
+
 const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
-  cache: new InMemoryCache(),
+  cache,
   credentials: 'same-origin',
 });
 

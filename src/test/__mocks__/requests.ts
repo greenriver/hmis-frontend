@@ -7,51 +7,62 @@ const projectsForSelectMock = {
   },
   result: {
     data: {
-      projectsForSelect: [
+      projects: [
         {
-          label: 'Hawthorne Home',
-          options: [
-            {
-              label: 'White Ash Center',
-              value: '116',
-              projectType: 'ES',
-            },
-            {
-              label: 'Eastern Hemlock Lake',
-              value: '118',
-              projectType: 'ES',
-            },
-            {
-              label: 'Scarlet Oak Creek',
-              value: '127',
-              projectType: 'RRH',
-            },
-            {
-              label: 'White Spruce Hill',
-              value: '37518',
-              projectType: 'SO',
-            },
-          ],
+          projectName: 'White Ash Center',
+          id: '116',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
         },
         {
-          label: 'American Chestnut Home',
-          options: [
-            {
-              label: 'The Maples Room',
-              value: '37612',
-              projectType: 'ES',
-            },
-            {
-              label: 'Paper Birch Room',
-              value: '428',
-              projectType: 'PH',
-            },
-            {
-              label: 'Paper Birch Lake',
-              value: '433',
-              projectType: 'ES',
-            },
-          ],
+          projectName: 'Eastern Hemlock Lake',
+          id: '118',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'Scarlet Oak Creek',
+          id: '127',
+          projectType: 'RRH',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'White Spruce Hill',
+          id: '37518',
+          projectType: 'SO',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'The Maples Room',
+          id: '37612',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
+        },
+        {
+          projectName: 'Paper Birch Room',
+          id: '428',
+          projectType: 'PH',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
+        },
+        {
+          projectName: 'Paper Birch Lake',
+          id: '433',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
         },
       ],
     },
@@ -62,16 +73,16 @@ const clientSearchMock = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      input: { searchTerm: 'ack' },
-      limit: 10,
       offset: 0,
+      input: { searchTerm: 'ack' },
+      limit: 3,
     },
   },
   result: {
     data: {
       offset: 0,
-      limit: 10,
-      totalCount: 20,
+      limit: 3,
+      totalCount: 4,
       nodes: [
         {
           id: '9999',
@@ -80,6 +91,38 @@ const clientSearchMock = {
           preferredName: null,
           lastName: 'Ackroyd',
           dob: '04/04/1980',
+          enrollments: [
+            {
+              id: 5,
+              entryDate: '07/01/2022',
+              exitDate: null,
+              project: { projectName: 'White Pine' },
+            },
+            {
+              id: 6,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'Spruce Hill' },
+            },
+            {
+              id: 7,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine Terrace' },
+            },
+            {
+              id: 8,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine' },
+            },
+            {
+              id: 9,
+              entryDate: '12/01/2021',
+              exitDate: '12/05/2021',
+              project: { projectName: 'White Pine' },
+            },
+          ],
         },
         {
           id: '9998',
@@ -88,6 +131,7 @@ const clientSearchMock = {
           preferredName: 'Leo',
           lastName: 'Acker',
           dob: '04/04/1980',
+          enrollments: null,
         },
         {
           id: '9997',
@@ -96,7 +140,28 @@ const clientSearchMock = {
           preferredName: 'Jay',
           lastName: 'Ackman',
           dob: '12/13/1980',
+          enrollments: null,
         },
+      ],
+    },
+  },
+};
+
+const clientSearchMockNextPage = {
+  request: {
+    query: GET_CLIENTS,
+    variables: {
+      input: { searchTerm: 'ack' },
+      limit: 3,
+      offset: 3,
+    },
+  },
+  result: {
+    data: {
+      offset: 4,
+      limit: 3,
+      totalCount: 4,
+      nodes: [
         {
           id: '9996',
           ssn: '0004',
@@ -104,12 +169,17 @@ const clientSearchMock = {
           preferredName: null,
           lastName: 'Acker',
           dob: '12/01/1980',
+          enrollments: null,
         },
       ],
     },
   },
 };
 
-const mocks: any[] = [projectsForSelectMock, clientSearchMock];
+const mocks: any[] = [
+  projectsForSelectMock,
+  clientSearchMock,
+  clientSearchMockNextPage,
+];
 
 export default mocks;

@@ -48,7 +48,7 @@ export const transformValues = (values: Record<string, any>) => {
       variables[k] = format(value, 'MM/dd/yyyy');
     } else if (value instanceof Array) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
-      variables[k] = value.map((item) => item.value);
+      variables[k] = value.map((item) => item.id);
     } else {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       variables[k] = value;

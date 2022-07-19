@@ -3,6 +3,8 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
+import ClientDashboard from '@/components/pages/ClientDashboard';
+import EnrollmentPage from '@/components/pages/EnrollmentPage';
 
 const Dashboard = lazy(() => import('@/components/pages/Dashboard'));
 const Intake = lazy(() => import('@/components/pages/Intake'));
@@ -23,7 +25,11 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: '/intake', element: <Intake /> },
-      { path: '/client/:id', element: <Intake /> },
+      { path: '/client/:clientId', element: <ClientDashboard /> },
+      {
+        path: '/client/:clientId/enrollment/:enrollmentId',
+        element: <EnrollmentPage />,
+      },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <Navigate to='.' /> },
     ],

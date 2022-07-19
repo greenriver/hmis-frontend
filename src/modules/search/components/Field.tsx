@@ -6,7 +6,7 @@ import { FormFieldDefinition } from './types';
 import DatePicker from '@/components/elements/input/DatePicker';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
-import TextField from '@/components/elements/input/TextField';
+import TextInput from '@/components/elements/input/TextInput';
 
 interface Props {
   field: FormFieldDefinition;
@@ -16,12 +16,10 @@ interface Props {
 
 const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
   switch (field.type) {
-    // FIXME ssn needs input mask
     case 'text':
       return (
         <Grid item xs={4}>
-          <TextField
-            fullWidth
+          <TextInput
             id={field._uid}
             name={field._uid}
             label={field.label}
@@ -52,12 +50,11 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
         <Grid item xs={5}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={value}
+            value={value || []}
             onChange={(selectedOption) => {
-              // const value = selectedOption.value;
               fieldChanged(field._uid, selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
       );
@@ -66,11 +63,11 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
         <Grid item xs={5}>
           <OrganizationSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={value}
+            value={value || []}
             onChange={(selectedOption) => {
               fieldChanged(field._uid, selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
       );
