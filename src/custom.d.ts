@@ -40,13 +40,3 @@ interface ClientQuery {
   readonly limit: number;
   readonly nodes: Client[];
 }
-
-interface Project {
-  readonly id: string;
-  readonly projectName: string;
-  readonly projectType: string;
-}
-interface Organization {
-  readonly organizationName: string;
-  readonly projects: Project[];
-}

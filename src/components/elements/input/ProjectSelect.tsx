@@ -14,7 +14,7 @@ export interface ProjectOption {
   readonly id: string;
   readonly projectName: string;
   readonly projectType: string;
-  readonly organizationName: string;
+  readonly organization: { organizationName: string };
 }
 
 export type ProjectSelectValue = ProjectOption[] | ProjectOption | null;
@@ -36,22 +36,6 @@ const renderOption = (props: object, option: ProjectOption) => (
   </li>
 );
 
-// Reformat to flat list for Autocomplete
-const flattenProjectOptions = (organizations: Organization[]) =>
-  organizations.reduce((arr, row) => {
-    const projectRows: ProjectOption[] = [];
-    row.projects.map(({ id, projectName, projectType }: Project) => {
-      projectRows.push({
-        id,
-        projectName,
-        projectType,
-        organizationName: row.organizationName,
-      });
-    });
-    arr = arr.concat(projectRows);
-    return arr;
-  }, [] as ProjectOption[]);
-
 interface Props
   extends Omit<
     AutocompleteProps<
@@ -69,11 +53,16 @@ interface Props
 
 const ProjectSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
   const { data, loading, error } = useQuery<{
-    organizations: Organization[];
+    projects: ProjectOption[];
   }>(GET_PROJECTS);
   if (error) console.error(error);
 
-  const options = flattenProjectOptions(data?.organizations || []);
+  // FIXME: sort in graphql, not here
+  const options = (data?.projects || []).slice().sort((a, b) => {
+    const org1 = a.organization.organizationName;
+    const org2 = b.organization.organizationName;
+    return org1.localeCompare(org2);
+  });
 
   return (
     <Autocomplete
@@ -81,7 +70,7 @@ const ProjectSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
       options={options}
       value={value}
       onChange={(_, selected) => onChange(selected)}
-      groupBy={(option) => option.organizationName}
+      groupBy={(option) => option.organization.organizationName}
       renderOption={renderOption}
       getOptionLabel={(option) => option.projectName}
       renderInput={(params) => <TextInput {...params} label='Projects' />}

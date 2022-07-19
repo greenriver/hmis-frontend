@@ -7,51 +7,62 @@ const projectsForSelectMock = {
   },
   result: {
     data: {
-      organizations: [
+      projects: [
         {
-          organizationName: 'Hawthorne Home',
-          projects: [
-            {
-              projectName: 'White Ash Center',
-              id: '116',
-              projectType: 'ES',
-            },
-            {
-              projectName: 'Eastern Hemlock Lake',
-              id: '118',
-              projectType: 'ES',
-            },
-            {
-              projectName: 'Scarlet Oak Creek',
-              id: '127',
-              projectType: 'RRH',
-            },
-            {
-              projectName: 'White Spruce Hill',
-              id: '37518',
-              projectType: 'SO',
-            },
-          ],
+          projectName: 'White Ash Center',
+          id: '116',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
         },
         {
-          organizationName: 'American Chestnut Home',
-          projects: [
-            {
-              projectName: 'The Maples Room',
-              id: '37612',
-              projectType: 'ES',
-            },
-            {
-              projectName: 'Paper Birch Room',
-              id: '428',
-              projectType: 'PH',
-            },
-            {
-              projectName: 'Paper Birch Lake',
-              id: '433',
-              projectType: 'ES',
-            },
-          ],
+          projectName: 'Eastern Hemlock Lake',
+          id: '118',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'Scarlet Oak Creek',
+          id: '127',
+          projectType: 'RRH',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'White Spruce Hill',
+          id: '37518',
+          projectType: 'SO',
+          organization: {
+            organizationName: 'Hawthorne Home',
+          },
+        },
+        {
+          projectName: 'The Maples Room',
+          id: '37612',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
+        },
+        {
+          projectName: 'Paper Birch Room',
+          id: '428',
+          projectType: 'PH',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
+        },
+        {
+          projectName: 'Paper Birch Lake',
+          id: '433',
+          projectType: 'ES',
+          organization: {
+            organizationName: 'American Chestnut Home',
+          },
         },
       ],
     },
