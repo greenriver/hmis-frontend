@@ -7,21 +7,23 @@ import { GET_PROJECTS } from '@/api/projects.gql';
 
 // FIXME codegen
 interface Organization {
-  label: string;
-  options: Omit<ProjectOption, 'organization'>[];
+  organizationName: string;
+  projects: Omit<ProjectOption, 'organizationName'>[];
 }
 
 export interface ProjectOption {
-  readonly value: string;
-  readonly label: string;
+  readonly id: string;
+  readonly projectName: string;
   readonly projectType: string;
-  readonly organization: string;
+  readonly organizationName: string;
 }
 
+export type ProjectSelectValue = ProjectOption[] | ProjectOption | null;
+
 const renderOption = (props: object, option: ProjectOption) => (
-  <li {...props}>
+  <li {...props} key={option.id}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
-      <Typography variant='body2'>{option.label}</Typography>
+      <Typography variant='body2'>{option.projectName}</Typography>
       <Typography
         variant='body2'
         sx={{
@@ -35,8 +37,8 @@ const renderOption = (props: object, option: ProjectOption) => (
   </li>
 );
 interface Props {
-  value: ProjectOption[] | ProjectOption | null;
-  onChange: (option: ProjectOption | ProjectOption[] | null) => void;
+  value: ProjectSelectValue;
+  onChange: (option: ProjectSelectValue) => void;
   isMulti?: boolean;
 }
 
@@ -53,8 +55,13 @@ const ProjectSelect: React.FC<Props> = ({
   // Reformat to flat list for Autocomplete
   const options = data?.organizations.reduce((arr, row) => {
     const projectRows: ProjectOption[] = [];
-    row.options.map((option) => {
-      projectRows.push({ ...option, organization: row.label });
+    row.projects.map(({ id, projectName, projectType }) => {
+      projectRows.push({
+        id,
+        projectName,
+        projectType,
+        organizationName: row.organizationName,
+      });
     });
     arr = arr.concat(projectRows);
     return arr;
@@ -67,11 +74,12 @@ const ProjectSelect: React.FC<Props> = ({
       value={value}
       onChange={(_, selected) => onChange(selected)}
       multiple={multiple}
-      groupBy={(option) => option.organization}
+      groupBy={(option) => option.organizationName}
       renderOption={renderOption}
+      getOptionLabel={(option) => option.projectName}
       renderInput={(params) => <TextInput {...params} label='Projects' />}
       isOptionEqualToValue={(option: ProjectOption, value: ProjectOption) =>
-        option.value === value.value
+        option.id === value.id
       }
     />
   );

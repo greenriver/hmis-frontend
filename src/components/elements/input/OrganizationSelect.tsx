@@ -3,33 +3,38 @@ import { Typography, Autocomplete } from '@mui/material';
 import TextInput from './TextInput';
 
 export interface OrganizationOption {
-  readonly label: string;
-  readonly value: string;
+  readonly organizationName: string;
+  readonly id: string;
 }
 
 const fakeOptions: readonly OrganizationOption[] = [
   {
-    value: '1',
-    label: 'Sassafrass Center',
+    id: '1',
+    organizationName: 'Sassafrass Center',
   },
   {
-    value: '2',
-    label: 'Red Pine Center',
+    id: '2',
+    organizationName: 'Red Pine Center',
   },
   {
-    value: '3',
-    label: 'Red Cedar House',
+    id: '3',
+    organizationName: 'Red Cedar House',
   },
 ];
 
 const renderOption = (props: object, option: OrganizationOption) => (
-  <li {...props}>
-    <Typography variant='body2'>{option.label}</Typography>
+  <li {...props} key={option.id}>
+    <Typography variant='body2'>{option.organizationName}</Typography>
   </li>
 );
+
+export type OrganizationSelectValue =
+  | OrganizationOption[]
+  | OrganizationOption
+  | null;
 interface Props {
-  value: OrganizationOption[] | OrganizationOption | null;
-  onChange: (option: OrganizationOption[] | OrganizationOption | null) => void;
+  value: OrganizationSelectValue;
+  onChange: (option: OrganizationSelectValue) => void;
   isMulti?: boolean;
 }
 
@@ -51,10 +56,11 @@ const OrganizationSelect: React.FC<Props> = ({
       multiple={multiple}
       renderOption={renderOption}
       renderInput={(params) => <TextInput {...params} label='Organizations' />}
+      getOptionLabel={(option) => option.organizationName}
       isOptionEqualToValue={(
         option: OrganizationOption,
         value: OrganizationOption
-      ) => option.value === value.value}
+      ) => option.id === value.id}
     />
   );
 };

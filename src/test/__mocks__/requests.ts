@@ -9,46 +9,46 @@ const projectsForSelectMock = {
     data: {
       organizations: [
         {
-          label: 'Hawthorne Home',
-          options: [
+          organizationName: 'Hawthorne Home',
+          projects: [
             {
-              label: 'White Ash Center',
-              value: '116',
+              projectName: 'White Ash Center',
+              id: '116',
               projectType: 'ES',
             },
             {
-              label: 'Eastern Hemlock Lake',
-              value: '118',
+              projectName: 'Eastern Hemlock Lake',
+              id: '118',
               projectType: 'ES',
             },
             {
-              label: 'Scarlet Oak Creek',
-              value: '127',
+              projectName: 'Scarlet Oak Creek',
+              id: '127',
               projectType: 'RRH',
             },
             {
-              label: 'White Spruce Hill',
-              value: '37518',
+              projectName: 'White Spruce Hill',
+              id: '37518',
               projectType: 'SO',
             },
           ],
         },
         {
-          label: 'American Chestnut Home',
-          options: [
+          organizationName: 'American Chestnut Home',
+          projects: [
             {
-              label: 'The Maples Room',
-              value: '37612',
+              projectName: 'The Maples Room',
+              id: '37612',
               projectType: 'ES',
             },
             {
-              label: 'Paper Birch Room',
-              value: '428',
+              projectName: 'Paper Birch Room',
+              id: '428',
               projectType: 'PH',
             },
             {
-              label: 'Paper Birch Lake',
-              value: '433',
+              projectName: 'Paper Birch Lake',
+              id: '433',
               projectType: 'ES',
             },
           ],
