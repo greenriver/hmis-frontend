@@ -4,6 +4,7 @@ import '../src/index.css';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
+  layout: 'padded',
   controls: {
     matchers: {
       color: /(background|color)$/i,

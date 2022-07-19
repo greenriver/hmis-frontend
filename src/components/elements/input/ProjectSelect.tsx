@@ -1,17 +1,11 @@
 import { useQuery } from '@apollo/client';
-import {
-  Typography,
-  Box,
-  Autocomplete,
-  AutocompleteProps,
-} from '@mui/material';
+import { Typography, Box } from '@mui/material';
 
-import TextInput from './TextInput';
+import GenericSelect, { GenericSelectProps, Option } from './GenericSelect';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
 
-export interface ProjectOption {
-  readonly id: string;
+export interface ProjectOption extends Option {
   readonly projectName: string;
   readonly projectType: string;
   readonly organization: { organizationName: string };
@@ -36,48 +30,33 @@ const renderOption = (props: object, option: ProjectOption) => (
   </li>
 );
 
-interface Props
-  extends Omit<
-    AutocompleteProps<
-      ProjectOption,
-      boolean,
-      undefined,
-      undefined,
-      React.ElementType
-    >,
-    'onChange' | 'renderInput' | 'value' | 'options'
-  > {
-  value: ProjectSelectValue;
-  onChange: (option: ProjectSelectValue) => void;
-}
-
-const ProjectSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
+const ProjectSelect: React.FC<
+  Omit<GenericSelectProps<ProjectOption>, 'options'>
+> = ({ multiple, label = multiple ? 'Projects' : 'Project', ...props }) => {
   const { data, loading, error } = useQuery<{
     projects: ProjectOption[];
   }>(GET_PROJECTS);
   if (error) console.error(error);
 
   // FIXME: sort in graphql, not here
-  const options = (data?.projects || []).slice().sort((a, b) => {
-    const org1 = a.organization.organizationName;
-    const org2 = b.organization.organizationName;
-    return org1.localeCompare(org2);
-  });
+  const options: ProjectOption[] = (data?.projects || [])
+    .slice()
+    .sort((a, b) => {
+      const org1 = a.organization.organizationName;
+      const org2 = b.organization.organizationName;
+      return org1.localeCompare(org2);
+    });
 
   return (
-    <Autocomplete
-      loading={loading}
-      options={options}
-      value={value}
-      onChange={(_, selected) => onChange(selected)}
-      groupBy={(option) => option.organization.organizationName}
-      renderOption={renderOption}
+    <GenericSelect<ProjectOption>
       getOptionLabel={(option) => option.projectName}
-      renderInput={(params) => <TextInput {...params} label='Projects' />}
-      isOptionEqualToValue={(option: ProjectOption, value: ProjectOption) =>
-        option.id === value.id
-      }
-      {...rest}
+      groupBy={(option) => option.organization.organizationName}
+      label={label}
+      loading={loading}
+      multiple={multiple}
+      options={options}
+      renderOption={renderOption}
+      {...props}
     />
   );
 };

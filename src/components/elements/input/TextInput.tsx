@@ -7,12 +7,10 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
-export type TextInputProps = Partial<
-  Omit<TextFieldProps, 'error' | 'variant'>
-> & {
+export interface TextInputProps
+  extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
-  label?: React.ReactNode;
-};
+}
 
 const TextInput = ({
   inputProps = {},

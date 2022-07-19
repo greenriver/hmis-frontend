@@ -21,6 +21,25 @@ const config: StorybookViteConfig = {
   core: {
     builder: '@storybook/builder-vite',
   },
+  typescript: {
+    check: false,
+    checkOptions: {},
+    reactDocgen: 'react-docgen-typescript',
+    reactDocgenTypescriptOptions: {
+      // propFilter: () => true,
+      propFilter: (prop: any) => {
+        return prop.parent
+          ? prop.parent.name !== 'DOMAttributes' &&
+              prop.parent.name !== 'HTMLAttributes' &&
+              prop.parent.name !== 'AriaAttributes'
+          : true;
+      },
+      compilerOptions: {
+        allowSyntheticDefaultImports: false,
+        esModuleInterop: false,
+      },
+    },
+  },
   features: {
     storyStoreV7: true,
   },

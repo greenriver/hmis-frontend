@@ -1,13 +1,12 @@
-import { Typography, Autocomplete, AutocompleteProps } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import TextInput from './TextInput';
+import GenericSelect, { GenericSelectProps, Option } from './GenericSelect';
 
-export interface OrganizationOption {
-  readonly organizationName: string;
-  readonly id: string;
+export interface OrganizationOption extends Option {
+  organizationName: string;
 }
 
-const fakeOptions: readonly OrganizationOption[] = [
+const fakeOptions: OrganizationOption[] = [
   {
     id: '1',
     organizationName: 'Sassafrass Center',
@@ -32,41 +31,27 @@ export type OrganizationSelectValue =
   | OrganizationOption[]
   | OrganizationOption
   | null;
-interface Props
-  extends Omit<
-    AutocompleteProps<
-      OrganizationOption,
-      boolean,
-      undefined,
-      undefined,
-      React.ElementType
-    >,
-    'onChange' | 'renderInput' | 'value' | 'options'
-  > {
-  value: OrganizationSelectValue;
-  onChange: (option: OrganizationSelectValue) => void;
-  multiple?: boolean;
-}
 
-const OrganizationSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
+const OrganizationSelect: React.FC<
+  Omit<GenericSelectProps<OrganizationOption>, 'options'>
+> = ({
+  multiple,
+  label = multiple ? 'Organizations' : 'Organization',
+  ...props
+}) => {
   // FIXME replace with GQL query that returns grouped organization list
   const options = fakeOptions;
   const loading = false;
 
   return (
-    <Autocomplete
-      loading={loading}
-      options={options || []}
-      value={value}
-      onChange={(_, selected) => onChange(selected)}
-      renderOption={renderOption}
-      renderInput={(params) => <TextInput {...params} label='Organizations' />}
+    <GenericSelect<OrganizationOption>
       getOptionLabel={(option) => option.organizationName}
-      isOptionEqualToValue={(
-        option: OrganizationOption,
-        value: OrganizationOption
-      ) => option.id === value.id}
-      {...rest}
+      label={label}
+      loading={loading}
+      multiple={multiple}
+      options={options}
+      renderOption={renderOption}
+      {...props}
     />
   );
 };

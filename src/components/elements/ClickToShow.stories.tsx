@@ -5,9 +5,6 @@ import ClickToShow from './ClickToShow';
 export default {
   title: 'ClickToShow',
   component: ClickToShow,
-  parameters: {
-    layout: 'fullscreen',
-  },
 } as ComponentMeta<typeof ClickToShow>;
 
 const Template: ComponentStory<typeof ClickToShow> = (args) => (

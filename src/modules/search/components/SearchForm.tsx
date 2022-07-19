@@ -82,6 +82,7 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             onChange={(selectedOption) => {
               fieldChanged('projects', selectedOption);
             }}
+            textInputProps={{ placeholder: 'Choose projects...' }}
             multiple
           />
         </Grid>
