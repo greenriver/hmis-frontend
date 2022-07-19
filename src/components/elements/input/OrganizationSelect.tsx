@@ -1,4 +1,4 @@
-import { Typography, Autocomplete } from '@mui/material';
+import { Typography, Autocomplete, AutocompleteProps } from '@mui/material';
 
 import TextInput from './TextInput';
 
@@ -32,17 +32,23 @@ export type OrganizationSelectValue =
   | OrganizationOption[]
   | OrganizationOption
   | null;
-interface Props {
+interface Props
+  extends Omit<
+    AutocompleteProps<
+      OrganizationOption,
+      boolean,
+      undefined,
+      undefined,
+      React.ElementType
+    >,
+    'onChange' | 'renderInput' | 'value' | 'options'
+  > {
   value: OrganizationSelectValue;
   onChange: (option: OrganizationSelectValue) => void;
-  isMulti?: boolean;
+  multiple?: boolean;
 }
 
-const OrganizationSelect: React.FC<Props> = ({
-  value,
-  onChange,
-  isMulti: multiple,
-}) => {
+const OrganizationSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
   // FIXME replace with GQL query that returns grouped organization list
   const options = fakeOptions;
   const loading = false;
@@ -53,7 +59,6 @@ const OrganizationSelect: React.FC<Props> = ({
       options={options || []}
       value={value}
       onChange={(_, selected) => onChange(selected)}
-      multiple={multiple}
       renderOption={renderOption}
       renderInput={(params) => <TextInput {...params} label='Organizations' />}
       getOptionLabel={(option) => option.organizationName}
@@ -61,6 +66,7 @@ const OrganizationSelect: React.FC<Props> = ({
         option: OrganizationOption,
         value: OrganizationOption
       ) => option.id === value.id}
+      {...rest}
     />
   );
 };

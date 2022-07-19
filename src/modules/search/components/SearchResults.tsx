@@ -17,14 +17,6 @@ interface Props {
   filters: Record<string, any>;
 }
 
-// FIXME code-gen
-interface ClientQuery {
-  totalCount: number;
-  offset: number;
-  limit: number;
-  nodes: Client[];
-}
-
 const SearchResults: React.FC<Props> = ({ filters }) => {
   const [cards, setCards] = useState<boolean>();
   const [offset, setOffset] = useState(0);

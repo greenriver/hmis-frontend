@@ -1,15 +1,14 @@
 import { useQuery } from '@apollo/client';
-import { Typography, Box, Autocomplete } from '@mui/material';
+import {
+  Typography,
+  Box,
+  Autocomplete,
+  AutocompleteProps,
+} from '@mui/material';
 
 import TextInput from './TextInput';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
-
-// FIXME codegen
-interface Organization {
-  organizationName: string;
-  projects: Omit<ProjectOption, 'organizationName'>[];
-}
 
 export interface ProjectOption {
   readonly id: string;
@@ -36,26 +35,12 @@ const renderOption = (props: object, option: ProjectOption) => (
     </Box>
   </li>
 );
-interface Props {
-  value: ProjectSelectValue;
-  onChange: (option: ProjectSelectValue) => void;
-  isMulti?: boolean;
-}
 
-const ProjectSelect: React.FC<Props> = ({
-  value,
-  onChange,
-  isMulti: multiple,
-}) => {
-  const { data, loading, error } = useQuery<{
-    organizations: Organization[];
-  }>(GET_PROJECTS);
-  if (error) console.error(error);
-
-  // Reformat to flat list for Autocomplete
-  const options = data?.organizations.reduce((arr, row) => {
+// Reformat to flat list for Autocomplete
+const flattenProjectOptions = (organizations: Organization[]) =>
+  organizations.reduce((arr, row) => {
     const projectRows: ProjectOption[] = [];
-    row.projects.map(({ id, projectName, projectType }) => {
+    row.projects.map(({ id, projectName, projectType }: Project) => {
       projectRows.push({
         id,
         projectName,
@@ -67,13 +52,35 @@ const ProjectSelect: React.FC<Props> = ({
     return arr;
   }, [] as ProjectOption[]);
 
+interface Props
+  extends Omit<
+    AutocompleteProps<
+      ProjectOption,
+      boolean,
+      undefined,
+      undefined,
+      React.ElementType
+    >,
+    'onChange' | 'renderInput' | 'value' | 'options'
+  > {
+  value: ProjectSelectValue;
+  onChange: (option: ProjectSelectValue) => void;
+}
+
+const ProjectSelect: React.FC<Props> = ({ value, onChange, ...rest }) => {
+  const { data, loading, error } = useQuery<{
+    organizations: Organization[];
+  }>(GET_PROJECTS);
+  if (error) console.error(error);
+
+  const options = flattenProjectOptions(data?.organizations || []);
+
   return (
     <Autocomplete
       loading={loading}
-      options={options || []}
+      options={options}
       value={value}
       onChange={(_, selected) => onChange(selected)}
-      multiple={multiple}
       groupBy={(option) => option.organizationName}
       renderOption={renderOption}
       getOptionLabel={(option) => option.projectName}
@@ -81,6 +88,7 @@ const ProjectSelect: React.FC<Props> = ({
       isOptionEqualToValue={(option: ProjectOption, value: ProjectOption) =>
         option.id === value.id
       }
+      {...rest}
     />
   );
 };

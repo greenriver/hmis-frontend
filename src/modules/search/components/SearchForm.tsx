@@ -82,7 +82,7 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             onChange={(selectedOption) => {
               fieldChanged('projects', selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
         <Grid item xs={2}></Grid>

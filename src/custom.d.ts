@@ -16,7 +16,7 @@ interface HmisErrorResponse {
   error: HmisError;
 }
 
-// FIXME code-gen
+// FIXME: codegen all of these!
 interface Enrollment {
   id: string;
   entryDate: string;
@@ -24,7 +24,6 @@ interface Enrollment {
   project: { projectName: string };
 }
 
-// FIXME code-gen
 interface Client {
   id: string;
   ssn?: string;
@@ -33,4 +32,21 @@ interface Client {
   lastName?: string;
   dob?: string;
   enrollments?: Enrollment[];
+}
+
+interface ClientQuery {
+  readonly totalCount: number;
+  readonly offset: number;
+  readonly limit: number;
+  readonly nodes: Client[];
+}
+
+interface Project {
+  readonly id: string;
+  readonly projectName: string;
+  readonly projectType: string;
+}
+interface Organization {
+  readonly organizationName: string;
+  readonly projects: Project[];
 }

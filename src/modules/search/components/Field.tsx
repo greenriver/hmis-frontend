@@ -54,7 +54,7 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
             onChange={(selectedOption) => {
               fieldChanged(field._uid, selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
       );
@@ -67,7 +67,7 @@ const Field: React.FC<Props> = ({ field, fieldChanged, value }) => {
             onChange={(selectedOption) => {
               fieldChanged(field._uid, selectedOption);
             }}
-            isMulti
+            multiple
           />
         </Grid>
       );
