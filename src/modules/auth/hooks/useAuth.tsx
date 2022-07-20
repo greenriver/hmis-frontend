@@ -9,6 +9,7 @@ import React, {
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import * as sessionsApi from '../api/sessions';
+import { isHmisResponseError } from '../api/sessions';
 
 import Loading from '@/components/elements/Loading';
 
@@ -63,7 +64,7 @@ export function AuthProvider({
         navigateTo('/');
       })
       .catch((error: Error) => {
-        if (error.message === 'mfa_required') {
+        if (isHmisResponseError(error) && error.type === 'mfa_required') {
           setPrompt2fa(true);
         } else {
           setError(error);
