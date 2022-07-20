@@ -38,15 +38,6 @@ const ProjectSelect: React.FC<
   }>(GET_PROJECTS);
   if (error) console.error(error);
 
-  // FIXME: sort in graphql, not here
-  const options: ProjectOption[] = (data?.projects || [])
-    .slice()
-    .sort((a, b) => {
-      const org1 = a.organization.organizationName;
-      const org2 = b.organization.organizationName;
-      return org1.localeCompare(org2);
-    });
-
   return (
     <GenericSelect<ProjectOption>
       getOptionLabel={(option) => option.projectName}
@@ -54,7 +45,7 @@ const ProjectSelect: React.FC<
       label={label}
       loading={loading}
       multiple={multiple}
-      options={options}
+      options={data?.projects || []}
       renderOption={renderOption}
       {...props}
     />
