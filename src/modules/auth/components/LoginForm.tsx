@@ -1,10 +1,21 @@
 import { Box, Button, Alert } from '@mui/material';
-import React, { FormEvent, useState } from 'react';
+import { FormEvent, useState } from 'react';
+
+import { isHmisResponseError } from '../api/sessions';
 
 import OneTimePassword from './OneTimePassword';
 
 import TextInput from '@/components/elements/input/TextInput';
 import useAuth from '@/modules/auth/hooks/useAuth';
+
+const errorMessage = (error: Error) => {
+  if (isHmisResponseError(error)) {
+    return error.type === 'unauthenticated'
+      ? 'Bad login/password'
+      : error.message;
+  }
+  return 'Something went wrong, please try again later.';
+};
 
 const LoginForm = () => {
   const { login, prompt2fa, loading, error } = useAuth();
@@ -53,8 +64,7 @@ const LoginForm = () => {
       >
         Sign In
       </Button>
-      {/* FIXME: error could be something else */}
-      {error && <Alert severity='error'>Bad login/password</Alert>}
+      {error && <Alert severity='error'>{errorMessage(error)}</Alert>}
     </Box>
   );
 };

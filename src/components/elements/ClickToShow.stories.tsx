@@ -8,7 +8,7 @@ export default {
 } as ComponentMeta<typeof ClickToShow>;
 
 const Template: ComponentStory<typeof ClickToShow> = (args) => (
-  <ClickToShow {...args}>hidden value </ClickToShow>
+  <ClickToShow {...args}>hidden value</ClickToShow>
 );
 
 export const Default = Template.bind({});
