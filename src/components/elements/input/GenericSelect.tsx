@@ -3,10 +3,6 @@ import React from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
-export interface Option {
-  readonly id: string;
-}
-
 export interface GenericSelectProps<T>
   extends Omit<
     AutocompleteProps<T, boolean, undefined, undefined, React.ElementType>,
@@ -19,7 +15,7 @@ export interface GenericSelectProps<T>
   textInputProps?: TextInputProps;
 }
 
-const GenericSelect = <T extends Option>({
+const GenericSelect = <T extends object>({
   value,
   onChange,
   label,
@@ -47,7 +43,6 @@ const GenericSelect = <T extends Option>({
           label={label}
         />
       )}
-      isOptionEqualToValue={(option: T, value: T) => option.id === value.id}
       {...rest}
     />
   );

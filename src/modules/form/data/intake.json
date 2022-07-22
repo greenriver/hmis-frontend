@@ -1,0 +1,259 @@
+{
+  "name": "client-intake",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "first-name-group",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "first-name",
+          "text": "First Name"
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "last-name",
+          "text": "Last Name"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "name-dq",
+          "text": "Data Quality",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Full name reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Partial, street name, or code name reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "required": false,
+      "linkId": "dob-group",
+      "item": [
+        {
+          "type": "date",
+          "required": false,
+          "linkId": "dob",
+          "text": "Date of Birth"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "dob-dq",
+          "text": "Data Quality",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Full DOB reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Approximate or partial DOB reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "required": false,
+      "linkId": "ssn-group",
+      "item": [
+        {
+          "type": "ssn",
+          "required": false,
+          "linkId": "ssn",
+          "text": "Social Security Number"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "ssn-dq",
+          "text": "Data Quality",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Full SSN Reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Approximate or partial  SSN reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "required": false,
+      "text": "Additional Details",
+      "linkId": "demo-group",
+      "item": [
+        {
+          "type": "display",
+          "required": false,
+          "linkId": "demo-group-description",
+          "text": "Some display text for this section goes here."
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "pronouns",
+          "text": "Pronouns"
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "gender",
+          "text": "Gender"
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "sexual-orientation",
+          "text": "Sexual Orientation"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "repeats": false,
+          "linkId": "veteran-status",
+          "text": "Veteran Status",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "0",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "required": false,
+          "text": "Nested Group",
+          "linkId": "demo-group-2",
+          "item": [
+            {
+              "type": "choice",
+              "answerValueSet": "organizations",
+              "required": false,
+              "linkId": "organization",
+              "text": "Organizations (single)",
+              "repeats": false
+            },
+            {
+              "type": "choice",
+              "answerValueSet": "projects",
+              "required": false,
+              "linkId": "project",
+              "text": "Projects (multple)",
+              "repeats": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -11,23 +11,28 @@ import {
 } from '@mui/material';
 import React, { useState } from 'react';
 
-import Field from './Field';
-import { FormFieldDefinition } from './types';
-
-import ProjectSelect from '@/components/elements/input/ProjectSelect';
+import ProjectSelect, {
+  Option as ProjectOption,
+} from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
+import DynamicField from '@/modules/form/components/DynamicField';
+import { FormDefinition, Item } from '@/modules/form/types';
+import { transformSubmitValues } from '@/modules/form/util';
 
-interface SearchFormConfig {
-  fields: FormFieldDefinition[];
-}
-
+type FormValues = {
+  searchTerm?: string;
+  projects?: ProjectOption[];
+  [k: string]: any;
+};
 interface Props {
-  config: SearchFormConfig;
+  definition: FormDefinition;
   onSubmit: (values: Record<string, any>) => void;
 }
 
-const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
-  const [values, setValues] = useState<Record<string, any>>({});
+const MAPPING_KEY = 'clientSearchInput';
+
+const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
+  const [values, setValues] = useState<FormValues>({});
   const [expanded, setExpanded] = useState(false);
 
   const fieldChanged = (fieldId: string, value: any) => {
@@ -42,8 +47,13 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
     event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent
   ) => {
     event.preventDefault();
-    console.log('Searching... ', JSON.stringify(values, null, 2));
-    onSubmit(values);
+    // Transform values into ClientSearchInput query variables
+    const variables = transformSubmitValues(definition, values, MAPPING_KEY);
+    onSubmit({
+      ...variables,
+      searchTerm: values.searchTerm,
+      projects: values.projects ? values.projects.map((p) => p.id) : undefined,
+    });
   };
   const submitOnEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
@@ -109,13 +119,13 @@ const SearchForm: React.FC<Props> = ({ config, onSubmit }) => {
             columnSpacing={2}
             sx={{ mb: 2 }}
           >
-            {config.fields.map((field) => (
-              <Field
-                key={field._uid}
-                field={field}
-                fieldChanged={fieldChanged}
+            {definition.item?.map((item: Item) => (
+              <DynamicField
+                key={item.linkId}
+                item={item}
+                itemChanged={fieldChanged}
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                value={values[field._uid] ?? ''}
+                value={values[item.linkId] ?? ''}
               />
             ))}
           </Grid>
