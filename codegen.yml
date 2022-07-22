@@ -1,0 +1,13 @@
+overwrite: true
+schema: ${SCHEMA_PATH}
+generates:
+  ./gqlTypes.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+  ./fragmentTypes.json:
+    plugins:
+      - 'fragment-matcher'
