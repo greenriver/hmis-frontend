@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const GET_PROJECTS = gql`
   query GetProjectsForSelect {
-    projects {
+    projects(sortOrder: ORGANIZATION_AND_NAME) {
       id
       projectName
       projectType

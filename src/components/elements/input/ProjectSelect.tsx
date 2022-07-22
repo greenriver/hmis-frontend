@@ -1,19 +1,20 @@
 import { useQuery } from '@apollo/client';
 import { Typography, Box } from '@mui/material';
 
-import GenericSelect, { GenericSelectProps, Option } from './GenericSelect';
+import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
 import { GET_PROJECTS } from '@/api/projects.gql';
 
-export interface ProjectOption extends Option {
+export interface Option {
+  readonly id: string;
   readonly projectName: string;
   readonly projectType: string;
   readonly organization: { organizationName: string };
 }
 
-export type ProjectSelectValue = ProjectOption[] | ProjectOption | null;
+export type ProjectSelectValue = Option[] | Option | null;
 
-const renderOption = (props: object, option: ProjectOption) => (
+const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
       <Typography variant='body2'>{option.projectName}</Typography>
@@ -30,16 +31,18 @@ const renderOption = (props: object, option: ProjectOption) => (
   </li>
 );
 
-const ProjectSelect: React.FC<
-  Omit<GenericSelectProps<ProjectOption>, 'options'>
-> = ({ multiple, label = multiple ? 'Projects' : 'Project', ...props }) => {
+const ProjectSelect: React.FC<Omit<GenericSelectProps<Option>, 'options'>> = ({
+  multiple,
+  label = multiple ? 'Projects' : 'Project',
+  ...props
+}) => {
   const { data, loading, error } = useQuery<{
-    projects: ProjectOption[];
+    projects: Option[];
   }>(GET_PROJECTS);
   if (error) console.error(error);
 
   return (
-    <GenericSelect<ProjectOption>
+    <GenericSelect<Option>
       getOptionLabel={(option) => option.projectName}
       groupBy={(option) => option.organization.organizationName}
       label={label}
@@ -47,6 +50,7 @@ const ProjectSelect: React.FC<
       multiple={multiple}
       options={data?.projects || []}
       renderOption={renderOption}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       {...props}
     />
   );

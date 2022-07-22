@@ -1,12 +1,13 @@
 import { Typography } from '@mui/material';
 
-import GenericSelect, { GenericSelectProps, Option } from './GenericSelect';
+import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-export interface OrganizationOption extends Option {
+export interface Option {
+  readonly id: string;
   organizationName: string;
 }
 
-const fakeOptions: OrganizationOption[] = [
+const fakeOptions: Option[] = [
   {
     id: '1',
     organizationName: 'Sassafrass Center',
@@ -21,19 +22,16 @@ const fakeOptions: OrganizationOption[] = [
   },
 ];
 
-const renderOption = (props: object, option: OrganizationOption) => (
+const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
     <Typography variant='body2'>{option.organizationName}</Typography>
   </li>
 );
 
-export type OrganizationSelectValue =
-  | OrganizationOption[]
-  | OrganizationOption
-  | null;
+export type OrganizationSelectValue = Option[] | Option | null;
 
 const OrganizationSelect: React.FC<
-  Omit<GenericSelectProps<OrganizationOption>, 'options'>
+  Omit<GenericSelectProps<Option>, 'options'>
 > = ({
   multiple,
   label = multiple ? 'Organizations' : 'Organization',
@@ -44,13 +42,14 @@ const OrganizationSelect: React.FC<
   const loading = false;
 
   return (
-    <GenericSelect<OrganizationOption>
+    <GenericSelect<Option>
       getOptionLabel={(option) => option.organizationName}
       label={label}
       loading={loading}
       multiple={multiple}
       options={options}
       renderOption={renderOption}
+      isOptionEqualToValue={(option, value) => option.id === value.id}
       {...props}
     />
   );

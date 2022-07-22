@@ -1,17 +1,23 @@
 import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import clientSearchConfig, { transformValues } from '@/api/clientSearchConfig';
+import formData from '@/modules/form/data/search.json';
+import { FormDefinition } from '@/modules/form/types';
 import SearchForm from '@/modules/search/components/SearchForm';
 import SearchResults from '@/modules/search/components/SearchResults';
+
+// FIXME workaround for enum issue
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+const searchFormDefinition: FormDefinition = JSON.parse(
+  JSON.stringify(formData)
+);
 
 const Dashboard: React.FC = () => {
   const [filters, setFilters] = useState<Record<string, any>>();
 
   const submitHandler = (values: Record<string, any>) => {
-    const variables = transformValues(values);
-    console.log(JSON.stringify(variables, null, 2));
-    setFilters(variables);
+    console.log(JSON.stringify(values, null, 2));
+    setFilters(values);
   };
 
   return (
@@ -19,7 +25,7 @@ const Dashboard: React.FC = () => {
       <Typography variant='h6' sx={{ mb: 2 }}>
         Clients
       </Typography>
-      <SearchForm config={clientSearchConfig} onSubmit={submitHandler} />
+      <SearchForm definition={searchFormDefinition} onSubmit={submitHandler} />
       {filters && <SearchResults filters={filters} />}
     </>
   );
