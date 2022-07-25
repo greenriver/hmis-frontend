@@ -1,0 +1,61 @@
+{
+  "name": "search",
+  "item": [
+    {
+      "type": "string",
+      "required": false,
+      "linkId": "1",
+      "text": "Personal ID",
+      "mapping": {
+        "clientSearchInput": "personalId"
+      }
+    },
+    {
+      "type": "string",
+      "required": false,
+      "linkId": "2",
+      "text": "First Name",
+      "mapping": {
+        "clientSearchInput": "firstName"
+      }
+    },
+    {
+      "type": "string",
+      "required": false,
+      "linkId": "3",
+      "text": "Last Name",
+      "mapping": {
+        "clientSearchInput": "lastName"
+      }
+    },
+    {
+      "type": "string",
+      "required": false,
+      "linkId": "4",
+      "text": "Last 4 Social",
+      "mapping": {
+        "clientSearchInput": "ssnSerial"
+      }
+    },
+    {
+      "type": "date",
+      "required": false,
+      "linkId": "5",
+      "text": "Date of Birth",
+      "mapping": {
+        "clientSearchInput": "dob"
+      }
+    },
+    {
+      "type": "choice",
+      "required": false,
+      "linkId": "6",
+      "text": "Organizations",
+      "repeats": true,
+      "answerValueSet": "organizations",
+      "mapping": {
+        "clientSearchInput": "organizations"
+      }
+    }
+  ]
+}
