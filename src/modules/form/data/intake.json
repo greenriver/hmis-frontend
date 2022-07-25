@@ -37,10 +37,19 @@
           }
         },
         {
+          "type": "string",
+          "required": false,
+          "linkId": "name-suffix",
+          "text": "Suffix",
+          "mapping": {
+            "clientMutationInput": "nameSuffix"
+          }
+        },
+        {
           "type": "choice",
           "required": false,
           "linkId": "name-dq",
-          "text": "Data Quality",
+          "text": "Name Data Quality",
           "mapping": {
             "clientMutationInput": "nameDataQuality"
           },
@@ -97,7 +106,7 @@
           "type": "choice",
           "required": false,
           "linkId": "dob-dq",
-          "text": "Data Quality",
+          "text": "DOB Data Quality",
           "answerOption": [
             {
               "valueCoding": {
@@ -148,7 +157,7 @@
           "type": "choice",
           "required": false,
           "linkId": "ssn-dq",
-          "text": "Data Quality",
+          "text": "SSN Data Quality",
           "answerOption": [
             {
               "valueCoding": {
@@ -160,6 +169,205 @@
               "valueCoding": {
                 "code": "2",
                 "display": "Approximate or partial  SSN reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "required": false,
+      "linkId": "additional-group",
+      "item": [
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "race",
+          "text": "Race",
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "American Indian, Alaska Native, or Indigenous"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Asian or Asian American"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Black, African-American, or African"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Native Hawaiian or Pacific Islander"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "White"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "ethnicity",
+          "text": "Ethnicity",
+          "repeats": false,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "0",
+                "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Hispanic/Latin(a)(o)(x)"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "gender",
+          "text": "Gender",
+          "repeats": true,
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "0",
+                "display": "Female"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Male"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Non-binary, genderfluid, agender, culturally specific gender"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Transgender"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "6",
+                "display": "Questioning"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "repeats": false,
+          "linkId": "veteran-status",
+          "text": "Veteran Status",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "0",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Yes"
               }
             },
             {
