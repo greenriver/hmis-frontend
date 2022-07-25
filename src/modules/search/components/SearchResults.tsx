@@ -1,6 +1,19 @@
 import { useQuery } from '@apollo/client';
-import { Paper, Switch, FormGroup, FormControlLabel } from '@mui/material';
+import ViewCompactIcon from '@mui/icons-material/ViewCompact';
+import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
+import {
+  Paper,
+  Grid,
+  ToggleButtonGroup,
+  ToggleButton,
+  Typography,
+  Button,
+  Box,
+  Card,
+  Stack,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import ClientCard from './ClientCard';
 import SearchResultsTable from './SearchResultsTable';
@@ -54,18 +67,40 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
 
   return (
     <>
-      <FormGroup sx={{ mb: 2 }}>
-        <FormControlLabel
-          control={
-            <Switch
-              checked={cards}
-              onChange={(_, checked) => setCards(checked)}
-              inputProps={{ 'aria-label': 'controlled' }}
-            />
-          }
-          label={cards ? 'Switch to table' : 'Switch to cards'}
-        />
-      </FormGroup>
+      <Grid container justifyContent='space-between' sx={{ mb: 4 }}>
+        <Grid item>
+          <ToggleButtonGroup
+            value={cards}
+            exclusive
+            onChange={(_, checked: boolean) => setCards(checked)}
+            aria-label='results display format'
+          >
+            <ToggleButton value={false} aria-label='table' size='small'>
+              <ViewHeadlineIcon />
+              <Box sx={{ pl: 0.5 }}>Table</Box>
+            </ToggleButton>
+            <ToggleButton value={true} aria-label='cards' size='small'>
+              <ViewCompactIcon />
+              <Box sx={{ pl: 0.5 }}>Cards</Box>
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <Card sx={{ p: 1 }}>
+            <Stack direction='row' spacing={3}>
+              <Typography>Don't see the client you're looking for?</Typography>
+              <Button
+                size='small'
+                variant='outlined'
+                component={RouterLink}
+                to='/intake'
+              >
+                + Add Client
+              </Button>
+            </Stack>
+          </Card>
+        </Grid>
+      </Grid>
       {cards ? (
         data.nodes.map((client) => (
           <ClientCard key={client.id} client={client} />

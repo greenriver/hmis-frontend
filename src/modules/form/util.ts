@@ -10,6 +10,7 @@ const findItem = (
   if (!items || items.length === 0) return undefined;
   const found = items.find((i) => i.linkId === linkId);
   if (found) return found;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return items.find((item) => findItem(item.item, linkId));
 };
 
@@ -38,6 +39,27 @@ const transformValue = (value: any, item: Item): any => {
   return value;
 };
 
+// Recursive helper for transformSubmitValues
+const transformSubmitValuesInner = (
+  items: Item[],
+  values: Record<string, any>,
+  transformed: Record<string, any>,
+  mappingKey: string
+) => {
+  items.forEach((item: Item) => {
+    if (Array.isArray(item.item)) {
+      transformSubmitValuesInner(item.item, values, transformed, mappingKey);
+    }
+
+    if (!(item.linkId in values)) return;
+    if (!item.mapping) return;
+    const key = item.mapping[mappingKey];
+    if (!key) return;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    transformed[key] = transformValue(values[item.linkId], item);
+  });
+};
+
 // Take a mapping of linkId->value and transform it into queryVariable -> value
 export const transformSubmitValues = (
   definition: FormDefinition,
@@ -45,13 +67,11 @@ export const transformSubmitValues = (
   mappingKey: string
 ) => {
   const transformed: Record<string, any> = {};
-  Object.keys(values).forEach((linkId) => {
-    const item = findItem(definition.item, linkId);
-    if (!item || !item.mapping) return;
-    const key = item.mapping[mappingKey];
-    if (!key) return;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    transformed[key] = transformValue(values[linkId], item);
-  });
+  transformSubmitValuesInner(
+    definition.item || [],
+    values,
+    transformed,
+    mappingKey
+  );
   return transformed;
 };

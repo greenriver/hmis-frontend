@@ -8,9 +8,16 @@ import DynamicField from './DynamicField';
 interface Props {
   definition: FormDefinition;
   onSubmit: (values: Record<string, any>) => void;
+  submitButtonText?: string;
+  discardButtonText?: string;
 }
 
-const DynamicForm: React.FC<Props> = ({ definition, onSubmit }) => {
+const DynamicForm: React.FC<Props> = ({
+  definition,
+  onSubmit,
+  submitButtonText,
+  discardButtonText,
+}) => {
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>({});
 
@@ -55,12 +62,10 @@ const DynamicForm: React.FC<Props> = ({ definition, onSubmit }) => {
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
         <Button variant='contained' type='submit'>
-          Submit
+          {submitButtonText || 'Submit'}
         </Button>
-        <Button variant='outlined'>Save Draft</Button>
-        <Button variant='outlined' disabled>
-          Discard
-        </Button>
+        {/* <Button variant='outlined'>Save Draft</Button> */}
+        <Button variant='outlined'>{discardButtonText || 'Discard'}</Button>
         {/* <Link
             onClick={() => {
               setValues({});
