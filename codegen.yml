@@ -5,9 +5,9 @@ generates:
     plugins:
       - 'typescript'
       - 'typescript-operations'
-  ./graphql.schema.json:
-    plugins:
-      - 'introspection'
+  # ./graphql.schema.json:
+  #   plugins:
+  #     - 'introspection'
   ./fragmentTypes.json:
     plugins:
       - 'fragment-matcher'
