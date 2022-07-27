@@ -1,11 +1,23 @@
 import { ThemeOptions } from '@mui/material';
 
 const theme: ThemeOptions = {
+  palette: {
+    background: {
+      default: '#F9F9F9',
+    },
+  },
   components: {
     MuiPaper: {
       defaultProps: {
         elevation: 0,
         variant: 'outlined',
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'white',
+        },
       },
     },
     MuiDatePicker: {

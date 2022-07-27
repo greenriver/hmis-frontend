@@ -15,10 +15,10 @@ import {
 import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import ClientCard from './ClientCard';
 import SearchResultsTable from './SearchResultsTable';
 
 import { GET_CLIENTS } from '@/api/clients.gql';
+import ClientCard from '@/components/elements/ClientCard';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
 import { ClientsPaginated } from '@/types/gqlTypes';
@@ -104,7 +104,12 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
       </Grid>
       {cards ? (
         data.nodes.map((client) => (
-          <ClientCard key={client.id} client={client} />
+          <ClientCard
+            key={client.id}
+            client={client}
+            showLinkToRecord
+            showNotices
+          />
         ))
       ) : (
         <SearchResultsTable rows={data.nodes} />

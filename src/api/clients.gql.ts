@@ -7,11 +7,13 @@ export const GET_CLIENTS = gql`
     nodesCount
     nodes {
       id
-      ssn
+      personalId
+      ssnSerial
       firstName
       preferredName
       lastName
       dob
+      dateUpdated
       enrollments {
         id
         entryDate

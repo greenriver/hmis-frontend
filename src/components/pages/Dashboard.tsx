@@ -1,5 +1,8 @@
 import { Typography } from '@mui/material';
+import { Container } from '@mui/system';
 import React, { useState } from 'react';
+
+import PageHeader from '../layout/PageHeader';
 
 import formData from '@/modules/form/data/search.json';
 import { FormDefinition } from '@/modules/form/types';
@@ -22,11 +25,16 @@ const Dashboard: React.FC = () => {
 
   return (
     <>
-      <Typography variant='h6' sx={{ mb: 2 }}>
-        Clients
-      </Typography>
-      <SearchForm definition={searchFormDefinition} onSubmit={submitHandler} />
-      {filters && <SearchResults filters={filters} />}
+      <PageHeader>
+        <Typography variant='h5'>Clients</Typography>
+      </PageHeader>
+      <Container maxWidth='xl' sx={{ pt: 3, pb: 6 }}>
+        <SearchForm
+          definition={searchFormDefinition}
+          onSubmit={submitHandler}
+        />
+        {filters && <SearchResults filters={filters} />}
+      </Container>
     </>
   );
 };

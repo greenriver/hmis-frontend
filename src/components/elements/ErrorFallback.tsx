@@ -5,9 +5,10 @@ const ErrorFallback = () => (
     display='flex'
     justifyContent='center'
     alignItems='center'
-    minHeight='100vh'
+    height='100%'
     data-testid='error'
     flexDirection='column'
+    sx={{ p: 10 }}
   >
     <Typography variant='h4'>Something went wrong.</Typography>
     <Button
