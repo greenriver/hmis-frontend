@@ -10,7 +10,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import * as HmisUtil from '@/modules/hmis/util';
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { Client } from '@/types/gqlTypes';
 
 interface Props {
@@ -38,7 +38,12 @@ const ClientCard: React.FC<Props> = ({
     <Grid container sx={{ p: 1 }}>
       <Grid item xs={5}>
         <Stack spacing={1}>
-          <Typography variant='h6'>{HmisUtil.name(client)}</Typography>
+          <Stack direction='row' spacing={1}>
+            <Typography variant='h6'>{HmisUtil.name(client)}</Typography>
+            <Typography variant='h6' color='text.secondary'>
+              {HmisUtil.pronouns(client)}
+            </Typography>
+          </Stack>
           <Stack spacing={1} direction='row'>
             <img alt='client' src='https://via.placeholder.com/150' />
             <Stack spacing={0.5}>
@@ -69,7 +74,7 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
           </Stack>
-          <Typography variant='caption' sx={{ fontStyle: 'italic' }}>
+          <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
             Last Updated on {HmisUtil.lastUpdated(client)}
           </Typography>
         </Stack>

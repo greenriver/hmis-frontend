@@ -8,7 +8,7 @@ import ClientDashboardTabs from '../layout/ClientDashboardTabs';
 import PageHeader from '../layout/PageHeader';
 
 import { GET_CLIENTS } from '@/api/clients.gql';
-import * as HmisUtil from '@/modules/hmis/util';
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { Client, ClientsPaginated } from '@/types/gqlTypes';
 const Profile: React.FC<{ client: Client }> = ({ client }) => (
   <ClientCard client={client} />

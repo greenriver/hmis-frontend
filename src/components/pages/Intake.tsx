@@ -4,8 +4,8 @@ import PageHeader from '../layout/PageHeader';
 
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import formData from '@/modules/form/data/intake.json';
+import { transformSubmitValues } from '@/modules/form/formUtil';
 import { FormDefinition } from '@/modules/form/types';
-import { transformSubmitValues } from '@/modules/form/util';
 import ConfiguredApolloProvider from '@/providers/ConfiguredApolloProvider';
 
 const MAPPING_KEY = 'clientMutationInput';

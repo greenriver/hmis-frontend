@@ -31,6 +31,10 @@ export const lastUpdated = (client: Client) => {
   return formatDate(date);
 };
 
+// TODO implement
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const pronouns = (_client: Client) => '(she/her)';
+
 export const entryExitRange = (enrollment: Enrollment) => {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
   return `${enrollment.entryDate || 'unknown'} - ${
