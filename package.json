@@ -18,7 +18,8 @@
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
     "postinstall": "husky install",
     "storybook": "cross-env TS_NODE_PROJECT=.storybook/tsconfig.json NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "graphql:codegen": "graphql-codegen --config codegen.yml"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -74,6 +75,12 @@
     "@babel/preset-env": "^7.17.12",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
+    "@graphql-codegen/cli": "^2.9.1",
+    "@graphql-codegen/fragment-matcher": "^3.3.0",
+    "@graphql-codegen/introspection": "^2.2.0",
+    "@graphql-codegen/typescript": "^2.7.2",
+    "@graphql-codegen/typescript-document-nodes": "^2.3.2",
+    "@graphql-codegen/typescript-operations": "^2.5.2",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
     "@storybook/addon-interactions": "^6.5.9",
