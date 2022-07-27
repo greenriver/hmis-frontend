@@ -9,6 +9,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+import { Client } from '@/types/gqlTypes';
+
 // FIXME make generic Table component
 
 const SearchResultsTable: React.FC<{
@@ -45,7 +47,7 @@ const SearchResultsTable: React.FC<{
               <TableCell component='th' scope='row'>
                 {row.id}
               </TableCell>
-              <TableCell>{row.ssn}</TableCell>
+              <TableCell>{row.ssnSerial}</TableCell>
               <TableCell>{row.firstName}</TableCell>
               <TableCell>{row.preferredName}</TableCell>
               <TableCell>{row.lastName}</TableCell>

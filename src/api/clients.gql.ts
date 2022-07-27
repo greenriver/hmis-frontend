@@ -4,7 +4,7 @@ export const GET_CLIENTS = gql`
   query GetClients($input: ClientSearchInput!, $limit: Int!, $offset: Int = 0) {
     offset
     limit
-    totalCount
+    nodesCount
     nodes {
       id
       ssn

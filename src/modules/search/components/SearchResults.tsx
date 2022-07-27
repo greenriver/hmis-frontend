@@ -21,6 +21,7 @@ import SearchResultsTable from './SearchResultsTable';
 import { GET_CLIENTS } from '@/api/clients.gql';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
+import { ClientsPaginated } from '@/types/gqlTypes';
 
 const PAGE_SIZE = 3;
 const MAX_CARDS_THRESHOLD = 100;
@@ -35,7 +36,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
   const [offset, setOffset] = useState(0);
 
   const limit = PAGE_SIZE;
-  const { data, loading, error, fetchMore } = useQuery<ClientQuery>(
+  const { data, loading, error, fetchMore } = useQuery<ClientsPaginated>(
     GET_CLIENTS,
     {
       variables: {
@@ -49,7 +50,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
   // Set initial state of Card/Table toggle
   useEffect(() => {
     if (typeof cards === 'undefined' && data) {
-      setCards(data.totalCount <= MAX_CARDS_THRESHOLD);
+      setCards(data.nodesCount <= MAX_CARDS_THRESHOLD);
     }
   }, [data, cards]);
 
@@ -110,7 +111,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
       )}
       <Pagination
         {...{ limit, offset }}
-        totalEntries={data.totalCount}
+        totalEntries={data.nodesCount}
         setOffset={setOffset}
         itemName='clients'
         gridProps={{ mt: 2 }}

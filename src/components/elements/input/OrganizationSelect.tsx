@@ -2,10 +2,9 @@ import { Typography } from '@mui/material';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-export interface Option {
-  readonly id: string;
-  organizationName: string;
-}
+import { Organization } from '@/types/gqlTypes';
+
+export type Option = Omit<Organization, 'projects'>;
 
 const fakeOptions: Option[] = [
   {

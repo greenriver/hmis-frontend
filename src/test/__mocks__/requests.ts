@@ -82,7 +82,10 @@ const clientSearchMock = {
     data: {
       offset: 0,
       limit: 3,
-      totalCount: 4,
+      hasMoreAfter: true,
+      hasMoreBefore: false,
+      nodesCount: 4,
+      pagesCount: 2,
       nodes: [
         {
           id: '9999',
@@ -160,7 +163,10 @@ const clientSearchMockNextPage = {
     data: {
       offset: 4,
       limit: 3,
-      totalCount: 4,
+      hasMoreAfter: true,
+      hasMoreBefore: false,
+      nodesCount: 4,
+      pagesCount: 2,
       nodes: [
         {
           id: '9996',

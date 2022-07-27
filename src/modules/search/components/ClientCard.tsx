@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
+import { Client } from '@/types/gqlTypes';
 
 const displayName = (client: Client) => {
   if (!client.preferredName && !client.firstName && !client.lastName) {
@@ -34,7 +35,7 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
                 <ClickToShow text='Show DOB'>{client.dob}</ClickToShow>
               </div>
               <div>
-                <ClickToShow text='Show SSN'>{client.ssn}</ClickToShow>
+                <ClickToShow text='Show SSN'>{client.ssnSerial}</ClickToShow>
               </div>
               <Button
                 variant='outlined'
@@ -66,7 +67,7 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
                       to={`/client/${client.id}/enrollment/${enrollment.id}`}
                       target='_blank'
                     >
-                      {enrollment.project.projectName}
+                      {enrollment.project?.projectName}
                     </Link>
                     <Typography sx={{ ml: 1 }}>
                       {enrollment.entryDate} - {enrollment.exitDate || 'active'}
