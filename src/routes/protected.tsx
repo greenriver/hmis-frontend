@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Navigate, Outlet } from 'react-router-dom';
 
+import EnrollmentTab from '@/components/dashboard/Enrollment';
 import Enrollments from '@/components/dashboard/Enrollments';
 import Profile from '@/components/dashboard/Profile';
 import ErrorFallback from '@/components/elements/ErrorFallback';
@@ -36,6 +37,7 @@ export const protectedRoutes = [
         children: [
           { path: '', element: <Profile /> },
           { path: 'profile', element: <Profile /> },
+          { path: 'enrollments/:enrollmentId', element: <EnrollmentTab /> },
           { path: 'enrollments', element: <Enrollments /> },
           { path: 'history', element: null },
           { path: 'assessments', element: null },

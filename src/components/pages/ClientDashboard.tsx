@@ -1,9 +1,10 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Container, Tab, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import {
   Link,
   Outlet,
+  useLocation,
   useNavigate,
   useOutletContext,
   useParams,
@@ -55,21 +56,24 @@ const tabs = [
   },
 ];
 
+const getTabFromPath = (pathname: string, tabs: { path: string }[]) => {
+  return (
+    tabs.find(({ path }) => pathname.includes(`/${path}`))?.path || tabs[0].path
+  );
+};
+
 const ClientDashboard: React.FC = () => {
   const { clientId } = useParams() as { clientId: string };
   const [client, loading] = useClient(clientId);
 
   const navigate = useNavigate();
-  let initial = tabs[0].path;
+  const { pathname } = useLocation();
   const baseRoute = `/client/${clientId}`;
-  // TODO need to propogate sub-path like /client/1/enrollments/2
-  if (location.pathname) {
-    const curr = location.pathname.replace(baseRoute, '').replace('/', '');
-    if (curr && tabs.find(({ path }) => path === curr)) {
-      initial = curr;
-    }
-  }
-  const [currentTab, setCurrentTab] = useState<string>(initial);
+  const initialTab = useMemo(() => getTabFromPath(pathname, tabs), [pathname]);
+  const [currentTab, setCurrentTab] = useState<string>(initialTab);
+  useEffect(() => {
+    setCurrentTab(initialTab);
+  }, [initialTab]);
 
   if (loading || !client) return <Loading />;
 
@@ -81,7 +85,7 @@ const ClientDashboard: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h5'>{HmisUtil.name(client)}</Typography>
+        <Typography variant='h4'>{HmisUtil.name(client)}</Typography>
       </PageHeader>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={currentTab}>

@@ -18,12 +18,14 @@ interface Props {
   client: Client;
   showNotices?: boolean;
   showLinkToRecord?: boolean;
+  linkTargetBlank?: boolean;
 }
 
 const ClientCard: React.FC<Props> = ({
   client,
   showNotices = false,
   showLinkToRecord = false,
+  linkTargetBlank = false,
 }) => (
   <Card sx={{ mb: 2, p: 2 }}>
     {showNotices && (
@@ -40,8 +42,8 @@ const ClientCard: React.FC<Props> = ({
       <Grid item xs={5}>
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
-            <Typography variant='h6'>{HmisUtil.name(client)}</Typography>
-            <Typography variant='h6' color='text.secondary'>
+            <Typography variant='h5'>{HmisUtil.name(client)}</Typography>
+            <Typography variant='h5' color='text.secondary'>
               {HmisUtil.pronouns(client)}
             </Typography>
           </Stack>
@@ -67,7 +69,7 @@ const ClientCard: React.FC<Props> = ({
                   variant='contained'
                   component={RouterLink}
                   to={`/client/${client.id}`}
-                  target='_blank'
+                  target={linkTargetBlank ? '_blank' : undefined}
                   color='secondary'
                 >
                   Go to Record
@@ -80,11 +82,8 @@ const ClientCard: React.FC<Props> = ({
           </Typography>
         </Stack>
       </Grid>
-      <Grid item xs={5} sx={{ pt: 3 }}>
-        <Typography
-          variant='body2'
-          sx={{ mb: 1, color: 'text.secondary', textTransform: 'uppercase' }}
-        >
+      <Grid item xs={5}>
+        <Typography variant='h6' sx={{ mb: 1 }}>
           Recent Enrollments
         </Typography>
         {!client.enrollments && <Typography>None found.</Typography>}
@@ -95,8 +94,8 @@ const ClientCard: React.FC<Props> = ({
                 <Grid item xs={4}>
                   <Link
                     component={RouterLink}
-                    to={`/client/${client.id}/enrollment/${enrollment.id}`}
-                    target='_blank'
+                    to={`/client/${client.id}/enrollments/${enrollment.id}`}
+                    target={linkTargetBlank ? '_blank' : undefined}
                     variant='body2'
                   >
                     {enrollment.project.projectName}
@@ -115,7 +114,10 @@ const ClientCard: React.FC<Props> = ({
           </Grid>
         )}
       </Grid>
-      <Grid item xs={2} sx={{ pt: 3 }}>
+      <Grid item xs={2}>
+        <Typography variant='h6' sx={{ mb: 1 }}>
+          Actions
+        </Typography>
         <Stack spacing={1}>
           <Button fullWidth variant='outlined' color='secondary'>
             Enroll

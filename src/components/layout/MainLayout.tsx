@@ -30,7 +30,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
           <Link
-            variant='h6'
+            variant='h1'
             color='secondary'
             noWrap
             sx={{ flexGrow: 1 }}

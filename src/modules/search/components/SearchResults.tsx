@@ -109,6 +109,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
             client={client}
             showLinkToRecord
             showNotices
+            linkTargetBlank
           />
         ))
       ) : (

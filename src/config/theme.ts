@@ -5,6 +5,8 @@ const theme: ThemeOptions = {
     fontFamily: "'Open Sans', sans-serif",
     h1: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 18,
+      fontWeight: 600,
     },
     h2: {
       fontFamily: "'Montserrat', sans-serif",
@@ -14,12 +16,18 @@ const theme: ThemeOptions = {
     },
     h4: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 20,
+      fontWeight: 600,
     },
     h5: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 18,
     },
     h6: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 12,
+      textTransform: 'uppercase',
+      color: '#10182899',
     },
   },
   palette: {
