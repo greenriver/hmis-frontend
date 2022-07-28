@@ -40,7 +40,7 @@ const ProjectSelect: React.FC<Omit<GenericSelectProps<Option>, 'options'>> = ({
   return (
     <GenericSelect<Option>
       getOptionLabel={(option) => option.projectName}
-      groupBy={(option) => option.organization?.organizationName || ''}
+      groupBy={(option) => option.organization.organizationName || ''}
       label={label}
       loading={loading}
       multiple={multiple}

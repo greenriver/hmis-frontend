@@ -20,5 +20,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/types/custom.d.ts", "src/types/gqlTypes.ts"]
+  "include": ["src"]
 }

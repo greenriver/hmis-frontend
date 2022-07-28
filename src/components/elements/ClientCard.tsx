@@ -98,7 +98,7 @@ const ClientCard: React.FC<Props> = ({
                     target='_blank'
                     variant='body2'
                   >
-                    {enrollment.project?.projectName}
+                    {enrollment.project.projectName}
                   </Link>
                 </Grid>
                 <Grid item xs={8}>
