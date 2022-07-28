@@ -5,6 +5,10 @@ generates:
     plugins:
       - 'typescript'
       - 'typescript-operations'
+    config:
+      scalars:
+        ISO8601DateTime: string
+        ISO8601Date: string
   # ./graphql.schema.json:
   #   plugins:
   #     - 'introspection'
