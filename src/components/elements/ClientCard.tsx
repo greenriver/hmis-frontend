@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { Fragment } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
@@ -90,7 +91,7 @@ const ClientCard: React.FC<Props> = ({
         {client.enrollments && (
           <Grid container spacing={0.5}>
             {client.enrollments.map((enrollment) => (
-              <>
+              <Fragment key={enrollment.id}>
                 <Grid item xs={4}>
                   <Link
                     component={RouterLink}
@@ -109,7 +110,7 @@ const ClientCard: React.FC<Props> = ({
                     {HmisUtil.entryExitRange(enrollment)}
                   </Typography>
                 </Grid>
-              </>
+              </Fragment>
             ))}
           </Grid>
         )}
