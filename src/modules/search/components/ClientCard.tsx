@@ -67,7 +67,7 @@ const ClientCard: React.FC<{ client: Client }> = ({ client }) => (
                       to={`/client/${client.id}/enrollment/${enrollment.id}`}
                       target='_blank'
                     >
-                      {enrollment.project?.projectName}
+                      {enrollment.project.projectName}
                     </Link>
                     <Typography sx={{ ml: 1 }}>
                       {enrollment.entryDate} - {enrollment.exitDate || 'active'}
