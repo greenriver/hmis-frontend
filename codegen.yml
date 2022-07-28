@@ -1,7 +1,7 @@
 overwrite: true
 schema: ${SCHEMA_PATH}
 generates:
-  ./gqlTypes.ts:
+  ./src/types/gqlTypes.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
