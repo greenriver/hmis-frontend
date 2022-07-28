@@ -69,8 +69,10 @@ export type ClientsPaginated = {
   __typename?: 'ClientsPaginated';
   hasMoreAfter: Scalars['Boolean'];
   hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
   nodes: Array<Client>;
   nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
 };
 
@@ -80,7 +82,7 @@ export type Enrollment = {
   entryDate?: Maybe<Scalars['ISO8601DateTime']>;
   exitDate?: Maybe<Scalars['ISO8601DateTime']>;
   id: Scalars['ID'];
-  project?: Maybe<Project>;
+  project: Project;
 };
 
 /** HUD Organization */
@@ -107,7 +109,7 @@ export enum OrganizationSortOption {
 export type Project = {
   __typename?: 'Project';
   id: Scalars['ID'];
-  organization?: Maybe<Organization>;
+  organization: Organization;
   projectName: Scalars['String'];
   projectType: ProjectType;
 };
