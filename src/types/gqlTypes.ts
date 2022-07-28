@@ -71,8 +71,6 @@ export type ClientsPaginated = {
   hasMoreBefore: Scalars['Boolean'];
   limit: Scalars['Int'];
   nodes: Array<Client>;
-  offset: Scalars['Int'];
-  limit: Scalars['Int'];
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
