@@ -17,17 +17,17 @@ export const name = (client: Client) =>
 
 export const dob = (client: Client) => {
   if (!client.dob) return '';
-  return formatDate(parseISO(client.dob as string));
+  return formatDate(parseISO(client.dob));
 };
 
 export const age = (client: Client) => {
   if (!client.dob) return '';
-  const date = parseISO(client.dob as string);
+  const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
 };
 
 export const lastUpdated = (client: Client) => {
-  const date = parseISO(client.dateUpdated as string);
+  const date = parseISO(client.dateUpdated);
   return formatDate(date);
 };
 
