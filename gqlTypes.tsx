@@ -16,19 +16,19 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A Date object, transporated as a string */
-  Date: any;
-  /** A DateTime object, transporated as a string */
-  DateTime: any;
+  /** An ISO 8601-encoded date */
+  ISO8601Date: string;
+  /** An ISO 8601-encoded datetime */
+  ISO8601DateTime: string;
 };
 
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
-  dateUpdated: Scalars['DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
   /** Date of birth as format yyyy-mm-dd */
-  dob?: Maybe<Scalars['Date']>;
-  endDate?: Maybe<Scalars['DateTime']>;
+  dob?: Maybe<Scalars['ISO8601Date']>;
+  endDate?: Maybe<Scalars['ISO8601DateTime']>;
   enrollments: Array<Enrollment>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
@@ -37,7 +37,7 @@ export type Client = {
   preferredName?: Maybe<Scalars['String']>;
   pronouns?: Maybe<Scalars['String']>;
   ssnSerial?: Maybe<Scalars['String']>;
-  startDate?: Maybe<Scalars['DateTime']>;
+  startDate?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
 /** HMIS Client search input */
@@ -77,8 +77,8 @@ export type ClientsPaginated = {
 /** HUD Enrollment */
 export type Enrollment = {
   __typename?: 'Enrollment';
-  entryDate?: Maybe<Scalars['DateTime']>;
-  exitDate?: Maybe<Scalars['DateTime']>;
+  entryDate?: Maybe<Scalars['ISO8601DateTime']>;
+  exitDate?: Maybe<Scalars['ISO8601DateTime']>;
   id: Scalars['ID'];
   project?: Maybe<Project>;
 };
