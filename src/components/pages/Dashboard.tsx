@@ -20,7 +20,9 @@ const Dashboard: React.FC = () => {
 
   const submitHandler = (values: Record<string, any>) => {
     console.log(JSON.stringify(values, null, 2));
-    setFilters(values);
+    // TODO re-enable when query is fixed
+    // setFilters(values);
+    setFilters({});
   };
 
   return (

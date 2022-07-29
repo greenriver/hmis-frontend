@@ -63,9 +63,6 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
-      <Typography sx={{ mb: 2, fontStyle: 'italic', color: 'darkgreen' }}>
-        Search for 'ack' to get mocked results.
-      </Typography>
       <Typography sx={{ mb: 2 }}>
         Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse ID,
         or PersonalID. It is often most efficient to search using the first few

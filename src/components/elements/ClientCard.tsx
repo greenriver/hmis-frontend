@@ -71,6 +71,7 @@ const ClientCard: React.FC<Props> = ({
                   to={`/client/${client.id}`}
                   target={linkTargetBlank ? '_blank' : undefined}
                   color='secondary'
+                  sx={{ maxWidth: 160 }}
                 >
                   Go to Record
                 </Button>

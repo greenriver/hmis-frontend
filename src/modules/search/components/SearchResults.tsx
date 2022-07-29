@@ -36,17 +36,20 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
   const [offset, setOffset] = useState(0);
 
   const limit = PAGE_SIZE;
-  const { data, loading, error, fetchMore } = useQuery<ClientsPaginated>(
-    GET_CLIENTS,
-    {
-      variables: {
-        input: filters,
-        limit,
-        offset: 0,
-      },
-    }
-  );
-
+  const {
+    data: { clientSearch: data } = {},
+    loading,
+    error,
+    fetchMore,
+  } = useQuery<{
+    clientSearch: ClientsPaginated;
+  }>(GET_CLIENTS, {
+    variables: {
+      input: filters,
+      limit,
+      offset: 0,
+    },
+  });
   // Set initial state of Card/Table toggle
   useEffect(() => {
     if (typeof cards === 'undefined' && data) {
@@ -108,12 +111,13 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
             key={client.id}
             client={client}
             showLinkToRecord
-            showNotices
+            // TODO re-enable when we have data for it
+            // showNotices
             linkTargetBlank
           />
         ))
       ) : (
-        <SearchResultsTable rows={data.nodes} />
+        <SearchResultsTable rows={data.nodes || []} />
       )}
       <Pagination
         {...{ limit, offset }}

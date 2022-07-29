@@ -4,7 +4,11 @@ import { GET_CLIENTS } from '@/api/clients.gql';
 import { ClientsPaginated } from '@/types/gqlTypes';
 
 const useClient = (id: string) => {
-  const { data, loading, error } = useQuery<ClientsPaginated>(GET_CLIENTS, {
+  const {
+    data: { clientSearch: data } = {},
+    loading,
+    error,
+  } = useQuery<{ clientSearch: ClientsPaginated }>(GET_CLIENTS, {
     variables: {
       input: { id },
       limit: 1,

@@ -5,13 +5,13 @@ import {
   TableRow,
   TableBody,
   TableCell,
+  Stack,
   Paper,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { Client } from '@/types/gqlTypes';
-
-// FIXME make generic Table component
 
 const SearchResultsTable: React.FC<{
   rows: Client[];
@@ -23,7 +23,7 @@ const SearchResultsTable: React.FC<{
     'First Name',
     'Preferred Name',
     'Last Name',
-    'DOB',
+    'DOB / Age',
   ];
   return (
     <TableContainer component={Paper}>
@@ -51,7 +51,14 @@ const SearchResultsTable: React.FC<{
               <TableCell>{row.firstName}</TableCell>
               <TableCell>{row.preferredName}</TableCell>
               <TableCell>{row.lastName}</TableCell>
-              <TableCell>{row.dob}</TableCell>
+              <TableCell>
+                {row.dob && (
+                  <Stack direction='row' spacing={1}>
+                    <span>{HmisUtil.dob(row)}</span>
+                    <span>{`(${HmisUtil.age(row)})`}</span>
+                  </Stack>
+                )}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
