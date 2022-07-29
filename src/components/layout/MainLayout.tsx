@@ -1,7 +1,6 @@
 import {
   AppBar,
   CssBaseline,
-  Container,
   Toolbar,
   Typography,
   Link,
@@ -31,7 +30,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
           <Link
-            variant='h6'
+            variant='h1'
             color='secondary'
             noWrap
             sx={{ flexGrow: 1 }}
@@ -55,11 +54,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           </Button>
         </Toolbar>
       </AppBar>
-
-      <Container maxWidth='lg' sx={{ pt: 2, pb: 4 }}>
-        <CssBaseline />
-        {children}
-      </Container>
+      <CssBaseline />
+      {children}
     </React.Fragment>
   );
 };

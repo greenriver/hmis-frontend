@@ -1,10 +1,14 @@
 import React, { Suspense, lazy } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Navigate, Outlet } from 'react-router-dom';
 
+import EnrollmentTab from '@/components/dashboard/Enrollment';
+import Enrollments from '@/components/dashboard/Enrollments';
+import Profile from '@/components/dashboard/Profile';
+import ErrorFallback from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import ClientDashboard from '@/components/pages/ClientDashboard';
-import EnrollmentPage from '@/components/pages/EnrollmentPage';
 
 const Dashboard = lazy(() => import('@/components/pages/Dashboard'));
 const Intake = lazy(() => import('@/components/pages/Intake'));
@@ -13,7 +17,9 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <Outlet />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <Outlet />
+        </ErrorBoundary>
       </Suspense>
     </MainLayout>
   );
@@ -25,10 +31,22 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: '/intake', element: <Intake /> },
-      { path: '/client/:clientId', element: <ClientDashboard /> },
       {
-        path: '/client/:clientId/enrollment/:enrollmentId',
-        element: <EnrollmentPage />,
+        path: '/client/:clientId',
+        element: <ClientDashboard />,
+        children: [
+          { path: '', element: <Profile /> },
+          { path: 'profile', element: <Profile /> },
+          { path: 'enrollments/:enrollmentId', element: <EnrollmentTab /> },
+          { path: 'enrollments', element: <Enrollments /> },
+          { path: 'history', element: null },
+          { path: 'assessments', element: null },
+          { path: 'notes', element: null },
+          { path: 'files', element: null },
+          { path: 'contact', element: null },
+          { path: 'locations', element: null },
+          { path: 'referrals', element: null },
+        ],
       },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <Navigate to='.' /> },

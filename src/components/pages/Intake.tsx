@@ -1,9 +1,11 @@
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
+
+import PageHeader from '../layout/PageHeader';
 
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import formData from '@/modules/form/data/intake.json';
+import { transformSubmitValues } from '@/modules/form/formUtil';
 import { FormDefinition } from '@/modules/form/types';
-import { transformSubmitValues } from '@/modules/form/util';
 import ConfiguredApolloProvider from '@/providers/ConfiguredApolloProvider';
 
 const MAPPING_KEY = 'clientMutationInput';
@@ -27,13 +29,17 @@ const Intake: React.FC = () => {
 
   return (
     <ConfiguredApolloProvider>
-      <Typography variant='h4'>Create New Record</Typography>
-      <DynamicForm
-        definition={intakeFormDefinition}
-        onSubmit={submitHandler}
-        submitButtonText='Create Record'
-        discardButtonText='Cancel'
-      />
+      <PageHeader>
+        <Typography variant='h5'>Add New Client</Typography>
+      </PageHeader>
+      <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
+        <DynamicForm
+          definition={intakeFormDefinition}
+          onSubmit={submitHandler}
+          submitButtonText='Create Record'
+          discardButtonText='Cancel'
+        />
+      </Container>
     </ConfiguredApolloProvider>
   );
 };

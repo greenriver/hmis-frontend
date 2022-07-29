@@ -1,11 +1,52 @@
-import { ThemeOptions } from '@mui/material';
+import { ThemeOptions, experimental_sx as sx } from '@mui/material';
 
 const theme: ThemeOptions = {
+  typography: {
+    fontFamily: "'Open Sans', sans-serif",
+    h1: {
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: 18,
+      fontWeight: 600,
+    },
+    h2: {
+      fontFamily: "'Montserrat', sans-serif",
+    },
+    h3: {
+      fontFamily: "'Montserrat', sans-serif",
+    },
+    h4: {
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: 20,
+      fontWeight: 600,
+    },
+    h5: {
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: 18,
+    },
+    h6: {
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: 12,
+      textTransform: 'uppercase',
+      color: '#10182899',
+    },
+  },
+  palette: {
+    background: {
+      default: '#F9F9F9',
+    },
+  },
   components: {
     MuiPaper: {
       defaultProps: {
         elevation: 0,
         variant: 'outlined',
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: 'white',
+        },
       },
     },
     MuiDatePicker: {
@@ -17,6 +58,11 @@ const theme: ThemeOptions = {
       defaultProps: {
         variant: 'body2',
       },
+      styleOverrides: {
+        root: sx({
+          cursor: 'pointer',
+        }),
+      },
     },
     MuiTextField: {
       defaultProps: {
@@ -26,7 +72,14 @@ const theme: ThemeOptions = {
     },
     MuiButtonBase: {
       defaultProps: {
-        disableRipple: true,
+        // disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            // borderWidth: 3,
+          },
+        },
       },
     },
     MuiButton: {
