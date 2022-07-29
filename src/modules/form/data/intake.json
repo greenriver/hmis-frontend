@@ -2,6 +2,14 @@
   "name": "client-intake",
   "item": [
     {
+      "type": "choice",
+      "required": false,
+      "linkId": "project",
+      "text": "Projects",
+      "repeats": true,
+      "answerValueSet": "projects"
+    },
+    {
       "type": "group",
       "linkId": "first-name-group",
       "required": false,

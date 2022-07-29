@@ -2,6 +2,18 @@ import * as storage from './storage';
 
 import { getCsrfToken } from '@/utils/csrf';
 
+export interface HmisUser {
+  email: string;
+  name: string;
+}
+interface HmisError {
+  type: string;
+  message?: string;
+}
+interface HmisErrorResponse {
+  error: HmisError;
+}
+
 export class HmisResponseError extends Error {
   hmis_error: HmisError;
 
