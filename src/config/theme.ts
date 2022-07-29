@@ -1,4 +1,4 @@
-import { ThemeOptions } from '@mui/material';
+import { ThemeOptions, experimental_sx as sx } from '@mui/material';
 
 const theme: ThemeOptions = {
   typography: {
@@ -58,6 +58,11 @@ const theme: ThemeOptions = {
       defaultProps: {
         variant: 'body2',
       },
+      styleOverrides: {
+        root: sx({
+          cursor: 'pointer',
+        }),
+      },
     },
     MuiTextField: {
       defaultProps: {
@@ -67,7 +72,14 @@ const theme: ThemeOptions = {
     },
     MuiButtonBase: {
       defaultProps: {
-        disableRipple: true,
+        // disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            // borderWidth: 3,
+          },
+        },
       },
     },
     MuiButton: {

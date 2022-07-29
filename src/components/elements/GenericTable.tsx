@@ -32,6 +32,11 @@ interface Props<T> {
   columns: Columns<T>[];
 }
 
+const clickableRowStyles = {
+  '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+  cursor: 'pointer',
+};
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
@@ -55,10 +60,16 @@ const GenericTable = <T extends { id: string }>({
               key={row.id}
               sx={{
                 '&:last-child td, &:last-child th': { border: 0 },
-                cursor: handleRowClick ? 'pointer' : undefined,
+                ...(!!handleRowClick && clickableRowStyles),
               }}
               hover={!!handleRowClick}
               onClick={handleRowClick ? () => handleRowClick(row) : undefined}
+              onKeyUp={
+                handleRowClick
+                  ? (event) => event.key === 'Enter' && handleRowClick(row)
+                  : undefined
+              }
+              tabIndex={0}
             >
               {columns.map(({ header, render }) => {
                 return (
