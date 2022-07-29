@@ -15,7 +15,7 @@ import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 
 const httpLink = createHttpLink({
-  uri: '/hmis/hmis-gql',
+  uri: import.meta.env.PUBLIC_HMIS_GRAPHQL_API,
   fetch,
 });
 
@@ -37,9 +37,6 @@ const authLink = setContext(
  * Handle errors on GraphQL chain.
  *
  * If unauthenticated, remove user info from storage and redirect to the login page.
- *
- * Note this doesn't work in all cases, sometimes backend is returning.
- * 500 or 422 when unauthenticated. fix with #182653885
  */
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) console.log('[GraphQL error]', graphQLErrors);

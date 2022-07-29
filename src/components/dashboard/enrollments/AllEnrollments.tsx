@@ -1,11 +1,16 @@
-import { Grid, Paper, Typography } from '@mui/material';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { Button, Grid, Paper, Typography } from '@mui/material';
+import {
+  useNavigate,
+  useOutletContext,
+  Link as RouterLink,
+  generatePath,
+} from 'react-router-dom';
 
-import GenericTable from '../elements/GenericTable';
-
+import GenericTable from '@/components/elements/GenericTable';
+import { DashboardRoutes } from '@/routes/routes';
 import { Client, Enrollment } from '@/types/gqlTypes';
 
-const Enrollments = () => {
+const AllEnrollments = () => {
   const { client } = useOutletContext<{ client: Client | null }>();
   const navigate = useNavigate();
   if (!client) throw Error('Missing client');
@@ -20,7 +25,12 @@ const Enrollments = () => {
           <GenericTable<Enrollment>
             rows={client.enrollments}
             handleRowClick={(enrollment) =>
-              navigate(`/client/${client.id}/enrollments/${enrollment.id}`)
+              navigate(
+                generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                  clientId: client.id,
+                  enrollmentId: enrollment.id,
+                })
+              )
             }
             columns={[
               { header: 'ID', render: 'id' },
@@ -37,12 +47,22 @@ const Enrollments = () => {
       <Grid item xs>
         <Paper sx={{ p: 2 }}>
           <Typography variant='h6' sx={{ mb: 2 }}>
-            Available Projects
+            Actions
           </Typography>
+          <Button
+            variant='outlined'
+            color='secondary'
+            component={RouterLink}
+            to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+              clientId: client.id,
+            })}
+          >
+            + Add Enrollment
+          </Button>
         </Paper>
       </Grid>
     </Grid>
   );
 };
 
-export default Enrollments;
+export default AllEnrollments;

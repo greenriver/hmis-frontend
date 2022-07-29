@@ -21,6 +21,7 @@ import { GET_CLIENTS } from '@/api/clients.gql';
 import ClientCard from '@/components/elements/ClientCard';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
+import { Routes } from '@/routes/routes';
 import { ClientsPaginated } from '@/types/gqlTypes';
 
 const PAGE_SIZE = 3;
@@ -97,7 +98,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
                 size='small'
                 variant='outlined'
                 component={RouterLink}
-                to='/intake'
+                to={Routes.CREATE_CLIENT}
               >
                 + Add Client
               </Button>

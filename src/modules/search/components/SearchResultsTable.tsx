@@ -41,8 +41,17 @@ const SearchResultsTable: React.FC<{
           {rows.map((row) => (
             <TableRow
               key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{
+                '&:last-child td, &:last-child th': { border: 0 },
+                '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
+                cursor: 'pointer',
+              }}
               onClick={() => navigate(`/client/${row.id}`)}
+              onKeyUp={(event) =>
+                event.key === 'Enter' && navigate(`/client/${row.id}`)
+              }
+              tabIndex={0}
+              hover
             >
               <TableCell component='th' scope='row'>
                 {row.id}
