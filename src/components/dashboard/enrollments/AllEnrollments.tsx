@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 
 import GenericTable from '@/components/elements/GenericTable';
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { Client, Enrollment } from '@/types/gqlTypes';
 
@@ -35,10 +36,19 @@ const AllEnrollments = () => {
             columns={[
               { header: 'ID', render: 'id' },
               { header: 'Project', render: (e) => e.project.projectName },
-              { header: 'Start Date', render: 'entryDate' },
+              {
+                header: 'Start Date',
+                render: (e) =>
+                  e.entryDate
+                    ? HmisUtil.parseAndFormatDate(e.entryDate)
+                    : 'Unknown',
+              },
               {
                 header: 'End Date',
-                render: (e) => <>{e.exitDate || 'Active'}</>,
+                render: (e) =>
+                  e.exitDate
+                    ? HmisUtil.parseAndFormatDate(e.exitDate)
+                    : 'Active',
               },
             ]}
           />

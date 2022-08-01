@@ -10,7 +10,7 @@ const DATE_FORMAT = 'MM/dd/yyyy';
 
 const formatDate = (date: Date) => format(date, DATE_FORMAT);
 
-const parseAndFormat = (date: string) => formatDate(parseISO(date));
+export const parseAndFormatDate = (date: string) => formatDate(parseISO(date));
 
 export const name = (client: Client) =>
   [client.preferredName || client.firstName, client.lastName]
@@ -19,7 +19,7 @@ export const name = (client: Client) =>
 
 export const dob = (client: Client) => {
   if (!client.dob) return '';
-  return parseAndFormat(client.dob);
+  return parseAndFormatDate(client.dob);
 };
 
 export const age = (client: Client) => {
@@ -29,7 +29,7 @@ export const age = (client: Client) => {
 };
 
 export const lastUpdated = (client: Client) => {
-  return parseAndFormat(client.dateUpdated);
+  return parseAndFormatDate(client.dateUpdated);
 };
 
 // TODO implement
@@ -39,7 +39,9 @@ export const pronouns = (_client: Client) => '(she/her)';
 export const entryExitRange = (enrollment: Enrollment) => {
   return `${
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    enrollment.entryDate ? parseAndFormat(enrollment.entryDate) : 'unknown'
+    enrollment.entryDate ? parseAndFormatDate(enrollment.entryDate) : 'unknown'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  } - ${enrollment.exitDate ? parseAndFormat(enrollment.exitDate) : 'active'}`;
+  } - ${
+    enrollment.exitDate ? parseAndFormatDate(enrollment.exitDate) : 'active'
+  }`;
 };

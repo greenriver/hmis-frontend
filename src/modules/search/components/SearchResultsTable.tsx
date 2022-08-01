@@ -38,9 +38,9 @@ const SearchResultsTable: React.FC<{
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row, idx) => (
             <TableRow
-              key={row.id}
+              key={`${row.id}-${idx}`}
               sx={{
                 '&:last-child td, &:last-child th': { border: 0 },
                 '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
