@@ -37,9 +37,6 @@ const TextInput = ({
           'label + &': {
             mt: 3,
           },
-          '& input[disabled]': {
-            backgroundColor: 'text.disabled',
-          },
         },
       }}
       InputLabelProps={{

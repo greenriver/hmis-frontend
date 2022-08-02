@@ -119,6 +119,7 @@ const DynamicField: React.FC<Props> = ({
           />
         </Grid>
       );
+    case FieldType.openchoice:
     case FieldType.choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedVal = value ? value : item.repeats ? [] : null;

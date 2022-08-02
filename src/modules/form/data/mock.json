@@ -1,0 +1,101 @@
+{
+  "name": "client-intake",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "group-1",
+      "text": "Group Title",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "string-1",
+          "text": "String"
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "boolean-1",
+          "text": "Boolean"
+        },
+        {
+          "type": "date",
+          "required": false,
+          "linkId": "date-1",
+          "text": "Date"
+        },
+        {
+          "type": "choice",
+          "linkId": "project",
+          "text": "Projects",
+          "repeats": true,
+          "answerValueSet": "projects"
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "group-3",
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "choice-1",
+          "text": "Yes no missing",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "string-4",
+          "text": "Details (select yes to enable)",
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "choice-1",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "choice-2",
+          "text": "Dependent (select yes to enable)",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "choice-1",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "required": false,
+      "linkId": "group-2",
+      "text": "Row group",
+      "display": {
+        "direction": "row"
+      },
+      "item": [
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "string-3",
+          "text": "String"
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "string-4",
+          "text": "String"
+        }
+      ]
+    }
+  ]
+}

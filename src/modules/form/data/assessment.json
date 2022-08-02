@@ -2,9 +2,15 @@
   "name": "es-intake",
   "item": [
     {
+      "type": "date",
+      "required": false,
+      "linkId": "engagement",
+      "text": "Date of Engagement"
+    },
+    {
       "type": "group",
-      "linkId": "pls",
-      "text": "Prior Living Situation",
+      "linkId": "3.917-group",
+      "prefix": "3.917",
       "item": [
         {
           "type": "display",
@@ -395,11 +401,18 @@
           "type": "text",
           "linkId": "location",
           "text": "Location details"
-        },
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "4.12-group",
+      "prefix": "4.12",
+      "item": [
         {
           "type": "choice",
           "required": false,
-          "linkId": "current-living",
+          "linkId": "4.12",
           "text": "Current Living Situation",
           "mapping": {},
           "answerOption": [
@@ -612,6 +625,321 @@
                 "display": "Data not collected",
                 "displayGroup": "Other situations"
               }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "dv-group",
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "4.11-2",
+          "text": "Domestic Violence Victim/Survivor",
+          "answerValueSet": "yesNoMissing",
+          "helperText": "Domestic Violence Victim/Survivor should be indicated as “Yes” if the person has experienced any domestic violence, dating violence, sexual assault, stalking or other dangerous or life-threatening conditions that relate to violence against the individual or a family member, including a child, that has either taken place within the individual's or family's primary nighttime residence."
+        },
+        {
+          "type": "choice",
+          "linkId": "4.11-A",
+          "text": "When did the experience occur?",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Within the past 3 months"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Three to six months ago"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Six months to one year ago"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "One year ago or more"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ],
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "4.11-2",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.11-B",
+          "text": "Are you currently fleeing?",
+          "answerValueSet": "yesNoMissing",
+          "helperText": "Currently fleeing should be indicated as “Yes” if the person is fleeing, or is attempting to flee, the domestic violence situation or is afraid to return to their primary nighttime residence.",
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "4.11-2",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "health-group",
+      "item": [
+        {
+          "type": "group",
+          "linkId": "insurance-group",
+          "text": "Health",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
+            {
+              "type": "choice",
+              "linkId": "4.04-2",
+              "text": "Covered by Health Insurance",
+              "answerValueSet": "yesNoMissing"
+            },
+            {
+              "type": "openchoice",
+              "linkId": "health-insurance",
+              "text": "Health Insurance",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "0",
+                    "display": "Medicaid"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Medicare"
+                  }
+                }
+              ],
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "4.04-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "4.05-group",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
+            {
+              "type": "choice",
+              "linkId": "4.05-2",
+              "text": "Physical Disability",
+              "answerValueSet": "yesNoMissing"
+            },
+            {
+              "type": "openchoice",
+              "linkId": "4.05-A",
+              "text": "Is this a disabling condition?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "4.05-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.06-2",
+          "text": "Developmental Disability",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
+          "type": "group",
+          "linkId": "4.07-group",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
+            {
+              "type": "choice",
+              "linkId": "4.07-2",
+              "text": "Chronic Health Condition",
+              "answerValueSet": "yesNoMissing"
+            },
+            {
+              "type": "openchoice",
+              "linkId": "4.07-A",
+              "text": "Is this a disabling condition?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "4.07-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.08-2",
+          "text": "HIV/AIDS",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
+          "type": "group",
+          "linkId": "4.09-group",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
+            {
+              "type": "choice",
+              "linkId": "4.09-2",
+              "text": "Mental Health Disorder",
+              "answerValueSet": "yesNoMissing"
+            },
+            {
+              "type": "openchoice",
+              "linkId": "4.09-A",
+              "text": "Is this a disabling condition?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "4.09-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "linkId": "4.10-group",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
+            {
+              "type": "choice",
+              "linkId": "4.10-2",
+              "text": "Substance Use Disorder",
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "0",
+                    "display": "No"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Alcohol use disorder"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "Drug use disorder"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "3",
+                    "display": "Both alcohol and drug use disorder"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "8",
+                    "display": "Client doesn't know"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "9",
+                    "display": "Client refused"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "99",
+                    "display": "Data not collected"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "openchoice",
+              "linkId": "4.10-A",
+              "text": "Is this a disabling condition?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.10-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                },
+                {
+                  "question": "4.10-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "2" }
+                },
+                {
+                  "question": "4.10-2",
+                  "operator": "=",
+                  "answerCoding": { "code": "3" }
+                }
+              ]
             }
           ]
         }
