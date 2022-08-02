@@ -40,6 +40,10 @@ export default defineConfig(({ command, mode }) => {
     define: {
       __APP_ENV__: env.APP_ENV,
     },
+    esbuild: {
+      // https://github.com/vitejs/vite/issues/8644#issuecomment-1159308803
+      logOverride: { 'this-is-undefined-in-esm': 'silent' },
+    },
     build: {
       rollupOptions: {
         plugins: [

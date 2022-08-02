@@ -117,7 +117,7 @@ const clientSearchMock = {
     query: GET_CLIENTS,
     variables: {
       offset: 0,
-      input: { searchTerm: 'ack' },
+      input: { textSearch: 'ack' },
       limit: 3,
     },
   },
@@ -162,7 +162,7 @@ const clientSearchMockNextPage = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      input: { searchTerm: 'ack' },
+      input: { textSearch: 'ack' },
       limit: 3,
       offset: 3,
     },

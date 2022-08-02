@@ -20,7 +20,7 @@ import { transformSubmitValues } from '@/modules/form/formUtil';
 import { FormDefinition, Item } from '@/modules/form/types';
 
 type FormValues = {
-  searchTerm?: string;
+  textSearch?: string;
   projects?: ProjectOption[];
   [k: string]: any;
 };
@@ -51,7 +51,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
     const variables = transformSubmitValues(definition, values, MAPPING_KEY);
     onSubmit({
       ...variables,
-      searchTerm: values.searchTerm,
+      textSearch: values.textSearch,
       projects: values.projects ? values.projects.map((p) => p.id) : undefined,
     });
   };
@@ -75,9 +75,9 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
             label='Search Clients'
             placeholder='Search clients...'
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.searchTerm || ''}
+            value={values.textSearch || ''}
             onChange={(e) => {
-              fieldChanged('searchTerm', e.target.value);
+              fieldChanged('textSearch', e.target.value);
             }}
             onKeyUp={submitOnEnter}
           />
