@@ -13,37 +13,56 @@ import TextInput from '@/components/elements/input/TextInput';
 interface Props {
   item: Item;
   itemChanged: (uid: string, value: any) => void;
+  nestingLevel: number;
   value: any;
   children?: (item: Item) => ReactNode;
 }
 
 const ItemGroup = ({
   children,
-  title,
+  item,
+  nestingLevel,
 }: {
   children: ReactNode;
-  title?: string;
-}) => (
-  <Paper
-    sx={{
-      ml: 1,
-      mt: 2,
-      py: 1,
-      px: 2,
-      borderLeft: 3,
-      borderLeftColor: 'primary.light',
-    }}
-  >
-    {title && <Typography sx={{ mb: 1 }}>{title}</Typography>}
-    <Stack direction='column' spacing={1}>
+  item: Item;
+  nestingLevel: number;
+}) => {
+  const direction = item.display?.direction ?? 'column';
+  const wrappedChildren = (
+    <Stack direction={direction} spacing={direction === 'column' ? 1 : 2}>
       {children}
     </Stack>
-  </Paper>
-);
+  );
+  if (nestingLevel === 0) {
+    return (
+      <Paper
+        sx={{
+          ml: 1,
+          mt: 2,
+          py: 2,
+          px: 2,
+          borderLeft: 3,
+          borderLeftColor: 'primary.light',
+        }}
+      >
+        {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
+        {wrappedChildren}
+      </Paper>
+    );
+  } else {
+    return (
+      <>
+        {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
+        {wrappedChildren}
+      </>
+    );
+  }
+};
 
 const DynamicField: React.FC<Props> = ({
   item,
   itemChanged,
+  nestingLevel,
   value,
   children,
 }) => {
@@ -56,7 +75,7 @@ const DynamicField: React.FC<Props> = ({
       return <Typography variant='body2'>{item.text}</Typography>;
     case FieldType.group:
       return (
-        <ItemGroup title={item.text}>
+        <ItemGroup item={item} nestingLevel={nestingLevel}>
           {children && item.item?.map((childItem) => children(childItem))}
         </ItemGroup>
       );
@@ -76,7 +95,7 @@ const DynamicField: React.FC<Props> = ({
     case FieldType.date:
     case FieldType.dob:
       return (
-        <Grid item sx={{ width: 200 }}>
+        <Grid item sx={{ width: 400 }}>
           <DatePicker
             label={item.text}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

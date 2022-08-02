@@ -34,6 +34,9 @@ export interface AnswerOption {
 export interface Mapping {
   [k: string]: string;
 }
+export interface DisplayOptions {
+  direction?: 'row' | 'column';
+}
 
 export interface Item {
   linkId: string; // Unique ID for this field item
@@ -48,6 +51,7 @@ export interface Item {
   answerOption?: AnswerOption[]; // Permitted answers, for choice items
   item?: Item[]; // Nested items
   mapping?: Mapping;
+  display?: DisplayOptions;
 }
 
 export interface FormDefinition {

@@ -37,14 +37,15 @@ const DynamicForm: React.FC<Props> = ({
     onSubmit(values);
   };
 
-  const renderItem = (item: Item) => (
+  const renderItem = (item: Item, nestingLevel: number) => (
     <DynamicField
       key={item.linkId}
       item={item}
       itemChanged={itemChanged}
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       value={values[item.linkId] ?? ''}
-      children={renderItem}
+      nestingLevel={nestingLevel}
+      children={(item) => renderItem(item, nestingLevel + 1)}
     />
   );
 
@@ -58,7 +59,7 @@ const DynamicForm: React.FC<Props> = ({
         columnSpacing={2}
         sx={{ mb: 2 }}
       >
-        {definition?.item.map(renderItem)}
+        {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
         <Button variant='contained' type='submit'>

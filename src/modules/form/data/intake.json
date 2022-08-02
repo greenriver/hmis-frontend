@@ -12,6 +12,7 @@
     {
       "type": "group",
       "linkId": "first-name-group",
+      "text": "Name",
       "required": false,
       "item": [
         {
@@ -27,13 +28,19 @@
           "type": "string",
           "required": false,
           "linkId": "preferred-name",
-          "text": "Preferred Name"
+          "text": "Preferred Name",
+          "mapping": {
+            "clientMutationInput": "preferredName"
+          }
         },
         {
           "type": "string",
           "required": false,
           "linkId": "middle-name",
-          "text": "Middle Name"
+          "text": "Middle Name",
+          "mapping": {
+            "clientMutationInput": "middleName"
+          }
         },
         {
           "type": "string",
@@ -100,6 +107,9 @@
       "type": "group",
       "required": false,
       "linkId": "dob-group",
+      "display": {
+        "direction": "row"
+      },
       "item": [
         {
           "type": "date",
@@ -115,6 +125,9 @@
           "required": false,
           "linkId": "dob-dq",
           "text": "DOB Data Quality",
+          "mapping": {
+            "clientMutationInput": "dobDataQuality"
+          },
           "answerOption": [
             {
               "valueCoding": {
@@ -154,18 +167,27 @@
       "type": "group",
       "required": false,
       "linkId": "ssn-group",
+      "display": {
+        "direction": "row"
+      },
       "item": [
         {
           "type": "ssn",
           "required": false,
           "linkId": "ssn",
-          "text": "Social Security Number"
+          "text": "Social Security Number",
+          "mapping": {
+            "clientMutationInput": "ssn"
+          }
         },
         {
           "type": "choice",
           "required": false,
           "linkId": "ssn-dq",
           "text": "SSN Data Quality",
+          "mapping": {
+            "clientMutationInput": "ssnDataQuality"
+          },
           "answerOption": [
             {
               "valueCoding": {
@@ -204,101 +226,118 @@
     {
       "type": "group",
       "required": false,
-      "linkId": "additional-group",
+      "linkId": "demographic-group",
+      "text": "Demographic Information",
       "item": [
         {
-          "type": "choice",
+          "type": "group",
           "required": false,
-          "linkId": "race",
-          "text": "Race",
-          "repeats": true,
-          "answerOption": [
+          "linkId": "race-ethnicity-group",
+          "display": {
+            "direction": "row"
+          },
+          "item": [
             {
-              "valueCoding": {
-                "code": "1",
-                "display": "American Indian, Alaska Native, or Indigenous"
-              }
+              "type": "choice",
+              "required": false,
+              "linkId": "race",
+              "text": "Race",
+              "repeats": true,
+              "mapping": {
+                "clientMutationInput": "race"
+              },
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "American Indian, Alaska Native, or Indigenous"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "2",
+                    "display": "Asian or Asian American"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "3",
+                    "display": "Black, African-American, or African"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "4",
+                    "display": "Native Hawaiian or Pacific Islander"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "5",
+                    "display": "White"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "8",
+                    "display": "Client doesn't know"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "9",
+                    "display": "Client refused"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "99",
+                    "display": "Data not collected"
+                  }
+                }
+              ]
             },
             {
-              "valueCoding": {
-                "code": "2",
-                "display": "Asian or Asian American"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "3",
-                "display": "Black, African-American, or African"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "4",
-                "display": "Native Hawaiian or Pacific Islander"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "5",
-                "display": "White"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "8",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "9",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "99",
-                "display": "Data not collected"
-              }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "required": false,
-          "linkId": "ethnicity",
-          "text": "Ethnicity",
-          "repeats": false,
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "0",
-                "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "1",
-                "display": "Hispanic/Latin(a)(o)(x)"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "8",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "9",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "99",
-                "display": "Data not collected"
-              }
+              "type": "choice",
+              "required": false,
+              "linkId": "ethnicity",
+              "text": "Ethnicity",
+              "repeats": false,
+              "mapping": {
+                "clientMutationInput": "ethnicity"
+              },
+              "answerOption": [
+                {
+                  "valueCoding": {
+                    "code": "0",
+                    "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "1",
+                    "display": "Hispanic/Latin(a)(o)(x)"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "8",
+                    "display": "Client doesn't know"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "9",
+                    "display": "Client refused"
+                  }
+                },
+                {
+                  "valueCoding": {
+                    "code": "99",
+                    "display": "Data not collected"
+                  }
+                }
+              ]
             }
           ]
         },
@@ -308,6 +347,9 @@
           "linkId": "gender",
           "text": "Gender",
           "repeats": true,
+          "mapping": {
+            "clientMutationInput": "gender"
+          },
           "answerOption": [
             {
               "valueCoding": {
@@ -365,6 +407,9 @@
           "repeats": false,
           "linkId": "veteran-status",
           "text": "Veteran Status",
+          "mapping": {
+            "clientMutationInput": "veteranStatus"
+          },
           "answerOption": [
             {
               "valueCoding": {
