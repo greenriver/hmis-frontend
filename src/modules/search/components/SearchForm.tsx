@@ -118,6 +118,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
           >
             {definition.item?.map((item: Item) => (
               <DynamicField
+                nestingLevel={0}
                 key={item.linkId}
                 item={item}
                 itemChanged={fieldChanged}

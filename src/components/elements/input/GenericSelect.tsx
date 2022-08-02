@@ -38,6 +38,7 @@ const GenericSelect = <T extends object>({
         <TextInput
           {...params}
           {...inputProps}
+          disabled={rest.disabled}
           // Only render placeholder if no values are selected
           placeholder={hasValue(value) ? undefined : placeholder}
           label={label}

@@ -1,6 +1,7 @@
 import { Box, Grid, Button, Stack } from '@mui/material';
 import React, { useState } from 'react';
 
+import { shouldEnableItem } from '../formUtil';
 import { FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
@@ -37,17 +38,30 @@ const DynamicForm: React.FC<Props> = ({
     onSubmit(values);
   };
 
-  const renderItem = (item: Item, nestingLevel: number) => (
-    <DynamicField
-      key={item.linkId}
-      item={item}
-      itemChanged={itemChanged}
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      value={values[item.linkId] ?? ''}
-      nestingLevel={nestingLevel}
-      children={(item) => renderItem(item, nestingLevel + 1)}
-    />
-  );
+  const isEnabled = (item: Item) => {
+    if (!item.enableWhen) return true;
+    // We assume that all enableWhen conditions depend on the same question, for now, to speed things up (so we can skip immediately if there is no answer)
+    const linkId = item.enableWhen[0]?.question;
+    return shouldEnableItem(values[linkId], item);
+  };
+
+  const renderItem = (item: Item, nestingLevel: number) => {
+    // if (!isEnabled(item)) {
+    //   return null;
+    // }
+    return (
+      <DynamicField
+        key={item.linkId}
+        item={item}
+        itemChanged={itemChanged}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        value={values[item.linkId] ?? ''}
+        nestingLevel={nestingLevel}
+        children={(item) => renderItem(item, nestingLevel + 1)}
+        disabled={item.readOnly || !isEnabled(item)}
+      />
+    );
+  };
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ mt: 4, pb: 2 }}>

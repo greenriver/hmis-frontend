@@ -40,6 +40,7 @@ const FormSelect: React.FC<Props> = ({
   label,
   ...props
 }) => {
+  const isGrouped = !!options[0]?.valueCoding?.displayGroup;
   return (
     <GenericSelect<AnswerOption>
       getOptionLabel={(option) => optionLabel(option)}
@@ -47,6 +48,11 @@ const FormSelect: React.FC<Props> = ({
       multiple={multiple}
       options={options}
       renderOption={renderOption}
+      groupBy={
+        isGrouped
+          ? (option) => option.valueCoding?.displayGroup || ''
+          : undefined
+      }
       isOptionEqualToValue={(option, value) =>
         optionId(option) === optionId(value)
       }

@@ -1,96 +1,617 @@
 {
-  "name": "client-intake-assessment",
+  "name": "es-intake",
   "item": [
     {
       "type": "group",
-      "required": false,
-      "text": "Additional Details",
-      "linkId": "demo-group",
+      "linkId": "pls",
+      "text": "Prior Living Situation",
       "item": [
         {
           "type": "display",
-          "required": false,
-          "linkId": "demo-group-description",
-          "text": "Some display text for this section goes here."
-        },
-        {
-          "type": "string",
-          "required": false,
-          "linkId": "pronouns",
-          "text": "Pronouns"
-        },
-        {
-          "type": "string",
-          "required": false,
-          "linkId": "gender",
-          "text": "Gender"
-        },
-        {
-          "type": "string",
-          "required": false,
-          "linkId": "sexual-orientation",
-          "text": "Sexual Orientation"
+          "linkId": "prior-living-instruction",
+          "text": "Where did the client spend last night? Select the category that most closely matches the client's response."
         },
         {
           "type": "choice",
           "required": false,
-          "repeats": false,
-          "linkId": "veteran-status",
-          "text": "Veteran Status",
+          "linkId": "prior-living",
+          "text": "Prior Living Situation",
+          "mapping": {},
           "answerOption": [
             {
               "valueCoding": {
-                "code": "0",
-                "display": "No"
+                "code": "16",
+                "display": "Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)",
+                "displayGroup": "Homeless situations"
               }
             },
             {
               "valueCoding": {
                 "code": "1",
-                "display": "Yes"
+                "display": "Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter ",
+                "displayGroup": "Homeless situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "18",
+                "display": "Safe Haven",
+                "displayGroup": "Homeless situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "15",
+                "display": "Foster care home or foster care group home",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "6",
+                "display": "Hospital or other residential non-psychiatric medical facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "7",
+                "display": "Jail, prison or juvenile detention facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "25",
+                "display": "Long-term care facility or nursing home",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Psychiatric hospital or other psychiatric facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Substance abuse treatment facility or detox center",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "29",
+                "display": "Residential project or halfway house with no homeless criteria",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "14",
+                "display": "Hotel or motel paid for without emergency shelter voucher",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Transitional housing for homeless persons (including homeless youth)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "32",
+                "display": "Host Home (non-crisis)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "36",
+                "display": "Staying or living in a friend's room, apartment or house",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "35",
+                "display": "Staying or living in a family member's room, apartment or house",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "28",
+                "display": "Rental by client, with GPD TIP housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "19",
+                "display": "Rental by client, with VASH housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Permanent housing (other than RRH) for formerly homeless persons",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "31",
+                "display": "Rental by client, with RRH or equivalent subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "33",
+                "display": "Rental by client, with HCV voucher (tenant or project based)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "34",
+                "display": "Rental by client in a public housing unit",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "10",
+                "display": "Rental by client, no ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "20",
+                "display": "Rental by client, with other ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "21",
+                "display": "Owned by client, with ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "11",
+                "display": "Owned by client, no ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
               }
             },
             {
               "valueCoding": {
                 "code": "8",
-                "display": "Client doesn't know"
+                "display": "Client doesn't know",
+                "displayGroup": "Other situations"
               }
             },
             {
               "valueCoding": {
                 "code": "9",
-                "display": "Client refused"
+                "display": "Client refused",
+                "displayGroup": "Other situations"
               }
             },
             {
               "valueCoding": {
                 "code": "99",
-                "display": "Data not collected"
+                "display": "Data not collected",
+                "displayGroup": "Other situations"
               }
             }
           ]
         },
         {
-          "type": "group",
-          "required": false,
-          "text": "Nested Group",
-          "linkId": "demo-group-2",
-          "item": [
+          "type": "choice",
+          "linkId": "pls-a",
+          "text": "Is client going to have to leave their current living situation within 14 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
             {
-              "type": "choice",
-              "answerValueSet": "organizations",
-              "required": false,
-              "linkId": "organization",
-              "text": "Organizations (single)",
-              "repeats": false
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "15" }
             },
             {
-              "type": "choice",
-              "answerValueSet": "projects",
-              "required": false,
-              "linkId": "project",
-              "text": "Projects (multple)",
-              "repeats": true
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "6" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "7" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "25" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "4" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "5" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "29" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "14" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "2" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "32" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "36" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "35" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "28" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "19" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "3" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "31" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "33" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "34" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "10" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "20" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "21" }
+            },
+            {
+              "question": "prior-living",
+              "operator": "=",
+              "answerCoding": { "code": "11" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "pls-b",
+          "text": "Has a subsequent residence been identified?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "pls-a",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "pls-c",
+          "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "pls-a",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "pls-d",
+          "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "pls-a",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "pls-e",
+          "text": "Has the client moved 2 or more times in the last 60 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "pls-a",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "linkId": "location",
+          "text": "Location details"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "current-living",
+          "text": "Current Living Situation",
+          "mapping": {},
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "16",
+                "display": "Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)",
+                "displayGroup": "Homeless situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter ",
+                "displayGroup": "Homeless situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "18",
+                "display": "Safe Haven",
+                "displayGroup": "Homeless situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "15",
+                "display": "Foster care home or foster care group home",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "6",
+                "display": "Hospital or other residential non-psychiatric medical facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "7",
+                "display": "Jail, prison or juvenile detention facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "25",
+                "display": "Long-term care facility or nursing home",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Psychiatric hospital or other psychiatric facility",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Substance abuse treatment facility or detox center",
+                "displayGroup": "Institutional situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "29",
+                "display": "Residential project or halfway house with no homeless criteria",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "14",
+                "display": "Hotel or motel paid for without emergency shelter voucher",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Transitional housing for homeless persons (including homeless youth)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "32",
+                "display": "Host Home (non-crisis)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "36",
+                "display": "Staying or living in a friend's room, apartment or house",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "35",
+                "display": "Staying or living in a family member's room, apartment or house",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "28",
+                "display": "Rental by client, with GPD TIP housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "19",
+                "display": "Rental by client, with VASH housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Permanent housing (other than RRH) for formerly homeless persons",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "31",
+                "display": "Rental by client, with RRH or equivalent subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "33",
+                "display": "Rental by client, with HCV voucher (tenant or project based)",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "34",
+                "display": "Rental by client in a public housing unit",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "10",
+                "display": "Rental by client, no ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "20",
+                "display": "Rental by client, with other ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "21",
+                "display": "Owned by client, with ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "11",
+                "display": "Owned by client, no ongoing housing subsidy",
+                "displayGroup": "Temporary and permanent housing situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "17",
+                "display": "Other",
+                "displayGroup": "Other situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "37",
+                "display": "Worker unable to determine",
+                "displayGroup": "Other situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know",
+                "displayGroup": "Other situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused",
+                "displayGroup": "Other situations"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected",
+                "displayGroup": "Other situations"
+              }
             }
           ]
         }

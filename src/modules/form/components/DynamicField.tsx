@@ -1,6 +1,7 @@
 import { Grid, Stack, Paper, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 
+import { resolveAnswerValueSet } from '../formUtil';
 import { FieldType, Item } from '../types';
 
 import FormSelect from './FormSelect';
@@ -15,6 +16,7 @@ interface Props {
   itemChanged: (uid: string, value: any) => void;
   nestingLevel: number;
   value: any;
+  disabled?: boolean;
   children?: (item: Item) => ReactNode;
 }
 
@@ -59,20 +61,28 @@ const ItemGroup = ({
   }
 };
 
+const getLabel = (item: Item) => {
+  if (!item.prefix && !item.text) return undefined;
+  if (!item.prefix) return item.text;
+  return `${item.prefix} ${item.text || ''}`;
+};
+
 const DynamicField: React.FC<Props> = ({
   item,
   itemChanged,
   nestingLevel,
   value,
+  disabled = false,
   children,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
   const onChangeValue = (val: any) => itemChanged(item.linkId, val);
+  const label = getLabel(item);
 
   switch (FieldType[item.type]) {
     case FieldType.display:
-      return <Typography variant='body2'>{item.text}</Typography>;
+      return <Typography variant='body2'>{label}</Typography>;
     case FieldType.group:
       return (
         <ItemGroup item={item} nestingLevel={nestingLevel}>
@@ -80,15 +90,17 @@ const DynamicField: React.FC<Props> = ({
         </ItemGroup>
       );
     case FieldType.string:
+    case FieldType.text:
     case FieldType.ssn:
       return (
         <Grid item sx={{ width: 400 }}>
           <TextInput
             id={item.linkId}
             name={item.linkId}
-            label={item.text}
+            label={label}
             value={value as string}
             onChange={onChangeEvent}
+            disabled={disabled}
           />
         </Grid>
       );
@@ -97,12 +109,13 @@ const DynamicField: React.FC<Props> = ({
       return (
         <Grid item sx={{ width: 400 }}>
           <DatePicker
-            label={item.text}
+            label={label}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             openTo='year'
             disableFuture
             onChange={onChangeValue}
+            disabled={disabled}
           />
         </Grid>
       );
@@ -125,6 +138,7 @@ const DynamicField: React.FC<Props> = ({
               value={selectedVal}
               onChange={onChangeValue}
               multiple={item.repeats}
+              disabled={disabled}
             />
           </Grid>
         );
@@ -134,10 +148,15 @@ const DynamicField: React.FC<Props> = ({
           <FormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedVal}
-            label={item.text}
-            options={item.answerOption || []}
+            label={label}
+            options={
+              item.answerValueSet
+                ? resolveAnswerValueSet(item.answerValueSet)
+                : item.answerOption || []
+            }
             onChange={onChangeValue}
             multiple={item.repeats}
+            disabled={disabled}
           />
         </Grid>
       );
