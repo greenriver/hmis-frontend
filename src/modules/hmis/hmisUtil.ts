@@ -6,9 +6,11 @@ import { Client, Enrollment } from '@/types/gqlTypes';
  * Utility functions for transforming HMIS data elements into strings
  */
 
-const DATE_FORMAT = 'M/dd/yyyy';
+const DATE_FORMAT = 'MM/dd/yyyy';
 
 const formatDate = (date: Date) => format(date, DATE_FORMAT);
+
+export const parseAndFormatDate = (date: string) => formatDate(parseISO(date));
 
 export const name = (client: Client) =>
   [client.preferredName || client.firstName, client.lastName]
@@ -17,7 +19,7 @@ export const name = (client: Client) =>
 
 export const dob = (client: Client) => {
   if (!client.dob) return '';
-  return formatDate(parseISO(client.dob));
+  return parseAndFormatDate(client.dob);
 };
 
 export const age = (client: Client) => {
@@ -27,8 +29,7 @@ export const age = (client: Client) => {
 };
 
 export const lastUpdated = (client: Client) => {
-  const date = parseISO(client.dateUpdated);
-  return formatDate(date);
+  return parseAndFormatDate(client.dateUpdated);
 };
 
 // TODO implement
@@ -36,9 +37,11 @@ export const lastUpdated = (client: Client) => {
 export const pronouns = (_client: Client) => '(she/her)';
 
 export const entryExitRange = (enrollment: Enrollment) => {
-  // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  return `${enrollment.entryDate || 'unknown'} - ${
+  return `${
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+    enrollment.entryDate ? parseAndFormatDate(enrollment.entryDate) : 'unknown'
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    enrollment.exitDate || 'active'
+  } - ${
+    enrollment.exitDate ? parseAndFormatDate(enrollment.exitDate) : 'active'
   }`;
 };

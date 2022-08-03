@@ -5,8 +5,9 @@ const Loading = () => (
     display='flex'
     justifyContent='center'
     alignItems='center'
-    minHeight='100vh'
+    height='100%'
     data-testid='loading'
+    sx={{ p: 10 }}
   >
     <CircularProgress size={50} />
   </Box>

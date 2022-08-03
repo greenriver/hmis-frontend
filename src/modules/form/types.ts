@@ -24,15 +24,35 @@ type FieldTypes = keyof typeof FieldType;
 export interface Coding {
   code: string;
   display: string;
+  displayGroup?: string;
+}
+
+export function isAnswerOption(value: any): value is AnswerOption {
+  return (
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    !!(value?.valueCoding || value?.valueString)
+  );
 }
 export interface AnswerOption {
   valueCoding?: Coding;
   valueString?: string;
-  initialSelected: boolean; // Whether option is selected by default
+  initialSelected?: boolean; // Whether option is selected by default
+}
+
+export interface EnableWhen {
+  question: string; // The linkId of question that determines whether item is enabled/disabled
+  operator: string; // exists | = | != | > | < | >= | <=
+  answerCoding?: Coding; // Value for question comparison based on operator
+  answerString?: string;
 }
 
 export interface Mapping {
   [k: string]: string;
+}
+export interface DisplayOptions {
+  direction?: 'row' | 'column';
 }
 
 export interface Item {
@@ -44,10 +64,14 @@ export interface Item {
   readOnly?: boolean; // Don't allow human editing
   repeats?: boolean; // Whether the item may repeat (for choice types, this means multiple choice)
   maxLength?: number; // No more than this many characters
-  answerValueSet?: 'projects' | 'organizations'; // Value set of possible answer options
+  answerValueSet?: string; // Value set of possible answer options
   answerOption?: AnswerOption[]; // Permitted answers, for choice items
   item?: Item[]; // Nested items
   mapping?: Mapping;
+  display?: DisplayOptions;
+
+  enableBehavior?: 'any' | 'all';
+  enableWhen?: EnableWhen[];
 }
 
 export interface FormDefinition {

@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import TextInput from './TextInput';
@@ -22,3 +22,8 @@ const Template: ComponentStory<typeof TextInput> = (args) => (
 export const Default = Template.bind({});
 export const Labeled = Template.bind({});
 Labeled.args = { label: 'Label', helperText: 'Helper text here' };
+
+export const LabeledWithElement = Template.bind({});
+LabeledWithElement.args = {
+  label: <Typography variant='h4'>H4 label</Typography>,
+};

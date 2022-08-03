@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { AnswerOption, FormDefinition, Item } from './types';
+import { AnswerOption, FormDefinition, isAnswerOption, Item } from './types';
 
 // Find a question item by linkId
 const findItem = (
@@ -74,4 +74,76 @@ export const transformSubmitValues = (
     mappingKey
   );
   return transformed;
+};
+
+export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
+  if (!item.enableWhen) return true;
+
+  const currentValue = isAnswerOption(dependentQuestionValue)
+    ? dependentQuestionValue.valueCoding?.code
+    : undefined;
+  if (!currentValue) return false;
+
+  // If there is a value, evaluate all enableWhen conditions
+  const booleans = item.enableWhen.map((en) => {
+    const comparisonValue = en.answerCoding?.code;
+    if (
+      typeof currentValue === 'undefined' ||
+      typeof comparisonValue === 'undefined'
+    ) {
+      return false;
+    }
+    switch (en.operator) {
+      case '=':
+        return currentValue === comparisonValue;
+    }
+    console.warn('Unsupported enableWhen operator', en.operator);
+    return false;
+  });
+
+  if (item.enableBehavior === 'any') {
+    return booleans.some(Boolean);
+  } else {
+    return booleans.every(Boolean);
+  }
+};
+
+export const resolveAnswerValueSet = (
+  answerValueSet: string
+): AnswerOption[] => {
+  if (answerValueSet === 'yesNoMissing') {
+    return [
+      {
+        valueCoding: {
+          code: '0',
+          display: 'No',
+        },
+      },
+      {
+        valueCoding: {
+          code: '1',
+          display: 'Yes',
+        },
+      },
+      {
+        valueCoding: {
+          code: '8',
+          display: "Don't know",
+        },
+      },
+      {
+        valueCoding: {
+          code: '9',
+          display: 'Client refused',
+        },
+      },
+      {
+        valueCoding: {
+          code: '99',
+          display: 'Data not collected',
+        },
+      },
+    ];
+  }
+  return [];
 };

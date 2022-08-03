@@ -1,4 +1,5 @@
 import { DateType } from '@date-io/type';
+import { SxProps } from '@mui/material';
 import {
   DatePicker as MuiDatePicker,
   DatePickerProps,
@@ -6,18 +7,15 @@ import {
 
 import TextInput from './TextInput';
 
-// interface Props
-//   extends Omit<DatePickerProps<DateType, DateType>, 'value' | 'renderInput'> {
-//   onChange: (date: string | null) => void;
-//   value: string | null;
-// }
+interface Props
+  extends Omit<DatePickerProps<DateType, DateType>, 'renderInput'> {
+  sx?: SxProps;
+}
 
-const DatePicker: React.FC<
-  Omit<DatePickerProps<DateType, DateType>, 'renderInput'>
-> = (props) => (
+const DatePicker: React.FC<Props> = ({ sx, ...props }: Props) => (
   <MuiDatePicker
     {...props}
-    renderInput={(params) => <TextInput {...params} />}
+    renderInput={(params) => <TextInput sx={sx} {...params} />}
   />
 );
 

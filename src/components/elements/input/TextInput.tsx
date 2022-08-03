@@ -37,9 +37,6 @@ const TextInput = ({
           'label + &': {
             mt: 3,
           },
-          '& input[disabled]': {
-            backgroundColor: 'text.disabled',
-          },
         },
       }}
       InputLabelProps={{
@@ -50,7 +47,6 @@ const TextInput = ({
         sx: {
           transform: 'none',
           color: 'text.secondary',
-          // FIXME: define typography variants and how each is used. talk to ash
           typography: 'body2',
         },
       }}

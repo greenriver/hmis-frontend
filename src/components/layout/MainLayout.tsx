@@ -11,6 +11,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import { Routes } from '@/routes/routes';
 
 interface Props {
   children: React.ReactNode;
@@ -38,12 +39,12 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             underline='none'
             to='/'
           >
-            {import.meta.env.VITE_APP_NAME}
+            {import.meta.env.PUBLIC_APP_NAME}
           </Link>
           <Link component={RouterLink} to='/' sx={{ ml: 2 }}>
             Search
           </Link>
-          <Link component={RouterLink} to='/intake' sx={{ ml: 2 }}>
+          <Link component={RouterLink} to={Routes.CREATE_CLIENT} sx={{ ml: 2 }}>
             New Client
           </Link>
           <Typography variant='body2' sx={{ ml: 8 }}>

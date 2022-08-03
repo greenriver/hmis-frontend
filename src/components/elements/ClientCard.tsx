@@ -8,10 +8,11 @@ import {
   Typography,
 } from '@mui/material';
 import { Fragment } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { DashboardRoutes } from '@/routes/routes';
 import { Client } from '@/types/gqlTypes';
 
 interface Props {
@@ -71,6 +72,7 @@ const ClientCard: React.FC<Props> = ({
                   to={`/client/${client.id}`}
                   target={linkTargetBlank ? '_blank' : undefined}
                   color='secondary'
+                  sx={{ maxWidth: 160 }}
                 >
                   Go to Record
                 </Button>
@@ -94,7 +96,10 @@ const ClientCard: React.FC<Props> = ({
                 <Grid item xs={4}>
                   <Link
                     component={RouterLink}
-                    to={`/client/${client.id}/enrollments/${enrollment.id}`}
+                    to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                      clientId: client.id,
+                      enrollmentId: enrollment.id,
+                    })}
                     target={linkTargetBlank ? '_blank' : undefined}
                     variant='body2'
                   >
@@ -119,7 +124,15 @@ const ClientCard: React.FC<Props> = ({
           Actions
         </Typography>
         <Stack spacing={1}>
-          <Button fullWidth variant='outlined' color='secondary'>
+          <Button
+            fullWidth
+            variant='outlined'
+            color='secondary'
+            component={RouterLink}
+            to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+              clientId: client.id,
+            })}
+          >
             Enroll
           </Button>
           <Button fullWidth variant='outlined' color='error'>

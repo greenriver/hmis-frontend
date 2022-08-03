@@ -1,25 +1,12 @@
+import { useQuery } from '@apollo/client';
 import { Typography } from '@mui/material';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
+import { GET_ORGANIZATIONS } from '@/api/organizations.gql';
 import { Organization } from '@/types/gqlTypes';
 
 export type Option = Omit<Organization, 'projects'>;
-
-const fakeOptions: Option[] = [
-  {
-    id: '1',
-    organizationName: 'Sassafrass Center',
-  },
-  {
-    id: '2',
-    organizationName: 'Red Pine Center',
-  },
-  {
-    id: '3',
-    organizationName: 'Red Cedar House',
-  },
-];
 
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
@@ -36,9 +23,10 @@ const OrganizationSelect: React.FC<
   label = multiple ? 'Organizations' : 'Organization',
   ...props
 }) => {
-  // FIXME replace with GQL query that returns grouped organization list
-  const options = fakeOptions;
-  const loading = false;
+  const { data, loading, error } = useQuery<{
+    organizations: Option[];
+  }>(GET_ORGANIZATIONS);
+  if (error) console.error(error);
 
   return (
     <GenericSelect<Option>
@@ -46,7 +34,7 @@ const OrganizationSelect: React.FC<
       label={label}
       loading={loading}
       multiple={multiple}
-      options={options}
+      options={data?.organizations || []}
       renderOption={renderOption}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       {...props}

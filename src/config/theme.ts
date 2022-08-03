@@ -29,6 +29,9 @@ const theme: ThemeOptions = {
       textTransform: 'uppercase',
       color: '#10182899',
     },
+    button: {
+      textTransform: 'none',
+    },
   },
   palette: {
     background: {

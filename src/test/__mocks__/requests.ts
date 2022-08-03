@@ -13,32 +13,32 @@ export const RITA_ACKROYD = {
   enrollments: [
     {
       id: '5',
-      entryDate: '07/01/2022',
+      entryDate: '2022-06-18T00:00:00+00:00',
       exitDate: null,
       project: { projectName: 'White Pine' },
     },
     {
       id: '6',
-      entryDate: '12/01/2021',
-      exitDate: '12/05/2021',
+      entryDate: '2021-02-10T00:00:00+00:00',
+      exitDate: '2021-02-10T00:00:00+00:00',
       project: { projectName: 'Spruce Hill' },
     },
     {
       id: '7',
-      entryDate: '12/01/2021',
-      exitDate: '12/05/2021',
+      entryDate: '2013-02-10T00:00:00+00:00',
+      exitDate: '2013-02-10T00:00:00+00:00',
       project: { projectName: 'White Pine Terrace' },
     },
     {
       id: '8',
-      entryDate: '12/01/2021',
-      exitDate: '12/05/2021',
+      entryDate: '2013-02-10T00:00:00+00:00',
+      exitDate: '2013-02-10T00:00:00+00:00',
       project: { projectName: 'White Pine' },
     },
     {
       id: '9',
-      entryDate: '12/01/2021',
-      exitDate: '12/05/2021',
+      entryDate: '2013-02-10T00:00:00+00:00',
+      exitDate: '2013-02-10T00:00:00+00:00',
       project: { projectName: 'White Pine' },
     },
   ],
@@ -117,7 +117,7 @@ const clientSearchMock = {
     query: GET_CLIENTS,
     variables: {
       offset: 0,
-      input: { searchTerm: 'ack' },
+      input: { textSearch: 'ack' },
       limit: 3,
     },
   },
@@ -162,7 +162,7 @@ const clientSearchMockNextPage = {
   request: {
     query: GET_CLIENTS,
     variables: {
-      input: { searchTerm: 'ack' },
+      input: { textSearch: 'ack' },
       limit: 3,
       offset: 3,
     },

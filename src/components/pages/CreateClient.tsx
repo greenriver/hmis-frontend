@@ -6,7 +6,6 @@ import DynamicForm from '@/modules/form/components/DynamicForm';
 import formData from '@/modules/form/data/intake.json';
 import { transformSubmitValues } from '@/modules/form/formUtil';
 import { FormDefinition } from '@/modules/form/types';
-import ConfiguredApolloProvider from '@/providers/ConfiguredApolloProvider';
 
 const MAPPING_KEY = 'clientMutationInput';
 
@@ -16,7 +15,7 @@ const intakeFormDefinition: FormDefinition = JSON.parse(
   JSON.stringify(formData)
 );
 
-const Intake: React.FC = () => {
+const CreateClient: React.FC = () => {
   const submitHandler = (values: Record<string, any>) => {
     // Transform values into client input query variables
     const variables = transformSubmitValues(
@@ -25,10 +24,11 @@ const Intake: React.FC = () => {
       MAPPING_KEY
     );
     console.log(JSON.stringify(variables, null, 2));
+    // TODO submit mutation, show validation, navigate to client dashboard
   };
 
   return (
-    <ConfiguredApolloProvider>
+    <>
       <PageHeader>
         <Typography variant='h5'>Add New Client</Typography>
       </PageHeader>
@@ -40,8 +40,8 @@ const Intake: React.FC = () => {
           discardButtonText='Cancel'
         />
       </Container>
-    </ConfiguredApolloProvider>
+    </>
   );
 };
 
-export default Intake;
+export default CreateClient;

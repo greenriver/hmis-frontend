@@ -20,7 +20,7 @@ import { transformSubmitValues } from '@/modules/form/formUtil';
 import { FormDefinition, Item } from '@/modules/form/types';
 
 type FormValues = {
-  searchTerm?: string;
+  textSearch?: string;
   projects?: ProjectOption[];
   [k: string]: any;
 };
@@ -51,7 +51,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
     const variables = transformSubmitValues(definition, values, MAPPING_KEY);
     onSubmit({
       ...variables,
-      searchTerm: values.searchTerm,
+      textSearch: values.textSearch,
       projects: values.projects ? values.projects.map((p) => p.id) : undefined,
     });
   };
@@ -63,9 +63,6 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
-      <Typography sx={{ mb: 2, fontStyle: 'italic', color: 'darkgreen' }}>
-        Search for 'ack' to get mocked results.
-      </Typography>
       <Typography sx={{ mb: 2 }}>
         Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse ID,
         or PersonalID. It is often most efficient to search using the first few
@@ -78,9 +75,9 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
             label='Search Clients'
             placeholder='Search clients...'
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.searchTerm || ''}
+            value={values.textSearch || ''}
             onChange={(e) => {
-              fieldChanged('searchTerm', e.target.value);
+              fieldChanged('textSearch', e.target.value);
             }}
             onKeyUp={submitOnEnter}
           />
@@ -121,6 +118,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
           >
             {definition.item?.map((item: Item) => (
               <DynamicField
+                nestingLevel={0}
                 key={item.linkId}
                 item={item}
                 itemChanged={fieldChanged}

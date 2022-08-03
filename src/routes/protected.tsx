@@ -1,17 +1,19 @@
-import React, { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import EnrollmentTab from '@/components/dashboard/Enrollment';
-import Enrollments from '@/components/dashboard/Enrollments';
+import { Routes, DashboardRoutes } from './routes';
+
+import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
+import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
+import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
 import ErrorFallback from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import ClientDashboard from '@/components/pages/ClientDashboard';
-
-const Dashboard = lazy(() => import('@/components/pages/Dashboard'));
-const Intake = lazy(() => import('@/components/pages/Intake'));
+import CreateClient from '@/components/pages/CreateClient';
+import Dashboard from '@/components/pages/Dashboard';
 
 const App = () => {
   return (
@@ -30,22 +32,33 @@ export const protectedRoutes = [
     path: '/',
     element: <App />,
     children: [
-      { path: '/intake', element: <Intake /> },
+      { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
-        path: '/client/:clientId',
+        path: Routes.CLIENT_DASHBOARD,
         element: <ClientDashboard />,
         children: [
           { path: '', element: <Profile /> },
-          { path: 'profile', element: <Profile /> },
-          { path: 'enrollments/:enrollmentId', element: <EnrollmentTab /> },
-          { path: 'enrollments', element: <Enrollments /> },
-          { path: 'history', element: null },
-          { path: 'assessments', element: null },
-          { path: 'notes', element: null },
-          { path: 'files', element: null },
-          { path: 'contact', element: null },
-          { path: 'locations', element: null },
-          { path: 'referrals', element: null },
+          { path: DashboardRoutes.PROFILE, element: <Profile /> },
+          {
+            path: DashboardRoutes.NEW_ENROLLMENT,
+            element: <NewEnrollment />,
+          },
+          {
+            path: DashboardRoutes.VIEW_ENROLLMENT,
+            element: <ViewEnrollment />,
+          },
+          {
+            path: DashboardRoutes.ALL_ENROLLMENTS,
+            element: <AllEnrollments />,
+          },
+
+          { path: DashboardRoutes.HISTORY, element: null },
+          { path: DashboardRoutes.ASSESSMENTS, element: null },
+          { path: DashboardRoutes.NOTES, element: null },
+          { path: DashboardRoutes.FILES, element: null },
+          { path: DashboardRoutes.CONTACT, element: null },
+          { path: DashboardRoutes.LOCATIONS, element: null },
+          { path: DashboardRoutes.REFERRALS, element: null },
         ],
       },
       { path: '/', element: <Dashboard /> },

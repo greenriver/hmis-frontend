@@ -21,10 +21,11 @@ import { GET_CLIENTS } from '@/api/clients.gql';
 import ClientCard from '@/components/elements/ClientCard';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
+import { Routes } from '@/routes/routes';
 import { ClientsPaginated } from '@/types/gqlTypes';
 
-const PAGE_SIZE = 3;
-const MAX_CARDS_THRESHOLD = 100;
+const PAGE_SIZE = 10;
+const MAX_CARDS_THRESHOLD = 10;
 
 // FIXME code-gen
 interface Props {
@@ -36,16 +37,24 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
   const [offset, setOffset] = useState(0);
 
   const limit = PAGE_SIZE;
-  const { data, loading, error, fetchMore } = useQuery<ClientsPaginated>(
-    GET_CLIENTS,
-    {
-      variables: {
-        input: filters,
-        limit,
-        offset: 0,
-      },
-    }
-  );
+  const {
+    data: { clientSearch: data } = {},
+    loading,
+    error,
+    refetch,
+  } = useQuery<{
+    clientSearch: ClientsPaginated;
+  }>(GET_CLIENTS, {
+    variables: {
+      input: filters,
+      limit,
+      offset: 0,
+    },
+    notifyOnNetworkStatusChange: true,
+    refetchWritePolicy: 'merge',
+    // fetchPolicy: 'cache-first',
+    // nextFetchPolicy: 'cache-first',
+  });
 
   // Set initial state of Card/Table toggle
   useEffect(() => {
@@ -56,10 +65,8 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
 
   // Fetch more data on page change
   useEffect(() => {
-    void fetchMore({
-      variables: { offset },
-    });
-  }, [offset, fetchMore]);
+    void refetch({ offset });
+  }, [offset, refetch]);
 
   if (error) return <Paper sx={{ p: 2 }}>{error.message}</Paper>;
 
@@ -94,7 +101,7 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
                 size='small'
                 variant='outlined'
                 component={RouterLink}
-                to='/intake'
+                to={Routes.CREATE_CLIENT}
               >
                 + Add Client
               </Button>
@@ -108,12 +115,13 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
             key={client.id}
             client={client}
             showLinkToRecord
-            showNotices
+            // TODO re-enable when we have data for it
+            // showNotices
             linkTargetBlank
           />
         ))
       ) : (
-        <SearchResultsTable rows={data.nodes} />
+        <SearchResultsTable rows={data.nodes || []} />
       )}
       <Pagination
         {...{ limit, offset }}

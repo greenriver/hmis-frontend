@@ -16,9 +16,9 @@ const setGitVariables = (process) => {
     .toString()
     .trimEnd();
 
-  process.env.VITE_GIT_COMMIT_DATE = commitDate;
-  process.env.VITE_GIT_BRANCH_NAME = branchName;
-  process.env.VITE_GIT_COMMIT_HASH = commitHash;
+  process.env.PUBLIC_GIT_COMMIT_DATE = commitDate;
+  process.env.PUBLIC_GIT_BRANCH_NAME = branchName;
+  process.env.PUBLIC_GIT_COMMIT_HASH = commitHash;
 };
 
 dns.setDefaultResultOrder('ipv4first');
@@ -30,6 +30,7 @@ export default defineConfig(({ command, mode }) => {
   }
 
   return {
+    envPrefix: 'PUBLIC_',
     resolve: {
       alias: {
         '@': resolve(__dirname, './src'),
@@ -38,6 +39,10 @@ export default defineConfig(({ command, mode }) => {
     plugins: [react()],
     define: {
       __APP_ENV__: env.APP_ENV,
+    },
+    esbuild: {
+      // https://github.com/vitejs/vite/issues/8644#issuecomment-1159308803
+      logOverride: { 'this-is-undefined-in-esm': 'silent' },
     },
     build: {
       rollupOptions: {
