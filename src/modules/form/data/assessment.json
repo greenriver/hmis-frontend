@@ -2,25 +2,81 @@
   "name": "es-intake",
   "item": [
     {
-      "type": "date",
-      "required": false,
-      "linkId": "engagement",
-      "text": "Date of Engagement"
+      "type": "group",
+      "linkId": "initial-group",
+      "item": [
+        {
+          "type": "choice",
+          "linkId": "3.15",
+          "prefix": "3.15",
+          "text": "Relationship to Head of Household",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Self"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Head of household's child"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Head of household's spouse or partner"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "4",
+                "display": "Head of household's other relation member"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "5",
+                "display": "Other: non-relation member"
+              }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "3.16",
+          "prefix": "3.16",
+          "text": "CoC Code for Client Location"
+        },
+        {
+          "type": "date",
+          "linkId": "4.13",
+          "prefix": "4.13",
+          "text": "Date of Engagement"
+        },
+        {
+          "type": "date",
+          "linkId": "4.14",
+          "prefix": "4.14",
+          "text": "Bed-Night Date"
+        }
+      ]
     },
     {
       "type": "group",
       "linkId": "3.917-group",
-      "prefix": "3.917",
       "item": [
         {
           "type": "display",
-          "linkId": "prior-living-instruction",
+          "linkId": "3.917-instruction",
           "text": "Where did the client spend last night? Select the category that most closely matches the client's response."
         },
         {
           "type": "choice",
           "required": false,
-          "linkId": "prior-living",
+          "linkId": "3.917",
+          "prefix": "3.917",
           "text": "Prior Living Situation",
           "mapping": {},
           "answerOption": [
@@ -224,195 +280,50 @@
         },
         {
           "type": "choice",
-          "linkId": "pls-a",
-          "text": "Is client going to have to leave their current living situation within 14 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "15" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "6" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "7" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "25" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "4" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "5" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "29" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "14" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "2" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "32" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "36" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "35" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "28" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "19" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "3" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "31" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "33" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "34" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "10" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "20" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "21" }
-            },
-            {
-              "question": "prior-living",
-              "operator": "=",
-              "answerCoding": { "code": "11" }
-            }
-          ]
+          "linkId": "3.917-2",
+          "text": "Length of stay in prior living situation"
+        },
+        {
+          "type": "boolean",
+          "linkId": "3.917-A",
+          "text": "Did the client stay less than 90 days?"
+        },
+        {
+          "type": "boolean",
+          "linkId": "3.917-B",
+          "text": "Did the client stay less than 7 nights?"
+        },
+        {
+          "type": "boolean",
+          "linkId": "3.917-C",
+          "text": "On the night before, did the client stay on the streets, ES or SH?"
+        },
+        {
+          "type": "date",
+          "linkId": "3.917-3",
+          "text": "Date homelessness started"
         },
         {
           "type": "choice",
-          "linkId": "pls-b",
-          "text": "Has a subsequent residence been identified?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "pls-a",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
+          "linkId": "3.917-4",
+          "text": "Number of times the client has been on the streets, in ES, or SH in the past three years"
         },
         {
           "type": "choice",
-          "linkId": "pls-c",
-          "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "pls-a",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "pls-d",
-          "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "pls-a",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "pls-e",
-          "text": "Has the client moved 2 or more times in the last 60 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "pls-a",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "linkId": "location",
-          "text": "Location details"
+          "linkId": "3.917-5",
+          "text": "Total number of months homeless on the street, in ES, or SH in the past three years"
         }
       ]
     },
     {
       "type": "group",
       "linkId": "4.12-group",
-      "prefix": "4.12",
       "item": [
         {
           "type": "choice",
           "required": false,
           "linkId": "4.12",
+          "prefix": "4.12",
           "text": "Current Living Situation",
           "mapping": {},
           "answerOption": [
@@ -627,12 +538,193 @@
               }
             }
           ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.12-A",
+          "text": "Is client going to have to leave their current living situation within 14 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "15" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "6" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "7" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "25" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "4" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "5" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "29" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "14" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "2" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "32" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "36" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "35" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "28" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "19" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "3" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "31" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "33" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "34" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "10" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "20" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "21" }
+            },
+            {
+              "question": "4.12",
+              "operator": "=",
+              "answerCoding": { "code": "11" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.12-B",
+          "text": "Has a subsequent residence been identified?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "4.12-A",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.12-C",
+          "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "4.12-A",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.12-D",
+          "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "4.12-A",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "linkId": "4.12-E",
+          "text": "Has the client moved 2 or more times in the last 60 days?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "any",
+          "enableWhen": [
+            {
+              "question": "4.12-A",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "linkId": "4.12-4",
+          "text": "Location details"
         }
       ]
     },
     {
       "type": "group",
-      "linkId": "dv-group",
+      "linkId": "4.11-group",
+      "text": "4.11",
       "item": [
         {
           "type": "choice",

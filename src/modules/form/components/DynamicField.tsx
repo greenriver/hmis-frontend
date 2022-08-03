@@ -135,6 +135,7 @@ const DynamicField: React.FC<Props> = ({
         return (
           <Grid item sx={{ width: 400 }}>
             <SelectComponent
+              label={label}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               value={selectedVal}
               onChange={onChangeValue}
