@@ -38,12 +38,16 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE }}
           role-session-name: github-action
 
-      - name: Export node version
-        id: node
+      - name: Export environment variables
+        id: env
         run: |
           export NODE_VERSION=`cat .nvmrc`
+          export GITHASH="${SHA::9}"
+          export IMAGE_TAG="githash-${GITHASH}"
 
           echo "::set-output name=node_version::$NODE_VERSION"
+          echo "::set-output name=git_hash::$GIT_HASH"
+          echo "::set-output name=image_tag::$IMAGE_TAG"
 
       # Build and scan on PRs
       - name: Build container image for PR
@@ -53,7 +57,7 @@ jobs:
         with:
           push: false
           file: docker/Dockerfile
-          tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           outputs: type=docker
           build-args: |
             NODE_VERSION=${{ steps.node.outputs.node_version }}
@@ -64,7 +68,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
@@ -83,10 +87,10 @@ jobs:
         with:
           push: false
           file: docker/Dockerfile
-          tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           outputs: type=docker
           build-args: |
-            NODE_VERSION=${{ steps.node.outputs.node_version }}
+            NODE_VERSION=${{ steps.env.outputs.node_version }}
 
       # log medium vulnerabilities
       - name: Run scan for medium vulnerabilities
@@ -95,7 +99,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
@@ -108,7 +112,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           format: 'table'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
@@ -128,6 +132,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: docker/Dockerfile
           labels: ${{ steps.metadata.outputs.labels }}
-          tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
           build-args: |
             NODE_VERSION=${{ steps.node.outputs.node_version }}
