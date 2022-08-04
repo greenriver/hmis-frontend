@@ -26,7 +26,8 @@ on:
       - stable
   push:
     branches:
-      - stable
+      - "*"
+      - "**/*"
 
 jobs:
   build:
