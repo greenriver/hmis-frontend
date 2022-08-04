@@ -38,6 +38,13 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE }}
           role-session-name: github-action
 
+      - name: Export node version
+        id: node
+        run: |
+          export NODE_VERSION=`cat .nvmrc`
+
+          echo "::set-output name=node_version::$NODE_VERSION"
+
       # Build and scan on PRs
       - name: Build container image
         if: github.event_name == 'pull_request'
@@ -48,6 +55,8 @@ jobs:
           file: docker/Dockerfile
           tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           outputs: type=docker
+          build-args: |
+            NODE_VERSION=${{ steps.node.outputs.node_version }}
 
       - name: Run vulnerability scan
         if: github.event_name == 'pull_request'
