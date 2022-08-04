@@ -60,7 +60,7 @@ jobs:
           tags: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
           outputs: type=docker
           build-args: |
-            NODE_VERSION=${{ steps.node.outputs.node_version }}
+            NODE_VERSION=${{ steps.env.outputs.node_version }}
 
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
@@ -134,4 +134,4 @@ jobs:
           labels: ${{ steps.metadata.outputs.labels }}
           tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
           build-args: |
-            NODE_VERSION=${{ steps.node.outputs.node_version }}
+            NODE_VERSION=${{ steps.env.outputs.node_version }}
