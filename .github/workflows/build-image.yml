@@ -40,6 +40,8 @@ jobs:
 
       - name: Export environment variables
         id: env
+        env:
+          SHA: ${{ github.sha }}
         run: |
           export NODE_VERSION=`cat .nvmrc`
           export GITHASH="${SHA::9}"
