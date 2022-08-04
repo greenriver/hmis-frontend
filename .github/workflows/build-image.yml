@@ -1,0 +1,138 @@
+name: 'Build and Scan Container'
+
+on:
+  workflow_dispatch:
+    inputs:
+      AWS_ACCOUNT_ID:
+        required: true
+        type: string
+      AWS_REGION:
+        required: true
+        type: string
+      AWS_ROLE:
+        required: true
+        type: string
+      AWS_ECR_REGISTRY:
+        required: true
+        type: string
+      IMAGE_NAME:
+        required: true
+        type: string
+      PATH:
+        required: true
+        type: string
+  pull_request:
+    branches:
+      - stable
+  push:
+    branches:
+      - stable
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-20.04
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    outputs:
+      digest: ${{ steps.push.outputs.digest }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3.0.2
+
+      - name: Setup buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Configure AWS credentials
+        if: github.event_name != 'pull_request'
+        uses: aws-actions/configure-aws-credentials@v1.6.1
+        with:
+          aws-region: ${{ inputs.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT_ID }}:role/${{ inputs.AWS_ROLE }}
+          role-session-name: github-action
+
+      # Build and scan on PRs
+      - name: Build container image
+        if: github.event_name == 'pull_request'
+        id: vuln_build
+        uses: docker/build-push-action@v3
+        with:
+          push: false
+          file: ${{ inputs.PATH }}
+          tags: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          outputs: type=docker
+
+      - name: Run vulnerability scan
+        if: github.event_name == 'pull_request'
+        id: vuln_scan
+        uses: aquasecurity/trivy-action@0.2.5
+        continue-on-error: true
+        with:
+          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      # Build scan and push to ECR
+      - name: Login to Amazon ECR
+        if: github.event_name != 'pull_request'
+        uses: aws-actions/amazon-ecr-login@v1
+
+
+      - name: Build container image
+        if: github.event_name != 'pull_request'
+        id: build
+        uses: docker/build-push-action@v3
+        with:
+          push: false
+          file: ${{ inputs.PATH }}
+          tags: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          outputs: type=docker
+
+      # log medium vulnerabilities
+      - name: Run scan for medium vulnerabilities
+        if: github.event_name != 'pull_request'
+        id: scan_medium
+        uses: aquasecurity/trivy-action@0.2.5
+        continue-on-error: true
+        with:
+          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'MEDIUM'
+
+      # fail on critical and high vulnerabilities
+      - name: Run scan for critical and high vulnerabilities
+        if: github.event_name == 'pull_request'
+        id: scan_crit
+        uses: aquasecurity/trivy-action@0.2.5
+        continue-on-error: true
+        with:
+          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          format: 'table'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+      - name: Set Docker remote
+        if: ${{ github.event_name != 'pull_request' }}
+        id: metadata
+        uses: docker/metadata-action@v3.6.0
+        with:
+          images: ${{ inputs.AWS_ECR_REGISTRY }}/${{ inputs.IMAGE_NAME }}
+
+      - name: Build and push container image
+        if: ${{ github.event_name != 'pull_request' }}
+        id: push
+        uses: docker/build-push-action@v3
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          file: ${{ inputs.PATH }}
+          labels: ${{ steps.metadata.outputs.labels }}
+          tags: ${{ inputs.AWS_ECR_REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
