@@ -2,25 +2,6 @@ name: 'Build and Scan Container'
 
 on:
   workflow_dispatch:
-    inputs:
-      AWS_ACCOUNT_ID:
-        required: true
-        type: string
-      AWS_REGION:
-        required: true
-        type: string
-      AWS_ROLE:
-        required: true
-        type: string
-      AWS_ECR_REGISTRY:
-        required: true
-        type: string
-      IMAGE_NAME:
-        required: true
-        type: string
-      PATH:
-        required: true
-        type: string
   pull_request:
     branches:
       - stable
@@ -53,8 +34,8 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: aws-actions/configure-aws-credentials@v1.6.1
         with:
-          aws-region: ${{ inputs.AWS_REGION }}
-          role-to-assume: arn:aws:iam::${{ inputs.AWS_ACCOUNT_ID }}:role/${{ inputs.AWS_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE }}
           role-session-name: github-action
 
       # Build and scan on PRs
@@ -64,8 +45,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: false
-          file: ${{ inputs.PATH }}
-          tags: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          file: docker/Dockerfile
+          tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           outputs: type=docker
 
       - name: Run vulnerability scan
@@ -74,7 +55,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
@@ -92,8 +73,8 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: false
-          file: ${{ inputs.PATH }}
-          tags: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          file: docker/Dockerfile
+          tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           outputs: type=docker
 
       # log medium vulnerabilities
@@ -103,7 +84,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           format: 'table'
           exit-code: '0'
           ignore-unfixed: true
@@ -116,7 +97,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
         with:
-          image-ref: ${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          image-ref: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           format: 'table'
           ignore-unfixed: true
           severity: 'CRITICAL,HIGH'
@@ -126,7 +107,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v3.6.0
         with:
-          images: ${{ inputs.AWS_ECR_REGISTRY }}/${{ inputs.IMAGE_NAME }}
+          images: ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.IMAGE_NAME }}
 
       - name: Build and push container image
         if: ${{ github.event_name != 'pull_request' }}
@@ -134,6 +115,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          file: ${{ inputs.PATH }}
+          file: docker/Dockerfile
           labels: ${{ steps.metadata.outputs.labels }}
-          tags: ${{ inputs.AWS_ECR_REGISTRY }}/${{ inputs.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
