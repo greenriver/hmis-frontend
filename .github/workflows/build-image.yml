@@ -103,7 +103,7 @@ jobs:
 
       # fail on critical and high vulnerabilities
       - name: Run scan for critical and high vulnerabilities
-        if: github.event_name == 'pull_request'
+        if: github.event_name != 'pull_request'
         id: scan_crit
         uses: aquasecurity/trivy-action@0.2.5
         continue-on-error: true
@@ -118,7 +118,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v3.6.0
         with:
-          images: ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.IMAGE_NAME }}
+          images: ${{ secrets.AWS_ECR_REGISTRY }}
 
       - name: Build and push container image
         if: ${{ github.event_name != 'pull_request' }}
@@ -128,6 +128,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: docker/Dockerfile
           labels: ${{ steps.metadata.outputs.labels }}
-          tags: ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ secrets.GITHUB_TOKEN }}
           build-args: |
             NODE_VERSION=${{ steps.node.outputs.node_version }}
