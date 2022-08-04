@@ -46,7 +46,7 @@ jobs:
           echo "::set-output name=node_version::$NODE_VERSION"
 
       # Build and scan on PRs
-      - name: Build container image
+      - name: Build container image for PR
         if: github.event_name == 'pull_request'
         id: vuln_build
         uses: docker/build-push-action@v3
@@ -58,7 +58,7 @@ jobs:
           build-args: |
             NODE_VERSION=${{ steps.node.outputs.node_version }}
 
-      - name: Run vulnerability scan
+      - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
         id: vuln_scan
         uses: aquasecurity/trivy-action@0.2.5
@@ -85,6 +85,8 @@ jobs:
           file: docker/Dockerfile
           tags: ${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
           outputs: type=docker
+          build-args: |
+            NODE_VERSION=${{ steps.node.outputs.node_version }}
 
       # log medium vulnerabilities
       - name: Run scan for medium vulnerabilities
@@ -127,3 +129,5 @@ jobs:
           file: docker/Dockerfile
           labels: ${{ steps.metadata.outputs.labels }}
           tags: ${{ secrets.AWS_ECR_REGISTRY }}/${{ secrets.IMAGE_NAME }}:${{ secrets.GITHUB_TOKEN }}
+          build-args: |
+            NODE_VERSION=${{ steps.node.outputs.node_version }}
