@@ -30,7 +30,6 @@ export type Client = {
   dateUpdated: Scalars['ISO8601DateTime'];
   /** Date of birth as format yyyy-mm-dd */
   dob?: Maybe<Scalars['ISO8601Date']>;
-  endDate?: Maybe<Scalars['ISO8601DateTime']>;
   enrollments: Array<Enrollment>;
   firstName: Scalars['String'];
   id: Scalars['ID'];
@@ -39,7 +38,6 @@ export type Client = {
   preferredName?: Maybe<Scalars['String']>;
   pronouns?: Maybe<Scalars['String']>;
   ssnSerial?: Maybe<Scalars['String']>;
-  startDate?: Maybe<Scalars['ISO8601DateTime']>;
 };
 
 /** HMIS Client input */
