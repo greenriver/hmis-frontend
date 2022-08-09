@@ -24,7 +24,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder --chown=app:app /app/dist .
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY ./docker/default.conf /etc/nginx/conf.d/default.conf
+COPY ./docker/templates/default.conf.template /etc/nginx/templates/default.conf.template
 
 RUN addgroup --gid 10001 --system app \
  && adduser  --uid 10000 --system --ingroup app --home /usr/share/nginx/html app \
@@ -37,9 +37,9 @@ RUN addgroup --gid 10001 --system app \
  && apk add --no-cache tini
 
 # set entrypoint to handle signals
-ENTRYPOINT ["/sbin/tini", "--", "nginx"]
+ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 
 # run as a non-root user
 USER app
 
-CMD ["-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
