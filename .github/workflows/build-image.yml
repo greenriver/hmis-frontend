@@ -125,6 +125,10 @@ jobs:
         uses: docker/metadata-action@v3.6.0
         with:
           images: ${{ secrets.AWS_ECR_REGISTRY }}
+          tags: |
+            ${{ steps.env.outputs.image_tag }}
+            type=ref,event=branch
+            type=sha
 
       - name: Build and push container image
         if: ${{ github.event_name != 'pull_request' }}
@@ -134,6 +138,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           file: docker/Dockerfile
           labels: ${{ steps.metadata.outputs.labels }}
-          tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
+          tags: ${{ steps.metadata.outputs.tags }}
+          #tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
