@@ -8,6 +8,8 @@ WORKDIR /app
 
 COPY . .
 
+ENV INLINE_RUNTIME_CHUNK=false
+
 RUN corepack enable \
  && yarn install --offline \
  && yarn format:check \
@@ -18,7 +20,7 @@ RUN corepack enable \
 #####################################################################
 # nginx container
 #####################################################################
-FROM nginx:1.23.1-alpine
+FROM nginx:1.23-alpine
 
 WORKDIR /usr/share/nginx/html
 
