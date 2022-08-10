@@ -67,7 +67,7 @@ jobs:
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
         id: vuln_scan
-        uses: aquasecurity/trivy-action@0.2.5
+        uses: aquasecurity/trivy-action@0.6.2
         continue-on-error: true
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
@@ -98,7 +98,7 @@ jobs:
       - name: Run scan for medium vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_medium
-        uses: aquasecurity/trivy-action@0.2.5
+        uses: aquasecurity/trivy-action@0.6.2
         continue-on-error: true
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
@@ -111,7 +111,7 @@ jobs:
       - name: Run scan for critical and high vulnerabilities
         if: github.event_name != 'pull_request'
         id: scan_crit
-        uses: aquasecurity/trivy-action@0.2.5
+        uses: aquasecurity/trivy-action@0.6.2
         continue-on-error: true
         with:
           image-ref: ${{ secrets.IMAGE_NAME }}:${{ steps.env.outputs.image_tag }}
@@ -122,7 +122,7 @@ jobs:
       - name: Set Docker remote
         if: ${{ github.event_name != 'pull_request' }}
         id: metadata
-        uses: docker/metadata-action@v3.6
+        uses: docker/metadata-action@v4
         with:
           images: ${{ secrets.AWS_ECR_REGISTRY }}
           tags: |
