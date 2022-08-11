@@ -36,19 +36,15 @@ const SearchResults = ({ filters }: { filters: ClientSearchInput }) => {
     data: { clientSearch: data } = {},
     loading,
     error,
-    refetch,
   } = useQuery<{
     clientSearch: ClientsPaginated;
   }>(GET_CLIENTS, {
     variables: {
       input: filters,
       limit,
-      offset: 0,
+      offset,
     },
     notifyOnNetworkStatusChange: true,
-    refetchWritePolicy: 'merge',
-    // fetchPolicy: 'cache-first',
-    // nextFetchPolicy: 'cache-first',
   });
 
   // Set initial state of Card/Table toggle
@@ -57,11 +53,6 @@ const SearchResults = ({ filters }: { filters: ClientSearchInput }) => {
       setCards(data.nodesCount <= MAX_CARDS_THRESHOLD);
     }
   }, [data, cards]);
-
-  // Fetch more data on page change
-  useEffect(() => {
-    void refetch({ offset });
-  }, [offset, refetch]);
 
   if (error) return <Paper sx={{ p: 2 }}>{error.message}</Paper>;
 

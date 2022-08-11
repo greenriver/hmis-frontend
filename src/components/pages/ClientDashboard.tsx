@@ -69,7 +69,15 @@ const ClientDashboard: React.FC = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const baseRoute = `/client/${clientId}`;
+
   const initialTab = useMemo(() => getTabFromPath(pathname, tabs), [pathname]);
+  const outletContext = useMemo(
+    () => ({
+      client,
+    }),
+    [client]
+  );
+
   const [currentTab, setCurrentTab] = useState<string>(initialTab);
   useEffect(() => {
     setCurrentTab(initialTab);
@@ -117,7 +125,7 @@ const ClientDashboard: React.FC = () => {
             <TabPanel value={path} key={path}>
               {path === currentTab && (
                 <Container maxWidth='xl'>
-                  <Outlet context={{ client }} />
+                  <Outlet context={outletContext} />
                 </Container>
               )}
             </TabPanel>
