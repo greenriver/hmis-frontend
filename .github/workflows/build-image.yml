@@ -128,6 +128,7 @@ jobs:
           tags: |
             ${{ steps.env.outputs.image_tag }}
             type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
+            type=raw,value=stable,enable=${{ github.ref == format('refs/heads/{0}', 'stable') }}
             type=ref,event=branch
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
