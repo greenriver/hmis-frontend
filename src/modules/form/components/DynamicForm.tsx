@@ -2,7 +2,7 @@ import { Box, Grid, Button, Stack } from '@mui/material';
 import React, { useState } from 'react';
 
 import { shouldEnableItem } from '../formUtil';
-import { FormDefinition, Item } from '../types';
+import { FieldType, FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
 
@@ -49,9 +49,10 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   const renderItem = (item: Item, nestingLevel: number) => {
-    // if (!isEnabled(item)) {
-    //   return null;
-    // }
+    const hidden = !isEnabled(item);
+    if (hidden && item.type === FieldType.group) {
+      return null;
+    }
     return (
       <DynamicField
         key={item.linkId}
@@ -61,7 +62,7 @@ const DynamicForm: React.FC<Props> = ({
         value={values[item.linkId] ?? ''}
         nestingLevel={nestingLevel}
         children={(item) => renderItem(item, nestingLevel + 1)}
-        disabled={item.readOnly || !isEnabled(item)}
+        disabled={item.readOnly || hidden}
       />
     );
   };
