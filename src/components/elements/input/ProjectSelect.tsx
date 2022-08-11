@@ -8,8 +8,6 @@ import { Project } from '@/types/gqlTypes';
 
 export type Option = Project;
 
-export type ProjectSelectValue = Option[] | Option | null;
-
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
@@ -27,18 +25,18 @@ const renderOption = (props: object, option: Option) => (
   </li>
 );
 
-const ProjectSelect: React.FC<Omit<GenericSelectProps<Option>, 'options'>> = ({
+const ProjectSelect = <Multiple extends boolean | undefined>({
   multiple,
   label = multiple ? 'Projects' : 'Project',
   ...props
-}) => {
+}: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
   const { data, loading, error } = useQuery<{
     projects: Option[];
   }>(GET_PROJECTS);
   if (error) console.error(error);
 
   return (
-    <GenericSelect<Option>
+    <GenericSelect
       getOptionLabel={(option) => option.projectName}
       groupBy={(option) => option.organization.organizationName || ''}
       label={label}

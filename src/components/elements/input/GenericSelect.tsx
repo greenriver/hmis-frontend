@@ -3,27 +3,30 @@ import React from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
-export interface GenericSelectProps<T>
-  extends Omit<
-    AutocompleteProps<T, boolean, undefined, undefined, React.ElementType>,
-    'onChange' | 'renderInput' | 'value' | 'options'
+export interface GenericSelectProps<
+  T,
+  Multiple extends boolean | undefined,
+  Creatable extends boolean | undefined
+> extends Omit<
+    AutocompleteProps<T, Multiple, boolean, Creatable, React.ElementType>,
+    'renderInput'
   > {
-  value: T[] | T | null;
-  options: T[];
-  onChange: (option: T[] | T | null) => void;
   label?: string;
   textInputProps?: TextInputProps;
 }
 
-const GenericSelect = <T extends object>({
+const GenericSelect = <
+  T extends object,
+  Multiple extends boolean | undefined,
+  Creatable extends boolean | undefined
+>({
   value,
-  onChange,
   label,
   textInputProps,
   options,
   ...rest
-}: GenericSelectProps<T>) => {
-  const hasValue = (value: T[] | T | null) => {
+}: GenericSelectProps<T, Multiple, Creatable>) => {
+  const hasValue = (value: string | object | null | undefined) => {
     if (Array.isArray(value) && value.length == 0) return false;
     return value !== null && typeof value !== 'undefined';
   };
@@ -33,7 +36,6 @@ const GenericSelect = <T extends object>({
     <Autocomplete
       options={options}
       value={value}
-      onChange={(_, selected) => onChange(selected)}
       renderInput={(params) => (
         <TextInput
           {...params}

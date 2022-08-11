@@ -1,105 +1,82 @@
+import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
+import { useState } from 'react';
 import {
-  Breadcrumbs,
-  Link,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-import {
-  Link as RouterLink,
   useLocation,
   useOutletContext,
   useParams,
   generatePath,
+  useNavigate,
 } from 'react-router-dom';
 
+import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
-import DynamicForm from '@/modules/form/components/DynamicForm';
-import formData from '@/modules/form/data/assessment.json';
-import { FormDefinition } from '@/modules/form/types';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
-
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const intakeFormDefinition: FormDefinition = JSON.parse(
-  JSON.stringify(formData)
-);
+import { Client, Project } from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [project, setProject] = useState<Project | null>(null);
+  const [entryDate, setEntryDate] = useState<Date | null>(null);
   const { clientId } = useParams() as {
     clientId: string;
   };
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
 
-  const pathnames = [
+  const crumbs = [
     {
       label: 'Back to all enrollments',
-      to: generatePath(DashboardRoutes.ALL_ENROLLMENTS, { clientId }),
+      to: DashboardRoutes.ALL_ENROLLMENTS,
     },
     { label: `Add Enrollment`, to: pathname },
   ];
   return (
     <>
-      <Breadcrumbs aria-label='breadcrumb' sx={{ mb: 3 }}>
-        {pathnames.map(({ label, to }, index) => {
-          const last = index === pathnames.length - 1;
-
-          return last ? (
-            <Typography variant='body2' key={to}>
-              {label}
-            </Typography>
-          ) : (
-            <Link component={RouterLink} to={to} key={to} variant='body2'>
-              {label}
-            </Link>
-          );
-        })}
-      </Breadcrumbs>
+      <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Typography variant='h5' sx={{ mb: 2 }}>
             Add Enrollment
           </Typography>
-          <Stack spacing={2}>
-            <ProjectSelect
-              value={null}
-              onChange={(selectedOption) => {
-                console.log(selectedOption);
-              }}
+          <Stack spacing={2} sx={{ mb: 2 }}>
+            <ProjectSelect<false>
+              value={project}
+              onChange={(_, value) => setProject(value)}
               textInputProps={{ placeholder: 'Choose project...' }}
               sx={{ width: 400 }}
             />
             <DatePicker
               label='Entry Date'
-              value={null}
+              value={entryDate}
               disableFuture
               sx={{ width: 200 }}
-              onChange={(value) => {
-                console.log(value);
-              }}
+              onChange={(value) => setEntryDate(value)}
             />
             <Paper sx={{ p: 2 }}>
               <Typography variant='h6' sx={{ mb: 2 }}>
-                Household
+                Add Household Members
               </Typography>
             </Paper>
-            {/* <Paper sx={{ p: 2 }}> */}
-            {/* <Typography variant='h6' sx={{ mb: 2 }}>
-              Assessment
-            </Typography> */}
-            <DynamicForm
-              definition={intakeFormDefinition}
-              onSubmit={(values) => console.log(values)}
-              // submitButtonText='Create Record'
-              // discardButtonText='Cancel'
-            />
-            {/* </Paper> */}
           </Stack>
+          <Button
+            disabled={!project || !entryDate}
+            onClick={() => {
+              if (!project) return;
+              // FIXME: send enrollment creation mutation, get id back
+              const enrollmentId = '1';
+              navigate(
+                generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+                  assessmentType: 'intake',
+                  enrollmentId,
+                  clientId,
+                })
+              );
+            }}
+          >
+            Begin Assessment
+          </Button>
         </Grid>
         <Grid item xs></Grid>
       </Grid>

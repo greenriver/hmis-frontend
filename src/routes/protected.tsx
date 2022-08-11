@@ -5,6 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { Routes, DashboardRoutes } from './routes';
 
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
+import NewAssessment from '@/components/dashboard/enrollments/NewAssessment';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
@@ -46,6 +47,10 @@ export const protectedRoutes = [
           {
             path: DashboardRoutes.VIEW_ENROLLMENT,
             element: <ViewEnrollment />,
+          },
+          {
+            path: DashboardRoutes.NEW_ASSESSMENT,
+            element: <NewAssessment />,
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,

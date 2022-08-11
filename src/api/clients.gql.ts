@@ -13,6 +13,7 @@ export const GET_CLIENTS = gql`
         firstName
         preferredName
         lastName
+        nameSuffix
         dob
         dateUpdated
         enrollments {

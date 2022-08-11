@@ -26,7 +26,10 @@ const transformValue = (value: any, item: Item): any => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return value.id;
     }
-  } else if (item.type === 'choice' && item.answerOption) {
+  } else if (
+    ['choice', 'openchoice'].includes(item.type) &&
+    item.answerOption
+  ) {
     if (Array.isArray(value)) {
       return value.map(
         (option: AnswerOption) => option.valueString || option.valueCoding?.code
@@ -39,24 +42,43 @@ const transformValue = (value: any, item: Item): any => {
   return value;
 };
 
+const dataNotCollectedCode = (item: Item): string | undefined => {
+  if (!item.answerOption) return undefined;
+  return item.answerOption.find((opt) =>
+    opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED')
+  )?.valueCoding?.code;
+};
+
 // Recursive helper for transformSubmitValues
 const transformSubmitValuesInner = (
   items: Item[],
   values: Record<string, any>,
   transformed: Record<string, any>,
-  mappingKey: string
+  mappingKey: string,
+  autofillNotCollected: boolean
 ) => {
   items.forEach((item: Item) => {
     if (Array.isArray(item.item)) {
-      transformSubmitValuesInner(item.item, values, transformed, mappingKey);
+      transformSubmitValuesInner(
+        item.item,
+        values,
+        transformed,
+        mappingKey,
+        autofillNotCollected
+      );
     }
-
-    if (!(item.linkId in values)) return;
     if (!item.mapping) return;
     const key = item.mapping[mappingKey];
     if (!key) return;
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    transformed[key] = transformValue(values[item.linkId], item);
+
+    if (item.linkId in values) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      transformed[key] = transformValue(values[item.linkId], item);
+    } else if (autofillNotCollected) {
+      // If we don't have a value, fill in Not Collected code if present
+      const notCollectedCode = dataNotCollectedCode(item);
+      if (notCollectedCode) transformed[key] = notCollectedCode;
+    }
   });
 };
 
@@ -64,14 +86,16 @@ const transformSubmitValuesInner = (
 export const transformSubmitValues = (
   definition: FormDefinition,
   values: Record<string, any>,
-  mappingKey: string
+  mappingKey: string,
+  autofillNotCollected = false
 ) => {
   const transformed: Record<string, any> = {};
   transformSubmitValuesInner(
     definition.item || [],
     values,
     transformed,
-    mappingKey
+    mappingKey,
+    autofillNotCollected
   );
   return transformed;
 };

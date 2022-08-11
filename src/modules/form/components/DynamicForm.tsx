@@ -11,6 +11,8 @@ interface Props {
   onSubmit: (values: Record<string, any>) => void;
   submitButtonText?: string;
   discardButtonText?: string;
+  loading?: boolean;
+  // validations
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -18,6 +20,7 @@ const DynamicForm: React.FC<Props> = ({
   onSubmit,
   submitButtonText,
   discardButtonText,
+  loading,
 }) => {
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>({});
@@ -76,8 +79,8 @@ const DynamicForm: React.FC<Props> = ({
         {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
-        <Button variant='contained' type='submit'>
-          {submitButtonText || 'Submit'}
+        <Button variant='contained' type='submit' disabled={!!loading}>
+          {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
         {/* <Button variant='outlined'>Save Draft</Button> */}
         <Button variant='outlined'>{discardButtonText || 'Discard'}</Button>
