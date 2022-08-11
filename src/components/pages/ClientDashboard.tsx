@@ -15,44 +15,45 @@ import PageHeader from '../layout/PageHeader';
 
 import useClient from '@/hooks/useClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { DashboardRoutes } from '@/routes/routes';
 import { Client } from '@/types/gqlTypes';
 
 const tabs = [
   {
     label: 'Profile',
-    path: 'profile',
+    path: DashboardRoutes.PROFILE,
   },
   {
     label: 'Enrollments',
-    path: 'enrollments',
+    path: DashboardRoutes.ALL_ENROLLMENTS,
   },
   {
     label: 'History',
-    path: 'history',
+    path: DashboardRoutes.HISTORY,
   },
   {
     label: 'Assessments',
-    path: 'assessments',
+    path: DashboardRoutes.ASSESSMENTS,
   },
   {
     label: 'Notes',
-    path: 'notes',
+    path: DashboardRoutes.NOTES,
   },
   {
     label: 'Files',
-    path: 'files',
+    path: DashboardRoutes.FILES,
   },
   {
     label: 'Contact',
-    path: 'contact',
+    path: DashboardRoutes.CONTACT,
   },
   {
     label: 'Locations',
-    path: 'locations',
+    path: DashboardRoutes.LOCATIONS,
   },
   {
     label: 'Referrals',
-    path: 'referrals',
+    path: DashboardRoutes.REFERRALS,
   },
 ];
 
