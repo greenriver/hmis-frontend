@@ -8,8 +8,6 @@ import GenericSelect, {
 
 type Option = AnswerOption;
 
-export type SelectValue = Option[] | Option | null;
-
 const optionId = (option: Option): string => {
   if (option.valueCoding) {
     return option.valueCoding.code;
@@ -30,19 +28,15 @@ const renderOption = (props: object, option: Option) => (
   </li>
 );
 
-interface Props extends Omit<GenericSelectProps<Option>, 'options'> {
-  options: AnswerOption[];
-}
-
-const FormSelect: React.FC<Props> = ({
+const FormSelect = <Multiple extends boolean | undefined>({
   options,
   multiple,
   label,
   ...props
-}) => {
+}: GenericSelectProps<Option, Multiple, false>) => {
   const isGrouped = !!options[0]?.valueCoding?.displayGroup;
   return (
-    <GenericSelect<AnswerOption>
+    <GenericSelect
       getOptionLabel={(option) => optionLabel(option)}
       label={label}
       multiple={multiple}

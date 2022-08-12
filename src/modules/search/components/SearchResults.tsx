@@ -22,17 +22,12 @@ import ClientCard from '@/components/elements/ClientCard';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
 import { Routes } from '@/routes/routes';
-import { ClientsPaginated } from '@/types/gqlTypes';
+import { ClientSearchInput, ClientsPaginated } from '@/types/gqlTypes';
 
 const PAGE_SIZE = 10;
 const MAX_CARDS_THRESHOLD = 10;
 
-// FIXME code-gen
-interface Props {
-  filters: Record<string, any>;
-}
-
-const SearchResults: React.FC<Props> = ({ filters }) => {
+const SearchResults = ({ filters }: { filters: ClientSearchInput }) => {
   const [cards, setCards] = useState<boolean>();
   const [offset, setOffset] = useState(0);
 
@@ -41,19 +36,15 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
     data: { clientSearch: data } = {},
     loading,
     error,
-    refetch,
   } = useQuery<{
     clientSearch: ClientsPaginated;
   }>(GET_CLIENTS, {
     variables: {
       input: filters,
       limit,
-      offset: 0,
+      offset,
     },
     notifyOnNetworkStatusChange: true,
-    refetchWritePolicy: 'merge',
-    // fetchPolicy: 'cache-first',
-    // nextFetchPolicy: 'cache-first',
   });
 
   // Set initial state of Card/Table toggle
@@ -63,35 +54,33 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
     }
   }, [data, cards]);
 
-  // Fetch more data on page change
-  useEffect(() => {
-    void refetch({ offset });
-  }, [offset, refetch]);
-
   if (error) return <Paper sx={{ p: 2 }}>{error.message}</Paper>;
 
   // workaround: render loading if card toggle isn't set yet, because useEffect stil needs to run to set the initial card state
   if (loading || !data || typeof cards === 'undefined') return <Loading />;
 
+  const hasResults = !!data.nodes.length;
   return (
     <>
       <Grid container justifyContent='space-between' sx={{ mb: 4 }}>
         <Grid item>
-          <ToggleButtonGroup
-            value={cards}
-            exclusive
-            onChange={(_, checked: boolean) => setCards(checked)}
-            aria-label='results display format'
-          >
-            <ToggleButton value={false} aria-label='table' size='small'>
-              <ViewHeadlineIcon />
-              <Box sx={{ pl: 0.5 }}>Table</Box>
-            </ToggleButton>
-            <ToggleButton value={true} aria-label='cards' size='small'>
-              <ViewCompactIcon />
-              <Box sx={{ pl: 0.5 }}>Cards</Box>
-            </ToggleButton>
-          </ToggleButtonGroup>
+          {hasResults && (
+            <ToggleButtonGroup
+              value={cards}
+              exclusive
+              onChange={(_, checked: boolean) => setCards(checked)}
+              aria-label='results display format'
+            >
+              <ToggleButton value={false} aria-label='table' size='small'>
+                <ViewHeadlineIcon />
+                <Box sx={{ pl: 0.5 }}>Table</Box>
+              </ToggleButton>
+              <ToggleButton value={true} aria-label='cards' size='small'>
+                <ViewCompactIcon />
+                <Box sx={{ pl: 0.5 }}>Cards</Box>
+              </ToggleButton>
+            </ToggleButtonGroup>
+          )}
         </Grid>
         <Grid item>
           <Card sx={{ p: 1 }}>
@@ -109,20 +98,22 @@ const SearchResults: React.FC<Props> = ({ filters }) => {
           </Card>
         </Grid>
       </Grid>
-      {cards ? (
-        data.nodes.map((client) => (
-          <ClientCard
-            key={client.id}
-            client={client}
-            showLinkToRecord
-            // TODO re-enable when we have data for it
-            // showNotices
-            linkTargetBlank
-          />
-        ))
-      ) : (
-        <SearchResultsTable rows={data.nodes || []} />
-      )}
+      {!hasResults && <Paper sx={{ mb: 2, p: 2 }}>No clients found.</Paper>}
+      {hasResults &&
+        (cards ? (
+          data.nodes.map((client) => (
+            <ClientCard
+              key={client.id}
+              client={client}
+              showLinkToRecord
+              // TODO re-enable when we have data for it
+              // showNotices
+              linkTargetBlank
+            />
+          ))
+        ) : (
+          <SearchResultsTable rows={data.nodes || []} />
+        ))}
       <Pagination
         {...{ limit, offset }}
         totalEntries={data.nodesCount}

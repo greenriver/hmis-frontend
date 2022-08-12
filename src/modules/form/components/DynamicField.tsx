@@ -4,6 +4,7 @@ import React, { ReactNode } from 'react';
 import { resolveAnswerValueSet } from '../formUtil';
 import { FieldType, Item } from '../types';
 
+import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
 
 import DatePicker from '@/components/elements/input/DatePicker';
@@ -78,6 +79,8 @@ const DynamicField: React.FC<Props> = ({
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
   const onChangeValue = (val: any) => itemChanged(item.linkId, val);
+  const onChangeEventValue = (_: any, val: any) =>
+    itemChanged(item.linkId, val);
   const label = getLabel(item);
 
   switch (FieldType[item.type]) {
@@ -120,6 +123,25 @@ const DynamicField: React.FC<Props> = ({
         </Grid>
       );
     case FieldType.openchoice:
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const selectedChoiceVal = value ? value : item.repeats ? [] : null;
+      return (
+        <Grid item sx={{ width: 400 }}>
+          <CreatableFormSelect
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            value={selectedChoiceVal}
+            label={label}
+            options={
+              item.answerValueSet
+                ? resolveAnswerValueSet(item.answerValueSet)
+                : item.answerOption || []
+            }
+            onChange={onChangeEventValue}
+            multiple={item.repeats}
+            disabled={disabled}
+          />
+        </Grid>
+      );
     case FieldType.choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedVal = value ? value : item.repeats ? [] : null;
@@ -138,7 +160,7 @@ const DynamicField: React.FC<Props> = ({
               label={label}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               value={selectedVal}
-              onChange={onChangeValue}
+              onChange={onChangeEventValue}
               multiple={item.repeats}
               disabled={disabled}
             />
@@ -156,7 +178,7 @@ const DynamicField: React.FC<Props> = ({
                 ? resolveAnswerValueSet(item.answerValueSet)
                 : item.answerOption || []
             }
-            onChange={onChangeValue}
+            onChange={onChangeEventValue}
             multiple={item.repeats}
             disabled={disabled}
           />

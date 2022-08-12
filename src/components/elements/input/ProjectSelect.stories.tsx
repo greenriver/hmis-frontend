@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { useState } from 'react';
 
-import ProjectSelect, { ProjectSelectValue } from './ProjectSelect';
+import ProjectSelect, { Option } from './ProjectSelect';
 
 export default {
   title: 'ProjectSelect',
@@ -17,10 +17,16 @@ export default {
 } as ComponentMeta<typeof ProjectSelect>;
 
 const Template: ComponentStory<typeof ProjectSelect> = (args) => {
-  const [value, setValue] = useState<ProjectSelectValue>(
+  const [value, setValue] = useState<Option | Option[] | null>(
     args.multiple ? [] : null
   );
-  return <ProjectSelect {...args} value={value} onChange={setValue} />;
+  return (
+    <ProjectSelect
+      {...args}
+      value={value}
+      onChange={(_, value) => setValue(value)}
+    />
+  );
 };
 
 export const Default = Template.bind({});

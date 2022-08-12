@@ -14,22 +14,18 @@ const renderOption = (props: object, option: Option) => (
   </li>
 );
 
-export type OrganizationSelectValue = Option[] | Option | null;
-
-const OrganizationSelect: React.FC<
-  Omit<GenericSelectProps<Option>, 'options'>
-> = ({
+const OrganizationSelect = <Multiple extends boolean | undefined>({
   multiple,
   label = multiple ? 'Organizations' : 'Organization',
   ...props
-}) => {
+}: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
   const { data, loading, error } = useQuery<{
     organizations: Option[];
   }>(GET_ORGANIZATIONS);
   if (error) console.error(error);
 
   return (
-    <GenericSelect<Option>
+    <GenericSelect //<Option>
       getOptionLabel={(option) => option.organizationName}
       label={label}
       loading={loading}

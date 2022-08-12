@@ -86,7 +86,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.projects || []}
-            onChange={(selectedOption) => {
+            onChange={(_, selectedOption) => {
               fieldChanged('projects', selectedOption);
             }}
             textInputProps={{ placeholder: 'Choose projects...' }}

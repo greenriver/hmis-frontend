@@ -1,56 +1,28 @@
-import {
-  Breadcrumbs,
-  Link,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-  Button,
-} from '@mui/material';
-import {
-  generatePath,
-  Link as RouterLink,
-  useLocation,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom';
+import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
+import { useLocation, useOutletContext, useParams } from 'react-router-dom';
 
+import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { DashboardRoutes } from '@/routes/routes';
 import { Client } from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
   const { pathname } = useLocation();
-  const { enrollmentId, clientId } = useParams() as {
-    clientId: string;
+  const { enrollmentId } = useParams() as {
     enrollmentId: string;
   };
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
 
-  const pathnames = [
+  const crumbs = [
     {
       label: 'Back to all enrollments',
-      to: generatePath(DashboardRoutes.ALL_ENROLLMENTS, { clientId }),
+      to: DashboardRoutes.ALL_ENROLLMENTS,
     },
     { label: `Enrollment ${enrollmentId}`, to: pathname },
   ];
   return (
     <>
-      <Breadcrumbs aria-label='breadcrumb' sx={{ mb: 3 }}>
-        {pathnames.map(({ label, to }, index) => {
-          const last = index === pathnames.length - 1;
-
-          return last ? (
-            <Typography variant='body2' key={to}>
-              {label}
-            </Typography>
-          ) : (
-            <Link component={RouterLink} to={to} key={to} variant='body2'>
-              {label}
-            </Link>
-          );
-        })}
-      </Breadcrumbs>
+      <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Typography variant='h5' sx={{ mb: 2 }}>

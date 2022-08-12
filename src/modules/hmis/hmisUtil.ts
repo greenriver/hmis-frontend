@@ -34,7 +34,7 @@ export const lastUpdated = (client: Client) => {
 
 // TODO implement
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const pronouns = (_client: Client) => '(she/her)';
+export const pronouns = (_client: Client) => null;
 
 export const entryExitRange = (enrollment: Enrollment) => {
   return `${

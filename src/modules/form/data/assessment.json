@@ -8,7 +8,6 @@
         {
           "type": "choice",
           "linkId": "3.15",
-          "prefix": "3.15",
           "text": "Relationship to Head of Household",
           "answerOption": [
             {
@@ -47,7 +46,15 @@
           "type": "choice",
           "linkId": "3.16",
           "prefix": "3.16",
-          "text": "CoC Code for Client Location"
+          "text": "CoC Code for Client Location",
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "3.15",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
+            }
+          ]
         },
         {
           "type": "date",
@@ -66,6 +73,15 @@
     {
       "type": "group",
       "linkId": "3.917-group",
+      "text": "3.917 Prior Living Situation",
+      "enableBehavior": "all",
+      "enableWhen": [
+        {
+          "question": "3.15",
+          "operator": "=",
+          "answerCoding": { "code": "1" }
+        }
+      ],
       "item": [
         {
           "type": "display",
@@ -76,7 +92,6 @@
           "type": "choice",
           "required": false,
           "linkId": "3.917",
-          "prefix": "3.917",
           "text": "Prior Living Situation",
           "mapping": {},
           "answerOption": [
@@ -318,12 +333,12 @@
     {
       "type": "group",
       "linkId": "4.12-group",
+      "text": "4.12 Current Living Situation",
       "item": [
         {
           "type": "choice",
           "required": false,
           "linkId": "4.12",
-          "prefix": "4.12",
           "text": "Current Living Situation",
           "mapping": {},
           "answerOption": [

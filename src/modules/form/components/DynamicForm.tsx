@@ -2,7 +2,7 @@ import { Box, Grid, Button, Stack } from '@mui/material';
 import React, { useState } from 'react';
 
 import { shouldEnableItem } from '../formUtil';
-import { FormDefinition, Item } from '../types';
+import { FieldType, FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
 
@@ -11,6 +11,8 @@ interface Props {
   onSubmit: (values: Record<string, any>) => void;
   submitButtonText?: string;
   discardButtonText?: string;
+  loading?: boolean;
+  // validations
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -18,6 +20,7 @@ const DynamicForm: React.FC<Props> = ({
   onSubmit,
   submitButtonText,
   discardButtonText,
+  loading,
 }) => {
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>({});
@@ -46,9 +49,10 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   const renderItem = (item: Item, nestingLevel: number) => {
-    // if (!isEnabled(item)) {
-    //   return null;
-    // }
+    const hidden = !isEnabled(item);
+    if (hidden && item.type === FieldType.group) {
+      return null;
+    }
     return (
       <DynamicField
         key={item.linkId}
@@ -58,7 +62,7 @@ const DynamicForm: React.FC<Props> = ({
         value={values[item.linkId] ?? ''}
         nestingLevel={nestingLevel}
         children={(item) => renderItem(item, nestingLevel + 1)}
-        disabled={item.readOnly || !isEnabled(item)}
+        disabled={item.readOnly || hidden}
       />
     );
   };
@@ -76,8 +80,8 @@ const DynamicForm: React.FC<Props> = ({
         {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
-        <Button variant='contained' type='submit'>
-          {submitButtonText || 'Submit'}
+        <Button variant='contained' type='submit' disabled={!!loading}>
+          {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
         {/* <Button variant='outlined'>Save Draft</Button> */}
         <Button variant='outlined'>{discardButtonText || 'Discard'}</Button>

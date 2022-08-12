@@ -2,14 +2,6 @@
   "name": "client-intake",
   "item": [
     {
-      "type": "choice",
-      "required": false,
-      "linkId": "project",
-      "text": "Projects",
-      "repeats": true,
-      "answerValueSet": "projects"
-    },
-    {
       "type": "group",
       "linkId": "first-name-group",
       "text": "Name",
@@ -17,7 +9,7 @@
       "item": [
         {
           "type": "string",
-          "required": false,
+          "required": true,
           "linkId": "first-name",
           "text": "First Name",
           "mapping": {
@@ -44,7 +36,7 @@
         },
         {
           "type": "string",
-          "required": false,
+          "required": true,
           "linkId": "last-name",
           "text": "Last Name",
           "mapping": {
@@ -66,38 +58,59 @@
           "linkId": "name-dq",
           "text": "Name Data Quality",
           "mapping": {
-            "clientMutationInput": "nameDataQuality"
+            "clientMutationInput": "nameQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "1",
+                "code": "NAME_FULL",
                 "display": "Full name reported"
               }
             },
             {
               "valueCoding": {
-                "code": "2",
+                "code": "NAME_PARTIAL",
                 "display": "Partial, street name, or code name reported"
               }
             },
             {
               "valueCoding": {
-                "code": "8",
+                "code": "NAME_UNKNOWN",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "9",
+                "code": "NAME_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "99",
+                "code": "NAME_NOT_COLLECTED",
                 "display": "Data not collected"
               }
+            }
+          ]
+        },
+        {
+          "type": "openchoice",
+          "required": false,
+          "linkId": "pronouns",
+          "text": "Pronouns",
+          "repeats": true,
+          "mapping": {
+            "DISABLE_clientMutationInput": "pronouns"
+          },
+          "answerOption": [
+            {
+              "valueString": "she/her"
+            },
+            {
+              "valueString": "he/him"
+            },
+            {
+              "valueString": "they/them"
             }
           ]
         }
@@ -126,36 +139,36 @@
           "linkId": "dob-dq",
           "text": "DOB Data Quality",
           "mapping": {
-            "clientMutationInput": "dobDataQuality"
+            "clientMutationInput": "dobQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "1",
+                "code": "DOB_FULL",
                 "display": "Full DOB reported"
               }
             },
             {
               "valueCoding": {
-                "code": "2",
+                "code": "DOB_PARTIAL",
                 "display": "Approximate or partial DOB reported"
               }
             },
             {
               "valueCoding": {
-                "code": "8",
+                "code": "DOB_UNKNOWN",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "9",
+                "code": "DOB_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "99",
+                "code": "DOB_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -186,36 +199,36 @@
           "linkId": "ssn-dq",
           "text": "SSN Data Quality",
           "mapping": {
-            "clientMutationInput": "ssnDataQuality"
+            "clientMutationInput": "ssnQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "1",
+                "code": "SSN_FULL",
                 "display": "Full SSN Reported"
               }
             },
             {
               "valueCoding": {
-                "code": "2",
+                "code": "SSN_PARTIAL",
                 "display": "Approximate or partial  SSN reported"
               }
             },
             {
               "valueCoding": {
-                "code": "8",
+                "code": "SSN_UNKNOWN",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "9",
+                "code": "SSN_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "99",
+                "code": "SSN_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -249,49 +262,49 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "1",
+                    "code": "RACE_AM_IND_AK_NATIVE",
                     "display": "American Indian, Alaska Native, or Indigenous"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "2",
+                    "code": "RACE_ASIAN",
                     "display": "Asian or Asian American"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "3",
+                    "code": "RACE_BLACK_AF_AMERICAN",
                     "display": "Black, African-American, or African"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "4",
+                    "code": "RACE_NATIVE_HI_PACIFIC",
                     "display": "Native Hawaiian or Pacific Islander"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "5",
+                    "code": "RACE_WHITE",
                     "display": "White"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "8",
+                    "code": "RACE_UNKNOWN",
                     "display": "Client doesn't know"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "9",
+                    "code": "RACE_REFUSED",
                     "display": "Client refused"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "99",
+                    "code": "RACE_NOT_COLLECTED",
                     "display": "Data not collected"
                   }
                 }
@@ -309,31 +322,31 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "0",
+                    "code": "ETHNICITY_NON_HISPANIC",
                     "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "1",
+                    "code": "ETHNICITY_HISPANIC",
                     "display": "Hispanic/Latin(a)(o)(x)"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "8",
+                    "code": "ETHNICITY_UNKNOWN",
                     "display": "Client doesn't know"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "9",
+                    "code": "ETHNICITY_REFUSED",
                     "display": "Client refused"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "99",
+                    "code": "ETHNICITY_NOT_COLLECTED",
                     "display": "Data not collected"
                   }
                 }
@@ -353,49 +366,49 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "0",
+                "code": "GENDER_FEMALE",
                 "display": "Female"
               }
             },
             {
               "valueCoding": {
-                "code": "1",
+                "code": "GENDER_MALE",
                 "display": "Male"
               }
             },
             {
               "valueCoding": {
-                "code": "4",
+                "code": "GENDER_NO_SINGLE_GENDER",
                 "display": "Non-binary, genderfluid, agender, culturally specific gender"
               }
             },
             {
               "valueCoding": {
-                "code": "5",
+                "code": "GENDER_TRANSGENDER",
                 "display": "Transgender"
               }
             },
             {
               "valueCoding": {
-                "code": "6",
+                "code": "GENDER_QUESTIONING",
                 "display": "Questioning"
               }
             },
             {
               "valueCoding": {
-                "code": "8",
+                "code": "GENDER_UNKNOWN",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "9",
+                "code": "GENDER_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "99",
+                "code": "GENDER_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -413,31 +426,31 @@
           "answerOption": [
             {
               "valueCoding": {
-                "code": "0",
+                "code": "VETERAN_STATUS_NO",
                 "display": "No"
               }
             },
             {
               "valueCoding": {
-                "code": "1",
+                "code": "VETERAN_STATUS_YES",
                 "display": "Yes"
               }
             },
             {
               "valueCoding": {
-                "code": "8",
+                "code": "VETERAN_STATUS_UNKNOWN",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "9",
+                "code": "VETERAN_STATUS_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "99",
+                "code": "VETERAN_STATUS_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
