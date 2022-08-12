@@ -8,6 +8,7 @@ import {
   useNavigate,
   useOutletContext,
   useParams,
+  generatePath,
 } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
@@ -57,21 +58,25 @@ const tabs = [
   },
 ];
 
-const getTabFromPath = (pathname: string, tabs: { path: string }[]) => {
-  return (
-    tabs.find(({ path }) => pathname.includes(`/${path}`))?.path || tabs[0].path
-  );
-};
-
 const ClientDashboard: React.FC = () => {
-  const { clientId } = useParams() as { clientId: string };
-  const [client, loading] = useClient(clientId);
-
+  const params = useParams() as { clientId: string };
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const baseRoute = `/client/${clientId}`;
+  const [client, loading] = useClient(params.clientId);
 
-  const initialTab = useMemo(() => getTabFromPath(pathname, tabs), [pathname]);
+  const initialTab = useMemo(() => {
+    const matchedRoute = tabs.find(({ path }) =>
+      pathname.startsWith(generatePath(path, params))
+    );
+    return matchedRoute?.path || tabs[0].path;
+  }, [pathname, params]);
+
+  const [currentTab, setCurrentTab] = useState<string>(initialTab);
+
+  useEffect(() => {
+    setCurrentTab(initialTab);
+  }, [initialTab]);
+
   const outletContext = useMemo(
     () => ({
       client,
@@ -79,18 +84,14 @@ const ClientDashboard: React.FC = () => {
     [client]
   );
 
-  const [currentTab, setCurrentTab] = useState<string>(initialTab);
-  useEffect(() => {
-    setCurrentTab(initialTab);
-  }, [initialTab]);
-
   if (loading || !client) return <Loading />;
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();
-    navigate(`${baseRoute}/${newValue}`, { replace: true });
+    navigate(generatePath(newValue, params), { replace: true });
     setCurrentTab(newValue);
   };
+
   return (
     <>
       <PageHeader>
@@ -112,7 +113,7 @@ const ClientDashboard: React.FC = () => {
                   key={path}
                   value={path}
                   component={Link}
-                  to={`${baseRoute}/${path}`}
+                  to={generatePath(path, params)}
                   sx={{
                     textTransform: 'capitalize',
                     fontWeight: currentTab === path ? 'bold' : undefined,
