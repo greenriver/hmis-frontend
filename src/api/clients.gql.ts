@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_CLIENTS = gql`
-  query GetClients($input: ClientSearchInput!, $limit: Int!, $offset: Int = 0) {
+  query GetClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
     clientSearch(input: $input, limit: $limit, offset: $offset) {
       offset
       limit
@@ -16,14 +16,6 @@ export const GET_CLIENTS = gql`
         nameSuffix
         dob
         dateUpdated
-        enrollments {
-          id
-          entryDate
-          exitDate
-          project {
-            projectName
-          }
-        }
       }
     }
   }

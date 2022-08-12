@@ -4,6 +4,7 @@ import {
   Card,
   Grid,
   Link,
+  Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
@@ -11,9 +12,53 @@ import { Fragment } from 'react';
 import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
+import useClient from '@/hooks/useClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
+import { Client, Enrollment } from '@/types/gqlTypes';
+
+const RecentEnrollments = ({
+  clientId,
+  linkTargetBlank,
+}: {
+  clientId: string;
+  linkTargetBlank?: boolean;
+}) => {
+  // Fetch recent enrollments
+  const [client, loading] = useClient(clientId);
+  if (loading || !client)
+    return <Skeleton variant='rectangular' width={230} height={150} />;
+
+  if (client.enrollments.nodesCount === 0)
+    return <Typography>None.</Typography>;
+
+  return (
+    <Grid container spacing={0.5}>
+      {client.enrollments.nodes.map((enrollment: Enrollment) => (
+        <Fragment key={enrollment.id}>
+          <Grid item xs={4}>
+            <Link
+              component={RouterLink}
+              to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                clientId: client.id,
+                enrollmentId: enrollment.id,
+              })}
+              target={linkTargetBlank ? '_blank' : undefined}
+              variant='body2'
+            >
+              {enrollment.project.projectName}
+            </Link>
+          </Grid>
+          <Grid item xs={8}>
+            <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
+              {HmisUtil.entryExitRange(enrollment)}
+            </Typography>
+          </Grid>
+        </Fragment>
+      ))}
+    </Grid>
+  );
+};
 
 interface Props {
   client: Client;
@@ -88,36 +133,10 @@ const ClientCard: React.FC<Props> = ({
         <Typography variant='h6' sx={{ mb: 1 }}>
           Recent Enrollments
         </Typography>
-        {!client.enrollments && <Typography>None found.</Typography>}
-        {client.enrollments && (
-          <Grid container spacing={0.5}>
-            {client.enrollments.map((enrollment) => (
-              <Fragment key={enrollment.id}>
-                <Grid item xs={4}>
-                  <Link
-                    component={RouterLink}
-                    to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                      clientId: client.id,
-                      enrollmentId: enrollment.id,
-                    })}
-                    target={linkTargetBlank ? '_blank' : undefined}
-                    variant='body2'
-                  >
-                    {enrollment.project.projectName}
-                  </Link>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography
-                    variant='body2'
-                    sx={{ ml: 1, color: 'text.secondary' }}
-                  >
-                    {HmisUtil.entryExitRange(enrollment)}
-                  </Typography>
-                </Grid>
-              </Fragment>
-            ))}
-          </Grid>
-        )}
+        <RecentEnrollments
+          clientId={client.id}
+          linkTargetBlank={linkTargetBlank}
+        />
       </Grid>
       <Grid item xs={2}>
         <Typography variant='h6' sx={{ mb: 1 }}>

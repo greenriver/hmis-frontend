@@ -30,7 +30,7 @@ export type Client = {
   dateUpdated: Scalars['ISO8601DateTime'];
   /** Date of birth as format yyyy-mm-dd */
   dob?: Maybe<Scalars['ISO8601Date']>;
-  enrollments: Array<Enrollment>;
+  enrollments: EnrollmentsPaginated;
   firstName: Scalars['String'];
   id: Scalars['ID'];
   lastName: Scalars['String'];
@@ -38,6 +38,12 @@ export type Client = {
   preferredName?: Maybe<Scalars['String']>;
   pronouns?: Maybe<Scalars['String']>;
   ssnSerial?: Maybe<Scalars['String']>;
+};
+
+/** HUD Client */
+export type ClientEnrollmentsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** HMIS Client input */
@@ -130,6 +136,17 @@ export type Enrollment = {
   exitDate?: Maybe<Scalars['ISO8601DateTime']>;
   id: Scalars['ID'];
   project: Project;
+};
+
+export type EnrollmentsPaginated = {
+  __typename?: 'EnrollmentsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Enrollment>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
 };
 
 /** HUD Ethnicity */
@@ -256,12 +273,18 @@ export enum ProjectType {
 
 export type Query = {
   __typename?: 'Query';
+  /** Client lookup */
+  client?: Maybe<Client>;
   /** Search for clients */
   clientSearch: ClientsPaginated;
   /** Get a list of organizations */
   organizations: Array<Organization>;
   /** Get a list of projects */
   projects: Array<Project>;
+};
+
+export type QueryClientArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryClientSearchArgs = {

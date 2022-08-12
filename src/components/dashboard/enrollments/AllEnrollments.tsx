@@ -24,7 +24,7 @@ const AllEnrollments = () => {
             Enrollments
           </Typography>
           <GenericTable<Enrollment>
-            rows={client.enrollments}
+            rows={client.enrollments.nodes}
             handleRowClick={(enrollment) =>
               navigate(
                 generatePath(DashboardRoutes.VIEW_ENROLLMENT, {

@@ -1,3 +1,4 @@
+import { GET_CLIENT } from '@/api/client.gql';
 import { GET_CLIENTS } from '@/api/clients.gql';
 import { GET_PROJECTS } from '@/api/projects.gql';
 
@@ -10,38 +11,41 @@ export const RITA_ACKROYD = {
   lastName: 'Ackroyd',
   dob: '1980-03-20',
   dateUpdated: '2022-07-27T15:14:29.062',
-  enrollments: [
-    {
-      id: '5',
-      entryDate: '2022-06-18T00:00:00+00:00',
-      exitDate: null,
-      project: { projectName: 'White Pine' },
-    },
-    {
-      id: '6',
-      entryDate: '2021-02-10T00:00:00+00:00',
-      exitDate: '2021-02-10T00:00:00+00:00',
-      project: { projectName: 'Spruce Hill' },
-    },
-    {
-      id: '7',
-      entryDate: '2013-02-10T00:00:00+00:00',
-      exitDate: '2013-02-10T00:00:00+00:00',
-      project: { projectName: 'White Pine Terrace' },
-    },
-    {
-      id: '8',
-      entryDate: '2013-02-10T00:00:00+00:00',
-      exitDate: '2013-02-10T00:00:00+00:00',
-      project: { projectName: 'White Pine' },
-    },
-    {
-      id: '9',
-      entryDate: '2013-02-10T00:00:00+00:00',
-      exitDate: '2013-02-10T00:00:00+00:00',
-      project: { projectName: 'White Pine' },
-    },
-  ],
+  enrollments: {
+    nodesCount: 5,
+    nodes: [
+      {
+        id: '5',
+        entryDate: '2022-06-18T00:00:00+00:00',
+        exitDate: null,
+        project: { projectName: 'White Pine' },
+      },
+      {
+        id: '6',
+        entryDate: '2021-02-10T00:00:00+00:00',
+        exitDate: '2021-02-10T00:00:00+00:00',
+        project: { projectName: 'Spruce Hill' },
+      },
+      {
+        id: '7',
+        entryDate: '2013-02-10T00:00:00+00:00',
+        exitDate: '2013-02-10T00:00:00+00:00',
+        project: { projectName: 'White Pine Terrace' },
+      },
+      {
+        id: '8',
+        entryDate: '2013-02-10T00:00:00+00:00',
+        exitDate: '2013-02-10T00:00:00+00:00',
+        project: { projectName: 'White Pine' },
+      },
+      {
+        id: '9',
+        entryDate: '2013-02-10T00:00:00+00:00',
+        exitDate: '2013-02-10T00:00:00+00:00',
+        project: { projectName: 'White Pine' },
+      },
+    ],
+  },
 };
 
 const projectsForSelectMock = {
@@ -139,7 +143,6 @@ const clientSearchMock = {
           preferredName: 'Leo',
           lastName: 'Acker',
           dob: '1980-03-20',
-          enrollments: null,
           dateUpdated: '2022-07-27T15:14:29.062',
         },
         {
@@ -150,7 +153,6 @@ const clientSearchMock = {
           preferredName: 'Jay',
           lastName: 'Ackman',
           dob: '1980-03-20',
-          enrollments: null,
           dateUpdated: '2022-07-27T15:14:29.062',
         },
       ],
@@ -194,22 +196,14 @@ const clientSearchMockNextPage = {
 
 const clientLookupMock = {
   request: {
-    query: GET_CLIENTS,
+    query: GET_CLIENT,
     variables: {
-      offset: 0,
-      input: { id: '9999' },
-      limit: 1,
+      id: '9999',
     },
   },
   result: {
     data: {
-      offset: 0,
-      limit: 1,
-      hasMoreAfter: false,
-      hasMoreBefore: false,
-      nodesCount: 1,
-      pagesCount: 1,
-      nodes: [RITA_ACKROYD],
+      client: RITA_ACKROYD,
     },
   },
 };
