@@ -1,12 +1,13 @@
-import { useQuery } from '@apollo/client';
 import { Typography, Box } from '@mui/material';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-import { GET_PROJECTS } from '@/api/projects.gql';
-import { Project } from '@/types/gqlTypes';
+import {
+  GetProjectsForSelectQuery,
+  useGetProjectsForSelectQuery,
+} from '@/types/gqlTypes';
 
-export type Option = Project;
+export type Option = GetProjectsForSelectQuery['projects'][0];
 
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
@@ -30,9 +31,12 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
   label = multiple ? 'Projects' : 'Project',
   ...props
 }: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
-  const { data, loading, error } = useQuery<{
-    projects: Option[];
-  }>(GET_PROJECTS);
+  const {
+    data: { projects } = {},
+    loading,
+    error,
+  } = useGetProjectsForSelectQuery();
+
   if (error) console.error(error);
 
   return (
@@ -42,7 +46,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
       label={label}
       loading={loading}
       multiple={multiple}
-      options={data?.projects || []}
+      options={projects || []}
       renderOption={renderOption}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       {...props}

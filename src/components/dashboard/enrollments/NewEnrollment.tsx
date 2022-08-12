@@ -10,14 +10,16 @@ import {
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
-import ProjectSelect from '@/components/elements/input/ProjectSelect';
+import ProjectSelect, {
+  Option as ProjectOption,
+} from '@/components/elements/input/ProjectSelect';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client, Project } from '@/types/gqlTypes';
+import { Client } from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [project, setProject] = useState<Project | null>(null);
+  const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(null);
   const { clientId } = useParams() as {
     clientId: string;

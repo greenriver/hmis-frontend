@@ -1,10 +1,12 @@
 overwrite: true
 schema: ${SCHEMA_PATH}
+documents: src/api/operations/**/*.graphql
 generates:
   ./src/types/gqlTypes.ts:
     plugins:
       - 'typescript'
       - 'typescript-operations'
+      - 'typescript-react-apollo'
     config:
       scalars:
         ISO8601DateTime: string

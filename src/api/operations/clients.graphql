@@ -1,0 +1,60 @@
+fragment EnrollmentFields on Enrollment {
+  id
+  entryDate
+  exitDate
+  project {
+    projectName
+  }
+}
+
+fragment ClientFields on Client {
+  id
+  personalId
+  ssnSerial
+  firstName
+  preferredName
+  lastName
+  nameSuffix
+  dob
+  dateUpdated
+}
+
+query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
+  clientSearch(input: $input, limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ClientFields
+    }
+  }
+}
+
+query GetClient($id: ID!) {
+  client(id: $id) {
+    ...ClientFields
+    enrollments(limit: 10, offset: 0) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFields
+      }
+    }
+  }
+}
+
+mutation CreateClient($input: CreateClientInput!) {
+  createClient(input: $input) {
+    clientMutationId
+    client {
+      ...ClientFields
+    }
+    errors {
+      type
+      attribute
+      message
+      fullMessage
+    }
+  }
+}

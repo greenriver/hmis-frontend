@@ -1,8 +1,11 @@
-import { GET_CLIENT } from '@/api/client.gql';
-import { GET_CLIENTS } from '@/api/clients.gql';
-import { GET_PROJECTS } from '@/api/projects.gql';
+import {
+  GetClientDocument,
+  SearchClientsDocument,
+  GetProjectsForSelectDocument,
+} from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
+  __typename: 'Client',
   id: '9999',
   personalId: '9999',
   ssnSerial: '0001',
@@ -10,35 +13,43 @@ export const RITA_ACKROYD = {
   preferredName: null,
   lastName: 'Ackroyd',
   dob: '1980-03-20',
+  nameSuffix: null,
   dateUpdated: '2022-07-27T15:14:29.062',
   enrollments: {
     nodesCount: 5,
+    offset: 0,
+    limit: 10,
     nodes: [
       {
+        __typename: 'Enrollment',
         id: '5',
         entryDate: '2022-06-18T00:00:00+00:00',
         exitDate: null,
         project: { projectName: 'White Pine' },
       },
       {
+        __typename: 'Enrollment',
         id: '6',
         entryDate: '2021-02-10T00:00:00+00:00',
         exitDate: '2021-02-10T00:00:00+00:00',
         project: { projectName: 'Spruce Hill' },
       },
       {
+        __typename: 'Enrollment',
         id: '7',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
         project: { projectName: 'White Pine Terrace' },
       },
       {
+        __typename: 'Enrollment',
         id: '8',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
         project: { projectName: 'White Pine' },
       },
       {
+        __typename: 'Enrollment',
         id: '9',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
@@ -50,12 +61,13 @@ export const RITA_ACKROYD = {
 
 const projectsForSelectMock = {
   request: {
-    query: GET_PROJECTS,
+    query: GetProjectsForSelectDocument,
   },
   result: {
     data: {
       projects: [
         {
+          __typename: 'Project',
           projectName: 'White Ash Center',
           id: '116',
           projectType: 'ES',
@@ -64,6 +76,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'Eastern Hemlock Lake',
           id: '118',
           projectType: 'ES',
@@ -72,6 +85,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'Scarlet Oak Creek',
           id: '127',
           projectType: 'RRH',
@@ -80,6 +94,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'White Spruce Hill',
           id: '37518',
           projectType: 'SO',
@@ -88,6 +103,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'The Maples Room',
           id: '37612',
           projectType: 'ES',
@@ -96,6 +112,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'Paper Birch Room',
           id: '428',
           projectType: 'PH',
@@ -104,6 +121,7 @@ const projectsForSelectMock = {
           },
         },
         {
+          __typename: 'Project',
           projectName: 'Paper Birch Lake',
           id: '433',
           projectType: 'ES',
@@ -118,7 +136,7 @@ const projectsForSelectMock = {
 
 const clientSearchMock = {
   request: {
-    query: GET_CLIENTS,
+    query: SearchClientsDocument,
     variables: {
       offset: 0,
       input: { textSearch: 'ack' },
@@ -162,7 +180,7 @@ const clientSearchMock = {
 
 const clientSearchMockNextPage = {
   request: {
-    query: GET_CLIENTS,
+    query: SearchClientsDocument,
     variables: {
       input: { textSearch: 'ack' },
       limit: 3,
@@ -196,7 +214,7 @@ const clientSearchMockNextPage = {
 
 const clientLookupMock = {
   request: {
-    query: GET_CLIENT,
+    query: GetClientDocument,
     variables: {
       id: '9999',
     },
