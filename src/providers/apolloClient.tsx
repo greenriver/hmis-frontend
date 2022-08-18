@@ -1,10 +1,4 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  from,
-  ServerError,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, from, ServerError } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
@@ -53,12 +47,10 @@ export const cache = new InMemoryCache({
   typePolicies: {},
 });
 
-const client = new ApolloClient({
+const apolloClient = new ApolloClient({
   link: from([errorLink, authLink, batchLink]),
   cache,
   credentials: 'same-origin',
 });
 
-export default ({ children }: { children: React.ReactNode }) => (
-  <ApolloProvider client={client}>{children}</ApolloProvider>
-);
+export default apolloClient;
