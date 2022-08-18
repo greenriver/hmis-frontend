@@ -3,9 +3,9 @@ import {
   InMemoryCache,
   ApolloProvider,
   from,
-  createHttpLink,
   ServerError,
 } from '@apollo/client';
+import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import fetch from 'cross-fetch';
@@ -13,7 +13,7 @@ import fetch from 'cross-fetch';
 import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 
-const httpLink = createHttpLink({
+const batchLink = new BatchHttpLink({
   uri: import.meta.env.PUBLIC_HMIS_GRAPHQL_API,
   fetch,
 });
@@ -54,7 +54,7 @@ export const cache = new InMemoryCache({
 });
 
 const client = new ApolloClient({
-  link: from([errorLink, authLink, httpLink]),
+  link: from([errorLink, authLink, batchLink]),
   cache,
   credentials: 'same-origin',
 });
