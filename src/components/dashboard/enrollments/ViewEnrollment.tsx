@@ -10,6 +10,7 @@ const ViewEnrollment = () => {
   const { enrollmentId } = useParams() as {
     enrollmentId: string;
   };
+
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
 
