@@ -1,12 +1,18 @@
 import { Grid, Typography } from '@mui/material';
-import { useLocation, useOutletContext, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import formData from '@/modules/form/data/assessment.json';
 import { FormDefinition } from '@/modules/form/types';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import apolloClient from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
+import {
+  EnrollmentFieldsFragmentDoc,
+  useGetEnrollmentQuery,
+} from '@/types/gqlTypes';
 
 // FIXME workaround for enum issue
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -19,8 +25,21 @@ const NewAssessment = () => {
   // FIXME put enrollment in context, and fetch formDefinition here based on
   // enrollment/project ID
   const { enrollmentId } = useParams() as { enrollmentId: string };
-  const { client } = useOutletContext<{ client: Client | null }>();
-  if (!client) throw Error('Missing client');
+
+  const enrollmentFragment = apolloClient.readFragment({
+    id: `Enrollment:${enrollmentId}`,
+    fragment: EnrollmentFieldsFragmentDoc,
+  });
+
+  const { data, loading, error } = useGetEnrollmentQuery({
+    variables: { id: enrollmentId },
+    skip: !!enrollmentFragment,
+  });
+  if (error) throw error;
+  if (loading) return <Loading />;
+
+  const enrollment = enrollmentFragment || data?.enrollment;
+  if (!enrollment) throw Error('Enrollment not found');
 
   //FIXME pull out into router state?
   const crumbs = [
@@ -28,10 +47,7 @@ const NewAssessment = () => {
       label: 'Back to all enrollments',
       to: DashboardRoutes.ALL_ENROLLMENTS,
     },
-    {
-      label: `Enrollment ${enrollmentId}`,
-      to: DashboardRoutes.VIEW_ENROLLMENT,
-    },
+    { label: enrollmentName(enrollment), to: DashboardRoutes.VIEW_ENROLLMENT },
     {
       label: `Intake Assessment`,
       to: pathname,

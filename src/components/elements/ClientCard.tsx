@@ -98,7 +98,7 @@ const ClientCard: React.FC<Props> = ({
       <Grid item xs={5}>
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
-            <Typography variant='h5'>{HmisUtil.name(client)}</Typography>
+            <Typography variant='h5'>{HmisUtil.clientName(client)}</Typography>
             <Typography variant='h5' color='text.secondary'>
               {HmisUtil.pronouns(client)}
             </Typography>

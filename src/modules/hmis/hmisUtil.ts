@@ -2,6 +2,7 @@ import { format, parseISO, differenceInYears } from 'date-fns';
 
 import {
   ClientFieldsFragment,
+  ClientNameFragment,
   EnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -15,7 +16,7 @@ const formatDate = (date: Date) => format(date, DATE_FORMAT);
 
 export const parseAndFormatDate = (date: string) => formatDate(parseISO(date));
 
-export const name = (client: ClientFieldsFragment) =>
+export const clientName = (client: ClientNameFragment) =>
   [client.preferredName || client.firstName, client.lastName]
     .filter(Boolean)
     .join(' ');
@@ -47,4 +48,10 @@ export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   } - ${
     enrollment.exitDate ? parseAndFormatDate(enrollment.exitDate) : 'active'
   }`;
+};
+
+export const enrollmentName = (enrollment: {
+  project: { projectName: string };
+}) => {
+  return enrollment.project.projectName;
 };

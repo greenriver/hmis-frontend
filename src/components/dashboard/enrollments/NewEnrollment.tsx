@@ -41,7 +41,7 @@ const NewEnrollment = () => {
         <Grid item xs={9}>
           <Typography variant='h5' sx={{ mb: 2 }}>
             <b>Start new enrollment</b>
-            {` for ${HmisUtil.name(client)}`}
+            {` for ${HmisUtil.clientName(client)}`}
           </Typography>
 
           <Paper sx={{ p: 2, mb: 2 }}>

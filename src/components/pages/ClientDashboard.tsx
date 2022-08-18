@@ -103,7 +103,7 @@ const ClientDashboard: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h4'>{HmisUtil.name(client)}</Typography>
+        <Typography variant='h4'>{HmisUtil.clientName(client)}</Typography>
       </PageHeader>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={currentTab}>

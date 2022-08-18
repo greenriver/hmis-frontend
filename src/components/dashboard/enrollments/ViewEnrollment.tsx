@@ -1,39 +1,66 @@
 import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
-import { useLocation, useOutletContext, useParams } from 'react-router-dom';
+import {
+  useLocation,
+  useParams,
+  generatePath,
+  Link as RouterLink,
+} from 'react-router-dom';
+
+import HouseholdMemberTable from './HouseholdMemberTable';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import Loading from '@/components/elements/Loading';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import apolloClient from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
+import {
+  EnrollmentFieldsFragmentDoc,
+  useGetEnrollmentQuery,
+} from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
   const { pathname } = useLocation();
-  const { enrollmentId } = useParams() as {
+  const { clientId, enrollmentId } = useParams() as {
     enrollmentId: string;
+    clientId: string;
   };
 
-  const { client } = useOutletContext<{ client: Client | null }>();
-  if (!client) throw Error('Missing client');
+  const enrollmentFragment = apolloClient.readFragment({
+    id: `Enrollment:${enrollmentId}`,
+    fragment: EnrollmentFieldsFragmentDoc,
+  });
+
+  const { data, loading, error } = useGetEnrollmentQuery({
+    variables: { id: enrollmentId },
+    skip: !!enrollmentFragment,
+  });
+  if (error) throw error;
+  if (loading) return <Loading />;
+
+  const enrollment = enrollmentFragment || data?.enrollment;
+  if (!enrollment) throw Error('Enrollment not found');
 
   const crumbs = [
     {
       label: 'Back to all enrollments',
       to: DashboardRoutes.ALL_ENROLLMENTS,
     },
-    { label: `Enrollment ${enrollmentId}`, to: pathname },
+    { label: enrollmentName(enrollment), to: pathname },
   ];
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          <Typography variant='h5' sx={{ mb: 2 }}>
-            Enrollment {enrollmentId}
+          <Typography variant='h4' sx={{ mb: 2 }}>
+            {enrollmentName(enrollment)}
           </Typography>
           <Stack spacing={2}>
             <Paper sx={{ p: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                Household Members
-              </Typography>
+              <HouseholdMemberTable
+                clientId={clientId}
+                enrollmentId={enrollmentId}
+              />
             </Paper>
             <Paper sx={{ p: 2 }}>
               <Typography variant='h6' sx={{ mb: 2 }}>
@@ -63,6 +90,13 @@ const ViewEnrollment = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
+                component={RouterLink}
+                to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+                  clientId,
+                  enrollmentId,
+                  // FIXME
+                  assessmentType: 'annual',
+                })}
               >
                 + Assessment
               </Button>
