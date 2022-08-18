@@ -1,0 +1,25 @@
+fragment ProjectFields on Project {
+  id
+  projectName
+  projectType
+}
+
+fragment OrganizationFields on Organization {
+  id
+  organizationName
+}
+
+query GetProjectsForSelect {
+  projects(sortOrder: ORGANIZATION_AND_NAME) {
+    ...ProjectFields
+    organization {
+      organizationName
+    }
+  }
+}
+
+query GetOrganizationsForSelect {
+  organizations(sortOrder: NAME) {
+    ...OrganizationFields
+  }
+}

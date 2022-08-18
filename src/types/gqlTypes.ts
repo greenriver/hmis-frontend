@@ -1,3 +1,5 @@
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -9,6 +11,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -31,9 +34,10 @@ export type Client = {
   /** Date of birth as format yyyy-mm-dd */
   dob?: Maybe<Scalars['ISO8601Date']>;
   enrollments: EnrollmentsPaginated;
-  firstName: Scalars['String'];
+  firstName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  lastName: Scalars['String'];
+  lastName?: Maybe<Scalars['String']>;
+  nameSuffix?: Maybe<Scalars['String']>;
   personalId: Scalars['String'];
   preferredName?: Maybe<Scalars['String']>;
   pronouns?: Maybe<Scalars['String']>;
@@ -44,6 +48,7 @@ export type Client = {
 export type ClientEnrollmentsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
 /** HMIS Client input */
@@ -56,6 +61,7 @@ export type ClientInput = {
   lastName?: InputMaybe<Scalars['String']>;
   middleName?: InputMaybe<Scalars['String']>;
   nameQuality?: InputMaybe<NameDataQuality>;
+  nameSuffix?: InputMaybe<Scalars['String']>;
   preferredName?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Array<Race>>;
   ssn?: InputMaybe<Scalars['String']>;
@@ -137,6 +143,11 @@ export type Enrollment = {
   id: Scalars['ID'];
   project: Project;
 };
+
+/** HUD Enrollment Sorting Options */
+export enum EnrollmentSortOption {
+  MostRecent = 'MOST_RECENT',
+}
 
 export type EnrollmentsPaginated = {
   __typename?: 'EnrollmentsPaginated';
@@ -359,3 +370,502 @@ export enum VeteranStatus {
   /** Yes */
   VeteranStatusYes = 'VETERAN_STATUS_YES',
 }
+
+export type EnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate?: string | null;
+  exitDate?: string | null;
+  project: { __typename?: 'Project'; projectName: string };
+};
+
+export type ClientFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  personalId: string;
+  ssnSerial?: string | null;
+  firstName?: string | null;
+  preferredName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+  dob?: string | null;
+  dateUpdated: string;
+};
+
+export type SearchClientsQueryVariables = Exact<{
+  input: ClientSearchInput;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type SearchClientsQuery = {
+  __typename?: 'Query';
+  clientSearch: {
+    __typename?: 'ClientsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Client';
+      id: string;
+      personalId: string;
+      ssnSerial?: string | null;
+      firstName?: string | null;
+      preferredName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
+    }>;
+  };
+};
+
+export type GetClientQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetClientQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    personalId: string;
+    ssnSerial?: string | null;
+    firstName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    dob?: string | null;
+    dateUpdated: string;
+    enrollments: {
+      __typename?: 'EnrollmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate?: string | null;
+        exitDate?: string | null;
+        project: { __typename?: 'Project'; projectName: string };
+      }>;
+    };
+  } | null;
+};
+
+export type CreateClientMutationVariables = Exact<{
+  input: CreateClientInput;
+}>;
+
+export type CreateClientMutation = {
+  __typename?: 'Mutation';
+  createClient?: {
+    __typename?: 'CreateClientPayload';
+    clientMutationId?: string | null;
+    client?: {
+      __typename?: 'Client';
+      id: string;
+      personalId: string;
+      ssnSerial?: string | null;
+      firstName?: string | null;
+      preferredName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+    }>;
+  } | null;
+};
+
+export type ProjectFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  projectName: string;
+  projectType: ProjectType;
+};
+
+export type OrganizationFieldsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  organizationName: string;
+};
+
+export type GetProjectsForSelectQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetProjectsForSelectQuery = {
+  __typename?: 'Query';
+  projects: Array<{
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType: ProjectType;
+    organization: { __typename?: 'Organization'; organizationName: string };
+  }>;
+};
+
+export type GetOrganizationsForSelectQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetOrganizationsForSelectQuery = {
+  __typename?: 'Query';
+  organizations: Array<{
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  }>;
+};
+
+export const EnrollmentFieldsFragmentDoc = gql`
+  fragment EnrollmentFields on Enrollment {
+    id
+    entryDate
+    exitDate
+    project {
+      projectName
+    }
+  }
+`;
+export const ClientFieldsFragmentDoc = gql`
+  fragment ClientFields on Client {
+    id
+    personalId
+    ssnSerial
+    firstName
+    preferredName
+    lastName
+    nameSuffix
+    dob
+    dateUpdated
+  }
+`;
+export const ProjectFieldsFragmentDoc = gql`
+  fragment ProjectFields on Project {
+    id
+    projectName
+    projectType
+  }
+`;
+export const OrganizationFieldsFragmentDoc = gql`
+  fragment OrganizationFields on Organization {
+    id
+    organizationName
+  }
+`;
+export const SearchClientsDocument = gql`
+  query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
+    clientSearch(input: $input, limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientFields
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useSearchClientsQuery__
+ *
+ * To run a query within a React component, call `useSearchClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchClientsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useSearchClientsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    SearchClientsQuery,
+    SearchClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<SearchClientsQuery, SearchClientsQueryVariables>(
+    SearchClientsDocument,
+    options
+  );
+}
+export function useSearchClientsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    SearchClientsQuery,
+    SearchClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<SearchClientsQuery, SearchClientsQueryVariables>(
+    SearchClientsDocument,
+    options
+  );
+}
+export type SearchClientsQueryHookResult = ReturnType<
+  typeof useSearchClientsQuery
+>;
+export type SearchClientsLazyQueryHookResult = ReturnType<
+  typeof useSearchClientsLazyQuery
+>;
+export type SearchClientsQueryResult = Apollo.QueryResult<
+  SearchClientsQuery,
+  SearchClientsQueryVariables
+>;
+export const GetClientDocument = gql`
+  query GetClient($id: ID!) {
+    client(id: $id) {
+      ...ClientFields
+      enrollments(limit: 10, offset: 0) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientQuery__
+ *
+ * To run a query within a React component, call `useGetClientQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientQuery(
+  baseOptions: Apollo.QueryHookOptions<GetClientQuery, GetClientQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClientQuery, GetClientQueryVariables>(
+    GetClientDocument,
+    options
+  );
+}
+export function useGetClientLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientQuery,
+    GetClientQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClientQuery, GetClientQueryVariables>(
+    GetClientDocument,
+    options
+  );
+}
+export type GetClientQueryHookResult = ReturnType<typeof useGetClientQuery>;
+export type GetClientLazyQueryHookResult = ReturnType<
+  typeof useGetClientLazyQuery
+>;
+export type GetClientQueryResult = Apollo.QueryResult<
+  GetClientQuery,
+  GetClientQueryVariables
+>;
+export const CreateClientDocument = gql`
+  mutation CreateClient($input: CreateClientInput!) {
+    createClient(input: $input) {
+      clientMutationId
+      client {
+        ...ClientFields
+      }
+      errors {
+        type
+        attribute
+        message
+        fullMessage
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+`;
+export type CreateClientMutationFn = Apollo.MutationFunction<
+  CreateClientMutation,
+  CreateClientMutationVariables
+>;
+
+/**
+ * __useCreateClientMutation__
+ *
+ * To run a mutation, you first call `useCreateClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createClientMutation, { data, loading, error }] = useCreateClientMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateClientMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateClientMutation,
+    CreateClientMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateClientMutation,
+    CreateClientMutationVariables
+  >(CreateClientDocument, options);
+}
+export type CreateClientMutationHookResult = ReturnType<
+  typeof useCreateClientMutation
+>;
+export type CreateClientMutationResult =
+  Apollo.MutationResult<CreateClientMutation>;
+export type CreateClientMutationOptions = Apollo.BaseMutationOptions<
+  CreateClientMutation,
+  CreateClientMutationVariables
+>;
+export const GetProjectsForSelectDocument = gql`
+  query GetProjectsForSelect {
+    projects(sortOrder: ORGANIZATION_AND_NAME) {
+      ...ProjectFields
+      organization {
+        organizationName
+      }
+    }
+  }
+  ${ProjectFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectsForSelectQuery__
+ *
+ * To run a query within a React component, call `useGetProjectsForSelectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsForSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectsForSelectQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProjectsForSelectQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetProjectsForSelectQuery,
+    GetProjectsForSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectsForSelectQuery,
+    GetProjectsForSelectQueryVariables
+  >(GetProjectsForSelectDocument, options);
+}
+export function useGetProjectsForSelectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectsForSelectQuery,
+    GetProjectsForSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectsForSelectQuery,
+    GetProjectsForSelectQueryVariables
+  >(GetProjectsForSelectDocument, options);
+}
+export type GetProjectsForSelectQueryHookResult = ReturnType<
+  typeof useGetProjectsForSelectQuery
+>;
+export type GetProjectsForSelectLazyQueryHookResult = ReturnType<
+  typeof useGetProjectsForSelectLazyQuery
+>;
+export type GetProjectsForSelectQueryResult = Apollo.QueryResult<
+  GetProjectsForSelectQuery,
+  GetProjectsForSelectQueryVariables
+>;
+export const GetOrganizationsForSelectDocument = gql`
+  query GetOrganizationsForSelect {
+    organizations(sortOrder: NAME) {
+      ...OrganizationFields
+    }
+  }
+  ${OrganizationFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationsForSelectQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationsForSelectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationsForSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationsForSelectQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrganizationsForSelectQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOrganizationsForSelectQuery,
+    GetOrganizationsForSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOrganizationsForSelectQuery,
+    GetOrganizationsForSelectQueryVariables
+  >(GetOrganizationsForSelectDocument, options);
+}
+export function useGetOrganizationsForSelectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationsForSelectQuery,
+    GetOrganizationsForSelectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationsForSelectQuery,
+    GetOrganizationsForSelectQueryVariables
+  >(GetOrganizationsForSelectDocument, options);
+}
+export type GetOrganizationsForSelectQueryHookResult = ReturnType<
+  typeof useGetOrganizationsForSelectQuery
+>;
+export type GetOrganizationsForSelectLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationsForSelectLazyQuery
+>;
+export type GetOrganizationsForSelectQueryResult = Apollo.QueryResult<
+  GetOrganizationsForSelectQuery,
+  GetOrganizationsForSelectQueryVariables
+>;

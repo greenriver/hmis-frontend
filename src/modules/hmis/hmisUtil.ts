@@ -1,6 +1,9 @@
 import { format, parseISO, differenceInYears } from 'date-fns';
 
-import { Client, Enrollment } from '@/types/gqlTypes';
+import {
+  ClientFieldsFragment,
+  EnrollmentFieldsFragment,
+} from '@/types/gqlTypes';
 
 /**
  * Utility functions for transforming HMIS data elements into strings
@@ -12,31 +15,31 @@ const formatDate = (date: Date) => format(date, DATE_FORMAT);
 
 export const parseAndFormatDate = (date: string) => formatDate(parseISO(date));
 
-export const name = (client: Client) =>
+export const name = (client: ClientFieldsFragment) =>
   [client.preferredName || client.firstName, client.lastName]
     .filter(Boolean)
     .join(' ');
 
-export const dob = (client: Client) => {
+export const dob = (client: ClientFieldsFragment) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);
 };
 
-export const age = (client: Client) => {
+export const age = (client: ClientFieldsFragment) => {
   if (!client.dob) return '';
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
 };
 
-export const lastUpdated = (client: Client) => {
+export const lastUpdated = (client: ClientFieldsFragment) => {
   return parseAndFormatDate(client.dateUpdated);
 };
 
 // TODO implement
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const pronouns = (_client: Client) => null;
+export const pronouns = (_client: ClientFieldsFragment) => null;
 
-export const entryExitRange = (enrollment: Enrollment) => {
+export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return `${
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     enrollment.entryDate ? parseAndFormatDate(enrollment.entryDate) : 'unknown'

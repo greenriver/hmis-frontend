@@ -1,4 +1,3 @@
-import { useQuery } from '@apollo/client';
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import {
@@ -17,12 +16,11 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import SearchResultsTable from './SearchResultsTable';
 
-import { GET_CLIENTS } from '@/api/clients.gql';
 import ClientCard from '@/components/elements/ClientCard';
 import Loading from '@/components/elements/Loading';
 import Pagination from '@/components/elements/Pagination';
 import { Routes } from '@/routes/routes';
-import { ClientSearchInput, ClientsPaginated } from '@/types/gqlTypes';
+import { ClientSearchInput, useSearchClientsQuery } from '@/types/gqlTypes';
 
 const PAGE_SIZE = 10;
 const MAX_CARDS_THRESHOLD = 10;
@@ -36,9 +34,7 @@ const SearchResults = ({ filters }: { filters: ClientSearchInput }) => {
     data: { clientSearch: data } = {},
     loading,
     error,
-  } = useQuery<{
-    clientSearch: ClientsPaginated;
-  }>(GET_CLIENTS, {
+  } = useSearchClientsQuery({
     variables: {
       input: filters,
       limit,

@@ -14,10 +14,9 @@ import {
 import Loading from '../elements/Loading';
 import PageHeader from '../layout/PageHeader';
 
-import useClient from '@/hooks/useClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
+import { Client, useGetClientQuery } from '@/types/gqlTypes';
 
 const tabs = [
   {
@@ -62,7 +61,15 @@ const ClientDashboard: React.FC = () => {
   const params = useParams() as { clientId: string };
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [client, loading] = useClient(params.clientId);
+
+  const {
+    data: { client } = {},
+    loading,
+    error,
+  } = useGetClientQuery({
+    variables: { id: params.clientId },
+  });
+  if (error) throw error;
 
   const initialTab = useMemo(() => {
     const matchedRoute = tabs.find(({ path }) =>

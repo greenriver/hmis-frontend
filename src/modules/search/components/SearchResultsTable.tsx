@@ -11,10 +11,10 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
-import { Client } from '@/types/gqlTypes';
+import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 const SearchResultsTable: React.FC<{
-  rows: Client[];
+  rows: ClientFieldsFragment[];
 }> = ({ rows }) => {
   const navigate = useNavigate();
   const headers = [

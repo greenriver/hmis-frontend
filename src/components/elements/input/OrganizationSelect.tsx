@@ -1,12 +1,13 @@
-import { useQuery } from '@apollo/client';
 import { Typography } from '@mui/material';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
-import { GET_ORGANIZATIONS } from '@/api/organizations.gql';
-import { Organization } from '@/types/gqlTypes';
+import {
+  GetOrganizationsForSelectQuery,
+  useGetOrganizationsForSelectQuery,
+} from '@/types/gqlTypes';
 
-export type Option = Omit<Organization, 'projects'>;
+export type Option = GetOrganizationsForSelectQuery['organizations'][0];
 
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
@@ -19,13 +20,11 @@ const OrganizationSelect = <Multiple extends boolean | undefined>({
   label = multiple ? 'Organizations' : 'Organization',
   ...props
 }: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
-  const { data, loading, error } = useQuery<{
-    organizations: Option[];
-  }>(GET_ORGANIZATIONS);
+  const { data, loading, error } = useGetOrganizationsForSelectQuery();
   if (error) console.error(error);
 
   return (
-    <GenericSelect //<Option>
+    <GenericSelect
       getOptionLabel={(option) => option.organizationName}
       label={label}
       loading={loading}

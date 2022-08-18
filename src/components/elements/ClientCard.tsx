@@ -12,10 +12,9 @@ import { Fragment } from 'react';
 import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import useClient from '@/hooks/useClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client, Enrollment } from '@/types/gqlTypes';
+import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
   clientId,
@@ -25,7 +24,15 @@ const RecentEnrollments = ({
   linkTargetBlank?: boolean;
 }) => {
   // Fetch recent enrollments
-  const [client, loading] = useClient(clientId);
+  const {
+    data: { client } = {},
+    loading,
+    error,
+  } = useGetClientQuery({
+    variables: { id: clientId },
+  });
+
+  if (error) throw error;
   if (loading || !client)
     return <Skeleton variant='rectangular' width={230} height={150} />;
 
@@ -34,7 +41,7 @@ const RecentEnrollments = ({
 
   return (
     <Grid container spacing={0.5}>
-      {client.enrollments.nodes.map((enrollment: Enrollment) => (
+      {client.enrollments.nodes.map((enrollment) => (
         <Fragment key={enrollment.id}>
           <Grid item xs={4}>
             <Link
@@ -61,7 +68,7 @@ const RecentEnrollments = ({
 };
 
 interface Props {
-  client: Client;
+  client: ClientFieldsFragment;
   showNotices?: boolean;
   showLinkToRecord?: boolean;
   linkTargetBlank?: boolean;
