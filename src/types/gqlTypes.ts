@@ -27,6 +27,51 @@ export type Scalars = {
   JsonObject: any;
 };
 
+/** HUD Assessment */
+export type Assessment = {
+  __typename?: 'Assessment';
+  assessmentDate: Scalars['ISO8601DateTime'];
+  assessmentLevel: AssessmentLevel;
+  assessmentLocation: Scalars['String'];
+  assessmentType: AssessmentType;
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  enrollment: Enrollment;
+  id: Scalars['ID'];
+  prioritizationStatus: PrioritizationStatus;
+};
+
+/** HUD AssessmentLevel */
+export enum AssessmentLevel {
+  /** Crisis Needs Assessment */
+  CrisisNeedsAssessment = 'CRISIS_NEEDS_ASSESSMENT',
+  /** Housing Needs Assessment */
+  HousingNeedsAssessment = 'HOUSING_NEEDS_ASSESSMENT',
+}
+
+/** HUD AssessmentType */
+export enum AssessmentType {
+  /** In Person */
+  InPerson = 'IN_PERSON',
+  /** Phone */
+  Phone = 'PHONE',
+  /** Virtual */
+  Virtual = 'VIRTUAL',
+}
+
+export type AssessmentsPaginated = {
+  __typename?: 'AssessmentsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Assessment>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
@@ -138,10 +183,32 @@ export enum DobDataQuality {
 /** HUD Enrollment */
 export type Enrollment = {
   __typename?: 'Enrollment';
+  assessments: AssessmentsPaginated;
   entryDate?: Maybe<Scalars['ISO8601DateTime']>;
+  events: EventsPaginated;
   exitDate?: Maybe<Scalars['ISO8601DateTime']>;
+  household?: Maybe<Household>;
   id: Scalars['ID'];
   project: Project;
+  services: ServicesPaginated;
+};
+
+/** HUD Enrollment */
+export type EnrollmentAssessmentsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentServicesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** HUD Enrollment Sorting Options */
@@ -174,6 +241,75 @@ export enum Ethnicity {
   EthnicityUnknown = 'ETHNICITY_UNKNOWN',
 }
 
+/** HUD Event */
+export type Event = {
+  __typename?: 'Event';
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  enrollment: Enrollment;
+  event: EventType;
+  eventDate: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  locationCrisisOrPhHousing?: Maybe<Scalars['String']>;
+  probSolDivRrResult?: Maybe<ProbSolDivRrResult>;
+  referralCaseManageAfter?: Maybe<ReferralCaseManageAfter>;
+  referralResult?: Maybe<ReferralResult>;
+  resultDate?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** HUD EventType */
+export enum EventType {
+  /** Problem Solving/Diversion/Rapid Resolution intervention or service */
+  ProblemSolvingDiversionRapidResolutionInterventionOrService = 'PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE',
+  /** Referral to a Housing Stability Voucher */
+  ReferralToAHousingStabilityVoucher = 'REFERRAL_TO_A_HOUSING_STABILITY_VOUCHER',
+  /** Referral to emergency assistance/flex fund/furniture assistance */
+  ReferralToEmergencyAssistanceFlexFundFurnitureAssistance = 'REFERRAL_TO_EMERGENCY_ASSISTANCE_FLEX_FUND_FURNITURE_ASSISTANCE',
+  /** Referral to Emergency Housing Voucher (EHV) */
+  ReferralToEmergencyHousingVoucherEhv = 'REFERRAL_TO_EMERGENCY_HOUSING_VOUCHER_EHV_',
+  /** Referral to Emergency Shelter bed opening */
+  ReferralToEmergencyShelterBedOpening = 'REFERRAL_TO_EMERGENCY_SHELTER_BED_OPENING',
+  /** Referral to Housing Navigation project or services */
+  ReferralToHousingNavigationProjectOrServices = 'REFERRAL_TO_HOUSING_NAVIGATION_PROJECT_OR_SERVICES',
+  /** Referral to Joint TH-RRH project/unit/resource opening */
+  ReferralToJointThRrhProjectUnitResourceOpening = 'REFERRAL_TO_JOINT_TH_RRH_PROJECT_UNIT_RESOURCE_OPENING',
+  /** Referral to Non-continuum services: Ineligible for continuum services */
+  ReferralToNonContinuumServicesIneligibleForContinuumServices = 'REFERRAL_TO_NON_CONTINUUM_SERVICES_INELIGIBLE_FOR_CONTINUUM_SERVICES',
+  /** Referral to Non-continuum services: No availability in continuum services */
+  ReferralToNonContinuumServicesNoAvailabilityInContinuumServices = 'REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES',
+  /** Referral to Other PH project/unit/resource opening */
+  ReferralToOtherPhProjectUnitResourceOpening = 'REFERRAL_TO_OTHER_PH_PROJECT_UNIT_RESOURCE_OPENING',
+  /** Referral to Post-placement/ follow-up case management */
+  ReferralToPostPlacementFollowUpCaseManagement = 'REFERRAL_TO_POST_PLACEMENT_FOLLOW_UP_CASE_MANAGEMENT',
+  /** Referral to Prevention Assistance project */
+  ReferralToPreventionAssistanceProject = 'REFERRAL_TO_PREVENTION_ASSISTANCE_PROJECT',
+  /** Referral to PSH project resource opening */
+  ReferralToPshProjectResourceOpening = 'REFERRAL_TO_PSH_PROJECT_RESOURCE_OPENING',
+  /** Referral to RRH project resource opening */
+  ReferralToRrhProjectResourceOpening = 'REFERRAL_TO_RRH_PROJECT_RESOURCE_OPENING',
+  /** Referral to scheduled Coordinated Entry Crisis Needs Assessment */
+  ReferralToScheduledCoordinatedEntryCrisisNeedsAssessment = 'REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_CRISIS_NEEDS_ASSESSMENT',
+  /** Referral to scheduled Coordinated Entry Housing Needs Assessment */
+  ReferralToScheduledCoordinatedEntryHousingNeedsAssessment = 'REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_HOUSING_NEEDS_ASSESSMENT',
+  /** Referral to Street Outreach project or services */
+  ReferralToStreetOutreachProjectOrServices = 'REFERRAL_TO_STREET_OUTREACH_PROJECT_OR_SERVICES',
+  /** Referral to Transitional Housing bed/unit opening */
+  ReferralToTransitionalHousingBedUnitOpening = 'REFERRAL_TO_TRANSITIONAL_HOUSING_BED_UNIT_OPENING',
+}
+
+export type EventsPaginated = {
+  __typename?: 'EventsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Event>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 /** HUD Gender */
 export enum Gender {
   /** Female */
@@ -193,6 +329,21 @@ export enum Gender {
   /** Client doesn't know */
   GenderUnknown = 'GENDER_UNKNOWN',
 }
+
+/** HUD Household */
+export type Household = {
+  __typename?: 'Household';
+  householdClients: Array<HouseholdClient>;
+  id: Scalars['ID'];
+};
+
+/** HUD Client within a Household */
+export type HouseholdClient = {
+  __typename?: 'HouseholdClient';
+  client: Client;
+  id: Scalars['ID'];
+  relationshipToHoH: Scalars['String'];
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -235,6 +386,24 @@ export type OrganizationProjectsArgs = {
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
+}
+
+/** HUD PrioritizationStatus */
+export enum PrioritizationStatus {
+  /** Not placed on prioritization list */
+  NotPlacedOnPrioritizationList = 'NOT_PLACED_ON_PRIORITIZATION_LIST',
+  /** Placed on prioritization list */
+  PlacedOnPrioritizationList = 'PLACED_ON_PRIORITIZATION_LIST',
+}
+
+/** HUD ProbSolDivRRResult */
+export enum ProbSolDivRrResult {
+  /** Data not collected* */
+  DataNotCollected = 'DATA_NOT_COLLECTED_',
+  /** No */
+  No = 'NO',
+  /** Yes */
+  Yes = 'YES',
 }
 
 /** HUD Project */
@@ -288,6 +457,8 @@ export type Query = {
   client?: Maybe<Client>;
   /** Search for clients */
   clientSearch: ClientsPaginated;
+  /** Enrollment lookup */
+  enrollment?: Maybe<Enrollment>;
   /** Get a list of organizations */
   organizations: Array<Organization>;
   /** Get a list of projects */
@@ -303,6 +474,10 @@ export type QueryClientSearchArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ClientSortOption>;
+};
+
+export type QueryEnrollmentArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryOrganizationsArgs = {
@@ -334,6 +509,26 @@ export enum Race {
   RaceWhite = 'RACE_WHITE',
 }
 
+/** HUD ReferralCaseManageAfter */
+export enum ReferralCaseManageAfter {
+  /** Data not collected* */
+  DataNotCollected = 'DATA_NOT_COLLECTED_',
+  /** No */
+  No = 'NO',
+  /** Yes */
+  Yes = 'YES',
+}
+
+/** HUD ReferralResult */
+export enum ReferralResult {
+  /** Successful referral: client accepted */
+  SuccessfulReferralClientAccepted = 'SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED',
+  /** Unsuccessful referral: client rejected */
+  UnsuccessfulReferralClientRejected = 'UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED',
+  /** Unsuccessful referral: provider rejected */
+  UnsuccessfulReferralProviderRejected = 'UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED',
+}
+
 /** HUD SSN Data Quality */
 export enum SsnDataQuality {
   /** Full SSN reported */
@@ -348,6 +543,23 @@ export enum SsnDataQuality {
   SsnUnknown = 'SSN_UNKNOWN',
 }
 
+/** HUD Service */
+export type Service = {
+  __typename?: 'Service';
+  id: Scalars['ID'];
+};
+
+export type ServicesPaginated = {
+  __typename?: 'ServicesPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Service>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 export type ValidationError = {
   __typename?: 'ValidationError';
   attribute?: Maybe<Scalars['String']>;
@@ -359,14 +571,14 @@ export type ValidationError = {
 
 /** HUD Veteran Status */
 export enum VeteranStatus {
+  /** Client doesn't know */
+  VeteranStatusClientDoesnTKnow = 'VETERAN_STATUS_CLIENT_DOESN_T_KNOW',
+  /** Client refused */
+  VeteranStatusClientRefused = 'VETERAN_STATUS_CLIENT_REFUSED',
+  /** Data not collected */
+  VeteranStatusDataNotCollected = 'VETERAN_STATUS_DATA_NOT_COLLECTED',
   /** No */
   VeteranStatusNo = 'VETERAN_STATUS_NO',
-  /** Data not collected */
-  VeteranStatusNotCollected = 'VETERAN_STATUS_NOT_COLLECTED',
-  /** Client refused */
-  VeteranStatusRefused = 'VETERAN_STATUS_REFUSED',
-  /** Client doesn't know */
-  VeteranStatusUnknown = 'VETERAN_STATUS_UNKNOWN',
   /** Yes */
   VeteranStatusYes = 'VETERAN_STATUS_YES',
 }
@@ -379,17 +591,86 @@ export type EnrollmentFieldsFragment = {
   project: { __typename?: 'Project'; projectName: string };
 };
 
+export type ClientNameFragment = {
+  __typename?: 'Client';
+  firstName?: string | null;
+  preferredName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   id: string;
   personalId: string;
   ssnSerial?: string | null;
+  dob?: string | null;
+  dateUpdated: string;
   firstName?: string | null;
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
-  dob?: string | null;
-  dateUpdated: string;
+};
+
+export type HouseholdClientFieldsFragment = {
+  __typename?: 'HouseholdClient';
+  id: string;
+  relationshipToHoH: string;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+};
+
+export type GetEnrollmentQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    project: { __typename?: 'Project'; projectName: string };
+  } | null;
+};
+
+export type GetEnrollmentWithHoHQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentWithHoHQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    household?: {
+      __typename?: 'Household';
+      id: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: string;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          preferredName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+      }>;
+    } | null;
+    project: { __typename?: 'Project'; projectName: string };
+  } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -410,12 +691,12 @@ export type SearchClientsQuery = {
       id: string;
       personalId: string;
       ssnSerial?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
       firstName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-      dob?: string | null;
-      dateUpdated: string;
     }>;
   };
 };
@@ -431,12 +712,12 @@ export type GetClientQuery = {
     id: string;
     personalId: string;
     ssnSerial?: string | null;
+    dob?: string | null;
+    dateUpdated: string;
     firstName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-    dob?: string | null;
-    dateUpdated: string;
   } | null;
 };
 
@@ -453,12 +734,12 @@ export type GetClientWithEnrollmentsQuery = {
     id: string;
     personalId: string;
     ssnSerial?: string | null;
+    dob?: string | null;
+    dateUpdated: string;
     firstName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-    dob?: string | null;
-    dateUpdated: string;
     enrollments: {
       __typename?: 'EnrollmentsPaginated';
       offset: number;
@@ -489,12 +770,12 @@ export type CreateClientMutation = {
       id: string;
       personalId: string;
       ssnSerial?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
       firstName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-      dob?: string | null;
-      dateUpdated: string;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -557,18 +838,35 @@ export const EnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientNameFragmentDoc = gql`
+  fragment ClientName on Client {
+    firstName
+    preferredName
+    lastName
+    nameSuffix
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     id
     personalId
     ssnSerial
-    firstName
-    preferredName
-    lastName
-    nameSuffix
     dob
     dateUpdated
+    ...ClientName
   }
+  ${ClientNameFragmentDoc}
+`;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
 `;
 export const ProjectFieldsFragmentDoc = gql`
   fragment ProjectFields on Project {
@@ -583,6 +881,131 @@ export const OrganizationFieldsFragmentDoc = gql`
     organizationName
   }
 `;
+export const GetEnrollmentDocument = gql`
+  query GetEnrollment($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export function useGetEnrollmentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export type GetEnrollmentQueryHookResult = ReturnType<
+  typeof useGetEnrollmentQuery
+>;
+export type GetEnrollmentLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentLazyQuery
+>;
+export type GetEnrollmentQueryResult = Apollo.QueryResult<
+  GetEnrollmentQuery,
+  GetEnrollmentQueryVariables
+>;
+export const GetEnrollmentWithHoHDocument = gql`
+  query GetEnrollmentWithHoH($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+      household {
+        id
+        householdClients {
+          ...HouseholdClientFields
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentWithHoHQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentWithHoHQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentWithHoHQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentWithHoHQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentWithHoHQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >(GetEnrollmentWithHoHDocument, options);
+}
+export function useGetEnrollmentWithHoHLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >(GetEnrollmentWithHoHDocument, options);
+}
+export type GetEnrollmentWithHoHQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHoHQuery
+>;
+export type GetEnrollmentWithHoHLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHoHLazyQuery
+>;
+export type GetEnrollmentWithHoHQueryResult = Apollo.QueryResult<
+  GetEnrollmentWithHoHQuery,
+  GetEnrollmentWithHoHQueryVariables
+>;
 export const SearchClientsDocument = gql`
   query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
     clientSearch(input: $input, limit: $limit, offset: $offset) {

@@ -7,16 +7,47 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
-fragment ClientFields on Client {
-  id
-  personalId
-  ssnSerial
+fragment ClientName on Client {
   firstName
   preferredName
   lastName
   nameSuffix
+}
+
+fragment ClientFields on Client {
+  id
+  personalId
+  ssnSerial
   dob
   dateUpdated
+  ...ClientName
+}
+
+fragment HouseholdClientFields on HouseholdClient {
+  id
+  relationshipToHoH
+  client {
+    id
+    ...ClientName
+  }
+}
+
+query GetEnrollment($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+  }
+}
+
+query GetEnrollmentWithHoH($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFields
+      }
+    }
+  }
 }
 
 query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
