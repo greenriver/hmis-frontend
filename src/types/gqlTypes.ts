@@ -437,6 +437,28 @@ export type GetClientQuery = {
     nameSuffix?: string | null;
     dob?: string | null;
     dateUpdated: string;
+  } | null;
+};
+
+export type GetClientWithEnrollmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  enrollmentsLimit?: InputMaybe<Scalars['Int']>;
+  enrollmentsOffset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientWithEnrollmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    personalId: string;
+    ssnSerial?: string | null;
+    firstName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    dob?: string | null;
+    dateUpdated: string;
     enrollments: {
       __typename?: 'EnrollmentsPaginated';
       offset: number;
@@ -631,18 +653,9 @@ export const GetClientDocument = gql`
   query GetClient($id: ID!) {
     client(id: $id) {
       ...ClientFields
-      enrollments(limit: 10, offset: 0) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EnrollmentFields
-        }
-      }
     }
   }
   ${ClientFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -689,6 +702,84 @@ export type GetClientLazyQueryHookResult = ReturnType<
 export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
+>;
+export const GetClientWithEnrollmentsDocument = gql`
+  query GetClientWithEnrollments(
+    $id: ID!
+    $enrollmentsLimit: Int = 10
+    $enrollmentsOffset: Int = 0
+  ) {
+    client(id: $id) {
+      ...ClientFields
+      enrollments(
+        limit: $enrollmentsLimit
+        offset: $enrollmentsOffset
+        sortOrder: MOST_RECENT
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientWithEnrollmentsQuery__
+ *
+ * To run a query within a React component, call `useGetClientWithEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientWithEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientWithEnrollmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      enrollmentsLimit: // value for 'enrollmentsLimit'
+ *      enrollmentsOffset: // value for 'enrollmentsOffset'
+ *   },
+ * });
+ */
+export function useGetClientWithEnrollmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientWithEnrollmentsQuery,
+    GetClientWithEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientWithEnrollmentsQuery,
+    GetClientWithEnrollmentsQueryVariables
+  >(GetClientWithEnrollmentsDocument, options);
+}
+export function useGetClientWithEnrollmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientWithEnrollmentsQuery,
+    GetClientWithEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientWithEnrollmentsQuery,
+    GetClientWithEnrollmentsQueryVariables
+  >(GetClientWithEnrollmentsDocument, options);
+}
+export type GetClientWithEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetClientWithEnrollmentsQuery
+>;
+export type GetClientWithEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetClientWithEnrollmentsLazyQuery
+>;
+export type GetClientWithEnrollmentsQueryResult = Apollo.QueryResult<
+  GetClientWithEnrollmentsQuery,
+  GetClientWithEnrollmentsQueryVariables
 >;
 export const CreateClientDocument = gql`
   mutation CreateClient($input: CreateClientInput!) {

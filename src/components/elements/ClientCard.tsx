@@ -14,7 +14,10 @@ import { generatePath, Link as RouterLink } from 'react-router-dom';
 import ClickToShow from '@/components/elements/ClickToShow';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { ClientFieldsFragment, useGetClientQuery } from '@/types/gqlTypes';
+import {
+  ClientFieldsFragment,
+  useGetClientWithEnrollmentsQuery,
+} from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
   clientId,
@@ -28,7 +31,7 @@ const RecentEnrollments = ({
     data: { client } = {},
     loading,
     error,
-  } = useGetClientQuery({
+  } = useGetClientWithEnrollmentsQuery({
     variables: { id: clientId },
   });
 

@@ -91,7 +91,8 @@ const ClientDashboard: React.FC = () => {
     [client]
   );
 
-  if (loading || !client) return <Loading />;
+  if (loading) return <Loading />;
+  if (!client) throw Error('Client not found');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();

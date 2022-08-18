@@ -33,7 +33,21 @@ query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields
-    enrollments(limit: 10, offset: 0) {
+  }
+}
+
+query GetClientWithEnrollments(
+  $id: ID!
+  $enrollmentsLimit: Int = 10
+  $enrollmentsOffset: Int = 0
+) {
+  client(id: $id) {
+    ...ClientFields
+    enrollments(
+      limit: $enrollmentsLimit
+      offset: $enrollmentsOffset
+      sortOrder: MOST_RECENT
+    ) {
       offset
       limit
       nodesCount
