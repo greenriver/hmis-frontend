@@ -23,35 +23,40 @@ const AllEnrollments = () => {
           <Typography variant='h6' sx={{ mb: 2 }}>
             Enrollments
           </Typography>
-          <GenericTable<Enrollment>
-            rows={client.enrollments}
-            handleRowClick={(enrollment) =>
-              navigate(
-                generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                  clientId: client.id,
-                  enrollmentId: enrollment.id,
-                })
-              )
-            }
-            columns={[
-              { header: 'ID', render: 'id' },
-              { header: 'Project', render: (e) => e.project.projectName },
-              {
-                header: 'Start Date',
-                render: (e) =>
-                  e.entryDate
-                    ? HmisUtil.parseAndFormatDate(e.entryDate)
-                    : 'Unknown',
-              },
-              {
-                header: 'End Date',
-                render: (e) =>
-                  e.exitDate
-                    ? HmisUtil.parseAndFormatDate(e.exitDate)
-                    : 'Active',
-              },
-            ]}
-          />
+          {client.enrollments.nodesCount === 0 && (
+            <Typography>No enrollments</Typography>
+          )}
+          {client.enrollments.nodesCount !== 0 && (
+            <GenericTable<Enrollment>
+              rows={client.enrollments.nodes}
+              handleRowClick={(enrollment) =>
+                navigate(
+                  generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                    clientId: client.id,
+                    enrollmentId: enrollment.id,
+                  })
+                )
+              }
+              columns={[
+                { header: 'ID', render: 'id' },
+                { header: 'Project', render: (e) => e.project.projectName },
+                {
+                  header: 'Start Date',
+                  render: (e) =>
+                    e.entryDate
+                      ? HmisUtil.parseAndFormatDate(e.entryDate)
+                      : 'Unknown',
+                },
+                {
+                  header: 'End Date',
+                  render: (e) =>
+                    e.exitDate
+                      ? HmisUtil.parseAndFormatDate(e.exitDate)
+                      : 'Active',
+                },
+              ]}
+            />
+          )}
         </Paper>
       </Grid>
       <Grid item xs>
