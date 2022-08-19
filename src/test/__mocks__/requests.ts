@@ -3,6 +3,7 @@ import {
   SearchClientsDocument,
   GetProjectsForSelectDocument,
   GetEnrollmentWithHoHDocument,
+  GetClientWithEnrollmentsDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -227,9 +228,28 @@ const clientLookupMock = {
   },
 };
 
+const clientWithEnrollmentsMock = {
+  request: {
+    query: GetClientWithEnrollmentsDocument,
+    variables: {
+      id: '9999',
+      enrollmentsLimit: 10,
+      enrollmentsOffset: 0,
+    },
+  },
+  result: {
+    data: {
+      client: RITA_ACKROYD,
+    },
+  },
+};
+
 const enrollmentWithHoHMock = {
   request: {
     query: GetEnrollmentWithHoHDocument,
+    variables: {
+      id: '5',
+    },
   },
   result: {
     data: {
@@ -245,9 +265,22 @@ const enrollmentWithHoHMock = {
           householdClients: [
             {
               __typename: 'HouseholdClient',
-              id: '5',
-              relationshipToHoH: 1,
+              id: RITA_ACKROYD.id,
+              relationshipToHoH: '1',
               client: RITA_ACKROYD,
+            },
+            {
+              __typename: 'HouseholdClient',
+              id: '9998',
+              relationshipToHoH: '3',
+              client: {
+                __typename: 'Client',
+                id: '9998',
+                firstName: 'Lennart',
+                preferredName: 'Leo',
+                lastName: 'Acker',
+                nameSuffix: null,
+              },
             },
           ],
         },
@@ -261,6 +294,7 @@ const mocks: any[] = [
   clientSearchMock,
   clientSearchMockNextPage,
   clientLookupMock,
+  clientWithEnrollmentsMock,
   enrollmentWithHoHMock,
 ];
 
