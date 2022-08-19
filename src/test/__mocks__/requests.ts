@@ -2,6 +2,7 @@ import {
   GetClientDocument,
   SearchClientsDocument,
   GetProjectsForSelectDocument,
+  GetEnrollmentWithHoHDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -226,11 +227,41 @@ const clientLookupMock = {
   },
 };
 
+const enrollmentWithHoHMock = {
+  request: {
+    query: GetEnrollmentWithHoHDocument,
+  },
+  result: {
+    data: {
+      enrollment: {
+        __typename: 'Enrollment',
+        id: '5',
+        entryDate: '2022-06-18T00:00:00+00:00',
+        exitDate: null,
+        project: { projectName: 'White Pine' },
+        household: {
+          id: '123',
+          __typename: 'Household',
+          householdClients: [
+            {
+              __typename: 'HouseholdClient',
+              id: '5',
+              relationshipToHoH: 1,
+              client: RITA_ACKROYD,
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
   clientSearchMockNextPage,
   clientLookupMock,
+  enrollmentWithHoHMock,
 ];
 
 export default mocks;
