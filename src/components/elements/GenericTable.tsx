@@ -26,7 +26,7 @@ function isRenderFunction<T>(value: any): value is RenderFunction<T> {
   return typeof value === 'function';
 }
 
-interface Columns<T> {
+export interface Columns<T> {
   header: string;
   render: AttributeName<T> | RenderFunction<T>;
 }

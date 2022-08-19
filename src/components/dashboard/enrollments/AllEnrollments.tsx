@@ -1,7 +1,7 @@
 import { Button, Grid, Paper, Typography } from '@mui/material';
 import { Link as RouterLink, generatePath, useParams } from 'react-router-dom';
 
-import EnrollmentsTable from '@/components/elements/EnrollmentsTable';
+import EnrollmentsTable from '@/components/dashboard/enrollments/tables/EnrollmentsTable';
 import { DashboardRoutes } from '@/routes/routes';
 
 const AllEnrollments = () => {

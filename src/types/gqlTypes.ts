@@ -701,13 +701,13 @@ export type GetClientQuery = {
   } | null;
 };
 
-export type GetClientWithEnrollmentsQueryVariables = Exact<{
+export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
 
-export type GetClientWithEnrollmentsQuery = {
+export type GetClientEnrollmentsQuery = {
   __typename?: 'Query';
   client?: {
     __typename?: 'Client';
@@ -1112,8 +1112,8 @@ export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
 >;
-export const GetClientWithEnrollmentsDocument = gql`
-  query GetClientWithEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+export const GetClientEnrollmentsDocument = gql`
+  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     client(id: $id) {
       id
       enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
@@ -1130,16 +1130,16 @@ export const GetClientWithEnrollmentsDocument = gql`
 `;
 
 /**
- * __useGetClientWithEnrollmentsQuery__
+ * __useGetClientEnrollmentsQuery__
  *
- * To run a query within a React component, call `useGetClientWithEnrollmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetClientWithEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetClientEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetClientWithEnrollmentsQuery({
+ * const { data, loading, error } = useGetClientEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
  *      limit: // value for 'limit'
@@ -1147,39 +1147,39 @@ export const GetClientWithEnrollmentsDocument = gql`
  *   },
  * });
  */
-export function useGetClientWithEnrollmentsQuery(
+export function useGetClientEnrollmentsQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetClientWithEnrollmentsQuery,
-    GetClientWithEnrollmentsQueryVariables
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetClientWithEnrollmentsQuery,
-    GetClientWithEnrollmentsQueryVariables
-  >(GetClientWithEnrollmentsDocument, options);
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >(GetClientEnrollmentsDocument, options);
 }
-export function useGetClientWithEnrollmentsLazyQuery(
+export function useGetClientEnrollmentsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetClientWithEnrollmentsQuery,
-    GetClientWithEnrollmentsQueryVariables
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetClientWithEnrollmentsQuery,
-    GetClientWithEnrollmentsQueryVariables
-  >(GetClientWithEnrollmentsDocument, options);
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >(GetClientEnrollmentsDocument, options);
 }
-export type GetClientWithEnrollmentsQueryHookResult = ReturnType<
-  typeof useGetClientWithEnrollmentsQuery
+export type GetClientEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetClientEnrollmentsQuery
 >;
-export type GetClientWithEnrollmentsLazyQueryHookResult = ReturnType<
-  typeof useGetClientWithEnrollmentsLazyQuery
+export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetClientEnrollmentsLazyQuery
 >;
-export type GetClientWithEnrollmentsQueryResult = Apollo.QueryResult<
-  GetClientWithEnrollmentsQuery,
-  GetClientWithEnrollmentsQueryVariables
+export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
+  GetClientEnrollmentsQuery,
+  GetClientEnrollmentsQueryVariables
 >;
 export const CreateClientDocument = gql`
   mutation CreateClient($input: CreateClientInput!) {

@@ -3,7 +3,7 @@ import {
   SearchClientsDocument,
   GetProjectsForSelectDocument,
   GetEnrollmentWithHoHDocument,
-  GetClientWithEnrollmentsDocument,
+  GetClientEnrollmentsDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -230,7 +230,7 @@ const clientLookupMock = {
 
 const clientWithEnrollmentsMock = {
   request: {
-    query: GetClientWithEnrollmentsDocument,
+    query: GetClientEnrollmentsDocument,
     variables: {
       id: '9999',
       limit: 10,

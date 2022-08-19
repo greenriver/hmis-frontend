@@ -15,7 +15,7 @@ query GetClient($id: ID!) {
   }
 }
 
-query GetClientWithEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
     enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {

@@ -16,7 +16,7 @@ import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
-  useGetClientWithEnrollmentsQuery,
+  useGetClientEnrollmentsQuery,
 } from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
@@ -31,7 +31,7 @@ const RecentEnrollments = ({
     data: { client } = {},
     loading,
     error,
-  } = useGetClientWithEnrollmentsQuery({
+  } = useGetClientEnrollmentsQuery({
     variables: { id: clientId },
   });
 

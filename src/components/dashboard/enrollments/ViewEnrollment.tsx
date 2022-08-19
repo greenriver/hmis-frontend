@@ -6,6 +6,7 @@ import {
   Link as RouterLink,
 } from 'react-router-dom';
 
+import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './HouseholdMemberTable';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
@@ -63,9 +64,7 @@ const ViewEnrollment = () => {
               />
             </Paper>
             <Paper sx={{ p: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                Assessments
-              </Typography>
+              <EnrollmentRecordTabs />
             </Paper>
           </Stack>
         </Grid>
@@ -78,8 +77,6 @@ const ViewEnrollment = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                // component={RouterLink}
-                // to={}
               >
                 Intake (finish now)
               </Button>
