@@ -15,18 +15,10 @@ query GetClient($id: ID!) {
   }
 }
 
-query GetClientWithEnrollments(
-  $id: ID!
-  $enrollmentsLimit: Int = 10
-  $enrollmentsOffset: Int = 0
-) {
+query GetClientWithEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
-    ...ClientFields
-    enrollments(
-      limit: $enrollmentsLimit
-      offset: $enrollmentsOffset
-      sortOrder: MOST_RECENT
-    ) {
+    id
+    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
       offset
       limit
       nodesCount
@@ -65,6 +57,34 @@ query GetEnrollmentWithHoH($id: ID!) {
       id
       householdClients {
         ...HouseholdClientFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    assessments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    events(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EventFields
       }
     }
   }

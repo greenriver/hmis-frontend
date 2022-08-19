@@ -31,3 +31,28 @@ fragment EnrollmentFields on Enrollment {
     projectName
   }
 }
+
+fragment AssessmentFields on Assessment {
+  id
+  assessmentDate
+  assessmentLevel
+  assessmentLocation
+  assessmentType
+  dateCreated
+  dateUpdated
+  dateDeleted
+}
+
+fragment EventFields on Event {
+  id
+  event
+  eventDate
+  locationCrisisOrPhHousing
+  probSolDivRrResult
+  referralCaseManageAfter
+  referralResult
+  resultDate
+  dateCreated
+  dateUpdated
+  dateDeleted
+}

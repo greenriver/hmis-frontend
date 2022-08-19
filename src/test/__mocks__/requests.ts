@@ -233,8 +233,8 @@ const clientWithEnrollmentsMock = {
     query: GetClientWithEnrollmentsDocument,
     variables: {
       id: '9999',
-      enrollmentsLimit: 10,
-      enrollmentsOffset: 0,
+      limit: 10,
+      offset: 0,
     },
   },
   result: {
