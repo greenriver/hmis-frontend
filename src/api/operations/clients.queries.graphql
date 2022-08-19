@@ -1,55 +1,3 @@
-fragment EnrollmentFields on Enrollment {
-  id
-  entryDate
-  exitDate
-  project {
-    projectName
-  }
-}
-
-fragment ClientName on Client {
-  firstName
-  preferredName
-  lastName
-  nameSuffix
-}
-
-fragment ClientFields on Client {
-  id
-  personalId
-  ssnSerial
-  dob
-  dateUpdated
-  ...ClientName
-}
-
-fragment HouseholdClientFields on HouseholdClient {
-  id
-  relationshipToHoH
-  client {
-    id
-    ...ClientName
-  }
-}
-
-query GetEnrollment($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-  }
-}
-
-query GetEnrollmentWithHoH($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-    household {
-      id
-      householdClients {
-        ...HouseholdClientFields
-      }
-    }
-  }
-}
-
 query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
   clientSearch(input: $input, limit: $limit, offset: $offset) {
     offset
@@ -100,6 +48,24 @@ mutation CreateClient($input: CreateClientInput!) {
       attribute
       message
       fullMessage
+    }
+  }
+}
+
+query GetEnrollment($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+  }
+}
+
+query GetEnrollmentWithHoH($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFields
+      }
     }
   }
 }

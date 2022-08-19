@@ -1,0 +1,33 @@
+fragment ClientName on Client {
+  firstName
+  preferredName
+  lastName
+  nameSuffix
+}
+
+fragment ClientFields on Client {
+  id
+  personalId
+  ssnSerial
+  dob
+  dateUpdated
+  ...ClientName
+}
+
+fragment HouseholdClientFields on HouseholdClient {
+  id
+  relationshipToHoH
+  client {
+    id
+    ...ClientName
+  }
+}
+
+fragment EnrollmentFields on Enrollment {
+  id
+  entryDate
+  exitDate
+  project {
+    projectName
+  }
+}
