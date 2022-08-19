@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
