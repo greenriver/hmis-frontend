@@ -45,7 +45,7 @@ const HouseholdMemberTable = ({
                 <Link
                   component={RouterLink}
                   to={generatePath(DashboardRoutes.PROFILE, {
-                    clientId,
+                    clientId: h.client.id,
                   })}
                   target='_blank'
                   variant='body2'
