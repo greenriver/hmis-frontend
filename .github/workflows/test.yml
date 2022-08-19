@@ -32,6 +32,10 @@ jobs:
       run: |
         yarn test
 
+    - name: Storybook smoke test
+      run: |
+        yarn storybook --smoke-test
+
     - name: Build
       run: |
         yarn build
