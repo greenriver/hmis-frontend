@@ -23,6 +23,10 @@ jobs:
         corepack enable
         yarn install --offline
 
+    - name: Audit dependencies
+      run: |
+        yarn audit --groups dependencies
+
     - name: Lint and Format
       run: |
         yarn format:check
