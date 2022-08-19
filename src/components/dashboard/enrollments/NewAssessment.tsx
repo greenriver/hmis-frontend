@@ -39,7 +39,7 @@ const NewAssessment = () => {
   if (loading) return <Loading />;
 
   const enrollment = enrollmentFragment || data?.enrollment;
-  if (!enrollment) throw Error('Enrollment not found');
+  // if (!enrollment) throw Error('Enrollment not found');
 
   //FIXME pull out into router state?
   const crumbs = [
@@ -47,7 +47,10 @@ const NewAssessment = () => {
       label: 'Back to all enrollments',
       to: DashboardRoutes.ALL_ENROLLMENTS,
     },
-    { label: enrollmentName(enrollment), to: DashboardRoutes.VIEW_ENROLLMENT },
+    {
+      label: enrollment ? enrollmentName(enrollment) : 'New Enrollment',
+      to: DashboardRoutes.VIEW_ENROLLMENT,
+    },
     {
       label: `Intake Assessment`,
       to: pathname,
