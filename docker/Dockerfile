@@ -26,7 +26,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder --chown=app:app /app/dist .
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
-COPY ./docker/templates/default.conf.template /etc/nginx/templates/default.conf.template
+COPY ./docker/templates/*.template /etc/nginx/templates/
 
 RUN addgroup --gid 10001 --system app \
  && adduser  --uid 10000 --system --ingroup app --home /usr/share/nginx/html app \
