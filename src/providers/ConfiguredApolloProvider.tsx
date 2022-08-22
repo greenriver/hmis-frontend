@@ -14,7 +14,7 @@ import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 
 const batchLink = new BatchHttpLink({
-  uri: import.meta.env.PUBLIC_HMIS_GRAPHQL_API,
+  uri: '/hmis/hmis-gql',
   fetch,
 });
 
