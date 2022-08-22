@@ -10,7 +10,6 @@ server {
         root   /usr/share/nginx/html;
         index  index.html index.htm;
         try_files $uri /index.html;
-        rewrite ^(/hmis/.*)$ ${HMIS_BACKEND_URL}$1 permanent;
 
         # application has inline styles
         # use INLINE_RUNTIME_CHECK=false yarn build and nonce / hash to apply a CSP
@@ -21,6 +20,18 @@ server {
         add_header X-XSS-Protection "1; mode=block" always;
         add_header X-Content-Type-Options "nosniff" always;
         add_header Feature-Policy "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none'; usb 'none';";
+
+    }
+
+    location /hmis {
+      # proxy destination
+      proxy_pass https://${HMIS_BACKEND};
+
+      # include default proxy headers
+      include /etc/nginx/conf.d/proxy_headers.conf;
+
+      # add location specific headers
+      proxy_set_header Host ${HMIS_BACKEND};
 
     }
 
