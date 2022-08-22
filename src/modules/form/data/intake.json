@@ -438,7 +438,7 @@
             },
             {
               "valueCoding": {
-                "code": "VETERAN_STATUS_UNKNOWN",
+                "code": "VETERAN_STATUS_CLIENT_DOESN_T_KNOW",
                 "display": "Client doesn't know"
               }
             },
@@ -450,7 +450,7 @@
             },
             {
               "valueCoding": {
-                "code": "VETERAN_STATUS_NOT_COLLECTED",
+                "code": "VETERAN_STATUS_DATA_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
