@@ -4,18 +4,22 @@
 ARG NODE_VERSION
 FROM node:${NODE_VERSION}-alpine AS builder
 
+ARG GITHASH
 WORKDIR /app
 
 COPY . .
 
 ENV INLINE_RUNTIME_CHUNK=false
 
+# Env vars prefixed with PUBLIC_ are made available to the app at build time
+ENV PUBLIC_GIT_COMMIT_HASH ${GITHASH}
+
 RUN corepack enable \
  && yarn install --offline \
  && yarn format:check \
  && yarn lint:check \
  && yarn test \
- && yarn build
+ && yarn build:staging
 
 #####################################################################
 # nginx container

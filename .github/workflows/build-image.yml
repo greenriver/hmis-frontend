@@ -48,7 +48,7 @@ jobs:
           export IMAGE_TAG="githash-${GITHASH}"
 
           echo "::set-output name=node_version::$NODE_VERSION"
-          echo "::set-output name=git_hash::$GIT_HASH"
+          echo "::set-output name=git_hash::$GITHASH"
           echo "::set-output name=image_tag::$IMAGE_TAG"
 
       # Build and scan on PRs
@@ -63,6 +63,7 @@ jobs:
           outputs: type=docker
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
 
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
@@ -93,6 +94,7 @@ jobs:
           outputs: type=docker
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
 
       # log medium vulnerabilities
       - name: Run scan for medium vulnerabilities
@@ -146,3 +148,4 @@ jobs:
           #tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
