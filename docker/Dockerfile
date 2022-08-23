@@ -4,6 +4,7 @@
 ARG NODE_VERSION
 FROM node:${NODE_VERSION}-alpine AS builder
 
+ARG GITHASH
 WORKDIR /app
 
 COPY . .

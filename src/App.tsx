@@ -4,7 +4,7 @@ import { AppRoutes } from '@/routes';
 
 const App = () => (
   <AppProvider>
-    {import.meta.env.DEV && <StagingAppBar />}
+    {import.meta.env.MODE !== 'production' && <StagingAppBar />}
     <AppRoutes />
   </AppProvider>
 );
