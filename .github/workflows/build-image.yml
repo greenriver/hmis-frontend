@@ -48,7 +48,7 @@ jobs:
           export IMAGE_TAG="githash-${GITHASH}"
 
           echo "::set-output name=node_version::$NODE_VERSION"
-          echo "::set-output name=git_hash::$GIT_HASH"
+          echo "::set-output name=git_hash::$GITHASH"
           echo "::set-output name=image_tag::$IMAGE_TAG"
 
       # Build and scan on PRs
