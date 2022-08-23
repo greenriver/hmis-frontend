@@ -63,7 +63,7 @@ jobs:
           outputs: type=docker
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
-            GITHASH=${{ github.sha }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
 
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
@@ -94,7 +94,7 @@ jobs:
           outputs: type=docker
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
-            GITHASH=${{ github.sha }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
 
       # log medium vulnerabilities
       - name: Run scan for medium vulnerabilities
@@ -148,4 +148,4 @@ jobs:
           #tags: ${{ secrets.AWS_ECR_REGISTRY }}:${{ steps.env.outputs.image_tag }}
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
-            GITHASH=${{ github.sha }}
+            GITHASH=${{ steps.env.outputs.git_hash }}
