@@ -5,6 +5,7 @@ import {
   Typography,
   Link,
   Button,
+  Chip,
 } from '@mui/material';
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
@@ -40,6 +41,15 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             to='/'
           >
             {import.meta.env.PUBLIC_APP_NAME}
+            {import.meta.env.MODE === 'staging' &&
+              import.meta.env.PUBLIC_GIT_COMMIT_HASH && (
+                <Chip
+                  label={import.meta.env.PUBLIC_GIT_COMMIT_HASH}
+                  size='small'
+                  variant='outlined'
+                  sx={{ ml: 2 }}
+                />
+              )}
           </Link>
           <Link component={RouterLink} to='/' sx={{ ml: 2 }}>
             Search
