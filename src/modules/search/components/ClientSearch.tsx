@@ -66,7 +66,7 @@ const ClientSearch: React.FC = () => {
     searchClients({ variables: { input: searchParamsObject } });
   }, [searchClients, searchParamsObject]);
 
-  // When "submit" buttn is clicked, update the search parameters
+  // When form is submitted, update the search parameters
   const handleSubmitSearch = useMemo(() => {
     return (values: Record<string, any>) => {
       const cleaned = omitBy(values, isNil);

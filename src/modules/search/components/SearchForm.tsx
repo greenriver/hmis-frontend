@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { isEmpty, omit } from 'lodash-es';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import ProjectSelect, {
   Option as ProjectOption,
@@ -32,6 +32,7 @@ interface Props {
 }
 
 const MAPPING_KEY = 'clientSearchInput';
+const defaultSearchKeys = ['textSearch', 'projects'];
 
 const SearchForm: React.FC<Props> = ({
   definition,
@@ -40,12 +41,9 @@ const SearchForm: React.FC<Props> = ({
 }) => {
   const [values, setValues] = useState<FormValues>(initialValues || {});
 
-  console.log(initialValues);
-  const hasInitialAdvanced = !isEmpty(
-    omit(initialValues, ['textSearch', 'projects'])
-  );
+  // If advanced parameters were specified in the URL parameters, expand the panel
+  const hasInitialAdvanced = !isEmpty(omit(initialValues, defaultSearchKeys));
   const [expanded, setExpanded] = useState(hasInitialAdvanced);
-  console.log(values);
 
   const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
@@ -55,18 +53,20 @@ const SearchForm: React.FC<Props> = ({
     });
   };
 
-  const submitHandler = (
-    event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent
-  ) => {
-    event.preventDefault();
-    // Transform values into ClientSearchInput query variables
-    const variables = transformSubmitValues(definition, values, MAPPING_KEY);
-    onSubmit({
-      ...variables,
-      textSearch: values.textSearch,
-      ...(values.projects && { projects: values.projects.map((p) => p.id) }),
-    });
-  };
+  // When form is submitted, transform values into query paramterse and invoke parent submit handler
+  const submitHandler = useMemo(() => {
+    return (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent) => {
+      event.preventDefault();
+      // Transform values into ClientSearchInput query variables
+      const variables = transformSubmitValues(definition, values, MAPPING_KEY);
+      onSubmit({
+        ...variables,
+        textSearch: values.textSearch,
+        ...(values.projects && { projects: values.projects.map((p) => p.id) }),
+      });
+    };
+  }, [values, definition, onSubmit]);
+
   const submitOnEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       submitHandler(event);
