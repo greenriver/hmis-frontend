@@ -9,6 +9,7 @@ import {
   Link,
   Typography,
 } from '@mui/material';
+import { isEmpty, omit } from 'lodash-es';
 import React, { useState } from 'react';
 
 import ProjectSelect, {
@@ -27,13 +28,24 @@ type FormValues = {
 interface Props {
   definition: FormDefinition;
   onSubmit: (values: Record<string, any>) => void;
+  initialValues?: Record<string, any>;
 }
 
 const MAPPING_KEY = 'clientSearchInput';
 
-const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
-  const [values, setValues] = useState<FormValues>({});
-  const [expanded, setExpanded] = useState(false);
+const SearchForm: React.FC<Props> = ({
+  definition,
+  onSubmit,
+  initialValues,
+}) => {
+  const [values, setValues] = useState<FormValues>(initialValues || {});
+
+  console.log(initialValues);
+  const hasInitialAdvanced = !isEmpty(
+    omit(initialValues, ['textSearch', 'projects'])
+  );
+  const [expanded, setExpanded] = useState(hasInitialAdvanced);
+  console.log(values);
 
   const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
@@ -52,7 +64,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
     onSubmit({
       ...variables,
       textSearch: values.textSearch,
-      projects: values.projects ? values.projects.map((p) => p.id) : undefined,
+      ...(values.projects && { projects: values.projects.map((p) => p.id) }),
     });
   };
   const submitOnEnter = (event: React.KeyboardEvent) => {
@@ -63,12 +75,16 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
-      <Typography sx={{ mb: 2 }}>
-        Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse ID,
-        or PersonalID. It is often most efficient to search using the first few
-        characters of the first name and last name, e.g. to find Jane Smith you
-        might search for ja sm.
-      </Typography>
+      <Grid container sx={{ mb: 2 }}>
+        <Grid item xs={9}>
+          <Typography>
+            Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse
+            ID, or PersonalID. It is often most efficient to search using the
+            first few characters of the first name and last name, e.g. to find
+            Jane Smith you might search for ja sm.
+          </Typography>
+        </Grid>
+      </Grid>
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={5}>
           <TextInput
@@ -82,7 +98,7 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
             onKeyUp={submitOnEnter}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={4}>
           <ProjectSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.projects || []}
@@ -93,7 +109,11 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
             multiple
           />
         </Grid>
-        <Grid item xs={2}></Grid>
+        <Grid item xs={2}>
+          <Button variant='outlined' type='submit' sx={{ mt: 3 }}>
+            Search
+          </Button>
+        </Grid>
       </Grid>
       <Button
         variant='outlined'
@@ -108,7 +128,6 @@ const SearchForm: React.FC<Props> = ({ definition, onSubmit }) => {
       </Button>
       {expanded && (
         <Paper sx={{ p: 2 }}>
-          {/* <Typography sx={{ mb: 2 }}>Advanced Search</Typography> */}
           <Grid
             container
             direction='row'

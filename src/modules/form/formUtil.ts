@@ -38,6 +38,8 @@ const transformValue = (value: any, item: Item): any => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return (value as AnswerOption).valueString || value.valueCoding?.code;
     }
+  } else if (value === '') {
+    return undefined;
   }
   return value;
 };
@@ -71,9 +73,12 @@ const transformSubmitValuesInner = (
     const key = item.mapping[mappingKey];
     if (!key) return;
 
+    let value;
     if (item.linkId in values) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      transformed[key] = transformValue(values[item.linkId], item);
+      value = transformValue(values[item.linkId], item);
+    }
+    if (typeof value !== 'undefined') {
+      transformed[key] = value;
     } else if (autofillNotCollected) {
       // If we don't have a value, fill in Not Collected code if present
       const notCollectedCode = dataNotCollectedCode(item);
