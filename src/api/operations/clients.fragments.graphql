@@ -56,3 +56,7 @@ fragment EventFields on Event {
   dateUpdated
   dateDeleted
 }
+
+fragment ServiceFields on Service {
+  id
+}

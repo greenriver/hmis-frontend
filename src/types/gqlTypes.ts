@@ -653,6 +653,8 @@ export type EventFieldsFragment = {
   dateDeleted: string;
 };
 
+export type ServiceFieldsFragment = { __typename?: 'Service'; id: string };
+
 export type SearchClientsQueryVariables = Exact<{
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']>;
@@ -871,6 +873,27 @@ export type GetEnrollmentEventsQuery = {
   } | null;
 };
 
+export type GetEnrollmentServicesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentServicesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{ __typename?: 'Service'; id: string }>;
+    };
+  } | null;
+};
+
 export type ProjectFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -977,6 +1000,11 @@ export const EventFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
+  }
+`;
+export const ServiceFieldsFragmentDoc = gql`
+  fragment ServiceFields on Service {
+    id
   }
 `;
 export const ProjectFieldsFragmentDoc = gql`
@@ -1503,6 +1531,75 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
+>;
+export const GetEnrollmentServicesDocument = gql`
+  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      services(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentServicesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export function useGetEnrollmentServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export type GetEnrollmentServicesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesQuery
+>;
+export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesLazyQuery
+>;
+export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
+  GetEnrollmentServicesQuery,
+  GetEnrollmentServicesQueryVariables
 >;
 export const GetProjectsForSelectDocument = gql`
   query GetProjectsForSelect {
