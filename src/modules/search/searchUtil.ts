@@ -8,44 +8,50 @@ export const searchParamsToVariables = (
   searchParams: URLSearchParams
 ) => {
   const variables: Record<string, any> = {};
-  searchFormDefinition.item.forEach((item) => {
-    const fieldName = item?.mapping?.clientSearchInput;
-    if (!fieldName) return;
-    if (item.repeats) {
+  const fieldNames: [string, boolean][] = searchFormDefinition.item.map(
+    (item) => [item?.mapping?.clientSearchInput as string, !!item?.repeats]
+  );
+  fieldNames.push(['textSearch', false]);
+  fieldNames.push(['projects', true]);
+  fieldNames.forEach(([fieldName, repeats]) => {
+    if (!searchParams.has(fieldName)) return;
+    if (repeats) {
       variables[fieldName] = searchParams.getAll(fieldName);
     } else {
       variables[fieldName] = searchParams.get(fieldName);
     }
   });
 
-  variables.textSearch = searchParams.get('textSearch');
-  variables.projects = searchParams.getAll('projects');
   return omitBy(variables, isNil);
 };
 
 // Construct from state from query variables
 // This only works because Project and Organization are the only dropdowns.
 // Need to revisit if search form options are expanded to use answerOptions.
-export const variablesToState = (
+export const searchParamsToState = (
   searchFormDefinition: FormDefinition,
   searchParams: URLSearchParams
 ) => {
   const variables: Record<string, any> = {};
-  searchFormDefinition.item.forEach((item) => {
-    const fieldName = item?.mapping?.clientSearchInput;
-    if (!fieldName) return;
-    if (item.repeats) {
-      const arr = searchParams.getAll(fieldName).map((id: string) => ({ id }));
-      if (arr.length > 0) variables[item.linkId] = arr;
+  const fieldNames: [string, string, boolean][] = searchFormDefinition.item.map(
+    (item) => [
+      item?.mapping?.clientSearchInput as string,
+      item.linkId,
+      !!item?.repeats,
+    ]
+  );
+  fieldNames.push(['textSearch', 'textSearch', false]);
+  fieldNames.push(['projects', 'projects', true]);
+  fieldNames.forEach(([fieldName, linkId, repeats]) => {
+    if (!searchParams.has(fieldName)) return;
+    if (repeats) {
+      variables[linkId] = searchParams
+        .getAll(fieldName)
+        .map((id: string) => ({ id }));
     } else {
-      variables[item.linkId] = searchParams.get(fieldName);
+      variables[linkId] = searchParams.get(fieldName);
     }
   });
-
-  variables.textSearch = searchParams.get('textSearch');
-  variables.projects = searchParams
-    .getAll('projects')
-    .map((id: string) => ({ id }));
 
   return omitBy(variables, isNil);
 };

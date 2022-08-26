@@ -26,7 +26,8 @@ export const PaginationSummary = ({
   const start = offset + 1;
   const end = Math.min(totalEntries, offset + limit);
   const range = start === end ? start : `${start}-${end}`;
-  const text = `${range} of ${totalEntries} ${itemName || 'items'}`;
+  const total = totalEntries.toLocaleString('en-US');
+  const text = `${range} of ${total} ${itemName || 'items'}`;
   return <Typography sx={sx}>{text}</Typography>;
 };
 

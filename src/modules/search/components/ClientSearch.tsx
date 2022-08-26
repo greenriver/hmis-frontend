@@ -1,9 +1,9 @@
 import { Paper } from '@mui/material';
-import { omitBy, isNil } from 'lodash-es';
+import { omitBy, isNil, isEmpty } from 'lodash-es';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, createSearchParams } from 'react-router-dom';
 
-import { searchParamsToVariables, variablesToState } from '../searchUtil';
+import { searchParamsToVariables, searchParamsToState } from '../searchUtil';
 
 import Loading from '@/components/elements/Loading';
 import Pagination, {
@@ -29,11 +29,17 @@ const MAX_CARDS_THRESHOLD = 10;
 const ClientSearch: React.FC = () => {
   // URL search parameters
   const [searchParams, setSearchParams] = useSearchParams();
+  // whether the search params were derived
+  const [derivedSearchParams, setDerivedSearchParams] =
+    useState<boolean>(false);
+  // initial form state derived from the SearchParams
+  const [initialValues, setInitialValues] = useState<Record<string, any>>();
   // whether to display results as cards or a table
   const [cards, setCards] = useState<boolean>(false);
   // whether user has manually selected display format
   const [hasSetCards, setHasSetCards] = useState<boolean>(false);
   const [offset, setOffset] = useState(0);
+
   const [searchClients, { data, loading, error }] = useSearchClientsLazyQuery({
     variables: {
       input: {},
@@ -41,7 +47,7 @@ const ClientSearch: React.FC = () => {
       offset,
     },
     notifyOnNetworkStatusChange: true,
-    // fetchPolicy: 'network-only',
+    fetchPolicy: 'network-only',
     onCompleted: (data) => {
       // update display type (card vs table) based on length of results
       // if the use has manually set the display type alread, don't change it
@@ -51,29 +57,42 @@ const ClientSearch: React.FC = () => {
     },
   });
 
-  // Construct the initial variables and initial state based on query parameters
-  const [searchParamsObject, initialValues] = useMemo(() => {
+  useEffect(() => {
+    // if search params are derived, we don't want to perform a search on them
+    if (derivedSearchParams) return;
+
+    // this is the first render, so derive the initial state from the SearchParams and perform a search
     const variables = searchParamsToVariables(
       searchFormDefinition,
       searchParams
     );
-    const initState = variablesToState(searchFormDefinition, searchParams);
-    return [variables, initState];
-  }, [searchParams]);
+    if (isEmpty(variables)) {
+      setInitialValues({});
+    } else {
+      const initState = searchParamsToState(searchFormDefinition, searchParams);
+      setInitialValues(initState);
+      // Perform search using the cache so when you nav back/forward it doesn't refetch
+      searchClients({
+        variables: { input: variables },
+        fetchPolicy: 'cache-first',
+      });
+    }
+  }, [derivedSearchParams, searchParams, searchClients]);
 
-  // Perform client search when query parameters change
-  useEffect(() => {
-    searchClients({ variables: { input: searchParamsObject } });
-  }, [searchClients, searchParamsObject]);
-
-  // When form is submitted, update the search parameters
+  // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
     return (values: Record<string, any>) => {
       const cleaned = omitBy(values, isNil);
+
+      // Construct derived search parameters and update the URL
       const searchParams = createSearchParams(cleaned);
       setSearchParams(searchParams);
+      setDerivedSearchParams(true); // so that searchParam change doesn't trigger a query
+
+      // Perform the search
+      searchClients({ variables: { input: cleaned } });
     };
-  }, [setSearchParams]);
+  }, [searchClients, setSearchParams, setDerivedSearchParams]);
 
   const handleChangeDisplayType = useMemo(() => {
     return (_: any, checked: boolean) => {
@@ -82,13 +101,14 @@ const ClientSearch: React.FC = () => {
     };
   }, []);
 
+  if (!initialValues) return <Loading />;
+
   const paginationProps = {
     limit: PAGE_SIZE,
     offset,
     totalEntries: data?.clientSearch.nodesCount || -1,
     itemName: 'clients',
   };
-
   const hasResults = !!data?.clientSearch?.nodes.length;
   return (
     <>
