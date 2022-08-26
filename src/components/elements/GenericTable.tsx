@@ -30,7 +30,7 @@ export interface Columns<T> {
   header: string;
   render: AttributeName<T> | RenderFunction<T>;
 }
-interface Props<T> {
+export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   columns: Columns<T>[];
