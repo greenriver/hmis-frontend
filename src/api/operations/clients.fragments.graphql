@@ -59,4 +59,15 @@ fragment EventFields on Event {
 
 fragment ServiceFields on Service {
   id
+  dateProvided
+  movingOnOtherType
+  recordType
+  referralOutcome
+  subTypeProvided
+  typeProvided
+  otherTypeProvided
+
+  dateCreated
+  dateUpdated
+  dateDeleted
 }

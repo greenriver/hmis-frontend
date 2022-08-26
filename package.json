@@ -19,7 +19,7 @@
     "postinstall": "husky install",
     "storybook": "cross-env TS_NODE_PROJECT=.storybook/tsconfig.json NODE_OPTIONS=--openssl-legacy-provider start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "graphql:codegen": "graphql-codegen --config codegen.yml && prettier --write ./src/types/*"
+    "graphql:codegen": "graphql-codegen --config codegen.yml && node scripts/generateEnumDescriptions.js && prettier --write ./src/types/*"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [

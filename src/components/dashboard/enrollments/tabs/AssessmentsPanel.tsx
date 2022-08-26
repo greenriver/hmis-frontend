@@ -8,7 +8,7 @@ import {
 
 import { Columns } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { humanizeEnum, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
@@ -21,12 +21,23 @@ const columns: Columns<AssessmentFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (e) => e.assessmentType,
+    render: (e) => humanizeEnum(e.assessmentType),
+  },
+  {
+    header: 'Level',
+    render: (e) => humanizeEnum(e.assessmentLevel),
+  },
+  {
+    header: 'Location',
+    render: (e) => e.assessmentLocation,
   },
   {
     header: 'Date',
-    render: (e) =>
-      e.assessmentDate ? parseAndFormatDate(e.assessmentDate) : 'Unknown',
+    render: (e) => parseAndFormatDate(e.assessmentDate),
+  },
+  {
+    header: 'Last Updated',
+    render: (e) => parseAndFormatDate(e.dateUpdated),
   },
 ];
 
@@ -49,9 +60,6 @@ const AssessmentsPanel = ({
         })
       );
   }, [clientId, enrollmentId, navigate]);
-
-  // FIXME: add back when query works
-  return <>WIP</>;
 
   return (
     <Stack>

@@ -26,19 +26,18 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  const enrollmentFragment = apolloClient.readFragment({
+  const enrollment = apolloClient.readFragment({
     id: `Enrollment:${enrollmentId}`,
     fragment: EnrollmentFieldsFragmentDoc,
   });
 
-  const { data, loading, error } = useGetEnrollmentQuery({
+  const { loading, error } = useGetEnrollmentQuery({
     variables: { id: enrollmentId },
-    skip: !!enrollmentFragment,
+    skip: !!enrollment,
   });
   if (error) throw error;
   if (loading) return <Loading />;
 
-  const enrollment = enrollmentFragment || data?.enrollment;
   if (!enrollment) throw Error('Enrollment not found');
 
   const crumbs = [

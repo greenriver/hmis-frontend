@@ -10,6 +10,7 @@ import {
   TablePaginationProps,
   LinearProgress,
 } from '@mui/material';
+import { ReactNode } from 'react';
 
 type AttributeName<T> = keyof T;
 type RenderFunction<T> = (value: T) => React.ReactNode;
@@ -37,6 +38,7 @@ export interface Props<T> {
   paginated?: boolean;
   loading?: boolean;
   tablePaginationProps?: TablePaginationProps;
+  ActionRowComponent?: ReactNode;
 }
 
 const clickableRowStyles = {
@@ -51,6 +53,7 @@ const GenericTable = <T extends { id: string }>({
   paginated = false,
   loading = false,
   tablePaginationProps,
+  ActionRowComponent,
 }: Props<T>) => {
   return (
     <TableContainer>
@@ -101,24 +104,28 @@ const GenericTable = <T extends { id: string }>({
                 })}
               </TableRow>
             ))}
+          {ActionRowComponent}
         </TableBody>
-        {paginated && rows && tablePaginationProps && (
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                SelectProps={{
-                  inputProps: {
-                    'aria-label': 'rows per page',
-                  },
-                  native: true,
-                }}
-                sx={{ borderBottom: 'none' }}
-                {...tablePaginationProps}
-              />
-            </TableRow>
-          </TableFooter>
-        )}
+        {paginated &&
+          rows &&
+          tablePaginationProps &&
+          tablePaginationProps.count > rows.length && (
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  SelectProps={{
+                    inputProps: {
+                      'aria-label': 'rows per page',
+                    },
+                    native: true,
+                  }}
+                  sx={{ borderBottom: 'none' }}
+                  {...tablePaginationProps}
+                />
+              </TableRow>
+            </TableFooter>
+          )}
       </Table>
     </TableContainer>
   );

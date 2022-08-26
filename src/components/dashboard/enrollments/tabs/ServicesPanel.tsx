@@ -3,7 +3,9 @@ import { Link as RouterLink, generatePath } from 'react-router-dom';
 
 import { Columns } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import { humanizeEnum, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { RecordTypeEnum, ServiceTypeProvidedEnum } from '@/types/gqlEnums';
 import {
   ServiceFieldsFragment,
   GetEnrollmentServicesDocument,
@@ -13,6 +15,32 @@ import {
 
 const columns: Columns<ServiceFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
+  {
+    header: 'Date Provided',
+    render: (e) => parseAndFormatDate(e.dateProvided),
+  },
+  {
+    header: 'Type',
+    render: (e) => RecordTypeEnum[e.recordType],
+  },
+  {
+    header: 'Type Provided',
+    render: (e) => ServiceTypeProvidedEnum[e.typeProvided],
+  },
+  {
+    header: 'Other Type Provided',
+    render: (e) =>
+      e.otherTypeProvided ? humanizeEnum(e.otherTypeProvided) : null,
+  },
+  {
+    header: 'Moving on Other Type',
+    render: (e) =>
+      e.movingOnOtherType ? humanizeEnum(e.movingOnOtherType) : null,
+  },
+  {
+    header: 'Sub Type',
+    render: (e) => (e.subTypeProvided ? humanizeEnum(e.subTypeProvided) : null),
+  },
 ];
 
 const ServicesPanel = ({
@@ -21,45 +49,40 @@ const ServicesPanel = ({
 }: {
   clientId: string;
   enrollmentId: string;
-}) => {
-  // FIXME: add back when query works
-  return <>WIP</>;
-
-  return (
-    <Stack>
-      <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
-        <Typography variant='h5'>Services</Typography>
-        <Button
-          variant='outlined'
-          color='secondary'
-          component={RouterLink}
-          size='small'
-          to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
-            clientId,
-            enrollmentId,
-            assessmentType: 'TODO',
-          })}
-        >
-          + Add Service
-        </Button>
-      </Stack>
-      <GenericTableWithData<
-        GetEnrollmentServicesQuery,
-        GetEnrollmentServicesQueryVariables,
-        ServiceFieldsFragment
+}) => (
+  <Stack>
+    <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
+      <Typography variant='h5'>Services</Typography>
+      <Button
+        variant='outlined'
+        color='secondary'
+        component={RouterLink}
+        size='small'
+        to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+          clientId,
+          enrollmentId,
+          assessmentType: 'TODO',
+        })}
       >
-        queryVariables={{ id: enrollmentId }}
-        queryDocument={GetEnrollmentServicesDocument}
-        columns={columns}
-        toNodes={(data: GetEnrollmentServicesQuery) =>
-          data.enrollment?.services?.nodes || []
-        }
-        toNodesCount={(data: GetEnrollmentServicesQuery) =>
-          data.enrollment?.services?.nodesCount
-        }
-      />
+        + Add Service
+      </Button>
     </Stack>
-  );
-};
+    <GenericTableWithData<
+      GetEnrollmentServicesQuery,
+      GetEnrollmentServicesQueryVariables,
+      ServiceFieldsFragment
+    >
+      queryVariables={{ id: enrollmentId }}
+      queryDocument={GetEnrollmentServicesDocument}
+      columns={columns}
+      toNodes={(data: GetEnrollmentServicesQuery) =>
+        data.enrollment?.services?.nodes || []
+      }
+      toNodesCount={(data: GetEnrollmentServicesQuery) =>
+        data.enrollment?.services?.nodesCount
+      }
+    />
+  </Stack>
+);
 
 export default ServicesPanel;
