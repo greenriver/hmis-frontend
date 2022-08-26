@@ -1,5 +1,5 @@
 import { format, parseISO, differenceInYears } from 'date-fns';
-import { startCase } from 'lodash-es';
+// import { startCase } from 'lodash-es';
 
 import {
   ClientFieldsFragment,
@@ -65,7 +65,7 @@ export const enrollmentName = (enrollment: {
   return enrollment.project.projectName;
 };
 
-export const humanizeEnum = (s: string) => startCase(s.toLowerCase());
+export const humanizeEnum = (s: string) => s; //startCase(s.toLowerCase());
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
   if (!e.referralResult) return null;

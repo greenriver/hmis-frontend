@@ -4,7 +4,7 @@ const AddHouseholdMembers = () => {
   return (
     <>
       {/* <Typography>Search for a Client</Typography> */}
-      <MiniClientSearch />
+      <MiniClientSearch onSubmit={(s) => console.log(s)} />
       {/* <Typography>Previously Associated Members</Typography> */}
     </>
   );
