@@ -8,8 +8,9 @@ import {
 
 import { Columns } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import { humanizeEnum, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { AssessmentLevelEnum, AssessmentTypeEnum } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
@@ -21,11 +22,11 @@ const columns: Columns<AssessmentFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (e) => humanizeEnum(e.assessmentType),
+    render: (a) => AssessmentTypeEnum[a.assessmentType],
   },
   {
     header: 'Level',
-    render: (e) => humanizeEnum(e.assessmentLevel),
+    render: (a) => AssessmentLevelEnum[a.assessmentLevel],
   },
   {
     header: 'Location',

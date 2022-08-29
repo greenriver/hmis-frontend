@@ -1,11 +1,16 @@
 import { format, parseISO, differenceInYears } from 'date-fns';
-// import { startCase } from 'lodash-es';
 
+import {
+  ReferralResultEnum,
+  ServiceSubTypeProvidedEnum,
+  ServiceTypeProvidedEnum,
+} from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -65,13 +70,46 @@ export const enrollmentName = (enrollment: {
   return enrollment.project.projectName;
 };
 
-export const humanizeEnum = (s: string) => s; //startCase(s.toLowerCase());
-
 export const eventReferralResult = (e: EventFieldsFragment) => {
   if (!e.referralResult) return null;
-  const result = humanizeEnum(e.referralResult);
+  const result = ReferralResultEnum[e.referralResult];
   if (e.resultDate) {
     return `${result} (${parseAndFormatDate(e.resultDate)})`;
   }
   return result;
+};
+
+export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
+  let typeProvided: string | null = ServiceTypeProvidedEnum[e.typeProvided];
+
+  // Don't show bed night because it's redundant
+  if (e.typeProvided === 'BED_NIGHT__BED_NIGHT') typeProvided = null;
+
+  const isOtherSsvf =
+    e.recordType === 'SSVF_SERVICE' &&
+    e.typeProvided ===
+      'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA';
+  const isOtherHudVash =
+    e.recordType === 'HUD_VASH_OTH_VOUCHER_TRACKING' &&
+    e.typeProvided === 'HUD_VASH_OTH_VOUCHER_TRACKING__OTHER';
+  const isOtherMovingOn =
+    e.recordType === 'C2_MOVING_ON_ASSISTANCE_PROVIDED' &&
+    e.typeProvided ===
+      'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_';
+
+  // Don't show 'other' if we have the other value
+  if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)
+    typeProvided = null;
+
+  // Don't show 'other' if we have the other value
+  if (isOtherMovingOn && e.movingOnOtherType) typeProvided = null;
+
+  return [
+    typeProvided,
+    e.otherTypeProvided,
+    e.movingOnOtherType,
+    e.subTypeProvided ? ServiceSubTypeProvidedEnum[e.subTypeProvided] : null,
+  ].filter(
+    (s) => s !== null && s !== '' && typeof s !== 'undefined'
+  ) as string[];
 };

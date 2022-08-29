@@ -5,10 +5,10 @@ import { Columns } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import {
   eventReferralResult,
-  humanizeEnum,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { EventTypeEnum } from '@/types/gqlEnums';
 import {
   EventFieldsFragment,
   GetEnrollmentEventsDocument,
@@ -20,7 +20,7 @@ const columns: Columns<EventFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (e) => humanizeEnum(e.event),
+    render: (e) => EventTypeEnum[e.event],
   },
   {
     header: 'Date',

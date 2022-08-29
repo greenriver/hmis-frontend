@@ -3,9 +3,9 @@ import { Link as RouterLink, generatePath } from 'react-router-dom';
 
 import { Columns } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import { humanizeEnum, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { RecordTypeEnum, ServiceTypeProvidedEnum } from '@/types/gqlEnums';
+import { RecordTypeEnum } from '@/types/gqlEnums';
 import {
   ServiceFieldsFragment,
   GetEnrollmentServicesDocument,
@@ -24,22 +24,21 @@ const columns: Columns<ServiceFieldsFragment>[] = [
     render: (e) => RecordTypeEnum[e.recordType],
   },
   {
-    header: 'Type Provided',
-    render: (e) => ServiceTypeProvidedEnum[e.typeProvided],
+    header: 'Details',
+    render: (e) => (
+      <Stack>
+        {serviceDetails(e).map((s) => (
+          <Typography variant='body2' sx={{ pl: 1 }}>
+            {s}
+          </Typography>
+        ))}
+      </Stack>
+    ),
   },
   {
-    header: 'Other Type Provided',
-    render: (e) =>
-      e.otherTypeProvided ? humanizeEnum(e.otherTypeProvided) : null,
-  },
-  {
-    header: 'Moving on Other Type',
-    render: (e) =>
-      e.movingOnOtherType ? humanizeEnum(e.movingOnOtherType) : null,
-  },
-  {
-    header: 'Sub Type',
-    render: (e) => (e.subTypeProvided ? humanizeEnum(e.subTypeProvided) : null),
+    header: '',
+    //TODO or faa amount
+    render: (e) => e.referralOutcome,
   },
 ];
 
