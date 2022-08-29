@@ -957,6 +957,13 @@ export type HouseholdClientFieldsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
   };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    project: { __typename?: 'Project'; projectName: string };
+  };
 };
 
 export type EnrollmentFieldsFragment = {
@@ -1156,6 +1163,13 @@ export type GetEnrollmentWithHoHQuery = {
           lastName?: string | null;
           nameSuffix?: string | null;
         };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate?: string | null;
+          exitDate?: string | null;
+          project: { __typename?: 'Project'; projectName: string };
+        };
       }>;
     } | null;
     project: { __typename?: 'Project'; projectName: string };
@@ -1321,17 +1335,6 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
-export const HouseholdClientFieldsFragmentDoc = gql`
-  fragment HouseholdClientFields on HouseholdClient {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-    }
-  }
-  ${ClientNameFragmentDoc}
-`;
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
@@ -1341,6 +1344,21 @@ export const EnrollmentFieldsFragmentDoc = gql`
       projectName
     }
   }
+`;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+    }
+    enrollment {
+      ...EnrollmentFields
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
 `;
 export const AssessmentFieldsFragmentDoc = gql`
   fragment AssessmentFields on Assessment {

@@ -4,7 +4,7 @@ import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { clientName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
@@ -66,11 +66,17 @@ const HouseholdMemberTable = ({
           },
           {
             header: 'Start Date',
-            render: () => null,
+            render: (h) =>
+              h.enrollment.entryDate
+                ? parseAndFormatDate(h.enrollment.entryDate)
+                : 'Unknown',
           },
           {
             header: 'Exit Date',
-            render: () => null,
+            render: (h) =>
+              h.enrollment.exitDate
+                ? parseAndFormatDate(h.enrollment.exitDate)
+                : 'Active',
           },
           {
             header: 'Actions',
