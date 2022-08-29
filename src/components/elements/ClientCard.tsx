@@ -1,5 +1,6 @@
 import {
   Alert,
+  Box,
   Button,
   Card,
   Grid,
@@ -95,7 +96,7 @@ const ClientCard: React.FC<Props> = ({
       </Grid>
     )}
     <Grid container sx={{ p: 1 }}>
-      <Grid item xs={5}>
+      <Grid item xs={6}>
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
             <Typography variant='h5'>{HmisUtil.clientName(client)}</Typography>
@@ -104,9 +105,19 @@ const ClientCard: React.FC<Props> = ({
             </Typography>
           </Stack>
           <Stack spacing={1} direction='row'>
-            <img alt='client' src='https://dummyimage.com/150x150/e8e8e8/aaa' />
-            <Stack spacing={0.5}>
-              <Typography>ID {client.personalId}</Typography>
+            <Box
+              component='img'
+              alt='client'
+              src='https://dummyimage.com/150x150/e8e8e8/aaa'
+              sx={{
+                height: 150,
+                width: 150,
+              }}
+            />
+            <Stack spacing={0.5} sx={{ pr: 1 }}>
+              <Typography sx={{ wordBreak: 'break-all' }}>
+                ID {client.personalId}
+              </Typography>
               {client.dob && (
                 <ClickToShow text='Date of Birth'>
                   <Typography>{HmisUtil.dob(client)}</Typography>
@@ -139,7 +150,7 @@ const ClientCard: React.FC<Props> = ({
           </Typography>
         </Stack>
       </Grid>
-      <Grid item xs={5}>
+      <Grid item xs={4}>
         <Typography variant='h6' sx={{ mb: 1 }}>
           Recent Enrollments
         </Typography>
