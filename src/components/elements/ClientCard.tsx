@@ -104,7 +104,7 @@ const ClientCard: React.FC<Props> = ({
             </Typography>
           </Stack>
           <Stack spacing={1} direction='row'>
-            <img alt='client' src='https://via.placeholder.com/150' />
+            <img alt='client' src='https://dummyimage.com/150x150/e8e8e8/aaa' />
             <Stack spacing={0.5}>
               <Typography>ID {client.personalId}</Typography>
               {client.dob && (
