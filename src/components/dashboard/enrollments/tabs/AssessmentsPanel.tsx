@@ -1,9 +1,45 @@
 import { Button, Stack, Typography } from '@mui/material';
-import { Link as RouterLink, generatePath } from 'react-router-dom';
+import { useMemo } from 'react';
+import {
+  Link as RouterLink,
+  generatePath,
+  useNavigate,
+} from 'react-router-dom';
 
-// import AssessmentsTable from '../tables/AssessmentsTable';
-
+import { Columns } from '@/components/elements/GenericTable';
+import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import { humanizeEnum, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import {
+  AssessmentFieldsFragment,
+  GetEnrollmentAssessmentsDocument,
+  GetEnrollmentAssessmentsQuery,
+  GetEnrollmentAssessmentsQueryVariables,
+} from '@/types/gqlTypes';
+
+const columns: Columns<AssessmentFieldsFragment>[] = [
+  { header: 'ID', render: 'id' },
+  {
+    header: 'Type',
+    render: (e) => humanizeEnum(e.assessmentType),
+  },
+  {
+    header: 'Level',
+    render: (e) => humanizeEnum(e.assessmentLevel),
+  },
+  {
+    header: 'Location',
+    render: (e) => e.assessmentLocation,
+  },
+  {
+    header: 'Date',
+    render: (e) => parseAndFormatDate(e.assessmentDate),
+  },
+  {
+    header: 'Last Updated',
+    render: (e) => parseAndFormatDate(e.dateUpdated),
+  },
+];
 
 const AssessmentsPanel = ({
   clientId,
@@ -12,6 +48,19 @@ const AssessmentsPanel = ({
   clientId: string;
   enrollmentId: string;
 }) => {
+  const navigate = useNavigate();
+
+  const handleRowClick = useMemo(() => {
+    return (assessment: AssessmentFieldsFragment) =>
+      navigate(
+        generatePath(DashboardRoutes.VIEW_ASSESSMENT, {
+          clientId,
+          enrollmentId,
+          assessmentId: assessment.id,
+        })
+      );
+  }, [clientId, enrollmentId, navigate]);
+
   return (
     <Stack>
       <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
@@ -30,8 +79,22 @@ const AssessmentsPanel = ({
           + Add Assessment
         </Button>
       </Stack>
-      {/* FIXME: add back when query works */}
-      {/* <AssessmentsTable clientId={clientId} enrollmentId={enrollmentId} /> */}
+      <GenericTableWithData<
+        GetEnrollmentAssessmentsQuery,
+        GetEnrollmentAssessmentsQueryVariables,
+        AssessmentFieldsFragment
+      >
+        queryVariables={{ id: enrollmentId }}
+        queryDocument={GetEnrollmentAssessmentsDocument}
+        handleRowClick={handleRowClick}
+        columns={columns}
+        toNodes={(data: GetEnrollmentAssessmentsQuery) =>
+          data.enrollment?.assessments?.nodes || []
+        }
+        toNodesCount={(data: GetEnrollmentAssessmentsQuery) =>
+          data.enrollment?.assessments?.nodesCount
+        }
+      />
     </Stack>
   );
 };

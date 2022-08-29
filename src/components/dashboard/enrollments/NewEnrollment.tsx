@@ -8,11 +8,13 @@ import {
 } from 'react-router-dom';
 
 // import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import AddHouseholdMembers from './AddHouseholdMembers';
+
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { Client } from '@/types/gqlTypes';
 
@@ -41,7 +43,7 @@ const NewEnrollment = () => {
         <Grid item xs={9}>
           <Typography variant='h5' sx={{ mb: 2 }}>
             <b>Start new enrollment</b>
-            {` for ${HmisUtil.clientName(client)}`}
+            {` for ${clientName(client)}`}
           </Typography>
 
           <Paper sx={{ p: 2, mb: 2 }}>
@@ -69,9 +71,7 @@ const NewEnrollment = () => {
             <Typography variant='h6' sx={{ mb: 2 }}>
               Add Household Members
             </Typography>
-
-            <Typography>Search for a Client</Typography>
-            <Typography>Previously Associated Members</Typography>
+            <AddHouseholdMembers />
           </Paper>
 
           <Button

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import AssessmentsPanel from './tabs/AssessmentsPanel';
+import EventsPanel from './tabs/EventsPanel';
+import ServicesPanel from './tabs/ServicesPanel';
 
 const tabs = [
   {
@@ -12,9 +14,11 @@ const tabs = [
   },
   {
     label: 'Services',
+    Component: ServicesPanel,
   },
   {
     label: 'Events',
+    Component: EventsPanel,
   },
   {
     label: 'Case Notes',

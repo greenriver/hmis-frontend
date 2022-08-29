@@ -21,6 +21,9 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
   }
+  enrollment {
+    ...EnrollmentFields
+  }
 }
 
 fragment EnrollmentFields on Enrollment {
@@ -52,6 +55,21 @@ fragment EventFields on Event {
   referralCaseManageAfter
   referralResult
   resultDate
+  dateCreated
+  dateUpdated
+  dateDeleted
+}
+
+fragment ServiceFields on Service {
+  id
+  dateProvided
+  movingOnOtherType
+  recordType
+  referralOutcome
+  subTypeProvided
+  typeProvided
+  otherTypeProvided
+
   dateCreated
   dateUpdated
   dateDeleted
