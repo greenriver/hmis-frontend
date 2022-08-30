@@ -7,6 +7,7 @@ import { Routes, DashboardRoutes } from './routes';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import NewAssessment from '@/components/dashboard/enrollments/NewAssessment';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
+import ViewAssessment from '@/components/dashboard/enrollments/ViewAssessment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
 import ErrorFallback from '@/components/elements/ErrorFallback';
@@ -51,6 +52,10 @@ export const protectedRoutes = [
           {
             path: DashboardRoutes.NEW_ASSESSMENT,
             element: <NewAssessment />,
+          },
+          {
+            path: DashboardRoutes.VIEW_ASSESSMENT,
+            element: <ViewAssessment />,
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,

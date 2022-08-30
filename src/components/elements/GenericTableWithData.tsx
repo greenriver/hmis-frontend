@@ -72,7 +72,7 @@ const GenericTableWithData = <
   }, [data, page, rowsPerPage, toNodesCount]);
 
   if (data && toNodesCount(data) === 0) {
-    return <Typography>No assessments</Typography>;
+    return <Typography>None found.</Typography>;
   }
 
   return (
