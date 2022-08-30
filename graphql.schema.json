@@ -1,0 +1,5535 @@
+{
+  "__schema": {
+    "queryType": {
+      "name": "Query"
+    },
+    "mutationType": {
+      "name": "Mutation"
+    },
+    "subscriptionType": null,
+    "types": [
+      {
+        "kind": "OBJECT",
+        "name": "Assessment",
+        "description": "HUD Assessment",
+        "fields": [
+          {
+            "name": "assessmentDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentLevel",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "AssessmentLevel",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentLocation",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "AssessmentType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateDeleted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "prioritizationStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "PrioritizationStatus",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AssessmentLevel",
+        "description": "HUD AssessmentLevel (4.19.4)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CRISIS_NEEDS_ASSESSMENT",
+            "description": "(1) Crisis Needs Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOUSING_NEEDS_ASSESSMENT",
+            "description": "(2) Housing Needs Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "AssessmentType",
+        "description": "HUD AssessmentType (4.19.3)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "IN_PERSON",
+            "description": "(3) In Person",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PHONE",
+            "description": "(1) Phone",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VIRTUAL",
+            "description": "(2) Virtual",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "AssessmentsPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Assessment",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Boolean",
+        "description": "The `Boolean` scalar type represents `true` or `false`.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Client",
+        "description": "HUD Client",
+        "fields": [
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dob",
+            "description": "Date of birth as format yyyy-mm-dd",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollments",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "EnrollmentSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "EnrollmentsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "firstName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lastName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nameSuffix",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "personalId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "preferredName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pronouns",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ssnSerial",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ClientInput",
+        "description": "HMIS Client input",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "dob",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dobDataQuality",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "DOBDataQuality",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ethnicity",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "Ethnicity",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "firstName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "gender",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Gender",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lastName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "middleName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nameDataQuality",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "NameDataQuality",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nameSuffix",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "preferredName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "race",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "Race",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ssn",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ssnDataQuality",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "SSNDataQuality",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "veteranStatus",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "VeteranStatus",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ClientSearchInput",
+        "description": "HMIS Client search input",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "dob",
+            "description": "Date of birth as format yyyy-mm-dd",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "firstName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Client primary key",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "lastName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizations",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "personalId",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "preferredName",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projects",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ssnSerial",
+            "description": "Last 4 digits of SSN",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "textSearch",
+            "description": "Omnisearch string",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "warehouseId",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ClientSortOption",
+        "description": "HUD Client Sorting Options",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "LAST_NAME_ASC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAST_NAME_DESC",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ClientsPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Client",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "CreateClientInput",
+        "description": "Autogenerated input type of CreateClient",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "input",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "INPUT_OBJECT",
+                "name": "ClientInput",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CreateClientPayload",
+        "description": "Autogenerated return type of CreateClient",
+        "fields": [
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Client",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "DOBDataQuality",
+        "description": "HUD DOB Data Quality (3.03.2)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED",
+            "description": "(2) Approximate or partial DOB reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DOB_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DOB_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DOB_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DOB_FULL_DOB_REPORTED",
+            "description": "(1) Full DOB reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Enrollment",
+        "description": "HUD Enrollment",
+        "fields": [
+          {
+            "name": "assessments",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "AssessmentsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "entryDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "events",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "EventsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "exitDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "household",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Household",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "project",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Project",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "services",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ServicesPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "EnrollmentSortOption",
+        "description": "HUD Enrollment Sorting Options",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MOST_RECENT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "EnrollmentsPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Enrollment",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Ethnicity",
+        "description": "HUD Ethnicity (3.05.1)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ETHNICITY_HISPANIC_LATIN_A_O_X_",
+            "description": "(1) Hispanic/Latin(a)(o)(x)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_",
+            "description": "(0) Non-Hispanic/Non-Latin(a)(o)(x)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ETHNICITY_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ETHNICITY_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ETHNICITY_UNKNOWN",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Event",
+        "description": "HUD Event",
+        "fields": [
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateDeleted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "event",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "EventType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "eventDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "locationCrisisOrPhHousing",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "probSolDivRrResult",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ProbSolDivRRResult",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referralCaseManageAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReferralCaseManageAfter",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referralResult",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReferralResult",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resultDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "EventType",
+        "description": "HUD EventType (4.20.2)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE",
+            "description": "(2) Problem Solving/Diversion/Rapid Resolution intervention or service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_A_HOUSING_STABILITY_VOUCHER",
+            "description": "(18) Referral to a Housing Stability Voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_EMERGENCY_ASSISTANCE_FLEX_FUND_FURNITURE_ASSISTANCE",
+            "description": "(16) Referral to emergency assistance/flex fund/furniture assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_EMERGENCY_HOUSING_VOUCHER_EHV_",
+            "description": "(17) Referral to Emergency Housing Voucher (EHV)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_EMERGENCY_SHELTER_BED_OPENING",
+            "description": "(10) Referral to Emergency Shelter bed opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_HOUSING_NAVIGATION_PROJECT_OR_SERVICES",
+            "description": "(7) Referral to Housing Navigation project or services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_JOINT_TH_RRH_PROJECT_UNIT_RESOURCE_OPENING",
+            "description": "(12) Referral to Joint TH-RRH project/unit/resource opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_NON_CONTINUUM_SERVICES_INELIGIBLE_FOR_CONTINUUM_SERVICES",
+            "description": "(8) Referral to Non-continuum services: Ineligible for continuum services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES",
+            "description": "(9) Referral to Non-continuum services: No availability in continuum services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_OTHER_PH_PROJECT_UNIT_RESOURCE_OPENING",
+            "description": "(15) Referral to Other PH project/unit/resource opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_POST_PLACEMENT_FOLLOW_UP_CASE_MANAGEMENT",
+            "description": "(5) Referral to Post-placement/ follow-up case management",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_PREVENTION_ASSISTANCE_PROJECT",
+            "description": "(1) Referral to Prevention Assistance project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_PSH_PROJECT_RESOURCE_OPENING",
+            "description": "(14) Referral to PSH project resource opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_RRH_PROJECT_RESOURCE_OPENING",
+            "description": "(13) Referral to RRH project resource opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_CRISIS_NEEDS_ASSESSMENT",
+            "description": "(3) Referral to scheduled Coordinated Entry Crisis Needs Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_HOUSING_NEEDS_ASSESSMENT",
+            "description": "(4) Referral to scheduled Coordinated Entry Housing Needs Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_STREET_OUTREACH_PROJECT_OR_SERVICES",
+            "description": "(6) Referral to Street Outreach project or services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "REFERRAL_TO_TRANSITIONAL_HOUSING_BED_UNIT_OPENING",
+            "description": "(11) Referral to Transitional Housing bed/unit opening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "EventsPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Event",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Float",
+        "description": "The `Float` scalar type represents signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point).",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Gender",
+        "description": "HUD Gender (1.7)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "GENDER_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_FEMALE",
+            "description": "(0) Female",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_MALE",
+            "description": "(1) Male",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_NO_SINGLE_GENDER",
+            "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_QUESTIONING",
+            "description": "(6) Questioning",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_TRANSGENDER",
+            "description": "(5) Transgender",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Household",
+        "description": "HUD Household",
+        "fields": [
+          {
+            "name": "householdClients",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "HouseholdClient",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "HouseholdClient",
+        "description": "HUD Client within a Household",
+        "fields": [
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "relationshipToHoH",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "RelationshipToHoH",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "ID",
+        "description": "The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `\"4\"`) or integer (such as `4`) input value will be accepted as an ID.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "ISO8601Date",
+        "description": "An ISO 8601-encoded date",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "ISO8601DateTime",
+        "description": "An ISO 8601-encoded datetime",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "Int",
+        "description": "The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "JsonObject",
+        "description": "Arbitrary JSON Type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Mutation",
+        "description": null,
+        "fields": [
+          {
+            "name": "createClient",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": "Parameters for CreateClient",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "CreateClientInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CreateClientPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "NameDataQuality",
+        "description": "HUD NameDataQuality (3.01.5)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NAME_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_FULL_NAME_REPORTED",
+            "description": "(1) Full name reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
+            "description": "(2) Partial, street name, or code name reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Organization",
+        "description": "HUD Organization",
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizationName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projects",
+            "description": "Get a list of projects for this organization",
+            "args": [
+              {
+                "name": "projectTypes",
+                "description": null,
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "ProjectType",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "ProjectSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Project",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "OrganizationSortOption",
+        "description": "HUD Organization Sorting Options",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NAME",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PATHReferralOutcome",
+        "description": "HUD PATHReferralOutcome (P2.A)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ATTAINED",
+            "description": "(1) Attained",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NOT_ATTAINED",
+            "description": "(2) Not attained",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNKNOWN",
+            "description": "(3) Unknown",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "PrioritizationStatus",
+        "description": "HUD PrioritizationStatus (4.19.7)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NOT_PLACED_ON_PRIORITIZATION_LIST",
+            "description": "(2) Not placed on prioritization list",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PLACED_ON_PRIORITIZATION_LIST",
+            "description": "(1) Placed on prioritization list",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProbSolDivRRResult",
+        "description": "HUD ProbSolDivRRResult (1.7)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES",
+            "description": "(1) Yes",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Project",
+        "description": "HUD Project",
+        "fields": [
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organization",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Organization",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ProjectType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProjectSortOption",
+        "description": "HUD Project Sorting Options",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NAME",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORGANIZATION_AND_NAME",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ProjectType",
+        "description": "HUD Project Types",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CE",
+            "description": "Coordinated Entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DAY_SHELTER",
+            "description": "Day Shelter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ES",
+            "description": "Emergency Shelter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OPH",
+            "description": "Permanent Housing Only",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PH",
+            "description": "Permanent Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PREVENTION",
+            "description": "Homelessness Prevention",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PSH",
+            "description": "Permanent Supportive Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RRH",
+            "description": "Rapid Re-Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICES_ONLY",
+            "description": "Services Only",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SH",
+            "description": "Safe Haven",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SO",
+            "description": "Street Outreach",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TH",
+            "description": "Transitional Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Query",
+        "description": null,
+        "fields": [
+          {
+            "name": "client",
+            "description": "Client lookup",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Client",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientSearch",
+            "description": "Search for clients",
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "ClientSearchInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "ClientSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ClientsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": "Enrollment lookup",
+            "args": [
+              {
+                "name": "id",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Enrollment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizations",
+            "description": "Get a list of organizations",
+            "args": [
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "OrganizationSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Organization",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projects",
+            "description": "Get a list of projects",
+            "args": [
+              {
+                "name": "projectTypes",
+                "description": null,
+                "type": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "ProjectType",
+                      "ofType": null
+                    }
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "ProjectSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Project",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "Race",
+        "description": "HUD Race (1.7)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "RACE_AM_IND_AK_NATIVE",
+            "description": "(AmIndAKNative) American Indian, Alaska Native, or Indigenous",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_ASIAN",
+            "description": "(Asian) Asian or Asian American",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_BLACK_AF_AMERICAN",
+            "description": "(BlackAfAmerican) Black, African American, or African",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_NATIVE_HI_PACIFIC",
+            "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_UNKNOWN",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RACE_WHITE",
+            "description": "(White) White",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "RecordType",
+        "description": "HUD RecordType (1.4)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "BED_NIGHT",
+            "description": "(200) Bed night",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED",
+            "description": "(300) C2 Moving On Assistance Provided",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE",
+            "description": "(151) HOPWA financial assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE",
+            "description": "(143) HOPWA service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING",
+            "description": "(210) HUD-VASH OTH voucher tracking",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL",
+            "description": "(161) PATH referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE",
+            "description": "(141) PATH service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_REFERRAL",
+            "description": "(162) RHY referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS",
+            "description": "(142) RHY service connections",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE",
+            "description": "(152) SSVF financial assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE",
+            "description": "(144) SSVF service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReferralCaseManageAfter",
+        "description": "HUD ReferralCaseManageAfter (1.7)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES",
+            "description": "(1) Yes",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReferralResult",
+        "description": "HUD ReferralResult (4.20.D)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED",
+            "description": "(1) Successful referral: client accepted",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED",
+            "description": "(2) Unsuccessful referral: client rejected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED",
+            "description": "(3) Unsuccessful referral: provider rejected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "RelationshipToHoH",
+        "description": "HUD RelationshipToHoH (3.15.1)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CHILD",
+            "description": "(2) Child",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER_RELATIVE",
+            "description": "(4) Other relative",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELF_HEAD_OF_HOUSEHOLD_",
+            "description": "(1) Self (head of household)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SPOUSE_OR_PARTNER",
+            "description": "(3) Spouse or partner",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNRELATED_HOUSEHOLD_MEMBER",
+            "description": "(5) Unrelated household member",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SSNDataQuality",
+        "description": "HUD SSN Data Quality (3.02.2)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SSN_APPROXIMATE_OR_PARTIAL_SSN_REPORTED",
+            "description": "(2) Approximate or partial SSN reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSN_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSN_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSN_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSN_FULL_SSN_REPORTED",
+            "description": "(1) Full SSN reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "Service",
+        "description": "HUD Service",
+        "fields": [
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateDeleted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601Date",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "faaAmount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "movingOnOtherType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "otherTypeProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recordType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "RecordType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referralOutcome",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "PATHReferralOutcome",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subTypeProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ServiceSubTypeProvided",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "typeProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ServiceTypeProvided",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ServiceSubTypeProvided",
+        "description": "HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
+            "description": "(12) Child care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES",
+            "description": "(2) Daily living services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES",
+            "description": "(6) Fiduciary and representative payee services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES",
+            "description": "(1) Health care services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING",
+            "description": "(13) Housing counseling",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
+            "description": "(5) Income support services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT",
+            "description": "(7) Legal services - child support",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION",
+            "description": "(8) Legal services - eviction prevention",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER",
+            "description": "(11) Legal services - other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES",
+            "description": "(9) Legal services - outstanding fines and penalties",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE",
+            "description": "(10) Legal services - restore / acquire driver's license",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES",
+            "description": "(3) Personal financial planning services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES",
+            "description": "(4) Transportation services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE",
+            "description": "(3) Educational assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES",
+            "description": "(2) Employment and training services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES",
+            "description": "(4) Health care services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING",
+            "description": "(1) VA vocational and rehabilitation counseling",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
+            "description": "(10) Child care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES",
+            "description": "(4) Fiduciary and representative payee services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING",
+            "description": "(11) Housing counseling",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
+            "description": "(3) Income support services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT",
+            "description": "(5) Legal services - child support",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION",
+            "description": "(6) Legal services - eviction prevention",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER",
+            "description": "(9) Legal services - other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES",
+            "description": "(7) Legal services - outstanding fines and penalties",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE",
+            "description": "(8) Legal services - restore / acquire driver's license",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES",
+            "description": "(1) Personal financial planning services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES",
+            "description": "(2) Transportation services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ServiceTypeProvided",
+        "description": "HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "BED_NIGHT__BED_NIGHT",
+            "description": "(200) BedNight",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES_",
+            "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT",
+            "description": "(4) Housing referral/placement",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT_",
+            "description": "(3) Non-financial assistance for Moving On (e.g., housing navigation, transition support)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_",
+            "description": "(5) Other (please specify)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE",
+            "description": "(1) Subsidized housing application assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE",
+            "description": "(7) Mortgage assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE",
+            "description": "(1) Rental assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS",
+            "description": "(2) Security deposits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS",
+            "description": "(3) Utility deposits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS",
+            "description": "(4) Utility payments",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE",
+            "description": "(1) Adult day care and personal assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__CASE_MANAGEMENT",
+            "description": "(2) Case management",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__CHILD_CARE",
+            "description": "(3) Child care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES",
+            "description": "(4) Criminal justice/legal services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__EDUCATION",
+            "description": "(5) Education",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__EMPLOYMENT_AND_TRAINING_SERVICES",
+            "description": "(6) Employment and training services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__FOOD_MEALS_NUTRITIONAL_SERVICES",
+            "description": "(7) Food/meals/nutritional services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__HEALTH_MEDICAL_CARE",
+            "description": "(8) Health/medical care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__LIFE_SKILLS_TRAINING",
+            "description": "(9) Life skills training",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING",
+            "description": "(10) Mental health care/counseling",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__OTHER_HOPWA_FUNDED_SERVICE",
+            "description": "(14) Other HOPWA funded service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT",
+            "description": "(11) Outreach and/or engagement",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT",
+            "description": "(12) Substance abuse services/treatment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOPWA_SERVICE__TRANSPORTATION",
+            "description": "(13) Transportation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__OTHER",
+            "description": "(12) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA",
+            "description": "(1) Referral package forwarded to PHA",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER",
+            "description": "(10) Veteran exited - family maintained the voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER",
+            "description": "(11) Veteran exited - prior to ever receiving a voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED",
+            "description": "(9) Veteran exited - voucher was returned",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA",
+            "description": "(2) Voucher denied by PHA",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING",
+            "description": "(5) Voucher in use - veteran moved into housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA",
+            "description": "(3) Voucher issued by PHA",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED",
+            "description": "(4) Voucher revoked or expired",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_ADMINISTRATIVELY_ABSORBED_BY_NEW_PHA",
+            "description": "(7) Voucher was administratively absorbed by new PHA",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER",
+            "description": "(8) Voucher was converted to Housing Choice Voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY",
+            "description": "(6) Voucher was ported locally",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH",
+            "description": "(1) Community mental health",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__EDUCATIONAL_SERVICES",
+            "description": "(5) Educational services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__EMPLOYMENT_ASSISTANCE",
+            "description": "(9) Employment assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__HOUSING_SERVICES",
+            "description": "(6) Housing services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__INCOME_ASSISTANCE",
+            "description": "(8) Income assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__JOB_TRAINING",
+            "description": "(4) Job training",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__MEDICAL_INSURANCE",
+            "description": "(10) Medical insurance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__PERMANENT_HOUSING",
+            "description": "(7) Permanent housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE",
+            "description": "(3) Primary health/dental care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__SUBSTANCE_USE_TREATMENT",
+            "description": "(2) Substance use treatment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_REFERRAL__TEMPORARY_HOUSING",
+            "description": "(11) Temporary housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__CASE_MANAGEMENT",
+            "description": "(6) Case management",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__CLINICAL_ASSESSMENT",
+            "description": "(14) Clinical assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__COMMUNITY_MENTAL_HEALTH",
+            "description": "(4) Community mental health",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__HABILITATION_REHABILITATION",
+            "description": "(3) Habilitation/rehabilitation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__HOUSING_ELIGIBILITY_DETERMINATION",
+            "description": "(10) Housing eligibility determination",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__HOUSING_MINOR_RENOVATION",
+            "description": "(8) Housing minor renovation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__HOUSING_MOVING_ASSISTANCE",
+            "description": "(9) Housing moving assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION",
+            "description": "(12) One-time rent for eviction prevention",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__RESIDENTIAL_SUPPORTIVE_SERVICES",
+            "description": "(7) Residential supportive services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__RE_ENGAGEMENT",
+            "description": "(1) Re-engagement",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__SCREENING",
+            "description": "(2) Screening",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__SECURITY_DEPOSITS",
+            "description": "(11) Security deposits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_SERVICE__SUBSTANCE_USE_TREATMENT",
+            "description": "(5) Substance use treatment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL_",
+            "description": "(2) Community service/service learning (CSL)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES",
+            "description": "(7) Criminal justice /legal services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__EDUCATION",
+            "description": "(5) Education",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__EMPLOYMENT_AND_TRAINING_SERVICES",
+            "description": "(6) Employment and training services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__HEALTH_MEDICAL_CARE",
+            "description": "(14) Health/medical care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES",
+            "description": "(26) Home-based Services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING",
+            "description": "(8) Life skills training",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN",
+            "description": "(10) Parenting education for youth with children",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE",
+            "description": "(12) Post-natal care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS_",
+            "description": "(27) Post-natal newborn care (wellness exams; immunizations)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE",
+            "description": "(13) Pre-natal care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__STD_TESTING",
+            "description": "(28) STD Testing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES",
+            "description": "(29) Street-based Services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_PREVENTION_SERVICES",
+            "description": "(18) Substance use disorder/Prevention Services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_TREATMENT",
+            "description": "(17) Substance use disorder treatment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE",
+            "description": "(10) Child care",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE",
+            "description": "(14) Emergency housing assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE",
+            "description": "(15) Extended Shallow Subsidy - Rental Assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE",
+            "description": "(16) Food Assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE",
+            "description": "(12) General housing stability assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES",
+            "description": "(11) General housing stability assistance - emergency supplies",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS",
+            "description": "(5) Moving costs",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE",
+            "description": "(1) Rental assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT",
+            "description": "(2) Security deposit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS",
+            "description": "(8) Transportation services: tokens/vouchers",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE",
+            "description": "(9) Transportation services: vehicle repair/maintenance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT",
+            "description": "(3) Utility deposit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE",
+            "description": "(4) Utility fee payment assistance",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS",
+            "description": "(4) Assistance obtaining/coordinating other public benefits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS",
+            "description": "(3) Assistance obtaining VA benefits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__CASE_MANAGEMENT_SERVICES",
+            "description": "(2) Case management services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS",
+            "description": "(5) Direct provision of other public benefits",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA",
+            "description": "(6) Other (non-TFA) supportive service approved by VA",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSVF_SERVICE__OUTREACH_SERVICES",
+            "description": "(1) Outreach services",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ServicesPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "Service",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "SCALAR",
+        "name": "String",
+        "description": "The `String` scalar type represents textual data, represented as UTF-8 character sequences. The String type is most often used by GraphQL to represent free-form human-readable text.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ValidationError",
+        "description": null,
+        "fields": [
+          {
+            "name": "attribute",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fullMessage",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "message",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "options",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "VeteranStatus",
+        "description": "HUD Veteran Status (1.8)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "VETERAN_STATUS_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VETERAN_STATUS_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VETERAN_STATUS_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VETERAN_STATUS_NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VETERAN_STATUS_YES",
+            "description": "(1) Yes",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Directive",
+        "description": "A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.\n\nIn some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.",
+        "fields": [
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isRepeatable",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "locations",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "ENUM",
+                    "name": "__DirectiveLocation",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "args",
+            "description": null,
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "__InputValue",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "__DirectiveLocation",
+        "description": "A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "QUERY",
+            "description": "Location adjacent to a query operation.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MUTATION",
+            "description": "Location adjacent to a mutation operation.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUBSCRIPTION",
+            "description": "Location adjacent to a subscription operation.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FIELD",
+            "description": "Location adjacent to a field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FRAGMENT_DEFINITION",
+            "description": "Location adjacent to a fragment definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FRAGMENT_SPREAD",
+            "description": "Location adjacent to a fragment spread.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INLINE_FRAGMENT",
+            "description": "Location adjacent to an inline fragment.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VARIABLE_DEFINITION",
+            "description": "Location adjacent to a variable definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SCHEMA",
+            "description": "Location adjacent to a schema definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SCALAR",
+            "description": "Location adjacent to a scalar definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OBJECT",
+            "description": "Location adjacent to an object type definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FIELD_DEFINITION",
+            "description": "Location adjacent to a field definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ARGUMENT_DEFINITION",
+            "description": "Location adjacent to an argument definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTERFACE",
+            "description": "Location adjacent to an interface definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNION",
+            "description": "Location adjacent to a union definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENUM",
+            "description": "Location adjacent to an enum definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENUM_VALUE",
+            "description": "Location adjacent to an enum value definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INPUT_OBJECT",
+            "description": "Location adjacent to an input object type definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INPUT_FIELD_DEFINITION",
+            "description": "Location adjacent to an input object field definition.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__EnumValue",
+        "description": "One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string.",
+        "fields": [
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isDeprecated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deprecationReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Field",
+        "description": "Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type.",
+        "fields": [
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "args",
+            "description": null,
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "__InputValue",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "__Type",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isDeprecated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deprecationReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__InputValue",
+        "description": "Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value.",
+        "fields": [
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "__Type",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "defaultValue",
+            "description": "A GraphQL-formatted string representing the default value for this input value.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "isDeprecated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deprecationReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Schema",
+        "description": "A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations.",
+        "fields": [
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "types",
+            "description": "A list of all types supported by this server.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "__Type",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "queryType",
+            "description": "The type that query operations will be rooted at.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "__Type",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "mutationType",
+            "description": "If this server supports mutation, the type that mutation operations will be rooted at.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "__Type",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "subscriptionType",
+            "description": "If this server support subscription, the type that subscription operations will be rooted at.",
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "__Type",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "directives",
+            "description": "A list of all directives supported by this server.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "__Directive",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "__Type",
+        "description": "The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.\n\nDepending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByURL`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.",
+        "fields": [
+          {
+            "name": "kind",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "__TypeKind",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "description",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "specifiedByURL",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fields",
+            "description": null,
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "__Field",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "interfaces",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "__Type",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "possibleTypes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "__Type",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enumValues",
+            "description": null,
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "__EnumValue",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "inputFields",
+            "description": null,
+            "args": [
+              {
+                "name": "includeDeprecated",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false",
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "__InputValue",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ofType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "__Type",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "__TypeKind",
+        "description": "An enum describing what kind of type a given `__Type` is.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "SCALAR",
+            "description": "Indicates this type is a scalar.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OBJECT",
+            "description": "Indicates this type is an object. `fields` and `interfaces` are valid fields.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTERFACE",
+            "description": "Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNION",
+            "description": "Indicates this type is a union. `possibleTypes` is a valid field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENUM",
+            "description": "Indicates this type is an enum. `enumValues` is a valid field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INPUT_OBJECT",
+            "description": "Indicates this type is an input object. `inputFields` is a valid field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LIST",
+            "description": "Indicates this type is a list. `ofType` is a valid field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NON_NULL",
+            "description": "Indicates this type is a non-null. `ofType` is a valid field.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      }
+    ],
+    "directives": [
+      {
+        "name": "deprecated",
+        "description": "Marks an element of a GraphQL schema as no longer supported.",
+        "isRepeatable": false,
+        "locations": [
+          "ARGUMENT_DEFINITION",
+          "ENUM_VALUE",
+          "FIELD_DEFINITION",
+          "INPUT_FIELD_DEFINITION"
+        ],
+        "args": [
+          {
+            "name": "reason",
+            "description": "Explains why this element was deprecated, usually also including a suggestion for how to access supported similar data. Formatted using the Markdown syntax, as specified by [CommonMark](https://commonmark.org/).",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": "\"No longer supported\"",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ]
+      },
+      {
+        "name": "include",
+        "description": "Directs the executor to include this field or fragment only when the `if` argument is true.",
+        "isRepeatable": false,
+        "locations": ["FIELD", "FRAGMENT_SPREAD", "INLINE_FRAGMENT"],
+        "args": [
+          {
+            "name": "if",
+            "description": "Included when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ]
+      },
+      {
+        "name": "skip",
+        "description": "Directs the executor to skip this field or fragment when the `if` argument is true.",
+        "isRepeatable": false,
+        "locations": ["FIELD", "FRAGMENT_SPREAD", "INLINE_FRAGMENT"],
+        "args": [
+          {
+            "name": "if",
+            "description": "Skipped when true.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ]
+      },
+      {
+        "name": "specifiedBy",
+        "description": "Exposes a URL that specifies the behavior of this scalar.",
+        "isRepeatable": false,
+        "locations": ["SCALAR"],
+        "args": [
+          {
+            "name": "url",
+            "description": "The URL that specifies the behavior of this scalar.",
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,20 +1,55 @@
 import { Button, Grid, Paper, Typography } from '@mui/material';
+import { useMemo } from 'react';
 import {
-  useNavigate,
-  useOutletContext,
   Link as RouterLink,
   generatePath,
+  useParams,
+  useNavigate,
 } from 'react-router-dom';
 
-import GenericTable from '@/components/elements/GenericTable';
+import { Columns } from '@/components/elements/GenericTable';
+import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client, Enrollment } from '@/types/gqlTypes';
+import {
+  EnrollmentFieldsFragment,
+  GetClientEnrollmentsDocument,
+  GetClientEnrollmentsQuery,
+  GetClientEnrollmentsQueryVariables,
+} from '@/types/gqlTypes';
+
+const columns: Columns<EnrollmentFieldsFragment>[] = [
+  { header: 'ID', render: 'id' },
+  {
+    header: 'Project',
+    render: (e) => e.project.projectName,
+  },
+  {
+    header: 'Start Date',
+    render: (e) =>
+      e.entryDate ? HmisUtil.parseAndFormatDate(e.entryDate) : 'Unknown',
+  },
+  {
+    header: 'End Date',
+    render: (e) =>
+      e.exitDate ? HmisUtil.parseAndFormatDate(e.exitDate) : 'Active',
+  },
+];
 
 const AllEnrollments = () => {
-  const { client } = useOutletContext<{ client: Client | null }>();
+  const { clientId } = useParams() as { clientId: string };
+
   const navigate = useNavigate();
-  if (!client) throw Error('Missing client');
+
+  const handleRowClick = useMemo(() => {
+    return (enrollment: EnrollmentFieldsFragment) =>
+      navigate(
+        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          clientId,
+          enrollmentId: enrollment.id,
+        })
+      );
+  }, [clientId, navigate]);
 
   return (
     <Grid container spacing={4}>
@@ -23,40 +58,22 @@ const AllEnrollments = () => {
           <Typography variant='h6' sx={{ mb: 2 }}>
             Enrollments
           </Typography>
-          {client.enrollments.nodesCount === 0 && (
-            <Typography>No enrollments</Typography>
-          )}
-          {client.enrollments.nodesCount !== 0 && (
-            <GenericTable<Enrollment>
-              rows={client.enrollments.nodes}
-              handleRowClick={(enrollment) =>
-                navigate(
-                  generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                    clientId: client.id,
-                    enrollmentId: enrollment.id,
-                  })
-                )
-              }
-              columns={[
-                { header: 'ID', render: 'id' },
-                { header: 'Project', render: (e) => e.project.projectName },
-                {
-                  header: 'Start Date',
-                  render: (e) =>
-                    e.entryDate
-                      ? HmisUtil.parseAndFormatDate(e.entryDate)
-                      : 'Unknown',
-                },
-                {
-                  header: 'End Date',
-                  render: (e) =>
-                    e.exitDate
-                      ? HmisUtil.parseAndFormatDate(e.exitDate)
-                      : 'Active',
-                },
-              ]}
-            />
-          )}
+          <GenericTableWithData<
+            GetClientEnrollmentsQuery,
+            GetClientEnrollmentsQueryVariables,
+            EnrollmentFieldsFragment
+          >
+            queryVariables={{ id: clientId }}
+            queryDocument={GetClientEnrollmentsDocument}
+            handleRowClick={handleRowClick}
+            columns={columns}
+            toNodes={(data: GetClientEnrollmentsQuery) =>
+              data.client?.enrollments?.nodes || []
+            }
+            toNodesCount={(data: GetClientEnrollmentsQuery) =>
+              data.client?.enrollments?.nodesCount
+            }
+          />
         </Paper>
       </Grid>
       <Grid item xs>
@@ -69,7 +86,7 @@ const AllEnrollments = () => {
             color='secondary'
             component={RouterLink}
             to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
-              clientId: client.id,
+              clientId,
             })}
           >
             + Add Enrollment

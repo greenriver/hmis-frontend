@@ -11,9 +11,9 @@ generates:
       scalars:
         ISO8601DateTime: string
         ISO8601Date: string
-  # ./graphql.schema.json:
-  #   plugins:
-  #     - 'introspection'
-  ./fragmentTypes.json:
+  ./graphql.schema.json:
     plugins:
-      - 'fragment-matcher'
+      - 'introspection'
+  # ./src/types/fragmentTypes.json:
+  #   plugins:
+  #     - 'fragment-matcher'

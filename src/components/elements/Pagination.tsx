@@ -4,8 +4,32 @@ import {
   Pagination as MuiPagination,
   PaginationProps,
   GridProps,
+  SxProps,
 } from '@mui/material';
 import React from 'react';
+
+export const PaginationSummary = ({
+  limit,
+  offset,
+  totalEntries,
+  itemName,
+  sx,
+}: {
+  limit: number;
+  offset: number;
+  totalEntries: number;
+  itemName?: string;
+  sx?: SxProps;
+}) => {
+  if (totalEntries < 1) return null;
+
+  const start = offset + 1;
+  const end = Math.min(totalEntries, offset + limit);
+  const range = start === end ? start : `${start}-${end}`;
+  const total = totalEntries.toLocaleString('en-US');
+  const text = `${range} of ${total} ${itemName || 'items'}`;
+  return <Typography sx={sx}>{text}</Typography>;
+};
 
 interface Props extends Omit<PaginationProps, 'count' | 'page' | 'onChange'> {
   limit: number;
@@ -34,10 +58,6 @@ const Pagination: React.FC<Props> = ({
   ) => {
     setOffset((value - 1) * limit);
   };
-  const text = `${offset + 1}-${Math.min(
-    totalEntries,
-    offset + limit
-  )} of ${totalEntries} ${itemName || 'items'}`;
 
   return (
     <Grid
@@ -46,7 +66,12 @@ const Pagination: React.FC<Props> = ({
       alignItems='center'
       {...gridProps}
     >
-      {totalEntries > 0 && <Typography>{text}</Typography>}
+      <PaginationSummary
+        limit={limit}
+        offset={offset}
+        totalEntries={totalEntries}
+        itemName={itemName}
+      />
       {pageCount > 1 && (
         <MuiPagination
           count={pageCount}

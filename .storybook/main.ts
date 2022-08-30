@@ -26,7 +26,6 @@ const config: StorybookViteConfig = {
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
-      // propFilter: () => true,
       propFilter: (prop: any) => {
         return prop.parent
           ? prop.parent.name !== 'DOMAttributes' &&

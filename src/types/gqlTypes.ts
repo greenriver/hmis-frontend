@@ -27,6 +27,51 @@ export type Scalars = {
   JsonObject: any;
 };
 
+/** HUD Assessment */
+export type Assessment = {
+  __typename?: 'Assessment';
+  assessmentDate: Scalars['ISO8601DateTime'];
+  assessmentLevel: AssessmentLevel;
+  assessmentLocation: Scalars['String'];
+  assessmentType: AssessmentType;
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  enrollment: Enrollment;
+  id: Scalars['ID'];
+  prioritizationStatus: PrioritizationStatus;
+};
+
+/** HUD AssessmentLevel (4.19.4) */
+export enum AssessmentLevel {
+  /** (1) Crisis Needs Assessment */
+  CrisisNeedsAssessment = 'CRISIS_NEEDS_ASSESSMENT',
+  /** (2) Housing Needs Assessment */
+  HousingNeedsAssessment = 'HOUSING_NEEDS_ASSESSMENT',
+}
+
+/** HUD AssessmentType (4.19.3) */
+export enum AssessmentType {
+  /** (3) In Person */
+  InPerson = 'IN_PERSON',
+  /** (1) Phone */
+  Phone = 'PHONE',
+  /** (2) Virtual */
+  Virtual = 'VIRTUAL',
+}
+
+export type AssessmentsPaginated = {
+  __typename?: 'AssessmentsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Assessment>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
@@ -54,18 +99,18 @@ export type ClientEnrollmentsArgs = {
 /** HMIS Client input */
 export type ClientInput = {
   dob?: InputMaybe<Scalars['String']>;
-  dobQuality?: InputMaybe<DobDataQuality>;
+  dobDataQuality?: InputMaybe<DobDataQuality>;
   ethnicity?: InputMaybe<Ethnicity>;
   firstName?: InputMaybe<Scalars['String']>;
   gender?: InputMaybe<Array<Gender>>;
   lastName?: InputMaybe<Scalars['String']>;
   middleName?: InputMaybe<Scalars['String']>;
-  nameQuality?: InputMaybe<NameDataQuality>;
+  nameDataQuality?: InputMaybe<NameDataQuality>;
   nameSuffix?: InputMaybe<Scalars['String']>;
   preferredName?: InputMaybe<Scalars['String']>;
   race?: InputMaybe<Array<Race>>;
   ssn?: InputMaybe<Scalars['String']>;
-  ssnQuality?: InputMaybe<SsnDataQuality>;
+  ssnDataQuality?: InputMaybe<SsnDataQuality>;
   veteranStatus?: InputMaybe<VeteranStatus>;
 };
 
@@ -121,27 +166,49 @@ export type CreateClientPayload = {
   errors: Array<ValidationError>;
 };
 
-/** HUD DOB Data Quality */
+/** HUD DOB Data Quality (3.03.2) */
 export enum DobDataQuality {
-  /** Full DOB reported */
-  DobFull = 'DOB_FULL',
-  /** Data not collected */
-  DobNotCollected = 'DOB_NOT_COLLECTED',
-  /** Full DOB reported */
-  DobPartial = 'DOB_PARTIAL',
-  /** Client refused */
-  DobRefused = 'DOB_REFUSED',
-  /** Client doesn't know */
-  DobUnknown = 'DOB_UNKNOWN',
+  /** (2) Approximate or partial DOB reported */
+  DobApproximateOrPartialDobReported = 'DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED',
+  /** (8) Client doesn't know */
+  DobClientDoesnTKnow = 'DOB_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  DobClientRefused = 'DOB_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DobDataNotCollected = 'DOB_DATA_NOT_COLLECTED',
+  /** (1) Full DOB reported */
+  DobFullDobReported = 'DOB_FULL_DOB_REPORTED',
 }
 
 /** HUD Enrollment */
 export type Enrollment = {
   __typename?: 'Enrollment';
+  assessments: AssessmentsPaginated;
   entryDate?: Maybe<Scalars['ISO8601DateTime']>;
+  events: EventsPaginated;
   exitDate?: Maybe<Scalars['ISO8601DateTime']>;
+  household: Household;
   id: Scalars['ID'];
   project: Project;
+  services: ServicesPaginated;
+};
+
+/** HUD Enrollment */
+export type EnrollmentAssessmentsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentEventsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Enrollment */
+export type EnrollmentServicesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** HUD Enrollment Sorting Options */
@@ -160,39 +227,124 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD Ethnicity */
+/** HUD Ethnicity (3.05.1) */
 export enum Ethnicity {
-  /** Hispanic/Latin(a)(o)(x) */
-  EthnicityHispanic = 'ETHNICITY_HISPANIC',
-  /** Non-Hispanic/Non-Latin(a)(o)(x) */
-  EthnicityNonHispanic = 'ETHNICITY_NON_HISPANIC',
-  /** Data not collected */
+  /** (1) Hispanic/Latin(a)(o)(x) */
+  EthnicityHispanicLatinAOX = 'ETHNICITY_HISPANIC_LATIN_A_O_X_',
+  /** (0) Non-Hispanic/Non-Latin(a)(o)(x) */
+  EthnicityNonHispanicNonLatinAOX = 'ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_',
+  /** (99) Data not collected */
   EthnicityNotCollected = 'ETHNICITY_NOT_COLLECTED',
-  /** Client refused */
+  /** (9) Client refused */
   EthnicityRefused = 'ETHNICITY_REFUSED',
-  /** Client doesn't know */
+  /** (8) Client doesn't know */
   EthnicityUnknown = 'ETHNICITY_UNKNOWN',
 }
 
-/** HUD Gender */
-export enum Gender {
-  /** Female */
-  GenderFemale = 'GENDER_FEMALE',
-  /** Male */
-  GenderMale = 'GENDER_MALE',
-  /** Data not collected */
-  GenderNotCollected = 'GENDER_NOT_COLLECTED',
-  /** A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
-  GenderNoSingleGender = 'GENDER_NO_SINGLE_GENDER',
-  /** Questioning */
-  GenderQuestioning = 'GENDER_QUESTIONING',
-  /** Client refused */
-  GenderRefused = 'GENDER_REFUSED',
-  /** Transgender */
-  GenderTransgender = 'GENDER_TRANSGENDER',
-  /** Client doesn't know */
-  GenderUnknown = 'GENDER_UNKNOWN',
+/** HUD Event */
+export type Event = {
+  __typename?: 'Event';
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  enrollment: Enrollment;
+  event: EventType;
+  eventDate: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  locationCrisisOrPhHousing?: Maybe<Scalars['String']>;
+  probSolDivRrResult?: Maybe<ProbSolDivRrResult>;
+  referralCaseManageAfter?: Maybe<ReferralCaseManageAfter>;
+  referralResult?: Maybe<ReferralResult>;
+  resultDate?: Maybe<Scalars['ISO8601DateTime']>;
+};
+
+/** HUD EventType (4.20.2) */
+export enum EventType {
+  /** (2) Problem Solving/Diversion/Rapid Resolution intervention or service */
+  ProblemSolvingDiversionRapidResolutionInterventionOrService = 'PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE',
+  /** (18) Referral to a Housing Stability Voucher */
+  ReferralToAHousingStabilityVoucher = 'REFERRAL_TO_A_HOUSING_STABILITY_VOUCHER',
+  /** (16) Referral to emergency assistance/flex fund/furniture assistance */
+  ReferralToEmergencyAssistanceFlexFundFurnitureAssistance = 'REFERRAL_TO_EMERGENCY_ASSISTANCE_FLEX_FUND_FURNITURE_ASSISTANCE',
+  /** (17) Referral to Emergency Housing Voucher (EHV) */
+  ReferralToEmergencyHousingVoucherEhv = 'REFERRAL_TO_EMERGENCY_HOUSING_VOUCHER_EHV_',
+  /** (10) Referral to Emergency Shelter bed opening */
+  ReferralToEmergencyShelterBedOpening = 'REFERRAL_TO_EMERGENCY_SHELTER_BED_OPENING',
+  /** (7) Referral to Housing Navigation project or services */
+  ReferralToHousingNavigationProjectOrServices = 'REFERRAL_TO_HOUSING_NAVIGATION_PROJECT_OR_SERVICES',
+  /** (12) Referral to Joint TH-RRH project/unit/resource opening */
+  ReferralToJointThRrhProjectUnitResourceOpening = 'REFERRAL_TO_JOINT_TH_RRH_PROJECT_UNIT_RESOURCE_OPENING',
+  /** (8) Referral to Non-continuum services: Ineligible for continuum services */
+  ReferralToNonContinuumServicesIneligibleForContinuumServices = 'REFERRAL_TO_NON_CONTINUUM_SERVICES_INELIGIBLE_FOR_CONTINUUM_SERVICES',
+  /** (9) Referral to Non-continuum services: No availability in continuum services */
+  ReferralToNonContinuumServicesNoAvailabilityInContinuumServices = 'REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES',
+  /** (15) Referral to Other PH project/unit/resource opening */
+  ReferralToOtherPhProjectUnitResourceOpening = 'REFERRAL_TO_OTHER_PH_PROJECT_UNIT_RESOURCE_OPENING',
+  /** (5) Referral to Post-placement/ follow-up case management */
+  ReferralToPostPlacementFollowUpCaseManagement = 'REFERRAL_TO_POST_PLACEMENT_FOLLOW_UP_CASE_MANAGEMENT',
+  /** (1) Referral to Prevention Assistance project */
+  ReferralToPreventionAssistanceProject = 'REFERRAL_TO_PREVENTION_ASSISTANCE_PROJECT',
+  /** (14) Referral to PSH project resource opening */
+  ReferralToPshProjectResourceOpening = 'REFERRAL_TO_PSH_PROJECT_RESOURCE_OPENING',
+  /** (13) Referral to RRH project resource opening */
+  ReferralToRrhProjectResourceOpening = 'REFERRAL_TO_RRH_PROJECT_RESOURCE_OPENING',
+  /** (3) Referral to scheduled Coordinated Entry Crisis Needs Assessment */
+  ReferralToScheduledCoordinatedEntryCrisisNeedsAssessment = 'REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_CRISIS_NEEDS_ASSESSMENT',
+  /** (4) Referral to scheduled Coordinated Entry Housing Needs Assessment */
+  ReferralToScheduledCoordinatedEntryHousingNeedsAssessment = 'REFERRAL_TO_SCHEDULED_COORDINATED_ENTRY_HOUSING_NEEDS_ASSESSMENT',
+  /** (6) Referral to Street Outreach project or services */
+  ReferralToStreetOutreachProjectOrServices = 'REFERRAL_TO_STREET_OUTREACH_PROJECT_OR_SERVICES',
+  /** (11) Referral to Transitional Housing bed/unit opening */
+  ReferralToTransitionalHousingBedUnitOpening = 'REFERRAL_TO_TRANSITIONAL_HOUSING_BED_UNIT_OPENING',
 }
+
+export type EventsPaginated = {
+  __typename?: 'EventsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Event>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
+/** HUD Gender (1.7) */
+export enum Gender {
+  /** (8) Client doesn't know */
+  GenderClientDoesnTKnow = 'GENDER_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  GenderClientRefused = 'GENDER_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  GenderDataNotCollected = 'GENDER_DATA_NOT_COLLECTED',
+  /** (0) Female */
+  GenderFemale = 'GENDER_FEMALE',
+  /** (1) Male */
+  GenderMale = 'GENDER_MALE',
+  /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
+  GenderNoSingleGender = 'GENDER_NO_SINGLE_GENDER',
+  /** (6) Questioning */
+  GenderQuestioning = 'GENDER_QUESTIONING',
+  /** (5) Transgender */
+  GenderTransgender = 'GENDER_TRANSGENDER',
+}
+
+/** HUD Household */
+export type Household = {
+  __typename?: 'Household';
+  householdClients: Array<HouseholdClient>;
+  id: Scalars['ID'];
+};
+
+/** HUD Client within a Household */
+export type HouseholdClient = {
+  __typename?: 'HouseholdClient';
+  client: Client;
+  enrollment: Enrollment;
+  id: Scalars['ID'];
+  relationshipToHoH: RelationshipToHoH;
+};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -203,18 +355,18 @@ export type MutationCreateClientArgs = {
   input: CreateClientInput;
 };
 
-/** HUD Name Data Quality */
+/** HUD NameDataQuality (3.01.5) */
 export enum NameDataQuality {
-  /** Full name reported */
-  NameFull = 'NAME_FULL',
-  /** Data not collected */
-  NameNotCollected = 'NAME_NOT_COLLECTED',
-  /** Partial, street name, or code name reported */
-  NamePartial = 'NAME_PARTIAL',
-  /** Client refused */
-  NameRefused = 'NAME_REFUSED',
-  /** Client doesn't know */
-  NameUnknown = 'NAME_UNKNOWN',
+  /** (8) Client doesn't know */
+  NameClientDoesnTKnow = 'NAME_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  NameClientRefused = 'NAME_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  NameDataNotCollected = 'NAME_DATA_NOT_COLLECTED',
+  /** (1) Full name reported */
+  NameFullNameReported = 'NAME_FULL_NAME_REPORTED',
+  /** (2) Partial, street name, or code name reported */
+  NamePartialStreetNameOrCodeNameReported = 'NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED',
 }
 
 /** HUD Organization */
@@ -235,6 +387,34 @@ export type OrganizationProjectsArgs = {
 /** HUD Organization Sorting Options */
 export enum OrganizationSortOption {
   Name = 'NAME',
+}
+
+/** HUD PATHReferralOutcome (P2.A) */
+export enum PathReferralOutcome {
+  /** (1) Attained */
+  Attained = 'ATTAINED',
+  /** (2) Not attained */
+  NotAttained = 'NOT_ATTAINED',
+  /** (3) Unknown */
+  Unknown = 'UNKNOWN',
+}
+
+/** HUD PrioritizationStatus (4.19.7) */
+export enum PrioritizationStatus {
+  /** (2) Not placed on prioritization list */
+  NotPlacedOnPrioritizationList = 'NOT_PLACED_ON_PRIORITIZATION_LIST',
+  /** (1) Placed on prioritization list */
+  PlacedOnPrioritizationList = 'PLACED_ON_PRIORITIZATION_LIST',
+}
+
+/** HUD ProbSolDivRRResult (1.7) */
+export enum ProbSolDivRrResult {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
 }
 
 /** HUD Project */
@@ -288,6 +468,8 @@ export type Query = {
   client?: Maybe<Client>;
   /** Search for clients */
   clientSearch: ClientsPaginated;
+  /** Enrollment lookup */
+  enrollment?: Maybe<Enrollment>;
   /** Get a list of organizations */
   organizations: Array<Organization>;
   /** Get a list of projects */
@@ -305,6 +487,10 @@ export type QueryClientSearchArgs = {
   sortOrder?: InputMaybe<ClientSortOption>;
 };
 
+export type QueryEnrollmentArgs = {
+  id: Scalars['ID'];
+};
+
 export type QueryOrganizationsArgs = {
   sortOrder?: InputMaybe<OrganizationSortOption>;
 };
@@ -314,39 +500,385 @@ export type QueryProjectsArgs = {
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
-/** HUD Race */
+/** HUD Race (1.7) */
 export enum Race {
-  /** American Indian, Alaska Native, or Indigenous */
+  /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
   RaceAmIndAkNative = 'RACE_AM_IND_AK_NATIVE',
-  /** Asian or Asian American */
+  /** (Asian) Asian or Asian American */
   RaceAsian = 'RACE_ASIAN',
-  /** Black, African American, or African */
+  /** (BlackAfAmerican) Black, African American, or African */
   RaceBlackAfAmerican = 'RACE_BLACK_AF_AMERICAN',
-  /** Native Hawaiian or Pacific Islander */
+  /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
   RaceNativeHiPacific = 'RACE_NATIVE_HI_PACIFIC',
-  /** Data not collected */
+  /** (99) Data not collected */
   RaceNotCollected = 'RACE_NOT_COLLECTED',
-  /** Client refused */
+  /** (9) Client refused */
   RaceRefused = 'RACE_REFUSED',
-  /** Client doesn't know */
+  /** (8) Client doesn't know */
   RaceUnknown = 'RACE_UNKNOWN',
-  /** White */
+  /** (White) White */
   RaceWhite = 'RACE_WHITE',
 }
 
-/** HUD SSN Data Quality */
-export enum SsnDataQuality {
-  /** Full SSN reported */
-  SsnFull = 'SSN_FULL',
-  /** Data not collected */
-  SsnNotCollected = 'SSN_NOT_COLLECTED',
-  /** Approximate or partial SSN reported */
-  SsnPartial = 'SSN_PARTIAL',
-  /** Client refused */
-  SsnRefused = 'SSN_REFUSED',
-  /** Client doesn't know */
-  SsnUnknown = 'SSN_UNKNOWN',
+/** HUD RecordType (1.4) */
+export enum RecordType {
+  /** (200) Bed night */
+  BedNight = 'BED_NIGHT',
+  /** (300) C2 Moving On Assistance Provided */
+  C2MovingOnAssistanceProvided = 'C2_MOVING_ON_ASSISTANCE_PROVIDED',
+  /** (151) HOPWA financial assistance */
+  HopwaFinancialAssistance = 'HOPWA_FINANCIAL_ASSISTANCE',
+  /** (143) HOPWA service */
+  HopwaService = 'HOPWA_SERVICE',
+  /** (210) HUD-VASH OTH voucher tracking */
+  HudVashOthVoucherTracking = 'HUD_VASH_OTH_VOUCHER_TRACKING',
+  /** (161) PATH referral */
+  PathReferral = 'PATH_REFERRAL',
+  /** (141) PATH service */
+  PathService = 'PATH_SERVICE',
+  /** (162) RHY referral */
+  RhyReferral = 'RHY_REFERRAL',
+  /** (142) RHY service connections */
+  RhyServiceConnections = 'RHY_SERVICE_CONNECTIONS',
+  /** (152) SSVF financial assistance */
+  SsvfFinancialAssistance = 'SSVF_FINANCIAL_ASSISTANCE',
+  /** (144) SSVF service */
+  SsvfService = 'SSVF_SERVICE',
 }
+
+/** HUD ReferralCaseManageAfter (1.7) */
+export enum ReferralCaseManageAfter {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
+}
+
+/** HUD ReferralResult (4.20.D) */
+export enum ReferralResult {
+  /** (1) Successful referral: client accepted */
+  SuccessfulReferralClientAccepted = 'SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED',
+  /** (2) Unsuccessful referral: client rejected */
+  UnsuccessfulReferralClientRejected = 'UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED',
+  /** (3) Unsuccessful referral: provider rejected */
+  UnsuccessfulReferralProviderRejected = 'UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED',
+}
+
+/** HUD RelationshipToHoH (3.15.1) */
+export enum RelationshipToHoH {
+  /** (2) Child */
+  Child = 'CHILD',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (4) Other relative */
+  OtherRelative = 'OTHER_RELATIVE',
+  /** (1) Self (head of household) */
+  SelfHeadOfHousehold = 'SELF_HEAD_OF_HOUSEHOLD_',
+  /** (3) Spouse or partner */
+  SpouseOrPartner = 'SPOUSE_OR_PARTNER',
+  /** (5) Unrelated household member */
+  UnrelatedHouseholdMember = 'UNRELATED_HOUSEHOLD_MEMBER',
+}
+
+/** HUD SSN Data Quality (3.02.2) */
+export enum SsnDataQuality {
+  /** (2) Approximate or partial SSN reported */
+  SsnApproximateOrPartialSsnReported = 'SSN_APPROXIMATE_OR_PARTIAL_SSN_REPORTED',
+  /** (8) Client doesn't know */
+  SsnClientDoesnTKnow = 'SSN_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  SsnClientRefused = 'SSN_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  SsnDataNotCollected = 'SSN_DATA_NOT_COLLECTED',
+  /** (1) Full SSN reported */
+  SsnFullSsnReported = 'SSN_FULL_SSN_REPORTED',
+}
+
+/** HUD Service */
+export type Service = {
+  __typename?: 'Service';
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateProvided: Scalars['ISO8601Date'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  enrollment: Enrollment;
+  faaAmount?: Maybe<Scalars['Float']>;
+  id: Scalars['ID'];
+  movingOnOtherType?: Maybe<Scalars['String']>;
+  otherTypeProvided?: Maybe<Scalars['String']>;
+  recordType: RecordType;
+  referralOutcome?: Maybe<PathReferralOutcome>;
+  subTypeProvided?: Maybe<ServiceSubTypeProvided>;
+  typeProvided: ServiceTypeProvided;
+};
+
+/** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */
+export enum ServiceSubTypeProvided {
+  /** (12) Child care */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsChildCare = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE',
+  /** (2) Daily living services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsDailyLivingServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES',
+  /** (6) Fiduciary and representative payee services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsFiduciaryAndRepresentativePayeeServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES',
+  /** (1) Health care services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsHealthCareServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES',
+  /** (13) Housing counseling */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsHousingCounseling = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING',
+  /** (5) Income support services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsIncomeSupportServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES',
+  /** (7) Legal services - child support */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT',
+  /** (8) Legal services - eviction prevention */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION',
+  /** (11) Legal services - other */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER',
+  /** (9) Legal services - outstanding fines and penalties */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES',
+  /** (10) Legal services - restore / acquire driver's license */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE',
+  /** (3) Personal financial planning services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsPersonalFinancialPlanningServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES',
+  /** (4) Transportation services */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsTransportationServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES',
+  /** (3) Educational assistance */
+  SsvfServiceAssistanceObtainingVaBenefitsEducationalAssistance = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE',
+  /** (2) Employment and training services */
+  SsvfServiceAssistanceObtainingVaBenefitsEmploymentAndTrainingServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES',
+  /** (4) Health care services */
+  SsvfServiceAssistanceObtainingVaBenefitsHealthCareServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES',
+  /** (1) VA vocational and rehabilitation counseling */
+  SsvfServiceAssistanceObtainingVaBenefitsVaVocationalAndRehabilitationCounseling = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING',
+  /** (10) Child care */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsChildCare = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE',
+  /** (4) Fiduciary and representative payee services */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsFiduciaryAndRepresentativePayeeServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES',
+  /** (11) Housing counseling */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsHousingCounseling = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING',
+  /** (3) Income support services */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsIncomeSupportServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES',
+  /** (5) Legal services - child support */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT',
+  /** (6) Legal services - eviction prevention */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION',
+  /** (9) Legal services - other */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER',
+  /** (7) Legal services - outstanding fines and penalties */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES',
+  /** (8) Legal services - restore / acquire driver's license */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE',
+  /** (1) Personal financial planning services */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsPersonalFinancialPlanningServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES',
+  /** (2) Transportation services */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsTransportationServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES',
+}
+
+/** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
+export enum ServiceTypeProvided {
+  /** (200) BedNight */
+  BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
+  /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
+  C2MovingOnAssistanceProvidedFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES_',
+  /** (4) Housing referral/placement */
+  C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
+  /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
+  C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT_',
+  /** (5) Other (please specify) */
+  C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_',
+  /** (1) Subsidized housing application assistance */
+  C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
+  /** (7) Mortgage assistance */
+  HopwaFinancialAssistanceMortgageAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE',
+  /** (1) Rental assistance */
+  HopwaFinancialAssistanceRentalAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE',
+  /** (2) Security deposits */
+  HopwaFinancialAssistanceSecurityDeposits = 'HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS',
+  /** (3) Utility deposits */
+  HopwaFinancialAssistanceUtilityDeposits = 'HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS',
+  /** (4) Utility payments */
+  HopwaFinancialAssistanceUtilityPayments = 'HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS',
+  /** (1) Adult day care and personal assistance */
+  HopwaServiceAdultDayCareAndPersonalAssistance = 'HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE',
+  /** (2) Case management */
+  HopwaServiceCaseManagement = 'HOPWA_SERVICE__CASE_MANAGEMENT',
+  /** (3) Child care */
+  HopwaServiceChildCare = 'HOPWA_SERVICE__CHILD_CARE',
+  /** (4) Criminal justice/legal services */
+  HopwaServiceCriminalJusticeLegalServices = 'HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES',
+  /** (5) Education */
+  HopwaServiceEducation = 'HOPWA_SERVICE__EDUCATION',
+  /** (6) Employment and training services */
+  HopwaServiceEmploymentAndTrainingServices = 'HOPWA_SERVICE__EMPLOYMENT_AND_TRAINING_SERVICES',
+  /** (7) Food/meals/nutritional services */
+  HopwaServiceFoodMealsNutritionalServices = 'HOPWA_SERVICE__FOOD_MEALS_NUTRITIONAL_SERVICES',
+  /** (8) Health/medical care */
+  HopwaServiceHealthMedicalCare = 'HOPWA_SERVICE__HEALTH_MEDICAL_CARE',
+  /** (9) Life skills training */
+  HopwaServiceLifeSkillsTraining = 'HOPWA_SERVICE__LIFE_SKILLS_TRAINING',
+  /** (10) Mental health care/counseling */
+  HopwaServiceMentalHealthCareCounseling = 'HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING',
+  /** (14) Other HOPWA funded service */
+  HopwaServiceOtherHopwaFundedService = 'HOPWA_SERVICE__OTHER_HOPWA_FUNDED_SERVICE',
+  /** (11) Outreach and/or engagement */
+  HopwaServiceOutreachAndOrEngagement = 'HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT',
+  /** (12) Substance abuse services/treatment */
+  HopwaServiceSubstanceAbuseServicesTreatment = 'HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT',
+  /** (13) Transportation */
+  HopwaServiceTransportation = 'HOPWA_SERVICE__TRANSPORTATION',
+  /** (12) Other */
+  HudVashOthVoucherTrackingOther = 'HUD_VASH_OTH_VOUCHER_TRACKING__OTHER',
+  /** (1) Referral package forwarded to PHA */
+  HudVashOthVoucherTrackingReferralPackageForwardedToPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA',
+  /** (10) Veteran exited - family maintained the voucher */
+  HudVashOthVoucherTrackingVeteranExitedFamilyMaintainedTheVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER',
+  /** (11) Veteran exited - prior to ever receiving a voucher */
+  HudVashOthVoucherTrackingVeteranExitedPriorToEverReceivingAVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER',
+  /** (9) Veteran exited - voucher was returned */
+  HudVashOthVoucherTrackingVeteranExitedVoucherWasReturned = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED',
+  /** (2) Voucher denied by PHA */
+  HudVashOthVoucherTrackingVoucherDeniedByPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA',
+  /** (5) Voucher in use - veteran moved into housing */
+  HudVashOthVoucherTrackingVoucherInUseVeteranMovedIntoHousing = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING',
+  /** (3) Voucher issued by PHA */
+  HudVashOthVoucherTrackingVoucherIssuedByPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA',
+  /** (4) Voucher revoked or expired */
+  HudVashOthVoucherTrackingVoucherRevokedOrExpired = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED',
+  /** (7) Voucher was administratively absorbed by new PHA */
+  HudVashOthVoucherTrackingVoucherWasAdministrativelyAbsorbedByNewPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_ADMINISTRATIVELY_ABSORBED_BY_NEW_PHA',
+  /** (8) Voucher was converted to Housing Choice Voucher */
+  HudVashOthVoucherTrackingVoucherWasConvertedToHousingChoiceVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER',
+  /** (6) Voucher was ported locally */
+  HudVashOthVoucherTrackingVoucherWasPortedLocally = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY',
+  /** (1) Community mental health */
+  PathReferralCommunityMentalHealth = 'PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH',
+  /** (5) Educational services */
+  PathReferralEducationalServices = 'PATH_REFERRAL__EDUCATIONAL_SERVICES',
+  /** (9) Employment assistance */
+  PathReferralEmploymentAssistance = 'PATH_REFERRAL__EMPLOYMENT_ASSISTANCE',
+  /** (6) Housing services */
+  PathReferralHousingServices = 'PATH_REFERRAL__HOUSING_SERVICES',
+  /** (8) Income assistance */
+  PathReferralIncomeAssistance = 'PATH_REFERRAL__INCOME_ASSISTANCE',
+  /** (4) Job training */
+  PathReferralJobTraining = 'PATH_REFERRAL__JOB_TRAINING',
+  /** (10) Medical insurance */
+  PathReferralMedicalInsurance = 'PATH_REFERRAL__MEDICAL_INSURANCE',
+  /** (7) Permanent housing */
+  PathReferralPermanentHousing = 'PATH_REFERRAL__PERMANENT_HOUSING',
+  /** (3) Primary health/dental care */
+  PathReferralPrimaryHealthDentalCare = 'PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE',
+  /** (2) Substance use treatment */
+  PathReferralSubstanceUseTreatment = 'PATH_REFERRAL__SUBSTANCE_USE_TREATMENT',
+  /** (11) Temporary housing */
+  PathReferralTemporaryHousing = 'PATH_REFERRAL__TEMPORARY_HOUSING',
+  /** (6) Case management */
+  PathServiceCaseManagement = 'PATH_SERVICE__CASE_MANAGEMENT',
+  /** (14) Clinical assessment */
+  PathServiceClinicalAssessment = 'PATH_SERVICE__CLINICAL_ASSESSMENT',
+  /** (4) Community mental health */
+  PathServiceCommunityMentalHealth = 'PATH_SERVICE__COMMUNITY_MENTAL_HEALTH',
+  /** (3) Habilitation/rehabilitation */
+  PathServiceHabilitationRehabilitation = 'PATH_SERVICE__HABILITATION_REHABILITATION',
+  /** (10) Housing eligibility determination */
+  PathServiceHousingEligibilityDetermination = 'PATH_SERVICE__HOUSING_ELIGIBILITY_DETERMINATION',
+  /** (8) Housing minor renovation */
+  PathServiceHousingMinorRenovation = 'PATH_SERVICE__HOUSING_MINOR_RENOVATION',
+  /** (9) Housing moving assistance */
+  PathServiceHousingMovingAssistance = 'PATH_SERVICE__HOUSING_MOVING_ASSISTANCE',
+  /** (12) One-time rent for eviction prevention */
+  PathServiceOneTimeRentForEvictionPrevention = 'PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION',
+  /** (7) Residential supportive services */
+  PathServiceResidentialSupportiveServices = 'PATH_SERVICE__RESIDENTIAL_SUPPORTIVE_SERVICES',
+  /** (1) Re-engagement */
+  PathServiceReEngagement = 'PATH_SERVICE__RE_ENGAGEMENT',
+  /** (2) Screening */
+  PathServiceScreening = 'PATH_SERVICE__SCREENING',
+  /** (11) Security deposits */
+  PathServiceSecurityDeposits = 'PATH_SERVICE__SECURITY_DEPOSITS',
+  /** (5) Substance use treatment */
+  PathServiceSubstanceUseTreatment = 'PATH_SERVICE__SUBSTANCE_USE_TREATMENT',
+  /** (2) Community service/service learning (CSL) */
+  RhyServiceConnectionsCommunityServiceServiceLearningCsl = 'RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL_',
+  /** (7) Criminal justice /legal services */
+  RhyServiceConnectionsCriminalJusticeLegalServices = 'RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES',
+  /** (5) Education */
+  RhyServiceConnectionsEducation = 'RHY_SERVICE_CONNECTIONS__EDUCATION',
+  /** (6) Employment and training services */
+  RhyServiceConnectionsEmploymentAndTrainingServices = 'RHY_SERVICE_CONNECTIONS__EMPLOYMENT_AND_TRAINING_SERVICES',
+  /** (14) Health/medical care */
+  RhyServiceConnectionsHealthMedicalCare = 'RHY_SERVICE_CONNECTIONS__HEALTH_MEDICAL_CARE',
+  /** (26) Home-based Services */
+  RhyServiceConnectionsHomeBasedServices = 'RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES',
+  /** (8) Life skills training */
+  RhyServiceConnectionsLifeSkillsTraining = 'RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING',
+  /** (10) Parenting education for youth with children */
+  RhyServiceConnectionsParentingEducationForYouthWithChildren = 'RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN',
+  /** (12) Post-natal care */
+  RhyServiceConnectionsPostNatalCare = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE',
+  /** (27) Post-natal newborn care (wellness exams; immunizations) */
+  RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS_',
+  /** (13) Pre-natal care */
+  RhyServiceConnectionsPreNatalCare = 'RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE',
+  /** (28) STD Testing */
+  RhyServiceConnectionsStdTesting = 'RHY_SERVICE_CONNECTIONS__STD_TESTING',
+  /** (29) Street-based Services */
+  RhyServiceConnectionsStreetBasedServices = 'RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES',
+  /** (18) Substance use disorder/Prevention Services */
+  RhyServiceConnectionsSubstanceUseDisorderPreventionServices = 'RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_PREVENTION_SERVICES',
+  /** (17) Substance use disorder treatment */
+  RhyServiceConnectionsSubstanceUseDisorderTreatment = 'RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_TREATMENT',
+  /** (10) Child care */
+  SsvfFinancialAssistanceChildCare = 'SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE',
+  /** (14) Emergency housing assistance */
+  SsvfFinancialAssistanceEmergencyHousingAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE',
+  /** (15) Extended Shallow Subsidy - Rental Assistance */
+  SsvfFinancialAssistanceExtendedShallowSubsidyRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE',
+  /** (16) Food Assistance */
+  SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
+  /** (12) General housing stability assistance */
+  SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
+  /** (11) General housing stability assistance - emergency supplies */
+  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySupplies = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES',
+  /** (5) Moving costs */
+  SsvfFinancialAssistanceMovingCosts = 'SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS',
+  /** (1) Rental assistance */
+  SsvfFinancialAssistanceRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE',
+  /** (2) Security deposit */
+  SsvfFinancialAssistanceSecurityDeposit = 'SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT',
+  /** (8) Transportation services: tokens/vouchers */
+  SsvfFinancialAssistanceTransportationServicesTokensVouchers = 'SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS',
+  /** (9) Transportation services: vehicle repair/maintenance */
+  SsvfFinancialAssistanceTransportationServicesVehicleRepairMaintenance = 'SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE',
+  /** (3) Utility deposit */
+  SsvfFinancialAssistanceUtilityDeposit = 'SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT',
+  /** (4) Utility fee payment assistance */
+  SsvfFinancialAssistanceUtilityFeePaymentAssistance = 'SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE',
+  /** (4) Assistance obtaining/coordinating other public benefits */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefits = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS',
+  /** (3) Assistance obtaining VA benefits */
+  SsvfServiceAssistanceObtainingVaBenefits = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS',
+  /** (2) Case management services */
+  SsvfServiceCaseManagementServices = 'SSVF_SERVICE__CASE_MANAGEMENT_SERVICES',
+  /** (5) Direct provision of other public benefits */
+  SsvfServiceDirectProvisionOfOtherPublicBenefits = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS',
+  /** (6) Other (non-TFA) supportive service approved by VA */
+  SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa = 'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA',
+  /** (1) Outreach services */
+  SsvfServiceOutreachServices = 'SSVF_SERVICE__OUTREACH_SERVICES',
+}
+
+export type ServicesPaginated = {
+  __typename?: 'ServicesPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Service>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 export type ValidationError = {
   __typename?: 'ValidationError';
@@ -357,19 +889,61 @@ export type ValidationError = {
   type: Scalars['String'];
 };
 
-/** HUD Veteran Status */
+/** HUD Veteran Status (1.8) */
 export enum VeteranStatus {
-  /** No */
+  /** (8) Client doesn't know */
+  VeteranStatusClientDoesnTKnow = 'VETERAN_STATUS_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  VeteranStatusClientRefused = 'VETERAN_STATUS_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  VeteranStatusDataNotCollected = 'VETERAN_STATUS_DATA_NOT_COLLECTED',
+  /** (0) No */
   VeteranStatusNo = 'VETERAN_STATUS_NO',
-  /** Data not collected */
-  VeteranStatusNotCollected = 'VETERAN_STATUS_NOT_COLLECTED',
-  /** Client refused */
-  VeteranStatusRefused = 'VETERAN_STATUS_REFUSED',
-  /** Client doesn't know */
-  VeteranStatusUnknown = 'VETERAN_STATUS_UNKNOWN',
-  /** Yes */
+  /** (1) Yes */
   VeteranStatusYes = 'VETERAN_STATUS_YES',
 }
+
+export type ClientNameFragment = {
+  __typename?: 'Client';
+  firstName?: string | null;
+  preferredName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
+export type ClientFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  personalId: string;
+  ssnSerial?: string | null;
+  dob?: string | null;
+  dateUpdated: string;
+  firstName?: string | null;
+  preferredName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
+export type HouseholdClientFieldsFragment = {
+  __typename?: 'HouseholdClient';
+  id: string;
+  relationshipToHoH: RelationshipToHoH;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    project: { __typename?: 'Project'; projectName: string };
+  };
+};
 
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
@@ -379,17 +953,46 @@ export type EnrollmentFieldsFragment = {
   project: { __typename?: 'Project'; projectName: string };
 };
 
-export type ClientFieldsFragment = {
-  __typename?: 'Client';
+export type AssessmentFieldsFragment = {
+  __typename?: 'Assessment';
   id: string;
-  personalId: string;
-  ssnSerial?: string | null;
-  firstName?: string | null;
-  preferredName?: string | null;
-  lastName?: string | null;
-  nameSuffix?: string | null;
-  dob?: string | null;
+  assessmentDate: string;
+  assessmentLevel: AssessmentLevel;
+  assessmentLocation: string;
+  assessmentType: AssessmentType;
+  dateCreated: string;
   dateUpdated: string;
+  dateDeleted?: string | null;
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: ProbSolDivRrResult | null;
+  referralCaseManageAfter?: ReferralCaseManageAfter | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+};
+
+export type ServiceFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided: string;
+  movingOnOtherType?: string | null;
+  recordType: RecordType;
+  referralOutcome?: PathReferralOutcome | null;
+  subTypeProvided?: ServiceSubTypeProvided | null;
+  typeProvided: ServiceTypeProvided;
+  otherTypeProvided?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -410,12 +1013,12 @@ export type SearchClientsQuery = {
       id: string;
       personalId: string;
       ssnSerial?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
       firstName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-      dob?: string | null;
-      dateUpdated: string;
     }>;
   };
 };
@@ -431,12 +1034,26 @@ export type GetClientQuery = {
     id: string;
     personalId: string;
     ssnSerial?: string | null;
+    dob?: string | null;
+    dateUpdated: string;
     firstName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
-    dob?: string | null;
-    dateUpdated: string;
+  } | null;
+};
+
+export type GetClientEnrollmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientEnrollmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
     enrollments: {
       __typename?: 'EnrollmentsPaginated';
       offset: number;
@@ -467,12 +1084,12 @@ export type CreateClientMutation = {
       id: string;
       personalId: string;
       ssnSerial?: string | null;
+      dob?: string | null;
+      dateUpdated: string;
       firstName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
-      dob?: string | null;
-      dateUpdated: string;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -481,6 +1098,159 @@ export type CreateClientMutation = {
       message: string;
       fullMessage?: string | null;
     }>;
+  } | null;
+};
+
+export type GetEnrollmentQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    project: { __typename?: 'Project'; projectName: string };
+  } | null;
+};
+
+export type GetEnrollmentWithHoHQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetEnrollmentWithHoHQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate?: string | null;
+    exitDate?: string | null;
+    household: {
+      __typename?: 'Household';
+      id: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          preferredName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate?: string | null;
+          exitDate?: string | null;
+          project: { __typename?: 'Project'; projectName: string };
+        };
+      }>;
+    };
+    project: { __typename?: 'Project'; projectName: string };
+  } | null;
+};
+
+export type GetEnrollmentAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentAssessmentsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        assessmentDate: string;
+        assessmentLevel: AssessmentLevel;
+        assessmentLocation: string;
+        assessmentType: AssessmentType;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentEventsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    events: {
+      __typename?: 'EventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: ProbSolDivRrResult | null;
+        referralCaseManageAfter?: ReferralCaseManageAfter | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetEnrollmentServicesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentServicesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Service';
+        id: string;
+        dateProvided: string;
+        movingOnOtherType?: string | null;
+        recordType: RecordType;
+        referralOutcome?: PathReferralOutcome | null;
+        subTypeProvided?: ServiceSubTypeProvided | null;
+        typeProvided: ServiceTypeProvided;
+        otherTypeProvided?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
   } | null;
 };
 
@@ -525,6 +1295,25 @@ export type GetOrganizationsForSelectQuery = {
   }>;
 };
 
+export const ClientNameFragmentDoc = gql`
+  fragment ClientName on Client {
+    firstName
+    preferredName
+    lastName
+    nameSuffix
+  }
+`;
+export const ClientFieldsFragmentDoc = gql`
+  fragment ClientFields on Client {
+    id
+    personalId
+    ssnSerial
+    dob
+    dateUpdated
+    ...ClientName
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
@@ -535,17 +1324,61 @@ export const EnrollmentFieldsFragmentDoc = gql`
     }
   }
 `;
-export const ClientFieldsFragmentDoc = gql`
-  fragment ClientFields on Client {
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
     id
-    personalId
-    ssnSerial
-    firstName
-    preferredName
-    lastName
-    nameSuffix
-    dob
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+    }
+    enrollment {
+      ...EnrollmentFields
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+export const AssessmentFieldsFragmentDoc = gql`
+  fragment AssessmentFields on Assessment {
+    id
+    assessmentDate
+    assessmentLevel
+    assessmentLocation
+    assessmentType
+    dateCreated
     dateUpdated
+    dateDeleted
+  }
+`;
+export const EventFieldsFragmentDoc = gql`
+  fragment EventFields on Event {
+    id
+    event
+    eventDate
+    locationCrisisOrPhHousing
+    probSolDivRrResult
+    referralCaseManageAfter
+    referralResult
+    resultDate
+    dateCreated
+    dateUpdated
+    dateDeleted
+  }
+`;
+export const ServiceFieldsFragmentDoc = gql`
+  fragment ServiceFields on Service {
+    id
+    dateProvided
+    movingOnOtherType
+    recordType
+    referralOutcome
+    subTypeProvided
+    typeProvided
+    otherTypeProvided
+    dateCreated
+    dateUpdated
+    dateDeleted
   }
 `;
 export const ProjectFieldsFragmentDoc = gql`
@@ -631,18 +1464,9 @@ export const GetClientDocument = gql`
   query GetClient($id: ID!) {
     client(id: $id) {
       ...ClientFields
-      enrollments(limit: 10, offset: 0) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EnrollmentFields
-        }
-      }
     }
   }
   ${ClientFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
 `;
 
 /**
@@ -689,6 +1513,75 @@ export type GetClientLazyQueryHookResult = ReturnType<
 export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
+>;
+export const GetClientEnrollmentsDocument = gql`
+  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientEnrollmentsQuery__
+ *
+ * To run a query within a React component, call `useGetClientEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientEnrollmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetClientEnrollmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >(GetClientEnrollmentsDocument, options);
+}
+export function useGetClientEnrollmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientEnrollmentsQuery,
+    GetClientEnrollmentsQueryVariables
+  >(GetClientEnrollmentsDocument, options);
+}
+export type GetClientEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetClientEnrollmentsQuery
+>;
+export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetClientEnrollmentsLazyQuery
+>;
+export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
+  GetClientEnrollmentsQuery,
+  GetClientEnrollmentsQueryVariables
 >;
 export const CreateClientDocument = gql`
   mutation CreateClient($input: CreateClientInput!) {
@@ -749,6 +1642,338 @@ export type CreateClientMutationResult =
 export type CreateClientMutationOptions = Apollo.BaseMutationOptions<
   CreateClientMutation,
   CreateClientMutationVariables
+>;
+export const GetEnrollmentDocument = gql`
+  query GetEnrollment($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export function useGetEnrollmentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export type GetEnrollmentQueryHookResult = ReturnType<
+  typeof useGetEnrollmentQuery
+>;
+export type GetEnrollmentLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentLazyQuery
+>;
+export type GetEnrollmentQueryResult = Apollo.QueryResult<
+  GetEnrollmentQuery,
+  GetEnrollmentQueryVariables
+>;
+export const GetEnrollmentWithHoHDocument = gql`
+  query GetEnrollmentWithHoH($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+      household {
+        id
+        householdClients {
+          ...HouseholdClientFields
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentWithHoHQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentWithHoHQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentWithHoHQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentWithHoHQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentWithHoHQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >(GetEnrollmentWithHoHDocument, options);
+}
+export function useGetEnrollmentWithHoHLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentWithHoHQuery,
+    GetEnrollmentWithHoHQueryVariables
+  >(GetEnrollmentWithHoHDocument, options);
+}
+export type GetEnrollmentWithHoHQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHoHQuery
+>;
+export type GetEnrollmentWithHoHLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHoHLazyQuery
+>;
+export type GetEnrollmentWithHoHQueryResult = Apollo.QueryResult<
+  GetEnrollmentWithHoHQuery,
+  GetEnrollmentWithHoHQueryVariables
+>;
+export const GetEnrollmentAssessmentsDocument = gql`
+  query GetEnrollmentAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      assessments(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >(GetEnrollmentAssessmentsDocument, options);
+}
+export function useGetEnrollmentAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >(GetEnrollmentAssessmentsDocument, options);
+}
+export type GetEnrollmentAssessmentsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAssessmentsQuery
+>;
+export type GetEnrollmentAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAssessmentsLazyQuery
+>;
+export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
+  GetEnrollmentAssessmentsQuery,
+  GetEnrollmentAssessmentsQueryVariables
+>;
+export const GetEnrollmentEventsDocument = gql`
+  query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      events(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EventFields
+        }
+      }
+    }
+  }
+  ${EventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export function useGetEnrollmentEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export type GetEnrollmentEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsQuery
+>;
+export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsLazyQuery
+>;
+export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentEventsQuery,
+  GetEnrollmentEventsQueryVariables
+>;
+export const GetEnrollmentServicesDocument = gql`
+  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      services(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentServicesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export function useGetEnrollmentServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export type GetEnrollmentServicesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesQuery
+>;
+export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesLazyQuery
+>;
+export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
+  GetEnrollmentServicesQuery,
+  GetEnrollmentServicesQueryVariables
 >;
 export const GetProjectsForSelectDocument = gql`
   query GetProjectsForSelect {

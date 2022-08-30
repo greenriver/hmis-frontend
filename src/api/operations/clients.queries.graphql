@@ -1,0 +1,105 @@
+query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
+  clientSearch(input: $input, limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ClientFields
+    }
+  }
+}
+
+query GetClient($id: ID!) {
+  client(id: $id) {
+    ...ClientFields
+  }
+}
+
+query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFields
+      }
+    }
+  }
+}
+
+mutation CreateClient($input: CreateClientInput!) {
+  createClient(input: $input) {
+    clientMutationId
+    client {
+      ...ClientFields
+    }
+    errors {
+      type
+      attribute
+      message
+      fullMessage
+    }
+  }
+}
+
+query GetEnrollment($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+  }
+}
+
+query GetEnrollmentWithHoH($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    assessments(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    events(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EventFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    services(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { ApolloProvider } from '@apollo/client';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -6,7 +7,7 @@ import * as React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
 
-import ConfiguredApolloProvider from './ConfiguredApolloProvider';
+import apolloClient from './apolloClient';
 
 import ErrorFallback from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
@@ -25,11 +26,11 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <ConfiguredApolloProvider>
+            <ApolloProvider client={apolloClient}>
               <BrowserRouter>
                 <AuthProvider>{children}</AuthProvider>
               </BrowserRouter>
-            </ConfiguredApolloProvider>
+            </ApolloProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </ErrorBoundary>

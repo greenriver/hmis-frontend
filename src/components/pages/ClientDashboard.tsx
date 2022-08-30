@@ -91,7 +91,8 @@ const ClientDashboard: React.FC = () => {
     [client]
   );
 
-  if (loading || !client) return <Loading />;
+  if (loading) return <Loading />;
+  if (!client) throw Error('Client not found');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();
@@ -102,7 +103,7 @@ const ClientDashboard: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h4'>{HmisUtil.name(client)}</Typography>
+        <Typography variant='h4'>{HmisUtil.clientName(client)}</Typography>
       </PageHeader>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={currentTab}>

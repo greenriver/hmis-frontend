@@ -1,4 +1,5 @@
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, AutocompleteValue } from '@mui/material';
+import { compact } from 'lodash-es';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
@@ -29,6 +30,7 @@ const renderOption = (props: object, option: Option) => (
 const ProjectSelect = <Multiple extends boolean | undefined>({
   multiple,
   label = multiple ? 'Projects' : 'Project',
+  value,
   ...props
 }: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
   const {
@@ -39,9 +41,18 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
 
   if (error) console.error(error);
 
+  // special case to replace value with complete option value.
+  // e.g. {id: 50} becomes {id: 50, projectName: "White Ash Home"}
+  // this is needed for cases when initially selected values are loaded from URL params
+  if (Array.isArray(value) && value[0] && !value[0].projectName && projects) {
+    value = compact(
+      value.map(({ id }) => projects.find((opt) => opt.id === id))
+    ) as AutocompleteValue<Option, Multiple, boolean, undefined>;
+  }
+
   return (
     <GenericSelect
-      getOptionLabel={(option) => option.projectName}
+      getOptionLabel={(option) => option.projectName || option.id}
       groupBy={(option) => option.organization.organizationName || ''}
       label={label}
       loading={loading}
@@ -49,6 +60,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
       options={projects || []}
       renderOption={renderOption}
       isOptionEqualToValue={(option, value) => option.id === value.id}
+      value={value}
       {...props}
     />
   );
