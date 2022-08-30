@@ -187,7 +187,7 @@ export type Enrollment = {
   entryDate?: Maybe<Scalars['ISO8601DateTime']>;
   events: EventsPaginated;
   exitDate?: Maybe<Scalars['ISO8601DateTime']>;
-  household?: Maybe<Household>;
+  household: Household;
   id: Scalars['ID'];
   project: Project;
   services: ServicesPaginated;
@@ -312,8 +312,6 @@ export type EventsPaginated = {
 
 /** HUD Gender (1.7) */
 export enum Gender {
-  /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
-  GenderAGenderOtherThanSingularlyFemaleOrMaleEGNonBinaryGenderfluidAgenderCulturallySpecificGender = 'GENDER_A_GENDER_OTHER_THAN_SINGULARLY_FEMALE_OR_MALE_E_G_NON_BINARY_GENDERFLUID_AGENDER_CULTURALLY_SPECIFIC_GENDER_',
   /** (8) Client doesn't know */
   GenderClientDoesnTKnow = 'GENDER_CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
@@ -324,6 +322,8 @@ export enum Gender {
   GenderFemale = 'GENDER_FEMALE',
   /** (1) Male */
   GenderMale = 'GENDER_MALE',
+  /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
+  GenderNoSingleGender = 'GENDER_NO_SINGLE_GENDER',
   /** (6) Questioning */
   GenderQuestioning = 'GENDER_QUESTIONING',
   /** (5) Transgender */
@@ -503,13 +503,13 @@ export type QueryProjectsArgs = {
 /** HUD Race (1.7) */
 export enum Race {
   /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
-  RaceAmericanIndianAlaskaNativeOrIndigenous = 'RACE_AMERICAN_INDIAN_ALASKA_NATIVE_OR_INDIGENOUS',
+  RaceAmIndAkNative = 'RACE_AM_IND_AK_NATIVE',
   /** (Asian) Asian or Asian American */
-  RaceAsianOrAsianAmerican = 'RACE_ASIAN_OR_ASIAN_AMERICAN',
+  RaceAsian = 'RACE_ASIAN',
   /** (BlackAfAmerican) Black, African American, or African */
-  RaceBlackAfricanAmericanOrAfrican = 'RACE_BLACK_AFRICAN_AMERICAN_OR_AFRICAN',
+  RaceBlackAfAmerican = 'RACE_BLACK_AF_AMERICAN',
   /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
-  RaceNativeHawaiianOrPacificIslander = 'RACE_NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER',
+  RaceNativeHiPacific = 'RACE_NATIVE_HI_PACIFIC',
   /** (99) Data not collected */
   RaceNotCollected = 'RACE_NOT_COLLECTED',
   /** (9) Client refused */
@@ -617,276 +617,255 @@ export type Service = {
 
 /** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */
 export enum ServiceSubTypeProvided {
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (12) Child care */
+  /** (12) Child care */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsChildCare = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (2) Daily living services */
+  /** (2) Daily living services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsDailyLivingServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES',
-  /**
-   * (144) SSVF service – (4) Assistance obtaining/coordinating other public
-   * benefits – (6) Fiduciary and representative payee services
-   */
+  /** (6) Fiduciary and representative payee services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsFiduciaryAndRepresentativePayeeServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (1) Health care services */
+  /** (1) Health care services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsHealthCareServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (13) Housing counseling */
+  /** (13) Housing counseling */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsHousingCounseling = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (5) Income support services */
+  /** (5) Income support services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsIncomeSupportServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (7) Legal services - child support */
-  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT',
-  /**
-   * (144) SSVF service – (4) Assistance obtaining/coordinating other public
-   * benefits – (8) Legal services - eviction prevention
-   */
-  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (11) Legal services - other */
-  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER',
-  /**
-   * (144) SSVF service – (4) Assistance obtaining/coordinating other public
-   * benefits – (9) Legal services - outstanding fines and penalties
-   */
-  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES',
-  /**
-   * (144) SSVF service – (4) Assistance obtaining/coordinating other public
-   * benefits – (10) Legal services - restore / acquire driver's license
-   */
-  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE',
-  /**
-   * (144) SSVF service – (4) Assistance obtaining/coordinating other public
-   * benefits – (3) Personal financial planning services
-   */
+  /** (7) Legal services - child support */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT',
+  /** (8) Legal services - eviction prevention */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION',
+  /** (11) Legal services - other */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER',
+  /** (9) Legal services - outstanding fines and penalties */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES',
+  /** (10) Legal services - restore / acquire driver's license */
+  SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE',
+  /** (3) Personal financial planning services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsPersonalFinancialPlanningServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (4) Transportation services */
+  /** (4) Transportation services */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsTransportationServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES',
-  /** (144) SSVF service – (3) Assistance obtaining VA benefits – (3) Educational assistance */
+  /** (3) Educational assistance */
   SsvfServiceAssistanceObtainingVaBenefitsEducationalAssistance = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE',
-  /** (144) SSVF service – (3) Assistance obtaining VA benefits – (2) Employment and training services */
+  /** (2) Employment and training services */
   SsvfServiceAssistanceObtainingVaBenefitsEmploymentAndTrainingServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES',
-  /** (144) SSVF service – (3) Assistance obtaining VA benefits – (4) Health care services */
+  /** (4) Health care services */
   SsvfServiceAssistanceObtainingVaBenefitsHealthCareServices = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES',
-  /** (144) SSVF service – (3) Assistance obtaining VA benefits – (1) VA vocational and rehabilitation counseling */
+  /** (1) VA vocational and rehabilitation counseling */
   SsvfServiceAssistanceObtainingVaBenefitsVaVocationalAndRehabilitationCounseling = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (10) Child care */
+  /** (10) Child care */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsChildCare = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (4) Fiduciary and representative payee services */
+  /** (4) Fiduciary and representative payee services */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsFiduciaryAndRepresentativePayeeServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (11) Housing counseling */
+  /** (11) Housing counseling */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsHousingCounseling = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (3) Income support services */
+  /** (3) Income support services */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsIncomeSupportServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (5) Legal services - child support */
-  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (6) Legal services - eviction prevention */
-  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (9) Legal services - other */
-  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (7) Legal services - outstanding fines and penalties */
-  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES',
-  /**
-   * (144) SSVF service – (5) Direct provision of other public benefits – (8) Legal
-   * services - restore / acquire driver's license
-   */
-  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (1) Personal financial planning services */
+  /** (5) Legal services - child support */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesChildSupport = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT',
+  /** (6) Legal services - eviction prevention */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesEvictionPrevention = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION',
+  /** (9) Legal services - other */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOther = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER',
+  /** (7) Legal services - outstanding fines and penalties */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesOutstandingFinesAndPenalties = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES',
+  /** (8) Legal services - restore / acquire driver's license */
+  SsvfServiceDirectProvisionOfOtherPublicBenefitsLegalServicesRestoreAcquireDriverSLicense = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE',
+  /** (1) Personal financial planning services */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsPersonalFinancialPlanningServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES',
-  /** (144) SSVF service – (5) Direct provision of other public benefits – (2) Transportation services */
+  /** (2) Transportation services */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsTransportationServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES',
 }
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
 export enum ServiceTypeProvided {
-  /** (200) Bed night – (200) BedNight */
+  /** (200) BedNight */
   BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
-  /** (300) C2 Moving On Assistance Provided – (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
+  /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
   C2MovingOnAssistanceProvidedFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES_',
-  /** (300) C2 Moving On Assistance Provided – (4) Housing referral/placement */
+  /** (4) Housing referral/placement */
   C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
-  /**
-   * (300) C2 Moving On Assistance Provided – (3) Non-financial assistance for
-   * Moving On (e.g., housing navigation, transition support)
-   */
+  /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
   C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT_',
-  /** (300) C2 Moving On Assistance Provided – (5) Other (please specify) */
+  /** (5) Other (please specify) */
   C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_',
-  /** (300) C2 Moving On Assistance Provided – (1) Subsidized housing application assistance */
+  /** (1) Subsidized housing application assistance */
   C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
-  /** (151) HOPWA financial assistance – (7) Mortgage assistance */
+  /** (7) Mortgage assistance */
   HopwaFinancialAssistanceMortgageAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE',
-  /** (151) HOPWA financial assistance – (1) Rental assistance */
+  /** (1) Rental assistance */
   HopwaFinancialAssistanceRentalAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE',
-  /** (151) HOPWA financial assistance – (2) Security deposits */
+  /** (2) Security deposits */
   HopwaFinancialAssistanceSecurityDeposits = 'HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS',
-  /** (151) HOPWA financial assistance – (3) Utility deposits */
+  /** (3) Utility deposits */
   HopwaFinancialAssistanceUtilityDeposits = 'HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS',
-  /** (151) HOPWA financial assistance – (4) Utility payments */
+  /** (4) Utility payments */
   HopwaFinancialAssistanceUtilityPayments = 'HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS',
-  /** (143) HOPWA service – (1) Adult day care and personal assistance */
+  /** (1) Adult day care and personal assistance */
   HopwaServiceAdultDayCareAndPersonalAssistance = 'HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE',
-  /** (143) HOPWA service – (2) Case management */
+  /** (2) Case management */
   HopwaServiceCaseManagement = 'HOPWA_SERVICE__CASE_MANAGEMENT',
-  /** (143) HOPWA service – (3) Child care */
+  /** (3) Child care */
   HopwaServiceChildCare = 'HOPWA_SERVICE__CHILD_CARE',
-  /** (143) HOPWA service – (4) Criminal justice/legal services */
+  /** (4) Criminal justice/legal services */
   HopwaServiceCriminalJusticeLegalServices = 'HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES',
-  /** (143) HOPWA service – (5) Education */
+  /** (5) Education */
   HopwaServiceEducation = 'HOPWA_SERVICE__EDUCATION',
-  /** (143) HOPWA service – (6) Employment and training services */
+  /** (6) Employment and training services */
   HopwaServiceEmploymentAndTrainingServices = 'HOPWA_SERVICE__EMPLOYMENT_AND_TRAINING_SERVICES',
-  /** (143) HOPWA service – (7) Food/meals/nutritional services */
+  /** (7) Food/meals/nutritional services */
   HopwaServiceFoodMealsNutritionalServices = 'HOPWA_SERVICE__FOOD_MEALS_NUTRITIONAL_SERVICES',
-  /** (143) HOPWA service – (8) Health/medical care */
+  /** (8) Health/medical care */
   HopwaServiceHealthMedicalCare = 'HOPWA_SERVICE__HEALTH_MEDICAL_CARE',
-  /** (143) HOPWA service – (9) Life skills training */
+  /** (9) Life skills training */
   HopwaServiceLifeSkillsTraining = 'HOPWA_SERVICE__LIFE_SKILLS_TRAINING',
-  /** (143) HOPWA service – (10) Mental health care/counseling */
+  /** (10) Mental health care/counseling */
   HopwaServiceMentalHealthCareCounseling = 'HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING',
-  /** (143) HOPWA service – (14) Other HOPWA funded service */
+  /** (14) Other HOPWA funded service */
   HopwaServiceOtherHopwaFundedService = 'HOPWA_SERVICE__OTHER_HOPWA_FUNDED_SERVICE',
-  /** (143) HOPWA service – (11) Outreach and/or engagement */
+  /** (11) Outreach and/or engagement */
   HopwaServiceOutreachAndOrEngagement = 'HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT',
-  /** (143) HOPWA service – (12) Substance abuse services/treatment */
+  /** (12) Substance abuse services/treatment */
   HopwaServiceSubstanceAbuseServicesTreatment = 'HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT',
-  /** (143) HOPWA service – (13) Transportation */
+  /** (13) Transportation */
   HopwaServiceTransportation = 'HOPWA_SERVICE__TRANSPORTATION',
-  /** (210) HUD-VASH OTH voucher tracking – (12) Other */
+  /** (12) Other */
   HudVashOthVoucherTrackingOther = 'HUD_VASH_OTH_VOUCHER_TRACKING__OTHER',
-  /** (210) HUD-VASH OTH voucher tracking – (1) Referral package forwarded to PHA */
+  /** (1) Referral package forwarded to PHA */
   HudVashOthVoucherTrackingReferralPackageForwardedToPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA',
-  /** (210) HUD-VASH OTH voucher tracking – (10) Veteran exited - family maintained the voucher */
-  HudVashOthVoucherTrackingVeteranExitedFamilyMaintainedTheVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___FAMILY_MAINTAINED_THE_VOUCHER',
-  /** (210) HUD-VASH OTH voucher tracking – (11) Veteran exited - prior to ever receiving a voucher */
-  HudVashOthVoucherTrackingVeteranExitedPriorToEverReceivingAVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___PRIOR_TO_EVER_RECEIVING_A_VOUCHER',
-  /** (210) HUD-VASH OTH voucher tracking – (9) Veteran exited - voucher was returned */
-  HudVashOthVoucherTrackingVeteranExitedVoucherWasReturned = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___VOUCHER_WAS_RETURNED',
-  /** (210) HUD-VASH OTH voucher tracking – (2) Voucher denied by PHA */
+  /** (10) Veteran exited - family maintained the voucher */
+  HudVashOthVoucherTrackingVeteranExitedFamilyMaintainedTheVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER',
+  /** (11) Veteran exited - prior to ever receiving a voucher */
+  HudVashOthVoucherTrackingVeteranExitedPriorToEverReceivingAVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER',
+  /** (9) Veteran exited - voucher was returned */
+  HudVashOthVoucherTrackingVeteranExitedVoucherWasReturned = 'HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED',
+  /** (2) Voucher denied by PHA */
   HudVashOthVoucherTrackingVoucherDeniedByPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA',
-  /** (210) HUD-VASH OTH voucher tracking – (5) Voucher in use - veteran moved into housing */
-  HudVashOthVoucherTrackingVoucherInUseVeteranMovedIntoHousing = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE___VETERAN_MOVED_INTO_HOUSING',
-  /** (210) HUD-VASH OTH voucher tracking – (3) Voucher issued by PHA */
+  /** (5) Voucher in use - veteran moved into housing */
+  HudVashOthVoucherTrackingVoucherInUseVeteranMovedIntoHousing = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING',
+  /** (3) Voucher issued by PHA */
   HudVashOthVoucherTrackingVoucherIssuedByPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA',
-  /** (210) HUD-VASH OTH voucher tracking – (4) Voucher revoked or expired */
+  /** (4) Voucher revoked or expired */
   HudVashOthVoucherTrackingVoucherRevokedOrExpired = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED',
-  /** (210) HUD-VASH OTH voucher tracking – (7) Voucher was administratively absorbed by new PHA */
+  /** (7) Voucher was administratively absorbed by new PHA */
   HudVashOthVoucherTrackingVoucherWasAdministrativelyAbsorbedByNewPha = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_ADMINISTRATIVELY_ABSORBED_BY_NEW_PHA',
-  /** (210) HUD-VASH OTH voucher tracking – (8) Voucher was converted to Housing Choice Voucher */
+  /** (8) Voucher was converted to Housing Choice Voucher */
   HudVashOthVoucherTrackingVoucherWasConvertedToHousingChoiceVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER',
-  /** (210) HUD-VASH OTH voucher tracking – (6) Voucher was ported locally */
+  /** (6) Voucher was ported locally */
   HudVashOthVoucherTrackingVoucherWasPortedLocally = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY',
-  /** (161) PATH referral – (1) Community mental health */
+  /** (1) Community mental health */
   PathReferralCommunityMentalHealth = 'PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH',
-  /** (161) PATH referral – (5) Educational services */
+  /** (5) Educational services */
   PathReferralEducationalServices = 'PATH_REFERRAL__EDUCATIONAL_SERVICES',
-  /** (161) PATH referral – (9) Employment assistance */
+  /** (9) Employment assistance */
   PathReferralEmploymentAssistance = 'PATH_REFERRAL__EMPLOYMENT_ASSISTANCE',
-  /** (161) PATH referral – (6) Housing services */
+  /** (6) Housing services */
   PathReferralHousingServices = 'PATH_REFERRAL__HOUSING_SERVICES',
-  /** (161) PATH referral – (8) Income assistance */
+  /** (8) Income assistance */
   PathReferralIncomeAssistance = 'PATH_REFERRAL__INCOME_ASSISTANCE',
-  /** (161) PATH referral – (4) Job training */
+  /** (4) Job training */
   PathReferralJobTraining = 'PATH_REFERRAL__JOB_TRAINING',
-  /** (161) PATH referral – (10) Medical insurance */
+  /** (10) Medical insurance */
   PathReferralMedicalInsurance = 'PATH_REFERRAL__MEDICAL_INSURANCE',
-  /** (161) PATH referral – (7) Permanent housing */
+  /** (7) Permanent housing */
   PathReferralPermanentHousing = 'PATH_REFERRAL__PERMANENT_HOUSING',
-  /** (161) PATH referral – (3) Primary health/dental care */
+  /** (3) Primary health/dental care */
   PathReferralPrimaryHealthDentalCare = 'PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE',
-  /** (161) PATH referral – (2) Substance use treatment */
+  /** (2) Substance use treatment */
   PathReferralSubstanceUseTreatment = 'PATH_REFERRAL__SUBSTANCE_USE_TREATMENT',
-  /** (161) PATH referral – (11) Temporary housing */
+  /** (11) Temporary housing */
   PathReferralTemporaryHousing = 'PATH_REFERRAL__TEMPORARY_HOUSING',
-  /** (141) PATH service – (6) Case management */
+  /** (6) Case management */
   PathServiceCaseManagement = 'PATH_SERVICE__CASE_MANAGEMENT',
-  /** (141) PATH service – (14) Clinical assessment */
+  /** (14) Clinical assessment */
   PathServiceClinicalAssessment = 'PATH_SERVICE__CLINICAL_ASSESSMENT',
-  /** (141) PATH service – (4) Community mental health */
+  /** (4) Community mental health */
   PathServiceCommunityMentalHealth = 'PATH_SERVICE__COMMUNITY_MENTAL_HEALTH',
-  /** (141) PATH service – (3) Habilitation/rehabilitation */
+  /** (3) Habilitation/rehabilitation */
   PathServiceHabilitationRehabilitation = 'PATH_SERVICE__HABILITATION_REHABILITATION',
-  /** (141) PATH service – (10) Housing eligibility determination */
+  /** (10) Housing eligibility determination */
   PathServiceHousingEligibilityDetermination = 'PATH_SERVICE__HOUSING_ELIGIBILITY_DETERMINATION',
-  /** (141) PATH service – (8) Housing minor renovation */
+  /** (8) Housing minor renovation */
   PathServiceHousingMinorRenovation = 'PATH_SERVICE__HOUSING_MINOR_RENOVATION',
-  /** (141) PATH service – (9) Housing moving assistance */
+  /** (9) Housing moving assistance */
   PathServiceHousingMovingAssistance = 'PATH_SERVICE__HOUSING_MOVING_ASSISTANCE',
-  /** (141) PATH service – (12) One-time rent for eviction prevention */
+  /** (12) One-time rent for eviction prevention */
   PathServiceOneTimeRentForEvictionPrevention = 'PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION',
-  /** (141) PATH service – (7) Residential supportive services */
+  /** (7) Residential supportive services */
   PathServiceResidentialSupportiveServices = 'PATH_SERVICE__RESIDENTIAL_SUPPORTIVE_SERVICES',
-  /** (141) PATH service – (1) Re-engagement */
+  /** (1) Re-engagement */
   PathServiceReEngagement = 'PATH_SERVICE__RE_ENGAGEMENT',
-  /** (141) PATH service – (2) Screening */
+  /** (2) Screening */
   PathServiceScreening = 'PATH_SERVICE__SCREENING',
-  /** (141) PATH service – (11) Security deposits */
+  /** (11) Security deposits */
   PathServiceSecurityDeposits = 'PATH_SERVICE__SECURITY_DEPOSITS',
-  /** (141) PATH service – (5) Substance use treatment */
+  /** (5) Substance use treatment */
   PathServiceSubstanceUseTreatment = 'PATH_SERVICE__SUBSTANCE_USE_TREATMENT',
-  /** (142) RHY service connections – (2) Community service/service learning (CSL) */
+  /** (2) Community service/service learning (CSL) */
   RhyServiceConnectionsCommunityServiceServiceLearningCsl = 'RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL_',
-  /** (142) RHY service connections – (7) Criminal justice /legal services */
+  /** (7) Criminal justice /legal services */
   RhyServiceConnectionsCriminalJusticeLegalServices = 'RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES',
-  /** (142) RHY service connections – (5) Education */
+  /** (5) Education */
   RhyServiceConnectionsEducation = 'RHY_SERVICE_CONNECTIONS__EDUCATION',
-  /** (142) RHY service connections – (6) Employment and training services */
+  /** (6) Employment and training services */
   RhyServiceConnectionsEmploymentAndTrainingServices = 'RHY_SERVICE_CONNECTIONS__EMPLOYMENT_AND_TRAINING_SERVICES',
-  /** (142) RHY service connections – (14) Health/medical care */
+  /** (14) Health/medical care */
   RhyServiceConnectionsHealthMedicalCare = 'RHY_SERVICE_CONNECTIONS__HEALTH_MEDICAL_CARE',
-  /** (142) RHY service connections – (26) Home-based Services */
+  /** (26) Home-based Services */
   RhyServiceConnectionsHomeBasedServices = 'RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES',
-  /** (142) RHY service connections – (8) Life skills training */
+  /** (8) Life skills training */
   RhyServiceConnectionsLifeSkillsTraining = 'RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING',
-  /** (142) RHY service connections – (10) Parenting education for youth with children */
+  /** (10) Parenting education for youth with children */
   RhyServiceConnectionsParentingEducationForYouthWithChildren = 'RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN',
-  /** (142) RHY service connections – (12) Post-natal care */
+  /** (12) Post-natal care */
   RhyServiceConnectionsPostNatalCare = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE',
-  /** (142) RHY service connections – (27) Post-natal newborn care (wellness exams; immunizations) */
+  /** (27) Post-natal newborn care (wellness exams; immunizations) */
   RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS_',
-  /** (142) RHY service connections – (13) Pre-natal care */
+  /** (13) Pre-natal care */
   RhyServiceConnectionsPreNatalCare = 'RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE',
-  /** (142) RHY service connections – (28) STD Testing */
+  /** (28) STD Testing */
   RhyServiceConnectionsStdTesting = 'RHY_SERVICE_CONNECTIONS__STD_TESTING',
-  /** (142) RHY service connections – (29) Street-based Services */
+  /** (29) Street-based Services */
   RhyServiceConnectionsStreetBasedServices = 'RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES',
-  /** (142) RHY service connections – (18) Substance use disorder/Prevention Services */
+  /** (18) Substance use disorder/Prevention Services */
   RhyServiceConnectionsSubstanceUseDisorderPreventionServices = 'RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_PREVENTION_SERVICES',
-  /** (142) RHY service connections – (17) Substance use disorder treatment */
+  /** (17) Substance use disorder treatment */
   RhyServiceConnectionsSubstanceUseDisorderTreatment = 'RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_TREATMENT',
-  /** (152) SSVF financial assistance – (10) Child care */
+  /** (10) Child care */
   SsvfFinancialAssistanceChildCare = 'SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE',
-  /** (152) SSVF financial assistance – (14) Emergency housing assistance */
+  /** (14) Emergency housing assistance */
   SsvfFinancialAssistanceEmergencyHousingAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE',
-  /** (152) SSVF financial assistance – (15) Extended Shallow Subsidy - Rental Assistance */
-  SsvfFinancialAssistanceExtendedShallowSubsidyRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY___RENTAL_ASSISTANCE',
-  /** (152) SSVF financial assistance – (16) Food Assistance */
+  /** (15) Extended Shallow Subsidy - Rental Assistance */
+  SsvfFinancialAssistanceExtendedShallowSubsidyRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE',
+  /** (16) Food Assistance */
   SsvfFinancialAssistanceFoodAssistance = 'SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE',
-  /** (152) SSVF financial assistance – (12) General housing stability assistance */
+  /** (12) General housing stability assistance */
   SsvfFinancialAssistanceGeneralHousingStabilityAssistance = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE',
-  /** (152) SSVF financial assistance – (11) General housing stability assistance - emergency supplies */
-  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySupplies = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE___EMERGENCY_SUPPLIES',
-  /** (152) SSVF financial assistance – (5) Moving costs */
+  /** (11) General housing stability assistance - emergency supplies */
+  SsvfFinancialAssistanceGeneralHousingStabilityAssistanceEmergencySupplies = 'SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES',
+  /** (5) Moving costs */
   SsvfFinancialAssistanceMovingCosts = 'SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS',
-  /** (152) SSVF financial assistance – (1) Rental assistance */
+  /** (1) Rental assistance */
   SsvfFinancialAssistanceRentalAssistance = 'SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE',
-  /** (152) SSVF financial assistance – (2) Security deposit */
+  /** (2) Security deposit */
   SsvfFinancialAssistanceSecurityDeposit = 'SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT',
-  /** (152) SSVF financial assistance – (8) Transportation services: tokens/vouchers */
+  /** (8) Transportation services: tokens/vouchers */
   SsvfFinancialAssistanceTransportationServicesTokensVouchers = 'SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS',
-  /** (152) SSVF financial assistance – (9) Transportation services: vehicle repair/maintenance */
+  /** (9) Transportation services: vehicle repair/maintenance */
   SsvfFinancialAssistanceTransportationServicesVehicleRepairMaintenance = 'SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE',
-  /** (152) SSVF financial assistance – (3) Utility deposit */
+  /** (3) Utility deposit */
   SsvfFinancialAssistanceUtilityDeposit = 'SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT',
-  /** (152) SSVF financial assistance – (4) Utility fee payment assistance */
+  /** (4) Utility fee payment assistance */
   SsvfFinancialAssistanceUtilityFeePaymentAssistance = 'SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE',
-  /** (144) SSVF service – (4) Assistance obtaining/coordinating other public benefits */
+  /** (4) Assistance obtaining/coordinating other public benefits */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefits = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS',
-  /** (144) SSVF service – (3) Assistance obtaining VA benefits */
+  /** (3) Assistance obtaining VA benefits */
   SsvfServiceAssistanceObtainingVaBenefits = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS',
-  /** (144) SSVF service – (2) Case management services */
+  /** (2) Case management services */
   SsvfServiceCaseManagementServices = 'SSVF_SERVICE__CASE_MANAGEMENT_SERVICES',
-  /** (144) SSVF service – (5) Direct provision of other public benefits */
+  /** (5) Direct provision of other public benefits */
   SsvfServiceDirectProvisionOfOtherPublicBenefits = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS',
-  /** (144) SSVF service – (6) Other (non-TFA) supportive service approved by VA */
+  /** (6) Other (non-TFA) supportive service approved by VA */
   SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa = 'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA',
-  /** (144) SSVF service – (1) Outreach services */
+  /** (1) Outreach services */
   SsvfServiceOutreachServices = 'SSVF_SERVICE__OUTREACH_SERVICES',
 }
 
@@ -1148,7 +1127,7 @@ export type GetEnrollmentWithHoHQuery = {
     id: string;
     entryDate?: string | null;
     exitDate?: string | null;
-    household?: {
+    household: {
       __typename?: 'Household';
       id: string;
       householdClients: Array<{
@@ -1171,7 +1150,7 @@ export type GetEnrollmentWithHoHQuery = {
           project: { __typename?: 'Project'; projectName: string };
         };
       }>;
-    } | null;
+    };
     project: { __typename?: 'Project'; projectName: string };
   } | null;
 };

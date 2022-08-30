@@ -16,14 +16,6 @@ schema.__schema.types.forEach((type) => {
     type.enumValues.forEach((elem) => {
       if (elem.description) {
         let description = elem.description.replaceAll(/\n/g, ' ');
-        if (
-          elem.name.includes(ENUM_SECTION_DELIM) &&
-          description.includes(DESCRIPTION_DELIM)
-        ) {
-          description = description
-            .substring(description.search(/(\s–\s)\([0-9]*\)/s))
-            .replace(/^\s–\s/, '');
-        }
         values.push(`${elem.name}: "${description}"`);
       }
     });

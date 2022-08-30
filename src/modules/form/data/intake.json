@@ -58,36 +58,36 @@
           "linkId": "name-dq",
           "text": "Name Data Quality",
           "mapping": {
-            "clientMutationInput": "nameQuality"
+            "clientMutationInput": "nameDataQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "NAME_FULL",
+                "code": "NAME_FULL_NAME_REPORTED",
                 "display": "Full name reported"
               }
             },
             {
               "valueCoding": {
-                "code": "NAME_PARTIAL",
+                "code": "NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
                 "display": "Partial, street name, or code name reported"
               }
             },
             {
               "valueCoding": {
-                "code": "NAME_UNKNOWN",
+                "code": "NAME_CLIENT_DOESN_T_KNOW",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "NAME_REFUSED",
+                "code": "NAME_CLIENT_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "NAME_NOT_COLLECTED",
+                "code": "NAME_DATA_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -139,36 +139,36 @@
           "linkId": "dob-dq",
           "text": "DOB Data Quality",
           "mapping": {
-            "clientMutationInput": "dobQuality"
+            "clientMutationInput": "dobDataQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "DOB_FULL",
+                "code": "DOB_FULL_DOB_REPORTED",
                 "display": "Full DOB reported"
               }
             },
             {
               "valueCoding": {
-                "code": "DOB_PARTIAL",
+                "code": "DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED",
                 "display": "Approximate or partial DOB reported"
               }
             },
             {
               "valueCoding": {
-                "code": "DOB_UNKNOWN",
+                "code": "DOB_CLIENT_DOESN_T_KNOW",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "DOB_REFUSED",
+                "code": "DOB_CLIENT_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "DOB_NOT_COLLECTED",
+                "code": "DOB_DATA_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -199,36 +199,36 @@
           "linkId": "ssn-dq",
           "text": "SSN Data Quality",
           "mapping": {
-            "clientMutationInput": "ssnQuality"
+            "clientMutationInput": "ssnDataQuality"
           },
           "answerOption": [
             {
               "valueCoding": {
-                "code": "SSN_FULL",
+                "code": "SSN_FULL_SSN_REPORTED",
                 "display": "Full SSN Reported"
               }
             },
             {
               "valueCoding": {
-                "code": "SSN_PARTIAL",
+                "code": "SSN_APPROXIMATE_OR_PARTIAL_SSN_REPORTED",
                 "display": "Approximate or partial  SSN reported"
               }
             },
             {
               "valueCoding": {
-                "code": "SSN_UNKNOWN",
+                "code": "SSN_CLIENT_DOESN_T_KNOW",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "SSN_REFUSED",
+                "code": "SSN_CLIENT_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "SSN_NOT_COLLECTED",
+                "code": "SSN_DATA_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -322,13 +322,13 @@
               "answerOption": [
                 {
                   "valueCoding": {
-                    "code": "ETHNICITY_NON_HISPANIC",
+                    "code": "ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_",
                     "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
                   }
                 },
                 {
                   "valueCoding": {
-                    "code": "ETHNICITY_HISPANIC",
+                    "code": "ETHNICITY_HISPANIC_LATIN_A_O_X_",
                     "display": "Hispanic/Latin(a)(o)(x)"
                   }
                 },
@@ -396,19 +396,19 @@
             },
             {
               "valueCoding": {
-                "code": "GENDER_UNKNOWN",
+                "code": "GENDER_CLIENT_DOESN_T_KNOW",
                 "display": "Client doesn't know"
               }
             },
             {
               "valueCoding": {
-                "code": "GENDER_REFUSED",
+                "code": "GENDER_CLIENT_REFUSED",
                 "display": "Client refused"
               }
             },
             {
               "valueCoding": {
-                "code": "GENDER_NOT_COLLECTED",
+                "code": "GENDER_DATA_NOT_COLLECTED",
                 "display": "Data not collected"
               }
             }
@@ -444,7 +444,7 @@
             },
             {
               "valueCoding": {
-                "code": "VETERAN_STATUS_REFUSED",
+                "code": "VETERAN_STATUS_CLIENT_REFUSED",
                 "display": "Client refused"
               }
             },

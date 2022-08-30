@@ -62,13 +62,13 @@ export const EventTypeEnum = {
     '(11) Referral to Transitional Housing bed/unit opening',
 };
 export const GenderEnum = {
-  GENDER_A_GENDER_OTHER_THAN_SINGULARLY_FEMALE_OR_MALE_E_G_NON_BINARY_GENDERFLUID_AGENDER_CULTURALLY_SPECIFIC_GENDER_:
-    '(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
   GENDER_CLIENT_DOESN_T_KNOW: "(8) Client doesn't know",
   GENDER_CLIENT_REFUSED: '(9) Client refused',
   GENDER_DATA_NOT_COLLECTED: '(99) Data not collected',
   GENDER_FEMALE: '(0) Female',
   GENDER_MALE: '(1) Male',
+  GENDER_NO_SINGLE_GENDER:
+    '(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
   GENDER_QUESTIONING: '(6) Questioning',
   GENDER_TRANSGENDER: '(5) Transgender',
 };
@@ -110,12 +110,12 @@ export const ProjectTypeEnum = {
   TH: 'Transitional Housing',
 };
 export const RaceEnum = {
-  RACE_AMERICAN_INDIAN_ALASKA_NATIVE_OR_INDIGENOUS:
+  RACE_AM_IND_AK_NATIVE:
     '(AmIndAKNative) American Indian, Alaska Native, or Indigenous',
-  RACE_ASIAN_OR_ASIAN_AMERICAN: '(Asian) Asian or Asian American',
-  RACE_BLACK_AFRICAN_AMERICAN_OR_AFRICAN:
+  RACE_ASIAN: '(Asian) Asian or Asian American',
+  RACE_BLACK_AF_AMERICAN:
     '(BlackAfAmerican) Black, African American, or African',
-  RACE_NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER:
+  RACE_NATIVE_HI_PACIFIC:
     '(NativeHIPacific) Native Hawaiian or Pacific Islander',
   RACE_NOT_COLLECTED: '(99) Data not collected',
   RACE_REFUSED: '(9) Client refused',
@@ -166,61 +166,61 @@ export const SSNDataQualityEnum = {
 };
 export const ServiceSubTypeProvidedEnum = {
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
-    '(4) Assistance obtaining/coordinating other public benefits – (12) Child care',
+    '(12) Child care',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (2) Daily living services',
+    '(2) Daily living services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (6) Fiduciary and representative payee services',
+    '(6) Fiduciary and representative payee services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (1) Health care services',
+    '(1) Health care services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
-    '(4) Assistance obtaining/coordinating other public benefits – (13) Housing counseling',
+    '(13) Housing counseling',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (5) Income support services',
-  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT:
-    '(4) Assistance obtaining/coordinating other public benefits – (7) Legal services - child support',
-  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION:
-    '(4) Assistance obtaining/coordinating other public benefits – (8) Legal services - eviction prevention',
-  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER:
-    '(4) Assistance obtaining/coordinating other public benefits – (11) Legal services - other',
-  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES:
-    '(4) Assistance obtaining/coordinating other public benefits – (9) Legal services - outstanding fines and penalties',
-  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE:
-    "(4) Assistance obtaining/coordinating other public benefits – (10) Legal services - restore / acquire driver's license",
+    '(5) Income support services',
+  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT:
+    '(7) Legal services - child support',
+  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
+    '(8) Legal services - eviction prevention',
+  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
+    '(11) Legal services - other',
+  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
+    '(9) Legal services - outstanding fines and penalties',
+  SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
+    "(10) Legal services - restore / acquire driver's license",
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (3) Personal financial planning services',
+    '(3) Personal financial planning services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
-    '(4) Assistance obtaining/coordinating other public benefits – (4) Transportation services',
+    '(4) Transportation services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE:
-    '(3) Assistance obtaining VA benefits – (3) Educational assistance',
+    '(3) Educational assistance',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES:
-    '(3) Assistance obtaining VA benefits – (2) Employment and training services',
+    '(2) Employment and training services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES:
-    '(3) Assistance obtaining VA benefits – (4) Health care services',
+    '(4) Health care services',
   SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING:
-    '(3) Assistance obtaining VA benefits – (1) VA vocational and rehabilitation counseling',
+    '(1) VA vocational and rehabilitation counseling',
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
-    '(5) Direct provision of other public benefits – (10) Child care',
+    '(10) Child care',
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES:
-    '(5) Direct provision of other public benefits – (4) Fiduciary and representative payee services',
+    '(4) Fiduciary and representative payee services',
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
-    '(5) Direct provision of other public benefits – (11) Housing counseling',
+    '(11) Housing counseling',
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
-    '(5) Direct provision of other public benefits – (3) Income support services',
-  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT:
-    '(5) Direct provision of other public benefits – (5) Legal services - child support',
-  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION:
-    '(5) Direct provision of other public benefits – (6) Legal services - eviction prevention',
-  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER:
-    '(5) Direct provision of other public benefits – (9) Legal services - other',
-  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES:
-    '(5) Direct provision of other public benefits – (7) Legal services - outstanding fines and penalties',
-  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE:
-    "(5) Direct provision of other public benefits – (8) Legal services - restore / acquire driver's license",
+    '(3) Income support services',
+  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT:
+    '(5) Legal services - child support',
+  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
+    '(6) Legal services - eviction prevention',
+  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
+    '(9) Legal services - other',
+  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
+    '(7) Legal services - outstanding fines and penalties',
+  SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
+    "(8) Legal services - restore / acquire driver's license",
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
-    '(5) Direct provision of other public benefits – (1) Personal financial planning services',
+    '(1) Personal financial planning services',
   SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
-    '(5) Direct provision of other public benefits – (2) Transportation services',
+    '(2) Transportation services',
 };
 export const ServiceTypeProvidedEnum = {
   BED_NIGHT__BED_NIGHT: '(200) BedNight',
@@ -262,15 +262,15 @@ export const ServiceTypeProvidedEnum = {
   HUD_VASH_OTH_VOUCHER_TRACKING__OTHER: '(12) Other',
   HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA:
     '(1) Referral package forwarded to PHA',
-  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___FAMILY_MAINTAINED_THE_VOUCHER:
+  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER:
     '(10) Veteran exited - family maintained the voucher',
-  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___PRIOR_TO_EVER_RECEIVING_A_VOUCHER:
+  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER:
     '(11) Veteran exited - prior to ever receiving a voucher',
-  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___VOUCHER_WAS_RETURNED:
+  HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED:
     '(9) Veteran exited - voucher was returned',
   HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA:
     '(2) Voucher denied by PHA',
-  HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE___VETERAN_MOVED_INTO_HOUSING:
+  HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING:
     '(5) Voucher in use - veteran moved into housing',
   HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA:
     '(3) Voucher issued by PHA',
@@ -334,12 +334,12 @@ export const ServiceTypeProvidedEnum = {
   SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE: '(10) Child care',
   SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE:
     '(14) Emergency housing assistance',
-  SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY___RENTAL_ASSISTANCE:
+  SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE:
     '(15) Extended Shallow Subsidy - Rental Assistance',
   SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE: '(16) Food Assistance',
   SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE:
     '(12) General housing stability assistance',
-  SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE___EMERGENCY_SUPPLIES:
+  SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES:
     '(11) General housing stability assistance - emergency supplies',
   SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS: '(5) Moving costs',
   SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: '(1) Rental assistance',

@@ -1343,9 +1343,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "OBJECT",
-              "name": "Household",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Household",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -2082,12 +2086,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "GENDER_A_GENDER_OTHER_THAN_SINGULARLY_FEMALE_OR_MALE_E_G_NON_BINARY_GENDERFLUID_AGENDER_CULTURALLY_SPECIFIC_GENDER_",
-            "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "GENDER_CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
@@ -2114,6 +2112,12 @@
           {
             "name": "GENDER_MALE",
             "description": "(1) Male",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GENDER_NO_SINGLE_GENDER",
+            "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3015,25 +3019,25 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "RACE_AMERICAN_INDIAN_ALASKA_NATIVE_OR_INDIGENOUS",
+            "name": "RACE_AM_IND_AK_NATIVE",
             "description": "(AmIndAKNative) American Indian, Alaska Native, or Indigenous",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_ASIAN_OR_ASIAN_AMERICAN",
+            "name": "RACE_ASIAN",
             "description": "(Asian) Asian or Asian American",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_BLACK_AFRICAN_AMERICAN_OR_AFRICAN",
+            "name": "RACE_BLACK_AF_AMERICAN",
             "description": "(BlackAfAmerican) Black, African American, or African",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_NATIVE_HAWAIIAN_OR_PACIFIC_ISLANDER",
+            "name": "RACE_NATIVE_HI_PACIFIC",
             "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
             "isDeprecated": false,
             "deprecationReason": null
@@ -3509,169 +3513,169 @@
         "enumValues": [
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (12) Child care",
+            "description": "(12) Child care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (2) Daily living services",
+            "description": "(2) Daily living services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public\nbenefits – (6) Fiduciary and representative payee services",
+            "description": "(6) Fiduciary and representative payee services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (1) Health care services",
+            "description": "(1) Health care services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (13) Housing counseling",
+            "description": "(13) Housing counseling",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (5) Income support services",
+            "description": "(5) Income support services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (7) Legal services - child support",
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT",
+            "description": "(7) Legal services - child support",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public\nbenefits – (8) Legal services - eviction prevention",
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION",
+            "description": "(8) Legal services - eviction prevention",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (11) Legal services - other",
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER",
+            "description": "(11) Legal services - other",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public\nbenefits – (9) Legal services - outstanding fines and penalties",
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES",
+            "description": "(9) Legal services - outstanding fines and penalties",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public\nbenefits – (10) Legal services - restore / acquire driver's license",
+            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE",
+            "description": "(10) Legal services - restore / acquire driver's license",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public\nbenefits – (3) Personal financial planning services",
+            "description": "(3) Personal financial planning services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits – (4) Transportation services",
+            "description": "(4) Transportation services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE",
-            "description": "(144) SSVF service – (3) Assistance obtaining VA benefits – (3) Educational assistance",
+            "description": "(3) Educational assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES",
-            "description": "(144) SSVF service – (3) Assistance obtaining VA benefits – (2) Employment and training services",
+            "description": "(2) Employment and training services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES",
-            "description": "(144) SSVF service – (3) Assistance obtaining VA benefits – (4) Health care services",
+            "description": "(4) Health care services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING",
-            "description": "(144) SSVF service – (3) Assistance obtaining VA benefits – (1) VA vocational and rehabilitation counseling",
+            "description": "(1) VA vocational and rehabilitation counseling",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (10) Child care",
+            "description": "(10) Child care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (4) Fiduciary and representative payee services",
+            "description": "(4) Fiduciary and representative payee services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (11) Housing counseling",
+            "description": "(11) Housing counseling",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (3) Income support services",
+            "description": "(3) Income support services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___CHILD_SUPPORT",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (5) Legal services - child support",
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT",
+            "description": "(5) Legal services - child support",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___EVICTION_PREVENTION",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (6) Legal services - eviction prevention",
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION",
+            "description": "(6) Legal services - eviction prevention",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OTHER",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (9) Legal services - other",
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER",
+            "description": "(9) Legal services - other",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___OUTSTANDING_FINES_AND_PENALTIES",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (7) Legal services - outstanding fines and penalties",
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES",
+            "description": "(7) Legal services - outstanding fines and penalties",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES___RESTORE_ACQUIRE_DRIVER_S_LICENSE",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (8) Legal\nservices - restore / acquire driver's license",
+            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE",
+            "description": "(8) Legal services - restore / acquire driver's license",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (1) Personal financial planning services",
+            "description": "(1) Personal financial planning services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits – (2) Transportation services",
+            "description": "(2) Transportation services",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -3688,571 +3692,571 @@
         "enumValues": [
           {
             "name": "BED_NIGHT__BED_NIGHT",
-            "description": "(200) Bed night – (200) BedNight",
+            "description": "(200) BedNight",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES_",
-            "description": "(300) C2 Moving On Assistance Provided – (2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
+            "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT",
-            "description": "(300) C2 Moving On Assistance Provided – (4) Housing referral/placement",
+            "description": "(4) Housing referral/placement",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT_",
-            "description": "(300) C2 Moving On Assistance Provided – (3) Non-financial assistance for\nMoving On (e.g., housing navigation, transition support)",
+            "description": "(3) Non-financial assistance for Moving On (e.g., housing navigation, transition support)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_",
-            "description": "(300) C2 Moving On Assistance Provided – (5) Other (please specify)",
+            "description": "(5) Other (please specify)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE",
-            "description": "(300) C2 Moving On Assistance Provided – (1) Subsidized housing application assistance",
+            "description": "(1) Subsidized housing application assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE",
-            "description": "(151) HOPWA financial assistance – (7) Mortgage assistance",
+            "description": "(7) Mortgage assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE",
-            "description": "(151) HOPWA financial assistance – (1) Rental assistance",
+            "description": "(1) Rental assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS",
-            "description": "(151) HOPWA financial assistance – (2) Security deposits",
+            "description": "(2) Security deposits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS",
-            "description": "(151) HOPWA financial assistance – (3) Utility deposits",
+            "description": "(3) Utility deposits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS",
-            "description": "(151) HOPWA financial assistance – (4) Utility payments",
+            "description": "(4) Utility payments",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE",
-            "description": "(143) HOPWA service – (1) Adult day care and personal assistance",
+            "description": "(1) Adult day care and personal assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__CASE_MANAGEMENT",
-            "description": "(143) HOPWA service – (2) Case management",
+            "description": "(2) Case management",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__CHILD_CARE",
-            "description": "(143) HOPWA service – (3) Child care",
+            "description": "(3) Child care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES",
-            "description": "(143) HOPWA service – (4) Criminal justice/legal services",
+            "description": "(4) Criminal justice/legal services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__EDUCATION",
-            "description": "(143) HOPWA service – (5) Education",
+            "description": "(5) Education",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__EMPLOYMENT_AND_TRAINING_SERVICES",
-            "description": "(143) HOPWA service – (6) Employment and training services",
+            "description": "(6) Employment and training services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__FOOD_MEALS_NUTRITIONAL_SERVICES",
-            "description": "(143) HOPWA service – (7) Food/meals/nutritional services",
+            "description": "(7) Food/meals/nutritional services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__HEALTH_MEDICAL_CARE",
-            "description": "(143) HOPWA service – (8) Health/medical care",
+            "description": "(8) Health/medical care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__LIFE_SKILLS_TRAINING",
-            "description": "(143) HOPWA service – (9) Life skills training",
+            "description": "(9) Life skills training",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING",
-            "description": "(143) HOPWA service – (10) Mental health care/counseling",
+            "description": "(10) Mental health care/counseling",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__OTHER_HOPWA_FUNDED_SERVICE",
-            "description": "(143) HOPWA service – (14) Other HOPWA funded service",
+            "description": "(14) Other HOPWA funded service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__OUTREACH_AND_OR_ENGAGEMENT",
-            "description": "(143) HOPWA service – (11) Outreach and/or engagement",
+            "description": "(11) Outreach and/or engagement",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__SUBSTANCE_ABUSE_SERVICES_TREATMENT",
-            "description": "(143) HOPWA service – (12) Substance abuse services/treatment",
+            "description": "(12) Substance abuse services/treatment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE__TRANSPORTATION",
-            "description": "(143) HOPWA service – (13) Transportation",
+            "description": "(13) Transportation",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__OTHER",
-            "description": "(210) HUD-VASH OTH voucher tracking – (12) Other",
+            "description": "(12) Other",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA",
-            "description": "(210) HUD-VASH OTH voucher tracking – (1) Referral package forwarded to PHA",
+            "description": "(1) Referral package forwarded to PHA",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___FAMILY_MAINTAINED_THE_VOUCHER",
-            "description": "(210) HUD-VASH OTH voucher tracking – (10) Veteran exited - family maintained the voucher",
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER",
+            "description": "(10) Veteran exited - family maintained the voucher",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___PRIOR_TO_EVER_RECEIVING_A_VOUCHER",
-            "description": "(210) HUD-VASH OTH voucher tracking – (11) Veteran exited - prior to ever receiving a voucher",
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_PRIOR_TO_EVER_RECEIVING_A_VOUCHER",
+            "description": "(11) Veteran exited - prior to ever receiving a voucher",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED___VOUCHER_WAS_RETURNED",
-            "description": "(210) HUD-VASH OTH voucher tracking – (9) Veteran exited - voucher was returned",
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED",
+            "description": "(9) Veteran exited - voucher was returned",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA",
-            "description": "(210) HUD-VASH OTH voucher tracking – (2) Voucher denied by PHA",
+            "description": "(2) Voucher denied by PHA",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE___VETERAN_MOVED_INTO_HOUSING",
-            "description": "(210) HUD-VASH OTH voucher tracking – (5) Voucher in use - veteran moved into housing",
+            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING",
+            "description": "(5) Voucher in use - veteran moved into housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA",
-            "description": "(210) HUD-VASH OTH voucher tracking – (3) Voucher issued by PHA",
+            "description": "(3) Voucher issued by PHA",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED",
-            "description": "(210) HUD-VASH OTH voucher tracking – (4) Voucher revoked or expired",
+            "description": "(4) Voucher revoked or expired",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_ADMINISTRATIVELY_ABSORBED_BY_NEW_PHA",
-            "description": "(210) HUD-VASH OTH voucher tracking – (7) Voucher was administratively absorbed by new PHA",
+            "description": "(7) Voucher was administratively absorbed by new PHA",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER",
-            "description": "(210) HUD-VASH OTH voucher tracking – (8) Voucher was converted to Housing Choice Voucher",
+            "description": "(8) Voucher was converted to Housing Choice Voucher",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY",
-            "description": "(210) HUD-VASH OTH voucher tracking – (6) Voucher was ported locally",
+            "description": "(6) Voucher was ported locally",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH",
-            "description": "(161) PATH referral – (1) Community mental health",
+            "description": "(1) Community mental health",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__EDUCATIONAL_SERVICES",
-            "description": "(161) PATH referral – (5) Educational services",
+            "description": "(5) Educational services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__EMPLOYMENT_ASSISTANCE",
-            "description": "(161) PATH referral – (9) Employment assistance",
+            "description": "(9) Employment assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__HOUSING_SERVICES",
-            "description": "(161) PATH referral – (6) Housing services",
+            "description": "(6) Housing services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__INCOME_ASSISTANCE",
-            "description": "(161) PATH referral – (8) Income assistance",
+            "description": "(8) Income assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__JOB_TRAINING",
-            "description": "(161) PATH referral – (4) Job training",
+            "description": "(4) Job training",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__MEDICAL_INSURANCE",
-            "description": "(161) PATH referral – (10) Medical insurance",
+            "description": "(10) Medical insurance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__PERMANENT_HOUSING",
-            "description": "(161) PATH referral – (7) Permanent housing",
+            "description": "(7) Permanent housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE",
-            "description": "(161) PATH referral – (3) Primary health/dental care",
+            "description": "(3) Primary health/dental care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__SUBSTANCE_USE_TREATMENT",
-            "description": "(161) PATH referral – (2) Substance use treatment",
+            "description": "(2) Substance use treatment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_REFERRAL__TEMPORARY_HOUSING",
-            "description": "(161) PATH referral – (11) Temporary housing",
+            "description": "(11) Temporary housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__CASE_MANAGEMENT",
-            "description": "(141) PATH service – (6) Case management",
+            "description": "(6) Case management",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__CLINICAL_ASSESSMENT",
-            "description": "(141) PATH service – (14) Clinical assessment",
+            "description": "(14) Clinical assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__COMMUNITY_MENTAL_HEALTH",
-            "description": "(141) PATH service – (4) Community mental health",
+            "description": "(4) Community mental health",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__HABILITATION_REHABILITATION",
-            "description": "(141) PATH service – (3) Habilitation/rehabilitation",
+            "description": "(3) Habilitation/rehabilitation",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__HOUSING_ELIGIBILITY_DETERMINATION",
-            "description": "(141) PATH service – (10) Housing eligibility determination",
+            "description": "(10) Housing eligibility determination",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__HOUSING_MINOR_RENOVATION",
-            "description": "(141) PATH service – (8) Housing minor renovation",
+            "description": "(8) Housing minor renovation",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__HOUSING_MOVING_ASSISTANCE",
-            "description": "(141) PATH service – (9) Housing moving assistance",
+            "description": "(9) Housing moving assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION",
-            "description": "(141) PATH service – (12) One-time rent for eviction prevention",
+            "description": "(12) One-time rent for eviction prevention",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__RESIDENTIAL_SUPPORTIVE_SERVICES",
-            "description": "(141) PATH service – (7) Residential supportive services",
+            "description": "(7) Residential supportive services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__RE_ENGAGEMENT",
-            "description": "(141) PATH service – (1) Re-engagement",
+            "description": "(1) Re-engagement",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__SCREENING",
-            "description": "(141) PATH service – (2) Screening",
+            "description": "(2) Screening",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__SECURITY_DEPOSITS",
-            "description": "(141) PATH service – (11) Security deposits",
+            "description": "(11) Security deposits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE__SUBSTANCE_USE_TREATMENT",
-            "description": "(141) PATH service – (5) Substance use treatment",
+            "description": "(5) Substance use treatment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL_",
-            "description": "(142) RHY service connections – (2) Community service/service learning (CSL)",
+            "description": "(2) Community service/service learning (CSL)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES",
-            "description": "(142) RHY service connections – (7) Criminal justice /legal services",
+            "description": "(7) Criminal justice /legal services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__EDUCATION",
-            "description": "(142) RHY service connections – (5) Education",
+            "description": "(5) Education",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__EMPLOYMENT_AND_TRAINING_SERVICES",
-            "description": "(142) RHY service connections – (6) Employment and training services",
+            "description": "(6) Employment and training services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__HEALTH_MEDICAL_CARE",
-            "description": "(142) RHY service connections – (14) Health/medical care",
+            "description": "(14) Health/medical care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES",
-            "description": "(142) RHY service connections – (26) Home-based Services",
+            "description": "(26) Home-based Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING",
-            "description": "(142) RHY service connections – (8) Life skills training",
+            "description": "(8) Life skills training",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__PARENTING_EDUCATION_FOR_YOUTH_WITH_CHILDREN",
-            "description": "(142) RHY service connections – (10) Parenting education for youth with children",
+            "description": "(10) Parenting education for youth with children",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE",
-            "description": "(142) RHY service connections – (12) Post-natal care",
+            "description": "(12) Post-natal care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS_",
-            "description": "(142) RHY service connections – (27) Post-natal newborn care (wellness exams; immunizations)",
+            "description": "(27) Post-natal newborn care (wellness exams; immunizations)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE",
-            "description": "(142) RHY service connections – (13) Pre-natal care",
+            "description": "(13) Pre-natal care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__STD_TESTING",
-            "description": "(142) RHY service connections – (28) STD Testing",
+            "description": "(28) STD Testing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES",
-            "description": "(142) RHY service connections – (29) Street-based Services",
+            "description": "(29) Street-based Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_PREVENTION_SERVICES",
-            "description": "(142) RHY service connections – (18) Substance use disorder/Prevention Services",
+            "description": "(18) Substance use disorder/Prevention Services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS__SUBSTANCE_USE_DISORDER_TREATMENT",
-            "description": "(142) RHY service connections – (17) Substance use disorder treatment",
+            "description": "(17) Substance use disorder treatment",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__CHILD_CARE",
-            "description": "(152) SSVF financial assistance – (10) Child care",
+            "description": "(10) Child care",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__EMERGENCY_HOUSING_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (14) Emergency housing assistance",
+            "description": "(14) Emergency housing assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY___RENTAL_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (15) Extended Shallow Subsidy - Rental Assistance",
+            "name": "SSVF_FINANCIAL_ASSISTANCE__EXTENDED_SHALLOW_SUBSIDY_RENTAL_ASSISTANCE",
+            "description": "(15) Extended Shallow Subsidy - Rental Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__FOOD_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (16) Food Assistance",
+            "description": "(16) Food Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (12) General housing stability assistance",
+            "description": "(12) General housing stability assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE___EMERGENCY_SUPPLIES",
-            "description": "(152) SSVF financial assistance – (11) General housing stability assistance - emergency supplies",
+            "name": "SSVF_FINANCIAL_ASSISTANCE__GENERAL_HOUSING_STABILITY_ASSISTANCE_EMERGENCY_SUPPLIES",
+            "description": "(11) General housing stability assistance - emergency supplies",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS",
-            "description": "(152) SSVF financial assistance – (5) Moving costs",
+            "description": "(5) Moving costs",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (1) Rental assistance",
+            "description": "(1) Rental assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT",
-            "description": "(152) SSVF financial assistance – (2) Security deposit",
+            "description": "(2) Security deposit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS",
-            "description": "(152) SSVF financial assistance – (8) Transportation services: tokens/vouchers",
+            "description": "(8) Transportation services: tokens/vouchers",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE",
-            "description": "(152) SSVF financial assistance – (9) Transportation services: vehicle repair/maintenance",
+            "description": "(9) Transportation services: vehicle repair/maintenance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT",
-            "description": "(152) SSVF financial assistance – (3) Utility deposit",
+            "description": "(3) Utility deposit",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE",
-            "description": "(152) SSVF financial assistance – (4) Utility fee payment assistance",
+            "description": "(4) Utility fee payment assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS",
-            "description": "(144) SSVF service – (4) Assistance obtaining/coordinating other public benefits",
+            "description": "(4) Assistance obtaining/coordinating other public benefits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS",
-            "description": "(144) SSVF service – (3) Assistance obtaining VA benefits",
+            "description": "(3) Assistance obtaining VA benefits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__CASE_MANAGEMENT_SERVICES",
-            "description": "(144) SSVF service – (2) Case management services",
+            "description": "(2) Case management services",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS",
-            "description": "(144) SSVF service – (5) Direct provision of other public benefits",
+            "description": "(5) Direct provision of other public benefits",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA",
-            "description": "(144) SSVF service – (6) Other (non-TFA) supportive service approved by VA",
+            "description": "(6) Other (non-TFA) supportive service approved by VA",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE__OUTREACH_SERVICES",
-            "description": "(144) SSVF service – (1) Outreach services",
+            "description": "(1) Outreach services",
             "isDeprecated": false,
             "deprecationReason": null
           }
