@@ -103,3 +103,27 @@ query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     }
   }
 }
+
+query GetClientHouseholdMemberCandidates(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  client(id: $id) {
+    id
+    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        household {
+          householdClients {
+            client {
+              ...ClientFields
+            }
+          }
+        }
+      }
+    }
+  }
+}

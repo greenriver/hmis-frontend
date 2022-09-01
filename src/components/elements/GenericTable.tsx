@@ -30,6 +30,7 @@ function isRenderFunction<T>(value: any): value is RenderFunction<T> {
 export interface Columns<T> {
   header: string;
   render: AttributeName<T> | RenderFunction<T>;
+  width?: string;
 }
 export interface Props<T> {
   rows: T[];
@@ -92,9 +93,9 @@ const GenericTable = <T extends { id: string }>({
                 }
                 tabIndex={0}
               >
-                {columns.map(({ header, render }) => {
+                {columns.map(({ header, render, width }) => {
                   return (
-                    <TableCell key={header}>
+                    <TableCell key={header} width={width}>
                       <>
                         {isPrimitive<T>(render) && row[render]}
                         {isRenderFunction<T>(render) && render(row)}

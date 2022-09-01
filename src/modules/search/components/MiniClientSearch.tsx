@@ -18,7 +18,7 @@ const MiniClientSearch = ({
 
   return (
     <TextInput
-      label='Search Clients'
+      label='Search for Client'
       placeholder='Search by name, SSN, Personal ID...'
       value={value}
       onChange={(e) => {
