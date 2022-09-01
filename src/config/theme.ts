@@ -32,6 +32,8 @@ const theme: ThemeOptions = {
     button: {
       textTransform: 'none',
     },
+    fontSize: 14,
+    // htmlFontSize: 18,
   },
   palette: {
     background: {
@@ -39,6 +41,20 @@ const theme: ThemeOptions = {
     },
   },
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,

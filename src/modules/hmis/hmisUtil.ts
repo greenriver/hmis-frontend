@@ -46,6 +46,15 @@ export const age = (client: ClientFieldsFragment) => {
   return differenceInYears(new Date(), date);
 };
 
+export const maskedSSN = (client: ClientFieldsFragment) => {
+  if (!client.ssnSerial) return '';
+  let end = client.ssnSerial.slice(-4);
+  if (end.length < 4) {
+    end = [...Array(4 - end.length).fill('*'), end].join('');
+  }
+  return `***-**-${end}`;
+};
+
 export const lastUpdated = (client: ClientFieldsFragment) => {
   return parseAndFormatDate(client.dateUpdated);
 };

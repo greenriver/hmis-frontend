@@ -1,15 +1,11 @@
 import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
 import { useState } from 'react';
-import {
-  useOutletContext,
-  useParams,
-  generatePath,
-  useNavigate,
-} from 'react-router-dom';
+import { useOutletContext, useParams, useLocation } from 'react-router-dom';
 
 // import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import AddHouseholdMembers from './AddHouseholdMembers';
 
+import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
@@ -19,26 +15,30 @@ import { DashboardRoutes } from '@/routes/routes';
 import { Client } from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
-  const navigate = useNavigate();
-  // const { pathname } = useLocation();
+  const { pathname } = useLocation();
   const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
+
+  // map client id -> realtionship-to-hoh
+  const [members, setMembers] = useState<Record<string, string>>({});
+
   const { clientId } = useParams() as {
     clientId: string;
   };
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
 
-  // const crumbs = [
-  //   {
-  //     label: 'Back to all enrollments',
-  //     to: DashboardRoutes.ALL_ENROLLMENTS,
-  //   },
-  //   { label: `Add Enrollment`, to: pathname },
-  // ];
+  const crumbs = [
+    {
+      label: 'Back to all enrollments',
+      to: DashboardRoutes.ALL_ENROLLMENTS,
+    },
+    { label: `Add Enrollment`, to: pathname },
+  ];
+  console.log(members);
   return (
     <>
-      {/* <Breadcrumbs crumbs={crumbs} /> */}
+      <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Typography variant='h5' sx={{ mb: 2 }}>
@@ -71,23 +71,19 @@ const NewEnrollment = () => {
             <Typography variant='h6' sx={{ mb: 2 }}>
               Add Household Members
             </Typography>
-            <AddHouseholdMembers />
+            <AddHouseholdMembers
+              clientId={clientId}
+              members={members}
+              setMembers={setMembers}
+            />
           </Paper>
 
           <Button
-            disabled={!project || !entryDate}
-            onClick={() => {
-              if (!project) return;
-              // FIXME: send enrollment creation mutation, get id back
-              const enrollmentId = '1';
-              navigate(
-                generatePath(DashboardRoutes.NEW_ASSESSMENT, {
-                  assessmentType: 'intake',
-                  enrollmentId,
-                  clientId,
-                })
-              );
-            }}
+            disabled
+            // disabled={!project || !entryDate}
+            // onClick={() => {
+            //   // FIXME: send enrollment creation mutation, get id back
+            // }}
           >
             Begin Assessment
           </Button>

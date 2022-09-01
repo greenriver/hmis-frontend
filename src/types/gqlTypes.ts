@@ -1254,6 +1254,47 @@ export type GetEnrollmentServicesQuery = {
   } | null;
 };
 
+export type GetClientHouseholdMemberCandidatesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientHouseholdMemberCandidatesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    enrollments: {
+      __typename?: 'EnrollmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Enrollment';
+        household: {
+          __typename?: 'Household';
+          householdClients: Array<{
+            __typename?: 'HouseholdClient';
+            client: {
+              __typename?: 'Client';
+              id: string;
+              personalId: string;
+              ssnSerial?: string | null;
+              dob?: string | null;
+              dateUpdated: string;
+              firstName?: string | null;
+              preferredName?: string | null;
+              lastName?: string | null;
+              nameSuffix?: string | null;
+            };
+          }>;
+        };
+      }>;
+    };
+  } | null;
+};
+
 export type ProjectFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -1974,6 +2015,85 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
+>;
+export const GetClientHouseholdMemberCandidatesDocument = gql`
+  query GetClientHouseholdMemberCandidates(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    client(id: $id) {
+      id
+      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          household {
+            householdClients {
+              client {
+                ...ClientFields
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientHouseholdMemberCandidatesQuery__
+ *
+ * To run a query within a React component, call `useGetClientHouseholdMemberCandidatesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientHouseholdMemberCandidatesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientHouseholdMemberCandidatesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetClientHouseholdMemberCandidatesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientHouseholdMemberCandidatesQuery,
+    GetClientHouseholdMemberCandidatesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientHouseholdMemberCandidatesQuery,
+    GetClientHouseholdMemberCandidatesQueryVariables
+  >(GetClientHouseholdMemberCandidatesDocument, options);
+}
+export function useGetClientHouseholdMemberCandidatesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientHouseholdMemberCandidatesQuery,
+    GetClientHouseholdMemberCandidatesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientHouseholdMemberCandidatesQuery,
+    GetClientHouseholdMemberCandidatesQueryVariables
+  >(GetClientHouseholdMemberCandidatesDocument, options);
+}
+export type GetClientHouseholdMemberCandidatesQueryHookResult = ReturnType<
+  typeof useGetClientHouseholdMemberCandidatesQuery
+>;
+export type GetClientHouseholdMemberCandidatesLazyQueryHookResult = ReturnType<
+  typeof useGetClientHouseholdMemberCandidatesLazyQuery
+>;
+export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
+  GetClientHouseholdMemberCandidatesQuery,
+  GetClientHouseholdMemberCandidatesQueryVariables
 >;
 export const GetProjectsForSelectDocument = gql`
   query GetProjectsForSelect {
