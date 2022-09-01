@@ -1,18 +1,12 @@
 import { Grid, Typography } from '@mui/material';
-import { useLocation, useParams } from 'react-router-dom';
+
+import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import formData from '@/modules/form/data/assessment.json';
 import { FormDefinition } from '@/modules/form/types';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
-import apolloClient from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
-import {
-  EnrollmentFieldsFragmentDoc,
-  useGetEnrollmentQuery,
-} from '@/types/gqlTypes';
 
 // FIXME workaround for enum issue
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -21,40 +15,11 @@ const intakeFormDefinition: FormDefinition = JSON.parse(
 );
 
 const NewAssessment = () => {
-  const { pathname } = useLocation();
-  // FIXME put enrollment in context, and fetch formDefinition here based on
-  // enrollment/project ID
-  const { enrollmentId } = useParams() as { enrollmentId: string };
+  const [crumbs, loading] = useEnrollmentCrumbs('Intake Assessment');
 
-  const enrollment = apolloClient.readFragment({
-    id: `Enrollment:${enrollmentId}`,
-    fragment: EnrollmentFieldsFragmentDoc,
-  });
-
-  const { loading, error } = useGetEnrollmentQuery({
-    variables: { id: enrollmentId },
-    skip: !!enrollment,
-  });
-  if (error) throw error;
   if (loading) return <Loading />;
+  if (!crumbs) throw Error('Enrollment not found');
 
-  // if (!enrollment) throw Error('Enrollment not found');
-
-  //FIXME pull out into router state?
-  const crumbs = [
-    {
-      label: 'Back to all enrollments',
-      to: DashboardRoutes.ALL_ENROLLMENTS,
-    },
-    {
-      label: enrollment ? enrollmentName(enrollment) : 'New Enrollment',
-      to: DashboardRoutes.VIEW_ENROLLMENT,
-    },
-    {
-      label: `Intake Assessment`,
-      to: pathname,
-    },
-  ];
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />

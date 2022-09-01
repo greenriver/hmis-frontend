@@ -1,52 +1,24 @@
 import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
-import {
-  useLocation,
-  useParams,
-  generatePath,
-  Link as RouterLink,
-} from 'react-router-dom';
+import { useParams, generatePath, Link as RouterLink } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './HouseholdMemberTable';
+import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
-import apolloClient from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import {
-  EnrollmentFieldsFragmentDoc,
-  useGetEnrollmentQuery,
-} from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
-  const { pathname } = useLocation();
   const { clientId, enrollmentId } = useParams() as {
     enrollmentId: string;
     clientId: string;
   };
-
-  const enrollment = apolloClient.readFragment({
-    id: `Enrollment:${enrollmentId}`,
-    fragment: EnrollmentFieldsFragmentDoc,
-  });
-
-  const { loading, error } = useGetEnrollmentQuery({
-    variables: { id: enrollmentId },
-    skip: !!enrollment,
-  });
-  if (error) throw error;
+  const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
   if (loading) return <Loading />;
+  if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
-  if (!enrollment) throw Error('Enrollment not found');
-
-  const crumbs = [
-    {
-      label: 'Back to all enrollments',
-      to: DashboardRoutes.ALL_ENROLLMENTS,
-    },
-    { label: enrollmentName(enrollment), to: pathname },
-  ];
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
