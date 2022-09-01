@@ -13,6 +13,7 @@ const theme: ThemeOptions = {
     },
     h3: {
       fontFamily: "'Montserrat', sans-serif",
+      fontSize: 24,
     },
     h4: {
       fontFamily: "'Montserrat', sans-serif",

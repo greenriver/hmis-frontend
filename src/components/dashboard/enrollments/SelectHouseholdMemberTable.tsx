@@ -4,13 +4,9 @@ import { SyntheticEvent, useMemo } from 'react';
 
 import GenericTable from '@/components/elements/GenericTable';
 import GenericSelect from '@/components/elements/input/GenericSelect';
-import Loading from '@/components/elements/Loading';
 import { clientName, dob, maskedSSN } from '@/modules/hmis/hmisUtil';
 import { RelationshipToHoHEnum } from '@/types/gqlEnums';
-import {
-  ClientFieldsFragment,
-  useGetClientHouseholdMemberCandidatesQuery,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 const IncludeMemberSwitch = ({
   checked,
@@ -36,35 +32,14 @@ const IncludeMemberSwitch = ({
 };
 
 const SelectHouseholdMemberTable = ({
-  clientId,
+  recentMembers,
   members,
   setMembers,
 }: {
-  clientId: string;
+  recentMembers: ClientFieldsFragment[];
   members: Record<string, string>;
   setMembers: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 }) => {
-  const {
-    data: { client: client } = {},
-    loading,
-    error,
-  } = useGetClientHouseholdMemberCandidatesQuery({
-    variables: { id: clientId },
-  });
-
-  const candidates = useMemo(() => {
-    if (!client) return;
-    const candidates: Record<string, ClientFieldsFragment> = {};
-    client.enrollments.nodes.forEach((en) => {
-      en.household.householdClients.forEach(({ client }) => {
-        if (client.id in candidates) return;
-        if (client.id === clientId) return;
-        candidates[client.id] = client;
-      });
-    });
-    return Object.values(candidates);
-  }, [client, clientId]);
-
   const relationshipToHohOptions = useMemo(() => {
     const options = Object.entries(RelationshipToHoHEnum).map(
       ([value, label]) => ({
@@ -75,16 +50,11 @@ const SelectHouseholdMemberTable = ({
     return sortBy(options, ['label']);
   }, []);
 
-  if (error) throw error;
-  if (loading) return <Loading />;
-  if (!client) throw Error('Client not found');
-
-  // Hide component altogether if no household associations are found
-  if (candidates && candidates.length === 0) return null;
+  if (recentMembers.length === 0) return null;
 
   return (
     <GenericTable<ClientFieldsFragment>
-      rows={candidates || []}
+      rows={recentMembers || []}
       columns={[
         {
           header: 'Name',

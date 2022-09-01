@@ -35,6 +35,14 @@ export const clientName = (client: ClientNameFragment) =>
     .filter(Boolean)
     .join(' ');
 
+export const clientFirstNameAndPreferred = (client: ClientNameFragment) => {
+  if (client.preferredName && !client.firstName) return client.preferredName;
+  if (!client.preferredName && client.firstName) return client.firstName;
+  if (client.preferredName && client.firstName)
+    return `${client.preferredName} (${client.firstName})`;
+  return null;
+};
+
 export const dob = (client: ClientFieldsFragment) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);

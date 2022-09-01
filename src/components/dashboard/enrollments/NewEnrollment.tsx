@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useOutletContext, useParams, useLocation } from 'react-router-dom';
 
 // import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import AddHouseholdMembers from './AddHouseholdMembers';
+import QuickAddHouseholdMembers from './QuickAddHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
@@ -35,7 +35,7 @@ const NewEnrollment = () => {
     },
     { label: `Add Enrollment`, to: pathname },
   ];
-  console.log(members);
+
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -71,7 +71,7 @@ const NewEnrollment = () => {
             <Typography variant='h6' sx={{ mb: 2 }}>
               Add Household Members
             </Typography>
-            <AddHouseholdMembers
+            <QuickAddHouseholdMembers
               clientId={clientId}
               members={members}
               setMembers={setMembers}

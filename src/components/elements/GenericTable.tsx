@@ -9,6 +9,7 @@ import {
   TablePagination,
   TablePaginationProps,
   LinearProgress,
+  TableProps,
 } from '@mui/material';
 import { ReactNode } from 'react';
 
@@ -39,7 +40,8 @@ export interface Props<T> {
   paginated?: boolean;
   loading?: boolean;
   tablePaginationProps?: TablePaginationProps;
-  ActionRowComponent?: ReactNode;
+  actionRow?: ReactNode;
+  tableProps?: TableProps;
 }
 
 const clickableRowStyles = {
@@ -54,11 +56,12 @@ const GenericTable = <T extends { id: string }>({
   paginated = false,
   loading = false,
   tablePaginationProps,
-  ActionRowComponent,
+  actionRow,
+  tableProps,
 }: Props<T>) => {
   return (
     <TableContainer>
-      <Table size='small'>
+      <Table size='small' {...tableProps}>
         <TableHead>
           <TableRow>
             {columns.map(({ header }) => (
@@ -105,7 +108,7 @@ const GenericTable = <T extends { id: string }>({
                 })}
               </TableRow>
             ))}
-          {ActionRowComponent}
+          {actionRow}
         </TableBody>
         {paginated &&
           rows &&
