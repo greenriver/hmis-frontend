@@ -26,7 +26,11 @@ const IncludeMemberSwitch = ({
       control={
         <Switch inputProps={{ 'aria-label': 'controlled' }} size='small' />
       }
-      label={checked ? 'Included' : 'Not Included'}
+      label={
+        <Typography variant='body2'>
+          {checked ? 'Included' : 'Not Included'}
+        </Typography>
+      }
     />
   );
 };

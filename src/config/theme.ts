@@ -32,7 +32,7 @@ const theme: ThemeOptions = {
     button: {
       textTransform: 'none',
     },
-    fontSize: 14,
+    // fontSize: 14,
     // htmlFontSize: 18,
   },
   palette: {
@@ -41,13 +41,13 @@ const theme: ThemeOptions = {
     },
   },
   components: {
-    MuiTypography: {
-      styleOverrides: {
-        root: {
-          fontSize: '0.875rem',
-        },
-      },
-    },
+    // MuiTypography: {
+    //   styleOverrides: {
+    //     root: {
+    //       fontSize: '0.875rem',
+    //     },
+    //   },
+    // },
     MuiInputBase: {
       styleOverrides: {
         root: {
