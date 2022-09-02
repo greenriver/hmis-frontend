@@ -1,6 +1,13 @@
 import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
-import { useState } from 'react';
-import { useOutletContext, useParams, useLocation } from 'react-router-dom';
+import { format } from 'date-fns';
+import { useMemo, useState } from 'react';
+import {
+  useOutletContext,
+  useParams,
+  useLocation,
+  generatePath,
+  useNavigate,
+} from 'react-router-dom';
 
 // import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import QuickAddHouseholdMembers from './QuickAddHouseholdMembers';
@@ -12,23 +19,72 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client, RelationshipToHoH } from '@/types/gqlTypes';
+import {
+  Client,
+  CreateEnrollmentValues,
+  RelationshipToHoH,
+  useCreateEnrollmentMutation,
+} from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
   const { pathname } = useLocation();
   const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
-
   // map client id -> realtionship-to-hoh
   const [members, setMembers] = useState<
     Record<string, RelationshipToHoH | null>
   >({});
-
+  const navigate = useNavigate();
   const { clientId } = useParams() as {
     clientId: string;
   };
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
+
+  const [mutateFunction, { data, loading, error }] =
+    useCreateEnrollmentMutation({
+      onCompleted: (data) => {
+        if (data?.createEnrollment?.enrollments?.length) {
+          navigate(
+            generatePath(DashboardRoutes.ALL_ENROLLMENTS, {
+              clientId,
+            })
+          );
+        }
+      },
+    });
+
+  const onSubmit = useMemo(
+    () => () => {
+      if (!project || !entryDate) return;
+      const values: CreateEnrollmentValues = {
+        projectId: project.id,
+        startDate: format(entryDate, 'yyyy-MM-dd'),
+        householdMembers: [
+          ...Object.entries(members).map(([id, relation]) => ({
+            id,
+            relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
+          })),
+          {
+            id: clientId,
+            relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
+          },
+        ],
+        inProgress: true,
+      };
+      console.log(JSON.stringify(values, null, 2));
+      void mutateFunction({
+        variables: { input: { input: values } },
+      });
+    },
+    [clientId, entryDate, members, project, mutateFunction]
+  );
+
+  // TODO render validations
+  if (data?.createEnrollment?.errors) {
+    console.error('errors', data?.createEnrollment?.errors);
+  }
+  if (error) throw error;
 
   const crumbs = [
     {
@@ -81,13 +137,10 @@ const NewEnrollment = () => {
           </Paper>
 
           <Button
-            disabled
-            // disabled={!project || !entryDate}
-            // onClick={() => {
-            //   // FIXME: send enrollment creation mutation, get id back
-            // }}
+            disabled={!project || !entryDate || loading}
+            onClick={onSubmit}
           >
-            Begin Assessment
+            {loading ? 'Saving...' : 'Enroll'}
           </Button>
         </Grid>
         <Grid item xs></Grid>
