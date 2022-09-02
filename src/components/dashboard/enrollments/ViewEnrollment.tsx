@@ -2,7 +2,7 @@ import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
 import { useParams, generatePath, Link as RouterLink } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import HouseholdMemberTable from './HouseholdMemberTable';
+import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';

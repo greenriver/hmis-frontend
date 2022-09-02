@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 
-import SelectHouseholdMemberTable from './SelectHouseholdMemberTable';
+import AssociatedHouseholdMembers from './AssociatedHouseholdMembers';
 import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 
 import Loading from '@/components/elements/Loading';
@@ -8,6 +8,9 @@ import { RelationshipToHoH } from '@/types/gqlTypes';
 
 // import MiniClientSearch from '@/modules/search/components/MiniClientSearch';
 
+/**
+ * Quickly add household members to a new enrollment
+ */
 const QuickAddHouseholdMembers = ({
   clientId,
   members,
@@ -28,7 +31,7 @@ const QuickAddHouseholdMembers = ({
       {recentMembers && (
         <>
           <Typography>Previously Associated Members</Typography>
-          <SelectHouseholdMemberTable
+          <AssociatedHouseholdMembers
             recentMembers={recentMembers}
             members={members}
             setMembers={setMembers}

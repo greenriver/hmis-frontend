@@ -2,8 +2,7 @@ import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
 import { useState } from 'react';
 import { useOutletContext, useParams, useLocation } from 'react-router-dom';
 
-// import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import QuickAddHouseholdMembers from './QuickAddHouseholdMembers';
+import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';

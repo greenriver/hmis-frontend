@@ -32,6 +32,8 @@ export interface Columns<T> {
   header: string;
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
+  // unique key for element. if not provided, header is used.
+  key?: string;
 }
 export interface Props<T> {
   rows: T[];
@@ -64,8 +66,8 @@ const GenericTable = <T extends { id: string }>({
       <Table size='small' {...tableProps}>
         <TableHead>
           <TableRow>
-            {columns.map(({ header }) => (
-              <TableCell sx={{ fontWeight: 600 }} key={header}>
+            {columns.map(({ header, key }) => (
+              <TableCell sx={{ fontWeight: 600 }} key={key || header}>
                 {header}
               </TableCell>
             ))}
@@ -96,9 +98,9 @@ const GenericTable = <T extends { id: string }>({
                 }
                 tabIndex={0}
               >
-                {columns.map(({ header, render, width }) => {
+                {columns.map(({ header, key, render, width }) => {
                   return (
-                    <TableCell key={header} width={width}>
+                    <TableCell key={key || header} width={width}>
                       <>
                         {isPrimitive<T>(render) && row[render]}
                         {isRenderFunction<T>(render) && render(row)}
