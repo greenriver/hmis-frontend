@@ -29,6 +29,7 @@ interface Props {
   definition: FormDefinition;
   onSubmit: (values: Record<string, any>) => void;
   initialValues?: Record<string, any>;
+  hideInstructions?: boolean;
 }
 
 const MAPPING_KEY = 'clientSearchInput';
@@ -38,6 +39,7 @@ const SearchForm: React.FC<Props> = ({
   definition,
   onSubmit,
   initialValues,
+  hideInstructions = false,
 }) => {
   const [values, setValues] = useState<FormValues>(initialValues || {});
 
@@ -75,16 +77,18 @@ const SearchForm: React.FC<Props> = ({
 
   return (
     <Box component='form' onSubmit={submitHandler} sx={{ pb: 2 }}>
-      <Grid container sx={{ mb: 2 }}>
-        <Grid item xs={9}>
-          <Typography>
-            Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse
-            ID, or PersonalID. It is often most efficient to search using the
-            first few characters of the first name and last name, e.g. to find
-            Jane Smith you might search for ja sm.
-          </Typography>
+      {!hideInstructions && (
+        <Grid container sx={{ mb: 2 }}>
+          <Grid item xs={9}>
+            <Typography>
+              Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse
+              ID, or PersonalID. It is often most efficient to search using the
+              first few characters of the first name and last name, e.g. to find
+              Jane Smith you might search for ja sm.
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={5}>
           <TextInput

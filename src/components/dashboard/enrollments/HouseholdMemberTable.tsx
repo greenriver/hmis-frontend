@@ -1,6 +1,11 @@
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { Stack, Button, Link, TableRow, TableCell } from '@mui/material';
-import { generatePath, Link as RouterLink } from 'react-router-dom';
+import { useMemo } from 'react';
+import {
+  generatePath,
+  Link as RouterLink,
+  useNavigate,
+} from 'react-router-dom';
 
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
@@ -18,23 +23,27 @@ const HouseholdMemberTable = ({
   clientId: string;
   enrollmentId: string;
 }) => {
+  const navigate = useNavigate();
   const {
     data: { enrollment: enrollment } = {},
     loading,
     error,
   } = useGetEnrollmentWithHoHQuery({ variables: { id: enrollmentId } });
 
+  const handleClickAddMembers = useMemo(() => {
+    return () =>
+      navigate(
+        generatePath(DashboardRoutes.ADD_HOUSEHOLD_MEMBERS, {
+          clientId,
+          enrollmentId,
+        })
+      );
+  }, [navigate, clientId, enrollmentId]);
+
   if (error) throw error;
   if (loading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
 
-  const actionRow = (
-    <TableRow hover>
-      <TableCell sx={{ backgroundColor: '#F0EDF3', py: 1, px: 3 }} colSpan={4}>
-        + Add Household Member
-      </TableCell>
-    </TableRow>
-  );
   return (
     <>
       <GenericTable<HouseholdClientFieldsFragment>
@@ -92,9 +101,29 @@ const HouseholdMemberTable = ({
             ),
           },
         ]}
-        ActionRowComponent={actionRow}
+        actionRow={
+          <TableRow
+            onClick={handleClickAddMembers}
+            onKeyUp={(event) =>
+              event.key === 'Enter' && handleClickAddMembers()
+            }
+            hover
+            tabIndex={0}
+            sx={{
+              backgroundColor: '#F0EDF3',
+              py: 1,
+              px: 3,
+              '&:focus': { backgroundColor: '#e1dbe7' },
+              '&:hover': {
+                backgroundColor: '#e1dbe7 !important',
+              },
+              cursor: 'pointer',
+            }}
+          >
+            <TableCell colSpan={4}>+ Add Household Member</TableCell>
+          </TableRow>
+        }
       />
-      {/* <Box>+ Add Household Member</Box> */}
     </>
   );
 };

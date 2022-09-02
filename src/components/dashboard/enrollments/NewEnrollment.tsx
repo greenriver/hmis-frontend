@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useOutletContext, useParams, useLocation } from 'react-router-dom';
 
 // import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import AddHouseholdMembers from './AddHouseholdMembers';
+import QuickAddHouseholdMembers from './QuickAddHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
@@ -12,7 +12,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { Client } from '@/types/gqlTypes';
+import { Client, RelationshipToHoH } from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
   const { pathname } = useLocation();
@@ -20,7 +20,9 @@ const NewEnrollment = () => {
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
 
   // map client id -> realtionship-to-hoh
-  const [members, setMembers] = useState<Record<string, string>>({});
+  const [members, setMembers] = useState<
+    Record<string, RelationshipToHoH | null>
+  >({});
 
   const { clientId } = useParams() as {
     clientId: string;
@@ -35,7 +37,7 @@ const NewEnrollment = () => {
     },
     { label: `Add Enrollment`, to: pathname },
   ];
-  console.log(members);
+
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -71,7 +73,7 @@ const NewEnrollment = () => {
             <Typography variant='h6' sx={{ mb: 2 }}>
               Add Household Members
             </Typography>
-            <AddHouseholdMembers
+            <QuickAddHouseholdMembers
               clientId={clientId}
               members={members}
               setMembers={setMembers}

@@ -1,16 +1,12 @@
-import { FormControlLabel, Switch, Typography } from '@mui/material';
+import { FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { sortBy } from 'lodash-es';
 import { SyntheticEvent, useMemo } from 'react';
 
 import GenericTable from '@/components/elements/GenericTable';
 import GenericSelect from '@/components/elements/input/GenericSelect';
-import Loading from '@/components/elements/Loading';
-import { clientName, dob, maskedSSN } from '@/modules/hmis/hmisUtil';
+import { clientName, dob, age, maskedSSN } from '@/modules/hmis/hmisUtil';
 import { RelationshipToHoHEnum } from '@/types/gqlEnums';
-import {
-  ClientFieldsFragment,
-  useGetClientHouseholdMemberCandidatesQuery,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment, RelationshipToHoH } from '@/types/gqlTypes';
 
 const IncludeMemberSwitch = ({
   checked,
@@ -36,67 +32,50 @@ const IncludeMemberSwitch = ({
 };
 
 const SelectHouseholdMemberTable = ({
-  clientId,
+  recentMembers,
   members,
   setMembers,
 }: {
-  clientId: string;
-  members: Record<string, string>;
-  setMembers: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  recentMembers: ClientFieldsFragment[];
+  members: Record<string, RelationshipToHoH | null>;
+  setMembers: React.Dispatch<
+    React.SetStateAction<Record<string, RelationshipToHoH | null>>
+  >;
 }) => {
-  const {
-    data: { client: client } = {},
-    loading,
-    error,
-  } = useGetClientHouseholdMemberCandidatesQuery({
-    variables: { id: clientId },
-  });
-
-  const candidates = useMemo(() => {
-    if (!client) return;
-    const candidates: Record<string, ClientFieldsFragment> = {};
-    client.enrollments.nodes.forEach((en) => {
-      en.household.householdClients.forEach(({ client }) => {
-        if (client.id in candidates) return;
-        if (client.id === clientId) return;
-        candidates[client.id] = client;
-      });
-    });
-    return Object.values(candidates);
-  }, [client, clientId]);
-
   const relationshipToHohOptions = useMemo(() => {
     const options = Object.entries(RelationshipToHoHEnum).map(
-      ([value, label]) => ({
-        value,
-        label,
-      })
+      ([value, label]) =>
+        ({
+          value,
+          label,
+        } as { value: RelationshipToHoH; label: string })
     );
     return sortBy(options, ['label']);
   }, []);
 
-  if (error) throw error;
-  if (loading) return <Loading />;
-  if (!client) throw Error('Client not found');
-
-  // Hide component altogether if no household associations are found
-  if (candidates && candidates.length === 0) return null;
+  if (recentMembers.length === 0) return null;
 
   return (
     <GenericTable<ClientFieldsFragment>
-      rows={candidates || []}
+      rows={recentMembers || []}
       columns={[
         {
           header: 'Name',
           render: (client) => clientName(client),
         },
         {
-          header: 'SSN',
+          header: 'Last 4 Social',
           render: (client) => maskedSSN(client),
         },
         {
-          header: 'Date of Birth',
-          render: (client) => dob(client),
+          header: 'DOB / Age',
+          render: (client) =>
+            client.dob && (
+              <Stack direction='row' spacing={1}>
+                <span>{dob(client)}</span>
+                <span>{`(${age(client)})`}</span>
+              </Stack>
+            ),
         },
         {
           header: 'Add to Enrollment',
@@ -109,7 +88,7 @@ const SelectHouseholdMemberTable = ({
                   if (!checked) {
                     delete copy[client.id];
                   } else {
-                    copy[client.id] = ''; // RelationshipToHoH.DataNotCollected;
+                    copy[client.id] = null;
                   }
                   return copy;
                 });
@@ -121,7 +100,11 @@ const SelectHouseholdMemberTable = ({
           header: 'Relationship To HoH',
           width: '30%',
           render: (client) => (
-            <GenericSelect<{ value: string; label: string }, false, false>
+            <GenericSelect<
+              { value: RelationshipToHoH; label: string },
+              false,
+              false
+            >
               options={relationshipToHohOptions}
               disabled={!(client.id in members)}
               textInputProps={
@@ -141,7 +124,7 @@ const SelectHouseholdMemberTable = ({
                 setMembers((current) => {
                   const copy = { ...current };
                   if (!selected) {
-                    copy[client.id] = '';
+                    copy[client.id] = null;
                   } else {
                     copy[client.id] = selected.value;
                   }

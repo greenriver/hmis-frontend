@@ -13,7 +13,7 @@ const ErrorFallback = () => (
     <Typography variant='h4'>Something went wrong.</Typography>
     <Button
       variant='outlined'
-      onClick={() => window.location.assign(window.location.origin)}
+      onClick={() => window.location.reload()}
       sx={{ mt: 3 }}
     >
       Refresh

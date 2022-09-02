@@ -12,7 +12,7 @@ const Dashboard: React.FC = () => {
         <Typography variant='h5'>Clients</Typography>
       </PageHeader>
       <Container maxWidth='xl' sx={{ pt: 3, pb: 6 }}>
-        <ClientSearch />
+        <ClientSearch cardsEnabled />
       </Container>
     </>
   );

@@ -1,22 +1,37 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 import { omitBy, isNil, isEmpty } from 'lodash-es';
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSearchParams, createSearchParams } from 'react-router-dom';
+import {
+  useSearchParams,
+  createSearchParams,
+  useNavigate,
+} from 'react-router-dom';
 
 import { searchParamsToVariables, searchParamsToState } from '../searchUtil';
 
+import ClientCard from '@/components/elements/ClientCard';
+import GenericTable, {
+  Columns,
+  Props as GenericTableProps,
+} from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
 import formData from '@/modules/form/data/search.json';
 import { FormDefinition } from '@/modules/form/types';
+import {
+  dob,
+  age,
+  clientFirstNameAndPreferred,
+  maskedSSN,
+} from '@/modules/hmis/hmisUtil';
 import SearchForm from '@/modules/search/components/SearchForm';
-import SearchResults, {
-  SearchResultsHeader,
-} from '@/modules/search/components/SearchResults';
-import { useSearchClientsLazyQuery } from '@/types/gqlTypes';
-
+import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
+import {
+  ClientFieldsFragment,
+  useSearchClientsLazyQuery,
+} from '@/types/gqlTypes';
 // FIXME workaround for enum issue
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 const searchFormDefinition: FormDefinition = JSON.parse(
@@ -26,7 +41,51 @@ const searchFormDefinition: FormDefinition = JSON.parse(
 const PAGE_SIZE = 20;
 const MAX_CARDS_THRESHOLD = 10;
 
-const ClientSearch: React.FC = () => {
+export const searchResultColumns: Columns<ClientFieldsFragment>[] = [
+  { header: 'ID', render: 'id', width: '10%' },
+  {
+    header: 'Last 4 Social',
+    width: '15%',
+    render: (client: ClientFieldsFragment) => maskedSSN(client),
+  },
+
+  {
+    header: 'First Name',
+    render: (client: ClientFieldsFragment) =>
+      clientFirstNameAndPreferred(client),
+  },
+  {
+    header: 'Last Name',
+    render: 'lastName',
+  },
+  {
+    header: 'DOB / Age',
+    render: (row: ClientFieldsFragment) =>
+      row.dob && (
+        <Stack direction='row' spacing={1}>
+          <span>{dob(row)}</span>
+          <span>{`(${age(row)})`}</span>
+        </Stack>
+      ),
+  },
+];
+
+interface Props {
+  cardsEnabled: boolean;
+  searchResultsTableProps?: Omit<
+    GenericTableProps<ClientFieldsFragment>,
+    'rows'
+  >;
+  wrapperComponent?: React.ElementType;
+  hideInstructions?: boolean;
+}
+const ClientSearch: React.FC<Props> = ({
+  cardsEnabled,
+  searchResultsTableProps,
+  wrapperComponent: WrapperComponent = Paper,
+  hideInstructions = false,
+}) => {
+  const navigate = useNavigate();
   // URL search parameters
   const [searchParams, setSearchParams] = useSearchParams();
   // whether the search params were derived
@@ -51,7 +110,7 @@ const ClientSearch: React.FC = () => {
     onCompleted: (data) => {
       // update display type (card vs table) based on length of results
       // if the use has manually set the display type alread, don't change it
-      if (!hasSetCards) {
+      if (!hasSetCards && cardsEnabled) {
         setCards(data.clientSearch.nodesCount <= MAX_CARDS_THRESHOLD);
       }
     },
@@ -101,6 +160,10 @@ const ClientSearch: React.FC = () => {
     };
   }, []);
 
+  const handleRowClick = useMemo(() => {
+    return (row: ClientFieldsFragment) => navigate(`/client/${row.id}`);
+  }, [navigate]);
+
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
@@ -116,10 +179,12 @@ const ClientSearch: React.FC = () => {
         definition={searchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
+        hideInstructions={hideInstructions}
       />
       {error && <Paper sx={{ p: 2 }}>{error.message}</Paper>}
       {(data || loading) && (
         <SearchResultsHeader
+          showCardToggle={cardsEnabled}
           disabled={!hasResults}
           cardsEnabled={!!cards}
           onChangeCards={handleChangeDisplayType}
@@ -129,7 +194,34 @@ const ClientSearch: React.FC = () => {
       {data && !loading && (
         <>
           <PaginationSummary {...paginationProps} sx={{ mb: 2 }} />
-          <SearchResults data={data} useCards={cards} />
+          {!hasResults && (
+            <WrapperComponent sx={{ mb: 2, p: 2 }}>
+              No clients found.
+            </WrapperComponent>
+          )}
+          {hasResults &&
+            (cards ? (
+              data.clientSearch.nodes.map((client) => (
+                <ClientCard
+                  key={client.id}
+                  client={client}
+                  showLinkToRecord
+                  // TODO re-enable when we have data for it
+                  // showNotices
+                  // linkTargetBlank
+                />
+              ))
+            ) : (
+              <WrapperComponent>
+                <GenericTable
+                  columns={searchResultColumns}
+                  handleRowClick={handleRowClick}
+                  rows={data.clientSearch.nodes || []}
+                  tableProps={{ size: 'medium' }}
+                  {...searchResultsTableProps}
+                />
+              </WrapperComponent>
+            ))}
           <Pagination
             {...paginationProps}
             setOffset={setOffset}
