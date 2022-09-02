@@ -9,8 +9,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-// import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import QuickAddHouseholdMembers from './QuickAddHouseholdMembers';
+import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
