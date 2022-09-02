@@ -36,10 +36,7 @@ mutation CreateClient($input: CreateClientInput!) {
       ...ClientFields
     }
     errors {
-      type
-      attribute
-      message
-      fullMessage
+      ...ValidationErrorFields
     }
   }
 }
@@ -49,6 +46,9 @@ mutation CreateEnrollment($input: CreateEnrollmentInput!) {
     clientMutationId
     enrollments {
       ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }

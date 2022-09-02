@@ -179,7 +179,7 @@ export type CreateEnrollmentPayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
   enrollments?: Maybe<Array<Enrollment>>;
-  errors: Array<ErrorGroup>;
+  errors: Array<ValidationError>;
 };
 
 /** HMIS Enrollment creation input */
@@ -258,13 +258,6 @@ export type EnrollmentsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
-};
-
-export type ErrorGroup = {
-  __typename?: 'ErrorGroup';
-  className?: Maybe<Scalars['String']>;
-  errors: Array<ValidationError>;
-  id: Scalars['ID'];
 };
 
 /** HUD Ethnicity (3.05.1) */
@@ -929,6 +922,7 @@ export type ValidationError = {
   __typename?: 'ValidationError';
   attribute?: Maybe<Scalars['String']>;
   fullMessage?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
   message: Scalars['String'];
   options?: Maybe<Scalars['JsonObject']>;
   type: Scalars['String'];
@@ -947,6 +941,15 @@ export enum VeteranStatus {
   /** (1) Yes */
   VeteranStatusYes = 'VETERAN_STATUS_YES',
 }
+
+export type ValidationErrorFieldsFragment = {
+  __typename?: 'ValidationError';
+  type: string;
+  attribute?: string | null;
+  message: string;
+  fullMessage?: string | null;
+  id?: string | null;
+};
 
 export type ClientNameFragment = {
   __typename?: 'Client';
@@ -1145,6 +1148,7 @@ export type CreateClientMutation = {
       attribute?: string | null;
       message: string;
       fullMessage?: string | null;
+      id?: string | null;
     }>;
   } | null;
 };
@@ -1166,6 +1170,14 @@ export type CreateEnrollmentMutation = {
       inProgress: boolean;
       project: { __typename?: 'Project'; projectName: string };
     }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
   } | null;
 };
 
@@ -1407,6 +1419,15 @@ export type GetOrganizationsForSelectQuery = {
   }>;
 };
 
+export const ValidationErrorFieldsFragmentDoc = gql`
+  fragment ValidationErrorFields on ValidationError {
+    type
+    attribute
+    message
+    fullMessage
+    id
+  }
+`;
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     firstName
@@ -1704,14 +1725,12 @@ export const CreateClientDocument = gql`
         ...ClientFields
       }
       errors {
-        type
-        attribute
-        message
-        fullMessage
+        ...ValidationErrorFields
       }
     }
   }
   ${ClientFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateClientMutationFn = Apollo.MutationFunction<
   CreateClientMutation,
@@ -1763,9 +1782,13 @@ export const CreateEnrollmentDocument = gql`
       enrollments {
         ...EnrollmentFields
       }
+      errors {
+        ...ValidationErrorFields
+      }
     }
   }
   ${EnrollmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
   CreateEnrollmentMutation,
