@@ -268,6 +268,12 @@ const enrollmentWithHoHMock = {
               id: RITA_ACKROYD.id,
               relationshipToHoH: '1',
               client: RITA_ACKROYD,
+              enrollment: {
+                __typename: 'Enrollment',
+                id: '5',
+                entryDate: '2022-06-18T00:00:00+00:00',
+                exitDate: null,
+              },
             },
             {
               __typename: 'HouseholdClient',
@@ -280,6 +286,12 @@ const enrollmentWithHoHMock = {
                 preferredName: 'Leo',
                 lastName: 'Acker',
                 nameSuffix: null,
+              },
+              enrollment: {
+                __typename: 'Enrollment',
+                id: '4',
+                entryDate: '2022-06-15T00:00:00+00:00',
+                exitDate: '2022-08-15T00:00:00+00:00',
               },
             },
           ],

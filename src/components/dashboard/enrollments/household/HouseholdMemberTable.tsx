@@ -16,6 +16,9 @@ import {
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
 
+/**
+ * Table showing all members that belong to a given household
+ */
 const HouseholdMemberTable = ({
   clientId,
   enrollmentId,
@@ -43,7 +46,7 @@ const HouseholdMemberTable = ({
   if (error) throw error;
   if (loading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
-
+  console.log(enrollment);
   return (
     <>
       <GenericTable<HouseholdClientFieldsFragment>

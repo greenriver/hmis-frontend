@@ -1,64 +1,31 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { fromPairs } from 'lodash-es';
 import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, Link, useParams } from 'react-router-dom';
 
-import SelectHouseholdMemberTable from './SelectHouseholdMemberTable';
+import AssociatedHouseholdMembers from './household/AssociatedHouseholdMembers';
+import RelationshipToHohSelect from './household/RelationshipToHohSelect';
+import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
-import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import { Columns } from '@/components/elements/GenericTable';
+import GenericTable, { Columns } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import ClientSearch, {
   searchResultColumns,
 } from '@/modules/search/components/ClientSearch';
 import apolloClient from '@/providers/apolloClient';
-import { RelationshipToHoHEnum } from '@/types/gqlEnums';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientFieldsFragmentDoc,
   RelationshipToHoH,
+  useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
 
-const SelectedMember = ({
-  id,
-  relationshipToHoH,
-  onRemove,
-}: {
-  id: string;
-  relationshipToHoH: RelationshipToHoH | null;
-  onRemove: (id: string) => void;
-}) => {
-  const client = apolloClient.readFragment({
-    id: `Client:${id}`,
-    fragment: ClientFieldsFragmentDoc,
-    fragmentName: 'ClientFields',
-  });
-  // Should never be missing. Fetch if missing?
-  if (!client) return null;
-
-  return (
-    <Grid container spacing={3}>
-      <Grid item xs={3}>
-        {clientName(client)}
-      </Grid>
-      <Grid item xs>
-        <Typography>
-          {relationshipToHoH ? RelationshipToHoHEnum[relationshipToHoH] : ''}
-        </Typography>
-      </Grid>
-      <Grid item xs={1}>
-        <Button size='small' variant='outlined' onClick={() => onRemove(id)}>
-          Remove
-        </Button>
-      </Grid>
-    </Grid>
-  );
-};
-
 const AddHouseholdMembers = () => {
-  const { clientId } = useParams() as {
+  const { clientId, enrollmentId } = useParams() as {
     clientId: string;
     enrollmentId: string;
   };
@@ -69,6 +36,22 @@ const AddHouseholdMembers = () => {
   const [members, setMembers] = useState<
     Record<string, RelationshipToHoH | null>
   >({});
+
+  // map client id -> realtionship-to-hoh (clients that are alredy members)
+  const [currentMembers, setCurrentMembers] = useState<
+    Record<string, RelationshipToHoH>
+  >({});
+
+  const { loading: enrollmentLoading } = useGetEnrollmentWithHoHQuery({
+    variables: { id: enrollmentId },
+    onCompleted: (data) => {
+      const hc = data?.enrollment?.household.householdClients || [];
+      setCurrentMembers(
+        fromPairs(hc.map((c) => [c.client.id, c.relationshipToHoH]))
+      );
+    },
+  });
+
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs(
     'Add Household Members'
   );
@@ -83,11 +66,27 @@ const AddHouseholdMembers = () => {
     [setMembers]
   );
 
-  if (loading) return <Loading />;
-  if (!crumbs || !enrollment) throw Error('Enrollment not found');
+  // don't show people that are already enrolled in this household
+  const eligibleMembers = useMemo(
+    () => recentMembers?.filter(({ id }) => !(id in currentMembers)),
+    [currentMembers, recentMembers]
+  );
 
-  // TODO: filter out people that are already enrolled
-  const eligibleMembers = recentMembers;
+  // get each selected member from the cache so we can show them in the summary table
+  const selectedMembersClientFragments = useMemo(() => {
+    return Object.keys(members)
+      .map((id) =>
+        apolloClient.readFragment({
+          id: `Client:${id}`,
+          fragment: ClientFieldsFragmentDoc,
+          fragmentName: 'ClientFields',
+        })
+      )
+      .filter((c) => !!c);
+  }, [members]);
+
+  if (loading || enrollmentLoading) return <Loading />;
+  if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const columns: Columns<ClientFieldsFragment>[] = [
     ...searchResultColumns,
@@ -120,6 +119,7 @@ const AddHouseholdMembers = () => {
   ];
 
   const numSelected = Object.keys(members).length;
+
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -135,10 +135,11 @@ const AddHouseholdMembers = () => {
               <Typography variant='h5' sx={{ mb: 2 }}>
                 Add Previously Associated Members
               </Typography>
-              <SelectHouseholdMemberTable
+              <AssociatedHouseholdMembers
                 recentMembers={eligibleMembers}
                 members={members}
                 setMembers={setMembers}
+                hideRelationshipToHoH
               />
             </Paper>
           )}
@@ -163,26 +164,57 @@ const AddHouseholdMembers = () => {
             <Typography variant='h5' sx={{ mb: 3 }}>
               Summary
             </Typography>
-            {numSelected === 0 && 'None selected'}
-            {Object.entries(members).map(([id, relation], idx) => (
-              <Box
-                key={id}
-                sx={{
-                  mb: 1,
-                  ml: 0,
-                  width: 'unset',
-                  pb: 1,
-                  borderBottom:
-                    idx === numSelected - 1 ? undefined : '1px solid #eee',
-                }}
-              >
-                <SelectedMember
-                  id={id}
-                  relationshipToHoH={relation}
-                  onRemove={onRemove}
-                />
-              </Box>
-            ))}
+            {selectedMembersClientFragments.length === 0 && (
+              <Typography variant='body2'>
+                No additional household members selected.
+              </Typography>
+            )}
+            {selectedMembersClientFragments.length > 0 && (
+              <GenericTable<ClientFieldsFragment>
+                rows={selectedMembersClientFragments || []}
+                columns={[
+                  {
+                    header: 'Client Name',
+                    key: 'name',
+                    render: (client) => clientName(client),
+                  },
+                  {
+                    header: 'Relationship to Head of Household',
+                    width: '30%',
+                    key: 'relationship',
+                    render: (client) => (
+                      <RelationshipToHohSelect
+                        value={members[client.id]}
+                        onChange={(_, selected) => {
+                          setMembers((current) => {
+                            const copy = { ...current };
+                            if (!selected) {
+                              copy[client.id] = null;
+                            } else {
+                              copy[client.id] = selected.value;
+                            }
+                            return copy;
+                          });
+                        }}
+                      />
+                    ),
+                  },
+                  {
+                    header: '',
+                    key: 'action',
+                    render: (client) => (
+                      <Button
+                        size='small'
+                        variant='outlined'
+                        onClick={() => onRemove(client.id)}
+                      >
+                        Remove
+                      </Button>
+                    ),
+                  },
+                ]}
+              />
+            )}
           </Paper>
           <Stack direction={'row'} spacing={2} sx={{ mb: 3 }}>
             <Button color='secondary' disabled={numSelected === 0}>
@@ -192,7 +224,15 @@ const AddHouseholdMembers = () => {
                   } to Household`
                 : 'Add to Household'}
             </Button>
-            <Button color='secondary' variant='outlined'>
+            <Button
+              color='secondary'
+              variant='outlined'
+              component={Link}
+              to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                clientId,
+                enrollmentId,
+              })}
+            >
               Cancel
             </Button>
           </Stack>
