@@ -4,6 +4,7 @@ import SelectHouseholdMemberTable from './SelectHouseholdMemberTable';
 import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 
 import Loading from '@/components/elements/Loading';
+import { RelationshipToHoH } from '@/types/gqlTypes';
 
 // import MiniClientSearch from '@/modules/search/components/MiniClientSearch';
 
@@ -13,8 +14,10 @@ const QuickAddHouseholdMembers = ({
   setMembers,
 }: {
   clientId: string;
-  members: Record<string, string>;
-  setMembers: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+  members: Record<string, RelationshipToHoH | null>;
+  setMembers: React.Dispatch<
+    React.SetStateAction<Record<string, RelationshipToHoH | null>>
+  >;
 }) => {
   const [recentMembers, loading] = useRecentHouseholdMembers(clientId);
   if (loading) return <Loading />;

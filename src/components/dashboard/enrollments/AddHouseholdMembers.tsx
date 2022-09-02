@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import SelectHouseholdMemberTable from './SelectHouseholdMemberTable';
@@ -9,11 +9,53 @@ import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { Columns } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import ClientSearch, {
   searchResultColumns,
 } from '@/modules/search/components/ClientSearch';
-import { ClientFieldsFragment } from '@/types/gqlTypes';
+import apolloClient from '@/providers/apolloClient';
+import { RelationshipToHoHEnum } from '@/types/gqlEnums';
+import {
+  ClientFieldsFragment,
+  ClientFieldsFragmentDoc,
+  RelationshipToHoH,
+} from '@/types/gqlTypes';
+
+const SelectedMember = ({
+  id,
+  relationshipToHoH,
+  onRemove,
+}: {
+  id: string;
+  relationshipToHoH: RelationshipToHoH | null;
+  onRemove: (id: string) => void;
+}) => {
+  const client = apolloClient.readFragment({
+    id: `Client:${id}`,
+    fragment: ClientFieldsFragmentDoc,
+    fragmentName: 'ClientFields',
+  });
+  // Should never be missing. Fetch if missing?
+  if (!client) return null;
+
+  return (
+    <Grid container spacing={3}>
+      <Grid item xs={3}>
+        {clientName(client)}
+      </Grid>
+      <Grid item xs>
+        <Typography>
+          {relationshipToHoH ? RelationshipToHoHEnum[relationshipToHoH] : ''}
+        </Typography>
+      </Grid>
+      <Grid item xs={1}>
+        <Button size='small' variant='outlined' onClick={() => onRemove(id)}>
+          Remove
+        </Button>
+      </Grid>
+    </Grid>
+  );
+};
 
 const AddHouseholdMembers = () => {
   const { clientId } = useParams() as {
@@ -24,10 +66,23 @@ const AddHouseholdMembers = () => {
     useRecentHouseholdMembers(clientId);
 
   // map client id -> realtionship-to-hoh
-  const [members, setMembers] = useState<Record<string, string>>({});
+  const [members, setMembers] = useState<
+    Record<string, RelationshipToHoH | null>
+  >({});
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs(
     'Add Household Members'
   );
+
+  const onRemove = useMemo(
+    () => (id: string) =>
+      setMembers((current) => {
+        const copy = { ...current };
+        delete copy[id];
+        return copy;
+      }),
+    [setMembers]
+  );
+
   if (loading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
@@ -38,18 +93,33 @@ const AddHouseholdMembers = () => {
     ...searchResultColumns,
     {
       header: '',
-      render: (row: ClientFieldsFragment) => (
-        <Button
-          variant='outlined'
-          size='small'
-          onClick={() => console.log(row.id)}
-        >
-          Include
-        </Button>
-      ),
+      render: (client: ClientFieldsFragment) => {
+        const isSelected = client.id in members;
+        return (
+          <Button
+            variant='outlined'
+            size='small'
+            disabled={isSelected}
+            onClick={() => {
+              setMembers((current) => {
+                const copy = { ...current };
+                if (client.id in current) {
+                  delete copy[client.id];
+                } else {
+                  copy[client.id] = null;
+                }
+                return copy;
+              });
+            }}
+          >
+            {isSelected ? 'Included' : 'Include'}
+          </Button>
+        );
+      },
     },
   ];
 
+  const numSelected = Object.keys(members).length;
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -78,6 +148,7 @@ const AddHouseholdMembers = () => {
               Search for Clients to Add to Enrollment
             </Typography>
             <ClientSearch
+              hideInstructions
               cardsEnabled={false}
               wrapperComponent={Box}
               searchResultsTableProps={{
@@ -89,12 +160,38 @@ const AddHouseholdMembers = () => {
           </Paper>
 
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h5' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 3 }}>
               Summary
             </Typography>
+            {numSelected === 0 && 'None selected'}
+            {Object.entries(members).map(([id, relation], idx) => (
+              <Box
+                key={id}
+                sx={{
+                  mb: 1,
+                  ml: 0,
+                  width: 'unset',
+                  pb: 1,
+                  borderBottom:
+                    idx === numSelected - 1 ? undefined : '1px solid #eee',
+                }}
+              >
+                <SelectedMember
+                  id={id}
+                  relationshipToHoH={relation}
+                  onRemove={onRemove}
+                />
+              </Box>
+            ))}
           </Paper>
           <Stack direction={'row'} spacing={2} sx={{ mb: 3 }}>
-            <Button color='secondary'>Add to Enrollment</Button>
+            <Button color='secondary' disabled={numSelected === 0}>
+              {numSelected > 0
+                ? `Add ${numSelected} Client${
+                    numSelected > 1 ? 's' : ''
+                  } to Household`
+                : 'Add to Household'}
+            </Button>
             <Button color='secondary' variant='outlined'>
               Cancel
             </Button>

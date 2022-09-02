@@ -77,11 +77,13 @@ interface Props {
     'rows'
   >;
   wrapperComponent?: React.ElementType;
+  hideInstructions?: boolean;
 }
 const ClientSearch: React.FC<Props> = ({
   cardsEnabled,
   searchResultsTableProps,
   wrapperComponent: WrapperComponent = Paper,
+  hideInstructions = false,
 }) => {
   const navigate = useNavigate();
   // URL search parameters
@@ -177,6 +179,7 @@ const ClientSearch: React.FC<Props> = ({
         definition={searchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
+        hideInstructions={hideInstructions}
       />
       {error && <Paper sx={{ p: 2 }}>{error.message}</Paper>}
       {(data || loading) && (
