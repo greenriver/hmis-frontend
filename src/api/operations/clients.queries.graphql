@@ -44,6 +44,15 @@ mutation CreateClient($input: CreateClientInput!) {
   }
 }
 
+mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+  createEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentFields
+    }
+  }
+}
+
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields

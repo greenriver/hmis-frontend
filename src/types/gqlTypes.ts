@@ -986,6 +986,7 @@ export type HouseholdClientFieldsFragment = {
     id: string;
     entryDate?: string | null;
     exitDate?: string | null;
+    inProgress: boolean;
     project: { __typename?: 'Project'; projectName: string };
   };
 };
@@ -995,6 +996,7 @@ export type EnrollmentFieldsFragment = {
   id: string;
   entryDate?: string | null;
   exitDate?: string | null;
+  inProgress: boolean;
   project: { __typename?: 'Project'; projectName: string };
 };
 
@@ -1109,6 +1111,7 @@ export type GetClientEnrollmentsQuery = {
         id: string;
         entryDate?: string | null;
         exitDate?: string | null;
+        inProgress: boolean;
         project: { __typename?: 'Project'; projectName: string };
       }>;
     };
@@ -1146,6 +1149,26 @@ export type CreateClientMutation = {
   } | null;
 };
 
+export type CreateEnrollmentMutationVariables = Exact<{
+  input: CreateEnrollmentInput;
+}>;
+
+export type CreateEnrollmentMutation = {
+  __typename?: 'Mutation';
+  createEnrollment?: {
+    __typename?: 'CreateEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollments?: Array<{
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate?: string | null;
+      exitDate?: string | null;
+      inProgress: boolean;
+      project: { __typename?: 'Project'; projectName: string };
+    }> | null;
+  } | null;
+};
+
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1157,6 +1180,7 @@ export type GetEnrollmentQuery = {
     id: string;
     entryDate?: string | null;
     exitDate?: string | null;
+    inProgress: boolean;
     project: { __typename?: 'Project'; projectName: string };
   } | null;
 };
@@ -1172,6 +1196,7 @@ export type GetEnrollmentWithHoHQuery = {
     id: string;
     entryDate?: string | null;
     exitDate?: string | null;
+    inProgress: boolean;
     household: {
       __typename?: 'Household';
       id: string;
@@ -1192,6 +1217,7 @@ export type GetEnrollmentWithHoHQuery = {
           id: string;
           entryDate?: string | null;
           exitDate?: string | null;
+          inProgress: boolean;
           project: { __typename?: 'Project'; projectName: string };
         };
       }>;
@@ -1408,6 +1434,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     project {
       projectName
     }
+    inProgress
   }
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
@@ -1728,6 +1755,60 @@ export type CreateClientMutationResult =
 export type CreateClientMutationOptions = Apollo.BaseMutationOptions<
   CreateClientMutation,
   CreateClientMutationVariables
+>;
+export const CreateEnrollmentDocument = gql`
+  mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+    createEnrollment(input: $input) {
+      clientMutationId
+      enrollments {
+        ...EnrollmentFields
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
+>;
+
+/**
+ * __useCreateEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useCreateEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEnrollmentMutation, { data, loading, error }] = useCreateEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >(CreateEnrollmentDocument, options);
+}
+export type CreateEnrollmentMutationHookResult = ReturnType<
+  typeof useCreateEnrollmentMutation
+>;
+export type CreateEnrollmentMutationResult =
+  Apollo.MutationResult<CreateEnrollmentMutation>;
+export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {

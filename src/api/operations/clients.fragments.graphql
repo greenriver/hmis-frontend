@@ -33,6 +33,7 @@ fragment EnrollmentFields on Enrollment {
   project {
     projectName
   }
+  inProgress
 }
 
 fragment AssessmentFields on Assessment {
