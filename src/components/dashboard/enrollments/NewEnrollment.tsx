@@ -20,7 +20,7 @@ import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   Client,
-  CreateEnrollmentValues,
+  CreateEnrollmentInput,
   RelationshipToHoH,
   useCreateEnrollmentMutation,
 } from '@/types/gqlTypes';
@@ -56,7 +56,7 @@ const NewEnrollment = () => {
   const onSubmit = useMemo(
     () => () => {
       if (!project || !entryDate) return;
-      const values: CreateEnrollmentValues = {
+      const values: CreateEnrollmentInput = {
         projectId: project.id,
         startDate: format(entryDate, 'yyyy-MM-dd'),
         householdMembers: [
@@ -73,7 +73,7 @@ const NewEnrollment = () => {
       };
       console.log(JSON.stringify(values, null, 2));
       void mutateFunction({
-        variables: { input: { input: values } },
+        variables: { input: values },
       });
     },
     [clientId, entryDate, members, project, mutateFunction]
