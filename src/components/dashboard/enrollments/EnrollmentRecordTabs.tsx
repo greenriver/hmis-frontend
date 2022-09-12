@@ -17,7 +17,7 @@ const tabs = [
     Component: ServicesPanel,
   },
   {
-    label: 'Events',
+    label: 'CE Events',
     Component: EventsPanel,
   },
   {
