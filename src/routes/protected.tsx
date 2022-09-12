@@ -4,8 +4,8 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { Routes, DashboardRoutes } from './routes';
 
-import AddHouseholdMembers from '@/components/dashboard/enrollments/AddHouseholdMembers';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
+import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import NewAssessment from '@/components/dashboard/enrollments/NewAssessment';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewAssessment from '@/components/dashboard/enrollments/ViewAssessment';
@@ -51,8 +51,8 @@ export const protectedRoutes = [
             element: <ViewEnrollment />,
           },
           {
-            path: DashboardRoutes.ADD_HOUSEHOLD_MEMBERS,
-            element: <AddHouseholdMembers />,
+            path: DashboardRoutes.EDIT_HOUSEHOLD,
+            element: <EditHousehold />,
           },
           {
             path: DashboardRoutes.NEW_ASSESSMENT,

@@ -10,6 +10,7 @@ import {
   TablePaginationProps,
   LinearProgress,
   TableProps,
+  SxProps,
 } from '@mui/material';
 import { ReactNode } from 'react';
 
@@ -44,6 +45,7 @@ export interface Props<T> {
   tablePaginationProps?: TablePaginationProps;
   actionRow?: ReactNode;
   tableProps?: TableProps;
+  rowSx?: (row: T) => SxProps;
 }
 
 const clickableRowStyles = {
@@ -60,18 +62,22 @@ const GenericTable = <T extends { id: string }>({
   tablePaginationProps,
   actionRow,
   tableProps,
+  rowSx,
 }: Props<T>) => {
+  const hasHeaders = columns.find((c) => !!c.header);
   return (
     <TableContainer>
       <Table size='small' {...tableProps}>
         <TableHead>
-          <TableRow>
-            {columns.map(({ header, key }) => (
-              <TableCell sx={{ fontWeight: 600 }} key={key || header}>
-                {header}
-              </TableCell>
-            ))}
-          </TableRow>
+          {hasHeaders && (
+            <TableRow>
+              {columns.map(({ header, key }) => (
+                <TableCell sx={{ fontWeight: 600 }} key={key || header}>
+                  {header}
+                </TableCell>
+              ))}
+            </TableRow>
+          )}
           {loading && (
             <TableRow>
               <th colSpan={columns.length}>
@@ -88,6 +94,7 @@ const GenericTable = <T extends { id: string }>({
                 sx={{
                   '&:last-child td, &:last-child th': { border: 0 },
                   ...(!!handleRowClick && clickableRowStyles),
+                  ...(!!rowSx && rowSx(row)),
                 }}
                 hover={!!handleRowClick}
                 onClick={handleRowClick ? () => handleRowClick(row) : undefined}

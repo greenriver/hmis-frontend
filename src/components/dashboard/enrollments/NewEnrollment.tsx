@@ -10,12 +10,14 @@ import {
 } from 'react-router-dom';
 
 import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
+import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
+import Loading from '@/components/elements/Loading';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -29,14 +31,18 @@ const NewEnrollment = () => {
   const { pathname } = useLocation();
   const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
-  // map client id -> realtionship-to-hoh
-  const [members, setMembers] = useState<
-    Record<string, RelationshipToHoH | null>
-  >({});
   const navigate = useNavigate();
   const { clientId } = useParams() as {
     clientId: string;
   };
+  // map client id -> realtionship-to-hoh
+  const [members, setMembers] = useState<
+    Record<string, RelationshipToHoH | null>
+  >({ [clientId]: RelationshipToHoH.SelfHeadOfHousehold });
+
+  const [recentMembers, recentHouseholdMembersLoading] =
+    useRecentHouseholdMembers(clientId, true);
+
   const { client } = useOutletContext<{ client: Client | null }>();
   if (!client) throw Error('Missing client');
 
@@ -59,16 +65,10 @@ const NewEnrollment = () => {
       const values: CreateEnrollmentInput = {
         projectId: project.id,
         startDate: format(entryDate, 'yyyy-MM-dd'),
-        householdMembers: [
-          ...Object.entries(members).map(([id, relation]) => ({
-            id,
-            relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
-          })),
-          {
-            id: clientId,
-            relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
-          },
-        ],
+        householdMembers: Object.entries(members).map(([id, relation]) => ({
+          id,
+          relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
+        })),
         inProgress: true,
       };
       console.log(JSON.stringify(values, null, 2));
@@ -76,7 +76,7 @@ const NewEnrollment = () => {
         variables: { input: values },
       });
     },
-    [clientId, entryDate, members, project, mutateFunction]
+    [entryDate, members, project, mutateFunction]
   );
 
   // TODO render validations
@@ -124,16 +124,20 @@ const NewEnrollment = () => {
             </Stack>
           </Paper>
 
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
-              Add Household Members
-            </Typography>
-            <QuickAddHouseholdMembers
-              clientId={clientId}
-              members={members}
-              setMembers={setMembers}
-            />
-          </Paper>
+          {recentHouseholdMembersLoading && <Loading />}
+          {recentMembers && recentMembers.length > 1 && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              <Typography variant='h6' sx={{ mb: 2 }}>
+                Set up Household
+              </Typography>
+              <QuickAddHouseholdMembers
+                clientId={clientId}
+                members={members}
+                setMembers={setMembers}
+                recentMembers={recentMembers}
+              />
+            </Paper>
+          )}
 
           <Button
             disabled={!project || !entryDate || loading}

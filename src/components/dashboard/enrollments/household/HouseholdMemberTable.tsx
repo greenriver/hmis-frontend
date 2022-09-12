@@ -43,7 +43,7 @@ const HouseholdMemberTable = ({
   const handleClickAddMembers = useMemo(() => {
     return () =>
       navigate(
-        generatePath(DashboardRoutes.ADD_HOUSEHOLD_MEMBERS, {
+        generatePath(DashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
         })
@@ -154,7 +154,7 @@ const HouseholdMemberTable = ({
               cursor: 'pointer',
             }}
           >
-            <TableCell colSpan={5}>+ Add Household Member</TableCell>
+            <TableCell colSpan={5}>+ Edit Household</TableCell>
           </TableRow>
         }
       />
