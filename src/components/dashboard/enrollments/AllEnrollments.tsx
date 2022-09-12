@@ -1,4 +1,7 @@
-import { Button, Grid, Paper, Typography } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import HistoryIcon from '@mui/icons-material/History';
+import TimerIcon from '@mui/icons-material/Timer';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import {
   Link as RouterLink,
@@ -19,7 +22,39 @@ import {
 } from '@/types/gqlTypes';
 
 const columns: Columns<EnrollmentFieldsFragment>[] = [
-  { header: 'ID', render: 'id' },
+  {
+    header: 'Status',
+    width: '10%',
+    render: (e) => {
+      let Icon = TimerIcon;
+      let color: 'disabled' | 'error' | 'secondary' = 'disabled';
+      let text = 'Closed';
+      let textColor = 'gray';
+      if (e.inProgress) {
+        Icon = ErrorOutlineIcon;
+        color = 'error';
+        text = 'Pending';
+        textColor = color;
+      } else if (!e.exitDate) {
+        Icon = HistoryIcon;
+        color = 'secondary';
+        text = 'Active';
+        textColor = color;
+      }
+      return (
+        <Stack direction='row' alignItems='center' gap={0.8}>
+          <Icon color={color} fontSize='small' />
+          <Typography
+            variant='body2'
+            color={textColor}
+            sx={{ textDecoration: 'none' }}
+          >
+            {text}
+          </Typography>
+        </Stack>
+      );
+    },
+  },
   {
     header: 'Project',
     render: (e) => e.project.projectName,
