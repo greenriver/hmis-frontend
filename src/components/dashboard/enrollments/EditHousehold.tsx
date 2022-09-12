@@ -13,7 +13,6 @@ import {
   Radio,
   Typography,
 } from '@mui/material';
-import { fromPairs } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -69,7 +68,7 @@ const EditHousehold = () => {
 
   const currentMembers = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
-    return fromPairs(hc.map((c) => [c.client.id, c.relationshipToHoH]));
+    return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
   const onRemove = useMemo(
@@ -88,7 +87,7 @@ const EditHousehold = () => {
 
   // don't show people that are already enrolled in this household
   const eligibleMembers = useMemo(
-    () => recentMembers?.filter(({ id }) => !(id in currentMembers)),
+    () => recentMembers?.filter(({ id }) => !currentMembers.has(id)),
     [currentMembers, recentMembers]
   );
 
@@ -100,7 +99,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <DatePicker
-            disabled={client.id in currentMembers}
+            disabled={currentMembers.has(client.id)}
             value={candidateEntryDates[client.id] || new Date()}
             disableFuture
             sx={{ width: 200 }}
@@ -124,7 +123,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <RelationshipToHohSelect
-            disabled={client.id in currentMembers}
+            disabled={currentMembers.has(client.id)}
             value={candidateRelationships[client.id] || null}
             onChange={(_, selected) => {
               setCandidateRelationships((current) => {
@@ -144,11 +143,11 @@ const EditHousehold = () => {
         header: '',
         key: 'add',
         render: (client: ClientFieldsFragment) => {
-          const disabled = client.id in currentMembers;
-
+          const disabled = currentMembers.has(client.id);
           return (
             <Button
               disabled={disabled}
+              color='secondary'
               onClick={() => {
                 // FIXME graphql query
                 console.log(

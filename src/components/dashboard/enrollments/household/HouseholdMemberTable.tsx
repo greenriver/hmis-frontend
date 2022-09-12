@@ -145,7 +145,7 @@ const HouseholdMemberTable = ({
             tabIndex={0}
             sx={{
               backgroundColor: '#F0EDF3',
-              py: 1,
+              py: 3,
               px: 3,
               '&:focus': { backgroundColor: '#e1dbe7' },
               '&:hover': {
