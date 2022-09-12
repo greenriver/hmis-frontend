@@ -2,6 +2,7 @@ import { format, parseISO, differenceInYears } from 'date-fns';
 
 import {
   ReferralResultEnum,
+  RelationshipToHoHEnum,
   ServiceSubTypeProvidedEnum,
   ServiceTypeProvidedEnum,
 } from '@/types/gqlEnums';
@@ -10,6 +11,7 @@ import {
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  RelationshipToHoH,
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
 
@@ -20,6 +22,9 @@ import {
 const DATE_FORMAT = 'MM/dd/yyyy';
 
 const formatDate = (date: Date) => format(date, DATE_FORMAT);
+
+// Prefix on descriptions, like "(8) Client doesn't know"
+const numericPrefix = /^\([0-9]*\)\s/;
 
 export const parseAndFormatDate = (date: string) => {
   if (!date) return date;
@@ -85,6 +90,17 @@ export const enrollmentName = (enrollment: {
   project: { projectName: string };
 }) => {
   return enrollment.project.projectName;
+};
+
+const trimNumericPrefix = (s: string) => s.replace(numericPrefix, '');
+
+export const relationshipToHohForDisplay = (
+  relationship: RelationshipToHoH
+) => {
+  if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
+    return 'Self (HoH)';
+  if (relationship === RelationshipToHoH.DataNotCollected) return null;
+  return trimNumericPrefix(RelationshipToHoHEnum[relationship]);
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
