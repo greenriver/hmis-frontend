@@ -1,3 +1,11 @@
+fragment ValidationErrorFields on ValidationError {
+  type
+  attribute
+  message
+  fullMessage
+  id
+}
+
 fragment ClientName on Client {
   firstName
   preferredName
@@ -33,6 +41,7 @@ fragment EnrollmentFields on Enrollment {
   project {
     projectName
   }
+  inProgress
 }
 
 fragment AssessmentFields on Assessment {

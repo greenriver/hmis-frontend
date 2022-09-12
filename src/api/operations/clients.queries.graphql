@@ -36,10 +36,19 @@ mutation CreateClient($input: CreateClientInput!) {
       ...ClientFields
     }
     errors {
-      type
-      attribute
-      message
-      fullMessage
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+  createEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }
