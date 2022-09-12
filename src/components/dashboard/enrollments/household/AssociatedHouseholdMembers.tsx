@@ -2,13 +2,13 @@ import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
 import GenericTable, {
-  Columns,
+  ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import { age, clientName, dob, maskedSSN } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
-const defaultColumns: Columns<ClientFieldsFragment>[] = [
+const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
     key: 'name',
@@ -35,7 +35,7 @@ const defaultColumns: Columns<ClientFieldsFragment>[] = [
 interface Props
   extends Omit<GenericTableProps<ClientFieldsFragment>, 'rows' | 'columns'> {
   recentMembers: ClientFieldsFragment[];
-  additionalColumns?: Columns<ClientFieldsFragment>[];
+  additionalColumns?: ColumnDef<ClientFieldsFragment>[];
   hideHeaders?: boolean;
 }
 const AssociatedHouseholdMembers = ({
@@ -44,7 +44,7 @@ const AssociatedHouseholdMembers = ({
   hideHeaders,
   ...props
 }: Props) => {
-  const columns: Columns<ClientFieldsFragment>[] = useMemo(() => {
+  const columns: ColumnDef<ClientFieldsFragment>[] = useMemo(() => {
     return [
       ...defaultColumns.map((c) => (hideHeaders ? { ...c, header: '' } : c)),
       ...(additionalColumns || []),

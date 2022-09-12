@@ -6,7 +6,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-import { Columns } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
@@ -18,7 +18,7 @@ import {
   GetEnrollmentAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: Columns<AssessmentFieldsFragment>[] = [
+const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',

@@ -29,7 +29,7 @@ function isRenderFunction<T>(value: any): value is RenderFunction<T> {
   return typeof value === 'function';
 }
 
-export interface Columns<T> {
+export interface ColumnDef<T> {
   header: string;
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
@@ -39,7 +39,7 @@ export interface Columns<T> {
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
-  columns: Columns<T>[];
+  columns: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
   tablePaginationProps?: TablePaginationProps;

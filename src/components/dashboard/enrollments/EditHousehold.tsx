@@ -23,7 +23,7 @@ import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import GenericTable, { Columns } from '@/components/elements/GenericTable';
+import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
 import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
@@ -170,7 +170,7 @@ const EditHousehold = () => {
   if (loading || enrollmentLoading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
-  const columns: Columns<ClientFieldsFragment>[] = [
+  const columns: ColumnDef<ClientFieldsFragment>[] = [
     CLIENT_COLUMNS.name,
     CLIENT_COLUMNS.ssn,
     CLIENT_COLUMNS.dobAge,

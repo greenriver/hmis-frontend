@@ -11,7 +11,7 @@ import { searchParamsToVariables, searchParamsToState } from '../searchUtil';
 
 import ClientCard from '@/components/elements/ClientCard';
 import GenericTable, {
-  Columns,
+  ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
@@ -43,41 +43,42 @@ const searchFormDefinition: FormDefinition = JSON.parse(
 const PAGE_SIZE = 20;
 const MAX_CARDS_THRESHOLD = 10;
 
-export const CLIENT_COLUMNS: { [key: string]: Columns<ClientFieldsFragment> } =
-  {
-    id: { header: 'ID', render: 'id', width: '10%' },
-    ssn: {
-      header: 'Last 4 Social',
-      width: '15%',
-      render: (client: ClientFieldsFragment) => maskedSSN(client),
-    },
-    name: {
-      header: 'Name',
-      key: 'name',
-      render: (client: ClientFieldsFragment) => clientName(client),
-    },
-    first: {
-      header: 'First Name',
-      render: (client: ClientFieldsFragment) =>
-        clientFirstNameAndPreferred(client),
-    },
-    last: {
-      header: 'Last Name',
-      render: 'lastName',
-    },
-    dobAge: {
-      header: 'DOB / Age',
-      render: (row: ClientFieldsFragment) =>
-        row.dob && (
-          <Stack direction='row' spacing={1}>
-            <span>{dob(row)}</span>
-            <span>{`(${age(row)})`}</span>
-          </Stack>
-        ),
-    },
-  };
+export const CLIENT_COLUMNS: {
+  [key: string]: ColumnDef<ClientFieldsFragment>;
+} = {
+  id: { header: 'ID', render: 'id', width: '10%' },
+  ssn: {
+    header: 'Last 4 Social',
+    width: '15%',
+    render: (client: ClientFieldsFragment) => maskedSSN(client),
+  },
+  name: {
+    header: 'Name',
+    key: 'name',
+    render: (client: ClientFieldsFragment) => clientName(client),
+  },
+  first: {
+    header: 'First Name',
+    render: (client: ClientFieldsFragment) =>
+      clientFirstNameAndPreferred(client),
+  },
+  last: {
+    header: 'Last Name',
+    render: 'lastName',
+  },
+  dobAge: {
+    header: 'DOB / Age',
+    render: (row: ClientFieldsFragment) =>
+      row.dob && (
+        <Stack direction='row' spacing={1}>
+          <span>{dob(row)}</span>
+          <span>{`(${age(row)})`}</span>
+        </Stack>
+      ),
+  },
+};
 
-export const searchResultColumns: Columns<ClientFieldsFragment>[] = [
+export const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.ssn,
   CLIENT_COLUMNS.first,
