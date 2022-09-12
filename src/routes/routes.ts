@@ -8,7 +8,7 @@ const subRoutes = {
   PROFILE: 'profile',
   NEW_ENROLLMENT: 'enrollments/new',
   VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
-  ADD_HOUSEHOLD_MEMBERS: 'enrollments/:enrollmentId/add-household-members',
+  EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
   NEW_ASSESSMENT: 'enrollments/:enrollmentId/new-assessment/:assessmentType',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessment/:assessmentId',
   ALL_ENROLLMENTS: 'enrollments',

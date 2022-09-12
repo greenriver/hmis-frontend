@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { Link as RouterLink, generatePath } from 'react-router-dom';
 
-import { Columns } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import {
   eventReferralResult,
@@ -16,7 +16,7 @@ import {
   GetEnrollmentEventsQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: Columns<EventFieldsFragment>[] = [
+const columns: ColumnDef<EventFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',

@@ -1,5 +1,12 @@
 import { ThemeOptions, experimental_sx as sx } from '@mui/material';
 
+// to have typed safe, Button need to provide extra type that can be augmented
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    gray: true;
+  }
+}
+
 const theme: ThemeOptions = {
   typography: {
     fontFamily: "'Open Sans', sans-serif",
@@ -107,6 +114,14 @@ const theme: ThemeOptions = {
         variant: 'contained',
         disableElevation: true,
       },
+      variants: [
+        {
+          props: { variant: 'gray' },
+          style: {
+            backgroundColor: '#EDEDED',
+          },
+        },
+      ],
     },
     MuiAutocomplete: {
       defaultProps: {

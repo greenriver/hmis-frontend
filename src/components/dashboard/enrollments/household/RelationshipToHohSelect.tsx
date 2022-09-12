@@ -31,17 +31,22 @@ const RelationshipToHohSelect = ({ disabled, value, ...props }: Props) => {
     return sortBy(options, ['label']);
   }, []);
 
+  // disabled if HoH is selected
+  const isHoH = value === RelationshipToHoH.SelfHeadOfHousehold;
+  const isDisabled = disabled || isHoH;
   return (
     <GenericSelect<Option, false, false>
       options={relationshipToHohOptions}
-      disabled={disabled}
+      disabled={isDisabled}
       textInputProps={
-        disabled
-          ? { placeholder: 'Not Included' }
+        isDisabled
+          ? { placeholder: isHoH ? '(1) Self' : 'Not Included' }
           : { placeholder: '(99) Data not collected' }
       }
       value={
-        value ? relationshipToHohOptions.find((el) => el.value === value) : null
+        value && !isHoH
+          ? relationshipToHohOptions.find((el) => el.value === value)
+          : null
       }
       size='small'
       renderOption={(props, option) => (

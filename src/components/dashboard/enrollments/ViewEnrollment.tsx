@@ -44,13 +44,17 @@ const ViewEnrollment = () => {
             <Stack spacing={2} sx={{ mb: 3 }}>
               <Typography variant='h6'>Enrollment Status</Typography>
 
-              <Button
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
-              >
-                Intake (finish now)
-              </Button>
+              {enrollment.inProgress ? (
+                <Button
+                  variant='outlined'
+                  color='error'
+                  sx={{ pl: 3, justifyContent: 'left' }}
+                >
+                  Finish Intake
+                </Button>
+              ) : (
+                <Typography variant='body2'>Intake completed</Typography>
+              )}
             </Stack>
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>

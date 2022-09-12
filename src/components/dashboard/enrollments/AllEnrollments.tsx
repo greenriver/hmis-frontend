@@ -10,7 +10,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-import { Columns } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
@@ -21,7 +21,7 @@ import {
   GetClientEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
 
-const columns: Columns<EnrollmentFieldsFragment>[] = [
+const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
     header: 'Status',
     width: '10%',

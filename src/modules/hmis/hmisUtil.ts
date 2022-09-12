@@ -11,8 +11,10 @@ import {
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  RecordType,
   RelationshipToHoH,
   ServiceFieldsFragment,
+  ServiceTypeProvided,
 } from '@/types/gqlTypes';
 
 /**
@@ -116,19 +118,20 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
   let typeProvided: string | null = ServiceTypeProvidedEnum[e.typeProvided];
 
   // Don't show bed night because it's redundant
-  if (e.typeProvided === 'BED_NIGHT__BED_NIGHT') typeProvided = null;
+  if (e.typeProvided === ServiceTypeProvided.BedNightBedNight)
+    typeProvided = null;
 
   const isOtherSsvf =
-    e.recordType === 'SSVF_SERVICE' &&
+    e.recordType === RecordType.SsvfService &&
     e.typeProvided ===
-      'SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA';
+      ServiceTypeProvided.SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa;
   const isOtherHudVash =
-    e.recordType === 'HUD_VASH_OTH_VOUCHER_TRACKING' &&
-    e.typeProvided === 'HUD_VASH_OTH_VOUCHER_TRACKING__OTHER';
+    e.recordType === RecordType.HudVashOthVoucherTracking &&
+    e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
   const isOtherMovingOn =
-    e.recordType === 'C2_MOVING_ON_ASSISTANCE_PROVIDED' &&
+    e.recordType === RecordType.C2MovingOnAssistanceProvided &&
     e.typeProvided ===
-      'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_';
+      ServiceTypeProvided.C2MovingOnAssistanceProvidedOtherPleaseSpecify;
 
   // Don't show 'other' if we have the other value
   if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)
