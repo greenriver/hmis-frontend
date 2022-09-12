@@ -1,5 +1,6 @@
 import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Stack, Button, Link, TableRow, TableCell } from '@mui/material';
+import { Stack, Button, Link, TableRow, TableCell, Box } from '@mui/material';
+import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
 import {
   generatePath,
@@ -9,10 +10,16 @@ import {
 
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import { clientName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  clientName,
+  parseAndFormatDate,
+  relationshipToHohForDisplay,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { RelationshipToHoHEnum } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
+  RelationshipToHoH,
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
 
@@ -43,65 +50,89 @@ const HouseholdMemberTable = ({
       );
   }, [navigate, clientId, enrollmentId]);
 
+  const householdMembers = useMemo(() => {
+    if (!enrollment?.household?.householdClients) return [];
+    const clients = enrollment?.household?.householdClients || [];
+    return sortBy(clients, [(c) => RelationshipToHoHEnum[c.relationshipToHoH]]);
+  }, [enrollment]);
+
   if (error) throw error;
   if (loading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
-  console.log(enrollment);
+
   return (
     <>
       <GenericTable<HouseholdClientFieldsFragment>
-        rows={enrollment.household?.householdClients || []}
+        rows={householdMembers}
         columns={[
           {
             header: 'Household Member',
-            render: (h) => (
-              <Stack direction='row' alignItems='center' gap={1}>
-                {h.relationshipToHoH === 'SELF_HEAD_OF_HOUSEHOLD_' && (
-                  <PersonPinIcon fontSize='small' />
-                )}
-                {h.client.id === clientId ? (
+            render: (h) => {
+              const name =
+                h.client.id === clientId ? (
                   clientName(h.client)
                 ) : (
                   <Link
                     component={RouterLink}
-                    to={generatePath(DashboardRoutes.PROFILE, {
+                    to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
                       clientId: h.client.id,
+                      enrollmentId,
                     })}
                     target='_blank'
                     variant='body2'
                   >
                     {clientName(h.client)}
                   </Link>
-                )}
-              </Stack>
-            ),
+                );
+
+              if (
+                h.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+              ) {
+                return (
+                  <Stack
+                    direction='row'
+                    alignItems='center'
+                    gap={0.5}
+                    sx={{ ml: '-24px', pl: 1 }}
+                  >
+                    <PersonPinIcon fontSize='small' color='secondary' />
+                    {name}
+                  </Stack>
+                );
+              }
+              return <Box sx={{ ml: 1 }}>{name}</Box>;
+            },
           },
           {
             header: 'Start Date',
-            render: (h) =>
-              h.enrollment.entryDate
-                ? parseAndFormatDate(h.enrollment.entryDate)
+            render: (hc) =>
+              hc.enrollment.entryDate
+                ? parseAndFormatDate(hc.enrollment.entryDate)
                 : 'Unknown',
           },
           {
             header: 'Exit Date',
-            render: (h) =>
-              h.enrollment.exitDate
-                ? parseAndFormatDate(h.enrollment.exitDate)
+            render: (hc) =>
+              hc.enrollment.exitDate
+                ? parseAndFormatDate(hc.enrollment.exitDate)
                 : 'Active',
           },
           {
-            header: 'Actions',
-            render: () => (
-              <Stack direction='row' spacing={1}>
-                <Button variant='outlined' color='info' size='small'>
-                  Edit
-                </Button>
+            header: 'Relationship to HoH',
+            render: (hc) => relationshipToHohForDisplay(hc.relationshipToHoH),
+          },
+          {
+            header: '',
+            render: (hc) =>
+              hc.enrollment.inProgress ? (
                 <Button variant='outlined' color='error' size='small'>
+                  Finish Intake
+                </Button>
+              ) : (
+                <Button variant='outlined' size='small'>
                   Exit
                 </Button>
-              </Stack>
-            ),
+              ),
           },
         ]}
         actionRow={
@@ -123,7 +154,7 @@ const HouseholdMemberTable = ({
               cursor: 'pointer',
             }}
           >
-            <TableCell colSpan={4}>+ Add Household Member</TableCell>
+            <TableCell colSpan={5}>+ Add Household Member</TableCell>
           </TableRow>
         }
       />
