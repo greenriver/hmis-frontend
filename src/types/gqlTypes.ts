@@ -1201,6 +1201,34 @@ export type CreateEnrollmentMutation = {
   } | null;
 };
 
+export type AddHouseholdMembersMutationVariables = Exact<{
+  input: AddHouseholdMembersToEnrollmentInput;
+}>;
+
+export type AddHouseholdMembersMutation = {
+  __typename?: 'Mutation';
+  addHouseholdMembersToEnrollment?: {
+    __typename?: 'AddHouseholdMembersToEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollments?: Array<{
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate?: string | null;
+      exitDate?: string | null;
+      inProgress: boolean;
+      project: { __typename?: 'Project'; projectName: string };
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -1852,6 +1880,64 @@ export type CreateEnrollmentMutationResult =
 export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
   CreateEnrollmentMutation,
   CreateEnrollmentMutationVariables
+>;
+export const AddHouseholdMembersDocument = gql`
+  mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
+    addHouseholdMembersToEnrollment(input: $input) {
+      clientMutationId
+      enrollments {
+        ...EnrollmentFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type AddHouseholdMembersMutationFn = Apollo.MutationFunction<
+  AddHouseholdMembersMutation,
+  AddHouseholdMembersMutationVariables
+>;
+
+/**
+ * __useAddHouseholdMembersMutation__
+ *
+ * To run a mutation, you first call `useAddHouseholdMembersMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddHouseholdMembersMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addHouseholdMembersMutation, { data, loading, error }] = useAddHouseholdMembersMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddHouseholdMembersMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddHouseholdMembersMutation,
+    AddHouseholdMembersMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddHouseholdMembersMutation,
+    AddHouseholdMembersMutationVariables
+  >(AddHouseholdMembersDocument, options);
+}
+export type AddHouseholdMembersMutationHookResult = ReturnType<
+  typeof useAddHouseholdMembersMutation
+>;
+export type AddHouseholdMembersMutationResult =
+  Apollo.MutationResult<AddHouseholdMembersMutation>;
+export type AddHouseholdMembersMutationOptions = Apollo.BaseMutationOptions<
+  AddHouseholdMembersMutation,
+  AddHouseholdMembersMutationVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
