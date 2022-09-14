@@ -53,6 +53,18 @@ mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   }
 }
 
+mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
+  addHouseholdMembersToEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields

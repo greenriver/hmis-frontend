@@ -1,38 +1,26 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  FormControlLabel,
-  Grid,
-  Paper,
-  Radio,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
+import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers from './household/AssociatedHouseholdMembers';
+import EditHouseholdMemberTable from './household/EditHouseholdMemberTable';
 import RelationshipToHohSelect from './household/RelationshipToHohSelect';
 import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
-import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import ClientSearch, {
   CLIENT_COLUMNS,
 } from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
-  HouseholdClientFieldsFragment,
   RelationshipToHoH,
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
@@ -46,7 +34,7 @@ const EditHousehold = () => {
   const [recentMembers, recentMembersLoading] =
     useRecentHouseholdMembers(clientId);
 
-  // map candidate client id -> realtionship-to-hoh
+  // map candidate client id -> relationship-to-hoh
   const [candidateRelationships, setCandidateRelationships] = useState<
     Record<string, RelationshipToHoH | null>
   >({});
@@ -56,39 +44,38 @@ const EditHousehold = () => {
     Record<string, Date | null>
   >({});
 
-  const [proposedHoH, setProposedHoH] = useState<
-    HouseholdClientFieldsFragment['client'] | null
-  >(null);
+  const { data, loading, refetch, networkStatus } =
+    useGetEnrollmentWithHoHQuery({
+      variables: { id: enrollmentId },
+      notifyOnNetworkStatusChange: true,
+    });
+  const enrollmentLoading = loading && networkStatus !== 4;
 
-  const { data, loading: enrollmentLoading } = useGetEnrollmentWithHoHQuery({
-    variables: { id: enrollmentId },
-  });
-
-  const [crumbs, loading, enrollment] = useEnrollmentCrumbs('Edit Household');
+  const [crumbs, breadcrumbsLoading, enrollment] =
+    useEnrollmentCrumbs('Edit Household');
 
   const currentMembers = useMemo(() => {
+    return data?.enrollment?.household.householdClients || [];
+  }, [data]);
+  const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
-  const onRemove = useMemo(
-    // TODO mutation to remove household member
-    () => (id: string) => console.log('remove', id),
-    []
-  );
-
-  const hoh = useMemo(
-    () =>
-      data?.enrollment?.household.householdClients.find(
-        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      )?.client,
-    [data]
-  );
-
   // don't show people that are already enrolled in this household
-  const eligibleMembers = useMemo(
-    () => recentMembers?.filter(({ id }) => !currentMembers.has(id)),
-    [currentMembers, recentMembers]
+  const eligibleMembers = useMemo(() => {
+    return recentMembers?.filter(({ id }) => !currentMembersMap.has(id));
+  }, [recentMembers, currentMembersMap]);
+
+  const navigateToEnrollment = useMemo(
+    () => () =>
+      navigate(
+        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          clientId,
+          enrollmentId,
+        })
+      ),
+    [clientId, enrollmentId, navigate]
   );
 
   const addToEnrollmentColumns = useMemo(() => {
@@ -99,7 +86,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <DatePicker
-            disabled={currentMembers.has(client.id)}
+            disabled={currentMembersMap.has(client.id)}
             value={candidateEntryDates[client.id] || new Date()}
             disableFuture
             sx={{ width: 200 }}
@@ -123,7 +110,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <RelationshipToHohSelect
-            disabled={currentMembers.has(client.id)}
+            disabled={currentMembersMap.has(client.id)}
             value={candidateRelationships[client.id] || null}
             onChange={(_, selected) => {
               setCandidateRelationships((current) => {
@@ -142,34 +129,35 @@ const EditHousehold = () => {
       {
         header: '',
         key: 'add',
+        width: '15%',
         render: (client: ClientFieldsFragment) => {
-          const disabled = currentMembers.has(client.id);
+          if (!enrollment) return;
           return (
-            <Button
-              disabled={disabled}
-              color='secondary'
-              onClick={() => {
-                // FIXME graphql query
-                console.log(
-                  'add to enrollment',
-                  client.id,
-                  candidateRelationships[client.id],
-                  candidateEntryDates[client.id]
-                );
-              }}
-            >
-              {disabled ? 'Added' : 'Add to Enrollment'}
-            </Button>
+            <AddToHouseholdButton
+              isMember={currentMembersMap.has(client.id)}
+              onSuccess={refetch}
+              startDate={candidateEntryDates[client.id]}
+              relationshipToHoH={candidateRelationships[client.id]}
+              householdId={enrollment?.household.id}
+              clientId={client.id}
+            />
           );
         },
       },
     ];
-  }, [candidateEntryDates, candidateRelationships, currentMembers]);
+  }, [
+    candidateEntryDates,
+    candidateRelationships,
+    currentMembersMap,
+    refetch,
+    enrollment,
+  ]);
 
-  if (loading || enrollmentLoading) return <Loading />;
+  if (breadcrumbsLoading || enrollmentLoading || recentMembersLoading)
+    return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
-  const columns: ColumnDef<ClientFieldsFragment>[] = [
+  const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
     CLIENT_COLUMNS.name,
     CLIENT_COLUMNS.ssn,
     CLIENT_COLUMNS.dobAge,
@@ -185,132 +173,26 @@ const EditHousehold = () => {
             <b>Edit Household</b>
             {` for ${enrollmentName(enrollment)} `} enrollment
           </Typography>
-          {recentMembersLoading && <Loading />}
-
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h5' sx={{ mb: 3 }}>
-              Current Household
-            </Typography>
-            {proposedHoH && (
-              <Dialog open>
-                <DialogTitle variant='h5'>Change Head of Household</DialogTitle>
-                <DialogContent>
-                  {proposedHoH && hoh && (
-                    <DialogContentText>
-                      You are changing the head of household from{' '}
-                      <b>{clientName(hoh)}</b> to{' '}
-                      <b>{clientName(proposedHoH)}</b>
-                    </DialogContentText>
-                  )}
-                  {proposedHoH && !hoh && (
-                    <DialogContentText>
-                      Set <b>{clientName(proposedHoH)}</b> as Head of Household.
-                    </DialogContentText>
-                  )}
-                </DialogContent>
-                <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-                  <Button
-                    variant='outlined'
-                    color='secondary'
-                    onClick={() => {
-                      console.log('TODO query');
-                      setProposedHoH(null);
-                    }}
-                  >
-                    Confirm
-                  </Button>
-                  <Button onClick={() => setProposedHoH(null)} variant='gray'>
-                    Cancel
-                  </Button>
-                </DialogActions>
-              </Dialog>
-            )}
-            {currentMembers && (
-              <GenericTable<HouseholdClientFieldsFragment>
-                rows={data?.enrollment?.household.householdClients || []}
-                columns={[
-                  {
-                    header: '',
-                    key: 'name',
-                    width: '40%',
-                    render: (hc) => clientName(hc.client),
-                  },
-                  {
-                    header: '',
-                    key: 'relationship',
-                    render: (hc) => (
-                      <RelationshipToHohSelect
-                        value={hc.relationshipToHoH}
-                        disabled={
-                          hc.relationshipToHoH ===
-                          RelationshipToHoH.SelfHeadOfHousehold
-                        }
-                        onChange={(_, selected) => {
-                          // TODO query
-                          console.log(selected);
-                        }}
-                      />
-                    ),
-                  },
-                  {
-                    header: '',
-                    key: 'HoH',
-                    render: (hc: HouseholdClientFieldsFragment) => (
-                      <FormControlLabel
-                        checked={
-                          hc.relationshipToHoH ===
-                          RelationshipToHoH.SelfHeadOfHousehold
-                        }
-                        control={<Radio />}
-                        componentsProps={{ typography: { variant: 'body2' } }}
-                        label='Head of Household'
-                        onChange={() => {
-                          setProposedHoH(hc.client);
-                        }}
-                      />
-                    ),
-                  },
-                  {
-                    header: '',
-                    key: 'action',
-                    render: (hc) => (
-                      <Button
-                        size='small'
-                        variant='outlined'
-                        color='error'
-                        disabled={
-                          hc.client.id === clientId ||
-                          !hc.enrollment.inProgress ||
-                          hc.relationshipToHoH ===
-                            RelationshipToHoH.SelfHeadOfHousehold
-                        }
-                        onClick={() => onRemove(hc.client.id)}
-                      >
-                        Remove
-                      </Button>
-                    ),
-                  },
-                ]}
+          {currentMembers && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 3 }}>
+                Current Household
+              </Typography>
+              <EditHouseholdMemberTable
+                currentMembers={currentMembers}
+                clientId={clientId}
               />
-            )}
-            <Button
-              startIcon={<ArrowBackIcon />}
-              variant='gray'
-              size='small'
-              sx={{ mt: 2 }}
-              onClick={() =>
-                navigate(
-                  generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                    clientId,
-                    enrollmentId,
-                  })
-                )
-              }
-            >
-              Back to Enrollment
-            </Button>
-          </Paper>
-
+              <Button
+                startIcon={<ArrowBackIcon />}
+                variant='gray'
+                size='small'
+                sx={{ mt: 2 }}
+                onClick={navigateToEnrollment}
+              >
+                Back to Enrollment
+              </Button>
+            </Paper>
+          )}
           {eligibleMembers && eligibleMembers.length > 0 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h5' sx={{ mb: 2 }}>
@@ -334,7 +216,7 @@ const EditHousehold = () => {
               searchResultsTableProps={{
                 handleRowClick: undefined,
                 tableProps: { size: 'small' },
-                columns,
+                columns: searchResultColumns,
               }}
             />
           </Paper>

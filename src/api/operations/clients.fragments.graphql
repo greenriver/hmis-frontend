@@ -30,7 +30,10 @@ fragment HouseholdClientFields on HouseholdClient {
     ...ClientName
   }
   enrollment {
-    ...EnrollmentFields
+    id
+    entryDate
+    exitDate
+    inProgress
   }
 }
 
@@ -42,6 +45,9 @@ fragment EnrollmentFields on Enrollment {
     projectName
   }
   inProgress
+  household {
+    id
+  }
 }
 
 fragment AssessmentFields on Assessment {
