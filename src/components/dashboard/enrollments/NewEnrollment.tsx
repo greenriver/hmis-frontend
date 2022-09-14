@@ -50,11 +50,18 @@ const NewEnrollment = () => {
     useCreateEnrollmentMutation({
       onCompleted: (data) => {
         if (data?.createEnrollment?.enrollments?.length) {
-          navigate(
-            generatePath(DashboardRoutes.ALL_ENROLLMENTS, {
-              clientId,
-            })
-          );
+          const enrollmentId = data?.createEnrollment?.enrollments?.find(
+            (e) => e.client.id === clientId
+          )?.id;
+          const path = enrollmentId
+            ? generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                clientId,
+                enrollmentId,
+              })
+            : generatePath(DashboardRoutes.ALL_ENROLLMENTS, {
+                clientId,
+              });
+          navigate(path);
         }
       },
     });
@@ -93,13 +100,14 @@ const NewEnrollment = () => {
     { label: `Add Enrollment`, to: pathname },
   ];
 
+  const numMembers = Object.keys(members).length;
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
-        <Grid item xs={9}>
+        <Grid item xs={11}>
           <Typography variant='h5' sx={{ mb: 2 }}>
-            <b>Start new enrollment</b>
+            <b>Create enrollment</b>
             {` for ${clientName(client)}`}
           </Typography>
 
@@ -139,12 +147,21 @@ const NewEnrollment = () => {
             </Paper>
           )}
 
-          <Button
-            disabled={!project || !entryDate || loading}
-            onClick={onSubmit}
-          >
-            {loading ? 'Saving...' : 'Enroll'}
-          </Button>
+          <Grid item xs={4}>
+            <Button
+              disabled={!project || !entryDate || loading}
+              onClick={onSubmit}
+              fullWidth
+            >
+              {loading
+                ? 'Submitting...'
+                : numMembers > 1
+                ? `Enroll ${clientName(client)} and ${numMembers - 1} other${
+                    numMembers > 2 ? 's' : ''
+                  }`
+                : `Enroll ${clientName(client)}`}
+            </Button>
+          </Grid>
         </Grid>
         <Grid item xs></Grid>
       </Grid>

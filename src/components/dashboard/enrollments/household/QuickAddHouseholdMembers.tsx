@@ -13,8 +13,6 @@ import RelationshipToHohSelect from './RelationshipToHohSelect';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment, RelationshipToHoH } from '@/types/gqlTypes';
 
-// import MiniClientSearch from '@/modules/search/components/MiniClientSearch';
-
 const IncludeMemberSwitch = ({
   checked,
   onChange,
@@ -51,11 +49,90 @@ const QuickAddHouseholdMembers = ({
     React.SetStateAction<Record<string, RelationshipToHoH | null>>
   >;
 }) => {
+  const onToggleMemberForClient =
+    (client: ClientFieldsFragment) => (_, checked: boolean) =>
+      setMembers((current) => {
+        const copy = { ...current };
+        if (!checked) {
+          if (copy[client.id] === RelationshipToHoH.SelfHeadOfHousehold) {
+            copy[clientId] = RelationshipToHoH.SelfHeadOfHousehold;
+          }
+          delete copy[client.id];
+        } else {
+          copy[client.id] = null;
+        }
+        return copy;
+      });
+
+  const columns = [
+    {
+      header: '',
+      key: 'HoH',
+      render: (client: ClientFieldsFragment) => (
+        <FormControlLabel
+          disabled={!(client.id in members)}
+          checked={members[client.id] === RelationshipToHoH.SelfHeadOfHousehold}
+          control={<Radio />}
+          label='HoH'
+          componentsProps={{ typography: { variant: 'body2' } }}
+          onChange={(_, checked) => {
+            console.log(checked);
+            if (!checked) return;
+            setMembers((current) => {
+              const copy = { ...current };
+              Object.keys(copy).forEach((id) => {
+                if (copy[id] === RelationshipToHoH.SelfHeadOfHousehold) {
+                  copy[id] = null;
+                }
+                copy[client.id] = RelationshipToHoH.SelfHeadOfHousehold;
+              });
+              return copy;
+            });
+          }}
+        />
+      ),
+    },
+    {
+      header: '',
+      key: 'relationship',
+      width: '20%',
+      render: (client: ClientFieldsFragment) => (
+        <RelationshipToHohSelect
+          disabled={!(client.id in members)}
+          value={members[client.id] || null}
+          onChange={(_, selected) => {
+            setMembers((current) => {
+              const copy = { ...current };
+              if (!selected) {
+                copy[client.id] = null;
+              } else {
+                copy[client.id] = selected.value;
+              }
+              return copy;
+            });
+          }}
+        />
+      ),
+    },
+    {
+      header: '',
+      key: 'add',
+      width: '15%',
+      render: (client: ClientFieldsFragment) =>
+        client.id !== clientId && (
+          <IncludeMemberSwitch
+            checked={client.id in members}
+            onChange={onToggleMemberForClient(client)}
+          />
+        ),
+    },
+  ];
+
   return (
     <Stack spacing={3}>
       <Typography variant='body2'>
-        Use the toggles to include clients that have been previously enrolled in
-        the same household as <b>{clientName(recentMembers[0])}</b>.
+        Use the toggles to enroll previously associated clients in the same
+        household as <b>{clientName(recentMembers[0])}</b>.
       </Typography>
       <AssociatedHouseholdMembers
         recentMembers={recentMembers}
@@ -64,80 +141,7 @@ const QuickAddHouseholdMembers = ({
           !(client.id in members) ? { backgroundColor: '#f8f8f8' } : {}
         }
         tableProps={{ sx: { border: '1px solid #eee', borderRadius: 30 } }}
-        additionalColumns={[
-          {
-            header: '',
-            key: 'HoH',
-            render: (client) => (
-              <FormControlLabel
-                disabled={!(client.id in members)}
-                checked={
-                  members[client.id] === RelationshipToHoH.SelfHeadOfHousehold
-                }
-                control={<Radio />}
-                label='HoH'
-                componentsProps={{ typography: { variant: 'body2' } }}
-                onChange={(_, checked) => {
-                  console.log(checked);
-                  if (!checked) return;
-                  setMembers((current) => {
-                    const copy = { ...current };
-                    Object.keys(copy).forEach((id) => {
-                      if (copy[id] === RelationshipToHoH.SelfHeadOfHousehold) {
-                        copy[id] = null;
-                      }
-                      copy[client.id] = RelationshipToHoH.SelfHeadOfHousehold;
-                    });
-                    return copy;
-                  });
-                }}
-              />
-            ),
-          },
-          {
-            header: '',
-            key: 'relationship',
-            width: '20%',
-            render: (client: ClientFieldsFragment) => (
-              <RelationshipToHohSelect
-                disabled={!(client.id in members)}
-                value={members[client.id] || null}
-                onChange={(_, selected) => {
-                  setMembers((current) => {
-                    const copy = { ...current };
-                    if (!selected) {
-                      copy[client.id] = null;
-                    } else {
-                      copy[client.id] = selected.value;
-                    }
-                    return copy;
-                  });
-                }}
-              />
-            ),
-          },
-          {
-            header: '',
-            key: 'add',
-            render: (client) =>
-              client.id !== clientId && (
-                <IncludeMemberSwitch
-                  checked={client.id in members}
-                  onChange={(_, checked) => {
-                    setMembers((current) => {
-                      const copy = { ...current };
-                      if (!checked) {
-                        delete copy[client.id];
-                      } else {
-                        copy[client.id] = null;
-                      }
-                      return copy;
-                    });
-                  }}
-                />
-              ),
-          },
-        ]}
+        additionalColumns={columns}
       />
     </Stack>
   );

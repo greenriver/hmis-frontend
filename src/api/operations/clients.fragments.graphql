@@ -48,6 +48,9 @@ fragment EnrollmentFields on Enrollment {
   household {
     id
   }
+  client {
+    id
+  }
 }
 
 fragment AssessmentFields on Assessment {

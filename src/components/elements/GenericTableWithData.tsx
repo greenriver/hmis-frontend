@@ -43,6 +43,7 @@ const GenericTableWithData = <
         limit: rowsPerPage,
       },
       notifyOnNetworkStatusChange: true,
+      fetchPolicy: 'cache-and-network',
     }
   );
   if (error) throw error;
