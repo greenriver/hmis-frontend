@@ -50,7 +50,7 @@ const QuickAddHouseholdMembers = ({
   >;
 }) => {
   const onToggleMemberForClient =
-    (client: ClientFieldsFragment) => (_, checked: boolean) =>
+    (client: ClientFieldsFragment) => (_: SyntheticEvent, checked: boolean) =>
       setMembers((current) => {
         const copy = { ...current };
         if (!checked) {
@@ -76,7 +76,6 @@ const QuickAddHouseholdMembers = ({
           label='HoH'
           componentsProps={{ typography: { variant: 'body2' } }}
           onChange={(_, checked) => {
-            console.log(checked);
             if (!checked) return;
             setMembers((current) => {
               const copy = { ...current };
