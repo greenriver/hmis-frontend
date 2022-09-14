@@ -1021,6 +1021,7 @@ export type EnrollmentFieldsFragment = {
   inProgress: boolean;
   project: { __typename?: 'Project'; projectName: string };
   household: { __typename?: 'Household'; id: string };
+  client: { __typename?: 'Client'; id: string };
 };
 
 export type AssessmentFieldsFragment = {
@@ -1137,6 +1138,7 @@ export type GetClientEnrollmentsQuery = {
         inProgress: boolean;
         project: { __typename?: 'Project'; projectName: string };
         household: { __typename?: 'Household'; id: string };
+        client: { __typename?: 'Client'; id: string };
       }>;
     };
   } | null;
@@ -1191,6 +1193,7 @@ export type CreateEnrollmentMutation = {
       inProgress: boolean;
       project: { __typename?: 'Project'; projectName: string };
       household: { __typename?: 'Household'; id: string };
+      client: { __typename?: 'Client'; id: string };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -1220,6 +1223,7 @@ export type AddHouseholdMembersMutation = {
       inProgress: boolean;
       project: { __typename?: 'Project'; projectName: string };
       household: { __typename?: 'Household'; id: string };
+      client: { __typename?: 'Client'; id: string };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -1246,6 +1250,7 @@ export type GetEnrollmentQuery = {
     inProgress: boolean;
     project: { __typename?: 'Project'; projectName: string };
     household: { __typename?: 'Household'; id: string };
+    client: { __typename?: 'Client'; id: string };
   } | null;
 };
 
@@ -1286,6 +1291,7 @@ export type GetEnrollmentWithHoHQuery = {
       }>;
     };
     project: { __typename?: 'Project'; projectName: string };
+    client: { __typename?: 'Client'; id: string };
   } | null;
 };
 
@@ -1525,6 +1531,9 @@ export const EnrollmentFieldsFragmentDoc = gql`
     }
     inProgress
     household {
+      id
+    }
+    client {
       id
     }
   }

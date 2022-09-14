@@ -41,7 +41,7 @@ const RelationshipToHohSelect = ({ disabled, value, ...props }: Props) => {
       textInputProps={
         isDisabled
           ? { placeholder: isHoH ? '(1) Self' : 'Not Included' }
-          : { placeholder: '(99) Data not collected' }
+          : { placeholder: '(99) Not collected' }
       }
       value={
         value && !isHoH

@@ -4,6 +4,7 @@ import {
   GetProjectsForSelectDocument,
   GetEnrollmentWithHoHDocument,
   GetClientEnrollmentsDocument,
+  RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -266,7 +267,7 @@ const enrollmentWithHoHMock = {
             {
               __typename: 'HouseholdClient',
               id: RITA_ACKROYD.id,
-              relationshipToHoH: '1',
+              relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
               client: RITA_ACKROYD,
               enrollment: {
                 __typename: 'Enrollment',
@@ -278,7 +279,7 @@ const enrollmentWithHoHMock = {
             {
               __typename: 'HouseholdClient',
               id: '9998',
-              relationshipToHoH: '3',
+              relationshipToHoH: RelationshipToHoH.OtherRelative,
               client: {
                 __typename: 'Client',
                 id: '9998',

@@ -69,7 +69,7 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
       },
       {
         header: '',
-        width: '20%',
+        width: '25%',
         key: 'relationship',
         render: (hc: HouseholdClientFieldsFragment) => (
           // move into custom component with mutation
@@ -88,6 +88,7 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
       {
         header: '',
         key: 'HoH',
+        width: '10%',
         render: (hc: HouseholdClientFieldsFragment) => (
           <FormControlLabel
             checked={
@@ -95,7 +96,7 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
             }
             control={<Radio />}
             componentsProps={{ typography: { variant: 'body2' } }}
-            label='Head of Household'
+            label='HoH'
             onChange={() => {
               setProposedHoH(hc.client);
             }}
