@@ -1,6 +1,7 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers from './household/AssociatedHouseholdMembers';
@@ -17,6 +18,7 @@ import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import ClientSearch, {
   CLIENT_COLUMNS,
 } from '@/modules/search/components/ClientSearch';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   RelationshipToHoH,
@@ -24,6 +26,7 @@ import {
 } from '@/types/gqlTypes';
 
 const EditHousehold = () => {
+  const navigate = useNavigate();
   const { clientId, enrollmentId } = useParams() as {
     clientId: string;
     enrollmentId: string;
@@ -52,14 +55,28 @@ const EditHousehold = () => {
     useEnrollmentCrumbs('Edit Household');
 
   const currentMembers = useMemo(() => {
+    return data?.enrollment?.household.householdClients || [];
+  }, [data]);
+  const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
   // don't show people that are already enrolled in this household
   const eligibleMembers = useMemo(() => {
-    return recentMembers?.filter(({ id }) => !currentMembers.has(id));
-  }, [recentMembers, currentMembers]);
+    return recentMembers?.filter(({ id }) => !currentMembersMap.has(id));
+  }, [recentMembers, currentMembersMap]);
+
+  const navigateToEnrollment = useMemo(
+    () => () =>
+      navigate(
+        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          clientId,
+          enrollmentId,
+        })
+      ),
+    [clientId, enrollmentId, navigate]
+  );
 
   const addToEnrollmentColumns = useMemo(() => {
     return [
@@ -69,7 +86,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <DatePicker
-            disabled={currentMembers.has(client.id)}
+            disabled={currentMembersMap.has(client.id)}
             value={candidateEntryDates[client.id] || new Date()}
             disableFuture
             sx={{ width: 200 }}
@@ -93,7 +110,7 @@ const EditHousehold = () => {
         width: '20%',
         render: (client: ClientFieldsFragment) => (
           <RelationshipToHohSelect
-            disabled={currentMembers.has(client.id)}
+            disabled={currentMembersMap.has(client.id)}
             value={candidateRelationships[client.id] || null}
             onChange={(_, selected) => {
               setCandidateRelationships((current) => {
@@ -117,7 +134,7 @@ const EditHousehold = () => {
           if (!enrollment) return;
           return (
             <AddToHouseholdButton
-              isMember={currentMembers.has(client.id)}
+              isMember={currentMembersMap.has(client.id)}
               onSuccess={refetch}
               startDate={candidateEntryDates[client.id]}
               relationshipToHoH={candidateRelationships[client.id]}
@@ -131,12 +148,13 @@ const EditHousehold = () => {
   }, [
     candidateEntryDates,
     candidateRelationships,
-    currentMembers,
+    currentMembersMap,
     refetch,
     enrollment,
   ]);
 
-  if (breadcrumbsLoading || enrollmentLoading) return <Loading />;
+  if (breadcrumbsLoading || enrollmentLoading || recentMembersLoading)
+    return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
@@ -155,13 +173,26 @@ const EditHousehold = () => {
             <b>Edit Household</b>
             {` for ${enrollmentName(enrollment)} `} enrollment
           </Typography>
-          {recentMembersLoading && <Loading />}
-          <EditHouseholdMemberTable
-            data={data}
-            currentMembers={currentMembers}
-            clientId={clientId}
-            enrollmentId={enrollmentId}
-          />
+          {currentMembers && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 3 }}>
+                Current Household
+              </Typography>
+              <EditHouseholdMemberTable
+                currentMembers={currentMembers}
+                clientId={clientId}
+              />
+              <Button
+                startIcon={<ArrowBackIcon />}
+                variant='gray'
+                size='small'
+                sx={{ mt: 2 }}
+                onClick={navigateToEnrollment}
+              >
+                Back to Enrollment
+              </Button>
+            </Paper>
+          )}
           {eligibleMembers && eligibleMembers.length > 0 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h5' sx={{ mb: 2 }}>
