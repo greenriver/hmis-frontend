@@ -1,5 +1,6 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import { sortBy } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -55,7 +56,7 @@ const EditHousehold = () => {
     useEnrollmentCrumbs('Edit Household');
 
   const currentMembers = useMemo(() => {
-    return data?.enrollment?.household.householdClients || [];
+    return sortBy(data?.enrollment?.household.householdClients || [], 'id');
   }, [data]);
   const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
@@ -181,6 +182,8 @@ const EditHousehold = () => {
               <EditHouseholdMemberTable
                 currentMembers={currentMembers}
                 clientId={clientId}
+                householdId={enrollment.household.id}
+                refetch={refetch}
               />
               <Button
                 startIcon={<ArrowBackIcon />}
