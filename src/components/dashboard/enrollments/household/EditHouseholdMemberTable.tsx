@@ -12,6 +12,7 @@ import { useMemo, useState } from 'react';
 
 import EntryDateInput from './EntryDateInput';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
+import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
 import { clientName } from '@/modules/hmis/hmisUtil';
@@ -25,6 +26,7 @@ interface Props {
   currentMembers: HouseholdClientFieldsFragment[];
   clientId: string;
   householdId: string;
+  refetch: any;
 }
 
 type MaybeClient = HouseholdClientFieldsFragment['client'] | null;
@@ -33,12 +35,35 @@ const EditHouseholdMemberTable = ({
   currentMembers,
   clientId,
   householdId,
+  refetch,
 }: Props) => {
   const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
   const [hoh, setHoH] = useState<MaybeClient>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     )?.client || null
+  );
+
+  const [setHoHMutate, { loading, error }] = useSetHoHMutation({
+    onCompleted: () => {
+      setHoH(proposedHoH);
+      setProposedHoH(null);
+    },
+  });
+
+  const onChangeHoH = useMemo(
+    () => () => {
+      if (!proposedHoH) return;
+      setHoHMutate({
+        variables: {
+          input: {
+            clientId: proposedHoH.id,
+            householdId,
+          },
+        },
+      });
+    },
+    [setHoHMutate, proposedHoH, householdId]
   );
 
   const columns = useMemo(() => {
@@ -90,44 +115,19 @@ const EditHouseholdMemberTable = ({
         key: 'action',
         width: '10%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <Button
-            size='small'
-            variant='outlined'
-            color='error'
+          <RemoveFromHouseholdButton
+            enrollmentId={hc.enrollment.id}
             disabled={
               hc.client.id === clientId ||
               !hc.enrollment.inProgress ||
               hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
             }
-          >
-            Remove
-          </Button>
+            onSuccess={refetch}
+          />
         ),
       },
     ];
-  }, [clientId, hoh]);
-
-  const [setHoHMutate, { loading, error }] = useSetHoHMutation({
-    onCompleted: () => {
-      setHoH(proposedHoH);
-      setProposedHoH(null);
-    },
-  });
-
-  const onChangeHoH = useMemo(
-    () => () => {
-      if (!proposedHoH) return;
-      setHoHMutate({
-        variables: {
-          input: {
-            clientId: proposedHoH.id,
-            householdId,
-          },
-        },
-      });
-    },
-    [setHoHMutate, proposedHoH, householdId]
-  );
+  }, [clientId, hoh, refetch]);
 
   return (
     <>

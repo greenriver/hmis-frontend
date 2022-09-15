@@ -183,6 +183,7 @@ const EditHousehold = () => {
                 currentMembers={currentMembers}
                 clientId={clientId}
                 householdId={enrollment.household.id}
+                refetch={refetch}
               />
               <Button
                 startIcon={<ArrowBackIcon />}
