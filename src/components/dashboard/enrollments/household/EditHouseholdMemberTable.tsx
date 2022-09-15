@@ -8,35 +8,37 @@ import {
   FormControlLabel,
   Radio,
 } from '@mui/material';
-import { parseISO } from 'date-fns';
 import { useMemo, useState } from 'react';
 
-import RelationshipToHohSelect from './RelationshipToHohSelect';
+import EntryDateInput from './EntryDateInput';
+import RelationshipToHoHInput from './RelationshipToHoHInput';
 
 import GenericTable from '@/components/elements/GenericTable';
-import DatePicker from '@/components/elements/input/DatePicker';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
+  useSetHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   currentMembers: HouseholdClientFieldsFragment[];
   clientId: string;
+  householdId: string;
 }
 
-const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
-  const [proposedHoH, setProposedHoH] = useState<
-    HouseholdClientFieldsFragment['client'] | null
-  >(null);
+type MaybeClient = HouseholdClientFieldsFragment['client'] | null;
 
-  const hoh = useMemo(
-    () =>
-      currentMembers.find(
-        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      )?.client,
-    [currentMembers]
+const EditHouseholdMemberTable = ({
+  currentMembers,
+  clientId,
+  householdId,
+}: Props) => {
+  const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
+  const [hoh, setHoH] = useState<MaybeClient>(
+    currentMembers.find(
+      (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+    )?.client || null
   );
 
   const columns = useMemo(() => {
@@ -53,18 +55,7 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
         key: 'entry',
         width: '20%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          // move into custom component with mutation
-          <DatePicker
-            value={
-              hc.enrollment.entryDate ? parseISO(hc.enrollment.entryDate) : null
-            }
-            disableFuture
-            sx={{ width: 200 }}
-            onChange={(value) => {
-              // TODO mutation
-              console.log(value);
-            }}
-          />
+          <EntryDateInput enrollment={hc.enrollment} />
         ),
       },
       {
@@ -72,16 +63,9 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
         width: '25%',
         key: 'relationship',
         render: (hc: HouseholdClientFieldsFragment) => (
-          // move into custom component with mutation
-          <RelationshipToHohSelect
-            value={hc.relationshipToHoH}
-            disabled={
-              hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-            }
-            onChange={(_, selected) => {
-              // TODO query
-              console.log(selected);
-            }}
+          <RelationshipToHoHInput
+            enrollmentId={hc.enrollment.id}
+            relationshipToHoH={hc.relationshipToHoH}
           />
         ),
       },
@@ -91,9 +75,7 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
         width: '10%',
         render: (hc: HouseholdClientFieldsFragment) => (
           <FormControlLabel
-            checked={
-              hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-            }
+            checked={hc.client.id === hoh?.id}
             control={<Radio />}
             componentsProps={{ typography: { variant: 'body2' } }}
             label='HoH'
@@ -123,11 +105,33 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
         ),
       },
     ];
-  }, [clientId]);
+  }, [clientId, hoh]);
+
+  const [setHoHMutate, { loading, error }] = useSetHoHMutation({
+    onCompleted: () => {
+      setHoH(proposedHoH);
+      setProposedHoH(null);
+    },
+  });
+
+  const onChangeHoH = useMemo(
+    () => () => {
+      if (!proposedHoH) return;
+      setHoHMutate({
+        variables: {
+          input: {
+            clientId: proposedHoH.id,
+            householdId,
+          },
+        },
+      });
+    },
+    [setHoHMutate, proposedHoH, householdId]
+  );
 
   return (
     <>
-      {proposedHoH && (
+      {proposedHoH && !error && (
         <Dialog open>
           <DialogTitle variant='h5'>Change Head of Household</DialogTitle>
           <DialogContent>
@@ -144,15 +148,8 @@ const EditHouseholdMemberTable = ({ currentMembers, clientId }: Props) => {
             )}
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button
-              variant='outlined'
-              color='secondary'
-              onClick={() => {
-                console.log('TODO query');
-                setProposedHoH(null);
-              }}
-            >
-              Confirm
+            <Button variant='outlined' color='secondary' onClick={onChangeHoH}>
+              {loading ? 'Updating...' : 'Confirm'}
             </Button>
             <Button onClick={() => setProposedHoH(null)} variant='gray'>
               Cancel

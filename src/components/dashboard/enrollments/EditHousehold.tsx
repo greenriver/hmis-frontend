@@ -181,6 +181,7 @@ const EditHousehold = () => {
               <EditHouseholdMemberTable
                 currentMembers={currentMembers}
                 clientId={clientId}
+                householdId={enrollment.household.id}
               />
               <Button
                 startIcon={<ArrowBackIcon />}

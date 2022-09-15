@@ -8,7 +8,7 @@ import GenericSelect, {
 import { RelationshipToHoHEnum } from '@/types/gqlEnums';
 import { RelationshipToHoH } from '@/types/gqlTypes';
 
-type Option = { value: RelationshipToHoH; label: string };
+export type Option = { value: RelationshipToHoH; label: string };
 
 interface Props
   extends Omit<GenericSelectProps<Option, false, false>, 'options' | 'value'> {
@@ -45,7 +45,7 @@ const RelationshipToHohSelect = ({ disabled, value, ...props }: Props) => {
       }
       value={
         value && !isHoH
-          ? relationshipToHohOptions.find((el) => el.value === value)
+          ? relationshipToHohOptions.find((el) => el.value === value) || null
           : null
       }
       size='small'
