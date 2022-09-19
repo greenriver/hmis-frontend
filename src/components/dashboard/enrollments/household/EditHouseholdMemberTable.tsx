@@ -8,7 +8,7 @@ import {
   FormControlLabel,
   Radio,
 } from '@mui/material';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import EntryDateInput from './EntryDateInput';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
@@ -38,22 +38,54 @@ const EditHouseholdMemberTable = ({
   refetch,
 }: Props) => {
   const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
+  const [confirmedHoH, setConfirmedHoH] = useState(false);
   const [hoh, setHoH] = useState<MaybeClient>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     )?.client || null
   );
 
-  const [setHoHMutate, { loading, error }] = useSetHoHMutation({
-    onCompleted: () => {
-      setHoH(proposedHoH);
-      setProposedHoH(null);
-    },
+  const [setHoHMutate, { data, loading, error }] = useSetHoHMutation({
+    // refetch, so that all relationships-to-HoH to reload
+    onCompleted: () => refetch(),
   });
+
+  // If there was an error changing HoH, close the dialog.
+  // FIXME: get the apollo client to recognize this error, and show it to the user
+  useEffect(() => {
+    const gqlErrors = data?.setHoHForEnrollment?.errors || [];
+    if (gqlErrors.length > 0 || error) {
+      console.error(
+        'Error setting HoH',
+        data?.setHoHForEnrollment?.errors || error
+      );
+      setProposedHoH(null);
+      setConfirmedHoH(false);
+    }
+  }, [data, error]);
+
+  // If member list has changed, update HoH and clear proposed-HoH status
+  useEffect(() => {
+    const actualHoH =
+      currentMembers.find(
+        (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
+      )?.client || null;
+
+    setHoH(actualHoH);
+    setProposedHoH((prev) => {
+      if (prev && prev === actualHoH) {
+        // HoH change has completed successfully
+        setConfirmedHoH(false);
+        return null;
+      }
+      return prev;
+    });
+  }, [currentMembers]);
 
   const onChangeHoH = useMemo(
     () => () => {
       if (!proposedHoH) return;
+      setConfirmedHoH(true);
       setHoHMutate({
         variables: {
           input: {
@@ -148,8 +180,13 @@ const EditHouseholdMemberTable = ({
             )}
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button variant='outlined' color='secondary' onClick={onChangeHoH}>
-              {loading ? 'Updating...' : 'Confirm'}
+            <Button
+              variant='outlined'
+              color='secondary'
+              onClick={onChangeHoH}
+              disabled={loading || confirmedHoH}
+            >
+              {loading || confirmedHoH ? 'Updating...' : 'Confirm'}
             </Button>
             <Button onClick={() => setProposedHoH(null)} variant='gray'>
               Cancel
