@@ -38,7 +38,10 @@ const HouseholdMemberTable = ({
     data: { enrollment: enrollment } = {},
     loading,
     error,
-  } = useGetEnrollmentWithHoHQuery({ variables: { id: enrollmentId } });
+  } = useGetEnrollmentWithHoHQuery({
+    variables: { id: enrollmentId },
+    fetchPolicy: 'cache-and-network',
+  });
 
   const handleClickAddMembers = useMemo(() => {
     return () =>
