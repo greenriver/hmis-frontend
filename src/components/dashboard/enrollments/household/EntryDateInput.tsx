@@ -26,7 +26,7 @@ const EntryDateInput = ({
     if (!done) return;
     const timer = setTimeout(function () {
       setDone(false);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [done]);

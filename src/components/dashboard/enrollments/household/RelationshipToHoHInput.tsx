@@ -15,20 +15,26 @@ const RelationshipToHoHInput = ({
   enrollmentId: string;
   relationshipToHoH: RelationshipToHoH;
 }) => {
-  const [done, setDone] = useState(false);
+  // Store selected relationship in state so that it can be reflected immediately
   const [relationship, setRelationship] = useState<RelationshipToHoH | null>(
     relationshipToHoH
   );
+  const [done, setDone] = useState(false);
   const [updateEnrollment, { loading, error }] = useUpdateEnrollmentMutation({
     onCompleted: () => setDone(true),
   });
+
+  // If relationshipToHoH prop changes (as it would if setHoH is called), update the relationship in state
+  useEffect(() => {
+    setRelationship(relationshipToHoH);
+  }, [relationshipToHoH]);
 
   useEffect(() => {
     // Hide "done" checkmark after a few seconds
     if (!done) return;
     const timer = setTimeout(function () {
       setDone(false);
-    }, 5000);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [done]);
