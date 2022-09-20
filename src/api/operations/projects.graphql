@@ -18,6 +18,15 @@ query GetProjectsForSelect {
   }
 }
 
+query GetOrganizationsAndProjects {
+  organizations(sortOrder: NAME) {
+    ...OrganizationFields
+    projects {
+      ...ProjectFields
+    }
+  }
+}
+
 query GetOrganizationsForSelect {
   organizations(sortOrder: NAME) {
     ...OrganizationFields

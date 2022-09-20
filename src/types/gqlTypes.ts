@@ -1620,6 +1620,25 @@ export type GetProjectsForSelectQuery = {
   }>;
 };
 
+export type GetOrganizationsAndProjectsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type GetOrganizationsAndProjectsQuery = {
+  __typename?: 'Query';
+  organizations: Array<{
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+    projects: Array<{
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType: ProjectType;
+    }>;
+  }>;
+};
+
 export type GetOrganizationsForSelectQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -2755,6 +2774,68 @@ export type GetProjectsForSelectLazyQueryHookResult = ReturnType<
 export type GetProjectsForSelectQueryResult = Apollo.QueryResult<
   GetProjectsForSelectQuery,
   GetProjectsForSelectQueryVariables
+>;
+export const GetOrganizationsAndProjectsDocument = gql`
+  query GetOrganizationsAndProjects {
+    organizations(sortOrder: NAME) {
+      ...OrganizationFields
+      projects {
+        ...ProjectFields
+      }
+    }
+  }
+  ${OrganizationFieldsFragmentDoc}
+  ${ProjectFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationsAndProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationsAndProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationsAndProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationsAndProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrganizationsAndProjectsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOrganizationsAndProjectsQuery,
+    GetOrganizationsAndProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOrganizationsAndProjectsQuery,
+    GetOrganizationsAndProjectsQueryVariables
+  >(GetOrganizationsAndProjectsDocument, options);
+}
+export function useGetOrganizationsAndProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationsAndProjectsQuery,
+    GetOrganizationsAndProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationsAndProjectsQuery,
+    GetOrganizationsAndProjectsQueryVariables
+  >(GetOrganizationsAndProjectsDocument, options);
+}
+export type GetOrganizationsAndProjectsQueryHookResult = ReturnType<
+  typeof useGetOrganizationsAndProjectsQuery
+>;
+export type GetOrganizationsAndProjectsLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationsAndProjectsLazyQuery
+>;
+export type GetOrganizationsAndProjectsQueryResult = Apollo.QueryResult<
+  GetOrganizationsAndProjectsQuery,
+  GetOrganizationsAndProjectsQueryVariables
 >;
 export const GetOrganizationsForSelectDocument = gql`
   query GetOrganizationsForSelect {
