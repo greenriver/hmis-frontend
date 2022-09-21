@@ -1,0 +1,177 @@
+{
+  "name": "client-intake",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "name",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "2.02.2",
+          "text": "Project Name",
+          "mapping": {
+            "projectMutationInput": "projectName"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "description",
+          "text": "Description",
+          "mapping": {
+            "projectMutationInput": "description"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "contact",
+          "text": "Contact Information",
+          "mapping": {
+            "projectMutationInput": "contactInformation"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "dates",
+      "required": false,
+      "item": [
+        {
+          "type": "date",
+          "required": true,
+          "linkId": "2.02.3",
+          "text": "Operating Start Date",
+          "mapping": {
+            "projectMutationInput": "dob"
+          }
+        },
+        {
+          "type": "date",
+          "required": false,
+          "linkId": "2.02.4",
+          "text": "Operating End Date",
+          "mapping": {
+            "projectMutationInput": "dob"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "additional",
+      "required": false,
+      "item": [
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.5",
+          "text": "Continuum Project?",
+          "mapping": {
+            "projectMutationInput": "dob"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.A",
+          "text": "Residential Affiliation?",
+          "mapping": {
+            "projectMutationInput": "residentialAffiliation"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.7",
+          "text": "HMIS Participating Project?",
+          "mapping": {
+            "projectMutationInput": "residentialAffiliation"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.6",
+          "text": "Project Type",
+          "mapping": {
+            "projectMutationInput": "dob"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.D",
+          "text": "Housing Type",
+          "mapping": {
+            "projectMutationInput": "dob"
+          }
+        },
+
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.C",
+          "text": "Tracking Method",
+          "mapping": {
+            "projectMutationInput": "trackingMethod"
+          }
+        },
+
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.8",
+          "text": "Target Population",
+          "mapping": {
+            "projectMutationInput": "targetPopulation"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.9",
+          "text": "HOPWA Assisted Living Facility",
+          "mapping": {
+            "projectMutationInput": "HOPWAMedAssistedLivingFac"
+          },
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "NAME_FULL_NAME_REPORTED",
+                "display": "Full name reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
+                "display": "Partial, street name, or code name reported"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NAME_CLIENT_DOESN_T_KNOW",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NAME_CLIENT_REFUSED",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "NAME_DATA_NOT_COLLECTED",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

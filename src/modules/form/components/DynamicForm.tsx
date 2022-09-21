@@ -68,7 +68,7 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler} sx={{ mt: 4, pb: 2 }}>
+    <Box component='form' onSubmit={submitHandler}>
       <Grid
         container
         // direction='row'
@@ -84,7 +84,7 @@ const DynamicForm: React.FC<Props> = ({
           {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
         {/* <Button variant='outlined'>Save Draft</Button> */}
-        <Button variant='outlined'>{discardButtonText || 'Discard'}</Button>
+        <Button variant='gray'>{discardButtonText || 'Discard'}</Button>
         {/* <Link
             onClick={() => {
               setValues({});

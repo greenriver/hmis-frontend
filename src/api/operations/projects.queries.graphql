@@ -27,6 +27,24 @@ query GetOrganizationsAndProjects {
   }
 }
 
+query GetProject($id: ID!) {
+  project(id: $id) {
+    ...ProjectFields
+    organization {
+      ...OrganizationFields
+    }
+  }
+}
+
+query GetOrganization($id: ID!) {
+  organization(id: $id) {
+    ...OrganizationFields
+    projects {
+      ...ProjectFields
+    }
+  }
+}
+
 query GetOrganizationsForSelect {
   organizations(sortOrder: NAME) {
     ...OrganizationFields

@@ -3,6 +3,7 @@ export const Routes = {
   CLIENT_DASHBOARD: '/client/:clientId',
   ALL_PROJECTS: '/projects',
   PROJECT: '/projects/:id',
+  EDIT_PROJECT: '/projects/:id/edit',
   ORGANIZATION: '/organizations/:id',
 } as const;
 
