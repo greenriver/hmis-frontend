@@ -1,4 +1,6 @@
 import {
+  Avatar,
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -15,7 +17,7 @@ import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { clientInitials, clientName } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
@@ -102,13 +104,20 @@ const EditHouseholdMemberTable = ({
     return [
       {
         header: '',
+        key: 'thumbnail',
+        width: '1%',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <Avatar alt='client'>{clientInitials(hc.client)}</Avatar>
+        ),
+      },
+      {
+        header: 'Name',
         key: 'name',
-        width: '30%',
+        width: '20%',
         render: (hc: HouseholdClientFieldsFragment) => clientName(hc.client),
       },
-
       {
-        header: '',
+        header: <Box sx={{ pl: 4 }}>Entry Date</Box>,
         key: 'entry',
         width: '20%',
         render: (hc: HouseholdClientFieldsFragment) => (
@@ -116,29 +125,30 @@ const EditHouseholdMemberTable = ({
         ),
       },
       {
-        header: '',
-        width: '25%',
-        key: 'relationship',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <RelationshipToHoHInput
-            enrollmentId={hc.enrollment.id}
-            relationshipToHoH={hc.relationshipToHoH}
-          />
-        ),
-      },
-      {
-        header: '',
+        header: 'Head of Household',
         key: 'HoH',
-        width: '10%',
+        width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
           <FormControlLabel
             checked={hc.client.id === hoh?.id}
             control={<Radio />}
             componentsProps={{ typography: { variant: 'body2' } }}
             label='HoH'
+            labelPlacement='end'
             onChange={() => {
               setProposedHoH(hc.client);
             }}
+          />
+        ),
+      },
+      {
+        header: <Box sx={{ pl: 4 }}>Relationship to HoH</Box>,
+        width: '25%',
+        key: 'relationship',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <RelationshipToHoHInput
+            enrollmentId={hc.enrollment.id}
+            relationshipToHoH={hc.relationshipToHoH}
           />
         ),
       },

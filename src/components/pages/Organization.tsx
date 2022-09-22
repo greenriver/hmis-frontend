@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
-import GenericTable from '../elements/GenericTable';
+import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 import PageHeader from '../layout/PageHeader';
 
@@ -62,7 +62,7 @@ const Organization = () => {
     },
   ];
 
-  const columns = [
+  const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
     {
       header: 'Name',
       render: 'projectName',
@@ -72,7 +72,9 @@ const Organization = () => {
       render: (project: ProjectAllFieldsFragment) =>
         project.projectType
           ? ProjectTypeEnum[project.projectType]
-          : project.continuumProject && 'Continuum Project',
+          : project.continuumProject
+          ? 'Continuum Project'
+          : null,
     },
     {
       header: 'Start Date',
