@@ -46,7 +46,7 @@
           "linkId": "2.02.3",
           "text": "Operating Start Date",
           "mapping": {
-            "projectMutationInput": "dob"
+            "projectMutationInput": "operatingStartDate"
           }
         },
         {
@@ -55,7 +55,7 @@
           "linkId": "2.02.4",
           "text": "Operating End Date",
           "mapping": {
-            "projectMutationInput": "dob"
+            "projectMutationInput": "operatingEndDate"
           }
         }
       ]
@@ -71,7 +71,7 @@
           "linkId": "2.02.5",
           "text": "Continuum Project?",
           "mapping": {
-            "projectMutationInput": "dob"
+            "projectMutationInput": "continuumProject"
           }
         },
         {
@@ -98,7 +98,7 @@
           "linkId": "2.02.6",
           "text": "Project Type",
           "mapping": {
-            "projectMutationInput": "dob"
+            "projectMutationInput": "projectType"
           }
         },
         {
@@ -107,7 +107,7 @@
           "linkId": "2.02.D",
           "text": "Housing Type",
           "mapping": {
-            "projectMutationInput": "dob"
+            "projectMutationInput": "housingType"
           }
         },
 
@@ -137,39 +137,7 @@
           "text": "HOPWA Assisted Living Facility",
           "mapping": {
             "projectMutationInput": "HOPWAMedAssistedLivingFac"
-          },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "NAME_FULL_NAME_REPORTED",
-                "display": "Full name reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
-                "display": "Partial, street name, or code name reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          }
         }
       ]
     }

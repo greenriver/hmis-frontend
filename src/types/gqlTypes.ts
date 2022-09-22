@@ -673,8 +673,12 @@ export type Query = {
   clientSearch: ClientsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  /** Organization lookup */
+  organization?: Maybe<Organization>;
   /** Get a list of organizations */
   organizations: Array<Organization>;
+  /** Project lookup */
+  project?: Maybe<Project>;
   /** Get a list of projects */
   projects: Array<Project>;
 };
@@ -694,8 +698,16 @@ export type QueryEnrollmentArgs = {
   id: Scalars['ID'];
 };
 
+export type QueryOrganizationArgs = {
+  id: Scalars['ID'];
+};
+
 export type QueryOrganizationsArgs = {
   sortOrder?: InputMaybe<OrganizationSortOption>;
+};
+
+export type QueryProjectArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryProjectsArgs = {
@@ -1763,12 +1775,40 @@ export type ProjectFieldsFragment = {
   id: string;
   projectName: string;
   projectType?: ProjectType | null;
+  organization: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  };
 };
 
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
   organizationName: string;
+};
+
+export type ProjectAllFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  projectName: string;
+  projectType?: ProjectType | null;
+  HMISParticipatingProject?: boolean | null;
+  HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+  contactInformation?: string | null;
+  continuumProject?: boolean | null;
+  description?: string | null;
+  housingType?: HousingType | null;
+  operatingEndDate?: string | null;
+  operatingStartDate: string;
+  residentialAffiliation?: boolean | null;
+  targetPopulation?: TargetPopulation | null;
+  trackingMethod?: TrackingMethod | null;
+  organization: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  };
 };
 
 export type GetProjectsForSelectQueryVariables = Exact<{
@@ -1782,7 +1822,11 @@ export type GetProjectsForSelectQuery = {
     id: string;
     projectName: string;
     projectType?: ProjectType | null;
-    organization: { __typename?: 'Organization'; organizationName: string };
+    organization: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    };
   }>;
 };
 
@@ -1800,9 +1844,92 @@ export type GetOrganizationsAndProjectsQuery = {
       __typename?: 'Project';
       id: string;
       projectName: string;
-      projectType: ProjectType;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
     }>;
   }>;
+};
+
+export type GetProjectQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+    HMISParticipatingProject?: boolean | null;
+    HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+    contactInformation?: string | null;
+    continuumProject?: boolean | null;
+    description?: string | null;
+    housingType?: HousingType | null;
+    operatingEndDate?: string | null;
+    operatingStartDate: string;
+    residentialAffiliation?: boolean | null;
+    targetPopulation?: TargetPopulation | null;
+    trackingMethod?: TrackingMethod | null;
+    organization: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    };
+  } | null;
+};
+
+export type GetOrganizationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetOrganizationQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    description?: string | null;
+    contactInformation?: string | null;
+    id: string;
+    organizationName: string;
+    projects: Array<{
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    }>;
+  } | null;
 };
 
 export type GetOrganizationsForSelectQueryVariables = Exact<{
@@ -1816,6 +1943,48 @@ export type GetOrganizationsForSelectQuery = {
     id: string;
     organizationName: string;
   }>;
+};
+
+export type UpdateProjectMutationVariables = Exact<{
+  input: UpdateProjectInput;
+}>;
+
+export type UpdateProjectMutation = {
+  __typename?: 'Mutation';
+  updateProject?: {
+    __typename?: 'UpdateProjectPayload';
+    clientMutationId?: string | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
 };
 
 export const ValidationErrorFieldsFragmentDoc = gql`
@@ -1927,12 +2096,38 @@ export const ProjectFieldsFragmentDoc = gql`
     id
     projectName
     projectType
+    organization {
+      id
+      organizationName
+    }
   }
 `;
 export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
     id
     organizationName
+  }
+`;
+export const ProjectAllFieldsFragmentDoc = gql`
+  fragment ProjectAllFields on Project {
+    id
+    projectName
+    projectType
+    HMISParticipatingProject
+    HOPWAMedAssistedLivingFac
+    contactInformation
+    continuumProject
+    description
+    housingType
+    operatingEndDate
+    operatingStartDate
+    residentialAffiliation
+    targetPopulation
+    trackingMethod
+    organization {
+      id
+      organizationName
+    }
   }
 `;
 export const SearchClientsDocument = gql`
@@ -2884,9 +3079,6 @@ export const GetProjectsForSelectDocument = gql`
   query GetProjectsForSelect {
     projects(sortOrder: ORGANIZATION_AND_NAME) {
       ...ProjectFields
-      organization {
-        organizationName
-      }
     }
   }
   ${ProjectFieldsFragmentDoc}
@@ -2946,12 +3138,12 @@ export const GetOrganizationsAndProjectsDocument = gql`
     organizations(sortOrder: NAME) {
       ...OrganizationFields
       projects {
-        ...ProjectFields
+        ...ProjectAllFields
       }
     }
   }
   ${OrganizationFieldsFragmentDoc}
-  ${ProjectFieldsFragmentDoc}
+  ${ProjectAllFieldsFragmentDoc}
 `;
 
 /**
@@ -3002,6 +3194,128 @@ export type GetOrganizationsAndProjectsLazyQueryHookResult = ReturnType<
 export type GetOrganizationsAndProjectsQueryResult = Apollo.QueryResult<
   GetOrganizationsAndProjectsQuery,
   GetOrganizationsAndProjectsQueryVariables
+>;
+export const GetProjectDocument = gql`
+  query GetProject($id: ID!) {
+    project(id: $id) {
+      ...ProjectAllFields
+    }
+  }
+  ${ProjectAllFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectQuery__
+ *
+ * To run a query within a React component, call `useGetProjectQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectQuery,
+    GetProjectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProjectQuery, GetProjectQueryVariables>(
+    GetProjectDocument,
+    options
+  );
+}
+export function useGetProjectLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectQuery,
+    GetProjectQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProjectQuery, GetProjectQueryVariables>(
+    GetProjectDocument,
+    options
+  );
+}
+export type GetProjectQueryHookResult = ReturnType<typeof useGetProjectQuery>;
+export type GetProjectLazyQueryHookResult = ReturnType<
+  typeof useGetProjectLazyQuery
+>;
+export type GetProjectQueryResult = Apollo.QueryResult<
+  GetProjectQuery,
+  GetProjectQueryVariables
+>;
+export const GetOrganizationDocument = gql`
+  query GetOrganization($id: ID!) {
+    organization(id: $id) {
+      ...OrganizationFields
+      description
+      contactInformation
+      projects {
+        ...ProjectAllFields
+      }
+    }
+  }
+  ${OrganizationFieldsFragmentDoc}
+  ${ProjectAllFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOrganizationQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOrganizationQuery, GetOrganizationQueryVariables>(
+    GetOrganizationDocument,
+    options
+  );
+}
+export function useGetOrganizationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
+  >(GetOrganizationDocument, options);
+}
+export type GetOrganizationQueryHookResult = ReturnType<
+  typeof useGetOrganizationQuery
+>;
+export type GetOrganizationLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationLazyQuery
+>;
+export type GetOrganizationQueryResult = Apollo.QueryResult<
+  GetOrganizationQuery,
+  GetOrganizationQueryVariables
 >;
 export const GetOrganizationsForSelectDocument = gql`
   query GetOrganizationsForSelect {
@@ -3060,4 +3374,62 @@ export type GetOrganizationsForSelectLazyQueryHookResult = ReturnType<
 export type GetOrganizationsForSelectQueryResult = Apollo.QueryResult<
   GetOrganizationsForSelectQuery,
   GetOrganizationsForSelectQueryVariables
+>;
+export const UpdateProjectDocument = gql`
+  mutation UpdateProject($input: UpdateProjectInput!) {
+    updateProject(input: $input) {
+      clientMutationId
+      project {
+        ...ProjectAllFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectAllFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateProjectMutationFn = Apollo.MutationFunction<
+  UpdateProjectMutation,
+  UpdateProjectMutationVariables
+>;
+
+/**
+ * __useUpdateProjectMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectMutation, { data, loading, error }] = useUpdateProjectMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectMutation,
+    UpdateProjectMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateProjectMutation,
+    UpdateProjectMutationVariables
+  >(UpdateProjectDocument, options);
+}
+export type UpdateProjectMutationHookResult = ReturnType<
+  typeof useUpdateProjectMutation
+>;
+export type UpdateProjectMutationResult =
+  Apollo.MutationResult<UpdateProjectMutation>;
+export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectMutation,
+  UpdateProjectMutationVariables
 >;

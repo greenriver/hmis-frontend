@@ -33,7 +33,7 @@ const GroupedProjectTable = () => {
     (project: ProjectFieldsFragment) =>
       navigate(
         generatePath(Routes.PROJECT, {
-          id: project.id,
+          projectId: project.id,
         })
       ),
     [navigate]
@@ -45,13 +45,13 @@ const GroupedProjectTable = () => {
   return (
     <>
       {data?.organizations?.map((organization) => (
-        <Paper sx={{ p: 2, mb: 2 }}>
+        <Paper sx={{ p: 2, mb: 2 }} key={organization.id}>
           <Typography variant='h6' sx={{ mb: 2 }}>
             <Stack spacing={1} direction='row'>
               <Link
                 variant='h6'
                 to={generatePath(Routes.ORGANIZATION, {
-                  id: organization.id,
+                  organizationId: organization.id,
                 })}
                 component={RouterLink}
               >

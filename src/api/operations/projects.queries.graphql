@@ -2,6 +2,10 @@ fragment ProjectFields on Project {
   id
   projectName
   projectType
+  organization {
+    id
+    organizationName
+  }
 }
 
 fragment OrganizationFields on Organization {
@@ -9,12 +13,30 @@ fragment OrganizationFields on Organization {
   organizationName
 }
 
+fragment ProjectAllFields on Project {
+  id
+  projectName
+  projectType
+  HMISParticipatingProject
+  HOPWAMedAssistedLivingFac
+  contactInformation
+  continuumProject
+  description
+  housingType
+  operatingEndDate
+  operatingStartDate
+  residentialAffiliation
+  targetPopulation
+  trackingMethod
+  organization {
+    id
+    organizationName
+  }
+}
+
 query GetProjectsForSelect {
   projects(sortOrder: ORGANIZATION_AND_NAME) {
     ...ProjectFields
-    organization {
-      organizationName
-    }
   }
 }
 
@@ -22,25 +44,24 @@ query GetOrganizationsAndProjects {
   organizations(sortOrder: NAME) {
     ...OrganizationFields
     projects {
-      ...ProjectFields
+      ...ProjectAllFields
     }
   }
 }
 
 query GetProject($id: ID!) {
   project(id: $id) {
-    ...ProjectFields
-    organization {
-      ...OrganizationFields
-    }
+    ...ProjectAllFields
   }
 }
 
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationFields
+    description
+    contactInformation
     projects {
-      ...ProjectFields
+      ...ProjectAllFields
     }
   }
 }
@@ -48,5 +69,17 @@ query GetOrganization($id: ID!) {
 query GetOrganizationsForSelect {
   organizations(sortOrder: NAME) {
     ...OrganizationFields
+  }
+}
+
+mutation UpdateProject($input: UpdateProjectInput!) {
+  updateProject(input: $input) {
+    clientMutationId
+    project {
+      ...ProjectAllFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
