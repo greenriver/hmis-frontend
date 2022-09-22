@@ -30,7 +30,7 @@ function isRenderFunction<T>(value: any): value is RenderFunction<T> {
 }
 
 export interface ColumnDef<T> {
-  header: string;
+  header: string | ReactNode;
   render: AttributeName<T> | RenderFunction<T>;
   width?: string;
   // unique key for element. if not provided, header is used.
@@ -72,7 +72,10 @@ const GenericTable = <T extends { id: string }>({
           {hasHeaders && (
             <TableRow>
               {columns.map(({ header, key }) => (
-                <TableCell sx={{ fontWeight: 600 }} key={key || header}>
+                <TableCell
+                  sx={{ fontWeight: 600 }}
+                  key={key || (typeof header === 'string' ? header : '')}
+                >
                   {header}
                 </TableCell>
               ))}
@@ -107,7 +110,10 @@ const GenericTable = <T extends { id: string }>({
               >
                 {columns.map(({ header, key, render, width }) => {
                   return (
-                    <TableCell key={key || header} width={width}>
+                    <TableCell
+                      key={key || (typeof header === 'string' ? header : '')}
+                      width={width}
+                    >
                       <>
                         {isPrimitive<T>(render) && row[render]}
                         {isRenderFunction<T>(render) && render(row)}

@@ -14,9 +14,13 @@ import Profile from '@/components/dashboard/Profile';
 import ErrorFallback from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
+import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
 import CreateClient from '@/components/pages/CreateClient';
 import Dashboard from '@/components/pages/Dashboard';
+import EditProject from '@/components/pages/EditProject';
+import Organization from '@/components/pages/Organization';
+import Project from '@/components/pages/Project';
 
 const App = () => {
   return (
@@ -35,6 +39,10 @@ export const protectedRoutes = [
     path: '/',
     element: <App />,
     children: [
+      { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
+      { path: Routes.PROJECT, element: <Project /> },
+      { path: Routes.EDIT_PROJECT, element: <EditProject /> },
+      { path: Routes.ORGANIZATION, element: <Organization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
         path: Routes.CLIENT_DASHBOARD,

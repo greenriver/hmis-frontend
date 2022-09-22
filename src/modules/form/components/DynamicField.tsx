@@ -1,4 +1,4 @@
-import { Grid, Stack, Paper, Typography } from '@mui/material';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import { resolveAnswerValueSet } from '../formUtil';
@@ -8,6 +8,7 @@ import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
 
 import DatePicker from '@/components/elements/input/DatePicker';
+import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
@@ -92,9 +93,25 @@ const DynamicField: React.FC<Props> = ({
           {children && item.item?.map((childItem) => children(childItem))}
         </ItemGroup>
       );
+    case FieldType.boolean:
+      return (
+        <Grid item sx={{ width: 400 }}>
+          <LabeledCheckbox
+            checked={!!value}
+            onChange={(e) =>
+              itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
+            }
+            id={item.linkId}
+            name={item.linkId}
+            label={label}
+            disabled={disabled}
+          />
+        </Grid>
+      );
     case FieldType.string:
     case FieldType.text:
     case FieldType.ssn:
+      const multiline = FieldType[item.type] === FieldType.text;
       return (
         <Grid item sx={{ width: 400 }}>
           <TextInput
@@ -104,6 +121,8 @@ const DynamicField: React.FC<Props> = ({
             value={value as string}
             onChange={onChangeEvent}
             disabled={disabled}
+            multiline={multiline}
+            minRows={multiline ? 3 : undefined}
           />
         </Grid>
       );

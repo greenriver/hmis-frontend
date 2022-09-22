@@ -16,7 +16,6 @@ import {
   relationshipToHohForDisplay,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { RelationshipToHoHEnum } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
@@ -56,7 +55,7 @@ const HouseholdMemberTable = ({
   const householdMembers = useMemo(() => {
     if (!enrollment?.household?.householdClients) return [];
     const clients = enrollment?.household?.householdClients || [];
-    return sortBy(clients, [(c) => RelationshipToHoHEnum[c.relationshipToHoH]]);
+    return sortBy(clients, [(c) => c.client.lastName || c.client.id]);
   }, [enrollment]);
 
   if (error) throw error;

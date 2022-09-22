@@ -105,6 +105,44 @@ export const transformSubmitValues = (
   return transformed;
 };
 
+// Recursive helper for transformSubmitValues
+const createInitialValuesInner = (
+  items: Item[],
+  record: Record<string, any>,
+  transformed: Record<string, any>,
+  mappingKey: string
+) => {
+  items.forEach((item: Item) => {
+    if (Array.isArray(item.item)) {
+      createInitialValuesInner(item.item, record, transformed, mappingKey);
+    }
+    if (!item.mapping) return;
+    const key = item.mapping[mappingKey];
+    if (!key) return;
+
+    if (record.hasOwnProperty(key)) {
+      transformed[item.linkId] = record[key];
+    }
+  });
+};
+
+// Create initialValues for form based on mapping key and record
+export const createInitialValues = (
+  definition: FormDefinition,
+  record: any,
+  mappingKey: string
+): Record<string, any> => {
+  const initialValues: Record<string, any> = {};
+  createInitialValuesInner(
+    definition.item || [],
+    record,
+    initialValues,
+    mappingKey
+  );
+
+  return initialValues;
+};
+
 export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
   if (!item.enableWhen) return true;
 

@@ -24,8 +24,8 @@ import {
   dob,
   age,
   clientFirstNameAndPreferred,
-  maskedSSN,
   clientName,
+  last4SSN,
 } from '@/modules/hmis/hmisUtil';
 import SearchForm from '@/modules/search/components/SearchForm';
 import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
@@ -50,7 +50,7 @@ export const CLIENT_COLUMNS: {
   ssn: {
     header: 'Last 4 Social',
     width: '15%',
-    render: (client: ClientFieldsFragment) => maskedSSN(client),
+    render: (client: ClientFieldsFragment) => last4SSN(client),
   },
   name: {
     header: 'Name',

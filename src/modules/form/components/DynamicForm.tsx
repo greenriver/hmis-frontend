@@ -12,7 +12,7 @@ interface Props {
   submitButtonText?: string;
   discardButtonText?: string;
   loading?: boolean;
-  // validations
+  initialValues?: Record<string, any>;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -21,9 +21,10 @@ const DynamicForm: React.FC<Props> = ({
   submitButtonText,
   discardButtonText,
   loading,
+  initialValues = {},
 }) => {
   // Map { linkId => current value }
-  const [values, setValues] = useState<Record<string, any>>({});
+  const [values, setValues] = useState<Record<string, any>>(initialValues);
 
   // this needs to be memoized
   const itemChanged = (linkId: string, value: any) => {
@@ -68,7 +69,7 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler} sx={{ mt: 4, pb: 2 }}>
+    <Box component='form' onSubmit={submitHandler}>
       <Grid
         container
         // direction='row'
@@ -84,7 +85,7 @@ const DynamicForm: React.FC<Props> = ({
           {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
         {/* <Button variant='outlined'>Save Draft</Button> */}
-        <Button variant='outlined'>{discardButtonText || 'Discard'}</Button>
+        <Button variant='gray'>{discardButtonText || 'Discard'}</Button>
         {/* <Link
             onClick={() => {
               setValues({});

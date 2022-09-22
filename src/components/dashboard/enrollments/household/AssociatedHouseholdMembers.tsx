@@ -5,19 +5,19 @@ import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
-import { age, clientName, dob, maskedSSN } from '@/modules/hmis/hmisUtil';
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
     key: 'name',
-    render: (client) => clientName(client),
+    render: (client) => HmisUtil.clientName(client),
   },
   {
     header: 'Last 4 Social',
     key: 'ssn',
-    render: (client) => maskedSSN(client),
+    render: (client) => HmisUtil.last4SSN(client),
   },
   {
     header: 'DOB / Age',
@@ -25,8 +25,8 @@ const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
     render: (client) =>
       client.dob && (
         <Stack direction='row' spacing={1}>
-          <span>{dob(client)}</span>
-          <span>{`(${age(client)})`}</span>
+          <span>{HmisUtil.dob(client)}</span>
+          <span>{`(${HmisUtil.age(client)})`}</span>
         </Stack>
       ),
   },

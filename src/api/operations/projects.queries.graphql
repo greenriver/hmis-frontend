@@ -1,0 +1,85 @@
+fragment ProjectFields on Project {
+  id
+  projectName
+  projectType
+  organization {
+    id
+    organizationName
+  }
+}
+
+fragment OrganizationFields on Organization {
+  id
+  organizationName
+}
+
+fragment ProjectAllFields on Project {
+  id
+  projectName
+  projectType
+  HMISParticipatingProject
+  HOPWAMedAssistedLivingFac
+  contactInformation
+  continuumProject
+  description
+  housingType
+  operatingEndDate
+  operatingStartDate
+  residentialAffiliation
+  targetPopulation
+  trackingMethod
+  organization {
+    id
+    organizationName
+  }
+}
+
+query GetProjectsForSelect {
+  projects(sortOrder: ORGANIZATION_AND_NAME) {
+    ...ProjectFields
+  }
+}
+
+query GetOrganizationsAndProjects {
+  organizations(sortOrder: NAME) {
+    ...OrganizationFields
+    projects {
+      ...ProjectAllFields
+    }
+  }
+}
+
+query GetProject($id: ID!) {
+  project(id: $id) {
+    ...ProjectAllFields
+  }
+}
+
+query GetOrganization($id: ID!) {
+  organization(id: $id) {
+    ...OrganizationFields
+    description
+    contactInformation
+    projects {
+      ...ProjectAllFields
+    }
+  }
+}
+
+query GetOrganizationsForSelect {
+  organizations(sortOrder: NAME) {
+    ...OrganizationFields
+  }
+}
+
+mutation UpdateProject($input: UpdateProjectInput!) {
+  updateProject(input: $input) {
+    clientMutationId
+    project {
+      ...ProjectAllFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

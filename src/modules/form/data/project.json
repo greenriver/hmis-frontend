@@ -1,0 +1,145 @@
+{
+  "name": "client-intake",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "name",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "2.02.2",
+          "text": "Project Name",
+          "mapping": {
+            "projectMutationInput": "projectName"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "description",
+          "text": "Description",
+          "mapping": {
+            "projectMutationInput": "description"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "contact",
+          "text": "Contact Information",
+          "mapping": {
+            "projectMutationInput": "contactInformation"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "dates",
+      "required": false,
+      "item": [
+        {
+          "type": "date",
+          "required": true,
+          "linkId": "2.02.3",
+          "text": "Operating Start Date",
+          "mapping": {
+            "projectMutationInput": "operatingStartDate"
+          }
+        },
+        {
+          "type": "date",
+          "required": false,
+          "linkId": "2.02.4",
+          "text": "Operating End Date",
+          "mapping": {
+            "projectMutationInput": "operatingEndDate"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "additional",
+      "required": false,
+      "item": [
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.5",
+          "text": "Continuum Project?",
+          "mapping": {
+            "projectMutationInput": "continuumProject"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.A",
+          "text": "Residential Affiliation?",
+          "mapping": {
+            "projectMutationInput": "residentialAffiliation"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.7",
+          "text": "HMIS Participating Project?",
+          "mapping": {
+            "projectMutationInput": "residentialAffiliation"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.6",
+          "text": "Project Type",
+          "mapping": {
+            "projectMutationInput": "projectType"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.D",
+          "text": "Housing Type",
+          "mapping": {
+            "projectMutationInput": "housingType"
+          }
+        },
+
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.C",
+          "text": "Tracking Method",
+          "mapping": {
+            "projectMutationInput": "trackingMethod"
+          }
+        },
+
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.8",
+          "text": "Target Population",
+          "mapping": {
+            "projectMutationInput": "targetPopulation"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.9",
+          "text": "HOPWA Assisted Living Facility",
+          "mapping": {
+            "projectMutationInput": "HOPWAMedAssistedLivingFac"
+          }
+        }
+      ]
+    }
+  ]
+}

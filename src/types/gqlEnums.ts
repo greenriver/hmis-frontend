@@ -72,6 +72,17 @@ export const GenderEnum = {
   GENDER_QUESTIONING: '(6) Questioning',
   GENDER_TRANSGENDER: '(5) Transgender',
 };
+export const HOPWAMedAssistedLivingFacEnum = {
+  NO: '(0) No',
+  NON_HOPWA_FUNDED_PROJECT: '(2) Non-HOPWA Funded Project',
+  YES: '(1) Yes',
+};
+export const HousingTypeEnum = {
+  SITE_BASED_CLUSTERED_MULTIPLE_SITES:
+    '(2) Site-based - clustered / multiple sites',
+  SITE_BASED_SINGLE_SITE: '(1) Site-based - single site',
+  TENANT_BASED_SCATTERED_SITE: '(3) Tenant-based - scattered site',
+};
 export const NameDataQualityEnum = {
   NAME_CLIENT_DOESN_T_KNOW: "(8) Client doesn't know",
   NAME_CLIENT_REFUSED: '(9) Client refused',
@@ -361,6 +372,15 @@ export const ServiceTypeProvidedEnum = {
   SSVF_SERVICE__OTHER_NON_TFA_SUPPORTIVE_SERVICE_APPROVED_BY_VA:
     '(6) Other (non-TFA) supportive service approved by VA',
   SSVF_SERVICE__OUTREACH_SERVICES: '(1) Outreach services',
+};
+export const TargetPopulationEnum = {
+  DOMESTIC_VIOLENCE_VICTIMS: '(1) Domestic violence victims',
+  NOT_APPLICABLE: '(4) Not applicable',
+  PERSONS_WITH_HIV_AIDS: '(3) Persons with HIV/AIDS',
+};
+export const TrackingMethodEnum = {
+  ENTRY_EXIT_DATE: '(0) Entry/Exit Date',
+  NIGHT_BY_NIGHT: '(3) Night-by-Night',
 };
 export const VeteranStatusEnum = {
   VETERAN_STATUS_CLIENT_DOESN_T_KNOW: "(8) Client doesn't know",

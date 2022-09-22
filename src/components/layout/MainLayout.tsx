@@ -51,16 +51,26 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 />
               )}
           </Link>
-          <Link component={RouterLink} to='/' sx={{ ml: 2 }}>
-            Search
+          <Link component={RouterLink} to='/' sx={{ ml: 2 }} color='secondary'>
+            Dashboard
           </Link>
-          <Link component={RouterLink} to={Routes.CREATE_CLIENT} sx={{ ml: 2 }}>
-            New Client
+          <Link
+            component={RouterLink}
+            to={Routes.ALL_PROJECTS}
+            sx={{ ml: 2 }}
+            color='secondary'
+          >
+            Projects
           </Link>
           <Typography variant='body2' sx={{ ml: 8 }}>
             {user.name}
           </Typography>
-          <Button variant='text' sx={{ ml: 2 }} onClick={logout}>
+          <Button
+            variant='text'
+            sx={{ ml: 2 }}
+            onClick={logout}
+            color='secondary'
+          >
             Sign Out
           </Button>
         </Toolbar>

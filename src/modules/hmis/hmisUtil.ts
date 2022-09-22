@@ -50,6 +50,12 @@ export const clientFirstNameAndPreferred = (client: ClientNameFragment) => {
   return null;
 };
 
+export const clientInitials = (client: ClientNameFragment) =>
+  [client.preferredName || client.firstName, client.lastName]
+    .filter(Boolean)
+    .map((s) => (s ? s[0] : ''))
+    .join('');
+
 export const dob = (client: ClientFieldsFragment) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);
@@ -61,13 +67,19 @@ export const age = (client: ClientFieldsFragment) => {
   return differenceInYears(new Date(), date);
 };
 
-export const maskedSSN = (client: ClientFieldsFragment) => {
+export const last4SSN = (client: ClientFieldsFragment) => {
   if (!client.ssnSerial) return '';
   let end = client.ssnSerial.slice(-4);
   if (end.length < 4) {
     end = [...Array(4 - end.length).fill('*'), end].join('');
   }
-  return `***-**-${end}`;
+  return end;
+};
+
+export const maskedSSN = (client: ClientFieldsFragment) => {
+  if (!client.ssnSerial) return '';
+  const lastFour = last4SSN(client);
+  return `***-**-${lastFour}`;
 };
 
 export const lastUpdated = (client: ClientFieldsFragment) => {

@@ -56,7 +56,9 @@ const EditHousehold = () => {
     useEnrollmentCrumbs('Edit Household');
 
   const currentMembers = useMemo(() => {
-    return sortBy(data?.enrollment?.household.householdClients || [], 'id');
+    return sortBy(data?.enrollment?.household.householdClients || [], [
+      (c) => c.client.lastName || c.client.id,
+    ]);
   }, [data]);
   const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
@@ -175,7 +177,7 @@ const EditHousehold = () => {
             {` for ${enrollmentName(enrollment)} `} enrollment
           </Typography>
           {currentMembers && (
-            <Paper sx={{ p: 2, mb: 2 }}>
+            <Paper sx={{ p: 2, mb: 4 }}>
               <Typography variant='h5' sx={{ mb: 3 }}>
                 Current Household
               </Typography>
@@ -196,10 +198,13 @@ const EditHousehold = () => {
               </Button>
             </Paper>
           )}
+          <Typography variant='h3' sx={{ mb: 2 }}>
+            <b>Add Household Members</b>
+          </Typography>
           {eligibleMembers && eligibleMembers.length > 0 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h5' sx={{ mb: 2 }}>
-                Add Previously Associated Members
+                Previously Associated Members
               </Typography>
               <AssociatedHouseholdMembers
                 recentMembers={eligibleMembers}

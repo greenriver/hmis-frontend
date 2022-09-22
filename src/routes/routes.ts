@@ -1,6 +1,10 @@
 export const Routes = {
   CREATE_CLIENT: '/new-client',
   CLIENT_DASHBOARD: '/client/:clientId',
+  ALL_PROJECTS: '/projects',
+  PROJECT: '/projects/:projectId',
+  EDIT_PROJECT: '/projects/:projectId/edit',
+  ORGANIZATION: '/organizations/:organizationId',
 } as const;
 
 // Routes within the client dashboard
