@@ -11,6 +11,7 @@ import {
   LinearProgress,
   TableProps,
   SxProps,
+  Theme,
 } from '@mui/material';
 import { ReactNode } from 'react';
 
@@ -45,7 +46,7 @@ export interface Props<T> {
   tablePaginationProps?: TablePaginationProps;
   actionRow?: ReactNode;
   tableProps?: TableProps;
-  rowSx?: (row: T) => SxProps;
+  rowSx?: (row: T) => SxProps<Theme>;
 }
 
 const clickableRowStyles = {

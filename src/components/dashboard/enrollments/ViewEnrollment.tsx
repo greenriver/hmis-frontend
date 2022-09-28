@@ -44,13 +44,14 @@ const ViewEnrollment = () => {
             <Stack spacing={2} sx={{ mb: 3 }}>
               <Typography variant='h6'>Enrollment Status</Typography>
 
+              {/* FIXME this should check whether ANY enrollments in the household are in progress, not just this one */}
               {enrollment.inProgress ? (
                 <Button
                   variant='outlined'
                   color='error'
                   sx={{ pl: 3, justifyContent: 'left' }}
                 >
-                  Finish Intake
+                  Perform Intake
                 </Button>
               ) : (
                 <Typography variant='body2'>Intake completed</Typography>

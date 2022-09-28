@@ -1,12 +1,12 @@
-import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
+import { Button, Grid, Paper, Stack, Theme, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
+  generatePath,
+  useLocation,
+  useNavigate,
   useOutletContext,
   useParams,
-  useLocation,
-  generatePath,
-  useNavigate,
 } from 'react-router-dom';
 
 import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
@@ -31,6 +31,8 @@ const NewEnrollment = () => {
   const { pathname } = useLocation();
   const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
+  const [projectError, setProjectError] = useState(false);
+  const [dateError, setDateError] = useState(false);
   const navigate = useNavigate();
   const { clientId } = useParams() as {
     clientId: string;
@@ -66,25 +68,26 @@ const NewEnrollment = () => {
       },
     });
 
-  const onSubmit = useMemo(
-    () => () => {
-      if (!project || !entryDate) return;
-      const values: CreateEnrollmentInput = {
-        projectId: project.id,
-        startDate: format(entryDate, 'yyyy-MM-dd'),
-        householdMembers: Object.entries(members).map(([id, relation]) => ({
-          id,
-          relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
-        })),
-        inProgress: true,
-      };
-      console.log(JSON.stringify(values, null, 2));
-      void mutateFunction({
-        variables: { input: values },
-      });
-    },
-    [entryDate, members, project, mutateFunction]
-  );
+  const onSubmit = useCallback(() => {
+    if (!project || !entryDate) {
+      setProjectError(project ? false : true);
+      setDateError(entryDate ? false : true);
+      return;
+    }
+    const values: CreateEnrollmentInput = {
+      projectId: project.id,
+      startDate: format(entryDate, 'yyyy-MM-dd'),
+      householdMembers: Object.entries(members).map(([id, relation]) => ({
+        id,
+        relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
+      })),
+      inProgress: true,
+    };
+    console.log(JSON.stringify(values, null, 2));
+    void mutateFunction({
+      variables: { input: values },
+    });
+  }, [entryDate, members, project, mutateFunction]);
 
   // TODO render validations
   if (data?.createEnrollment?.errors) {
@@ -101,6 +104,9 @@ const NewEnrollment = () => {
   ];
 
   const numMembers = Object.keys(members).length;
+  const errorProps = {
+    sx: { color: (theme: Theme) => theme.palette.error.dark },
+  };
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -118,8 +124,15 @@ const NewEnrollment = () => {
             <Stack spacing={2} sx={{ mb: 2 }}>
               <ProjectSelect<false>
                 value={project}
-                onChange={(_, value) => setProject(value)}
-                textInputProps={{ placeholder: 'Choose project...' }}
+                onChange={(_, value) => {
+                  setProject(value);
+                  setProjectError(false);
+                }}
+                textInputProps={{
+                  placeholder: 'Choose project...',
+                  InputProps: projectError ? errorProps : undefined,
+                  InputLabelProps: projectError ? errorProps : undefined,
+                }}
                 sx={{ width: 400 }}
               />
               <DatePicker
@@ -127,7 +140,14 @@ const NewEnrollment = () => {
                 value={entryDate}
                 disableFuture
                 sx={{ width: 200 }}
-                onChange={(value) => setEntryDate(value)}
+                InputProps={dateError ? errorProps : undefined}
+                textInputProps={{
+                  InputLabelProps: dateError ? errorProps : undefined,
+                }}
+                onChange={(value) => {
+                  setEntryDate(value);
+                  setDateError(false);
+                }}
               />
             </Stack>
           </Paper>
@@ -136,7 +156,7 @@ const NewEnrollment = () => {
           {recentMembers && recentMembers.length > 1 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h6' sx={{ mb: 2 }}>
-                Set up Household
+                Create Household
               </Typography>
               <QuickAddHouseholdMembers
                 clientId={clientId}
@@ -148,11 +168,7 @@ const NewEnrollment = () => {
           )}
 
           <Grid item xs={4}>
-            <Button
-              disabled={!project || !entryDate || loading}
-              onClick={onSubmit}
-              fullWidth
-            >
+            <Button disabled={loading} onClick={onSubmit} fullWidth>
               {loading
                 ? 'Submitting...'
                 : numMembers > 1
@@ -161,6 +177,15 @@ const NewEnrollment = () => {
                   }`
                 : `Enroll ${clientName(client)}`}
             </Button>
+            {(projectError || dateError) && (
+              <Typography variant='body2' color='error' sx={{ mt: 1 }}>
+                {projectError && dateError
+                  ? 'Please select a project and entry date.'
+                  : projectError
+                  ? 'Please select a project.'
+                  : 'Please select an entry date.'}
+              </Typography>
+            )}
           </Grid>
         </Grid>
         <Grid item xs></Grid>

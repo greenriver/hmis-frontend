@@ -128,7 +128,7 @@ const HouseholdMemberTable = ({
             render: (hc) =>
               hc.enrollment.inProgress ? (
                 <Button variant='outlined' color='error' size='small'>
-                  Finish Intake
+                  Perform Intake
                 </Button>
               ) : (
                 <Button variant='outlined' size='small'>
