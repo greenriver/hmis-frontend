@@ -95,6 +95,7 @@ const AssessmentsPanel = ({
         toNodesCount={(data: GetEnrollmentAssessmentsQuery) =>
           data.enrollment?.assessments?.nodesCount
         }
+        noData='No assessments.'
       />
     </Stack>
   );

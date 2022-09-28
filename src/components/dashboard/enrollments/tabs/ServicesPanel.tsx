@@ -80,6 +80,7 @@ const ServicesPanel = ({
       toNodesCount={(data: GetEnrollmentServicesQuery) =>
         data.enrollment?.services?.nodesCount
       }
+      noData='No services.'
     />
   </Stack>
 );

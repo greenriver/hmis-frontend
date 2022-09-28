@@ -1,19 +1,20 @@
 import {
+  SxProps,
   Table,
-  TableContainer,
-  TableHead,
-  TableRow,
   TableBody,
   TableCell,
+  TableContainer,
   TableFooter,
+  TableHead,
   TablePagination,
   TablePaginationProps,
-  LinearProgress,
   TableProps,
-  SxProps,
+  TableRow,
   Theme,
 } from '@mui/material';
 import { ReactNode } from 'react';
+
+import Loading from './Loading';
 
 type AttributeName<T> = keyof T;
 type RenderFunction<T> = (value: T) => React.ReactNode;
@@ -66,6 +67,7 @@ const GenericTable = <T extends { id: string }>({
   rowSx,
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
+  if (loading) return <Loading />;
   return (
     <TableContainer>
       <Table size='small' {...tableProps}>
@@ -82,13 +84,13 @@ const GenericTable = <T extends { id: string }>({
               ))}
             </TableRow>
           )}
-          {loading && (
+          {/* {loading && (
             <TableRow>
               <th colSpan={columns.length}>
                 <LinearProgress />
               </th>
             </TableRow>
-          )}
+          )} */}
         </TableHead>
         <TableBody>
           {rows &&

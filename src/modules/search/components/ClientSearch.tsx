@@ -1,10 +1,12 @@
-import { Paper, Stack } from '@mui/material';
+import { Link, Paper, Stack } from '@mui/material';
 import { omitBy, isNil, isEmpty } from 'lodash-es';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   useSearchParams,
   createSearchParams,
   useNavigate,
+  generatePath,
+  Link as RouterLink,
 } from 'react-router-dom';
 
 import { searchParamsToVariables, searchParamsToState } from '../searchUtil';
@@ -27,8 +29,11 @@ import {
   clientName,
   last4SSN,
 } from '@/modules/hmis/hmisUtil';
-import SearchForm from '@/modules/search/components/SearchForm';
+import SearchForm, {
+  SearchFormProps,
+} from '@/modules/search/components/SearchForm';
 import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
+import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   useSearchClientsLazyQuery,
@@ -40,7 +45,6 @@ const searchFormDefinition: FormDefinition = JSON.parse(
   JSON.stringify(formData)
 );
 
-const PAGE_SIZE = 20;
 const MAX_CARDS_THRESHOLD = 10;
 
 export const CLIENT_COLUMNS: {
@@ -56,6 +60,20 @@ export const CLIENT_COLUMNS: {
     header: 'Name',
     key: 'name',
     render: (client: ClientFieldsFragment) => clientName(client),
+  },
+  nameLink: {
+    header: 'Name',
+    key: 'name',
+    render: (client: ClientFieldsFragment) => (
+      <Link
+        component={RouterLink}
+        to={generatePath(Routes.CLIENT_DASHBOARD, {
+          clientId: client.id,
+        })}
+      >
+        {clientName(client)}
+      </Link>
+    ),
   },
   first: {
     header: 'First Name',
@@ -86,20 +104,22 @@ export const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.dobAge,
 ];
 
-interface Props {
+interface Props
+  extends Omit<SearchFormProps, 'definition' | 'onSubmit' | 'initialValues'> {
   cardsEnabled: boolean;
   searchResultsTableProps?: Omit<
     GenericTableProps<ClientFieldsFragment>,
     'rows'
   >;
   wrapperComponent?: React.ElementType;
-  hideInstructions?: boolean;
+  pageSize?: number;
 }
 const ClientSearch: React.FC<Props> = ({
   cardsEnabled,
   searchResultsTableProps,
   wrapperComponent: WrapperComponent = Paper,
-  hideInstructions = false,
+  pageSize = 20,
+  ...searchFormProps
 }) => {
   const navigate = useNavigate();
   // URL search parameters
@@ -118,7 +138,7 @@ const ClientSearch: React.FC<Props> = ({
   const [searchClients, { data, loading, error }] = useSearchClientsLazyQuery({
     variables: {
       input: {},
-      limit: PAGE_SIZE,
+      limit: pageSize,
       offset,
     },
     notifyOnNetworkStatusChange: true,
@@ -183,7 +203,7 @@ const ClientSearch: React.FC<Props> = ({
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
-    limit: PAGE_SIZE,
+    limit: pageSize,
     offset,
     totalEntries: data?.clientSearch.nodesCount || -1,
     itemName: 'clients',
@@ -195,7 +215,7 @@ const ClientSearch: React.FC<Props> = ({
         definition={searchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
-        hideInstructions={hideInstructions}
+        {...searchFormProps}
       />
       {error && <Paper sx={{ p: 2 }}>{error.message}</Paper>}
       {(data || loading) && (

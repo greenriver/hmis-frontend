@@ -28,7 +28,11 @@ const SearchResultsHeader = ({
   cardsEnabled: boolean;
   onChangeCards: (event: React.MouseEvent<HTMLElement>, value: any) => void;
 }) => (
-  <Grid container justifyContent='space-between' sx={{ mb: 4 }}>
+  <Grid
+    container
+    justifyContent='space-between'
+    sx={showCardToggle ? { mb: 4 } : undefined}
+  >
     <Grid item>
       {showCardToggle && (
         <ToggleButtonGroup
@@ -59,12 +63,15 @@ const SearchResultsHeader = ({
       )}
     </Grid>
     <Grid item>
-      <Card sx={{ p: 1 }}>
-        <Stack direction='row' spacing={3}>
-          <Typography>Don't see the client you're looking for?</Typography>
+      <Card sx={{ pl: 2, py: 1, pr: 1 }}>
+        <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
+          <Typography variant='body2'>
+            Don't see the client you're looking for?
+          </Typography>
           <Button
             size='small'
             variant='outlined'
+            color='secondary'
             component={RouterLink}
             to={Routes.CREATE_CLIENT}
           >

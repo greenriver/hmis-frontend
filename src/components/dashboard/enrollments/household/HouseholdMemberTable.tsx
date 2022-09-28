@@ -156,7 +156,9 @@ const HouseholdMemberTable = ({
               cursor: 'pointer',
             }}
           >
-            <TableCell colSpan={5}>+ Edit Household</TableCell>
+            <TableCell colSpan={5} sx={{ py: 1.2 }}>
+              + Add Household Members / Edit Household
+            </TableCell>
           </TableRow>
         }
       />
