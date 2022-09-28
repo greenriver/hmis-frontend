@@ -128,7 +128,7 @@ const HouseholdMemberTable = ({
             render: (hc) =>
               hc.enrollment.inProgress ? (
                 <Button variant='outlined' color='error' size='small'>
-                  Finish Intake
+                  Perform Intake
                 </Button>
               ) : (
                 <Button variant='outlined' size='small'>
@@ -156,7 +156,9 @@ const HouseholdMemberTable = ({
               cursor: 'pointer',
             }}
           >
-            <TableCell colSpan={5}>+ Edit Household</TableCell>
+            <TableCell colSpan={5} sx={{ py: 1.2 }}>
+              + Add Household Members / Edit Household
+            </TableCell>
           </TableRow>
         }
       />

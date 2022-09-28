@@ -38,6 +38,7 @@ const TextInput = ({
           'label + &': {
             mt: 3,
           },
+          ...(props.InputProps?.sx || {}),
         },
       }}
       InputLabelProps={{
@@ -49,6 +50,7 @@ const TextInput = ({
           transform: 'none',
           color: 'text.secondary',
           typography: 'body2',
+          ...(props.InputLabelProps?.sx || {}),
         },
       }}
       SelectProps={props.SelectProps as SelectProps}

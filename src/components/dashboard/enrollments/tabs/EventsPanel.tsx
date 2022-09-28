@@ -70,6 +70,7 @@ const EventsPanel = ({
       toNodesCount={(data: GetEnrollmentEventsQuery) =>
         data.enrollment?.events?.nodesCount
       }
+      noData='No events.'
     />
   </Stack>
 );

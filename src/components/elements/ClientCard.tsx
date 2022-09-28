@@ -47,7 +47,7 @@ const RecentEnrollments = ({
     <Grid container spacing={0.5}>
       {client.enrollments.nodes.map((enrollment) => (
         <Fragment key={enrollment.id}>
-          <Grid item xs={4}>
+          <Grid item xs={6}>
             <Link
               component={RouterLink}
               to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
@@ -60,7 +60,7 @@ const RecentEnrollments = ({
               {enrollment.project.projectName}
             </Link>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={6}>
             <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
               {HmisUtil.entryExitRange(enrollment)}
             </Typography>
@@ -96,7 +96,7 @@ const ClientCard: React.FC<Props> = ({
       </Grid>
     )}
     <Grid container sx={{ p: 1 }}>
-      <Grid item xs={6}>
+      <Grid item xs={5}>
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
             <Typography variant='h5'>{HmisUtil.clientName(client)}</Typography>
@@ -112,36 +112,42 @@ const ClientCard: React.FC<Props> = ({
               sx={{
                 height: 150,
                 width: 150,
+                mr: 1,
               }}
             />
             <Stack spacing={0.5} sx={{ pr: 1 }}>
-              <Typography sx={{ wordBreak: 'break-all' }}>
+              <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
                 ID {client.personalId}
               </Typography>
               {client.dob && (
-                <ClickToShow text='Date of Birth'>
-                  <Typography>{HmisUtil.dob(client)}</Typography>
+                <ClickToShow text='Date of Birth' variant='body2'>
+                  <Typography variant='body2'>
+                    {HmisUtil.dob(client)}
+                  </Typography>
                 </ClickToShow>
               )}
               {client.ssnSerial && (
-                <ClickToShow text='Last 4 Social'>
-                  <Typography>{client.ssnSerial}</Typography>
+                <ClickToShow text='Last 4 Social' variant='body2'>
+                  <Typography variant='body2'>{client.ssnSerial}</Typography>
                 </ClickToShow>
               )}
               {client.dob && (
-                <Typography>Current Age: {HmisUtil.age(client)}</Typography>
+                <Typography variant='body2'>
+                  Current Age: {HmisUtil.age(client)}
+                </Typography>
               )}
               {showLinkToRecord && (
-                <Button
-                  variant='contained'
-                  component={RouterLink}
-                  to={`/client/${client.id}`}
-                  target={linkTargetBlank ? '_blank' : undefined}
-                  color='secondary'
-                  sx={{ maxWidth: 160 }}
-                >
-                  Go to Record
-                </Button>
+                <Box sx={{ pt: 1 }}>
+                  <Button
+                    variant='contained'
+                    component={RouterLink}
+                    to={`/client/${client.id}`}
+                    target={linkTargetBlank ? '_blank' : undefined}
+                    color='secondary'
+                  >
+                    Go to Profile
+                  </Button>
+                </Box>
               )}
             </Stack>
           </Stack>
@@ -150,7 +156,7 @@ const ClientCard: React.FC<Props> = ({
           </Typography>
         </Stack>
       </Grid>
-      <Grid item xs={4}>
+      <Grid item xs={5}>
         <Typography variant='h6' sx={{ mb: 1 }}>
           Recent Enrollments
         </Typography>

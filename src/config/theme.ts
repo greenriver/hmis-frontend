@@ -1,4 +1,4 @@
-import { ThemeOptions, experimental_sx as sx } from '@mui/material';
+import { experimental_sx as sx, ThemeOptions } from '@mui/material';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -46,6 +46,12 @@ const theme: ThemeOptions = {
   palette: {
     background: {
       default: '#F9F9F9',
+    },
+    secondary: {
+      main: '#75559F',
+    },
+    error: {
+      main: '#B23842',
     },
   },
   components: {
@@ -122,6 +128,24 @@ const theme: ThemeOptions = {
           },
         },
       ],
+      // "bold" styled buttons
+      styleOverrides: {
+        outlined: {
+          fontWeight: 600,
+          // borderWidth: '2px',
+          // lineHeight: 'initial',
+          // '&:hover': {
+          //   borderWidth: '2px',
+          // },
+        },
+        contained: {
+          fontWeight: 600,
+          // borderWidth: '2px',
+          // '&:hover': {
+          //   borderWidth: '2px',
+          // },
+        },
+      },
     },
     MuiAutocomplete: {
       defaultProps: {

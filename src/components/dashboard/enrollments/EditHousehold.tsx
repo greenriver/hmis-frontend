@@ -86,7 +86,7 @@ const EditHousehold = () => {
       {
         header: 'Entry Date',
         key: 'entry',
-        width: '20%',
+        width: '10%',
         render: (client: ClientFieldsFragment) => (
           <DatePicker
             disabled={currentMembersMap.has(client.id)}
@@ -191,7 +191,7 @@ const EditHousehold = () => {
                 startIcon={<ArrowBackIcon />}
                 variant='gray'
                 size='small'
-                sx={{ mt: 2 }}
+                sx={{ mt: 4 }}
                 onClick={navigateToEnrollment}
               >
                 Back to Enrollment
@@ -219,7 +219,10 @@ const EditHousehold = () => {
             </Typography>
             <ClientSearch
               hideInstructions
+              hideProject
+              hideAdvanced
               cardsEnabled={false}
+              pageSize={10}
               wrapperComponent={Box}
               searchResultsTableProps={{
                 handleRowClick: undefined,

@@ -17,6 +17,7 @@ interface Props<Query, QueryVariables, RowDataType>
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   toNodes: (data: Query) => RowDataType[];
   toNodesCount: (data: Query) => number | undefined;
+  noData?: string;
 }
 
 const GenericTableWithData = <
@@ -30,6 +31,7 @@ const GenericTableWithData = <
   toNodes,
   handleRowClick,
   columns,
+  noData = 'None found',
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
@@ -73,7 +75,7 @@ const GenericTableWithData = <
   }, [data, page, rowsPerPage, toNodesCount]);
 
   if (data && toNodesCount(data) === 0) {
-    return <Typography>None found.</Typography>;
+    return <Typography>{noData}</Typography>;
   }
 
   return (

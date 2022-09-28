@@ -68,6 +68,7 @@ const QuickAddHouseholdMembers = ({
     {
       header: '',
       key: 'HoH',
+      width: '1%',
       render: (client: ClientFieldsFragment) => (
         <FormControlLabel
           disabled={!(client.id in members)}
@@ -92,9 +93,9 @@ const QuickAddHouseholdMembers = ({
       ),
     },
     {
-      header: '',
+      header: 'Relationship to HoH',
       key: 'relationship',
-      width: '20%',
+      width: '25%',
       render: (client: ClientFieldsFragment) => (
         <RelationshipToHohSelect
           disabled={!(client.id in members)}
@@ -131,14 +132,18 @@ const QuickAddHouseholdMembers = ({
     <Stack spacing={3}>
       <Typography variant='body2'>
         Use the toggles to enroll previously associated clients in the same
-        household as <b>{clientName(recentMembers[0])}</b>.
+        household as <b>{clientName(recentMembers[0])}</b>. Additional household
+        members can be added at a later step.
       </Typography>
       <AssociatedHouseholdMembers
         recentMembers={recentMembers}
-        hideHeaders
-        rowSx={(client) =>
-          !(client.id in members) ? { backgroundColor: '#f8f8f8' } : {}
-        }
+        rowSx={(client) => ({
+          backgroundColor: !(client.id in members) ? '#f8f8f8' : undefined,
+          borderLeft:
+            client.id === clientId
+              ? (theme) => `3px solid ${theme.palette.secondary.main}`
+              : undefined,
+        })}
         tableProps={{ sx: { border: '1px solid #eee', borderRadius: 30 } }}
         additionalColumns={columns}
       />

@@ -25,21 +25,25 @@ type FormValues = {
   projects?: ProjectOption[];
   [k: string]: any;
 };
-interface Props {
+export interface SearchFormProps {
   definition: FormDefinition;
   onSubmit: (values: Record<string, any>) => void;
   initialValues?: Record<string, any>;
   hideInstructions?: boolean;
+  hideProject?: boolean;
+  hideAdvanced?: boolean;
 }
 
 const MAPPING_KEY = 'clientSearchInput';
 const defaultSearchKeys = ['textSearch', 'projects'];
 
-const SearchForm: React.FC<Props> = ({
+const SearchForm: React.FC<SearchFormProps> = ({
   definition,
   onSubmit,
   initialValues,
   hideInstructions = false,
+  hideProject = false,
+  hideAdvanced = false,
 }) => {
   const [values, setValues] = useState<FormValues>(initialValues || {});
 
@@ -93,7 +97,11 @@ const SearchForm: React.FC<Props> = ({
         <Grid item xs={5}>
           <TextInput
             label='Search Clients'
-            placeholder='Search clients...'
+            placeholder={
+              hideInstructions
+                ? 'Search by name, DOB, SSN, or Personal ID'
+                : 'Search clients...'
+            }
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={values.textSearch || ''}
             onChange={(e) => {
@@ -102,34 +110,38 @@ const SearchForm: React.FC<Props> = ({
             onKeyUp={submitOnEnter}
           />
         </Grid>
-        <Grid item xs={4}>
-          <ProjectSelect
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.projects || []}
-            onChange={(_, selectedOption) => {
-              fieldChanged('projects', selectedOption);
-            }}
-            textInputProps={{ placeholder: 'Choose projects...' }}
-            multiple
-          />
-        </Grid>
+        {!hideProject && (
+          <Grid item xs={4}>
+            <ProjectSelect
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              value={values.projects || []}
+              onChange={(_, selectedOption) => {
+                fieldChanged('projects', selectedOption);
+              }}
+              textInputProps={{ placeholder: 'Choose projects...' }}
+              multiple
+            />
+          </Grid>
+        )}
         <Grid item xs={2}>
           <Button variant='outlined' type='submit' sx={{ mt: 3 }}>
             Search
           </Button>
         </Grid>
       </Grid>
-      <Button
-        variant='outlined'
-        onClick={() => {
-          setExpanded((old) => !old);
-        }}
-        sx={{ mb: 2 }}
-        size='small'
-      >
-        Advanced Search
-        {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-      </Button>
+      {!hideAdvanced && (
+        <Button
+          variant='outlined'
+          onClick={() => {
+            setExpanded((old) => !old);
+          }}
+          sx={{ mb: 2 }}
+          size='small'
+        >
+          Advanced Search
+          {expanded ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+        </Button>
+      )}
       {expanded && (
         <Paper sx={{ p: 2 }}>
           <Grid

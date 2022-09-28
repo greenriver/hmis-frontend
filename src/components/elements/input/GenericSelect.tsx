@@ -40,6 +40,11 @@ const GenericSelect = <
         <TextInput
           {...params}
           {...inputProps}
+          InputProps={{ ...params.InputProps, ...inputProps.InputProps }}
+          InputLabelProps={{
+            ...params.InputLabelProps,
+            ...inputProps.InputLabelProps,
+          }}
           disabled={rest.disabled}
           // Only render placeholder if no values are selected
           placeholder={hasValue(value) ? undefined : placeholder}

@@ -17,6 +17,7 @@ const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Last 4 Social',
     key: 'ssn',
+    width: '10%',
     render: (client) => HmisUtil.last4SSN(client),
   },
   {
