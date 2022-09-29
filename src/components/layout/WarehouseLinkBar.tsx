@@ -15,7 +15,7 @@ const linkStyles = {
 };
 
 const WarehouseLinkBar = () => {
-  // if (import.meta.env.MODE !== 'staging') return null;
+  if (import.meta.env.MODE !== 'staging') return null;
 
   if (!import.meta.env.PUBLIC_WAREHOUSE_URL && !import.meta.env.PUBLIC_CAS_URL)
     return null;
