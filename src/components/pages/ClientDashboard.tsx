@@ -1,14 +1,15 @@
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Container, Tab, Typography } from '@mui/material';
-import { useEffect, useState, useMemo } from 'react';
+import { Box, Button, Container, Stack, Tab, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from 'react';
 import {
-  Link,
+  generatePath,
+  Link as RouterLink,
   Outlet,
   useLocation,
   useNavigate,
   useOutletContext,
   useParams,
-  generatePath,
 } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
@@ -103,7 +104,27 @@ const ClientDashboard: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h4'>{HmisUtil.clientName(client)}</Typography>
+        <Stack spacing={2} direction='row' justifyContent='space-between'>
+          <Typography variant='h4'>{HmisUtil.clientName(client)}</Typography>
+          {import.meta.env.PUBLIC_WAREHOUSE_URL && (
+            <Button
+              variant='text'
+              size='small'
+              href={`${import.meta.env.PUBLIC_WAREHOUSE_URL}clients/${
+                client.id
+              }/from_source`}
+              target='_blank'
+              endIcon={
+                <OpenInNewIcon
+                  fontSize='small'
+                  sx={{ '&.MuiSvgIcon-fontSizeSmall': { fontSize: '16px' } }}
+                />
+              }
+            >
+              View in Warehouse
+            </Button>
+          )}
+        </Stack>
       </PageHeader>
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={currentTab}>
@@ -120,7 +141,7 @@ const ClientDashboard: React.FC = () => {
                   label={label}
                   key={path}
                   value={path}
-                  component={Link}
+                  component={RouterLink}
                   to={generatePath(path, params)}
                   sx={{
                     textTransform: 'capitalize',

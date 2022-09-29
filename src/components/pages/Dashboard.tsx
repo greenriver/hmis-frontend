@@ -9,7 +9,7 @@ const Dashboard: React.FC = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h5'>Clients</Typography>
+        <Typography variant='h4'>Clients</Typography>
       </PageHeader>
       <Container maxWidth='xl' sx={{ pt: 3, pb: 6 }}>
         <ClientSearch cardsEnabled />

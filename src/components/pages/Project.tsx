@@ -107,7 +107,7 @@ const Project = () => {
   return (
     <>
       <PageHeader>
-        <Typography variant='h5'>Projects</Typography>
+        <Typography variant='h4'>Projects</Typography>
       </PageHeader>
       <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
         <Breadcrumbs crumbs={crumbs} />
