@@ -10,6 +10,8 @@ import {
 import * as React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
+import WarehouseLinkBar from './WarehouseLinkBar';
+
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { Routes } from '@/routes/routes';
@@ -24,6 +26,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <React.Fragment>
+      <WarehouseLinkBar />
       <AppBar
         position='static'
         color='default'
