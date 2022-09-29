@@ -1,4 +1,5 @@
 import { format, parseISO, differenceInYears } from 'date-fns';
+import { isNil } from 'lodash-es';
 
 import {
   ReferralResultEnum,
@@ -24,6 +25,11 @@ import {
 const DATE_FORMAT = 'MM/dd/yyyy';
 
 const formatDate = (date: Date) => format(date, DATE_FORMAT);
+
+export const yesNo = (bool: boolean | null | undefined) => {
+  if (isNil(bool)) return null;
+  return bool ? 'Yes' : 'No';
+};
 
 // Prefix on descriptions, like "(8) Client doesn't know"
 const numericPrefix = /^\([0-9]*\)\s/;

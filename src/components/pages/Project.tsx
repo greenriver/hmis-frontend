@@ -7,7 +7,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { useParams, generatePath, Link as RouterLink } from 'react-router-dom';
+import { isNil } from 'lodash-es';
+import { generatePath, Link as RouterLink, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
@@ -22,16 +23,14 @@ import {
   TargetPopulationEnum,
   TrackingMethodEnum,
 } from '@/types/gqlEnums';
-import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
-
-const yesNo = (bool: boolean | null | undefined) => (bool ? 'Yes' : 'No');
+import {
+  HopwaMedAssistedLivingFac,
+  ProjectAllFieldsFragment,
+  ProjectType,
+} from '@/types/gqlTypes';
 
 const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
   const data = [
-    {
-      title: 'Project Type',
-      value: project.projectType && ProjectTypeEnum[project.projectType],
-    },
     {
       title: 'Operating Start Date',
       value:
@@ -45,12 +44,40 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         HmisUtil.parseAndFormatDate(project.operatingStartDate),
     },
     {
-      title: 'Housing Type',
-      value: project.housingType && HousingTypeEnum[project.housingType],
+      title: 'Project Type',
+      value: project.projectType && ProjectTypeEnum[project.projectType],
     },
     {
+      title: 'Continuum Project',
+      value: HmisUtil.yesNo(project.continuumProject) || '-',
+    },
+    {
+      title: 'Housing Type',
+      value:
+        (project.housingType && HousingTypeEnum[project.housingType]) || '-',
+    },
+    ...(project.projectType === ProjectType.ServicesOnly
+      ? [
+          {
+            title: 'Residential Affiliation',
+            value: HmisUtil.yesNo(project.residentialAffiliation) || '-',
+          },
+        ]
+      : []),
+    ...(project.projectType === ProjectType.Es
+      ? [
+          {
+            title: 'Tracking Method',
+            value:
+              (project.trackingMethod &&
+                TrackingMethodEnum[project.trackingMethod]) ||
+              '-',
+          },
+        ]
+      : []),
+    {
       title: 'HMIS Participating Project',
-      value: yesNo(project.HMISParticipatingProject),
+      value: HmisUtil.yesNo(project.HMISParticipatingProject) || '-',
     },
     {
       title: 'Target Population',
@@ -58,24 +85,24 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         project.targetPopulation &&
         TargetPopulationEnum[project.targetPopulation],
     },
-    ...(project.trackingMethod
-      ? [
-          {
-            title: 'Tracking Method',
-            value:
-              project.trackingMethod &&
-              TrackingMethodEnum[project.trackingMethod],
-          },
-        ]
-      : []),
+    {
+      title: 'HOPWA Medical Assisted Living Facility',
+      value:
+        isNil(project.HOPWAMedAssistedLivingFac) ||
+        project.HOPWAMedAssistedLivingFac ===
+          HopwaMedAssistedLivingFac.NonHopwaFundedProject
+          ? '-'
+          : HmisUtil.yesNo(
+              project.HOPWAMedAssistedLivingFac ===
+                HopwaMedAssistedLivingFac.Yes
+            ),
+    },
   ];
+
   return (
     <Grid container spacing={3}>
       {project.description && (
         <Grid item xs={12}>
-          <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>
-            Description
-          </Typography>
           <Typography variant='subtitle2'>
             {project.description || 'No description provided.'}
           </Typography>
