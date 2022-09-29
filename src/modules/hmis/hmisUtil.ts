@@ -1,12 +1,7 @@
 import { format, parseISO, differenceInYears } from 'date-fns';
 import { isNil } from 'lodash-es';
 
-import {
-  ReferralResultEnum,
-  RelationshipToHoHEnum,
-  ServiceSubTypeProvidedEnum,
-  ServiceTypeProvidedEnum,
-} from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientNameFragment,
@@ -120,12 +115,12 @@ export const relationshipToHohForDisplay = (
   if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
     return 'Self (HoH)';
   if (relationship === RelationshipToHoH.DataNotCollected) return null;
-  return trimNumericPrefix(RelationshipToHoHEnum[relationship]);
+  return trimNumericPrefix(HmisEnums.RelationshipToHoH[relationship]);
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
   if (!e.referralResult) return null;
-  const result = ReferralResultEnum[e.referralResult];
+  const result = HmisEnums.ReferralResult[e.referralResult];
   if (e.resultDate) {
     return `${result} (${parseAndFormatDate(e.resultDate)})`;
   }
@@ -133,7 +128,8 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
 };
 
 export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
-  let typeProvided: string | null = ServiceTypeProvidedEnum[e.typeProvided];
+  let typeProvided: string | null =
+    HmisEnums.ServiceTypeProvided[e.typeProvided];
 
   // Don't show bed night because it's redundant
   if (e.typeProvided === ServiceTypeProvided.BedNightBedNight)
@@ -162,7 +158,9 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     typeProvided,
     e.otherTypeProvided,
     e.movingOnOtherType,
-    e.subTypeProvided ? ServiceSubTypeProvidedEnum[e.subTypeProvided] : null,
+    e.subTypeProvided
+      ? HmisEnums.ServiceSubTypeProvided[e.subTypeProvided]
+      : null,
   ].filter(
     (s) => s !== null && s !== '' && typeof s !== 'undefined'
   ) as string[];

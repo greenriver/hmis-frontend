@@ -50,6 +50,7 @@ const EditProject = () => {
   }, [project]);
 
   const submitHandler = (values: Record<string, any>) => {
+    console.log(values);
     // Transform values into client input query variables
     const variables = transformSubmitValues(
       formDefinition,

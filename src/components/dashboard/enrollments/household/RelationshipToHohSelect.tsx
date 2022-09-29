@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
-import { RelationshipToHoHEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import { RelationshipToHoH } from '@/types/gqlTypes';
 
 export type Option = { value: RelationshipToHoH; label: string };
@@ -17,7 +17,7 @@ interface Props
 
 const RelationshipToHohSelect = ({ disabled, value, ...props }: Props) => {
   const relationshipToHohOptions = useMemo(() => {
-    const filtered = omit(RelationshipToHoHEnum, [
+    const filtered = omit(HmisEnums.RelationshipToHoH, [
       RelationshipToHoH.DataNotCollected,
       RelationshipToHoH.SelfHeadOfHousehold,
     ]);

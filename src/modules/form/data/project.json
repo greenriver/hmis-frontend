@@ -77,19 +77,10 @@
         {
           "type": "boolean",
           "required": false,
-          "linkId": "2.02.A",
-          "text": "Residential Affiliation?",
-          "mapping": {
-            "projectMutationInput": "residentialAffiliation"
-          }
-        },
-        {
-          "type": "boolean",
-          "required": false,
           "linkId": "2.02.7",
           "text": "HMIS Participating Project?",
           "mapping": {
-            "projectMutationInput": "residentialAffiliation"
+            "projectMutationInput": "HMISParticipatingProject"
           }
         },
         {
@@ -97,18 +88,27 @@
           "required": false,
           "linkId": "2.02.6",
           "text": "Project Type",
+          "answerValueSet": "ProjectType",
           "mapping": {
             "projectMutationInput": "projectType"
           }
         },
         {
-          "type": "choice",
+          "type": "boolean",
           "required": false,
-          "linkId": "2.02.D",
-          "text": "Housing Type",
+          "linkId": "2.02.A",
+          "text": "Residential Affiliation?",
           "mapping": {
-            "projectMutationInput": "housingType"
-          }
+            "projectMutationInput": "residentialAffiliation"
+          },
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "2.02.6",
+              "operator": "=",
+              "answerCoding": { "code": "SERVICES_ONLY" }
+            }
+          ]
         },
 
         {
@@ -116,16 +116,35 @@
           "required": false,
           "linkId": "2.02.C",
           "text": "Tracking Method",
+          "answerValueSet": "TrackingMethod",
           "mapping": {
             "projectMutationInput": "trackingMethod"
+          },
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "2.02.6",
+              "operator": "=",
+              "answerCoding": { "code": "ES" }
+            }
+          ]
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "2.02.D",
+          "text": "Housing Type",
+          "answerValueSet": "HousingType",
+          "mapping": {
+            "projectMutationInput": "housingType"
           }
         },
-
         {
           "type": "choice",
           "required": false,
           "linkId": "2.02.8",
           "text": "Target Population",
+          "answerValueSet": "TargetPopulation",
           "mapping": {
             "projectMutationInput": "targetPopulation"
           }
@@ -135,6 +154,7 @@
           "required": false,
           "linkId": "2.02.9",
           "text": "HOPWA Assisted Living Facility",
+          "answerValueSet": "HOPWAMedAssistedLivingFac",
           "mapping": {
             "projectMutationInput": "HOPWAMedAssistedLivingFac"
           }

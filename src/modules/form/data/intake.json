@@ -60,38 +60,7 @@
           "mapping": {
             "clientMutationInput": "nameDataQuality"
           },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "NAME_FULL_NAME_REPORTED",
-                "display": "Full name reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
-                "display": "Partial, street name, or code name reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "NAME_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          "answerValueSet": "NameDataQuality"
         },
         {
           "type": "openchoice",
@@ -141,38 +110,7 @@
           "mapping": {
             "clientMutationInput": "dobDataQuality"
           },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "DOB_FULL_DOB_REPORTED",
-                "display": "Full DOB reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED",
-                "display": "Approximate or partial DOB reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "DOB_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "DOB_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "DOB_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          "answerValueSet": "DOBDataQuality"
         }
       ]
     },
@@ -201,38 +139,7 @@
           "mapping": {
             "clientMutationInput": "ssnDataQuality"
           },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "SSN_FULL_SSN_REPORTED",
-                "display": "Full SSN Reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "SSN_APPROXIMATE_OR_PARTIAL_SSN_REPORTED",
-                "display": "Approximate or partial  SSN reported"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "SSN_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "SSN_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "SSN_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          "answerValueSet": "SSNDataQuality"
         }
       ]
     },
@@ -259,56 +166,7 @@
               "mapping": {
                 "clientMutationInput": "race"
               },
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "RACE_AM_IND_AK_NATIVE",
-                    "display": "American Indian, Alaska Native, or Indigenous"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_ASIAN",
-                    "display": "Asian or Asian American"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_BLACK_AF_AMERICAN",
-                    "display": "Black, African-American, or African"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_NATIVE_HI_PACIFIC",
-                    "display": "Native Hawaiian or Pacific Islander"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_WHITE",
-                    "display": "White"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_UNKNOWN",
-                    "display": "Client doesn't know"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_REFUSED",
-                    "display": "Client refused"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "RACE_NOT_COLLECTED",
-                    "display": "Data not collected"
-                  }
-                }
-              ]
+              "answerValueSet": "Race"
             },
             {
               "type": "choice",
@@ -319,38 +177,7 @@
               "mapping": {
                 "clientMutationInput": "ethnicity"
               },
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_",
-                    "display": "Non-Hispanic/Non- Latin(a)(o)(x)"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ETHNICITY_HISPANIC_LATIN_A_O_X_",
-                    "display": "Hispanic/Latin(a)(o)(x)"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ETHNICITY_UNKNOWN",
-                    "display": "Client doesn't know"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ETHNICITY_REFUSED",
-                    "display": "Client refused"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "ETHNICITY_NOT_COLLECTED",
-                    "display": "Data not collected"
-                  }
-                }
-              ]
+              "answerValueSet": "Ethnicity"
             }
           ]
         },
@@ -363,56 +190,7 @@
           "mapping": {
             "clientMutationInput": "gender"
           },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "GENDER_FEMALE",
-                "display": "Female"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_MALE",
-                "display": "Male"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_NO_SINGLE_GENDER",
-                "display": "Non-binary, genderfluid, agender, culturally specific gender"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_TRANSGENDER",
-                "display": "Transgender"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_QUESTIONING",
-                "display": "Questioning"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "GENDER_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          "answerValueSet": "Gender"
         },
         {
           "type": "choice",
@@ -423,38 +201,7 @@
           "mapping": {
             "clientMutationInput": "veteranStatus"
           },
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "VETERAN_STATUS_NO",
-                "display": "No"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "VETERAN_STATUS_YES",
-                "display": "Yes"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "VETERAN_STATUS_CLIENT_DOESN_T_KNOW",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "VETERAN_STATUS_CLIENT_REFUSED",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "VETERAN_STATUS_DATA_NOT_COLLECTED",
-                "display": "Data not collected"
-              }
-            }
-          ]
+          "answerValueSet": "VeteranStatus"
         }
       ]
     }

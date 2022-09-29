@@ -4,12 +4,7 @@ import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
-import {
-  HousingTypeEnum,
-  ProjectTypeEnum,
-  TargetPopulationEnum,
-  TrackingMethodEnum,
-} from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   HopwaMedAssistedLivingFac,
   ProjectAllFieldsFragment,
@@ -33,7 +28,8 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Project Type',
-        value: project.projectType && ProjectTypeEnum[project.projectType],
+        value:
+          project.projectType && HmisEnums.ProjectType[project.projectType],
       },
       {
         label: 'Continuum Project',
@@ -42,7 +38,8 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       {
         label: 'Housing Type',
         value:
-          (project.housingType && HousingTypeEnum[project.housingType]) || '-',
+          (project.housingType && HmisEnums.HousingType[project.housingType]) ||
+          '-',
       },
       ...(project.projectType === ProjectType.ServicesOnly
         ? [
@@ -58,7 +55,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
               label: 'Tracking Method',
               value:
                 (project.trackingMethod &&
-                  TrackingMethodEnum[project.trackingMethod]) ||
+                  HmisEnums.TrackingMethod[project.trackingMethod]) ||
                 '-',
             },
           ]
@@ -71,7 +68,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         label: 'Target Population',
         value:
           project.targetPopulation &&
-          TargetPopulationEnum[project.targetPopulation],
+          HmisEnums.TargetPopulation[project.targetPopulation],
       },
       {
         label: 'HOPWA Medical Assisted Living Facility',

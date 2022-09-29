@@ -8,7 +8,7 @@ import {
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { EventTypeEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   EventFieldsFragment,
   GetEnrollmentEventsDocument,
@@ -20,7 +20,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (e) => EventTypeEnum[e.event],
+    render: (e) => HmisEnums.EventType[e.event],
   },
   {
     header: 'Date',

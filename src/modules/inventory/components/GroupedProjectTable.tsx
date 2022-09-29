@@ -9,7 +9,7 @@ import {
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import { Routes } from '@/routes/routes';
-import { ProjectTypeEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ProjectFieldsFragment,
   useGetOrganizationsAndProjectsQuery,
@@ -25,7 +25,7 @@ const GroupedProjectTable = () => {
       key: 'type',
       width: '20%',
       render: (p: ProjectFieldsFragment) =>
-        p.projectType ? ProjectTypeEnum[p.projectType] : null,
+        p.projectType ? HmisEnums.ProjectType[p.projectType] : null,
     },
   ];
 

@@ -25,7 +25,7 @@ import OrganizationDetails from '@/modules/inventory/components/OrganizationDeta
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
 import apolloClient from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { ProjectTypeEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   OrganizationFieldsFragmentDoc,
   ProjectAllFieldsFragment,
@@ -85,7 +85,7 @@ const Organization = () => {
       header: 'Type',
       render: (project: ProjectAllFieldsFragment) =>
         project.projectType
-          ? ProjectTypeEnum[project.projectType]
+          ? HmisEnums.ProjectType[project.projectType]
           : project.continuumProject
           ? 'Continuum Project'
           : null,

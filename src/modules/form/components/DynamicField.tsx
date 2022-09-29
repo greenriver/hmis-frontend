@@ -164,7 +164,7 @@ const DynamicField: React.FC<Props> = ({
     case FieldType.choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedVal = value ? value : item.repeats ? [] : null;
-      //TODO get from initialOption
+
       if (
         item.answerValueSet &&
         ['projects', 'organizations'].includes(item.answerValueSet)
@@ -186,6 +186,7 @@ const DynamicField: React.FC<Props> = ({
           </Grid>
         );
       }
+
       return (
         <Grid item sx={{ width: 400 }}>
           <FormSelect
@@ -194,7 +195,7 @@ const DynamicField: React.FC<Props> = ({
             label={label}
             options={
               item.answerValueSet
-                ? resolveAnswerValueSet(item.answerValueSet)
+                ? resolveAnswerValueSet(item.answerValueSet) || []
                 : item.answerOption || []
             }
             onChange={onChangeEventValue}
