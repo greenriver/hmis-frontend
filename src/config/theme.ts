@@ -1,4 +1,4 @@
-import { experimental_sx as sx, ThemeOptions } from '@mui/material';
+import { createTheme, experimental_sx as sx } from '@mui/material';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -7,7 +7,22 @@ declare module '@mui/material/Button' {
   }
 }
 
-const theme: ThemeOptions = {
+// Dynamic installation-specific theming
+const theme = createTheme({
+  palette: {
+    background: {
+      default: '#F9F9F9',
+    },
+    secondary: {
+      main: '#75559F',
+    },
+    error: {
+      main: '#B23842',
+    },
+  },
+});
+
+export default createTheme(theme, {
   typography: {
     fontFamily: "'Open Sans', sans-serif",
     h1: {
@@ -43,17 +58,7 @@ const theme: ThemeOptions = {
     // fontSize: 14,
     // htmlFontSize: 18,
   },
-  palette: {
-    background: {
-      default: '#F9F9F9',
-    },
-    secondary: {
-      main: '#75559F',
-    },
-    error: {
-      main: '#B23842',
-    },
-  },
+
   components: {
     // MuiTypography: {
     //   styleOverrides: {
@@ -158,6 +163,4 @@ const theme: ThemeOptions = {
       },
     },
   },
-};
-
-export default theme;
+});

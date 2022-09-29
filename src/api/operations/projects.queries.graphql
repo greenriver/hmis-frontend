@@ -13,6 +13,11 @@ fragment OrganizationFields on Organization {
   organizationName
 }
 
+fragment OrganizationDetailFields on Organization {
+  description
+  contactInformation
+}
+
 fragment ProjectAllFields on Project {
   id
   projectName
@@ -58,8 +63,7 @@ query GetProject($id: ID!) {
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationFields
-    description
-    contactInformation
+    ...OrganizationDetailFields
     projects {
       ...ProjectAllFields
     }
@@ -77,6 +81,19 @@ mutation UpdateProject($input: UpdateProjectInput!) {
     clientMutationId
     project {
       ...ProjectAllFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateOrganization($input: UpdateOrganizationInput!) {
+  updateOrganization(input: $input) {
+    clientMutationId
+    organization {
+      ...OrganizationFields
+      ...OrganizationDetailFields
     }
     errors {
       ...ValidationErrorFields

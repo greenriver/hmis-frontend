@@ -7,120 +7,15 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isNil } from 'lodash-es';
 import { generatePath, Link as RouterLink, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 import PageHeader from '../layout/PageHeader';
 
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import {
-  HousingTypeEnum,
-  ProjectTypeEnum,
-  TargetPopulationEnum,
-  TrackingMethodEnum,
-} from '@/types/gqlEnums';
-import {
-  HopwaMedAssistedLivingFac,
-  ProjectAllFieldsFragment,
-  ProjectType,
-} from '@/types/gqlTypes';
-
-const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
-  const data = [
-    {
-      title: 'Operating Start Date',
-      value:
-        project.operatingStartDate &&
-        HmisUtil.parseAndFormatDate(project.operatingStartDate),
-    },
-    {
-      title: 'Operating End Date',
-      value:
-        project.operatingStartDate &&
-        HmisUtil.parseAndFormatDate(project.operatingStartDate),
-    },
-    {
-      title: 'Project Type',
-      value: project.projectType && ProjectTypeEnum[project.projectType],
-    },
-    {
-      title: 'Continuum Project',
-      value: HmisUtil.yesNo(project.continuumProject) || '-',
-    },
-    {
-      title: 'Housing Type',
-      value:
-        (project.housingType && HousingTypeEnum[project.housingType]) || '-',
-    },
-    ...(project.projectType === ProjectType.ServicesOnly
-      ? [
-          {
-            title: 'Residential Affiliation',
-            value: HmisUtil.yesNo(project.residentialAffiliation) || '-',
-          },
-        ]
-      : []),
-    ...(project.projectType === ProjectType.Es
-      ? [
-          {
-            title: 'Tracking Method',
-            value:
-              (project.trackingMethod &&
-                TrackingMethodEnum[project.trackingMethod]) ||
-              '-',
-          },
-        ]
-      : []),
-    {
-      title: 'HMIS Participating Project',
-      value: HmisUtil.yesNo(project.HMISParticipatingProject) || '-',
-    },
-    {
-      title: 'Target Population',
-      value:
-        project.targetPopulation &&
-        TargetPopulationEnum[project.targetPopulation],
-    },
-    {
-      title: 'HOPWA Medical Assisted Living Facility',
-      value:
-        isNil(project.HOPWAMedAssistedLivingFac) ||
-        project.HOPWAMedAssistedLivingFac ===
-          HopwaMedAssistedLivingFac.NonHopwaFundedProject
-          ? '-'
-          : HmisUtil.yesNo(
-              project.HOPWAMedAssistedLivingFac ===
-                HopwaMedAssistedLivingFac.Yes
-            ),
-    },
-  ];
-
-  return (
-    <Grid container spacing={3}>
-      {project.description && (
-        <Grid item xs={12}>
-          <Typography variant='subtitle2'>
-            {project.description || 'No description provided.'}
-          </Typography>
-        </Grid>
-      )}
-      {data.map(({ title, value }) => (
-        <Grid item xs={4} key={title}>
-          <Stack>
-            <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>
-              {title}
-            </Typography>
-            <Typography variant='subtitle2'>{value}</Typography>
-          </Stack>
-        </Grid>
-      ))}
-    </Grid>
-  );
-};
 
 const Project = () => {
   const { projectId } = useParams() as {
@@ -138,7 +33,7 @@ const Project = () => {
       </PageHeader>
       <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
         <Breadcrumbs crumbs={crumbs} />
-        <Typography variant='h3' sx={{ mb: 2 }}>
+        <Typography variant='h3' sx={{ mb: 4 }}>
           {project.projectName}
         </Typography>
         <Grid container spacing={4}>
@@ -194,16 +89,17 @@ const Project = () => {
               </Paper>
             )}
             <Paper sx={{ p: 2 }}>
-              <Stack spacing={2}>
+              <Stack spacing={1}>
                 <Link
                   component={RouterLink}
+                  color='text.secondary'
                   to={generatePath(Routes.EDIT_PROJECT, {
                     projectId,
                   })}
                 >
                   Edit Project
                 </Link>
-                <Link component={RouterLink} to=''>
+                <Link color='text.secondary' component={RouterLink} to=''>
                   Delete Project
                 </Link>
               </Stack>
