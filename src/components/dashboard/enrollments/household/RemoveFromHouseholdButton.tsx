@@ -40,7 +40,7 @@ const RemoveFromHouseholdButton = ({
       fullWidth
       variant='outlined'
       color='error'
-      size='small'
+      // size='small'
       disabled={disabled || loading || done || !!error}
       onClick={onClick}
     >

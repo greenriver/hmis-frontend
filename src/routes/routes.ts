@@ -6,6 +6,8 @@ export const Routes = {
   EDIT_PROJECT: '/projects/:projectId/edit',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
+  CREATE_PROJECT: '/organizations/:organizationId/new-project',
+  CREATE_ORGANIZATION: '/projects/new-organization',
 } as const;
 
 // Routes within the client dashboard

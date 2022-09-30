@@ -1,6 +1,6 @@
 import { Button } from '@mui/material';
 import { format } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   RelationshipToHoH,
@@ -15,6 +15,15 @@ interface Props {
   relationshipToHoH?: RelationshipToHoH | null;
   startDate?: Date | null;
 }
+
+function usePrevious(value: any) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
 const AddToHouseholdButton = ({
   clientId,
   isMember,
@@ -23,6 +32,7 @@ const AddToHouseholdButton = ({
   startDate,
   onSuccess,
 }: Props) => {
+  const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
   const [addHouseholdMember, { loading, error }] =
     useAddHouseholdMembersMutation({
@@ -31,6 +41,13 @@ const AddToHouseholdButton = ({
         onSuccess();
       },
     });
+
+  useEffect(() => {
+    // If client was previously added but has since been removed
+    if (prevIsMember && !isMember) {
+      setAdded(false);
+    }
+  }, [prevIsMember, isMember, setAdded]);
 
   let text = 'Add to Enrollment';
   let color: 'secondary' | 'error' = 'secondary';

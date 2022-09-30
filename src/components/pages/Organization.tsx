@@ -1,12 +1,4 @@
-import {
-  Button,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import {
   generatePath,
@@ -18,19 +10,14 @@ import {
 import Breadcrumbs from '../elements/Breadcrumbs';
 import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
-import PageHeader from '../layout/PageHeader';
 
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
-import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
-import apolloClient from '@/providers/apolloClient';
+import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  OrganizationFieldsFragmentDoc,
-  ProjectAllFieldsFragment,
-  useGetOrganizationQuery,
-} from '@/types/gqlTypes';
+import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
 
 const Organization = () => {
   const { organizationId } = useParams() as {
@@ -38,17 +25,8 @@ const Organization = () => {
   };
   const navigate = useNavigate();
 
-  // get org from cache if we have it
-  const organizationNameFragment = apolloClient.readFragment({
-    id: `Organization:${organizationId}`,
-    fragment: OrganizationFieldsFragmentDoc,
-  });
-
-  const {
-    data: { organization } = {},
-    loading,
-    error,
-  } = useGetOrganizationQuery({ variables: { id: organizationId } });
+  const { crumbs, loading, organization, organizationName } =
+    useOrganizationCrumbs();
 
   const handleRowClick = useCallback(
     (project: ProjectAllFieldsFragment) =>
@@ -60,21 +38,9 @@ const Organization = () => {
     [navigate]
   );
 
-  if (error) throw error;
-  if (!loading && !organization) throw Error('Organization not found');
-
-  const organizationName =
-    organizationNameFragment?.organizationName ||
-    organization?.organizationName ||
-    `Organization ${organizationId}`;
-
-  const crumbs = [
-    ALL_PROJECTS_CRUMB,
-    {
-      label: organizationName,
-      to: Routes.ORGANIZATION,
-    },
-  ];
+  // if (loading) return <Loading />;
+  if (!loading && (!crumbs || !organization))
+    throw Error('Organization not found');
 
   const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
     {
@@ -105,82 +71,85 @@ const Organization = () => {
   ];
 
   return (
-    <>
-      <PageHeader>
-        <Typography variant='h4'>Projects</Typography>
-      </PageHeader>
-      <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
-        <Breadcrumbs crumbs={crumbs} />
-        <Typography variant='h3' sx={{ mb: 4 }}>
-          {organizationName}
-        </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={9}>
-            {loading && <Loading />}
+    <ProjectLayout>
+      {crumbs && <Breadcrumbs crumbs={crumbs} />}
 
-            {organization?.description && (
-              <Paper sx={{ p: 2, mb: 2 }}>
-                <OrganizationDetails organization={organization} />
-              </Paper>
-            )}
+      <Typography variant='h3' sx={{ mb: 4 }}>
+        {organizationName}
+      </Typography>
 
+      <Grid container spacing={4}>
+        <Grid item xs={9}>
+          {loading && <Loading />}
+
+          {organization?.description && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              <OrganizationDetails organization={organization} />
+            </Paper>
+          )}
+
+          {organization && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h6' sx={{ mb: 2 }}>
                 Projects
               </Typography>
-              <GenericTable
-                rows={organization?.projects || []}
-                columns={columns}
-                handleRowClick={handleRowClick}
-                loading={loading}
-              />
+              {(organization?.projects || []).length > 0 ? (
+                <GenericTable
+                  rows={organization?.projects || []}
+                  columns={columns}
+                  handleRowClick={handleRowClick}
+                  loading={loading}
+                />
+              ) : (
+                <Typography>No Projects</Typography>
+              )}
             </Paper>
-          </Grid>
-          <Grid item xs>
+          )}
+        </Grid>
+        <Grid item xs>
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Stack spacing={2}>
+              <Typography variant='h6'>Add to Organization</Typography>
+              <Button
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                component={RouterLink}
+                to={generatePath(Routes.CREATE_PROJECT, { organizationId })}
+              >
+                + Add Project
+              </Button>
+            </Stack>
+          </Paper>
+          {organization?.contactInformation && (
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
-                <Typography variant='h6'>Add to Organization</Typography>
-                <Button
-                  variant='outlined'
-                  color='secondary'
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                  component={RouterLink}
-                  to=''
-                >
-                  + Add Project
-                </Button>
+                <Typography variant='h6'>Organization Contact</Typography>
+                <Typography variant='body2'>
+                  {organization.contactInformation}
+                </Typography>
               </Stack>
             </Paper>
-            {organization?.contactInformation && (
-              <Paper sx={{ p: 2, mb: 3 }}>
-                <Stack spacing={2}>
-                  <Typography variant='h6'>Organization Contact</Typography>
-                  <Typography variant='body2'>
-                    {organization.contactInformation}
-                  </Typography>
-                </Stack>
-              </Paper>
-            )}
-            <Paper sx={{ p: 2 }}>
-              <Stack spacing={1}>
-                <Link
-                  component={RouterLink}
-                  color='text.secondary'
-                  to={generatePath(Routes.EDIT_ORGANIZATION, {
-                    organizationId,
-                  })}
-                >
-                  Edit Organization
-                </Link>
-                <Link color='text.secondary' component={RouterLink} to=''>
-                  Delete Organization
-                </Link>
-              </Stack>
-            </Paper>
-          </Grid>
+          )}
+          <Paper sx={{ p: 2 }}>
+            <Stack spacing={1}>
+              <Link
+                component={RouterLink}
+                color='text.secondary'
+                to={generatePath(Routes.EDIT_ORGANIZATION, {
+                  organizationId,
+                })}
+              >
+                Edit Organization
+              </Link>
+              <Link color='text.secondary' component={RouterLink} to=''>
+                Delete Organization
+              </Link>
+            </Stack>
+          </Paper>
         </Grid>
-      </Container>
-    </>
+      </Grid>
+    </ProjectLayout>
   );
 };
 export default Organization;

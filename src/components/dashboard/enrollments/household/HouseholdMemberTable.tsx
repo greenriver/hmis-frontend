@@ -127,13 +127,11 @@ const HouseholdMemberTable = ({
             header: '',
             render: (hc) =>
               hc.enrollment.inProgress ? (
-                <Button variant='outlined' color='error' size='small'>
+                <Button variant='outlined' color='error'>
                   Perform Intake
                 </Button>
               ) : (
-                <Button variant='outlined' size='small'>
-                  Exit
-                </Button>
+                <Button variant='outlined'>Exit</Button>
               ),
           },
         ]}
@@ -157,7 +155,7 @@ const HouseholdMemberTable = ({
             }}
           >
             <TableCell colSpan={5} sx={{ py: 1.2 }}>
-              + Add Household Members / Edit Household
+              + Add Household Member
             </TableCell>
           </TableRow>
         }

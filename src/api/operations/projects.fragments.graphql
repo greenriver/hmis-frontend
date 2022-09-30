@@ -1,0 +1,44 @@
+fragment ProjectFields on Project {
+  id
+  projectName
+  projectType
+  organization {
+    id
+    organizationName
+  }
+}
+
+fragment OrganizationFields on Organization {
+  id
+  organizationName
+}
+
+fragment OrganizationDetailFields on Organization {
+  description
+  contactInformation
+}
+fragment OrganizationAllFields on Organization {
+  ...OrganizationFields
+  ...OrganizationDetailFields
+}
+
+fragment ProjectAllFields on Project {
+  id
+  projectName
+  projectType
+  HMISParticipatingProject
+  HOPWAMedAssistedLivingFac
+  contactInformation
+  continuumProject
+  description
+  housingType
+  operatingEndDate
+  operatingStartDate
+  residentialAffiliation
+  targetPopulation
+  trackingMethod
+  organization {
+    id
+    organizationName
+  }
+}

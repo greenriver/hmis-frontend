@@ -1,4 +1,5 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { CalendarPickerView } from '@mui/x-date-pickers';
 import React, { ReactNode } from 'react';
 
 import { resolveAnswerValueSet } from '../formUtil';
@@ -128,16 +129,19 @@ const DynamicField: React.FC<Props> = ({
       );
     case FieldType.date:
     case FieldType.dob:
+      const props =
+        item.type === FieldType.dob
+          ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
+          : {};
       return (
         <Grid item sx={{ width: 400 }}>
           <DatePicker
             label={label}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
-            openTo='year'
-            disableFuture
             onChange={onChangeValue}
             disabled={disabled}
+            {...props}
           />
         </Grid>
       );

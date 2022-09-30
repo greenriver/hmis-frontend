@@ -9,6 +9,8 @@ import {
   DialogTitle,
   FormControlLabel,
   Radio,
+  Stack,
+  Tooltip,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
@@ -17,8 +19,10 @@ import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
+import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { clientInitials, clientName } from '@/modules/hmis/hmisUtil';
 import {
+  ClientFieldsFragment,
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
   useSetHoHMutation,
@@ -117,6 +121,18 @@ const EditHouseholdMemberTable = ({
         render: (hc: HouseholdClientFieldsFragment) => clientName(hc.client),
       },
       {
+        header: 'DOB / Age',
+        key: 'dob',
+        width: '10%',
+        render: ({ client }: HouseholdClientFieldsFragment) =>
+          client.dob && (
+            <Stack direction='row' spacing={1}>
+              <span>{HmisUtil.dob(client as ClientFieldsFragment)}</span>
+              <span>{`(${HmisUtil.age(client as ClientFieldsFragment)})`}</span>
+            </Stack>
+          ),
+      },
+      {
         header: <Box sx={{ pl: 4 }}>Entry Date</Box>,
         key: 'entry',
         width: '20%',
@@ -125,7 +141,11 @@ const EditHouseholdMemberTable = ({
         ),
       },
       {
-        header: 'Head of Household',
+        header: (
+          <Tooltip title='Head of Household' placement='top' arrow>
+            <Box sx={{ width: 'fit-content' }}>HoH</Box>
+          </Tooltip>
+        ),
         key: 'HoH',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (

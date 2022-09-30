@@ -1,136 +1,78 @@
-import { Container, Grid, Typography } from '@mui/material';
-import { useMemo } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { Grid, Typography } from '@mui/material';
+import { useCallback } from 'react';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
-import PageHeader from '../layout/PageHeader';
 
-import DynamicForm from '@/modules/form/components/DynamicForm';
+import EditRecord from '@/modules/form/components/EditRecord';
 import formData from '@/modules/form/data/organization.json';
-import {
-  createInitialValues,
-  transformSubmitValues,
-} from '@/modules/form/formUtil';
 import { FormDefinition } from '@/modules/form/types';
-import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
-import apolloClient from '@/providers/apolloClient';
+import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
-  OrganizationFieldsFragmentDoc,
-  useGetOrganizationQuery,
-  useUpdateOrganizationMutation,
+  OrganizationAllFieldsFragment,
+  UpdateOrganizationDocument,
+  UpdateOrganizationMutation,
+  UpdateOrganizationMutationVariables,
 } from '@/types/gqlTypes';
 
-const MAPPING_KEY = 'organizationMutationInput';
+export const MAPPING_KEY = 'organizationMutationInput';
 
 // FIXME workaround for enum issue
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const formDefinition: FormDefinition = JSON.parse(JSON.stringify(formData));
+export const ORGANIZATION_FORM: FormDefinition = JSON.parse(
+  JSON.stringify(formData)
+);
 
 const EditOrganization = () => {
-  const { organizationId } = useParams() as {
-    organizationId: string;
-  };
   const navigate = useNavigate();
 
-  // get org from cache if we have it
-  const organizationNameFragment = apolloClient.readFragment({
-    id: `Organization:${organizationId}`,
-    fragment: OrganizationFieldsFragmentDoc,
-  });
+  const { crumbs, loading, organization, organizationName } =
+    useOrganizationCrumbs('Edit');
 
-  const {
-    data: { organization } = {},
-    loading,
-    error,
-  } = useGetOrganizationQuery({ variables: { id: organizationId } });
-
-  if (error) throw error;
-  if (!loading && !organization) throw Error('Organization not found');
-
-  const organizationName =
-    organizationNameFragment?.organizationName ||
-    organization?.organizationName ||
-    `Organization ${organizationId}`;
-
-  const crumbs = [
-    ALL_PROJECTS_CRUMB,
-    {
-      label: organizationName,
-      to: Routes.ORGANIZATION,
+  const onCompleted = useCallback(
+    (data: UpdateOrganizationMutation) => {
+      const id = data?.updateOrganization?.organization?.id;
+      if (id) {
+        navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
+      }
     },
-
-    {
-      label: 'Edit',
-      to: Routes.EDIT_ORGANIZATION,
-    },
-  ];
-
-  const [mutateFunction, { loading: saveLoading, error: saveError }] =
-    useUpdateOrganizationMutation({
-      onCompleted: (data) => {
-        if (data?.updateOrganization?.organization?.id) {
-          navigate(
-            generatePath(Routes.ORGANIZATION, {
-              organizationId: data?.updateOrganization?.organization?.id,
-            })
-          );
-        }
-      },
-    });
-
-  const initialValues = useMemo(() => {
-    if (!organization) return;
-    return createInitialValues(formDefinition, organization, MAPPING_KEY);
-  }, [organization]);
-
-  const submitHandler = (values: Record<string, any>) => {
-    // Transform values into client input query variables
-    const variables = transformSubmitValues(
-      formDefinition,
-      values,
-      MAPPING_KEY,
-      true
-    );
-    console.log(JSON.stringify(variables, null, 2));
-
-    void mutateFunction({
-      variables: {
-        input: {
-          id: organizationId,
-          input: variables,
-          clientMutationId: '123',
-        },
-      },
-    });
-  };
+    [navigate]
+  );
 
   if (loading) return <Loading />;
   if (!crumbs || !organization) throw Error('Organization not found');
-  if (saveError) throw saveError;
 
   return (
-    <>
-      <PageHeader>
-        <Typography variant='h4'>Organizations</Typography>
-      </PageHeader>
-      <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
-        <Breadcrumbs crumbs={crumbs} />
-        <Grid container>
-          <Grid item xs={9}>
-            <DynamicForm
-              definition={formDefinition}
-              onSubmit={submitHandler}
-              submitButtonText='Save Changes'
-              discardButtonText='Discard'
-              initialValues={initialValues}
-              loading={saveLoading}
+    <ProjectLayout>
+      <Breadcrumbs crumbs={crumbs} />
+      <Typography variant='h3' sx={{ mb: 4 }}>
+        Edit {organizationName}
+      </Typography>
+      <Grid container>
+        <Grid item xs={9}>
+          {loading && <Loading />}
+          {organization && (
+            <EditRecord<
+              OrganizationAllFieldsFragment,
+              UpdateOrganizationMutation,
+              UpdateOrganizationMutationVariables
+            >
+              formDefinition={ORGANIZATION_FORM}
+              mappingKey={MAPPING_KEY}
+              record={organization}
+              queryDocument={UpdateOrganizationDocument}
+              onCompleted={onCompleted}
+              getErrors={(data: UpdateOrganizationMutation) =>
+                data?.updateOrganization?.errors
+              }
             />
-          </Grid>
+          )}
         </Grid>
-      </Container>
-    </>
+      </Grid>
+    </ProjectLayout>
   );
 };
 export default EditOrganization;

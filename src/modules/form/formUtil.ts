@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { isNil } from 'lodash-es';
 
 import { AnswerOption, FormDefinition, isAnswerOption, Item } from './types';
 
@@ -130,6 +131,7 @@ const dataNotCollectedCode = (item: Item): string | undefined => {
  * @param values form state (from DynamicForm) to transform
  * @param mappingKey key used in the FormDefinition to specify the record field that corresponds to the question
  * @param autofillNotCollected whether to fill unanswered questions with Data Not Collected option (if present)
+ * @param autofillNulls whether to fill unanswered questions with null
  *
  * @returns values extracted from the form state, ready to submit
  *  to a graphql mutation as query variables.
@@ -138,7 +140,8 @@ export const transformSubmitValues = (
   definition: FormDefinition,
   values: Record<string, any>,
   mappingKey: string,
-  autofillNotCollected = false
+  autofillNotCollected = false,
+  autofillNulls = false
 ) => {
   const result: Record<string, any> = {};
 
@@ -164,10 +167,14 @@ export const transformSubmitValues = (
 
       if (typeof value !== 'undefined') {
         transformed[key] = value;
-      } else if (autofillNotCollected) {
+      }
+      if (autofillNotCollected) {
         // If we don't have a value, fill in Not Collected code if present
         const notCollectedCode = dataNotCollectedCode(item);
         if (notCollectedCode) transformed[key] = notCollectedCode;
+      }
+      if (autofillNulls && isNil(value)) {
+        transformed[key] = null;
       }
     });
   }

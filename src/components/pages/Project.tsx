@@ -1,19 +1,11 @@
-import {
-  Button,
-  Container,
-  Grid,
-  Link,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import { generatePath, Link as RouterLink, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
-import PageHeader from '../layout/PageHeader';
 
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
+import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
 
@@ -27,87 +19,82 @@ const Project = () => {
   if (!crumbs || !project) throw Error('Project not found');
 
   return (
-    <>
-      <PageHeader>
-        <Typography variant='h4'>Projects</Typography>
-      </PageHeader>
-      <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
-        <Breadcrumbs crumbs={crumbs} />
-        <Typography variant='h3' sx={{ mb: 4 }}>
-          {project.projectName}
-        </Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={9}>
-            <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                Project Details
-              </Typography>
-              <ProjectDetails project={project} />
-            </Paper>
-          </Grid>
-          <Grid item xs>
+    <ProjectLayout>
+      <Breadcrumbs crumbs={crumbs} />
+      <Typography variant='h3' sx={{ mb: 4 }}>
+        {project.projectName}
+      </Typography>
+      <Grid container spacing={4}>
+        <Grid item xs={9}>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Typography variant='h6' sx={{ mb: 2 }}>
+              Project Details
+            </Typography>
+            <ProjectDetails project={project} />
+          </Paper>
+        </Grid>
+        <Grid item xs>
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Stack spacing={2}>
+              <Typography variant='h6'>Add to Project</Typography>
+              <Button
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                component={RouterLink}
+                to=''
+              >
+                + Add Inventory
+              </Button>
+              <Button
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                component={RouterLink}
+                to=''
+              >
+                + Add Funding Source
+              </Button>
+              <Button
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                component={RouterLink}
+                to=''
+              >
+                + Add Project CoC
+              </Button>
+            </Stack>
+          </Paper>
+          {project.contactInformation && (
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
-                <Typography variant='h6'>Add to Project</Typography>
-                <Button
-                  variant='outlined'
-                  color='secondary'
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                  component={RouterLink}
-                  to=''
-                >
-                  + Add Inventory
-                </Button>
-                <Button
-                  variant='outlined'
-                  color='secondary'
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                  component={RouterLink}
-                  to=''
-                >
-                  + Add Funding Source
-                </Button>
-                <Button
-                  variant='outlined'
-                  color='secondary'
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                  component={RouterLink}
-                  to=''
-                >
-                  + Add Project CoC
-                </Button>
+                <Typography variant='h6'>Project Contact</Typography>
+                <Typography variant='body2'>
+                  {project.contactInformation}
+                </Typography>
               </Stack>
             </Paper>
-            {project.contactInformation && (
-              <Paper sx={{ p: 2, mb: 3 }}>
-                <Stack spacing={2}>
-                  <Typography variant='h6'>Project Contact</Typography>
-                  <Typography variant='body2'>
-                    {project.contactInformation}
-                  </Typography>
-                </Stack>
-              </Paper>
-            )}
-            <Paper sx={{ p: 2 }}>
-              <Stack spacing={1}>
-                <Link
-                  component={RouterLink}
-                  color='text.secondary'
-                  to={generatePath(Routes.EDIT_PROJECT, {
-                    projectId,
-                  })}
-                >
-                  Edit Project
-                </Link>
-                <Link color='text.secondary' component={RouterLink} to=''>
-                  Delete Project
-                </Link>
-              </Stack>
-            </Paper>
-          </Grid>
+          )}
+          <Paper sx={{ p: 2 }}>
+            <Stack spacing={1}>
+              <Link
+                component={RouterLink}
+                color='text.secondary'
+                to={generatePath(Routes.EDIT_PROJECT, {
+                  projectId,
+                })}
+              >
+                Edit Project
+              </Link>
+              <Link color='text.secondary' component={RouterLink} to=''>
+                Delete Project
+              </Link>
+            </Stack>
+          </Paper>
         </Grid>
-      </Container>
-    </>
+      </Grid>
+    </ProjectLayout>
   );
 };
 export default Project;

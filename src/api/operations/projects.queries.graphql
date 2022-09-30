@@ -1,44 +1,3 @@
-fragment ProjectFields on Project {
-  id
-  projectName
-  projectType
-  organization {
-    id
-    organizationName
-  }
-}
-
-fragment OrganizationFields on Organization {
-  id
-  organizationName
-}
-
-fragment OrganizationDetailFields on Organization {
-  description
-  contactInformation
-}
-
-fragment ProjectAllFields on Project {
-  id
-  projectName
-  projectType
-  HMISParticipatingProject
-  HOPWAMedAssistedLivingFac
-  contactInformation
-  continuumProject
-  description
-  housingType
-  operatingEndDate
-  operatingStartDate
-  residentialAffiliation
-  targetPopulation
-  trackingMethod
-  organization {
-    id
-    organizationName
-  }
-}
-
 query GetProjectsForSelect {
   projects(sortOrder: ORGANIZATION_AND_NAME) {
     ...ProjectFields
@@ -62,8 +21,7 @@ query GetProject($id: ID!) {
 
 query GetOrganization($id: ID!) {
   organization(id: $id) {
-    ...OrganizationFields
-    ...OrganizationDetailFields
+    ...OrganizationAllFields
     projects {
       ...ProjectAllFields
     }
@@ -76,11 +34,35 @@ query GetOrganizationsForSelect {
   }
 }
 
+mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    clientMutationId
+    project {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 mutation UpdateProject($input: UpdateProjectInput!) {
   updateProject(input: $input) {
     clientMutationId
     project {
-      ...ProjectAllFields
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateOrganization($input: CreateOrganizationInput!) {
+  createOrganization(input: $input) {
+    clientMutationId
+    organization {
+      id
     }
     errors {
       ...ValidationErrorFields
@@ -92,8 +74,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
   updateOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationFields
-      ...OrganizationDetailFields
+      id
     }
     errors {
       ...ValidationErrorFields
