@@ -1262,6 +1262,7 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    dob?: string | null;
     firstName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
@@ -1629,6 +1630,7 @@ export type GetEnrollmentWithHoHQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          dob?: string | null;
           firstName?: string | null;
           preferredName?: string | null;
           lastName?: string | null;
@@ -2073,6 +2075,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     client {
       id
       ...ClientName
+      dob
     }
     enrollment {
       id

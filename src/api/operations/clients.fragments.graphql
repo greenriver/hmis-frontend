@@ -28,6 +28,7 @@ fragment HouseholdClientFields on HouseholdClient {
   client {
     id
     ...ClientName
+    dob
   }
   enrollment {
     id
