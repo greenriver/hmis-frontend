@@ -25,7 +25,11 @@ const WarehouseLinkBar = () => {
       position='static'
       color='default'
       elevation={0}
-      sx={{ backgroundColor: 'black', height, border: 'none' }}
+      sx={{
+        backgroundColor: (theme) => theme.palette.grey[900],
+        height,
+        border: 'none',
+      }}
     >
       <Toolbar
         sx={{

@@ -12,10 +12,12 @@ export const resolveAnswerValueSet = (
   answerValueSet: string
 ): AnswerOption[] => {
   if (isHmisEnum(answerValueSet)) {
-    return Object.entries(HmisEnums[answerValueSet]).map(([code, display]) => ({
+    const hmisEnum = HmisEnums[answerValueSet];
+    return Object.entries(hmisEnum).map(([code, display]) => ({
       valueCoding: { code: code.toString(), display },
     }));
   }
+
   if (answerValueSet === 'yesNoMissing') {
     return [
       {
@@ -50,10 +52,13 @@ export const resolveAnswerValueSet = (
       },
     ];
   }
+
   return [];
 };
 
-// Find a question item by linkId
+/**
+ * Recursively find a question item by linkId
+ */
 const findItem = (
   items: Item[] | undefined,
   linkId: string
@@ -65,21 +70,30 @@ const findItem = (
   return items.find((item) => findItem(item.item, linkId));
 };
 
-// Transform form value based on the type
-const transformValue = (value: any, item: Item): any => {
+/**
+ * Transform form value shape into GraphQL value shape.
+ * For example, a selected option '{ valueCoding: { code: 'ES' }}'
+ * is converted to enum 'ES'.
+ *
+ * @param value value from the form state
+ * @param item corresponding FormDefinition item
+ * @returns transformed value
+ */
+const transformFormValueToGqlValue = (value: any, item: Item): any => {
   if (value instanceof Date) {
     return format(value, 'yyyy-MM-dd');
   }
+
   if (
     item.type === 'choice' &&
     item.answerValueSet &&
     ['projects', 'organizations'].includes(item.answerValueSet)
   ) {
+    // Special case for project/org selectors which key on ID
     if (Array.isArray(value)) {
       return value.map((option: { id: string }) => option.id);
     } else if (value) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      return value.id;
+      return (value as { id: string }).id;
     }
   } else if (['choice', 'openchoice'].includes(item.type)) {
     if (Array.isArray(value)) {
@@ -87,10 +101,11 @@ const transformValue = (value: any, item: Item): any => {
         (option: AnswerOption) => option.valueString || option.valueCoding?.code
       );
     } else if (value) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return (value as AnswerOption).valueString || value.valueCoding?.code;
     }
-  } else if (value === '') {
+  }
+
+  if (value === '') {
     return undefined;
   }
   return value;
@@ -103,101 +118,130 @@ const dataNotCollectedCode = (item: Item): string | undefined => {
   )?.valueCoding?.code;
 };
 
-// Recursive helper for transformSubmitValues
-const transformSubmitValuesInner = (
-  items: Item[],
-  values: Record<string, any>,
-  transformed: Record<string, any>,
-  mappingKey: string,
-  autofillNotCollected: boolean
-) => {
-  items.forEach((item: Item) => {
-    if (Array.isArray(item.item)) {
-      transformSubmitValuesInner(
-        item.item,
-        values,
-        transformed,
-        mappingKey,
-        autofillNotCollected
-      );
-    }
-    if (!item.mapping) return;
-    const key = item.mapping[mappingKey];
-    if (!key) return;
-
-    let value;
-    if (item.linkId in values) {
-      value = transformValue(values[item.linkId], item);
-    }
-    if (typeof value !== 'undefined') {
-      transformed[key] = value;
-    } else if (autofillNotCollected) {
-      // If we don't have a value, fill in Not Collected code if present
-      const notCollectedCode = dataNotCollectedCode(item);
-      if (notCollectedCode) transformed[key] = notCollectedCode;
-    }
-  });
-};
-
-// Take a mapping of linkId->value and transform it into queryVariable -> value
+/**
+ * Given the form state of a completed form, transform it into
+ * query variables for a mutation. This is used for dynamic forms that
+ * edit one record directly, like the Client, Project, and Organization edit screens.
+ *
+ * @param definition
+ * @param values form state (from DynamicForm) to transform
+ * @param mappingKey key used in the FormDefinition to specify the record field that corresponds to the question
+ * @param autofillNotCollected whether to fill unanswered questions with Data Not Collected option (if present)
+ *
+ * @returns values extracted from the form state, ready to submit
+ *  to a graphql mutation as query variables.
+ */
 export const transformSubmitValues = (
   definition: FormDefinition,
   values: Record<string, any>,
   mappingKey: string,
   autofillNotCollected = false
 ) => {
-  const transformed: Record<string, any> = {};
-  transformSubmitValuesInner(
+  const result: Record<string, any> = {};
+
+  // Recursive helper for traversing the FormDefinition
+  function recursiveTransformValues(
+    items: Item[],
+    values: Record<string, any>,
+    transformed: Record<string, any>, // result map to be filled in
+    mappingKey: string,
+    autofillNotCollected: boolean
+  ) {
+    items.forEach((item: Item) => {
+      if (Array.isArray(item.item)) {
+        recursiveTransformValues(
+          item.item,
+          values,
+          transformed,
+          mappingKey,
+          autofillNotCollected
+        );
+      }
+      if (!item.mapping) return;
+      const key = item.mapping[mappingKey];
+      if (!key) return;
+
+      let value;
+      if (item.linkId in values) {
+        value = transformFormValueToGqlValue(values[item.linkId], item);
+      }
+      if (typeof value !== 'undefined') {
+        transformed[key] = value;
+      } else if (autofillNotCollected) {
+        // If we don't have a value, fill in Not Collected code if present
+        const notCollectedCode = dataNotCollectedCode(item);
+        if (notCollectedCode) transformed[key] = notCollectedCode;
+      }
+    });
+  }
+
+  recursiveTransformValues(
     definition.item || [],
     values,
-    transformed,
+    result,
     mappingKey,
     autofillNotCollected
   );
-  return transformed;
+
+  return result;
 };
 
-// Recursive helper for transformSubmitValues
-const createInitialValuesInner = (
-  items: Item[],
-  record: Record<string, any>,
-  transformed: Record<string, any>,
-  mappingKey: string
-) => {
-  items.forEach((item: Item) => {
-    if (Array.isArray(item.item)) {
-      createInitialValuesInner(item.item, record, transformed, mappingKey);
-    }
-    if (!item.mapping) return;
-    const key = item.mapping[mappingKey];
-    if (!key || !record.hasOwnProperty(key)) return;
-
-    if (
-      record[key] &&
-      ['choice', 'openchoice'].includes(item.type) &&
-      item.answerValueSet
-    ) {
-      // This is a value for a choice item, like 'PSH', so transform it to the option object
-      const option = resolveAnswerValueSet(item.answerValueSet).find(
-        (opt) => opt.valueCoding?.code === record[key]
-      );
-      transformed[item.linkId] = option || {
-        valueCoding: { code: record[key] },
-      };
-    } else {
-      transformed[item.linkId] = record[key];
-    }
-  });
-};
-
-// Create initialValues for form based on mapping key and record
+/**
+ * Create initial form values. This is used for dynamic forms that
+ * edit one record directly, like the Client, Project, and Organization edit screens.
+ *
+ * @param definition FormDefinition
+ * @param record  GQL HMIS record, like Project or Organization
+ * @param mappingKey key used in the FormDefinition to specify the record field that corresponds to the question
+ *
+ * @returns initial form state, ready to pass to DynamicForm as initialValues
+ */
 export const createInitialValues = (
   definition: FormDefinition,
   record: any,
   mappingKey: string
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
-  createInitialValuesInner(
+
+  // Recursive helper for traversing the FormDefinition
+  function recursiveFillInValues(
+    items: Item[],
+    record: Record<string, any>,
+    values: Record<string, any>, // intialValues object to be filled in
+    mappingKey: string
+  ) {
+    items.forEach((item: Item) => {
+      if (Array.isArray(item.item)) {
+        recursiveFillInValues(item.item, record, values, mappingKey);
+      }
+      // Skip: this question doesn't have a mapping key
+      if (!item.mapping) return;
+
+      // Skip: this question doesn't have THIS mapping key, or
+      // the record doesn't have a value for this property
+      const key = item.mapping[mappingKey];
+      if (!key || !record.hasOwnProperty(key)) return;
+
+      if (
+        record[key] &&
+        ['choice', 'openchoice'].includes(item.type) &&
+        item.answerValueSet
+      ) {
+        // This is a value for a choice item, like 'PSH', so transform it to the option object
+        const option = resolveAnswerValueSet(item.answerValueSet).find(
+          (opt) => opt.valueCoding?.code === record[key]
+        );
+        values[item.linkId] = option || {
+          valueCoding: { code: record[key] },
+        };
+      } else {
+        // Set the property directly as the initial form value
+        values[item.linkId] = record[key];
+      }
+    });
+  }
+
+  recursiveFillInValues(
     definition.item || [],
     record,
     initialValues,
@@ -207,6 +251,18 @@ export const createInitialValues = (
   return initialValues;
 };
 
+/**
+ * Decide whether an item should be enabled based on enableWhen logic.
+ * NOTE for now this only takes ONE dependent question value for the sake of speed,
+ * even though enableWhen can technically specify dependency on multiple different questions.
+ * Will probably need to update to support that later.
+ *
+ * NOTE: only supports dependency on option questions right now
+ *
+ * @param dependentQuestionValue The value of the question that this item depends on
+ * @param item Item that we're deciding whether to enable or not
+ * @returns boolean
+ */
 export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
   if (!item.enableWhen) return true;
 
