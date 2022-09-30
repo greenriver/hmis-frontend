@@ -61,8 +61,8 @@ const RelationshipToHoHInput = ({
     <InputIndicatorContainer loading={loading} error={!!error} success={done}>
       <RelationshipToHohSelect
         value={relationship || null}
-        disabled={relationship === RelationshipToHoH.SelfHeadOfHousehold}
         onChange={onChange}
+        showDataNotCollected
       />
     </InputIndicatorContainer>
   );

@@ -152,7 +152,7 @@ const GroupedProjectTable = ({
                 organizationId: organization.id,
               })}
               component={RouterLink}
-              sx={{ mx: 1, my: 1, float: 'right' }}
+              sx={{ mx: 1, my: 1, float: 'left' }}
             >
               View Organization
             </Button>
