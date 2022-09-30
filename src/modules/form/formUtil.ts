@@ -168,12 +168,13 @@ export const transformSubmitValues = (
       if (typeof value !== 'undefined') {
         transformed[key] = value;
       }
-      if (autofillNotCollected) {
+
+      if (autofillNotCollected && isNil(value)) {
         // If we don't have a value, fill in Not Collected code if present
         const notCollectedCode = dataNotCollectedCode(item);
         if (notCollectedCode) transformed[key] = notCollectedCode;
       }
-      if (autofillNulls && isNil(value)) {
+      if (autofillNulls && isNil(transformed[key])) {
         transformed[key] = null;
       }
     });

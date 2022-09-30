@@ -107,7 +107,9 @@ const DynamicForm: React.FC<Props> = ({
       {errors && (
         <Stack spacing={1} sx={{ mt: 2 }}>
           {errors.map((e) => (
-            <Typography color='error'>{e.fullMessage}</Typography>
+            <Typography key={e.message} color='error'>
+              {e.fullMessage}
+            </Typography>
           ))}
         </Stack>
       )}
