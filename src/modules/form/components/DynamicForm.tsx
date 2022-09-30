@@ -25,7 +25,7 @@ const DynamicForm: React.FC<Props> = ({
 }) => {
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(initialValues);
-
+  console.log(values);
   // this needs to be memoized
   const itemChanged = (linkId: string, value: any) => {
     setValues((currentValues) => {

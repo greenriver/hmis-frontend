@@ -2,6 +2,57 @@ import { format } from 'date-fns';
 
 import { AnswerOption, FormDefinition, isAnswerOption, Item } from './types';
 
+import { HmisEnums } from '@/types/gqlEnums';
+
+export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
+  return k in HmisEnums;
+};
+
+export const resolveAnswerValueSet = (
+  answerValueSet: string
+): AnswerOption[] => {
+  if (isHmisEnum(answerValueSet)) {
+    return Object.entries(HmisEnums[answerValueSet]).map(([code, display]) => ({
+      valueCoding: { code: code.toString(), display },
+    }));
+  }
+  if (answerValueSet === 'yesNoMissing') {
+    return [
+      {
+        valueCoding: {
+          code: '0',
+          display: 'No',
+        },
+      },
+      {
+        valueCoding: {
+          code: '1',
+          display: 'Yes',
+        },
+      },
+      {
+        valueCoding: {
+          code: '8',
+          display: "Don't know",
+        },
+      },
+      {
+        valueCoding: {
+          code: '9',
+          display: 'Client refused',
+        },
+      },
+      {
+        valueCoding: {
+          code: '99',
+          display: 'Data not collected',
+        },
+      },
+    ];
+  }
+  return [];
+};
+
 // Find a question item by linkId
 const findItem = (
   items: Item[] | undefined,
@@ -19,17 +70,18 @@ const transformValue = (value: any, item: Item): any => {
   if (value instanceof Date) {
     return format(value, 'yyyy-MM-dd');
   }
-  if (item.type === 'choice' && item.answerValueSet) {
+  if (
+    item.type === 'choice' &&
+    item.answerValueSet &&
+    ['projects', 'organizations'].includes(item.answerValueSet)
+  ) {
     if (Array.isArray(value)) {
       return value.map((option: { id: string }) => option.id);
     } else if (value) {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       return value.id;
     }
-  } else if (
-    ['choice', 'openchoice'].includes(item.type) &&
-    item.answerOption
-  ) {
+  } else if (['choice', 'openchoice'].includes(item.type)) {
     if (Array.isArray(value)) {
       return value.map(
         (option: AnswerOption) => option.valueString || option.valueCoding?.code
@@ -118,9 +170,21 @@ const createInitialValuesInner = (
     }
     if (!item.mapping) return;
     const key = item.mapping[mappingKey];
-    if (!key) return;
+    if (!key || !record.hasOwnProperty(key)) return;
 
-    if (record.hasOwnProperty(key)) {
+    if (
+      record[key] &&
+      ['choice', 'openchoice'].includes(item.type) &&
+      item.answerValueSet
+    ) {
+      // This is a value for a choice item, like 'PSH', so transform it to the option object
+      const option = resolveAnswerValueSet(item.answerValueSet).find(
+        (opt) => opt.valueCoding?.code === record[key]
+      );
+      transformed[item.linkId] = option || {
+        valueCoding: { code: record[key] },
+      };
+    } else {
       transformed[item.linkId] = record[key];
     }
   });
@@ -173,44 +237,4 @@ export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
   } else {
     return booleans.every(Boolean);
   }
-};
-
-export const resolveAnswerValueSet = (
-  answerValueSet: string
-): AnswerOption[] => {
-  if (answerValueSet === 'yesNoMissing') {
-    return [
-      {
-        valueCoding: {
-          code: '0',
-          display: 'No',
-        },
-      },
-      {
-        valueCoding: {
-          code: '1',
-          display: 'Yes',
-        },
-      },
-      {
-        valueCoding: {
-          code: '8',
-          display: "Don't know",
-        },
-      },
-      {
-        valueCoding: {
-          code: '9',
-          display: 'Client refused',
-        },
-      },
-      {
-        valueCoding: {
-          code: '99',
-          display: 'Data not collected',
-        },
-      },
-    ];
-  }
-  return [];
 };

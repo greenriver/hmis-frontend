@@ -18,6 +18,7 @@ import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
 import CreateClient from '@/components/pages/CreateClient';
 import Dashboard from '@/components/pages/Dashboard';
+import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
@@ -43,6 +44,7 @@ export const protectedRoutes = [
       { path: Routes.PROJECT, element: <Project /> },
       { path: Routes.EDIT_PROJECT, element: <EditProject /> },
       { path: Routes.ORGANIZATION, element: <Organization /> },
+      { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
         path: Routes.CLIENT_DASHBOARD,

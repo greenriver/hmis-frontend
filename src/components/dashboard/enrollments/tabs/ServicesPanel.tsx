@@ -5,7 +5,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { RecordTypeEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ServiceFieldsFragment,
   GetEnrollmentServicesDocument,
@@ -21,7 +21,7 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
   },
   {
     header: 'Type',
-    render: (e) => RecordTypeEnum[e.recordType],
+    render: (e) => HmisEnums.RecordType[e.recordType],
   },
   {
     header: 'Details',

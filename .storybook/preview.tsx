@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { MemoryRouter } from 'react-router-dom';
 import mocks from '../src/test/__mocks__/requests';
 import '../src/index.css';
-import muiTheme from '../src/config/theme';
+import theme from '../src/config/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -23,8 +23,6 @@ export const parameters = {
     addTypename: false,
   },
 };
-
-const theme = createTheme(muiTheme);
 
 export const decorators = [
   (Story) => <MemoryRouter>{Story()}</MemoryRouter>,

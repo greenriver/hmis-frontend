@@ -10,7 +10,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { AssessmentLevelEnum, AssessmentTypeEnum } from '@/types/gqlEnums';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
@@ -22,11 +22,11 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (a) => AssessmentTypeEnum[a.assessmentType],
+    render: (a) => HmisEnums.AssessmentType[a.assessmentType],
   },
   {
     header: 'Level',
-    render: (a) => AssessmentLevelEnum[a.assessmentLevel],
+    render: (a) => HmisEnums.AssessmentLevel[a.assessmentLevel],
   },
   {
     header: 'Location',

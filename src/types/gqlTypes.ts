@@ -70,6 +70,11 @@ export enum AssessmentLevel {
   HousingNeedsAssessment = 'HOUSING_NEEDS_ASSESSMENT',
 }
 
+/** HUD Assessment Sorting Options */
+export enum AssessmentSortOption {
+  AssessmentDate = 'ASSESSMENT_DATE',
+}
+
 /** HUD AssessmentType (4.19.3) */
 export enum AssessmentType {
   /** (3) In Person */
@@ -287,18 +292,21 @@ export type Enrollment = {
 export type EnrollmentAssessmentsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
 /** HUD Enrollment */
 export type EnrollmentEventsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<EventSortOption>;
 };
 
 /** HUD Enrollment */
 export type EnrollmentServicesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
 /** HMIS Enrollment household member input */
@@ -354,6 +362,11 @@ export type Event = {
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']>;
 };
+
+/** HUD Event Sorting Options */
+export enum EventSortOption {
+  EventDate = 'EVENT_DATE',
+}
 
 /** HUD EventType (4.20.2) */
 export enum EventType {
@@ -829,6 +842,11 @@ export type Service = {
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided: ServiceTypeProvided;
 };
+
+/** HUD Service Sorting Options */
+export enum ServiceSortOption {
+  DateProvided = 'DATE_PROVIDED',
+}
 
 /** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */
 export enum ServiceSubTypeProvided {
@@ -1788,6 +1806,12 @@ export type OrganizationFieldsFragment = {
   organizationName: string;
 };
 
+export type OrganizationDetailFieldsFragment = {
+  __typename?: 'Organization';
+  description?: string | null;
+  contactInformation?: string | null;
+};
+
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -1903,10 +1927,10 @@ export type GetOrganizationQuery = {
   __typename?: 'Query';
   organization?: {
     __typename?: 'Organization';
-    description?: string | null;
-    contactInformation?: string | null;
     id: string;
     organizationName: string;
+    description?: string | null;
+    contactInformation?: string | null;
     projects: Array<{
       __typename?: 'Project';
       id: string;
@@ -1975,6 +1999,33 @@ export type UpdateProjectMutation = {
         id: string;
         organizationName: string;
       };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type UpdateOrganizationMutationVariables = Exact<{
+  input: UpdateOrganizationInput;
+}>;
+
+export type UpdateOrganizationMutation = {
+  __typename?: 'Mutation';
+  updateOrganization?: {
+    __typename?: 'UpdateOrganizationPayload';
+    clientMutationId?: string | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+      description?: string | null;
+      contactInformation?: string | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -2106,6 +2157,12 @@ export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
     id
     organizationName
+  }
+`;
+export const OrganizationDetailFieldsFragmentDoc = gql`
+  fragment OrganizationDetailFields on Organization {
+    description
+    contactInformation
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
@@ -3256,14 +3313,14 @@ export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
     organization(id: $id) {
       ...OrganizationFields
-      description
-      contactInformation
+      ...OrganizationDetailFields
       projects {
         ...ProjectAllFields
       }
     }
   }
   ${OrganizationFieldsFragmentDoc}
+  ${OrganizationDetailFieldsFragmentDoc}
   ${ProjectAllFieldsFragmentDoc}
 `;
 
@@ -3432,4 +3489,64 @@ export type UpdateProjectMutationResult =
 export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectMutation,
   UpdateProjectMutationVariables
+>;
+export const UpdateOrganizationDocument = gql`
+  mutation UpdateOrganization($input: UpdateOrganizationInput!) {
+    updateOrganization(input: $input) {
+      clientMutationId
+      organization {
+        ...OrganizationFields
+        ...OrganizationDetailFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${OrganizationFieldsFragmentDoc}
+  ${OrganizationDetailFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateOrganizationMutationFn = Apollo.MutationFunction<
+  UpdateOrganizationMutation,
+  UpdateOrganizationMutationVariables
+>;
+
+/**
+ * __useUpdateOrganizationMutation__
+ *
+ * To run a mutation, you first call `useUpdateOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateOrganizationMutation, { data, loading, error }] = useUpdateOrganizationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateOrganizationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateOrganizationMutation,
+    UpdateOrganizationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateOrganizationMutation,
+    UpdateOrganizationMutationVariables
+  >(UpdateOrganizationDocument, options);
+}
+export type UpdateOrganizationMutationHookResult = ReturnType<
+  typeof useUpdateOrganizationMutation
+>;
+export type UpdateOrganizationMutationResult =
+  Apollo.MutationResult<UpdateOrganizationMutation>;
+export type UpdateOrganizationMutationOptions = Apollo.BaseMutationOptions<
+  UpdateOrganizationMutation,
+  UpdateOrganizationMutationVariables
 >;

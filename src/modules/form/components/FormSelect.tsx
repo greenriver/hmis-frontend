@@ -32,9 +32,11 @@ const FormSelect = <Multiple extends boolean | undefined>({
   options,
   multiple,
   label,
+  value,
   ...props
 }: GenericSelectProps<Option, Multiple, false>) => {
   const isGrouped = !!options[0]?.valueCoding?.displayGroup;
+
   return (
     <GenericSelect
       getOptionLabel={(option) => optionLabel(option)}
@@ -50,6 +52,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       isOptionEqualToValue={(option, value) =>
         optionId(option) === optionId(value)
       }
+      value={value}
       {...props}
     />
   );

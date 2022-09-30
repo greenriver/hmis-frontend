@@ -1,0 +1,39 @@
+{
+  "name": "organization-edit",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "name",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "1",
+          "text": "Organization Name",
+          "mapping": {
+            "organizationMutationInput": "organizationName"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "description",
+          "text": "Description",
+          "mapping": {
+            "organizationMutationInput": "description"
+          }
+        },
+        {
+          "type": "text",
+          "required": false,
+          "linkId": "contact",
+          "text": "Contact Information",
+          "mapping": {
+            "organizationMutationInput": "contactInformation"
+          }
+        }
+      ]
+    }
+  ]
+}
