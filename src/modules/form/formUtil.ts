@@ -112,8 +112,11 @@ const transformFormValueToGqlValue = (value: any, item: Item): any => {
 };
 
 const dataNotCollectedCode = (item: Item): string | undefined => {
-  if (!item.answerOption) return undefined;
-  return item.answerOption.find((opt) =>
+  const options = item.answerValueSet
+    ? resolveAnswerValueSet(item.answerValueSet)
+    : item.answerOption || [];
+
+  return options.find((opt) =>
     opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED')
   )?.valueCoding?.code;
 };
@@ -144,18 +147,11 @@ export const transformSubmitValues = (
     items: Item[],
     values: Record<string, any>,
     transformed: Record<string, any>, // result map to be filled in
-    mappingKey: string,
-    autofillNotCollected: boolean
+    mappingKey: string
   ) {
     items.forEach((item: Item) => {
       if (Array.isArray(item.item)) {
-        recursiveTransformValues(
-          item.item,
-          values,
-          transformed,
-          mappingKey,
-          autofillNotCollected
-        );
+        recursiveTransformValues(item.item, values, transformed, mappingKey);
       }
       if (!item.mapping) return;
       const key = item.mapping[mappingKey];
@@ -165,6 +161,7 @@ export const transformSubmitValues = (
       if (item.linkId in values) {
         value = transformFormValueToGqlValue(values[item.linkId], item);
       }
+
       if (typeof value !== 'undefined') {
         transformed[key] = value;
       } else if (autofillNotCollected) {
@@ -175,13 +172,7 @@ export const transformSubmitValues = (
     });
   }
 
-  recursiveTransformValues(
-    definition.item || [],
-    values,
-    result,
-    mappingKey,
-    autofillNotCollected
-  );
+  recursiveTransformValues(definition.item || [], values, result, mappingKey);
 
   return result;
 };
