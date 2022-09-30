@@ -128,12 +128,16 @@ const Organization = () => {
               <Typography variant='h6' sx={{ mb: 2 }}>
                 Projects
               </Typography>
-              <GenericTable
-                rows={organization?.projects || []}
-                columns={columns}
-                handleRowClick={handleRowClick}
-                loading={loading}
-              />
+              {(organization?.projects || []).length > 0 ? (
+                <GenericTable
+                  rows={organization?.projects || []}
+                  columns={columns}
+                  handleRowClick={handleRowClick}
+                  loading={loading}
+                />
+              ) : (
+                <Typography>No Projects</Typography>
+              )}
             </Paper>
           </Grid>
           <Grid item xs>

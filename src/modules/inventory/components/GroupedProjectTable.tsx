@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Button,
   Stack,
   Typography,
@@ -156,12 +157,17 @@ const GroupedProjectTable = ({
             >
               View Organization
             </Button>
-            <GenericTable<ProjectFieldsFragment>
-              key={organization.id}
-              columns={columns}
-              rows={organization.projects}
-              handleRowClick={handleRowClick}
-            />
+            {(organization.projects || []).length > 0 ? (
+              <GenericTable
+                columns={columns}
+                rows={organization.projects}
+                handleRowClick={handleRowClick}
+              />
+            ) : (
+              <Box sx={{ clear: 'left', px: 2, py: 2 }}>
+                <Typography>No Projects</Typography>
+              </Box>
+            )}
           </AccordionDetails>
         </Accordion>
       ))}
