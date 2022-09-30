@@ -21,8 +21,7 @@ query GetProject($id: ID!) {
 
 query GetOrganization($id: ID!) {
   organization(id: $id) {
-    ...OrganizationFields
-    ...OrganizationDetailFields
+    ...OrganizationAllFields
     projects {
       ...ProjectAllFields
     }
@@ -35,11 +34,35 @@ query GetOrganizationsForSelect {
   }
 }
 
+mutation CreateProject($input: CreateProjectInput!) {
+  createProject(input: $input) {
+    clientMutationId
+    project {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 mutation UpdateProject($input: UpdateProjectInput!) {
   updateProject(input: $input) {
     clientMutationId
     project {
-      ...ProjectAllFields
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateOrganization($input: CreateOrganizationInput!) {
+  createOrganization(input: $input) {
+    clientMutationId
+    organization {
+      id
     }
     errors {
       ...ValidationErrorFields
@@ -51,8 +74,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
   updateOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationFields
-      ...OrganizationDetailFields
+      id
     }
     errors {
       ...ValidationErrorFields

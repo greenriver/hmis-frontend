@@ -17,6 +17,8 @@ import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
 import ClientDashboard from '@/components/pages/ClientDashboard';
 import CreateClient from '@/components/pages/CreateClient';
+import CreateOrganization from '@/components/pages/CreateOrganization';
+import CreateProject from '@/components/pages/CreateProject';
 import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
@@ -43,8 +45,10 @@ export const protectedRoutes = [
       { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
       { path: Routes.PROJECT, element: <Project /> },
       { path: Routes.EDIT_PROJECT, element: <EditProject /> },
+      { path: Routes.CREATE_PROJECT, element: <CreateProject /> },
       { path: Routes.ORGANIZATION, element: <Organization /> },
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
+      { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
         path: Routes.CLIENT_DASHBOARD,

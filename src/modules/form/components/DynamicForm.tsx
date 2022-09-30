@@ -1,10 +1,13 @@
-import { Box, Grid, Button, Stack } from '@mui/material';
+import { Box, Grid, Button, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { shouldEnableItem } from '../formUtil';
 import { FieldType, FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
+
+import { ValidationError } from '@/types/gqlTypes';
 
 interface Props {
   definition: FormDefinition;
@@ -13,6 +16,7 @@ interface Props {
   discardButtonText?: string;
   loading?: boolean;
   initialValues?: Record<string, any>;
+  errors?: ValidationError[] | null;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -22,7 +26,9 @@ const DynamicForm: React.FC<Props> = ({
   discardButtonText,
   loading,
   initialValues = {},
+  errors,
 }) => {
+  const navigate = useNavigate();
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(initialValues);
 
@@ -85,7 +91,9 @@ const DynamicForm: React.FC<Props> = ({
           {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
         {/* <Button variant='outlined'>Save Draft</Button> */}
-        <Button variant='gray'>{discardButtonText || 'Discard'}</Button>
+        <Button variant='gray' onClick={() => navigate(-1)}>
+          {discardButtonText || 'Discard'}
+        </Button>
         {/* <Link
             onClick={() => {
               setValues({});
@@ -96,6 +104,13 @@ const DynamicForm: React.FC<Props> = ({
             Save Draft
           </Link> */}
       </Stack>
+      {errors && (
+        <Stack spacing={1} sx={{ mt: 2 }}>
+          {errors.map((e) => (
+            <Typography color='error'>{e.fullMessage}</Typography>
+          ))}
+        </Stack>
+      )}
     </Box>
   );
 };

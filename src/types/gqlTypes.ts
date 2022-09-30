@@ -1814,6 +1814,14 @@ export type OrganizationDetailFieldsFragment = {
   contactInformation?: string | null;
 };
 
+export type OrganizationAllFieldsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  organizationName: string;
+  description?: string | null;
+  contactInformation?: string | null;
+};
+
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -1971,6 +1979,27 @@ export type GetOrganizationsForSelectQuery = {
   }>;
 };
 
+export type CreateProjectMutationVariables = Exact<{
+  input: CreateProjectInput;
+}>;
+
+export type CreateProjectMutation = {
+  __typename?: 'Mutation';
+  createProject?: {
+    __typename?: 'CreateProjectPayload';
+    clientMutationId?: string | null;
+    project?: { __typename?: 'Project'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type UpdateProjectMutationVariables = Exact<{
   input: UpdateProjectInput;
 }>;
@@ -1980,28 +2009,28 @@ export type UpdateProjectMutation = {
   updateProject?: {
     __typename?: 'UpdateProjectPayload';
     clientMutationId?: string | null;
-    project?: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      HMISParticipatingProject?: boolean | null;
-      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-      contactInformation?: string | null;
-      continuumProject?: boolean | null;
-      description?: string | null;
-      housingType?: HousingType | null;
-      operatingEndDate?: string | null;
-      operatingStartDate: string;
-      residentialAffiliation?: boolean | null;
-      targetPopulation?: TargetPopulation | null;
-      trackingMethod?: TrackingMethod | null;
-      organization: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      };
-    } | null;
+    project?: { __typename?: 'Project'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type CreateOrganizationMutationVariables = Exact<{
+  input: CreateOrganizationInput;
+}>;
+
+export type CreateOrganizationMutation = {
+  __typename?: 'Mutation';
+  createOrganization?: {
+    __typename?: 'CreateOrganizationPayload';
+    clientMutationId?: string | null;
+    organization?: { __typename?: 'Organization'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2022,13 +2051,7 @@ export type UpdateOrganizationMutation = {
   updateOrganization?: {
     __typename?: 'UpdateOrganizationPayload';
     clientMutationId?: string | null;
-    organization?: {
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-      description?: string | null;
-      contactInformation?: string | null;
-    } | null;
+    organization?: { __typename?: 'Organization'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2167,6 +2190,14 @@ export const OrganizationDetailFieldsFragmentDoc = gql`
     description
     contactInformation
   }
+`;
+export const OrganizationAllFieldsFragmentDoc = gql`
+  fragment OrganizationAllFields on Organization {
+    ...OrganizationFields
+    ...OrganizationDetailFields
+  }
+  ${OrganizationFieldsFragmentDoc}
+  ${OrganizationDetailFieldsFragmentDoc}
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
@@ -3315,15 +3346,13 @@ export type GetProjectQueryResult = Apollo.QueryResult<
 export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
     organization(id: $id) {
-      ...OrganizationFields
-      ...OrganizationDetailFields
+      ...OrganizationAllFields
       projects {
         ...ProjectAllFields
       }
     }
   }
-  ${OrganizationFieldsFragmentDoc}
-  ${OrganizationDetailFieldsFragmentDoc}
+  ${OrganizationAllFieldsFragmentDoc}
   ${ProjectAllFieldsFragmentDoc}
 `;
 
@@ -3435,19 +3464,75 @@ export type GetOrganizationsForSelectQueryResult = Apollo.QueryResult<
   GetOrganizationsForSelectQuery,
   GetOrganizationsForSelectQueryVariables
 >;
-export const UpdateProjectDocument = gql`
-  mutation UpdateProject($input: UpdateProjectInput!) {
-    updateProject(input: $input) {
+export const CreateProjectDocument = gql`
+  mutation CreateProject($input: CreateProjectInput!) {
+    createProject(input: $input) {
       clientMutationId
       project {
-        ...ProjectAllFields
+        id
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${ProjectAllFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateProjectMutationFn = Apollo.MutationFunction<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProjectMutation,
+    CreateProjectMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateProjectMutation,
+    CreateProjectMutationVariables
+  >(CreateProjectDocument, options);
+}
+export type CreateProjectMutationHookResult = ReturnType<
+  typeof useCreateProjectMutation
+>;
+export type CreateProjectMutationResult =
+  Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+>;
+export const UpdateProjectDocument = gql`
+  mutation UpdateProject($input: UpdateProjectInput!) {
+    updateProject(input: $input) {
+      clientMutationId
+      project {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateProjectMutationFn = Apollo.MutationFunction<
@@ -3493,21 +3578,75 @@ export type UpdateProjectMutationOptions = Apollo.BaseMutationOptions<
   UpdateProjectMutation,
   UpdateProjectMutationVariables
 >;
-export const UpdateOrganizationDocument = gql`
-  mutation UpdateOrganization($input: UpdateOrganizationInput!) {
-    updateOrganization(input: $input) {
+export const CreateOrganizationDocument = gql`
+  mutation CreateOrganization($input: CreateOrganizationInput!) {
+    createOrganization(input: $input) {
       clientMutationId
       organization {
-        ...OrganizationFields
-        ...OrganizationDetailFields
+        id
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${OrganizationFieldsFragmentDoc}
-  ${OrganizationDetailFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateOrganizationMutationFn = Apollo.MutationFunction<
+  CreateOrganizationMutation,
+  CreateOrganizationMutationVariables
+>;
+
+/**
+ * __useCreateOrganizationMutation__
+ *
+ * To run a mutation, you first call `useCreateOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOrganizationMutation, { data, loading, error }] = useCreateOrganizationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOrganizationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOrganizationMutation,
+    CreateOrganizationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOrganizationMutation,
+    CreateOrganizationMutationVariables
+  >(CreateOrganizationDocument, options);
+}
+export type CreateOrganizationMutationHookResult = ReturnType<
+  typeof useCreateOrganizationMutation
+>;
+export type CreateOrganizationMutationResult =
+  Apollo.MutationResult<CreateOrganizationMutation>;
+export type CreateOrganizationMutationOptions = Apollo.BaseMutationOptions<
+  CreateOrganizationMutation,
+  CreateOrganizationMutationVariables
+>;
+export const UpdateOrganizationDocument = gql`
+  mutation UpdateOrganization($input: UpdateOrganizationInput!) {
+    updateOrganization(input: $input) {
+      clientMutationId
+      organization {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateOrganizationMutationFn = Apollo.MutationFunction<

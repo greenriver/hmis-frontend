@@ -16,7 +16,7 @@ interface Props {
   startDate?: Date | null;
 }
 
-function usePrevious(value) {
+function usePrevious(value: any) {
   const ref = useRef();
   useEffect(() => {
     ref.current = value;

@@ -17,6 +17,10 @@ fragment OrganizationDetailFields on Organization {
   description
   contactInformation
 }
+fragment OrganizationAllFields on Organization {
+  ...OrganizationFields
+  ...OrganizationDetailFields
+}
 
 fragment ProjectAllFields on Project {
   id
