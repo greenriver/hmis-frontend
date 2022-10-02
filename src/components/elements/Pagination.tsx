@@ -28,7 +28,11 @@ export const PaginationSummary = ({
   const range = start === end ? start : `${start}-${end}`;
   const total = totalEntries.toLocaleString('en-US');
   const text = `${range} of ${total} ${itemName || 'items'}`;
-  return <Typography sx={sx}>{text}</Typography>;
+  return (
+    <Typography variant='body2' sx={sx}>
+      {text}
+    </Typography>
+  );
 };
 
 interface Props extends Omit<PaginationProps, 'count' | 'page' | 'onChange'> {
@@ -78,6 +82,7 @@ const Pagination: React.FC<Props> = ({
           page={pageNumber}
           onChange={handleChangePage}
           shape='rounded'
+          size='small'
           {...rest}
         />
       )}

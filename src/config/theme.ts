@@ -80,6 +80,14 @@ export default createTheme(theme, {
         variant: 'outlined',
       },
     },
+    MuiTableCell: {
+      styleOverrides: {
+        sizeMedium: sx({
+          py: '8px',
+          px: '12px',
+        }),
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

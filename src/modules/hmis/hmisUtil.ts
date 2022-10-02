@@ -114,7 +114,7 @@ export const relationshipToHohForDisplay = (
 ) => {
   if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
     return 'Self (HoH)';
-  if (relationship === RelationshipToHoH.DataNotCollected) return null;
+  // if (relationship === RelationshipToHoH.DataNotCollected) return null;
   return trimNumericPrefix(HmisEnums.RelationshipToHoH[relationship]);
 };
 

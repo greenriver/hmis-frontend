@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   Dialog,
@@ -20,7 +19,7 @@ import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
-import { clientInitials, clientName } from '@/modules/hmis/hmisUtil';
+import { clientName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
   HouseholdClientFieldsFragment,
@@ -106,14 +105,22 @@ const EditHouseholdMemberTable = ({
 
   const columns = useMemo(() => {
     return [
-      {
-        header: '',
-        key: 'thumbnail',
-        width: '1%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <Avatar alt='client'>{clientInitials(hc.client)}</Avatar>
-        ),
-      },
+      // {
+      //   header: '',
+      //   key: 'thumbnail',
+      //   width: '1%',
+      //   render: (hc: HouseholdClientFieldsFragment) => (
+      //     <Avatar alt='client'>{clientInitials(hc.client)}</Avatar>
+      //   ),
+      // },
+      // {
+      //   header: '',
+      //   key: 'indicator',
+      //   width: '1%',
+      //   render: (hc: HouseholdClientFieldsFragment) => (
+      //     <HohIndicatorTableCell householdClient={hc} />
+      //   ),
+      // },
       {
         header: 'Name',
         key: 'name',
@@ -175,15 +182,11 @@ const EditHouseholdMemberTable = ({
       {
         header: '',
         key: 'action',
-        width: '10%',
+        width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
           <RemoveFromHouseholdButton
-            enrollmentId={hc.enrollment.id}
-            disabled={
-              hc.client.id === clientId ||
-              !hc.enrollment.inProgress ||
-              hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-            }
+            clientId={clientId}
+            householdClient={hc}
             onSuccess={refetch}
           />
         ),
@@ -228,6 +231,13 @@ const EditHouseholdMemberTable = ({
       <GenericTable<HouseholdClientFieldsFragment>
         rows={currentMembers}
         columns={columns}
+        rowSx={(hc) => ({
+          borderLeft:
+            hc.client.id === clientId
+              ? (theme) => `3px solid ${theme.palette.secondary.main}`
+              : undefined,
+          // 'td:nth-of-type(1)': { px: 0 },
+        })}
       />
     </>
   );

@@ -1,8 +1,13 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { sortBy } from 'lodash-es';
-import { useMemo, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import {
+  generatePath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers from './household/AssociatedHouseholdMembers';
@@ -27,6 +32,7 @@ import {
 } from '@/types/gqlTypes';
 
 const EditHousehold = () => {
+  const { pathname, hash, key } = useLocation();
   const navigate = useNavigate();
   const { clientId, enrollmentId } = useParams() as {
     clientId: string;
@@ -54,6 +60,20 @@ const EditHousehold = () => {
 
   const [crumbs, breadcrumbsLoading, enrollment] =
     useEnrollmentCrumbs('Edit Household');
+
+  const anythingLoading =
+    breadcrumbsLoading || enrollmentLoading || recentMembersLoading;
+
+  useEffect(() => {
+    if (!hash || anythingLoading) return;
+    setTimeout(() => {
+      const id = hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView();
+      }
+    }, 0);
+  }, [pathname, hash, key, anythingLoading]);
 
   const currentMembers = useMemo(() => {
     return sortBy(data?.enrollment?.household.householdClients || [], [
@@ -156,8 +176,7 @@ const EditHousehold = () => {
     enrollment,
   ]);
 
-  if (breadcrumbsLoading || enrollmentLoading || recentMembersLoading)
-    return <Loading />;
+  if (anythingLoading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
@@ -177,28 +196,30 @@ const EditHousehold = () => {
             {` for ${enrollmentName(enrollment)} `} enrollment
           </Typography>
           {currentMembers && (
-            <Paper sx={{ p: 2, mb: 4 }}>
-              <Typography variant='h5' sx={{ mb: 3 }}>
-                Current Household
-              </Typography>
-              <EditHouseholdMemberTable
-                currentMembers={currentMembers}
-                clientId={clientId}
-                householdId={enrollment.household.id}
-                refetch={refetch}
-              />
+            <>
+              <Paper sx={{ p: 2, mb: 2 }}>
+                <Typography variant='h5' sx={{ mb: 3 }}>
+                  Current Household
+                </Typography>
+                <EditHouseholdMemberTable
+                  currentMembers={currentMembers}
+                  clientId={clientId}
+                  householdId={enrollment.household.id}
+                  refetch={refetch}
+                />
+              </Paper>
               <Button
                 startIcon={<ArrowBackIcon />}
                 variant='gray'
                 size='small'
-                sx={{ mt: 4 }}
+                sx={{ mb: 6 }}
                 onClick={navigateToEnrollment}
               >
                 Back to Enrollment
               </Button>
-            </Paper>
+            </>
           )}
-          <Typography variant='h3' sx={{ mb: 2 }}>
+          <Typography variant='h3' sx={{ mb: 2 }} id='add'>
             <b>Add Household Members</b>
           </Typography>
           {eligibleMembers && eligibleMembers.length > 0 && (
@@ -231,6 +252,14 @@ const EditHousehold = () => {
               }}
             />
           </Paper>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            variant='gray'
+            size='small'
+            onClick={navigateToEnrollment}
+          >
+            Back to Enrollment
+          </Button>
         </Grid>
       </Grid>
     </>
