@@ -1,5 +1,12 @@
+import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
-import { useParams, generatePath, Link as RouterLink } from 'react-router-dom';
+import { useCallback } from 'react';
+import {
+  useParams,
+  generatePath,
+  Link as RouterLink,
+  useNavigate,
+} from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
@@ -11,24 +18,56 @@ import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 
 const ViewEnrollment = () => {
+  const navigate = useNavigate();
   const { clientId, enrollmentId } = useParams() as {
     enrollmentId: string;
     clientId: string;
   };
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
+
+  const handleClickEditHousehold = useCallback(
+    () =>
+      navigate(
+        generatePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+          clientId,
+          enrollmentId,
+        })
+      ),
+    [navigate, clientId, enrollmentId]
+  );
+
   if (loading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
+      <Typography variant='h4' sx={{ mb: 2 }}>
+        {enrollmentName(enrollment)}
+      </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          <Typography variant='h4' sx={{ mb: 2 }}>
-            {enrollmentName(enrollment)}
-          </Typography>
           <Stack spacing={2}>
             <Paper sx={{ p: 2 }}>
+              <Stack
+                spacing={4}
+                direction='row'
+                justifyContent={'space-between'}
+                sx={{ mb: 2, pr: 1 }}
+              >
+                <Typography variant='h5' sx={{ mb: 0 }}>
+                  Household
+                </Typography>
+                <Button
+                  size='small'
+                  variant='outlined'
+                  color='secondary'
+                  endIcon={<EditIcon />}
+                  onClick={handleClickEditHousehold}
+                >
+                  Edit Household
+                </Button>
+              </Stack>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}

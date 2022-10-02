@@ -70,7 +70,7 @@ const GenericTable = <T extends { id: string }>({
   if (loading) return <Loading />;
   return (
     <TableContainer>
-      <Table {...tableProps}>
+      <Table size='medium' {...tableProps}>
         <TableHead>
           {hasHeaders && (
             <TableRow>

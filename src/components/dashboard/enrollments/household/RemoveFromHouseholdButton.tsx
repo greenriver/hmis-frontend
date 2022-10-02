@@ -1,14 +1,21 @@
 import { LoadingButton } from '@mui/lab';
+import { Tooltip } from '@mui/material';
 import { useMemo, useState } from 'react';
 
-import { useDeleteEnrollmentMutation } from '@/types/gqlTypes';
+import {
+  HouseholdClientFieldsFragment,
+  RelationshipToHoH,
+  useDeleteEnrollmentMutation,
+} from '@/types/gqlTypes';
 
 const RemoveFromHouseholdButton = ({
-  enrollmentId,
+  householdClient,
+  clientId,
   onSuccess,
   disabled,
 }: {
-  enrollmentId: string;
+  householdClient: HouseholdClientFieldsFragment;
+  clientId: string;
   onSuccess: () => void;
   disabled?: boolean;
 }) => {
@@ -20,32 +27,61 @@ const RemoveFromHouseholdButton = ({
     },
   });
 
+  const disabledReason = useMemo(() => {
+    if (!householdClient.enrollment.inProgress) {
+      return 'Client with completed enrollment cannot be removed. Exit the client instead.';
+    } else if (
+      householdClient.relationshipToHoH ===
+      RelationshipToHoH.SelfHeadOfHousehold
+    ) {
+      return 'Head of Household cannot be removed.';
+    } else if (householdClient.client.id === clientId) {
+      return "Currently active client cannot be removed. Go to another member's profile to remove them.";
+    }
+  }, [householdClient, clientId]);
+
   const onClick = useMemo(
     () => () => {
       void deleteEnrollment({
         variables: {
           input: {
-            id: enrollmentId,
+            id: householdClient.enrollment.id,
           },
         },
       });
     },
-    [enrollmentId, deleteEnrollment]
+    [householdClient, deleteEnrollment]
   );
 
-  return (
+  const isDisabled = !!disabledReason || disabled || loading || done || !!error;
+  const button = (
     <LoadingButton
       loading={loading}
-      loadingIndicator='Removing...'
+      loadingIndicator='Removing..'
       fullWidth
       variant='outlined'
       color='error'
-      // size='small'
-      disabled={disabled || loading || done || !!error}
-      onClick={onClick}
+      disabled={isDisabled}
+      onClick={disabledReason ? undefined : onClick}
+      sx={{
+        root: {
+          '&.Mui-disabled': {
+            pointerEvents: 'auto',
+          },
+        },
+      }}
     >
       {done ? 'Removed' : 'Remove'}
     </LoadingButton>
   );
+
+  if (disabledReason) {
+    return (
+      <Tooltip title={disabledReason} placement='top' arrow>
+        <span>{button}</span>
+      </Tooltip>
+    );
+  }
+  return button;
 };
 export default RemoveFromHouseholdButton;

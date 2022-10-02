@@ -1,12 +1,14 @@
-import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Stack, Button, Link, TableRow, TableCell, Box } from '@mui/material';
+// import PersonPinIcon from '@mui/icons-material/PersonPin';
+import { Button, Link, TableCell, TableRow } from '@mui/material';
 import { sortBy } from 'lodash-es';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   generatePath,
   Link as RouterLink,
   useNavigate,
 } from 'react-router-dom';
+
+import HohIndicatorTableCell from './HohIndicatorTableCell';
 
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
@@ -18,7 +20,6 @@ import {
 import { DashboardRoutes } from '@/routes/routes';
 import {
   HouseholdClientFieldsFragment,
-  RelationshipToHoH,
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
 
@@ -42,15 +43,16 @@ const HouseholdMemberTable = ({
     fetchPolicy: 'cache-and-network',
   });
 
-  const handleClickAddMembers = useMemo(() => {
-    return () =>
+  const handleClickAddMembers = useCallback(
+    () =>
       navigate(
-        generatePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+        generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}#add`, {
           clientId,
           enrollmentId,
         })
-      );
-  }, [navigate, clientId, enrollmentId]);
+      ),
+    [navigate, clientId, enrollmentId]
+  );
 
   const householdMembers = useMemo(() => {
     if (!enrollment?.household?.householdClients) return [];
@@ -68,41 +70,29 @@ const HouseholdMemberTable = ({
         rows={householdMembers}
         columns={[
           {
-            header: 'Household Member',
+            header: '',
+            key: 'indicator',
+            width: '1%',
+            render: (hc) => <HohIndicatorTableCell householdClient={hc} />,
+          },
+          {
+            header: 'Name',
             render: (h) => {
-              const name =
-                h.client.id === clientId ? (
-                  clientName(h.client)
-                ) : (
-                  <Link
-                    component={RouterLink}
-                    to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                      clientId: h.client.id,
-                      enrollmentId,
-                    })}
-                    target='_blank'
-                    variant='body2'
-                  >
-                    {clientName(h.client)}
-                  </Link>
-                );
-
-              if (
-                h.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-              ) {
-                return (
-                  <Stack
-                    direction='row'
-                    alignItems='center'
-                    gap={0.5}
-                    sx={{ ml: '-24px', pl: 1 }}
-                  >
-                    <PersonPinIcon fontSize='small' color='secondary' />
-                    {name}
-                  </Stack>
-                );
-              }
-              return <Box sx={{ ml: 1 }}>{name}</Box>;
+              return h.client.id === clientId ? (
+                clientName(h.client)
+              ) : (
+                <Link
+                  component={RouterLink}
+                  to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                    clientId: h.client.id,
+                    enrollmentId,
+                  })}
+                  target='_blank'
+                  variant='body2'
+                >
+                  {clientName(h.client)}
+                </Link>
+              );
             },
           },
           {
@@ -125,16 +115,30 @@ const HouseholdMemberTable = ({
           },
           {
             header: '',
+            key: 'actions',
             render: (hc) =>
               hc.enrollment.inProgress ? (
-                <Button variant='outlined' color='error'>
-                  Perform Intake
+                <Button variant='outlined' color='error' size='small' fullWidth>
+                  Finish Intake
                 </Button>
               ) : (
-                <Button variant='outlined'>Exit</Button>
+                <Button variant='outlined' size='small' fullWidth>
+                  Exit
+                </Button>
               ),
           },
         ]}
+        rowSx={(hc) => ({
+          borderLeft:
+            hc.client.id === clientId
+              ? (theme) => `3px solid ${theme.palette.secondary.main}`
+              : undefined,
+          'td:nth-of-type(1)': { px: 0 },
+          'td:last-child': {
+            whiteSpace: 'nowrap',
+            width: '1%',
+          },
+        })}
         actionRow={
           <TableRow
             onClick={handleClickAddMembers}
@@ -154,6 +158,7 @@ const HouseholdMemberTable = ({
               cursor: 'pointer',
             }}
           >
+            <TableCell colSpan={1}></TableCell>
             <TableCell colSpan={5} sx={{ py: 1.2 }}>
               + Add Household Member
             </TableCell>
