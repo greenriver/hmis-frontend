@@ -110,7 +110,7 @@ const GroupedProjectTable = ({
             aria-controls={`panel-${organization.id}-content`}
             id={`panel-${organization.id}-header`}
             sx={{
-              minHeight: '36px',
+              minHeight: '48px',
               '.MuiAccordionSummary-content': {
                 my: 1,
                 '&.Mui-expanded': {
@@ -118,7 +118,7 @@ const GroupedProjectTable = ({
                 },
               },
               '&.Mui-expanded': {
-                minHeight: '36px',
+                minHeight: '48px',
                 my: 0,
               },
             }}
@@ -128,11 +128,11 @@ const GroupedProjectTable = ({
               direction='row'
               sx={{ width: '100%', pr: 2 }}
             >
-              <Typography variant='body1'>
+              <Typography variant='body1' sx={{ fontWeight: 600 }}>
                 {organization.organizationName}
               </Typography>
 
-              <Typography sx={{ color: 'text.secondary' }} variant='body2'>
+              <Typography variant='body1'>
                 {organization.projects.length} project
                 {organization.projects.length !== 1 ? 's' : ''}
               </Typography>

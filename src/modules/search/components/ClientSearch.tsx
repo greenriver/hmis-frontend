@@ -1,21 +1,20 @@
-import { Link, Paper, Stack } from '@mui/material';
-import { omitBy, isNil, isEmpty } from 'lodash-es';
+import { Paper, Stack } from '@mui/material';
+import { isEmpty, isNil, omitBy } from 'lodash-es';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  useSearchParams,
   createSearchParams,
   useNavigate,
-  generatePath,
-  Link as RouterLink,
+  useSearchParams,
 } from 'react-router-dom';
 
-import { searchParamsToVariables, searchParamsToState } from '../searchUtil';
+import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
 import ClientCard from '@/components/elements/ClientCard';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
+import LinkToClient from '@/components/elements/LinkToClient';
 import Loading from '@/components/elements/Loading';
 import Pagination, {
   PaginationSummary,
@@ -23,17 +22,16 @@ import Pagination, {
 import formData from '@/modules/form/data/search.json';
 import { FormDefinition } from '@/modules/form/types';
 import {
-  dob,
   age,
   clientFirstNameAndPreferred,
   clientName,
+  dob,
   last4SSN,
 } from '@/modules/hmis/hmisUtil';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
 import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
-import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   useSearchClientsLazyQuery,
@@ -52,8 +50,8 @@ export const CLIENT_COLUMNS: {
 } = {
   id: { header: 'ID', render: 'id', width: '10%' },
   ssn: {
-    header: 'Last 4 Social',
-    width: '15%',
+    header: 'SSN',
+    width: '8%',
     render: (client: ClientFieldsFragment) => last4SSN(client),
   },
   name: {
@@ -61,18 +59,11 @@ export const CLIENT_COLUMNS: {
     key: 'name',
     render: (client: ClientFieldsFragment) => clientName(client),
   },
-  nameLink: {
+  linkedName: {
     header: 'Name',
     key: 'name',
     render: (client: ClientFieldsFragment) => (
-      <Link
-        component={RouterLink}
-        to={generatePath(Routes.CLIENT_DASHBOARD, {
-          clientId: client.id,
-        })}
-      >
-        {clientName(client)}
-      </Link>
+      <LinkToClient client={client} target='_blank' />
     ),
   },
   first: {

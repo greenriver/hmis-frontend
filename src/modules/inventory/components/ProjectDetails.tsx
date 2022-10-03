@@ -90,7 +90,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
     <Grid container spacing={3}>
       {project.description && (
         <Grid item xs={12}>
-          <Typography variant='subtitle2'>{project.description}</Typography>
+          <Typography variant='body1'>{project.description}</Typography>
         </Grid>
       )}
       <DetailGrid data={data} />

@@ -40,7 +40,7 @@ const HouseholdMemberTable = ({
     error,
   } = useGetEnrollmentWithHoHQuery({
     variables: { id: enrollmentId },
-    fetchPolicy: 'cache-and-network',
+    // fetchPolicy: 'cache-and-network',
   });
 
   const handleClickAddMembers = useCallback(

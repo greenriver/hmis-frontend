@@ -38,7 +38,7 @@ mutation CreateProject($input: CreateProjectInput!) {
   createProject(input: $input) {
     clientMutationId
     project {
-      id
+      ...ProjectAllFields
     }
     errors {
       ...ValidationErrorFields
@@ -50,7 +50,7 @@ mutation UpdateProject($input: UpdateProjectInput!) {
   updateProject(input: $input) {
     clientMutationId
     project {
-      id
+      ...ProjectAllFields
     }
     errors {
       ...ValidationErrorFields
@@ -62,7 +62,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
   createOrganization(input: $input) {
     clientMutationId
     organization {
-      id
+      ...OrganizationAllFieldsAndProjects
     }
     errors {
       ...ValidationErrorFields
@@ -74,7 +74,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
   updateOrganization(input: $input) {
     clientMutationId
     organization {
-      id
+      ...OrganizationAllFieldsAndProjects
     }
     errors {
       ...ValidationErrorFields

@@ -180,7 +180,7 @@ const EditHousehold = () => {
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
-    CLIENT_COLUMNS.name,
+    CLIENT_COLUMNS.linkedName,
     CLIENT_COLUMNS.ssn,
     CLIENT_COLUMNS.dobAge,
     ...addToEnrollmentColumns,

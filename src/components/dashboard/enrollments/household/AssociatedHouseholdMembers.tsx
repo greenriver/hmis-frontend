@@ -5,6 +5,7 @@ import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
+import LinkToClient from '@/components/elements/LinkToClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
@@ -12,12 +13,12 @@ const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
     key: 'name',
-    render: (client) => HmisUtil.clientName(client),
+    render: (client) => <LinkToClient client={client} target='_blank' />,
   },
   {
-    header: 'Last 4 Social',
+    header: 'SSN',
     key: 'ssn',
-    width: '10%',
+    width: '8%',
     render: (client) => HmisUtil.last4SSN(client),
   },
   {

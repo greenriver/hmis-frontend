@@ -62,7 +62,7 @@ const ViewEnrollment = () => {
                   size='small'
                   variant='outlined'
                   color='secondary'
-                  endIcon={<EditIcon />}
+                  endIcon={<EditIcon fontSize='small' />}
                   onClick={handleClickEditHousehold}
                 >
                   Edit Household
