@@ -1,5 +1,4 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
 import { useCallback } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -67,9 +66,7 @@ const Organization = () => {
     },
   ];
 
-  const hasDetails =
-    organization &&
-    (organization?.description || !isNil(organization?.victimServiceProvider));
+  const hasDetails = organization && organization?.description;
 
   return (
     <ProjectLayout>

@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 
-import DetailGrid from '@/components/elements/DetailGrid';
+// import DetailGrid from '@/components/elements/DetailGrid';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
 
 const OrganizationDetails = ({
@@ -14,14 +14,14 @@ const OrganizationDetails = ({
         <Typography variant='body1'>{organization.description}</Typography>
       </Grid>
     )}
-    <DetailGrid
+    {/* <DetailGrid
       data={[
         {
           label: 'Victim Service Provider',
           value: organization?.victimServiceProvider ? 'Yes' : 'No',
         },
       ]}
-    />
+    /> */}
   </Grid>
 );
 
