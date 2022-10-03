@@ -1,14 +1,14 @@
 import {
   AppBar,
+  Button,
+  Chip,
   CssBaseline,
   Toolbar,
   Typography,
-  Link,
-  Button,
-  Chip,
 } from '@mui/material';
 import * as React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+
+import RouterLink from '../elements/RouterLink';
 
 import WarehouseLinkBar from './WarehouseLinkBar';
 
@@ -34,7 +34,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
         <Toolbar sx={{ flexWrap: 'wrap' }}>
-          <Link
+          <RouterLink
             variant='h1'
             color='secondary'
             noWrap
@@ -53,18 +53,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                   sx={{ ml: 2 }}
                 />
               )}
-          </Link>
-          <Link component={RouterLink} to='/' sx={{ ml: 2 }} color='secondary'>
+          </RouterLink>
+          <RouterLink to='/' sx={{ ml: 2 }} color='secondary'>
             Dashboard
-          </Link>
-          <Link
-            component={RouterLink}
-            to={Routes.ALL_PROJECTS}
-            sx={{ ml: 2 }}
-            color='secondary'
-          >
+          </RouterLink>
+          <RouterLink to={Routes.ALL_PROJECTS} sx={{ ml: 2 }} color='secondary'>
             Projects
-          </Link>
+          </RouterLink>
           <Typography variant='body2' sx={{ ml: 8 }}>
             {user.name}
           </Typography>

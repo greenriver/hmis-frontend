@@ -1,10 +1,11 @@
 import {
   Breadcrumbs as MuiBreadcrumbs,
   BreadcrumbsProps,
-  Link,
   Typography,
 } from '@mui/material';
-import { Link as RouterLink, useParams, generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
+
+import RouterLink from './RouterLink';
 
 interface Props extends BreadcrumbsProps {
   crumbs: { label: string; to: string }[];
@@ -27,14 +28,9 @@ const Breadcrumbs = ({ crumbs, ...rest }: Props) => {
         // Fill in path with params we already have (e.g. replace :clientId with id)
         const filledInPath = generatePath(to, params);
         return (
-          <Link
-            component={RouterLink}
-            to={filledInPath}
-            key={to}
-            variant='body2'
-          >
+          <RouterLink to={filledInPath} key={to} variant='body2'>
             {label}
-          </Link>
+          </RouterLink>
         );
       })}
     </MuiBreadcrumbs>

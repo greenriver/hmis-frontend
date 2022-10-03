@@ -32,15 +32,6 @@
           "mapping": {
             "organizationMutationInput": "contactInformation"
           }
-        },
-        {
-          "type": "boolean",
-          "required": false,
-          "linkId": "victim",
-          "text": "Victim Service Povider",
-          "mapping": {
-            "organizationMutationInput": "victimServiceProvider"
-          }
         }
       ]
     }

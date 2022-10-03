@@ -4,17 +4,13 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Stack,
   Typography,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import {
-  generatePath,
-  Link as RouterLink,
-  useNavigate,
-} from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -145,18 +141,17 @@ const GroupedProjectTable = ({
               borderTop: (theme) => `1px solid ${theme.palette.grey[300]}`,
             }}
           >
-            <Button
+            <ButtonLink
               variant='outlined'
               color='secondary'
               size='small'
               to={generatePath(Routes.ORGANIZATION, {
                 organizationId: organization.id,
               })}
-              component={RouterLink}
               sx={{ mx: 1, my: 1, float: 'left' }}
             >
               View Organization
-            </Button>
+            </ButtonLink>
             {(organization.projects || []).length > 0 ? (
               <GenericTable
                 columns={columns}

@@ -4,13 +4,15 @@ import {
   Button,
   Card,
   Grid,
-  Link,
   Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
 import { Fragment } from 'react';
-import { generatePath, Link as RouterLink } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
+
+import ButtonLink from './ButtonLink';
+import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
@@ -48,8 +50,7 @@ const RecentEnrollments = ({
       {client.enrollments.nodes.map((enrollment) => (
         <Fragment key={enrollment.id}>
           <Grid item xs={6}>
-            <Link
-              component={RouterLink}
+            <RouterLink
               to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
                 clientId: client.id,
                 enrollmentId: enrollment.id,
@@ -58,7 +59,7 @@ const RecentEnrollments = ({
               variant='body2'
             >
               {enrollment.project.projectName}
-            </Link>
+            </RouterLink>
           </Grid>
           <Grid item xs={6}>
             <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
@@ -138,15 +139,14 @@ const ClientCard: React.FC<Props> = ({
               )}
               {showLinkToRecord && (
                 <Box sx={{ pt: 1 }}>
-                  <Button
+                  <ButtonLink
                     variant='contained'
-                    component={RouterLink}
                     to={`/client/${client.id}`}
                     target={linkTargetBlank ? '_blank' : undefined}
                     color='secondary'
                   >
                     Go to Profile
-                  </Button>
+                  </ButtonLink>
                 </Box>
               )}
             </Stack>

@@ -244,7 +244,6 @@ const ClientSearch: React.FC<Props> = ({
                   columns={searchResultColumns}
                   handleRowClick={handleRowClick}
                   rows={data.clientSearch.nodes || []}
-                  tableProps={{ size: 'medium' }}
                   {...searchResultsTableProps}
                 />
               </WrapperComponent>

@@ -1,17 +1,16 @@
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import {
-  Grid,
-  ToggleButtonGroup,
-  ToggleButton,
-  Typography,
-  Button,
   Box,
   Card,
+  Grid,
   Stack,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
 } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import { Routes } from '@/routes/routes';
 
 /**
@@ -68,15 +67,15 @@ const SearchResultsHeader = ({
           <Typography variant='body2'>
             Don't see the client you're looking for?
           </Typography>
-          <Button
+          <ButtonLink
             size='small'
             variant='outlined'
             color='secondary'
-            component={RouterLink}
             to={Routes.CREATE_CLIENT}
+            target='_blank'
           >
             + Add Client
-          </Button>
+          </ButtonLink>
         </Stack>
       </Card>
     </Grid>

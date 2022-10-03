@@ -106,13 +106,13 @@ const EditHousehold = () => {
       {
         header: 'Entry Date',
         key: 'entry',
-        width: '10%',
+        width: '1%',
         render: (client: ClientFieldsFragment) => (
           <DatePicker
             disabled={currentMembersMap.has(client.id)}
             value={candidateEntryDates[client.id] || new Date()}
             disableFuture
-            sx={{ width: 200 }}
+            sx={{ width: 150 }}
             onChange={(value) => {
               setCandidateEntryDates((current) => {
                 const copy = { ...current };
@@ -152,7 +152,7 @@ const EditHousehold = () => {
       {
         header: '',
         key: 'add',
-        width: '15%',
+        width: '10%',
         render: (client: ClientFieldsFragment) => {
           if (!enrollment) return;
           return (
@@ -188,7 +188,7 @@ const EditHousehold = () => {
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4} sx={{ pb: 10 }}>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <Typography variant='h3' sx={{ mb: 2 }}>
             <b>Edit Household</b>
             {` for ${enrollmentName(enrollment)} `} enrollment
@@ -218,7 +218,7 @@ const EditHousehold = () => {
             </>
           )}
           <Typography variant='h3' sx={{ mb: 2 }} id='add'>
-            <b>Add Household Members</b>
+            Add Clients to Household
           </Typography>
           {eligibleMembers && eligibleMembers.length > 0 && (
             <Paper sx={{ p: 2, mb: 2 }}>
@@ -234,7 +234,7 @@ const EditHousehold = () => {
 
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
-              Search for Clients to Add to Enrollment
+              Client Search
             </Typography>
             <ClientSearch
               hideInstructions
@@ -250,14 +250,6 @@ const EditHousehold = () => {
               }}
             />
           </Paper>
-          <Button
-            startIcon={<ArrowBackIcon />}
-            variant='gray'
-            size='small'
-            onClick={navigateToEnrollment}
-          >
-            Back to Enrollment
-          </Button>
         </Grid>
       </Grid>
     </>

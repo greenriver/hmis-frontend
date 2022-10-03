@@ -1,39 +1,32 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { Grid, Paper, Stack, Typography, Button } from '@mui/material';
-import { useCallback } from 'react';
-import {
-  useParams,
-  generatePath,
-  Link as RouterLink,
-  useNavigate,
-} from 'react-router-dom';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { useMemo } from 'react';
+import { generatePath, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 
 const ViewEnrollment = () => {
-  const navigate = useNavigate();
   const { clientId, enrollmentId } = useParams() as {
     enrollmentId: string;
     clientId: string;
   };
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
 
-  const handleClickEditHousehold = useCallback(
+  const editHouseholdPath = useMemo(
     () =>
-      navigate(
-        generatePath(DashboardRoutes.EDIT_HOUSEHOLD, {
-          clientId,
-          enrollmentId,
-        })
-      ),
-    [navigate, clientId, enrollmentId]
+      generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
+        clientId,
+        enrollmentId,
+      }),
+    [clientId, enrollmentId]
   );
 
   if (loading) return <Loading />;
@@ -50,28 +43,37 @@ const ViewEnrollment = () => {
           <Stack spacing={2}>
             <Paper sx={{ p: 2 }}>
               <Stack
-                spacing={4}
+                gap={3}
                 direction='row'
                 justifyContent={'space-between'}
-                sx={{ mb: 2, pr: 1 }}
+                sx={{ mb: 2, pr: 1, alignItems: 'center' }}
               >
                 <Typography variant='h5' sx={{ mb: 0 }}>
                   Household
                 </Typography>
-                <Button
+                <ButtonLink
                   size='small'
                   variant='outlined'
                   color='secondary'
-                  endIcon={<EditIcon fontSize='small' />}
-                  onClick={handleClickEditHousehold}
+                  startIcon={<EditIcon fontSize='small' />}
+                  to={`${editHouseholdPath}`}
                 >
                   Edit Household
-                </Button>
+                </ButtonLink>
               </Stack>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
+              <ButtonLink
+                size='small'
+                variant='outlined'
+                color='secondary'
+                sx={{ mt: 2, ml: 6 }}
+                to={`${editHouseholdPath}#add`}
+              >
+                + Add Household Members
+              </ButtonLink>
             </Paper>
             <Paper sx={{ p: 2 }}>
               <EnrollmentRecordTabs />
@@ -98,11 +100,10 @@ const ViewEnrollment = () => {
             </Stack>
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
@@ -111,21 +112,23 @@ const ViewEnrollment = () => {
                 })}
               >
                 + Assessment
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
+                to=''
                 sx={{ pl: 3, justifyContent: 'left' }}
               >
                 + Service
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
+                to=''
                 sx={{ pl: 3, justifyContent: 'left' }}
               >
                 + Event
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
         </Grid>

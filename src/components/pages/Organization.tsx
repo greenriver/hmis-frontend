@@ -1,16 +1,12 @@
-import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import {
-  generatePath,
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
+import ButtonLink from '../elements/ButtonLink';
 import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
+import RouterLink from '../elements/RouterLink';
 
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
@@ -70,9 +66,7 @@ const Organization = () => {
     },
   ];
 
-  const hasDetails =
-    organization &&
-    (organization?.description || !isNil(organization?.victimServiceProvider));
+  const hasDetails = organization && organization?.description;
 
   return (
     <ProjectLayout>
@@ -125,32 +119,30 @@ const Organization = () => {
             )}
             <Stack spacing={1}>
               <Typography variant='h6'>Add to Organization</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to={generatePath(Routes.CREATE_PROJECT, { organizationId })}
               >
                 + Add Project
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
 
           <Paper sx={{ p: 2 }}>
             <Stack spacing={1}>
-              <Link
-                component={RouterLink}
+              <RouterLink
                 color='text.secondary'
                 to={generatePath(Routes.EDIT_ORGANIZATION, {
                   organizationId,
                 })}
               >
                 Edit Organization
-              </Link>
-              <Link color='text.secondary' component={RouterLink} to=''>
+              </RouterLink>
+              <RouterLink color='text.secondary' to=''>
                 Delete Organization
-              </Link>
+              </RouterLink>
             </Stack>
           </Paper>
         </Grid>

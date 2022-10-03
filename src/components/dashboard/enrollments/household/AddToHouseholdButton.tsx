@@ -85,6 +85,7 @@ const AddToHouseholdButton = ({
       fullWidth
       size='small'
       onClick={onClick}
+      sx={{ maxWidth: '180px' }}
     >
       {text}
     </Button>
