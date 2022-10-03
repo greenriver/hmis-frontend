@@ -12,6 +12,8 @@ import {
 import { Fragment } from 'react';
 import { generatePath, Link as RouterLink } from 'react-router-dom';
 
+import ButtonLink from './ButtonLink';
+
 import ClickToShow from '@/components/elements/ClickToShow';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
@@ -138,15 +140,14 @@ const ClientCard: React.FC<Props> = ({
               )}
               {showLinkToRecord && (
                 <Box sx={{ pt: 1 }}>
-                  <Button
+                  <ButtonLink
                     variant='contained'
-                    component={RouterLink}
                     to={`/client/${client.id}`}
                     target={linkTargetBlank ? '_blank' : undefined}
                     color='secondary'
                   >
                     Go to Profile
-                  </Button>
+                  </ButtonLink>
                 </Box>
               )}
             </Stack>

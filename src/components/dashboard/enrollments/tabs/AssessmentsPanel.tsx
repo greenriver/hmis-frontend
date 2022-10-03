@@ -1,11 +1,8 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import {
-  Link as RouterLink,
-  generatePath,
-  useNavigate,
-} from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -66,10 +63,9 @@ const AssessmentsPanel = ({
     <Stack>
       <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
         <Typography variant='h5'>Assessments</Typography>
-        <Button
+        <ButtonLink
           variant='outlined'
           color='secondary'
-          component={RouterLink}
           size='small'
           to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
             clientId,
@@ -78,7 +74,7 @@ const AssessmentsPanel = ({
           })}
         >
           + Add Assessment
-        </Button>
+        </ButtonLink>
       </Stack>
       <GenericTableWithData<
         GetEnrollmentAssessmentsQuery,

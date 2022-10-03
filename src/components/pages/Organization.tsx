@@ -1,4 +1,4 @@
-import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Link, Paper, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useCallback } from 'react';
 import {
@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
+import ButtonLink from '../elements/ButtonLink';
 import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 
@@ -125,15 +126,14 @@ const Organization = () => {
             )}
             <Stack spacing={1}>
               <Typography variant='h6'>Add to Organization</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to={generatePath(Routes.CREATE_PROJECT, { organizationId })}
               >
                 + Add Project
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
 

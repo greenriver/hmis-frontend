@@ -1,15 +1,11 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import {
-  Link as RouterLink,
-  generatePath,
-  useParams,
-  useNavigate,
-} from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
@@ -116,16 +112,15 @@ const AllEnrollments = () => {
           <Typography variant='h6' sx={{ mb: 2 }}>
             Actions
           </Typography>
-          <Button
+          <ButtonLink
             variant='outlined'
             color='secondary'
-            component={RouterLink}
             to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
               clientId,
             })}
           >
             + Add Enrollment
-          </Button>
+          </ButtonLink>
         </Paper>
       </Grid>
     </Grid>

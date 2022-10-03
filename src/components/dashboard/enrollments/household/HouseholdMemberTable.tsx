@@ -1,12 +1,8 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Button, Link, TableCell, TableRow } from '@mui/material';
+import { Button, Link } from '@mui/material';
 import { sortBy } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
-import {
-  generatePath,
-  Link as RouterLink,
-  useNavigate,
-} from 'react-router-dom';
+import { useMemo } from 'react';
+import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
@@ -33,26 +29,13 @@ const HouseholdMemberTable = ({
   clientId: string;
   enrollmentId: string;
 }) => {
-  const navigate = useNavigate();
   const {
     data: { enrollment: enrollment } = {},
     loading,
     error,
   } = useGetEnrollmentWithHoHQuery({
     variables: { id: enrollmentId },
-    // fetchPolicy: 'cache-and-network',
   });
-
-  const handleClickAddMembers = useCallback(
-    () =>
-      navigate(
-        generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}#add`, {
-          clientId,
-          enrollmentId,
-        })
-      ),
-    [navigate, clientId, enrollmentId]
-  );
 
   const householdMembers = useMemo(() => {
     if (!enrollment?.household?.householdClients) return [];
@@ -60,112 +43,92 @@ const HouseholdMemberTable = ({
     return sortBy(clients, [(c) => c.client.lastName || c.client.id]);
   }, [enrollment]);
 
+  const columns = useMemo(() => {
+    return [
+      {
+        header: '',
+        key: 'indicator',
+        width: '1%',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <HohIndicatorTableCell householdClient={hc} />
+        ),
+      },
+      {
+        header: 'Name',
+        render: (h: HouseholdClientFieldsFragment) => {
+          return h.client.id === clientId ? (
+            clientName(h.client)
+          ) : (
+            <Link
+              component={RouterLink}
+              to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                clientId: h.client.id,
+                enrollmentId,
+              })}
+              target='_blank'
+              variant='body2'
+            >
+              {clientName(h.client)}
+            </Link>
+          );
+        },
+      },
+      {
+        header: 'Start Date',
+        render: (hc: HouseholdClientFieldsFragment) =>
+          hc.enrollment.entryDate
+            ? parseAndFormatDate(hc.enrollment.entryDate)
+            : 'Unknown',
+      },
+      {
+        header: 'Exit Date',
+        render: (hc: HouseholdClientFieldsFragment) =>
+          hc.enrollment.exitDate
+            ? parseAndFormatDate(hc.enrollment.exitDate)
+            : 'Active',
+      },
+      {
+        header: 'Relationship to HoH',
+        render: (hc: HouseholdClientFieldsFragment) =>
+          relationshipToHohForDisplay(hc.relationshipToHoH),
+      },
+      {
+        header: '',
+        key: 'actions',
+        render: (hc: HouseholdClientFieldsFragment) =>
+          hc.enrollment.inProgress ? (
+            <Button variant='outlined' color='error' size='small' fullWidth>
+              Finish Intake
+            </Button>
+          ) : (
+            <Button variant='outlined' size='small' fullWidth>
+              Exit
+            </Button>
+          ),
+      },
+    ];
+  }, [clientId, enrollmentId]);
+
   if (error) throw error;
   if (loading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
 
   return (
-    <>
-      <GenericTable<HouseholdClientFieldsFragment>
-        rows={householdMembers}
-        columns={[
-          {
-            header: '',
-            key: 'indicator',
-            width: '1%',
-            render: (hc) => <HohIndicatorTableCell householdClient={hc} />,
-          },
-          {
-            header: 'Name',
-            render: (h) => {
-              return h.client.id === clientId ? (
-                clientName(h.client)
-              ) : (
-                <Link
-                  component={RouterLink}
-                  to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                    clientId: h.client.id,
-                    enrollmentId,
-                  })}
-                  target='_blank'
-                  variant='body2'
-                >
-                  {clientName(h.client)}
-                </Link>
-              );
-            },
-          },
-          {
-            header: 'Start Date',
-            render: (hc) =>
-              hc.enrollment.entryDate
-                ? parseAndFormatDate(hc.enrollment.entryDate)
-                : 'Unknown',
-          },
-          {
-            header: 'Exit Date',
-            render: (hc) =>
-              hc.enrollment.exitDate
-                ? parseAndFormatDate(hc.enrollment.exitDate)
-                : 'Active',
-          },
-          {
-            header: 'Relationship to HoH',
-            render: (hc) => relationshipToHohForDisplay(hc.relationshipToHoH),
-          },
-          {
-            header: '',
-            key: 'actions',
-            render: (hc) =>
-              hc.enrollment.inProgress ? (
-                <Button variant='outlined' color='error' size='small' fullWidth>
-                  Finish Intake
-                </Button>
-              ) : (
-                <Button variant='outlined' size='small' fullWidth>
-                  Exit
-                </Button>
-              ),
-          },
-        ]}
-        rowSx={(hc) => ({
-          borderLeft:
-            hc.client.id === clientId
-              ? (theme) => `3px solid ${theme.palette.secondary.main}`
-              : undefined,
-          'td:nth-of-type(1)': { px: 0 },
-          'td:last-child': {
-            whiteSpace: 'nowrap',
-            width: '1%',
-          },
-        })}
-        actionRow={
-          <TableRow
-            onClick={handleClickAddMembers}
-            onKeyUp={(event) =>
-              event.key === 'Enter' && handleClickAddMembers()
-            }
-            hover
-            tabIndex={0}
-            sx={{
-              backgroundColor: '#F0EDF3',
-              py: 3,
-              px: 3,
-              '&:focus': { backgroundColor: '#e1dbe7' },
-              '&:hover': {
-                backgroundColor: '#e1dbe7 !important',
-              },
-              cursor: 'pointer',
-            }}
-          >
-            <TableCell colSpan={1}></TableCell>
-            <TableCell colSpan={5} sx={{ py: 1.2 }}>
-              + Add Household Member
-            </TableCell>
-          </TableRow>
-        }
-      />
-    </>
+    <GenericTable<HouseholdClientFieldsFragment>
+      rows={householdMembers}
+      columns={columns}
+      rowSx={(hc) => ({
+        borderLeft:
+          hc.client.id === clientId
+            ? (theme) => `3px solid ${theme.palette.secondary.main}`
+            : undefined,
+        'td:nth-of-type(1)': { px: 0 },
+        'td:last-child': {
+          whiteSpace: 'nowrap',
+          width: '1%',
+        },
+      })}
+    />
   );
 };
 

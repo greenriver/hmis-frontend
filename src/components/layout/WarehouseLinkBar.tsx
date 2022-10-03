@@ -2,7 +2,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
 import StorageIcon from '@mui/icons-material/Storage';
 import { AppBar, Button, Toolbar } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+
+import ButtonLink from '../elements/ButtonLink';
 
 const height = '40px';
 const linkStyles = {
@@ -61,9 +62,8 @@ const WarehouseLinkBar = () => {
             CAS
           </Button>
         )}
-        <Button
+        <ButtonLink
           variant='text'
-          component={RouterLink}
           to='/'
           startIcon={<PersonPinIcon />}
           sx={{
@@ -73,7 +73,7 @@ const WarehouseLinkBar = () => {
           }}
         >
           HMIS
-        </Button>
+        </ButtonLink>
       </Toolbar>
     </AppBar>
   );

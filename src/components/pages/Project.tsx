@@ -1,8 +1,10 @@
-import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
-import { generatePath, Link as RouterLink, useParams } from 'react-router-dom';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
+import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
+import RouterLink from '../elements/RouterLink';
 
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -37,33 +39,30 @@ const Project = () => {
           <Paper sx={{ p: 2, mb: 3 }}>
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Project</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to=''
               >
                 + Add Inventory
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to=''
               >
                 + Add Funding Source
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to=''
               >
                 + Add Project CoC
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
           {project.contactInformation && (
@@ -78,18 +77,17 @@ const Project = () => {
           )}
           <Paper sx={{ p: 2 }}>
             <Stack spacing={1}>
-              <Link
-                component={RouterLink}
+              <RouterLink
                 color='text.secondary'
                 to={generatePath(Routes.EDIT_PROJECT, {
                   projectId,
                 })}
               >
                 Edit Project
-              </Link>
-              <Link color='text.secondary' component={RouterLink} to=''>
+              </RouterLink>
+              <RouterLink color='text.secondary' to=''>
                 Delete Project
-              </Link>
+              </RouterLink>
             </Stack>
           </Paper>
         </Grid>

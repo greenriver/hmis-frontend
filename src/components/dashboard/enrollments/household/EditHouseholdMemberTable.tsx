@@ -135,6 +135,13 @@ const EditHouseholdMemberTable = ({
           />
         ),
       },
+      // {
+      //   header: 'SSN',
+      //   key: 'ssn',
+      //   width: '1%',
+      //   render: ({ client }: HouseholdClientFieldsFragment) =>
+      //     HmisUtil.last4SSN(client),
+      // },
       {
         header: 'DOB / Age',
         key: 'dob',

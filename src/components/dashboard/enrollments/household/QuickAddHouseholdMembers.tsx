@@ -130,11 +130,15 @@ const QuickAddHouseholdMembers = ({
 
   return (
     <Stack spacing={3}>
-      <Typography variant='body2'>
-        Use the toggles to enroll previously associated clients in the same
-        household as <b>{clientName(recentMembers[0])}</b>. Additional household
-        members can be added at a later step.
-      </Typography>
+      <Stack spacing={1}>
+        <Typography variant='body2'>
+          Use the toggles to enroll previously associated clients in the same
+          household as <b>{clientName(recentMembers[0])}</b>.
+        </Typography>
+        <Typography variant='body2'>
+          Additional household members can be added at a later step.
+        </Typography>
+      </Stack>
       <AssociatedHouseholdMembers
         recentMembers={recentMembers}
         rowSx={(client) => ({

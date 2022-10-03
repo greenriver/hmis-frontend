@@ -53,7 +53,7 @@ const EntryDateInput = ({
       <DatePicker
         value={date}
         disableFuture
-        sx={{ width: 200 }}
+        sx={{ width: 150 }}
         onChange={onChange}
       />
     </InputIndicatorContainer>
