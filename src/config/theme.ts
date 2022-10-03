@@ -84,7 +84,6 @@ export default createTheme(theme, {
       styleOverrides: {
         sizeMedium: sx({
           py: '8px',
-          px: '12px',
         }),
       },
     },
