@@ -5,23 +5,26 @@ import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
+import LinkToClient from '@/components/elements/LinkToClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
-const defaultColumns: ColumnDef<ClientFieldsFragment>[] = [
+export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
+    width: '15%',
     key: 'name',
-    render: (client) => HmisUtil.clientName(client),
+    render: (client) => <LinkToClient client={client} target='_blank' />,
   },
   {
-    header: 'Last 4 Social',
+    header: 'SSN',
     key: 'ssn',
-    width: '10%',
+    width: '1%',
     render: (client) => HmisUtil.last4SSN(client),
   },
   {
     header: 'DOB / Age',
+    width: '1%',
     key: 'dob',
     render: (client) =>
       client.dob && (
@@ -47,7 +50,9 @@ const AssociatedHouseholdMembers = ({
 }: Props) => {
   const columns: ColumnDef<ClientFieldsFragment>[] = useMemo(() => {
     return [
-      ...defaultColumns.map((c) => (hideHeaders ? { ...c, header: '' } : c)),
+      ...householdMemberColumns.map((c) =>
+        hideHeaders ? { ...c, header: '' } : c
+      ),
       ...(additionalColumns || []),
     ];
   }, [hideHeaders, additionalColumns]);

@@ -16,10 +16,18 @@ fragment OrganizationFields on Organization {
 fragment OrganizationDetailFields on Organization {
   description
   contactInformation
+  victimServiceProvider
 }
 fragment OrganizationAllFields on Organization {
   ...OrganizationFields
   ...OrganizationDetailFields
+}
+
+fragment OrganizationAllFieldsAndProjects on Organization {
+  ...OrganizationAllFields
+  projects {
+    ...ProjectAllFields
+  }
 }
 
 fragment ProjectAllFields on Project {

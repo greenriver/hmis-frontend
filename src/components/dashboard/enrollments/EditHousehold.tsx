@@ -10,7 +10,9 @@ import {
 } from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
-import AssociatedHouseholdMembers from './household/AssociatedHouseholdMembers';
+import AssociatedHouseholdMembers, {
+  householdMemberColumns,
+} from './household/AssociatedHouseholdMembers';
 import EditHouseholdMemberTable from './household/EditHouseholdMemberTable';
 import RelationshipToHohSelect from './household/RelationshipToHohSelect';
 import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
@@ -21,9 +23,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
-import ClientSearch, {
-  CLIENT_COLUMNS,
-} from '@/modules/search/components/ClientSearch';
+import ClientSearch from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -180,9 +180,7 @@ const EditHousehold = () => {
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
-    CLIENT_COLUMNS.name,
-    CLIENT_COLUMNS.ssn,
-    CLIENT_COLUMNS.dobAge,
+    ...householdMemberColumns,
     ...addToEnrollmentColumns,
   ];
 

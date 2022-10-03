@@ -127,7 +127,7 @@ const ClientCard: React.FC<Props> = ({
                 </ClickToShow>
               )}
               {client.ssnSerial && (
-                <ClickToShow text='Last 4 Social' variant='body2'>
+                <ClickToShow text='SSN' variant='body2'>
                   <Typography variant='body2'>{client.ssnSerial}</Typography>
                 </ClickToShow>
               )}

@@ -1,4 +1,5 @@
 import { Button, Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { useCallback } from 'react';
 import {
   generatePath,
@@ -38,7 +39,6 @@ const Organization = () => {
     [navigate]
   );
 
-  // if (loading) return <Loading />;
   if (!loading && (!crumbs || !organization))
     throw Error('Organization not found');
 
@@ -70,6 +70,10 @@ const Organization = () => {
     },
   ];
 
+  const hasDetails =
+    organization &&
+    (organization?.description || !isNil(organization?.victimServiceProvider));
+
   return (
     <ProjectLayout>
       {crumbs && <Breadcrumbs crumbs={crumbs} />}
@@ -82,7 +86,7 @@ const Organization = () => {
         <Grid item xs={9}>
           {loading && <Loading />}
 
-          {organization?.description && (
+          {hasDetails && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <OrganizationDetails organization={organization} />
             </Paper>
@@ -107,8 +111,16 @@ const Organization = () => {
           )}
         </Grid>
         <Grid item xs>
-          <Paper sx={{ p: 2, mb: 3 }}>
-            <Stack spacing={2}>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            {organization?.contactInformation && (
+              <Stack spacing={1} sx={{ mb: 4 }}>
+                <Typography variant='h6'>Contact</Typography>
+                <Typography variant='body2'>
+                  {organization?.contactInformation}
+                </Typography>
+              </Stack>
+            )}
+            <Stack spacing={1}>
               <Typography variant='h6'>Add to Organization</Typography>
               <Button
                 variant='outlined'
@@ -121,16 +133,7 @@ const Organization = () => {
               </Button>
             </Stack>
           </Paper>
-          {organization?.contactInformation && (
-            <Paper sx={{ p: 2, mb: 3 }}>
-              <Stack spacing={2}>
-                <Typography variant='h6'>Organization Contact</Typography>
-                <Typography variant='body2'>
-                  {organization.contactInformation}
-                </Typography>
-              </Stack>
-            </Paper>
-          )}
+
           <Paper sx={{ p: 2 }}>
             <Stack spacing={1}>
               <Link

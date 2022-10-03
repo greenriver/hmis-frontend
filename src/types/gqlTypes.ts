@@ -1288,6 +1288,41 @@ export type EnrollmentFieldsFragment = {
   client: { __typename?: 'Client'; id: string };
 };
 
+export type EnrollmentWithHoHFragmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate?: string | null;
+  exitDate?: string | null;
+  inProgress: boolean;
+  household: {
+    __typename?: 'Household';
+    id: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        dob?: string | null;
+        firstName?: string | null;
+        preferredName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate?: string | null;
+        exitDate?: string | null;
+        inProgress: boolean;
+      };
+    }>;
+  };
+  project: { __typename?: 'Project'; projectName: string };
+  client: { __typename?: 'Client'; id: string };
+};
+
 export type AssessmentFieldsFragment = {
   __typename?: 'Assessment';
   id: string;
@@ -1485,8 +1520,32 @@ export type UpdateEnrollmentMutation = {
       entryDate?: string | null;
       exitDate?: string | null;
       inProgress: boolean;
+      household: {
+        __typename?: 'Household';
+        id: string;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            dob?: string | null;
+            firstName?: string | null;
+            preferredName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            entryDate?: string | null;
+            exitDate?: string | null;
+            inProgress: boolean;
+          };
+        }>;
+      };
       project: { __typename?: 'Project'; projectName: string };
-      household: { __typename?: 'Household'; id: string };
       client: { __typename?: 'Client'; id: string };
     } | null;
     errors: Array<{
@@ -1515,8 +1574,32 @@ export type SetHoHMutation = {
       entryDate?: string | null;
       exitDate?: string | null;
       inProgress: boolean;
+      household: {
+        __typename?: 'Household';
+        id: string;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            dob?: string | null;
+            firstName?: string | null;
+            preferredName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            entryDate?: string | null;
+            exitDate?: string | null;
+            inProgress: boolean;
+          };
+        }>;
+      };
       project: { __typename?: 'Project'; projectName: string };
-      household: { __typename?: 'Household'; id: string };
       client: { __typename?: 'Client'; id: string };
     } | null;
     errors: Array<{
@@ -1575,8 +1658,32 @@ export type AddHouseholdMembersMutation = {
       entryDate?: string | null;
       exitDate?: string | null;
       inProgress: boolean;
+      household: {
+        __typename?: 'Household';
+        id: string;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            dob?: string | null;
+            firstName?: string | null;
+            preferredName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            entryDate?: string | null;
+            exitDate?: string | null;
+            inProgress: boolean;
+          };
+        }>;
+      };
       project: { __typename?: 'Project'; projectName: string };
-      household: { __typename?: 'Household'; id: string };
       client: { __typename?: 'Client'; id: string };
     }> | null;
     errors: Array<{
@@ -1812,6 +1919,7 @@ export type OrganizationDetailFieldsFragment = {
   __typename?: 'Organization';
   description?: string | null;
   contactInformation?: string | null;
+  victimServiceProvider?: boolean | null;
 };
 
 export type OrganizationAllFieldsFragment = {
@@ -1820,6 +1928,38 @@ export type OrganizationAllFieldsFragment = {
   organizationName: string;
   description?: string | null;
   contactInformation?: string | null;
+  victimServiceProvider?: boolean | null;
+};
+
+export type OrganizationAllFieldsAndProjectsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  organizationName: string;
+  description?: string | null;
+  contactInformation?: string | null;
+  victimServiceProvider?: boolean | null;
+  projects: Array<{
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+    HMISParticipatingProject?: boolean | null;
+    HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+    contactInformation?: string | null;
+    continuumProject?: boolean | null;
+    description?: string | null;
+    housingType?: HousingType | null;
+    operatingEndDate?: string | null;
+    operatingStartDate: string;
+    residentialAffiliation?: boolean | null;
+    targetPopulation?: TargetPopulation | null;
+    trackingMethod?: TrackingMethod | null;
+    organization: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    };
+  }>;
 };
 
 export type ProjectAllFieldsFragment = {
@@ -1941,6 +2081,7 @@ export type GetOrganizationQuery = {
     organizationName: string;
     description?: string | null;
     contactInformation?: string | null;
+    victimServiceProvider?: boolean | null;
     projects: Array<{
       __typename?: 'Project';
       id: string;
@@ -1988,7 +2129,28 @@ export type CreateProjectMutation = {
   createProject?: {
     __typename?: 'CreateProjectPayload';
     clientMutationId?: string | null;
-    project?: { __typename?: 'Project'; id: string } | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2009,7 +2171,28 @@ export type UpdateProjectMutation = {
   updateProject?: {
     __typename?: 'UpdateProjectPayload';
     clientMutationId?: string | null;
-    project?: { __typename?: 'Project'; id: string } | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2030,7 +2213,36 @@ export type CreateOrganizationMutation = {
   createOrganization?: {
     __typename?: 'CreateOrganizationPayload';
     clientMutationId?: string | null;
-    organization?: { __typename?: 'Organization'; id: string } | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+      description?: string | null;
+      contactInformation?: string | null;
+      victimServiceProvider?: boolean | null;
+      projects: Array<{
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+        HMISParticipatingProject?: boolean | null;
+        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+        contactInformation?: string | null;
+        continuumProject?: boolean | null;
+        description?: string | null;
+        housingType?: HousingType | null;
+        operatingEndDate?: string | null;
+        operatingStartDate: string;
+        residentialAffiliation?: boolean | null;
+        targetPopulation?: TargetPopulation | null;
+        trackingMethod?: TrackingMethod | null;
+        organization: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        };
+      }>;
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2051,7 +2263,36 @@ export type UpdateOrganizationMutation = {
   updateOrganization?: {
     __typename?: 'UpdateOrganizationPayload';
     clientMutationId?: string | null;
-    organization?: { __typename?: 'Organization'; id: string } | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+      description?: string | null;
+      contactInformation?: string | null;
+      victimServiceProvider?: boolean | null;
+      projects: Array<{
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+        HMISParticipatingProject?: boolean | null;
+        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+        contactInformation?: string | null;
+        continuumProject?: boolean | null;
+        description?: string | null;
+        housingType?: HousingType | null;
+        operatingEndDate?: string | null;
+        operatingStartDate: string;
+        residentialAffiliation?: boolean | null;
+        targetPopulation?: TargetPopulation | null;
+        trackingMethod?: TrackingMethod | null;
+        organization: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        };
+      }>;
+    } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -2091,6 +2332,23 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const EnrollmentFieldsFragmentDoc = gql`
+  fragment EnrollmentFields on Enrollment {
+    id
+    entryDate
+    exitDate
+    project {
+      projectName
+    }
+    inProgress
+    household {
+      id
+    }
+    client {
+      id
+    }
+  }
+`;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
     id
@@ -2109,22 +2367,18 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
-export const EnrollmentFieldsFragmentDoc = gql`
-  fragment EnrollmentFields on Enrollment {
-    id
-    entryDate
-    exitDate
-    project {
-      projectName
-    }
-    inProgress
+export const EnrollmentWithHoHFragmentFragmentDoc = gql`
+  fragment EnrollmentWithHoHFragment on Enrollment {
+    ...EnrollmentFields
     household {
       id
-    }
-    client {
-      id
+      householdClients {
+        ...HouseholdClientFields
+      }
     }
   }
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const AssessmentFieldsFragmentDoc = gql`
   fragment AssessmentFields on Assessment {
@@ -2189,6 +2443,7 @@ export const OrganizationDetailFieldsFragmentDoc = gql`
   fragment OrganizationDetailFields on Organization {
     description
     contactInformation
+    victimServiceProvider
   }
 `;
 export const OrganizationAllFieldsFragmentDoc = gql`
@@ -2220,6 +2475,16 @@ export const ProjectAllFieldsFragmentDoc = gql`
       organizationName
     }
   }
+`;
+export const OrganizationAllFieldsAndProjectsFragmentDoc = gql`
+  fragment OrganizationAllFieldsAndProjects on Organization {
+    ...OrganizationAllFields
+    projects {
+      ...ProjectAllFields
+    }
+  }
+  ${OrganizationAllFieldsFragmentDoc}
+  ${ProjectAllFieldsFragmentDoc}
 `;
 export const SearchClientsDocument = gql`
   query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
@@ -2531,14 +2796,14 @@ export const UpdateEnrollmentDocument = gql`
     updateEnrollment(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentFields
+        ...EnrollmentWithHoHFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithHoHFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateEnrollmentMutationFn = Apollo.MutationFunction<
@@ -2589,14 +2854,14 @@ export const SetHoHDocument = gql`
     setHoHForEnrollment(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentFields
+        ...EnrollmentWithHoHFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithHoHFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SetHoHMutationFn = Apollo.MutationFunction<
@@ -2702,14 +2967,14 @@ export const AddHouseholdMembersDocument = gql`
     addHouseholdMembersToEnrollment(input: $input) {
       clientMutationId
       enrollments {
-        ...EnrollmentFields
+        ...EnrollmentWithHoHFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
+  ${EnrollmentWithHoHFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type AddHouseholdMembersMutationFn = Apollo.MutationFunction<
@@ -2817,17 +3082,10 @@ export type GetEnrollmentQueryResult = Apollo.QueryResult<
 export const GetEnrollmentWithHoHDocument = gql`
   query GetEnrollmentWithHoH($id: ID!) {
     enrollment(id: $id) {
-      ...EnrollmentFields
-      household {
-        id
-        householdClients {
-          ...HouseholdClientFields
-        }
-      }
+      ...EnrollmentWithHoHFragment
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsFragmentDoc}
+  ${EnrollmentWithHoHFragmentFragmentDoc}
 `;
 
 /**
@@ -3469,13 +3727,14 @@ export const CreateProjectDocument = gql`
     createProject(input: $input) {
       clientMutationId
       project {
-        id
+        ...ProjectAllFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
+  ${ProjectAllFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateProjectMutationFn = Apollo.MutationFunction<
@@ -3526,13 +3785,14 @@ export const UpdateProjectDocument = gql`
     updateProject(input: $input) {
       clientMutationId
       project {
-        id
+        ...ProjectAllFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
+  ${ProjectAllFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateProjectMutationFn = Apollo.MutationFunction<
@@ -3583,13 +3843,14 @@ export const CreateOrganizationDocument = gql`
     createOrganization(input: $input) {
       clientMutationId
       organization {
-        id
+        ...OrganizationAllFieldsAndProjects
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
+  ${OrganizationAllFieldsAndProjectsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateOrganizationMutationFn = Apollo.MutationFunction<
@@ -3640,13 +3901,14 @@ export const UpdateOrganizationDocument = gql`
     updateOrganization(input: $input) {
       clientMutationId
       organization {
-        id
+        ...OrganizationAllFieldsAndProjects
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
+  ${OrganizationAllFieldsAndProjectsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateOrganizationMutationFn = Apollo.MutationFunction<

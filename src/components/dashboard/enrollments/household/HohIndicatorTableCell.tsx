@@ -16,6 +16,7 @@ const HohIndicatorTableCell = ({
     sx={{
       fontWeight: 600,
       pl: 1,
+      pt: 0.5,
       fontSize: '.75rem',
     }}
   >

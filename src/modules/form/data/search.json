@@ -32,7 +32,7 @@
       "type": "string",
       "required": false,
       "linkId": "4",
-      "text": "Last 4 Social",
+      "text": "SSN",
       "mapping": {
         "clientSearchInput": "ssnSerial"
       }

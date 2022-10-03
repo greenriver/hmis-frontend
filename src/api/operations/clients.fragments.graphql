@@ -54,6 +54,16 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+fragment EnrollmentWithHoHFragment on Enrollment {
+  ...EnrollmentFields
+  household {
+    id
+    householdClients {
+      ...HouseholdClientFields
+    }
+  }
+}
+
 fragment AssessmentFields on Assessment {
   id
   assessmentDate

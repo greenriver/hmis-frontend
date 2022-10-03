@@ -14,10 +14,12 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 
 import EntryDateInput from './EntryDateInput';
+import HohIndicatorTableCell from './HohIndicatorTableCell';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
+import LinkToClient from '@/components/elements/LinkToClient';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import {
@@ -113,24 +115,30 @@ const EditHouseholdMemberTable = ({
       //     <Avatar alt='client'>{clientInitials(hc.client)}</Avatar>
       //   ),
       // },
-      // {
-      //   header: '',
-      //   key: 'indicator',
-      //   width: '1%',
-      //   render: (hc: HouseholdClientFieldsFragment) => (
-      //     <HohIndicatorTableCell householdClient={hc} />
-      //   ),
-      // },
+      {
+        header: '',
+        key: 'indicator',
+        width: '1%',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <HohIndicatorTableCell householdClient={hc} />
+        ),
+      },
       {
         header: 'Name',
         key: 'name',
         width: '20%',
-        render: (hc: HouseholdClientFieldsFragment) => clientName(hc.client),
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <LinkToClient
+            client={hc.client}
+            target='_blank'
+            disabled={hc.client.id === clientId}
+          />
+        ),
       },
       {
         header: 'DOB / Age',
         key: 'dob',
-        width: '10%',
+        width: '1%',
         render: ({ client }: HouseholdClientFieldsFragment) =>
           client.dob && (
             <Stack direction='row' spacing={1}>
@@ -236,7 +244,7 @@ const EditHouseholdMemberTable = ({
             hc.client.id === clientId
               ? (theme) => `3px solid ${theme.palette.secondary.main}`
               : undefined,
-          // 'td:nth-of-type(1)': { px: 0 },
+          'td:nth-of-type(1)': { px: 0 },
         })}
       />
     </>
