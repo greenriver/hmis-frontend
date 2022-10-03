@@ -4,7 +4,7 @@ import { Box, Button, Container, Stack, Tab, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import {
   generatePath,
-  Link as RouterLink,
+  Link,
   Outlet,
   useLocation,
   useNavigate,
@@ -141,7 +141,7 @@ const ClientDashboard: React.FC = () => {
                   label={label}
                   key={path}
                   value={path}
-                  component={RouterLink}
+                  component={Link}
                   to={generatePath(path, params)}
                   sx={{
                     textTransform: 'capitalize',

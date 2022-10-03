@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { generatePath, Link as RouterLink, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
@@ -100,11 +100,10 @@ const ViewEnrollment = () => {
             </Stack>
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
@@ -113,21 +112,23 @@ const ViewEnrollment = () => {
                 })}
               >
                 + Assessment
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
+                to=''
                 sx={{ pl: 3, justifyContent: 'left' }}
               >
                 + Service
-              </Button>
-              <Button
+              </ButtonLink>
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
+                to=''
                 sx={{ pl: 3, justifyContent: 'left' }}
               >
                 + Event
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
         </Grid>

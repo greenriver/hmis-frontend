@@ -1,15 +1,12 @@
 import { Button, ButtonProps } from '@mui/material';
 import { forwardRef } from 'react';
-import {
-  Link as RouterLink,
-  LinkProps as RouterLinkProps,
-} from 'react-router-dom';
+import { Link, LinkProps } from 'react-router-dom';
 
-type ButtonLinkProps = Omit<ButtonProps, 'href'> & RouterLinkProps;
+type ButtonLinkProps = Omit<ButtonProps, 'href'> & LinkProps;
 
 const ButtonLink = forwardRef<ButtonLinkProps, any>((props, ref) => (
   <Button
-    component={RouterLink}
+    component={Link}
     ref={ref}
     {...props}
     role={undefined} // remove the button role

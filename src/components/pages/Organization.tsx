@@ -1,17 +1,13 @@
-import { Grid, Link, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useCallback } from 'react';
-import {
-  generatePath,
-  Link as RouterLink,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
 import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
+import RouterLink from '../elements/RouterLink';
 
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
@@ -139,18 +135,17 @@ const Organization = () => {
 
           <Paper sx={{ p: 2 }}>
             <Stack spacing={1}>
-              <Link
-                component={RouterLink}
+              <RouterLink
                 color='text.secondary'
                 to={generatePath(Routes.EDIT_ORGANIZATION, {
                   organizationId,
                 })}
               >
                 Edit Organization
-              </Link>
-              <Link color='text.secondary' component={RouterLink} to=''>
+              </RouterLink>
+              <RouterLink color='text.secondary' to=''>
                 Delete Organization
-              </Link>
+              </RouterLink>
             </Stack>
           </Paper>
         </Grid>
