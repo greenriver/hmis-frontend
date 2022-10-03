@@ -1,13 +1,14 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Button, Link } from '@mui/material';
+import { Button } from '@mui/material';
 import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
-import { generatePath, Link as RouterLink } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import {
   clientName,
   parseAndFormatDate,
@@ -59,8 +60,7 @@ const HouseholdMemberTable = ({
           return h.client.id === clientId ? (
             clientName(h.client)
           ) : (
-            <Link
-              component={RouterLink}
+            <RouterLink
               to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
                 clientId: h.client.id,
                 enrollmentId,
@@ -69,7 +69,7 @@ const HouseholdMemberTable = ({
               variant='body2'
             >
               {clientName(h.client)}
-            </Link>
+            </RouterLink>
           );
         },
       },

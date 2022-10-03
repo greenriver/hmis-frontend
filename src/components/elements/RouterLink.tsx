@@ -5,7 +5,7 @@ import {
   LinkProps as ReactRouterLinkProps,
 } from 'react-router-dom';
 
-type RouterLinkProps = Omit<LinkProps, 'href'> & ReactRouterLinkProps;
+export type RouterLinkProps = Omit<LinkProps, 'href'> & ReactRouterLinkProps;
 
 const RouterLink = forwardRef<RouterLinkProps, any>((props, ref) => (
   <Link component={ReactRouterLink} ref={ref} {...props} />

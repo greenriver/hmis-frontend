@@ -1,6 +1,7 @@
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { generatePath, Link as RouterLink } from 'react-router-dom';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { generatePath } from 'react-router-dom';
 
+import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
 
 import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTable';
@@ -28,15 +29,14 @@ const AllProjects = () => {
           <Paper sx={{ p: 2, mb: 3 }}>
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>
-              <Button
+              <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                component={RouterLink}
                 to={generatePath(Routes.CREATE_ORGANIZATION)}
               >
                 + Add Organization
-              </Button>
+              </ButtonLink>
             </Stack>
           </Paper>
         </Grid>
