@@ -118,7 +118,7 @@ const NewEnrollment = () => {
           </Typography>
 
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Enrollment Details
             </Typography>
             <Stack spacing={2} sx={{ mb: 2 }}>
@@ -155,8 +155,8 @@ const NewEnrollment = () => {
           {recentHouseholdMembersLoading && <Loading />}
           {recentMembers && recentMembers.length > 1 && (
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
-                Create Household
+              <Typography variant='h5' sx={{ mb: 2 }}>
+                Household
               </Typography>
               <QuickAddHouseholdMembers
                 clientId={clientId}
