@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { omit, sortBy } from 'lodash-es';
+import { omit } from 'lodash-es';
 import { useMemo } from 'react';
 
 import GenericSelect, {
@@ -35,7 +35,7 @@ const RelationshipToHohSelect = ({
           label,
         } as Option)
     );
-    return sortBy(options, ['label']);
+    return options;
   }, [showDataNotCollected]);
 
   // disabled if HoH is selected

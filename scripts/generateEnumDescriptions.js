@@ -10,9 +10,12 @@ let output = 'export const HmisEnums = {';
 // const ENUM_SECTION_DELIM = '__';
 // const DESCRIPTION_DELIM = ' – ';
 
+const CODE_PATTERN_NUMERIC = /^\(([0-9]*)\) /;
+const CODE_PATTERN = /^\(([a-zA-Z0-9]*)\) /;
+
 // Get 9 from "(9) Client refused"
 const getNumber = (elem) => {
-  const m = elem.description.match(/^\(([0-9]*)\) /);
+  const m = elem.description.match(CODE_PATTERN_NUMERIC);
   if (m && m[1]) {
     return parseInt(m[1]);
   }
@@ -37,6 +40,9 @@ schema.__schema.types.forEach((type) => {
 
     const values = enumValues.map((elem) => {
       let description = elem.description.replaceAll(/\n/g, ' ');
+      // if (enumValues.length < 15) {
+      description = description.replace(CODE_PATTERN, '');
+      // }
       return `${elem.name}: "${description}"`;
     });
 
