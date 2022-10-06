@@ -177,6 +177,7 @@ const ClientSearch: React.FC<Props> = ({
 
       // Perform the search
       searchClients({ variables: { input: cleaned } });
+      setOffset(0);
     };
   }, [searchClients, setSearchParams, setDerivedSearchParams]);
 
