@@ -95,16 +95,21 @@ const HouseholdMemberTable = ({
       {
         header: '',
         key: 'actions',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          hc.enrollment.inProgress ? (
-            <Button variant='outlined' color='error' size='small' fullWidth>
-              Finish Intake
-            </Button>
-          ) : (
-            <Button variant='outlined' size='small' fullWidth>
-              Exit
-            </Button>
-          ),
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <>
+            {hc.enrollment.inProgress ? (
+              <Button variant='outlined' color='error' size='small' fullWidth>
+                Finish Intake
+              </Button>
+            ) : (
+              !hc.enrollment.exitDate && (
+                <Button variant='outlined' size='small' fullWidth>
+                  Exit
+                </Button>
+              )
+            )}
+          </>
+        ),
       },
     ];
   }, [clientId, enrollmentId]);

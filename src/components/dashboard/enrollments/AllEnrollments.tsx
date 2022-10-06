@@ -29,7 +29,7 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
       if (e.inProgress) {
         Icon = ErrorOutlineIcon;
         color = 'error';
-        text = 'Pending';
+        text = 'Incomplete';
         textColor = color;
       } else if (!e.exitDate) {
         Icon = HistoryIcon;
