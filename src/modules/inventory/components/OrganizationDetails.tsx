@@ -11,7 +11,9 @@ const OrganizationDetails = ({
   <Grid container spacing={3}>
     {organization.description && (
       <Grid item xs={12}>
-        <Typography variant='body1'>{organization.description}</Typography>
+        <Typography variant='body1' sx={{ whiteSpace: 'pre-line' }}>
+          {organization.description}
+        </Typography>
       </Grid>
     )}
     {/* <DetailGrid

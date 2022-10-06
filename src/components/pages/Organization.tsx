@@ -112,7 +112,7 @@ const Organization = () => {
             {organization?.contactInformation && (
               <Stack spacing={1} sx={{ mb: 4 }}>
                 <Typography variant='h6'>Contact</Typography>
-                <Typography variant='body2'>
+                <Typography variant='body2' sx={{ whiteSpace: 'pre-line' }}>
                   {organization?.contactInformation}
                 </Typography>
               </Stack>

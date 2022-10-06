@@ -69,7 +69,7 @@ const Project = () => {
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
                 <Typography variant='h6'>Project Contact</Typography>
-                <Typography variant='body2'>
+                <Typography variant='body2' sx={{ whiteSpace: 'pre-line' }}>
                   {project.contactInformation}
                 </Typography>
               </Stack>
