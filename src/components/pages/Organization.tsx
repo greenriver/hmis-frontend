@@ -1,6 +1,6 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
@@ -21,19 +21,16 @@ const Organization = () => {
   const { organizationId } = useParams() as {
     organizationId: string;
   };
-  const navigate = useNavigate();
 
   const { crumbs, loading, organization, organizationName } =
     useOrganizationCrumbs();
 
-  const handleRowClick = useCallback(
+  const rowLinkTo = useCallback(
     (project: ProjectAllFieldsFragment) =>
-      navigate(
-        generatePath(Routes.PROJECT, {
-          projectId: project.id,
-        })
-      ),
-    [navigate]
+      generatePath(Routes.PROJECT, {
+        projectId: project.id,
+      }),
+    []
   );
 
   if (!loading && (!crumbs || !organization))
@@ -43,6 +40,7 @@ const Organization = () => {
     {
       header: 'Name',
       render: 'projectName',
+      linkTreatment: true,
     },
     {
       header: 'Type',
@@ -62,8 +60,9 @@ const Organization = () => {
     {
       header: 'End Date',
       render: (project: ProjectAllFieldsFragment) =>
-        project.operatingEndDate &&
-        HmisUtil.parseAndFormatDate(project.operatingEndDate),
+        (project.operatingEndDate &&
+          HmisUtil.parseAndFormatDate(project.operatingEndDate)) ||
+        'Active',
     },
   ];
 
@@ -99,7 +98,7 @@ const Organization = () => {
                 <GenericTable
                   rows={organization?.projects || []}
                   columns={columns}
-                  handleRowClick={handleRowClick}
+                  rowLinkTo={rowLinkTo}
                   loading={loading}
                 />
               ) : (

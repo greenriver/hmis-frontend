@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
@@ -24,10 +24,14 @@ const GroupedProjectTable = ({
 }: {
   organizations: GetOrganizationsAndProjectsQuery['organizations'];
 }) => {
-  const navigate = useNavigate();
-
   const columns: ColumnDef<ProjectFieldsFragment>[] = [
-    { header: 'Project', key: 'name', width: '10%', render: 'projectName' },
+    {
+      header: 'Project',
+      key: 'name',
+      width: '10%',
+      render: 'projectName',
+      linkTreatment: true,
+    },
     {
       header: 'Project Type',
       key: 'type',
@@ -74,14 +78,12 @@ const GroupedProjectTable = ({
     });
   };
 
-  const handleRowClick = useCallback(
+  const rowLinkTo = useCallback(
     (project: ProjectFieldsFragment) =>
-      navigate(
-        generatePath(Routes.PROJECT, {
-          projectId: project.id,
-        })
-      ),
-    [navigate]
+      generatePath(Routes.PROJECT, {
+        projectId: project.id,
+      }),
+    []
   );
 
   return (
@@ -156,7 +158,7 @@ const GroupedProjectTable = ({
               <GenericTable
                 columns={columns}
                 rows={organization.projects}
-                handleRowClick={handleRowClick}
+                rowLinkTo={rowLinkTo}
               />
             ) : (
               <Box sx={{ clear: 'left', px: 2, py: 2 }}>

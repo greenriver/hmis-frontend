@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
+import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -20,6 +20,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Type',
     render: (a) => HmisEnums.AssessmentType[a.assessmentType],
+    linkTreatment: true,
   },
   {
     header: 'Level',
@@ -46,18 +47,15 @@ const AssessmentsPanel = ({
   clientId: string;
   enrollmentId: string;
 }) => {
-  const navigate = useNavigate();
-
-  const handleRowClick = useMemo(() => {
-    return (assessment: AssessmentFieldsFragment) =>
-      navigate(
-        generatePath(DashboardRoutes.VIEW_ASSESSMENT, {
-          clientId,
-          enrollmentId,
-          assessmentId: assessment.id,
-        })
-      );
-  }, [clientId, enrollmentId, navigate]);
+  const rowLinkTo = useCallback(
+    (assessment: AssessmentFieldsFragment) =>
+      generatePath(DashboardRoutes.VIEW_ASSESSMENT, {
+        clientId,
+        enrollmentId,
+        assessmentId: assessment.id,
+      }),
+    [clientId, enrollmentId]
+  );
 
   return (
     <Stack>
@@ -83,7 +81,7 @@ const AssessmentsPanel = ({
       >
         queryVariables={{ id: enrollmentId }}
         queryDocument={GetEnrollmentAssessmentsDocument}
-        handleRowClick={handleRowClick}
+        rowLinkTo={rowLinkTo}
         columns={columns}
         toNodes={(data: GetEnrollmentAssessmentsQuery) =>
           data.enrollment?.assessments?.nodes || []

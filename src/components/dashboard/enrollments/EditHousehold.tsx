@@ -244,7 +244,7 @@ const EditHousehold = () => {
               pageSize={10}
               wrapperComponent={Box}
               searchResultsTableProps={{
-                handleRowClick: undefined,
+                rowLinkTo: undefined,
                 tableProps: { size: 'small' },
                 columns: searchResultColumns,
               }}

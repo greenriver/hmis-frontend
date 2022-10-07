@@ -29,9 +29,8 @@ const GenericTableWithData = <
   queryDocument,
   toNodesCount,
   toNodes,
-  handleRowClick,
-  columns,
   noData = 'None found',
+  ...props
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(DEFAULT_ROWS_PER_PAGE);
@@ -85,10 +84,9 @@ const GenericTableWithData = <
     <GenericTable<RowDataType>
       loading={loading}
       rows={data ? toNodes(data) : []}
-      handleRowClick={data && handleRowClick}
-      columns={columns}
       paginated
       tablePaginationProps={tablePaginationProps}
+      {...props}
     />
   );
 };
