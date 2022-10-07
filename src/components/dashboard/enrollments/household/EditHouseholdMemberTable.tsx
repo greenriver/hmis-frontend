@@ -145,7 +145,7 @@ const EditHouseholdMemberTable = ({
       {
         header: 'DOB / Age',
         key: 'dob',
-        width: '1%',
+        width: '5%',
         render: ({ client }: HouseholdClientFieldsFragment) =>
           client.dob && (
             <Stack direction='row' spacing={1}>
