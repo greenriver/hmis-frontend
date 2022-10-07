@@ -25,7 +25,9 @@ const TextInput = ({
       id={htmlId}
       fullWidth={fullWidth}
       label={hiddenLabel ? undefined : label}
-      onKeyPress={(e) => e.key === 'Enter' && e.preventDefault()}
+      onKeyPress={(e) =>
+        !props.multiline && e.key === 'Enter' && e.preventDefault()
+      }
       {...props}
       inputProps={{
         ...inputProps,

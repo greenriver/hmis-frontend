@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
+import MultilineTypography from '@/components/elements/MultilineTypography';
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -23,8 +24,8 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       {
         label: 'Operating End Date',
         value:
-          project.operatingStartDate &&
-          HmisUtil.parseAndFormatDate(project.operatingStartDate),
+          project.operatingEndDate &&
+          HmisUtil.parseAndFormatDate(project.operatingEndDate),
       },
       {
         label: 'Project Type',
@@ -90,7 +91,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
     <Grid container spacing={3}>
       {project.description && (
         <Grid item xs={12}>
-          <Typography variant='body1'>{project.description}</Typography>
+          <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>
+            Description
+          </Typography>
+          <MultilineTypography variant='body1'>
+            {project.description}
+          </MultilineTypography>
         </Grid>
       )}
       <DetailGrid data={data} />
