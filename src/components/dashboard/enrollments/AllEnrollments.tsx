@@ -2,8 +2,8 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useCallback } from 'react';
+import { generatePath, useParams } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -54,6 +54,7 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
     header: 'Project',
     render: (e) => e.project.projectName,
+    linkTreatment: true,
   },
   {
     header: 'Start Date',
@@ -70,17 +71,14 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
 const AllEnrollments = () => {
   const { clientId } = useParams() as { clientId: string };
 
-  const navigate = useNavigate();
-
-  const handleRowClick = useMemo(() => {
-    return (enrollment: EnrollmentFieldsFragment) =>
-      navigate(
-        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-          clientId,
-          enrollmentId: enrollment.id,
-        })
-      );
-  }, [clientId, navigate]);
+  const rowLinkTo = useCallback(
+    (enrollment: EnrollmentFieldsFragment) =>
+      generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        clientId,
+        enrollmentId: enrollment.id,
+      }),
+    [clientId]
+  );
 
   return (
     <Grid container spacing={4}>
@@ -96,7 +94,7 @@ const AllEnrollments = () => {
           >
             queryVariables={{ id: clientId }}
             queryDocument={GetClientEnrollmentsDocument}
-            handleRowClick={handleRowClick}
+            rowLinkTo={rowLinkTo}
             columns={columns}
             toNodes={(data: GetClientEnrollmentsQuery) =>
               data.client?.enrollments?.nodes || []

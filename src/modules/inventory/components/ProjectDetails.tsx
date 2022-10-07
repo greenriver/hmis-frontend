@@ -24,8 +24,9 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       {
         label: 'Operating End Date',
         value:
-          project.operatingEndDate &&
-          HmisUtil.parseAndFormatDate(project.operatingEndDate),
+          (project.operatingEndDate &&
+            HmisUtil.parseAndFormatDate(project.operatingEndDate)) ||
+          'Active',
       },
       {
         label: 'Project Type',
@@ -68,8 +69,9 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       {
         label: 'Target Population',
         value:
-          project.targetPopulation &&
-          HmisEnums.TargetPopulation[project.targetPopulation],
+          (project.targetPopulation &&
+            HmisEnums.TargetPopulation[project.targetPopulation]) ||
+          '-',
       },
       {
         label: 'HOPWA Medical Assisted Living Facility',

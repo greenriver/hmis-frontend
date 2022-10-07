@@ -1,11 +1,7 @@
 import { Paper, Stack } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  createSearchParams,
-  useNavigate,
-  useSearchParams,
-} from 'react-router-dom';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
@@ -90,9 +86,9 @@ export const CLIENT_COLUMNS: {
 export const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.ssn,
-  CLIENT_COLUMNS.first,
-  CLIENT_COLUMNS.last,
-  CLIENT_COLUMNS.dobAge,
+  { ...CLIENT_COLUMNS.first, width: '15%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.last, width: '25%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
 
 interface Props
@@ -112,7 +108,6 @@ const ClientSearch: React.FC<Props> = ({
   pageSize = 20,
   ...searchFormProps
 }) => {
-  const navigate = useNavigate();
   // URL search parameters
   const [searchParams, setSearchParams] = useSearchParams();
   // whether the search params were derived
@@ -188,9 +183,10 @@ const ClientSearch: React.FC<Props> = ({
     };
   }, []);
 
-  const handleRowClick = useMemo(() => {
-    return (row: ClientFieldsFragment) => navigate(`/client/${row.id}`);
-  }, [navigate]);
+  const rowLinkTo = useCallback(
+    (row: ClientFieldsFragment) => `/client/${row.id}`,
+    []
+  );
 
   if (!initialValues) return <Loading />;
 
@@ -243,7 +239,7 @@ const ClientSearch: React.FC<Props> = ({
               <WrapperComponent>
                 <GenericTable
                   columns={searchResultColumns}
-                  handleRowClick={handleRowClick}
+                  rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
                   {...searchResultsTableProps}
                 />
