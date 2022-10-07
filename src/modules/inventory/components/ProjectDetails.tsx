@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
@@ -91,6 +91,9 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
     <Grid container spacing={3}>
       {project.description && (
         <Grid item xs={12}>
+          <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>
+            Description
+          </Typography>
           <MultilineTypography variant='body1'>
             {project.description}
           </MultilineTypography>
