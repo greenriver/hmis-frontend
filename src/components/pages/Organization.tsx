@@ -6,6 +6,7 @@ import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
 import GenericTable, { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
+import MultilineTypography from '../elements/MultilineTypography';
 import RouterLink from '../elements/RouterLink';
 
 import * as HmisUtil from '@/modules/hmis/hmisUtil';
@@ -112,9 +113,9 @@ const Organization = () => {
             {organization?.contactInformation && (
               <Stack spacing={1} sx={{ mb: 4 }}>
                 <Typography variant='h6'>Contact</Typography>
-                <Typography variant='body2' sx={{ whiteSpace: 'pre-line' }}>
+                <MultilineTypography variant='body2'>
                   {organization?.contactInformation}
-                </Typography>
+                </MultilineTypography>
               </Stack>
             )}
             <Stack spacing={1}>

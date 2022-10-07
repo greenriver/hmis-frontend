@@ -4,6 +4,7 @@ import { generatePath, useParams } from 'react-router-dom';
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
+import MultilineTypography from '../elements/MultilineTypography';
 import RouterLink from '../elements/RouterLink';
 
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
@@ -69,9 +70,9 @@ const Project = () => {
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
                 <Typography variant='h6'>Project Contact</Typography>
-                <Typography variant='body2' sx={{ whiteSpace: 'pre-line' }}>
+                <MultilineTypography variant='body2'>
                   {project.contactInformation}
-                </Typography>
+                </MultilineTypography>
               </Stack>
             </Paper>
           )}

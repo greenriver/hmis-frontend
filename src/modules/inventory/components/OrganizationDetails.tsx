@@ -1,6 +1,7 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 
 // import DetailGrid from '@/components/elements/DetailGrid';
+import MultilineTypography from '@/components/elements/MultilineTypography';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
 
 const OrganizationDetails = ({
@@ -11,9 +12,9 @@ const OrganizationDetails = ({
   <Grid container spacing={3}>
     {organization.description && (
       <Grid item xs={12}>
-        <Typography variant='body1' sx={{ whiteSpace: 'pre-line' }}>
+        <MultilineTypography variant='body1'>
           {organization.description}
-        </Typography>
+        </MultilineTypography>
       </Grid>
     )}
     {/* <DetailGrid
