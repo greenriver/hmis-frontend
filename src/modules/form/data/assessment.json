@@ -302,7 +302,7 @@
     {
       "type": "group",
       "linkId": "4.12-group",
-      "text": "4.12 Current Living Situation",
+      "text": "Current Living Situation (4.12)",
       "item": [
         {
           "type": "choice",
@@ -524,177 +524,183 @@
           ]
         },
         {
-          "type": "choice",
-          "linkId": "4.12-A",
-          "text": "Is client going to have to leave their current living situation within 14 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
+          "type": "group",
+          "linkId": "4.12-conditionals",
+          "item": [
             {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "15" }
+              "type": "choice",
+              "linkId": "4.12-A",
+              "text": "Is client going to have to leave their current living situation within 14 days?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "15" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "6" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "7" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "25" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "4" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "5" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "29" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "14" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "2" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "32" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "36" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "35" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "28" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "19" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "3" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "31" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "33" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "34" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "10" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "20" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "21" }
+                },
+                {
+                  "question": "4.12",
+                  "operator": "=",
+                  "answerCoding": { "code": "11" }
+                }
+              ]
             },
             {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "6" }
+              "type": "choice",
+              "linkId": "4.12-B",
+              "text": "Has a subsequent residence been identified?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.12-A",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
             },
             {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "7" }
+              "type": "choice",
+              "linkId": "4.12-C",
+              "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.12-A",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
             },
             {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "25" }
+              "type": "choice",
+              "linkId": "4.12-D",
+              "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.12-A",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
             },
             {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "4" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "5" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "29" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "14" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "2" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "32" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "36" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "35" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "28" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "19" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "3" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "31" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "33" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "34" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "10" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "20" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "21" }
-            },
-            {
-              "question": "4.12",
-              "operator": "=",
-              "answerCoding": { "code": "11" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "4.12-B",
-          "text": "Has a subsequent residence been identified?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "4.12-A",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "4.12-C",
-          "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "4.12-A",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "4.12-D",
-          "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "4.12-A",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
-            }
-          ]
-        },
-        {
-          "type": "choice",
-          "linkId": "4.12-E",
-          "text": "Has the client moved 2 or more times in the last 60 days?",
-          "answerValueSet": "yesNoMissing",
-          "enableBehavior": "any",
-          "enableWhen": [
-            {
-              "question": "4.12-A",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "type": "choice",
+              "linkId": "4.12-E",
+              "text": "Has the client moved 2 or more times in the last 60 days?",
+              "answerValueSet": "yesNoMissing",
+              "enableBehavior": "any",
+              "enableWhen": [
+                {
+                  "question": "4.12-A",
+                  "operator": "=",
+                  "answerCoding": { "code": "1" }
+                }
+              ]
             }
           ]
         },
@@ -794,76 +800,58 @@
     {
       "type": "group",
       "linkId": "health-group",
+      "text": "Health",
       "item": [
         {
-          "type": "group",
-          "linkId": "insurance-group",
-          "text": "Health",
-          "display": {
-            "direction": "row"
-          },
-          "item": [
+          "type": "choice",
+          "linkId": "4.04-2",
+          "text": "Covered by Health Insurance",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
+          "type": "choice",
+          "linkId": "health-insurance",
+          "text": "Health Insurance",
+          "answerOption": [
             {
-              "type": "choice",
-              "linkId": "4.04-2",
-              "text": "Covered by Health Insurance",
-              "answerValueSet": "yesNoMissing"
+              "valueCoding": {
+                "code": "0",
+                "display": "Medicaid"
+              }
             },
             {
-              "type": "openchoice",
-              "linkId": "health-insurance",
-              "text": "Health Insurance",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "0",
-                    "display": "Medicaid"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "1",
-                    "display": "Medicare"
-                  }
-                }
-              ],
-              "enableBehavior": "all",
-              "enableWhen": [
-                {
-                  "question": "4.04-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
-                }
-              ]
+              "valueCoding": {
+                "code": "1",
+                "display": "Medicare"
+              }
+            }
+          ],
+          "enableBehavior": "all",
+          "enableWhen": [
+            {
+              "question": "4.04-2",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
             }
           ]
         },
         {
-          "type": "group",
-          "linkId": "4.05-group",
-          "display": {
-            "direction": "row"
-          },
-          "item": [
+          "type": "choice",
+          "linkId": "4.05-2",
+          "text": "Physical Disability",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
+          "type": "choice",
+          "linkId": "4.05-A",
+          "text": "Is this a disabling condition?",
+          "answerValueSet": "yesNoMissing",
+          "enableBehavior": "all",
+          "enableWhen": [
             {
-              "type": "choice",
-              "linkId": "4.05-2",
-              "text": "Physical Disability",
-              "answerValueSet": "yesNoMissing"
-            },
-            {
-              "type": "openchoice",
-              "linkId": "4.05-A",
-              "text": "Is this a disabling condition?",
-              "answerValueSet": "yesNoMissing",
-              "enableBehavior": "all",
-              "enableWhen": [
-                {
-                  "question": "4.05-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
-                }
-              ]
+              "question": "4.05-2",
+              "operator": "=",
+              "answerCoding": { "code": "1" }
             }
           ]
         },
@@ -874,20 +862,17 @@
           "answerValueSet": "yesNoMissing"
         },
         {
+          "type": "choice",
+          "linkId": "4.07-2",
+          "text": "Chronic Health Condition",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
           "type": "group",
-          "linkId": "4.07-group",
-          "display": {
-            "direction": "row"
-          },
+          "linkId": "4.07-2-conditional",
           "item": [
             {
               "type": "choice",
-              "linkId": "4.07-2",
-              "text": "Chronic Health Condition",
-              "answerValueSet": "yesNoMissing"
-            },
-            {
-              "type": "openchoice",
               "linkId": "4.07-A",
               "text": "Is this a disabling condition?",
               "answerValueSet": "yesNoMissing",
@@ -909,20 +894,17 @@
           "answerValueSet": "yesNoMissing"
         },
         {
+          "type": "choice",
+          "linkId": "4.09-2",
+          "text": "Mental Health Disorder",
+          "answerValueSet": "yesNoMissing"
+        },
+        {
           "type": "group",
           "linkId": "4.09-group",
-          "display": {
-            "direction": "row"
-          },
           "item": [
             {
               "type": "choice",
-              "linkId": "4.09-2",
-              "text": "Mental Health Disorder",
-              "answerValueSet": "yesNoMissing"
-            },
-            {
-              "type": "openchoice",
               "linkId": "4.09-A",
               "text": "Is this a disabling condition?",
               "answerValueSet": "yesNoMissing",
@@ -937,6 +919,56 @@
             }
           ]
         },
+
+        {
+          "type": "choice",
+          "linkId": "4.10-2",
+          "text": "Substance Use Disorder",
+          "answerOption": [
+            {
+              "valueCoding": {
+                "code": "0",
+                "display": "No"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "1",
+                "display": "Alcohol use disorder"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "2",
+                "display": "Drug use disorder"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "3",
+                "display": "Both alcohol and drug use disorder"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "8",
+                "display": "Client doesn't know"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "9",
+                "display": "Client refused"
+              }
+            },
+            {
+              "valueCoding": {
+                "code": "99",
+                "display": "Data not collected"
+              }
+            }
+          ]
+        },
         {
           "type": "group",
           "linkId": "4.10-group",
@@ -946,55 +978,6 @@
           "item": [
             {
               "type": "choice",
-              "linkId": "4.10-2",
-              "text": "Substance Use Disorder",
-              "answerOption": [
-                {
-                  "valueCoding": {
-                    "code": "0",
-                    "display": "No"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "1",
-                    "display": "Alcohol use disorder"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "2",
-                    "display": "Drug use disorder"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "3",
-                    "display": "Both alcohol and drug use disorder"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "8",
-                    "display": "Client doesn't know"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "9",
-                    "display": "Client refused"
-                  }
-                },
-                {
-                  "valueCoding": {
-                    "code": "99",
-                    "display": "Data not collected"
-                  }
-                }
-              ]
-            },
-            {
-              "type": "openchoice",
               "linkId": "4.10-A",
               "text": "Is this a disabling condition?",
               "answerValueSet": "yesNoMissing",

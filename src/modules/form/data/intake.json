@@ -150,36 +150,26 @@
       "text": "Demographic Information",
       "item": [
         {
-          "type": "group",
+          "type": "choice",
           "required": false,
-          "linkId": "race-ethnicity-group",
-          "display": {
-            "direction": "row"
+          "linkId": "race",
+          "text": "Race",
+          "repeats": true,
+          "mapping": {
+            "clientMutationInput": "race"
           },
-          "item": [
-            {
-              "type": "choice",
-              "required": false,
-              "linkId": "race",
-              "text": "Race",
-              "repeats": true,
-              "mapping": {
-                "clientMutationInput": "race"
-              },
-              "answerValueSet": "Race"
-            },
-            {
-              "type": "choice",
-              "required": false,
-              "linkId": "ethnicity",
-              "text": "Ethnicity",
-              "repeats": false,
-              "mapping": {
-                "clientMutationInput": "ethnicity"
-              },
-              "answerValueSet": "Ethnicity"
-            }
-          ]
+          "answerValueSet": "Race"
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "ethnicity",
+          "text": "Ethnicity",
+          "repeats": false,
+          "mapping": {
+            "clientMutationInput": "ethnicity"
+          },
+          "answerValueSet": "Ethnicity"
         },
         {
           "type": "choice",
