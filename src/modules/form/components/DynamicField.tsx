@@ -1,4 +1,4 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import { CalendarPickerView } from '@mui/x-date-pickers';
 import React, { ReactNode } from 'react';
 
@@ -33,10 +33,17 @@ const ItemGroup = ({
   nestingLevel: number;
 }) => {
   const direction = item.display?.direction ?? 'column';
+  const isColumn = direction === 'column';
   const wrappedChildren = (
-    <Stack direction={direction} spacing={direction === 'column' ? 1 : 2}>
+    <Grid
+      container
+      direction={direction}
+      rowSpacing={isColumn ? 2 : 0}
+      columnSpacing={isColumn ? 0 : 2}
+      sx={{ '& .MuiGrid-item:first-child': { pt: 0 }, mt: 0 }}
+    >
       {children}
-    </Stack>
+    </Grid>
   );
   if (nestingLevel === 0) {
     return (
@@ -44,30 +51,49 @@ const ItemGroup = ({
         sx={{
           ml: 1,
           mt: 2,
-          py: 2,
-          px: 2,
-          borderLeft: 3,
-          borderLeftColor: 'primary.light',
+          py: 3,
+          px: 2.5,
         }}
       >
-        {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
+        {item.text && (
+          <Typography variant='h5' sx={{ mb: 3 }}>
+            {item.text}
+          </Typography>
+        )}
         {wrappedChildren}
       </Paper>
     );
-  } else {
+  }
+  if (nestingLevel === 1) {
     return (
-      <>
-        {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
-        {wrappedChildren}
-      </>
+      <Grid item xs>
+        <Box sx={{ pl: 1 }}>
+          <Box
+            sx={{
+              pl: 2,
+              borderLeft: (theme) => `2px solid ${theme.palette.grey[400]}`,
+            }}
+          >
+            {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
+            {wrappedChildren}
+          </Box>
+        </Box>
+      </Grid>
     );
   }
+  return (
+    <>
+      {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
+      {wrappedChildren}
+    </>
+  );
 };
 
 const getLabel = (item: Item) => {
   if (!item.prefix && !item.text) return undefined;
   if (!item.prefix) return item.text;
-  return `${item.prefix} ${item.text || ''}`;
+  return item.text;
+  // return `${item.prefix} ${item.text || ''}`;
 };
 
 const DynamicField: React.FC<Props> = ({
@@ -84,6 +110,8 @@ const DynamicField: React.FC<Props> = ({
   const onChangeEventValue = (_: any, val: any) =>
     itemChanged(item.linkId, val);
   const label = getLabel(item);
+  const maxWidth = 600 - nestingLevel * 26;
+  const minWidth = 250;
 
   switch (FieldType[item.type]) {
     case FieldType.display:
@@ -114,7 +142,7 @@ const DynamicField: React.FC<Props> = ({
     case FieldType.ssn:
       const multiline = FieldType[item.type] === FieldType.text;
       return (
-        <Grid item sx={{ width: 400 }}>
+        <Grid item sx={{ maxWidth, minWidth }}>
           <TextInput
             id={item.linkId}
             name={item.linkId}
@@ -134,7 +162,7 @@ const DynamicField: React.FC<Props> = ({
           ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
           : {};
       return (
-        <Grid item sx={{ width: 400 }}>
+        <Grid item sx={{ width: 180 }}>
           <DatePicker
             label={label}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -149,7 +177,7 @@ const DynamicField: React.FC<Props> = ({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedChoiceVal = value ? value : item.repeats ? [] : null;
       return (
-        <Grid item sx={{ width: 400 }}>
+        <Grid item sx={{ maxWidth, minWidth }}>
           <CreatableFormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedChoiceVal}
@@ -178,7 +206,7 @@ const DynamicField: React.FC<Props> = ({
             ? ProjectSelect
             : OrganizationSelect;
         return (
-          <Grid item sx={{ width: 400 }}>
+          <Grid item sx={{ maxWidth, minWidth }}>
             <SelectComponent
               label={label}
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -192,7 +220,7 @@ const DynamicField: React.FC<Props> = ({
       }
 
       return (
-        <Grid item sx={{ width: 400 }}>
+        <Grid item sx={{ maxWidth, minWidth }}>
           <FormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedVal}

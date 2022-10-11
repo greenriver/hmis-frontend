@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Container, Grid, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -40,18 +40,24 @@ const CreateClient: React.FC = () => {
         <Typography variant='h5'>Add New Client</Typography>
       </PageHeader>
       <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
-        <EditRecord<
-          ClientFieldsFragment,
-          CreateClientMutation,
-          CreateClientMutationVariables
-        >
-          formDefinition={CLIENT_FORM}
-          mappingKey={MAPPING_KEY}
-          // record={client}
-          queryDocument={CreateClientDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
-        />
+        <Grid container>
+          <Grid item xs={8}>
+            <EditRecord<
+              ClientFieldsFragment,
+              CreateClientMutation,
+              CreateClientMutationVariables
+            >
+              formDefinition={CLIENT_FORM}
+              mappingKey={MAPPING_KEY}
+              // record={client}
+              queryDocument={CreateClientDocument}
+              onCompleted={onCompleted}
+              getErrors={(data: CreateClientMutation) =>
+                data?.createClient?.errors
+              }
+            />
+          </Grid>
+        </Grid>
       </Container>
     </>
   );

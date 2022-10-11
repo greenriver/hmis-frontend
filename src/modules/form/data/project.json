@@ -38,13 +38,15 @@
     {
       "type": "group",
       "linkId": "dates",
+      "text": "Operating Period",
       "required": false,
+      "display": { "direction": "row" },
       "item": [
         {
           "type": "date",
           "required": true,
           "linkId": "2.02.3",
-          "text": "Operating Start Date",
+          "text": "Start Date",
           "mapping": {
             "projectMutationInput": "operatingStartDate"
           }
@@ -53,7 +55,7 @@
           "type": "date",
           "required": false,
           "linkId": "2.02.4",
-          "text": "Operating End Date",
+          "text": "End Date",
           "mapping": {
             "projectMutationInput": "operatingEndDate"
           }
@@ -63,26 +65,8 @@
     {
       "type": "group",
       "linkId": "additional",
-      "required": false,
+      "text": "Project Details",
       "item": [
-        {
-          "type": "boolean",
-          "required": false,
-          "linkId": "2.02.5",
-          "text": "Continuum Project?",
-          "mapping": {
-            "projectMutationInput": "continuumProject"
-          }
-        },
-        {
-          "type": "boolean",
-          "required": false,
-          "linkId": "2.02.7",
-          "text": "HMIS Participating Project?",
-          "mapping": {
-            "projectMutationInput": "HMISParticipatingProject"
-          }
-        },
         {
           "type": "choice",
           "required": false,
@@ -94,38 +78,43 @@
           }
         },
         {
-          "type": "boolean",
-          "required": false,
-          "linkId": "2.02.A",
-          "text": "Residential Affiliation?",
-          "mapping": {
-            "projectMutationInput": "residentialAffiliation"
-          },
-          "enableBehavior": "all",
-          "enableWhen": [
+          "type": "group",
+          "linkId": "2.02.6-conditionals",
+          "item": [
             {
-              "question": "2.02.6",
-              "operator": "=",
-              "answerCoding": { "code": "SERVICES_ONLY" }
-            }
-          ]
-        },
-
-        {
-          "type": "choice",
-          "required": false,
-          "linkId": "2.02.C",
-          "text": "Tracking Method",
-          "answerValueSet": "TrackingMethod",
-          "mapping": {
-            "projectMutationInput": "trackingMethod"
-          },
-          "enableBehavior": "all",
-          "enableWhen": [
+              "type": "choice",
+              "required": false,
+              "linkId": "2.02.C",
+              "text": "Tracking Method",
+              "answerValueSet": "TrackingMethod",
+              "mapping": {
+                "projectMutationInput": "trackingMethod"
+              },
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "2.02.6",
+                  "operator": "=",
+                  "answerCoding": { "code": "ES" }
+                }
+              ]
+            },
             {
-              "question": "2.02.6",
-              "operator": "=",
-              "answerCoding": { "code": "ES" }
+              "type": "boolean",
+              "required": false,
+              "linkId": "2.02.A",
+              "text": "Residential Affiliation?",
+              "mapping": {
+                "projectMutationInput": "residentialAffiliation"
+              },
+              "enableBehavior": "all",
+              "enableWhen": [
+                {
+                  "question": "2.02.6",
+                  "operator": "=",
+                  "answerCoding": { "code": "SERVICES_ONLY" }
+                }
+              ]
             }
           ]
         },
@@ -157,6 +146,24 @@
           "answerValueSet": "HOPWAMedAssistedLivingFac",
           "mapping": {
             "projectMutationInput": "HOPWAMedAssistedLivingFac"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.5",
+          "text": "Continuum Project?",
+          "mapping": {
+            "projectMutationInput": "continuumProject"
+          }
+        },
+        {
+          "type": "boolean",
+          "required": false,
+          "linkId": "2.02.7",
+          "text": "HMIS Participating Project?",
+          "mapping": {
+            "projectMutationInput": "HMISParticipatingProject"
           }
         }
       ]

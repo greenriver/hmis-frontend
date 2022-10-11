@@ -1,9 +1,9 @@
-import { Box, Grid, Button, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { shouldEnableItem } from '../formUtil';
-import { FieldType, FormDefinition, Item } from '../types';
+import { FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
 
@@ -48,8 +48,13 @@ const DynamicForm: React.FC<Props> = ({
     onSubmit(values);
   };
 
-  const isEnabled = (item: Item) => {
-    if (!item.enableWhen) return true;
+  const isEnabled = (item: Item): boolean => {
+    if (!item.enableWhen) {
+      // If it has nested items, only show if has any enabled children.
+      // Otherwise, show it.
+      return item.item ? item.item.some((i) => isEnabled(i)) : true;
+    }
+
     // We assume that all enableWhen conditions depend on the same question, for now, to speed things up (so we can skip immediately if there is no answer)
     const linkId = item.enableWhen[0]?.question;
     return shouldEnableItem(values[linkId], item);
@@ -57,7 +62,8 @@ const DynamicForm: React.FC<Props> = ({
 
   const renderItem = (item: Item, nestingLevel: number) => {
     const hidden = !isEnabled(item);
-    if (hidden && item.type === FieldType.group) {
+    // if (hidden && item.type === FieldType.group) {
+    if (hidden) {
       return null;
     }
     return (

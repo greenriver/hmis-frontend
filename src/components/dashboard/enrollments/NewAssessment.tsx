@@ -25,7 +25,9 @@ const NewAssessment = () => {
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          <Typography variant='h5'>Intake Assessment</Typography>
+          <Typography variant='h3' sx={{ mb: 3 }}>
+            Intake Assessment
+          </Typography>
           <DynamicForm
             definition={intakeFormDefinition}
             onSubmit={(values) => console.log(values)}

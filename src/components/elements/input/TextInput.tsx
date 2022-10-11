@@ -38,7 +38,7 @@ const TextInput = ({
         notched: false,
         sx: {
           'label + &': {
-            mt: 3,
+            mt: 0.5,
           },
           ...(props.InputProps?.sx || {}),
         },
@@ -52,6 +52,8 @@ const TextInput = ({
           transform: 'none',
           color: 'text.secondary',
           typography: 'body2',
+          position: 'relative',
+          whiteSpace: 'break-spaces',
           ...(props.InputLabelProps?.sx || {}),
         },
       }}
