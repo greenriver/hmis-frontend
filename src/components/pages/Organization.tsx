@@ -1,5 +1,6 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { sortBy } from 'lodash-es';
+import { useCallback, useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
@@ -35,6 +36,17 @@ const Organization = () => {
 
   if (!loading && (!crumbs || !organization))
     throw Error('Organization not found');
+
+  const projects = useMemo(
+    () =>
+      sortBy(organization?.projects || [], [
+        (p) => !!p.operatingEndDate,
+        'operatingStartDate',
+        'operatingEndDate',
+        'projectName',
+      ]),
+    [organization]
+  );
 
   const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
     {
@@ -94,9 +106,9 @@ const Organization = () => {
               <Typography variant='h6' sx={{ mb: 2 }}>
                 Projects
               </Typography>
-              {(organization?.projects || []).length > 0 ? (
+              {projects.length > 0 ? (
                 <GenericTable
-                  rows={organization?.projects || []}
+                  rows={projects}
                   columns={columns}
                   rowLinkTo={rowLinkTo}
                   loading={loading}
