@@ -21,7 +21,7 @@ const LoginForm = () => {
   const { login, prompt2fa, loading, error } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  if (error) console.log(`Error in login: ${error.message}`);
+  if (error) console.error(`Error logging in: ${error.message}`);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

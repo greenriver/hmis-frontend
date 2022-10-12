@@ -54,11 +54,7 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-export async function getCurrentUser(): Promise<HmisUser> {
-  const storedUser = storage.getUser();
-  if (storedUser) {
-    return Promise.resolve(JSON.parse(storedUser) as HmisUser);
-  }
+export async function fetchCurrentUser(): Promise<HmisUser> {
   const response = await fetch('/hmis/user.json', {
     credentials: 'include',
     headers: {
@@ -72,6 +68,14 @@ export async function getCurrentUser(): Promise<HmisUser> {
   } else {
     return response.json() as Promise<HmisUser>;
   }
+}
+
+export async function getCurrentUser(): Promise<HmisUser> {
+  const storedUser = storage.getUser();
+  if (storedUser) {
+    return Promise.resolve(JSON.parse(storedUser) as HmisUser);
+  }
+  return fetchCurrentUser();
 }
 
 export type LoginParams = {
@@ -113,6 +117,7 @@ export async function login({
 }
 
 export async function logout() {
+  console.log('LOGOUT');
   const response = await fetch('/hmis/logout', {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },

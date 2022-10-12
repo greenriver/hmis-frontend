@@ -7,6 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import * as React from 'react';
+import { useCallback } from 'react';
 
 import RouterLink from '../elements/RouterLink';
 
@@ -22,6 +23,8 @@ interface Props {
 
 const MainLayout: React.FC<Props> = ({ children }) => {
   const { logout, user, loading } = useAuth();
+  const logoutUser = useCallback(() => logout(true), [logout]);
+
   if (loading || !user) return <Loading />;
 
   return (
@@ -66,7 +69,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           <Button
             variant='text'
             sx={{ ml: 2 }}
-            onClick={logout}
+            onClick={logoutUser}
             color='secondary'
           >
             Sign Out
