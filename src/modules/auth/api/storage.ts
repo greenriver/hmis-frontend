@@ -1,4 +1,4 @@
-const USER_STORAGE_KEY = '_hmis_user_info';
+export const USER_STORAGE_KEY = '_hmis_user_info';
 
 // Stores user name and email. No sensitive information stored!
 export const setUser = (user: object) =>
