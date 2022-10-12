@@ -84,14 +84,19 @@ export function AuthProvider({
           replace: true,
         });
       }
+      setLoading(true);
       return sessionsApi
         .logout()
         .then(() => {
-          setUser(undefined);
+          // get a new CSRF token
+          return sessionsApi.fetchCurrentUser();
         })
-        .catch((error: Error) => setError(error));
+        .finally(() => {
+          setUser(undefined);
+          setLoading(false);
+        });
     },
-    [setError, navigate, pathname]
+    [navigate, pathname]
   );
 
   // Poll the backend to check if the session is still valid
