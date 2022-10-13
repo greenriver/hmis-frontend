@@ -57,7 +57,7 @@ const EditProject = () => {
             UpdateProjectMutation,
             UpdateProjectMutationVariables
           >
-            formDefinition={PROJECT_FORM}
+            definition={PROJECT_FORM}
             mappingKey={MAPPING_KEY}
             record={project}
             queryDocument={UpdateProjectDocument}

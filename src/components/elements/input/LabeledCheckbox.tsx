@@ -3,24 +3,34 @@ import {
   FormControlLabel,
   FormControlLabelProps,
   FormGroup,
-  Typography,
 } from '@mui/material';
 
-export interface Props extends Omit<FormControlLabelProps, 'control'> {
+import { DynamicInputCommonProps } from '@/modules/form/types';
+
+export interface Props
+  extends Omit<FormControlLabelProps, 'control' | 'label'> {
   name?: string;
 }
 
-const LabeledCheckbox = ({ label, ...props }: Props) => {
-  return (
-    <FormGroup>
-      <FormControlLabel
-        control={<Checkbox />}
-        labelPlacement='end'
-        label={<Typography variant='body2'>{label}</Typography>}
-        {...props}
-      />
-    </FormGroup>
-  );
-};
+const LabeledCheckbox = ({
+  label,
+  error,
+  ...props
+}: Props & DynamicInputCommonProps) => (
+  <FormGroup>
+    <FormControlLabel
+      control={<Checkbox />}
+      labelPlacement='end'
+      label={label}
+      sx={{
+        color: error ? (theme) => theme.palette.error.main : undefined,
+        '.MuiCheckbox-root': {
+          color: error ? (theme) => theme.palette.error.main : undefined,
+        },
+      }}
+      {...props}
+    />
+  </FormGroup>
+);
 
 export default LabeledCheckbox;

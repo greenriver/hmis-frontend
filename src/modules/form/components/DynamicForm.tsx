@@ -1,5 +1,5 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import { Box, Button, Grid, Stack } from '@mui/material';
+import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { shouldEnableItem } from '../formUtil';
@@ -9,14 +9,15 @@ import DynamicField from './DynamicField';
 
 import { ValidationError } from '@/types/gqlTypes';
 
-interface Props {
+export interface Props {
   definition: FormDefinition;
+  mappingKey?: string; // mapping key in form definition, used to map errors to Items
   onSubmit: (values: Record<string, any>) => void;
   submitButtonText?: string;
   discardButtonText?: string;
   loading?: boolean;
   initialValues?: Record<string, any>;
-  errors?: ValidationError[] | null;
+  errors?: ValidationError[];
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -25,6 +26,7 @@ const DynamicForm: React.FC<Props> = ({
   submitButtonText,
   discardButtonText,
   loading,
+  mappingKey,
   initialValues = {},
   errors,
 }) => {
@@ -32,14 +34,18 @@ const DynamicForm: React.FC<Props> = ({
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(initialValues);
 
-  // this needs to be memoized
-  const itemChanged = (linkId: string, value: any) => {
-    setValues((currentValues) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      currentValues[linkId] = value;
-      return { ...currentValues };
-    });
-  };
+  if (errors) console.log('Validation errors', errors);
+
+  const itemChanged = useCallback(
+    (linkId: string, value: any) => {
+      setValues((currentValues) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        currentValues[linkId] = value;
+        return { ...currentValues };
+      });
+    },
+    [setValues]
+  );
 
   const submitHandler = (
     event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent
@@ -61,12 +67,25 @@ const DynamicForm: React.FC<Props> = ({
     return shouldEnableItem(values[linkId], item);
   };
 
+  // Get errors for a particular field
+  const getFieldErrors = useCallback(
+    (item: Item) => {
+      if (!errors || !mappingKey) return undefined;
+      if (!item.mapping || !item.mapping[mappingKey]) return undefined;
+      const attribute = item.mapping[mappingKey];
+      return errors.filter((e) => e.attribute === attribute);
+    },
+    [errors, mappingKey]
+  );
+
+  // Recursively render an item
   const renderItem = (item: Item, nestingLevel: number) => {
     const hidden = !isEnabled(item);
     // if (hidden && item.type === FieldType.group) {
     if (hidden) {
       return null;
     }
+
     return (
       <DynamicField
         key={item.linkId}
@@ -77,6 +96,7 @@ const DynamicForm: React.FC<Props> = ({
         nestingLevel={nestingLevel}
         children={(item) => renderItem(item, nestingLevel + 1)}
         disabled={item.readOnly || hidden}
+        errors={getFieldErrors(item)}
       />
     );
   };
@@ -93,7 +113,7 @@ const DynamicForm: React.FC<Props> = ({
       >
         {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
-      <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
+      <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
         <Button variant='contained' type='submit' disabled={!!loading}>
           {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
@@ -101,25 +121,7 @@ const DynamicForm: React.FC<Props> = ({
         <Button variant='gray' onClick={() => navigate(-1)}>
           {discardButtonText || 'Discard'}
         </Button>
-        {/* <Link
-            onClick={() => {
-              setValues({});
-            }}
-            variant='caption'
-            sx={{ display: 'block', pt: 1, pl: 2 }}
-          >
-            Save Draft
-          </Link> */}
       </Stack>
-      {errors && (
-        <Stack spacing={1} sx={{ mt: 2 }}>
-          {errors.map((e) => (
-            <Typography key={e.message} color='error'>
-              {e.fullMessage}
-            </Typography>
-          ))}
-        </Stack>
-      )}
     </Box>
   );
 };

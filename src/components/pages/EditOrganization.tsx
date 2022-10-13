@@ -60,7 +60,7 @@ const EditOrganization = () => {
               UpdateOrganizationMutation,
               UpdateOrganizationMutationVariables
             >
-              formDefinition={ORGANIZATION_FORM}
+              definition={ORGANIZATION_FORM}
               mappingKey={MAPPING_KEY}
               record={organization}
               queryDocument={UpdateOrganizationDocument}

@@ -1,6 +1,6 @@
 import { Typography, createFilterOptions } from '@mui/material';
 
-import { AnswerOption } from '../types';
+import { AnswerOption, DynamicInputCommonProps } from '../types';
 
 import GenericSelect, {
   GenericSelectProps,
@@ -55,8 +55,9 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
   label = multiple ? 'Organizations' : 'Organization',
   options,
   onChange,
+  error,
   ...props
-}: GenericSelectProps<Option, Multiple, boolean>) => {
+}: GenericSelectProps<Option, Multiple, boolean> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.valueCoding?.displayGroup;
   const openchoice = true;
   return (
@@ -100,6 +101,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
           : undefined
       }
       {...props}
+      textInputProps={{ ...props.textInputProps, error }}
       onChange={
         onChange
           ? (event, newValue, ...rest) => {

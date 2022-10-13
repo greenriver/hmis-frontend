@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import { AnswerOption } from '../types';
+import { AnswerOption, DynamicInputCommonProps } from '../types';
 
 import GenericSelect, {
   GenericSelectProps,
@@ -33,8 +33,9 @@ const FormSelect = <Multiple extends boolean | undefined>({
   multiple,
   label,
   value,
+  error,
   ...props
-}: GenericSelectProps<Option, Multiple, false>) => {
+}: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.valueCoding?.displayGroup;
 
   return (
@@ -54,6 +55,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       }
       value={value}
       {...props}
+      textInputProps={{ ...props.textInputProps, error }}
     />
   );
 };

@@ -30,7 +30,6 @@ const CreateOrganization = () => {
 
   const onCompleted = useCallback(
     (data: CreateOrganizationMutation) => {
-      console.log(data);
       const id = data?.createOrganization?.organization?.id;
       if (id) {
         navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
@@ -54,13 +53,14 @@ const CreateOrganization = () => {
             CreateOrganizationMutation,
             CreateOrganizationMutationVariables
           >
-            formDefinition={ORGANIZATION_FORM}
+            definition={ORGANIZATION_FORM}
             mappingKey={MAPPING_KEY}
             queryDocument={CreateOrganizationDocument}
             onCompleted={onCompleted}
             getErrors={(data: CreateOrganizationMutation) =>
               data?.createOrganization?.errors
             }
+            submitButtonText='Create Organization'
           />
         </Grid>
       </Grid>

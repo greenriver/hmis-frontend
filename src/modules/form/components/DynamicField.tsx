@@ -1,18 +1,21 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { CalendarPickerView } from '@mui/x-date-pickers';
 import React, { ReactNode } from 'react';
 
 import { resolveAnswerValueSet } from '../formUtil';
-import { FieldType, Item } from '../types';
+import { DynamicInputCommonProps, FieldType, Item } from '../types';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
+import InputContainer from './InputContainer';
+import ItemGroup from './ItemGroup';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
+import { ValidationError } from '@/types/gqlTypes';
 
 interface Props {
   item: Item;
@@ -21,79 +24,22 @@ interface Props {
   value: any;
   disabled?: boolean;
   children?: (item: Item) => ReactNode;
+  errors?: ValidationError[];
 }
 
-const ItemGroup = ({
-  children,
-  item,
-  nestingLevel,
-}: {
-  children: ReactNode;
-  item: Item;
-  nestingLevel: number;
-}) => {
-  const direction = item.display?.direction ?? 'column';
-  const isColumn = direction === 'column';
-  const wrappedChildren = (
-    <Grid
-      container
-      direction={direction}
-      rowSpacing={isColumn ? 2 : 0}
-      columnSpacing={isColumn ? 0 : 2}
-      sx={{ '& .MuiGrid-item:first-of-type': { pt: 0 }, mt: 0 }}
-    >
-      {children}
-    </Grid>
-  );
-  if (nestingLevel === 0) {
-    return (
-      <Paper
-        sx={{
-          ml: 1,
-          mt: 2,
-          py: 3,
-          px: 2.5,
-        }}
-      >
-        {item.text && (
-          <Typography variant='h5' sx={{ mb: 3 }}>
-            {item.text}
-          </Typography>
-        )}
-        {wrappedChildren}
-      </Paper>
-    );
-  }
-  if (nestingLevel === 1) {
-    return (
-      <Grid item xs>
-        <Box sx={{ pl: 1 }}>
-          <Box
-            sx={{
-              pl: 2,
-              borderLeft: (theme) => `2px solid ${theme.palette.grey[400]}`,
-            }}
-          >
-            {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
-            {wrappedChildren}
-          </Box>
-        </Box>
-      </Grid>
-    );
-  }
-  return (
-    <>
-      {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
-      {wrappedChildren}
-    </>
-  );
-};
-
 const getLabel = (item: Item) => {
-  if (!item.prefix && !item.text) return undefined;
-  if (!item.prefix) return item.text;
-  return item.text;
-  // return `${item.prefix} ${item.text || ''}`;
+  if (!item.prefix && !item.text) return null;
+
+  return (
+    <Stack direction='row' spacing={1}>
+      <Typography variant='body2'>{item.text}</Typography>
+      {item.required && (
+        <Typography variant='body2' color='error'>
+          (Required)
+        </Typography>
+      )}
+    </Stack>
+  );
 };
 
 const DynamicField: React.FC<Props> = ({
@@ -102,6 +48,7 @@ const DynamicField: React.FC<Props> = ({
   nestingLevel,
   value,
   disabled = false,
+  errors,
   children,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -113,9 +60,22 @@ const DynamicField: React.FC<Props> = ({
   const maxWidth = 600 - nestingLevel * 26;
   const minWidth = 250;
 
+  const commonContainerProps = {
+    // If we already show a required indicator, no need for message
+    errors: item.required
+      ? errors?.filter((e) => e.type !== 'required')
+      : errors,
+  };
+
+  const commonInputProps: DynamicInputCommonProps = {
+    disabled,
+    label,
+    error: !!(errors && errors.length > 0),
+  };
+
   switch (FieldType[item.type]) {
     case FieldType.display:
-      return <Typography variant='body2'>{label}</Typography>;
+      return label;
     case FieldType.group:
       return (
         <ItemGroup item={item} nestingLevel={nestingLevel}>
@@ -124,7 +84,7 @@ const DynamicField: React.FC<Props> = ({
       );
     case FieldType.boolean:
       return (
-        <Grid item sx={{ width: 400 }}>
+        <InputContainer sx={{ width: 400 }} {...commonContainerProps}>
           <LabeledCheckbox
             checked={!!value}
             onChange={(e) =>
@@ -132,56 +92,52 @@ const DynamicField: React.FC<Props> = ({
             }
             id={item.linkId}
             name={item.linkId}
-            label={label}
-            disabled={disabled}
+            {...commonInputProps}
           />
-        </Grid>
+        </InputContainer>
       );
     case FieldType.string:
     case FieldType.text:
     case FieldType.ssn:
       const multiline = FieldType[item.type] === FieldType.text;
       return (
-        <Grid item sx={{ maxWidth, minWidth }}>
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
             id={item.linkId}
             name={item.linkId}
-            label={label}
             value={value as string}
             onChange={onChangeEvent}
-            disabled={disabled}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
+            {...commonInputProps}
           />
-        </Grid>
+        </InputContainer>
       );
     case FieldType.date:
     case FieldType.dob:
-      const props =
+      const datePickerProps =
         item.type === FieldType.dob
           ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
           : {};
       return (
-        <Grid item sx={{ width: 180 }}>
+        <InputContainer sx={{ width: 250 }} {...commonContainerProps}>
           <DatePicker
-            label={label}
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
-            disabled={disabled}
-            {...props}
+            {...datePickerProps}
+            {...commonInputProps}
           />
-        </Grid>
+        </InputContainer>
       );
     case FieldType.openchoice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedChoiceVal = value ? value : item.repeats ? [] : null;
       return (
-        <Grid item sx={{ maxWidth, minWidth }}>
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <CreatableFormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedChoiceVal}
-            label={label}
             options={
               item.answerValueSet
                 ? resolveAnswerValueSet(item.answerValueSet)
@@ -189,14 +145,15 @@ const DynamicField: React.FC<Props> = ({
             }
             onChange={onChangeEventValue}
             multiple={item.repeats}
-            disabled={disabled}
+            {...commonInputProps}
           />
-        </Grid>
+        </InputContainer>
       );
     case FieldType.choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedVal = value ? value : item.repeats ? [] : null;
 
+      let inputComponent;
       if (
         item.answerValueSet &&
         ['projects', 'organizations'].includes(item.answerValueSet)
@@ -205,26 +162,20 @@ const DynamicField: React.FC<Props> = ({
           item.answerValueSet === 'projects'
             ? ProjectSelect
             : OrganizationSelect;
-        return (
-          <Grid item sx={{ maxWidth, minWidth }}>
-            <SelectComponent
-              label={label}
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              value={selectedVal}
-              onChange={onChangeEventValue}
-              multiple={item.repeats}
-              disabled={disabled}
-            />
-          </Grid>
+        inputComponent = (
+          <SelectComponent
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            value={selectedVal}
+            onChange={onChangeEventValue}
+            multiple={item.repeats}
+            disabled={disabled}
+          />
         );
-      }
-
-      return (
-        <Grid item sx={{ maxWidth, minWidth }}>
+      } else {
+        inputComponent = (
           <FormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedVal}
-            label={label}
             options={
               item.answerValueSet
                 ? resolveAnswerValueSet(item.answerValueSet) || []
@@ -232,9 +183,15 @@ const DynamicField: React.FC<Props> = ({
             }
             onChange={onChangeEventValue}
             multiple={item.repeats}
-            disabled={disabled}
+            {...commonInputProps}
           />
-        </Grid>
+        );
+      }
+
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          {inputComponent}
+        </InputContainer>
       );
     default:
       return <></>;

@@ -1,5 +1,5 @@
 import { Autocomplete, AutocompleteProps } from '@mui/material';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -11,7 +11,7 @@ export interface GenericSelectProps<
     AutocompleteProps<T, Multiple, boolean, Creatable, React.ElementType>,
     'renderInput'
   > {
-  label?: string;
+  label?: ReactNode;
   textInputProps?: TextInputProps;
 }
 
