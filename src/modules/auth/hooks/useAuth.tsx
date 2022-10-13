@@ -112,7 +112,8 @@ export function AuthProvider({
           logout();
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.log(err);
         console.log('Invalid session, logging out');
         logout();
       });
