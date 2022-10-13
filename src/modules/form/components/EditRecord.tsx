@@ -59,13 +59,14 @@ const EditRecord = <
 
   const submitHandler = (values: Record<string, any>) => {
     // Transform values into client input query variables
-    const inputValues = transformSubmitValues(
+    const inputValues = transformSubmitValues({
       definition,
       values,
       mappingKey,
-      true,
-      true
-    );
+      autofillNotCollected: true,
+      autofillNulls: true,
+      autofillBooleans: true,
+    });
     console.log(JSON.stringify(inputValues, null, 2));
 
     const input = {
@@ -73,7 +74,10 @@ const EditRecord = <
       id: record?.id,
     };
 
-    void mutateFunction({ variables: { input } as QueryVariables });
+    void mutateFunction({
+      variables: { input } as QueryVariables,
+      onCompleted: () => window.scrollTo(0, 0),
+    });
   };
 
   if (error) console.error(error); // FIXME handle error on form submission

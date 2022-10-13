@@ -27,21 +27,21 @@ const ItemGroup = ({
   );
   if (nestingLevel === 0) {
     return (
-      <Paper
-        sx={{
-          ml: 1,
-          mt: 2,
-          py: 3,
-          px: 2.5,
-        }}
-      >
-        {item.text && (
-          <Typography variant='h5' sx={{ mb: 3 }}>
-            {item.text}
-          </Typography>
-        )}
-        {wrappedChildren}
-      </Paper>
+      <Grid item>
+        <Paper
+          sx={{
+            py: 3,
+            px: 2.5,
+          }}
+        >
+          {item.text && (
+            <Typography variant='h5' sx={{ mb: 3 }}>
+              {item.text}
+            </Typography>
+          )}
+          {wrappedChildren}
+        </Paper>
+      </Grid>
     );
   }
   if (nestingLevel === 1) {

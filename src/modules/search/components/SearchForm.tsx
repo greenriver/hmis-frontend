@@ -64,7 +64,11 @@ const SearchForm: React.FC<SearchFormProps> = ({
     return (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent) => {
       event.preventDefault();
       // Transform values into ClientSearchInput query variables
-      const variables = transformSubmitValues(definition, values, MAPPING_KEY);
+      const variables = transformSubmitValues({
+        definition,
+        values,
+        mappingKey: MAPPING_KEY,
+      });
       onSubmit({
         ...variables,
         textSearch: values.textSearch,

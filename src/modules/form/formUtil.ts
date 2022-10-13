@@ -1,7 +1,13 @@
 import { format } from 'date-fns';
 import { isNil } from 'lodash-es';
 
-import { AnswerOption, FormDefinition, isAnswerOption, Item } from './types';
+import {
+  AnswerOption,
+  FieldType,
+  FormDefinition,
+  isAnswerOption,
+  Item,
+} from './types';
 
 import { HmisEnums } from '@/types/gqlEnums';
 
@@ -117,32 +123,40 @@ const dataNotCollectedCode = (item: Item): string | undefined => {
     ? resolveAnswerValueSet(item.answerValueSet)
     : item.answerOption || [];
 
-  return options.find((opt) =>
-    opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED')
+  return options.find(
+    (opt) =>
+      opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED') ||
+      opt?.valueCoding?.code === 'NOT_APPLICABLE'
   )?.valueCoding?.code;
+};
+
+type TransformSubmitValuesParams = {
+  definition: FormDefinition;
+  /** form state (from DynamicForm) to transform */
+  values: Record<string, any>;
+  /** key used in the FormDefinition to specify the record field that corresponds to the question */
+  mappingKey: string;
+  /** whether to fill unanswered questions with Data Not Collected option (if present) */
+  autofillNotCollected?: boolean;
+  /** whether to fill unanswered questions with `null` */
+  autofillNulls?: boolean;
+  /** whether to fill unanswered boolean questions `false` */
+  autofillBooleans?: boolean;
 };
 
 /**
  * Given the form state of a completed form, transform it into
  * query variables for a mutation. This is used for dynamic forms that
  * edit one record directly, like the Client, Project, and Organization edit screens.
- *
- * @param definition
- * @param values form state (from DynamicForm) to transform
- * @param mappingKey key used in the FormDefinition to specify the record field that corresponds to the question
- * @param autofillNotCollected whether to fill unanswered questions with Data Not Collected option (if present)
- * @param autofillNulls whether to fill unanswered questions with null
- *
- * @returns values extracted from the form state, ready to submit
- *  to a graphql mutation as query variables.
  */
-export const transformSubmitValues = (
-  definition: FormDefinition,
-  values: Record<string, any>,
-  mappingKey: string,
+export const transformSubmitValues = ({
+  definition,
+  values,
+  mappingKey,
   autofillNotCollected = false,
-  autofillNulls = false
-) => {
+  autofillNulls = false,
+  autofillBooleans = false,
+}: TransformSubmitValuesParams) => {
   const result: Record<string, any> = {};
 
   // Recursive helper for traversing the FormDefinition
@@ -176,6 +190,13 @@ export const transformSubmitValues = (
       }
       if (autofillNulls && isNil(transformed[key])) {
         transformed[key] = null;
+      }
+      if (
+        autofillBooleans &&
+        isNil(transformed[key]) &&
+        item.type === FieldType.boolean
+      ) {
+        transformed[key] = false;
       }
     });
   }

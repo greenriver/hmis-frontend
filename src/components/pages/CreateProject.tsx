@@ -26,7 +26,6 @@ const CreateProject = () => {
 
   const onCompleted = useCallback(
     (data: CreateProjectMutation) => {
-      console.log(data);
       const id = data?.createProject?.project?.id;
       if (id) {
         navigate(generatePath(Routes.PROJECT, { projectId: id }));

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Stack } from '@mui/material';
+import { Alert, Box, Button, Grid, Stack } from '@mui/material';
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -103,14 +103,14 @@ const DynamicForm: React.FC<Props> = ({
 
   return (
     <Box component='form' onSubmit={submitHandler}>
-      <Grid
-        container
-        // direction='row'
-        direction='column'
-        rowSpacing={2}
-        columnSpacing={2}
-        sx={{ mb: 2 }}
-      >
+      <Grid container direction='column' spacing={2}>
+        {errors && (
+          <Grid item>
+            <Alert severity='error' sx={{ mb: 1 }}>
+              Please fix outstanding errors.
+            </Alert>
+          </Grid>
+        )}
         {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
