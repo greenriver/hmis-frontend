@@ -69,7 +69,7 @@
       "item": [
         {
           "type": "choice",
-          "required": false,
+          "required": true,
           "linkId": "2.02.6",
           "text": "Project Type",
           "answerValueSet": "ProjectType",

@@ -7,6 +7,8 @@ import {
 
 import TextInput, { TextInputProps } from './TextInput';
 
+import { DynamicInputCommonProps } from '@/modules/form/types';
+
 interface Props
   extends Omit<DatePickerProps<DateType, DateType>, 'renderInput'> {
   sx?: SxProps<Theme>;
@@ -16,12 +18,13 @@ interface Props
 const DatePicker: React.FC<Props> = ({
   sx,
   textInputProps,
+  error,
   ...props
-}: Props) => (
+}: Props & DynamicInputCommonProps) => (
   <MuiDatePicker
     {...props}
     renderInput={(params) => (
-      <TextInput sx={sx} {...textInputProps} {...params} />
+      <TextInput sx={sx} {...textInputProps} {...params} error={error} />
     )}
   />
 );

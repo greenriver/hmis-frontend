@@ -1,6 +1,6 @@
 import { Grid } from '@mui/material';
 
-// import DetailGrid from '@/components/elements/DetailGrid';
+import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
 
@@ -17,14 +17,16 @@ const OrganizationDetails = ({
         </MultilineTypography>
       </Grid>
     )}
-    {/* <DetailGrid
-      data={[
-        {
-          label: 'Victim Service Provider',
-          value: organization?.victimServiceProvider ? 'Yes' : 'No',
-        },
-      ]}
-    /> */}
+    {organization?.victimServiceProvider && (
+      <DetailGrid
+        data={[
+          {
+            label: 'Victim Service Provider',
+            value: organization?.victimServiceProvider ? 'Yes' : 'No',
+          },
+        ]}
+      />
+    )}
   </Grid>
 );
 

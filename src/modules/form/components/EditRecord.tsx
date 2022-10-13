@@ -17,7 +17,7 @@ interface Props<RecordType, Query, QueryVariables> {
 
   inputVariables?: Record<string, any>;
   onCompleted: (data: Query) => void;
-  getErrors: (data: Query) => ValidationError[] | null | undefined;
+  getErrors: (data: Query) => ValidationError[] | undefined;
 }
 
 /**
@@ -36,12 +36,11 @@ const EditRecord = <
   onCompleted,
   inputVariables = {},
 }: Props<RecordType, Query, QueryVariables>) => {
-  const [errors, setErrors] = useState<ValidationError[] | null | undefined>();
+  const [errors, setErrors] = useState<ValidationError[] | undefined>();
   const [mutateFunction, { loading, error }] = useMutation<
     Query,
     QueryVariables
   >(queryDocument, {
-    // TODO handle validations internally, only call this on success
     onCompleted: (data) => {
       const errors = getErrors(data);
       setErrors(errors);

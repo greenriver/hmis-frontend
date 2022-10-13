@@ -7,10 +7,12 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
-export interface TextInputProps
-  extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
+import { DynamicInputCommonProps } from '@/modules/form/types';
+
+interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
 }
+export type TextInputProps = Props & DynamicInputCommonProps;
 
 const TextInput = ({
   inputProps = {},

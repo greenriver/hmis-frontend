@@ -35,8 +35,9 @@
         },
         {
           "type": "boolean",
-          "required": true,
-          "hidden": true,
+          "required": false,
+          "hidden": false,
+          "text": "Victim Service Provider",
           "linkId": "victimServiceProvider",
           "mapping": {
             "organizationMutationInput": "victimServiceProvider"
