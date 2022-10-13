@@ -52,7 +52,7 @@ const CreateProject = () => {
             CreateProjectMutation,
             CreateProjectMutationVariables
           >
-            formDefinition={PROJECT_FORM}
+            definition={PROJECT_FORM}
             mappingKey={MAPPING_KEY}
             queryDocument={CreateProjectDocument}
             onCompleted={onCompleted}
@@ -60,6 +60,7 @@ const CreateProject = () => {
             getErrors={(data: CreateProjectMutation) =>
               data?.createProject?.errors
             }
+            submitButtonText='Create Project'
           />
         </Grid>
       </Grid>

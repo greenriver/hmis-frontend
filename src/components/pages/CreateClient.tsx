@@ -5,7 +5,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import PageHeader from '../layout/PageHeader';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import formData from '@/modules/form/data/intake.json';
+import formData from '@/modules/form/data/client.json';
 import { FormDefinition } from '@/modules/form/types';
 import { Routes } from '@/routes/routes';
 import {
@@ -47,7 +47,7 @@ const CreateClient: React.FC = () => {
               CreateClientMutation,
               CreateClientMutationVariables
             >
-              formDefinition={CLIENT_FORM}
+              definition={CLIENT_FORM}
               mappingKey={MAPPING_KEY}
               // record={client}
               queryDocument={CreateClientDocument}
@@ -55,6 +55,7 @@ const CreateClient: React.FC = () => {
               getErrors={(data: CreateClientMutation) =>
                 data?.createClient?.errors
               }
+              submitButtonText='Create Client'
             />
           </Grid>
         </Grid>

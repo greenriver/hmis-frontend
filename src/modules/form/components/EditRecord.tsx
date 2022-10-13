@@ -1,20 +1,23 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { useMemo, useState } from 'react';
 
-import DynamicForm from '@/modules/form/components/DynamicForm';
+import DynamicForm, {
+  Props as DynamicFormProps,
+} from '@/modules/form/components/DynamicForm';
 import {
   createInitialValues,
   transformSubmitValues,
 } from '@/modules/form/formUtil';
-import { FormDefinition } from '@/modules/form/types';
 import { ValidationError } from '@/types/gqlTypes';
 
-interface Props<RecordType, Query, QueryVariables> {
-  formDefinition: FormDefinition;
-  mappingKey: string;
+interface Props<RecordType, Query, QueryVariables>
+  extends Omit<
+    DynamicFormProps,
+    'initialValues' | 'submitHandler' | 'errors' | 'loading' | 'onSubmit'
+  > {
   record?: RecordType;
+  mappingKey: string;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
-
   inputVariables?: Record<string, any>;
   onCompleted: (data: Query) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
@@ -28,13 +31,14 @@ const EditRecord = <
   Query extends Record<string, string | Record<string, unknown> | null>,
   QueryVariables extends { input: unknown }
 >({
-  formDefinition,
+  definition,
   mappingKey,
   record,
   queryDocument,
   getErrors,
   onCompleted,
   inputVariables = {},
+  ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
   const [mutateFunction, { loading, error }] = useMutation<
@@ -50,13 +54,13 @@ const EditRecord = <
 
   const initialValues = useMemo(() => {
     if (!record) return {};
-    return createInitialValues(formDefinition, record, mappingKey);
-  }, [record, mappingKey, formDefinition]);
+    return createInitialValues(definition, record, mappingKey);
+  }, [record, mappingKey, definition]);
 
   const submitHandler = (values: Record<string, any>) => {
     // Transform values into client input query variables
     const inputValues = transformSubmitValues(
-      formDefinition,
+      definition,
       values,
       mappingKey,
       true,
@@ -76,13 +80,15 @@ const EditRecord = <
 
   return (
     <DynamicForm
-      definition={formDefinition}
+      definition={definition}
+      mappingKey={mappingKey}
       onSubmit={submitHandler}
       submitButtonText='Save Changes'
       discardButtonText='Discard'
       initialValues={initialValues}
       loading={loading}
       errors={errors}
+      {...props}
     />
   );
 };

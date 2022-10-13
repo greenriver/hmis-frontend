@@ -1,5 +1,5 @@
 {
-  "name": "client-intake",
+  "name": "client-record",
   "item": [
     {
       "type": "group",
@@ -9,7 +9,7 @@
       "item": [
         {
           "type": "string",
-          "required": true,
+          "required": false,
           "linkId": "first-name",
           "text": "First Name",
           "mapping": {
@@ -36,7 +36,7 @@
         },
         {
           "type": "string",
-          "required": true,
+          "required": false,
           "linkId": "last-name",
           "text": "Last Name",
           "mapping": {

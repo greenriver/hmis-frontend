@@ -9,8 +9,9 @@ import DynamicField from './DynamicField';
 
 import { ValidationError } from '@/types/gqlTypes';
 
-interface Props {
+export interface Props {
   definition: FormDefinition;
+  mappingKey?: string; // mapping key in form definition, used to map errors to Items
   onSubmit: (values: Record<string, any>) => void;
   submitButtonText?: string;
   discardButtonText?: string;
@@ -25,6 +26,7 @@ const DynamicForm: React.FC<Props> = ({
   submitButtonText,
   discardButtonText,
   loading,
+  mappingKey,
   initialValues = {},
   errors,
 }) => {
@@ -32,7 +34,7 @@ const DynamicForm: React.FC<Props> = ({
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(initialValues);
 
-  if (errors) console.log(errors);
+  if (errors) console.log('Validation errors', errors);
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
@@ -65,12 +67,10 @@ const DynamicForm: React.FC<Props> = ({
     return shouldEnableItem(values[linkId], item);
   };
 
-  const mappingKey = 'projectMutationInput';
-
   // Get errors for a particular field
   const getFieldErrors = useCallback(
     (item: Item) => {
-      if (!errors) return undefined;
+      if (!errors || !mappingKey) return undefined;
       if (!item.mapping || !item.mapping[mappingKey]) return undefined;
       const attribute = item.mapping[mappingKey];
       return errors.filter((e) => e.attribute === attribute);
@@ -113,7 +113,7 @@ const DynamicForm: React.FC<Props> = ({
       >
         {definition?.item.map((item) => renderItem(item, 0))}
       </Grid>
-      <Stack direction='row' spacing={1} sx={{ mt: 4 }}>
+      <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
         <Button variant='contained' type='submit' disabled={!!loading}>
           {loading ? 'Submitting...' : submitButtonText || 'Submit'}
         </Button>
