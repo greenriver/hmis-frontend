@@ -73,7 +73,10 @@ const EditRecord = <
       id: record?.id,
     };
 
-    void mutateFunction({ variables: { input } as QueryVariables });
+    void mutateFunction({
+      variables: { input } as QueryVariables,
+      onCompleted: () => window.scrollTo(0, 0),
+    });
   };
 
   if (error) console.error(error); // FIXME handle error on form submission
