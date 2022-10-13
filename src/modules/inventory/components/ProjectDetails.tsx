@@ -1,5 +1,4 @@
 import { Grid, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
@@ -10,7 +9,14 @@ import {
   HopwaMedAssistedLivingFac,
   ProjectAllFieldsFragment,
   ProjectType,
+  TargetPopulation,
 } from '@/types/gqlTypes';
+
+const notSpecified = (
+  <Typography variant='inherit' color='text.secondary'>
+    Not specified
+  </Typography>
+);
 
 const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
   const data = useMemo(
@@ -35,19 +41,20 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Continuum Project',
-        value: HmisUtil.yesNo(project.continuumProject) || '-',
+        value: HmisUtil.yesNo(project.continuumProject) || notSpecified,
       },
       {
         label: 'Housing Type',
         value:
           (project.housingType && HmisEnums.HousingType[project.housingType]) ||
-          '-',
+          notSpecified,
       },
       ...(project.projectType === ProjectType.ServicesOnly
         ? [
             {
               label: 'Residential Affiliation',
-              value: HmisUtil.yesNo(project.residentialAffiliation) || '-',
+              value:
+                HmisUtil.yesNo(project.residentialAffiliation) || notSpecified,
             },
           ]
         : []),
@@ -58,33 +65,39 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
               value:
                 (project.trackingMethod &&
                   HmisEnums.TrackingMethod[project.trackingMethod]) ||
-                '-',
+                notSpecified,
             },
           ]
         : []),
       {
         label: 'HMIS Participating Project',
-        value: HmisUtil.yesNo(project.HMISParticipatingProject) || '-',
+        value: HmisUtil.yesNo(project.HMISParticipatingProject) || notSpecified,
       },
-      {
-        label: 'Target Population',
-        value:
-          (project.targetPopulation &&
-            HmisEnums.TargetPopulation[project.targetPopulation]) ||
-          '-',
-      },
-      {
-        label: 'HOPWA Medical Assisted Living Facility',
-        value:
-          isNil(project.HOPWAMedAssistedLivingFac) ||
-          project.HOPWAMedAssistedLivingFac ===
-            HopwaMedAssistedLivingFac.NonHopwaFundedProject
-            ? '-'
-            : HmisUtil.yesNo(
+      ...(project.targetPopulation &&
+      project.targetPopulation !== TargetPopulation.NotApplicable
+        ? [
+            {
+              label: 'Target Population',
+              value:
+                (project.targetPopulation &&
+                  HmisEnums.TargetPopulation[project.targetPopulation]) ||
+                notSpecified,
+            },
+          ]
+        : []),
+      ...(project.HOPWAMedAssistedLivingFac &&
+      project.HOPWAMedAssistedLivingFac !==
+        HopwaMedAssistedLivingFac.NonHopwaFundedProject
+        ? [
+            {
+              label: 'HOPWA Medical Assisted Living Facility',
+              value: HmisUtil.yesNo(
                 project.HOPWAMedAssistedLivingFac ===
                   HopwaMedAssistedLivingFac.Yes
               ),
-      },
+            },
+          ]
+        : []),
     ],
     [project]
   );

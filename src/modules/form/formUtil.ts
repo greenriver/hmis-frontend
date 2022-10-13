@@ -123,8 +123,10 @@ const dataNotCollectedCode = (item: Item): string | undefined => {
     ? resolveAnswerValueSet(item.answerValueSet)
     : item.answerOption || [];
 
-  return options.find((opt) =>
-    opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED')
+  return options.find(
+    (opt) =>
+      opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED') ||
+      opt?.valueCoding?.code === 'NOT_APPLICABLE'
   )?.valueCoding?.code;
 };
 
