@@ -61,6 +61,7 @@ export interface Item {
   prefix?: string; // 	E.g. "1(a)", "2.5.3"
   text?: string; // Primary text for the item
   required?: boolean; // Whether the item must be included in data results
+  hidden?: boolean; // Whether the item should always be hidden
   readOnly?: boolean; // Don't allow human editing
   repeats?: boolean; // Whether the item may repeat (for choice types, this means multiple choice)
   maxLength?: number; // No more than this many characters

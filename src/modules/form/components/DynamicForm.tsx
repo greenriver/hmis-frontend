@@ -49,6 +49,7 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   const isEnabled = (item: Item): boolean => {
+    if (item.hidden) return false;
     if (!item.enableWhen) {
       // If it has nested items, only show if has any enabled children.
       // Otherwise, show it.

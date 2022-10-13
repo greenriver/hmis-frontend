@@ -40,7 +40,7 @@ const ItemGroup = ({
       direction={direction}
       rowSpacing={isColumn ? 2 : 0}
       columnSpacing={isColumn ? 0 : 2}
-      sx={{ '& .MuiGrid-item:first-child': { pt: 0 }, mt: 0 }}
+      sx={{ '& .MuiGrid-item:first-of-type': { pt: 0 }, mt: 0 }}
     >
       {children}
     </Grid>
