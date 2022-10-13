@@ -102,29 +102,27 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   return (
-    <>
-      <Box component='form' onSubmit={submitHandler}>
-        <Grid container direction='column' spacing={2}>
-          {errors && (
-            <Grid item>
-              <Alert severity='error' sx={{ mb: 1 }}>
-                Please fix outstanding errors.
-              </Alert>
-            </Grid>
-          )}
-          {definition?.item.map((item) => renderItem(item, 0))}
-        </Grid>
-        <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
-          <Button variant='contained' type='submit' disabled={!!loading}>
-            {loading ? 'Submitting...' : submitButtonText || 'Submit'}
-          </Button>
-          {/* <Button variant='outlined'>Save Draft</Button> */}
-          <Button variant='gray' onClick={() => navigate(-1)}>
-            {discardButtonText || 'Discard'}
-          </Button>
-        </Stack>
-      </Box>
-    </>
+    <Box component='form' onSubmit={submitHandler}>
+      <Grid container direction='column' spacing={2}>
+        {errors && (
+          <Grid item>
+            <Alert severity='error' sx={{ mb: 1 }}>
+              Please fix outstanding errors.
+            </Alert>
+          </Grid>
+        )}
+        {definition?.item.map((item) => renderItem(item, 0))}
+      </Grid>
+      <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
+        <Button variant='contained' type='submit' disabled={!!loading}>
+          {loading ? 'Submitting...' : submitButtonText || 'Submit'}
+        </Button>
+        {/* <Button variant='outlined'>Save Draft</Button> */}
+        <Button variant='gray' onClick={() => navigate(-1)}>
+          {discardButtonText || 'Discard'}
+        </Button>
+      </Stack>
+    </Box>
   );
 };
 
