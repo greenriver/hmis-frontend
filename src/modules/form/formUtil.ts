@@ -1,5 +1,6 @@
-import { format } from 'date-fns';
 import { isNil } from 'lodash-es';
+
+import { formatDateForGql, parseHmisDateString } from '../hmis/hmisUtil';
 
 import {
   AnswerOption,
@@ -86,13 +87,13 @@ const findItem = (
  * @param item corresponding FormDefinition item
  * @returns transformed value
  */
-const transformFormValueToGqlValue = (value: any, item: Item): any => {
+export const formValueToGqlValue = (value: any, item: Item): any => {
   if (value instanceof Date) {
-    return format(value, 'yyyy-MM-dd');
+    return formatDateForGql(value);
   }
 
   if (
-    item.type === 'choice' &&
+    item.type === FieldType.choice &&
     item.answerValueSet &&
     ['projects', 'organizations'].includes(item.answerValueSet)
   ) {
@@ -102,7 +103,9 @@ const transformFormValueToGqlValue = (value: any, item: Item): any => {
     } else if (value) {
       return (value as { id: string }).id;
     }
-  } else if (['choice', 'openchoice'].includes(item.type)) {
+  } else if (
+    [FieldType.choice, FieldType.openchoice].includes(item.type as FieldType)
+  ) {
     if (Array.isArray(value)) {
       return value.map(
         (option: AnswerOption) => option.valueString || option.valueCoding?.code
@@ -176,7 +179,8 @@ export const transformSubmitValues = ({
 
       let value;
       if (item.linkId in values) {
-        value = transformFormValueToGqlValue(values[item.linkId], item);
+        // Transform into gql value, for example Date -> YYYY-MM-DD string
+        value = formValueToGqlValue(values[item.linkId], item);
       }
 
       if (typeof value !== 'undefined') {
@@ -254,6 +258,13 @@ export const createInitialValues = (
         values[item.linkId] = option || {
           valueCoding: { code: record[key] },
         };
+      } else if (
+        (item.type === FieldType.date || item.type === FieldType.dob) &&
+        typeof record[key] === 'string'
+      ) {
+        // Convert date string to Date object
+        console.log('parsing date string to create initial value');
+        values[item.linkId] = parseHmisDateString(record[key]);
       } else {
         // Set the property directly as the initial form value
         values[item.linkId] = record[key];

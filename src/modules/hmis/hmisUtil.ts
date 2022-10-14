@@ -1,4 +1,4 @@
-import { differenceInYears, format, parseISO } from 'date-fns';
+import { differenceInYears, format, isValid, parse, parseISO } from 'date-fns';
 import { isNil } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
@@ -17,9 +17,30 @@ import {
  * Utility functions for transforming HMIS data elements into strings
  */
 
-const DATE_FORMAT = 'MM/dd/yyyy';
+const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
+const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
 
-const formatDate = (date: Date) => format(date, DATE_FORMAT);
+export const formatDateForGql = (date: Date) => {
+  try {
+    return format(date, HMIS_DATE_FORMAT);
+  } catch (RangeError) {
+    console.error(
+      `Failed to format date '${date.toString()}' as ${HMIS_DATE_FORMAT}`
+    );
+    return null;
+  }
+};
+
+const formatDateForDisplay = (date: Date) => {
+  try {
+    return format(date, DATE_DISPLAY_FORMAT);
+  } catch (RangeError) {
+    console.error(
+      `Failed to format date '${date.toString()}' as ${DATE_DISPLAY_FORMAT}`
+    );
+    return null;
+  }
+};
 
 export const yesNo = (bool: boolean | null | undefined) => {
   if (isNil(bool)) return null;
@@ -29,13 +50,38 @@ export const yesNo = (bool: boolean | null | undefined) => {
 // Prefix on descriptions, like "(8) Client doesn't know"
 const numericPrefix = /^\([0-9]*\)\s/;
 
-export const parseAndFormatDate = (date: string) => {
-  if (!date) return date;
-  try {
-    return formatDate(parseISO(date));
-  } catch (RangeError) {
-    return date;
+export const parseHmisDateString = (dateString: string): Date | null => {
+  // Check format first because parsing is too lenient
+  // https://github.com/date-fns/date-fns/issues/942
+  if (!dateString.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
+    return null;
   }
+  const date = parse(dateString, HMIS_DATE_FORMAT, new Date());
+  return isValid(date) ? date : null;
+};
+
+export const parseHmisDateTimeString = (dateString: string): Date | null => {
+  console.log(dateString);
+  const date = parseISO(dateString);
+  if (!isValid(date)) {
+    console.error(`Failed to parse datetime: ${dateString}`);
+    return null;
+  }
+  return date;
+};
+
+export const parseAndFormatDate = (dateString: string): string => {
+  if (!dateString) return dateString;
+  const parsed = parseHmisDateString(dateString);
+  if (!parsed) return dateString;
+  return formatDateForDisplay(parsed) || dateString;
+};
+
+export const parseAndFormatDateTime = (dateString: string): string => {
+  if (!dateString) return dateString;
+  const parsed = parseHmisDateTimeString(dateString);
+  if (!parsed) return dateString;
+  return formatDateForDisplay(parsed) || dateString;
 };
 
 export const clientName = (client: ClientNameFragment) =>
@@ -84,7 +130,7 @@ export const maskedSSN = (client: ClientFieldsFragment) => {
 };
 
 export const lastUpdated = (client: ClientFieldsFragment) => {
-  return parseAndFormatDate(client.dateUpdated);
+  return parseAndFormatDateTime(client.dateUpdated);
 };
 
 // TODO implement
