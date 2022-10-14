@@ -5,6 +5,8 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
+import { InactiveBanner } from './Project';
+
 import EditRecord from '@/modules/form/components/EditRecord';
 import formData from '@/modules/form/data/project.json';
 import { FormDefinition } from '@/modules/form/types';
@@ -52,6 +54,7 @@ const EditProject = () => {
       </Typography>
       <Grid container>
         <Grid item xs={9}>
+          <InactiveBanner project={project} />
           <EditRecord<
             ProjectAllFieldsFragment,
             UpdateProjectMutation,

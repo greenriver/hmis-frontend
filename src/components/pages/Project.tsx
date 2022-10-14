@@ -1,4 +1,5 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, Grid, Paper, Stack, Typography } from '@mui/material';
+import { addDays, isBefore } from 'date-fns';
 import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
@@ -7,10 +8,26 @@ import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import RouterLink from '../elements/RouterLink';
 
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
+import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
+
+export const InactiveBanner = ({
+  project,
+}: {
+  project: ProjectAllFieldsFragment;
+}) => {
+  if (!project.operatingEndDate) return null;
+  const endDate = parseHmisDateString(project.operatingEndDate);
+  return endDate && isBefore(endDate, addDays(new Date(), -1)) ? (
+    <Alert severity='info' sx={{ mb: 2 }}>
+      This project is inactive
+    </Alert>
+  ) : null;
+};
 
 const Project = () => {
   const { projectId } = useParams() as {
@@ -29,6 +46,7 @@ const Project = () => {
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
+          <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h6' sx={{ mb: 2 }}>
               Project Details
