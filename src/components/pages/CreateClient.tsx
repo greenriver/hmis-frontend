@@ -39,7 +39,7 @@ const CreateClient: React.FC = () => {
       <PageHeader>
         <Typography variant='h5'>Add New Client</Typography>
       </PageHeader>
-      <Container maxWidth='lg' sx={{ pt: 3, pb: 6 }}>
+      <Container maxWidth='lg' sx={{ pt: 3, pb: 20 }}>
         <Grid container>
           <Grid item xs={8}>
             <EditRecord<
