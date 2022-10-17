@@ -61,7 +61,6 @@ export const parseHmisDateString = (dateString: string): Date | null => {
 };
 
 export const parseHmisDateTimeString = (dateString: string): Date | null => {
-  console.log(dateString);
   const date = parseISO(dateString);
   if (!isValid(date)) {
     console.error(`Failed to parse datetime: ${dateString}`);

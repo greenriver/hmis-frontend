@@ -59,16 +59,25 @@ export function AuthProvider({
           setUser(user);
           setPrompt2fa(false);
           navigate((state as RouteLocationState)?.prev || '/');
+          setLoading(false);
         })
         .catch((error: Error) => {
           if (isHmisResponseError(error) && error.type === 'mfa_required') {
             setPrompt2fa(true);
+            setLoading(false);
+          } else if (
+            isHmisResponseError(error) &&
+            error.type === 'unverified_request'
+          ) {
+            console.log('CSRF token is expired, fetching a new one...');
+            return sessionsApi
+              .fetchCurrentUser()
+              .catch(() => {})
+              .then(() => login(params));
           } else {
             setError(error);
+            setLoading(false);
           }
-        })
-        .finally(() => {
-          setLoading(false);
         });
     },
     [setLoading, navigate, state]
