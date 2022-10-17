@@ -60,12 +60,7 @@ const DynamicField: React.FC<Props> = ({
   const maxWidth = 600 - nestingLevel * 26;
   const minWidth = 250;
 
-  const commonContainerProps = {
-    // If we already show a required indicator, no need for message
-    errors: item.required
-      ? errors?.filter((e) => e.type !== 'required')
-      : errors,
-  };
+  const commonContainerProps = { errors };
 
   const commonInputProps: DynamicInputCommonProps = {
     disabled,

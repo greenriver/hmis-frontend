@@ -107,7 +107,12 @@ const DynamicForm: React.FC<Props> = ({
         {errors && (
           <Grid item>
             <Alert severity='error' sx={{ mb: 1 }}>
-              Please fix outstanding errors.
+              Please fix outstanding errors:
+              <Box component='ul' sx={{ pl: 2 }}>
+                {errors.map(({ message, fullMessage }) => (
+                  <li key={fullMessage || message}>{fullMessage || message}</li>
+                ))}
+              </Box>
             </Alert>
           </Grid>
         )}
