@@ -81,3 +81,45 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
     }
   }
 }
+
+query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    inventories(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...InventoryFields
+      }
+    }
+  }
+}
+
+query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    projectCocs(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectCocFields
+      }
+    }
+  }
+}
+
+query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    funders(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FunderFields
+      }
+    }
+  }
+}
