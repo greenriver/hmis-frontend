@@ -2851,6 +2851,79 @@ export type GetProjectQuery = {
   } | null;
 };
 
+export type GetFunderQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetFunderQuery = {
+  __typename?: 'Query';
+  funder?: {
+    __typename?: 'Funder';
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    endDate?: string | null;
+    funder: FundingSource;
+    grantId: string;
+    id: string;
+    otherFunder?: string | null;
+    startDate: string;
+  } | null;
+};
+
+export type GetInventoryQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetInventoryQuery = {
+  __typename?: 'Query';
+  inventory?: {
+    __typename?: 'Inventory';
+    availability?: Availability | null;
+    bedInventory: number;
+    chBedInventory?: number | null;
+    chVetBedInventory?: number | null;
+    chYouthBedInventory?: number | null;
+    cocCode: string;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    esBedType?: BedType | null;
+    householdType: HouseholdType;
+    id: string;
+    inventoryEndDate?: string | null;
+    inventoryStartDate: string;
+    otherBedInventory?: number | null;
+    unitInventory: number;
+    vetBedInventory?: number | null;
+    youthBedInventory?: number | null;
+    youthVetBedInventory?: number | null;
+  } | null;
+};
+
+export type GetProjectCocQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectCocQuery = {
+  __typename?: 'Query';
+  projectCoc?: {
+    __typename?: 'ProjectCoc';
+    address1?: string | null;
+    address2?: string | null;
+    city?: string | null;
+    cocCode: string;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    geocode: string;
+    geographyType?: GeographyType | null;
+    id: string;
+    state?: string | null;
+    zip?: string | null;
+  } | null;
+};
+
 export type GetOrganizationQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -3195,6 +3268,48 @@ export type GetProjectFundersQuery = {
   } | null;
 };
 
+export type CreateInventoryMutationVariables = Exact<{
+  input: CreateInventoryInput;
+}>;
+
+export type CreateInventoryMutation = {
+  __typename?: 'Mutation';
+  createInventory?: {
+    __typename?: 'CreateInventoryPayload';
+    clientMutationId?: string | null;
+    inventory?: {
+      __typename?: 'Inventory';
+      availability?: Availability | null;
+      bedInventory: number;
+      chBedInventory?: number | null;
+      chVetBedInventory?: number | null;
+      chYouthBedInventory?: number | null;
+      cocCode: string;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      esBedType?: BedType | null;
+      householdType: HouseholdType;
+      id: string;
+      inventoryEndDate?: string | null;
+      inventoryStartDate: string;
+      otherBedInventory?: number | null;
+      unitInventory: number;
+      vetBedInventory?: number | null;
+      youthBedInventory?: number | null;
+      youthVetBedInventory?: number | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type UpdateInventoryMutationVariables = Exact<{
   input: UpdateInventoryInput;
 }>;
@@ -3247,6 +3362,182 @@ export type DeleteInventoryMutation = {
     __typename?: 'DeleteInventoryPayload';
     clientMutationId?: string | null;
     inventory?: { __typename?: 'Inventory'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type CreateFunderMutationVariables = Exact<{
+  input: CreateFunderInput;
+}>;
+
+export type CreateFunderMutation = {
+  __typename?: 'Mutation';
+  createFunder?: {
+    __typename?: 'CreateFunderPayload';
+    clientMutationId?: string | null;
+    funder?: {
+      __typename?: 'Funder';
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      endDate?: string | null;
+      funder: FundingSource;
+      grantId: string;
+      id: string;
+      otherFunder?: string | null;
+      startDate: string;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type UpdateFunderMutationVariables = Exact<{
+  input: UpdateFunderInput;
+}>;
+
+export type UpdateFunderMutation = {
+  __typename?: 'Mutation';
+  updateFunder?: {
+    __typename?: 'UpdateFunderPayload';
+    clientMutationId?: string | null;
+    funder?: {
+      __typename?: 'Funder';
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      endDate?: string | null;
+      funder: FundingSource;
+      grantId: string;
+      id: string;
+      otherFunder?: string | null;
+      startDate: string;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type DeleteFunderMutationVariables = Exact<{
+  input: DeleteFunderInput;
+}>;
+
+export type DeleteFunderMutation = {
+  __typename?: 'Mutation';
+  deleteFunder?: {
+    __typename?: 'DeleteFunderPayload';
+    clientMutationId?: string | null;
+    funder?: { __typename?: 'Funder'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type CreateProjectCocMutationVariables = Exact<{
+  input: CreateProjectCocInput;
+}>;
+
+export type CreateProjectCocMutation = {
+  __typename?: 'Mutation';
+  createProjectCoc?: {
+    __typename?: 'CreateProjectCocPayload';
+    clientMutationId?: string | null;
+    projectCoc?: {
+      __typename?: 'ProjectCoc';
+      address1?: string | null;
+      address2?: string | null;
+      city?: string | null;
+      cocCode: string;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      geocode: string;
+      geographyType?: GeographyType | null;
+      id: string;
+      state?: string | null;
+      zip?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type UpdateProjectCocMutationVariables = Exact<{
+  input: UpdateProjectCocInput;
+}>;
+
+export type UpdateProjectCocMutation = {
+  __typename?: 'Mutation';
+  updateProjectCoc?: {
+    __typename?: 'UpdateProjectCocPayload';
+    clientMutationId?: string | null;
+    projectCoc?: {
+      __typename?: 'ProjectCoc';
+      address1?: string | null;
+      address2?: string | null;
+      city?: string | null;
+      cocCode: string;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      geocode: string;
+      geographyType?: GeographyType | null;
+      id: string;
+      state?: string | null;
+      zip?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type DeleteProjectCocMutationVariables = Exact<{
+  input: DeleteProjectCocInput;
+}>;
+
+export type DeleteProjectCocMutation = {
+  __typename?: 'Mutation';
+  deleteProjectCoc?: {
+    __typename?: 'DeleteProjectCocPayload';
+    clientMutationId?: string | null;
+    projectCoc?: { __typename?: 'ProjectCoc'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: string;
@@ -4607,6 +4898,178 @@ export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
 >;
+export const GetFunderDocument = gql`
+  query GetFunder($id: ID!) {
+    funder(id: $id) {
+      ...FunderFields
+    }
+  }
+  ${FunderFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFunderQuery__
+ *
+ * To run a query within a React component, call `useGetFunderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFunderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFunderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFunderQuery(
+  baseOptions: Apollo.QueryHookOptions<GetFunderQuery, GetFunderQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetFunderQuery, GetFunderQueryVariables>(
+    GetFunderDocument,
+    options
+  );
+}
+export function useGetFunderLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFunderQuery,
+    GetFunderQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetFunderQuery, GetFunderQueryVariables>(
+    GetFunderDocument,
+    options
+  );
+}
+export type GetFunderQueryHookResult = ReturnType<typeof useGetFunderQuery>;
+export type GetFunderLazyQueryHookResult = ReturnType<
+  typeof useGetFunderLazyQuery
+>;
+export type GetFunderQueryResult = Apollo.QueryResult<
+  GetFunderQuery,
+  GetFunderQueryVariables
+>;
+export const GetInventoryDocument = gql`
+  query GetInventory($id: ID!) {
+    inventory(id: $id) {
+      ...InventoryFields
+    }
+  }
+  ${InventoryFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetInventoryQuery__
+ *
+ * To run a query within a React component, call `useGetInventoryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetInventoryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetInventoryQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetInventoryQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetInventoryQuery,
+    GetInventoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetInventoryQuery, GetInventoryQueryVariables>(
+    GetInventoryDocument,
+    options
+  );
+}
+export function useGetInventoryLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetInventoryQuery,
+    GetInventoryQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetInventoryQuery, GetInventoryQueryVariables>(
+    GetInventoryDocument,
+    options
+  );
+}
+export type GetInventoryQueryHookResult = ReturnType<
+  typeof useGetInventoryQuery
+>;
+export type GetInventoryLazyQueryHookResult = ReturnType<
+  typeof useGetInventoryLazyQuery
+>;
+export type GetInventoryQueryResult = Apollo.QueryResult<
+  GetInventoryQuery,
+  GetInventoryQueryVariables
+>;
+export const GetProjectCocDocument = gql`
+  query GetProjectCoc($id: ID!) {
+    projectCoc(id: $id) {
+      ...ProjectCocFields
+    }
+  }
+  ${ProjectCocFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectCocQuery__
+ *
+ * To run a query within a React component, call `useGetProjectCocQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectCocQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectCocQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectCocQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectCocQuery,
+    GetProjectCocQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProjectCocQuery, GetProjectCocQueryVariables>(
+    GetProjectCocDocument,
+    options
+  );
+}
+export function useGetProjectCocLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectCocQuery,
+    GetProjectCocQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProjectCocQuery, GetProjectCocQueryVariables>(
+    GetProjectCocDocument,
+    options
+  );
+}
+export type GetProjectCocQueryHookResult = ReturnType<
+  typeof useGetProjectCocQuery
+>;
+export type GetProjectCocLazyQueryHookResult = ReturnType<
+  typeof useGetProjectCocLazyQuery
+>;
+export type GetProjectCocQueryResult = Apollo.QueryResult<
+  GetProjectCocQuery,
+  GetProjectCocQueryVariables
+>;
 export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
     organization(id: $id) {
@@ -5167,6 +5630,64 @@ export type GetProjectFundersQueryResult = Apollo.QueryResult<
   GetProjectFundersQuery,
   GetProjectFundersQueryVariables
 >;
+export const CreateInventoryDocument = gql`
+  mutation CreateInventory($input: CreateInventoryInput!) {
+    createInventory(input: $input) {
+      clientMutationId
+      inventory {
+        ...InventoryFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${InventoryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateInventoryMutationFn = Apollo.MutationFunction<
+  CreateInventoryMutation,
+  CreateInventoryMutationVariables
+>;
+
+/**
+ * __useCreateInventoryMutation__
+ *
+ * To run a mutation, you first call `useCreateInventoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateInventoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createInventoryMutation, { data, loading, error }] = useCreateInventoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateInventoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateInventoryMutation,
+    CreateInventoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateInventoryMutation,
+    CreateInventoryMutationVariables
+  >(CreateInventoryDocument, options);
+}
+export type CreateInventoryMutationHookResult = ReturnType<
+  typeof useCreateInventoryMutation
+>;
+export type CreateInventoryMutationResult =
+  Apollo.MutationResult<CreateInventoryMutation>;
+export type CreateInventoryMutationOptions = Apollo.BaseMutationOptions<
+  CreateInventoryMutation,
+  CreateInventoryMutationVariables
+>;
 export const UpdateInventoryDocument = gql`
   mutation UpdateInventory($input: UpdateInventoryInput!) {
     updateInventory(input: $input) {
@@ -5281,4 +5802,350 @@ export type DeleteInventoryMutationResult =
 export type DeleteInventoryMutationOptions = Apollo.BaseMutationOptions<
   DeleteInventoryMutation,
   DeleteInventoryMutationVariables
+>;
+export const CreateFunderDocument = gql`
+  mutation CreateFunder($input: CreateFunderInput!) {
+    createFunder(input: $input) {
+      clientMutationId
+      funder {
+        ...FunderFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${FunderFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateFunderMutationFn = Apollo.MutationFunction<
+  CreateFunderMutation,
+  CreateFunderMutationVariables
+>;
+
+/**
+ * __useCreateFunderMutation__
+ *
+ * To run a mutation, you first call `useCreateFunderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateFunderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createFunderMutation, { data, loading, error }] = useCreateFunderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateFunderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateFunderMutation,
+    CreateFunderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateFunderMutation,
+    CreateFunderMutationVariables
+  >(CreateFunderDocument, options);
+}
+export type CreateFunderMutationHookResult = ReturnType<
+  typeof useCreateFunderMutation
+>;
+export type CreateFunderMutationResult =
+  Apollo.MutationResult<CreateFunderMutation>;
+export type CreateFunderMutationOptions = Apollo.BaseMutationOptions<
+  CreateFunderMutation,
+  CreateFunderMutationVariables
+>;
+export const UpdateFunderDocument = gql`
+  mutation UpdateFunder($input: UpdateFunderInput!) {
+    updateFunder(input: $input) {
+      clientMutationId
+      funder {
+        ...FunderFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${FunderFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateFunderMutationFn = Apollo.MutationFunction<
+  UpdateFunderMutation,
+  UpdateFunderMutationVariables
+>;
+
+/**
+ * __useUpdateFunderMutation__
+ *
+ * To run a mutation, you first call `useUpdateFunderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateFunderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateFunderMutation, { data, loading, error }] = useUpdateFunderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateFunderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateFunderMutation,
+    UpdateFunderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateFunderMutation,
+    UpdateFunderMutationVariables
+  >(UpdateFunderDocument, options);
+}
+export type UpdateFunderMutationHookResult = ReturnType<
+  typeof useUpdateFunderMutation
+>;
+export type UpdateFunderMutationResult =
+  Apollo.MutationResult<UpdateFunderMutation>;
+export type UpdateFunderMutationOptions = Apollo.BaseMutationOptions<
+  UpdateFunderMutation,
+  UpdateFunderMutationVariables
+>;
+export const DeleteFunderDocument = gql`
+  mutation DeleteFunder($input: DeleteFunderInput!) {
+    deleteFunder(input: $input) {
+      clientMutationId
+      funder {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteFunderMutationFn = Apollo.MutationFunction<
+  DeleteFunderMutation,
+  DeleteFunderMutationVariables
+>;
+
+/**
+ * __useDeleteFunderMutation__
+ *
+ * To run a mutation, you first call `useDeleteFunderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteFunderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteFunderMutation, { data, loading, error }] = useDeleteFunderMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteFunderMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteFunderMutation,
+    DeleteFunderMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteFunderMutation,
+    DeleteFunderMutationVariables
+  >(DeleteFunderDocument, options);
+}
+export type DeleteFunderMutationHookResult = ReturnType<
+  typeof useDeleteFunderMutation
+>;
+export type DeleteFunderMutationResult =
+  Apollo.MutationResult<DeleteFunderMutation>;
+export type DeleteFunderMutationOptions = Apollo.BaseMutationOptions<
+  DeleteFunderMutation,
+  DeleteFunderMutationVariables
+>;
+export const CreateProjectCocDocument = gql`
+  mutation CreateProjectCoc($input: CreateProjectCocInput!) {
+    createProjectCoc(input: $input) {
+      clientMutationId
+      projectCoc {
+        ...ProjectCocFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectCocFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateProjectCocMutationFn = Apollo.MutationFunction<
+  CreateProjectCocMutation,
+  CreateProjectCocMutationVariables
+>;
+
+/**
+ * __useCreateProjectCocMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectCocMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectCocMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectCocMutation, { data, loading, error }] = useCreateProjectCocMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateProjectCocMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateProjectCocMutation,
+    CreateProjectCocMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateProjectCocMutation,
+    CreateProjectCocMutationVariables
+  >(CreateProjectCocDocument, options);
+}
+export type CreateProjectCocMutationHookResult = ReturnType<
+  typeof useCreateProjectCocMutation
+>;
+export type CreateProjectCocMutationResult =
+  Apollo.MutationResult<CreateProjectCocMutation>;
+export type CreateProjectCocMutationOptions = Apollo.BaseMutationOptions<
+  CreateProjectCocMutation,
+  CreateProjectCocMutationVariables
+>;
+export const UpdateProjectCocDocument = gql`
+  mutation UpdateProjectCoc($input: UpdateProjectCocInput!) {
+    updateProjectCoc(input: $input) {
+      clientMutationId
+      projectCoc {
+        ...ProjectCocFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ProjectCocFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateProjectCocMutationFn = Apollo.MutationFunction<
+  UpdateProjectCocMutation,
+  UpdateProjectCocMutationVariables
+>;
+
+/**
+ * __useUpdateProjectCocMutation__
+ *
+ * To run a mutation, you first call `useUpdateProjectCocMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProjectCocMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProjectCocMutation, { data, loading, error }] = useUpdateProjectCocMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProjectCocMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateProjectCocMutation,
+    UpdateProjectCocMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateProjectCocMutation,
+    UpdateProjectCocMutationVariables
+  >(UpdateProjectCocDocument, options);
+}
+export type UpdateProjectCocMutationHookResult = ReturnType<
+  typeof useUpdateProjectCocMutation
+>;
+export type UpdateProjectCocMutationResult =
+  Apollo.MutationResult<UpdateProjectCocMutation>;
+export type UpdateProjectCocMutationOptions = Apollo.BaseMutationOptions<
+  UpdateProjectCocMutation,
+  UpdateProjectCocMutationVariables
+>;
+export const DeleteProjectCocDocument = gql`
+  mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
+    deleteProjectCoc(input: $input) {
+      clientMutationId
+      projectCoc {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteProjectCocMutationFn = Apollo.MutationFunction<
+  DeleteProjectCocMutation,
+  DeleteProjectCocMutationVariables
+>;
+
+/**
+ * __useDeleteProjectCocMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectCocMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectCocMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectCocMutation, { data, loading, error }] = useDeleteProjectCocMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteProjectCocMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteProjectCocMutation,
+    DeleteProjectCocMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteProjectCocMutation,
+    DeleteProjectCocMutationVariables
+  >(DeleteProjectCocDocument, options);
+}
+export type DeleteProjectCocMutationHookResult = ReturnType<
+  typeof useDeleteProjectCocMutation
+>;
+export type DeleteProjectCocMutationResult =
+  Apollo.MutationResult<DeleteProjectCocMutation>;
+export type DeleteProjectCocMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectCocMutation,
+  DeleteProjectCocMutationVariables
 >;

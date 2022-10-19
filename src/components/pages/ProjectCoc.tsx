@@ -7,42 +7,41 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { InventoryFormDefinition } from '@/modules/form/data';
+import { ProjectCocFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
-  CreateInventoryDocument,
-  CreateInventoryMutation,
-  CreateInventoryMutationVariables,
-  InventoryFieldsFragment,
-  UpdateInventoryDocument,
-  UpdateInventoryMutation,
-  UpdateInventoryMutationVariables,
-  useGetInventoryQuery,
+  CreateProjectCocDocument,
+  CreateProjectCocMutation,
+  CreateProjectCocMutationVariables,
+  ProjectCocFieldsFragment,
+  UpdateProjectCocDocument,
+  UpdateProjectCocMutation,
+  UpdateProjectCocMutationVariables,
+  useGetProjectCocQuery,
 } from '@/types/gqlTypes';
 
-const Inventory = ({ create = false }: { create?: boolean }) => {
+const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const { projectId, inventoryId } = useParams() as {
+  const { projectId, cocId } = useParams() as {
     projectId: string;
-    inventoryId: string; // Not present if create!
+    cocId: string;
   };
-  const title = create ? `Add Inventory` : `Edit Inventory`;
+  const title = create ? `Add Project CoC` : `Edit Project CoC`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   // FIXME why isn't cache working
-  const { data, loading, error } = useGetInventoryQuery({
-    variables: { id: inventoryId },
+  const { data, loading, error } = useGetProjectCocQuery({
+    variables: { id: cocId },
     skip: create,
   });
 
   if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
-  if (!create && !data?.inventory) throw Error('Inventory not found');
   if (error) throw error;
+  if (!crumbs || !project) throw Error('Project not found');
 
   const common = {
-    definition: InventoryFormDefinition,
+    definition: ProjectCocFormDefinition,
     mappingKey: 'field',
   };
   return (
@@ -56,30 +55,29 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           <InactiveBanner project={project} />
           {create ? (
             <EditRecord<
-              InventoryFieldsFragment,
-              CreateInventoryMutation,
-              CreateInventoryMutationVariables
+              ProjectCocFieldsFragment,
+              CreateProjectCocMutation,
+              CreateProjectCocMutationVariables
             >
               inputVariables={{ projectId }}
-              queryDocument={CreateInventoryDocument}
+              queryDocument={CreateProjectCocDocument}
               onCompleted={() => navigate(-1)}
-              getErrors={(data: CreateInventoryMutation) =>
-                data?.createInventory?.errors
+              getErrors={(data: CreateProjectCocMutation) =>
+                data?.createProjectCoc?.errors
               }
-              submitButtonText='Create Funding Source'
               {...common}
             />
           ) : (
             <EditRecord<
-              InventoryFieldsFragment,
-              UpdateInventoryMutation,
-              UpdateInventoryMutationVariables
+              ProjectCocFieldsFragment,
+              UpdateProjectCocMutation,
+              UpdateProjectCocMutationVariables
             >
-              record={data?.inventory || undefined}
-              queryDocument={UpdateInventoryDocument}
+              record={data?.projectCoc || undefined}
+              queryDocument={UpdateProjectCocDocument}
               onCompleted={() => navigate(-1)}
-              getErrors={(data: UpdateInventoryMutation) =>
-                data?.updateInventory?.errors
+              getErrors={(data: UpdateProjectCocMutation) =>
+                data?.updateProjectCoc?.errors
               }
               {...common}
             />
@@ -89,4 +87,4 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     </ProjectLayout>
   );
 };
-export default Inventory;
+export default ProjectCoc;

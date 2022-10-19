@@ -93,8 +93,10 @@ const DynamicField: React.FC<Props> = ({
       );
     case FieldType.string:
     case FieldType.text:
+    case FieldType.integer:
     case FieldType.ssn:
       const multiline = FieldType[item.type] === FieldType.text;
+      const numeric = FieldType[item.type] === FieldType.integer;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
@@ -104,6 +106,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
+            type={numeric ? 'number' : undefined}
             {...commonInputProps}
           />
         </InputContainer>

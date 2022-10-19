@@ -7,42 +7,42 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { InventoryFormDefinition } from '@/modules/form/data';
+import { FunderFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
-  CreateInventoryDocument,
-  CreateInventoryMutation,
-  CreateInventoryMutationVariables,
-  InventoryFieldsFragment,
-  UpdateInventoryDocument,
-  UpdateInventoryMutation,
-  UpdateInventoryMutationVariables,
-  useGetInventoryQuery,
+  CreateFunderDocument,
+  CreateFunderMutation,
+  CreateFunderMutationVariables,
+  FunderFieldsFragment,
+  UpdateFunderDocument,
+  UpdateFunderMutation,
+  UpdateFunderMutationVariables,
+  useGetFunderQuery,
 } from '@/types/gqlTypes';
 
-const Inventory = ({ create = false }: { create?: boolean }) => {
+const Funder = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const { projectId, inventoryId } = useParams() as {
+  const { projectId, funderId } = useParams() as {
     projectId: string;
-    inventoryId: string; // Not present if create!
+    funderId: string; // Not present if create!
   };
-  const title = create ? `Add Inventory` : `Edit Inventory`;
+  const title = create ? `Add Funder` : `Edit Funder`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   // FIXME why isn't cache working
-  const { data, loading, error } = useGetInventoryQuery({
-    variables: { id: inventoryId },
+  const { data, loading, error } = useGetFunderQuery({
+    variables: { id: funderId },
     skip: create,
   });
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
-  if (!create && !data?.inventory) throw Error('Inventory not found');
+  if (!create && !data?.funder) throw Error('Funder not found');
   if (error) throw error;
 
   const common = {
-    definition: InventoryFormDefinition,
+    definition: FunderFormDefinition,
     mappingKey: 'field',
   };
   return (
@@ -56,30 +56,30 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           <InactiveBanner project={project} />
           {create ? (
             <EditRecord<
-              InventoryFieldsFragment,
-              CreateInventoryMutation,
-              CreateInventoryMutationVariables
+              FunderFieldsFragment,
+              CreateFunderMutation,
+              CreateFunderMutationVariables
             >
               inputVariables={{ projectId }}
-              queryDocument={CreateInventoryDocument}
+              queryDocument={CreateFunderDocument}
               onCompleted={() => navigate(-1)}
-              getErrors={(data: CreateInventoryMutation) =>
-                data?.createInventory?.errors
+              getErrors={(data: CreateFunderMutation) =>
+                data?.createFunder?.errors
               }
               submitButtonText='Create Funding Source'
               {...common}
             />
           ) : (
             <EditRecord<
-              InventoryFieldsFragment,
-              UpdateInventoryMutation,
-              UpdateInventoryMutationVariables
+              FunderFieldsFragment,
+              UpdateFunderMutation,
+              UpdateFunderMutationVariables
             >
-              record={data?.inventory || undefined}
-              queryDocument={UpdateInventoryDocument}
+              record={data?.funder || undefined}
+              queryDocument={UpdateFunderDocument}
               onCompleted={() => navigate(-1)}
-              getErrors={(data: UpdateInventoryMutation) =>
-                data?.updateInventory?.errors
+              getErrors={(data: UpdateFunderMutation) =>
+                data?.updateFunder?.errors
               }
               {...common}
             />
@@ -89,4 +89,4 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     </ProjectLayout>
   );
 };
-export default Inventory;
+export default Funder;

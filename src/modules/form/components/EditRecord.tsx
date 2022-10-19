@@ -47,8 +47,11 @@ const EditRecord = <
   >(queryDocument, {
     onCompleted: (data) => {
       const errors = getErrors(data);
-      setErrors(errors);
-      onCompleted(data);
+      if ((errors || []).length > 0) {
+        setErrors(errors);
+      } else {
+        onCompleted(data);
+      }
     },
   });
 

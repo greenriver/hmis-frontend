@@ -4,23 +4,19 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
-import GenericTableWithData from '../elements/GenericTableWithData';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import RouterLink from '../elements/RouterLink';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import FunderTable from '@/modules/inventory/components/FunderTable';
+import InventoryTable from '@/modules/inventory/components/InventoryTable';
+import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import {
-  GetProjectInventoriesDocument,
-  GetProjectInventoriesQuery,
-  GetProjectInventoriesQueryVariables,
-  InventoryFieldsFragment,
-  ProjectAllFieldsFragment,
-} from '@/types/gqlTypes';
+import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
 
 export const InactiveBanner = ({
   project,
@@ -43,6 +39,7 @@ const Project = () => {
 
   const [crumbs, loading, project] = useProjectCrumbs();
   if (loading) return <Loading />;
+  console.log();
   if (!crumbs || !project) throw Error('Project not found');
 
   return (
@@ -61,26 +58,22 @@ const Project = () => {
             <ProjectDetails project={project} />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
+              Funding Sources
+            </Typography>
+            <FunderTable projectId={projectId} />
+          </Paper>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
+              Project CoCs
+            </Typography>
+            <ProjectCocTable projectId={projectId} />
+          </Paper>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
-            <GenericTableWithData<
-              GetProjectInventoriesQuery,
-              GetProjectInventoriesQueryVariables,
-              InventoryFieldsFragment
-            >
-              queryVariables={{ id: projectId }}
-              queryDocument={GetProjectInventoriesDocument}
-              // rowLinkTo={rowLinkTo}
-              columns={[{ header: 'ID', render: 'id' }]}
-              toNodes={(data: GetProjectInventoriesQuery) =>
-                data.project?.inventories?.nodes || []
-              }
-              toNodesCount={(data: GetProjectInventoriesQuery) =>
-                data.project?.inventories?.nodesCount
-              }
-              noData='No inventory.'
-            />
+            <InventoryTable projectId={projectId} />
           </Paper>
         </Grid>
         <Grid item xs>
@@ -99,7 +92,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to=''
+                to={generatePath(Routes.NEW_FUNDER, { projectId })}
               >
                 + Add Funding Source
               </ButtonLink>
@@ -107,7 +100,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to=''
+                to={generatePath(Routes.NEW_COC, { projectId })}
               >
                 + Add Project CoC
               </ButtonLink>
@@ -116,7 +109,7 @@ const Project = () => {
           {project.contactInformation && (
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
-                <Typography variant='h6'>Project Contact</Typography>
+                <Typography variant='h5'>Project Contact</Typography>
                 <MultilineTypography variant='body2'>
                   {project.contactInformation}
                 </MultilineTypography>

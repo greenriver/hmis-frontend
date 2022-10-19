@@ -22,9 +22,11 @@ import CreateProject from '@/components/pages/CreateProject';
 import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
+import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
+import ProjectCoc from '@/components/pages/ProjectCoc';
 
 const App = () => {
   return (
@@ -51,6 +53,22 @@ export const protectedRoutes = [
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
       { path: Routes.NEW_INVENTORY, element: <Inventory create /> },
       { path: Routes.EDIT_INVENTORY, element: <Inventory /> },
+      {
+        path: Routes.NEW_FUNDER,
+        element: <Funder create={true} />,
+      },
+      {
+        path: Routes.EDIT_FUNDER,
+        element: <Funder />,
+      },
+      {
+        path: Routes.NEW_COC,
+        element: <ProjectCoc create />,
+      },
+      {
+        path: Routes.EDIT_COC,
+        element: <ProjectCoc />,
+      },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
