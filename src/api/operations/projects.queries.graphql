@@ -85,7 +85,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
 query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
-    inventories(limit: $limit, offset: $offset) {
+    inventories(limit: $limit, offset: $offset, sortOrder: START_DATE) {
       offset
       limit
       nodesCount
@@ -120,6 +120,30 @@ query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodes {
         ...FunderFields
       }
+    }
+  }
+}
+
+mutation UpdateInventory($input: UpdateInventoryInput!) {
+  updateInventory(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteInventory($input: DeleteInventoryInput!) {
+  deleteInventory(input: $input) {
+    clientMutationId
+    inventory {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }

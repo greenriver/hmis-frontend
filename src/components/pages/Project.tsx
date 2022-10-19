@@ -4,6 +4,7 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
+import GenericTableWithData from '../elements/GenericTableWithData';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import RouterLink from '../elements/RouterLink';
@@ -13,7 +14,13 @@ import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import {
+  GetProjectInventoriesDocument,
+  GetProjectInventoriesQuery,
+  GetProjectInventoriesQueryVariables,
+  InventoryFieldsFragment,
+  ProjectAllFieldsFragment,
+} from '@/types/gqlTypes';
 
 export const InactiveBanner = ({
   project,
@@ -53,6 +60,28 @@ const Project = () => {
             </Typography>
             <ProjectDetails project={project} />
           </Paper>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Typography variant='h6' sx={{ mb: 2 }}>
+              Inventory
+            </Typography>
+            <GenericTableWithData<
+              GetProjectInventoriesQuery,
+              GetProjectInventoriesQueryVariables,
+              InventoryFieldsFragment
+            >
+              queryVariables={{ id: projectId }}
+              queryDocument={GetProjectInventoriesDocument}
+              // rowLinkTo={rowLinkTo}
+              columns={[{ header: 'ID', render: 'id' }]}
+              toNodes={(data: GetProjectInventoriesQuery) =>
+                data.project?.inventories?.nodes || []
+              }
+              toNodesCount={(data: GetProjectInventoriesQuery) =>
+                data.project?.inventories?.nodesCount
+              }
+              noData='No inventory.'
+            />
+          </Paper>
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>
@@ -62,7 +91,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to=''
+                to={generatePath(Routes.NEW_INVENTORY, { projectId })}
               >
                 + Add Inventory
               </ButtonLink>

@@ -22,6 +22,7 @@ import CreateProject from '@/components/pages/CreateProject';
 import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
+import Inventory from '@/components/pages/Inventory';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
 
@@ -48,6 +49,8 @@ export const protectedRoutes = [
       { path: Routes.CREATE_PROJECT, element: <CreateProject /> },
       { path: Routes.ORGANIZATION, element: <Organization /> },
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
+      { path: Routes.NEW_INVENTORY, element: <Inventory create /> },
+      { path: Routes.EDIT_INVENTORY, element: <Inventory /> },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {

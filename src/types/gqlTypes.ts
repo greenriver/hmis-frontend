@@ -3195,6 +3195,69 @@ export type GetProjectFundersQuery = {
   } | null;
 };
 
+export type UpdateInventoryMutationVariables = Exact<{
+  input: UpdateInventoryInput;
+}>;
+
+export type UpdateInventoryMutation = {
+  __typename?: 'Mutation';
+  updateInventory?: {
+    __typename?: 'UpdateInventoryPayload';
+    clientMutationId?: string | null;
+    inventory?: {
+      __typename?: 'Inventory';
+      availability?: Availability | null;
+      bedInventory: number;
+      chBedInventory?: number | null;
+      chVetBedInventory?: number | null;
+      chYouthBedInventory?: number | null;
+      cocCode: string;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      esBedType?: BedType | null;
+      householdType: HouseholdType;
+      id: string;
+      inventoryEndDate?: string | null;
+      inventoryStartDate: string;
+      otherBedInventory?: number | null;
+      unitInventory: number;
+      vetBedInventory?: number | null;
+      youthBedInventory?: number | null;
+      youthVetBedInventory?: number | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type DeleteInventoryMutationVariables = Exact<{
+  input: DeleteInventoryInput;
+}>;
+
+export type DeleteInventoryMutation = {
+  __typename?: 'Mutation';
+  deleteInventory?: {
+    __typename?: 'DeleteInventoryPayload';
+    clientMutationId?: string | null;
+    inventory?: { __typename?: 'Inventory'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -4901,7 +4964,7 @@ export const GetProjectInventoriesDocument = gql`
   query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     project(id: $id) {
       id
-      inventories(limit: $limit, offset: $offset) {
+      inventories(limit: $limit, offset: $offset, sortOrder: START_DATE) {
         offset
         limit
         nodesCount
@@ -5103,4 +5166,119 @@ export type GetProjectFundersLazyQueryHookResult = ReturnType<
 export type GetProjectFundersQueryResult = Apollo.QueryResult<
   GetProjectFundersQuery,
   GetProjectFundersQueryVariables
+>;
+export const UpdateInventoryDocument = gql`
+  mutation UpdateInventory($input: UpdateInventoryInput!) {
+    updateInventory(input: $input) {
+      clientMutationId
+      inventory {
+        ...InventoryFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${InventoryFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateInventoryMutationFn = Apollo.MutationFunction<
+  UpdateInventoryMutation,
+  UpdateInventoryMutationVariables
+>;
+
+/**
+ * __useUpdateInventoryMutation__
+ *
+ * To run a mutation, you first call `useUpdateInventoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateInventoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateInventoryMutation, { data, loading, error }] = useUpdateInventoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateInventoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateInventoryMutation,
+    UpdateInventoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateInventoryMutation,
+    UpdateInventoryMutationVariables
+  >(UpdateInventoryDocument, options);
+}
+export type UpdateInventoryMutationHookResult = ReturnType<
+  typeof useUpdateInventoryMutation
+>;
+export type UpdateInventoryMutationResult =
+  Apollo.MutationResult<UpdateInventoryMutation>;
+export type UpdateInventoryMutationOptions = Apollo.BaseMutationOptions<
+  UpdateInventoryMutation,
+  UpdateInventoryMutationVariables
+>;
+export const DeleteInventoryDocument = gql`
+  mutation DeleteInventory($input: DeleteInventoryInput!) {
+    deleteInventory(input: $input) {
+      clientMutationId
+      inventory {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteInventoryMutationFn = Apollo.MutationFunction<
+  DeleteInventoryMutation,
+  DeleteInventoryMutationVariables
+>;
+
+/**
+ * __useDeleteInventoryMutation__
+ *
+ * To run a mutation, you first call `useDeleteInventoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteInventoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteInventoryMutation, { data, loading, error }] = useDeleteInventoryMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteInventoryMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteInventoryMutation,
+    DeleteInventoryMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteInventoryMutation,
+    DeleteInventoryMutationVariables
+  >(DeleteInventoryDocument, options);
+}
+export type DeleteInventoryMutationHookResult = ReturnType<
+  typeof useDeleteInventoryMutation
+>;
+export type DeleteInventoryMutationResult =
+  Apollo.MutationResult<DeleteInventoryMutation>;
+export type DeleteInventoryMutationOptions = Apollo.BaseMutationOptions<
+  DeleteInventoryMutation,
+  DeleteInventoryMutationVariables
 >;

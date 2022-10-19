@@ -4,6 +4,8 @@ export const Routes = {
   ALL_PROJECTS: '/projects',
   PROJECT: '/projects/:projectId',
   EDIT_PROJECT: '/projects/:projectId/edit',
+  NEW_INVENTORY: '/projects/:projectId/inventory/new',
+  EDIT_INVENTORY: '/projects/:projectId/inventory/edit',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
