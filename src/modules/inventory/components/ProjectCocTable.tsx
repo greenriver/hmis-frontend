@@ -51,7 +51,7 @@ const Table = ({ projectId }: { projectId: string }) => (
     toNodesCount={(data: GetProjectProjectCocsQuery) =>
       data.project?.projectCocs?.nodesCount
     }
-    noData='No inventory.'
+    noData='No Project CoC records.'
   />
 );
 export default Table;
