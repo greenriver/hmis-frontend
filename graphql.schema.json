@@ -3337,6 +3337,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "role",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "AssessmentRole",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "sortOrder",
                 "description": null,
                 "type": {

@@ -4,6 +4,8 @@ import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
+import FinishIntakeButton from '../FinishIntakeButton';
+
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
 import GenericTable from '@/components/elements/GenericTable';
@@ -98,9 +100,12 @@ const HouseholdMemberTable = ({
         render: (hc: HouseholdClientFieldsFragment) => (
           <>
             {hc.enrollment.inProgress ? (
-              <Button variant='outlined' color='error' size='small' fullWidth>
-                Finish Intake
-              </Button>
+              <FinishIntakeButton
+                size='small'
+                fullWidth
+                enrollmentId={hc.enrollment.id}
+                clientId={hc.client.id}
+              />
             ) : (
               !hc.enrollment.exitDate && (
                 <Button variant='outlined' size='small' fullWidth>

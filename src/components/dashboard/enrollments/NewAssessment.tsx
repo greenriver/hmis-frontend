@@ -1,39 +1,116 @@
-import { Grid, Typography } from '@mui/material';
+import { Alert, Grid, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
+import { useCallback, useMemo, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import formData from '@/modules/form/data/assessment.json';
-import { FormDefinition } from '@/modules/form/types';
+import FormDefinitions from '@/modules/form/definitions';
+import {
+  AssessmentRole,
+  useCreateAssessmentMutation,
+  useGetFormDefinitionQuery,
+  ValidationError,
+} from '@/types/gqlTypes';
 
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const intakeFormDefinition: FormDefinition = JSON.parse(
-  JSON.stringify(formData)
-);
-
+// TODO if this is an intake and they already have one, redirect them there...?
 const NewAssessment = () => {
-  const [crumbs, loading] = useEnrollmentCrumbs('Intake Assessment');
+  const {
+    // clientId,
+    enrollmentId,
+    assessmentRole: assessmentRoleParam,
+  } = useParams() as {
+    // clientId: string;
+    enrollmentId: string;
+    assessmentRole: string;
+  };
+  const [errors, setErrors] = useState<ValidationError[] | undefined>();
+  const navigate = useNavigate();
+  const assessmentRole = useMemo(() => {
+    if (
+      !Object.values<string>(AssessmentRole).includes(
+        assessmentRoleParam.toUpperCase()
+      )
+    ) {
+      throw Error(`Unrecognized role ${assessmentRoleParam}`);
+    }
+    return assessmentRoleParam.toUpperCase() as AssessmentRole;
+  }, [assessmentRoleParam]);
+  const title = `${startCase(assessmentRole.toLowerCase())} Assessment`;
 
-  if (loading) return <Loading />;
+  const { data, loading, error } = useGetFormDefinitionQuery({
+    variables: { enrollmentId, assessmentRole },
+  });
+  const [crumbs, crumbsLoading] = useEnrollmentCrumbs(title);
+
+  const [createAssessmentMutation, { loading: saveLoading, error: saveError }] =
+    useCreateAssessmentMutation({
+      onCompleted: (data) => {
+        const errors = data.createAssessment?.errors;
+        if ((errors || []).length > 0) {
+          window.scrollTo(0, 0);
+          setErrors(errors);
+        } else {
+          navigate(-1);
+        }
+      },
+    });
+
+  const formDefinition = data?.getFormDefinition;
+  const identifier = formDefinition?.identifier;
+  const definition = identifier ? FormDefinitions[identifier] : undefined;
+
+  const submitHandler = useCallback(
+    (values: Record<string, any>) => {
+      if (!formDefinition) return;
+      console.log(JSON.stringify(values, null, 2));
+      const input = {
+        formDefinitionId: formDefinition.id,
+        enrollmentId,
+        inProgress: true,
+        values: JSON.stringify(values),
+      };
+
+      void createAssessmentMutation({ variables: { ...input } });
+    },
+    [createAssessmentMutation, enrollmentId, formDefinition]
+  );
+
+  if (crumbsLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
+  if (error) throw error;
+  if (saveError) throw saveError;
 
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <Grid container spacing={4}>
+      <Grid container spacing={4} sx={{ pb: 20 }}>
         <Grid item xs={9}>
-          <Typography variant='h3' sx={{ mb: 3 }}>
-            Intake Assessment
-          </Typography>
-          <DynamicForm
-            definition={intakeFormDefinition}
-            onSubmit={(values) => console.log(values)}
-            // submitButtonText='Create Record'
-            // discardButtonText='Cancel'
-          />
+          {loading && <Loading />}
+          {!loading && !definition && (
+            <Alert severity='error'>{`Unable to load ${title} form.`}</Alert>
+          )}
+          {definition && (
+            <>
+              <Typography
+                variant='h3'
+                sx={{ mb: 3, textTransform: 'capitalize' }}
+              >
+                {title}
+              </Typography>
+              <DynamicForm
+                definition={definition}
+                onSubmit={submitHandler}
+                submitButtonText='Save and Finish Later'
+                loading={saveLoading}
+                errors={errors}
+                // discardButtonText='Cancel'
+              />
+            </>
+          )}
         </Grid>
         <Grid item xs></Grid>
       </Grid>

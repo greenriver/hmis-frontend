@@ -1,0 +1,91 @@
+query GetAssessment($id: ID!) {
+  assessment(id: $id) {
+    ...AssessmentFields
+  }
+}
+
+query GetEnrollmentAssessments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $role: AssessmentRole
+) {
+  enrollment(id: $id) {
+    id
+    assessments(
+      limit: $limit
+      offset: $offset
+      role: $role
+      sortOrder: ASSESSMENT_DATE
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+      }
+    }
+  }
+}
+
+query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
+  getFormDefinition(
+    enrollmentId: $enrollmentId
+    assessmentRole: $assessmentRole
+  ) {
+    id
+    version
+    role
+    status
+    identifier
+    definition
+  }
+}
+
+mutation CreateAssessment(
+  $enrollmentId: ID!
+  $formDefinitionId: ID!
+  $values: JsonObject!
+  $assessmentDate: String
+  $inProgress: Boolean
+) {
+  createAssessment(
+    input: {
+      enrollmentId: $enrollmentId
+      formDefinitionId: $formDefinitionId
+      assessmentDate: $assessmentDate
+      values: $values
+      inProgress: $inProgress
+    }
+  ) {
+    assessment {
+      ...AssessmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation SaveAssessment(
+  $assessmentId: ID!
+  $values: JsonObject!
+  $assessmentDate: String
+  $inProgress: Boolean
+) {
+  saveAssessment(
+    input: {
+      assessmentId: $assessmentId
+      assessmentDate: $assessmentDate
+      values: $values
+      inProgress: $inProgress
+    }
+  ) {
+    assessment {
+      ...AssessmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

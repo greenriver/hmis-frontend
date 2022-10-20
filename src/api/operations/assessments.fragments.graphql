@@ -1,0 +1,51 @@
+fragment FormDefinitionFields on FormDefinition {
+  id
+  version
+  role
+  status
+  identifier
+}
+
+fragment FormDefinitionWithJsonFields on FormDefinition {
+  ...FormDefinitionFields
+  definition
+}
+
+# contains big JSON (values)
+fragment AssessmentDetailFields on AssessmentDetail {
+  id
+  dataCollectionStage
+  role
+  status
+  values
+}
+
+fragment AssessmentFields on Assessment {
+  id
+  inProgress
+  assessmentDate
+  assessmentLevel
+  assessmentLocation
+  assessmentType
+  prioritizationStatus
+  dateCreated
+  dateUpdated
+  dateDeleted
+  assessmentDetail {
+    ...AssessmentDetailFields
+    definition {
+      ...FormDefinitionFields
+    }
+  }
+}
+
+# contains big JSON definition, eventually
+fragment AssessmentWithDefinition on Assessment {
+  ...AssessmentFields
+  assessmentDetail {
+    ...AssessmentDetailFields
+    definition {
+      ...FormDefinitionWithJsonFields
+    }
+  }
+}

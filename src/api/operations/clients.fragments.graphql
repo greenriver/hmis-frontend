@@ -44,6 +44,7 @@ fragment EnrollmentFields on Enrollment {
   exitDate
   project {
     projectName
+    projectType
   }
   inProgress
   household {
@@ -62,17 +63,6 @@ fragment EnrollmentWithHoHFragment on Enrollment {
       ...HouseholdClientFields
     }
   }
-}
-
-fragment AssessmentFields on Assessment {
-  id
-  assessmentDate
-  assessmentLevel
-  assessmentLocation
-  assessmentType
-  dateCreated
-  dateUpdated
-  dateDeleted
 }
 
 fragment EventFields on Event {

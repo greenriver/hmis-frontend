@@ -538,6 +538,7 @@ export type Enrollment = {
 export type EnrollmentAssessmentsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  role?: InputMaybe<AssessmentRole>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -1992,6 +1993,303 @@ export enum VeteranStatus {
   VeteranStatusYes = 'VETERAN_STATUS_YES',
 }
 
+export type FormDefinitionFieldsFragment = {
+  __typename?: 'FormDefinition';
+  id: string;
+  version: number;
+  role: AssessmentRole;
+  status: string;
+  identifier: string;
+};
+
+export type FormDefinitionWithJsonFieldsFragment = {
+  __typename?: 'FormDefinition';
+  definition: any;
+  id: string;
+  version: number;
+  role: AssessmentRole;
+  status: string;
+  identifier: string;
+};
+
+export type AssessmentDetailFieldsFragment = {
+  __typename?: 'AssessmentDetail';
+  id: string;
+  dataCollectionStage?: DataCollectionStage | null;
+  role: AssessmentRole;
+  status: string;
+  values?: any | null;
+};
+
+export type AssessmentFieldsFragment = {
+  __typename?: 'Assessment';
+  id: string;
+  inProgress: boolean;
+  assessmentDate: string;
+  assessmentLevel?: AssessmentLevel | null;
+  assessmentLocation: string;
+  assessmentType?: AssessmentType | null;
+  prioritizationStatus?: PrioritizationStatus | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  assessmentDetail?: {
+    __typename?: 'AssessmentDetail';
+    id: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    role: AssessmentRole;
+    status: string;
+    values?: any | null;
+    definition: {
+      __typename?: 'FormDefinition';
+      id: string;
+      version: number;
+      role: AssessmentRole;
+      status: string;
+      identifier: string;
+    };
+  } | null;
+};
+
+export type AssessmentWithDefinitionFragment = {
+  __typename?: 'Assessment';
+  id: string;
+  inProgress: boolean;
+  assessmentDate: string;
+  assessmentLevel?: AssessmentLevel | null;
+  assessmentLocation: string;
+  assessmentType?: AssessmentType | null;
+  prioritizationStatus?: PrioritizationStatus | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  assessmentDetail?: {
+    __typename?: 'AssessmentDetail';
+    id: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    role: AssessmentRole;
+    status: string;
+    values?: any | null;
+    definition: {
+      __typename?: 'FormDefinition';
+      definition: any;
+      id: string;
+      version: number;
+      role: AssessmentRole;
+      status: string;
+      identifier: string;
+    };
+  } | null;
+};
+
+export type GetAssessmentQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetAssessmentQuery = {
+  __typename?: 'Query';
+  assessment?: {
+    __typename?: 'Assessment';
+    id: string;
+    inProgress: boolean;
+    assessmentDate: string;
+    assessmentLevel?: AssessmentLevel | null;
+    assessmentLocation: string;
+    assessmentType?: AssessmentType | null;
+    prioritizationStatus?: PrioritizationStatus | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+    assessmentDetail?: {
+      __typename?: 'AssessmentDetail';
+      id: string;
+      dataCollectionStage?: DataCollectionStage | null;
+      role: AssessmentRole;
+      status: string;
+      values?: any | null;
+      definition: {
+        __typename?: 'FormDefinition';
+        id: string;
+        version: number;
+        role: AssessmentRole;
+        status: string;
+        identifier: string;
+      };
+    } | null;
+  } | null;
+};
+
+export type GetEnrollmentAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  role?: InputMaybe<AssessmentRole>;
+}>;
+
+export type GetEnrollmentAssessmentsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        inProgress: boolean;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        assessmentDetail?: {
+          __typename?: 'AssessmentDetail';
+          id: string;
+          dataCollectionStage?: DataCollectionStage | null;
+          role: AssessmentRole;
+          status: string;
+          values?: any | null;
+          definition: {
+            __typename?: 'FormDefinition';
+            id: string;
+            version: number;
+            role: AssessmentRole;
+            status: string;
+            identifier: string;
+          };
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetFormDefinitionQueryVariables = Exact<{
+  enrollmentId: Scalars['ID'];
+  assessmentRole: AssessmentRole;
+}>;
+
+export type GetFormDefinitionQuery = {
+  __typename?: 'Query';
+  getFormDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    version: number;
+    role: AssessmentRole;
+    status: string;
+    identifier: string;
+    definition: any;
+  } | null;
+};
+
+export type CreateAssessmentMutationVariables = Exact<{
+  enrollmentId: Scalars['ID'];
+  formDefinitionId: Scalars['ID'];
+  values: Scalars['JsonObject'];
+  assessmentDate?: InputMaybe<Scalars['String']>;
+  inProgress?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+export type CreateAssessmentMutation = {
+  __typename?: 'Mutation';
+  createAssessment?: {
+    __typename?: 'CreateAssessmentPayload';
+    assessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+      assessmentDate: string;
+      assessmentLevel?: AssessmentLevel | null;
+      assessmentLocation: string;
+      assessmentType?: AssessmentType | null;
+      prioritizationStatus?: PrioritizationStatus | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+      assessmentDetail?: {
+        __typename?: 'AssessmentDetail';
+        id: string;
+        dataCollectionStage?: DataCollectionStage | null;
+        role: AssessmentRole;
+        status: string;
+        values?: any | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          version: number;
+          role: AssessmentRole;
+          status: string;
+          identifier: string;
+        };
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type SaveAssessmentMutationVariables = Exact<{
+  assessmentId: Scalars['ID'];
+  values: Scalars['JsonObject'];
+  assessmentDate?: InputMaybe<Scalars['String']>;
+  inProgress?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+export type SaveAssessmentMutation = {
+  __typename?: 'Mutation';
+  saveAssessment?: {
+    __typename?: 'SaveAssessmentPayload';
+    assessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+      assessmentDate: string;
+      assessmentLevel?: AssessmentLevel | null;
+      assessmentLocation: string;
+      assessmentType?: AssessmentType | null;
+      prioritizationStatus?: PrioritizationStatus | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+      assessmentDetail?: {
+        __typename?: 'AssessmentDetail';
+        id: string;
+        dataCollectionStage?: DataCollectionStage | null;
+        role: AssessmentRole;
+        status: string;
+        values?: any | null;
+        definition: {
+          __typename?: 'FormDefinition';
+          id: string;
+          version: number;
+          role: AssessmentRole;
+          status: string;
+          identifier: string;
+        };
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: string;
@@ -2050,7 +2348,11 @@ export type EnrollmentFieldsFragment = {
   entryDate?: string | null;
   exitDate?: string | null;
   inProgress: boolean;
-  project: { __typename?: 'Project'; projectName: string };
+  project: {
+    __typename?: 'Project';
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
   household: { __typename?: 'Household'; id: string };
   client: { __typename?: 'Client'; id: string };
 };
@@ -2086,20 +2388,12 @@ export type EnrollmentWithHoHFragmentFragment = {
       };
     }>;
   };
-  project: { __typename?: 'Project'; projectName: string };
+  project: {
+    __typename?: 'Project';
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
   client: { __typename?: 'Client'; id: string };
-};
-
-export type AssessmentFieldsFragment = {
-  __typename?: 'Assessment';
-  id: string;
-  assessmentDate: string;
-  assessmentLevel?: AssessmentLevel | null;
-  assessmentLocation: string;
-  assessmentType?: AssessmentType | null;
-  dateCreated: string;
-  dateUpdated: string;
-  dateDeleted?: string | null;
 };
 
 export type EventFieldsFragment = {
@@ -2202,7 +2496,11 @@ export type GetClientEnrollmentsQuery = {
         entryDate?: string | null;
         exitDate?: string | null;
         inProgress: boolean;
-        project: { __typename?: 'Project'; projectName: string };
+        project: {
+          __typename?: 'Project';
+          projectName: string;
+          projectType?: ProjectType | null;
+        };
         household: { __typename?: 'Household'; id: string };
         client: { __typename?: 'Client'; id: string };
       }>;
@@ -2257,7 +2555,11 @@ export type CreateEnrollmentMutation = {
       entryDate?: string | null;
       exitDate?: string | null;
       inProgress: boolean;
-      project: { __typename?: 'Project'; projectName: string };
+      project: {
+        __typename?: 'Project';
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
       household: { __typename?: 'Household'; id: string };
       client: { __typename?: 'Client'; id: string };
     }> | null;
@@ -2312,7 +2614,11 @@ export type UpdateEnrollmentMutation = {
           };
         }>;
       };
-      project: { __typename?: 'Project'; projectName: string };
+      project: {
+        __typename?: 'Project';
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
       client: { __typename?: 'Client'; id: string };
     } | null;
     errors: Array<{
@@ -2366,7 +2672,11 @@ export type SetHoHMutation = {
           };
         }>;
       };
-      project: { __typename?: 'Project'; projectName: string };
+      project: {
+        __typename?: 'Project';
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
       client: { __typename?: 'Client'; id: string };
     } | null;
     errors: Array<{
@@ -2395,7 +2705,11 @@ export type DeleteEnrollmentMutation = {
       entryDate?: string | null;
       exitDate?: string | null;
       inProgress: boolean;
-      project: { __typename?: 'Project'; projectName: string };
+      project: {
+        __typename?: 'Project';
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
       household: { __typename?: 'Household'; id: string };
       client: { __typename?: 'Client'; id: string };
     } | null;
@@ -2450,7 +2764,11 @@ export type AddHouseholdMembersMutation = {
           };
         }>;
       };
-      project: { __typename?: 'Project'; projectName: string };
+      project: {
+        __typename?: 'Project';
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
       client: { __typename?: 'Client'; id: string };
     }> | null;
     errors: Array<{
@@ -2476,7 +2794,11 @@ export type GetEnrollmentQuery = {
     entryDate?: string | null;
     exitDate?: string | null;
     inProgress: boolean;
-    project: { __typename?: 'Project'; projectName: string };
+    project: {
+      __typename?: 'Project';
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
     household: { __typename?: 'Household'; id: string };
     client: { __typename?: 'Client'; id: string };
   } | null;
@@ -2519,39 +2841,12 @@ export type GetEnrollmentWithHoHQuery = {
         };
       }>;
     };
-    project: { __typename?: 'Project'; projectName: string };
-    client: { __typename?: 'Client'; id: string };
-  } | null;
-};
-
-export type GetEnrollmentAssessmentsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-export type GetEnrollmentAssessmentsQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    assessments: {
-      __typename?: 'AssessmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Assessment';
-        id: string;
-        assessmentDate: string;
-        assessmentLevel?: AssessmentLevel | null;
-        assessmentLocation: string;
-        assessmentType?: AssessmentType | null;
-        dateCreated: string;
-        dateUpdated: string;
-        dateDeleted?: string | null;
-      }>;
+    project: {
+      __typename?: 'Project';
+      projectName: string;
+      projectType?: ProjectType | null;
     };
+    client: { __typename?: 'Client'; id: string };
   } | null;
 };
 
@@ -3586,6 +3881,67 @@ export type DeleteProjectCocMutation = {
   } | null;
 };
 
+export const AssessmentDetailFieldsFragmentDoc = gql`
+  fragment AssessmentDetailFields on AssessmentDetail {
+    id
+    dataCollectionStage
+    role
+    status
+    values
+  }
+`;
+export const FormDefinitionFieldsFragmentDoc = gql`
+  fragment FormDefinitionFields on FormDefinition {
+    id
+    version
+    role
+    status
+    identifier
+  }
+`;
+export const AssessmentFieldsFragmentDoc = gql`
+  fragment AssessmentFields on Assessment {
+    id
+    inProgress
+    assessmentDate
+    assessmentLevel
+    assessmentLocation
+    assessmentType
+    prioritizationStatus
+    dateCreated
+    dateUpdated
+    dateDeleted
+    assessmentDetail {
+      ...AssessmentDetailFields
+      definition {
+        ...FormDefinitionFields
+      }
+    }
+  }
+  ${AssessmentDetailFieldsFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
+`;
+export const FormDefinitionWithJsonFieldsFragmentDoc = gql`
+  fragment FormDefinitionWithJsonFields on FormDefinition {
+    ...FormDefinitionFields
+    definition
+  }
+  ${FormDefinitionFieldsFragmentDoc}
+`;
+export const AssessmentWithDefinitionFragmentDoc = gql`
+  fragment AssessmentWithDefinition on Assessment {
+    ...AssessmentFields
+    assessmentDetail {
+      ...AssessmentDetailFields
+      definition {
+        ...FormDefinitionWithJsonFields
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentDetailFieldsFragmentDoc}
+  ${FormDefinitionWithJsonFieldsFragmentDoc}
+`;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -3621,6 +3977,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     exitDate
     project {
       projectName
+      projectType
     }
     inProgress
     household {
@@ -3661,18 +4018,6 @@ export const EnrollmentWithHoHFragmentFragmentDoc = gql`
   }
   ${EnrollmentFieldsFragmentDoc}
   ${HouseholdClientFieldsFragmentDoc}
-`;
-export const AssessmentFieldsFragmentDoc = gql`
-  fragment AssessmentFields on Assessment {
-    id
-    assessmentDate
-    assessmentLevel
-    assessmentLocation
-    assessmentType
-    dateCreated
-    dateUpdated
-    dateDeleted
-  }
 `;
 export const EventFieldsFragmentDoc = gql`
   fragment EventFields on Event {
@@ -3820,6 +4165,362 @@ export const FunderFieldsFragmentDoc = gql`
     startDate
   }
 `;
+export const GetAssessmentDocument = gql`
+  query GetAssessment($id: ID!) {
+    assessment(id: $id) {
+      ...AssessmentFields
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetAssessmentQuery__
+ *
+ * To run a query within a React component, call `useGetAssessmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAssessmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAssessmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetAssessmentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetAssessmentQuery,
+    GetAssessmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetAssessmentQuery, GetAssessmentQueryVariables>(
+    GetAssessmentDocument,
+    options
+  );
+}
+export function useGetAssessmentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAssessmentQuery,
+    GetAssessmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetAssessmentQuery, GetAssessmentQueryVariables>(
+    GetAssessmentDocument,
+    options
+  );
+}
+export type GetAssessmentQueryHookResult = ReturnType<
+  typeof useGetAssessmentQuery
+>;
+export type GetAssessmentLazyQueryHookResult = ReturnType<
+  typeof useGetAssessmentLazyQuery
+>;
+export type GetAssessmentQueryResult = Apollo.QueryResult<
+  GetAssessmentQuery,
+  GetAssessmentQueryVariables
+>;
+export const GetEnrollmentAssessmentsDocument = gql`
+  query GetEnrollmentAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $role: AssessmentRole
+  ) {
+    enrollment(id: $id) {
+      id
+      assessments(
+        limit: $limit
+        offset: $offset
+        role: $role
+        sortOrder: ASSESSMENT_DATE
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      role: // value for 'role'
+ *   },
+ * });
+ */
+export function useGetEnrollmentAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >(GetEnrollmentAssessmentsDocument, options);
+}
+export function useGetEnrollmentAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentAssessmentsQuery,
+    GetEnrollmentAssessmentsQueryVariables
+  >(GetEnrollmentAssessmentsDocument, options);
+}
+export type GetEnrollmentAssessmentsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAssessmentsQuery
+>;
+export type GetEnrollmentAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentAssessmentsLazyQuery
+>;
+export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
+  GetEnrollmentAssessmentsQuery,
+  GetEnrollmentAssessmentsQueryVariables
+>;
+export const GetFormDefinitionDocument = gql`
+  query GetFormDefinition(
+    $enrollmentId: ID!
+    $assessmentRole: AssessmentRole!
+  ) {
+    getFormDefinition(
+      enrollmentId: $enrollmentId
+      assessmentRole: $assessmentRole
+    ) {
+      id
+      version
+      role
+      status
+      identifier
+      definition
+    }
+  }
+`;
+
+/**
+ * __useGetFormDefinitionQuery__
+ *
+ * To run a query within a React component, call `useGetFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormDefinitionQuery({
+ *   variables: {
+ *      enrollmentId: // value for 'enrollmentId'
+ *      assessmentRole: // value for 'assessmentRole'
+ *   },
+ * });
+ */
+export function useGetFormDefinitionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormDefinitionQuery,
+    GetFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormDefinitionQuery,
+    GetFormDefinitionQueryVariables
+  >(GetFormDefinitionDocument, options);
+}
+export function useGetFormDefinitionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormDefinitionQuery,
+    GetFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormDefinitionQuery,
+    GetFormDefinitionQueryVariables
+  >(GetFormDefinitionDocument, options);
+}
+export type GetFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionQuery
+>;
+export type GetFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionLazyQuery
+>;
+export type GetFormDefinitionQueryResult = Apollo.QueryResult<
+  GetFormDefinitionQuery,
+  GetFormDefinitionQueryVariables
+>;
+export const CreateAssessmentDocument = gql`
+  mutation CreateAssessment(
+    $enrollmentId: ID!
+    $formDefinitionId: ID!
+    $values: JsonObject!
+    $assessmentDate: String
+    $inProgress: Boolean
+  ) {
+    createAssessment(
+      input: {
+        enrollmentId: $enrollmentId
+        formDefinitionId: $formDefinitionId
+        assessmentDate: $assessmentDate
+        values: $values
+        inProgress: $inProgress
+      }
+    ) {
+      assessment {
+        ...AssessmentFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateAssessmentMutationFn = Apollo.MutationFunction<
+  CreateAssessmentMutation,
+  CreateAssessmentMutationVariables
+>;
+
+/**
+ * __useCreateAssessmentMutation__
+ *
+ * To run a mutation, you first call `useCreateAssessmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateAssessmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createAssessmentMutation, { data, loading, error }] = useCreateAssessmentMutation({
+ *   variables: {
+ *      enrollmentId: // value for 'enrollmentId'
+ *      formDefinitionId: // value for 'formDefinitionId'
+ *      values: // value for 'values'
+ *      assessmentDate: // value for 'assessmentDate'
+ *      inProgress: // value for 'inProgress'
+ *   },
+ * });
+ */
+export function useCreateAssessmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateAssessmentMutation,
+    CreateAssessmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateAssessmentMutation,
+    CreateAssessmentMutationVariables
+  >(CreateAssessmentDocument, options);
+}
+export type CreateAssessmentMutationHookResult = ReturnType<
+  typeof useCreateAssessmentMutation
+>;
+export type CreateAssessmentMutationResult =
+  Apollo.MutationResult<CreateAssessmentMutation>;
+export type CreateAssessmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateAssessmentMutation,
+  CreateAssessmentMutationVariables
+>;
+export const SaveAssessmentDocument = gql`
+  mutation SaveAssessment(
+    $assessmentId: ID!
+    $values: JsonObject!
+    $assessmentDate: String
+    $inProgress: Boolean
+  ) {
+    saveAssessment(
+      input: {
+        assessmentId: $assessmentId
+        assessmentDate: $assessmentDate
+        values: $values
+        inProgress: $inProgress
+      }
+    ) {
+      assessment {
+        ...AssessmentFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type SaveAssessmentMutationFn = Apollo.MutationFunction<
+  SaveAssessmentMutation,
+  SaveAssessmentMutationVariables
+>;
+
+/**
+ * __useSaveAssessmentMutation__
+ *
+ * To run a mutation, you first call `useSaveAssessmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveAssessmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveAssessmentMutation, { data, loading, error }] = useSaveAssessmentMutation({
+ *   variables: {
+ *      assessmentId: // value for 'assessmentId'
+ *      values: // value for 'values'
+ *      assessmentDate: // value for 'assessmentDate'
+ *      inProgress: // value for 'inProgress'
+ *   },
+ * });
+ */
+export function useSaveAssessmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SaveAssessmentMutation,
+    SaveAssessmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SaveAssessmentMutation,
+    SaveAssessmentMutationVariables
+  >(SaveAssessmentDocument, options);
+}
+export type SaveAssessmentMutationHookResult = ReturnType<
+  typeof useSaveAssessmentMutation
+>;
+export type SaveAssessmentMutationResult =
+  Apollo.MutationResult<SaveAssessmentMutation>;
+export type SaveAssessmentMutationOptions = Apollo.BaseMutationOptions<
+  SaveAssessmentMutation,
+  SaveAssessmentMutationVariables
+>;
 export const SearchClientsDocument = gql`
   query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
     clientSearch(input: $input, limit: $limit, offset: $offset) {
@@ -4471,75 +5172,6 @@ export type GetEnrollmentWithHoHLazyQueryHookResult = ReturnType<
 export type GetEnrollmentWithHoHQueryResult = Apollo.QueryResult<
   GetEnrollmentWithHoHQuery,
   GetEnrollmentWithHoHQueryVariables
->;
-export const GetEnrollmentAssessmentsDocument = gql`
-  query GetEnrollmentAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    enrollment(id: $id) {
-      id
-      assessments(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...AssessmentFields
-        }
-      }
-    }
-  }
-  ${AssessmentFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentAssessmentsQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentAssessmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentAssessmentsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetEnrollmentAssessmentsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentAssessmentsQuery,
-    GetEnrollmentAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentAssessmentsQuery,
-    GetEnrollmentAssessmentsQueryVariables
-  >(GetEnrollmentAssessmentsDocument, options);
-}
-export function useGetEnrollmentAssessmentsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentAssessmentsQuery,
-    GetEnrollmentAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentAssessmentsQuery,
-    GetEnrollmentAssessmentsQueryVariables
-  >(GetEnrollmentAssessmentsDocument, options);
-}
-export type GetEnrollmentAssessmentsQueryHookResult = ReturnType<
-  typeof useGetEnrollmentAssessmentsQuery
->;
-export type GetEnrollmentAssessmentsLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentAssessmentsLazyQuery
->;
-export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
-  GetEnrollmentAssessmentsQuery,
-  GetEnrollmentAssessmentsQueryVariables
 >;
 export const GetEnrollmentEventsDocument = gql`
   query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
