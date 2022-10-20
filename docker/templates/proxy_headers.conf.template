@@ -3,3 +3,12 @@ proxy_set_header X-Forwarded-Proto $scheme;
 proxy_set_header X-Forwarded-Ssl on;
 proxy_set_header X-Forwarded-Port $server_port;
 proxy_set_header X-Forwarded-Host $host;
+
+# These are normally 60 second. Trying these first to fix instability problems.
+proxy_connect_timeout       300;
+proxy_send_timeout          300;
+proxy_read_timeout          300;
+
+# Some things to try
+# proxy_set_header Connection "";
+# proxy_set_header Connection "keep-alive";
