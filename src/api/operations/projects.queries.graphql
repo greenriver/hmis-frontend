@@ -19,6 +19,24 @@ query GetProject($id: ID!) {
   }
 }
 
+query GetFunder($id: ID!) {
+  funder(id: $id) {
+    ...FunderFields
+  }
+}
+
+query GetInventory($id: ID!) {
+  inventory(id: $id) {
+    ...InventoryFields
+  }
+}
+
+query GetProjectCoc($id: ID!) {
+  projectCoc(id: $id) {
+    ...ProjectCocFields
+  }
+}
+
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationAllFields
@@ -75,6 +93,156 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
     clientMutationId
     organization {
       ...OrganizationAllFieldsAndProjects
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    inventories(limit: $limit, offset: $offset, sortOrder: START_DATE) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...InventoryFields
+      }
+    }
+  }
+}
+
+query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    projectCocs(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectCocFields
+      }
+    }
+  }
+}
+
+query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    funders(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FunderFields
+      }
+    }
+  }
+}
+
+mutation CreateInventory($input: CreateInventoryInput!) {
+  createInventory(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateInventory($input: UpdateInventoryInput!) {
+  updateInventory(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteInventory($input: DeleteInventoryInput!) {
+  deleteInventory(input: $input) {
+    clientMutationId
+    inventory {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateFunder($input: CreateFunderInput!) {
+  createFunder(input: $input) {
+    clientMutationId
+    funder {
+      ...FunderFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateFunder($input: UpdateFunderInput!) {
+  updateFunder(input: $input) {
+    clientMutationId
+    funder {
+      ...FunderFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteFunder($input: DeleteFunderInput!) {
+  deleteFunder(input: $input) {
+    clientMutationId
+    funder {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateProjectCoc($input: CreateProjectCocInput!) {
+  createProjectCoc(input: $input) {
+    clientMutationId
+    projectCoc {
+      ...ProjectCocFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateProjectCoc($input: UpdateProjectCocInput!) {
+  updateProjectCoc(input: $input) {
+    clientMutationId
+    projectCoc {
+      ...ProjectCocFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
+  deleteProjectCoc(input: $input) {
+    clientMutationId
+    projectCoc {
+      id
     }
     errors {
       ...ValidationErrorFields

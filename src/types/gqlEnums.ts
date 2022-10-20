@@ -8,6 +8,16 @@ export const HmisEnums = {
     VIRTUAL: 'Virtual',
     IN_PERSON: 'In Person',
   },
+  Availability: {
+    YEAR_ROUND: 'Year-round',
+    SEASONAL: 'Seasonal',
+    OVERFLOW: 'Overflow',
+  },
+  BedType: {
+    FACILITY_BASED: 'Facility-based',
+    VOUCHER: 'Voucher',
+    OTHER: 'Other',
+  },
   DOBDataQuality: {
     DOB_FULL_DOB_REPORTED: 'Full DOB reported',
     DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED:
@@ -15,6 +25,13 @@ export const HmisEnums = {
     DOB_CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DOB_CLIENT_REFUSED: 'Client refused',
     DOB_DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  DataCollectionStage: {
+    PROJECT_ENTRY: 'Project entry',
+    UPDATE: 'Update',
+    PROJECT_EXIT: 'Project exit',
+    ANNUAL_ASSESSMENT: 'Annual assessment',
+    POST_EXIT: 'Post-exit',
   },
   Ethnicity: {
     ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_: 'Non-Hispanic/Non-Latin(a)(o)(x)',
@@ -61,6 +78,82 @@ export const HmisEnums = {
     REFERRAL_TO_A_HOUSING_STABILITY_VOUCHER:
       'Referral to a Housing Stability Voucher',
   },
+  FundingSource: {
+    HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY_:
+      'HUD: CoC - Homelessness Prevention (High Performing Communities Only)',
+    HUD_COC_PERMANENT_SUPPORTIVE_HOUSING:
+      'HUD: CoC - Permanent Supportive Housing',
+    HUD_COC_RAPID_RE_HOUSING: 'HUD: CoC - Rapid Re-Housing',
+    HUD_COC_SUPPORTIVE_SERVICES_ONLY: 'HUD: CoC - Supportive Services Only',
+    HUD_COC_TRANSITIONAL_HOUSING: 'HUD: CoC - Transitional Housing',
+    HUD_COC_SAFE_HAVEN: 'HUD: CoC - Safe Haven',
+    HUD_COC_SINGLE_ROOM_OCCUPANCY_SRO_:
+      'HUD: CoC - Single Room Occupancy (SRO)',
+    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
+      'HUD: ESG - Emergency Shelter (operating and/or essential services)',
+    HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
+    HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
+    HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
+    HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_:
+      'HUD: Rural Housing Stability Assistance Program ',
+    HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
+    HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
+    HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA_:
+      'HUD: HOPWA - Permanent Housing (facility based or TBRA)',
+    HUD_HOPWA_PERMANENT_HOUSING_PLACEMENT:
+      'HUD: HOPWA - Permanent Housing Placement',
+    HUD_HOPWA_SHORT_TERM_RENT_MORTGAGE_UTILITY_ASSISTANCE:
+      'HUD: HOPWA - Short-Term Rent, Mortgage, Utility assistance',
+    HUD_HOPWA_SHORT_TERM_SUPPORTIVE_FACILITY:
+      'HUD: HOPWA - Short-Term Supportive Facility',
+    HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA_:
+      'HUD: HOPWA - Transitional Housing (facility based or TBRA)',
+    HUD_HUD_VASH: 'HUD: HUD/VASH',
+    HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
+      'HHS: PATH - Street Outreach & Supportive Services Only',
+    HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER_:
+      'HHS: RHY - Basic Center Program (prevention and shelter)',
+    HHS_RHY_MATERNITY_GROUP_HOME_FOR_PREGNANT_AND_PARENTING_YOUTH:
+      'HHS: RHY - Maternity Group Home for Pregnant and Parenting Youth',
+    HHS_RHY_TRANSITIONAL_LIVING_PROGRAM:
+      'HHS: RHY - Transitional Living Program',
+    HHS_RHY_STREET_OUTREACH_PROJECT: 'HHS: RHY - Street Outreach Project',
+    HHS_RHY_DEMONSTRATION_PROJECT: 'HHS: RHY - Demonstration Project',
+    VA_CRS_CONTRACT_RESIDENTIAL_SERVICES:
+      'VA: CRS Contract Residential Services',
+    VA_COMMUNITY_CONTRACT_SAFE_HAVEN_PROGRAM:
+      'VA: Community Contract Safe Haven Program',
+    VA_COMPENSATED_WORK_THERAPY_TRANSITIONAL_RESIDENCE:
+      'VA: Compensated Work Therapy Transitional Residence',
+    VA_SUPPORTIVE_SERVICES_FOR_VETERAN_FAMILIES:
+      'VA: Supportive Services for Veteran Families',
+    N_A: 'N/A',
+    HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
+    HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
+      'HUD: Public and Indian Housing (PIH) Programs',
+    VA_GRANT_PER_DIEM_BRIDGE_HOUSING: 'VA: Grant Per Diem - Bridge Housing',
+    VA_GRANT_PER_DIEM_LOW_DEMAND: 'VA: Grant Per Diem - Low Demand',
+    VA_GRANT_PER_DIEM_HOSPITAL_TO_HOUSING:
+      'VA: Grant Per Diem - Hospital to Housing',
+    VA_GRANT_PER_DIEM_CLINICAL_TREATMENT:
+      'VA: Grant Per Diem - Clinical Treatment',
+    VA_GRANT_PER_DIEM_SERVICE_INTENSIVE_TRANSITIONAL_HOUSING:
+      'VA: Grant Per Diem - Service Intensive Transitional Housing',
+    VA_GRANT_PER_DIEM_TRANSITION_IN_PLACE:
+      'VA: Grant Per Diem - Transition in Place',
+    HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP_:
+      'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
+    HUD_COC_JOINT_COMPONENT_TH_RRH: 'HUD: CoC - Joint Component TH/RRH',
+    VA_GRANT_PER_DIEM_CASE_MANAGEMENT_HOUSING_RETENTION:
+      'VA: Grant Per Diem - Case Management/Housing Retention',
+    LOCAL_OR_OTHER_FUNDING_SOURCE: 'Local or Other Funding Source',
+    HUD_ESG_CV: 'HUD: ESG - CV',
+    HUD_HOPWA_CV: 'HUD: HOPWA - CV',
+    HUD_COC_JOINT_COMPONENT_RRH_PSH_: 'HUD: CoC - Joint Component RRH/PSH ',
+    HUD_HOME: 'HUD: HOME',
+    HUD_HOME_ARP_: 'HUD: HOME (ARP)',
+    HUD_PIH_EMERGENCY_HOUSING_VOUCHER_: 'HUD: PIH (Emergency Housing Voucher)',
+  },
   Gender: {
     GENDER_FEMALE: 'Female',
     GENDER_MALE: 'Male',
@@ -72,10 +165,22 @@ export const HmisEnums = {
     GENDER_CLIENT_REFUSED: 'Client refused',
     GENDER_DATA_NOT_COLLECTED: 'Data not collected',
   },
+  GeographyType: {
+    URBAN: 'Urban',
+    SUBURBAN: 'Suburban',
+    RURAL: 'Rural',
+    UNKNOWN_DATA_NOT_COLLECTED: 'Unknown / data not collected',
+  },
   HOPWAMedAssistedLivingFac: {
     NO: 'No',
     YES: 'Yes',
     NON_HOPWA_FUNDED_PROJECT: 'Non-HOPWA Funded Project',
+  },
+  HouseholdType: {
+    HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
+    HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD:
+      'Households with at least one adult and one child',
+    HOUSEHOLDS_WITH_ONLY_CHILDREN: 'Households with only children',
   },
   HousingType: {
     SITE_BASED_SINGLE_SITE: 'Site-based - single site',

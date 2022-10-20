@@ -50,3 +50,52 @@ fragment ProjectAllFields on Project {
     organizationName
   }
 }
+
+fragment InventoryFields on Inventory {
+  availability
+  bedInventory
+  chBedInventory
+  chVetBedInventory
+  chYouthBedInventory
+  cocCode
+  dateCreated
+  dateDeleted
+  dateUpdated
+  esBedType
+  householdType
+  id
+  inventoryEndDate
+  inventoryStartDate
+  otherBedInventory
+  unitInventory
+  vetBedInventory
+  youthBedInventory
+  youthVetBedInventory
+}
+
+fragment ProjectCocFields on ProjectCoc {
+  address1
+  address2
+  city
+  cocCode
+  dateCreated
+  dateDeleted
+  dateUpdated
+  geocode
+  geographyType
+  id
+  state
+  zip
+}
+
+fragment FunderFields on Funder {
+  dateCreated
+  dateDeleted
+  dateUpdated
+  endDate
+  funder
+  grantId
+  id
+  otherFunder
+  startDate
+}

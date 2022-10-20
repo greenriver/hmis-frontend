@@ -1,0 +1,76 @@
+{
+  "name": "funder-edit",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "name",
+      "text": "Details",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "coc",
+          "text": "CoC Code",
+          "mapping": {
+            "field": "cocCode"
+          }
+        },
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "geocode",
+          "text": "Geocode",
+          "mapping": {
+            "field": "geocode"
+          }
+        },
+        {
+          "type": "choice",
+          "required": false,
+          "linkId": "geotype",
+          "text": "Geography Type",
+          "answerValueSet": "GeographyType",
+          "mapping": {
+            "field": "geographyType"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "address",
+      "text": "Address",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "city",
+          "text": "City",
+          "mapping": {
+            "field": "city"
+          }
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "state",
+          "text": "State",
+          "mapping": {
+            "field": "state"
+          }
+        },
+        {
+          "type": "string",
+          "required": false,
+          "linkId": "zip",
+          "text": "Zip",
+          "mapping": {
+            "field": "zip"
+          }
+        }
+      ]
+    }
+  ]
+}

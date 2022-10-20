@@ -92,6 +92,10 @@ export const formValueToGqlValue = (value: any, item: Item): any => {
     return formatDateForGql(value);
   }
 
+  if (item.type === FieldType.integer) {
+    return parseInt(value);
+  }
+
   if (
     item.type === FieldType.choice &&
     item.answerValueSet &&
@@ -263,7 +267,6 @@ export const createInitialValues = (
         typeof record[key] === 'string'
       ) {
         // Convert date string to Date object
-        console.log('parsing date string to create initial value');
         values[item.linkId] = parseHmisDateString(record[key]);
       } else {
         // Set the property directly as the initial form value

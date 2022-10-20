@@ -1,0 +1,77 @@
+{
+  "name": "inventory",
+  "item": [
+    {
+      "type": "group",
+      "linkId": "name",
+      "text": "Details",
+      "required": false,
+      "item": [
+        {
+          "type": "string",
+          "required": true,
+          "linkId": "coc",
+          "text": "CoC Code",
+          "mapping": {
+            "field": "cocCode"
+          }
+        },
+        {
+          "type": "choice",
+          "required": true,
+          "linkId": "hhtype",
+          "text": "Household Type",
+          "answerValueSet": "HouseholdType",
+          "mapping": {
+            "field": "householdType"
+          }
+        },
+        {
+          "type": "integer",
+          "required": true,
+          "linkId": "units",
+          "text": "Unit Inventory",
+          "mapping": {
+            "field": "unitInventory"
+          }
+        },
+        {
+          "type": "integer",
+          "required": true,
+          "linkId": "beds",
+          "text": "Bed Inventory",
+          "mapping": {
+            "field": "bedInventory"
+          }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "linkId": "dates",
+      "text": "Operating Period",
+      "required": false,
+      "display": { "direction": "row" },
+      "item": [
+        {
+          "type": "date",
+          "required": true,
+          "linkId": "2.02.3",
+          "text": "Start Date",
+          "mapping": {
+            "field": "inventoryStartDate"
+          }
+        },
+        {
+          "type": "date",
+          "required": false,
+          "linkId": "2.02.4",
+          "text": "End Date",
+          "mapping": {
+            "field": "inventoryEndDate"
+          }
+        }
+      ]
+    }
+  ]
+}
