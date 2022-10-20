@@ -19,12 +19,14 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (a) => HmisEnums.AssessmentType[a.assessmentType],
+    render: (a) =>
+      a.assessmentType && HmisEnums.AssessmentType[a.assessmentType],
     linkTreatment: true,
   },
   {
     header: 'Level',
-    render: (a) => HmisEnums.AssessmentLevel[a.assessmentLevel],
+    render: (a) =>
+      a.assessmentLevel && HmisEnums.AssessmentLevel[a.assessmentLevel],
   },
   {
     header: 'Location',
