@@ -25,29 +25,17 @@ describe('formValueToGqlValue', () => {
 
   it('transforms single-select choice', () => {
     const item = { linkId: 'abc', type: ItemType.Choice };
-    expect(formValueToGqlValue({ valueString: 'answer' }, item)).toBe('answer');
-    expect(formValueToGqlValue({ valueCoding: { code: 'answer' } }, item)).toBe(
-      'answer'
-    );
+    expect(formValueToGqlValue({ code: 'answer' }, item)).toBe('answer');
   });
 
   it('transforms multi-select choice', () => {
     const item = { linkId: 'abc', type: ItemType.Choice, multiple: true };
     expect(
-      formValueToGqlValue(
-        [{ valueString: 'answer' }, { valueString: 'answer2' }],
-        item
-      )
+      formValueToGqlValue([{ code: 'answer' }, { code: 'answer2' }], item)
     ).toEqual(['answer', 'answer2']);
 
     expect(
-      formValueToGqlValue(
-        [
-          { valueCoding: { code: 'answer' } },
-          { valueCoding: { code: 'answer2' } },
-        ],
-        item
-      )
+      formValueToGqlValue([{ code: 'answer' }, { code: 'answer2' }], item)
     ).toEqual(['answer', 'answer2']);
   });
 });

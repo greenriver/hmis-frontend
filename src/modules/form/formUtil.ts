@@ -74,7 +74,7 @@ const findItem = (
 
 /**
  * Transform form value shape into GraphQL value shape.
- * For example, a selected option '{ valueCoding: { code: 'ES' }}'
+ * For example, a selected option '{ code: 'ES' }'
  * is converted to enum 'ES'.
  *
  * @param value value from the form state
@@ -239,9 +239,7 @@ export const createInitialValues = (
         const option = (
           localResolvePickList(item.pickListReference) || []
         ).find((opt) => opt.code === record[key]);
-        values[item.linkId] = option || {
-          valueCoding: { code: record[key] },
-        };
+        values[item.linkId] = option || { code: record[key] };
       } else if (
         item.type === ItemType.Date &&
         typeof record[key] === 'string'
