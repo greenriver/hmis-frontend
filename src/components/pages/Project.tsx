@@ -126,6 +126,7 @@ const Project = () => {
               >
                 Edit Project
               </RouterLink>
+              {/* TODO implement delete */}
               <RouterLink color='text.secondary' to=''>
                 Delete Project
               </RouterLink>

@@ -6,9 +6,26 @@ fragment FormDefinitionFields on FormDefinition {
   identifier
 }
 
+fragment ItemFields on FormItem {
+  linkId
+  prefix
+  text
+  required
+  hidden
+  readOnly
+  repeats
+  answerValueSet
+}
 fragment FormDefinitionWithJson on FormDefinition {
   ...FormDefinitionFields
-  definition
+  definition {
+    item {
+      ...ItemFields
+      item {
+        ...ItemFields
+      }
+    }
+  }
 }
 
 fragment AssessmentDetailFields on AssessmentDetail {

@@ -65,7 +65,7 @@ export type Assessment = {
   user: User;
 };
 
-/** HUD AssessmentDetail */
+/** AssessmentDetail */
 export type AssessmentDetail = {
   __typename?: 'AssessmentDetail';
   assessment: Assessment;
@@ -667,15 +667,43 @@ export type EventsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD FormDefinition */
+/** FormDefinition */
 export type FormDefinition = {
   __typename?: 'FormDefinition';
-  definition: Scalars['JsonObject'];
+  definition: FormDefinitionJson;
   id: Scalars['ID'];
   identifier: Scalars['String'];
   role: AssessmentRole;
   status: Scalars['String'];
   version: Scalars['Int'];
+};
+
+export type FormDefinitionJson = {
+  __typename?: 'FormDefinitionJson';
+  /** Nested items */
+  item?: Maybe<Array<FormItem>>;
+};
+
+/** Item representing a question of group in a FormDefinition */
+export type FormItem = {
+  __typename?: 'FormItem';
+  /** Reference to value set of possible answer options */
+  answerValueSet?: Maybe<Scalars['String']>;
+  /** Whether the item should always be hidden */
+  hidden?: Maybe<Scalars['Boolean']>;
+  /** Nested items */
+  item?: Maybe<Array<FormItem>>;
+  /** Unique identifier for item */
+  linkId: Scalars['String'];
+  prefix?: Maybe<Scalars['String']>;
+  /** Whether human editing is allowed */
+  readOnly?: Maybe<Scalars['Boolean']>;
+  /** Whether the item may repeat (for choice types, this means multiple choice) */
+  repeats?: Maybe<Scalars['Boolean']>;
+  /** Whether the item must be included in data results */
+  required?: Maybe<Scalars['Boolean']>;
+  /** Primary text for the item */
+  text?: Maybe<Scalars['String']>;
 };
 
 export type Funder = {
@@ -1338,7 +1366,7 @@ export type Query = {
   enrollment?: Maybe<Enrollment>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
-  /** Get form assessment for enrollment & assessment role */
+  /** Get form definition for enrollment & assessment role */
   getFormDefinition?: Maybe<FormDefinition>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
@@ -2029,14 +2057,50 @@ export type FormDefinitionFieldsFragment = {
   identifier: string;
 };
 
+export type ItemFieldsFragment = {
+  __typename?: 'FormItem';
+  linkId: string;
+  prefix?: string | null;
+  text?: string | null;
+  required?: boolean | null;
+  hidden?: boolean | null;
+  readOnly?: boolean | null;
+  repeats?: boolean | null;
+  answerValueSet?: string | null;
+};
+
 export type FormDefinitionWithJsonFragment = {
   __typename?: 'FormDefinition';
-  definition: any;
   id: string;
   version: number;
   role: AssessmentRole;
   status: string;
   identifier: string;
+  definition: {
+    __typename?: 'FormDefinitionJson';
+    item?: Array<{
+      __typename?: 'FormItem';
+      linkId: string;
+      prefix?: string | null;
+      text?: string | null;
+      required?: boolean | null;
+      hidden?: boolean | null;
+      readOnly?: boolean | null;
+      repeats?: boolean | null;
+      answerValueSet?: string | null;
+      item?: Array<{
+        __typename?: 'FormItem';
+        linkId: string;
+        prefix?: string | null;
+        text?: string | null;
+        required?: boolean | null;
+        hidden?: boolean | null;
+        readOnly?: boolean | null;
+        repeats?: boolean | null;
+        answerValueSet?: string | null;
+      }> | null;
+    }> | null;
+  };
 };
 
 export type AssessmentDetailFieldsFragment = {
@@ -2097,12 +2161,36 @@ export type AssessmentWithDefinitionAndValuesFragment = {
     status: string;
     definition: {
       __typename?: 'FormDefinition';
-      definition: any;
       id: string;
       version: number;
       role: AssessmentRole;
       status: string;
       identifier: string;
+      definition: {
+        __typename?: 'FormDefinitionJson';
+        item?: Array<{
+          __typename?: 'FormItem';
+          linkId: string;
+          prefix?: string | null;
+          text?: string | null;
+          required?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          answerValueSet?: string | null;
+          item?: Array<{
+            __typename?: 'FormItem';
+            linkId: string;
+            prefix?: string | null;
+            text?: string | null;
+            required?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            answerValueSet?: string | null;
+          }> | null;
+        }> | null;
+      };
     };
   } | null;
 };
@@ -2134,12 +2222,36 @@ export type GetAssessmentQuery = {
       status: string;
       definition: {
         __typename?: 'FormDefinition';
-        definition: any;
         id: string;
         version: number;
         role: AssessmentRole;
         status: string;
         identifier: string;
+        definition: {
+          __typename?: 'FormDefinitionJson';
+          item?: Array<{
+            __typename?: 'FormItem';
+            linkId: string;
+            prefix?: string | null;
+            text?: string | null;
+            required?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            answerValueSet?: string | null;
+            item?: Array<{
+              __typename?: 'FormItem';
+              linkId: string;
+              prefix?: string | null;
+              text?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              answerValueSet?: string | null;
+            }> | null;
+          }> | null;
+        };
       };
     } | null;
   } | null;
@@ -2203,12 +2315,36 @@ export type GetFormDefinitionQuery = {
   __typename?: 'Query';
   getFormDefinition?: {
     __typename?: 'FormDefinition';
-    definition: any;
     id: string;
     version: number;
     role: AssessmentRole;
     status: string;
     identifier: string;
+    definition: {
+      __typename?: 'FormDefinitionJson';
+      item?: Array<{
+        __typename?: 'FormItem';
+        linkId: string;
+        prefix?: string | null;
+        text?: string | null;
+        required?: boolean | null;
+        hidden?: boolean | null;
+        readOnly?: boolean | null;
+        repeats?: boolean | null;
+        answerValueSet?: string | null;
+        item?: Array<{
+          __typename?: 'FormItem';
+          linkId: string;
+          prefix?: string | null;
+          text?: string | null;
+          required?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          answerValueSet?: string | null;
+        }> | null;
+      }> | null;
+    };
   } | null;
 };
 
@@ -2245,12 +2381,36 @@ export type CreateAssessmentMutation = {
         status: string;
         definition: {
           __typename?: 'FormDefinition';
-          definition: any;
           id: string;
           version: number;
           role: AssessmentRole;
           status: string;
           identifier: string;
+          definition: {
+            __typename?: 'FormDefinitionJson';
+            item?: Array<{
+              __typename?: 'FormItem';
+              linkId: string;
+              prefix?: string | null;
+              text?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              answerValueSet?: string | null;
+              item?: Array<{
+                __typename?: 'FormItem';
+                linkId: string;
+                prefix?: string | null;
+                text?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                answerValueSet?: string | null;
+              }> | null;
+            }> | null;
+          };
         };
       } | null;
     } | null;
@@ -2297,12 +2457,36 @@ export type SaveAssessmentMutation = {
         status: string;
         definition: {
           __typename?: 'FormDefinition';
-          definition: any;
           id: string;
           version: number;
           role: AssessmentRole;
           status: string;
           identifier: string;
+          definition: {
+            __typename?: 'FormDefinitionJson';
+            item?: Array<{
+              __typename?: 'FormItem';
+              linkId: string;
+              prefix?: string | null;
+              text?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              answerValueSet?: string | null;
+              item?: Array<{
+                __typename?: 'FormItem';
+                linkId: string;
+                prefix?: string | null;
+                text?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                answerValueSet?: string | null;
+              }> | null;
+            }> | null;
+          };
         };
       } | null;
     } | null;
@@ -3989,12 +4173,32 @@ export const AssessmentFieldsFragmentDoc = gql`
   ${AssessmentDetailFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const ItemFieldsFragmentDoc = gql`
+  fragment ItemFields on FormItem {
+    linkId
+    prefix
+    text
+    required
+    hidden
+    readOnly
+    repeats
+    answerValueSet
+  }
+`;
 export const FormDefinitionWithJsonFragmentDoc = gql`
   fragment FormDefinitionWithJson on FormDefinition {
     ...FormDefinitionFields
-    definition
+    definition {
+      item {
+        ...ItemFields
+        item {
+          ...ItemFields
+        }
+      }
+    }
   }
   ${FormDefinitionFieldsFragmentDoc}
+  ${ItemFieldsFragmentDoc}
 `;
 export const AssessmentWithDefinitionAndValuesFragmentDoc = gql`
   fragment AssessmentWithDefinitionAndValues on Assessment {
