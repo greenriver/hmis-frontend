@@ -1,5 +1,4 @@
 import { Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -8,7 +7,6 @@ import {
   eventReferralResult,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EventFieldsFragment,
@@ -34,6 +32,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
 ];
 
 const EventsPanel = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientId,
   enrollmentId,
 }: {
@@ -43,16 +42,7 @@ const EventsPanel = ({
   <Stack>
     <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
       <Typography variant='h5'>Events</Typography>
-      <ButtonLink
-        variant='outlined'
-        color='secondary'
-        size='small'
-        to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
-          clientId,
-          enrollmentId,
-          assessmentType: 'TODO',
-        })}
-      >
+      <ButtonLink variant='outlined' color='secondary' size='small' to=''>
         + Add Event
       </ButtonLink>
     </Stack>

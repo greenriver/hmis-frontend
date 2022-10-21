@@ -113,20 +113,6 @@ query GetEnrollmentWithHoH($id: ID!) {
   }
 }
 
-query GetEnrollmentAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  enrollment(id: $id) {
-    id
-    assessments(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...AssessmentFields
-      }
-    }
-  }
-}
-
 query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {
     id

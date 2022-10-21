@@ -1,11 +1,9 @@
 import { Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetEnrollmentServicesDocument,
@@ -44,6 +42,7 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
 ];
 
 const ServicesPanel = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientId,
   enrollmentId,
 }: {
@@ -53,16 +52,7 @@ const ServicesPanel = ({
   <Stack>
     <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
       <Typography variant='h5'>Services</Typography>
-      <ButtonLink
-        variant='outlined'
-        color='secondary'
-        size='small'
-        to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
-          clientId,
-          enrollmentId,
-          assessmentType: 'TODO',
-        })}
-      >
+      <ButtonLink variant='outlined' color='secondary' size='small' to=''>
         + Add Service
       </ButtonLink>
     </Stack>

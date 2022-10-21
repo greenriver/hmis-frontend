@@ -1,9 +1,10 @@
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
+import FinishIntakeButton from './FinishIntakeButton';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
@@ -12,6 +13,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { AssessmentRole } from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
   const { clientId, enrollmentId } = useParams() as {
@@ -76,7 +78,7 @@ const ViewEnrollment = () => {
               </ButtonLink>
             </Paper>
             <Paper sx={{ p: 2 }}>
-              <EnrollmentRecordTabs />
+              <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>
           </Stack>
         </Grid>
@@ -87,13 +89,11 @@ const ViewEnrollment = () => {
 
               {/* FIXME this should check whether ANY enrollments in the household are in progress, not just this one */}
               {enrollment.inProgress ? (
-                <Button
-                  variant='outlined'
-                  color='error'
+                <FinishIntakeButton
+                  enrollmentId={enrollmentId}
+                  clientId={clientId}
                   sx={{ pl: 3, justifyContent: 'left' }}
-                >
-                  Perform Intake
-                </Button>
+                />
               ) : (
                 <Typography variant='body2'>Intake completed</Typography>
               )}
@@ -107,8 +107,7 @@ const ViewEnrollment = () => {
                 to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
-                  // FIXME
-                  assessmentType: 'annual',
+                  assessmentRole: AssessmentRole.Update,
                 })}
               >
                 + Assessment

@@ -1,22 +1,27 @@
 import { Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
+  AssessmentRole,
+  EnrollmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
+  ProjectType,
 } from '@/types/gqlTypes';
 
-const columns: ColumnDef<AssessmentFieldsFragment>[] = [
-  { header: 'ID', render: 'id' },
+const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Type',
     render: (a) =>
@@ -32,22 +37,42 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
     header: 'Location',
     render: (e) => e.assessmentLocation,
   },
+];
+
+const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
-    header: 'Date',
+    header: 'Assessment Date',
+    width: '20%',
+
     render: (e) => parseAndFormatDate(e.assessmentDate),
   },
   {
+    header: 'Type',
+    width: '10%',
+    linkTreatment: true,
+    render: (assessment) => assessment.assessmentDetail?.role,
+  },
+  {
+    header: 'Status',
+    width: '10%',
+    render: (assessment) => assessment.assessmentDetail?.status,
+  },
+
+  {
     header: 'Last Updated',
-    render: (e) => parseAndFormatDate(e.dateUpdated),
+    // width: '5%',
+    render: (e) => parseAndFormatDateTime(e.dateUpdated),
   },
 ];
 
 const AssessmentsPanel = ({
   clientId,
   enrollmentId,
+  enrollment,
 }: {
   clientId: string;
   enrollmentId: string;
+  enrollment: EnrollmentFieldsFragment;
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
@@ -57,6 +82,13 @@ const AssessmentsPanel = ({
         assessmentId: assessment.id,
       }),
     [clientId, enrollmentId]
+  );
+  const tableColumns = useMemo(
+    () =>
+      enrollment.project.projectType === ProjectType.Ce
+        ? [...columns, ...ceColumns]
+        : columns,
+    [enrollment]
   );
 
   return (
@@ -70,7 +102,7 @@ const AssessmentsPanel = ({
           to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
             clientId,
             enrollmentId,
-            assessmentType: 'TODO',
+            assessmentRole: AssessmentRole.Update,
           })}
         >
           + Add Assessment
@@ -84,7 +116,7 @@ const AssessmentsPanel = ({
         queryVariables={{ id: enrollmentId }}
         queryDocument={GetEnrollmentAssessmentsDocument}
         rowLinkTo={rowLinkTo}
-        columns={columns}
+        columns={tableColumns}
         toNodes={(data: GetEnrollmentAssessmentsQuery) =>
           data.enrollment?.assessments?.nodes || []
         }

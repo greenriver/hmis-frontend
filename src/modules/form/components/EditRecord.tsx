@@ -1,5 +1,5 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import DynamicForm, {
   Props as DynamicFormProps,
@@ -48,6 +48,7 @@ const EditRecord = <
     onCompleted: (data) => {
       const errors = getErrors(data);
       if ((errors || []).length > 0) {
+        window.scrollTo(0, 0);
         setErrors(errors);
       } else {
         onCompleted(data);
@@ -60,28 +61,28 @@ const EditRecord = <
     return createInitialValues(definition, record, mappingKey);
   }, [record, mappingKey, definition]);
 
-  const submitHandler = (values: Record<string, any>) => {
-    // Transform values into client input query variables
-    const inputValues = transformSubmitValues({
-      definition,
-      values,
-      mappingKey,
-      autofillNotCollected: true,
-      autofillNulls: true,
-      autofillBooleans: true,
-    });
-    console.log(JSON.stringify(inputValues, null, 2));
+  const submitHandler = useCallback(
+    (values: Record<string, any>) => {
+      // Transform values into client input query variables
+      const inputValues = transformSubmitValues({
+        definition,
+        values,
+        mappingKey,
+        autofillNotCollected: true,
+        autofillNulls: true,
+        autofillBooleans: true,
+      });
+      console.log(JSON.stringify(inputValues, null, 2));
 
-    const input = {
-      input: { ...inputValues, ...inputVariables },
-      id: record?.id,
-    };
+      const input = {
+        input: { ...inputValues, ...inputVariables },
+        id: record?.id,
+      };
 
-    void mutateFunction({
-      variables: { input } as QueryVariables,
-      onCompleted: () => window.scrollTo(0, 0),
-    });
-  };
+      void mutateFunction({ variables: { input } as QueryVariables });
+    },
+    [definition, inputVariables, mutateFunction, mappingKey, record]
+  );
 
   if (error) console.error(error); // FIXME handle error on form submission
 

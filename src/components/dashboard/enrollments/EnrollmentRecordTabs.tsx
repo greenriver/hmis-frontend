@@ -7,6 +7,8 @@ import AssessmentsPanel from './tabs/AssessmentsPanel';
 import EventsPanel from './tabs/EventsPanel';
 import ServicesPanel from './tabs/ServicesPanel';
 
+import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
+
 const tabs = [
   {
     label: 'Assessments',
@@ -28,7 +30,11 @@ const tabs = [
   },
 ];
 
-const EnrollmentRecordTabs: React.FC = () => {
+const EnrollmentRecordTabs = ({
+  enrollment,
+}: {
+  enrollment: EnrollmentFieldsFragment;
+}) => {
   const { clientId, enrollmentId } = useParams() as {
     clientId: string;
     enrollmentId: string;
@@ -69,7 +75,11 @@ const EnrollmentRecordTabs: React.FC = () => {
           {label === currentTab && (
             <Container maxWidth='xl'>
               {Component && (
-                <Component clientId={clientId} enrollmentId={enrollmentId} />
+                <Component
+                  clientId={clientId}
+                  enrollmentId={enrollmentId}
+                  enrollment={enrollment}
+                />
               )}
             </Container>
           )}
