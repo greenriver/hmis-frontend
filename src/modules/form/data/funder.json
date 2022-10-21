@@ -2,64 +2,54 @@
   "name": "funder-edit",
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "name",
       "required": false,
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": true,
           "linkId": "funder",
           "text": "Funding Source",
-          "answerValueSet": "FundingSource",
-          "mapping": {
-            "field": "funder"
-          }
+          "pickListReference": "FundingSource",
+          "queryField": "funder"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "other",
           "text": "Other Funder",
-          "mapping": {
-            "field": "otherFunder"
-          }
+          "queryField": "otherFunder"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": true,
           "linkId": "grant-id",
           "text": "Grant Identifier",
-          "mapping": {
-            "field": "grantId"
-          }
+          "queryField": "grantId"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "dates",
       "text": "Operating Period",
       "required": false,
       "display": { "direction": "row" },
       "item": [
         {
-          "type": "date",
+          "type": "DATE",
           "required": true,
           "linkId": "start",
           "text": "Start Date",
-          "mapping": {
-            "field": "startDate"
-          }
+          "queryField": "startDate"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "required": false,
           "linkId": "end",
           "text": "End Date",
-          "mapping": {
-            "field": "endDate"
-          }
+          "queryField": "endDate"
         }
       ]
     }

@@ -1,60 +1,53 @@
 {
   "item": [
     {
-      "type": "string",
+      "type": "STRING",
       "required": false,
       "linkId": "1",
       "text": "Personal ID",
-      "mapping": {
-        "clientSearchInput": "personalId"
-      }
+
+      "queryField": "personalId"
     },
     {
-      "type": "string",
+      "type": "STRING",
       "required": false,
       "linkId": "2",
       "text": "First Name",
-      "mapping": {
-        "clientSearchInput": "firstName"
-      }
+
+      "queryField": "firstName"
     },
     {
-      "type": "string",
+      "type": "STRING",
       "required": false,
       "linkId": "3",
       "text": "Last Name",
-      "mapping": {
-        "clientSearchInput": "lastName"
-      }
+
+      "queryField": "lastName"
     },
     {
-      "type": "string",
+      "type": "STRING",
       "required": false,
       "linkId": "4",
       "text": "SSN",
-      "mapping": {
-        "clientSearchInput": "ssnSerial"
-      }
+
+      "queryField": "ssnSerial"
     },
     {
-      "type": "date",
+      "type": "DATE",
       "required": false,
       "linkId": "5",
       "text": "Date of Birth",
-      "mapping": {
-        "clientSearchInput": "dob"
-      }
+
+      "queryField": "dob"
     },
     {
-      "type": "choice",
+      "type": "CHOICE",
       "required": false,
       "linkId": "6",
       "text": "Organizations",
       "repeats": true,
-      "answerValueSet": "organizations",
-      "mapping": {
-        "clientSearchInput": "organizations"
-      }
+      "pickListReference": "ORGANIZATION",
+      "queryField": "organizations"
     }
   ]
 }

@@ -1,14 +1,15 @@
 import { formValueToGqlValue } from '../form/formUtil';
-import { FieldType } from '../form/types';
+
+import { ItemType } from '@/types/gqlTypes';
 
 describe('formValueToGqlValue', () => {
   it('removes empty strings', () => {
-    const item = { linkId: 'abc', type: FieldType.string };
+    const item = { linkId: 'abc', type: ItemType.String };
     expect(formValueToGqlValue('', item)).toBe(undefined);
   });
 
   it('leaves nulls, strings, and integers', () => {
-    const item = { linkId: 'abc', type: FieldType.string };
+    const item = { linkId: 'abc', type: ItemType.String };
 
     expect(formValueToGqlValue(null, item)).toBe(null);
     expect(formValueToGqlValue(undefined, item)).toBe(undefined);
@@ -18,12 +19,12 @@ describe('formValueToGqlValue', () => {
   });
 
   it('transforms dates', () => {
-    const item = { linkId: 'abc', type: FieldType.date };
+    const item = { linkId: 'abc', type: ItemType.Date };
     expect(formValueToGqlValue(new Date(2020, 0, 31), item)).toBe('2020-01-31');
   });
 
   it('transforms single-select choice', () => {
-    const item = { linkId: 'abc', type: FieldType.choice };
+    const item = { linkId: 'abc', type: ItemType.Choice };
     expect(formValueToGqlValue({ valueString: 'answer' }, item)).toBe('answer');
     expect(formValueToGqlValue({ valueCoding: { code: 'answer' } }, item)).toBe(
       'answer'
@@ -31,7 +32,7 @@ describe('formValueToGqlValue', () => {
   });
 
   it('transforms multi-select choice', () => {
-    const item = { linkId: 'abc', type: FieldType.choice, multiple: true };
+    const item = { linkId: 'abc', type: ItemType.Choice, multiple: true };
     expect(
       formValueToGqlValue(
         [{ valueString: 'answer' }, { valueString: 'answer2' }],

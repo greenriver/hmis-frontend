@@ -1,9 +1,8 @@
 import { Stack, Typography } from '@mui/material';
-import { CalendarPickerView } from '@mui/x-date-pickers';
 import React, { ReactNode } from 'react';
 
-import { resolveAnswerValueSet } from '../formUtil';
-import { DynamicInputCommonProps, FieldType, Item } from '../types';
+import { DynamicInputCommonProps } from '../formUtil';
+import { usePickList } from '../hooks/usePickList';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
@@ -15,19 +14,19 @@ import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
-import { ValidationError } from '@/types/gqlTypes';
+import { FormItem, ItemType, ValidationError } from '@/types/gqlTypes';
 
 interface Props {
-  item: Item;
+  item: FormItem;
   itemChanged: (uid: string, value: any) => void;
   nestingLevel: number;
   value: any;
   disabled?: boolean;
-  children?: (item: Item) => ReactNode;
+  children?: (item: FormItem) => ReactNode;
   errors?: ValidationError[];
 }
 
-const getLabel = (item: Item) => {
+const getLabel = (item: FormItem) => {
   if (!item.prefix && !item.text) return null;
 
   return (
@@ -68,16 +67,18 @@ const DynamicField: React.FC<Props> = ({
     error: !!(errors && errors.length > 0),
   };
 
-  switch (FieldType[item.type]) {
-    case FieldType.display:
+  const [options, pickListLoading] = usePickList(item);
+
+  switch (item.type) {
+    case ItemType.Display:
       return label;
-    case FieldType.group:
+    case ItemType.Group:
       return (
         <ItemGroup item={item} nestingLevel={nestingLevel}>
           {children && item.item?.map((childItem) => children(childItem))}
         </ItemGroup>
       );
-    case FieldType.boolean:
+    case ItemType.Boolean:
       return (
         <InputContainer sx={{ width: 400 }} {...commonContainerProps}>
           <LabeledCheckbox
@@ -91,12 +92,11 @@ const DynamicField: React.FC<Props> = ({
           />
         </InputContainer>
       );
-    case FieldType.string:
-    case FieldType.text:
-    case FieldType.integer:
-    case FieldType.ssn:
-      const multiline = FieldType[item.type] === FieldType.text;
-      const numeric = FieldType[item.type] === FieldType.integer;
+    case ItemType.String:
+    case ItemType.Text:
+    case ItemType.Integer:
+      const multiline = item.type === ItemType.Text;
+      const numeric = item.type === ItemType.Integer;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
@@ -111,12 +111,12 @@ const DynamicField: React.FC<Props> = ({
           />
         </InputContainer>
       );
-    case FieldType.date:
-    case FieldType.dob:
-      const datePickerProps =
-        item.type === FieldType.dob
-          ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
-          : {};
+    case ItemType.Date:
+      // case ItemType.Dob:
+      const datePickerProps = {};
+      // item.type === ItemType.Dob
+      //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
+      //   : {};
       return (
         <InputContainer sx={{ width: 250 }} {...commonContainerProps}>
           <DatePicker
@@ -128,7 +128,7 @@ const DynamicField: React.FC<Props> = ({
           />
         </InputContainer>
       );
-    case FieldType.openchoice:
+    case ItemType.OpenChoice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedChoiceVal = value ? value : item.repeats ? [] : null;
       return (
@@ -136,28 +136,25 @@ const DynamicField: React.FC<Props> = ({
           <CreatableFormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedChoiceVal}
-            options={
-              item.answerValueSet
-                ? resolveAnswerValueSet(item.answerValueSet)
-                : item.answerOption || []
-            }
+            options={options || []}
             onChange={onChangeEventValue}
-            multiple={item.repeats}
+            multiple={!!item.repeats}
+            loading={pickListLoading}
             {...commonInputProps}
           />
         </InputContainer>
       );
-    case FieldType.choice:
+    case ItemType.Choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const selectedVal = value ? value : item.repeats ? [] : null;
 
       let inputComponent;
       if (
-        item.answerValueSet &&
-        ['projects', 'organizations'].includes(item.answerValueSet)
+        item.pickListReference &&
+        ['projects', 'organizations'].includes(item.pickListReference)
       ) {
         const SelectComponent =
-          item.answerValueSet === 'projects'
+          item.pickListReference === 'projects'
             ? ProjectSelect
             : OrganizationSelect;
         inputComponent = (
@@ -165,7 +162,7 @@ const DynamicField: React.FC<Props> = ({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedVal}
             onChange={onChangeEventValue}
-            multiple={item.repeats}
+            multiple={!!item.repeats}
             disabled={disabled}
           />
         );
@@ -174,13 +171,10 @@ const DynamicField: React.FC<Props> = ({
           <FormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={selectedVal}
-            options={
-              item.answerValueSet
-                ? resolveAnswerValueSet(item.answerValueSet) || []
-                : item.answerOption || []
-            }
+            options={options || []}
             onChange={onChangeEventValue}
-            multiple={item.repeats}
+            multiple={!!item.repeats}
+            loading={pickListLoading}
             {...commonInputProps}
           />
         );
@@ -192,6 +186,7 @@ const DynamicField: React.FC<Props> = ({
         </InputContainer>
       );
     default:
+      console.warn('Unrecognized item type:', item.type);
       return <></>;
   }
 };

@@ -1,7 +1,7 @@
 import { Box, Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { Item } from '../types';
+import { FormItem } from '@/types/gqlTypes';
 
 const ItemGroup = ({
   children,
@@ -9,10 +9,10 @@ const ItemGroup = ({
   nestingLevel,
 }: {
   children: ReactNode;
-  item: Item;
+  item: FormItem;
   nestingLevel: number;
 }) => {
-  const direction = item.display?.direction ?? 'column';
+  const direction = 'column'; // item.display?.direction ?? 'column';
   const isColumn = direction === 'column';
   const wrappedChildren = (
     <Grid

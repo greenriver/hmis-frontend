@@ -1,30 +1,38 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
-import { AnswerOption, DynamicInputCommonProps } from '../types';
+import { DynamicInputCommonProps } from '../formUtil';
 
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { PickListOption } from '@/types/gqlTypes';
 
-type Option = AnswerOption;
+type Option = PickListOption;
 
 const optionId = (option: Option): string => {
-  if (option.valueCoding) {
-    return option.valueCoding.code;
-  }
-  return option.valueString || '';
+  return option.code || '';
 };
 
 const optionLabel = (option: Option): string => {
-  if (option.valueCoding) {
-    return option.valueCoding.display || option.valueCoding.code;
-  }
-  return option.valueString || '';
+  return option.label || option.code || '';
 };
 
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={optionId(option)}>
-    <Typography variant='body2'>{optionLabel(option)}</Typography>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
+      <Typography variant='body2'>{optionLabel(option)}</Typography>
+      {option.secondaryLabel && (
+        <Typography
+          variant='body2'
+          sx={{
+            ml: 1,
+            color: 'text.secondary',
+          }}
+        >
+          {option.secondaryLabel}
+        </Typography>
+      )}
+    </Box>
   </li>
 );
 
@@ -36,7 +44,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
   error,
   ...props
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
-  const isGrouped = !!options[0]?.valueCoding?.displayGroup;
+  const isGrouped = !!options[0]?.groupLabel;
 
   return (
     <GenericSelect
@@ -45,11 +53,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       multiple={multiple}
       options={options}
       renderOption={renderOption}
-      groupBy={
-        isGrouped
-          ? (option) => option.valueCoding?.displayGroup || ''
-          : undefined
-      }
+      groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
       isOptionEqualToValue={(option, value) =>
         optionId(option) === optionId(value)
       }

@@ -1,21 +1,18 @@
-import { Typography, AutocompleteValue } from '@mui/material';
+import { AutocompleteValue } from '@mui/material';
 import { compact } from 'lodash-es';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
+import { renderOption } from './ProjectSelect';
 
 import {
-  GetOrganizationsForSelectQuery,
-  useGetOrganizationsForSelectQuery,
+  PickListOption,
+  PickListType,
+  useGetPickListQuery,
 } from '@/types/gqlTypes';
 
-export type Option =
-  GetOrganizationsForSelectQuery['organizations']['nodes'][0];
+type Option = PickListOption;
 
-const renderOption = (props: object, option: Option) => (
-  <li {...props} key={option.id}>
-    <Typography variant='body2'>{option.organizationName}</Typography>
-  </li>
-);
+// FIXME dedup use FormSelect
 
 const OrganizationSelect = <Multiple extends boolean | undefined>({
   multiple,
@@ -24,29 +21,34 @@ const OrganizationSelect = <Multiple extends boolean | undefined>({
   ...props
 }: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
   const {
-    data: { organizations } = {},
+    data: { pickList } = {},
     loading,
     error,
-  } = useGetOrganizationsForSelectQuery();
+  } = useGetPickListQuery({
+    variables: { pickListType: PickListType.Organization },
+  });
+
   if (error) console.error(error);
-  const orgs = organizations?.nodes || [];
+
   // special case to replace value with complete option value.
   // e.g. {id: 50} becomes {id: 50, projectName: "White Ash Home"}
   // this is needed for cases when initially selected values are loaded from URL params
-  if (Array.isArray(value) && value[0] && !value[0].organizationName && orgs) {
+  if (Array.isArray(value) && value[0] && !value[0].label && pickList) {
     value = compact(
-      value.map(({ id }) => orgs.find((opt) => opt.id === id))
+      value.map(({ code }) => pickList.find((opt) => opt.code === code))
     ) as AutocompleteValue<Option, Multiple, boolean, undefined>;
   }
+
   return (
     <GenericSelect
-      getOptionLabel={(option) => option.organizationName || option.id}
+      getOptionLabel={(option) => option.label || option.code}
+      groupBy={(option) => option.groupLabel || ''}
       label={label}
       loading={loading}
       multiple={multiple}
-      options={orgs}
+      options={pickList || []}
       renderOption={renderOption}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option.code === value.code}
       value={value}
       {...props}
     />

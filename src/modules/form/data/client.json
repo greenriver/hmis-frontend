@@ -1,91 +1,77 @@
 {
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "first-name-group",
       "text": "Name",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "first-name",
           "text": "First Name",
-          "mapping": {
-            "clientMutationInput": "firstName"
-          }
+          "queryField": "firstName"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "preferred-name",
           "text": "Preferred Name",
-          "mapping": {
-            "clientMutationInput": "preferredName"
-          }
+          "queryField": "preferredName"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "middle-name",
           "text": "Middle Name",
-          "mapping": {
-            "clientMutationInput": "middleName"
-          }
+          "queryField": "middleName"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "last-name",
           "text": "Last Name",
-          "mapping": {
-            "clientMutationInput": "lastName"
-          }
+          "queryField": "lastName"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "name-suffix",
           "text": "Suffix",
-          "mapping": {
-            "clientMutationInput": "nameSuffix"
-          }
+          "queryField": "nameSuffix"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "name-dq",
           "text": "Name Data Quality",
-          "mapping": {
-            "clientMutationInput": "nameDataQuality"
-          },
-          "answerValueSet": "NameDataQuality"
+          "queryField": "nameDataQuality",
+          "pickListReference": "NameDataQuality"
         },
         {
-          "type": "openchoice",
+          "type": "OPEN_CHOICE",
           "required": false,
           "linkId": "pronouns",
           "text": "Pronouns",
           "repeats": true,
-          "mapping": {
-            "DISABLE_clientMutationInput": "pronouns"
-          },
-          "answerOption": [
+          "queryField": "pronouns",
+          "pickListOption": [
             {
-              "valueString": "she/her"
+              "code": "she/her"
             },
             {
-              "valueString": "he/him"
+              "code": "he/him"
             },
             {
-              "valueString": "they/them"
+              "code": "they/them"
             }
           ]
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "required": false,
       "linkId": "dob-group",
       "display": {
@@ -93,28 +79,24 @@
       },
       "item": [
         {
-          "type": "date",
+          "type": "DATE",
           "required": false,
           "linkId": "dob",
           "text": "Date of Birth",
-          "mapping": {
-            "clientMutationInput": "dob"
-          }
+          "queryField": "dob"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "dob-dq",
           "text": "DOB Data Quality",
-          "mapping": {
-            "clientMutationInput": "dobDataQuality"
-          },
-          "answerValueSet": "DOBDataQuality"
+          "queryField": "dobDataQuality",
+          "pickListReference": "DOBDataQuality"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "required": false,
       "linkId": "ssn-group",
       "display": {
@@ -122,75 +104,63 @@
       },
       "item": [
         {
-          "type": "ssn",
+          "type": "STRING",
           "required": false,
           "linkId": "ssn",
           "text": "Social Security Number",
-          "mapping": {
-            "clientMutationInput": "ssn"
-          }
+          "queryField": "ssn"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "ssn-dq",
           "text": "SSN Data Quality",
-          "mapping": {
-            "clientMutationInput": "ssnDataQuality"
-          },
-          "answerValueSet": "SSNDataQuality"
+          "queryField": "ssnDataQuality",
+          "pickListReference": "SSNDataQuality"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "required": false,
       "linkId": "demographic-group",
       "text": "Demographic Information",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "race",
           "text": "Race",
           "repeats": true,
-          "mapping": {
-            "clientMutationInput": "race"
-          },
-          "answerValueSet": "Race"
+          "queryField": "race",
+          "pickListReference": "Race"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "ethnicity",
           "text": "Ethnicity",
           "repeats": false,
-          "mapping": {
-            "clientMutationInput": "ethnicity"
-          },
-          "answerValueSet": "Ethnicity"
+          "queryField": "ethnicity",
+          "pickListReference": "Ethnicity"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "gender",
           "text": "Gender",
           "repeats": true,
-          "mapping": {
-            "clientMutationInput": "gender"
-          },
-          "answerValueSet": "Gender"
+          "queryField": "gender",
+          "pickListReference": "Gender"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "repeats": false,
           "linkId": "veteran-status",
           "text": "Veteran Status",
-          "mapping": {
-            "clientMutationInput": "veteranStatus"
-          },
-          "answerValueSet": "VeteranStatus"
+          "queryField": "veteranStatus",
+          "pickListReference": "VeteranStatus"
         }
       ]
     }

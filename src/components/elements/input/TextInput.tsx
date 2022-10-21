@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
-import { DynamicInputCommonProps } from '@/modules/form/types';
+import { DynamicInputCommonProps } from '@/modules/form/formUtil';
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;

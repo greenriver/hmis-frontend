@@ -389,6 +389,16 @@ export enum DobDataQuality {
   DobFullDobReported = 'DOB_FULL_DOB_REPORTED',
 }
 
+export enum DataCollectedAbout {
+  AllClients = 'ALL_CLIENTS',
+  AllClientsReceivingSsvfFinancialAssistance = 'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
+  AllClientsReceivingSsvfServices = 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
+  AllVeterans = 'ALL_VETERANS',
+  Hoh = 'HOH',
+  HohAndAdults = 'HOH_AND_ADULTS',
+  VeteranHoh = 'VETERAN_HOH',
+}
+
 /** HUD Data Collection Stage (5.03.1) */
 export enum DataCollectionStage {
   /** (5) Annual assessment */
@@ -513,6 +523,35 @@ export type DeleteServicePayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   service?: Maybe<Service>;
+};
+
+export enum EnableBehavior {
+  All = 'ALL',
+  Any = 'ANY',
+}
+
+export enum EnableOperator {
+  Equal = 'EQUAL',
+  Exists = 'EXISTS',
+  GreaterThan = 'GREATER_THAN',
+  GreaterThanEqual = 'GREATER_THAN_EQUAL',
+  LessThan = 'LESS_THAN',
+  LessThanEqual = 'LESS_THAN_EQUAL',
+  NotEqual = 'NOT_EQUAL',
+}
+
+export type EnableWhen = {
+  __typename?: 'EnableWhen';
+  /** Value for question comparison based on operator, if question is boolean */
+  answerBoolean?: Maybe<Scalars['String']>;
+  /** Value for question comparison based on operator, if question is string or choice type */
+  answerCode?: Maybe<Scalars['String']>;
+  /** Value for question comparison based on operator, if question is numeric */
+  answerNumber?: Maybe<Scalars['String']>;
+  /** How to evaluate the question's answer */
+  operator: EnableOperator;
+  /** The linkId of question that determines whether item is enabled/disabled */
+  question: Scalars['String'];
 };
 
 /** HUD Enrollment */
@@ -681,21 +720,35 @@ export type FormDefinition = {
 export type FormDefinitionJson = {
   __typename?: 'FormDefinitionJson';
   /** Nested items */
-  item?: Maybe<Array<FormItem>>;
+  item: Array<FormItem>;
 };
 
-/** Item representing a question of group in a FormDefinition */
+/** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
-  /** Reference to value set of possible answer options */
-  answerValueSet?: Maybe<Scalars['String']>;
+  /** HUD Data Collected About condition for this question or group */
+  dataCollectedAbout?: Maybe<DataCollectedAbout>;
+  enableBehavior?: Maybe<EnableBehavior>;
+  enableWhen?: Maybe<Array<EnableWhen>>;
+  /** Helper text for the item */
+  helperText?: Maybe<Scalars['String']>;
   /** Whether the item should always be hidden */
   hidden?: Maybe<Scalars['Boolean']>;
   /** Nested items */
   item?: Maybe<Array<FormItem>>;
   /** Unique identifier for item */
   linkId: Scalars['String'];
+  /** Permitted answers, for choice items */
+  pickListOptions?: Maybe<Array<PickListOption>>;
+  /** Reference to value set of possible answer options */
+  pickListReference?: Maybe<Scalars['String']>;
+  /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
+  /**
+   * Name of the query input field that corresponds to this item. Only used for
+   * record creation/update forms, not for assessments.
+   */
+  queryField?: Maybe<Scalars['String']>;
   /** Whether human editing is allowed */
   readOnly?: Maybe<Scalars['Boolean']>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
@@ -704,6 +757,7 @@ export type FormItem = {
   required?: Maybe<Scalars['Boolean']>;
   /** Primary text for the item */
   text?: Maybe<Scalars['String']>;
+  type: ItemType;
 };
 
 export type Funder = {
@@ -984,6 +1038,18 @@ export enum InventorySortOption {
   StartDate = 'START_DATE',
 }
 
+export enum ItemType {
+  Boolean = 'BOOLEAN',
+  Choice = 'CHOICE',
+  Date = 'DATE',
+  Display = 'DISPLAY',
+  Group = 'GROUP',
+  Integer = 'INTEGER',
+  OpenChoice = 'OPEN_CHOICE',
+  String = 'STRING',
+  Text = 'TEXT',
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   addHouseholdMembersToEnrollment?: Maybe<AddHouseholdMembersToEnrollmentPayload>;
@@ -1188,6 +1254,26 @@ export enum PathReferralOutcome {
   Unknown = 'UNKNOWN',
 }
 
+export type PickListOption = {
+  __typename?: 'PickListOption';
+  /** Code for the option */
+  code: Scalars['String'];
+  /** Label for group that option belongs to, if grouped */
+  groupLabel?: Maybe<Scalars['String']>;
+  /** Whether option is selected by default */
+  initialSelected?: Maybe<Scalars['Boolean']>;
+  /** Label for the option */
+  label?: Maybe<Scalars['String']>;
+  /** Secondary label, such as project type or CoC code */
+  secondaryLabel?: Maybe<Scalars['String']>;
+};
+
+export enum PickListType {
+  Coc = 'COC',
+  Organization = 'ORGANIZATION',
+  Project = 'PROJECT',
+}
+
 /** HUD PrioritizationStatus (4.19.7) */
 export enum PrioritizationStatus {
   /** (2) Not placed on prioritization list */
@@ -1374,6 +1460,8 @@ export type Query = {
   organization?: Maybe<Organization>;
   /** Get a list of organizations */
   organizations: OrganizationsPaginated;
+  /** Get list of options for pick list */
+  pickList: Array<PickListOption>;
   /** Project lookup */
   project?: Maybe<Project>;
   /** Project CoC lookup */
@@ -1422,6 +1510,10 @@ export type QueryOrganizationsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
+};
+
+export type QueryPickListArgs = {
+  pickListType: PickListType;
 };
 
 export type QueryProjectArgs = {
@@ -2057,16 +2149,44 @@ export type FormDefinitionFieldsFragment = {
   identifier: string;
 };
 
+export type PickListOptionFieldsFragment = {
+  __typename?: 'PickListOption';
+  code: string;
+  label?: string | null;
+  secondaryLabel?: string | null;
+  groupLabel?: string | null;
+  initialSelected?: boolean | null;
+};
+
 export type ItemFieldsFragment = {
   __typename?: 'FormItem';
   linkId: string;
   prefix?: string | null;
   text?: string | null;
+  helperText?: string | null;
   required?: boolean | null;
   hidden?: boolean | null;
   readOnly?: boolean | null;
   repeats?: boolean | null;
-  answerValueSet?: string | null;
+  queryField?: string | null;
+  pickListReference?: string | null;
+  enableBehavior?: EnableBehavior | null;
+  pickListOptions?: Array<{
+    __typename?: 'PickListOption';
+    code: string;
+    label?: string | null;
+    secondaryLabel?: string | null;
+    groupLabel?: string | null;
+    initialSelected?: boolean | null;
+  }> | null;
+  enableWhen?: Array<{
+    __typename?: 'EnableWhen';
+    question: string;
+    operator: EnableOperator;
+    answerCode?: string | null;
+    answerNumber?: string | null;
+    answerBoolean?: string | null;
+  }> | null;
 };
 
 export type FormDefinitionWithJsonFragment = {
@@ -2078,28 +2198,66 @@ export type FormDefinitionWithJsonFragment = {
   identifier: string;
   definition: {
     __typename?: 'FormDefinitionJson';
-    item?: Array<{
+    item: Array<{
       __typename?: 'FormItem';
       linkId: string;
       prefix?: string | null;
       text?: string | null;
+      helperText?: string | null;
       required?: boolean | null;
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
-      answerValueSet?: string | null;
+      queryField?: string | null;
+      pickListReference?: string | null;
+      enableBehavior?: EnableBehavior | null;
       item?: Array<{
         __typename?: 'FormItem';
         linkId: string;
         prefix?: string | null;
         text?: string | null;
+        helperText?: string | null;
         required?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        answerValueSet?: string | null;
+        queryField?: string | null;
+        pickListReference?: string | null;
+        enableBehavior?: EnableBehavior | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          initialSelected?: boolean | null;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question: string;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerNumber?: string | null;
+          answerBoolean?: string | null;
+        }> | null;
       }> | null;
-    }> | null;
+      pickListOptions?: Array<{
+        __typename?: 'PickListOption';
+        code: string;
+        label?: string | null;
+        secondaryLabel?: string | null;
+        groupLabel?: string | null;
+        initialSelected?: boolean | null;
+      }> | null;
+      enableWhen?: Array<{
+        __typename?: 'EnableWhen';
+        question: string;
+        operator: EnableOperator;
+        answerCode?: string | null;
+        answerNumber?: string | null;
+        answerBoolean?: string | null;
+      }> | null;
+    }>;
   };
 };
 
@@ -2168,28 +2326,66 @@ export type AssessmentWithDefinitionAndValuesFragment = {
       identifier: string;
       definition: {
         __typename?: 'FormDefinitionJson';
-        item?: Array<{
+        item: Array<{
           __typename?: 'FormItem';
           linkId: string;
           prefix?: string | null;
           text?: string | null;
+          helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          answerValueSet?: string | null;
+          queryField?: string | null;
+          pickListReference?: string | null;
+          enableBehavior?: EnableBehavior | null;
           item?: Array<{
             __typename?: 'FormItem';
             linkId: string;
             prefix?: string | null;
             text?: string | null;
+            helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            answerValueSet?: string | null;
+            queryField?: string | null;
+            pickListReference?: string | null;
+            enableBehavior?: EnableBehavior | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerNumber?: string | null;
+              answerBoolean?: string | null;
+            }> | null;
           }> | null;
-        }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerNumber?: string | null;
+            answerBoolean?: string | null;
+          }> | null;
+        }>;
       };
     };
   } | null;
@@ -2229,32 +2425,86 @@ export type GetAssessmentQuery = {
         identifier: string;
         definition: {
           __typename?: 'FormDefinitionJson';
-          item?: Array<{
+          item: Array<{
             __typename?: 'FormItem';
             linkId: string;
             prefix?: string | null;
             text?: string | null;
+            helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            answerValueSet?: string | null;
+            queryField?: string | null;
+            pickListReference?: string | null;
+            enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename?: 'FormItem';
               linkId: string;
               prefix?: string | null;
               text?: string | null;
+              helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              answerValueSet?: string | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              enableBehavior?: EnableBehavior | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
             }> | null;
-          }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerNumber?: string | null;
+              answerBoolean?: string | null;
+            }> | null;
+          }>;
         };
       };
     } | null;
   } | null;
+};
+
+export type GetPickListQueryVariables = Exact<{
+  pickListType: PickListType;
+}>;
+
+export type GetPickListQuery = {
+  __typename?: 'Query';
+  pickList: Array<{
+    __typename?: 'PickListOption';
+    code: string;
+    label?: string | null;
+    secondaryLabel?: string | null;
+    groupLabel?: string | null;
+    initialSelected?: boolean | null;
+  }>;
 };
 
 export type GetEnrollmentAssessmentsQueryVariables = Exact<{
@@ -2322,28 +2572,66 @@ export type GetFormDefinitionQuery = {
     identifier: string;
     definition: {
       __typename?: 'FormDefinitionJson';
-      item?: Array<{
+      item: Array<{
         __typename?: 'FormItem';
         linkId: string;
         prefix?: string | null;
         text?: string | null;
+        helperText?: string | null;
         required?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        answerValueSet?: string | null;
+        queryField?: string | null;
+        pickListReference?: string | null;
+        enableBehavior?: EnableBehavior | null;
         item?: Array<{
           __typename?: 'FormItem';
           linkId: string;
           prefix?: string | null;
           text?: string | null;
+          helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          answerValueSet?: string | null;
+          queryField?: string | null;
+          pickListReference?: string | null;
+          enableBehavior?: EnableBehavior | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerNumber?: string | null;
+            answerBoolean?: string | null;
+          }> | null;
         }> | null;
-      }> | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          initialSelected?: boolean | null;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question: string;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerNumber?: string | null;
+          answerBoolean?: string | null;
+        }> | null;
+      }>;
     };
   } | null;
 };
@@ -2388,28 +2676,66 @@ export type CreateAssessmentMutation = {
           identifier: string;
           definition: {
             __typename?: 'FormDefinitionJson';
-            item?: Array<{
+            item: Array<{
               __typename?: 'FormItem';
               linkId: string;
               prefix?: string | null;
               text?: string | null;
+              helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              answerValueSet?: string | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename?: 'FormItem';
                 linkId: string;
                 prefix?: string | null;
                 text?: string | null;
+                helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                answerValueSet?: string | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                enableBehavior?: EnableBehavior | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
               }> | null;
-            }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }>;
           };
         };
       } | null;
@@ -2464,28 +2790,66 @@ export type SaveAssessmentMutation = {
           identifier: string;
           definition: {
             __typename?: 'FormDefinitionJson';
-            item?: Array<{
+            item: Array<{
               __typename?: 'FormItem';
               linkId: string;
               prefix?: string | null;
               text?: string | null;
+              helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              answerValueSet?: string | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename?: 'FormItem';
                 linkId: string;
                 prefix?: string | null;
                 text?: string | null;
+                helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                answerValueSet?: string | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                enableBehavior?: EnableBehavior | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
               }> | null;
-            }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }>;
           };
         };
       } | null;
@@ -4173,17 +4537,40 @@ export const AssessmentFieldsFragmentDoc = gql`
   ${AssessmentDetailFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
+export const PickListOptionFieldsFragmentDoc = gql`
+  fragment PickListOptionFields on PickListOption {
+    code
+    label
+    secondaryLabel
+    groupLabel
+    initialSelected
+  }
+`;
 export const ItemFieldsFragmentDoc = gql`
   fragment ItemFields on FormItem {
     linkId
     prefix
     text
+    helperText
     required
     hidden
     readOnly
     repeats
-    answerValueSet
+    queryField
+    pickListReference
+    pickListOptions {
+      ...PickListOptionFields
+    }
+    enableBehavior
+    enableWhen {
+      question
+      operator
+      answerCode
+      answerNumber
+      answerBoolean
+    }
   }
+  ${PickListOptionFieldsFragmentDoc}
 `;
 export const FormDefinitionWithJsonFragmentDoc = gql`
   fragment FormDefinitionWithJson on FormDefinition {
@@ -4498,6 +4885,63 @@ export type GetAssessmentLazyQueryHookResult = ReturnType<
 export type GetAssessmentQueryResult = Apollo.QueryResult<
   GetAssessmentQuery,
   GetAssessmentQueryVariables
+>;
+export const GetPickListDocument = gql`
+  query GetPickList($pickListType: PickListType!) {
+    pickList(pickListType: $pickListType) {
+      ...PickListOptionFields
+    }
+  }
+  ${PickListOptionFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetPickListQuery__
+ *
+ * To run a query within a React component, call `useGetPickListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPickListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPickListQuery({
+ *   variables: {
+ *      pickListType: // value for 'pickListType'
+ *   },
+ * });
+ */
+export function useGetPickListQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetPickListQuery,
+    GetPickListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetPickListQuery, GetPickListQueryVariables>(
+    GetPickListDocument,
+    options
+  );
+}
+export function useGetPickListLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPickListQuery,
+    GetPickListQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetPickListQuery, GetPickListQueryVariables>(
+    GetPickListDocument,
+    options
+  );
+}
+export type GetPickListQueryHookResult = ReturnType<typeof useGetPickListQuery>;
+export type GetPickListLazyQueryHookResult = ReturnType<
+  typeof useGetPickListLazyQuery
+>;
+export type GetPickListQueryResult = Apollo.QueryResult<
+  GetPickListQuery,
+  GetPickListQueryVariables
 >;
 export const GetEnrollmentAssessmentsDocument = gql`
   query GetEnrollmentAssessments(

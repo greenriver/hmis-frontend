@@ -1,28 +1,33 @@
-import { Typography, Box, AutocompleteValue } from '@mui/material';
+import { AutocompleteValue, Box, Typography } from '@mui/material';
 import { compact } from 'lodash-es';
 
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
 import {
-  GetProjectsForSelectQuery,
-  useGetProjectsForSelectQuery,
+  PickListOption,
+  PickListType,
+  useGetPickListQuery,
 } from '@/types/gqlTypes';
 
-export type Option = GetProjectsForSelectQuery['projects']['nodes'][0];
+export type Option = PickListOption;
 
-const renderOption = (props: object, option: Option) => (
-  <li {...props} key={option.id}>
+// FIXME dedup use FormSelect
+
+export const renderOption = (props: object, option: Option) => (
+  <li {...props} key={option.code}>
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
-      <Typography variant='body2'>{option.projectName}</Typography>
-      <Typography
-        variant='body2'
-        sx={{
-          ml: 1,
-          color: 'text.secondary',
-        }}
-      >
-        {option.projectType}
-      </Typography>
+      <Typography variant='body2'>{option.label}</Typography>
+      {option.secondaryLabel && (
+        <Typography
+          variant='body2'
+          sx={{
+            ml: 1,
+            color: 'text.secondary',
+          }}
+        >
+          {option.secondaryLabel}
+        </Typography>
+      )}
     </Box>
   </li>
 );
@@ -34,38 +39,34 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
   ...props
 }: Omit<GenericSelectProps<Option, Multiple, undefined>, 'options'>) => {
   const {
-    data: { projects } = {},
+    data: { pickList } = {},
     loading,
     error,
-  } = useGetProjectsForSelectQuery();
+  } = useGetPickListQuery({
+    variables: { pickListType: PickListType.Project },
+  });
 
   if (error) console.error(error);
-  const projectList = projects?.nodes || [];
 
   // special case to replace value with complete option value.
   // e.g. {id: 50} becomes {id: 50, projectName: "White Ash Home"}
   // this is needed for cases when initially selected values are loaded from URL params
-  if (
-    Array.isArray(value) &&
-    value[0] &&
-    !value[0].projectName &&
-    projectList
-  ) {
+  if (Array.isArray(value) && value[0] && !value[0].label && pickList) {
     value = compact(
-      value.map(({ id }) => projectList.find((opt) => opt.id === id))
+      value.map(({ code }) => pickList.find((opt) => opt.code === code))
     ) as AutocompleteValue<Option, Multiple, boolean, undefined>;
   }
 
   return (
     <GenericSelect
-      getOptionLabel={(option) => option.projectName || option.id}
-      groupBy={(option) => option.organization.organizationName || ''}
+      getOptionLabel={(option) => option.label || option.code}
+      groupBy={(option) => option.groupLabel || ''}
       label={label}
       loading={loading}
       multiple={multiple}
-      options={projectList}
+      options={pickList || []}
       renderOption={renderOption}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option.code === value.code}
       value={value}
       {...props}
     />

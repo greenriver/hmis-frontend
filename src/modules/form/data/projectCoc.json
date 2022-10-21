@@ -1,74 +1,83 @@
 {
-  "name": "funder-edit",
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "name",
       "text": "Details",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "CHOICE",
           "required": true,
           "linkId": "coc",
           "text": "CoC Code",
-          "mapping": {
-            "field": "cocCode"
-          }
+          "pickListReference": "COC",
+          "queryField": "cocCode"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": true,
           "linkId": "geocode",
           "text": "Geocode",
-          "mapping": {
-            "field": "geocode"
-          }
+
+          "queryField": "geocode"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "geotype",
           "text": "Geography Type",
-          "answerValueSet": "GeographyType",
-          "mapping": {
-            "field": "geographyType"
-          }
+          "pickListReference": "GeographyType",
+
+          "queryField": "geographyType"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "address",
-      "text": "Address",
+      "text": "Project Address",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
+          "required": false,
+          "linkId": "address1",
+          "text": "Address",
+
+          "queryField": "address1"
+        },
+        {
+          "type": "STRING",
+          "required": false,
+          "linkId": "address2",
+          "text": "Address (line 2)",
+
+          "queryField": "address2"
+        },
+        {
+          "type": "STRING",
           "required": false,
           "linkId": "city",
           "text": "City",
-          "mapping": {
-            "field": "city"
-          }
+
+          "queryField": "city"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "state",
           "text": "State",
-          "mapping": {
-            "field": "state"
-          }
+
+          "queryField": "state"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "zip",
           "text": "Zip",
-          "mapping": {
-            "field": "zip"
-          }
+
+          "queryField": "zip"
         }
       ]
     }

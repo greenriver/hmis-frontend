@@ -43,7 +43,6 @@ const Funder = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definition: FunderFormDefinition,
-    mappingKey: 'field',
   };
   return (
     <ProjectLayout>

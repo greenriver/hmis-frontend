@@ -18,7 +18,7 @@ import ProjectSelect, {
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
 import { transformSubmitValues } from '@/modules/form/formUtil';
-import { FormDefinition, Item } from '@/modules/form/types';
+import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 type FormValues = {
   textSearch?: string;
@@ -26,7 +26,7 @@ type FormValues = {
   [k: string]: any;
 };
 export interface SearchFormProps {
-  definition: FormDefinition;
+  definition: FormDefinitionJson;
   onSubmit: (values: Record<string, any>) => void;
   initialValues?: Record<string, any>;
   hideInstructions?: boolean;
@@ -34,7 +34,6 @@ export interface SearchFormProps {
   hideAdvanced?: boolean;
 }
 
-const MAPPING_KEY = 'clientSearchInput';
 const defaultSearchKeys = ['textSearch', 'projects'];
 
 const SearchForm: React.FC<SearchFormProps> = ({
@@ -67,12 +66,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
       const variables = transformSubmitValues({
         definition,
         values,
-        mappingKey: MAPPING_KEY,
       });
       onSubmit({
         ...variables,
         textSearch: values.textSearch,
-        ...(values.projects && { projects: values.projects.map((p) => p.id) }),
+        ...(values.projects && {
+          projects: values.projects.map((p) => p.code),
+        }),
       });
     };
   }, [values, definition, onSubmit]);
@@ -155,7 +155,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             columnSpacing={2}
             sx={{ mb: 2 }}
           >
-            {definition.item?.map((item: Item) => (
+            {definition.item?.map((item: FormItem) => (
               <DynamicField
                 nestingLevel={0}
                 key={item.linkId}

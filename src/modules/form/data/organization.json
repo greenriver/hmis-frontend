@@ -1,46 +1,38 @@
 {
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "name",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": true,
           "linkId": "1",
           "text": "Organization Name",
-          "mapping": {
-            "organizationMutationInput": "organizationName"
-          }
+          "queryField": "organizationName"
         },
         {
-          "type": "text",
+          "type": "TEXT",
           "required": false,
           "linkId": "description",
           "text": "Description",
-          "mapping": {
-            "organizationMutationInput": "description"
-          }
+          "queryField": "description"
         },
         {
-          "type": "text",
+          "type": "TEXT",
           "required": false,
           "linkId": "contact",
           "text": "Contact Information",
-          "mapping": {
-            "organizationMutationInput": "contactInformation"
-          }
+          "queryField": "contactInformation"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "required": false,
           "hidden": false,
           "text": "Victim Service Provider",
           "linkId": "victimServiceProvider",
-          "mapping": {
-            "organizationMutationInput": "victimServiceProvider"
-          }
+          "queryField": "victimServiceProvider"
         }
       ]
     }

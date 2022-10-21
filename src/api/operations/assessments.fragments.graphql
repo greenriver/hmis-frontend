@@ -6,15 +6,36 @@ fragment FormDefinitionFields on FormDefinition {
   identifier
 }
 
+fragment PickListOptionFields on PickListOption {
+  code
+  label
+  secondaryLabel
+  groupLabel
+  initialSelected
+}
+
 fragment ItemFields on FormItem {
   linkId
   prefix
   text
+  helperText
   required
   hidden
   readOnly
   repeats
-  answerValueSet
+  queryField
+  pickListReference
+  pickListOptions {
+    ...PickListOptionFields
+  }
+  enableBehavior
+  enableWhen {
+    question
+    operator
+    answerCode
+    answerNumber
+    answerBoolean
+  }
 }
 fragment FormDefinitionWithJson on FormDefinition {
   ...FormDefinitionFields

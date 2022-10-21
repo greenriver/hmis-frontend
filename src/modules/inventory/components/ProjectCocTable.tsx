@@ -22,7 +22,7 @@ const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
     render: 'geocode',
   },
   {
-    header: 'Location',
+    header: 'Address',
     render: (c: ProjectCocFieldsFragment) =>
       [c.address1, c.address2, c.city, c.state, c.zip]
         .filter((f) => !isNil(f))

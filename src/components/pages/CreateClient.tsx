@@ -5,8 +5,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import PageHeader from '../layout/PageHeader';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import formData from '@/modules/form/data/client.json';
-import { FormDefinition } from '@/modules/form/types';
+import { ClientFormDefinition } from '@/modules/form/data';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -14,12 +13,6 @@ import {
   CreateClientMutation,
   CreateClientMutationVariables,
 } from '@/types/gqlTypes';
-
-const MAPPING_KEY = 'clientMutationInput';
-
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const CLIENT_FORM: FormDefinition = JSON.parse(JSON.stringify(formData));
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();
@@ -47,8 +40,7 @@ const CreateClient: React.FC = () => {
               CreateClientMutation,
               CreateClientMutationVariables
             >
-              definition={CLIENT_FORM}
-              mappingKey={MAPPING_KEY}
+              definition={ClientFormDefinition}
               // record={client}
               queryDocument={CreateClientDocument}
               onCompleted={onCompleted}

@@ -4,6 +4,12 @@ query GetAssessment($id: ID!) {
   }
 }
 
+query GetPickList($pickListType: PickListType!) {
+  pickList(pickListType: $pickListType) {
+    ...PickListOptionFields
+  }
+}
+
 query GetEnrollmentAssessments(
   $id: ID!
   $limit: Int = 10

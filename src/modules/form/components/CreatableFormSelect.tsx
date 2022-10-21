@@ -1,21 +1,19 @@
 import { Typography, createFilterOptions } from '@mui/material';
 
-import { AnswerOption, DynamicInputCommonProps } from '../types';
+import { DynamicInputCommonProps } from '../formUtil';
 
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { PickListOption } from '@/types/gqlTypes';
 
-interface CreatableOption extends AnswerOption {
+interface CreatableOption extends PickListOption {
   customOptionLabel?: string;
 }
-type Option = AnswerOption & CreatableOption;
+type Option = PickListOption & CreatableOption;
 
 const optionId = (option: Option): string => {
-  if (option.valueCoding) {
-    return option.valueCoding.code;
-  }
-  return option.valueString || '';
+  return option.code || '';
 };
 
 const optionLabel = (option: Option | string, forMenu = false): string => {
@@ -28,10 +26,7 @@ const optionLabel = (option: Option | string, forMenu = false): string => {
     return option.customOptionLabel;
   }
 
-  if (option.valueCoding) {
-    return option.valueCoding.display || option.valueCoding.code;
-  }
-  return option.valueString || '';
+  return option.label || option.code || '';
 };
 
 const renderOption = (props: object, option: Option) => (
@@ -46,7 +41,7 @@ const transformSelectedValue = (
   value: Option | string | null
 ): Option | null => {
   if (value === null) return null;
-  if (typeof value === 'string') return { valueString: value };
+  if (typeof value === 'string') return { code: value };
   return value;
 };
 
@@ -58,7 +53,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
   error,
   ...props
 }: GenericSelectProps<Option, Multiple, boolean> & DynamicInputCommonProps) => {
-  const isGrouped = !!options[0]?.valueCoding?.displayGroup;
+  const isGrouped = !!options[0]?.groupLabel;
   const openchoice = true;
   return (
     <GenericSelect
@@ -67,11 +62,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
       multiple={multiple}
       options={options}
       renderOption={renderOption}
-      groupBy={
-        isGrouped
-          ? (option) => option.valueCoding?.displayGroup || ''
-          : undefined
-      }
+      groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
       isOptionEqualToValue={(option, value) =>
         optionId(option) === optionId(value) ||
         optionId(option) === optionLabel(value)
@@ -92,7 +83,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
               if (inputValue !== '' && !isExisting) {
                 filtered.push({
                   customOptionLabel: `Add "${inputValue}"`,
-                  valueString: inputValue,
+                  code: inputValue,
                 });
               }
 

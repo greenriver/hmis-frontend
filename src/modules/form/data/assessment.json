@@ -2,26 +2,27 @@
   "title": "Client Intake Assessment",
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "initial-group",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "3.16",
           "prefix": "3.16",
           "text": "CoC Code for Client Location",
           "enableBehavior": "all",
+          "pickListReference": "COC",
           "dataCollectedAbout": "HOH"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "linkId": "4.13",
           "prefix": "4.13",
           "text": "Date of Engagement",
           "dataCollectedAbout": "HOH_AND_ADULTS"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "linkId": "4.14",
           "prefix": "4.14",
           "text": "Bed-Night Date"
@@ -29,240 +30,196 @@
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "3.917-group",
       "text": "Prior Living Situation (3.917)",
       "dataCollectedAbout": "HOH_AND_ADULTS",
       "item": [
         {
-          "type": "display",
+          "type": "DISPLAY",
           "linkId": "3.917-instruction",
           "text": "Where did the client spend last night? Select the category that most closely matches the client's response."
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "3.917",
           "text": "Prior Living Situation",
-          "answerValueSet": "LivingSituation"
+          "pickListReference": "LivingSituation"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "3.917-2",
           "text": "Length of stay in prior living situation"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "linkId": "3.917-A",
           "text": "Did the client stay less than 90 days?"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "linkId": "3.917-B",
           "text": "Did the client stay less than 7 nights?"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "linkId": "3.917-C",
           "text": "On the night before, did the client stay on the streets, ES or SH?"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "linkId": "3.917-3",
           "text": "Date homelessness started"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "3.917-4",
           "text": "Number of times the client has been on the streets, in ES, or SH in the past three years"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "3.917-5",
           "text": "Total number of months homeless on the street, in ES, or SH in the past three years"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "4.12-group",
       "text": "Current Living Situation (4.12)",
       "dataCollectedAbout": "HOH_AND_ADULTS",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "4.12",
           "text": "Current Living Situation",
           "valueSetReference": "LivingSituation"
         },
         {
-          "type": "group",
+          "type": "GROUP",
           "linkId": "4.12-conditionals",
           "item": [
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.12-A",
               "text": "Is client going to have to leave their current living situation within 14 days?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": []
             },
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.12-B",
               "text": "Has a subsequent residence been identified?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": []
             },
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.12-C",
               "text": "Does individual or family have resources or support networks to obtain other permanent housing?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": []
             },
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.12-D",
               "text": "Has the client had a lease or ownership interest in a permanent housing unit in the last 60 days?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": [
                 {
                   "question": "4.12-A",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
+                  "operator": "EQUAL",
+                  "answerCode": "1"
                 }
               ]
             },
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.12-E",
               "text": "Has the client moved 2 or more times in the last 60 days?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": [
                 {
                   "question": "4.12-A",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
+                  "operator": "EQUAL",
+                  "answerCode": "1"
                 }
               ]
             }
           ]
         },
         {
-          "type": "text",
+          "type": "TEXT",
           "linkId": "4.12-4",
           "text": "Location details"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "4.11-group",
       "text": "4.11",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.11-2",
           "text": "Domestic Violence Victim/Survivor",
-          "answerValueSet": "yesNoMissing",
+          "pickListReference": "yesNoMissing",
           "helperText": "Domestic Violence Victim/Survivor should be indicated as “Yes” if the person has experienced any domestic violence, dating violence, sexual assault, stalking or other dangerous or life-threatening conditions that relate to violence against the individual or a family member, including a child, that has either taken place within the individual's or family's primary nighttime residence."
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.11-A",
           "text": "When did the experience occur?",
-          "answerOption": [
-            {
-              "valueCoding": {
-                "code": "1",
-                "display": "Within the past 3 months"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "2",
-                "display": "Three to six months ago"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "3",
-                "display": "Six months to one year ago"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "4",
-                "display": "One year ago or more"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "8",
-                "display": "Client doesn't know"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "9",
-                "display": "Client refused"
-              }
-            },
-            {
-              "valueCoding": {
-                "code": "99",
-                "display": "Data not collected"
-              }
-            }
-          ],
           "enableBehavior": "all",
           "enableWhen": [
             {
               "question": "4.11-2",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.11-B",
           "text": "Are you currently fleeing?",
-          "answerValueSet": "yesNoMissing",
+          "pickListReference": "yesNoMissing",
           "helperText": "Currently fleeing should be indicated as “Yes” if the person is fleeing, or is attempting to flee, the domestic violence situation or is afraid to return to their primary nighttime residence.",
           "enableBehavior": "all",
           "enableWhen": [
             {
               "question": "4.11-2",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "health-group",
       "text": "Health",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.04-2",
           "text": "Covered by Health Insurance",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "health-insurance",
           "text": "Health Insurance",
-          "answerOption": [
+          "pickListOption": [
             {
               "valueCoding": {
                 "code": "0",
@@ -280,90 +237,90 @@
           "enableWhen": [
             {
               "question": "4.04-2",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.05-2",
           "text": "Physical Disability",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.05-A",
           "text": "Is this a disabling condition?",
-          "answerValueSet": "yesNoMissing",
+          "pickListReference": "yesNoMissing",
           "enableBehavior": "all",
           "enableWhen": [
             {
               "question": "4.05-2",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.06-2",
           "text": "Developmental Disability",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.07-2",
           "text": "Chronic Health Condition",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "group",
+          "type": "GROUP",
           "linkId": "4.07-2-conditional",
           "item": [
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.07-A",
               "text": "Is this a disabling condition?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "all",
               "enableWhen": [
                 {
                   "question": "4.07-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
+                  "operator": "EQUAL",
+                  "answerCode": "1"
                 }
               ]
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.08-2",
           "text": "HIV/AIDS",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.09-2",
           "text": "Mental Health Disorder",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "group",
+          "type": "GROUP",
           "linkId": "4.09-group",
           "item": [
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.09-A",
               "text": "Is this a disabling condition?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "all",
               "enableWhen": [
                 {
                   "question": "4.09-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
+                  "operator": "EQUAL",
+                  "answerCode": "1"
                 }
               ]
             }
@@ -371,10 +328,10 @@
         },
 
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "4.10-2",
           "text": "Substance Use Disorder",
-          "answerOption": [
+          "pickListOption": [
             {
               "valueCoding": {
                 "code": "0",
@@ -420,33 +377,33 @@
           ]
         },
         {
-          "type": "group",
+          "type": "GROUP",
           "linkId": "4.10-group",
           "display": {
             "direction": "row"
           },
           "item": [
             {
-              "type": "choice",
+              "type": "CHOICE",
               "linkId": "4.10-A",
               "text": "Is this a disabling condition?",
-              "answerValueSet": "yesNoMissing",
+              "pickListReference": "yesNoMissing",
               "enableBehavior": "any",
               "enableWhen": [
                 {
                   "question": "4.10-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "1" }
+                  "operator": "EQUAL",
+                  "answerCode": "1"
                 },
                 {
                   "question": "4.10-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "2" }
+                  "operator": "EQUAL",
+                  "answerCode": "2"
                 },
                 {
                   "question": "4.10-2",
-                  "operator": "=",
-                  "answerCoding": { "code": "3" }
+                  "operator": "EQUAL",
+                  "answerCode": "3"
                 }
               ]
             }

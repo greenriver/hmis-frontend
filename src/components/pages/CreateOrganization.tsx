@@ -4,9 +4,8 @@ import { generatePath, useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 
-import { MAPPING_KEY, ORGANIZATION_FORM } from './EditOrganization';
-
 import EditRecord from '@/modules/form/components/EditRecord';
+import { OrganizationFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -53,8 +52,7 @@ const CreateOrganization = () => {
             CreateOrganizationMutation,
             CreateOrganizationMutationVariables
           >
-            definition={ORGANIZATION_FORM}
-            mappingKey={MAPPING_KEY}
+            definition={OrganizationFormDefinition}
             queryDocument={CreateOrganizationDocument}
             onCompleted={onCompleted}
             getErrors={(data: CreateOrganizationMutation) =>

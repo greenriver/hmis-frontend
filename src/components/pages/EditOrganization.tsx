@@ -6,8 +6,7 @@ import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import formData from '@/modules/form/data/organization.json';
-import { FormDefinition } from '@/modules/form/types';
+import { OrganizationFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
@@ -17,14 +16,6 @@ import {
   UpdateOrganizationMutation,
   UpdateOrganizationMutationVariables,
 } from '@/types/gqlTypes';
-
-export const MAPPING_KEY = 'organizationMutationInput';
-
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-export const ORGANIZATION_FORM: FormDefinition = JSON.parse(
-  JSON.stringify(formData)
-);
 
 const EditOrganization = () => {
   const navigate = useNavigate();
@@ -60,8 +51,7 @@ const EditOrganization = () => {
               UpdateOrganizationMutation,
               UpdateOrganizationMutationVariables
             >
-              definition={ORGANIZATION_FORM}
-              mappingKey={MAPPING_KEY}
+              definition={OrganizationFormDefinition}
               record={organization}
               queryDocument={UpdateOrganizationDocument}
               onCompleted={onCompleted}

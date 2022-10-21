@@ -42,7 +42,6 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definition: ProjectCocFormDefinition,
-    mappingKey: 'field',
   };
   return (
     <ProjectLayout>

@@ -14,7 +14,6 @@ const AllProjects = () => {
   if (loading) return <Loading />;
   if (error) throw error;
 
-  console.log(data);
   return (
     <ProjectLayout>
       <Typography variant='h5' sx={{ mb: 2 }}>

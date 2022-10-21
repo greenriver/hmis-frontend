@@ -16,7 +16,6 @@ interface Props<RecordType, Query, QueryVariables>
     'initialValues' | 'submitHandler' | 'errors' | 'loading' | 'onSubmit'
   > {
   record?: RecordType;
-  mappingKey: string;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   inputVariables?: Record<string, any>;
   onCompleted: (data: Query) => void;
@@ -32,7 +31,6 @@ const EditRecord = <
   QueryVariables extends { input: unknown }
 >({
   definition,
-  mappingKey,
   record,
   queryDocument,
   getErrors,
@@ -58,8 +56,8 @@ const EditRecord = <
 
   const initialValues = useMemo(() => {
     if (!record) return {};
-    return createInitialValues(definition, record, mappingKey);
-  }, [record, mappingKey, definition]);
+    return createInitialValues(definition, record);
+  }, [record, definition]);
 
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
@@ -67,7 +65,6 @@ const EditRecord = <
       const inputValues = transformSubmitValues({
         definition,
         values,
-        mappingKey,
         autofillNotCollected: true,
         autofillNulls: true,
         autofillBooleans: true,
@@ -81,7 +78,7 @@ const EditRecord = <
 
       void mutateFunction({ variables: { input } as QueryVariables });
     },
-    [definition, inputVariables, mutateFunction, mappingKey, record]
+    [definition, inputVariables, mutateFunction, record]
   );
 
   if (error) console.error(error); // FIXME handle error on form submission
@@ -89,7 +86,6 @@ const EditRecord = <
   return (
     <DynamicForm
       definition={definition}
-      mappingKey={mappingKey}
       onSubmit={submitHandler}
       submitButtonText='Save Changes'
       discardButtonText='Discard'

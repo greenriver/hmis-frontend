@@ -4,9 +4,8 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 
-import { MAPPING_KEY, PROJECT_FORM } from './EditProject';
-
 import EditRecord from '@/modules/form/components/EditRecord';
+import { ProjectFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
@@ -51,8 +50,7 @@ const CreateProject = () => {
             CreateProjectMutation,
             CreateProjectMutationVariables
           >
-            definition={PROJECT_FORM}
-            mappingKey={MAPPING_KEY}
+            definition={ProjectFormDefinition}
             queryDocument={CreateProjectDocument}
             onCompleted={onCompleted}
             inputVariables={{ organizationId }}

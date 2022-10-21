@@ -75,7 +75,7 @@ const NewEnrollment = () => {
       return;
     }
     const values: CreateEnrollmentInput = {
-      projectId: project.id,
+      projectId: project.code,
       startDate: format(entryDate, 'yyyy-MM-dd'),
       householdMembers: Object.entries(members).map(([id, relation]) => ({
         id,

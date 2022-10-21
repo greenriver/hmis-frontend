@@ -2,74 +2,62 @@
   "name": "inventory",
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "name",
       "text": "Details",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": true,
           "linkId": "coc",
           "text": "CoC Code",
-          "mapping": {
-            "field": "cocCode"
-          }
+          "queryField": "cocCode"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": true,
           "linkId": "hhtype",
           "text": "Household Type",
-          "answerValueSet": "HouseholdType",
-          "mapping": {
-            "field": "householdType"
-          }
+          "pickListReference": "HouseholdType",
+          "queryField": "householdType"
         },
         {
-          "type": "integer",
+          "type": "INTEGER",
           "required": true,
           "linkId": "units",
           "text": "Unit Inventory",
-          "mapping": {
-            "field": "unitInventory"
-          }
+          "queryField": "unitInventory"
         },
         {
-          "type": "integer",
+          "type": "INTEGER",
           "required": true,
           "linkId": "beds",
           "text": "Bed Inventory",
-          "mapping": {
-            "field": "bedInventory"
-          }
+          "queryField": "bedInventory"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "dates",
       "text": "Operating Period",
       "required": false,
-      "display": { "direction": "row" },
+
       "item": [
         {
-          "type": "date",
+          "type": "DATE",
           "required": true,
           "linkId": "2.02.3",
           "text": "Start Date",
-          "mapping": {
-            "field": "inventoryStartDate"
-          }
+          "queryField": "inventoryStartDate"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "required": false,
           "linkId": "2.02.4",
           "text": "End Date",
-          "mapping": {
-            "field": "inventoryEndDate"
-          }
+          "queryField": "inventoryEndDate"
         }
       ]
     }

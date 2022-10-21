@@ -1,169 +1,156 @@
 {
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "name",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": true,
           "linkId": "2.02.2",
           "text": "Project Name",
-          "mapping": {
-            "projectMutationInput": "projectName"
-          }
+
+          "queryField": "projectName"
         },
         {
-          "type": "text",
+          "type": "TEXT",
           "required": false,
           "linkId": "description",
           "text": "Description",
-          "mapping": {
-            "projectMutationInput": "description"
-          }
+
+          "queryField": "description"
         },
         {
-          "type": "text",
+          "type": "TEXT",
           "required": false,
           "linkId": "contact",
           "text": "Contact Information",
-          "mapping": {
-            "projectMutationInput": "contactInformation"
-          }
+
+          "queryField": "contactInformation"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "dates",
       "text": "Operating Period",
       "required": false,
       "display": { "direction": "row" },
       "item": [
         {
-          "type": "date",
+          "type": "DATE",
           "required": true,
           "linkId": "2.02.3",
           "text": "Start Date",
-          "mapping": {
-            "projectMutationInput": "operatingStartDate"
-          }
+
+          "queryField": "operatingStartDate"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "required": false,
           "linkId": "2.02.4",
           "text": "End Date",
-          "mapping": {
-            "projectMutationInput": "operatingEndDate"
-          }
+
+          "queryField": "operatingEndDate"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "additional",
       "text": "Project Details",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": true,
           "linkId": "2.02.6",
           "text": "Project Type",
-          "answerValueSet": "ProjectType",
-          "mapping": {
-            "projectMutationInput": "projectType"
-          }
+          "pickListReference": "ProjectType",
+
+          "queryField": "projectType"
         },
         {
-          "type": "group",
+          "type": "GROUP",
           "linkId": "2.02.6-conditionals",
           "item": [
             {
-              "type": "choice",
+              "type": "CHOICE",
               "required": false,
               "linkId": "2.02.C",
               "text": "Tracking Method",
-              "answerValueSet": "TrackingMethod",
-              "mapping": {
-                "projectMutationInput": "trackingMethod"
-              },
+              "pickListReference": "TrackingMethod",
+
+              "queryField": "trackingMethod",
               "enableBehavior": "all",
               "enableWhen": [
                 {
                   "question": "2.02.6",
-                  "operator": "=",
-                  "answerCoding": { "code": "ES" }
+                  "operator": "EQUAL",
+                  "answerCode": "ES"
                 }
               ]
             },
             {
-              "type": "boolean",
+              "type": "BOOLEAN",
               "required": false,
               "linkId": "2.02.A",
               "text": "Residential Affiliation?",
-              "mapping": {
-                "projectMutationInput": "residentialAffiliation"
-              },
+
+              "queryField": "residentialAffiliation",
               "enableBehavior": "all",
               "enableWhen": [
                 {
                   "question": "2.02.6",
-                  "operator": "=",
-                  "answerCoding": { "code": "SERVICES_ONLY" }
+                  "operator": "EQUAL",
+                  "answerCode": "SERVICES_ONLY"
                 }
               ]
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "2.02.D",
           "text": "Housing Type",
-          "answerValueSet": "HousingType",
-          "mapping": {
-            "projectMutationInput": "housingType"
-          }
+          "pickListReference": "HousingType",
+
+          "queryField": "housingType"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "2.02.8",
           "text": "Target Population",
-          "answerValueSet": "TargetPopulation",
-          "mapping": {
-            "projectMutationInput": "targetPopulation"
-          }
+          "pickListReference": "TargetPopulation",
+
+          "queryField": "targetPopulation"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "required": false,
           "linkId": "2.02.9",
           "text": "HOPWA Assisted Living Facility",
-          "answerValueSet": "HOPWAMedAssistedLivingFac",
-          "mapping": {
-            "projectMutationInput": "HOPWAMedAssistedLivingFac"
-          }
+          "pickListReference": "HOPWAMedAssistedLivingFac",
+
+          "queryField": "HOPWAMedAssistedLivingFac"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "required": false,
           "linkId": "2.02.5",
           "text": "Continuum Project?",
-          "mapping": {
-            "projectMutationInput": "continuumProject"
-          }
+
+          "queryField": "continuumProject"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "required": false,
           "linkId": "2.02.7",
           "text": "HMIS Participating Project?",
-          "mapping": {
-            "projectMutationInput": "HMISParticipatingProject"
-          }
+
+          "queryField": "HMISParticipatingProject"
         }
       ]
     }

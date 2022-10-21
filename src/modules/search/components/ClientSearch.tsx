@@ -15,8 +15,7 @@ import Loading from '@/components/elements/Loading';
 import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
-import formData from '@/modules/form/data/search.json';
-import { FormDefinition } from '@/modules/form/types';
+import { SearchFormDefinition } from '@/modules/form/data';
 import {
   age,
   clientFirstNameAndPreferred,
@@ -32,12 +31,6 @@ import {
   ClientFieldsFragment,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
-
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const searchFormDefinition: FormDefinition = JSON.parse(
-  JSON.stringify(formData)
-);
 
 const MAX_CARDS_THRESHOLD = 10;
 
@@ -144,13 +137,13 @@ const ClientSearch: React.FC<Props> = ({
 
     // this is the first render, so derive the initial state from the SearchParams and perform a search
     const variables = searchParamsToVariables(
-      searchFormDefinition,
+      SearchFormDefinition,
       searchParams
     );
     if (isEmpty(variables)) {
       setInitialValues({});
     } else {
-      const initState = searchParamsToState(searchFormDefinition, searchParams);
+      const initState = searchParamsToState(SearchFormDefinition, searchParams);
       setInitialValues(initState);
       // Perform search using the cache so when you nav back/forward it doesn't refetch
       searchClients({
@@ -200,7 +193,7 @@ const ClientSearch: React.FC<Props> = ({
   return (
     <>
       <SearchForm
-        definition={searchFormDefinition}
+        definition={SearchFormDefinition}
         onSubmit={handleSubmitSearch}
         initialValues={initialValues}
         {...searchFormProps}

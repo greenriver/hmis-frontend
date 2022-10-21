@@ -43,7 +43,6 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definition: InventoryFormDefinition,
-    mappingKey: 'field',
   };
   return (
     <ProjectLayout>

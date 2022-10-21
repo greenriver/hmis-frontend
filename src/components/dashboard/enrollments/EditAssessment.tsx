@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -60,6 +61,10 @@ const EditAssessment = () => {
 
   const identifier = data?.assessment?.assessmentDetail?.definition.identifier;
   const initialValues = data?.assessment?.assessmentDetail?.values;
+  const assessmentRole = data?.assessment?.assessmentDetail?.role;
+  const title = `${
+    assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
+  } Assessment`;
   const formDefinition = identifier ? FormDefinitions[identifier] : undefined;
   console.log(initialValues);
 
@@ -67,7 +72,7 @@ const EditAssessment = () => {
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Typography variant='h4' sx={{ mb: 2 }}>
-        {formDefinition?.title || 'Assessment'}
+        {title}
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
