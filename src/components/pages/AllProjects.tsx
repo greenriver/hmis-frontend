@@ -14,6 +14,7 @@ const AllProjects = () => {
   if (loading) return <Loading />;
   if (error) throw error;
 
+  console.log(data);
   return (
     <ProjectLayout>
       <Typography variant='h5' sx={{ mb: 2 }}>
@@ -21,8 +22,8 @@ const AllProjects = () => {
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          {data?.organizations && (
-            <GroupedProjectTable organizations={data?.organizations} />
+          {data?.organizations?.nodesCount && (
+            <GroupedProjectTable organizations={data?.organizations?.nodes} />
           )}
         </Grid>
         <Grid item xs>

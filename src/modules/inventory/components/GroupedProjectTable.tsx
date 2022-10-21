@@ -3,63 +3,23 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
   Stack,
   Typography,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { generatePath } from 'react-router-dom';
 
+import ProjectsTable from './ProjectsTable';
+
 import ButtonLink from '@/components/elements/ButtonLink';
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import { Routes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
-import {
-  GetOrganizationsAndProjectsQuery,
-  ProjectFieldsFragment,
-} from '@/types/gqlTypes';
+import { GetOrganizationsAndProjectsQuery } from '@/types/gqlTypes';
 
 const GroupedProjectTable = ({
   organizations,
 }: {
-  organizations: GetOrganizationsAndProjectsQuery['organizations'];
+  organizations: GetOrganizationsAndProjectsQuery['organizations']['nodes'];
 }) => {
-  const columns: ColumnDef<ProjectFieldsFragment>[] = [
-    {
-      header: 'Project',
-      key: 'name',
-      width: '10%',
-      render: 'projectName',
-      linkTreatment: true,
-    },
-    {
-      header: 'Project Type',
-      key: 'type',
-      width: '20%',
-      render: (p: ProjectFieldsFragment) =>
-        p.projectType ? HmisEnums.ProjectType[p.projectType] : null,
-    },
-    // {
-    //   header: '',
-    //   key: 'view',
-    //   width: '10%',
-    //   render: (p: ProjectFieldsFragment) => (
-    //     <Button
-    //       variant='outlined'
-    //       color='secondary'
-    //       size='small'
-    //       to={generatePath(Routes.PROJECT, {
-    //         projectId: p.id,
-    //       })}
-    //       component={RouterLink}
-    //       sx={{ py: 0, float: 'right' }}
-    //     >
-    //       View Project
-    //     </Button>
-    //   ),
-    // },
-  ];
-
   const [expanded, setExpanded] = useState<Record<string, boolean>>(
     organizations.length < 6
       ? Object.fromEntries(organizations.map(({ id }) => [id, true]))
@@ -77,14 +37,6 @@ const GroupedProjectTable = ({
       return copy;
     });
   };
-
-  const rowLinkTo = useCallback(
-    (project: ProjectFieldsFragment) =>
-      generatePath(Routes.PROJECT, {
-        projectId: project.id,
-      }),
-    []
-  );
 
   return (
     <>
@@ -131,8 +83,8 @@ const GroupedProjectTable = ({
               </Typography>
 
               <Typography variant='body1'>
-                {organization.projects.length} project
-                {organization.projects.length !== 1 ? 's' : ''}
+                {organization.projects.nodesCount} project
+                {organization.projects.nodesCount !== 1 ? 's' : ''}
               </Typography>
             </Stack>
           </AccordionSummary>
@@ -143,28 +95,20 @@ const GroupedProjectTable = ({
               borderTop: (theme) => `1px solid ${theme.palette.grey[300]}`,
             }}
           >
-            <ButtonLink
-              variant='outlined'
-              color='secondary'
-              size='small'
-              to={generatePath(Routes.ORGANIZATION, {
-                organizationId: organization.id,
-              })}
-              sx={{ mx: 1, my: 1, float: 'left' }}
-            >
-              View Organization
-            </ButtonLink>
-            {(organization.projects || []).length > 0 ? (
-              <GenericTable
-                columns={columns}
-                rows={organization.projects}
-                rowLinkTo={rowLinkTo}
-              />
-            ) : (
-              <Box sx={{ clear: 'left', px: 2, py: 2 }}>
-                <Typography>No Projects</Typography>
-              </Box>
-            )}
+            <Stack spacing={2}>
+              <ButtonLink
+                variant='outlined'
+                color='secondary'
+                size='small'
+                to={generatePath(Routes.ORGANIZATION, {
+                  organizationId: organization.id,
+                })}
+                sx={{ mx: 1, my: 1, float: 'left', width: 150 }}
+              >
+                View Organization
+              </ButtonLink>
+              <ProjectsTable organizationId={organization.id} />
+            </Stack>
           </AccordionDetails>
         </Accordion>
       ))}

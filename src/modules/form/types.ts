@@ -7,6 +7,8 @@ export type DynamicInputCommonProps = {
   helperText?: ReactNode;
 };
 
+// TODO move all these to gql
+
 export enum FieldType {
   group = 'group', // An item with no direct answer but should have at least one child item
   display = 'display', // Text for display that will not capture an answer or have child items

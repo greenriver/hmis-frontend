@@ -1114,13 +1114,14 @@ export type Organization = {
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   organizationName: Scalars['String'];
-  /** Get a list of projects for this organization */
-  projects: Array<Project>;
+  projects: ProjectsPaginated;
   victimServiceProvider?: Maybe<Scalars['Boolean']>;
 };
 
 /** HUD Organization */
 export type OrganizationProjectsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
@@ -1137,6 +1138,17 @@ export type OrganizationInput = {
 export enum OrganizationSortOption {
   Name = 'NAME',
 }
+
+export type OrganizationsPaginated = {
+  __typename?: 'OrganizationsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Organization>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 /** HUD PATHReferralOutcome (P2.A) */
 export enum PathReferralOutcome {
@@ -1303,6 +1315,17 @@ export enum ProjectType {
   Th = 'TH',
 }
 
+export type ProjectsPaginated = {
+  __typename?: 'ProjectsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Project>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Assessment lookup */
@@ -1322,13 +1345,13 @@ export type Query = {
   /** Organization lookup */
   organization?: Maybe<Organization>;
   /** Get a list of organizations */
-  organizations: Array<Organization>;
+  organizations: OrganizationsPaginated;
   /** Project lookup */
   project?: Maybe<Project>;
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   /** Get a list of projects */
-  projects: Array<Project>;
+  projects: ProjectsPaginated;
 };
 
 export type QueryAssessmentArgs = {
@@ -1368,6 +1391,8 @@ export type QueryOrganizationArgs = {
 };
 
 export type QueryOrganizationsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<OrganizationSortOption>;
 };
 
@@ -1380,6 +1405,8 @@ export type QueryProjectCocArgs = {
 };
 
 export type QueryProjectsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
@@ -2002,7 +2029,7 @@ export type FormDefinitionFieldsFragment = {
   identifier: string;
 };
 
-export type FormDefinitionWithJsonFieldsFragment = {
+export type FormDefinitionWithJsonFragment = {
   __typename?: 'FormDefinition';
   definition: any;
   id: string;
@@ -2018,7 +2045,6 @@ export type AssessmentDetailFieldsFragment = {
   dataCollectionStage?: DataCollectionStage | null;
   role: AssessmentRole;
   status: string;
-  values?: any | null;
 };
 
 export type AssessmentFieldsFragment = {
@@ -2039,7 +2065,6 @@ export type AssessmentFieldsFragment = {
     dataCollectionStage?: DataCollectionStage | null;
     role: AssessmentRole;
     status: string;
-    values?: any | null;
     definition: {
       __typename?: 'FormDefinition';
       id: string;
@@ -2051,7 +2076,7 @@ export type AssessmentFieldsFragment = {
   } | null;
 };
 
-export type AssessmentWithDefinitionFragment = {
+export type AssessmentWithDefinitionAndValuesFragment = {
   __typename?: 'Assessment';
   id: string;
   inProgress: boolean;
@@ -2065,11 +2090,11 @@ export type AssessmentWithDefinitionFragment = {
   dateDeleted?: string | null;
   assessmentDetail?: {
     __typename?: 'AssessmentDetail';
+    values?: any | null;
     id: string;
     dataCollectionStage?: DataCollectionStage | null;
     role: AssessmentRole;
     status: string;
-    values?: any | null;
     definition: {
       __typename?: 'FormDefinition';
       definition: any;
@@ -2102,13 +2127,14 @@ export type GetAssessmentQuery = {
     dateDeleted?: string | null;
     assessmentDetail?: {
       __typename?: 'AssessmentDetail';
+      values?: any | null;
       id: string;
       dataCollectionStage?: DataCollectionStage | null;
       role: AssessmentRole;
       status: string;
-      values?: any | null;
       definition: {
         __typename?: 'FormDefinition';
+        definition: any;
         id: string;
         version: number;
         role: AssessmentRole;
@@ -2154,7 +2180,6 @@ export type GetEnrollmentAssessmentsQuery = {
           dataCollectionStage?: DataCollectionStage | null;
           role: AssessmentRole;
           status: string;
-          values?: any | null;
           definition: {
             __typename?: 'FormDefinition';
             id: string;
@@ -2178,12 +2203,12 @@ export type GetFormDefinitionQuery = {
   __typename?: 'Query';
   getFormDefinition?: {
     __typename?: 'FormDefinition';
+    definition: any;
     id: string;
     version: number;
     role: AssessmentRole;
     status: string;
     identifier: string;
-    definition: any;
   } | null;
 };
 
@@ -2213,13 +2238,14 @@ export type CreateAssessmentMutation = {
       dateDeleted?: string | null;
       assessmentDetail?: {
         __typename?: 'AssessmentDetail';
+        values?: any | null;
         id: string;
         dataCollectionStage?: DataCollectionStage | null;
         role: AssessmentRole;
         status: string;
-        values?: any | null;
         definition: {
           __typename?: 'FormDefinition';
+          definition: any;
           id: string;
           version: number;
           role: AssessmentRole;
@@ -2264,13 +2290,14 @@ export type SaveAssessmentMutation = {
       dateDeleted?: string | null;
       assessmentDetail?: {
         __typename?: 'AssessmentDetail';
+        values?: any | null;
         id: string;
         dataCollectionStage?: DataCollectionStage | null;
         role: AssessmentRole;
         status: string;
-        values?: any | null;
         definition: {
           __typename?: 'FormDefinition';
+          definition: any;
           id: string;
           version: number;
           role: AssessmentRole;
@@ -3000,28 +3027,31 @@ export type OrganizationAllFieldsAndProjectsFragment = {
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider?: boolean | null;
-  projects: Array<{
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-    HMISParticipatingProject?: boolean | null;
-    HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-    contactInformation?: string | null;
-    continuumProject?: boolean | null;
-    description?: string | null;
-    housingType?: HousingType | null;
-    operatingEndDate?: string | null;
-    operatingStartDate: string;
-    residentialAffiliation?: boolean | null;
-    targetPopulation?: TargetPopulation | null;
-    trackingMethod?: TrackingMethod | null;
-    organization: {
-      __typename?: 'Organization';
+  projects: {
+    __typename?: 'ProjectsPaginated';
+    nodes: Array<{
+      __typename?: 'Project';
       id: string;
-      organizationName: string;
-    };
-  }>;
+      projectName: string;
+      projectType?: ProjectType | null;
+      HMISParticipatingProject?: boolean | null;
+      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+      contactInformation?: string | null;
+      continuumProject?: boolean | null;
+      description?: string | null;
+      housingType?: HousingType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      residentialAffiliation?: boolean | null;
+      targetPopulation?: TargetPopulation | null;
+      trackingMethod?: TrackingMethod | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    }>;
+  };
 };
 
 export type ProjectAllFieldsFragment = {
@@ -3105,17 +3135,20 @@ export type GetProjectsForSelectQueryVariables = Exact<{
 
 export type GetProjectsForSelectQuery = {
   __typename?: 'Query';
-  projects: Array<{
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-    organization: {
-      __typename?: 'Organization';
+  projects: {
+    __typename?: 'ProjectsPaginated';
+    nodes: Array<{
+      __typename?: 'Project';
       id: string;
-      organizationName: string;
-    };
-  }>;
+      projectName: string;
+      projectType?: ProjectType | null;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      };
+    }>;
+  };
 };
 
 export type GetOrganizationsAndProjectsQueryVariables = Exact<{
@@ -3124,33 +3157,16 @@ export type GetOrganizationsAndProjectsQueryVariables = Exact<{
 
 export type GetOrganizationsAndProjectsQuery = {
   __typename?: 'Query';
-  organizations: Array<{
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-    projects: Array<{
-      __typename?: 'Project';
+  organizations: {
+    __typename?: 'OrganizationsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Organization';
       id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      HMISParticipatingProject?: boolean | null;
-      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-      contactInformation?: string | null;
-      continuumProject?: boolean | null;
-      description?: string | null;
-      housingType?: HousingType | null;
-      operatingEndDate?: string | null;
-      operatingStartDate: string;
-      residentialAffiliation?: boolean | null;
-      targetPopulation?: TargetPopulation | null;
-      trackingMethod?: TrackingMethod | null;
-      organization: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      };
+      organizationName: string;
+      projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
     }>;
-  }>;
+  };
 };
 
 export type GetProjectQueryVariables = Exact<{
@@ -3269,28 +3285,72 @@ export type GetOrganizationQuery = {
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider?: boolean | null;
-    projects: Array<{
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      HMISParticipatingProject?: boolean | null;
-      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-      contactInformation?: string | null;
-      continuumProject?: boolean | null;
-      description?: string | null;
-      housingType?: HousingType | null;
-      operatingEndDate?: string | null;
-      operatingStartDate: string;
-      residentialAffiliation?: boolean | null;
-      targetPopulation?: TargetPopulation | null;
-      trackingMethod?: TrackingMethod | null;
-      organization: {
-        __typename?: 'Organization';
+    projects: {
+      __typename?: 'ProjectsPaginated';
+      nodes: Array<{
+        __typename?: 'Project';
         id: string;
-        organizationName: string;
-      };
-    }>;
+        projectName: string;
+        projectType?: ProjectType | null;
+        HMISParticipatingProject?: boolean | null;
+        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+        contactInformation?: string | null;
+        continuumProject?: boolean | null;
+        description?: string | null;
+        housingType?: HousingType | null;
+        operatingEndDate?: string | null;
+        operatingStartDate: string;
+        residentialAffiliation?: boolean | null;
+        targetPopulation?: TargetPopulation | null;
+        trackingMethod?: TrackingMethod | null;
+        organization: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        };
+      }>;
+    };
+  } | null;
+};
+
+export type GetOrganizationWithPaginatedProjectsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetOrganizationWithPaginatedProjectsQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    projects: {
+      __typename?: 'ProjectsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+        HMISParticipatingProject?: boolean | null;
+        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+        contactInformation?: string | null;
+        continuumProject?: boolean | null;
+        description?: string | null;
+        housingType?: HousingType | null;
+        operatingEndDate?: string | null;
+        operatingStartDate: string;
+        residentialAffiliation?: boolean | null;
+        targetPopulation?: TargetPopulation | null;
+        trackingMethod?: TrackingMethod | null;
+        organization: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        };
+      }>;
+    };
   } | null;
 };
 
@@ -3300,11 +3360,14 @@ export type GetOrganizationsForSelectQueryVariables = Exact<{
 
 export type GetOrganizationsForSelectQuery = {
   __typename?: 'Query';
-  organizations: Array<{
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-  }>;
+  organizations: {
+    __typename?: 'OrganizationsPaginated';
+    nodes: Array<{
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    }>;
+  };
 };
 
 export type CreateProjectMutationVariables = Exact<{
@@ -3407,28 +3470,31 @@ export type CreateOrganizationMutation = {
       description?: string | null;
       contactInformation?: string | null;
       victimServiceProvider?: boolean | null;
-      projects: Array<{
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-        HMISParticipatingProject?: boolean | null;
-        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-        contactInformation?: string | null;
-        continuumProject?: boolean | null;
-        description?: string | null;
-        housingType?: HousingType | null;
-        operatingEndDate?: string | null;
-        operatingStartDate: string;
-        residentialAffiliation?: boolean | null;
-        targetPopulation?: TargetPopulation | null;
-        trackingMethod?: TrackingMethod | null;
-        organization: {
-          __typename?: 'Organization';
+      projects: {
+        __typename?: 'ProjectsPaginated';
+        nodes: Array<{
+          __typename?: 'Project';
           id: string;
-          organizationName: string;
-        };
-      }>;
+          projectName: string;
+          projectType?: ProjectType | null;
+          HMISParticipatingProject?: boolean | null;
+          HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+          contactInformation?: string | null;
+          continuumProject?: boolean | null;
+          description?: string | null;
+          housingType?: HousingType | null;
+          operatingEndDate?: string | null;
+          operatingStartDate: string;
+          residentialAffiliation?: boolean | null;
+          targetPopulation?: TargetPopulation | null;
+          trackingMethod?: TrackingMethod | null;
+          organization: {
+            __typename?: 'Organization';
+            id: string;
+            organizationName: string;
+          };
+        }>;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -3457,28 +3523,31 @@ export type UpdateOrganizationMutation = {
       description?: string | null;
       contactInformation?: string | null;
       victimServiceProvider?: boolean | null;
-      projects: Array<{
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-        HMISParticipatingProject?: boolean | null;
-        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-        contactInformation?: string | null;
-        continuumProject?: boolean | null;
-        description?: string | null;
-        housingType?: HousingType | null;
-        operatingEndDate?: string | null;
-        operatingStartDate: string;
-        residentialAffiliation?: boolean | null;
-        targetPopulation?: TargetPopulation | null;
-        trackingMethod?: TrackingMethod | null;
-        organization: {
-          __typename?: 'Organization';
+      projects: {
+        __typename?: 'ProjectsPaginated';
+        nodes: Array<{
+          __typename?: 'Project';
           id: string;
-          organizationName: string;
-        };
-      }>;
+          projectName: string;
+          projectType?: ProjectType | null;
+          HMISParticipatingProject?: boolean | null;
+          HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+          contactInformation?: string | null;
+          continuumProject?: boolean | null;
+          description?: string | null;
+          housingType?: HousingType | null;
+          operatingEndDate?: string | null;
+          operatingStartDate: string;
+          residentialAffiliation?: boolean | null;
+          targetPopulation?: TargetPopulation | null;
+          trackingMethod?: TrackingMethod | null;
+          organization: {
+            __typename?: 'Organization';
+            id: string;
+            organizationName: string;
+          };
+        }>;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -3887,7 +3956,6 @@ export const AssessmentDetailFieldsFragmentDoc = gql`
     dataCollectionStage
     role
     status
-    values
   }
 `;
 export const FormDefinitionFieldsFragmentDoc = gql`
@@ -3921,26 +3989,27 @@ export const AssessmentFieldsFragmentDoc = gql`
   ${AssessmentDetailFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
-export const FormDefinitionWithJsonFieldsFragmentDoc = gql`
-  fragment FormDefinitionWithJsonFields on FormDefinition {
+export const FormDefinitionWithJsonFragmentDoc = gql`
+  fragment FormDefinitionWithJson on FormDefinition {
     ...FormDefinitionFields
     definition
   }
   ${FormDefinitionFieldsFragmentDoc}
 `;
-export const AssessmentWithDefinitionFragmentDoc = gql`
-  fragment AssessmentWithDefinition on Assessment {
+export const AssessmentWithDefinitionAndValuesFragmentDoc = gql`
+  fragment AssessmentWithDefinitionAndValues on Assessment {
     ...AssessmentFields
     assessmentDetail {
       ...AssessmentDetailFields
+      values
       definition {
-        ...FormDefinitionWithJsonFields
+        ...FormDefinitionWithJson
       }
     }
   }
   ${AssessmentFieldsFragmentDoc}
   ${AssessmentDetailFieldsFragmentDoc}
-  ${FormDefinitionWithJsonFieldsFragmentDoc}
+  ${FormDefinitionWithJsonFragmentDoc}
 `;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
@@ -4106,8 +4175,10 @@ export const ProjectAllFieldsFragmentDoc = gql`
 export const OrganizationAllFieldsAndProjectsFragmentDoc = gql`
   fragment OrganizationAllFieldsAndProjects on Organization {
     ...OrganizationAllFields
-    projects {
-      ...ProjectAllFields
+    projects(limit: 500) {
+      nodes {
+        ...ProjectAllFields
+      }
     }
   }
   ${OrganizationAllFieldsFragmentDoc}
@@ -4168,10 +4239,10 @@ export const FunderFieldsFragmentDoc = gql`
 export const GetAssessmentDocument = gql`
   query GetAssessment($id: ID!) {
     assessment(id: $id) {
-      ...AssessmentFields
+      ...AssessmentWithDefinitionAndValues
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithDefinitionAndValuesFragmentDoc}
 `;
 
 /**
@@ -4313,14 +4384,10 @@ export const GetFormDefinitionDocument = gql`
       enrollmentId: $enrollmentId
       assessmentRole: $assessmentRole
     ) {
-      id
-      version
-      role
-      status
-      identifier
-      definition
+      ...FormDefinitionWithJson
     }
   }
+  ${FormDefinitionWithJsonFragmentDoc}
 `;
 
 /**
@@ -4392,14 +4459,14 @@ export const CreateAssessmentDocument = gql`
       }
     ) {
       assessment {
-        ...AssessmentFields
+        ...AssessmentWithDefinitionAndValues
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithDefinitionAndValuesFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateAssessmentMutationFn = Apollo.MutationFunction<
@@ -4465,14 +4532,14 @@ export const SaveAssessmentDocument = gql`
       }
     ) {
       assessment {
-        ...AssessmentFields
+        ...AssessmentWithDefinitionAndValues
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentWithDefinitionAndValuesFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SaveAssessmentMutationFn = Apollo.MutationFunction<
@@ -5392,8 +5459,10 @@ export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
 >;
 export const GetProjectsForSelectDocument = gql`
   query GetProjectsForSelect {
-    projects(sortOrder: ORGANIZATION_AND_NAME) {
-      ...ProjectFields
+    projects(limit: 500, sortOrder: ORGANIZATION_AND_NAME) {
+      nodes {
+        ...ProjectFields
+      }
     }
   }
   ${ProjectFieldsFragmentDoc}
@@ -5450,15 +5519,17 @@ export type GetProjectsForSelectQueryResult = Apollo.QueryResult<
 >;
 export const GetOrganizationsAndProjectsDocument = gql`
   query GetOrganizationsAndProjects {
-    organizations(sortOrder: NAME) {
-      ...OrganizationFields
-      projects {
-        ...ProjectAllFields
+    organizations(limit: 500, sortOrder: NAME) {
+      nodesCount
+      nodes {
+        ...OrganizationFields
+        projects(limit: 1) {
+          nodesCount
+        }
       }
     }
   }
   ${OrganizationFieldsFragmentDoc}
-  ${ProjectAllFieldsFragmentDoc}
 `;
 
 /**
@@ -5743,8 +5814,10 @@ export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
     organization(id: $id) {
       ...OrganizationAllFields
-      projects {
-        ...ProjectAllFields
+      projects(limit: 500) {
+        nodes {
+          ...ProjectAllFields
+        }
       }
     }
   }
@@ -5802,10 +5875,84 @@ export type GetOrganizationQueryResult = Apollo.QueryResult<
   GetOrganizationQuery,
   GetOrganizationQueryVariables
 >;
+export const GetOrganizationWithPaginatedProjectsDocument = gql`
+  query GetOrganizationWithPaginatedProjects(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    organization(id: $id) {
+      projects(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ProjectAllFields
+        }
+      }
+    }
+  }
+  ${ProjectAllFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationWithPaginatedProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationWithPaginatedProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationWithPaginatedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationWithPaginatedProjectsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetOrganizationWithPaginatedProjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOrganizationWithPaginatedProjectsQuery,
+    GetOrganizationWithPaginatedProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOrganizationWithPaginatedProjectsQuery,
+    GetOrganizationWithPaginatedProjectsQueryVariables
+  >(GetOrganizationWithPaginatedProjectsDocument, options);
+}
+export function useGetOrganizationWithPaginatedProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationWithPaginatedProjectsQuery,
+    GetOrganizationWithPaginatedProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationWithPaginatedProjectsQuery,
+    GetOrganizationWithPaginatedProjectsQueryVariables
+  >(GetOrganizationWithPaginatedProjectsDocument, options);
+}
+export type GetOrganizationWithPaginatedProjectsQueryHookResult = ReturnType<
+  typeof useGetOrganizationWithPaginatedProjectsQuery
+>;
+export type GetOrganizationWithPaginatedProjectsLazyQueryHookResult =
+  ReturnType<typeof useGetOrganizationWithPaginatedProjectsLazyQuery>;
+export type GetOrganizationWithPaginatedProjectsQueryResult =
+  Apollo.QueryResult<
+    GetOrganizationWithPaginatedProjectsQuery,
+    GetOrganizationWithPaginatedProjectsQueryVariables
+  >;
 export const GetOrganizationsForSelectDocument = gql`
   query GetOrganizationsForSelect {
-    organizations(sortOrder: NAME) {
-      ...OrganizationFields
+    organizations(limit: 500, sortOrder: NAME) {
+      nodes {
+        ...OrganizationFields
+      }
     }
   }
   ${OrganizationFieldsFragmentDoc}

@@ -14,7 +14,7 @@ interface Props extends Omit<ButtonLinkProps, 'to' | 'ref'> {
 }
 
 const FinishIntakeButton = ({ enrollmentId, clientId, ...props }: Props) => {
-  const { data } = useGetEnrollmentAssessmentsQuery({
+  const { data, loading } = useGetEnrollmentAssessmentsQuery({
     variables: { id: enrollmentId, role: AssessmentRole.Intake },
   });
   const existingIntakePath = useMemo(() => {
@@ -42,7 +42,7 @@ const FinishIntakeButton = ({ enrollmentId, clientId, ...props }: Props) => {
       }
       {...props}
     >
-      {existingIntakePath ? 'Finish Intake' : 'Start Intake'}
+      {loading ? '...' : existingIntakePath ? 'Finish Intake' : 'Start Intake'}
     </ButtonLink>
   );
 };

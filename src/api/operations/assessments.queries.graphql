@@ -1,6 +1,6 @@
 query GetAssessment($id: ID!) {
   assessment(id: $id) {
-    ...AssessmentFields
+    ...AssessmentWithDefinitionAndValues
   }
 }
 
@@ -33,12 +33,7 @@ query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
     enrollmentId: $enrollmentId
     assessmentRole: $assessmentRole
   ) {
-    id
-    version
-    role
-    status
-    identifier
-    definition
+    ...FormDefinitionWithJson
   }
 }
 
@@ -59,7 +54,7 @@ mutation CreateAssessment(
     }
   ) {
     assessment {
-      ...AssessmentFields
+      ...AssessmentWithDefinitionAndValues
     }
     errors {
       ...ValidationErrorFields
@@ -82,7 +77,7 @@ mutation SaveAssessment(
     }
   ) {
     assessment {
-      ...AssessmentFields
+      ...AssessmentWithDefinitionAndValues
     }
     errors {
       ...ValidationErrorFields

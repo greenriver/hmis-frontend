@@ -1,14 +1,19 @@
 query GetProjectsForSelect {
-  projects(sortOrder: ORGANIZATION_AND_NAME) {
-    ...ProjectFields
+  projects(limit: 500, sortOrder: ORGANIZATION_AND_NAME) {
+    nodes {
+      ...ProjectFields
+    }
   }
 }
 
 query GetOrganizationsAndProjects {
-  organizations(sortOrder: NAME) {
-    ...OrganizationFields
-    projects {
-      ...ProjectAllFields
+  organizations(limit: 500, sortOrder: NAME) {
+    nodesCount
+    nodes {
+      ...OrganizationFields
+      projects(limit: 1) {
+        nodesCount
+      }
     }
   }
 }
@@ -40,15 +45,36 @@ query GetProjectCoc($id: ID!) {
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationAllFields
-    projects {
-      ...ProjectAllFields
+    projects(limit: 500) {
+      nodes {
+        ...ProjectAllFields
+      }
+    }
+  }
+}
+
+query GetOrganizationWithPaginatedProjects(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  organization(id: $id) {
+    projects(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectAllFields
+      }
     }
   }
 }
 
 query GetOrganizationsForSelect {
-  organizations(sortOrder: NAME) {
-    ...OrganizationFields
+  organizations(limit: 500, sortOrder: NAME) {
+    nodes {
+      ...OrganizationFields
+    }
   }
 }
 

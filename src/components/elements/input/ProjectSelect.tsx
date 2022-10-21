@@ -8,7 +8,7 @@ import {
   useGetProjectsForSelectQuery,
 } from '@/types/gqlTypes';
 
-export type Option = GetProjectsForSelectQuery['projects'][0];
+export type Option = GetProjectsForSelectQuery['projects']['nodes'][0];
 
 const renderOption = (props: object, option: Option) => (
   <li {...props} key={option.id}>
@@ -40,13 +40,19 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
   } = useGetProjectsForSelectQuery();
 
   if (error) console.error(error);
+  const projectList = projects?.nodes || [];
 
   // special case to replace value with complete option value.
   // e.g. {id: 50} becomes {id: 50, projectName: "White Ash Home"}
   // this is needed for cases when initially selected values are loaded from URL params
-  if (Array.isArray(value) && value[0] && !value[0].projectName && projects) {
+  if (
+    Array.isArray(value) &&
+    value[0] &&
+    !value[0].projectName &&
+    projectList
+  ) {
     value = compact(
-      value.map(({ id }) => projects.find((opt) => opt.id === id))
+      value.map(({ id }) => projectList.find((opt) => opt.id === id))
     ) as AutocompleteValue<Option, Multiple, boolean, undefined>;
   }
 
@@ -57,7 +63,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
       label={label}
       loading={loading}
       multiple={multiple}
-      options={projects || []}
+      options={projectList}
       renderOption={renderOption}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       value={value}
