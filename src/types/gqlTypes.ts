@@ -2389,6 +2389,7 @@ export type AssessmentFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+  user: { __typename?: 'User'; id: string; name: string };
   assessmentDetail?: {
     __typename?: 'AssessmentDetail';
     id: string;
@@ -2597,6 +2598,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
       };
     };
   } | null;
+  user: { __typename?: 'User'; id: string; name: string };
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -2796,6 +2798,7 @@ export type GetAssessmentQuery = {
         };
       };
     } | null;
+    user: { __typename?: 'User'; id: string; name: string };
   } | null;
 };
 
@@ -2844,6 +2847,7 @@ export type GetEnrollmentAssessmentsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
+        user: { __typename?: 'User'; id: string; name: string };
         assessmentDetail?: {
           __typename?: 'AssessmentDetail';
           id: string;
@@ -3426,6 +3430,7 @@ export type CreateAssessmentMutation = {
           };
         };
       } | null;
+      user: { __typename?: 'User'; id: string; name: string };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -3640,6 +3645,7 @@ export type SaveAssessmentMutation = {
           };
         };
       } | null;
+      user: { __typename?: 'User'; id: string; name: string };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -5207,6 +5213,10 @@ export const AssessmentFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
+    user {
+      id
+      name
+    }
     assessmentDetail {
       ...AssessmentDetailFields
       definition {

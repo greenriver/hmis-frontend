@@ -82,6 +82,10 @@ fragment AssessmentFields on Assessment {
   dateCreated
   dateUpdated
   dateDeleted
+  user {
+    id
+    name
+  }
   assessmentDetail {
     ...AssessmentDetailFields
     definition {
