@@ -1,4 +1,4 @@
-query GetOrganizationsAndProjects {
+query GetAllOrganizations {
   organizations(limit: 500, sortOrder: NAME) {
     nodesCount
     nodes {
@@ -49,11 +49,6 @@ query GetProjectCoc($id: ID!) {
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationAllFields
-    projects(limit: 500) {
-      nodes {
-        ...ProjectAllFields
-      }
-    }
   }
 }
 
@@ -114,7 +109,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
   createOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationAllFieldsAndProjects
+      ...OrganizationAllFields
     }
     errors {
       ...ValidationErrorFields
@@ -126,7 +121,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
   updateOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationAllFieldsAndProjects
+      ...OrganizationAllFields
     }
     errors {
       ...ValidationErrorFields

@@ -64,7 +64,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
               getErrors={(data: CreateInventoryMutation) =>
                 data?.createInventory?.errors
               }
-              submitButtonText='Create Funding Source'
+              submitButtonText='Create Inventory'
               {...common}
             />
           ) : (

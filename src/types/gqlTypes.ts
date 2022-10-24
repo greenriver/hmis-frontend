@@ -4355,40 +4355,6 @@ export type OrganizationAllFieldsFragment = {
   victimServiceProvider?: boolean | null;
 };
 
-export type OrganizationAllFieldsAndProjectsFragment = {
-  __typename?: 'Organization';
-  id: string;
-  organizationName: string;
-  description?: string | null;
-  contactInformation?: string | null;
-  victimServiceProvider?: boolean | null;
-  projects: {
-    __typename?: 'ProjectsPaginated';
-    nodes: Array<{
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      HMISParticipatingProject?: boolean | null;
-      HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-      contactInformation?: string | null;
-      continuumProject?: boolean | null;
-      description?: string | null;
-      housingType?: HousingType | null;
-      operatingEndDate?: string | null;
-      operatingStartDate: string;
-      residentialAffiliation?: boolean | null;
-      targetPopulation?: TargetPopulation | null;
-      trackingMethod?: TrackingMethod | null;
-      organization: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      };
-    }>;
-  };
-};
-
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -4464,11 +4430,9 @@ export type FunderFieldsFragment = {
   startDate: string;
 };
 
-export type GetOrganizationsAndProjectsQueryVariables = Exact<{
-  [key: string]: never;
-}>;
+export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetOrganizationsAndProjectsQuery = {
+export type GetAllOrganizationsQuery = {
   __typename?: 'Query';
   organizations: {
     __typename?: 'OrganizationsPaginated';
@@ -4619,31 +4583,6 @@ export type GetOrganizationQuery = {
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider?: boolean | null;
-    projects: {
-      __typename?: 'ProjectsPaginated';
-      nodes: Array<{
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-        HMISParticipatingProject?: boolean | null;
-        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-        contactInformation?: string | null;
-        continuumProject?: boolean | null;
-        description?: string | null;
-        housingType?: HousingType | null;
-        operatingEndDate?: string | null;
-        operatingStartDate: string;
-        residentialAffiliation?: boolean | null;
-        targetPopulation?: TargetPopulation | null;
-        trackingMethod?: TrackingMethod | null;
-        organization: {
-          __typename?: 'Organization';
-          id: string;
-          organizationName: string;
-        };
-      }>;
-    };
   } | null;
 };
 
@@ -4809,31 +4748,6 @@ export type CreateOrganizationMutation = {
       description?: string | null;
       contactInformation?: string | null;
       victimServiceProvider?: boolean | null;
-      projects: {
-        __typename?: 'ProjectsPaginated';
-        nodes: Array<{
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-          HMISParticipatingProject?: boolean | null;
-          HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-          contactInformation?: string | null;
-          continuumProject?: boolean | null;
-          description?: string | null;
-          housingType?: HousingType | null;
-          operatingEndDate?: string | null;
-          operatingStartDate: string;
-          residentialAffiliation?: boolean | null;
-          targetPopulation?: TargetPopulation | null;
-          trackingMethod?: TrackingMethod | null;
-          organization: {
-            __typename?: 'Organization';
-            id: string;
-            organizationName: string;
-          };
-        }>;
-      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -4862,31 +4776,6 @@ export type UpdateOrganizationMutation = {
       description?: string | null;
       contactInformation?: string | null;
       victimServiceProvider?: boolean | null;
-      projects: {
-        __typename?: 'ProjectsPaginated';
-        nodes: Array<{
-          __typename?: 'Project';
-          id: string;
-          projectName: string;
-          projectType?: ProjectType | null;
-          HMISParticipatingProject?: boolean | null;
-          HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-          contactInformation?: string | null;
-          continuumProject?: boolean | null;
-          description?: string | null;
-          housingType?: HousingType | null;
-          operatingEndDate?: string | null;
-          operatingStartDate: string;
-          residentialAffiliation?: boolean | null;
-          targetPopulation?: TargetPopulation | null;
-          trackingMethod?: TrackingMethod | null;
-          organization: {
-            __typename?: 'Organization';
-            id: string;
-            organizationName: string;
-          };
-        }>;
-      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -5566,18 +5455,6 @@ export const ProjectAllFieldsFragmentDoc = gql`
       organizationName
     }
   }
-`;
-export const OrganizationAllFieldsAndProjectsFragmentDoc = gql`
-  fragment OrganizationAllFieldsAndProjects on Organization {
-    ...OrganizationAllFields
-    projects(limit: 500) {
-      nodes {
-        ...ProjectAllFields
-      }
-    }
-  }
-  ${OrganizationAllFieldsFragmentDoc}
-  ${ProjectAllFieldsFragmentDoc}
 `;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
@@ -6968,8 +6845,8 @@ export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
   GetClientHouseholdMemberCandidatesQuery,
   GetClientHouseholdMemberCandidatesQueryVariables
 >;
-export const GetOrganizationsAndProjectsDocument = gql`
-  query GetOrganizationsAndProjects {
+export const GetAllOrganizationsDocument = gql`
+  query GetAllOrganizations {
     organizations(limit: 500, sortOrder: NAME) {
       nodesCount
       nodes {
@@ -6984,53 +6861,53 @@ export const GetOrganizationsAndProjectsDocument = gql`
 `;
 
 /**
- * __useGetOrganizationsAndProjectsQuery__
+ * __useGetAllOrganizationsQuery__
  *
- * To run a query within a React component, call `useGetOrganizationsAndProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationsAndProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetAllOrganizationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAllOrganizationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOrganizationsAndProjectsQuery({
+ * const { data, loading, error } = useGetAllOrganizationsQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetOrganizationsAndProjectsQuery(
+export function useGetAllOrganizationsQuery(
   baseOptions?: Apollo.QueryHookOptions<
-    GetOrganizationsAndProjectsQuery,
-    GetOrganizationsAndProjectsQueryVariables
+    GetAllOrganizationsQuery,
+    GetAllOrganizationsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetOrganizationsAndProjectsQuery,
-    GetOrganizationsAndProjectsQueryVariables
-  >(GetOrganizationsAndProjectsDocument, options);
+    GetAllOrganizationsQuery,
+    GetAllOrganizationsQueryVariables
+  >(GetAllOrganizationsDocument, options);
 }
-export function useGetOrganizationsAndProjectsLazyQuery(
+export function useGetAllOrganizationsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrganizationsAndProjectsQuery,
-    GetOrganizationsAndProjectsQueryVariables
+    GetAllOrganizationsQuery,
+    GetAllOrganizationsQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetOrganizationsAndProjectsQuery,
-    GetOrganizationsAndProjectsQueryVariables
-  >(GetOrganizationsAndProjectsDocument, options);
+    GetAllOrganizationsQuery,
+    GetAllOrganizationsQueryVariables
+  >(GetAllOrganizationsDocument, options);
 }
-export type GetOrganizationsAndProjectsQueryHookResult = ReturnType<
-  typeof useGetOrganizationsAndProjectsQuery
+export type GetAllOrganizationsQueryHookResult = ReturnType<
+  typeof useGetAllOrganizationsQuery
 >;
-export type GetOrganizationsAndProjectsLazyQueryHookResult = ReturnType<
-  typeof useGetOrganizationsAndProjectsLazyQuery
+export type GetAllOrganizationsLazyQueryHookResult = ReturnType<
+  typeof useGetAllOrganizationsLazyQuery
 >;
-export type GetOrganizationsAndProjectsQueryResult = Apollo.QueryResult<
-  GetOrganizationsAndProjectsQuery,
-  GetOrganizationsAndProjectsQueryVariables
+export type GetAllOrganizationsQueryResult = Apollo.QueryResult<
+  GetAllOrganizationsQuery,
+  GetAllOrganizationsQueryVariables
 >;
 export const GetProjectDocument = gql`
   query GetProject($id: ID!) {
@@ -7322,15 +7199,9 @@ export const GetOrganizationDocument = gql`
   query GetOrganization($id: ID!) {
     organization(id: $id) {
       ...OrganizationAllFields
-      projects(limit: 500) {
-        nodes {
-          ...ProjectAllFields
-        }
-      }
     }
   }
   ${OrganizationAllFieldsFragmentDoc}
-  ${ProjectAllFieldsFragmentDoc}
 `;
 
 /**
@@ -7633,14 +7504,14 @@ export const CreateOrganizationDocument = gql`
     createOrganization(input: $input) {
       clientMutationId
       organization {
-        ...OrganizationAllFieldsAndProjects
+        ...OrganizationAllFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${OrganizationAllFieldsAndProjectsFragmentDoc}
+  ${OrganizationAllFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateOrganizationMutationFn = Apollo.MutationFunction<
@@ -7691,14 +7562,14 @@ export const UpdateOrganizationDocument = gql`
     updateOrganization(input: $input) {
       clientMutationId
       organization {
-        ...OrganizationAllFieldsAndProjects
+        ...OrganizationAllFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${OrganizationAllFieldsAndProjectsFragmentDoc}
+  ${OrganizationAllFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateOrganizationMutationFn = Apollo.MutationFunction<

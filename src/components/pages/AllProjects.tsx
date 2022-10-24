@@ -7,9 +7,9 @@ import Loading from '../elements/Loading';
 import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { Routes } from '@/routes/routes';
-import { useGetOrganizationsAndProjectsQuery } from '@/types/gqlTypes';
+import { useGetAllOrganizationsQuery } from '@/types/gqlTypes';
 const AllProjects = () => {
-  const { data, loading, error } = useGetOrganizationsAndProjectsQuery();
+  const { data, loading, error } = useGetAllOrganizationsQuery();
 
   if (loading) return <Loading />;
   if (error) throw error;

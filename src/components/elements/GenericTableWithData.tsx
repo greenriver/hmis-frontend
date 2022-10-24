@@ -76,7 +76,7 @@ const GenericTableWithData = <
     };
   }, [data, page, rowsPerPage, toNodesCount]);
 
-  if (data && toNodesCount(data) === 0) {
+  if (!loading && data && toNodesCount(data) === 0) {
     return <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>;
   }
 
