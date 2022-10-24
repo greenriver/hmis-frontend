@@ -5,7 +5,6 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import PageHeader from '../layout/PageHeader';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { ClientFormDefinition } from '@/modules/form/data';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -40,7 +39,7 @@ const CreateClient: React.FC = () => {
               CreateClientMutation,
               CreateClientMutationVariables
             >
-              definition={ClientFormDefinition}
+              definitionIdentifier='client'
               // record={client}
               queryDocument={CreateClientDocument}
               onCompleted={onCompleted}

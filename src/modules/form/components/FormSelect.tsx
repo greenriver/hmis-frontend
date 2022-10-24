@@ -45,7 +45,6 @@ const FormSelect = <Multiple extends boolean | undefined>({
   ...props
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
-
   return (
     <GenericSelect
       getOptionLabel={(option) => optionLabel(option)}

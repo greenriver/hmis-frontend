@@ -28,13 +28,14 @@ const DynamicForm: React.FC<Props> = ({
   submitButtonText,
   discardButtonText,
   loading,
-
   initialValues = {},
   errors,
 }) => {
   const navigate = useNavigate();
   // Map { linkId => current value }
-  const [values, setValues] = useState<Record<string, any>>(initialValues);
+  const [values, setValues] = useState<Record<string, any>>({
+    ...initialValues,
+  });
 
   if (errors) console.log('Validation errors', errors);
 

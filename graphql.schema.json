@@ -9526,6 +9526,35 @@
             "deprecationReason": null
           },
           {
+            "name": "formDefinition",
+            "description": "Form definition lookup by identifier",
+            "args": [
+              {
+                "name": "identifier",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "funder",
             "description": "Funder lookup",
             "args": [

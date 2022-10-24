@@ -15,7 +15,9 @@ fragment PickListOptionFields on PickListOption {
 }
 
 fragment ItemFields on FormItem {
+  __typename
   linkId
+  type
   prefix
   text
   helperText
@@ -28,6 +30,7 @@ fragment ItemFields on FormItem {
   pickListOptions {
     ...PickListOptionFields
   }
+  dataCollectedAbout
   enableBehavior
   enableWhen {
     question
@@ -37,13 +40,25 @@ fragment ItemFields on FormItem {
     answerBoolean
   }
 }
+
+# GQL doesnt allow recursive fragments, so we have a max nesting level here
 fragment FormDefinitionWithJson on FormDefinition {
   ...FormDefinitionFields
   definition {
+    __typename
     item {
       ...ItemFields
       item {
         ...ItemFields
+        item {
+          ...ItemFields
+          item {
+            ...ItemFields
+            item {
+              ...ItemFields
+            }
+          }
+        }
       }
     }
   }

@@ -8,7 +8,6 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import FormDefinitions from '@/modules/form/definitions';
 import {
   useGetAssessmentQuery,
   useSaveAssessmentMutation,
@@ -65,8 +64,8 @@ const EditAssessment = () => {
   const title = `${
     assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
   } Assessment`;
-  const formDefinition = identifier ? FormDefinitions[identifier] : undefined;
-  console.log(initialValues);
+  const formDefinition =
+    data?.assessment?.assessmentDetail?.definition?.definition;
 
   return (
     <>

@@ -1450,6 +1450,8 @@ export type Query = {
   clientSearch: ClientsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  /** Form definition lookup by identifier */
+  formDefinition?: Maybe<FormDefinition>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Get form definition for enrollment & assessment role */
@@ -1487,6 +1489,10 @@ export type QueryClientSearchArgs = {
 
 export type QueryEnrollmentArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryFormDefinitionArgs = {
+  identifier: Scalars['String'];
 };
 
 export type QueryFunderArgs = {
@@ -2159,8 +2165,9 @@ export type PickListOptionFieldsFragment = {
 };
 
 export type ItemFieldsFragment = {
-  __typename?: 'FormItem';
+  __typename: 'FormItem';
   linkId: string;
+  type: ItemType;
   prefix?: string | null;
   text?: string | null;
   helperText?: string | null;
@@ -2170,6 +2177,7 @@ export type ItemFieldsFragment = {
   repeats?: boolean | null;
   queryField?: string | null;
   pickListReference?: string | null;
+  dataCollectedAbout?: DataCollectedAbout | null;
   enableBehavior?: EnableBehavior | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
@@ -2197,10 +2205,11 @@ export type FormDefinitionWithJsonFragment = {
   status: string;
   identifier: string;
   definition: {
-    __typename?: 'FormDefinitionJson';
+    __typename: 'FormDefinitionJson';
     item: Array<{
-      __typename?: 'FormItem';
+      __typename: 'FormItem';
       linkId: string;
+      type: ItemType;
       prefix?: string | null;
       text?: string | null;
       helperText?: string | null;
@@ -2210,10 +2219,12 @@ export type FormDefinitionWithJsonFragment = {
       repeats?: boolean | null;
       queryField?: string | null;
       pickListReference?: string | null;
+      dataCollectedAbout?: DataCollectedAbout | null;
       enableBehavior?: EnableBehavior | null;
       item?: Array<{
-        __typename?: 'FormItem';
+        __typename: 'FormItem';
         linkId: string;
+        type: ItemType;
         prefix?: string | null;
         text?: string | null;
         helperText?: string | null;
@@ -2223,7 +2234,104 @@ export type FormDefinitionWithJsonFragment = {
         repeats?: boolean | null;
         queryField?: string | null;
         pickListReference?: string | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
         enableBehavior?: EnableBehavior | null;
+        item?: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          prefix?: string | null;
+          text?: string | null;
+          helperText?: string | null;
+          required?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          queryField?: string | null;
+          pickListReference?: string | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          enableBehavior?: EnableBehavior | null;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            prefix?: string | null;
+            text?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            queryField?: string | null;
+            pickListReference?: string | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            enableBehavior?: EnableBehavior | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              prefix?: string | null;
+              text?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              enableBehavior?: EnableBehavior | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerNumber?: string | null;
+              answerBoolean?: string | null;
+            }> | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerNumber?: string | null;
+            answerBoolean?: string | null;
+          }> | null;
+        }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
           code: string;
@@ -2325,10 +2433,11 @@ export type AssessmentWithDefinitionAndValuesFragment = {
       status: string;
       identifier: string;
       definition: {
-        __typename?: 'FormDefinitionJson';
+        __typename: 'FormDefinitionJson';
         item: Array<{
-          __typename?: 'FormItem';
+          __typename: 'FormItem';
           linkId: string;
+          type: ItemType;
           prefix?: string | null;
           text?: string | null;
           helperText?: string | null;
@@ -2338,10 +2447,12 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           repeats?: boolean | null;
           queryField?: string | null;
           pickListReference?: string | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
           item?: Array<{
-            __typename?: 'FormItem';
+            __typename: 'FormItem';
             linkId: string;
+            type: ItemType;
             prefix?: string | null;
             text?: string | null;
             helperText?: string | null;
@@ -2351,7 +2462,104 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             repeats?: boolean | null;
             queryField?: string | null;
             pickListReference?: string | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              prefix?: string | null;
+              text?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              enableBehavior?: EnableBehavior | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                prefix?: string | null;
+                text?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                enableBehavior?: EnableBehavior | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  prefix?: string | null;
+                  text?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  queryField?: string | null;
+                  pickListReference?: string | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  enableBehavior?: EnableBehavior | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerNumber?: string | null;
+                    answerBoolean?: string | null;
+                  }> | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
               code: string;
@@ -2424,10 +2632,11 @@ export type GetAssessmentQuery = {
         status: string;
         identifier: string;
         definition: {
-          __typename?: 'FormDefinitionJson';
+          __typename: 'FormDefinitionJson';
           item: Array<{
-            __typename?: 'FormItem';
+            __typename: 'FormItem';
             linkId: string;
+            type: ItemType;
             prefix?: string | null;
             text?: string | null;
             helperText?: string | null;
@@ -2437,10 +2646,12 @@ export type GetAssessmentQuery = {
             repeats?: boolean | null;
             queryField?: string | null;
             pickListReference?: string | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
-              __typename?: 'FormItem';
+              __typename: 'FormItem';
               linkId: string;
+              type: ItemType;
               prefix?: string | null;
               text?: string | null;
               helperText?: string | null;
@@ -2450,7 +2661,104 @@ export type GetAssessmentQuery = {
               repeats?: boolean | null;
               queryField?: string | null;
               pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                prefix?: string | null;
+                text?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                enableBehavior?: EnableBehavior | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  prefix?: string | null;
+                  text?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  queryField?: string | null;
+                  pickListReference?: string | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  enableBehavior?: EnableBehavior | null;
+                  item?: Array<{
+                    __typename: 'FormItem';
+                    linkId: string;
+                    type: ItemType;
+                    prefix?: string | null;
+                    text?: string | null;
+                    helperText?: string | null;
+                    required?: boolean | null;
+                    hidden?: boolean | null;
+                    readOnly?: boolean | null;
+                    repeats?: boolean | null;
+                    queryField?: string | null;
+                    pickListReference?: string | null;
+                    dataCollectedAbout?: DataCollectedAbout | null;
+                    enableBehavior?: EnableBehavior | null;
+                    pickListOptions?: Array<{
+                      __typename?: 'PickListOption';
+                      code: string;
+                      label?: string | null;
+                      secondaryLabel?: string | null;
+                      groupLabel?: string | null;
+                      initialSelected?: boolean | null;
+                    }> | null;
+                    enableWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerNumber?: string | null;
+                      answerBoolean?: string | null;
+                    }> | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerNumber?: string | null;
+                    answerBoolean?: string | null;
+                  }> | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
+              }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
                 code: string;
@@ -2556,6 +2864,185 @@ export type GetEnrollmentAssessmentsQuery = {
   } | null;
 };
 
+export type GetFormDefinitionByIdentifierQueryVariables = Exact<{
+  identifier: Scalars['String'];
+}>;
+
+export type GetFormDefinitionByIdentifierQuery = {
+  __typename?: 'Query';
+  formDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    version: number;
+    role: AssessmentRole;
+    status: string;
+    identifier: string;
+    definition: {
+      __typename: 'FormDefinitionJson';
+      item: Array<{
+        __typename: 'FormItem';
+        linkId: string;
+        type: ItemType;
+        prefix?: string | null;
+        text?: string | null;
+        helperText?: string | null;
+        required?: boolean | null;
+        hidden?: boolean | null;
+        readOnly?: boolean | null;
+        repeats?: boolean | null;
+        queryField?: string | null;
+        pickListReference?: string | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        enableBehavior?: EnableBehavior | null;
+        item?: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          prefix?: string | null;
+          text?: string | null;
+          helperText?: string | null;
+          required?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          queryField?: string | null;
+          pickListReference?: string | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          enableBehavior?: EnableBehavior | null;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            prefix?: string | null;
+            text?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            queryField?: string | null;
+            pickListReference?: string | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            enableBehavior?: EnableBehavior | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              prefix?: string | null;
+              text?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              enableBehavior?: EnableBehavior | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                prefix?: string | null;
+                text?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                enableBehavior?: EnableBehavior | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerNumber?: string | null;
+              answerBoolean?: string | null;
+            }> | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerNumber?: string | null;
+            answerBoolean?: string | null;
+          }> | null;
+        }> | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          initialSelected?: boolean | null;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question: string;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerNumber?: string | null;
+          answerBoolean?: string | null;
+        }> | null;
+      }>;
+    };
+  } | null;
+};
+
 export type GetFormDefinitionQueryVariables = Exact<{
   enrollmentId: Scalars['ID'];
   assessmentRole: AssessmentRole;
@@ -2571,10 +3058,11 @@ export type GetFormDefinitionQuery = {
     status: string;
     identifier: string;
     definition: {
-      __typename?: 'FormDefinitionJson';
+      __typename: 'FormDefinitionJson';
       item: Array<{
-        __typename?: 'FormItem';
+        __typename: 'FormItem';
         linkId: string;
+        type: ItemType;
         prefix?: string | null;
         text?: string | null;
         helperText?: string | null;
@@ -2584,10 +3072,12 @@ export type GetFormDefinitionQuery = {
         repeats?: boolean | null;
         queryField?: string | null;
         pickListReference?: string | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
         enableBehavior?: EnableBehavior | null;
         item?: Array<{
-          __typename?: 'FormItem';
+          __typename: 'FormItem';
           linkId: string;
+          type: ItemType;
           prefix?: string | null;
           text?: string | null;
           helperText?: string | null;
@@ -2597,7 +3087,104 @@ export type GetFormDefinitionQuery = {
           repeats?: boolean | null;
           queryField?: string | null;
           pickListReference?: string | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            prefix?: string | null;
+            text?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            queryField?: string | null;
+            pickListReference?: string | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            enableBehavior?: EnableBehavior | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              prefix?: string | null;
+              text?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              queryField?: string | null;
+              pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              enableBehavior?: EnableBehavior | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                prefix?: string | null;
+                text?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                queryField?: string | null;
+                pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                enableBehavior?: EnableBehavior | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerNumber?: string | null;
+                  answerBoolean?: string | null;
+                }> | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerNumber?: string | null;
+                answerBoolean?: string | null;
+              }> | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerNumber?: string | null;
+              answerBoolean?: string | null;
+            }> | null;
+          }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
             code: string;
@@ -2675,10 +3262,11 @@ export type CreateAssessmentMutation = {
           status: string;
           identifier: string;
           definition: {
-            __typename?: 'FormDefinitionJson';
+            __typename: 'FormDefinitionJson';
             item: Array<{
-              __typename?: 'FormItem';
+              __typename: 'FormItem';
               linkId: string;
+              type: ItemType;
               prefix?: string | null;
               text?: string | null;
               helperText?: string | null;
@@ -2688,10 +3276,12 @@ export type CreateAssessmentMutation = {
               repeats?: boolean | null;
               queryField?: string | null;
               pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
-                __typename?: 'FormItem';
+                __typename: 'FormItem';
                 linkId: string;
+                type: ItemType;
                 prefix?: string | null;
                 text?: string | null;
                 helperText?: string | null;
@@ -2701,7 +3291,104 @@ export type CreateAssessmentMutation = {
                 repeats?: boolean | null;
                 queryField?: string | null;
                 pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  prefix?: string | null;
+                  text?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  queryField?: string | null;
+                  pickListReference?: string | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  enableBehavior?: EnableBehavior | null;
+                  item?: Array<{
+                    __typename: 'FormItem';
+                    linkId: string;
+                    type: ItemType;
+                    prefix?: string | null;
+                    text?: string | null;
+                    helperText?: string | null;
+                    required?: boolean | null;
+                    hidden?: boolean | null;
+                    readOnly?: boolean | null;
+                    repeats?: boolean | null;
+                    queryField?: string | null;
+                    pickListReference?: string | null;
+                    dataCollectedAbout?: DataCollectedAbout | null;
+                    enableBehavior?: EnableBehavior | null;
+                    item?: Array<{
+                      __typename: 'FormItem';
+                      linkId: string;
+                      type: ItemType;
+                      prefix?: string | null;
+                      text?: string | null;
+                      helperText?: string | null;
+                      required?: boolean | null;
+                      hidden?: boolean | null;
+                      readOnly?: boolean | null;
+                      repeats?: boolean | null;
+                      queryField?: string | null;
+                      pickListReference?: string | null;
+                      dataCollectedAbout?: DataCollectedAbout | null;
+                      enableBehavior?: EnableBehavior | null;
+                      pickListOptions?: Array<{
+                        __typename?: 'PickListOption';
+                        code: string;
+                        label?: string | null;
+                        secondaryLabel?: string | null;
+                        groupLabel?: string | null;
+                        initialSelected?: boolean | null;
+                      }> | null;
+                      enableWhen?: Array<{
+                        __typename?: 'EnableWhen';
+                        question: string;
+                        operator: EnableOperator;
+                        answerCode?: string | null;
+                        answerNumber?: string | null;
+                        answerBoolean?: string | null;
+                      }> | null;
+                    }> | null;
+                    pickListOptions?: Array<{
+                      __typename?: 'PickListOption';
+                      code: string;
+                      label?: string | null;
+                      secondaryLabel?: string | null;
+                      groupLabel?: string | null;
+                      initialSelected?: boolean | null;
+                    }> | null;
+                    enableWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerNumber?: string | null;
+                      answerBoolean?: string | null;
+                    }> | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerNumber?: string | null;
+                    answerBoolean?: string | null;
+                  }> | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -2789,10 +3476,11 @@ export type SaveAssessmentMutation = {
           status: string;
           identifier: string;
           definition: {
-            __typename?: 'FormDefinitionJson';
+            __typename: 'FormDefinitionJson';
             item: Array<{
-              __typename?: 'FormItem';
+              __typename: 'FormItem';
               linkId: string;
+              type: ItemType;
               prefix?: string | null;
               text?: string | null;
               helperText?: string | null;
@@ -2802,10 +3490,12 @@ export type SaveAssessmentMutation = {
               repeats?: boolean | null;
               queryField?: string | null;
               pickListReference?: string | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
-                __typename?: 'FormItem';
+                __typename: 'FormItem';
                 linkId: string;
+                type: ItemType;
                 prefix?: string | null;
                 text?: string | null;
                 helperText?: string | null;
@@ -2815,7 +3505,104 @@ export type SaveAssessmentMutation = {
                 repeats?: boolean | null;
                 queryField?: string | null;
                 pickListReference?: string | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  prefix?: string | null;
+                  text?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  queryField?: string | null;
+                  pickListReference?: string | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  enableBehavior?: EnableBehavior | null;
+                  item?: Array<{
+                    __typename: 'FormItem';
+                    linkId: string;
+                    type: ItemType;
+                    prefix?: string | null;
+                    text?: string | null;
+                    helperText?: string | null;
+                    required?: boolean | null;
+                    hidden?: boolean | null;
+                    readOnly?: boolean | null;
+                    repeats?: boolean | null;
+                    queryField?: string | null;
+                    pickListReference?: string | null;
+                    dataCollectedAbout?: DataCollectedAbout | null;
+                    enableBehavior?: EnableBehavior | null;
+                    item?: Array<{
+                      __typename: 'FormItem';
+                      linkId: string;
+                      type: ItemType;
+                      prefix?: string | null;
+                      text?: string | null;
+                      helperText?: string | null;
+                      required?: boolean | null;
+                      hidden?: boolean | null;
+                      readOnly?: boolean | null;
+                      repeats?: boolean | null;
+                      queryField?: string | null;
+                      pickListReference?: string | null;
+                      dataCollectedAbout?: DataCollectedAbout | null;
+                      enableBehavior?: EnableBehavior | null;
+                      pickListOptions?: Array<{
+                        __typename?: 'PickListOption';
+                        code: string;
+                        label?: string | null;
+                        secondaryLabel?: string | null;
+                        groupLabel?: string | null;
+                        initialSelected?: boolean | null;
+                      }> | null;
+                      enableWhen?: Array<{
+                        __typename?: 'EnableWhen';
+                        question: string;
+                        operator: EnableOperator;
+                        answerCode?: string | null;
+                        answerNumber?: string | null;
+                        answerBoolean?: string | null;
+                      }> | null;
+                    }> | null;
+                    pickListOptions?: Array<{
+                      __typename?: 'PickListOption';
+                      code: string;
+                      label?: string | null;
+                      secondaryLabel?: string | null;
+                      groupLabel?: string | null;
+                      initialSelected?: boolean | null;
+                    }> | null;
+                    enableWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerNumber?: string | null;
+                      answerBoolean?: string | null;
+                    }> | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerNumber?: string | null;
+                    answerBoolean?: string | null;
+                  }> | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -3677,28 +4464,6 @@ export type FunderFieldsFragment = {
   startDate: string;
 };
 
-export type GetProjectsForSelectQueryVariables = Exact<{
-  [key: string]: never;
-}>;
-
-export type GetProjectsForSelectQuery = {
-  __typename?: 'Query';
-  projects: {
-    __typename?: 'ProjectsPaginated';
-    nodes: Array<{
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-      organization: {
-        __typename?: 'Organization';
-        id: string;
-        organizationName: string;
-      };
-    }>;
-  };
-};
-
 export type GetOrganizationsAndProjectsQueryVariables = Exact<{
   [key: string]: never;
 }>;
@@ -3744,6 +4509,27 @@ export type GetProjectQuery = {
       id: string;
       organizationName: string;
     };
+  } | null;
+};
+
+export type DeleteProjectMutationVariables = Exact<{
+  input: DeleteProjectInput;
+}>;
+
+export type DeleteProjectMutation = {
+  __typename?: 'Mutation';
+  deleteProject?: {
+    __typename?: 'DeleteProjectPayload';
+    clientMutationId?: string | null;
+    project?: { __typename?: 'Project'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
   } | null;
 };
 
@@ -3861,6 +4647,27 @@ export type GetOrganizationQuery = {
   } | null;
 };
 
+export type DeleteOrganizationMutationVariables = Exact<{
+  input: DeleteOrganizationInput;
+}>;
+
+export type DeleteOrganizationMutation = {
+  __typename?: 'Mutation';
+  deleteOrganization?: {
+    __typename?: 'DeleteOrganizationPayload';
+    clientMutationId?: string | null;
+    organization?: { __typename?: 'Organization'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type GetOrganizationWithPaginatedProjectsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -3900,22 +4707,6 @@ export type GetOrganizationWithPaginatedProjectsQuery = {
       }>;
     };
   } | null;
-};
-
-export type GetOrganizationsForSelectQueryVariables = Exact<{
-  [key: string]: never;
-}>;
-
-export type GetOrganizationsForSelectQuery = {
-  __typename?: 'Query';
-  organizations: {
-    __typename?: 'OrganizationsPaginated';
-    nodes: Array<{
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-    }>;
-  };
 };
 
 export type CreateProjectMutationVariables = Exact<{
@@ -4548,7 +5339,9 @@ export const PickListOptionFieldsFragmentDoc = gql`
 `;
 export const ItemFieldsFragmentDoc = gql`
   fragment ItemFields on FormItem {
+    __typename
     linkId
+    type
     prefix
     text
     helperText
@@ -4561,6 +5354,7 @@ export const ItemFieldsFragmentDoc = gql`
     pickListOptions {
       ...PickListOptionFields
     }
+    dataCollectedAbout
     enableBehavior
     enableWhen {
       question
@@ -4576,10 +5370,20 @@ export const FormDefinitionWithJsonFragmentDoc = gql`
   fragment FormDefinitionWithJson on FormDefinition {
     ...FormDefinitionFields
     definition {
+      __typename
       item {
         ...ItemFields
         item {
           ...ItemFields
+          item {
+            ...ItemFields
+            item {
+              ...ItemFields
+              item {
+                ...ItemFields
+              }
+            }
+          }
         }
       }
     }
@@ -5022,6 +5826,65 @@ export type GetEnrollmentAssessmentsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables
+>;
+export const GetFormDefinitionByIdentifierDocument = gql`
+  query GetFormDefinitionByIdentifier($identifier: String!) {
+    formDefinition(identifier: $identifier) {
+      ...FormDefinitionWithJson
+    }
+  }
+  ${FormDefinitionWithJsonFragmentDoc}
+`;
+
+/**
+ * __useGetFormDefinitionByIdentifierQuery__
+ *
+ * To run a query within a React component, call `useGetFormDefinitionByIdentifierQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFormDefinitionByIdentifierQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFormDefinitionByIdentifierQuery({
+ *   variables: {
+ *      identifier: // value for 'identifier'
+ *   },
+ * });
+ */
+export function useGetFormDefinitionByIdentifierQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetFormDefinitionByIdentifierQuery,
+    GetFormDefinitionByIdentifierQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetFormDefinitionByIdentifierQuery,
+    GetFormDefinitionByIdentifierQueryVariables
+  >(GetFormDefinitionByIdentifierDocument, options);
+}
+export function useGetFormDefinitionByIdentifierLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetFormDefinitionByIdentifierQuery,
+    GetFormDefinitionByIdentifierQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetFormDefinitionByIdentifierQuery,
+    GetFormDefinitionByIdentifierQueryVariables
+  >(GetFormDefinitionByIdentifierDocument, options);
+}
+export type GetFormDefinitionByIdentifierQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionByIdentifierQuery
+>;
+export type GetFormDefinitionByIdentifierLazyQueryHookResult = ReturnType<
+  typeof useGetFormDefinitionByIdentifierLazyQuery
+>;
+export type GetFormDefinitionByIdentifierQueryResult = Apollo.QueryResult<
+  GetFormDefinitionByIdentifierQuery,
+  GetFormDefinitionByIdentifierQueryVariables
 >;
 export const GetFormDefinitionDocument = gql`
   query GetFormDefinition(
@@ -6105,66 +6968,6 @@ export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
   GetClientHouseholdMemberCandidatesQuery,
   GetClientHouseholdMemberCandidatesQueryVariables
 >;
-export const GetProjectsForSelectDocument = gql`
-  query GetProjectsForSelect {
-    projects(limit: 500, sortOrder: ORGANIZATION_AND_NAME) {
-      nodes {
-        ...ProjectFields
-      }
-    }
-  }
-  ${ProjectFieldsFragmentDoc}
-`;
-
-/**
- * __useGetProjectsForSelectQuery__
- *
- * To run a query within a React component, call `useGetProjectsForSelectQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetProjectsForSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetProjectsForSelectQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetProjectsForSelectQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetProjectsForSelectQuery,
-    GetProjectsForSelectQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetProjectsForSelectQuery,
-    GetProjectsForSelectQueryVariables
-  >(GetProjectsForSelectDocument, options);
-}
-export function useGetProjectsForSelectLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetProjectsForSelectQuery,
-    GetProjectsForSelectQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetProjectsForSelectQuery,
-    GetProjectsForSelectQueryVariables
-  >(GetProjectsForSelectDocument, options);
-}
-export type GetProjectsForSelectQueryHookResult = ReturnType<
-  typeof useGetProjectsForSelectQuery
->;
-export type GetProjectsForSelectLazyQueryHookResult = ReturnType<
-  typeof useGetProjectsForSelectLazyQuery
->;
-export type GetProjectsForSelectQueryResult = Apollo.QueryResult<
-  GetProjectsForSelectQuery,
-  GetProjectsForSelectQueryVariables
->;
 export const GetOrganizationsAndProjectsDocument = gql`
   query GetOrganizationsAndProjects {
     organizations(limit: 500, sortOrder: NAME) {
@@ -6285,6 +7088,63 @@ export type GetProjectLazyQueryHookResult = ReturnType<
 export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
+>;
+export const DeleteProjectDocument = gql`
+  mutation DeleteProject($input: DeleteProjectInput!) {
+    deleteProject(input: $input) {
+      clientMutationId
+      project {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteProjectMutationFn = Apollo.MutationFunction<
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables
+>;
+
+/**
+ * __useDeleteProjectMutation__
+ *
+ * To run a mutation, you first call `useDeleteProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteProjectMutation, { data, loading, error }] = useDeleteProjectMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteProjectMutation,
+    DeleteProjectMutationVariables
+  >(DeleteProjectDocument, options);
+}
+export type DeleteProjectMutationHookResult = ReturnType<
+  typeof useDeleteProjectMutation
+>;
+export type DeleteProjectMutationResult =
+  Apollo.MutationResult<DeleteProjectMutation>;
+export type DeleteProjectMutationOptions = Apollo.BaseMutationOptions<
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables
 >;
 export const GetFunderDocument = gql`
   query GetFunder($id: ID!) {
@@ -6523,6 +7383,63 @@ export type GetOrganizationQueryResult = Apollo.QueryResult<
   GetOrganizationQuery,
   GetOrganizationQueryVariables
 >;
+export const DeleteOrganizationDocument = gql`
+  mutation DeleteOrganization($input: DeleteOrganizationInput!) {
+    deleteOrganization(input: $input) {
+      clientMutationId
+      organization {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteOrganizationMutationFn = Apollo.MutationFunction<
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables
+>;
+
+/**
+ * __useDeleteOrganizationMutation__
+ *
+ * To run a mutation, you first call `useDeleteOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOrganizationMutation, { data, loading, error }] = useDeleteOrganizationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteOrganizationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOrganizationMutation,
+    DeleteOrganizationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteOrganizationMutation,
+    DeleteOrganizationMutationVariables
+  >(DeleteOrganizationDocument, options);
+}
+export type DeleteOrganizationMutationHookResult = ReturnType<
+  typeof useDeleteOrganizationMutation
+>;
+export type DeleteOrganizationMutationResult =
+  Apollo.MutationResult<DeleteOrganizationMutation>;
+export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables
+>;
 export const GetOrganizationWithPaginatedProjectsDocument = gql`
   query GetOrganizationWithPaginatedProjects(
     $id: ID!
@@ -6595,66 +7512,6 @@ export type GetOrganizationWithPaginatedProjectsQueryResult =
     GetOrganizationWithPaginatedProjectsQuery,
     GetOrganizationWithPaginatedProjectsQueryVariables
   >;
-export const GetOrganizationsForSelectDocument = gql`
-  query GetOrganizationsForSelect {
-    organizations(limit: 500, sortOrder: NAME) {
-      nodes {
-        ...OrganizationFields
-      }
-    }
-  }
-  ${OrganizationFieldsFragmentDoc}
-`;
-
-/**
- * __useGetOrganizationsForSelectQuery__
- *
- * To run a query within a React component, call `useGetOrganizationsForSelectQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationsForSelectQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrganizationsForSelectQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetOrganizationsForSelectQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetOrganizationsForSelectQuery,
-    GetOrganizationsForSelectQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetOrganizationsForSelectQuery,
-    GetOrganizationsForSelectQueryVariables
-  >(GetOrganizationsForSelectDocument, options);
-}
-export function useGetOrganizationsForSelectLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrganizationsForSelectQuery,
-    GetOrganizationsForSelectQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetOrganizationsForSelectQuery,
-    GetOrganizationsForSelectQueryVariables
-  >(GetOrganizationsForSelectDocument, options);
-}
-export type GetOrganizationsForSelectQueryHookResult = ReturnType<
-  typeof useGetOrganizationsForSelectQuery
->;
-export type GetOrganizationsForSelectLazyQueryHookResult = ReturnType<
-  typeof useGetOrganizationsForSelectLazyQuery
->;
-export type GetOrganizationsForSelectQueryResult = Apollo.QueryResult<
-  GetOrganizationsForSelectQuery,
-  GetOrganizationsForSelectQueryVariables
->;
 export const CreateProjectDocument = gql`
   mutation CreateProject($input: CreateProjectInput!) {
     createProject(input: $input) {

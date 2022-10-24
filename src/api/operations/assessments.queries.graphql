@@ -34,6 +34,12 @@ query GetEnrollmentAssessments(
   }
 }
 
+query GetFormDefinitionByIdentifier($identifier: String!) {
+  formDefinition(identifier: $identifier) {
+    ...FormDefinitionWithJson
+  }
+}
+
 query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
   getFormDefinition(
     enrollmentId: $enrollmentId

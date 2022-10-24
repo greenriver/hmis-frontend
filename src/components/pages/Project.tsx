@@ -84,14 +84,6 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.NEW_INVENTORY, { projectId })}
-              >
-                + Add Inventory
-              </ButtonLink>
-              <ButtonLink
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generatePath(Routes.NEW_FUNDER, { projectId })}
               >
                 + Add Funding Source
@@ -103,6 +95,14 @@ const Project = () => {
                 to={generatePath(Routes.NEW_COC, { projectId })}
               >
                 + Add Project CoC
+              </ButtonLink>
+              <ButtonLink
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generatePath(Routes.NEW_INVENTORY, { projectId })}
+              >
+                + Add Inventory
               </ButtonLink>
             </Stack>
           </Paper>

@@ -5,7 +5,6 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import Breadcrumbs from '../elements/Breadcrumbs';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { ProjectFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
@@ -50,7 +49,7 @@ const CreateProject = () => {
             CreateProjectMutation,
             CreateProjectMutationVariables
           >
-            definition={ProjectFormDefinition}
+            definitionIdentifier='project'
             queryDocument={CreateProjectDocument}
             onCompleted={onCompleted}
             inputVariables={{ organizationId }}

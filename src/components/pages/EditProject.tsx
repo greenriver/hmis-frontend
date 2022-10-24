@@ -8,7 +8,6 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { ProjectFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -51,7 +50,7 @@ const EditProject = () => {
             UpdateProjectMutation,
             UpdateProjectMutationVariables
           >
-            definition={ProjectFormDefinition}
+            definitionIdentifier='project'
             record={project}
             queryDocument={UpdateProjectDocument}
             onCompleted={onCompleted}

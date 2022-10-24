@@ -1,6 +1,7 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 
+import Loading from '@/components/elements/Loading';
 import DynamicForm, {
   Props as DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
@@ -8,13 +9,23 @@ import {
   createInitialValues,
   transformSubmitValues,
 } from '@/modules/form/formUtil';
-import { ValidationError } from '@/types/gqlTypes';
+import {
+  FormDefinitionJson,
+  useGetFormDefinitionByIdentifierQuery,
+  ValidationError,
+} from '@/types/gqlTypes';
 
 interface Props<RecordType, Query, QueryVariables>
   extends Omit<
     DynamicFormProps,
-    'initialValues' | 'submitHandler' | 'errors' | 'loading' | 'onSubmit'
+    | 'initialValues'
+    | 'submitHandler'
+    | 'errors'
+    | 'loading'
+    | 'onSubmit'
+    | 'definition'
   > {
+  definitionIdentifier: string;
   record?: RecordType;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   inputVariables?: Record<string, any>;
@@ -30,7 +41,7 @@ const EditRecord = <
   Query extends Record<string, string | Record<string, unknown> | null>,
   QueryVariables extends { input: unknown }
 >({
-  definition,
+  definitionIdentifier,
   record,
   queryDocument,
   getErrors,
@@ -39,7 +50,20 @@ const EditRecord = <
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const [mutateFunction, { loading, error }] = useMutation<
+
+  const {
+    data,
+    loading: definitionLoading,
+    error: definitionError,
+  } = useGetFormDefinitionByIdentifierQuery({
+    variables: { identifier: definitionIdentifier },
+  });
+  const definition: FormDefinitionJson | undefined = useMemo(
+    () => data?.formDefinition?.definition,
+    [data]
+  );
+
+  const [mutateFunction, { loading: saveLoading, error }] = useMutation<
     Query,
     QueryVariables
   >(queryDocument, {
@@ -55,12 +79,13 @@ const EditRecord = <
   });
 
   const initialValues = useMemo(() => {
-    if (!record) return {};
+    if (!record || !definition) return {};
     return createInitialValues(definition, record);
   }, [record, definition]);
 
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
+      if (!definition) return;
       // Transform values into client input query variables
       const inputValues = transformSubmitValues({
         definition,
@@ -81,7 +106,10 @@ const EditRecord = <
     [definition, inputVariables, mutateFunction, record]
   );
 
+  if (definitionLoading) return <Loading />;
   if (error) console.error(error); // FIXME handle error on form submission
+  if (definitionError) console.error(definitionError);
+  if (!definition) throw Error('Definition not found');
 
   return (
     <DynamicForm
@@ -90,7 +118,7 @@ const EditRecord = <
       submitButtonText='Save Changes'
       discardButtonText='Discard'
       initialValues={initialValues}
-      loading={loading}
+      loading={saveLoading}
       errors={errors}
       {...props}
     />

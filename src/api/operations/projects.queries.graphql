@@ -1,11 +1,3 @@
-query GetProjectsForSelect {
-  projects(limit: 500, sortOrder: ORGANIZATION_AND_NAME) {
-    nodes {
-      ...ProjectFields
-    }
-  }
-}
-
 query GetOrganizationsAndProjects {
   organizations(limit: 500, sortOrder: NAME) {
     nodesCount
@@ -21,6 +13,18 @@ query GetOrganizationsAndProjects {
 query GetProject($id: ID!) {
   project(id: $id) {
     ...ProjectAllFields
+  }
+}
+
+mutation DeleteProject($input: DeleteProjectInput!) {
+  deleteProject(input: $input) {
+    clientMutationId
+    project {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 
@@ -53,6 +57,18 @@ query GetOrganization($id: ID!) {
   }
 }
 
+mutation DeleteOrganization($input: DeleteOrganizationInput!) {
+  deleteOrganization(input: $input) {
+    clientMutationId
+    organization {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetOrganizationWithPaginatedProjects(
   $id: ID!
   $limit: Int = 10
@@ -66,14 +82,6 @@ query GetOrganizationWithPaginatedProjects(
       nodes {
         ...ProjectAllFields
       }
-    }
-  }
-}
-
-query GetOrganizationsForSelect {
-  organizations(limit: 500, sortOrder: NAME) {
-    nodes {
-      ...OrganizationFields
     }
   }
 }

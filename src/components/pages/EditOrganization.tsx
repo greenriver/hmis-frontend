@@ -6,7 +6,6 @@ import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { OrganizationFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
@@ -51,7 +50,7 @@ const EditOrganization = () => {
               UpdateOrganizationMutation,
               UpdateOrganizationMutationVariables
             >
-              definition={OrganizationFormDefinition}
+              definitionIdentifier='organization'
               record={organization}
               queryDocument={UpdateOrganizationDocument}
               onCompleted={onCompleted}

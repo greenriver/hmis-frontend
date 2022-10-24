@@ -232,7 +232,7 @@ export const createInitialValues = (
 
       if (
         record[key] &&
-        ['choice', 'openchoice'].includes(item.type) &&
+        [ItemType.Choice, ItemType.OpenChoice].includes(item.type) &&
         item.pickListReference
       ) {
         // This is a value for a choice item, like 'PSH', so transform it to the option object
