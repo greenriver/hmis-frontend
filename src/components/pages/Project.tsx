@@ -1,12 +1,13 @@
-import { Alert, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Alert, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
-import { generatePath, useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
+import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
-import RouterLink from '../elements/RouterLink';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import FunderTable from '@/modules/inventory/components/FunderTable';
@@ -16,7 +17,10 @@ import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import { ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import {
+  ProjectAllFieldsFragment,
+  useDeleteProjectMutation,
+} from '@/types/gqlTypes';
 
 export const InactiveBanner = ({
   project,
@@ -36,10 +40,25 @@ const Project = () => {
   const { projectId } = useParams() as {
     projectId: string;
   };
-
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
   const [crumbs, loading, project] = useProjectCrumbs();
+
+  const [deleteProject, { loading: deleteLoading, error: deleteError }] =
+    useDeleteProjectMutation({
+      variables: { input: { id: projectId } },
+      onCompleted: () =>
+        project
+          ? navigate(
+              generatePath(Routes.ORGANIZATION, {
+                organizationId: project?.organization.id,
+              })
+            )
+          : navigate(-1),
+    });
+
   if (loading) return <Loading />;
-  console.log();
+  if (deleteError) console.error(deleteError);
   if (!crumbs || !project) throw Error('Project not found');
 
   return (
@@ -117,23 +136,43 @@ const Project = () => {
             </Paper>
           )}
           <Paper sx={{ p: 2 }}>
-            <Stack spacing={1}>
-              <RouterLink
-                color='text.secondary'
+            <Stack>
+              <ButtonLink
+                variant='text'
+                color='secondary'
                 to={generatePath(Routes.EDIT_PROJECT, {
                   projectId,
                 })}
+                sx={{ justifyContent: 'left' }}
               >
                 Edit Project
-              </RouterLink>
-              {/* TODO implement delete */}
-              <RouterLink color='text.secondary' to=''>
+              </ButtonLink>
+              <Button
+                color='error'
+                variant='text'
+                onClick={() => setOpen(true)}
+                sx={{ justifyContent: 'left' }}
+              >
                 Delete Project
-              </RouterLink>
+              </Button>
             </Stack>
           </Paper>
         </Grid>
       </Grid>
+      <ConfirmationDialog
+        id='deleteProjectConfirmation'
+        open={open}
+        title='Delete project'
+        onConfirm={deleteProject}
+        onCancel={() => setOpen(false)}
+        loading={deleteLoading}
+      >
+        <Typography>
+          Are you sure you want to delete project{' '}
+          <strong>{project.projectName}</strong>?
+        </Typography>
+        <Typography>This action cannot be undone.</Typography>
+      </ConfirmationDialog>
     </ProjectLayout>
   );
 };
