@@ -1049,6 +1049,7 @@ export enum InventorySortOption {
 export enum ItemType {
   Boolean = 'BOOLEAN',
   Choice = 'CHOICE',
+  Currency = 'CURRENCY',
   Date = 'DATE',
   Display = 'DISPLAY',
   Group = 'GROUP',

@@ -51,6 +51,16 @@ export const localResolvePickList = (
       }));
   }
 
+  if (pickListReference === 'YesNoMissing') {
+    return [
+      { code: 'YES', label: 'Yes' },
+      { code: 'NO', label: 'No' },
+      { code: 'CLIENT_DOESN_T_KNOW', label: "Client doesn't know" },
+      { code: 'CLIENT_REFUSED', label: 'Client refused' },
+      // { code: 'DATA_NOT_COLLECTED', label: 'Data not collected' },
+    ];
+  }
+
   return null;
 };
 
