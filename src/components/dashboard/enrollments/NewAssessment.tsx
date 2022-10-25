@@ -8,7 +8,6 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import FormDefinitions from '@/modules/form/definitions';
 import {
   AssessmentRole,
   useCreateAssessmentMutation,
@@ -60,8 +59,7 @@ const NewAssessment = () => {
     });
 
   const formDefinition = data?.getFormDefinition;
-  const identifier = formDefinition?.identifier;
-  const definition = identifier ? FormDefinitions[identifier] : undefined;
+  const definition = formDefinition?.definition;
 
   const submitHandler = useCallback(
     (values: Record<string, any>) => {

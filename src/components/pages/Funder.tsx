@@ -7,7 +7,6 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { FunderFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
@@ -42,8 +41,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   if (error) throw error;
 
   const common = {
-    definition: FunderFormDefinition,
-    mappingKey: 'field',
+    definitionIdentifier: 'funder',
   };
   return (
     <ProjectLayout>

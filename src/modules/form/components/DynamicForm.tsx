@@ -3,15 +3,17 @@ import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { shouldEnableItem } from '../formUtil';
-import { FormDefinition, Item } from '../types';
 
 import DynamicField from './DynamicField';
 
-import { ValidationError } from '@/types/gqlTypes';
+import {
+  FormDefinitionJson,
+  FormItem,
+  ValidationError,
+} from '@/types/gqlTypes';
 
 export interface Props {
-  definition: FormDefinition;
-  mappingKey?: string; // mapping key in form definition, used to map errors to Items
+  definition: FormDefinitionJson;
   onSubmit: (values: Record<string, any>) => void;
   submitButtonText?: string;
   discardButtonText?: string;
@@ -26,13 +28,14 @@ const DynamicForm: React.FC<Props> = ({
   submitButtonText,
   discardButtonText,
   loading,
-  mappingKey,
   initialValues = {},
   errors,
 }) => {
   const navigate = useNavigate();
   // Map { linkId => current value }
-  const [values, setValues] = useState<Record<string, any>>(initialValues);
+  const [values, setValues] = useState<Record<string, any>>({
+    ...initialValues,
+  });
 
   if (errors) console.log('Validation errors', errors);
 
@@ -54,7 +57,7 @@ const DynamicForm: React.FC<Props> = ({
     onSubmit(values);
   };
 
-  const isEnabled = (item: Item): boolean => {
+  const isEnabled = (item: FormItem): boolean => {
     if (item.hidden) return false;
     if (!item.enableWhen) {
       // If it has nested items, only show if has any enabled children.
@@ -69,19 +72,19 @@ const DynamicForm: React.FC<Props> = ({
 
   // Get errors for a particular field
   const getFieldErrors = useCallback(
-    (item: Item) => {
-      if (!errors || !mappingKey) return undefined;
-      if (!item.mapping || !item.mapping[mappingKey]) return undefined;
-      const attribute = item.mapping[mappingKey];
+    (item: FormItem) => {
+      if (!errors) return undefined;
+      if (!item.queryField) return undefined;
+      const attribute = item.queryField;
       return errors.filter((e) => e.attribute === attribute);
     },
-    [errors, mappingKey]
+    [errors]
   );
 
   // Recursively render an item
-  const renderItem = (item: Item, nestingLevel: number) => {
+  const renderItem = (item: FormItem, nestingLevel: number) => {
     const hidden = !isEnabled(item);
-    // if (hidden && item.type === FieldType.group) {
+    // if (hidden && item.type === ItemType.group) {
     if (hidden) {
       return null;
     }
@@ -116,7 +119,7 @@ const DynamicForm: React.FC<Props> = ({
             </Alert>
           </Grid>
         )}
-        {definition?.item.map((item) => renderItem(item, 0))}
+        {definition.item.map((item) => renderItem(item, 0))}
       </Grid>
       <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
         <Button variant='contained' type='submit' disabled={!!loading}>

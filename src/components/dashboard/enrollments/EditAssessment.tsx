@@ -1,4 +1,5 @@
 import { Grid, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
 import { useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -7,7 +8,6 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import FormDefinitions from '@/modules/form/definitions';
 import {
   useGetAssessmentQuery,
   useSaveAssessmentMutation,
@@ -60,14 +60,18 @@ const EditAssessment = () => {
 
   const identifier = data?.assessment?.assessmentDetail?.definition.identifier;
   const initialValues = data?.assessment?.assessmentDetail?.values;
-  const formDefinition = identifier ? FormDefinitions[identifier] : undefined;
-  console.log(initialValues);
+  const assessmentRole = data?.assessment?.assessmentDetail?.role;
+  const title = `${
+    assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
+  } Assessment`;
+  const formDefinition =
+    data?.assessment?.assessmentDetail?.definition?.definition;
 
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Typography variant='h4' sx={{ mb: 2 }}>
-        {formDefinition?.title || 'Assessment'}
+        {title}
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>

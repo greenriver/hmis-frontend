@@ -41,9 +41,8 @@ const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
-    header: 'Assessment Date',
-    width: '20%',
-
+    header: 'Date',
+    width: '10%',
     render: (e) => parseAndFormatDate(e.assessmentDate),
   },
   {
@@ -60,8 +59,11 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
 
   {
     header: 'Last Updated',
-    // width: '5%',
-    render: (e) => parseAndFormatDateTime(e.dateUpdated),
+    width: '25%',
+    render: (e) =>
+      `${parseAndFormatDateTime(e.dateUpdated)} by ${
+        e.user?.name || 'Unknown User'
+      }`,
   },
 ];
 

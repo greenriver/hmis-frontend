@@ -2,50 +2,50 @@
   "name": "client-intake",
   "item": [
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "group-1",
       "text": "Group Title",
       "required": false,
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "string-1",
           "text": "String"
         },
         {
-          "type": "boolean",
+          "type": "BOOLEAN",
           "required": false,
           "linkId": "boolean-1",
           "text": "Boolean"
         },
         {
-          "type": "date",
+          "type": "DATE",
           "required": false,
           "linkId": "date-1",
           "text": "Date"
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "project",
           "text": "Projects",
           "repeats": true,
-          "answerValueSet": "projects"
+          "pickListReference": "projects"
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "linkId": "group-3",
       "item": [
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "choice-1",
           "text": "Yes no missing",
-          "answerValueSet": "yesNoMissing"
+          "pickListReference": "yesNoMissing"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "string-4",
           "text": "Details (select yes to enable)",
@@ -53,29 +53,29 @@
           "enableWhen": [
             {
               "question": "choice-1",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         },
         {
-          "type": "choice",
+          "type": "CHOICE",
           "linkId": "choice-2",
           "text": "Dependent (select yes to enable)",
-          "answerValueSet": "yesNoMissing",
+          "pickListReference": "yesNoMissing",
           "enableBehavior": "all",
           "enableWhen": [
             {
               "question": "choice-1",
-              "operator": "=",
-              "answerCoding": { "code": "1" }
+              "operator": "EQUAL",
+              "answerCode": "1"
             }
           ]
         }
       ]
     },
     {
-      "type": "group",
+      "type": "GROUP",
       "required": false,
       "linkId": "group-2",
       "text": "Row group",
@@ -84,13 +84,13 @@
       },
       "item": [
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "string-3",
           "text": "String"
         },
         {
-          "type": "string",
+          "type": "STRING",
           "required": false,
           "linkId": "string-4",
           "text": "String"

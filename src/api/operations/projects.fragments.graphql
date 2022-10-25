@@ -23,15 +23,6 @@ fragment OrganizationAllFields on Organization {
   ...OrganizationDetailFields
 }
 
-fragment OrganizationAllFieldsAndProjects on Organization {
-  ...OrganizationAllFields
-  projects(limit: 500) {
-    nodes {
-      ...ProjectAllFields
-    }
-  }
-}
-
 fragment ProjectAllFields on Project {
   id
   projectName

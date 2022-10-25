@@ -6,9 +6,62 @@ fragment FormDefinitionFields on FormDefinition {
   identifier
 }
 
+fragment PickListOptionFields on PickListOption {
+  code
+  label
+  secondaryLabel
+  groupLabel
+  initialSelected
+}
+
+fragment ItemFields on FormItem {
+  __typename
+  linkId
+  type
+  prefix
+  text
+  helperText
+  required
+  hidden
+  readOnly
+  repeats
+  queryField
+  pickListReference
+  pickListOptions {
+    ...PickListOptionFields
+  }
+  dataCollectedAbout
+  enableBehavior
+  enableWhen {
+    question
+    operator
+    answerCode
+    answerNumber
+    answerBoolean
+  }
+}
+
+# GQL doesnt allow recursive fragments, so we have a max nesting level here
 fragment FormDefinitionWithJson on FormDefinition {
   ...FormDefinitionFields
-  definition
+  definition {
+    __typename
+    item {
+      ...ItemFields
+      item {
+        ...ItemFields
+        item {
+          ...ItemFields
+          item {
+            ...ItemFields
+            item {
+              ...ItemFields
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 fragment AssessmentDetailFields on AssessmentDetail {
@@ -29,6 +82,10 @@ fragment AssessmentFields on Assessment {
   dateCreated
   dateUpdated
   dateDeleted
+  user {
+    id
+    name
+  }
   assessmentDetail {
     ...AssessmentDetailFields
     definition {

@@ -7,7 +7,6 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import { ProjectCocFormDefinition } from '@/modules/form/data';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
@@ -41,8 +40,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   if (!crumbs || !project) throw Error('Project not found');
 
   const common = {
-    definition: ProjectCocFormDefinition,
-    mappingKey: 'field',
+    definitionIdentifier: 'project_coc',
   };
   return (
     <ProjectLayout>

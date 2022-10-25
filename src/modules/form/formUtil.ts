@@ -1,76 +1,70 @@
 import { isNil } from 'lodash-es';
+import { ReactNode } from 'react';
 
 import { formatDateForGql, parseHmisDateString } from '../hmis/hmisUtil';
 
-import {
-  AnswerOption,
-  FieldType,
-  FormDefinition,
-  isAnswerOption,
-  Item,
-} from './types';
-
 import { HmisEnums } from '@/types/gqlEnums';
+import {
+  EnableBehavior,
+  EnableOperator,
+  FormDefinitionJson,
+  FormItem,
+  ItemType,
+  PickListOption,
+} from '@/types/gqlTypes';
+
+export type DynamicInputCommonProps = {
+  disabled?: boolean;
+  label?: ReactNode;
+  error?: boolean;
+  helperText?: ReactNode;
+};
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
 };
+export function isPickListOption(
+  value: any | null | undefined
+): value is PickListOption {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    !!value.code
+  );
+}
 
-export const resolveAnswerValueSet = (
-  answerValueSet: string
-): AnswerOption[] => {
-  if (isHmisEnum(answerValueSet)) {
-    const hmisEnum = HmisEnums[answerValueSet];
-    return Object.entries(hmisEnum).map(([code, display]) => ({
-      valueCoding: { code: code.toString(), display },
+export const localResolvePickList = (
+  pickListReference: string
+): PickListOption[] | null => {
+  if (isHmisEnum(pickListReference)) {
+    const hmisEnum = HmisEnums[pickListReference];
+    return Object.entries(hmisEnum).map(([code, label]) => ({
+      code: code.toString(),
+      label,
     }));
   }
 
-  if (answerValueSet === 'yesNoMissing') {
-    return [
-      {
-        valueCoding: {
-          code: '0',
-          display: 'No',
-        },
-      },
-      {
-        valueCoding: {
-          code: '1',
-          display: 'Yes',
-        },
-      },
-      {
-        valueCoding: {
-          code: '8',
-          display: "Don't know",
-        },
-      },
-      {
-        valueCoding: {
-          code: '9',
-          display: 'Client refused',
-        },
-      },
-      {
-        valueCoding: {
-          code: '99',
-          display: 'Data not collected',
-        },
-      },
-    ];
-  }
+  return null;
+};
 
-  return [];
+export const resolveOptionList = (item: FormItem): PickListOption[] | null => {
+  if (!item.pickListReference && !item.pickListOptions) return null;
+  if (item.pickListOptions) return item.pickListOptions;
+  if (item.pickListReference) {
+    return localResolvePickList(item.pickListReference);
+  }
+  return null;
 };
 
 /**
  * Recursively find a question item by linkId
  */
 const findItem = (
-  items: Item[] | undefined,
+  items: FormItem[] | null | undefined,
   linkId: string
-): Item | undefined => {
+): FormItem | undefined => {
   if (!items || items.length === 0) return undefined;
   const found = items.find((i) => i.linkId === linkId);
   if (found) return found;
@@ -80,26 +74,26 @@ const findItem = (
 
 /**
  * Transform form value shape into GraphQL value shape.
- * For example, a selected option '{ valueCoding: { code: 'ES' }}'
+ * For example, a selected option '{ code: 'ES' }'
  * is converted to enum 'ES'.
  *
  * @param value value from the form state
  * @param item corresponding FormDefinition item
  * @returns transformed value
  */
-export const formValueToGqlValue = (value: any, item: Item): any => {
+export const formValueToGqlValue = (value: any, item: FormItem): any => {
   if (value instanceof Date) {
     return formatDateForGql(value);
   }
 
-  if (item.type === FieldType.integer) {
+  if (item.type === ItemType.Integer) {
     return parseInt(value);
   }
 
   if (
-    item.type === FieldType.choice &&
-    item.answerValueSet &&
-    ['projects', 'organizations'].includes(item.answerValueSet)
+    item.type === ItemType.Choice &&
+    item.pickListReference &&
+    ['projects', 'organizations'].includes(item.pickListReference)
   ) {
     // Special case for project/org selectors which key on ID
     if (Array.isArray(value)) {
@@ -107,15 +101,11 @@ export const formValueToGqlValue = (value: any, item: Item): any => {
     } else if (value) {
       return (value as { id: string }).id;
     }
-  } else if (
-    [FieldType.choice, FieldType.openchoice].includes(item.type as FieldType)
-  ) {
+  } else if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
     if (Array.isArray(value)) {
-      return value.map(
-        (option: AnswerOption) => option.valueString || option.valueCoding?.code
-      );
+      return value.map((option: PickListOption) => option.code);
     } else if (value) {
-      return (value as AnswerOption).valueString || value.valueCoding?.code;
+      return (value as PickListOption).code;
     }
   }
 
@@ -125,24 +115,19 @@ export const formValueToGqlValue = (value: any, item: Item): any => {
   return value;
 };
 
-const dataNotCollectedCode = (item: Item): string | undefined => {
-  const options = item.answerValueSet
-    ? resolveAnswerValueSet(item.answerValueSet)
-    : item.answerOption || [];
+const dataNotCollectedCode = (item: FormItem): string | undefined => {
+  const options = resolveOptionList(item) || [];
 
   return options.find(
     (opt) =>
-      opt?.valueCoding?.code?.endsWith('_NOT_COLLECTED') ||
-      opt?.valueCoding?.code === 'NOT_APPLICABLE'
-  )?.valueCoding?.code;
+      opt.code?.endsWith('_NOT_COLLECTED') || opt.code === 'NOT_APPLICABLE'
+  )?.code;
 };
 
 type TransformSubmitValuesParams = {
-  definition: FormDefinition;
+  definition: FormDefinitionJson;
   /** form state (from DynamicForm) to transform */
   values: Record<string, any>;
-  /** key used in the FormDefinition to specify the record field that corresponds to the question */
-  mappingKey: string;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
   autofillNotCollected?: boolean;
   /** whether to fill unanswered questions with `null` */
@@ -159,7 +144,7 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values,
-  mappingKey,
+
   autofillNotCollected = false,
   autofillNulls = false,
   autofillBooleans = false,
@@ -168,17 +153,16 @@ export const transformSubmitValues = ({
 
   // Recursive helper for traversing the FormDefinition
   function recursiveTransformValues(
-    items: Item[],
+    items: FormItem[],
     values: Record<string, any>,
-    transformed: Record<string, any>, // result map to be filled in
-    mappingKey: string
+    transformed: Record<string, any> // result map to be filled in
   ) {
-    items.forEach((item: Item) => {
+    items.forEach((item: FormItem) => {
       if (Array.isArray(item.item)) {
-        recursiveTransformValues(item.item, values, transformed, mappingKey);
+        recursiveTransformValues(item.item, values, transformed);
       }
-      if (!item.mapping) return;
-      const key = item.mapping[mappingKey];
+
+      const key = item.queryField;
       if (!key) return;
 
       let value;
@@ -202,14 +186,14 @@ export const transformSubmitValues = ({
       if (
         autofillBooleans &&
         isNil(transformed[key]) &&
-        item.type === FieldType.boolean
+        item.type === ItemType.Boolean
       ) {
         transformed[key] = false;
       }
     });
   }
 
-  recursiveTransformValues(definition.item || [], values, result, mappingKey);
+  recursiveTransformValues(definition.item || [], values, result);
 
   return result;
 };
@@ -220,50 +204,44 @@ export const transformSubmitValues = ({
  *
  * @param definition FormDefinition
  * @param record  GQL HMIS record, like Project or Organization
- * @param mappingKey key used in the FormDefinition to specify the record field that corresponds to the question
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
 export const createInitialValues = (
-  definition: FormDefinition,
-  record: any,
-  mappingKey: string
+  definition: FormDefinitionJson,
+  record: any
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
   // Recursive helper for traversing the FormDefinition
   function recursiveFillInValues(
-    items: Item[],
+    items: FormItem[],
     record: Record<string, any>,
-    values: Record<string, any>, // intialValues object to be filled in
-    mappingKey: string
+    values: Record<string, any> // intialValues object to be filled in
   ) {
-    items.forEach((item: Item) => {
+    items.forEach((item: FormItem) => {
       if (Array.isArray(item.item)) {
-        recursiveFillInValues(item.item, record, values, mappingKey);
+        recursiveFillInValues(item.item, record, values);
       }
-      // Skip: this question doesn't have a mapping key
-      if (!item.mapping) return;
+      // Skip: this question doesn't map to a field
+      if (!item.queryField) return;
 
-      // Skip: this question doesn't have THIS mapping key, or
-      // the record doesn't have a value for this property
-      const key = item.mapping[mappingKey];
-      if (!key || !record.hasOwnProperty(key)) return;
+      // Skip: the record doesn't have a value for this property
+      const key = item.queryField;
+      if (!record.hasOwnProperty(key)) return;
 
       if (
         record[key] &&
-        ['choice', 'openchoice'].includes(item.type) &&
-        item.answerValueSet
+        [ItemType.Choice, ItemType.OpenChoice].includes(item.type) &&
+        item.pickListReference
       ) {
         // This is a value for a choice item, like 'PSH', so transform it to the option object
-        const option = resolveAnswerValueSet(item.answerValueSet).find(
-          (opt) => opt.valueCoding?.code === record[key]
-        );
-        values[item.linkId] = option || {
-          valueCoding: { code: record[key] },
-        };
+        const option = (
+          localResolvePickList(item.pickListReference) || []
+        ).find((opt) => opt.code === record[key]);
+        values[item.linkId] = option || { code: record[key] };
       } else if (
-        (item.type === FieldType.date || item.type === FieldType.dob) &&
+        item.type === ItemType.Date &&
         typeof record[key] === 'string'
       ) {
         // Convert date string to Date object
@@ -275,12 +253,7 @@ export const createInitialValues = (
     });
   }
 
-  recursiveFillInValues(
-    definition.item || [],
-    record,
-    initialValues,
-    mappingKey
-  );
+  recursiveFillInValues(definition.item || [], record, initialValues);
 
   return initialValues;
 };
@@ -294,20 +267,23 @@ export const createInitialValues = (
  * NOTE: only supports dependency on option questions right now
  *
  * @param dependentQuestionValue The value of the question that this item depends on
- * @param item Item that we're deciding whether to enable or not
+ * @param item FormItem that we're deciding whether to enable or not
  * @returns boolean
  */
-export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
+export const shouldEnableItem = (
+  dependentQuestionValue: any,
+  item: FormItem
+) => {
   if (!item.enableWhen) return true;
 
-  const currentValue = isAnswerOption(dependentQuestionValue)
-    ? dependentQuestionValue.valueCoding?.code
+  const currentValue = isPickListOption(dependentQuestionValue)
+    ? dependentQuestionValue.code
     : undefined;
   if (!currentValue) return false;
 
   // If there is a value, evaluate all enableWhen conditions
   const booleans = item.enableWhen.map((en) => {
-    const comparisonValue = en.answerCoding?.code;
+    const comparisonValue = en.answerCode;
     if (
       typeof currentValue === 'undefined' ||
       typeof comparisonValue === 'undefined'
@@ -315,14 +291,14 @@ export const shouldEnableItem = (dependentQuestionValue: any, item: Item) => {
       return false;
     }
     switch (en.operator) {
-      case '=':
+      case EnableOperator.Equal:
         return currentValue === comparisonValue;
     }
     console.warn('Unsupported enableWhen operator', en.operator);
     return false;
   });
 
-  if (item.enableBehavior === 'any') {
+  if (item.enableBehavior === EnableBehavior.Any) {
     return booleans.some(Boolean);
   } else {
     return booleans.every(Boolean);

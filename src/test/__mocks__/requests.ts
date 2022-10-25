@@ -1,10 +1,11 @@
 import {
   GetClientDocument,
   SearchClientsDocument,
-  GetProjectsForSelectDocument,
+  GetPickListDocument,
   GetEnrollmentWithHoHDocument,
   GetClientEnrollmentsDocument,
   RelationshipToHoH,
+  PickListOption,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -28,35 +29,35 @@ export const RITA_ACKROYD = {
         id: '5',
         entryDate: '2022-06-18T00:00:00+00:00',
         exitDate: null,
-        project: { projectName: 'White Pine' },
+        project: { label: 'White Pine' },
       },
       {
         __typename: 'Enrollment',
         id: '6',
         entryDate: '2021-02-10T00:00:00+00:00',
         exitDate: '2021-02-10T00:00:00+00:00',
-        project: { projectName: 'Spruce Hill' },
+        project: { label: 'Spruce Hill' },
       },
       {
         __typename: 'Enrollment',
         id: '7',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
-        project: { projectName: 'White Pine Terrace' },
+        project: { label: 'White Pine Terrace' },
       },
       {
         __typename: 'Enrollment',
         id: '8',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
-        project: { projectName: 'White Pine' },
+        project: { label: 'White Pine' },
       },
       {
         __typename: 'Enrollment',
         id: '9',
         entryDate: '2013-02-10T00:00:00+00:00',
         exitDate: '2013-02-10T00:00:00+00:00',
-        project: { projectName: 'White Pine' },
+        project: { label: 'White Pine' },
       },
     ],
   },
@@ -64,75 +65,63 @@ export const RITA_ACKROYD = {
 
 const projectsForSelectMock = {
   request: {
-    query: GetProjectsForSelectDocument,
+    query: GetPickListDocument,
+    variables: {
+      pickListType: 'PROJECT',
+    },
   },
   result: {
     data: {
-      projects: [
+      pickList: [
         {
-          __typename: 'Project',
-          projectName: 'White Ash Center',
-          id: '116',
-          projectType: 'ES',
-          organization: {
-            organizationName: 'Hawthorne Home',
-          },
+          label: 'White Ash Center',
+          code: '116',
+          secondaryLabel: 'ES',
+          groupLabel: 'Hawthorne Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'Eastern Hemlock Lake',
-          id: '118',
-          projectType: 'ES',
-          organization: {
-            organizationName: 'Hawthorne Home',
-          },
+          label: 'Eastern Hemlock Lake',
+          code: '118',
+          secondaryLabel: 'ES',
+          groupLabel: 'Hawthorne Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'Scarlet Oak Creek',
-          id: '127',
-          projectType: 'RRH',
-          organization: {
-            organizationName: 'Hawthorne Home',
-          },
+          label: 'Scarlet Oak Creek',
+          code: '127',
+          secondaryLabel: 'RRH',
+
+          groupLabel: 'Hawthorne Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'White Spruce Hill',
-          id: '37518',
-          projectType: 'SO',
-          organization: {
-            organizationName: 'Hawthorne Home',
-          },
+          label: 'White Spruce Hill',
+          code: '37518',
+          secondaryLabel: 'SO',
+
+          groupLabel: 'Hawthorne Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'The Maples Room',
-          id: '37612',
-          projectType: 'ES',
-          organization: {
-            organizationName: 'American Chestnut Home',
-          },
+          label: 'The Maples Room',
+          code: '37612',
+          secondaryLabel: 'ES',
+          groupLabel: 'American Chestnut Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'Paper Birch Room',
-          id: '428',
-          projectType: 'PH',
-          organization: {
-            organizationName: 'American Chestnut Home',
-          },
+          label: 'Paper Birch Room',
+          code: '428',
+          secondaryLabel: 'PH',
+          groupLabel: 'American Chestnut Home',
         },
         {
-          __typename: 'Project',
-          projectName: 'Paper Birch Lake',
-          id: '433',
-          projectType: 'ES',
-          organization: {
-            organizationName: 'American Chestnut Home',
-          },
+          label: 'Paper Birch Lake',
+          code: '433',
+          secondaryLabel: 'ES',
+          groupLabel: 'American Chestnut Home',
         },
-      ],
+      ].map((p: PickListOption) => {
+        p.__typename = 'PickListOption';
+        p.initialSelected = false;
+        return p;
+      }),
     },
   },
 };
@@ -259,7 +248,7 @@ const enrollmentWithHoHMock = {
         id: '5',
         entryDate: '2022-06-18T00:00:00+00:00',
         exitDate: null,
-        project: { projectName: 'White Pine' },
+        project: { label: 'White Pine' },
         household: {
           id: '123',
           __typename: 'Household',

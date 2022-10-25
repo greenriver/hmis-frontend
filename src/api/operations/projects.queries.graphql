@@ -1,12 +1,4 @@
-query GetProjectsForSelect {
-  projects(limit: 500, sortOrder: ORGANIZATION_AND_NAME) {
-    nodes {
-      ...ProjectFields
-    }
-  }
-}
-
-query GetOrganizationsAndProjects {
+query GetAllOrganizations {
   organizations(limit: 500, sortOrder: NAME) {
     nodesCount
     nodes {
@@ -21,6 +13,18 @@ query GetOrganizationsAndProjects {
 query GetProject($id: ID!) {
   project(id: $id) {
     ...ProjectAllFields
+  }
+}
+
+mutation DeleteProject($input: DeleteProjectInput!) {
+  deleteProject(input: $input) {
+    clientMutationId
+    project {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
   }
 }
 
@@ -45,10 +49,17 @@ query GetProjectCoc($id: ID!) {
 query GetOrganization($id: ID!) {
   organization(id: $id) {
     ...OrganizationAllFields
-    projects(limit: 500) {
-      nodes {
-        ...ProjectAllFields
-      }
+  }
+}
+
+mutation DeleteOrganization($input: DeleteOrganizationInput!) {
+  deleteOrganization(input: $input) {
+    clientMutationId
+    organization {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }
@@ -66,14 +77,6 @@ query GetOrganizationWithPaginatedProjects(
       nodes {
         ...ProjectAllFields
       }
-    }
-  }
-}
-
-query GetOrganizationsForSelect {
-  organizations(limit: 500, sortOrder: NAME) {
-    nodes {
-      ...OrganizationFields
     }
   }
 }
@@ -106,7 +109,7 @@ mutation CreateOrganization($input: CreateOrganizationInput!) {
   createOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationAllFieldsAndProjects
+      ...OrganizationAllFields
     }
     errors {
       ...ValidationErrorFields
@@ -118,7 +121,7 @@ mutation UpdateOrganization($input: UpdateOrganizationInput!) {
   updateOrganization(input: $input) {
     clientMutationId
     organization {
-      ...OrganizationAllFieldsAndProjects
+      ...OrganizationAllFields
     }
     errors {
       ...ValidationErrorFields

@@ -1,17 +1,19 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { generatePath, useParams } from 'react-router-dom';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
+import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
-import RouterLink from '../elements/RouterLink';
 
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
+import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
 
 const Organization = () => {
   const { organizationId } = useParams() as {
@@ -23,6 +25,15 @@ const Organization = () => {
 
   if (!loading && (!crumbs || !organization))
     throw Error('Organization not found');
+
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
+    useDeleteOrganizationMutation({
+      variables: { input: { id: organizationId } },
+      onCompleted: () => navigate(generatePath(Routes.ALL_PROJECTS)),
+    });
+  if (deleteError) console.error(deleteError);
 
   // const projects = useMemo(
   //   () =>
@@ -91,22 +102,43 @@ const Organization = () => {
           </Paper>
 
           <Paper sx={{ p: 2 }}>
-            <Stack spacing={1}>
-              <RouterLink
-                color='text.secondary'
+            <Stack>
+              <ButtonLink
+                variant='text'
+                color='secondary'
                 to={generatePath(Routes.EDIT_ORGANIZATION, {
                   organizationId,
                 })}
+                sx={{ justifyContent: 'left' }}
               >
-                Edit Organization
-              </RouterLink>
-              <RouterLink color='text.secondary' to=''>
-                Delete Organization
-              </RouterLink>
+                Edit Project
+              </ButtonLink>
+              <Button
+                color='error'
+                variant='text'
+                onClick={() => setOpen(true)}
+                sx={{ justifyContent: 'left' }}
+              >
+                Delete organization
+              </Button>
             </Stack>
           </Paper>
         </Grid>
       </Grid>
+      <ConfirmationDialog
+        id='deleteOrgConfirmation'
+        open={open}
+        title='Delete organization'
+        onConfirm={deleteOrganization}
+        onCancel={() => setOpen(false)}
+        loading={deleteLoading}
+      >
+        <Typography>
+          Are you sure you want to delete organization{' '}
+          <strong>{organization?.organizationName}</strong>?
+        </Typography>
+        <Typography>This action cannot be undone.</Typography>
+      </ConfirmationDialog>
     </ProjectLayout>
   );
 };

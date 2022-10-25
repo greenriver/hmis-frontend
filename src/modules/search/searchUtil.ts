@@ -1,16 +1,16 @@
 import { omitBy, isNil } from 'lodash-es';
 
-import { FormDefinition } from '../form/types';
+import { FormDefinitionJson } from '@/types/gqlTypes';
 
 // Construct js object of permitted query terms from search params
 export const searchParamsToVariables = (
-  searchFormDefinition: FormDefinition,
+  searchFormDefinition: FormDefinitionJson,
   searchParams: URLSearchParams
 ) => {
   const variables: Record<string, any> = {};
-  const fieldNames: [string, boolean][] = searchFormDefinition.item.map(
-    (item) => [item?.mapping?.clientSearchInput as string, !!item?.repeats]
-  );
+  const fieldNames: [string, boolean][] = searchFormDefinition.item
+    .filter((i) => !!i.queryField)
+    .map((item) => [item.queryField as string, !!item.repeats]);
   fieldNames.push(['textSearch', false]);
   fieldNames.push(['projects', true]);
   fieldNames.forEach(([fieldName, repeats]) => {
@@ -27,18 +27,14 @@ export const searchParamsToVariables = (
 
 // Construct from state from query variables
 // This only works because Project and Organization are the only dropdowns.
-// Need to revisit if search form options are expanded to use answerOptions.
+// Need to revisit if search form options are expanded to use PickListOptions.
 export const searchParamsToState = (
-  searchFormDefinition: FormDefinition,
+  searchFormDefinition: FormDefinitionJson,
   searchParams: URLSearchParams
 ) => {
   const variables: Record<string, any> = {};
   const fieldNames: [string, string, boolean][] = searchFormDefinition.item.map(
-    (item) => [
-      item?.mapping?.clientSearchInput as string,
-      item.linkId,
-      !!item?.repeats,
-    ]
+    (item) => [item.queryField as string, item.linkId, !!item.repeats]
   );
   fieldNames.push(['textSearch', 'textSearch', false]);
   fieldNames.push(['projects', 'projects', true]);
@@ -47,7 +43,7 @@ export const searchParamsToState = (
     if (repeats) {
       variables[linkId] = searchParams
         .getAll(fieldName)
-        .map((id: string) => ({ id }));
+        .map((code: string) => ({ code }));
     } else {
       variables[linkId] = searchParams.get(fieldName);
     }

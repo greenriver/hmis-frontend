@@ -13,12 +13,12 @@ import ProjectsTable from './ProjectsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { Routes } from '@/routes/routes';
-import { GetOrganizationsAndProjectsQuery } from '@/types/gqlTypes';
+import { GetAllOrganizationsQuery } from '@/types/gqlTypes';
 
 const GroupedProjectTable = ({
   organizations,
 }: {
-  organizations: GetOrganizationsAndProjectsQuery['organizations']['nodes'];
+  organizations: GetAllOrganizationsQuery['organizations']['nodes'];
 }) => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>(
     organizations.length < 6

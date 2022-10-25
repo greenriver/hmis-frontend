@@ -7,7 +7,7 @@ import {
 
 import TextInput, { TextInputProps } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/types';
+import { DynamicInputCommonProps } from '@/modules/form/formUtil';
 
 interface Props
   extends Omit<DatePickerProps<DateType, DateType>, 'renderInput'> {

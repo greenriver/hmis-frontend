@@ -4,10 +4,10 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import DynamicForm from './DynamicForm';
 
 import formData from '@/modules/form/data/mock.json';
-import { FormDefinition } from '@/modules/form/types';
+import { FormDefinitionJson } from '@/types/gqlTypes';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-const formDefinition: FormDefinition = JSON.parse(JSON.stringify(formData));
+const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
   title: 'DynamicForm',

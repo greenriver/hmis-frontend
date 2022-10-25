@@ -8,8 +8,6 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import formData from '@/modules/form/data/project.json';
-import { FormDefinition } from '@/modules/form/types';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -19,14 +17,6 @@ import {
   UpdateProjectMutation,
   UpdateProjectMutationVariables,
 } from '@/types/gqlTypes';
-
-export const MAPPING_KEY = 'projectMutationInput';
-
-// FIXME workaround for enum issue
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-export const PROJECT_FORM: FormDefinition = JSON.parse(
-  JSON.stringify(formData)
-);
 
 const EditProject = () => {
   const navigate = useNavigate();
@@ -60,8 +50,7 @@ const EditProject = () => {
             UpdateProjectMutation,
             UpdateProjectMutationVariables
           >
-            definition={PROJECT_FORM}
-            mappingKey={MAPPING_KEY}
+            definitionIdentifier='project'
             record={project}
             queryDocument={UpdateProjectDocument}
             onCompleted={onCompleted}
