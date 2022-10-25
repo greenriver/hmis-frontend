@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
@@ -53,20 +53,26 @@ const EditAssessment = () => {
     [saveAssessmentMutation, assessmentId]
   );
 
+  const initialValues = useMemo(() => {
+    const values = data?.assessment?.assessmentDetail?.values;
+    return values ? JSON.parse(values) : undefined;
+  }, [data]);
+
+  const title = useMemo(() => {
+    const assessmentRole = data?.assessment?.assessmentDetail?.role;
+    return `${
+      assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
+    } Assessment`;
+  }, [data]);
+
   if (crumbsLoading || loading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
   if (error) throw error;
   if (saveError) console.error(saveError);
 
   const identifier = data?.assessment?.assessmentDetail?.definition.identifier;
-  const initialValues = data?.assessment?.assessmentDetail?.values;
-  const assessmentRole = data?.assessment?.assessmentDetail?.role;
-  const title = `${
-    assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
-  } Assessment`;
   const formDefinition =
     data?.assessment?.assessmentDetail?.definition?.definition;
-
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />

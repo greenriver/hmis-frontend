@@ -38,6 +38,7 @@ fragment ItemFields on FormItem {
     answerCode
     answerNumber
     answerBoolean
+    answerGroupLabel
   }
 }
 

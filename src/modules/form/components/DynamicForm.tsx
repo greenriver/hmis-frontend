@@ -33,9 +33,9 @@ const DynamicForm: React.FC<Props> = ({
 }) => {
   const navigate = useNavigate();
   // Map { linkId => current value }
-  const [values, setValues] = useState<Record<string, any>>({
-    ...initialValues,
-  });
+  const [values, setValues] = useState<Record<string, any>>(
+    Object.assign({}, initialValues)
+  );
 
   if (errors) console.log('Validation errors', errors);
 
@@ -65,9 +65,7 @@ const DynamicForm: React.FC<Props> = ({
       return item.item ? item.item.some((i) => isEnabled(i)) : true;
     }
 
-    // We assume that all enableWhen conditions depend on the same question, for now, to speed things up (so we can skip immediately if there is no answer)
-    const linkId = item.enableWhen[0]?.question;
-    return shouldEnableItem(values[linkId], item);
+    return shouldEnableItem(item, values);
   };
 
   // Get errors for a particular field

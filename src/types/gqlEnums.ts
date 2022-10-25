@@ -55,10 +55,6 @@ export const HmisEnums = {
       'Referral to Street Outreach project or services',
     REFERRAL_TO_HOUSING_NAVIGATION_PROJECT_OR_SERVICES:
       'Referral to Housing Navigation project or services',
-    REFERRAL_TO_NON_CONTINUUM_SERVICES_INELIGIBLE_FOR_CONTINUUM_SERVICES:
-      'Referral to Non-continuum services: Ineligible for continuum services',
-    REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES:
-      'Referral to Non-continuum services: No availability in continuum services',
     REFERRAL_TO_EMERGENCY_SHELTER_BED_OPENING:
       'Referral to Emergency Shelter bed opening',
     REFERRAL_TO_TRANSITIONAL_HOUSING_BED_UNIT_OPENING:
@@ -77,6 +73,10 @@ export const HmisEnums = {
       'Referral to Emergency Housing Voucher (EHV)',
     REFERRAL_TO_A_HOUSING_STABILITY_VOUCHER:
       'Referral to a Housing Stability Voucher',
+    REFERRAL_TO_NON_CONTINUUM_SERVICES_INELIGIBLE_FOR_CONTINUUM_SERVICES:
+      'Referral to Non-continuum services: Ineligible for continuum services',
+    REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES:
+      'Referral to Non-continuum services: No availability in continuum services',
   },
   FundingSource: {
     HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY_:
@@ -89,9 +89,6 @@ export const HmisEnums = {
     HUD_COC_SAFE_HAVEN: 'HUD: CoC - Safe Haven',
     HUD_COC_SINGLE_ROOM_OCCUPANCY_SRO_:
       'HUD: CoC - Single Room Occupancy (SRO)',
-    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
-      'HUD: ESG - Emergency Shelter (operating and/or essential services)',
-    HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
     HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_:
@@ -153,6 +150,9 @@ export const HmisEnums = {
     HUD_HOME: 'HUD: HOME',
     HUD_HOME_ARP_: 'HUD: HOME (ARP)',
     HUD_PIH_EMERGENCY_HOUSING_VOUCHER_: 'HUD: PIH (Emergency Housing Voucher)',
+    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
+      'HUD: ESG - Emergency Shelter (operating and/or essential services)',
+    HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
   },
   Gender: {
     GENDER_FEMALE: 'Female',
@@ -187,6 +187,106 @@ export const HmisEnums = {
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
+  },
+  LengthOfStay: {
+    LOS_ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH:
+      'One week or more, but less than one month',
+    LOS_ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS:
+      'One month or more, but less than 90 days',
+    LOS_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR:
+      '90 days or more but less than one year',
+    LOS_ONE_YEAR_OR_LONGER: 'One year or longer',
+    LOS_ONE_NIGHT_OR_LESS: 'One night or less',
+    LOS_TWO_TO_SIX_NIGHTS: 'Two to six nights',
+    LOS_CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    LOS_CLIENT_REFUSED: 'Client refused',
+    LOS_DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  LivingSituation: {
+    EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER_:
+      'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter ',
+    TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH_:
+      'Transitional housing for homeless persons (including homeless youth)',
+    PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS:
+      'Permanent housing (other than RRH) for formerly homeless persons',
+    PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY:
+      'Psychiatric hospital or other psychiatric facility',
+    SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER:
+      'Substance abuse treatment facility or detox center',
+    HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY:
+      'Hospital or other residential non-psychiatric medical facility',
+    JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY:
+      'Jail, prison or juvenile detention facility',
+    RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, no ongoing housing subsidy',
+    OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, no ongoing housing subsidy',
+    STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE_:
+      'Staying or living with family, temporary tenure (e.g. room, apartment or house)',
+    STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE_:
+      'Staying or living with friends, temporary tenure (e.g. room apartment or house)',
+    HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER:
+      'Hotel or motel paid for without emergency shelter voucher',
+    FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME:
+      'Foster care home or foster care group home',
+    PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE_:
+      'Place not meant for habitation (e.g., a vehicle, an abandoned building, bus/train/subway station/airport or anywhere outside)',
+    OTHER: 'Other',
+    SAFE_HAVEN: 'Safe Haven',
+    RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY:
+      'Rental by client, with VASH housing subsidy',
+    RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, with other ongoing housing subsidy',
+    OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY:
+      'Owned by client, with ongoing housing subsidy',
+    STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE:
+      'Staying or living with family, permanent tenure',
+    STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE:
+      'Staying or living with friends, permanent tenure',
+    DECEASED: 'Deceased',
+    LONG_TERM_CARE_FACILITY_OR_NURSING_HOME:
+      'Long-term care facility or nursing home',
+    MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH:
+      'Moved from one HOPWA funded project to HOPWA PH',
+    INTERIM_HOUSING: 'Interim Housing',
+    RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY:
+      'Rental by client, with GPD TIP housing subsidy',
+    RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA:
+      'Residential project or halfway house with no homeless criteria',
+    NO_EXIT_INTERVIEW_COMPLETED: 'No exit interview completed',
+    RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY:
+      'Rental by client, with RRH or equivalent subsidy',
+    HOST_HOME_NON_CRISIS_: 'Host Home (non-crisis)',
+    RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED_:
+      'Rental by client, with HCV voucher (tenant or project based)',
+    RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT:
+      'Rental by client in a public housing unit',
+    STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE:
+      "Staying or living in a family member's room, apartment or house",
+    STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
+      "Staying or living in a friend's room, apartment or house",
+    WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    CLIENT_REFUSED: 'Client refused',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  MonthsHomelessPastThreeYears: {
+    MONTHS_1: '1',
+    MONTHS_2: '2',
+    MONTHS_3: '3',
+    MONTHS_4: '4',
+    MONTHS_5: '5',
+    MONTHS_6: '6',
+    MONTHS_7: '7',
+    MONTHS_8: '8',
+    MONTHS_9: '9',
+    MONTHS_10: '10',
+    MONTHS_11: '11',
+    MONTHS_12: '12',
+    MONTHS_MORE_THAN_12_MONTHS: 'More than 12 months',
+    MONTHS_CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    MONTHS_CLIENT_REFUSED: 'Client refused',
+    MONTHS_DATA_NOT_COLLECTED: 'Data not collected',
   },
   NameDataQuality: {
     NAME_FULL_NAME_REPORTED: 'Full name reported',
@@ -313,14 +413,6 @@ export const HmisEnums = {
       'Legal services - child support',
     SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
       'Legal services - outstanding fines and penalties',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
-      'Legal services - eviction prevention',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
-      "Legal services - restore / acquire driver's license",
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
-      'Legal services - outstanding fines and penalties',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
-      'Legal services - other',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
       "Legal services - restore / acquire driver's license",
     SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
@@ -333,6 +425,14 @@ export const HmisEnums = {
       'Child care',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
       'Housing counseling',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
+      'Legal services - eviction prevention',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
+      "Legal services - restore / acquire driver's license",
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
+      'Legal services - outstanding fines and penalties',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
+      'Legal services - other',
   },
   ServiceTypeProvided: {
     C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
@@ -413,21 +513,6 @@ export const HmisEnums = {
       'Residential supportive services',
     RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES:
       'Criminal justice /legal services',
-    HOPWA_SERVICE__HEALTH_MEDICAL_CARE: 'Health/medical care',
-    HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER:
-      'Voucher was converted to Housing Choice Voucher',
-    PATH_REFERRAL__INCOME_ASSISTANCE: 'Income assistance',
-    PATH_SERVICE__HOUSING_MINOR_RENOVATION: 'Housing minor renovation',
-    RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING: 'Life skills training',
-    SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS:
-      'Transportation services: tokens/vouchers',
-    HOPWA_SERVICE__LIFE_SKILLS_TRAINING: 'Life skills training',
-    HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED:
-      'Veteran exited - voucher was returned',
-    PATH_REFERRAL__EMPLOYMENT_ASSISTANCE: 'Employment assistance',
-    PATH_SERVICE__HOUSING_MOVING_ASSISTANCE: 'Housing moving assistance',
-    SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE:
-      'Transportation services: vehicle repair/maintenance',
     HOPWA_SERVICE__MENTAL_HEALTH_CARE_COUNSELING:
       'Mental health care/counseling',
     HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_FAMILY_MAINTAINED_THE_VOUCHER:
@@ -473,11 +558,35 @@ export const HmisEnums = {
     RHY_SERVICE_CONNECTIONS__STD_TESTING: 'STD Testing',
     RHY_SERVICE_CONNECTIONS__STREET_BASED_SERVICES: 'Street-based Services',
     BED_NIGHT__BED_NIGHT: 'BedNight',
+    HOPWA_SERVICE__HEALTH_MEDICAL_CARE: 'Health/medical care',
+    HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER:
+      'Voucher was converted to Housing Choice Voucher',
+    PATH_REFERRAL__INCOME_ASSISTANCE: 'Income assistance',
+    PATH_SERVICE__HOUSING_MINOR_RENOVATION: 'Housing minor renovation',
+    RHY_SERVICE_CONNECTIONS__LIFE_SKILLS_TRAINING: 'Life skills training',
+    SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_TOKENS_VOUCHERS:
+      'Transportation services: tokens/vouchers',
+    HOPWA_SERVICE__LIFE_SKILLS_TRAINING: 'Life skills training',
+    HUD_VASH_OTH_VOUCHER_TRACKING__VETERAN_EXITED_VOUCHER_WAS_RETURNED:
+      'Veteran exited - voucher was returned',
+    PATH_REFERRAL__EMPLOYMENT_ASSISTANCE: 'Employment assistance',
+    PATH_SERVICE__HOUSING_MOVING_ASSISTANCE: 'Housing moving assistance',
+    SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE:
+      'Transportation services: vehicle repair/maintenance',
   },
   TargetPopulation: {
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
     PERSONS_WITH_HIV_AIDS: 'Persons with HIV/AIDS',
     NOT_APPLICABLE: 'Not applicable',
+  },
+  TimesHomelessPastThreeYears: {
+    TIMES_ONE_TIME: 'One time',
+    TIMES_TWO_TIMES: 'Two times',
+    TIMES_THREE_TIMES: 'Three times',
+    TIMES_FOUR_OR_MORE_TIMES: 'Four or more times',
+    TIMES_CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    TIMES_CLIENT_REFUSED: 'Client refused',
+    TIMES_DATA_NOT_COLLECTED: 'Data not collected',
   },
   TrackingMethod: {
     ENTRY_EXIT_DATE: 'Entry/Exit Date',

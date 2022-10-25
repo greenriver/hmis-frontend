@@ -17,7 +17,12 @@ const CODE_PATTERN = /^\(([a-zA-Z0-9]*)\) /;
 const getNumber = (elem) => {
   const m = elem.description.match(CODE_PATTERN_NUMERIC);
   if (m && m[1]) {
-    return parseInt(m[1]);
+    const num = parseInt(m[1]);
+    // Always put DNC/REFUSED/DK at the end
+    if (num === 99) return 500;
+    if (num === 9) return 499;
+    if (num === 8) return 498;
+    return num;
   }
   return null;
 };

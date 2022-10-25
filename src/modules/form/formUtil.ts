@@ -20,9 +20,12 @@ export type DynamicInputCommonProps = {
   helperText?: ReactNode;
 };
 
+const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
+
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
 };
+
 export function isPickListOption(
   value: any | null | undefined
 ): value is PickListOption {
@@ -40,10 +43,12 @@ export const localResolvePickList = (
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
     const hmisEnum = HmisEnums[pickListReference];
-    return Object.entries(hmisEnum).map(([code, label]) => ({
-      code: code.toString(),
-      label,
-    }));
+    return Object.entries(hmisEnum)
+      .filter(([code]) => !isDataNotCollected(code))
+      .map(([code, label]) => ({
+        code: code.toString(),
+        label,
+      }));
   }
 
   return null;
@@ -56,6 +61,14 @@ export const resolveOptionList = (item: FormItem): PickListOption[] | null => {
     return localResolvePickList(item.pickListReference);
   }
   return null;
+};
+
+const dataNotCollectedCode = (item: FormItem): string | undefined => {
+  const options = resolveOptionList(item) || [];
+
+  return options.find(
+    (opt) => isDataNotCollected(opt.code) || opt.code === 'NOT_APPLICABLE'
+  )?.code;
 };
 
 /**
@@ -113,15 +126,6 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     return undefined;
   }
   return value;
-};
-
-const dataNotCollectedCode = (item: FormItem): string | undefined => {
-  const options = resolveOptionList(item) || [];
-
-  return options.find(
-    (opt) =>
-      opt.code?.endsWith('_NOT_COLLECTED') || opt.code === 'NOT_APPLICABLE'
-  )?.code;
 };
 
 type TransformSubmitValuesParams = {
@@ -198,6 +202,42 @@ export const transformSubmitValues = ({
   return result;
 };
 
+// Convert gql value into value for form state
+const getFormValue = (value: any | null | undefined, item: FormItem) => {
+  if (isNil(value)) return value;
+
+  switch (item.type) {
+    case ItemType.Date:
+      return parseHmisDateString(value);
+
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      if (value && isDataNotCollected(value)) {
+        return null;
+      }
+      if (item.pickListReference) {
+        // This is a value for a choice item, like 'PSH', so transform it to the option object
+        const option = (
+          localResolvePickList(item.pickListReference) || []
+        ).find((opt) => opt.code === value);
+        return option || { code: value };
+      }
+      if (item.pickListOptions) {
+        const option = item.pickListOptions.find((opt) => opt.code === value);
+        if (!option)
+          console.error(
+            `Value '${value}' does not match answer options for question '${item.linkId}'`
+          );
+        return option || { code: value };
+      }
+      break;
+
+    default:
+      // Set the property directly as the initial form value
+      return value;
+  }
+};
+
 /**
  * Create initial form values. This is used for dynamic forms that
  * edit one record directly, like the Client, Project, and Organization edit screens.
@@ -227,29 +267,9 @@ export const createInitialValues = (
       if (!item.queryField) return;
 
       // Skip: the record doesn't have a value for this property
-      const key = item.queryField;
-      if (!record.hasOwnProperty(key)) return;
+      if (!record.hasOwnProperty(item.queryField)) return;
 
-      if (
-        record[key] &&
-        [ItemType.Choice, ItemType.OpenChoice].includes(item.type) &&
-        item.pickListReference
-      ) {
-        // This is a value for a choice item, like 'PSH', so transform it to the option object
-        const option = (
-          localResolvePickList(item.pickListReference) || []
-        ).find((opt) => opt.code === record[key]);
-        values[item.linkId] = option || { code: record[key] };
-      } else if (
-        item.type === ItemType.Date &&
-        typeof record[key] === 'string'
-      ) {
-        // Convert date string to Date object
-        values[item.linkId] = parseHmisDateString(record[key]);
-      } else {
-        // Set the property directly as the initial form value
-        values[item.linkId] = record[key];
-      }
+      values[item.linkId] = getFormValue(record[item.queryField], item);
     });
   }
 
@@ -271,31 +291,58 @@ export const createInitialValues = (
  * @returns boolean
  */
 export const shouldEnableItem = (
-  dependentQuestionValue: any,
-  item: FormItem
+  item: FormItem,
+  values: Record<string, any | null | undefined>
 ) => {
   if (!item.enableWhen) return true;
 
-  const currentValue = isPickListOption(dependentQuestionValue)
-    ? dependentQuestionValue.code
-    : undefined;
-  if (!currentValue) return false;
-
-  // If there is a value, evaluate all enableWhen conditions
+  // Evaluate all enableWhen conditions
   const booleans = item.enableWhen.map((en) => {
-    const comparisonValue = en.answerCode;
-    if (
-      typeof currentValue === 'undefined' ||
-      typeof comparisonValue === 'undefined'
-    ) {
-      return false;
+    const linkId = en.question;
+    const dependentQuestionValue = values[linkId];
+    let currentValue;
+    let comparisonValue;
+    if (!isNil(en.answerBoolean)) {
+      currentValue = dependentQuestionValue;
+      comparisonValue = en.answerBoolean;
+    } else if (en.answerCode) {
+      currentValue =
+        dependentQuestionValue && isPickListOption(dependentQuestionValue)
+          ? dependentQuestionValue.code
+          : undefined;
+      comparisonValue = en.answerCode;
+    } else if (en.answerGroupLabel) {
+      currentValue =
+        dependentQuestionValue && isPickListOption(dependentQuestionValue)
+          ? dependentQuestionValue.groupLabel
+          : undefined;
+      comparisonValue = en.answerGroupLabel;
+    } else {
+      console.warn('Missing answer value:', en);
     }
+
+    let result;
     switch (en.operator) {
       case EnableOperator.Equal:
-        return currentValue === comparisonValue;
+        result = currentValue === comparisonValue;
+        break;
+      case EnableOperator.NotEqual:
+        result = currentValue !== comparisonValue;
+        break;
+      default:
+        result = false;
+        console.warn('Unsupported enableWhen operator', en.operator);
     }
-    console.warn('Unsupported enableWhen operator', en.operator);
-    return false;
+
+    console.log(
+      'COMPARING:',
+      currentValue,
+      en.operator,
+      comparisonValue,
+      '?',
+      result
+    );
+    return result;
   });
 
   if (item.enableBehavior === EnableBehavior.Any) {
