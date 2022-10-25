@@ -15,7 +15,10 @@ import {
 export interface Props {
   definition: FormDefinitionJson;
   onSubmit: (values: Record<string, any>) => void;
+  onSaveDraft?: (values: Record<string, any>) => void;
+  onDiscard?: () => void;
   submitButtonText?: string;
+  saveDraftButtonText?: string;
   discardButtonText?: string;
   loading?: boolean;
   initialValues?: Record<string, any>;
@@ -25,7 +28,10 @@ export interface Props {
 const DynamicForm: React.FC<Props> = ({
   definition,
   onSubmit,
+  onSaveDraft,
+  onDiscard,
   submitButtonText,
+  saveDraftButtonText,
   discardButtonText,
   loading,
   initialValues = {},
@@ -50,12 +56,22 @@ const DynamicForm: React.FC<Props> = ({
     [setValues]
   );
 
-  const submitHandler = (
-    event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent
-  ) => {
-    event.preventDefault();
-    onSubmit(values);
-  };
+  const handleSubmit = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+      onSubmit(values);
+    },
+    [values, onSubmit]
+  );
+
+  const handleSaveDraft = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      event.preventDefault();
+      if (!onSaveDraft) return;
+      onSaveDraft(values);
+    },
+    [values, onSaveDraft]
+  );
 
   const isEnabled = (item: FormItem): boolean => {
     if (item.hidden) return false;
@@ -103,7 +119,7 @@ const DynamicForm: React.FC<Props> = ({
   };
 
   return (
-    <Box component='form' onSubmit={submitHandler}>
+    <Box component='form'>
       <Grid container direction='column' spacing={2}>
         {errors && (
           <Grid item>
@@ -119,12 +135,29 @@ const DynamicForm: React.FC<Props> = ({
         )}
         {definition.item.map((item) => renderItem(item, 0))}
       </Grid>
+
       <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
-        <Button variant='contained' type='submit' disabled={!!loading}>
-          {loading ? 'Submitting...' : submitButtonText || 'Submit'}
+        <Button
+          variant='contained'
+          type='submit'
+          disabled={!!loading}
+          onClick={handleSubmit}
+        >
+          {loading ? 'Saving...' : submitButtonText || 'Submit'}
         </Button>
-        {/* <Button variant='outlined'>Save Draft</Button> */}
-        <Button variant='gray' onClick={() => navigate(-1)}>
+        {onSaveDraft && (
+          <Button
+            variant='outlined'
+            type='submit'
+            disabled={!!loading}
+            onClick={handleSaveDraft}
+          >
+            {loading
+              ? 'Saving...'
+              : saveDraftButtonText || 'Save and Finish Later'}
+          </Button>
+        )}
+        <Button variant='gray' onClick={onDiscard || (() => navigate(-1))}>
           {discardButtonText || 'Discard'}
         </Button>
       </Stack>

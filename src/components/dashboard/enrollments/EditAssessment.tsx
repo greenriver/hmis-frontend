@@ -42,20 +42,34 @@ const EditAssessment = () => {
     (values: Record<string, any>) => {
       // if (!formDefinition) return;
       console.log(JSON.stringify(values, null, 2));
-      const input = {
+      const variables = {
+        assessmentId,
+        inProgress: false,
+        values,
+      };
+
+      void saveAssessmentMutation({ variables });
+    },
+    [saveAssessmentMutation, assessmentId]
+  );
+
+  const saveDraftHandler = useCallback(
+    (values: Record<string, any>) => {
+      // if (!formDefinition) return;
+      console.log(JSON.stringify(values, null, 2));
+      const variables = {
         assessmentId,
         inProgress: true,
         values,
       };
 
-      void saveAssessmentMutation({ variables: { ...input } });
+      void saveAssessmentMutation({ variables });
     },
     [saveAssessmentMutation, assessmentId]
   );
 
   const initialValues = useMemo(() => {
-    const values = data?.assessment?.assessmentDetail?.values;
-    return values ? JSON.parse(values) : undefined;
+    return data?.assessment?.assessmentDetail?.values;
   }, [data]);
 
   const title = useMemo(() => {
@@ -87,8 +101,7 @@ const EditAssessment = () => {
             <DynamicForm
               definition={formDefinition}
               onSubmit={submitHandler}
-              submitButtonText='Save Changes'
-              discardButtonText='Go back'
+              onSaveDraft={saveDraftHandler}
               initialValues={initialValues || undefined}
               loading={saveLoading}
               errors={errors}

@@ -65,14 +65,29 @@ const NewAssessment = () => {
     (values: Record<string, any>) => {
       if (!formDefinition) return;
       console.log(JSON.stringify(values, null, 2));
-      const input = {
+      const variables = {
+        formDefinitionId: formDefinition.id,
+        enrollmentId,
+        inProgress: false,
+        values,
+      };
+
+      void createAssessmentMutation({ variables });
+    },
+    [createAssessmentMutation, enrollmentId, formDefinition]
+  );
+  const submitDraftHandler = useCallback(
+    (values: Record<string, any>) => {
+      if (!formDefinition) return;
+      console.log(JSON.stringify(values, null, 2));
+      const variables = {
         formDefinitionId: formDefinition.id,
         enrollmentId,
         inProgress: true,
         values: JSON.stringify(values),
       };
 
-      void createAssessmentMutation({ variables: { ...input } });
+      void createAssessmentMutation({ variables });
     },
     [createAssessmentMutation, enrollmentId, formDefinition]
   );
@@ -102,10 +117,9 @@ const NewAssessment = () => {
               <DynamicForm
                 definition={definition}
                 onSubmit={submitHandler}
-                submitButtonText='Save and Finish Later'
+                onSaveDraft={submitDraftHandler}
                 loading={saveLoading}
                 errors={errors}
-                // discardButtonText='Cancel'
               />
             </>
           )}

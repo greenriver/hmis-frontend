@@ -344,14 +344,14 @@ export const shouldEnableItem = (
         console.warn('Unsupported enableWhen operator', en.operator);
     }
 
-    console.log(
-      'COMPARING:',
-      currentValue,
-      en.operator,
-      comparisonValue,
-      '?',
-      result
-    );
+    // console.log(
+    //   'COMPARING:',
+    //   currentValue,
+    //   en.operator,
+    //   comparisonValue,
+    //   '?',
+    //   result
+    // );
     return result;
   });
 

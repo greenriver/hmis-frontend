@@ -538,6 +538,7 @@ export enum EnableOperator {
   LessThan = 'LESS_THAN',
   LessThanEqual = 'LESS_THAN_EQUAL',
   NotEqual = 'NOT_EQUAL',
+  NotExists = 'NOT_EXISTS',
 }
 
 export type EnableWhen = {
