@@ -574,7 +574,6 @@ export type Enrollment = {
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   lengthOfStay?: Maybe<LengthOfStay>;
-  livingSituation?: Maybe<LivingSituation>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
@@ -1079,89 +1078,6 @@ export enum LengthOfStay {
   LosOneYearOrLonger = 'LOS_ONE_YEAR_OR_LONGER',
   /** (11) Two to six nights */
   LosTwoToSixNights = 'LOS_TWO_TO_SIX_NIGHTS',
-}
-
-/** HUD LivingSituation (3.917.1) */
-export enum LivingSituation {
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (24) Deceased */
-  Deceased = 'DECEASED',
-  /** (1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter  */
-  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrRhyFundedHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER_',
-  /** (15) Foster care home or foster care group home */
-  FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
-  /** (6) Hospital or other residential non-psychiatric medical facility */
-  HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
-  /** (32) Host Home (non-crisis) */
-  HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS_',
-  /** (14) Hotel or motel paid for without emergency shelter voucher */
-  HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
-  /** (27) Interim Housing */
-  InterimHousing = 'INTERIM_HOUSING',
-  /** (7) Jail, prison or juvenile detention facility */
-  JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
-  /** (25) Long-term care facility or nursing home */
-  LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
-  /** (26) Moved from one HOPWA funded project to HOPWA PH */
-  MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
-  /** (30) No exit interview completed */
-  NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
-  /** (17) Other */
-  Other = 'OTHER',
-  /** (11) Owned by client, no ongoing housing subsidy */
-  OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (21) Owned by client, with ongoing housing subsidy */
-  OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
-  /** (3) Permanent housing (other than RRH) for formerly homeless persons */
-  PermanentHousingOtherThanRrhForFormerlyHomelessPersons = 'PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS',
-  /**
-   * (16) Place not meant for habitation (e.g., a vehicle, an abandoned building,
-   * bus/train/subway station/airport or anywhere outside)
-   */
-  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE_',
-  /** (4) Psychiatric hospital or other psychiatric facility */
-  PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
-  /** (34) Rental by client in a public housing unit */
-  RentalByClientInAPublicHousingUnit = 'RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT',
-  /** (10) Rental by client, no ongoing housing subsidy */
-  RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
-  /** (28) Rental by client, with GPD TIP housing subsidy */
-  RentalByClientWithGpdTipHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY',
-  /** (33) Rental by client, with HCV voucher (tenant or project based) */
-  RentalByClientWithHcvVoucherTenantOrProjectBased = 'RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED_',
-  /** (20) Rental by client, with other ongoing housing subsidy */
-  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
-  /** (31) Rental by client, with RRH or equivalent subsidy */
-  RentalByClientWithRrhOrEquivalentSubsidy = 'RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY',
-  /** (19) Rental by client, with VASH housing subsidy */
-  RentalByClientWithVashHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY',
-  /** (29) Residential project or halfway house with no homeless criteria */
-  ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
-  /** (18) Safe Haven */
-  SafeHaven = 'SAFE_HAVEN',
-  /** (35) Staying or living in a family member's room, apartment or house */
-  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (36) Staying or living in a friend's room, apartment or house */
-  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
-  /** (22) Staying or living with family, permanent tenure */
-  StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
-  /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
-  StayingOrLivingWithFamilyTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE_',
-  /** (23) Staying or living with friends, permanent tenure */
-  StayingOrLivingWithFriendsPermanentTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE',
-  /** (13) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
-  StayingOrLivingWithFriendsTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE_',
-  /** (5) Substance abuse treatment facility or detox center */
-  SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
-  /** (2) Transitional housing for homeless persons (including homeless youth) */
-  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH_',
-  /** (37) Worker unable to determine */
-  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** HUD MonthsHomelessPastThreeYears (3.917.5) */
