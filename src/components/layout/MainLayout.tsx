@@ -9,6 +9,7 @@ import {
 import * as React from 'react';
 import { useCallback } from 'react';
 
+import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
 import WarehouseLinkBar from './WarehouseLinkBar';
@@ -42,7 +43,6 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             color='secondary'
             noWrap
             sx={{ flexGrow: 1 }}
-            component={RouterLink}
             underline='none'
             to='/'
           >
@@ -57,12 +57,17 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 />
               )}
           </RouterLink>
-          <RouterLink to='/' sx={{ ml: 2 }} color='secondary'>
+          <ButtonLink variant='text' to='/' sx={{ ml: 2 }} color='secondary'>
             Dashboard
-          </RouterLink>
-          <RouterLink to={Routes.ALL_PROJECTS} sx={{ ml: 2 }} color='secondary'>
+          </ButtonLink>
+          <ButtonLink
+            variant='text'
+            to={Routes.ALL_PROJECTS}
+            sx={{ ml: 2 }}
+            color='secondary'
+          >
             Projects
-          </RouterLink>
+          </ButtonLink>
           <Typography variant='body2' sx={{ ml: 8 }}>
             {user.name}
           </Typography>

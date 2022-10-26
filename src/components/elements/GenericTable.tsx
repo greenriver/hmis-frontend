@@ -133,7 +133,11 @@ const GenericTable = <T extends { id: string }>({
                       <TableCell
                         key={key || (typeof header === 'string' ? header : '')}
                         width={width}
-                        sx={rowLinkTo && { p: 0 }}
+                        sx={
+                          rowLinkTo && {
+                            p: 0,
+                          }
+                        }
                       >
                         {rowLinkTo ? (
                           <RouterLink
@@ -143,6 +147,9 @@ const GenericTable = <T extends { id: string }>({
                               height: '100%',
                               verticalAlign: 'middle',
                               display: 'block',
+                              '&.Mui-focusVisible': {
+                                outlineOffset: '-2px',
+                              },
                             }}
                             tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
                           >

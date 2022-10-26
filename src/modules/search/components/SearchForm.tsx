@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { isEmpty, omit } from 'lodash-es';
 import React, { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import ProjectSelect, {
   Option as ProjectOption,
@@ -44,6 +45,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   hideProject = false,
   hideAdvanced = false,
 }) => {
+  const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(initialValues || {});
 
   // If advanced parameters were specified in the URL parameters, expand the panel
@@ -88,12 +90,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       {!hideInstructions && (
         <Grid container sx={{ mb: 2 }}>
           <Grid item xs={9}>
-            <Typography>
-              Search by name, D.O.B. (mm/dd/yyyy), SSN (xxx-yyy-zzzz), Warehouse
-              ID, or PersonalID. It is often most efficient to search using the
-              first few characters of the first name and last name, e.g. to find
-              Jane Smith you might search for ja sm.
-            </Typography>
+            <Typography>{t<string>('clientSearch.instruction')}</Typography>
           </Grid>
         </Grid>
       )}
