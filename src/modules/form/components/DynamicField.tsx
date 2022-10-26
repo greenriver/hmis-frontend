@@ -71,7 +71,11 @@ const DynamicField: React.FC<Props> = ({
 
   switch (item.type) {
     case ItemType.Display:
-      return label;
+      return (
+        <Typography variant='body2' sx={{ my: 2 }}>
+          {item.text}
+        </Typography>
+      );
     case ItemType.Group:
       return (
         <ItemGroup item={item} nestingLevel={nestingLevel}>

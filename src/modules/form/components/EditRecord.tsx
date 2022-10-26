@@ -6,7 +6,7 @@ import DynamicForm, {
   Props as DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
 import {
-  createInitialValues,
+  createInitialValuesFromRecord,
   transformSubmitValues,
 } from '@/modules/form/formUtil';
 import {
@@ -80,7 +80,7 @@ const EditRecord = <
 
   const initialValues = useMemo(() => {
     if (!record || !definition) return {};
-    return createInitialValues(definition, record);
+    return createInitialValuesFromRecord(definition, record);
   }, [record, definition]);
 
   const submitHandler = useCallback(

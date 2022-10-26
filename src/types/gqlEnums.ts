@@ -37,6 +37,13 @@ export const HmisEnums = {
     ANNUAL_ASSESSMENT: 'Annual assessment',
     POST_EXIT: 'Post-exit',
   },
+  EnableOperator: {
+    ENABLED:
+      'Use with answerBoolean to specify is the item should be enabled or not.',
+    EXISTS:
+      'Use with answerBoolean to specify if an answer should exist or not.',
+    IN: 'Whether the value is in the answerCodes array.',
+  },
   Ethnicity: {
     ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_: 'Non-Hispanic/Non-Latin(a)(o)(x)',
     ETHNICITY_HISPANIC_LATIN_A_O_X_: 'Hispanic/Latin(a)(o)(x)',

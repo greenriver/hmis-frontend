@@ -69,6 +69,7 @@ const EditAssessment = () => {
   );
 
   const initialValues = useMemo(() => {
+    // TODO merge with getInitialValues(definition) ?
     return data?.assessment?.assessmentDetail?.values;
   }, [data]);
 

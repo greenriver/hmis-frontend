@@ -8,6 +8,7 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import { getInitialValues } from '@/modules/form/formUtil';
 import {
   AssessmentRole,
   useCreateAssessmentMutation,
@@ -92,6 +93,11 @@ const NewAssessment = () => {
     [createAssessmentMutation, enrollmentId, formDefinition]
   );
 
+  const initialValues = useMemo(
+    () => (definition ? getInitialValues(definition) : undefined),
+    [definition]
+  );
+
   if (crumbsLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
   if (error) throw error;
@@ -116,6 +122,7 @@ const NewAssessment = () => {
               </Typography>
               <DynamicForm
                 definition={definition}
+                initialValues={initialValues}
                 onSubmit={submitHandler}
                 onSaveDraft={submitDraftHandler}
                 loading={saveLoading}

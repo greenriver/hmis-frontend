@@ -82,6 +82,30 @@ const dataNotCollectedCode = (item: FormItem): string | undefined => {
 };
 
 /**
+ * Construct LinkID->Item map, for easier lookup
+ */
+export const getItemMap = (definition: FormDefinitionJson) => {
+  const allItems: Record<string, FormItem> = {};
+
+  // Recursive helper for traversing the FormDefinition
+  function rescursiveFillMap(
+    items: FormItem[],
+    itemMap: Record<string, FormItem>
+  ) {
+    items.forEach((item: FormItem) => {
+      itemMap[item.linkId] = item;
+      if (Array.isArray(item.item)) {
+        rescursiveFillMap(item.item, itemMap);
+      }
+    });
+  }
+
+  rescursiveFillMap(definition.item || [], allItems);
+
+  return allItems;
+};
+
+/**
  * Recursively find a question item by linkId
  */
 const findItem = (
@@ -212,6 +236,28 @@ export const transformSubmitValues = ({
   return result;
 };
 
+const getOptionValue = (value: string, item: FormItem) => {
+  if (value && isDataNotCollected(value)) {
+    return null;
+  }
+  if (item.pickListReference) {
+    // This is a value for a choice item, like 'PSH', so transform it to the option object
+    const option = (localResolvePickList(item.pickListReference) || []).find(
+      (opt) => opt.code === value
+    );
+    return option || { code: value };
+  }
+  if (item.pickListOptions) {
+    const option = item.pickListOptions.find((opt) => opt.code === value);
+    if (!option)
+      console.error(
+        `Value '${value}' does not match answer options for question '${item.linkId}'`
+      );
+    return option || { code: value };
+  }
+  return { code: value };
+};
+
 // Convert gql value into value for form state
 const getFormValue = (value: any | null | undefined, item: FormItem) => {
   if (isNil(value)) return value;
@@ -222,25 +268,7 @@ const getFormValue = (value: any | null | undefined, item: FormItem) => {
 
     case ItemType.Choice:
     case ItemType.OpenChoice:
-      if (value && isDataNotCollected(value)) {
-        return null;
-      }
-      if (item.pickListReference) {
-        // This is a value for a choice item, like 'PSH', so transform it to the option object
-        const option = (
-          localResolvePickList(item.pickListReference) || []
-        ).find((opt) => opt.code === value);
-        return option || { code: value };
-      }
-      if (item.pickListOptions) {
-        const option = item.pickListOptions.find((opt) => opt.code === value);
-        if (!option)
-          console.error(
-            `Value '${value}' does not match answer options for question '${item.linkId}'`
-          );
-        return option || { code: value };
-      }
-      break;
+      return getOptionValue(value, item);
 
     default:
       // Set the property directly as the initial form value
@@ -249,15 +277,49 @@ const getFormValue = (value: any | null | undefined, item: FormItem) => {
 };
 
 /**
- * Create initial form values. This is used for dynamic forms that
- * edit one record directly, like the Client, Project, and Organization edit screens.
+ * Create initial form state based on initial values specified in the form definition
+ */
+export const getInitialValues = (
+  definition: FormDefinitionJson
+): Record<string, any> => {
+  const initialValues: Record<string, any> = {};
+
+  // Recursive helper for traversing the FormDefinition
+  function recursiveFillInValues(
+    items: FormItem[],
+    values: Record<string, any> // intialValues object to be filled in
+  ) {
+    items.forEach((item: FormItem) => {
+      if (Array.isArray(item.item)) {
+        recursiveFillInValues(item.item, values);
+      }
+      if (!item.initial) return;
+      console.log(item.initial);
+      // FIXME handle multiple initials for multi-select questions
+      const initial = item.initial[0];
+      if (initial.valueBoolean) values[item.linkId] = initial.valueBoolean;
+      if (initial.valueNumber) values[item.linkId] = initial.valueNumber;
+      if (initial.valueCode) {
+        values[item.linkId] = getOptionValue(initial.valueCode, item);
+      }
+    });
+  }
+
+  recursiveFillInValues(definition.item || [], initialValues);
+
+  return initialValues;
+};
+
+/**
+ * Create initial form values based on a record.
+ * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
  *
  * @param definition FormDefinition
  * @param record  GQL HMIS record, like Project or Organization
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
-export const createInitialValues = (
+export const createInitialValuesFromRecord = (
   definition: FormDefinitionJson,
   record: any
 ): Record<string, any> => {
@@ -302,33 +364,33 @@ export const createInitialValues = (
  */
 export const shouldEnableItem = (
   item: FormItem,
-  values: Record<string, any | null | undefined>
-) => {
+  values: Record<string, any | null | undefined>,
+  itemMap: Record<string, FormItem>
+): boolean => {
   if (!item.enableWhen) return true;
 
   // Evaluate all enableWhen conditions
   const booleans = item.enableWhen.map((en) => {
     const linkId = en.question;
-    const dependentQuestionValue = values[linkId];
-    let currentValue;
+
+    // Current form value to compare
+    let currentValue = values[linkId];
+    if (currentValue && isPickListOption(currentValue)) {
+      currentValue = en.answerGroupCode
+        ? currentValue.groupCode
+        : currentValue.code;
+    }
+
+    // Comparison value from the form definition
     let comparisonValue;
-    if (!isNil(en.answerBoolean)) {
-      currentValue = dependentQuestionValue;
-      comparisonValue = en.answerBoolean;
-    } else if (en.answerCode) {
-      currentValue =
-        dependentQuestionValue && isPickListOption(dependentQuestionValue)
-          ? dependentQuestionValue.code
-          : undefined;
-      comparisonValue = en.answerCode;
-    } else if (en.answerGroupCode) {
-      currentValue =
-        dependentQuestionValue && isPickListOption(dependentQuestionValue)
-          ? dependentQuestionValue.groupCode
-          : undefined;
-      comparisonValue = en.answerGroupCode;
-    } else {
-      console.warn('Missing answer value:', en);
+    if (en.operator !== EnableOperator.Exists) {
+      comparisonValue = [
+        en.answerBoolean,
+        en.answerCode,
+        en.answerGroupCode,
+        en.answerNumber,
+        en.answerCodes,
+      ].filter((e) => !isNil(e))[0];
     }
 
     let result;
@@ -338,6 +400,28 @@ export const shouldEnableItem = (
         break;
       case EnableOperator.NotEqual:
         result = currentValue !== comparisonValue;
+        break;
+      case EnableOperator.Exists:
+        result = !isNil(currentValue);
+        // flip the result if this is "not exists"
+        if (en.answerBoolean === false) {
+          result = !result;
+        }
+        break;
+      case EnableOperator.Enabled:
+        const dependentItem = itemMap[linkId];
+        result = shouldEnableItem(dependentItem, values, itemMap);
+        // flip the result if this is "not enabled"
+        if (en.answerBoolean === false) {
+          result = !result;
+        }
+        break;
+      case EnableOperator.In:
+        if (Array.isArray(comparisonValue)) {
+          result = !!comparisonValue.find((val) => val === currentValue);
+        } else {
+          console.warn("Can't use IN operator without array comparison value");
+        }
         break;
       default:
         result = false;
@@ -355,6 +439,7 @@ export const shouldEnableItem = (
     return result;
   });
 
+  // console.log(item.linkId, booleans);
   if (item.enableBehavior === EnableBehavior.Any) {
     return booleans.some(Boolean);
   } else {
