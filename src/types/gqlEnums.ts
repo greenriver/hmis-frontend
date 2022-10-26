@@ -3,6 +3,10 @@ export const HmisEnums = {
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
+  AssessmentRole: {
+    CUSTOM: 'Custom HMIS Assessment',
+    RESOURCE: 'Form for creating or editing resources directly',
+  },
   AssessmentType: {
     PHONE: 'Phone',
     VIRTUAL: 'Virtual',

@@ -529,7 +529,7 @@
           },
           {
             "name": "CUSTOM",
-            "description": null,
+            "description": "Custom HMIS Assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -548,6 +548,12 @@
           {
             "name": "POST_EXIT",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESOURCE",
+            "description": "Form for creating or editing resources directly",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3445,7 +3451,7 @@
         "fields": [
           {
             "name": "answerBoolean",
-            "description": "Value for question comparison based on operator, if question is boolean",
+            "description": "If question is BOOLEAN type, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3457,7 +3463,7 @@
           },
           {
             "name": "answerCode",
-            "description": "Value for question comparison based on operator, if question is string or choice type",
+            "description": "If question is CHOICE type, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3468,8 +3474,8 @@
             "deprecationReason": null
           },
           {
-            "name": "answerGroupLabel",
-            "description": "Value for question comparison based on operator, if question is string or\nchoice type. Group label of selected option is compared.",
+            "name": "answerGroupCode",
+            "description": "If question is CHOICE type and has grouped options, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3481,7 +3487,7 @@
           },
           {
             "name": "answerNumber",
-            "description": "Value for question comparison based on operator, if question is numeric",
+            "description": "If question is numeric, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -4780,7 +4786,7 @@
         "fields": [
           {
             "name": "dataCollectedAbout",
-            "description": "HUD Data Collected About condition for this question or group",
+            "description": "Include this item only if the Client meets this HUD DataCollectedAbout condition",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -4815,6 +4821,26 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "EnableWhen",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "funders",
+            "description": "Include this item only for the listed funders",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FundingSource",
                   "ofType": null
                 }
               }
@@ -4922,6 +4948,46 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectTypesExcluded",
+            "description": "Exclude this item for the listed project types",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectTypesIncluded",
+            "description": "Include this item only for the listed project types",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8196,6 +8262,18 @@
                 "name": "String",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "groupCode",
+            "description": "Code for group that option belongs to, if grouped",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

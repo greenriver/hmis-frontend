@@ -89,10 +89,13 @@ export enum AssessmentLevel {
 export enum AssessmentRole {
   Annual = 'ANNUAL',
   Ce = 'CE',
+  /** Custom HMIS Assessment */
   Custom = 'CUSTOM',
   Exit = 'EXIT',
   Intake = 'INTAKE',
   PostExit = 'POST_EXIT',
+  /** Form for creating or editing resources directly */
+  Resource = 'RESOURCE',
   Update = 'UPDATE',
 }
 
@@ -543,16 +546,13 @@ export enum EnableOperator {
 
 export type EnableWhen = {
   __typename?: 'EnableWhen';
-  /** Value for question comparison based on operator, if question is boolean */
+  /** If question is BOOLEAN type, value for comparison */
   answerBoolean?: Maybe<Scalars['Boolean']>;
-  /** Value for question comparison based on operator, if question is string or choice type */
+  /** If question is CHOICE type, value for comparison */
   answerCode?: Maybe<Scalars['String']>;
-  /**
-   * Value for question comparison based on operator, if question is string or
-   * choice type. Group label of selected option is compared.
-   */
-  answerGroupLabel?: Maybe<Scalars['String']>;
-  /** Value for question comparison based on operator, if question is numeric */
+  /** If question is CHOICE type and has grouped options, value for comparison */
+  answerGroupCode?: Maybe<Scalars['String']>;
+  /** If question is numeric, value for comparison */
   answerNumber?: Maybe<Scalars['Int']>;
   /** How to evaluate the question's answer */
   operator: EnableOperator;
@@ -735,10 +735,12 @@ export type FormDefinitionJson = {
 /** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
-  /** HUD Data Collected About condition for this question or group */
+  /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
+  /** Include this item only for the listed funders */
+  funders?: Maybe<Array<FundingSource>>;
   /** Helper text for the item */
   helperText?: Maybe<Scalars['String']>;
   /** Whether the item should always be hidden */
@@ -753,6 +755,10 @@ export type FormItem = {
   pickListReference?: Maybe<Scalars['String']>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
+  /** Exclude this item for the listed project types */
+  projectTypesExcluded?: Maybe<Array<ProjectType>>;
+  /** Include this item only for the listed project types */
+  projectTypesIncluded?: Maybe<Array<ProjectType>>;
   /**
    * Name of the query input field that corresponds to this item. Only used for
    * record creation/update forms, not for assessments.
@@ -1326,6 +1332,8 @@ export type PickListOption = {
   __typename?: 'PickListOption';
   /** Code for the option */
   code: Scalars['String'];
+  /** Code for group that option belongs to, if grouped */
+  groupCode?: Maybe<Scalars['String']>;
   /** Label for group that option belongs to, if grouped */
   groupLabel?: Maybe<Scalars['String']>;
   /** Whether option is selected by default */
@@ -2249,6 +2257,7 @@ export type PickListOptionFieldsFragment = {
   label?: string | null;
   secondaryLabel?: string | null;
   groupLabel?: string | null;
+  groupCode?: string | null;
   initialSelected?: boolean | null;
 };
 
@@ -2273,6 +2282,7 @@ export type ItemFieldsFragment = {
     label?: string | null;
     secondaryLabel?: string | null;
     groupLabel?: string | null;
+    groupCode?: string | null;
     initialSelected?: boolean | null;
   }> | null;
   enableWhen?: Array<{
@@ -2282,7 +2292,7 @@ export type ItemFieldsFragment = {
     answerCode?: string | null;
     answerNumber?: number | null;
     answerBoolean?: boolean | null;
-    answerGroupLabel?: string | null;
+    answerGroupCode?: string | null;
   }> | null;
 };
 
@@ -2376,6 +2386,7 @@ export type FormDefinitionWithJsonFragment = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2385,7 +2396,7 @@ export type FormDefinitionWithJsonFragment = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2394,6 +2405,7 @@ export type FormDefinitionWithJsonFragment = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2403,7 +2415,7 @@ export type FormDefinitionWithJsonFragment = {
               answerCode?: string | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
-              answerGroupLabel?: string | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -2412,6 +2424,7 @@ export type FormDefinitionWithJsonFragment = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -2421,7 +2434,7 @@ export type FormDefinitionWithJsonFragment = {
             answerCode?: string | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
-            answerGroupLabel?: string | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -2430,6 +2443,7 @@ export type FormDefinitionWithJsonFragment = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -2439,7 +2453,7 @@ export type FormDefinitionWithJsonFragment = {
           answerCode?: string | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
-          answerGroupLabel?: string | null;
+          answerGroupCode?: string | null;
         }> | null;
       }> | null;
       pickListOptions?: Array<{
@@ -2448,6 +2462,7 @@ export type FormDefinitionWithJsonFragment = {
         label?: string | null;
         secondaryLabel?: string | null;
         groupLabel?: string | null;
+        groupCode?: string | null;
         initialSelected?: boolean | null;
       }> | null;
       enableWhen?: Array<{
@@ -2457,7 +2472,7 @@ export type FormDefinitionWithJsonFragment = {
         answerCode?: string | null;
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
-        answerGroupLabel?: string | null;
+        answerGroupCode?: string | null;
       }> | null;
     }>;
   };
@@ -2610,6 +2625,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -2619,7 +2635,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     answerCode?: string | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
-                    answerGroupLabel?: string | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -2628,6 +2644,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -2637,7 +2654,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -2646,6 +2663,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2655,7 +2673,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2664,6 +2682,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2673,7 +2692,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               answerCode?: string | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
-              answerGroupLabel?: string | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -2682,6 +2701,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -2691,7 +2711,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             answerCode?: string | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
-            answerGroupLabel?: string | null;
+            answerGroupCode?: string | null;
           }> | null;
         }>;
       };
@@ -2815,6 +2835,7 @@ export type GetAssessmentQuery = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -2824,7 +2845,7 @@ export type GetAssessmentQuery = {
                       answerCode?: string | null;
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
-                      answerGroupLabel?: string | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -2833,6 +2854,7 @@ export type GetAssessmentQuery = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -2842,7 +2864,7 @@ export type GetAssessmentQuery = {
                     answerCode?: string | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
-                    answerGroupLabel?: string | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -2851,6 +2873,7 @@ export type GetAssessmentQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -2860,7 +2883,7 @@ export type GetAssessmentQuery = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -2869,6 +2892,7 @@ export type GetAssessmentQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2878,7 +2902,7 @@ export type GetAssessmentQuery = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2887,6 +2911,7 @@ export type GetAssessmentQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2896,7 +2921,7 @@ export type GetAssessmentQuery = {
               answerCode?: string | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
-              answerGroupLabel?: string | null;
+              answerGroupCode?: string | null;
             }> | null;
           }>;
         };
@@ -2918,6 +2943,7 @@ export type GetPickListQuery = {
     label?: string | null;
     secondaryLabel?: string | null;
     groupLabel?: string | null;
+    groupCode?: string | null;
     initialSelected?: boolean | null;
   }>;
 };
@@ -3068,6 +3094,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3077,7 +3104,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3086,6 +3113,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3095,7 +3123,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -3104,6 +3132,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -3113,7 +3142,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               answerCode?: string | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
-              answerGroupLabel?: string | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -3122,6 +3151,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -3131,7 +3161,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             answerCode?: string | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
-            answerGroupLabel?: string | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -3140,6 +3170,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -3149,7 +3180,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           answerCode?: string | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
-          answerGroupLabel?: string | null;
+          answerGroupCode?: string | null;
         }> | null;
       }>;
     };
@@ -3253,6 +3284,7 @@ export type GetFormDefinitionQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3262,7 +3294,7 @@ export type GetFormDefinitionQuery = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3271,6 +3303,7 @@ export type GetFormDefinitionQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3280,7 +3313,7 @@ export type GetFormDefinitionQuery = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -3289,6 +3322,7 @@ export type GetFormDefinitionQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -3298,7 +3332,7 @@ export type GetFormDefinitionQuery = {
               answerCode?: string | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
-              answerGroupLabel?: string | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -3307,6 +3341,7 @@ export type GetFormDefinitionQuery = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -3316,7 +3351,7 @@ export type GetFormDefinitionQuery = {
             answerCode?: string | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
-            answerGroupLabel?: string | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -3325,6 +3360,7 @@ export type GetFormDefinitionQuery = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -3334,7 +3370,7 @@ export type GetFormDefinitionQuery = {
           answerCode?: string | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
-          answerGroupLabel?: string | null;
+          answerGroupCode?: string | null;
         }> | null;
       }>;
     };
@@ -3462,6 +3498,7 @@ export type CreateAssessmentMutation = {
                         label?: string | null;
                         secondaryLabel?: string | null;
                         groupLabel?: string | null;
+                        groupCode?: string | null;
                         initialSelected?: boolean | null;
                       }> | null;
                       enableWhen?: Array<{
@@ -3471,7 +3508,7 @@ export type CreateAssessmentMutation = {
                         answerCode?: string | null;
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
-                        answerGroupLabel?: string | null;
+                        answerGroupCode?: string | null;
                       }> | null;
                     }> | null;
                     pickListOptions?: Array<{
@@ -3480,6 +3517,7 @@ export type CreateAssessmentMutation = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -3489,7 +3527,7 @@ export type CreateAssessmentMutation = {
                       answerCode?: string | null;
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
-                      answerGroupLabel?: string | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -3498,6 +3536,7 @@ export type CreateAssessmentMutation = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -3507,7 +3546,7 @@ export type CreateAssessmentMutation = {
                     answerCode?: string | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
-                    answerGroupLabel?: string | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -3516,6 +3555,7 @@ export type CreateAssessmentMutation = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3525,7 +3565,7 @@ export type CreateAssessmentMutation = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3534,6 +3574,7 @@ export type CreateAssessmentMutation = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3543,7 +3584,7 @@ export type CreateAssessmentMutation = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }>;
           };
@@ -3682,6 +3723,7 @@ export type SaveAssessmentMutation = {
                         label?: string | null;
                         secondaryLabel?: string | null;
                         groupLabel?: string | null;
+                        groupCode?: string | null;
                         initialSelected?: boolean | null;
                       }> | null;
                       enableWhen?: Array<{
@@ -3691,7 +3733,7 @@ export type SaveAssessmentMutation = {
                         answerCode?: string | null;
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
-                        answerGroupLabel?: string | null;
+                        answerGroupCode?: string | null;
                       }> | null;
                     }> | null;
                     pickListOptions?: Array<{
@@ -3700,6 +3742,7 @@ export type SaveAssessmentMutation = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -3709,7 +3752,7 @@ export type SaveAssessmentMutation = {
                       answerCode?: string | null;
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
-                      answerGroupLabel?: string | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -3718,6 +3761,7 @@ export type SaveAssessmentMutation = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -3727,7 +3771,7 @@ export type SaveAssessmentMutation = {
                     answerCode?: string | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
-                    answerGroupLabel?: string | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -3736,6 +3780,7 @@ export type SaveAssessmentMutation = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3745,7 +3790,7 @@ export type SaveAssessmentMutation = {
                   answerCode?: string | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
-                  answerGroupLabel?: string | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3754,6 +3799,7 @@ export type SaveAssessmentMutation = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3763,7 +3809,7 @@ export type SaveAssessmentMutation = {
                 answerCode?: string | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
-                answerGroupLabel?: string | null;
+                answerGroupCode?: string | null;
               }> | null;
             }>;
           };
@@ -5357,6 +5403,7 @@ export const PickListOptionFieldsFragmentDoc = gql`
     label
     secondaryLabel
     groupLabel
+    groupCode
     initialSelected
   }
 `;
@@ -5385,7 +5432,7 @@ export const ItemFieldsFragmentDoc = gql`
       answerCode
       answerNumber
       answerBoolean
-      answerGroupLabel
+      answerGroupCode
     }
   }
   ${PickListOptionFieldsFragmentDoc}

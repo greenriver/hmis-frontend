@@ -321,12 +321,12 @@ export const shouldEnableItem = (
           ? dependentQuestionValue.code
           : undefined;
       comparisonValue = en.answerCode;
-    } else if (en.answerGroupLabel) {
+    } else if (en.answerGroupCode) {
       currentValue =
         dependentQuestionValue && isPickListOption(dependentQuestionValue)
-          ? dependentQuestionValue.groupLabel
+          ? dependentQuestionValue.groupCode
           : undefined;
-      comparisonValue = en.answerGroupLabel;
+      comparisonValue = en.answerGroupCode;
     } else {
       console.warn('Missing answer value:', en);
     }
