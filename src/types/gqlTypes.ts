@@ -777,6 +777,7 @@ export type FormItem = {
 
 export type Funder = {
   __typename?: 'Funder';
+  active: Scalars['Boolean'];
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -1007,6 +1008,7 @@ export type InventoriesPaginated = {
 
 export type Inventory = {
   __typename?: 'Inventory';
+  active: Scalars['Boolean'];
   availability?: Maybe<Availability>;
   bedInventory: Scalars['Int'];
   chBedInventory?: Maybe<Scalars['Int']>;
@@ -1374,6 +1376,7 @@ export type Project = {
   __typename?: 'Project';
   HMISParticipatingProject?: Maybe<Scalars['Boolean']>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
+  active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<Scalars['Boolean']>;
   dateCreated: Scalars['ISO8601DateTime'];
