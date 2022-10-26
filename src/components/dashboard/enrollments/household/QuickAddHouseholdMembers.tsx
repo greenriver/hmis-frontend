@@ -5,7 +5,7 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, useState } from 'react';
 
 import AssociatedHouseholdMembers from './AssociatedHouseholdMembers';
 import RelationshipToHohSelect from './RelationshipToHohSelect';
@@ -49,6 +49,7 @@ const QuickAddHouseholdMembers = ({
     React.SetStateAction<Record<string, RelationshipToHoH | null>>
   >;
 }) => {
+  const [highlight, setHighlight] = useState<string | null>(null);
   const onToggleMemberForClient =
     (client: ClientFieldsFragment) => (_: SyntheticEvent, checked: boolean) =>
       setMembers((current) => {
@@ -83,9 +84,10 @@ const QuickAddHouseholdMembers = ({
               Object.keys(copy).forEach((id) => {
                 if (copy[id] === RelationshipToHoH.SelfHeadOfHousehold) {
                   copy[id] = null;
+                  setHighlight(id);
                 }
-                copy[client.id] = RelationshipToHoH.SelfHeadOfHousehold;
               });
+              copy[client.id] = RelationshipToHoH.SelfHeadOfHousehold;
               return copy;
             });
           }}
@@ -99,8 +101,10 @@ const QuickAddHouseholdMembers = ({
       render: (client: ClientFieldsFragment) => (
         <RelationshipToHohSelect
           disabled={!(client.id in members)}
+          textInputProps={{ error: client.id === highlight }}
           value={members[client.id] || null}
           onChange={(_, selected) => {
+            setHighlight(null);
             setMembers((current) => {
               const copy = { ...current };
               if (!selected) {

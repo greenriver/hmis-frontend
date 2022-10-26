@@ -52,6 +52,9 @@ const EditHouseholdMemberTable = ({
     )?.client || null
   );
 
+  // client to highlight for relationship input
+  const [highlight, setHighlight] = useState<string | null>(null);
+
   const [setHoHMutate, { data, loading, error }] = useSetHoHMutation({
     // refetch, so that all relationships-to-HoH to reload
     onCompleted: () => refetch(),
@@ -93,6 +96,7 @@ const EditHouseholdMemberTable = ({
     () => () => {
       if (!proposedHoH) return;
       setConfirmedHoH(true);
+      if (hoh) setHighlight(hoh.id);
       setHoHMutate({
         variables: {
           input: {
@@ -102,7 +106,7 @@ const EditHouseholdMemberTable = ({
         },
       });
     },
-    [setHoHMutate, proposedHoH, householdId]
+    [setHoHMutate, proposedHoH, householdId, setHighlight, hoh]
   );
 
   const columns = useMemo(() => {
@@ -191,6 +195,8 @@ const EditHouseholdMemberTable = ({
           <RelationshipToHoHInput
             enrollmentId={hc.enrollment.id}
             relationshipToHoH={hc.relationshipToHoH}
+            onChanged={() => setHighlight(null)}
+            error={hc.client.id === highlight}
           />
         ),
       },
@@ -207,7 +213,7 @@ const EditHouseholdMemberTable = ({
         ),
       },
     ];
-  }, [clientId, hoh, refetch]);
+  }, [clientId, hoh, refetch, setHighlight, highlight]);
 
   return (
     <>

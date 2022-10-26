@@ -11,18 +11,26 @@ import {
 const RelationshipToHoHInput = ({
   enrollmentId,
   relationshipToHoH,
+  onChanged,
+  error,
 }: {
   enrollmentId: string;
   relationshipToHoH: RelationshipToHoH;
+  onChanged: () => void;
+  error: boolean;
 }) => {
   // Store selected relationship in state so that it can be reflected immediately
   const [relationship, setRelationship] = useState<RelationshipToHoH | null>(
     relationshipToHoH
   );
   const [done, setDone] = useState(false);
-  const [updateEnrollment, { loading, error }] = useUpdateEnrollmentMutation({
-    onCompleted: () => setDone(true),
-  });
+  const [updateEnrollment, { loading, error: updateError }] =
+    useUpdateEnrollmentMutation({
+      onCompleted: () => {
+        onChanged();
+        setDone(true);
+      },
+    });
 
   // If relationshipToHoH prop changes (as it would if setHoH is called), update the relationship in state
   useEffect(() => {
@@ -58,11 +66,16 @@ const RelationshipToHoHInput = ({
   );
 
   return (
-    <InputIndicatorContainer loading={loading} error={!!error} success={done}>
+    <InputIndicatorContainer
+      loading={loading}
+      error={!!updateError}
+      success={done}
+    >
       <RelationshipToHohSelect
         value={relationship || null}
         onChange={onChange}
         showDataNotCollected
+        textInputProps={{ error }}
       />
     </InputIndicatorContainer>
   );
