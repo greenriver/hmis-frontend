@@ -24,9 +24,7 @@ const IncludeMemberSwitch = ({
     <FormControlLabel
       checked={checked}
       onChange={onChange}
-      control={
-        <Switch inputProps={{ 'aria-label': 'controlled' }} size='small' />
-      }
+      control={<Switch inputProps={{ 'aria-label': 'controlled' }} />}
       componentsProps={{ typography: { variant: 'body2' } }}
       label={checked ? 'Included' : 'Not Included'}
     />

@@ -60,20 +60,6 @@ export default createTheme(theme, {
   },
 
   components: {
-    // MuiTypography: {
-    //   styleOverrides: {
-    //     root: {
-    //       fontSize: '0.875rem',
-    //     },
-    //   },
-    // },
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          fontSize: '0.875rem',
-        },
-      },
-    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,
@@ -106,6 +92,9 @@ export default createTheme(theme, {
       styleOverrides: {
         root: sx({
           cursor: 'pointer',
+          '&.Mui-focusVisible': {
+            outlineOffset: '4px',
+          },
         }),
       },
     },
@@ -117,12 +106,47 @@ export default createTheme(theme, {
     },
     MuiButtonBase: {
       defaultProps: {
-        // disableRipple: true,
+        disableRipple: true,
       },
       styleOverrides: {
         root: {
           '&.Mui-focusVisible': {
-            // borderWidth: 3,
+            outlineColor: '-webkit-focus-ring-color',
+            outlineWidth: '2px',
+            outlineStyle: 'auto',
+          },
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            outlineOffset: '-6px',
+          },
+        },
+      },
+    },
+    MuiSwitch: {
+      defaultProps: {
+        disableRipple: false,
+      },
+      styleOverrides: {
+        switchBase: {
+          '&.Mui-focusVisible': {
+            outline: 'none',
+          },
+          '.MuiTouchRipple-child': {
+            backgroundColor: theme.palette.primary.main,
+          },
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            outlineOffset: '-1px',
           },
         },
       },
