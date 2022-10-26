@@ -68,7 +68,7 @@ const SearchResultsHeader = ({
         <Card sx={{ pl: 2, py: 1, pr: 1 }}>
           <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
             <Typography variant='body2'>
-              {t('clientSearch.addClientPrompt')}
+              {t<string>('clientSearch.addClientPrompt')}
             </Typography>
             <ButtonLink
               size='small'

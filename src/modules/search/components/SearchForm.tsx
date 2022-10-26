@@ -90,7 +90,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       {!hideInstructions && (
         <Grid container sx={{ mb: 2 }}>
           <Grid item xs={9}>
-            <Typography>{t('clientSearch.instruction')}</Typography>
+            <Typography>{t<string>('clientSearch.instruction')}</Typography>
           </Grid>
         </Grid>
       )}
