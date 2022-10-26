@@ -170,17 +170,16 @@ const ClientCard: React.FC<Props> = ({
           Actions
         </Typography>
         <Stack spacing={1}>
-          <Button
+          <ButtonLink
             fullWidth
             variant='outlined'
             color='secondary'
-            component={RouterLink}
             to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
               clientId: client.id,
             })}
           >
             Enroll
-          </Button>
+          </ButtonLink>
           <Button fullWidth variant='outlined' color='error'>
             Exit
           </Button>
