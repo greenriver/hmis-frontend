@@ -89,10 +89,13 @@ export enum AssessmentLevel {
 export enum AssessmentRole {
   Annual = 'ANNUAL',
   Ce = 'CE',
+  /** Custom HMIS Assessment */
   Custom = 'CUSTOM',
   Exit = 'EXIT',
   Intake = 'INTAKE',
   PostExit = 'POST_EXIT',
+  /** Form for creating or editing resources directly */
+  Resource = 'RESOURCE',
   Update = 'UPDATE',
 }
 
@@ -538,16 +541,19 @@ export enum EnableOperator {
   LessThan = 'LESS_THAN',
   LessThanEqual = 'LESS_THAN_EQUAL',
   NotEqual = 'NOT_EQUAL',
+  NotExists = 'NOT_EXISTS',
 }
 
 export type EnableWhen = {
   __typename?: 'EnableWhen';
-  /** Value for question comparison based on operator, if question is boolean */
-  answerBoolean?: Maybe<Scalars['String']>;
-  /** Value for question comparison based on operator, if question is string or choice type */
+  /** If question is BOOLEAN type, value for comparison */
+  answerBoolean?: Maybe<Scalars['Boolean']>;
+  /** If question is CHOICE type, value for comparison */
   answerCode?: Maybe<Scalars['String']>;
-  /** Value for question comparison based on operator, if question is numeric */
-  answerNumber?: Maybe<Scalars['String']>;
+  /** If question is CHOICE type and has grouped options, value for comparison */
+  answerGroupCode?: Maybe<Scalars['String']>;
+  /** If question is numeric, value for comparison */
+  answerNumber?: Maybe<Scalars['Int']>;
   /** How to evaluate the question's answer */
   operator: EnableOperator;
   /** The linkId of question that determines whether item is enabled/disabled */
@@ -568,9 +574,12 @@ export type Enrollment = {
   household: Household;
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
+  lengthOfStay?: Maybe<LengthOfStay>;
+  monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
+  timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
 };
 
 /** HUD Enrollment */
@@ -726,10 +735,12 @@ export type FormDefinitionJson = {
 /** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
-  /** HUD Data Collected About condition for this question or group */
+  /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
+  /** Include this item only for the listed funders */
+  funders?: Maybe<Array<FundingSource>>;
   /** Helper text for the item */
   helperText?: Maybe<Scalars['String']>;
   /** Whether the item should always be hidden */
@@ -744,6 +755,10 @@ export type FormItem = {
   pickListReference?: Maybe<Scalars['String']>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
+  /** Exclude this item for the listed project types */
+  projectTypesExcluded?: Maybe<Array<ProjectType>>;
+  /** Include this item only for the listed project types */
+  projectTypesIncluded?: Maybe<Array<ProjectType>>;
   /**
    * Name of the query input field that corresponds to this item. Only used for
    * record creation/update forms, not for assessments.
@@ -762,6 +777,7 @@ export type FormItem = {
 
 export type Funder = {
   __typename?: 'Funder';
+  active: Scalars['Boolean'];
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -992,6 +1008,7 @@ export type InventoriesPaginated = {
 
 export type Inventory = {
   __typename?: 'Inventory';
+  active: Scalars['Boolean'];
   availability?: Maybe<Availability>;
   bedInventory: Scalars['Int'];
   chBedInventory?: Maybe<Scalars['Int']>;
@@ -1041,6 +1058,7 @@ export enum InventorySortOption {
 export enum ItemType {
   Boolean = 'BOOLEAN',
   Choice = 'CHOICE',
+  Currency = 'CURRENCY',
   Date = 'DATE',
   Display = 'DISPLAY',
   Group = 'GROUP',
@@ -1048,6 +1066,64 @@ export enum ItemType {
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
+}
+
+/** HUD Length of Stay in Prior living situation (3.917.2) */
+export enum LengthOfStay {
+  /** (4) 90 days or more but less than one year */
+  Los_90DaysOrMoreButLessThanOneYear = 'LOS_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
+  /** (8) Client doesn't know */
+  LosClientDoesnTKnow = 'LOS_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  LosClientRefused = 'LOS_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  LosDataNotCollected = 'LOS_DATA_NOT_COLLECTED',
+  /** (3) One month or more, but less than 90 days */
+  LosOneMonthOrMoreButLessThan_90Days = 'LOS_ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
+  /** (10) One night or less */
+  LosOneNightOrLess = 'LOS_ONE_NIGHT_OR_LESS',
+  /** (2) One week or more, but less than one month */
+  LosOneWeekOrMoreButLessThanOneMonth = 'LOS_ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH',
+  /** (5) One year or longer */
+  LosOneYearOrLonger = 'LOS_ONE_YEAR_OR_LONGER',
+  /** (11) Two to six nights */
+  LosTwoToSixNights = 'LOS_TWO_TO_SIX_NIGHTS',
+}
+
+/** HUD MonthsHomelessPastThreeYears (3.917.5) */
+export enum MonthsHomelessPastThreeYears {
+  /** (101) 1 */
+  Months_1 = 'MONTHS_1',
+  /** (102) 2 */
+  Months_2 = 'MONTHS_2',
+  /** (103) 3 */
+  Months_3 = 'MONTHS_3',
+  /** (104) 4 */
+  Months_4 = 'MONTHS_4',
+  /** (105) 5 */
+  Months_5 = 'MONTHS_5',
+  /** (106) 6 */
+  Months_6 = 'MONTHS_6',
+  /** (107) 7 */
+  Months_7 = 'MONTHS_7',
+  /** (108) 8 */
+  Months_8 = 'MONTHS_8',
+  /** (109) 9 */
+  Months_9 = 'MONTHS_9',
+  /** (110) 10 */
+  Months_10 = 'MONTHS_10',
+  /** (111) 11 */
+  Months_11 = 'MONTHS_11',
+  /** (112) 12 */
+  Months_12 = 'MONTHS_12',
+  /** (8) Client doesn't know */
+  MonthsClientDoesnTKnow = 'MONTHS_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  MonthsClientRefused = 'MONTHS_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  MonthsDataNotCollected = 'MONTHS_DATA_NOT_COLLECTED',
+  /** (113) More than 12 months */
+  MonthsMoreThan_12Months = 'MONTHS_MORE_THAN_12_MONTHS',
 }
 
 export type Mutation = {
@@ -1258,6 +1334,8 @@ export type PickListOption = {
   __typename?: 'PickListOption';
   /** Code for the option */
   code: Scalars['String'];
+  /** Code for group that option belongs to, if grouped */
+  groupCode?: Maybe<Scalars['String']>;
   /** Label for group that option belongs to, if grouped */
   groupLabel?: Maybe<Scalars['String']>;
   /** Whether option is selected by default */
@@ -1270,7 +1348,9 @@ export type PickListOption = {
 
 export enum PickListType {
   Coc = 'COC',
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Organization = 'ORGANIZATION',
+  PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   Project = 'PROJECT',
 }
 
@@ -1296,6 +1376,7 @@ export type Project = {
   __typename?: 'Project';
   HMISParticipatingProject?: Maybe<Scalars['Boolean']>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
+  active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<Scalars['Boolean']>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -1983,6 +2064,24 @@ export enum TargetPopulation {
   PersonsWithHivAids = 'PERSONS_WITH_HIV_AIDS',
 }
 
+/** HUD TimesHomelessPastThreeYears (3.917.4) */
+export enum TimesHomelessPastThreeYears {
+  /** (8) Client doesn't know */
+  TimesClientDoesnTKnow = 'TIMES_CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  TimesClientRefused = 'TIMES_CLIENT_REFUSED',
+  /** (99) Data not collected */
+  TimesDataNotCollected = 'TIMES_DATA_NOT_COLLECTED',
+  /** (4) Four or more times */
+  TimesFourOrMoreTimes = 'TIMES_FOUR_OR_MORE_TIMES',
+  /** (1) One time */
+  TimesOneTime = 'TIMES_ONE_TIME',
+  /** (3) Three times */
+  TimesThreeTimes = 'TIMES_THREE_TIMES',
+  /** (2) Two times */
+  TimesTwoTimes = 'TIMES_TWO_TIMES',
+}
+
 /** HUD TrackingMethod (2.02.C) */
 export enum TrackingMethod {
   /** (0) Entry/Exit Date */
@@ -2161,6 +2260,7 @@ export type PickListOptionFieldsFragment = {
   label?: string | null;
   secondaryLabel?: string | null;
   groupLabel?: string | null;
+  groupCode?: string | null;
   initialSelected?: boolean | null;
 };
 
@@ -2185,6 +2285,7 @@ export type ItemFieldsFragment = {
     label?: string | null;
     secondaryLabel?: string | null;
     groupLabel?: string | null;
+    groupCode?: string | null;
     initialSelected?: boolean | null;
   }> | null;
   enableWhen?: Array<{
@@ -2192,8 +2293,9 @@ export type ItemFieldsFragment = {
     question: string;
     operator: EnableOperator;
     answerCode?: string | null;
-    answerNumber?: string | null;
-    answerBoolean?: string | null;
+    answerNumber?: number | null;
+    answerBoolean?: boolean | null;
+    answerGroupCode?: string | null;
   }> | null;
 };
 
@@ -2287,6 +2389,7 @@ export type FormDefinitionWithJsonFragment = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2294,8 +2397,9 @@ export type FormDefinitionWithJsonFragment = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2304,6 +2408,7 @@ export type FormDefinitionWithJsonFragment = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2311,8 +2416,9 @@ export type FormDefinitionWithJsonFragment = {
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
-              answerNumber?: string | null;
-              answerBoolean?: string | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -2321,6 +2427,7 @@ export type FormDefinitionWithJsonFragment = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -2328,8 +2435,9 @@ export type FormDefinitionWithJsonFragment = {
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
-            answerNumber?: string | null;
-            answerBoolean?: string | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -2338,6 +2446,7 @@ export type FormDefinitionWithJsonFragment = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -2345,8 +2454,9 @@ export type FormDefinitionWithJsonFragment = {
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
-          answerNumber?: string | null;
-          answerBoolean?: string | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
         }> | null;
       }> | null;
       pickListOptions?: Array<{
@@ -2355,6 +2465,7 @@ export type FormDefinitionWithJsonFragment = {
         label?: string | null;
         secondaryLabel?: string | null;
         groupLabel?: string | null;
+        groupCode?: string | null;
         initialSelected?: boolean | null;
       }> | null;
       enableWhen?: Array<{
@@ -2362,8 +2473,9 @@ export type FormDefinitionWithJsonFragment = {
         question: string;
         operator: EnableOperator;
         answerCode?: string | null;
-        answerNumber?: string | null;
-        answerBoolean?: string | null;
+        answerNumber?: number | null;
+        answerBoolean?: boolean | null;
+        answerGroupCode?: string | null;
       }> | null;
     }>;
   };
@@ -2516,6 +2628,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -2523,8 +2636,9 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
-                    answerNumber?: string | null;
-                    answerBoolean?: string | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -2533,6 +2647,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -2540,8 +2655,9 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -2550,6 +2666,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2557,8 +2674,9 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2567,6 +2685,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2574,8 +2693,9 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
-              answerNumber?: string | null;
-              answerBoolean?: string | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -2584,6 +2704,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -2591,8 +2712,9 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
-            answerNumber?: string | null;
-            answerBoolean?: string | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
           }> | null;
         }>;
       };
@@ -2716,6 +2838,7 @@ export type GetAssessmentQuery = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -2723,8 +2846,9 @@ export type GetAssessmentQuery = {
                       question: string;
                       operator: EnableOperator;
                       answerCode?: string | null;
-                      answerNumber?: string | null;
-                      answerBoolean?: string | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -2733,6 +2857,7 @@ export type GetAssessmentQuery = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -2740,8 +2865,9 @@ export type GetAssessmentQuery = {
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
-                    answerNumber?: string | null;
-                    answerBoolean?: string | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -2750,6 +2876,7 @@ export type GetAssessmentQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -2757,8 +2884,9 @@ export type GetAssessmentQuery = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -2767,6 +2895,7 @@ export type GetAssessmentQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2774,8 +2903,9 @@ export type GetAssessmentQuery = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2784,6 +2914,7 @@ export type GetAssessmentQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -2791,8 +2922,9 @@ export type GetAssessmentQuery = {
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
-              answerNumber?: string | null;
-              answerBoolean?: string | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
             }> | null;
           }>;
         };
@@ -2814,6 +2946,7 @@ export type GetPickListQuery = {
     label?: string | null;
     secondaryLabel?: string | null;
     groupLabel?: string | null;
+    groupCode?: string | null;
     initialSelected?: boolean | null;
   }>;
 };
@@ -2964,6 +3097,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -2971,8 +3105,9 @@ export type GetFormDefinitionByIdentifierQuery = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -2981,6 +3116,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -2988,8 +3124,9 @@ export type GetFormDefinitionByIdentifierQuery = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -2998,6 +3135,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -3005,8 +3143,9 @@ export type GetFormDefinitionByIdentifierQuery = {
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
-              answerNumber?: string | null;
-              answerBoolean?: string | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -3015,6 +3154,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -3022,8 +3162,9 @@ export type GetFormDefinitionByIdentifierQuery = {
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
-            answerNumber?: string | null;
-            answerBoolean?: string | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -3032,6 +3173,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -3039,8 +3181,9 @@ export type GetFormDefinitionByIdentifierQuery = {
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
-          answerNumber?: string | null;
-          answerBoolean?: string | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
         }> | null;
       }>;
     };
@@ -3144,6 +3287,7 @@ export type GetFormDefinitionQuery = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3151,8 +3295,9 @@ export type GetFormDefinitionQuery = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3161,6 +3306,7 @@ export type GetFormDefinitionQuery = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3168,8 +3314,9 @@ export type GetFormDefinitionQuery = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }> | null;
             pickListOptions?: Array<{
@@ -3178,6 +3325,7 @@ export type GetFormDefinitionQuery = {
               label?: string | null;
               secondaryLabel?: string | null;
               groupLabel?: string | null;
+              groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
             enableWhen?: Array<{
@@ -3185,8 +3333,9 @@ export type GetFormDefinitionQuery = {
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
-              answerNumber?: string | null;
-              answerBoolean?: string | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
             }> | null;
           }> | null;
           pickListOptions?: Array<{
@@ -3195,6 +3344,7 @@ export type GetFormDefinitionQuery = {
             label?: string | null;
             secondaryLabel?: string | null;
             groupLabel?: string | null;
+            groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
           enableWhen?: Array<{
@@ -3202,8 +3352,9 @@ export type GetFormDefinitionQuery = {
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
-            answerNumber?: string | null;
-            answerBoolean?: string | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
           }> | null;
         }> | null;
         pickListOptions?: Array<{
@@ -3212,6 +3363,7 @@ export type GetFormDefinitionQuery = {
           label?: string | null;
           secondaryLabel?: string | null;
           groupLabel?: string | null;
+          groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
         enableWhen?: Array<{
@@ -3219,8 +3371,9 @@ export type GetFormDefinitionQuery = {
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
-          answerNumber?: string | null;
-          answerBoolean?: string | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
         }> | null;
       }>;
     };
@@ -3348,6 +3501,7 @@ export type CreateAssessmentMutation = {
                         label?: string | null;
                         secondaryLabel?: string | null;
                         groupLabel?: string | null;
+                        groupCode?: string | null;
                         initialSelected?: boolean | null;
                       }> | null;
                       enableWhen?: Array<{
@@ -3355,8 +3509,9 @@ export type CreateAssessmentMutation = {
                         question: string;
                         operator: EnableOperator;
                         answerCode?: string | null;
-                        answerNumber?: string | null;
-                        answerBoolean?: string | null;
+                        answerNumber?: number | null;
+                        answerBoolean?: boolean | null;
+                        answerGroupCode?: string | null;
                       }> | null;
                     }> | null;
                     pickListOptions?: Array<{
@@ -3365,6 +3520,7 @@ export type CreateAssessmentMutation = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -3372,8 +3528,9 @@ export type CreateAssessmentMutation = {
                       question: string;
                       operator: EnableOperator;
                       answerCode?: string | null;
-                      answerNumber?: string | null;
-                      answerBoolean?: string | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -3382,6 +3539,7 @@ export type CreateAssessmentMutation = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -3389,8 +3547,9 @@ export type CreateAssessmentMutation = {
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
-                    answerNumber?: string | null;
-                    answerBoolean?: string | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -3399,6 +3558,7 @@ export type CreateAssessmentMutation = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3406,8 +3566,9 @@ export type CreateAssessmentMutation = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3416,6 +3577,7 @@ export type CreateAssessmentMutation = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3423,8 +3585,9 @@ export type CreateAssessmentMutation = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }>;
           };
@@ -3563,6 +3726,7 @@ export type SaveAssessmentMutation = {
                         label?: string | null;
                         secondaryLabel?: string | null;
                         groupLabel?: string | null;
+                        groupCode?: string | null;
                         initialSelected?: boolean | null;
                       }> | null;
                       enableWhen?: Array<{
@@ -3570,8 +3734,9 @@ export type SaveAssessmentMutation = {
                         question: string;
                         operator: EnableOperator;
                         answerCode?: string | null;
-                        answerNumber?: string | null;
-                        answerBoolean?: string | null;
+                        answerNumber?: number | null;
+                        answerBoolean?: boolean | null;
+                        answerGroupCode?: string | null;
                       }> | null;
                     }> | null;
                     pickListOptions?: Array<{
@@ -3580,6 +3745,7 @@ export type SaveAssessmentMutation = {
                       label?: string | null;
                       secondaryLabel?: string | null;
                       groupLabel?: string | null;
+                      groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
                     enableWhen?: Array<{
@@ -3587,8 +3753,9 @@ export type SaveAssessmentMutation = {
                       question: string;
                       operator: EnableOperator;
                       answerCode?: string | null;
-                      answerNumber?: string | null;
-                      answerBoolean?: string | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
                   pickListOptions?: Array<{
@@ -3597,6 +3764,7 @@ export type SaveAssessmentMutation = {
                     label?: string | null;
                     secondaryLabel?: string | null;
                     groupLabel?: string | null;
+                    groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
                   enableWhen?: Array<{
@@ -3604,8 +3772,9 @@ export type SaveAssessmentMutation = {
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
-                    answerNumber?: string | null;
-                    answerBoolean?: string | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
                 pickListOptions?: Array<{
@@ -3614,6 +3783,7 @@ export type SaveAssessmentMutation = {
                   label?: string | null;
                   secondaryLabel?: string | null;
                   groupLabel?: string | null;
+                  groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
                 enableWhen?: Array<{
@@ -3621,8 +3791,9 @@ export type SaveAssessmentMutation = {
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
-                  answerNumber?: string | null;
-                  answerBoolean?: string | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
                 }> | null;
               }> | null;
               pickListOptions?: Array<{
@@ -3631,6 +3802,7 @@ export type SaveAssessmentMutation = {
                 label?: string | null;
                 secondaryLabel?: string | null;
                 groupLabel?: string | null;
+                groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
               enableWhen?: Array<{
@@ -3638,8 +3810,9 @@ export type SaveAssessmentMutation = {
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
-                answerNumber?: string | null;
-                answerBoolean?: string | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
               }> | null;
             }>;
           };
@@ -5233,6 +5406,7 @@ export const PickListOptionFieldsFragmentDoc = gql`
     label
     secondaryLabel
     groupLabel
+    groupCode
     initialSelected
   }
 `;
@@ -5261,6 +5435,7 @@ export const ItemFieldsFragmentDoc = gql`
       answerCode
       answerNumber
       answerBoolean
+      answerGroupCode
     }
   }
   ${PickListOptionFieldsFragmentDoc}

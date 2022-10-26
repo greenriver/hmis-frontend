@@ -95,8 +95,10 @@ const DynamicField: React.FC<Props> = ({
     case ItemType.String:
     case ItemType.Text:
     case ItemType.Integer:
+    case ItemType.Currency:
       const multiline = item.type === ItemType.Text;
-      const numeric = item.type === ItemType.Integer;
+      const numeric =
+        item.type === ItemType.Integer || item.type === ItemType.Currency;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput

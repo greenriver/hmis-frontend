@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
@@ -42,16 +42,42 @@ const EditAssessment = () => {
     (values: Record<string, any>) => {
       // if (!formDefinition) return;
       console.log(JSON.stringify(values, null, 2));
-      const input = {
+      const variables = {
+        assessmentId,
+        inProgress: false,
+        values,
+      };
+
+      void saveAssessmentMutation({ variables });
+    },
+    [saveAssessmentMutation, assessmentId]
+  );
+
+  const saveDraftHandler = useCallback(
+    (values: Record<string, any>) => {
+      // if (!formDefinition) return;
+      console.log(JSON.stringify(values, null, 2));
+      const variables = {
         assessmentId,
         inProgress: true,
         values,
       };
 
-      void saveAssessmentMutation({ variables: { ...input } });
+      void saveAssessmentMutation({ variables });
     },
     [saveAssessmentMutation, assessmentId]
   );
+
+  const initialValues = useMemo(() => {
+    return data?.assessment?.assessmentDetail?.values;
+  }, [data]);
+
+  const title = useMemo(() => {
+    const assessmentRole = data?.assessment?.assessmentDetail?.role;
+    return `${
+      assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
+    } Assessment`;
+  }, [data]);
 
   if (crumbsLoading || loading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
@@ -59,14 +85,8 @@ const EditAssessment = () => {
   if (saveError) console.error(saveError);
 
   const identifier = data?.assessment?.assessmentDetail?.definition.identifier;
-  const initialValues = data?.assessment?.assessmentDetail?.values;
-  const assessmentRole = data?.assessment?.assessmentDetail?.role;
-  const title = `${
-    assessmentRole ? startCase(assessmentRole.toLowerCase()) : ''
-  } Assessment`;
   const formDefinition =
     data?.assessment?.assessmentDetail?.definition?.definition;
-
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -81,8 +101,7 @@ const EditAssessment = () => {
             <DynamicForm
               definition={formDefinition}
               onSubmit={submitHandler}
-              submitButtonText='Save Changes'
-              discardButtonText='Go back'
+              onSaveDraft={saveDraftHandler}
               initialValues={initialValues || undefined}
               loading={saveLoading}
               errors={errors}

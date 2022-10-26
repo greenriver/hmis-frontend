@@ -111,7 +111,7 @@ const Organization = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Edit Project
+                Edit Organization
               </ButtonLink>
               <Button
                 color='error'

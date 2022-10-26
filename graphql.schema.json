@@ -529,7 +529,7 @@
           },
           {
             "name": "CUSTOM",
-            "description": null,
+            "description": "Custom HMIS Assessment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -548,6 +548,12 @@
           {
             "name": "POST_EXIT",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESOURCE",
+            "description": "Form for creating or editing resources directly",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3428,6 +3434,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "NOT_EXISTS",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -3439,7 +3451,19 @@
         "fields": [
           {
             "name": "answerBoolean",
-            "description": "Value for question comparison based on operator, if question is boolean",
+            "description": "If question is BOOLEAN type, value for comparison",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "answerCode",
+            "description": "If question is CHOICE type, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3450,8 +3474,8 @@
             "deprecationReason": null
           },
           {
-            "name": "answerCode",
-            "description": "Value for question comparison based on operator, if question is string or choice type",
+            "name": "answerGroupCode",
+            "description": "If question is CHOICE type and has grouped options, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -3463,11 +3487,11 @@
           },
           {
             "name": "answerNumber",
-            "description": "Value for question comparison based on operator, if question is numeric",
+            "description": "If question is numeric, value for comparison",
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3767,6 +3791,30 @@
             "deprecationReason": null
           },
           {
+            "name": "lengthOfStay",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "LengthOfStay",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "monthsHomelessPastThreeYears",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "MonthsHomelessPastThreeYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "project",
             "description": null,
             "args": [],
@@ -3847,6 +3895,18 @@
                 "name": "ServicesPaginated",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "timesHomelessPastThreeYears",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "TimesHomelessPastThreeYears",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4726,7 +4786,7 @@
         "fields": [
           {
             "name": "dataCollectedAbout",
-            "description": "HUD Data Collected About condition for this question or group",
+            "description": "Include this item only if the Client meets this HUD DataCollectedAbout condition",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -4761,6 +4821,26 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "EnableWhen",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "funders",
+            "description": "Include this item only for the listed funders",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "FundingSource",
                   "ofType": null
                 }
               }
@@ -4873,6 +4953,46 @@
             "deprecationReason": null
           },
           {
+            "name": "projectTypesExcluded",
+            "description": "Exclude this item for the listed project types",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectTypesIncluded",
+            "description": "Include this item only for the listed project types",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "queryField",
             "description": "Name of the query input field that corresponds to this item. Only used for\nrecord creation/update forms, not for assessments.",
             "args": [],
@@ -4959,6 +5079,22 @@
         "name": "Funder",
         "description": null,
         "fields": [
+          {
+            "name": "active",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "dateCreated",
             "description": null,
@@ -6133,6 +6269,22 @@
         "description": null,
         "fields": [
           {
+            "name": "active",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "availability",
             "description": null,
             "args": [],
@@ -6655,6 +6807,12 @@
             "deprecationReason": null
           },
           {
+            "name": "CURRENCY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "DATE",
             "description": null,
             "isDeprecated": false,
@@ -6707,6 +6865,178 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "LengthOfStay",
+        "description": "HUD Length of Stay in Prior living situation (3.917.2)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "LOS_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR",
+            "description": "(4) 90 days or more but less than one year",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS",
+            "description": "(3) One month or more, but less than 90 days",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_ONE_NIGHT_OR_LESS",
+            "description": "(10) One night or less",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH",
+            "description": "(2) One week or more, but less than one month",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_ONE_YEAR_OR_LONGER",
+            "description": "(5) One year or longer",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LOS_TWO_TO_SIX_NIGHTS",
+            "description": "(11) Two to six nights",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "MonthsHomelessPastThreeYears",
+        "description": "HUD MonthsHomelessPastThreeYears (3.917.5)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MONTHS_1",
+            "description": "(101) 1",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_2",
+            "description": "(102) 2",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_3",
+            "description": "(103) 3",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_4",
+            "description": "(104) 4",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_5",
+            "description": "(105) 5",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_6",
+            "description": "(106) 6",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_7",
+            "description": "(107) 7",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_8",
+            "description": "(108) 8",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_9",
+            "description": "(109) 9",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_10",
+            "description": "(110) 10",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_11",
+            "description": "(111) 11",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_12",
+            "description": "(112) 12",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MONTHS_MORE_THAN_12_MONTHS",
+            "description": "(113) More than 12 months",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -7969,6 +8299,18 @@
             "deprecationReason": null
           },
           {
+            "name": "groupCode",
+            "description": "Code for group that option belongs to, if grouped",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "groupLabel",
             "description": "Label for group that option belongs to, if grouped",
             "args": [],
@@ -8037,7 +8379,19 @@
             "deprecationReason": null
           },
           {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ORGANIZATION",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PRIOR_LIVING_SITUATION",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -8128,6 +8482,22 @@
               "kind": "ENUM",
               "name": "HOPWAMedAssistedLivingFac",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "active",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -11738,6 +12108,59 @@
           {
             "name": "PERSONS_WITH_HIV_AIDS",
             "description": "(3) Persons with HIV/AIDS",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "TimesHomelessPastThreeYears",
+        "description": "HUD TimesHomelessPastThreeYears (3.917.4)",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "TIMES_CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_FOUR_OR_MORE_TIMES",
+            "description": "(4) Four or more times",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_ONE_TIME",
+            "description": "(1) One time",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_THREE_TIMES",
+            "description": "(3) Three times",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TIMES_TWO_TIMES",
+            "description": "(2) Two times",
             "isDeprecated": false,
             "deprecationReason": null
           }

@@ -11,6 +11,7 @@ fragment PickListOptionFields on PickListOption {
   label
   secondaryLabel
   groupLabel
+  groupCode
   initialSelected
 }
 
@@ -38,6 +39,7 @@ fragment ItemFields on FormItem {
     answerCode
     answerNumber
     answerBoolean
+    answerGroupCode
   }
 }
 
