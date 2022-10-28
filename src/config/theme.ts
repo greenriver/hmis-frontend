@@ -114,6 +114,7 @@ export default createTheme(theme, {
             outlineColor: '-webkit-focus-ring-color',
             outlineWidth: '2px',
             outlineStyle: 'auto',
+            outlineOffset: '4px',
           },
         },
       },
@@ -129,15 +130,13 @@ export default createTheme(theme, {
     },
     MuiSwitch: {
       defaultProps: {
-        disableRipple: false,
+        disableRipple: true,
       },
       styleOverrides: {
         switchBase: {
           '&.Mui-focusVisible': {
-            outline: 'none',
-          },
-          '.MuiTouchRipple-child': {
-            backgroundColor: theme.palette.primary.main,
+            outline: '2px solid -webkit-focus-ring-color',
+            outlineOffset: '-2px',
           },
         },
       },
