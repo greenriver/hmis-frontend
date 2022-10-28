@@ -1,8 +1,8 @@
 import { Alert, Box, Button, Grid, Stack } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { shouldEnableItem } from '../formUtil';
+import { getItemMap, shouldEnableItem } from '../formUtil';
 
 import DynamicField from './DynamicField';
 
@@ -43,6 +43,8 @@ const DynamicForm: React.FC<Props> = ({
     Object.assign({}, initialValues)
   );
 
+  const itemMap = useMemo(() => getItemMap(definition), [definition]);
+
   if (errors) console.log('Validation errors', errors);
 
   const itemChanged = useCallback(
@@ -81,7 +83,7 @@ const DynamicForm: React.FC<Props> = ({
       return item.item ? item.item.some((i) => isEnabled(i)) : true;
     }
 
-    return shouldEnableItem(item, values);
+    return shouldEnableItem(item, values, itemMap);
   };
 
   // Get errors for a particular field

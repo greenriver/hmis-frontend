@@ -1,5 +1,4 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Button } from '@mui/material';
 import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
@@ -98,22 +97,13 @@ const HouseholdMemberTable = ({
         header: '',
         key: 'actions',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <>
-            {hc.enrollment.inProgress ? (
-              <FinishIntakeButton
-                size='small'
-                fullWidth
-                enrollmentId={hc.enrollment.id}
-                clientId={hc.client.id}
-              />
-            ) : (
-              !hc.enrollment.exitDate && (
-                <Button variant='outlined' size='small' fullWidth>
-                  Exit
-                </Button>
-              )
-            )}
-          </>
+          <FinishIntakeButton
+            size='small'
+            fullWidth
+            enrollmentId={hc.enrollment.id}
+            clientId={hc.client.id}
+            enrollment={hc.enrollment}
+          />
         ),
       },
     ];

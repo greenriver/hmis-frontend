@@ -1,13 +1,14 @@
 import { Grid, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   useGetAssessmentQuery,
   useSaveAssessmentMutation,
@@ -15,7 +16,9 @@ import {
 } from '@/types/gqlTypes';
 
 const EditAssessment = () => {
-  const { assessmentId } = useParams() as {
+  const { clientId, enrollmentId, assessmentId } = useParams() as {
+    clientId: string;
+    enrollmentId: string;
     assessmentId: string;
   };
   const navigate = useNavigate();
@@ -32,8 +35,13 @@ const EditAssessment = () => {
         if ((errors || []).length > 0) {
           window.scrollTo(0, 0);
           setErrors(errors);
-        } else {
-          navigate(-1);
+        } else if (!data.saveAssessment?.assessment?.inProgress) {
+          navigate(
+            generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+              clientId,
+              enrollmentId,
+            })
+          );
         }
       },
     });
@@ -41,7 +49,7 @@ const EditAssessment = () => {
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
       // if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state', values);
       const variables = {
         assessmentId,
         inProgress: false,
@@ -56,7 +64,7 @@ const EditAssessment = () => {
   const saveDraftHandler = useCallback(
     (values: Record<string, any>) => {
       // if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state:', values);
       const variables = {
         assessmentId,
         inProgress: true,
@@ -69,7 +77,12 @@ const EditAssessment = () => {
   );
 
   const initialValues = useMemo(() => {
-    return data?.assessment?.assessmentDetail?.values;
+    // TODO merge with getInitialValues(definition) ?
+    const values = data?.assessment?.assessmentDetail?.values;
+    if (!values) return;
+    if (typeof values === 'string') return JSON.parse(values);
+    console.log('Initial form state:', values);
+    return values;
   }, [data]);
 
   const title = useMemo(() => {

@@ -534,23 +534,29 @@ export enum EnableBehavior {
 }
 
 export enum EnableOperator {
+  /** Use with answerBoolean to specify is the item should be enabled or not. */
+  Enabled = 'ENABLED',
   Equal = 'EQUAL',
+  /** Use with answerBoolean to specify if an answer should exist or not. */
   Exists = 'EXISTS',
   GreaterThan = 'GREATER_THAN',
   GreaterThanEqual = 'GREATER_THAN_EQUAL',
+  /** Whether the value is in the answerCodes array. */
+  In = 'IN',
   LessThan = 'LESS_THAN',
   LessThanEqual = 'LESS_THAN_EQUAL',
   NotEqual = 'NOT_EQUAL',
-  NotExists = 'NOT_EXISTS',
 }
 
 export type EnableWhen = {
   __typename?: 'EnableWhen';
-  /** If question is BOOLEAN type, value for comparison */
+  /** If question is boolean type, value for comparison */
   answerBoolean?: Maybe<Scalars['Boolean']>;
-  /** If question is CHOICE type, value for comparison */
+  /** If question is choice type, value for comparison */
   answerCode?: Maybe<Scalars['String']>;
-  /** If question is CHOICE type and has grouped options, value for comparison */
+  /** If question is choice type, and operator is IN, values for comparison */
+  answerCodes?: Maybe<Array<Scalars['String']>>;
+  /** If question is choice type and has grouped options, value for comparison */
   answerGroupCode?: Maybe<Scalars['String']>;
   /** If question is numeric, value for comparison */
   answerNumber?: Maybe<Scalars['Int']>;
@@ -745,6 +751,8 @@ export type FormItem = {
   helperText?: Maybe<Scalars['String']>;
   /** Whether the item should always be hidden */
   hidden?: Maybe<Scalars['Boolean']>;
+  /** Initial value(s) when item is first rendered */
+  initial?: Maybe<Array<InitialValue>>;
   /** Nested items */
   item?: Maybe<Array<FormItem>>;
   /** Unique identifier for item */
@@ -994,6 +1002,17 @@ export enum HousingType {
   /** (3) Tenant-based - scattered site */
   TenantBasedScatteredSite = 'TENANT_BASED_SCATTERED_SITE',
 }
+
+/** Initial value when item is first rendered */
+export type InitialValue = {
+  __typename?: 'InitialValue';
+  /** If question is boolean type, initial value */
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  /** If question is choice type, initial value */
+  valueCode?: Maybe<Scalars['String']>;
+  /** If question is numeric, initial value */
+  valueNumber?: Maybe<Scalars['Int']>;
+};
 
 export type InventoriesPaginated = {
   __typename?: 'InventoriesPaginated';
@@ -2288,11 +2307,18 @@ export type ItemFieldsFragment = {
     groupCode?: string | null;
     initialSelected?: boolean | null;
   }> | null;
+  initial?: Array<{
+    __typename?: 'InitialValue';
+    valueCode?: string | null;
+    valueBoolean?: boolean | null;
+    valueNumber?: number | null;
+  }> | null;
   enableWhen?: Array<{
     __typename?: 'EnableWhen';
     question: string;
     operator: EnableOperator;
     answerCode?: string | null;
+    answerCodes?: Array<string> | null;
     answerNumber?: number | null;
     answerBoolean?: boolean | null;
     answerGroupCode?: string | null;
@@ -2392,11 +2418,18 @@ export type FormDefinitionWithJsonFragment = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -2411,11 +2444,18 @@ export type FormDefinitionWithJsonFragment = {
               groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+            }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
+              answerCodes?: Array<string> | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
@@ -2430,11 +2470,18 @@ export type FormDefinitionWithJsonFragment = {
             groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+          }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
+            answerCodes?: Array<string> | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
@@ -2449,11 +2496,18 @@ export type FormDefinitionWithJsonFragment = {
           groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+        }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
+          answerCodes?: Array<string> | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
@@ -2468,11 +2522,18 @@ export type FormDefinitionWithJsonFragment = {
         groupCode?: string | null;
         initialSelected?: boolean | null;
       }> | null;
+      initial?: Array<{
+        __typename?: 'InitialValue';
+        valueCode?: string | null;
+        valueBoolean?: boolean | null;
+        valueNumber?: number | null;
+      }> | null;
       enableWhen?: Array<{
         __typename?: 'EnableWhen';
         question: string;
         operator: EnableOperator;
         answerCode?: string | null;
+        answerCodes?: Array<string> | null;
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
@@ -2631,11 +2692,18 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                  }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
@@ -2650,11 +2718,18 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
@@ -2669,11 +2744,18 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -2688,11 +2770,18 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+            }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
+              answerCodes?: Array<string> | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
@@ -2707,11 +2796,18 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+          }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
+            answerCodes?: Array<string> | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
@@ -2841,11 +2937,18 @@ export type GetAssessmentQuery = {
                       groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
+                    initial?: Array<{
+                      __typename?: 'InitialValue';
+                      valueCode?: string | null;
+                      valueBoolean?: boolean | null;
+                      valueNumber?: number | null;
+                    }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
                       operator: EnableOperator;
                       answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
@@ -2860,11 +2963,18 @@ export type GetAssessmentQuery = {
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                  }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
@@ -2879,11 +2989,18 @@ export type GetAssessmentQuery = {
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
@@ -2898,11 +3015,18 @@ export type GetAssessmentQuery = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -2917,11 +3041,18 @@ export type GetAssessmentQuery = {
               groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+            }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
+              answerCodes?: Array<string> | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
@@ -3100,11 +3231,18 @@ export type GetFormDefinitionByIdentifierQuery = {
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
@@ -3119,11 +3257,18 @@ export type GetFormDefinitionByIdentifierQuery = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -3138,11 +3283,18 @@ export type GetFormDefinitionByIdentifierQuery = {
               groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+            }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
+              answerCodes?: Array<string> | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
@@ -3157,11 +3309,18 @@ export type GetFormDefinitionByIdentifierQuery = {
             groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+          }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
+            answerCodes?: Array<string> | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
@@ -3176,11 +3335,18 @@ export type GetFormDefinitionByIdentifierQuery = {
           groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+        }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
+          answerCodes?: Array<string> | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
@@ -3290,11 +3456,18 @@ export type GetFormDefinitionQuery = {
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
@@ -3309,11 +3482,18 @@ export type GetFormDefinitionQuery = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -3328,11 +3508,18 @@ export type GetFormDefinitionQuery = {
               groupCode?: string | null;
               initialSelected?: boolean | null;
             }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+            }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
               question: string;
               operator: EnableOperator;
               answerCode?: string | null;
+              answerCodes?: Array<string> | null;
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
@@ -3347,11 +3534,18 @@ export type GetFormDefinitionQuery = {
             groupCode?: string | null;
             initialSelected?: boolean | null;
           }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+          }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
             question: string;
             operator: EnableOperator;
             answerCode?: string | null;
+            answerCodes?: Array<string> | null;
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
@@ -3366,11 +3560,18 @@ export type GetFormDefinitionQuery = {
           groupCode?: string | null;
           initialSelected?: boolean | null;
         }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+        }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
           question: string;
           operator: EnableOperator;
           answerCode?: string | null;
+          answerCodes?: Array<string> | null;
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
@@ -3404,9 +3605,9 @@ export type CreateAssessmentMutation = {
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
+      user: { __typename?: 'User'; id: string; name: string };
       assessmentDetail?: {
         __typename?: 'AssessmentDetail';
-        values?: any | null;
         id: string;
         dataCollectionStage?: DataCollectionStage | null;
         role: AssessmentRole;
@@ -3418,182 +3619,8 @@ export type CreateAssessmentMutation = {
           role: AssessmentRole;
           status: string;
           identifier: string;
-          definition: {
-            __typename: 'FormDefinitionJson';
-            item: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              prefix?: string | null;
-              text?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              queryField?: string | null;
-              pickListReference?: string | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                prefix?: string | null;
-                text?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                queryField?: string | null;
-                pickListReference?: string | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                enableBehavior?: EnableBehavior | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  prefix?: string | null;
-                  text?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  queryField?: string | null;
-                  pickListReference?: string | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  enableBehavior?: EnableBehavior | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    prefix?: string | null;
-                    text?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    queryField?: string | null;
-                    pickListReference?: string | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    enableBehavior?: EnableBehavior | null;
-                    item?: Array<{
-                      __typename: 'FormItem';
-                      linkId: string;
-                      type: ItemType;
-                      prefix?: string | null;
-                      text?: string | null;
-                      helperText?: string | null;
-                      required?: boolean | null;
-                      hidden?: boolean | null;
-                      readOnly?: boolean | null;
-                      repeats?: boolean | null;
-                      queryField?: string | null;
-                      pickListReference?: string | null;
-                      dataCollectedAbout?: DataCollectedAbout | null;
-                      enableBehavior?: EnableBehavior | null;
-                      pickListOptions?: Array<{
-                        __typename?: 'PickListOption';
-                        code: string;
-                        label?: string | null;
-                        secondaryLabel?: string | null;
-                        groupLabel?: string | null;
-                        groupCode?: string | null;
-                        initialSelected?: boolean | null;
-                      }> | null;
-                      enableWhen?: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                      }> | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                    }> | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                  }> | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                }> | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question: string;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-              }> | null;
-            }>;
-          };
         };
       } | null;
-      user: { __typename?: 'User'; id: string; name: string };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -3729,11 +3756,18 @@ export type SaveAssessmentMutation = {
                         groupCode?: string | null;
                         initialSelected?: boolean | null;
                       }> | null;
+                      initial?: Array<{
+                        __typename?: 'InitialValue';
+                        valueCode?: string | null;
+                        valueBoolean?: boolean | null;
+                        valueNumber?: number | null;
+                      }> | null;
                       enableWhen?: Array<{
                         __typename?: 'EnableWhen';
                         question: string;
                         operator: EnableOperator;
                         answerCode?: string | null;
+                        answerCodes?: Array<string> | null;
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
@@ -3748,11 +3782,18 @@ export type SaveAssessmentMutation = {
                       groupCode?: string | null;
                       initialSelected?: boolean | null;
                     }> | null;
+                    initial?: Array<{
+                      __typename?: 'InitialValue';
+                      valueCode?: string | null;
+                      valueBoolean?: boolean | null;
+                      valueNumber?: number | null;
+                    }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
                       operator: EnableOperator;
                       answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
@@ -3767,11 +3808,18 @@ export type SaveAssessmentMutation = {
                     groupCode?: string | null;
                     initialSelected?: boolean | null;
                   }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                  }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
                     operator: EnableOperator;
                     answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
@@ -3786,11 +3834,18 @@ export type SaveAssessmentMutation = {
                   groupCode?: string | null;
                   initialSelected?: boolean | null;
                 }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
                   operator: EnableOperator;
                   answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
@@ -3805,11 +3860,18 @@ export type SaveAssessmentMutation = {
                 groupCode?: string | null;
                 initialSelected?: boolean | null;
               }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+              }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
                 operator: EnableOperator;
                 answerCode?: string | null;
+                answerCodes?: Array<string> | null;
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
@@ -5427,12 +5489,18 @@ export const ItemFieldsFragmentDoc = gql`
     pickListOptions {
       ...PickListOptionFields
     }
+    initial {
+      valueCode
+      valueBoolean
+      valueNumber
+    }
     dataCollectedAbout
     enableBehavior
     enableWhen {
       question
       operator
       answerCode
+      answerCodes
       answerNumber
       answerBoolean
       answerGroupCode
@@ -6032,14 +6100,14 @@ export const CreateAssessmentDocument = gql`
       }
     ) {
       assessment {
-        ...AssessmentWithDefinitionAndValues
+        ...AssessmentFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${AssessmentWithDefinitionAndValuesFragmentDoc}
+  ${AssessmentFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type CreateAssessmentMutationFn = Apollo.MutationFunction<

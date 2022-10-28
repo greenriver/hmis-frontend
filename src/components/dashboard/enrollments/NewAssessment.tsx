@@ -8,6 +8,7 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import { getInitialValues } from '@/modules/form/formUtil';
 import {
   AssessmentRole,
   useCreateAssessmentMutation,
@@ -64,7 +65,7 @@ const NewAssessment = () => {
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
       if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state', values);
       const variables = {
         formDefinitionId: formDefinition.id,
         enrollmentId,
@@ -79,7 +80,7 @@ const NewAssessment = () => {
   const submitDraftHandler = useCallback(
     (values: Record<string, any>) => {
       if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state', values);
       const variables = {
         formDefinitionId: formDefinition.id,
         enrollmentId,
@@ -90,6 +91,11 @@ const NewAssessment = () => {
       void createAssessmentMutation({ variables });
     },
     [createAssessmentMutation, enrollmentId, formDefinition]
+  );
+
+  const initialValues = useMemo(
+    () => (definition ? getInitialValues(definition) : undefined),
+    [definition]
   );
 
   if (crumbsLoading) return <Loading />;
@@ -116,6 +122,7 @@ const NewAssessment = () => {
               </Typography>
               <DynamicForm
                 definition={definition}
+                initialValues={initialValues}
                 onSubmit={submitHandler}
                 onSaveDraft={submitDraftHandler}
                 loading={saveLoading}

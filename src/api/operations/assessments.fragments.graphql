@@ -31,12 +31,18 @@ fragment ItemFields on FormItem {
   pickListOptions {
     ...PickListOptionFields
   }
+  initial {
+    valueCode
+    valueBoolean
+    valueNumber
+  }
   dataCollectedAbout
   enableBehavior
   enableWhen {
     question
     operator
     answerCode
+    answerCodes
     answerNumber
     answerBoolean
     answerGroupCode
