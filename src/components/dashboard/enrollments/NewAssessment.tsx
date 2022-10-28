@@ -65,7 +65,7 @@ const NewAssessment = () => {
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
       if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state', values);
       const variables = {
         formDefinitionId: formDefinition.id,
         enrollmentId,
@@ -80,7 +80,7 @@ const NewAssessment = () => {
   const submitDraftHandler = useCallback(
     (values: Record<string, any>) => {
       if (!formDefinition) return;
-      console.log(JSON.stringify(values, null, 2));
+      console.log('Saved form state', values);
       const variables = {
         formDefinitionId: formDefinition.id,
         enrollmentId,

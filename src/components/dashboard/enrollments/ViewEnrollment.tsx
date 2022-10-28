@@ -93,6 +93,8 @@ const ViewEnrollment = () => {
                   enrollmentId={enrollmentId}
                   clientId={clientId}
                   sx={{ pl: 3, justifyContent: 'left' }}
+                  enrollment={enrollment}
+                  fullWidth
                 />
               ) : (
                 <Typography variant='body2'>Intake completed</Typography>

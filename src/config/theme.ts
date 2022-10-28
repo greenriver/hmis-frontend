@@ -128,6 +128,17 @@ export default createTheme(theme, {
         },
       },
     },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          '&.Mui-focusVisible': {
+            outlineOffset: '-4px',
+            outlineRadius: 0,
+            borderRadius: 0,
+          },
+        },
+      },
+    },
     MuiSwitch: {
       defaultProps: {
         disableRipple: true,

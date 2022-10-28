@@ -37,7 +37,6 @@ const DynamicForm: React.FC<Props> = ({
   initialValues = {},
   errors,
 }) => {
-  console.log(initialValues);
   const navigate = useNavigate();
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(
@@ -45,7 +44,6 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   const itemMap = useMemo(() => getItemMap(definition), [definition]);
-  console.log(values);
 
   if (errors) console.log('Validation errors', errors);
 
