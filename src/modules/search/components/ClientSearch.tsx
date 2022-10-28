@@ -157,6 +157,7 @@ const ClientSearch: React.FC<Props> = ({
   const handleSubmitSearch = useMemo(() => {
     return (values: Record<string, any>) => {
       const cleaned = omitBy(values, isNil);
+      if (isEmpty(cleaned)) return;
 
       // Construct derived search parameters and update the URL
       const searchParams = createSearchParams(cleaned);
