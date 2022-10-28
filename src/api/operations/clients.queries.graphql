@@ -41,6 +41,18 @@ mutation CreateClient($input: CreateClientInput!) {
   }
 }
 
+mutation UpdateClient($input: UpdateClientInput!) {
+  updateClient(input: $input) {
+    clientMutationId
+    client {
+      ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   createEnrollment(input: $input) {
     clientMutationId

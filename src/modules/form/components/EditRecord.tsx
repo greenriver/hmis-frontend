@@ -80,7 +80,9 @@ const EditRecord = <
 
   const initialValues = useMemo(() => {
     if (!record || !definition) return {};
-    return createInitialValuesFromRecord(definition, record);
+    const values = createInitialValuesFromRecord(definition, record);
+    console.log('Initial form values:', values, 'from', record);
+    return values;
   }, [record, definition]);
 
   const submitHandler = useCallback(
@@ -94,7 +96,7 @@ const EditRecord = <
         autofillNulls: true,
         autofillBooleans: true,
       });
-      console.log(JSON.stringify(inputValues, null, 2));
+      console.log('Submitted form values:', inputValues);
 
       const input = {
         input: { ...inputValues, ...inputVariables },

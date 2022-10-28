@@ -39,16 +39,18 @@ export function isPickListOption(
 }
 
 export const localResolvePickList = (
-  pickListReference: string
+  pickListReference: string,
+  includeDataNotCollected = false
 ): PickListOption[] | null => {
   if (isHmisEnum(pickListReference)) {
-    const hmisEnum = HmisEnums[pickListReference];
-    return Object.entries(hmisEnum)
-      .filter(([code]) => !isDataNotCollected(code))
-      .map(([code, label]) => ({
-        code: code.toString(),
-        label,
-      }));
+    let values = Object.entries(HmisEnums[pickListReference]);
+    if (!includeDataNotCollected) {
+      values = values.filter(([code]) => !isDataNotCollected(code));
+    }
+    return values.map(([code, label]) => ({
+      code: code.toString(),
+      label,
+    }));
   }
 
   if (pickListReference === 'YesNoMissing') {
@@ -64,17 +66,23 @@ export const localResolvePickList = (
   return null;
 };
 
-export const resolveOptionList = (item: FormItem): PickListOption[] | null => {
+export const resolveOptionList = (
+  item: FormItem,
+  includeDataNotCollected = false
+): PickListOption[] | null => {
   if (!item.pickListReference && !item.pickListOptions) return null;
   if (item.pickListOptions) return item.pickListOptions;
   if (item.pickListReference) {
-    return localResolvePickList(item.pickListReference);
+    return localResolvePickList(
+      item.pickListReference,
+      includeDataNotCollected
+    );
   }
   return null;
 };
 
-const dataNotCollectedCode = (item: FormItem): string | undefined => {
-  const options = resolveOptionList(item) || [];
+const findDataNotCollectedCode = (item: FormItem): string | undefined => {
+  const options = resolveOptionList(item, true) || [];
 
   return options.find(
     (opt) => isDataNotCollected(opt.code) || opt.code === 'NOT_APPLICABLE'
@@ -215,7 +223,7 @@ export const transformSubmitValues = ({
 
       if (autofillNotCollected && isNil(value)) {
         // If we don't have a value, fill in Not Collected code if present
-        const notCollectedCode = dataNotCollectedCode(item);
+        const notCollectedCode = findDataNotCollectedCode(item);
         if (notCollectedCode) transformed[key] = notCollectedCode;
       }
       if (autofillNulls && isNil(transformed[key])) {

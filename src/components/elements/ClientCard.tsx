@@ -76,12 +76,14 @@ interface Props {
   client: ClientFieldsFragment;
   showNotices?: boolean;
   showLinkToRecord?: boolean;
+  showEditLink?: boolean;
   linkTargetBlank?: boolean;
 }
 
 const ClientCard: React.FC<Props> = ({
   client,
   showNotices = false,
+  showEditLink = false,
   showLinkToRecord = false,
   linkTargetBlank = false,
 }) => (
@@ -146,6 +148,21 @@ const ClientCard: React.FC<Props> = ({
                     color='secondary'
                   >
                     Go to Profile
+                  </ButtonLink>
+                </Box>
+              )}
+              {showEditLink && (
+                <Box sx={{ pt: 1 }}>
+                  <ButtonLink
+                    variant='contained'
+                    to={generatePath(DashboardRoutes.EDIT, {
+                      clientId: client.id,
+                    })}
+                    target={linkTargetBlank ? '_blank' : undefined}
+                    color='secondary'
+                    size='small'
+                  >
+                    Edit Client Details
                   </ButtonLink>
                 </Box>
               )}

@@ -16,7 +16,7 @@ fragment ClientName on Client {
 fragment ClientFields on Client {
   id
   personalId
-  ssnSerial
+  ssn
   dob
   dateUpdated
   ...ClientName
