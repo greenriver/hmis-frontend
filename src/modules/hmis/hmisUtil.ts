@@ -76,6 +76,26 @@ export const parseAndFormatDate = (dateString: string): string => {
   return formatDateForDisplay(parsed) || dateString;
 };
 
+export const parseAndFormatDateRange = (
+  startDateString?: string | null,
+  endDateString?: string | null,
+  startPlaceholder = 'Unknown',
+  endPlaceholder = 'Now'
+): string | null => {
+  if (!startDateString && !endDateString) return null;
+  const start = startDateString ? parseHmisDateString(startDateString) : null;
+  const end = endDateString ? parseHmisDateString(endDateString) : null;
+
+  const startFormatted = start
+    ? formatDateForDisplay(start)
+    : startDateString || startPlaceholder;
+  const endFormatted = end
+    ? formatDateForDisplay(end)
+    : endDateString || endPlaceholder;
+
+  return `${startFormatted} - ${endFormatted}`;
+};
+
 export const parseAndFormatDateTime = (dateString: string): string => {
   if (!dateString) return dateString;
   const parsed = parseHmisDateTimeString(dateString);

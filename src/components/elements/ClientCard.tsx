@@ -15,7 +15,14 @@ import ButtonLink from './ButtonLink';
 import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import {
+  lastUpdated,
+  clientName,
+  pronouns,
+  dob,
+  age,
+  entryExitRange,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -63,7 +70,7 @@ const RecentEnrollments = ({
           </Grid>
           <Grid item xs={6}>
             <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
-              {HmisUtil.entryExitRange(enrollment)}
+              {entryExitRange(enrollment)}
             </Typography>
           </Grid>
         </Fragment>
@@ -102,9 +109,9 @@ const ClientCard: React.FC<Props> = ({
       <Grid item xs={5}>
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
-            <Typography variant='h5'>{HmisUtil.clientName(client)}</Typography>
+            <Typography variant='h5'>{clientName(client)}</Typography>
             <Typography variant='h5' color='text.secondary'>
-              {HmisUtil.pronouns(client)}
+              {pronouns(client)}
             </Typography>
           </Stack>
           <Stack spacing={1} direction='row'>
@@ -124,9 +131,7 @@ const ClientCard: React.FC<Props> = ({
               </Typography>
               {client.dob && (
                 <ClickToShow text='Date of Birth' variant='body2'>
-                  <Typography variant='body2'>
-                    {HmisUtil.dob(client)}
-                  </Typography>
+                  <Typography variant='body2'>{dob(client)}</Typography>
                 </ClickToShow>
               )}
               {client.ssn && (
@@ -136,7 +141,7 @@ const ClientCard: React.FC<Props> = ({
               )}
               {client.dob && (
                 <Typography variant='body2'>
-                  Current Age: {HmisUtil.age(client)}
+                  Current Age: {age(client)}
                 </Typography>
               )}
               {showLinkToRecord && (
@@ -169,7 +174,7 @@ const ClientCard: React.FC<Props> = ({
             </Stack>
           </Stack>
           <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-            Last Updated on {HmisUtil.lastUpdated(client)}
+            Last Updated on {lastUpdated(client)}
           </Typography>
         </Stack>
       </Grid>

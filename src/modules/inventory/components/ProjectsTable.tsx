@@ -3,7 +3,7 @@ import { generatePath } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -30,17 +30,12 @@ const ProjectsTable = ({ organizationId }: { organizationId: string }) => {
           : null,
     },
     {
-      header: 'Start Date',
+      header: 'Operating Period',
       render: (project: ProjectAllFieldsFragment) =>
-        project.operatingStartDate &&
-        HmisUtil.parseAndFormatDate(project.operatingStartDate),
-    },
-    {
-      header: 'End Date',
-      render: (project: ProjectAllFieldsFragment) =>
-        (project.operatingEndDate &&
-          HmisUtil.parseAndFormatDate(project.operatingEndDate)) ||
-        'Active',
+        parseAndFormatDateRange(
+          project.operatingStartDate,
+          project.operatingEndDate
+        ),
     },
   ];
 

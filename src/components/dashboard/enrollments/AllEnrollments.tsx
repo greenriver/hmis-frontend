@@ -8,7 +8,7 @@ import { generatePath, useParams } from 'react-router-dom';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -58,13 +58,11 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   },
   {
     header: 'Start Date',
-    render: (e) =>
-      e.entryDate ? HmisUtil.parseAndFormatDate(e.entryDate) : 'Unknown',
+    render: (e) => (e.entryDate ? parseAndFormatDate(e.entryDate) : 'Unknown'),
   },
   {
     header: 'End Date',
-    render: (e) =>
-      e.exitDate ? HmisUtil.parseAndFormatDate(e.exitDate) : 'Active',
+    render: (e) => (e.exitDate ? parseAndFormatDate(e.exitDate) : 'Active'),
   },
 ];
 

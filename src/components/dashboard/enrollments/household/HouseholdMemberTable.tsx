@@ -11,9 +11,9 @@ import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
 import {
-  clientName,
   parseAndFormatDate,
   relationshipToHohForDisplay,
+  clientName,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {

@@ -4,14 +4,14 @@ import { useMemo } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import FinishIntakeButton from './FinishIntakeButton';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
+import { useIntakeAssessment } from './useIntakeAssessment';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 
@@ -21,7 +21,7 @@ const ViewEnrollment = () => {
     clientId: string;
   };
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
-
+  const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
   const editHouseholdPath = useMemo(
     () =>
       generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
@@ -33,6 +33,17 @@ const ViewEnrollment = () => {
 
   if (loading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
+
+  let enrollmentStatus = '';
+  if (enrollment.exitDate) {
+    enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
+  } else if (assessment && assessment.inProgress) {
+    enrollmentStatus = 'Intake Incomplete';
+  } else if (!fetchIntakeStatus.loading && !assessment) {
+    enrollmentStatus = 'Intake Incomplete';
+  } else if (!fetchIntakeStatus.loading) {
+    enrollmentStatus = 'Active';
+  }
 
   return (
     <>
@@ -86,20 +97,11 @@ const ViewEnrollment = () => {
           <Paper sx={{ p: 2 }}>
             <Stack spacing={2} sx={{ mb: 3 }}>
               <Typography variant='h6'>Enrollment Status</Typography>
-
-              {/* FIXME this should check whether ANY enrollments in the household are in progress, not just this one */}
-              {enrollment.inProgress ? (
-                <FinishIntakeButton
-                  enrollmentId={enrollmentId}
-                  clientId={clientId}
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                  enrollment={enrollment}
-                  fullWidth
-                />
-              ) : (
-                <Typography variant='body2'>Intake completed</Typography>
-              )}
+              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                {enrollmentStatus}
+              </Typography>
             </Stack>
+
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>
               <ButtonLink

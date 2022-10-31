@@ -3,12 +3,13 @@ import { Stack } from '@mui/system';
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
+import { useIntakeAssessment } from './useIntakeAssessment';
+
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
-  useGetEnrollmentAssessmentsQuery,
 } from '@/types/gqlTypes';
 
 interface Props extends Omit<ButtonLinkProps, 'to' | 'ref'> {
@@ -23,24 +24,17 @@ const FinishIntakeButton = ({
   enrollment,
   ...props
 }: Props) => {
-  const { data, loading } = useGetEnrollmentAssessmentsQuery({
-    variables: { id: enrollmentId, role: AssessmentRole.Intake },
-    // FIXME: could update cache directly on save & remove this?
-    fetchPolicy: 'cache-and-network',
-  });
+  const [assessment, { loading }] = useIntakeAssessment(enrollmentId);
 
   const [existingIntakePath, intakeCompleted] = useMemo(() => {
-    if (!data?.enrollment?.assessments?.nodesCount) return [];
-    const assessment = data.enrollment.assessments.nodes[0];
-    const id = assessment.id;
-    if (!id) return [];
+    if (!assessment) return [];
     const path = generatePath(DashboardRoutes.EDIT_ASSESSMENT, {
       clientId,
       enrollmentId,
-      assessmentId: id,
+      assessmentId: assessment.id,
     });
     return [path, !assessment.inProgress];
-  }, [data, enrollmentId, clientId]);
+  }, [assessment, enrollmentId, clientId]);
 
   const isNewOrInProgress = !existingIntakePath || !intakeCompleted;
 
