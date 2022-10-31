@@ -80,7 +80,7 @@ export const parseAndFormatDateRange = (
   startDateString?: string | null,
   endDateString?: string | null,
   startPlaceholder = 'Unknown',
-  endPlaceholder = 'Now'
+  endPlaceholder = 'Active'
 ): string | null => {
   if (!startDateString && !endDateString) return null;
   const start = startDateString ? parseHmisDateString(startDateString) : null;
@@ -157,13 +157,7 @@ export const lastUpdated = (client: ClientFieldsFragment) => {
 export const pronouns = (_client: ClientFieldsFragment) => null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
-  return `${
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    enrollment.entryDate ? parseAndFormatDate(enrollment.entryDate) : 'unknown'
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  } - ${
-    enrollment.exitDate ? parseAndFormatDate(enrollment.exitDate) : 'active'
-  }`;
+  return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
 };
 
 export const enrollmentName = (enrollment: {
