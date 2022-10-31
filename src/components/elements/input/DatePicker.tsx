@@ -9,18 +9,20 @@ import TextInput, { TextInputProps } from './TextInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/formUtil';
 
-interface Props
+interface PickerProps
   extends Omit<DatePickerProps<DateType, DateType>, 'renderInput'> {
   sx?: SxProps<Theme>;
   textInputProps?: TextInputProps;
 }
+
+type Props = PickerProps & DynamicInputCommonProps;
 
 const DatePicker: React.FC<Props> = ({
   sx,
   textInputProps,
   error,
   ...props
-}: Props & DynamicInputCommonProps) => (
+}: Props) => (
   <MuiDatePicker
     {...props}
     renderInput={(params) => (
