@@ -1,4 +1,4 @@
-import { Button, Grid, Paper, Stack, Theme, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import {
@@ -104,9 +104,7 @@ const NewEnrollment = () => {
   ];
 
   const numMembers = Object.keys(members).length;
-  const errorProps = {
-    sx: { color: (theme: Theme) => theme.palette.error.dark },
-  };
+
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
@@ -129,9 +127,8 @@ const NewEnrollment = () => {
                   setProjectError(false);
                 }}
                 textInputProps={{
+                  error: projectError,
                   placeholder: 'Choose project...',
-                  InputProps: projectError ? errorProps : undefined,
-                  InputLabelProps: projectError ? errorProps : undefined,
                 }}
                 sx={{ width: 400 }}
               />
@@ -140,10 +137,7 @@ const NewEnrollment = () => {
                 value={entryDate}
                 disableFuture
                 sx={{ width: 200 }}
-                InputProps={dateError ? errorProps : undefined}
-                textInputProps={{
-                  InputLabelProps: dateError ? errorProps : undefined,
-                }}
+                error={dateError}
                 onChange={(value) => {
                   setEntryDate(value);
                   setDateError(false);
