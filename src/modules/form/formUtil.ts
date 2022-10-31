@@ -276,6 +276,9 @@ const getFormValue = (value: any | null | undefined, item: FormItem) => {
 
     case ItemType.Choice:
     case ItemType.OpenChoice:
+      if (Array.isArray(value)) {
+        return value.map((v) => getOptionValue(v, item));
+      }
       return getOptionValue(value, item);
 
     default:

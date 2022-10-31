@@ -129,9 +129,9 @@ const ClientCard: React.FC<Props> = ({
                   </Typography>
                 </ClickToShow>
               )}
-              {client.ssnSerial && (
+              {client.ssn && (
                 <ClickToShow text='SSN' variant='body2'>
-                  <Typography variant='body2'>{client.ssnSerial}</Typography>
+                  <Typography variant='body2'>{client.ssn}</Typography>
                 </ClickToShow>
               )}
               {client.dob && (

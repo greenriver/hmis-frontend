@@ -114,8 +114,8 @@ export const age = (client: ClientFieldsFragment) => {
 };
 
 export const last4SSN = (client: ClientFieldsFragment) => {
-  if (!client.ssnSerial) return '';
-  let end = client.ssnSerial.slice(-4);
+  if (!client.ssn) return '';
+  let end = client.ssn.slice(-4);
   if (end.length < 4) {
     end = [...Array(4 - end.length).fill('*'), end].join('');
   }
@@ -123,7 +123,7 @@ export const last4SSN = (client: ClientFieldsFragment) => {
 };
 
 export const maskedSSN = (client: ClientFieldsFragment) => {
-  if (!client.ssnSerial) return '';
+  if (!client.ssn) return '';
   const lastFour = last4SSN(client);
   return `***-**-${lastFour}`;
 };

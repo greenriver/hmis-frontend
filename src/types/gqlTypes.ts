@@ -159,6 +159,7 @@ export type Client = {
   gender: Array<Gender>;
   id: Scalars['ID'];
   lastName?: Maybe<Scalars['String']>;
+  middleName?: Maybe<Scalars['String']>;
   nameDataQuality: NameDataQuality;
   nameSuffix?: Maybe<Scalars['String']>;
   personalId: Scalars['String'];
@@ -3933,6 +3934,7 @@ export type ValidationErrorFieldsFragment = {
 export type ClientNameFragment = {
   __typename?: 'Client';
   firstName?: string | null;
+  middleName?: string | null;
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
@@ -3941,11 +3943,21 @@ export type ClientNameFragment = {
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   id: string;
-  personalId: string;
-  ssn?: string | null;
   dob?: string | null;
+  dobDataQuality: DobDataQuality;
+  ethnicity: Ethnicity;
+  gender: Array<Gender>;
+  nameDataQuality: NameDataQuality;
+  personalId: string;
+  race: Array<Race>;
+  ssn?: string | null;
+  ssnDataQuality: SsnDataQuality;
+  veteranStatus: VeteranStatus;
+  dateCreated: string;
+  dateDeleted?: string | null;
   dateUpdated: string;
   firstName?: string | null;
+  middleName?: string | null;
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
@@ -3960,6 +3972,7 @@ export type HouseholdClientFieldsFragment = {
     id: string;
     dob?: string | null;
     firstName?: string | null;
+    middleName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
@@ -4006,6 +4019,7 @@ export type EnrollmentWithHoHFragmentFragment = {
         id: string;
         dob?: string | null;
         firstName?: string | null;
+        middleName?: string | null;
         preferredName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
@@ -4073,11 +4087,21 @@ export type SearchClientsQuery = {
     nodes: Array<{
       __typename?: 'Client';
       id: string;
-      personalId: string;
-      ssn?: string | null;
       dob?: string | null;
+      dobDataQuality: DobDataQuality;
+      ethnicity: Ethnicity;
+      gender: Array<Gender>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      ssn?: string | null;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: VeteranStatus;
+      dateCreated: string;
+      dateDeleted?: string | null;
       dateUpdated: string;
       firstName?: string | null;
+      middleName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
@@ -4094,11 +4118,21 @@ export type GetClientQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
-    personalId: string;
-    ssn?: string | null;
     dob?: string | null;
+    dobDataQuality: DobDataQuality;
+    ethnicity: Ethnicity;
+    gender: Array<Gender>;
+    nameDataQuality: NameDataQuality;
+    personalId: string;
+    race: Array<Race>;
+    ssn?: string | null;
+    ssnDataQuality: SsnDataQuality;
+    veteranStatus: VeteranStatus;
+    dateCreated: string;
+    dateDeleted?: string | null;
     dateUpdated: string;
     firstName?: string | null;
+    middleName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
@@ -4151,11 +4185,21 @@ export type CreateClientMutation = {
     client?: {
       __typename?: 'Client';
       id: string;
-      personalId: string;
-      ssn?: string | null;
       dob?: string | null;
+      dobDataQuality: DobDataQuality;
+      ethnicity: Ethnicity;
+      gender: Array<Gender>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      ssn?: string | null;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: VeteranStatus;
+      dateCreated: string;
+      dateDeleted?: string | null;
       dateUpdated: string;
       firstName?: string | null;
+      middleName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
@@ -4183,11 +4227,21 @@ export type UpdateClientMutation = {
     client?: {
       __typename?: 'Client';
       id: string;
-      personalId: string;
-      ssn?: string | null;
       dob?: string | null;
+      dobDataQuality: DobDataQuality;
+      ethnicity: Ethnicity;
+      gender: Array<Gender>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      ssn?: string | null;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: VeteranStatus;
+      dateCreated: string;
+      dateDeleted?: string | null;
       dateUpdated: string;
       firstName?: string | null;
+      middleName?: string | null;
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
@@ -4264,6 +4318,7 @@ export type UpdateEnrollmentMutation = {
             id: string;
             dob?: string | null;
             firstName?: string | null;
+            middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
@@ -4322,6 +4377,7 @@ export type SetHoHMutation = {
             id: string;
             dob?: string | null;
             firstName?: string | null;
+            middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
@@ -4414,6 +4470,7 @@ export type AddHouseholdMembersMutation = {
             id: string;
             dob?: string | null;
             firstName?: string | null;
+            middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
@@ -4491,6 +4548,7 @@ export type GetEnrollmentWithHoHQuery = {
           id: string;
           dob?: string | null;
           firstName?: string | null;
+          middleName?: string | null;
           preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
@@ -4606,11 +4664,21 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             client: {
               __typename?: 'Client';
               id: string;
-              personalId: string;
-              ssn?: string | null;
               dob?: string | null;
+              dobDataQuality: DobDataQuality;
+              ethnicity: Ethnicity;
+              gender: Array<Gender>;
+              nameDataQuality: NameDataQuality;
+              personalId: string;
+              race: Array<Race>;
+              ssn?: string | null;
+              ssnDataQuality: SsnDataQuality;
+              veteranStatus: VeteranStatus;
+              dateCreated: string;
+              dateDeleted?: string | null;
               dateUpdated: string;
               firstName?: string | null;
+              middleName?: string | null;
               preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
@@ -5620,6 +5688,7 @@ export const ValidationErrorFieldsFragmentDoc = gql`
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     firstName
+    middleName
     preferredName
     lastName
     nameSuffix
@@ -5628,9 +5697,18 @@ export const ClientNameFragmentDoc = gql`
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     id
-    personalId
-    ssn
     dob
+    dobDataQuality
+    ethnicity
+    gender
+    nameDataQuality
+    personalId
+    race
+    ssn
+    ssnDataQuality
+    veteranStatus
+    dateCreated
+    dateDeleted
     dateUpdated
     ...ClientName
   }
