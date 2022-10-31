@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es';
+import { compact, isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { formatDateForGql, parseHmisDateString } from '../hmis/hmisUtil';
@@ -277,7 +277,8 @@ const getFormValue = (value: any | null | undefined, item: FormItem) => {
     case ItemType.Choice:
     case ItemType.OpenChoice:
       if (Array.isArray(value)) {
-        return value.map((v) => getOptionValue(v, item));
+        // DNC gets filtered out here
+        return compact(value.map((v) => getOptionValue(v, item)));
       }
       return getOptionValue(value, item);
 
