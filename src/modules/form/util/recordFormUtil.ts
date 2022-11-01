@@ -1,5 +1,9 @@
 /**
- * Utils specifically for the EditRecord component
+ * Utils specifically for the EditRecord component.
+ *
+ * These mostly have to to do with translating data from
+ * GraphQL types (like '2022-01-01') to JavaScript
+ * objects (like Date) and vice versa.
  */
 
 import { compact, isNil } from 'lodash-es';
@@ -12,12 +16,7 @@ import {
   resolveOptionList,
 } from './formUtil';
 
-import {
-  FormDefinitionJson,
-  FormItem,
-  ItemType,
-  PickListOption,
-} from '@/types/gqlTypes';
+import { FormItem, ItemType, PickListOption } from '@/types/gqlTypes';
 
 /**
  * Transform form value shape into GraphQL value shape.
@@ -71,7 +70,8 @@ const findDataNotCollectedCode = (item: FormItem): string | undefined => {
 };
 
 type TransformSubmitValuesParams = {
-  definition: FormDefinitionJson;
+  /** flattened form definition keyed on link id */
+  itemMap: Record<string, FormItem>;
   /** form state (from DynamicForm) to transform */
   values: Record<string, any>;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
@@ -88,58 +88,45 @@ type TransformSubmitValuesParams = {
  * edit one record directly, like the Client, Project, and Organization edit screens.
  */
 export const transformSubmitValues = ({
-  definition,
+  itemMap,
   values,
-
   autofillNotCollected = false,
   autofillNulls = false,
   autofillBooleans = false,
 }: TransformSubmitValuesParams) => {
+  // Map of variables to pass to gql mutation
   const result: Record<string, any> = {};
 
-  // Recursive helper for traversing the FormDefinition
-  function recursiveTransformValues(
-    items: FormItem[],
-    values: Record<string, any>,
-    transformed: Record<string, any> // result map to be filled in
-  ) {
-    items.forEach((item: FormItem) => {
-      if (Array.isArray(item.item)) {
-        recursiveTransformValues(item.item, values, transformed);
-      }
+  Object.values(itemMap).forEach((item: FormItem) => {
+    const key = item.queryField;
+    if (!key) return;
 
-      const key = item.queryField;
-      if (!key) return;
+    let value;
+    if (item.linkId in values) {
+      // Transform into gql value, for example Date -> YYYY-MM-DD string
+      value = formValueToGqlValue(values[item.linkId], item);
+    }
 
-      let value;
-      if (item.linkId in values) {
-        // Transform into gql value, for example Date -> YYYY-MM-DD string
-        value = formValueToGqlValue(values[item.linkId], item);
-      }
+    if (typeof value !== 'undefined') {
+      result[key] = value;
+    }
 
-      if (typeof value !== 'undefined') {
-        transformed[key] = value;
-      }
-
-      if (autofillNotCollected && isNil(value)) {
-        // If we don't have a value, fill in Not Collected code if present
-        const notCollectedCode = findDataNotCollectedCode(item);
-        if (notCollectedCode) transformed[key] = notCollectedCode;
-      }
-      if (autofillNulls && isNil(transformed[key])) {
-        transformed[key] = null;
-      }
-      if (
-        autofillBooleans &&
-        isNil(transformed[key]) &&
-        item.type === ItemType.Boolean
-      ) {
-        transformed[key] = false;
-      }
-    });
-  }
-
-  recursiveTransformValues(definition.item || [], values, result);
+    if (autofillNotCollected && isNil(value)) {
+      // If we don't have a value, fill in Not Collected code if present
+      const notCollectedCode = findDataNotCollectedCode(item);
+      if (notCollectedCode) result[key] = notCollectedCode;
+    }
+    if (autofillNulls && isNil(result[key])) {
+      result[key] = null;
+    }
+    if (
+      autofillBooleans &&
+      isNil(result[key]) &&
+      item.type === ItemType.Boolean
+    ) {
+      result[key] = false;
+    }
+  });
 
   return result;
 };
@@ -170,38 +157,26 @@ const getFormValue = (value: any | null | undefined, item: FormItem) => {
  * Create initial form values based on a record.
  * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
  *
- * @param definition FormDefinition
+ * @param itemMap Map of linkId -> Item
  * @param record  GQL HMIS record, like Project or Organization
  *
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
 export const createInitialValuesFromRecord = (
-  definition: FormDefinitionJson,
+  itemMap: Record<string, FormItem>,
   record: any
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
-  // Recursive helper for traversing the FormDefinition
-  function recursiveFillInValues(
-    items: FormItem[],
-    record: Record<string, any>,
-    values: Record<string, any> // intialValues object to be filled in
-  ) {
-    items.forEach((item: FormItem) => {
-      if (Array.isArray(item.item)) {
-        recursiveFillInValues(item.item, record, values);
-      }
-      // Skip: this question doesn't map to a field
-      if (!item.queryField) return;
+  Object.values(itemMap).forEach((item) => {
+    // Skip: this question doesn't map to a field
+    if (!item.queryField) return;
 
-      // Skip: the record doesn't have a value for this property
-      if (!record.hasOwnProperty(item.queryField)) return;
+    // Skip: the record doesn't have a value for this property
+    if (!record.hasOwnProperty(item.queryField)) return;
 
-      values[item.linkId] = getFormValue(record[item.queryField], item);
-    });
-  }
-
-  recursiveFillInValues(definition.item || [], record, initialValues);
+    initialValues[item.linkId] = getFormValue(record[item.queryField], item);
+  });
 
   return initialValues;
 };

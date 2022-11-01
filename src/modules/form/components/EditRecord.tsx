@@ -1,6 +1,8 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 
+import { getItemMap } from '../util/formUtil';
+
 import Loading from '@/components/elements/Loading';
 import DynamicForm, {
   Props as DynamicFormProps,
@@ -62,6 +64,10 @@ const EditRecord = <
     () => data?.formDefinition?.definition,
     [data]
   );
+  const itemMap = useMemo(
+    () => (definition ? getItemMap(definition, false) : undefined),
+    [definition]
+  );
 
   const [mutateFunction, { loading: saveLoading, error }] = useMutation<
     Query,
@@ -79,18 +85,18 @@ const EditRecord = <
   });
 
   const initialValues = useMemo(() => {
-    if (!record || !definition) return {};
-    const values = createInitialValuesFromRecord(definition, record);
+    if (!record || !itemMap) return {};
+    const values = createInitialValuesFromRecord(itemMap, record);
     console.log('Initial form values:', values, 'from', record);
     return values;
-  }, [record, definition]);
+  }, [record, itemMap]);
 
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
-      if (!definition) return;
+      if (!itemMap) return;
       // Transform values into client input query variables
       const inputValues = transformSubmitValues({
-        definition,
+        itemMap,
         values,
         autofillNotCollected: true,
         autofillNulls: true,
@@ -105,7 +111,7 @@ const EditRecord = <
 
       void mutateFunction({ variables: { input } as QueryVariables });
     },
-    [definition, inputVariables, mutateFunction, record]
+    [itemMap, inputVariables, mutateFunction, record]
   );
 
   if (definitionLoading) return <Loading />;

@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { isEmpty, omit } from 'lodash-es';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ProjectSelect, {
@@ -18,6 +18,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
+import { getItemMap } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
@@ -47,6 +48,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(initialValues || {});
+  const itemMap = useMemo(
+    () => (definition ? getItemMap(definition, false) : undefined),
+    [definition]
+  );
 
   // If advanced parameters were specified in the URL parameters, expand the panel
   const hasInitialAdvanced = !isEmpty(omit(initialValues, defaultSearchKeys));
@@ -61,12 +66,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   // When form is submitted, transform values into query paramterse and invoke parent submit handler
-  const submitHandler = useMemo(() => {
-    return (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent) => {
+  const submitHandler = useCallback(
+    (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent) => {
       event.preventDefault();
+      if (!itemMap) return;
       // Transform values into ClientSearchInput query variables
       const variables = transformSubmitValues({
-        definition,
+        itemMap,
         values,
       });
       onSubmit({
@@ -76,8 +82,9 @@ const SearchForm: React.FC<SearchFormProps> = ({
           projects: values.projects.map((p) => p.code),
         }),
       });
-    };
-  }, [values, definition, onSubmit]);
+    },
+    [values, itemMap, onSubmit]
+  );
 
   const submitOnEnter = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {

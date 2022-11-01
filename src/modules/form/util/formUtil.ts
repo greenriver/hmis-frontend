@@ -86,7 +86,10 @@ export const resolveOptionList = (
 /**
  * Construct LinkID->Item map, for easier lookup
  */
-export const getItemMap = (definition: FormDefinitionJson) => {
+export const getItemMap = (
+  definition: FormDefinitionJson,
+  preserveNestedItems = true
+) => {
   const allItems: Record<string, FormItem> = {};
 
   // Recursive helper for traversing the FormDefinition
@@ -95,9 +98,14 @@ export const getItemMap = (definition: FormDefinitionJson) => {
     itemMap: Record<string, FormItem>
   ) {
     items.forEach((item: FormItem) => {
-      itemMap[item.linkId] = item;
-      if (Array.isArray(item.item)) {
-        rescursiveFillMap(item.item, itemMap);
+      const { item: children, ...rest } = item;
+      if (preserveNestedItems) {
+        itemMap[item.linkId] = item;
+      } else {
+        itemMap[item.linkId] = rest;
+      }
+      if (Array.isArray(children)) {
+        rescursiveFillMap(children, itemMap);
       }
     });
   }
