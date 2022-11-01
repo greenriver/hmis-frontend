@@ -18,7 +18,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
-import { transformSubmitValues } from '@/modules/form/formUtil';
+import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 type FormValues = {

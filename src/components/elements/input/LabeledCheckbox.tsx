@@ -5,7 +5,7 @@ import {
   FormGroup,
 } from '@mui/material';
 
-import { DynamicInputCommonProps } from '@/modules/form/formUtil';
+import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
 
 export interface Props
   extends Omit<FormControlLabelProps, 'control' | 'label'> {

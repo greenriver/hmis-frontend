@@ -15,7 +15,7 @@ export default {
   argTypes: { label: { control: 'text' } },
   decorators: [
     (Story) => (
-      <Box sx={{ width: 400 }}>
+      <Box sx={{ width: 800 }}>
         <Story />
       </Box>
     ),

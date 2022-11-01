@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
-import { DynamicInputCommonProps } from '@/modules/form/formUtil';
+import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
@@ -19,6 +19,8 @@ const TextInput = ({
   label,
   hiddenLabel = false,
   fullWidth = true,
+  min,
+  max,
   ...props
 }: TextInputProps) => {
   const htmlId = useId();
@@ -33,6 +35,8 @@ const TextInput = ({
       {...props}
       inputProps={{
         ...inputProps,
+        minLength: min,
+        maxLength: max,
         'aria-label': hiddenLabel ? String(label) : undefined,
       }}
       InputProps={{

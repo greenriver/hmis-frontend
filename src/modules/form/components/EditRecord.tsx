@@ -8,7 +8,7 @@ import DynamicForm, {
 import {
   createInitialValuesFromRecord,
   transformSubmitValues,
-} from '@/modules/form/formUtil';
+} from '@/modules/form/util/recordFormUtil';
 import {
   FormDefinitionJson,
   useGetFormDefinitionByIdentifierQuery,

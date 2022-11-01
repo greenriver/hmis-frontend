@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 
-import { DynamicInputCommonProps } from '../formUtil';
+import { DynamicInputCommonProps } from './DynamicField';
 
 import GenericSelect, {
   GenericSelectProps,

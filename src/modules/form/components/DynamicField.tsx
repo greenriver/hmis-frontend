@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import React, { ReactNode } from 'react';
 
-import { DynamicInputCommonProps } from '../formUtil';
 import { usePickList } from '../hooks/usePickList';
 
 import CreatableFormSelect from './CreatableFormSelect';
@@ -11,10 +10,20 @@ import ItemGroup from './ItemGroup';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import { FormItem, ItemType, ValidationError } from '@/types/gqlTypes';
+
+export interface DynamicInputCommonProps {
+  disabled?: boolean;
+  label?: ReactNode;
+  error?: boolean;
+  helperText?: ReactNode;
+  min?: any;
+  max?: any;
+}
 
 interface Props {
   item: FormItem;
@@ -24,6 +33,7 @@ interface Props {
   disabled?: boolean;
   children?: (item: FormItem) => ReactNode;
   errors?: ValidationError[];
+  inputProps?: DynamicInputCommonProps;
 }
 
 const getLabel = (item: FormItem) => {
@@ -49,6 +59,7 @@ const DynamicField: React.FC<Props> = ({
   disabled = false,
   errors,
   children,
+  inputProps,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -65,6 +76,7 @@ const DynamicField: React.FC<Props> = ({
     disabled,
     label,
     error: !!(errors && errors.length > 0),
+    ...inputProps,
   };
 
   const [options, pickListLoading] = usePickList(item);
@@ -98,11 +110,7 @@ const DynamicField: React.FC<Props> = ({
       );
     case ItemType.String:
     case ItemType.Text:
-    case ItemType.Integer:
-    case ItemType.Currency:
       const multiline = item.type === ItemType.Text;
-      const numeric =
-        item.type === ItemType.Integer || item.type === ItemType.Currency;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
@@ -112,7 +120,20 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
-            type={numeric ? 'number' : undefined}
+            {...commonInputProps}
+          />
+        </InputContainer>
+      );
+    case ItemType.Integer:
+    case ItemType.Currency:
+      console.log(item, commonInputProps);
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <NumberInput
+            id={item.linkId}
+            name={item.linkId}
+            value={value}
+            onChange={onChangeEvent}
             {...commonInputProps}
           />
         </InputContainer>

@@ -1,5 +1,4 @@
 {
-  "name": "client-intake",
   "item": [
     {
       "type": "GROUP",
@@ -9,9 +8,16 @@
       "item": [
         {
           "type": "STRING",
-          "required": false,
+          "required": true,
           "linkId": "string-1",
           "text": "String"
+        },
+        {
+          "type": "INTEGER",
+          "required": false,
+          "linkId": "int-1",
+          "text": "Integer (max = 5)",
+          "bounds": [{ "type": "MAX", "valueNumber": 5 }]
         },
         {
           "type": "BOOLEAN",
@@ -41,8 +47,8 @@
         {
           "type": "CHOICE",
           "linkId": "choice-1",
-          "text": "Yes no missing",
-          "pickListReference": "yesNoMissing"
+          "text": "HMIS Enum choice",
+          "pickListReference": "RecordType"
         },
         {
           "type": "STRING",
@@ -78,10 +84,7 @@
       "type": "GROUP",
       "required": false,
       "linkId": "group-2",
-      "text": "Row group",
-      "display": {
-        "direction": "row"
-      },
+      "text": "Another group",
       "item": [
         {
           "type": "STRING",

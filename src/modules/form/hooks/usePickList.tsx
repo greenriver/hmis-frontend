@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { resolveOptionList } from '../formUtil';
+import { resolveOptionList } from '../util/formUtil';
 
 import {
   FormItem,
