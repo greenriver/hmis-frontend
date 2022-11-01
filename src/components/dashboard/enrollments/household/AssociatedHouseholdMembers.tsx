@@ -6,7 +6,7 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import LinkToClient from '@/components/elements/LinkToClient';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { last4SSN, dob, age } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
@@ -20,7 +20,7 @@ export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
     header: 'SSN',
     key: 'ssn',
     width: '1%',
-    render: (client) => HmisUtil.last4SSN(client),
+    render: (client) => last4SSN(client),
   },
   {
     header: 'DOB / Age',
@@ -29,8 +29,8 @@ export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
     render: (client) =>
       client.dob && (
         <Stack direction='row' spacing={1}>
-          <span>{HmisUtil.dob(client)}</span>
-          <span>{`(${HmisUtil.age(client)})`}</span>
+          <span>{dob(client)}</span>
+          <span>{`(${age(client)})`}</span>
         </Stack>
       ),
   },

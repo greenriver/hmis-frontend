@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate, yesNo } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   HopwaMedAssistedLivingFac,
@@ -25,13 +25,13 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         label: 'Operating Start Date',
         value:
           project.operatingStartDate &&
-          HmisUtil.parseAndFormatDate(project.operatingStartDate),
+          parseAndFormatDate(project.operatingStartDate),
       },
       {
         label: 'Operating End Date',
         value:
           (project.operatingEndDate &&
-            HmisUtil.parseAndFormatDate(project.operatingEndDate)) ||
+            parseAndFormatDate(project.operatingEndDate)) ||
           'Active',
       },
       {
@@ -41,7 +41,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Continuum Project',
-        value: HmisUtil.yesNo(project.continuumProject) || notSpecified,
+        value: yesNo(project.continuumProject) || notSpecified,
       },
       {
         label: 'Housing Type',
@@ -53,8 +53,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'Residential Affiliation',
-              value:
-                HmisUtil.yesNo(project.residentialAffiliation) || notSpecified,
+              value: yesNo(project.residentialAffiliation) || notSpecified,
             },
           ]
         : []),
@@ -71,7 +70,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         : []),
       {
         label: 'HMIS Participating Project',
-        value: HmisUtil.yesNo(project.HMISParticipatingProject) || notSpecified,
+        value: yesNo(project.HMISParticipatingProject) || notSpecified,
       },
       ...(project.targetPopulation &&
       project.targetPopulation !== TargetPopulation.NotApplicable
@@ -91,7 +90,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'HOPWA Medical Assisted Living Facility',
-              value: HmisUtil.yesNo(
+              value: yesNo(
                 project.HOPWAMedAssistedLivingFac ===
                   HopwaMedAssistedLivingFac.Yes
               ),

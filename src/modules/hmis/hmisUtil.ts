@@ -76,6 +76,26 @@ export const parseAndFormatDate = (dateString: string): string => {
   return formatDateForDisplay(parsed) || dateString;
 };
 
+export const parseAndFormatDateRange = (
+  startDateString?: string | null,
+  endDateString?: string | null,
+  startPlaceholder = 'Unknown',
+  endPlaceholder = 'Active'
+): string | null => {
+  if (!startDateString && !endDateString) return null;
+  const start = startDateString ? parseHmisDateString(startDateString) : null;
+  const end = endDateString ? parseHmisDateString(endDateString) : null;
+
+  const startFormatted = start
+    ? formatDateForDisplay(start)
+    : startDateString || startPlaceholder;
+  const endFormatted = end
+    ? formatDateForDisplay(end)
+    : endDateString || endPlaceholder;
+
+  return `${startFormatted} - ${endFormatted}`;
+};
+
 export const parseAndFormatDateTime = (dateString: string): string => {
   if (!dateString) return dateString;
   const parsed = parseHmisDateTimeString(dateString);
@@ -114,8 +134,8 @@ export const age = (client: ClientFieldsFragment) => {
 };
 
 export const last4SSN = (client: ClientFieldsFragment) => {
-  if (!client.ssnSerial) return '';
-  let end = client.ssnSerial.slice(-4);
+  if (!client.ssn) return '';
+  let end = client.ssn.slice(-4);
   if (end.length < 4) {
     end = [...Array(4 - end.length).fill('*'), end].join('');
   }
@@ -123,7 +143,7 @@ export const last4SSN = (client: ClientFieldsFragment) => {
 };
 
 export const maskedSSN = (client: ClientFieldsFragment) => {
-  if (!client.ssnSerial) return '';
+  if (!client.ssn) return '';
   const lastFour = last4SSN(client);
   return `***-**-${lastFour}`;
 };
@@ -137,13 +157,7 @@ export const lastUpdated = (client: ClientFieldsFragment) => {
 export const pronouns = (_client: ClientFieldsFragment) => null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
-  return `${
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    enrollment.entryDate ? parseAndFormatDate(enrollment.entryDate) : 'unknown'
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  } - ${
-    enrollment.exitDate ? parseAndFormatDate(enrollment.exitDate) : 'active'
-  }`;
+  return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
 };
 
 export const enrollmentName = (enrollment: {

@@ -7,6 +7,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -22,6 +23,11 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
     header: 'CoC Code',
     linkTreatment: true,
     render: 'cocCode',
+  },
+  {
+    header: 'Active Period',
+    render: (i: InventoryFieldsFragment) =>
+      parseAndFormatDateRange(i.inventoryStartDate, i.inventoryEndDate),
   },
   {
     header: 'Household Type',

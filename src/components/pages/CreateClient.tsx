@@ -40,7 +40,6 @@ const CreateClient: React.FC = () => {
               CreateClientMutationVariables
             >
               definitionIdentifier='client'
-              // record={client}
               queryDocument={CreateClientDocument}
               onCompleted={onCompleted}
               getErrors={(data: CreateClientMutation) =>

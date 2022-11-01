@@ -7,6 +7,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -22,6 +23,11 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
     header: 'Funder',
     linkTreatment: true,
     render: (f: FunderFieldsFragment) => HmisEnums.FundingSource[f.funder],
+  },
+  {
+    header: 'Active Period',
+    render: (f: FunderFieldsFragment) =>
+      parseAndFormatDateRange(f.startDate, f.endDate),
   },
   { header: 'Grant ID', render: 'grantId' },
 ];

@@ -20,8 +20,7 @@ import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
 import LinkToClient from '@/components/elements/LinkToClient';
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { age, clientName, dob } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
   HouseholdClientFieldsFragment,
@@ -144,7 +143,7 @@ const EditHouseholdMemberTable = ({
       //   key: 'ssn',
       //   width: '1%',
       //   render: ({ client }: HouseholdClientFieldsFragment) =>
-      //     HmisUtil.last4SSN(client),
+      //     last4SSN(client),
       // },
       {
         header: 'DOB / Age',
@@ -153,8 +152,8 @@ const EditHouseholdMemberTable = ({
         render: ({ client }: HouseholdClientFieldsFragment) =>
           client.dob && (
             <Stack direction='row' spacing={1}>
-              <span>{HmisUtil.dob(client as ClientFieldsFragment)}</span>
-              <span>{`(${HmisUtil.age(client as ClientFieldsFragment)})`}</span>
+              <span>{dob(client as ClientFieldsFragment)}</span>
+              <span>{`(${age(client as ClientFieldsFragment)})`}</span>
             </Stack>
           ),
       },

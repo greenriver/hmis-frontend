@@ -15,7 +15,7 @@ import {
 import Loading from '../elements/Loading';
 import PageHeader from '../layout/PageHeader';
 
-import * as HmisUtil from '@/modules/hmis/hmisUtil';
+import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { Client, useGetClientQuery } from '@/types/gqlTypes';
 
@@ -105,7 +105,7 @@ const ClientDashboard: React.FC = () => {
     <>
       <PageHeader>
         <Stack spacing={2} direction='row' justifyContent='space-between'>
-          <Typography variant='h4'>{HmisUtil.clientName(client)}</Typography>
+          <Typography variant='h4'>{clientName(client)}</Typography>
           {import.meta.env.PUBLIC_WAREHOUSE_URL && (
             <Button
               variant='text'

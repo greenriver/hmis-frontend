@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { Routes, DashboardRoutes } from './routes';
 
+import EditClient from '@/components/dashboard/EditClient';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import EditAssessment from '@/components/dashboard/enrollments/EditAssessment';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
@@ -77,6 +78,7 @@ export const protectedRoutes = [
         children: [
           { path: '', element: <Profile /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
+          { path: DashboardRoutes.EDIT, element: <EditClient /> },
           {
             path: DashboardRoutes.NEW_ENROLLMENT,
             element: <NewEnrollment />,

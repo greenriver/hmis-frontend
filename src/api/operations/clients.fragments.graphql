@@ -8,6 +8,7 @@ fragment ValidationErrorFields on ValidationError {
 
 fragment ClientName on Client {
   firstName
+  middleName
   preferredName
   lastName
   nameSuffix
@@ -15,9 +16,18 @@ fragment ClientName on Client {
 
 fragment ClientFields on Client {
   id
-  personalId
-  ssnSerial
   dob
+  dobDataQuality
+  ethnicity
+  gender
+  nameDataQuality
+  personalId
+  race
+  ssn
+  ssnDataQuality
+  veteranStatus
+  dateCreated
+  dateDeleted
   dateUpdated
   ...ClientName
 }
