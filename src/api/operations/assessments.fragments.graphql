@@ -28,6 +28,12 @@ fragment ItemFields on FormItem {
   repeats
   queryField
   pickListReference
+  bounds {
+    type
+    question
+    valueNumber
+    valueDate
+  }
   pickListOptions {
     ...PickListOptionFields
   }
