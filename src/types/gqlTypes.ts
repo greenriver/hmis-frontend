@@ -1386,9 +1386,11 @@ export type PickListOption = {
 export enum PickListType {
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  Geocode = 'GEOCODE',
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   Project = 'PROJECT',
+  State = 'STATE',
 }
 
 /** HUD PrioritizationStatus (4.19.7) */

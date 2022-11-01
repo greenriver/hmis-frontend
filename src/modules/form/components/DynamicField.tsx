@@ -79,7 +79,27 @@ const DynamicField: React.FC<Props> = ({
     ...inputProps,
   };
 
-  const [options, pickListLoading] = usePickList(item);
+  const [options, pickListLoading] = usePickList(item, {
+    onCompleted: (data) => {
+      if (!data?.pickList) return;
+
+      if (value) {
+        const fullOption = data.pickList.find((o) => o.code === value.code);
+        if (fullOption) {
+          // Update the value so that it shows the complete label
+          itemChanged(item.linkId, fullOption);
+        } else {
+          console.warn(
+            `Selected value '${value.code}' is not present in option list '${item.pickListReference}'`
+          );
+        }
+      } else {
+        // Set initial value if applicable
+        const initial = data.pickList.find((o) => o.initialSelected);
+        if (initial) itemChanged(item.linkId, initial);
+      }
+    },
+  });
 
   switch (item.type) {
     case ItemType.Display:

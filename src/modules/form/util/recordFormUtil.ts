@@ -132,7 +132,7 @@ export const transformSubmitValues = ({
 };
 
 // Convert gql value into value for form state
-const getFormValue = (value: any | null | undefined, item: FormItem) => {
+const gqlValueToFormValue = (value: any | null | undefined, item: FormItem) => {
   if (isNil(value)) return value;
 
   switch (item.type) {
@@ -175,7 +175,10 @@ export const createInitialValuesFromRecord = (
     // Skip: the record doesn't have a value for this property
     if (!record.hasOwnProperty(item.queryField)) return;
 
-    initialValues[item.linkId] = getFormValue(record[item.queryField], item);
+    initialValues[item.linkId] = gqlValueToFormValue(
+      record[item.queryField],
+      item
+    );
   });
 
   return initialValues;

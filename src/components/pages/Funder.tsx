@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
@@ -9,6 +10,7 @@ import { InactiveBanner } from './Project';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { Routes } from '@/routes/routes';
 import {
   CreateFunderDocument,
   CreateFunderMutation,
@@ -35,6 +37,10 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     skip: create,
   });
 
+  const onCompleted = useCallback(() => {
+    navigate(generatePath(Routes.PROJECT, { projectId }));
+  }, [navigate, projectId]);
+
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
   if (!create && !data?.funder) throw Error('Funder not found');
@@ -60,7 +66,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
             >
               inputVariables={{ projectId }}
               queryDocument={CreateFunderDocument}
-              onCompleted={() => navigate(-1)}
+              onCompleted={onCompleted}
               getErrors={(data: CreateFunderMutation) =>
                 data?.createFunder?.errors
               }
@@ -75,7 +81,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
             >
               record={data?.funder || undefined}
               queryDocument={UpdateFunderDocument}
-              onCompleted={() => navigate(-1)}
+              onCompleted={onCompleted}
               getErrors={(data: UpdateFunderMutation) =>
                 data?.updateFunder?.errors
               }

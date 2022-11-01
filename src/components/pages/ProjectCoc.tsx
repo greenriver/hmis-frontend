@@ -1,5 +1,6 @@
 import { Grid, Typography } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useCallback } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
@@ -9,6 +10,7 @@ import { InactiveBanner } from './Project';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { Routes } from '@/routes/routes';
 import {
   CreateProjectCocDocument,
   CreateProjectCocMutation,
@@ -29,7 +31,10 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const title = create ? `Add Project CoC` : `Edit Project CoC`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
-  // FIXME why isn't cache working
+  const onCompleted = useCallback(() => {
+    navigate(generatePath(Routes.PROJECT, { projectId }));
+  }, [navigate, projectId]);
+
   const { data, loading, error } = useGetProjectCocQuery({
     variables: { id: cocId },
     skip: create,
@@ -59,7 +64,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
             >
               inputVariables={{ projectId }}
               queryDocument={CreateProjectCocDocument}
-              onCompleted={() => navigate(-1)}
+              onCompleted={onCompleted}
               getErrors={(data: CreateProjectCocMutation) =>
                 data?.createProjectCoc?.errors
               }
@@ -73,7 +78,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
             >
               record={data?.projectCoc || undefined}
               queryDocument={UpdateProjectCocDocument}
-              onCompleted={() => navigate(-1)}
+              onCompleted={onCompleted}
               getErrors={(data: UpdateProjectCocMutation) =>
                 data?.updateProjectCoc?.errors
               }
