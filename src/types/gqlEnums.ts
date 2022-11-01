@@ -135,7 +135,6 @@ export const HmisEnums = {
       'VA: Compensated Work Therapy Transitional Residence',
     VA_SUPPORTIVE_SERVICES_FOR_VETERAN_FAMILIES:
       'VA: Supportive Services for Veteran Families',
-    N_A: 'N/A',
     HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
     HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
       'HUD: Public and Indian Housing (PIH) Programs',
@@ -154,7 +153,6 @@ export const HmisEnums = {
     HUD_COC_JOINT_COMPONENT_TH_RRH: 'HUD: CoC - Joint Component TH/RRH',
     VA_GRANT_PER_DIEM_CASE_MANAGEMENT_HOUSING_RETENTION:
       'VA: Grant Per Diem - Case Management/Housing Retention',
-    LOCAL_OR_OTHER_FUNDING_SOURCE: 'Local or Other Funding Source',
     HUD_ESG_CV: 'HUD: ESG - CV',
     HUD_HOPWA_CV: 'HUD: HOPWA - CV',
     HUD_COC_JOINT_COMPONENT_RRH_PSH_: 'HUD: CoC - Joint Component RRH/PSH ',
@@ -164,6 +162,8 @@ export const HmisEnums = {
     HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
+    LOCAL_OR_OTHER_FUNDING_SOURCE: 'Local or Other Funding Source',
+    N_A: 'N/A',
   },
   Gender: {
     GENDER_FEMALE: 'Female',
@@ -258,7 +258,6 @@ export const HmisEnums = {
     DAY_SHELTER: 'Day Shelter',
     ES: 'Emergency Shelter',
     OPH: 'Permanent Housing Only',
-    OTHER: 'Other',
     PH: 'Permanent Housing',
     PREVENTION: 'Homelessness Prevention',
     PSH: 'Permanent Supportive Housing',
@@ -267,6 +266,7 @@ export const HmisEnums = {
     SH: 'Safe Haven',
     SO: 'Street Outreach',
     TH: 'Transitional Housing',
+    OTHER: 'Other',
   },
   Race: {
     RACE_AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',

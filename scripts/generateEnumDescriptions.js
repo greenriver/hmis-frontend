@@ -13,18 +13,40 @@ let output = 'export const HmisEnums = {';
 const CODE_PATTERN_NUMERIC = /^\(([0-9]*)\) /;
 const CODE_PATTERN = /^\(([a-zA-Z0-9]*)\) /;
 
-// Get 9 from "(9) Client refused"
-const getNumber = (elem) => {
+const CUSTOM_SORT_VALUES = {
+  FundingSource: {
+    LOCAL_OR_OTHER_FUNDING_SOURCE: 499,
+    N_A: 500,
+  },
+  ProjectType: {
+    OTHER: 500,
+  },
+};
+
+// Get numeric sort value from enum value
+const getSortValue = (elem, name) => {
+  const custom = CUSTOM_SORT_VALUES[name] || {};
+
+  // 9 from "(9) Client refused"
   const m = elem.description.match(CODE_PATTERN_NUMERIC);
+
   if (m && m[1]) {
     const num = parseInt(m[1]);
     // Always put DNC/REFUSED/DK at the end
     if (num === 99) return 500;
     if (num === 9) return 499;
     if (num === 8) return 498;
+
+    // Other fields with custom sort values
+    if (custom[elem.name]) {
+      return custom[elem.name];
+    }
+
+    // By default, sort by HUD number if it exists
     return num;
   }
-  return null;
+
+  return custom[elem.name] || null;
 };
 
 schema.__schema.types.forEach((type) => {
@@ -34,8 +56,8 @@ schema.__schema.types.forEach((type) => {
     const enumValues = type.enumValues
       .filter((a) => !!a.description)
       .sort((a, b) => {
-        const first = getNumber(a);
-        const second = getNumber(b);
+        const first = getSortValue(a, type.name);
+        const second = getSortValue(b, type.name);
         if (first !== null && second !== null) return first - second;
         if (first === null && second === null) return 1;
         if (first !== null) return 1;
