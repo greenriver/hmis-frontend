@@ -8,7 +8,7 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
-import { getInitialValues } from '@/modules/form/formUtil';
+import { getInitialValues } from '@/modules/form/util/formUtil';
 import {
   AssessmentRole,
   useCreateAssessmentMutation,

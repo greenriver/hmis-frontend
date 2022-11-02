@@ -27,3 +27,6 @@ export const LabeledWithElement = Template.bind({});
 LabeledWithElement.args = {
   label: <Typography variant='h4'>H4 label</Typography>,
 };
+
+export const MaxLength = Template.bind({});
+MaxLength.args = { label: 'Max string length', max: 6 };

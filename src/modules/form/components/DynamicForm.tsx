@@ -2,11 +2,12 @@ import { Alert, Box, Button, Grid, Stack } from '@mui/material';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getItemMap, shouldEnableItem } from '../formUtil';
+import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
-import DynamicField from './DynamicField';
+import DynamicField, { DynamicInputCommonProps } from './DynamicField';
 
 import {
+  BoundType,
   FormDefinitionJson,
   FormItem,
   ValidationError,
@@ -97,11 +98,31 @@ const DynamicForm: React.FC<Props> = ({
     [errors]
   );
 
+  const getCommonInputProps = useCallback(
+    (item: FormItem) => {
+      const inputProps: DynamicInputCommonProps = {
+        disabled: item.readOnly || undefined,
+      };
+
+      (item.bounds || []).forEach((bound) => {
+        const value = getBoundValue(bound, values);
+        if (bound.type === BoundType.Min) {
+          inputProps.min = value;
+        } else if (bound.type === BoundType.Max) {
+          inputProps.max = value;
+        } else {
+          console.warn('Unrecognized bound type', bound.type);
+        }
+      });
+      return inputProps;
+    },
+    [values]
+  );
+
   // Recursively render an item
   const renderItem = (item: FormItem, nestingLevel: number) => {
-    const hidden = !isEnabled(item);
-    // if (hidden && item.type === ItemType.group) {
-    if (hidden) {
+    if (!isEnabled(item)) {
+      // console.log('Hidden:', item);
       return null;
     }
 
@@ -114,8 +135,8 @@ const DynamicForm: React.FC<Props> = ({
         value={values[item.linkId] ?? ''}
         nestingLevel={nestingLevel}
         children={(item) => renderItem(item, nestingLevel + 1)}
-        disabled={item.readOnly || hidden}
         errors={getFieldErrors(item)}
+        inputProps={getCommonInputProps(item)}
       />
     );
   };

@@ -145,6 +145,11 @@ export enum BedType {
   Voucher = 'VOUCHER',
 }
 
+export enum BoundType {
+  Max = 'MAX',
+  Min = 'MIN',
+}
+
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
@@ -748,6 +753,7 @@ export type FormDefinitionJson = {
 /** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
+  bounds?: Maybe<Array<ValueBound>>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   enableBehavior?: Maybe<EnableBehavior>;
@@ -1380,9 +1386,11 @@ export type PickListOption = {
 export enum PickListType {
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  Geocode = 'GEOCODE',
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   Project = 'PROJECT',
+  State = 'STATE',
 }
 
 /** HUD PrioritizationStatus (4.19.7) */
@@ -2279,6 +2287,16 @@ export type ValidationError = {
   type: Scalars['String'];
 };
 
+/** Bound for the response value. The bound may or may not be dependent on another questions answer. */
+export type ValueBound = {
+  __typename?: 'ValueBound';
+  /** Link ID of dependent question, if bound value should be equal to the questions answer */
+  question?: Maybe<Scalars['String']>;
+  type: BoundType;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueNumber?: Maybe<Scalars['Int']>;
+};
+
 /** HUD Veteran Status (1.8) */
 export enum VeteranStatus {
   /** (8) Client doesn't know */
@@ -2327,6 +2345,13 @@ export type ItemFieldsFragment = {
   pickListReference?: string | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   enableBehavior?: EnableBehavior | null;
+  bounds?: Array<{
+    __typename?: 'ValueBound';
+    type: BoundType;
+    question?: string | null;
+    valueNumber?: number | null;
+    valueDate?: string | null;
+  }> | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
     code: string;
@@ -2438,6 +2463,13 @@ export type FormDefinitionWithJsonFragment = {
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+              }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
                 code: string;
@@ -2463,6 +2495,13 @@ export type FormDefinitionWithJsonFragment = {
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
               }> | null;
+            }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -2490,6 +2529,13 @@ export type FormDefinitionWithJsonFragment = {
               answerGroupCode?: string | null;
             }> | null;
           }> | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+          }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
             code: string;
@@ -2516,6 +2562,13 @@ export type FormDefinitionWithJsonFragment = {
             answerGroupCode?: string | null;
           }> | null;
         }> | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
+        }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
           code: string;
@@ -2541,6 +2594,13 @@ export type FormDefinitionWithJsonFragment = {
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
         }> | null;
+      }> | null;
+      bounds?: Array<{
+        __typename?: 'ValueBound';
+        type: BoundType;
+        question?: string | null;
+        valueNumber?: number | null;
+        valueDate?: string | null;
       }> | null;
       pickListOptions?: Array<{
         __typename?: 'PickListOption';
@@ -2712,6 +2772,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   enableBehavior?: EnableBehavior | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
+                  }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
                     code: string;
@@ -2737,6 +2804,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
                   }> | null;
+                }> | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -2764,6 +2838,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   answerGroupCode?: string | null;
                 }> | null;
               }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+              }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
                 code: string;
@@ -2790,6 +2871,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 answerGroupCode?: string | null;
               }> | null;
             }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+            }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
               code: string;
@@ -2815,6 +2903,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
             }> | null;
+          }> | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -2957,6 +3052,13 @@ export type GetAssessmentQuery = {
                     pickListReference?: string | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     enableBehavior?: EnableBehavior | null;
+                    bounds?: Array<{
+                      __typename?: 'ValueBound';
+                      type: BoundType;
+                      question?: string | null;
+                      valueNumber?: number | null;
+                      valueDate?: string | null;
+                    }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
                       code: string;
@@ -2982,6 +3084,13 @@ export type GetAssessmentQuery = {
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
                     }> | null;
+                  }> | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -3009,6 +3118,13 @@ export type GetAssessmentQuery = {
                     answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -3035,6 +3151,13 @@ export type GetAssessmentQuery = {
                   answerGroupCode?: string | null;
                 }> | null;
               }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+              }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
                 code: string;
@@ -3060,6 +3183,13 @@ export type GetAssessmentQuery = {
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
               }> | null;
+            }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -3251,6 +3381,13 @@ export type GetFormDefinitionByIdentifierQuery = {
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -3276,6 +3413,13 @@ export type GetFormDefinitionByIdentifierQuery = {
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
                 }> | null;
+              }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -3303,6 +3447,13 @@ export type GetFormDefinitionByIdentifierQuery = {
                 answerGroupCode?: string | null;
               }> | null;
             }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+            }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
               code: string;
@@ -3329,6 +3480,13 @@ export type GetFormDefinitionByIdentifierQuery = {
               answerGroupCode?: string | null;
             }> | null;
           }> | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+          }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
             code: string;
@@ -3354,6 +3512,13 @@ export type GetFormDefinitionByIdentifierQuery = {
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
           }> | null;
+        }> | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -3476,6 +3641,13 @@ export type GetFormDefinitionQuery = {
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -3501,6 +3673,13 @@ export type GetFormDefinitionQuery = {
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
                 }> | null;
+              }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -3528,6 +3707,13 @@ export type GetFormDefinitionQuery = {
                 answerGroupCode?: string | null;
               }> | null;
             }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+            }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
               code: string;
@@ -3554,6 +3740,13 @@ export type GetFormDefinitionQuery = {
               answerGroupCode?: string | null;
             }> | null;
           }> | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+          }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
             code: string;
@@ -3579,6 +3772,13 @@ export type GetFormDefinitionQuery = {
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
           }> | null;
+        }> | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -3776,6 +3976,13 @@ export type SaveAssessmentMutation = {
                       pickListReference?: string | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       enableBehavior?: EnableBehavior | null;
+                      bounds?: Array<{
+                        __typename?: 'ValueBound';
+                        type: BoundType;
+                        question?: string | null;
+                        valueNumber?: number | null;
+                        valueDate?: string | null;
+                      }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
                         code: string;
@@ -3801,6 +4008,13 @@ export type SaveAssessmentMutation = {
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
                       }> | null;
+                    }> | null;
+                    bounds?: Array<{
+                      __typename?: 'ValueBound';
+                      type: BoundType;
+                      question?: string | null;
+                      valueNumber?: number | null;
+                      valueDate?: string | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -3828,6 +4042,13 @@ export type SaveAssessmentMutation = {
                       answerGroupCode?: string | null;
                     }> | null;
                   }> | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
+                  }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
                     code: string;
@@ -3854,6 +4075,13 @@ export type SaveAssessmentMutation = {
                     answerGroupCode?: string | null;
                   }> | null;
                 }> | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
                   code: string;
@@ -3879,6 +4107,13 @@ export type SaveAssessmentMutation = {
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
                 }> | null;
+              }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -5614,6 +5849,12 @@ export const ItemFieldsFragmentDoc = gql`
     repeats
     queryField
     pickListReference
+    bounds {
+      type
+      question
+      valueNumber
+      valueDate
+    }
     pickListOptions {
       ...PickListOptionFields
     }

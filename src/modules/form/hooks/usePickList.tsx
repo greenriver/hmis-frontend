@@ -1,15 +1,21 @@
+import { QueryHookOptions } from '@apollo/client';
 import { useMemo } from 'react';
 
-import { resolveOptionList } from '../formUtil';
+import { resolveOptionList } from '../util/formUtil';
 
 import {
   FormItem,
+  GetPickListQuery,
+  GetPickListQueryVariables,
   PickListOption,
   PickListType,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 
-export function usePickList(item: FormItem) {
+export function usePickList(
+  item: FormItem,
+  fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>
+) {
   const resolved = useMemo(() => resolveOptionList(item), [item]);
   const isKnownType = useMemo(
     () =>
@@ -22,17 +28,17 @@ export function usePickList(item: FormItem) {
     variables: { pickListType: item.pickListReference as PickListType },
     // Skip if it was already resolve with local enums, or if it's an unrecognized reference
     skip: !!resolved || !isKnownType,
+    ...fetchOptions,
   });
 
-  const list = useMemo(() => {
-    if (resolved) return resolved;
-    return data?.pickList;
+  const pickList = useMemo(() => {
+    return resolved || data?.pickList || [];
   }, [data, resolved]);
 
   if (error) throw error;
 
-  return [list, loading] as [
-    list: PickListOption[] | undefined,
+  return [pickList, loading] as [
+    pickList: PickListOption[] | undefined,
     loading: boolean
   ];
 }
