@@ -12,6 +12,7 @@ import { useCallback, useId } from 'react';
 import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
 
 interface Props extends ToggleButtonGroupProps {
+  nullable?: boolean; // whether you can click again to remove the selection
   name?: string;
   trueLabel?: string;
   falseLabel?: string;
@@ -22,6 +23,7 @@ export type YesNoInputProps = Props & DynamicInputCommonProps;
 
 const YesNoInput = ({
   label,
+  nullable = true,
   includeNullOption = false,
   trueLabel = 'Yes',
   falseLabel = 'No',
@@ -32,13 +34,13 @@ const YesNoInput = ({
   ...props
 }: YesNoInputProps) => {
   const htmlId = useId();
-
   const handleChange = useCallback(
     (event: React.MouseEvent<HTMLElement, MouseEvent>, value: any) => {
       if (!onChange) return;
+      if (!nullable && isNil(value)) return;
       return onChange(event, value === -1 ? null : value);
     },
-    [onChange]
+    [onChange, nullable]
   );
 
   const buttonSx = {
@@ -57,7 +59,7 @@ const YesNoInput = ({
         aria-labelledby={htmlId}
         sx={{ pt: 0.5, mt: 0.5 }}
         size='small'
-        onChange={includeNullOption ? handleChange : onChange}
+        onChange={handleChange}
         value={
           includeNullOption && isNil(value) && typeof value !== 'undefined'
             ? -1

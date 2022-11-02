@@ -122,6 +122,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             id={item.linkId}
             name={item.linkId}
+            nullable={!item.required}
             // includeNullOption
             {...commonInputProps}
           />
