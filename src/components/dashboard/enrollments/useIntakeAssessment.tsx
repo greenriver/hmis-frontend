@@ -20,7 +20,7 @@ export function useIntakeAssessment(enrollmentId: string) {
   });
   console.log(data);
 
-  if (status.error) throw status.error;
+  if (status.error) console.error(status.error, data);
 
   const assessment = useMemo(
     () => data?.enrollment?.assessments?.nodes[0],

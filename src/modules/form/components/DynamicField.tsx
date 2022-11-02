@@ -9,11 +9,11 @@ import InputContainer from './InputContainer';
 import ItemGroup from './ItemGroup';
 
 import DatePicker from '@/components/elements/input/DatePicker';
-import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
+import YesNoInput from '@/components/elements/input/YesNoInput';
 import { FormItem, ItemType, ValidationError } from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
@@ -116,8 +116,16 @@ const DynamicField: React.FC<Props> = ({
       );
     case ItemType.Boolean:
       return (
-        <InputContainer sx={{ width: 400 }} {...commonContainerProps}>
-          <LabeledCheckbox
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <YesNoInput
+            value={value}
+            onChange={onChangeEventValue}
+            id={item.linkId}
+            name={item.linkId}
+            // includeNullOption
+            {...commonInputProps}
+          />
+          {/* <LabeledCheckbox
             checked={!!value}
             onChange={(e) =>
               itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
@@ -125,7 +133,7 @@ const DynamicField: React.FC<Props> = ({
             id={item.linkId}
             name={item.linkId}
             {...commonInputProps}
-          />
+          /> */}
         </InputContainer>
       );
     case ItemType.String:
@@ -136,7 +144,7 @@ const DynamicField: React.FC<Props> = ({
           <TextInput
             id={item.linkId}
             name={item.linkId}
-            value={value as string}
+            value={value || ''}
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
@@ -146,7 +154,6 @@ const DynamicField: React.FC<Props> = ({
       );
     case ItemType.Integer:
     case ItemType.Currency:
-      console.log(item, commonInputProps);
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
