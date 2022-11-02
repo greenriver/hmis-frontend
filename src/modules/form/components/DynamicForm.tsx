@@ -131,8 +131,7 @@ const DynamicForm: React.FC<Props> = ({
         key={item.linkId}
         item={item}
         itemChanged={itemChanged}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        value={values[item.linkId] ?? ''}
+        value={values[item.linkId]}
         nestingLevel={nestingLevel}
         children={(item) => renderItem(item, nestingLevel + 1)}
         errors={getFieldErrors(item)}
