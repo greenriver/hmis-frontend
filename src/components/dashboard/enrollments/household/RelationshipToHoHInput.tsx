@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import RelationshipToHohSelect, { Option } from './RelationshipToHohSelect';
+import RelationshipToHohSelect, {
+  Option,
+  Props as RelationshipToHohSelectProps,
+} from './RelationshipToHohSelect';
 
 import InputIndicatorContainer from '@/components/elements/input/InputIndicatorContainer';
 import {
@@ -8,17 +11,18 @@ import {
   useUpdateEnrollmentMutation,
 } from '@/types/gqlTypes';
 
+interface Props
+  extends Omit<RelationshipToHohSelectProps, 'value' | 'onChange'> {
+  enrollmentId: string;
+  relationshipToHoH: RelationshipToHoH;
+}
+
 const RelationshipToHoHInput = ({
   enrollmentId,
   relationshipToHoH,
-  onChanged,
-  error,
-}: {
-  enrollmentId: string;
-  relationshipToHoH: RelationshipToHoH;
-  onChanged: () => void;
-  error: boolean;
-}) => {
+
+  ...props
+}: Props) => {
   // Store selected relationship in state so that it can be reflected immediately
   const [relationship, setRelationship] = useState<RelationshipToHoH | null>(
     relationshipToHoH
@@ -27,7 +31,6 @@ const RelationshipToHoHInput = ({
   const [updateEnrollment, { loading, error: updateError }] =
     useUpdateEnrollmentMutation({
       onCompleted: () => {
-        onChanged();
         setDone(true);
       },
     });
@@ -75,7 +78,7 @@ const RelationshipToHoHInput = ({
         value={relationship || null}
         onChange={onChange}
         showDataNotCollected
-        textInputProps={{ error }}
+        {...props}
       />
     </InputIndicatorContainer>
   );

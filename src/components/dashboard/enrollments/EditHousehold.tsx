@@ -1,6 +1,5 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import { sortBy } from 'lodash-es';
 import { useEffect, useMemo, useState } from 'react';
 import {
   generatePath,
@@ -22,7 +21,7 @@ import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import ClientSearch from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -75,11 +74,10 @@ const EditHousehold = () => {
     }, 0);
   }, [pathname, hash, key, anythingLoading]);
 
-  const currentMembers = useMemo(() => {
-    return sortBy(data?.enrollment?.household.householdClients || [], [
-      (c) => c.client.lastName || c.client.id,
-    ]);
-  }, [data]);
+  const currentMembers = useMemo(
+    () => sortHouseholdMembers(data?.enrollment?.household.householdClients),
+    [data]
+  );
   const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];
     return new Set(hc.map((c) => c.client.id));

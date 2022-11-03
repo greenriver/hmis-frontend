@@ -11,6 +11,7 @@ import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField'
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
+  highlight?: boolean; // toggle highlight state
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
 
@@ -21,6 +22,7 @@ const TextInput = ({
   fullWidth = true,
   min,
   max,
+  highlight,
   ...props
 }: TextInputProps) => {
   const htmlId = useId();
@@ -46,6 +48,10 @@ const TextInput = ({
           'label + &': {
             mt: 0.5,
           },
+          boxShadow: highlight
+            ? (theme) => `0 0 8px ${theme.palette.warning.main}`
+            : undefined,
+          borderRadius: highlight ? '5px' : undefined,
           ...(props.InputProps?.sx || {}),
         },
       }}

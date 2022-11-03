@@ -18,9 +18,8 @@ export function useIntakeAssessment(enrollmentId: string) {
     // FIXME: could update cache directly on save & remove this?
     fetchPolicy: 'cache-and-network',
   });
-  console.log(data);
 
-  if (status.error) console.error(status.error, data);
+  if (status.error) console.error(status.error);
 
   const assessment = useMemo(
     () => data?.enrollment?.assessments?.nodes[0],

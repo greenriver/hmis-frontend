@@ -20,6 +20,7 @@ import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
 import LinkToClient from '@/components/elements/LinkToClient';
+import usePrevious from '@/hooks/usePrevious';
 import { age, clientName, dob } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
@@ -50,13 +51,26 @@ const EditHouseholdMemberTable = ({
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
     )?.client || null
   );
+  const previousMembers =
+    usePrevious<HouseholdClientFieldsFragment[]>(currentMembers);
 
   // client to highlight for relationship input
-  const [highlight, setHighlight] = useState<string | null>(null);
+  const [highlight, setHighlight] = useState<string[]>([]);
 
   const [setHoHMutate, { data, loading, error }] = useSetHoHMutation({
-    // refetch, so that all relationships-to-HoH to reload
-    onCompleted: () => refetch(),
+    onCompleted: (data) => {
+      // highlight relationship field for non-HOH members
+      const members =
+        data.setHoHForEnrollment?.enrollment?.household.householdClients
+          .filter(
+            (hc) =>
+              hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
+          )
+          .map((hc) => hc.client.id);
+      setHighlight(members || []);
+      // refetch, so that all relationships-to-HoH to reload
+      refetch();
+    },
   });
 
   // If there was an error changing HoH, close the dialog.
@@ -91,11 +105,25 @@ const EditHouseholdMemberTable = ({
     });
   }, [currentMembers]);
 
+  // If new members have beed added highlight their relationship field if it's DNC
+  useEffect(() => {
+    if (!previousMembers || !currentMembers) return;
+    if (previousMembers.length < currentMembers.length) {
+      const old = new Set(previousMembers.map((m) => m.client.id));
+      const newMembers = currentMembers
+        .filter(
+          (hc) => hc.relationshipToHoH === RelationshipToHoH.DataNotCollected
+        )
+        .map((m) => m.client.id)
+        .filter((id) => !old.has(id));
+      setHighlight((old) => [...old, ...newMembers]);
+    }
+  }, [previousMembers, currentMembers]);
+
   const onChangeHoH = useMemo(
     () => () => {
       if (!proposedHoH) return;
       setConfirmedHoH(true);
-      if (hoh) setHighlight(hoh.id);
       setHoHMutate({
         variables: {
           input: {
@@ -105,7 +133,7 @@ const EditHouseholdMemberTable = ({
         },
       });
     },
-    [setHoHMutate, proposedHoH, householdId, setHighlight, hoh]
+    [setHoHMutate, proposedHoH, householdId]
   );
 
   const columns = useMemo(() => {
@@ -194,8 +222,10 @@ const EditHouseholdMemberTable = ({
           <RelationshipToHoHInput
             enrollmentId={hc.enrollment.id}
             relationshipToHoH={hc.relationshipToHoH}
-            onChanged={() => setHighlight(null)}
-            error={hc.client.id === highlight}
+            onClose={() =>
+              setHighlight((old) => old.filter((id) => id !== hc.client.id))
+            }
+            textInputProps={{ highlight: highlight.includes(hc.client.id) }}
           />
         ),
       },
