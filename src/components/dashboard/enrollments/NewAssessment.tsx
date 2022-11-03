@@ -127,6 +127,7 @@ const NewAssessment = () => {
                 onSaveDraft={submitDraftHandler}
                 loading={saveLoading}
                 errors={errors}
+                showSavePrompt
               />
             </>
           )}

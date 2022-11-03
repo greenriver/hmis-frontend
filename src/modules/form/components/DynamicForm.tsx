@@ -1,7 +1,9 @@
-import { Alert, Box, Button, Grid, Stack } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import { Alert, Box, Button, Grid, Paper, Slide, Stack } from '@mui/material';
+import { isNil } from 'lodash-es';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
@@ -24,6 +26,7 @@ export interface Props {
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
+  showSavePrompt?: boolean;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -37,8 +40,19 @@ const DynamicForm: React.FC<Props> = ({
   loading,
   initialValues = {},
   errors,
+  showSavePrompt = false,
 }) => {
   const navigate = useNavigate();
+
+  const [promptSave, setPromptSave] = useState<boolean | undefined>();
+  const saveButtonsRef = React.createRef<HTMLDivElement>();
+  const isSaveButtonVisible = useElementInView(saveButtonsRef, '0px');
+
+  useEffect(() => {
+    if (isNil(promptSave)) return;
+    setPromptSave(!isSaveButtonVisible);
+  }, [isSaveButtonVisible, promptSave]);
+
   // Map { linkId => current value }
   const [values, setValues] = useState<Record<string, any>>(
     Object.assign({}, initialValues)
@@ -50,6 +64,7 @@ const DynamicForm: React.FC<Props> = ({
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
+      setPromptSave(true);
       setValues((currentValues) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         currentValues[linkId] = value;
@@ -140,6 +155,34 @@ const DynamicForm: React.FC<Props> = ({
     );
   };
 
+  const saveButtons = (
+    <Stack direction='row' spacing={1}>
+      <Button variant='gray' onClick={onDiscard || (() => navigate(-1))}>
+        {discardButtonText || 'Discard'}
+      </Button>
+      {onSaveDraft && (
+        <Button
+          variant='outlined'
+          type='submit'
+          disabled={!!loading}
+          onClick={handleSaveDraft}
+        >
+          {loading
+            ? 'Saving...'
+            : saveDraftButtonText || 'Save and Finish Later'}
+        </Button>
+      )}
+      <Button
+        variant='contained'
+        type='submit'
+        disabled={!!loading}
+        onClick={handleSubmit}
+      >
+        {loading ? 'Saving...' : submitButtonText || 'Submit'}
+      </Button>
+    </Stack>
+  );
+
   return (
     <Box component='form'>
       <Grid container direction='column' spacing={2}>
@@ -157,32 +200,35 @@ const DynamicForm: React.FC<Props> = ({
         )}
         {definition.item.map((item) => renderItem(item, 0))}
       </Grid>
+      <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
+        {saveButtons}
+      </Box>
 
-      <Stack direction='row' spacing={1} sx={{ mt: 3 }}>
-        <Button
-          variant='contained'
-          type='submit'
-          disabled={!!loading}
-          onClick={handleSubmit}
-        >
-          {loading ? 'Saving...' : submitButtonText || 'Submit'}
-        </Button>
-        {onSaveDraft && (
-          <Button
-            variant='outlined'
-            type='submit'
-            disabled={!!loading}
-            onClick={handleSaveDraft}
+      {showSavePrompt && (
+        <Slide in={promptSave} appear timeout={300} direction='up'>
+          <Paper
+            elevation={2}
+            square
+            sx={{
+              position: 'fixed',
+              bottom: 0,
+              left: 0,
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'row-reverse',
+              opacity: 0.9,
+              py: 2,
+              px: 8,
+            }}
           >
-            {loading
-              ? 'Saving...'
-              : saveDraftButtonText || 'Save and Finish Later'}
-          </Button>
-        )}
-        <Button variant='gray' onClick={onDiscard || (() => navigate(-1))}>
-          {discardButtonText || 'Discard'}
-        </Button>
-      </Stack>
+            <Stack direction='row' spacing={3} alignItems='center'>
+              {/* <Typography>There are unsaved changes.</Typography> */}
+              {saveButtons}
+            </Stack>
+          </Paper>
+        </Slide>
+      )}
     </Box>
   );
 };

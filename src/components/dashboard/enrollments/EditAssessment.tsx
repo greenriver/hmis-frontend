@@ -118,6 +118,7 @@ const EditAssessment = () => {
               initialValues={initialValues || undefined}
               loading={saveLoading}
               errors={errors}
+              showSavePrompt
             />
           )}
         </Grid>
