@@ -1,5 +1,4 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { sortBy } from 'lodash-es';
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
@@ -11,9 +10,10 @@ import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
 import {
+  clientName,
   parseAndFormatDate,
   relationshipToHohForDisplay,
-  clientName,
+  sortHouseholdMembers,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -39,11 +39,10 @@ const HouseholdMemberTable = ({
     variables: { id: enrollmentId },
   });
 
-  const householdMembers = useMemo(() => {
-    if (!enrollment?.household?.householdClients) return [];
-    const clients = enrollment?.household?.householdClients || [];
-    return sortBy(clients, [(c) => c.client.lastName || c.client.id]);
-  }, [enrollment]);
+  const householdMembers = useMemo(
+    () => sortHouseholdMembers(enrollment?.household.householdClients),
+    [enrollment]
+  );
 
   const columns = useMemo(() => {
     return [

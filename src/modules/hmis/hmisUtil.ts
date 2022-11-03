@@ -1,5 +1,5 @@
 import { differenceInYears, format, isValid, parse, parseISO } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { isNil, sortBy } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -7,6 +7,7 @@ import {
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  HouseholdClientFieldsFragment,
   RecordType,
   RelationshipToHoH,
   ServiceFieldsFragment,
@@ -224,3 +225,7 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     (s) => s !== null && s !== '' && typeof s !== 'undefined'
   ) as string[];
 };
+
+export const sortHouseholdMembers = (
+  members?: HouseholdClientFieldsFragment[]
+) => sortBy(members || [], [(c) => c.client.lastName, (c) => c.client.id]);

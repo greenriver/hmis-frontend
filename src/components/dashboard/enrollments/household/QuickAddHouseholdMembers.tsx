@@ -47,9 +47,9 @@ const QuickAddHouseholdMembers = ({
     React.SetStateAction<Record<string, RelationshipToHoH | null>>
   >;
 }) => {
-  const [highlight, setHighlight] = useState<string | null>(null);
+  const [highlight, setHighlight] = useState<string[]>([]);
   const onToggleMemberForClient =
-    (client: ClientFieldsFragment) => (_: SyntheticEvent, checked: boolean) =>
+    (client: ClientFieldsFragment) => (_: SyntheticEvent, checked: boolean) => {
       setMembers((current) => {
         const copy = { ...current };
         if (!checked) {
@@ -62,6 +62,11 @@ const QuickAddHouseholdMembers = ({
         }
         return copy;
       });
+      if (!checked) {
+        // if unchecked, they shouldnt be highlighted again when rechecked
+        setHighlight((members) => members.filter((id) => id !== client.id));
+      }
+    };
 
   const columns = [
     {
@@ -82,12 +87,12 @@ const QuickAddHouseholdMembers = ({
               Object.keys(copy).forEach((id) => {
                 if (copy[id] === RelationshipToHoH.SelfHeadOfHousehold) {
                   copy[id] = null;
-                  setHighlight(id);
                 }
               });
               copy[client.id] = RelationshipToHoH.SelfHeadOfHousehold;
               return copy;
             });
+            setHighlight(Object.keys(members));
           }}
         />
       ),
@@ -99,10 +104,14 @@ const QuickAddHouseholdMembers = ({
       render: (client: ClientFieldsFragment) => (
         <RelationshipToHohSelect
           disabled={!(client.id in members)}
-          textInputProps={{ error: client.id === highlight }}
           value={members[client.id] || null}
+          onClose={() =>
+            setHighlight((old) => old.filter((id) => id !== client.id))
+          }
+          textInputProps={{
+            highlight: client.id in members && highlight.includes(client.id),
+          }}
           onChange={(_, selected) => {
-            setHighlight(null);
             setMembers((current) => {
               const copy = { ...current };
               if (!selected) {
