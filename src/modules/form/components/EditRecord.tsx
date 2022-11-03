@@ -100,7 +100,7 @@ const EditRecord = <
         values,
         autofillNotCollected: true,
         autofillNulls: true,
-        autofillBooleans: true,
+        autofillBooleans: false,
       });
       console.log('Submitted form values:', inputValues);
 
