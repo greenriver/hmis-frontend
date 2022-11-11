@@ -180,6 +180,30 @@ export const shouldEnableItem = (
       case EnableOperator.NotEqual:
         result = currentValue !== comparisonValue;
         break;
+      case EnableOperator.GreaterThan:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue > comparisonValue;
+        break;
+      case EnableOperator.GreaterThanEqual:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue >= comparisonValue;
+        break;
+      case EnableOperator.LessThan:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue < comparisonValue;
+        break;
+      case EnableOperator.LessThanEqual:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue <= comparisonValue;
+        break;
       case EnableOperator.Exists:
         result = !isNil(currentValue);
         // flip the result if this is "not exists"

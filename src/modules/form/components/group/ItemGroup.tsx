@@ -3,17 +3,20 @@ import { ReactNode } from 'react';
 
 import { FormItem } from '@/types/gqlTypes';
 
-const ItemGroup = ({
-  children,
-  item,
-  nestingLevel,
-}: {
-  children: ReactNode;
+export interface GroupItemComponentProps {
   item: FormItem;
   nestingLevel: number;
-}) => {
+  renderChildItem?: (item: FormItem) => ReactNode;
+  values: Record<string, any>;
+}
+const ItemGroup = ({
+  item,
+  nestingLevel,
+  renderChildItem,
+}: GroupItemComponentProps) => {
   const direction = 'column'; // item.display?.direction ?? 'column';
   const isColumn = direction === 'column';
+
   const wrappedChildren = (
     <Grid
       container
@@ -22,7 +25,8 @@ const ItemGroup = ({
       columnSpacing={isColumn ? 0 : 3}
       sx={{ '& .MuiGrid-item:first-of-type': { pt: 0 }, mt: 0 }}
     >
-      {children}
+      {renderChildItem &&
+        item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
   );
   if (nestingLevel === 0) {

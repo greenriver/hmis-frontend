@@ -1,9 +1,11 @@
 import {
-  TextField,
-  TextFieldProps,
   InputLabelProps,
   InputProps,
   SelectProps,
+  SxProps,
+  TextField,
+  TextFieldProps,
+  Theme,
 } from '@mui/material';
 import { useId } from 'react';
 
@@ -12,20 +14,50 @@ import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField'
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
   highlight?: boolean; // toggle highlight state
+  horizontal?: boolean;
+  inputWidth?: string;
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
+
+const horizontalProps: SxProps<Theme> = {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  backgroundImage: (theme: Theme) =>
+    `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
+  backgroundPosition: 'center',
+  backgroundSize: '8px 3px',
+  backgroundRepeat: 'repeat-x',
+};
 
 const TextInput = ({
   inputProps = {},
   label,
   hiddenLabel = false,
   fullWidth = true,
+  horizontal = false,
   min,
   max,
   highlight,
+  inputWidth,
+  sx,
   ...props
 }: TextInputProps) => {
   const htmlId = useId();
+
+  const sxProps: SxProps<Theme> = {
+    ...(horizontal ? horizontalProps : {}),
+    ...sx,
+  };
+  let width = inputWidth;
+  if (horizontal && !width) {
+    if (inputProps.inputMode === 'numeric') {
+      width = '120px';
+    } else {
+      width = '320px';
+    }
+  }
+
   return (
     <TextField
       id={htmlId}
@@ -35,6 +67,7 @@ const TextInput = ({
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       {...props}
+      sx={sxProps}
       inputProps={{
         ...inputProps,
         minLength: min,
@@ -48,6 +81,8 @@ const TextInput = ({
           'label + &': {
             mt: 0.5,
           },
+          width,
+          minWidth: width,
           boxShadow: highlight
             ? (theme) => `0 0 8px ${theme.palette.warning.main}`
             : undefined,
@@ -62,10 +97,14 @@ const TextInput = ({
         variant: 'standard',
         sx: {
           transform: 'none',
-          color: 'text.secondary',
+          color: 'text.primary',
           typography: 'body2',
           position: 'relative',
           whiteSpace: 'break-spaces',
+          display: 'flex',
+          alignItems: 'center',
+          backgroundColor: horizontal ? 'white' : undefined,
+          pr: horizontal ? 1 : undefined,
           ...(props.InputLabelProps?.sx || {}),
         },
       }}

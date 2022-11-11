@@ -7,11 +7,13 @@ import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
+import DynamicGroup from './DynamicGroup';
 
 import {
   BoundType,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -141,6 +143,17 @@ const DynamicForm: React.FC<Props> = ({
       return null;
     }
 
+    if (item.type === ItemType.Group) {
+      return (
+        <DynamicGroup
+          item={item}
+          key={item.linkId}
+          nestingLevel={nestingLevel}
+          renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
+          values={values}
+        />
+      );
+    }
     return (
       <DynamicField
         key={item.linkId}
@@ -148,7 +161,6 @@ const DynamicForm: React.FC<Props> = ({
         itemChanged={itemChanged}
         value={values[item.linkId]}
         nestingLevel={nestingLevel}
-        children={(item) => renderItem(item, nestingLevel + 1)}
         errors={getFieldErrors(item)}
         inputProps={getCommonInputProps(item)}
       />

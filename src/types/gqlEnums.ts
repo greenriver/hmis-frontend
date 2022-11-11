@@ -22,6 +22,10 @@ export const HmisEnums = {
     VOUCHER: 'Voucher',
     OTHER: 'Other',
   },
+  Component: {
+    CHECKBOX_GROUP: 'Group component, all children must be boolean',
+    NUMERIC_GROUP: 'Group component, all children must be numeric',
+  },
   DOBDataQuality: {
     DOB_FULL_DOB_REPORTED: 'Full DOB reported',
     DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED:
@@ -119,6 +123,7 @@ export const HmisEnums = {
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
+    HUD_ESG_RUSH: 'HUD: ESG - RUSH',
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
     HUD_HOME: 'HUD: HOME',
     HUD_HOME_ARP_: 'HUD: HOME (ARP)',

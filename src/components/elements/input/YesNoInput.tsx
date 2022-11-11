@@ -1,6 +1,7 @@
 import {
   FormGroup,
   FormLabel,
+  SxProps,
   Theme,
   ToggleButton,
   ToggleButtonGroup,
@@ -18,6 +19,7 @@ interface Props extends ToggleButtonGroupProps {
   falseLabel?: string;
   nullOptionLabel?: string;
   includeNullOption?: boolean;
+  horizontal?: boolean;
 }
 export type YesNoInputProps = Props & DynamicInputCommonProps;
 
@@ -28,6 +30,7 @@ const YesNoInput = ({
   trueLabel = 'Yes',
   falseLabel = 'No',
   nullOptionLabel = "Don't Know",
+  horizontal = false,
   onChange,
   value,
   error,
@@ -49,15 +52,38 @@ const YesNoInput = ({
       ? (theme: Theme) => `1px solid ${theme.palette.error.main}`
       : undefined,
   };
+  const horizontalProps: SxProps<Theme> = {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundImage: (theme: Theme) =>
+      `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
+    backgroundPosition: 'center',
+    backgroundSize: '8px 3px',
+    backgroundRepeat: 'repeat-x',
+  };
   return (
-    <FormGroup>
-      <FormLabel id={htmlId} error={error}>
+    <FormGroup sx={horizontal ? horizontalProps : undefined}>
+      <FormLabel
+        id={htmlId}
+        error={error}
+        sx={{
+          pr: horizontal ? 1 : undefined,
+          backgroundColor: horizontal ? 'white' : undefined,
+          color: horizontal ? 'text.primary' : undefined,
+        }}
+      >
         {label}
       </FormLabel>
       <ToggleButtonGroup
         exclusive
         aria-labelledby={htmlId}
-        sx={{ pt: 0.5, mt: 0.5 }}
+        sx={{
+          pt: 0.5,
+          mt: 0.5,
+          backgroundColor: horizontal ? 'white' : undefined,
+          pl: horizontal ? 1 : undefined,
+        }}
         size='small'
         onChange={handleChange}
         value={

@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
@@ -6,7 +7,6 @@ import { usePickList } from '../hooks/usePickList';
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
-import ItemGroup from './ItemGroup';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import NumberInput from '@/components/elements/input/NumberInput';
@@ -31,7 +31,6 @@ interface Props {
   nestingLevel: number;
   value: any;
   disabled?: boolean;
-  children?: (item: FormItem) => ReactNode;
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
 }
@@ -58,7 +57,6 @@ const DynamicField: React.FC<Props> = ({
   value,
   disabled = false,
   errors,
-  children,
   inputProps,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -69,6 +67,7 @@ const DynamicField: React.FC<Props> = ({
   const label = getLabel(item);
   const maxWidth = 600 - nestingLevel * 26;
   const minWidth = 250;
+  const horizontal = true;
 
   const commonContainerProps = { errors };
 
@@ -108,12 +107,6 @@ const DynamicField: React.FC<Props> = ({
           {item.text}
         </Typography>
       );
-    case ItemType.Group:
-      return (
-        <ItemGroup item={item} nestingLevel={nestingLevel}>
-          {children && item.item?.map((childItem) => children(childItem))}
-        </ItemGroup>
-      );
     case ItemType.Boolean:
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
@@ -123,6 +116,7 @@ const DynamicField: React.FC<Props> = ({
             id={item.linkId}
             name={item.linkId}
             nullable={!item.required}
+            horizontal
             // includeNullOption
             {...commonInputProps}
           />
@@ -149,6 +143,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
+            horizontal={horizontal}
             {...commonInputProps}
           />
         </InputContainer>
@@ -160,8 +155,10 @@ const DynamicField: React.FC<Props> = ({
           <NumberInput
             id={item.linkId}
             name={item.linkId}
-            value={value}
+            value={isNil(value) ? '' : value}
             onChange={onChangeEvent}
+            horizontal={horizontal}
+            currency={item.type === ItemType.Currency}
             {...commonInputProps}
           />
         </InputContainer>
@@ -173,11 +170,12 @@ const DynamicField: React.FC<Props> = ({
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
-        <InputContainer sx={{ width: 250 }} {...commonContainerProps}>
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
+            textInputProps={{ horizontal }}
             {...datePickerProps}
             {...commonInputProps}
           />
@@ -195,6 +193,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            textInputProps={{ horizontal }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -230,6 +229,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            textInputProps={{ horizontal }}
             {...commonInputProps}
           />
         );
