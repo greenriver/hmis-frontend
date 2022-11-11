@@ -13,19 +13,33 @@ let output = 'export const HmisEnums = {';
 const CODE_PATTERN_NUMERIC = /^\(([0-9]*)\) /;
 const CODE_PATTERN = /^\(([a-zA-Z0-9]*)\) /;
 
-const CUSTOM_SORT_VALUES = {
-  FundingSource: {
-    LOCAL_OR_OTHER_FUNDING_SOURCE: 499,
-    N_A: 500,
-  },
-  ProjectType: {
-    OTHER: 500,
-  },
+const ALPHABETICAL = ['FundingSource', 'ServiceSubTypeProvided'];
+
+const SORT_LAST = {
+  FundingSource: ['LOCAL_OR_OTHER_FUNDING_SOURCE', 'N_A'],
+  ProjectType: ['OTHER'],
+};
+
+const SORT_FIRST = {
+  LengthOfStay: ['LOS_TWO_TO_SIX_NIGHTS', 'LOS_ONE_NIGHT_OR_LESS'],
+};
+
+const alphabeticalCompare = (first, second) => {
+  const m = first.description.match(CODE_PATTERN_NUMERIC);
+  const m2 = second.description.match(CODE_PATTERN_NUMERIC);
+  if (m && m2) {
+    const description1 = first.description.replace(m[0], '');
+    const description2 = second.description.replace(m2[0], '');
+    // console.log(description1, description2)
+    return description1.localeCompare(description2);
+  }
+
+  return first.description.localeCompare(second.description);
 };
 
 // Get numeric sort value from enum value
 const getSortValue = (elem, name) => {
-  const custom = CUSTOM_SORT_VALUES[name] || {};
+  // const custom = CUSTOM_SORT_VALUES[name] || {};
 
   // 9 from "(9) Client refused"
   const m = elem.description.match(CODE_PATTERN_NUMERIC);
@@ -38,15 +52,15 @@ const getSortValue = (elem, name) => {
     if (num === 8) return 498;
 
     // Other fields with custom sort values
-    if (custom[elem.name]) {
-      return custom[elem.name];
-    }
+    // if (custom[elem.name]) {
+    //   return custom[elem.name];
+    // }
 
     // By default, sort by HUD number if it exists
     return num;
   }
 
-  return custom[elem.name] || null;
+  return null;
 };
 
 schema.__schema.types.forEach((type) => {
@@ -56,6 +70,9 @@ schema.__schema.types.forEach((type) => {
     const enumValues = type.enumValues
       .filter((a) => !!a.description)
       .sort((a, b) => {
+        if (ALPHABETICAL.includes(type.name)) {
+          return alphabeticalCompare(a, b);
+        }
         const first = getSortValue(a, type.name);
         const second = getSortValue(b, type.name);
         if (first !== null && second !== null) return first - second;
@@ -64,6 +81,19 @@ schema.__schema.types.forEach((type) => {
         if (second !== null) return -1;
         return 0;
       });
+
+    if (SORT_LAST[type.name]) {
+      SORT_LAST[type.name].forEach((name) => {
+        const idx = enumValues.findIndex((item) => item.name === name);
+        enumValues.push(enumValues.splice(idx, 1)[0]);
+      });
+    }
+    if (SORT_FIRST[type.name]) {
+      SORT_FIRST[type.name].forEach((name) => {
+        const idx = enumValues.findIndex((item) => item.name === name);
+        enumValues.unshift(enumValues.splice(idx, 1)[0]);
+      });
+    }
 
     const values = enumValues.map((elem) => {
       let description = elem.description.replaceAll(/\n/g, ' ');
