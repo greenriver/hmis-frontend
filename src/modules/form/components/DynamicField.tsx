@@ -33,6 +33,7 @@ interface Props {
   disabled?: boolean;
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
+  horizontal?: boolean;
 }
 
 const getLabel = (item: FormItem) => {
@@ -56,6 +57,7 @@ const DynamicField: React.FC<Props> = ({
   nestingLevel,
   value,
   disabled = false,
+  horizontal = false,
   errors,
   inputProps,
 }) => {
@@ -67,7 +69,6 @@ const DynamicField: React.FC<Props> = ({
   const label = getLabel(item);
   const maxWidth = 600 - nestingLevel * 26;
   const minWidth = 250;
-  const horizontal = true;
 
   const commonContainerProps = { errors };
 
@@ -116,7 +117,7 @@ const DynamicField: React.FC<Props> = ({
             id={item.linkId}
             name={item.linkId}
             nullable={!item.required}
-            horizontal
+            horizontal={horizontal}
             // includeNullOption
             {...commonInputProps}
           />

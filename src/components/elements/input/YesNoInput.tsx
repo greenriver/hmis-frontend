@@ -82,7 +82,6 @@ const YesNoInput = ({
           pt: 0.5,
           mt: 0.5,
           backgroundColor: horizontal ? 'white' : undefined,
-          pl: horizontal ? 1 : undefined,
         }}
         size='small'
         onChange={handleChange}

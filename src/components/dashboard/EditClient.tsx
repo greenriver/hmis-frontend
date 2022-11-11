@@ -45,6 +45,7 @@ const Profile = () => {
               data?.updateClient?.errors
             }
             submitButtonText='Save Changes'
+            horizontal
           />
         </Grid>
       </Grid>

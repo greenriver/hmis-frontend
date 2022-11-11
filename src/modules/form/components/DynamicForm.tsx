@@ -29,6 +29,7 @@ export interface Props {
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
+  horizontal?: boolean;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -43,6 +44,7 @@ const DynamicForm: React.FC<Props> = ({
   initialValues = {},
   errors,
   showSavePrompt = false,
+  horizontal = false,
 }) => {
   const navigate = useNavigate();
 
@@ -163,6 +165,7 @@ const DynamicForm: React.FC<Props> = ({
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         inputProps={getCommonInputProps(item)}
+        horizontal={horizontal}
       />
     );
   };
