@@ -90,20 +90,39 @@ export const HmisEnums = {
       'Referral to Non-continuum services: No availability in continuum services',
   },
   FundingSource: {
+    HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
+      'HHS: PATH - Street Outreach & Supportive Services Only',
+    HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER_:
+      'HHS: RHY - Basic Center Program (prevention and shelter)',
+    HHS_RHY_DEMONSTRATION_PROJECT: 'HHS: RHY - Demonstration Project',
+    HHS_RHY_MATERNITY_GROUP_HOME_FOR_PREGNANT_AND_PARENTING_YOUTH:
+      'HHS: RHY - Maternity Group Home for Pregnant and Parenting Youth',
+    HHS_RHY_STREET_OUTREACH_PROJECT: 'HHS: RHY - Street Outreach Project',
+    HHS_RHY_TRANSITIONAL_LIVING_PROGRAM:
+      'HHS: RHY - Transitional Living Program',
     HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY_:
       'HUD: CoC - Homelessness Prevention (High Performing Communities Only)',
+    HUD_COC_JOINT_COMPONENT_RRH_PSH_: 'HUD: CoC - Joint Component RRH/PSH ',
+    HUD_COC_JOINT_COMPONENT_TH_RRH: 'HUD: CoC - Joint Component TH/RRH',
     HUD_COC_PERMANENT_SUPPORTIVE_HOUSING:
       'HUD: CoC - Permanent Supportive Housing',
     HUD_COC_RAPID_RE_HOUSING: 'HUD: CoC - Rapid Re-Housing',
-    HUD_COC_SUPPORTIVE_SERVICES_ONLY: 'HUD: CoC - Supportive Services Only',
-    HUD_COC_TRANSITIONAL_HOUSING: 'HUD: CoC - Transitional Housing',
     HUD_COC_SAFE_HAVEN: 'HUD: CoC - Safe Haven',
     HUD_COC_SINGLE_ROOM_OCCUPANCY_SRO_:
       'HUD: CoC - Single Room Occupancy (SRO)',
+    HUD_COC_SUPPORTIVE_SERVICES_ONLY: 'HUD: CoC - Supportive Services Only',
+    HUD_COC_TRANSITIONAL_HOUSING: 'HUD: CoC - Transitional Housing',
+    HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP_:
+      'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
+    HUD_ESG_CV: 'HUD: ESG - CV',
+    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
+      'HUD: ESG - Emergency Shelter (operating and/or essential services)',
+    HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
-    HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_:
-      'HUD: Rural Housing Stability Assistance Program ',
+    HUD_HOME: 'HUD: HOME',
+    HUD_HOME_ARP_: 'HUD: HOME (ARP)',
+    HUD_HOPWA_CV: 'HUD: HOPWA - CV',
     HUD_HOPWA_HOTEL_MOTEL_VOUCHERS: 'HUD: HOPWA - Hotel/Motel Vouchers',
     HUD_HOPWA_HOUSING_INFORMATION: 'HUD: HOPWA - Housing Information',
     HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA_:
@@ -117,51 +136,32 @@ export const HmisEnums = {
     HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA_:
       'HUD: HOPWA - Transitional Housing (facility based or TBRA)',
     HUD_HUD_VASH: 'HUD: HUD/VASH',
-    HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
-      'HHS: PATH - Street Outreach & Supportive Services Only',
-    HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER_:
-      'HHS: RHY - Basic Center Program (prevention and shelter)',
-    HHS_RHY_MATERNITY_GROUP_HOME_FOR_PREGNANT_AND_PARENTING_YOUTH:
-      'HHS: RHY - Maternity Group Home for Pregnant and Parenting Youth',
-    HHS_RHY_TRANSITIONAL_LIVING_PROGRAM:
-      'HHS: RHY - Transitional Living Program',
-    HHS_RHY_STREET_OUTREACH_PROJECT: 'HHS: RHY - Street Outreach Project',
-    HHS_RHY_DEMONSTRATION_PROJECT: 'HHS: RHY - Demonstration Project',
-    VA_CRS_CONTRACT_RESIDENTIAL_SERVICES:
-      'VA: CRS Contract Residential Services',
+    HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
+    HUD_PIH_EMERGENCY_HOUSING_VOUCHER_: 'HUD: PIH (Emergency Housing Voucher)',
+    HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
+      'HUD: Public and Indian Housing (PIH) Programs',
+    HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_:
+      'HUD: Rural Housing Stability Assistance Program ',
     VA_COMMUNITY_CONTRACT_SAFE_HAVEN_PROGRAM:
       'VA: Community Contract Safe Haven Program',
     VA_COMPENSATED_WORK_THERAPY_TRANSITIONAL_RESIDENCE:
       'VA: Compensated Work Therapy Transitional Residence',
-    VA_SUPPORTIVE_SERVICES_FOR_VETERAN_FAMILIES:
-      'VA: Supportive Services for Veteran Families',
-    HUD_PAY_FOR_SUCCESS: 'HUD: Pay for Success',
-    HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS:
-      'HUD: Public and Indian Housing (PIH) Programs',
+    VA_CRS_CONTRACT_RESIDENTIAL_SERVICES:
+      'VA: CRS Contract Residential Services',
     VA_GRANT_PER_DIEM_BRIDGE_HOUSING: 'VA: Grant Per Diem - Bridge Housing',
-    VA_GRANT_PER_DIEM_LOW_DEMAND: 'VA: Grant Per Diem - Low Demand',
-    VA_GRANT_PER_DIEM_HOSPITAL_TO_HOUSING:
-      'VA: Grant Per Diem - Hospital to Housing',
+    VA_GRANT_PER_DIEM_CASE_MANAGEMENT_HOUSING_RETENTION:
+      'VA: Grant Per Diem - Case Management/Housing Retention',
     VA_GRANT_PER_DIEM_CLINICAL_TREATMENT:
       'VA: Grant Per Diem - Clinical Treatment',
+    VA_GRANT_PER_DIEM_HOSPITAL_TO_HOUSING:
+      'VA: Grant Per Diem - Hospital to Housing',
+    VA_GRANT_PER_DIEM_LOW_DEMAND: 'VA: Grant Per Diem - Low Demand',
     VA_GRANT_PER_DIEM_SERVICE_INTENSIVE_TRANSITIONAL_HOUSING:
       'VA: Grant Per Diem - Service Intensive Transitional Housing',
     VA_GRANT_PER_DIEM_TRANSITION_IN_PLACE:
       'VA: Grant Per Diem - Transition in Place',
-    HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP_:
-      'HUD: CoC - Youth Homeless Demonstration Program (YHDP)',
-    HUD_COC_JOINT_COMPONENT_TH_RRH: 'HUD: CoC - Joint Component TH/RRH',
-    VA_GRANT_PER_DIEM_CASE_MANAGEMENT_HOUSING_RETENTION:
-      'VA: Grant Per Diem - Case Management/Housing Retention',
-    HUD_ESG_CV: 'HUD: ESG - CV',
-    HUD_HOPWA_CV: 'HUD: HOPWA - CV',
-    HUD_COC_JOINT_COMPONENT_RRH_PSH_: 'HUD: CoC - Joint Component RRH/PSH ',
-    HUD_HOME: 'HUD: HOME',
-    HUD_HOME_ARP_: 'HUD: HOME (ARP)',
-    HUD_PIH_EMERGENCY_HOUSING_VOUCHER_: 'HUD: PIH (Emergency Housing Voucher)',
-    HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_:
-      'HUD: ESG - Emergency Shelter (operating and/or essential services)',
-    HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
+    VA_SUPPORTIVE_SERVICES_FOR_VETERAN_FAMILIES:
+      'VA: Supportive Services for Veteran Families',
     LOCAL_OR_OTHER_FUNDING_SOURCE: 'Local or Other Funding Source',
     N_A: 'N/A',
   },
@@ -200,6 +200,8 @@ export const HmisEnums = {
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
   },
   LengthOfStay: {
+    LOS_ONE_NIGHT_OR_LESS: 'One night or less',
+    LOS_TWO_TO_SIX_NIGHTS: 'Two to six nights',
     LOS_ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH:
       'One week or more, but less than one month',
     LOS_ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS:
@@ -207,8 +209,6 @@ export const HmisEnums = {
     LOS_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR:
       '90 days or more but less than one year',
     LOS_ONE_YEAR_OR_LONGER: 'One year or longer',
-    LOS_ONE_NIGHT_OR_LESS: 'One night or less',
-    LOS_TWO_TO_SIX_NIGHTS: 'Two to six nights',
     LOS_CLIENT_DOESN_T_KNOW: "Client doesn't know",
     LOS_CLIENT_REFUSED: 'Client refused',
     LOS_DATA_NOT_COLLECTED: 'Data not collected',
@@ -320,62 +320,62 @@ export const HmisEnums = {
     SSN_DATA_NOT_COLLECTED: 'Data not collected',
   },
   ServiceSubTypeProvided: {
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES:
-      'Health care services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING:
-      'VA vocational and rehabilitation counseling',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
-      'Personal financial planning services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
+      'Child care',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
+      'Child care',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__DAILY_LIVING_SERVICES:
       'Daily living services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES:
-      'Employment and training services',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
-      'Transportation services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
-      'Personal financial planning services',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EDUCATIONAL_ASSISTANCE:
       'Educational assistance',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
-      'Income support services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
-      'Transportation services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES:
-      'Health care services',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES:
-      'Fiduciary and representative payee services',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
-      'Income support services',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT:
-      'Legal services - child support',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__EMPLOYMENT_AND_TRAINING_SERVICES:
+      'Employment and training services',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES:
       'Fiduciary and representative payee services',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
-      'Legal services - eviction prevention',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__FIDUCIARY_AND_REPRESENTATIVE_PAYEE_SERVICES:
+      'Fiduciary and representative payee services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HEALTH_CARE_SERVICES:
+      'Health care services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__HEALTH_CARE_SERVICES:
+      'Health care services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
+      'Housing counseling',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
+      'Housing counseling',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
+      'Income support services',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES:
+      'Income support services',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT:
       'Legal services - child support',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_CHILD_SUPPORT:
+      'Legal services - child support',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
+      'Legal services - eviction prevention',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
+      'Legal services - eviction prevention',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
+      'Legal services - other',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
+      'Legal services - other',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
+      'Legal services - outstanding fines and penalties',
     SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
       'Legal services - outstanding fines and penalties',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
       "Legal services - restore / acquire driver's license",
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
-      'Child care',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
-      'Legal services - other',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
-      'Housing counseling',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
-      'Child care',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__HOUSING_COUNSELING:
-      'Housing counseling',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_EVICTION_PREVENTION:
-      'Legal services - eviction prevention',
     SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_RESTORE_ACQUIRE_DRIVER_S_LICENSE:
       "Legal services - restore / acquire driver's license",
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OUTSTANDING_FINES_AND_PENALTIES:
-      'Legal services - outstanding fines and penalties',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__LEGAL_SERVICES_OTHER:
-      'Legal services - other',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
+      'Personal financial planning services',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__PERSONAL_FINANCIAL_PLANNING_SERVICES:
+      'Personal financial planning services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
+      'Transportation services',
+    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES:
+      'Transportation services',
+    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING:
+      'VA vocational and rehabilitation counseling',
   },
   ServiceTypeProvided: {
     C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
