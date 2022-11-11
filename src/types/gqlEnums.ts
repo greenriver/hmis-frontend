@@ -23,8 +23,9 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   Component: {
-    CHECKBOX_GROUP: 'Group component, all children must be boolean',
-    NUMERIC_GROUP: 'Group component, all children must be numeric',
+    CHECKBOX: 'Boolean input component',
+    INPUT_GROUP:
+      'Group of inputs, optionally with a summary item (must be first)',
   },
   DOBDataQuality: {
     DOB_FULL_DOB_REPORTED: 'Full DOB reported',
@@ -540,11 +541,11 @@ export const HmisEnums = {
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
   },
-  VeteranStatus: {
-    VETERAN_STATUS_NO: 'No',
-    VETERAN_STATUS_YES: 'Yes',
-    VETERAN_STATUS_CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    VETERAN_STATUS_CLIENT_REFUSED: 'Client refused',
-    VETERAN_STATUS_DATA_NOT_COLLECTED: 'Data not collected',
+  YesNoMissingReason: {
+    YES: 'Yes',
+    NO: 'No',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    CLIENT_REFUSED: 'Client refused',
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
 };

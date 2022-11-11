@@ -9,12 +9,19 @@ import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
 
 import DatePicker from '@/components/elements/input/DatePicker';
+import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
+import ToggleButtonGroupInput from '@/components/elements/input/ToggleButtonGroupInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
-import { FormItem, ItemType, ValidationError } from '@/types/gqlTypes';
+import {
+  Component,
+  FormItem,
+  ItemType,
+  ValidationError,
+} from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
   disabled?: boolean;
@@ -27,7 +34,7 @@ export interface DynamicInputCommonProps {
 
 interface Props {
   item: FormItem;
-  itemChanged: (uid: string, value: any) => void;
+  itemChanged: (linkId: string, value: any) => void;
   nestingLevel: number;
   value: any;
   disabled?: boolean;
@@ -109,6 +116,22 @@ const DynamicField: React.FC<Props> = ({
         </Typography>
       );
     case ItemType.Boolean:
+      if (item.component === Component.Checkbox) {
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <LabeledCheckbox
+              checked={!!value}
+              onChange={(e) =>
+                itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
+              }
+              id={item.linkId}
+              name={item.linkId}
+              horizontal={horizontal}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+      }
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <YesNoInput
@@ -121,15 +144,6 @@ const DynamicField: React.FC<Props> = ({
             // includeNullOption
             {...commonInputProps}
           />
-          {/* <LabeledCheckbox
-            checked={!!value}
-            onChange={(e) =>
-              itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
-            }
-            id={item.linkId}
-            name={item.linkId}
-            {...commonInputProps}
-          /> */}
         </InputContainer>
       );
     case ItemType.String:
@@ -219,6 +233,18 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             disabled={disabled}
+          />
+        );
+      } else if (item.pickListReference === 'YesNoMissingReason') {
+        inputComponent = (
+          <ToggleButtonGroupInput
+            value={selectedVal}
+            onChange={onChangeEventValue}
+            id={item.linkId}
+            name={item.linkId}
+            horizontal={horizontal}
+            options={options || []}
+            {...commonInputProps}
           />
         );
       } else {

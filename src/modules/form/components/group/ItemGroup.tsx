@@ -1,14 +1,7 @@
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { ReactNode } from 'react';
 
-import { FormItem } from '@/types/gqlTypes';
+import { GroupItemComponentProps } from '../DynamicGroup';
 
-export interface GroupItemComponentProps {
-  item: FormItem;
-  nestingLevel: number;
-  renderChildItem?: (item: FormItem) => ReactNode;
-  values: Record<string, any>;
-}
 const ItemGroup = ({
   item,
   nestingLevel,

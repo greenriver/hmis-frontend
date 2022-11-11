@@ -19,7 +19,7 @@ interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
 
-const horizontalProps: SxProps<Theme> = {
+export const horizontalInputSx: SxProps<Theme> = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
@@ -28,6 +28,7 @@ const horizontalProps: SxProps<Theme> = {
   backgroundPosition: 'center',
   backgroundSize: '8px 3px',
   backgroundRepeat: 'repeat-x',
+  flexWrap: 'nowrap',
 };
 
 const TextInput = ({
@@ -46,7 +47,7 @@ const TextInput = ({
   const htmlId = useId();
 
   const sxProps: SxProps<Theme> = {
-    ...(horizontal ? horizontalProps : {}),
+    ...(horizontal ? horizontalInputSx : {}),
     ...sx,
   };
   let width = inputWidth;

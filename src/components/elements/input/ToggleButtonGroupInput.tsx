@@ -1,6 +1,7 @@
 import {
   FormGroup,
   FormLabel,
+  SxProps,
   Theme,
   ToggleButton,
   ToggleButtonGroup,
@@ -12,43 +13,43 @@ import { useCallback, useId } from 'react';
 import { horizontalInputSx } from './TextInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { PickListOption } from '@/types/gqlTypes';
+
+type Option = PickListOption;
 
 interface Props extends ToggleButtonGroupProps {
-  nullable?: boolean; // whether you can click again to remove the selection
   name?: string;
-  trueLabel?: string;
-  falseLabel?: string;
-  nullOptionLabel?: string;
-  includeNullOption?: boolean;
   horizontal?: boolean;
+  options: Option[];
 }
-export type YesNoInputProps = Props & DynamicInputCommonProps;
+export type ToggleButtonGroupInputProps = Props & DynamicInputCommonProps;
 
-const YesNoInput = ({
+const ToggleButtonGroupInput = ({
   label,
-  nullable = true,
-  includeNullOption = false,
-  trueLabel = 'Yes',
-  falseLabel = 'No',
-  nullOptionLabel = "Don't Know",
+  options,
   horizontal = false,
   onChange,
   value,
   error,
   ...props
-}: YesNoInputProps) => {
+}: ToggleButtonGroupInputProps) => {
   const htmlId = useId();
+
   const handleChange = useCallback(
     (event: React.MouseEvent<HTMLElement, MouseEvent>, value: any) => {
       if (!onChange) return;
-      if (!nullable && isNil(value)) return;
-      return onChange(event, value === -1 ? null : value);
+      if (isNil(value)) onChange(event, value);
+      return onChange(
+        event,
+        options.find((o) => o.code === value)
+      );
     },
-    [onChange, nullable]
+    [onChange, options]
   );
 
-  const buttonSx = {
-    width: 100,
+  const buttonSx: SxProps<Theme> = {
+    minWidth: 100,
+    whiteSpace: 'pre',
     border: error
       ? (theme: Theme) => `1px solid ${theme.palette.error.main}`
       : undefined,
@@ -77,42 +78,23 @@ const YesNoInput = ({
         }}
         size='small'
         onChange={handleChange}
-        value={
-          includeNullOption && isNil(value) && typeof value !== 'undefined'
-            ? -1
-            : value
-        }
+        value={value ? value.code : null}
         {...props}
       >
-        <ToggleButton
-          value={true}
-          aria-label={trueLabel}
-          color='secondary'
-          sx={buttonSx}
-        >
-          {trueLabel}
-        </ToggleButton>
-        <ToggleButton
-          value={false}
-          aria-label={falseLabel}
-          color='secondary'
-          sx={buttonSx}
-        >
-          {falseLabel}
-        </ToggleButton>
-        {includeNullOption && (
+        {options.map(({ code, label }) => (
           <ToggleButton
-            value={-1}
-            aria-label={nullOptionLabel}
+            value={code}
+            aria-label={label || code}
             color='secondary'
             sx={buttonSx}
+            key={code}
           >
-            {nullOptionLabel}
+            {label || code}
           </ToggleButton>
-        )}
+        ))}
       </ToggleButtonGroup>
     </FormGroup>
   );
 };
 
-export default YesNoInput;
+export default ToggleButtonGroupInput;

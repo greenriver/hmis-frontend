@@ -1185,7 +1185,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "VeteranStatus",
+                "name": "YesNoMissingReason",
                 "ofType": null
               }
             },
@@ -1381,7 +1381,7 @@
             "description": null,
             "type": {
               "kind": "ENUM",
-              "name": "VeteranStatus",
+              "name": "YesNoMissingReason",
               "ofType": null
             },
             "defaultValue": null,
@@ -1715,14 +1715,14 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "CHECKBOX_GROUP",
-            "description": "Group component, all children must be boolean",
+            "name": "CHECKBOX",
+            "description": "Boolean input component",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "NUMERIC_GROUP",
-            "description": "Group component, all children must be numeric",
+            "name": "INPUT_GROUP",
+            "description": "Group of inputs, optionally with a summary item (must be first)",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -13723,38 +13723,38 @@
       },
       {
         "kind": "ENUM",
-        "name": "VeteranStatus",
-        "description": "HUD Veteran Status (1.8)",
+        "name": "YesNoMissingReason",
+        "description": "HUD No/Yes/Reasons for Missing Data (1.8)",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
           {
-            "name": "VETERAN_STATUS_CLIENT_DOESN_T_KNOW",
+            "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "VETERAN_STATUS_CLIENT_REFUSED",
+            "name": "CLIENT_REFUSED",
             "description": "(9) Client refused",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "VETERAN_STATUS_DATA_NOT_COLLECTED",
+            "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "VETERAN_STATUS_NO",
+            "name": "NO",
             "description": "(0) No",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "VETERAN_STATUS_YES",
+            "name": "YES",
             "description": "(1) Yes",
             "isDeprecated": false,
             "deprecationReason": null

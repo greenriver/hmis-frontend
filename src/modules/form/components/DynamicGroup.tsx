@@ -1,23 +1,22 @@
 import { ReactNode } from 'react';
 
+import InputGroupWithSummary from './group/InputGroupWithSummary';
 import ItemGroup from './group/ItemGroup';
-import NumericInputGroup from './group/NumericInputGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
 
 export interface GroupItemComponentProps {
   item: FormItem;
   nestingLevel: number;
-  renderChildItem?: (item: FormItem) => ReactNode;
+  renderChildItem: (item: FormItem) => ReactNode;
   values: Record<string, any>;
+  itemChanged: (linkId: string, value: any) => void;
 }
 
 const DynamicGroup = (props: GroupItemComponentProps) => {
   switch (props.item.component) {
-    case Component.CheckboxGroup:
-      return <ItemGroup key={props.item.linkId} {...props} />;
-    case Component.NumericGroup:
-      return <NumericInputGroup key={props.item.linkId} {...props} />;
+    case Component.InputGroup:
+      return <InputGroupWithSummary key={props.item.linkId} {...props} />;
     default:
       return <ItemGroup key={props.item.linkId} {...props} />;
   }

@@ -62,6 +62,8 @@ const DynamicForm: React.FC<Props> = ({
     Object.assign({}, initialValues)
   );
 
+  // console.log(values);
+
   const itemMap = useMemo(() => getItemMap(definition), [definition]);
 
   if (errors) console.log('Validation errors', errors);
@@ -153,6 +155,7 @@ const DynamicForm: React.FC<Props> = ({
           nestingLevel={nestingLevel}
           renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
           values={values}
+          itemChanged={itemChanged}
         />
       );
     }
@@ -199,7 +202,10 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   return (
-    <Box component='form'>
+    <Box
+      component='form'
+      onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+    >
       <Grid container direction='column' spacing={2}>
         {errors && (
           <Grid item>
