@@ -7,11 +7,13 @@ import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
+import DynamicGroup from './DynamicGroup';
 
 import {
   BoundType,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -27,6 +29,7 @@ export interface Props {
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
+  horizontal?: boolean;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -41,6 +44,7 @@ const DynamicForm: React.FC<Props> = ({
   initialValues = {},
   errors,
   showSavePrompt = false,
+  horizontal = false,
 }) => {
   const navigate = useNavigate();
 
@@ -57,6 +61,8 @@ const DynamicForm: React.FC<Props> = ({
   const [values, setValues] = useState<Record<string, any>>(
     Object.assign({}, initialValues)
   );
+
+  // console.log(values);
 
   const itemMap = useMemo(() => getItemMap(definition), [definition]);
 
@@ -141,6 +147,18 @@ const DynamicForm: React.FC<Props> = ({
       return null;
     }
 
+    if (item.type === ItemType.Group) {
+      return (
+        <DynamicGroup
+          item={item}
+          key={item.linkId}
+          nestingLevel={nestingLevel}
+          renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
+          values={values}
+          itemChanged={itemChanged}
+        />
+      );
+    }
     return (
       <DynamicField
         key={item.linkId}
@@ -148,9 +166,9 @@ const DynamicForm: React.FC<Props> = ({
         itemChanged={itemChanged}
         value={values[item.linkId]}
         nestingLevel={nestingLevel}
-        children={(item) => renderItem(item, nestingLevel + 1)}
         errors={getFieldErrors(item)}
         inputProps={getCommonInputProps(item)}
+        horizontal={horizontal}
       />
     );
   };
@@ -184,7 +202,10 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   return (
-    <Box component='form'>
+    <Box
+      component='form'
+      onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+    >
       <Grid container direction='column' spacing={2}>
         {errors && (
           <Grid item>

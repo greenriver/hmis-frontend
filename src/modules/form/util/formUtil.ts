@@ -55,16 +55,6 @@ const localResolvePickList = (
     }));
   }
 
-  if (pickListReference === 'YesNoMissing') {
-    return [
-      { code: 'YES', label: 'Yes' },
-      { code: 'NO', label: 'No' },
-      { code: 'CLIENT_DOESN_T_KNOW', label: "Client doesn't know" },
-      { code: 'CLIENT_REFUSED', label: 'Client refused' },
-      // { code: 'DATA_NOT_COLLECTED', label: 'Data not collected' },
-    ];
-  }
-
   return null;
 };
 
@@ -179,6 +169,30 @@ export const shouldEnableItem = (
         break;
       case EnableOperator.NotEqual:
         result = currentValue !== comparisonValue;
+        break;
+      case EnableOperator.GreaterThan:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue > comparisonValue;
+        break;
+      case EnableOperator.GreaterThanEqual:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue >= comparisonValue;
+        break;
+      case EnableOperator.LessThan:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue < comparisonValue;
+        break;
+      case EnableOperator.LessThanEqual:
+        result =
+          !isNil(currentValue) &&
+          !isNil(comparisonValue) &&
+          currentValue <= comparisonValue;
         break;
       case EnableOperator.Exists:
         result = !isNil(currentValue);

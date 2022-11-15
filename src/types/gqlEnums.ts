@@ -22,6 +22,11 @@ export const HmisEnums = {
     VOUCHER: 'Voucher',
     OTHER: 'Other',
   },
+  Component: {
+    CHECKBOX: 'Boolean input component',
+    INPUT_GROUP:
+      'Group of inputs, optionally with a summary item (must be first)',
+  },
   DOBDataQuality: {
     DOB_FULL_DOB_REPORTED: 'Full DOB reported',
     DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED:
@@ -119,6 +124,7 @@ export const HmisEnums = {
       'HUD: ESG - Emergency Shelter (operating and/or essential services)',
     HUD_ESG_HOMELESSNESS_PREVENTION_: 'HUD: ESG - Homelessness Prevention ',
     HUD_ESG_RAPID_REHOUSING: 'HUD: ESG - Rapid Rehousing',
+    HUD_ESG_RUSH: 'HUD: ESG - RUSH',
     HUD_ESG_STREET_OUTREACH: 'HUD: ESG - Street Outreach',
     HUD_HOME: 'HUD: HOME',
     HUD_HOME_ARP_: 'HUD: HOME (ARP)',
@@ -535,11 +541,11 @@ export const HmisEnums = {
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
   },
-  VeteranStatus: {
-    VETERAN_STATUS_NO: 'No',
-    VETERAN_STATUS_YES: 'Yes',
-    VETERAN_STATUS_CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    VETERAN_STATUS_CLIENT_REFUSED: 'Client refused',
-    VETERAN_STATUS_DATA_NOT_COLLECTED: 'Data not collected',
+  YesNoMissingReason: {
+    YES: 'Yes',
+    NO: 'No',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    CLIENT_REFUSED: 'Client refused',
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
 };

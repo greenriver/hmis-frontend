@@ -1,19 +1,15 @@
 import { Box, Grid, Paper, Typography } from '@mui/material';
-import { ReactNode } from 'react';
 
-import { FormItem } from '@/types/gqlTypes';
+import { GroupItemComponentProps } from '../DynamicGroup';
 
 const ItemGroup = ({
-  children,
   item,
   nestingLevel,
-}: {
-  children: ReactNode;
-  item: FormItem;
-  nestingLevel: number;
-}) => {
+  renderChildItem,
+}: GroupItemComponentProps) => {
   const direction = 'column'; // item.display?.direction ?? 'column';
   const isColumn = direction === 'column';
+
   const wrappedChildren = (
     <Grid
       container
@@ -22,7 +18,8 @@ const ItemGroup = ({
       columnSpacing={isColumn ? 0 : 3}
       sx={{ '& .MuiGrid-item:first-of-type': { pt: 0 }, mt: 0 }}
     >
-      {children}
+      {renderChildItem &&
+        item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
   );
   if (nestingLevel === 0) {

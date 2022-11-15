@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
@@ -6,15 +7,21 @@ import { usePickList } from '../hooks/usePickList';
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
-import ItemGroup from './ItemGroup';
 
 import DatePicker from '@/components/elements/input/DatePicker';
+import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
+import ToggleButtonGroupInput from '@/components/elements/input/ToggleButtonGroupInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
-import { FormItem, ItemType, ValidationError } from '@/types/gqlTypes';
+import {
+  Component,
+  FormItem,
+  ItemType,
+  ValidationError,
+} from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
   disabled?: boolean;
@@ -27,13 +34,13 @@ export interface DynamicInputCommonProps {
 
 interface Props {
   item: FormItem;
-  itemChanged: (uid: string, value: any) => void;
+  itemChanged: (linkId: string, value: any) => void;
   nestingLevel: number;
   value: any;
   disabled?: boolean;
-  children?: (item: FormItem) => ReactNode;
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
+  horizontal?: boolean;
 }
 
 const getLabel = (item: FormItem) => {
@@ -57,8 +64,8 @@ const DynamicField: React.FC<Props> = ({
   nestingLevel,
   value,
   disabled = false,
+  horizontal = false,
   errors,
-  children,
   inputProps,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -108,13 +115,23 @@ const DynamicField: React.FC<Props> = ({
           {item.text}
         </Typography>
       );
-    case ItemType.Group:
-      return (
-        <ItemGroup item={item} nestingLevel={nestingLevel}>
-          {children && item.item?.map((childItem) => children(childItem))}
-        </ItemGroup>
-      );
     case ItemType.Boolean:
+      if (item.component === Component.Checkbox) {
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <LabeledCheckbox
+              checked={!!value}
+              onChange={(e) =>
+                itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
+              }
+              id={item.linkId}
+              name={item.linkId}
+              horizontal={horizontal}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+      }
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <YesNoInput
@@ -123,18 +140,10 @@ const DynamicField: React.FC<Props> = ({
             id={item.linkId}
             name={item.linkId}
             nullable={!item.required}
+            horizontal={horizontal}
             // includeNullOption
             {...commonInputProps}
           />
-          {/* <LabeledCheckbox
-            checked={!!value}
-            onChange={(e) =>
-              itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
-            }
-            id={item.linkId}
-            name={item.linkId}
-            {...commonInputProps}
-          /> */}
         </InputContainer>
       );
     case ItemType.String:
@@ -149,6 +158,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEvent}
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
+            horizontal={horizontal}
             {...commonInputProps}
           />
         </InputContainer>
@@ -160,8 +170,10 @@ const DynamicField: React.FC<Props> = ({
           <NumberInput
             id={item.linkId}
             name={item.linkId}
-            value={value}
+            value={isNil(value) ? '' : value}
             onChange={onChangeEvent}
+            horizontal={horizontal}
+            currency={item.type === ItemType.Currency}
             {...commonInputProps}
           />
         </InputContainer>
@@ -173,11 +185,12 @@ const DynamicField: React.FC<Props> = ({
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
-        <InputContainer sx={{ width: 250 }} {...commonContainerProps}>
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
+            textInputProps={{ horizontal }}
             {...datePickerProps}
             {...commonInputProps}
           />
@@ -195,6 +208,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            textInputProps={{ horizontal }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -221,6 +235,18 @@ const DynamicField: React.FC<Props> = ({
             disabled={disabled}
           />
         );
+      } else if (item.pickListReference === 'YesNoMissingReason') {
+        inputComponent = (
+          <ToggleButtonGroupInput
+            value={selectedVal}
+            onChange={onChangeEventValue}
+            id={item.linkId}
+            name={item.linkId}
+            horizontal={horizontal}
+            options={options || []}
+            {...commonInputProps}
+          />
+        );
       } else {
         inputComponent = (
           <FormSelect
@@ -230,6 +256,7 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            textInputProps={{ horizontal }}
             {...commonInputProps}
           />
         );

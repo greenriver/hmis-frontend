@@ -22,6 +22,7 @@ const SORT_LAST = {
 
 const SORT_FIRST = {
   LengthOfStay: ['LOS_TWO_TO_SIX_NIGHTS', 'LOS_ONE_NIGHT_OR_LESS'],
+  YesNoMissingReason: ['YES'],
 };
 
 const alphabeticalCompare = (first, second) => {
