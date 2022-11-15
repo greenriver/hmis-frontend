@@ -170,12 +170,15 @@ export const enrollmentName = (enrollment: {
 const trimNumericPrefix = (s: string) => s.replace(numericPrefix, '');
 
 export const relationshipToHohForDisplay = (
-  relationship: RelationshipToHoH
+  relationship?: RelationshipToHoH
 ) => {
+  if (isNil(relationship)) return '';
   if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
     return 'Self (HoH)';
   // if (relationship === RelationshipToHoH.DataNotCollected) return null;
-  return trimNumericPrefix(HmisEnums.RelationshipToHoH[relationship]);
+  const description = HmisEnums.RelationshipToHoH[relationship];
+  if (!description) return relationship;
+  return trimNumericPrefix(description);
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
