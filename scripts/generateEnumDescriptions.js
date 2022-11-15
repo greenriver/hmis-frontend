@@ -21,8 +21,8 @@ const SORT_LAST = {
 };
 
 const SORT_FIRST = {
-  LengthOfStay: ['LOS_TWO_TO_SIX_NIGHTS', 'LOS_ONE_NIGHT_OR_LESS'],
-  YesNoMissingReason: ['YES'],
+  ResidencePriorLengthOfStay: ['TWO_TO_SIX_NIGHTS', 'ONE_NIGHT_OR_LESS'],
+  NoYesReasonsForMissingData: ['YES'],
 };
 
 const alphabeticalCompare = (first, second) => {
@@ -86,15 +86,22 @@ schema.__schema.types.forEach((type) => {
     if (SORT_LAST[type.name]) {
       SORT_LAST[type.name].forEach((name) => {
         const idx = enumValues.findIndex((item) => item.name === name);
-        enumValues.push(enumValues.splice(idx, 1)[0]);
+        if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
       });
     }
     if (SORT_FIRST[type.name]) {
       SORT_FIRST[type.name].forEach((name) => {
         const idx = enumValues.findIndex((item) => item.name === name);
-        enumValues.unshift(enumValues.splice(idx, 1)[0]);
+        if (idx !== -1) enumValues.unshift(enumValues.splice(idx, 1)[0]);
       });
     }
+
+    ['CLIENT_REFUSED', 'CLIENT_DOESN_T_KNOW', 'DATA_NOT_COLLECTED'].forEach(
+      (name) => {
+        const idx = enumValues.findIndex((item) => item.name === name);
+        if (idx !== -1) enumValues.push(enumValues.splice(idx, 1)[0]);
+      }
+    );
 
     const values = enumValues.map((elem) => {
       let description = elem.description.replaceAll(/\n/g, ' ');

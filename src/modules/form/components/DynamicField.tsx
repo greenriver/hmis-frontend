@@ -235,7 +235,7 @@ const DynamicField: React.FC<Props> = ({
             disabled={disabled}
           />
         );
-      } else if (item.pickListReference === 'YesNoMissingReason') {
+      } else if (item.pickListReference === 'NoYesReasonsForMissingData') {
         inputComponent = (
           <ToggleButtonGroupInput
             value={selectedVal}

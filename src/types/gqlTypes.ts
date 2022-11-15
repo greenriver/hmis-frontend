@@ -77,7 +77,7 @@ export type AssessmentDetail = {
   values?: Maybe<Scalars['JsonObject']>;
 };
 
-/** HUD AssessmentLevel (4.19.4) */
+/** 4.19.4 */
 export enum AssessmentLevel {
   /** (1) Crisis Needs Assessment */
   CrisisNeedsAssessment = 'CRISIS_NEEDS_ASSESSMENT',
@@ -104,7 +104,7 @@ export enum AssessmentSortOption {
   AssessmentDate = 'ASSESSMENT_DATE',
 }
 
-/** HUD AssessmentType (4.19.3) */
+/** 4.19.3 */
 export enum AssessmentType {
   /** (3) In Person */
   InPerson = 'IN_PERSON',
@@ -125,7 +125,7 @@ export type AssessmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD Availability (2.7.4) */
+/** 2.7.4 */
 export enum Availability {
   /** (3) Overflow */
   Overflow = 'OVERFLOW',
@@ -135,7 +135,7 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
-/** HUD Bed Type (2.7.3) */
+/** 2.7.3 */
 export enum BedType {
   /** (1) Facility-based */
   FacilityBased = 'FACILITY_BASED',
@@ -173,7 +173,7 @@ export type Client = {
   race: Array<Race>;
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
-  veteranStatus: YesNoMissingReason;
+  veteranStatus: NoYesReasonsForMissingData;
 };
 
 /** HUD Client */
@@ -198,7 +198,7 @@ export type ClientInput = {
   race?: InputMaybe<Array<Race>>;
   ssn?: InputMaybe<Scalars['String']>;
   ssnDataQuality?: InputMaybe<SsnDataQuality>;
-  veteranStatus?: InputMaybe<YesNoMissingReason>;
+  veteranStatus?: InputMaybe<NoYesReasonsForMissingData>;
 };
 
 /** HMIS Client search input */
@@ -238,9 +238,12 @@ export type ClientsPaginated = {
 };
 
 export enum Component {
-  /** Boolean input component */
+  /** Component to render a boolean input item as a checkbox */
   Checkbox = 'CHECKBOX',
-  /** Group of inputs, optionally with a summary item (must be first) */
+  /**
+   * Component to render a group that contains children of the same type (eg all
+   * booleans). Optionally has a choice item, which must be the first item.
+   */
   InputGroup = 'INPUT_GROUP',
 }
 
@@ -397,18 +400,18 @@ export type CreateServicePayload = {
   service?: Maybe<Service>;
 };
 
-/** HUD DOB Data Quality (3.03.2) */
+/** 3.3.2 */
 export enum DobDataQuality {
   /** (2) Approximate or partial DOB reported */
-  DobApproximateOrPartialDobReported = 'DOB_APPROXIMATE_OR_PARTIAL_DOB_REPORTED',
+  ApproximateOrPartialDobReported = 'APPROXIMATE_OR_PARTIAL_DOB_REPORTED',
   /** (8) Client doesn't know */
-  DobClientDoesnTKnow = 'DOB_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  DobClientRefused = 'DOB_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  DobDataNotCollected = 'DOB_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full DOB reported */
-  DobFullDobReported = 'DOB_FULL_DOB_REPORTED',
+  FullDobReported = 'FULL_DOB_REPORTED',
 }
 
 export enum DataCollectedAbout {
@@ -421,7 +424,7 @@ export enum DataCollectedAbout {
   VeteranHoh = 'VETERAN_HOH',
 }
 
-/** HUD Data Collection Stage (5.03.1) */
+/** 5.03.1 */
 export enum DataCollectionStage {
   /** (5) Annual assessment */
   AnnualAssessment = 'ANNUAL_ASSESSMENT',
@@ -599,7 +602,7 @@ export type Enrollment = {
   household: Household;
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
-  lengthOfStay?: Maybe<LengthOfStay>;
+  lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
@@ -651,18 +654,18 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD Ethnicity (3.05.1) */
+/** 3.5.1 */
 export enum Ethnicity {
-  /** (1) Hispanic/Latin(a)(o)(x) */
-  EthnicityHispanicLatinAOX = 'ETHNICITY_HISPANIC_LATIN_A_O_X_',
-  /** (0) Non-Hispanic/Non-Latin(a)(o)(x) */
-  EthnicityNonHispanicNonLatinAOX = 'ETHNICITY_NON_HISPANIC_NON_LATIN_A_O_X_',
-  /** (99) Data not collected */
-  EthnicityNotCollected = 'ETHNICITY_NOT_COLLECTED',
-  /** (9) Client refused */
-  EthnicityRefused = 'ETHNICITY_REFUSED',
   /** (8) Client doesn't know */
-  EthnicityUnknown = 'ETHNICITY_UNKNOWN',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (1) Hispanic/Latin(a)(o)(x) */
+  HispanicLatinAOX = 'HISPANIC_LATIN_A_O_X',
+  /** (0) Non-Hispanic/Non-Latin(a)(o)(x) */
+  NonHispanicNonLatinAOX = 'NON_HISPANIC_NON_LATIN_A_O_X',
 }
 
 /** HUD Event */
@@ -677,8 +680,8 @@ export type Event = {
   eventDate: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']>;
-  probSolDivRrResult?: Maybe<ProbSolDivRrResult>;
-  referralCaseManageAfter?: Maybe<ReferralCaseManageAfter>;
+  probSolDivRrResult?: Maybe<NoYesMissing>;
+  referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']>;
   user: User;
@@ -689,7 +692,7 @@ export enum EventSortOption {
   EventDate = 'EVENT_DATE',
 }
 
-/** HUD EventType (4.20.2) */
+/** 4.20.2 */
 export enum EventType {
   /** (2) Problem Solving/Diversion/Rapid Resolution intervention or service */
   ProblemSolvingDiversionRapidResolutionInterventionOrService = 'PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE',
@@ -698,7 +701,7 @@ export enum EventType {
   /** (16) Referral to emergency assistance/flex fund/furniture assistance */
   ReferralToEmergencyAssistanceFlexFundFurnitureAssistance = 'REFERRAL_TO_EMERGENCY_ASSISTANCE_FLEX_FUND_FURNITURE_ASSISTANCE',
   /** (17) Referral to Emergency Housing Voucher (EHV) */
-  ReferralToEmergencyHousingVoucherEhv = 'REFERRAL_TO_EMERGENCY_HOUSING_VOUCHER_EHV_',
+  ReferralToEmergencyHousingVoucherEhv = 'REFERRAL_TO_EMERGENCY_HOUSING_VOUCHER_EHV',
   /** (10) Referral to Emergency Shelter bed opening */
   ReferralToEmergencyShelterBedOpening = 'REFERRAL_TO_EMERGENCY_SHELTER_BED_OPENING',
   /** (7) Referral to Housing Navigation project or services */
@@ -845,12 +848,12 @@ export type FundersPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD Funding Source (2.06.1) */
+/** 2.6.1 */
 export enum FundingSource {
   /** (21) HHS: PATH - Street Outreach & Supportive Services Only */
   HhsPathStreetOutreachSupportiveServicesOnly = 'HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY',
   /** (22) HHS: RHY - Basic Center Program (prevention and shelter) */
-  HhsRhyBasicCenterProgramPreventionAndShelter = 'HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER_',
+  HhsRhyBasicCenterProgramPreventionAndShelter = 'HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER',
   /** (26) HHS: RHY - Demonstration Project */
   HhsRhyDemonstrationProject = 'HHS_RHY_DEMONSTRATION_PROJECT',
   /** (23) HHS: RHY - Maternity Group Home for Pregnant and Parenting Youth */
@@ -860,9 +863,9 @@ export enum FundingSource {
   /** (24) HHS: RHY - Transitional Living Program */
   HhsRhyTransitionalLivingProgram = 'HHS_RHY_TRANSITIONAL_LIVING_PROGRAM',
   /** (1) HUD: CoC - Homelessness Prevention (High Performing Communities Only) */
-  HudCocHomelessnessPreventionHighPerformingCommunitiesOnly = 'HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY_',
-  /** (49) HUD: CoC - Joint Component RRH/PSH  */
-  HudCocJointComponentRrhPsh = 'HUD_COC_JOINT_COMPONENT_RRH_PSH_',
+  HudCocHomelessnessPreventionHighPerformingCommunitiesOnly = 'HUD_COC_HOMELESSNESS_PREVENTION_HIGH_PERFORMING_COMMUNITIES_ONLY',
+  /** (49) HUD: CoC - Joint Component RRH/PSH */
+  HudCocJointComponentRrhPsh = 'HUD_COC_JOINT_COMPONENT_RRH_PSH',
   /** (44) HUD: CoC - Joint Component TH/RRH */
   HudCocJointComponentThRrh = 'HUD_COC_JOINT_COMPONENT_TH_RRH',
   /** (2) HUD: CoC - Permanent Supportive Housing */
@@ -872,19 +875,19 @@ export enum FundingSource {
   /** (6) HUD: CoC - Safe Haven */
   HudCocSafeHaven = 'HUD_COC_SAFE_HAVEN',
   /** (7) HUD: CoC - Single Room Occupancy (SRO) */
-  HudCocSingleRoomOccupancySro = 'HUD_COC_SINGLE_ROOM_OCCUPANCY_SRO_',
+  HudCocSingleRoomOccupancySro = 'HUD_COC_SINGLE_ROOM_OCCUPANCY_SRO',
   /** (4) HUD: CoC - Supportive Services Only */
   HudCocSupportiveServicesOnly = 'HUD_COC_SUPPORTIVE_SERVICES_ONLY',
   /** (5) HUD: CoC - Transitional Housing */
   HudCocTransitionalHousing = 'HUD_COC_TRANSITIONAL_HOUSING',
   /** (43) HUD: CoC - Youth Homeless Demonstration Program (YHDP) */
-  HudCocYouthHomelessDemonstrationProgramYhdp = 'HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP_',
+  HudCocYouthHomelessDemonstrationProgramYhdp = 'HUD_COC_YOUTH_HOMELESS_DEMONSTRATION_PROGRAM_YHDP',
   /** (47) HUD: ESG - CV */
   HudEsgCv = 'HUD_ESG_CV',
   /** (8) HUD: ESG - Emergency Shelter (operating and/or essential services) */
-  HudEsgEmergencyShelterOperatingAndOrEssentialServices = 'HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES_',
-  /** (9) HUD: ESG - Homelessness Prevention  */
-  HudEsgHomelessnessPrevention = 'HUD_ESG_HOMELESSNESS_PREVENTION_',
+  HudEsgEmergencyShelterOperatingAndOrEssentialServices = 'HUD_ESG_EMERGENCY_SHELTER_OPERATING_AND_OR_ESSENTIAL_SERVICES',
+  /** (9) HUD: ESG - Homelessness Prevention */
+  HudEsgHomelessnessPrevention = 'HUD_ESG_HOMELESSNESS_PREVENTION',
   /** (10) HUD: ESG - Rapid Rehousing */
   HudEsgRapidRehousing = 'HUD_ESG_RAPID_REHOUSING',
   /** (53) HUD: ESG - RUSH */
@@ -894,7 +897,7 @@ export enum FundingSource {
   /** (50) HUD: HOME */
   HudHome = 'HUD_HOME',
   /** (51) HUD: HOME (ARP) */
-  HudHomeArp = 'HUD_HOME_ARP_',
+  HudHomeArp = 'HUD_HOME_ARP',
   /** (48) HUD: HOPWA - CV */
   HudHopwaCv = 'HUD_HOPWA_CV',
   /** (13) HUD: HOPWA - Hotel/Motel Vouchers */
@@ -902,7 +905,7 @@ export enum FundingSource {
   /** (14) HUD: HOPWA - Housing Information */
   HudHopwaHousingInformation = 'HUD_HOPWA_HOUSING_INFORMATION',
   /** (15) HUD: HOPWA - Permanent Housing (facility based or TBRA) */
-  HudHopwaPermanentHousingFacilityBasedOrTbra = 'HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA_',
+  HudHopwaPermanentHousingFacilityBasedOrTbra = 'HUD_HOPWA_PERMANENT_HOUSING_FACILITY_BASED_OR_TBRA',
   /** (16) HUD: HOPWA - Permanent Housing Placement */
   HudHopwaPermanentHousingPlacement = 'HUD_HOPWA_PERMANENT_HOUSING_PLACEMENT',
   /** (17) HUD: HOPWA - Short-Term Rent, Mortgage, Utility assistance */
@@ -910,17 +913,17 @@ export enum FundingSource {
   /** (18) HUD: HOPWA - Short-Term Supportive Facility */
   HudHopwaShortTermSupportiveFacility = 'HUD_HOPWA_SHORT_TERM_SUPPORTIVE_FACILITY',
   /** (19) HUD: HOPWA - Transitional Housing (facility based or TBRA) */
-  HudHopwaTransitionalHousingFacilityBasedOrTbra = 'HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA_',
+  HudHopwaTransitionalHousingFacilityBasedOrTbra = 'HUD_HOPWA_TRANSITIONAL_HOUSING_FACILITY_BASED_OR_TBRA',
   /** (20) HUD: HUD/VASH */
   HudHudVash = 'HUD_HUD_VASH',
   /** (35) HUD: Pay for Success */
   HudPayForSuccess = 'HUD_PAY_FOR_SUCCESS',
   /** (52) HUD: PIH (Emergency Housing Voucher) */
-  HudPihEmergencyHousingVoucher = 'HUD_PIH_EMERGENCY_HOUSING_VOUCHER_',
+  HudPihEmergencyHousingVoucher = 'HUD_PIH_EMERGENCY_HOUSING_VOUCHER',
   /** (36) HUD: Public and Indian Housing (PIH) Programs */
   HudPublicAndIndianHousingPihPrograms = 'HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS',
-  /** (12) HUD: Rural Housing Stability Assistance Program  */
-  HudRuralHousingStabilityAssistanceProgram = 'HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM_',
+  /** (12) HUD: Rural Housing Stability Assistance Program */
+  HudRuralHousingStabilityAssistanceProgram = 'HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM',
   /** (46) Local or Other Funding Source */
   LocalOrOtherFundingSource = 'LOCAL_OR_OTHER_FUNDING_SOURCE',
   /** (34) N/A */
@@ -969,7 +972,7 @@ export enum Gender {
   GenderTransgender = 'GENDER_TRANSGENDER',
 }
 
-/** HUD Geography Type (2.8.7) */
+/** 2.8.7 */
 export enum GeographyType {
   /** (3) Rural */
   Rural = 'RURAL',
@@ -981,7 +984,7 @@ export enum GeographyType {
   Urban = 'URBAN',
 }
 
-/** HUD HOPWAMedAssistedLivingFac (2.02.9) */
+/** 2.02.9 */
 export enum HopwaMedAssistedLivingFac {
   /** (0) No */
   No = 'NO',
@@ -1007,7 +1010,7 @@ export type HouseholdClient = {
   relationshipToHoH: RelationshipToHoH;
 };
 
-/** HUD Household Type (2.7.2) */
+/** 2.7.2 */
 export enum HouseholdType {
   /** (1) Households without children */
   HouseholdsWithoutChildren = 'HOUSEHOLDS_WITHOUT_CHILDREN',
@@ -1017,7 +1020,7 @@ export enum HouseholdType {
   HouseholdsWithOnlyChildren = 'HOUSEHOLDS_WITH_ONLY_CHILDREN',
 }
 
-/** HUD HousingType (2.02.D) */
+/** 2.02.D */
 export enum HousingType {
   /** (2) Site-based - clustered / multiple sites */
   SiteBasedClusteredMultipleSites = 'SITE_BASED_CLUSTERED_MULTIPLE_SITES',
@@ -1111,62 +1114,40 @@ export enum ItemType {
   Text = 'TEXT',
 }
 
-/** HUD Length of Stay in Prior living situation (3.917.2) */
-export enum LengthOfStay {
-  /** (4) 90 days or more but less than one year */
-  Los_90DaysOrMoreButLessThanOneYear = 'LOS_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
-  /** (8) Client doesn't know */
-  LosClientDoesnTKnow = 'LOS_CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  LosClientRefused = 'LOS_CLIENT_REFUSED',
-  /** (99) Data not collected */
-  LosDataNotCollected = 'LOS_DATA_NOT_COLLECTED',
-  /** (3) One month or more, but less than 90 days */
-  LosOneMonthOrMoreButLessThan_90Days = 'LOS_ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
-  /** (10) One night or less */
-  LosOneNightOrLess = 'LOS_ONE_NIGHT_OR_LESS',
-  /** (2) One week or more, but less than one month */
-  LosOneWeekOrMoreButLessThanOneMonth = 'LOS_ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH',
-  /** (5) One year or longer */
-  LosOneYearOrLonger = 'LOS_ONE_YEAR_OR_LONGER',
-  /** (11) Two to six nights */
-  LosTwoToSixNights = 'LOS_TWO_TO_SIX_NIGHTS',
-}
-
-/** HUD MonthsHomelessPastThreeYears (3.917.5) */
+/** 3.917.5 */
 export enum MonthsHomelessPastThreeYears {
-  /** (101) 1 */
-  Months_1 = 'MONTHS_1',
-  /** (102) 2 */
-  Months_2 = 'MONTHS_2',
-  /** (103) 3 */
-  Months_3 = 'MONTHS_3',
-  /** (104) 4 */
-  Months_4 = 'MONTHS_4',
-  /** (105) 5 */
-  Months_5 = 'MONTHS_5',
-  /** (106) 6 */
-  Months_6 = 'MONTHS_6',
-  /** (107) 7 */
-  Months_7 = 'MONTHS_7',
-  /** (108) 8 */
-  Months_8 = 'MONTHS_8',
-  /** (109) 9 */
-  Months_9 = 'MONTHS_9',
-  /** (110) 10 */
-  Months_10 = 'MONTHS_10',
-  /** (111) 11 */
-  Months_11 = 'MONTHS_11',
-  /** (112) 12 */
-  Months_12 = 'MONTHS_12',
   /** (8) Client doesn't know */
-  MonthsClientDoesnTKnow = 'MONTHS_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  MonthsClientRefused = 'MONTHS_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  MonthsDataNotCollected = 'MONTHS_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (113) More than 12 months */
-  MonthsMoreThan_12Months = 'MONTHS_MORE_THAN_12_MONTHS',
+  MoreThan_12Months = 'MORE_THAN_12_MONTHS',
+  /** (101) 1 */
+  Num_1 = 'NUM_1',
+  /** (102) 2 */
+  Num_2 = 'NUM_2',
+  /** (103) 3 */
+  Num_3 = 'NUM_3',
+  /** (104) 4 */
+  Num_4 = 'NUM_4',
+  /** (105) 5 */
+  Num_5 = 'NUM_5',
+  /** (106) 6 */
+  Num_6 = 'NUM_6',
+  /** (107) 7 */
+  Num_7 = 'NUM_7',
+  /** (108) 8 */
+  Num_8 = 'NUM_8',
+  /** (109) 9 */
+  Num_9 = 'NUM_9',
+  /** (110) 10 */
+  Num_10 = 'NUM_10',
+  /** (111) 11 */
+  Num_11 = 'NUM_11',
+  /** (112) 12 */
+  Num_12 = 'NUM_12',
 }
 
 export type Mutation = {
@@ -1308,18 +1289,42 @@ export type MutationUpdateServiceArgs = {
   input: UpdateServiceInput;
 };
 
-/** HUD NameDataQuality (3.01.5) */
+/** 3.1.5 */
 export enum NameDataQuality {
   /** (8) Client doesn't know */
-  NameClientDoesnTKnow = 'NAME_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  NameClientRefused = 'NAME_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  NameDataNotCollected = 'NAME_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full name reported */
-  NameFullNameReported = 'NAME_FULL_NAME_REPORTED',
+  FullNameReported = 'FULL_NAME_REPORTED',
   /** (2) Partial, street name, or code name reported */
-  NamePartialStreetNameOrCodeNameReported = 'NAME_PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED',
+  PartialStreetNameOrCodeNameReported = 'PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED',
+}
+
+/** 1.7 */
+export enum NoYesMissing {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
+}
+
+/** 1.8 */
+export enum NoYesReasonsForMissingData {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
 }
 
 /** HUD Organization */
@@ -1368,7 +1373,7 @@ export type OrganizationsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** HUD PATHReferralOutcome (P2.A) */
+/** P2.A */
 export enum PathReferralOutcome {
   /** (1) Attained */
   Attained = 'ATTAINED',
@@ -1404,22 +1409,12 @@ export enum PickListType {
   State = 'STATE',
 }
 
-/** HUD PrioritizationStatus (4.19.7) */
+/** 4.19.7 */
 export enum PrioritizationStatus {
   /** (2) Not placed on prioritization list */
   NotPlacedOnPrioritizationList = 'NOT_PLACED_ON_PRIORITIZATION_LIST',
   /** (1) Placed on prioritization list */
   PlacedOnPrioritizationList = 'PLACED_ON_PRIORITIZATION_LIST',
-}
-
-/** HUD ProbSolDivRRResult (1.7) */
-export enum ProbSolDivRrResult {
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
 }
 
 export type Project = {
@@ -1689,12 +1684,16 @@ export enum Race {
   RaceWhite = 'RACE_WHITE',
 }
 
-/** HUD RecordType (1.4) */
+/** 1.4 */
 export enum RecordType {
   /** (200) Bed night */
   BedNight = 'BED_NIGHT',
   /** (300) C2 Moving On Assistance Provided */
   C2MovingOnAssistanceProvided = 'C2_MOVING_ON_ASSISTANCE_PROVIDED',
+  /** (12) Contact 12 */
+  Contact_12 = 'CONTACT_12',
+  /** (13) Contact 13 */
+  Contact_13 = 'CONTACT_13',
   /** (151) HOPWA financial assistance */
   HopwaFinancialAssistance = 'HOPWA_FINANCIAL_ASSISTANCE',
   /** (143) HOPWA service */
@@ -1715,17 +1714,7 @@ export enum RecordType {
   SsvfService = 'SSVF_SERVICE',
 }
 
-/** HUD ReferralCaseManageAfter (1.7) */
-export enum ReferralCaseManageAfter {
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
-}
-
-/** HUD ReferralResult (4.20.D) */
+/** 4.20.D */
 export enum ReferralResult {
   /** (1) Successful referral: client accepted */
   SuccessfulReferralClientAccepted = 'SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED',
@@ -1735,7 +1724,7 @@ export enum ReferralResult {
   UnsuccessfulReferralProviderRejected = 'UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED',
 }
 
-/** HUD RelationshipToHoH (3.15.1) */
+/** 3.15.1 */
 export enum RelationshipToHoH {
   /** (2) Child */
   Child = 'CHILD',
@@ -1744,25 +1733,47 @@ export enum RelationshipToHoH {
   /** (4) Other relative */
   OtherRelative = 'OTHER_RELATIVE',
   /** (1) Self (head of household) */
-  SelfHeadOfHousehold = 'SELF_HEAD_OF_HOUSEHOLD_',
+  SelfHeadOfHousehold = 'SELF_HEAD_OF_HOUSEHOLD',
   /** (3) Spouse or partner */
   SpouseOrPartner = 'SPOUSE_OR_PARTNER',
   /** (5) Unrelated household member */
   UnrelatedHouseholdMember = 'UNRELATED_HOUSEHOLD_MEMBER',
 }
 
-/** HUD SSN Data Quality (3.02.2) */
+/** 3.917.2 */
+export enum ResidencePriorLengthOfStay {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (4) 90 days or more but less than one year */
+  Num_90DaysOrMoreButLessThanOneYear = 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
+  /** (3) One month or more, but less than 90 days */
+  OneMonthOrMoreButLessThan_90Days = 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
+  /** (10) One night or less */
+  OneNightOrLess = 'ONE_NIGHT_OR_LESS',
+  /** (2) One week or more, but less than one month */
+  OneWeekOrMoreButLessThanOneMonth = 'ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH',
+  /** (5) One year or longer */
+  OneYearOrLonger = 'ONE_YEAR_OR_LONGER',
+  /** (11) Two to six nights */
+  TwoToSixNights = 'TWO_TO_SIX_NIGHTS',
+}
+
+/** 3.2.2 */
 export enum SsnDataQuality {
   /** (2) Approximate or partial SSN reported */
-  SsnApproximateOrPartialSsnReported = 'SSN_APPROXIMATE_OR_PARTIAL_SSN_REPORTED',
+  ApproximateOrPartialSsnReported = 'APPROXIMATE_OR_PARTIAL_SSN_REPORTED',
   /** (8) Client doesn't know */
-  SsnClientDoesnTKnow = 'SSN_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  SsnClientRefused = 'SSN_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  SsnDataNotCollected = 'SSN_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full SSN reported */
-  SsnFullSsnReported = 'SSN_FULL_SSN_REPORTED',
+  FullSsnReported = 'FULL_SSN_REPORTED',
 }
 
 /** Autogenerated input type of SaveAssessment */
@@ -1888,13 +1899,13 @@ export enum ServiceTypeProvided {
   /** (200) BedNight */
   BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
   /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
-  C2MovingOnAssistanceProvidedFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES_',
+  C2MovingOnAssistanceProvidedFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES',
   /** (4) Housing referral/placement */
   C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
   /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
-  C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT_',
+  C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
   /** (5) Other (please specify) */
-  C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY_',
+  C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY',
   /** (1) Subsidized housing application assistance */
   C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
   /** (7) Mortgage assistance */
@@ -2008,7 +2019,7 @@ export enum ServiceTypeProvided {
   /** (5) Substance use treatment */
   PathServiceSubstanceUseTreatment = 'PATH_SERVICE__SUBSTANCE_USE_TREATMENT',
   /** (2) Community service/service learning (CSL) */
-  RhyServiceConnectionsCommunityServiceServiceLearningCsl = 'RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL_',
+  RhyServiceConnectionsCommunityServiceServiceLearningCsl = 'RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL',
   /** (7) Criminal justice /legal services */
   RhyServiceConnectionsCriminalJusticeLegalServices = 'RHY_SERVICE_CONNECTIONS__CRIMINAL_JUSTICE_LEGAL_SERVICES',
   /** (5) Education */
@@ -2026,7 +2037,7 @@ export enum ServiceTypeProvided {
   /** (12) Post-natal care */
   RhyServiceConnectionsPostNatalCare = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_CARE',
   /** (27) Post-natal newborn care (wellness exams; immunizations) */
-  RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS_',
+  RhyServiceConnectionsPostNatalNewbornCareWellnessExamsImmunizations = 'RHY_SERVICE_CONNECTIONS__POST_NATAL_NEWBORN_CARE_WELLNESS_EXAMS_IMMUNIZATIONS',
   /** (13) Pre-natal care */
   RhyServiceConnectionsPreNatalCare = 'RHY_SERVICE_CONNECTIONS__PRE_NATAL_CARE',
   /** (28) STD Testing */
@@ -2105,7 +2116,7 @@ export type SetHoHForEnrollmentPayload = {
   errors: Array<ValidationError>;
 };
 
-/** HUD TargetPopulation (2.02.8) */
+/** 2.02.8 */
 export enum TargetPopulation {
   /** (1) Domestic violence victims */
   DomesticViolenceVictims = 'DOMESTIC_VIOLENCE_VICTIMS',
@@ -2115,25 +2126,25 @@ export enum TargetPopulation {
   PersonsWithHivAids = 'PERSONS_WITH_HIV_AIDS',
 }
 
-/** HUD TimesHomelessPastThreeYears (3.917.4) */
+/** 3.3917.4 */
 export enum TimesHomelessPastThreeYears {
   /** (8) Client doesn't know */
-  TimesClientDoesnTKnow = 'TIMES_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  TimesClientRefused = 'TIMES_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  TimesDataNotCollected = 'TIMES_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Four or more times */
-  TimesFourOrMoreTimes = 'TIMES_FOUR_OR_MORE_TIMES',
+  FourOrMoreTimes = 'FOUR_OR_MORE_TIMES',
   /** (1) One time */
-  TimesOneTime = 'TIMES_ONE_TIME',
+  OneTime = 'ONE_TIME',
   /** (3) Three times */
-  TimesThreeTimes = 'TIMES_THREE_TIMES',
+  ThreeTimes = 'THREE_TIMES',
   /** (2) Two times */
-  TimesTwoTimes = 'TIMES_TWO_TIMES',
+  TwoTimes = 'TWO_TIMES',
 }
 
-/** HUD TrackingMethod (2.02.C) */
+/** 2.02.C */
 export enum TrackingMethod {
   /** (0) Entry/Exit Date */
   EntryExitDate = 'ENTRY_EXIT_DATE',
@@ -2308,20 +2319,6 @@ export type ValueBound = {
   valueDate?: Maybe<Scalars['ISO8601Date']>;
   valueNumber?: Maybe<Scalars['Int']>;
 };
-
-/** HUD No/Yes/Reasons for Missing Data (1.8) */
-export enum YesNoMissingReason {
-  /** (8) Client doesn't know */
-  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
-  /** (9) Client refused */
-  ClientRefused = 'CLIENT_REFUSED',
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
-}
 
 export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
@@ -4230,7 +4227,7 @@ export type ClientFieldsFragment = {
   race: Array<Race>;
   ssn?: string | null;
   ssnDataQuality: SsnDataQuality;
-  veteranStatus: YesNoMissingReason;
+  veteranStatus: NoYesReasonsForMissingData;
   dateCreated: string;
   dateDeleted?: string | null;
   dateUpdated: string;
@@ -4325,8 +4322,8 @@ export type EventFieldsFragment = {
   event: EventType;
   eventDate: string;
   locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: ProbSolDivRrResult | null;
-  referralCaseManageAfter?: ReferralCaseManageAfter | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
   referralResult?: ReferralResult | null;
   resultDate?: string | null;
   dateCreated: string;
@@ -4374,7 +4371,7 @@ export type SearchClientsQuery = {
       race: Array<Race>;
       ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
-      veteranStatus: YesNoMissingReason;
+      veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
@@ -4405,7 +4402,7 @@ export type GetClientQuery = {
     race: Array<Race>;
     ssn?: string | null;
     ssnDataQuality: SsnDataQuality;
-    veteranStatus: YesNoMissingReason;
+    veteranStatus: NoYesReasonsForMissingData;
     dateCreated: string;
     dateDeleted?: string | null;
     dateUpdated: string;
@@ -4472,7 +4469,7 @@ export type CreateClientMutation = {
       race: Array<Race>;
       ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
-      veteranStatus: YesNoMissingReason;
+      veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
@@ -4514,7 +4511,7 @@ export type UpdateClientMutation = {
       race: Array<Race>;
       ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
-      veteranStatus: YesNoMissingReason;
+      veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
@@ -4871,8 +4868,8 @@ export type GetEnrollmentEventsQuery = {
         event: EventType;
         eventDate: string;
         locationCrisisOrPhHousing?: string | null;
-        probSolDivRrResult?: ProbSolDivRrResult | null;
-        referralCaseManageAfter?: ReferralCaseManageAfter | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
         referralResult?: ReferralResult | null;
         resultDate?: string | null;
         dateCreated: string;
@@ -4951,7 +4948,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               race: Array<Race>;
               ssn?: string | null;
               ssnDataQuality: SsnDataQuality;
-              veteranStatus: YesNoMissingReason;
+              veteranStatus: NoYesReasonsForMissingData;
               dateCreated: string;
               dateDeleted?: string | null;
               dateUpdated: string;
