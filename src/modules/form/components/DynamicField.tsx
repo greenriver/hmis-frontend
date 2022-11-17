@@ -77,7 +77,7 @@ const DynamicField: React.FC<Props> = ({
   const maxWidth = 600 - nestingLevel * 26;
   const minWidth = 250;
 
-  const commonContainerProps = { errors };
+  const commonContainerProps = { errors, horizontal };
 
   const commonInputProps: DynamicInputCommonProps = {
     disabled,
