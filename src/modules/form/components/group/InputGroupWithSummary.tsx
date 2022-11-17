@@ -6,7 +6,11 @@ import { GroupItemComponentProps } from '../DynamicGroup';
 
 import NumberInput from '@/components/elements/input/NumberInput';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormItem, ItemType, YesNoMissingReason } from '@/types/gqlTypes';
+import {
+  FormItem,
+  ItemType,
+  NoYesReasonsForMissingData,
+} from '@/types/gqlTypes';
 
 const InputGroupWithSummary = ({
   item,
@@ -24,7 +28,7 @@ const InputGroupWithSummary = ({
       if (!item.item) return [null, []];
       if (
         item.item[0].type === ItemType.Choice &&
-        item.item[0].pickListReference === 'YesNoMissingReason'
+        item.item[0].pickListReference === 'NoYesReasonsForMissingData'
       ) {
         const [first, ...rest] = item.item;
         return [first, rest];
@@ -40,7 +44,7 @@ const InputGroupWithSummary = ({
     () =>
       summaryChild &&
       values[summaryChild.linkId] &&
-      values[summaryChild.linkId].code !== YesNoMissingReason.Yes,
+      values[summaryChild.linkId].code !== NoYesReasonsForMissingData.Yes,
     [summaryChild, values]
   );
 
@@ -85,13 +89,13 @@ const InputGroupWithSummary = ({
       .some(Boolean);
   }, [values, childItemLinkIds, childItemType]);
 
-  // Update the value of the YesNoMissingReason summary child
+  // Update the value of the NoYesReasonsForMissingData summary child
   useEffect(() => {
     if (!summaryChild) return;
     if ((sum && sum > 0) || anyTrue) {
       itemChanged(summaryChild.linkId, {
-        code: YesNoMissingReason.Yes,
-        label: HmisEnums.YesNoMissingReason.YES,
+        code: NoYesReasonsForMissingData.Yes,
+        label: HmisEnums.NoYesReasonsForMissingData.YES,
       });
     }
   }, [sum, itemChanged, summaryChild, anyTrue]);

@@ -12,7 +12,7 @@ import {
   NameDataQuality,
   Ethnicity,
   DobDataQuality,
-  YesNoMissingReason,
+  NoYesReasonsForMissingData,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -27,11 +27,11 @@ export const RITA_ACKROYD = {
   nameSuffix: null,
   gender: [Gender.GenderMale, Gender.GenderNoSingleGender],
   race: [Race.RaceRefused],
-  dobDataQuality: DobDataQuality.DobApproximateOrPartialDobReported,
-  ethnicity: Ethnicity.EthnicityHispanicLatinAOX,
-  nameDataQuality: NameDataQuality.NameFullNameReported,
-  ssnDataQuality: SsnDataQuality.SsnApproximateOrPartialSsnReported,
-  veteranStatus: YesNoMissingReason.ClientRefused,
+  dobDataQuality: DobDataQuality.ApproximateOrPartialDobReported,
+  ethnicity: Ethnicity.HispanicLatinAOX,
+  nameDataQuality: NameDataQuality.FullNameReported,
+  ssnDataQuality: SsnDataQuality.ApproximateOrPartialSsnReported,
+  veteranStatus: NoYesReasonsForMissingData.ClientRefused,
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   enrollments: {
