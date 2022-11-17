@@ -7,10 +7,12 @@ const InputContainer = ({
   sx,
   errors,
   children,
+  horizontal,
 }: {
   sx: SxProps;
   errors?: ValidationError[];
   children: ReactNode;
+  horizontal: boolean;
 }) => (
   <Grid item sx={sx}>
     {children}
@@ -20,7 +22,7 @@ const InputContainer = ({
           variant='body2'
           color='error'
           key={fullMessage || message}
-          sx={{ mt: 0.5 }}
+          sx={{ mt: 0.5, float: horizontal ? 'right' : undefined }}
         >
           {fullMessage || message}
         </Typography>
