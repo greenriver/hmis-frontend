@@ -156,13 +156,16 @@ export type Client = {
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
+  disabilities: DisabilitiesPaginated;
   dob?: Maybe<Scalars['ISO8601Date']>;
   dobDataQuality: DobDataQuality;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
   firstName?: Maybe<Scalars['String']>;
   gender: Array<Gender>;
+  healthAndDvs: HealthAndDvsPaginated;
   id: Scalars['ID'];
+  incomeBenefits: IncomeBenefitsPaginated;
   lastName?: Maybe<Scalars['String']>;
   middleName?: Maybe<Scalars['String']>;
   nameDataQuality: NameDataQuality;
@@ -177,10 +180,28 @@ export type Client = {
 };
 
 /** HUD Client */
+export type ClientDisabilitiesArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Client */
 export type ClientEnrollmentsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+/** HUD Client */
+export type ClientHealthAndDvsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** HUD Client */
+export type ClientIncomeBenefitsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** HMIS Client input */
@@ -550,6 +571,67 @@ export type DeleteServicePayload = {
   service?: Maybe<Service>;
 };
 
+export type DisabilitiesPaginated = {
+  __typename?: 'DisabilitiesPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Disability>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
+export type Disability = {
+  __typename?: 'Disability';
+  client: Client;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  disabilityResponse: DisabilityResponse;
+  disabilityType: DisabilityType;
+  enrollment: Enrollment;
+  id: Scalars['ID'];
+  indefiniteAndImpairs?: Maybe<Scalars['Int']>;
+  informationDate: Scalars['ISO8601Date'];
+  user: User;
+};
+
+/** 4.10.2 */
+export enum DisabilityResponse {
+  /** (1) Alcohol use disorder */
+  AlcoholUseDisorder = 'ALCOHOL_USE_DISORDER',
+  /** (3) Both alcohol and drug use disorders */
+  BothAlcoholAndDrugUseDisorders = 'BOTH_ALCOHOL_AND_DRUG_USE_DISORDERS',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (2) Drug use disorder */
+  DrugUseDisorder = 'DRUG_USE_DISORDER',
+  /** (0) No */
+  No = 'NO',
+}
+
+/** 1.3 */
+export enum DisabilityType {
+  /** (7) Chronic health condition */
+  ChronicHealthCondition = 'CHRONIC_HEALTH_CONDITION',
+  /** (6) Developmental disability */
+  DevelopmentalDisability = 'DEVELOPMENTAL_DISABILITY',
+  /** (8) HIV/AIDS */
+  HivAids = 'HIV_AIDS',
+  /** (9) Mental health disorder */
+  MentalHealthDisorder = 'MENTAL_HEALTH_DISORDER',
+  /** (5) Physical disability */
+  PhysicalDisability = 'PHYSICAL_DISABILITY',
+  /** (10) Substance use disorder */
+  SubstanceUseDisorder = 'SUBSTANCE_USE_DISORDER',
+}
+
 export enum EnableBehavior {
   All = 'ALL',
   Any = 'ANY',
@@ -596,13 +678,15 @@ export type Enrollment = {
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
-  entryDate?: Maybe<Scalars['ISO8601Date']>;
+  disablingCondition?: Maybe<NoYesReasonsForMissingData>;
+  entryDate: Scalars['ISO8601Date'];
   events: EventsPaginated;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
   household: Household;
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
+  livingSituation?: Maybe<LivingSituation>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
@@ -742,6 +826,26 @@ export type EventsPaginated = {
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
 };
+
+/** C1.2 */
+export enum FeelingFrequency {
+  /** (4) At least every day */
+  AtLeastEveryDay = 'AT_LEAST_EVERY_DAY',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) Not at all */
+  NotAtAll = 'NOT_AT_ALL',
+  /** (1) Once a month */
+  OnceAMonth = 'ONCE_A_MONTH',
+  /** (2) Several times a month */
+  SeveralTimesAMonth = 'SEVERAL_TIMES_A_MONTH',
+  /** (3) Several times a week */
+  SeveralTimesAWeek = 'SEVERAL_TIMES_A_WEEK',
+}
 
 /** FormDefinition */
 export type FormDefinition = {
@@ -994,6 +1098,61 @@ export enum HopwaMedAssistedLivingFac {
   Yes = 'YES',
 }
 
+export type HealthAndDv = {
+  __typename?: 'HealthAndDv';
+  bounceBack?: Maybe<WellbeingAgreement>;
+  client: Client;
+  currentlyFleeing?: Maybe<NoYesReasonsForMissingData>;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  dentalHealthStatus?: Maybe<HealthStatus>;
+  dueDate?: Maybe<Scalars['ISO8601Date']>;
+  enrollment: Enrollment;
+  feelingFrequency?: Maybe<FeelingFrequency>;
+  generalHealthStatus?: Maybe<HealthStatus>;
+  id: Scalars['ID'];
+  informationDate: Scalars['ISO8601Date'];
+  lifeValue?: Maybe<WellbeingAgreement>;
+  mentalHealthStatus?: Maybe<HealthStatus>;
+  pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
+  supportFromOthers?: Maybe<WellbeingAgreement>;
+  user: User;
+  whenOccurred?: Maybe<WhenDvOccurred>;
+};
+
+export type HealthAndDvsPaginated = {
+  __typename?: 'HealthAndDvsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<HealthAndDv>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
+/** 4.27.1 */
+export enum HealthStatus {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (1) Excellent */
+  Excellent = 'EXCELLENT',
+  /** (4) Fair */
+  Fair = 'FAIR',
+  /** (3) Good */
+  Good = 'GOOD',
+  /** (5) Poor */
+  Poor = 'POOR',
+  /** (2) Very good */
+  VeryGood = 'VERY_GOOD',
+}
+
 /** HUD Household */
 export type Household = {
   __typename?: 'Household';
@@ -1029,6 +1188,47 @@ export enum HousingType {
   /** (3) Tenant-based - scattered site */
   TenantBasedScatteredSite = 'TENANT_BASED_SCATTERED_SITE',
 }
+
+export type IncomeBenefit = {
+  __typename?: 'IncomeBenefit';
+  alimonyAmount?: Maybe<Scalars['Float']>;
+  childSupportAmount?: Maybe<Scalars['Float']>;
+  client: Client;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  earnedAmount?: Maybe<Scalars['Float']>;
+  enrollment: Enrollment;
+  gaAmount?: Maybe<Scalars['Float']>;
+  id: Scalars['ID'];
+  informationDate: Scalars['ISO8601Date'];
+  otherIncomeAmount?: Maybe<Scalars['Float']>;
+  otherIncomeSourceIdentify?: Maybe<Scalars['String']>;
+  pensionAmount?: Maybe<Scalars['Float']>;
+  privateDisabilityAmount?: Maybe<Scalars['Float']>;
+  socSecRetirementAmount?: Maybe<Scalars['Float']>;
+  ssdiAmount?: Maybe<Scalars['Float']>;
+  ssiAmount?: Maybe<Scalars['Float']>;
+  tanfAmount?: Maybe<Scalars['Float']>;
+  totalMonthlyIncome?: Maybe<Scalars['String']>;
+  unemploymentAmount?: Maybe<Scalars['Float']>;
+  user: User;
+  vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']>;
+  vaDisabilityServiceAmount?: Maybe<Scalars['Float']>;
+  workersCompAmount?: Maybe<Scalars['Float']>;
+};
+
+export type IncomeBenefitsPaginated = {
+  __typename?: 'IncomeBenefitsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<IncomeBenefit>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 /** Initial value when item is first rendered */
 export type InitialValue = {
@@ -1112,6 +1312,89 @@ export enum ItemType {
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
+}
+
+/** 3.917.1 */
+export enum LivingSituation {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (24) Deceased */
+  Deceased = 'DECEASED',
+  /** (1) Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter */
+  EmergencyShelterIncludingHotelOrMotelPaidForWithEmergencyShelterVoucherOrRhyFundedHostHomeShelter = 'EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER',
+  /** (15) Foster care home or foster care group home */
+  FosterCareHomeOrFosterCareGroupHome = 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+  /** (6) Hospital or other residential non-psychiatric medical facility */
+  HospitalOrOtherResidentialNonPsychiatricMedicalFacility = 'HOSPITAL_OR_OTHER_RESIDENTIAL_NON_PSYCHIATRIC_MEDICAL_FACILITY',
+  /** (32) Host Home (non-crisis) */
+  HostHomeNonCrisis = 'HOST_HOME_NON_CRISIS',
+  /** (14) Hotel or motel paid for without emergency shelter voucher */
+  HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
+  /** (27) Interim Housing */
+  InterimHousing = 'INTERIM_HOUSING',
+  /** (7) Jail, prison or juvenile detention facility */
+  JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
+  /** (25) Long-term care facility or nursing home */
+  LongTermCareFacilityOrNursingHome = 'LONG_TERM_CARE_FACILITY_OR_NURSING_HOME',
+  /** (26) Moved from one HOPWA funded project to HOPWA PH */
+  MovedFromOneHopwaFundedProjectToHopwaPh = 'MOVED_FROM_ONE_HOPWA_FUNDED_PROJECT_TO_HOPWA_PH',
+  /** (30) No exit interview completed */
+  NoExitInterviewCompleted = 'NO_EXIT_INTERVIEW_COMPLETED',
+  /** (17) Other */
+  Other = 'OTHER',
+  /** (11) Owned by client, no ongoing housing subsidy */
+  OwnedByClientNoOngoingHousingSubsidy = 'OWNED_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (21) Owned by client, with ongoing housing subsidy */
+  OwnedByClientWithOngoingHousingSubsidy = 'OWNED_BY_CLIENT_WITH_ONGOING_HOUSING_SUBSIDY',
+  /** (3) Permanent housing (other than RRH) for formerly homeless persons */
+  PermanentHousingOtherThanRrhForFormerlyHomelessPersons = 'PERMANENT_HOUSING_OTHER_THAN_RRH_FOR_FORMERLY_HOMELESS_PERSONS',
+  /**
+   * (16) Place not meant for habitation (e.g., a vehicle, an abandoned building,
+   * bus/train/subway station/airport or anywhere outside)
+   */
+  PlaceNotMeantForHabitationEGAVehicleAnAbandonedBuildingBusTrainSubwayStationAirportOrAnywhereOutside = 'PLACE_NOT_MEANT_FOR_HABITATION_E_G_A_VEHICLE_AN_ABANDONED_BUILDING_BUS_TRAIN_SUBWAY_STATION_AIRPORT_OR_ANYWHERE_OUTSIDE',
+  /** (4) Psychiatric hospital or other psychiatric facility */
+  PsychiatricHospitalOrOtherPsychiatricFacility = 'PSYCHIATRIC_HOSPITAL_OR_OTHER_PSYCHIATRIC_FACILITY',
+  /** (34) Rental by client in a public housing unit */
+  RentalByClientInAPublicHousingUnit = 'RENTAL_BY_CLIENT_IN_A_PUBLIC_HOUSING_UNIT',
+  /** (10) Rental by client, no ongoing housing subsidy */
+  RentalByClientNoOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_NO_ONGOING_HOUSING_SUBSIDY',
+  /** (28) Rental by client, with GPD TIP housing subsidy */
+  RentalByClientWithGpdTipHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_GPD_TIP_HOUSING_SUBSIDY',
+  /** (33) Rental by client, with HCV voucher (tenant or project based) */
+  RentalByClientWithHcvVoucherTenantOrProjectBased = 'RENTAL_BY_CLIENT_WITH_HCV_VOUCHER_TENANT_OR_PROJECT_BASED',
+  /** (20) Rental by client, with other ongoing housing subsidy */
+  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
+  /** (31) Rental by client, with RRH or equivalent subsidy */
+  RentalByClientWithRrhOrEquivalentSubsidy = 'RENTAL_BY_CLIENT_WITH_RRH_OR_EQUIVALENT_SUBSIDY',
+  /** (19) Rental by client, with VASH housing subsidy */
+  RentalByClientWithVashHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_VASH_HOUSING_SUBSIDY',
+  /** (29) Residential project or halfway house with no homeless criteria */
+  ResidentialProjectOrHalfwayHouseWithNoHomelessCriteria = 'RESIDENTIAL_PROJECT_OR_HALFWAY_HOUSE_WITH_NO_HOMELESS_CRITERIA',
+  /** (18) Safe Haven */
+  SafeHaven = 'SAFE_HAVEN',
+  /** (35) Staying or living in a family member's room, apartment or house */
+  StayingOrLivingInAFamilyMemberSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FAMILY_MEMBER_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (36) Staying or living in a friend's room, apartment or house */
+  StayingOrLivingInAFriendSRoomApartmentOrHouse = 'STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE',
+  /** (22) Staying or living with family, permanent tenure */
+  StayingOrLivingWithFamilyPermanentTenure = 'STAYING_OR_LIVING_WITH_FAMILY_PERMANENT_TENURE',
+  /** (12) Staying or living with family, temporary tenure (e.g. room, apartment or house) */
+  StayingOrLivingWithFamilyTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FAMILY_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
+  /** (23) Staying or living with friends, permanent tenure */
+  StayingOrLivingWithFriendsPermanentTenure = 'STAYING_OR_LIVING_WITH_FRIENDS_PERMANENT_TENURE',
+  /** (13) Staying or living with friends, temporary tenure (e.g. room apartment or house) */
+  StayingOrLivingWithFriendsTemporaryTenureEGRoomApartmentOrHouse = 'STAYING_OR_LIVING_WITH_FRIENDS_TEMPORARY_TENURE_E_G_ROOM_APARTMENT_OR_HOUSE',
+  /** (5) Substance abuse treatment facility or detox center */
+  SubstanceAbuseTreatmentFacilityOrDetoxCenter = 'SUBSTANCE_ABUSE_TREATMENT_FACILITY_OR_DETOX_CENTER',
+  /** (2) Transitional housing for homeless persons (including homeless youth) */
+  TransitionalHousingForHomelessPersonsIncludingHomelessYouth = 'TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH',
+  /** (37) Worker unable to determine */
+  WorkerUnableToDetermine = 'WORKER_UNABLE_TO_DETERMINE',
 }
 
 /** 3.917.5 */
@@ -2319,6 +2602,44 @@ export type ValueBound = {
   valueDate?: Maybe<Scalars['ISO8601Date']>;
   valueNumber?: Maybe<Scalars['Int']>;
 };
+
+/** C1.1 */
+export enum WellbeingAgreement {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (2) Neither agree nor disagree */
+  NeitherAgreeNorDisagree = 'NEITHER_AGREE_NOR_DISAGREE',
+  /** (3) Somewhat agree */
+  SomewhatAgree = 'SOMEWHAT_AGREE',
+  /** (1) Somewhat disagree */
+  SomewhatDisagree = 'SOMEWHAT_DISAGREE',
+  /** (4) Strongly agree */
+  StronglyAgree = 'STRONGLY_AGREE',
+  /** (0) Strongly disagree */
+  StronglyDisagree = 'STRONGLY_DISAGREE',
+}
+
+/** 4.11.A */
+export enum WhenDvOccurred {
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (4) One year or more */
+  OneYearOrMore = 'ONE_YEAR_OR_MORE',
+  /** (3) Six months to one year ago (excluding one year exactly) */
+  SixMonthsToOneYearAgoExcludingOneYearExactly = 'SIX_MONTHS_TO_ONE_YEAR_AGO_EXCLUDING_ONE_YEAR_EXACTLY',
+  /** (2) Three to six months ago (excluding six months exactly) */
+  ThreeToSixMonthsAgoExcludingSixMonthsExactly = 'THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY',
+  /** (1) Within the past three months */
+  WithinThePastThreeMonths = 'WITHIN_THE_PAST_THREE_MONTHS',
+}
 
 export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
@@ -4255,7 +4576,7 @@ export type HouseholdClientFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate?: string | null;
+    entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
   };
@@ -4264,7 +4585,7 @@ export type HouseholdClientFieldsFragment = {
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
-  entryDate?: string | null;
+  entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
   project: {
@@ -4279,7 +4600,7 @@ export type EnrollmentFieldsFragment = {
 export type EnrollmentWithHoHFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
-  entryDate?: string | null;
+  entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
   household: {
@@ -4302,7 +4623,7 @@ export type EnrollmentWithHoHFragmentFragment = {
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
-        entryDate?: string | null;
+        entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
       };
@@ -4433,7 +4754,7 @@ export type GetClientEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
-        entryDate?: string | null;
+        entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
         project: {
@@ -4544,7 +4865,7 @@ export type CreateEnrollmentMutation = {
     enrollments?: Array<{
       __typename?: 'Enrollment';
       id: string;
-      entryDate?: string | null;
+      entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       project: {
@@ -4578,7 +4899,7 @@ export type UpdateEnrollmentMutation = {
     enrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      entryDate?: string | null;
+      entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       household: {
@@ -4601,7 +4922,7 @@ export type UpdateEnrollmentMutation = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
-            entryDate?: string | null;
+            entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
           };
@@ -4637,7 +4958,7 @@ export type SetHoHMutation = {
     enrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      entryDate?: string | null;
+      entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       household: {
@@ -4660,7 +4981,7 @@ export type SetHoHMutation = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
-            entryDate?: string | null;
+            entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
           };
@@ -4696,7 +5017,7 @@ export type DeleteEnrollmentMutation = {
     enrollment?: {
       __typename?: 'Enrollment';
       id: string;
-      entryDate?: string | null;
+      entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       project: {
@@ -4730,7 +5051,7 @@ export type AddHouseholdMembersMutation = {
     enrollments?: Array<{
       __typename?: 'Enrollment';
       id: string;
-      entryDate?: string | null;
+      entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
       household: {
@@ -4753,7 +5074,7 @@ export type AddHouseholdMembersMutation = {
           enrollment: {
             __typename?: 'Enrollment';
             id: string;
-            entryDate?: string | null;
+            entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
           };
@@ -4786,7 +5107,7 @@ export type GetEnrollmentQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate?: string | null;
+    entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
     project: {
@@ -4808,7 +5129,7 @@ export type GetEnrollmentWithHoHQuery = {
   enrollment?: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate?: string | null;
+    entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
     household: {
@@ -4831,7 +5152,7 @@ export type GetEnrollmentWithHoHQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
-          entryDate?: string | null;
+          entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
         };
