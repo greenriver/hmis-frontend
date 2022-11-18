@@ -164,7 +164,6 @@ const InputGroupWithSummary = ({
       {summaryChild && renderChildItem && (
         <Grid container direction={'column'} rowSpacing={2} columnSpacing={0}>
           {renderChildItem(summaryChild, {
-            ...childProps,
             itemChanged: summaryItemChanged,
           })}
         </Grid>
