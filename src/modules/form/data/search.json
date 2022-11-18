@@ -6,7 +6,7 @@
       "linkId": "1",
       "text": "Personal ID",
 
-      "queryField": "personalId"
+      "fieldName": "personalId"
     },
     {
       "type": "STRING",
@@ -14,7 +14,7 @@
       "linkId": "2",
       "text": "First Name",
 
-      "queryField": "firstName"
+      "fieldName": "firstName"
     },
     {
       "type": "STRING",
@@ -22,7 +22,7 @@
       "linkId": "3",
       "text": "Last Name",
 
-      "queryField": "lastName"
+      "fieldName": "lastName"
     },
     {
       "type": "STRING",
@@ -30,7 +30,7 @@
       "linkId": "4",
       "text": "SSN",
 
-      "queryField": "ssnSerial"
+      "fieldName": "ssnSerial"
     },
     {
       "type": "DATE",
@@ -38,7 +38,7 @@
       "linkId": "5",
       "text": "Date of Birth",
 
-      "queryField": "dob"
+      "fieldName": "dob"
     },
     {
       "type": "CHOICE",
@@ -47,7 +47,7 @@
       "text": "Organizations",
       "repeats": true,
       "pickListReference": "ORGANIZATION",
-      "queryField": "organizations"
+      "fieldName": "organizations"
     }
   ]
 }

@@ -93,12 +93,7 @@ const Table = ({ projectId }: { projectId: string }) => {
             ),
           },
         ]}
-        toNodes={(data: GetProjectProjectCocsQuery) =>
-          data.project?.projectCocs?.nodes || []
-        }
-        toNodesCount={(data: GetProjectProjectCocsQuery) =>
-          data.project?.projectCocs?.nodesCount
-        }
+        pagePath='project.projectCocs'
         noData='No Project CoC records.'
       />
       <ConfirmationDialog

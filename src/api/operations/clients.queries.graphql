@@ -176,3 +176,39 @@ query GetClientHouseholdMemberCandidates(
     }
   }
 }
+
+query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    incomeBenefits(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...IncomeBenefitFields
+      }
+    }
+  }
+}
+
+query GetRecentDisabilities($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    disabilities(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...DisabilityFields
+      }
+    }
+  }
+}
+
+query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    healthAndDvs(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...HealthAndDvFields
+      }
+    }
+  }
+}

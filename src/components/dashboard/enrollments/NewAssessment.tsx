@@ -107,7 +107,7 @@ const NewAssessment = () => {
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4} sx={{ pb: 20 }}>
-        <Grid item xs={9}>
+        <Grid item>
           {loading && <Loading />}
           {!loading && !definition && (
             <Alert severity='error'>{`Unable to load ${title} form.`}</Alert>
@@ -133,7 +133,6 @@ const NewAssessment = () => {
             </>
           )}
         </Grid>
-        <Grid item xs></Grid>
       </Grid>
     </>
   );

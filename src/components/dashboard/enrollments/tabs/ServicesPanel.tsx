@@ -64,12 +64,7 @@ const ServicesPanel = ({
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentServicesDocument}
       columns={columns}
-      toNodes={(data: GetEnrollmentServicesQuery) =>
-        data.enrollment?.services?.nodes || []
-      }
-      toNodesCount={(data: GetEnrollmentServicesQuery) =>
-        data.enrollment?.services?.nodesCount
-      }
+      pagePath='enrollment.services'
       noData='No services.'
     />
   </Stack>

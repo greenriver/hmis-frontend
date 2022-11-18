@@ -1,12 +1,20 @@
-import { Box, Grid, Paper, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
+import { useCallback, useState } from 'react';
 
+import { getPopulatableChildren } from '../../util/formUtil';
+import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
+import RecordPickerDialog, { RelatedRecord } from '../RecordPickerDialog';
 
 const ItemGroup = ({
   item,
   nestingLevel,
   renderChildItem,
+  severalItemsChanged,
 }: GroupItemComponentProps) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
   const direction = 'column'; // item.display?.direction ?? 'column';
   const isColumn = direction === 'column';
 
@@ -22,22 +30,80 @@ const ItemGroup = ({
         item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
   );
+
+  const onSelectAutofillRecord = useCallback(
+    (record: RelatedRecord) => {
+      setSourceRecord(record);
+      setDialogOpen(false);
+      // console.log('source', record);
+      const newFormValues: Record<string, any> = {};
+      getPopulatableChildren(item).forEach((i) => {
+        if (!i.fieldName) return;
+        const gqlValue = record[i.fieldName as keyof RelatedRecord];
+        newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
+      });
+      // console.log('as values', newFormValues);
+      severalItemsChanged(newFormValues);
+    },
+    [setDialogOpen, severalItemsChanged, item]
+  );
+
   if (nestingLevel === 0) {
     return (
-      <Grid item>
-        <Paper
-          sx={{
-            py: 3,
-            px: 2.5,
-          }}
-        >
-          {item.text && (
-            <Typography variant='h5' sx={{ mb: 3 }}>
-              {item.text}
-            </Typography>
-          )}
-          {wrappedChildren}
-        </Paper>
+      <Grid item xs>
+        <Grid container direction='row' spacing={3}>
+          <Grid item xs>
+            <Paper
+              sx={{
+                py: 3,
+                px: 2.5,
+              }}
+            >
+              {item.text && (
+                <Stack justifyContent='space-between' direction='row'>
+                  <Typography variant='h5' sx={{ mb: 3 }}>
+                    {item.text}
+                  </Typography>
+                  {item.recordType && (
+                    <Button
+                      onClick={() => setDialogOpen(true)}
+                      variant='outlined'
+                      size='small'
+                      sx={{ height: 'fit-content' }}
+                    >
+                      AUTOFILL SECTION
+                    </Button>
+                  )}
+                </Stack>
+              )}
+              {sourceRecord && item.recordType && (
+                <Typography
+                  variant='body2'
+                  color='GrayText'
+                  fontStyle={'italic'}
+                >
+                  Autofilled with {startCase(item.recordType.toLowerCase())}{' '}
+                  record from <b>{sourceRecord.informationDate}</b>
+                </Typography>
+              )}
+              {wrappedChildren}
+            </Paper>
+          </Grid>
+          <Grid item xs={4}>
+            {item.recordType && (
+              <>
+                <RecordPickerDialog
+                  id={`recordPickerDialog-${item.linkId}`}
+                  item={item}
+                  recordType={item.recordType}
+                  open={dialogOpen}
+                  onSelected={onSelectAutofillRecord}
+                  onCancel={() => setDialogOpen(false)}
+                />
+              </>
+            )}
+          </Grid>
+        </Grid>
       </Grid>
     );
   }

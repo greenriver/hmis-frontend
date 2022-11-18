@@ -54,12 +54,7 @@ const EventsPanel = ({
       queryVariables={{ id: enrollmentId }}
       queryDocument={GetEnrollmentEventsDocument}
       columns={columns}
-      toNodes={(data: GetEnrollmentEventsQuery) =>
-        data.enrollment?.events?.nodes || []
-      }
-      toNodesCount={(data: GetEnrollmentEventsQuery) =>
-        data.enrollment?.events?.nodesCount
-      }
+      pagePath='enrollment.events'
       noData='No events.'
     />
   </Stack>

@@ -80,6 +80,16 @@ const DynamicForm: React.FC<Props> = ({
     [setValues]
   );
 
+  const severalItemsChanged = useCallback(
+    (values: Record<string, any>) => {
+      setPromptSave(true);
+      setValues((currentValues) => {
+        return { ...currentValues, ...values };
+      });
+    },
+    [setValues]
+  );
+
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
@@ -112,8 +122,8 @@ const DynamicForm: React.FC<Props> = ({
   const getFieldErrors = useCallback(
     (item: FormItem) => {
       if (!errors) return undefined;
-      if (!item.queryField) return undefined;
-      const attribute = item.queryField;
+      if (!item.fieldName) return undefined;
+      const attribute = item.fieldName;
       return errors.filter((e) => e.attribute === attribute);
     },
     [errors]
@@ -156,6 +166,7 @@ const DynamicForm: React.FC<Props> = ({
           renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
           values={values}
           itemChanged={itemChanged}
+          severalItemsChanged={severalItemsChanged}
         />
       );
     }

@@ -11,6 +11,7 @@ export interface GroupItemComponentProps {
   renderChildItem: (item: FormItem) => ReactNode;
   values: Record<string, any>;
   itemChanged: (linkId: string, value: any) => void;
+  severalItemsChanged: (values: Record<string, any>) => void;
 }
 
 const DynamicGroup = (props: GroupItemComponentProps) => {
