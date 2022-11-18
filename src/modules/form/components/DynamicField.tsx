@@ -58,6 +58,9 @@ const getLabel = (item: FormItem) => {
   );
 };
 
+export const maxWidthAtNestingLevel = (nestingLevel: number) =>
+  600 - nestingLevel * 26;
+
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
@@ -74,7 +77,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const onChangeEventValue = (_: any, val: any) =>
     itemChanged(item.linkId, val);
   const label = getLabel(item);
-  const maxWidth = 600 - nestingLevel * 26;
+  const maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = 250;
 
   const commonContainerProps = { errors, horizontal };

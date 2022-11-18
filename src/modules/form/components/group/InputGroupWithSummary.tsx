@@ -2,6 +2,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { isBoolean, isNil, isNumber, pick, reduce } from 'lodash-es';
 import { useCallback, useEffect, useMemo } from 'react';
 
+import { maxWidthAtNestingLevel } from '../DynamicField';
 import { GroupItemComponentProps } from '../DynamicGroup';
 
 import NumberInput from '@/components/elements/input/NumberInput';
@@ -22,6 +23,7 @@ const InputGroupWithSummary = ({
   values,
   renderChildItem,
   itemChanged,
+  nestingLevel,
 }: GroupItemComponentProps) => {
   const childItemLinkIds: string[] = useMemo(
     () => item.item?.map((item) => item.linkId) || [],
@@ -75,12 +77,29 @@ const InputGroupWithSummary = ({
         sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 3 }}
       >
         {renderChildItem &&
-          dynamicChildren.map((childItem) =>
-            renderChildItem(childItem, childProps)
-          )}
+          dynamicChildren.map((childItem, idx) => (
+            <Box
+              sx={{
+                backgroundColor: (theme) =>
+                  idx & 1 ? undefined : theme.palette.grey[100],
+                pl: 1,
+                pb: 0.5,
+                pr: 0.5,
+                maxWidth: maxWidthAtNestingLevel(nestingLevel + 1),
+              }}
+            >
+              {renderChildItem(childItem, childProps)}
+            </Box>
+          ))}
       </Grid>
     );
-  }, [renderChildItem, dynamicChildren, hideDynamicChildren, childProps]);
+  }, [
+    renderChildItem,
+    dynamicChildren,
+    hideDynamicChildren,
+    childProps,
+    nestingLevel,
+  ]);
 
   // Sum of child numeric inputs (if applicable)
   const sum = useMemo(() => {
@@ -152,13 +171,19 @@ const InputGroupWithSummary = ({
       )}
       {wrappedChildren}
       {!hideDynamicChildren && isCurrency && (
-        <Box sx={{ mt: 3 }}>
+        <Box
+          sx={{
+            pl: 1,
+            pr: 0.5,
+            maxWidth: maxWidthAtNestingLevel(nestingLevel + 1),
+          }}
+        >
           <NumberInput
             horizontal
             value={sum || 0}
             disabled
             label='Monthly Total Income'
-            currency={childItemType === ItemType.Currency}
+            currency={isCurrency}
           />
         </Box>
       )}

@@ -23,12 +23,12 @@ export const horizontalInputSx: SxProps<Theme> = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
-  backgroundImage: (theme: Theme) =>
-    `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
-  backgroundPosition: 'center',
-  backgroundSize: '8px 3px',
-  backgroundRepeat: 'repeat-x',
-  flexWrap: 'nowrap',
+  // backgroundImage: (theme: Theme) =>
+  // `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
+  // backgroundPosition: 'center',
+  // backgroundSize: '8px 3px',
+  // backgroundRepeat: 'repeat-x',
+  // flexWrap: 'nowrap',
 };
 
 const TextInput = ({
@@ -104,7 +104,7 @@ const TextInput = ({
           whiteSpace: 'break-spaces',
           display: 'flex',
           alignItems: 'center',
-          backgroundColor: horizontal ? 'white' : undefined,
+          // backgroundColor: horizontal ? 'white' : undefined,
           pr: horizontal ? 1 : undefined,
           ...(props.InputLabelProps?.sx || {}),
         },
