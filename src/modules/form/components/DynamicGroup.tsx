@@ -6,9 +6,11 @@ import ItemGroup from './group/ItemGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
 
-export type PassableDynamicFieldProps = Omit<
-  DynamicFieldProps,
-  'item' | 'itemChanged' | 'value' | 'nestingLevel'
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export type OverrideableDynamicFieldProps = Optional<
+  Omit<DynamicFieldProps, 'item' | 'value' | 'nestingLevel'>,
+  'itemChanged' // allow groups to override item changed
 >;
 
 export interface GroupItemComponentProps {
@@ -16,7 +18,7 @@ export interface GroupItemComponentProps {
   nestingLevel: number;
   renderChildItem: (
     item: FormItem,
-    props?: PassableDynamicFieldProps
+    props?: OverrideableDynamicFieldProps
   ) => ReactNode;
   values: Record<string, any>;
   itemChanged: (linkId: string, value: any) => void;

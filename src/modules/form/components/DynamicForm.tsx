@@ -7,7 +7,7 @@ import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
-import DynamicGroup, { PassableDynamicFieldProps } from './DynamicGroup';
+import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 
 import {
   BoundType,
@@ -154,7 +154,7 @@ const DynamicForm: React.FC<Props> = ({
   const renderItem = (
     item: FormItem,
     nestingLevel: number,
-    props?: PassableDynamicFieldProps
+    props?: OverrideableDynamicFieldProps
   ) => {
     if (!isEnabled(item)) {
       // console.log('Hidden:', item);
