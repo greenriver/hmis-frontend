@@ -46,7 +46,7 @@ const CreateClient: React.FC = () => {
                 data?.createClient?.errors
               }
               submitButtonText='Create Client'
-              horizontal
+              // horizontal
             />
           </Grid>
         </Grid>

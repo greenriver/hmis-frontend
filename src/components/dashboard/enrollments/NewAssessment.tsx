@@ -134,7 +134,7 @@ const NewAssessment = () => {
                 loading={saveLoading}
                 errors={errors}
                 showSavePrompt
-                horizontal
+                // horizontal
               />
             </>
           )}

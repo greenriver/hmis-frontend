@@ -119,7 +119,7 @@ const EditAssessment = () => {
               loading={saveLoading}
               errors={errors}
               showSavePrompt
-              horizontal
+              // horizontal
             />
           )}
         </Grid>

@@ -32,7 +32,7 @@ export interface DynamicInputCommonProps {
   max?: any;
 }
 
-interface Props {
+export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: (linkId: string, value: any) => void;
   nestingLevel: number;
@@ -58,7 +58,7 @@ const getLabel = (item: FormItem) => {
   );
 };
 
-const DynamicField: React.FC<Props> = ({
+const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
   nestingLevel,

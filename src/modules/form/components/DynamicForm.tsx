@@ -7,7 +7,7 @@ import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
-import DynamicGroup from './DynamicGroup';
+import DynamicGroup, { PassableDynamicFieldProps } from './DynamicGroup';
 
 import {
   BoundType,
@@ -151,7 +151,11 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   // Recursively render an item
-  const renderItem = (item: FormItem, nestingLevel: number) => {
+  const renderItem = (
+    item: FormItem,
+    nestingLevel: number,
+    props?: PassableDynamicFieldProps
+  ) => {
     if (!isEnabled(item)) {
       // console.log('Hidden:', item);
       return null;
@@ -163,7 +167,9 @@ const DynamicForm: React.FC<Props> = ({
           item={item}
           key={item.linkId}
           nestingLevel={nestingLevel}
-          renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
+          renderChildItem={(item, props) =>
+            renderItem(item, nestingLevel + 1, props)
+          }
           values={values}
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
@@ -180,6 +186,7 @@ const DynamicForm: React.FC<Props> = ({
         errors={getFieldErrors(item)}
         inputProps={getCommonInputProps(item)}
         horizontal={horizontal}
+        {...props}
       />
     );
   };

@@ -40,6 +40,17 @@ const InputGroupWithSummary = ({
     () => (item.item ? item.item[1].type : undefined),
     [item]
   );
+
+  const isCurrency = useMemo(
+    () => childItemType === ItemType.Currency,
+    [childItemType]
+  );
+
+  const childProps = useMemo(
+    () => (isCurrency ? { horizontal: true } : undefined),
+    [isCurrency]
+  );
+
   const hideDynamicChildren = useMemo(
     () =>
       summaryChild &&
@@ -59,15 +70,16 @@ const InputGroupWithSummary = ({
         sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 3 }}
       >
         {renderChildItem &&
-          dynamicChildren.map((childItem) => renderChildItem(childItem))}
+          dynamicChildren.map((childItem) =>
+            renderChildItem(childItem, childProps)
+          )}
       </Grid>
     );
-  }, [renderChildItem, dynamicChildren, hideDynamicChildren]);
+  }, [renderChildItem, dynamicChildren, hideDynamicChildren, childProps]);
 
   // Sum of child numeric inputs (if applicable)
   const sum = useMemo(() => {
-    if (!childItemType) return;
-    if (![ItemType.Currency, ItemType.Integer].includes(childItemType)) return;
+    if (!isCurrency) return;
     const relevant = pick(values, childItemLinkIds);
     return reduce(
       relevant,
@@ -77,7 +89,7 @@ const InputGroupWithSummary = ({
       },
       0
     );
-  }, [values, childItemLinkIds, childItemType]);
+  }, [values, childItemLinkIds, isCurrency]);
 
   // Whether any of the child checkboxes are checked (if applicable)
   const anyTrue = useMemo(() => {
@@ -105,23 +117,21 @@ const InputGroupWithSummary = ({
       {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
       {summaryChild && renderChildItem && (
         <Grid container direction={'column'} rowSpacing={2} columnSpacing={0}>
-          {renderChildItem(summaryChild)}
+          {renderChildItem(summaryChild, childProps)}
         </Grid>
       )}
       {wrappedChildren}
-      {!hideDynamicChildren &&
-        dynamicChildren &&
-        dynamicChildren[0].type === ItemType.Currency && (
-          <Box sx={{ mt: 3 }}>
-            <NumberInput
-              horizontal
-              value={sum || 0}
-              disabled
-              label='Monthly Total Income'
-              currency={childItemType === ItemType.Currency}
-            />
-          </Box>
-        )}
+      {!hideDynamicChildren && isCurrency && (
+        <Box sx={{ mt: 3 }}>
+          <NumberInput
+            horizontal
+            value={sum || 0}
+            disabled
+            label='Monthly Total Income'
+            currency={childItemType === ItemType.Currency}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
