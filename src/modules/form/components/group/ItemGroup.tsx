@@ -50,60 +50,48 @@ const ItemGroup = ({
 
   if (nestingLevel === 0) {
     return (
-      <Grid item xs>
-        <Grid container direction='row' spacing={3}>
-          <Grid item xs>
-            <Paper
-              sx={{
-                py: 3,
-                px: 2.5,
-              }}
-            >
-              {item.text && (
-                <Stack justifyContent='space-between' direction='row'>
-                  <Typography variant='h5' sx={{ mb: 3 }}>
-                    {item.text}
-                  </Typography>
-                  {item.recordType && (
-                    <Button
-                      onClick={() => setDialogOpen(true)}
-                      variant='outlined'
-                      size='small'
-                      sx={{ height: 'fit-content' }}
-                    >
-                      AUTOFILL SECTION
-                    </Button>
-                  )}
-                </Stack>
-              )}
-              {sourceRecord && item.recordType && (
-                <Typography
-                  variant='body2'
-                  color='GrayText'
-                  fontStyle={'italic'}
+      <Grid item>
+        <Paper
+          sx={{
+            py: 3,
+            px: 2.5,
+          }}
+        >
+          {item.text && (
+            <Stack justifyContent='space-between' direction='row'>
+              <Typography variant='h5' sx={{ mb: 3 }}>
+                {item.text}
+              </Typography>
+              {item.recordType && (
+                <Button
+                  onClick={() => setDialogOpen(true)}
+                  variant='outlined'
+                  size='small'
+                  sx={{ height: 'fit-content' }}
                 >
-                  Autofilled with {startCase(item.recordType.toLowerCase())}{' '}
-                  record from <b>{sourceRecord.informationDate}</b>
-                </Typography>
+                  AUTOFILL SECTION
+                </Button>
               )}
-              {wrappedChildren}
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            {item.recordType && (
-              <>
-                <RecordPickerDialog
-                  id={`recordPickerDialog-${item.linkId}`}
-                  item={item}
-                  recordType={item.recordType}
-                  open={dialogOpen}
-                  onSelected={onSelectAutofillRecord}
-                  onCancel={() => setDialogOpen(false)}
-                />
-              </>
-            )}
-          </Grid>
-        </Grid>
+            </Stack>
+          )}
+          {sourceRecord && item.recordType && (
+            <Typography variant='body2' color='GrayText' fontStyle={'italic'}>
+              Autofilled with {startCase(item.recordType.toLowerCase())} record
+              from <b>{sourceRecord.informationDate}</b>
+            </Typography>
+          )}
+          {wrappedChildren}
+          {item.recordType && (
+            <RecordPickerDialog
+              id={`recordPickerDialog-${item.linkId}`}
+              item={item}
+              recordType={item.recordType}
+              open={dialogOpen}
+              onSelected={onSelectAutofillRecord}
+              onCancel={() => setDialogOpen(false)}
+            />
+          )}
+        </Paper>
       </Grid>
     );
   }

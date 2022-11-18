@@ -1,7 +1,7 @@
 import { Alert, Grid, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
@@ -9,6 +9,7 @@ import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { getInitialValues } from '@/modules/form/util/formUtil';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   useCreateAssessmentMutation,
@@ -19,11 +20,11 @@ import {
 // TODO if this is an intake and they already have one, redirect them there...?
 const NewAssessment = () => {
   const {
-    // clientId,
+    clientId,
     enrollmentId,
     assessmentRole: assessmentRoleParam,
   } = useParams() as {
-    // clientId: string;
+    clientId: string;
     enrollmentId: string;
     assessmentRole: string;
   };
@@ -54,7 +55,12 @@ const NewAssessment = () => {
           window.scrollTo(0, 0);
           setErrors(errors);
         } else {
-          navigate(-1);
+          navigate(
+            generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+              enrollmentId,
+              clientId,
+            })
+          );
         }
       },
     });
@@ -107,7 +113,7 @@ const NewAssessment = () => {
     <>
       <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4} sx={{ pb: 20 }}>
-        <Grid item>
+        <Grid item xs={9}>
           {loading && <Loading />}
           {!loading && !definition && (
             <Alert severity='error'>{`Unable to load ${title} form.`}</Alert>
@@ -133,6 +139,7 @@ const NewAssessment = () => {
             </>
           )}
         </Grid>
+        <Grid item xs></Grid>
       </Grid>
     </>
   );

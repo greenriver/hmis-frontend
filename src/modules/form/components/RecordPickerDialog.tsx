@@ -20,9 +20,7 @@ import { FormItem, RelatedRecordType } from '@/types/gqlTypes';
 export type RelatedRecord = { id: string; informationDate: string };
 
 interface Props extends Omit<DialogProps, 'children'> {
-  // title: string;
   open: boolean;
-  // loading: boolean;
   item: FormItem;
   recordType: RelatedRecordType;
   onSelected: (record: RelatedRecord) => void;
@@ -40,8 +38,6 @@ const tableComponent = (
     case RelatedRecordType.HealthAndDv:
       return HealthAndDvsTable;
     // Enrollment
-    // Disabilities
-    // HealthandDV
     // Exit
     // CurrentLivingSituation
     // YouthEducationStatus
@@ -51,7 +47,6 @@ const tableComponent = (
   }
 };
 
-// construct columns based on what the child items are :)
 const RecordPickerDialog = ({
   onSelected,
   onCancel,
@@ -102,8 +97,12 @@ const RecordPickerDialog = ({
       onClose={onCancel}
       {...other}
     >
-      <DialogTitle typography='h5' sx={{ textTransform: 'none' }}>
-        Select {startCase(recordType.toLowerCase())} Record
+      <DialogTitle
+        typography='h5'
+        sx={{ textTransform: 'none' }}
+        color='text.primary'
+      >
+        Choose record for <b>{item.text}</b>
       </DialogTitle>
       <DialogContent sx={{ pb: 0 }}>
         <TableComponent
@@ -126,7 +125,7 @@ const RecordPickerDialog = ({
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 2, justifyContent: 'center' }}>
         <Button onClick={onCancel} variant='gray'>
-          Cancel
+          Close
         </Button>
       </DialogActions>
     </Dialog>

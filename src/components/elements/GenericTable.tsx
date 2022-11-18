@@ -104,38 +104,40 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : `${theme.palette.grey[50]}`,
   });
 
+  const tableHead = vertical ? (
+    <TableHead>
+      {renderVerticalHeaderCell && (
+        <TableRow>
+          <TableCell key='empty' />
+          {rows.map((row, idx) => (
+            <TableCell key={row.id} sx={verticalCellSx(idx)}>
+              {renderVerticalHeaderCell(row)}
+            </TableCell>
+          ))}
+        </TableRow>
+      )}
+    </TableHead>
+  ) : (
+    <TableHead>
+      {hasHeaders && (
+        <TableRow>
+          {columns.map((def) => (
+            <HeaderCell
+              columnDef={def}
+              key={
+                def.key || (typeof def.header === 'string' ? def.header : '')
+              }
+            />
+          ))}
+        </TableRow>
+      )}
+    </TableHead>
+  );
+
   return (
     <TableContainer>
       <Table size='medium' sx={{ height: '1px' }} {...tableProps}>
-        {!vertical && (
-          <TableHead>
-            {hasHeaders && (
-              <TableRow>
-                {columns.map((def) => (
-                  <HeaderCell
-                    columnDef={def}
-                    key={
-                      def.key ||
-                      (typeof def.header === 'string' ? def.header : '')
-                    }
-                  />
-                ))}
-              </TableRow>
-            )}
-          </TableHead>
-        )}
-        {vertical && renderVerticalHeaderCell && (
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              {rows.map((row, idx) => (
-                <TableCell key={row.id} sx={verticalCellSx(idx)}>
-                  {renderVerticalHeaderCell(row)}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-        )}
+        {tableHead}
         <TableBody>
           {vertical &&
             columns.map((def) => (
