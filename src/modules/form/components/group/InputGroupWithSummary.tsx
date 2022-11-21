@@ -86,7 +86,9 @@ const InputGroupWithSummary = ({
                 pl: 1,
                 pb: 0.5,
                 pr: 0.5,
-                maxWidth: maxWidthAtNestingLevel(nestingLevel + 1),
+                maxWidth: isCurrency
+                  ? maxWidthAtNestingLevel(nestingLevel + 1)
+                  : undefined,
               }}
             >
               {renderChildItem(childItem, childProps)}
@@ -100,6 +102,7 @@ const InputGroupWithSummary = ({
     hideDynamicChildren,
     childProps,
     nestingLevel,
+    isCurrency,
   ]);
 
   // Sum of child numeric inputs (if applicable)

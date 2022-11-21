@@ -59,6 +59,10 @@ const getLabel = (item: FormItem) => {
   );
 };
 
+const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
+const MAX_INPUT_WIDTH = 400;
+const FIXED_DATE_WIDTH = 200;
+
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
 
@@ -163,6 +167,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
             horizontal={horizontal}
+            sx={{
+              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+            }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -194,7 +202,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
-            textInputProps={{ horizontal }}
+            textInputProps={{ horizontal, sx: { width: FIXED_DATE_WIDTH } }}
             {...datePickerProps}
             {...commonInputProps}
           />
@@ -212,7 +220,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
-            textInputProps={{ horizontal }}
+            textInputProps={{
+              horizontal,
+              sx: {
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              },
+            }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -266,7 +280,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
-            textInputProps={{ horizontal }}
+            textInputProps={{
+              horizontal,
+              sx: {
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              },
+            }}
             {...commonInputProps}
           />
         );

@@ -72,7 +72,7 @@ const ItemGroup = ({
                   size='small'
                   sx={{ height: 'fit-content' }}
                 >
-                  AUTOFILL SECTION
+                  FILL SECTION
                 </Button>
               )}
             </Stack>
