@@ -62,7 +62,7 @@ export type Assessment = {
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   prioritizationStatus?: Maybe<PrioritizationStatus>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** AssessmentDetail */
@@ -596,7 +596,7 @@ export type Disability = {
   id: Scalars['ID'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']>;
   informationDate: Scalars['ISO8601Date'];
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** 4.10.2 */
@@ -695,7 +695,7 @@ export type Enrollment = {
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** HUD Enrollment */
@@ -772,7 +772,7 @@ export type Event = {
   referralCaseManageAfter?: Maybe<Scalars['Boolean']>;
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** HUD Event Sorting Options */
@@ -1125,7 +1125,7 @@ export type HealthAndDv = {
   mentalHealthStatus?: Maybe<HealthStatus>;
   pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
   supportFromOthers?: Maybe<WellbeingAgreement>;
-  user: User;
+  user?: Maybe<User>;
   whenOccurred?: Maybe<WhenDvOccurred>;
 };
 
@@ -1255,7 +1255,7 @@ export type IncomeBenefit = {
   tanfTransportation?: Maybe<Scalars['Boolean']>;
   totalMonthlyIncome?: Maybe<Scalars['String']>;
   unemploymentAmount?: Maybe<Scalars['Float']>;
-  user: User;
+  user?: Maybe<User>;
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']>;
   vaDisabilityServiceAmount?: Maybe<Scalars['Float']>;
   vaMedicalServices?: Maybe<Scalars['Boolean']>;
@@ -2185,7 +2185,7 @@ export type Service = {
   referralOutcome?: Maybe<PathReferralOutcome>;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided: ServiceTypeProvided;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** HUD Service Input */
@@ -3089,7 +3089,7 @@ export type AssessmentFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
   assessmentDetail?: {
     __typename?: 'AssessmentDetail';
     id: string;
@@ -3388,7 +3388,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
       };
     };
   } | null;
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -3678,7 +3678,7 @@ export type GetAssessmentQuery = {
         };
       };
     } | null;
-    user: { __typename: 'User'; id: string; name: string };
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -3728,7 +3728,7 @@ export type GetEnrollmentAssessmentsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
-        user: { __typename: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
         assessmentDetail?: {
           __typename?: 'AssessmentDetail';
           id: string;
@@ -4312,7 +4312,7 @@ export type CreateAssessmentMutation = {
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
-      user: { __typename: 'User'; id: string; name: string };
+      user?: { __typename: 'User'; id: string; name: string } | null;
       assessmentDetail?: {
         __typename?: 'AssessmentDetail';
         id: string;
@@ -4632,7 +4632,7 @@ export type SaveAssessmentMutation = {
           };
         };
       } | null;
-      user: { __typename: 'User'; id: string; name: string };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -4733,7 +4733,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   dateToStreetEssh?: string | null;
   timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
   monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type EnrollmentWithHoHFragmentFragment = {
@@ -4882,7 +4882,7 @@ export type IncomeBenefitFieldsFragment = {
     household: { __typename?: 'Household'; id: string };
     client: { __typename?: 'Client'; id: string };
   };
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type DisabilityFieldsFragment = {
@@ -4910,7 +4910,7 @@ export type DisabilityFieldsFragment = {
     household: { __typename?: 'Household'; id: string };
     client: { __typename?: 'Client'; id: string };
   };
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type HealthAndDvFieldsFragment = {
@@ -4947,7 +4947,7 @@ export type HealthAndDvFieldsFragment = {
     household: { __typename?: 'Household'; id: string };
     client: { __typename?: 'Client'; id: string };
   };
-  user: { __typename: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -5077,7 +5077,7 @@ export type GetRecentEnrollmentsQuery = {
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-        user: { __typename: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -5690,7 +5690,7 @@ export type GetRecentIncomeBenefitsQuery = {
           household: { __typename?: 'Household'; id: string };
           client: { __typename?: 'Client'; id: string };
         };
-        user: { __typename: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -5735,7 +5735,7 @@ export type GetRecentDisabilitiesQuery = {
           household: { __typename?: 'Household'; id: string };
           client: { __typename?: 'Client'; id: string };
         };
-        user: { __typename: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -5789,7 +5789,7 @@ export type GetRecentHealthAndDvsQuery = {
           household: { __typename?: 'Household'; id: string };
           client: { __typename?: 'Client'; id: string };
         };
-        user: { __typename: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;

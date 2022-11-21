@@ -76,17 +76,22 @@ const RecordPickerDialog = ({
   const { client } = useDashboardClient();
 
   const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
-    const commonColumns = [
-      { header: 'ID', render: 'id' as keyof RelatedRecord },
-      {
-        header: 'Information Date',
-        render: renderHmisField(
-          HmisEnums.RelatedRecordType[recordType],
-          'informationDate'
-        ),
-      },
-      { header: 'Collected By', render: 'user.name' as keyof RelatedRecord },
-    ];
+    const commonColumns =
+      recordType === RelatedRecordType.Enrollment
+        ? []
+        : [
+            {
+              header: 'Information Date',
+              render: renderHmisField(
+                HmisEnums.RelatedRecordType[recordType],
+                'informationDate'
+              ),
+            },
+            {
+              header: 'Collected By',
+              render: 'user.name' as keyof RelatedRecord,
+            },
+          ];
 
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item).map((i) => ({
@@ -97,7 +102,11 @@ const RecordPickerDialog = ({
         i.fieldName as string
       ),
     }));
-    return [...commonColumns, ...dataColumns];
+    return [
+      { header: 'ID', render: 'id' as keyof RelatedRecord },
+      ...commonColumns,
+      ...dataColumns,
+    ];
   }, [item, recordType]);
 
   const TableComponent = tableComponent(recordType);
