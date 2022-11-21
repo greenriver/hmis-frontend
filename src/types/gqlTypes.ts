@@ -187,6 +187,7 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
+  includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -677,6 +678,7 @@ export type Enrollment = {
   client: Client;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateToStreetEssh?: Maybe<Scalars['ISO8601Date']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   entryDate: Scalars['ISO8601Date'];
@@ -688,10 +690,12 @@ export type Enrollment = {
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
+  user: User;
 };
 
 /** HUD Enrollment */
@@ -4720,6 +4724,18 @@ export type EnrollmentFieldsFragment = {
   client: { __typename?: 'Client'; id: string };
 };
 
+export type EnrollmentFieldsFromAssessmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  previousStreetEssh?: boolean | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  user: { __typename: 'User'; id: string; name: string };
+};
+
 export type EnrollmentWithHoHFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -5031,6 +5047,37 @@ export type GetClientEnrollmentsQuery = {
         };
         household: { __typename?: 'Household'; id: string };
         client: { __typename?: 'Client'; id: string };
+      }>;
+    };
+  } | null;
+};
+
+export type GetRecentEnrollmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetRecentEnrollmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    enrollments: {
+      __typename?: 'EnrollmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        livingSituation?: LivingSituation | null;
+        lengthOfStay?: ResidencePriorLengthOfStay | null;
+        previousStreetEssh?: boolean | null;
+        dateToStreetEssh?: string | null;
+        timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+        monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        user: { __typename: 'User'; id: string; name: string };
       }>;
     };
   } | null;
@@ -6788,6 +6835,21 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
+  fragment EnrollmentFieldsFromAssessment on Enrollment {
+    id
+    livingSituation
+    lengthOfStay
+    previousStreetEssh
+    dateToStreetEssh
+    timesHomelessPastThreeYears
+    monthsHomelessPastThreeYears
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
@@ -7691,7 +7753,12 @@ export const GetClientEnrollmentsDocument = gql`
   query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        includeInProgress: true
+      ) {
         offset
         limit
         nodesCount
@@ -7755,6 +7822,80 @@ export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables
+>;
+export const GetRecentEnrollmentsDocument = gql`
+  query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        includeInProgress: false
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFieldsFromAssessment
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFromAssessmentFragmentDoc}
+`;
+
+/**
+ * __useGetRecentEnrollmentsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentEnrollmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetRecentEnrollmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >(GetRecentEnrollmentsDocument, options);
+}
+export function useGetRecentEnrollmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >(GetRecentEnrollmentsDocument, options);
+}
+export type GetRecentEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetRecentEnrollmentsQuery
+>;
+export type GetRecentEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetRecentEnrollmentsLazyQuery
+>;
+export type GetRecentEnrollmentsQueryResult = Apollo.QueryResult<
+  GetRecentEnrollmentsQuery,
+  GetRecentEnrollmentsQueryVariables
 >;
 export const CreateClientDocument = gql`
   mutation CreateClient($input: CreateClientInput!) {

@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
+import { isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
@@ -218,7 +219,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const selectedVal = value ? value : item.repeats ? [] : null;
+      let selectedVal = value ? value : item.repeats ? [] : null;
+
+      // for auto-populated choice fields with remotely fetched picklists
+      if (options && isPickListOption(selectedVal) && !selectedVal.label) {
+        const found = options.find((o) => o.code === selectedVal.code);
+        if (found) selectedVal = found;
+      }
 
       let inputComponent;
       if (

@@ -65,6 +65,19 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+fragment EnrollmentFieldsFromAssessment on Enrollment {
+  id
+  livingSituation
+  lengthOfStay
+  previousStreetEssh
+  dateToStreetEssh
+  timesHomelessPastThreeYears
+  monthsHomelessPastThreeYears
+  user {
+    ...UserFields
+  }
+}
+
 fragment EnrollmentWithHoHFragment on Enrollment {
   ...EnrollmentFields
   household {

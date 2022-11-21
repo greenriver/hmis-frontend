@@ -406,6 +406,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
       {
+        name: 'dateToStreetEssh',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'dateUpdated',
         type: {
           kind: 'NON_NULL',
@@ -468,6 +472,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'MonthsHomelessPastThreeYears',
           ofType: null,
         },
+      },
+      {
+        name: 'previousStreetEssh',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'relationshipToHoH',

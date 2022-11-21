@@ -9,6 +9,7 @@ import { useMemo } from 'react';
 import { getPopulatableChildren } from '../util/formUtil';
 
 import DisabilitiesTable from '@/components/dashboard/enrollments/tables/DisabilitiesTable';
+import EnrollmentsTable from '@/components/dashboard/enrollments/tables/EnrollmentsTable';
 import HealthAndDvsTable from '@/components/dashboard/enrollments/tables/HealthAndDvsTable';
 import IncomeBenefitsTable from '@/components/dashboard/enrollments/tables/IncomeBenefitsTable';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -17,7 +18,17 @@ import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormItem, RelatedRecordType } from '@/types/gqlTypes';
 
-export type RelatedRecord = { id: string; informationDate: string };
+export type RelatedRecord = { id: string };
+type RelatedRecordWithInformationDate = {
+  id: string;
+  informationDate: string;
+};
+
+export const hasInformationDate = (
+  r: RelatedRecord | RelatedRecordWithInformationDate
+): r is RelatedRecordWithInformationDate => {
+  return r.hasOwnProperty('informationDate');
+};
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
@@ -29,7 +40,12 @@ interface Props extends Omit<DialogProps, 'children'> {
 
 const tableComponent = (
   recordType: RelatedRecordType
-): typeof IncomeBenefitsTable | null => {
+):
+  | typeof IncomeBenefitsTable
+  | typeof DisabilitiesTable
+  | typeof HealthAndDvsTable
+  | typeof EnrollmentsTable
+  | null => {
   switch (recordType) {
     case RelatedRecordType.IncomeBenefit:
       return IncomeBenefitsTable;
@@ -37,11 +53,13 @@ const tableComponent = (
       return DisabilitiesTable;
     case RelatedRecordType.HealthAndDv:
       return HealthAndDvsTable;
+    case RelatedRecordType.Enrollment:
+      return EnrollmentsTable;
     // Enrollment
-    // Exit
-    // CurrentLivingSituation
     // YouthEducationStatus
     // EmploymentEducation
+    // CurrentLivingSituation
+    // Exit
     default:
       return null;
   }

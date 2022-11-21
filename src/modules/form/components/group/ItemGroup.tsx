@@ -5,7 +5,10 @@ import { useCallback, useState } from 'react';
 import { getPopulatableChildren } from '../../util/formUtil';
 import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
-import RecordPickerDialog, { RelatedRecord } from '../RecordPickerDialog';
+import RecordPickerDialog, {
+  hasInformationDate,
+  RelatedRecord,
+} from '../RecordPickerDialog';
 
 const ItemGroup = ({
   item,
@@ -77,7 +80,11 @@ const ItemGroup = ({
           {sourceRecord && item.recordType && (
             <Typography variant='body2' color='GrayText' fontStyle={'italic'}>
               Autofilled with {startCase(item.recordType.toLowerCase())} record
-              from <b>{sourceRecord.informationDate}</b>
+              {hasInformationDate(sourceRecord) ? (
+                <>
+                  from <b>{sourceRecord.informationDate}</b>
+                </>
+              ) : null}
             </Typography>
           )}
           {wrappedChildren}

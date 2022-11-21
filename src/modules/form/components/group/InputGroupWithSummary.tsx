@@ -79,6 +79,7 @@ const InputGroupWithSummary = ({
         {renderChildItem &&
           dynamicChildren.map((childItem, idx) => (
             <Box
+              key={childItem.linkId}
               sx={{
                 backgroundColor: (theme) =>
                   idx & 1 ? undefined : theme.palette.grey[100],

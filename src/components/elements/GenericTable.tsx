@@ -104,6 +104,9 @@ const GenericTable = <T extends { id: string }>({
       idx & 1 ? undefined : `${theme.palette.grey[50]}`,
   });
 
+  const key = (def: ColumnDef<T>) =>
+    def.key || (typeof def.header === 'string' ? def.header : '');
+
   const tableHead = vertical ? (
     <TableHead>
       {renderVerticalHeaderCell && (
@@ -122,12 +125,7 @@ const GenericTable = <T extends { id: string }>({
       {hasHeaders && (
         <TableRow>
           {columns.map((def) => (
-            <HeaderCell
-              columnDef={def}
-              key={
-                def.key || (typeof def.header === 'string' ? def.header : '')
-              }
-            />
+            <HeaderCell columnDef={def} key={key(def)} />
           ))}
         </TableRow>
       )}
@@ -141,14 +139,11 @@ const GenericTable = <T extends { id: string }>({
         <TableBody>
           {vertical &&
             columns.map((def) => (
-              <TableRow key={def.key}>
+              <TableRow key={key(def)}>
                 <HeaderCell
                   columnDef={def}
                   sx={{ ...verticalCellSx(1), maxWidth: '30%' }}
-                  key={
-                    def.key ||
-                    (typeof def.header === 'string' ? def.header : '')
-                  }
+                  key={key(def)}
                 />
                 {rows.map((row, idx) => (
                   <TableCell key={row.id} sx={verticalCellSx(idx)}>
@@ -175,56 +170,55 @@ const GenericTable = <T extends { id: string }>({
                 }
                 tabIndex={handleRowClick ? 0 : undefined}
               >
-                {columns.map(
-                  ({ header, key, render, width, linkTreatment }, index) => {
-                    const isFirstLinkWithTreatment =
-                      columns.findIndex((c) => c.linkTreatment) === index;
+                {columns.map((def, index) => {
+                  const { render, width, linkTreatment } = def;
+                  const isFirstLinkWithTreatment =
+                    columns.findIndex((c) => c.linkTreatment) === index;
 
-                    return (
-                      <TableCell
-                        key={key || (typeof header === 'string' ? header : '')}
-                        width={width}
-                        sx={
-                          rowLinkTo && {
-                            p: 0,
-                          }
+                  return (
+                    <TableCell
+                      key={key(def)}
+                      width={width}
+                      sx={
+                        rowLinkTo && {
+                          p: 0,
                         }
-                      >
-                        {rowLinkTo ? (
-                          <RouterLink
-                            to={rowLinkTo(row)}
-                            plain={!linkTreatment}
+                      }
+                    >
+                      {rowLinkTo ? (
+                        <RouterLink
+                          to={rowLinkTo(row)}
+                          plain={!linkTreatment}
+                          sx={{
+                            height: '100%',
+                            verticalAlign: 'middle',
+                            display: 'block',
+                            '&.Mui-focusVisible': {
+                              outlineOffset: '-2px',
+                            },
+                          }}
+                          tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
+                        >
+                          <Box
+                            component='span'
                             sx={{
+                              display: 'flex',
                               height: '100%',
-                              verticalAlign: 'middle',
-                              display: 'block',
-                              '&.Mui-focusVisible': {
-                                outlineOffset: '-2px',
-                              },
+                              alignItems: 'center',
+                              // TODO may want to adjust for small table size
+                              px: 2,
+                              py: 1,
                             }}
-                            tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
                           >
-                            <Box
-                              component='span'
-                              sx={{
-                                display: 'flex',
-                                height: '100%',
-                                alignItems: 'center',
-                                // TODO may want to adjust for small table size
-                                px: 2,
-                                py: 1,
-                              }}
-                            >
-                              {renderCellContents(row, render)}
-                            </Box>
-                          </RouterLink>
-                        ) : (
-                          renderCellContents(row, render)
-                        )}
-                      </TableCell>
-                    );
-                  }
-                )}
+                            {renderCellContents(row, render)}
+                          </Box>
+                        </RouterLink>
+                      ) : (
+                        renderCellContents(row, render)
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           {actionRow}
