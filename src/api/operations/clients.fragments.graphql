@@ -202,6 +202,7 @@ fragment HealthAndDvFields on HealthAndDv {
   dateDeleted
   dateUpdated
   dentalHealthStatus
+  domesticViolenceVictim
   dueDate
   enrollment {
     ...EnrollmentFields

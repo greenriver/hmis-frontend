@@ -6944,6 +6944,18 @@
             "deprecationReason": null
           },
           {
+            "name": "domesticViolenceVictim",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dueDate",
             "description": null,
             "args": [],

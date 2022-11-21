@@ -2,17 +2,17 @@ import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/components/elements/GenericTableWithData';
 import {
+  DisabilityFieldsFragment,
   GetRecentDisabilitiesDocument,
   GetRecentDisabilitiesQuery,
   GetRecentDisabilitiesQueryVariables,
-  IncomeBenefitFieldsFragment,
 } from '@/types/gqlTypes';
 
 type Props = Omit<
   GenericTableWithDataProps<
     GetRecentDisabilitiesQuery,
     GetRecentDisabilitiesQueryVariables,
-    IncomeBenefitFieldsFragment
+    DisabilityFieldsFragment
   >,
   'queryDocument' | 'pagePath'
 >;
@@ -22,11 +22,11 @@ const DisabilitiesTable = (props: Props) => {
     <GenericTableWithData<
       GetRecentDisabilitiesQuery,
       GetRecentDisabilitiesQueryVariables,
-      IncomeBenefitFieldsFragment
+      DisabilityFieldsFragment
     >
       queryDocument={GetRecentDisabilitiesDocument}
       recordType='IncomeBenefit'
-      pagePath='client.Disabilities'
+      pagePath='client.disabilities'
       {...props}
     />
   );

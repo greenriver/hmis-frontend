@@ -5,14 +5,14 @@ import {
   GetRecentHealthAndDvsDocument,
   GetRecentHealthAndDvsQuery,
   GetRecentHealthAndDvsQueryVariables,
-  IncomeBenefitFieldsFragment,
+  HealthAndDvFieldsFragment,
 } from '@/types/gqlTypes';
 
 type Props = Omit<
   GenericTableWithDataProps<
     GetRecentHealthAndDvsQuery,
     GetRecentHealthAndDvsQueryVariables,
-    IncomeBenefitFieldsFragment
+    HealthAndDvFieldsFragment
   >,
   'queryDocument' | 'pagePath'
 >;
@@ -22,11 +22,11 @@ const HealthAndDvsTable = (props: Props) => {
     <GenericTableWithData<
       GetRecentHealthAndDvsQuery,
       GetRecentHealthAndDvsQueryVariables,
-      IncomeBenefitFieldsFragment
+      HealthAndDvFieldsFragment
     >
       queryDocument={GetRecentHealthAndDvsDocument}
       recordType='HealthAndDv'
-      pagePath='client.HealthAndDvs'
+      pagePath='client.healthAndDvs'
       {...props}
     />
   );

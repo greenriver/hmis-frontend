@@ -1110,6 +1110,7 @@ export type HealthAndDv = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   dentalHealthStatus?: Maybe<HealthStatus>;
+  domesticViolenceVictim?: Maybe<NoYesReasonsForMissingData>;
   dueDate?: Maybe<Scalars['ISO8601Date']>;
   enrollment: Enrollment;
   feelingFrequency?: Maybe<FeelingFrequency>;
@@ -4905,6 +4906,7 @@ export type HealthAndDvFieldsFragment = {
   dateDeleted?: string | null;
   dateUpdated: string;
   dentalHealthStatus?: HealthStatus | null;
+  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
   dueDate?: string | null;
   feelingFrequency?: FeelingFrequency | null;
   generalHealthStatus?: HealthStatus | null;
@@ -5715,6 +5717,7 @@ export type GetRecentHealthAndDvsQuery = {
         dateDeleted?: string | null;
         dateUpdated: string;
         dentalHealthStatus?: HealthStatus | null;
+        domesticViolenceVictim?: NoYesReasonsForMissingData | null;
         dueDate?: string | null;
         feelingFrequency?: FeelingFrequency | null;
         generalHealthStatus?: HealthStatus | null;
@@ -6969,6 +6972,7 @@ export const HealthAndDvFieldsFragmentDoc = gql`
     dateDeleted
     dateUpdated
     dentalHealthStatus
+    domesticViolenceVictim
     dueDate
     enrollment {
       ...EnrollmentFields

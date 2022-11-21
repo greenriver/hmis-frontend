@@ -829,6 +829,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'HealthStatus', ofType: null },
       },
       {
+        name: 'domesticViolenceVictim',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'dueDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
