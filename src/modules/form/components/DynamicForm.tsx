@@ -7,7 +7,7 @@ import useElementInView from '../hooks/useElementInView';
 import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
-import DynamicGroup from './DynamicGroup';
+import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 
 import {
   BoundType,
@@ -80,6 +80,16 @@ const DynamicForm: React.FC<Props> = ({
     [setValues]
   );
 
+  const severalItemsChanged = useCallback(
+    (values: Record<string, any>) => {
+      setPromptSave(true);
+      setValues((currentValues) => {
+        return { ...currentValues, ...values };
+      });
+    },
+    [setValues]
+  );
+
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
@@ -112,8 +122,8 @@ const DynamicForm: React.FC<Props> = ({
   const getFieldErrors = useCallback(
     (item: FormItem) => {
       if (!errors) return undefined;
-      if (!item.queryField) return undefined;
-      const attribute = item.queryField;
+      if (!item.fieldName) return undefined;
+      const attribute = item.fieldName;
       return errors.filter((e) => e.attribute === attribute);
     },
     [errors]
@@ -141,7 +151,11 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   // Recursively render an item
-  const renderItem = (item: FormItem, nestingLevel: number) => {
+  const renderItem = (
+    item: FormItem,
+    nestingLevel: number,
+    props?: OverrideableDynamicFieldProps
+  ) => {
     if (!isEnabled(item)) {
       // console.log('Hidden:', item);
       return null;
@@ -153,9 +167,12 @@ const DynamicForm: React.FC<Props> = ({
           item={item}
           key={item.linkId}
           nestingLevel={nestingLevel}
-          renderChildItem={(item) => renderItem(item, nestingLevel + 1)}
+          renderChildItem={(item, props) =>
+            renderItem(item, nestingLevel + 1, props)
+          }
           values={values}
           itemChanged={itemChanged}
+          severalItemsChanged={severalItemsChanged}
         />
       );
     }
@@ -169,6 +186,7 @@ const DynamicForm: React.FC<Props> = ({
         errors={getFieldErrors(item)}
         inputProps={getCommonInputProps(item)}
         horizontal={horizontal}
+        {...props}
       />
     );
   };

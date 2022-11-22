@@ -27,7 +27,8 @@ fragment ItemFields on FormItem {
   hidden
   readOnly
   repeats
-  queryField
+  fieldName
+  recordType
   pickListReference
   bounds {
     type
@@ -86,6 +87,12 @@ fragment AssessmentDetailFields on AssessmentDetail {
   status
 }
 
+fragment UserFields on User {
+  __typename
+  id
+  name
+}
+
 fragment AssessmentFields on Assessment {
   id
   inProgress
@@ -98,8 +105,7 @@ fragment AssessmentFields on Assessment {
   dateUpdated
   dateDeleted
   user {
-    id
-    name
+    ...UserFields
   }
   assessmentDetail {
     ...AssessmentDetailFields

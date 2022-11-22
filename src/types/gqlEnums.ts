@@ -1,12 +1,21 @@
+// **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
+
 export const HmisEnums = {
   AssessmentLevel: {
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
   AssessmentRole: {
+    ANNUAL: 'ANNUAL',
+    CE: 'CE',
     CUSTOM: 'Custom HMIS Assessment',
-    RESOURCE: 'Form for creating or editing resources directly',
+    EXIT: 'EXIT',
+    INTAKE: 'INTAKE',
+    POST_EXIT: 'POST_EXIT',
+    RECORD: 'Form for creating or editing resources directly',
+    UPDATE: 'UPDATE',
   },
+  AssessmentSortOption: { ASSESSMENT_DATE: 'ASSESSMENT_DATE' },
   AssessmentType: {
     PHONE: 'Phone',
     VIRTUAL: 'Virtual',
@@ -22,6 +31,11 @@ export const HmisEnums = {
     VOUCHER: 'Voucher',
     OTHER: 'Other',
   },
+  BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  ClientSortOption: {
+    LAST_NAME_ASC: 'LAST_NAME_ASC',
+    LAST_NAME_DESC: 'LAST_NAME_DESC',
+  },
   Component: {
     CHECKBOX: 'Component to render a boolean input item as a checkbox',
     INPUT_GROUP:
@@ -33,6 +47,16 @@ export const HmisEnums = {
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  DataCollectedAbout: {
+    ALL_CLIENTS: 'ALL_CLIENTS',
+    ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE:
+      'ALL_CLIENTS_RECEIVING_SSVF_FINANCIAL_ASSISTANCE',
+    ALL_CLIENTS_RECEIVING_SSVF_SERVICES: 'ALL_CLIENTS_RECEIVING_SSVF_SERVICES',
+    ALL_VETERANS: 'ALL_VETERANS',
+    HOH: 'HOH',
+    HOH_AND_ADULTS: 'HOH_AND_ADULTS',
+    VETERAN_HOH: 'VETERAN_HOH',
   },
   DataCollectionStage: {
     PROJECT_ENTRY: 'Project entry',
@@ -58,13 +82,21 @@ export const HmisEnums = {
     HIV_AIDS: 'HIV/AIDS',
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
+  EnableBehavior: { ALL: 'ALL', ANY: 'ANY' },
   EnableOperator: {
     ENABLED:
       'Use with answerBoolean to specify is the item should be enabled or not.',
+    EQUAL: 'EQUAL',
     EXISTS:
       'Use with answerBoolean to specify if an answer should exist or not.',
+    GREATER_THAN: 'GREATER_THAN',
+    GREATER_THAN_EQUAL: 'GREATER_THAN_EQUAL',
     IN: 'Whether the value is in the answerCodes array.',
+    LESS_THAN: 'LESS_THAN',
+    LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
+    NOT_EQUAL: 'NOT_EQUAL',
   },
+  EnrollmentSortOption: { MOST_RECENT: 'MOST_RECENT' },
   Ethnicity: {
     NON_HISPANIC_NON_LATIN_A_O_X: 'Non-Hispanic/Non-Latin(a)(o)(x)',
     HISPANIC_LATIN_A_O_X: 'Hispanic/Latin(a)(o)(x)',
@@ -72,6 +104,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  EventSortOption: { EVENT_DATE: 'EVENT_DATE' },
   EventType: {
     REFERRAL_TO_PREVENTION_ASSISTANCE_PROJECT:
       'Referral to Prevention Assistance project',
@@ -120,6 +153,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  FunderSortOption: { START_DATE: 'START_DATE' },
   FundingSource: {
     HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
       'HHS: PATH - Street Outreach & Supportive Services Only',
@@ -240,6 +274,19 @@ export const HmisEnums = {
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
   },
+  InventorySortOption: { START_DATE: 'START_DATE' },
+  ItemType: {
+    BOOLEAN: 'BOOLEAN',
+    CHOICE: 'CHOICE',
+    CURRENCY: 'CURRENCY',
+    DATE: 'DATE',
+    DISPLAY: 'DISPLAY',
+    GROUP: 'GROUP',
+    INTEGER: 'INTEGER',
+    OPEN_CHOICE: 'OPEN_CHOICE',
+    STRING: 'STRING',
+    TEXT: 'TEXT',
+  },
   LivingSituation: {
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter',
@@ -334,9 +381,14 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  NoYesMissing: {
-    NO: 'No',
-    YES: 'Yes',
+  NoAssistanceReason: {
+    APPLIED_DECISION_PENDING: 'Applied; decision pending',
+    APPLIED_CLIENT_NOT_ELIGIBLE: 'Applied; client not eligible',
+    CLIENT_DID_NOT_APPLY: 'Client did not apply',
+    INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT:
+      'Insurance type not applicable for this client',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesReasonsForMissingData: {
@@ -346,14 +398,28 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  OrganizationSortOption: { NAME: 'NAME' },
   PATHReferralOutcome: {
     ATTAINED: 'Attained',
     NOT_ATTAINED: 'Not attained',
     UNKNOWN: 'Unknown',
   },
+  PickListType: {
+    COC: 'COC',
+    CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
+    GEOCODE: 'GEOCODE',
+    ORGANIZATION: 'ORGANIZATION',
+    PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
+    PROJECT: 'PROJECT',
+    STATE: 'STATE',
+  },
   PrioritizationStatus: {
     PLACED_ON_PRIORITIZATION_LIST: 'Placed on prioritization list',
     NOT_PLACED_ON_PRIORITIZATION_LIST: 'Not placed on prioritization list',
+  },
+  ProjectSortOption: {
+    NAME: 'NAME',
+    ORGANIZATION_AND_NAME: 'ORGANIZATION_AND_NAME',
   },
   ProjectType: {
     CE: 'Coordinated Entry',
@@ -380,6 +446,15 @@ export const HmisEnums = {
     RACE_REFUSED: 'Client refused',
     RACE_NOT_COLLECTED: 'Data not collected',
   },
+  ReasonNotInsured: {
+    APPLIED_DECISION_PENDING: 'Applied; decision pending',
+    APPLIED_CLIENT_NOT_ELIGIBLE: 'Applied; client not eligible',
+    CLIENT_DID_NOT_APPLY: 'Client did not apply',
+    INSURANCE_TYPE_N_A_FOR_THIS_CLIENT: 'Insurance type N/A for this client',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   RecordType: {
     CONTACT_12: 'Contact 12',
     CONTACT_13: 'Contact 13',
@@ -401,6 +476,16 @@ export const HmisEnums = {
       'Unsuccessful referral: client rejected',
     UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED:
       'Unsuccessful referral: provider rejected',
+  },
+  RelatedRecordType: {
+    CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
+    DISABILITY: 'Disability',
+    EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
+    ENROLLMENT: 'Enrollment',
+    EXIT: 'Exit',
+    HEALTH_AND_DV: 'HealthAndDv',
+    INCOME_BENEFIT: 'IncomeBenefit',
+    YOUTH_EDUCATION_STATUS: 'YouthEducationStatus',
   },
   RelationshipToHoH: {
     SELF_HEAD_OF_HOUSEHOLD: 'Self (head of household)',
@@ -431,6 +516,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
   ServiceSubTypeProvided: {
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
       'Child care',

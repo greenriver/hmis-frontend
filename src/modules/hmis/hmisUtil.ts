@@ -2,6 +2,7 @@ import { differenceInYears, format, isValid, parse, parseISO } from 'date-fns';
 import { isNil, sortBy } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
+import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   ClientFieldsFragment,
   ClientNameFragment,
@@ -232,3 +233,7 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
 export const sortHouseholdMembers = (
   members?: HouseholdClientFieldsFragment[]
 ) => sortBy(members || [], [(c) => c.client.lastName, (c) => c.client.id]);
+
+export const getSchemaForType = (type: string) => {
+  return HmisObjectSchemas.find((t: any) => t.name === type);
+};

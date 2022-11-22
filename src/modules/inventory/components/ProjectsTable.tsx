@@ -58,12 +58,7 @@ const ProjectsTable = ({ organizationId }: { organizationId: string }) => {
       columns={columns}
       rowLinkTo={rowLinkTo}
       noData='No projects.'
-      toNodes={(data: GetOrganizationWithPaginatedProjectsQuery) =>
-        data.organization?.projects?.nodes || []
-      }
-      toNodesCount={(data: GetOrganizationWithPaginatedProjectsQuery) =>
-        data.organization?.projects?.nodesCount
-      }
+      pagePath='organization.projects'
     />
   );
 };

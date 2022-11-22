@@ -9,8 +9,8 @@ export const searchParamsToVariables = (
 ) => {
   const variables: Record<string, any> = {};
   const fieldNames: [string, boolean][] = searchFormDefinition.item
-    .filter((i) => !!i.queryField)
-    .map((item) => [item.queryField as string, !!item.repeats]);
+    .filter((i) => !!i.fieldName)
+    .map((item) => [item.fieldName as string, !!item.repeats]);
   fieldNames.push(['textSearch', false]);
   fieldNames.push(['projects', true]);
   fieldNames.forEach(([fieldName, repeats]) => {
@@ -34,7 +34,7 @@ export const searchParamsToState = (
 ) => {
   const variables: Record<string, any> = {};
   const fieldNames: [string, string, boolean][] = searchFormDefinition.item.map(
-    (item) => [item.queryField as string, item.linkId, !!item.repeats]
+    (item) => [item.fieldName as string, item.linkId, !!item.repeats]
   );
   fieldNames.push(['textSearch', 'textSearch', false]);
   fieldNames.push(['projects', 'projects', true]);

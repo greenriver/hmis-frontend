@@ -3,6 +3,7 @@ import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
+import { isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import FormSelect from './FormSelect';
@@ -32,7 +33,7 @@ export interface DynamicInputCommonProps {
   max?: any;
 }
 
-interface Props {
+export interface DynamicFieldProps {
   item: FormItem;
   itemChanged: (linkId: string, value: any) => void;
   nestingLevel: number;
@@ -58,7 +59,14 @@ const getLabel = (item: FormItem) => {
   );
 };
 
-const DynamicField: React.FC<Props> = ({
+const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
+const MAX_INPUT_WIDTH = 400;
+const FIXED_DATE_WIDTH = 200;
+
+export const maxWidthAtNestingLevel = (nestingLevel: number) =>
+  600 - nestingLevel * 26;
+
+const DynamicField: React.FC<DynamicFieldProps> = ({
   item,
   itemChanged,
   nestingLevel,
@@ -74,7 +82,7 @@ const DynamicField: React.FC<Props> = ({
   const onChangeEventValue = (_: any, val: any) =>
     itemChanged(item.linkId, val);
   const label = getLabel(item);
-  const maxWidth = 600 - nestingLevel * 26;
+  const maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = 250;
 
   const commonContainerProps = { errors, horizontal };
@@ -159,6 +167,10 @@ const DynamicField: React.FC<Props> = ({
             multiline={multiline}
             minRows={multiline ? 3 : undefined}
             horizontal={horizontal}
+            sx={{
+              maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+              '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+            }}
             {...commonInputProps}
           />
         </InputContainer>
@@ -190,7 +202,7 @@ const DynamicField: React.FC<Props> = ({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
-            textInputProps={{ horizontal }}
+            textInputProps={{ horizontal, sx: { width: FIXED_DATE_WIDTH } }}
             {...datePickerProps}
             {...commonInputProps}
           />
@@ -208,14 +220,26 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
-            textInputProps={{ horizontal }}
+            textInputProps={{
+              horizontal,
+              sx: {
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              },
+            }}
             {...commonInputProps}
           />
         </InputContainer>
       );
     case ItemType.Choice:
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      const selectedVal = value ? value : item.repeats ? [] : null;
+      let selectedVal = value ? value : item.repeats ? [] : null;
+
+      // for auto-populated choice fields with remotely fetched picklists
+      if (options && isPickListOption(selectedVal) && !selectedVal.label) {
+        const found = options.find((o) => o.code === selectedVal.code);
+        if (found) selectedVal = found;
+      }
 
       let inputComponent;
       if (
@@ -256,7 +280,13 @@ const DynamicField: React.FC<Props> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
-            textInputProps={{ horizontal }}
+            textInputProps={{
+              horizontal,
+              sx: {
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              },
+            }}
             {...commonInputProps}
           />
         );

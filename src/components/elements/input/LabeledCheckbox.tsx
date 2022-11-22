@@ -37,7 +37,7 @@ const LabeledCheckbox = ({
   const checkboxSx = horizontal
     ? // remove transparency from hover state so dashes are not exposed
       { backgroundColor: 'white', '&:hover': { backgroundColor: '#F7F9FD' } }
-    : undefined;
+    : { '.MuiSvgIcon-root': { backgroundColor: 'white' } };
 
   // Prevent form submission on Enter. Enter should toggle the state.
   const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(

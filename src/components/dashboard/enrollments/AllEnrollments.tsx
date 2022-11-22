@@ -94,12 +94,11 @@ const AllEnrollments = () => {
             queryDocument={GetClientEnrollmentsDocument}
             rowLinkTo={rowLinkTo}
             columns={columns}
-            toNodes={(data: GetClientEnrollmentsQuery) =>
-              data.client?.enrollments?.nodes || []
-            }
-            toNodesCount={(data: GetClientEnrollmentsQuery) =>
-              data.client?.enrollments?.nodesCount
-            }
+            pagePath='client.enrollments'
+            // FIXME we shouldn't need this, but the cache for GetClientEnrollments
+            // isn't updated after a new enrollment is created. Figure out how to
+            // fix that with cache policies and remove this.
+            fetchPolicy='cache-and-network'
           />
         </Paper>
       </Grid>

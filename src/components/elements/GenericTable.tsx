@@ -13,6 +13,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
+import { get, isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 import { To } from 'react-router-dom';
 
@@ -47,12 +48,14 @@ export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
   rowLinkTo?: (row: T) => To;
-  columns: ColumnDef<T>[];
+  columns?: ColumnDef<T>[];
   paginated?: boolean;
   loading?: boolean;
   tablePaginationProps?: TablePaginationProps;
   actionRow?: ReactNode;
   tableProps?: TableProps;
+  vertical?: boolean;
+  renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
 }
 
@@ -61,13 +64,23 @@ const clickableRowStyles = {
   cursor: 'pointer',
 };
 
+const HeaderCell = ({
+  columnDef: { header },
+  sx,
+}: {
+  columnDef: ColumnDef<any>;
+  sx?: SxProps<Theme>;
+}) => <TableCell sx={{ fontWeight: 600, ...sx }}>{header}</TableCell>;
+
 const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
-  columns,
+  columns = [],
   paginated = false,
   loading = false,
+  vertical = false,
+  renderVerticalHeaderCell,
   tablePaginationProps,
   actionRow,
   tableProps,
@@ -75,32 +88,71 @@ const GenericTable = <T extends { id: string }>({
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
   if (loading) return <Loading />;
+
+  const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
+    if (isRenderFunction<T>(render)) return <>{render(row)}</>;
+    if (isPrimitive<T>(render)) {
+      const val = get(row, render);
+      if (!isNil(val)) return <>{`${val}`}</>;
+    }
+    return null;
+  };
+
+  const verticalCellSx = (idx: number): SxProps<Theme> => ({
+    border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
+    backgroundColor: (theme: Theme) =>
+      idx & 1 ? undefined : `${theme.palette.grey[50]}`,
+  });
+
+  const key = (def: ColumnDef<T>) =>
+    def.key || (typeof def.header === 'string' ? def.header : '');
+
+  const tableHead = vertical ? (
+    <TableHead>
+      {renderVerticalHeaderCell && (
+        <TableRow>
+          <TableCell key='empty' />
+          {rows.map((row, idx) => (
+            <TableCell key={row.id} sx={verticalCellSx(idx)}>
+              {renderVerticalHeaderCell(row)}
+            </TableCell>
+          ))}
+        </TableRow>
+      )}
+    </TableHead>
+  ) : (
+    <TableHead>
+      {hasHeaders && (
+        <TableRow>
+          {columns.map((def) => (
+            <HeaderCell columnDef={def} key={key(def)} />
+          ))}
+        </TableRow>
+      )}
+    </TableHead>
+  );
+
   return (
     <TableContainer>
       <Table size='medium' sx={{ height: '1px' }} {...tableProps}>
-        <TableHead>
-          {hasHeaders && (
-            <TableRow>
-              {columns.map(({ header, key }) => (
-                <TableCell
-                  sx={{ fontWeight: 600 }}
-                  key={key || (typeof header === 'string' ? header : '')}
-                >
-                  {header}
-                </TableCell>
-              ))}
-            </TableRow>
-          )}
-          {/* {loading && (
-            <TableRow>
-              <th colSpan={columns.length}>
-                <LinearProgress />
-              </th>
-            </TableRow>
-          )} */}
-        </TableHead>
+        {tableHead}
         <TableBody>
-          {rows &&
+          {vertical &&
+            columns.map((def) => (
+              <TableRow key={key(def)}>
+                <HeaderCell
+                  columnDef={def}
+                  sx={{ ...verticalCellSx(1), maxWidth: '30%' }}
+                  key={key(def)}
+                />
+                {rows.map((row, idx) => (
+                  <TableCell key={row.id} sx={verticalCellSx(idx)}>
+                    {renderCellContents(row, def.render)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          {!vertical &&
             rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -118,62 +170,55 @@ const GenericTable = <T extends { id: string }>({
                 }
                 tabIndex={handleRowClick ? 0 : undefined}
               >
-                {columns.map(
-                  ({ header, key, render, width, linkTreatment }, index) => {
-                    const content = (
-                      <>
-                        {isPrimitive<T>(render) && row[render]}
-                        {isRenderFunction<T>(render) && render(row)}
-                      </>
-                    );
-                    const isFirstLinkWithTreatment =
-                      columns.findIndex((c) => c.linkTreatment) === index;
+                {columns.map((def, index) => {
+                  const { render, width, linkTreatment } = def;
+                  const isFirstLinkWithTreatment =
+                    columns.findIndex((c) => c.linkTreatment) === index;
 
-                    return (
-                      <TableCell
-                        key={key || (typeof header === 'string' ? header : '')}
-                        width={width}
-                        sx={
-                          rowLinkTo && {
-                            p: 0,
-                          }
+                  return (
+                    <TableCell
+                      key={key(def)}
+                      width={width}
+                      sx={
+                        rowLinkTo && {
+                          p: 0,
                         }
-                      >
-                        {rowLinkTo ? (
-                          <RouterLink
-                            to={rowLinkTo(row)}
-                            plain={!linkTreatment}
+                      }
+                    >
+                      {rowLinkTo ? (
+                        <RouterLink
+                          to={rowLinkTo(row)}
+                          plain={!linkTreatment}
+                          sx={{
+                            height: '100%',
+                            verticalAlign: 'middle',
+                            display: 'block',
+                            '&.Mui-focusVisible': {
+                              outlineOffset: '-2px',
+                            },
+                          }}
+                          tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
+                        >
+                          <Box
+                            component='span'
                             sx={{
+                              display: 'flex',
                               height: '100%',
-                              verticalAlign: 'middle',
-                              display: 'block',
-                              '&.Mui-focusVisible': {
-                                outlineOffset: '-2px',
-                              },
+                              alignItems: 'center',
+                              // TODO may want to adjust for small table size
+                              px: 2,
+                              py: 1,
                             }}
-                            tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
                           >
-                            <Box
-                              component='span'
-                              sx={{
-                                display: 'flex',
-                                height: '100%',
-                                alignItems: 'center',
-                                // TODO may want to adjust for small table size
-                                px: 2,
-                                py: 1,
-                              }}
-                            >
-                              {content}
-                            </Box>
-                          </RouterLink>
-                        ) : (
-                          content
-                        )}
-                      </TableCell>
-                    );
-                  }
-                )}
+                            {renderCellContents(row, render)}
+                          </Box>
+                        </RouterLink>
+                      ) : (
+                        renderCellContents(row, render)
+                      )}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             ))}
           {actionRow}

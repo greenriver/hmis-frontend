@@ -15,7 +15,7 @@ const NumberInput = ({
         startAdornment: <Box sx={{ color: 'text.secondary', pr: 1 }}>$</Box>,
         sx: {
           pl: 1,
-          '.MuiInputBase-input': { textAlign: 'right' },
+          '.MuiInputBase-input': { textAlign: 'left' },
         },
       }
     : {};

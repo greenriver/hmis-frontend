@@ -70,6 +70,7 @@ query GetOrganizationWithPaginatedProjects(
   $offset: Int = 0
 ) {
   organization(id: $id) {
+    id
     projects(limit: $limit, offset: $offset) {
       offset
       limit

@@ -1,11 +1,13 @@
 'use strict';
 
 const fs = require('fs');
-
+const { type } = require('os');
+const generatedFiledHeader =
+  '// **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****\n\n';
 let rawdata = fs.readFileSync('graphql.schema.json');
 let schema = JSON.parse(rawdata);
 
-let output = 'export const HmisEnums = {';
+let output = `${generatedFiledHeader}\nexport const HmisEnums = {`;
 
 // const ENUM_SECTION_DELIM = '__';
 // const DESCRIPTION_DELIM = ' – ';
@@ -69,8 +71,10 @@ schema.__schema.types.forEach((type) => {
     // sort by descriptions since they are prefixed with (1) etc
     // we might want to drop that from some, like race/gender
     const enumValues = type.enumValues
-      .filter((a) => !!a.description)
+      // .filter((a) => !!a.description)
       .sort((a, b) => {
+        if (!a.description || !b.description) return 1;
+
         if (ALPHABETICAL.includes(type.name)) {
           return alphabeticalCompare(a, b);
         }
@@ -104,7 +108,7 @@ schema.__schema.types.forEach((type) => {
     );
 
     const values = enumValues.map((elem) => {
-      let description = elem.description.replaceAll(/\n/g, ' ');
+      let description = elem.description?.replaceAll(/\n/g, ' ') || elem.name;
       // if (enumValues.length < 15) {
       description = description.replace(CODE_PATTERN, '');
       // }
@@ -123,4 +127,52 @@ const filename = 'src/types/gqlEnums.ts';
 fs.writeFile(filename, output, (err) => {
   if (err) return console.log(err);
   console.log(filename);
+});
+
+const objectSchemas = schema.__schema.types
+  .filter(
+    (o) =>
+      o.kind === 'OBJECT' &&
+      !o.name.endsWith('Payload') &&
+      !o.name.endsWith('Payload') &&
+      !o.name.endsWith('Paginated') &&
+      !o.name.endsWith('Input') &&
+      !o.name.startsWith('__') &&
+      !['Mutation', 'Query'].includes(o.name)
+    // !o.type?.ofType?.kind === 'OBJECT'
+  )
+  .map(({ name, fields }) => {
+    fields = fields
+      .filter((f) => f.type?.kind !== 'OBJECT')
+      .filter((f) => f.type?.ofType?.kind !== 'OBJECT')
+      .filter((f) => f.type?.ofType?.ofType?.kind !== 'OBJECT')
+      .filter((f) => f.type?.ofType?.ofType?.ofType?.kind !== 'OBJECT')
+      .map(({ name, type }) => ({ name, type }));
+    return { name, fields };
+  });
+const schemaOutput = `
+${generatedFiledHeader}
+import { HmisEnums } from './gqlEnums';
+import { Scalars } from './gqlTypes';
+
+export interface GqlSchemaType {
+  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM';
+  name: keyof Scalars | keyof typeof HmisEnums | null;
+  ofType: GqlSchemaType | null;
+}
+
+export interface GqlSchemaField {
+  name: string;
+  type: GqlSchemaType;
+}
+export interface GqlSchema {
+  name: string;
+  fields: GqlSchemaField[];
+}
+
+// Partial schema introspection for object types. Includes non-object fields only.
+export const HmisObjectSchemas: GqlSchema[] = ${JSON.stringify(objectSchemas)};
+`;
+fs.writeFile('src/types/gqlObjects.ts', schemaOutput, (err) => {
+  if (err) return console.log(err);
 });

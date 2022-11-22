@@ -102,12 +102,7 @@ const InventoryTable = ({ projectId }: { projectId: string }) => {
             ),
           },
         ]}
-        toNodes={(data: GetProjectInventoriesQuery) =>
-          data.project?.inventories?.nodes || []
-        }
-        toNodesCount={(data: GetProjectInventoriesQuery) =>
-          data.project?.inventories?.nodesCount
-        }
+        pagePath='project.inventories'
         noData='No inventory.'
       />
       <ConfirmationDialog

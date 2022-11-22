@@ -65,6 +65,19 @@ fragment EnrollmentFields on Enrollment {
   }
 }
 
+fragment EnrollmentFieldsFromAssessment on Enrollment {
+  id
+  livingSituation
+  lengthOfStay
+  previousStreetEssh
+  dateToStreetEssh
+  timesHomelessPastThreeYears
+  monthsHomelessPastThreeYears
+  user {
+    ...UserFields
+  }
+}
+
 fragment EnrollmentWithHoHFragment on Enrollment {
   ...EnrollmentFields
   household {
@@ -102,4 +115,121 @@ fragment ServiceFields on Service {
   dateCreated
   dateUpdated
   dateDeleted
+}
+
+fragment IncomeBenefitFields on IncomeBenefit {
+  __typename
+  adap
+  alimonyAmount
+  benefitsFromAnySource
+  childSupportAmount
+  cobra
+  connectionWithSoar
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  earnedAmount
+  employerProvided
+  enrollment {
+    ...EnrollmentFields
+  }
+  gaAmount
+  hivaidsAssistance
+  id
+  incomeFromAnySource
+  indianHealthServices
+  informationDate
+  insuranceFromAnySource
+  medicaid
+  medicare
+  noAdapReason
+  noCobraReason
+  noEmployerProvidedReason
+  noHivaidsAssistanceReason
+  noIndianHealthServicesReason
+  noMedicaidReason
+  noMedicareReason
+  noPrivatePayReason
+  noRyanWhiteReason
+  noSchipReason
+  noStateHealthInsReason
+  noVaMedReason
+  otherBenefitsSource
+  otherBenefitsSourceIdentify
+  otherIncomeAmount
+  otherIncomeSourceIdentify
+  otherInsurance
+  otherInsuranceIdentify
+  otherTanf
+  pensionAmount
+  privateDisabilityAmount
+  privatePay
+  ryanWhiteMedDent
+  schip
+  snap
+  socSecRetirementAmount
+  ssdiAmount
+  ssiAmount
+  stateHealthIns
+  tanfAmount
+  tanfChildCare
+  tanfTransportation
+  totalMonthlyIncome
+  unemploymentAmount
+  user {
+    ...UserFields
+  }
+  vaDisabilityNonServiceAmount
+  vaDisabilityServiceAmount
+  vaMedicalServices
+  wic
+  workersCompAmount
+}
+
+fragment DisabilityFields on Disability {
+  __typename
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  disabilityResponse
+  disabilityType
+  enrollment {
+    ...EnrollmentFields
+  }
+  id
+  indefiniteAndImpairs
+  informationDate
+  user {
+    ...UserFields
+  }
+}
+
+fragment HealthAndDvFields on HealthAndDv {
+  __typename
+  bounceBack
+  currentlyFleeing
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  dentalHealthStatus
+  domesticViolenceVictim
+  dueDate
+  enrollment {
+    ...EnrollmentFields
+  }
+  feelingFrequency
+  generalHealthStatus
+  id
+  informationDate
+  lifeValue
+  mentalHealthStatus
+  pregnancyStatus
+  supportFromOthers
+  user {
+    ...UserFields
+  }
+  whenOccurred
 }

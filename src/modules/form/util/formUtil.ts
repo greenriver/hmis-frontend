@@ -311,3 +311,20 @@ export const getInitialValues = (
 
   return initialValues;
 };
+
+export const getPopulatableChildren = (item: FormItem): FormItem[] => {
+  function recursiveFind(items: FormItem[], fields: FormItem[]) {
+    items.forEach((item) => {
+      if (Array.isArray(item.item)) {
+        recursiveFind(item.item, fields);
+      }
+      if (item.fieldName) {
+        fields.push(item);
+      }
+    });
+  }
+
+  const result: FormItem[] = [];
+  recursiveFind(item.item || [], result);
+  return result;
+};

@@ -18,12 +18,36 @@ query GetClient($id: ID!) {
 query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
-    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      includeInProgress: true
+    ) {
       offset
       limit
       nodesCount
       nodes {
         ...EnrollmentFields
+      }
+    }
+  }
+}
+
+query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      includeInProgress: false
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFieldsFromAssessment
       }
     }
   }
@@ -172,6 +196,42 @@ query GetClientHouseholdMemberCandidates(
             }
           }
         }
+      }
+    }
+  }
+}
+
+query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    incomeBenefits(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...IncomeBenefitFields
+      }
+    }
+  }
+}
+
+query GetRecentDisabilities($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    disabilities(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...DisabilityFields
+      }
+    }
+  }
+}
+
+query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    healthAndDvs(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...HealthAndDvFields
       }
     }
   }

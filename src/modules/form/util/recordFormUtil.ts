@@ -98,7 +98,7 @@ export const transformSubmitValues = ({
   const result: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item: FormItem) => {
-    const key = item.queryField;
+    const key = item.fieldName;
     if (!key) return;
 
     let value;
@@ -132,7 +132,10 @@ export const transformSubmitValues = ({
 };
 
 // Convert gql value into value for form state
-const gqlValueToFormValue = (value: any | null | undefined, item: FormItem) => {
+export const gqlValueToFormValue = (
+  value: any | null | undefined,
+  item: FormItem
+) => {
   if (isNil(value)) return value;
 
   switch (item.type) {
@@ -170,13 +173,13 @@ export const createInitialValuesFromRecord = (
 
   Object.values(itemMap).forEach((item) => {
     // Skip: this question doesn't map to a field
-    if (!item.queryField) return;
+    if (!item.fieldName) return;
 
     // Skip: the record doesn't have a value for this property
-    if (!record.hasOwnProperty(item.queryField)) return;
+    if (!record.hasOwnProperty(item.fieldName)) return;
 
     initialValues[item.linkId] = gqlValueToFormValue(
-      record[item.queryField],
+      record[item.fieldName],
       item
     );
   });

@@ -1,16 +1,28 @@
 import { ReactNode } from 'react';
 
+import { DynamicFieldProps } from './DynamicField';
 import InputGroupWithSummary from './group/InputGroupWithSummary';
 import ItemGroup from './group/ItemGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
 
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+export type OverrideableDynamicFieldProps = Optional<
+  Omit<DynamicFieldProps, 'item' | 'value' | 'nestingLevel'>,
+  'itemChanged' // allow groups to override item changed
+>;
+
 export interface GroupItemComponentProps {
   item: FormItem;
   nestingLevel: number;
-  renderChildItem: (item: FormItem) => ReactNode;
+  renderChildItem: (
+    item: FormItem,
+    props?: OverrideableDynamicFieldProps
+  ) => ReactNode;
   values: Record<string, any>;
   itemChanged: (linkId: string, value: any) => void;
+  severalItemsChanged: (values: Record<string, any>) => void;
 }
 
 const DynamicGroup = (props: GroupItemComponentProps) => {

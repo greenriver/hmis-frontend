@@ -119,12 +119,7 @@ const AssessmentsPanel = ({
         queryDocument={GetEnrollmentAssessmentsDocument}
         rowLinkTo={rowLinkTo}
         columns={tableColumns}
-        toNodes={(data: GetEnrollmentAssessmentsQuery) =>
-          data.enrollment?.assessments?.nodes || []
-        }
-        toNodesCount={(data: GetEnrollmentAssessmentsQuery) =>
-          data.enrollment?.assessments?.nodesCount
-        }
+        pagePath='enrollment.assessments'
         noData='No assessments.'
       />
     </Stack>

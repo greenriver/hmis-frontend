@@ -352,13 +352,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -552,7 +548,7 @@
             "deprecationReason": null
           },
           {
-            "name": "RESOURCE",
+            "name": "RECORD",
             "description": "Form for creating or editing resources directly",
             "isDeprecated": false,
             "deprecationReason": null
@@ -746,7 +742,7 @@
       {
         "kind": "ENUM",
         "name": "Availability",
-        "description": "2.7.4",
+        "description": "2.07.6",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -775,7 +771,7 @@
       {
         "kind": "ENUM",
         "name": "BedType",
-        "description": "2.7.3",
+        "description": "2.07.5",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -956,6 +952,18 @@
             "name": "enrollments",
             "description": null,
             "args": [
+              {
+                "name": "includeInProgress",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
               {
                 "name": "limit",
                 "description": null,
@@ -2853,7 +2861,7 @@
       {
         "kind": "ENUM",
         "name": "DOBDataQuality",
-        "description": "3.3.2",
+        "description": "3.03.2",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -3980,13 +3988,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4411,6 +4415,18 @@
             "deprecationReason": null
           },
           {
+            "name": "dateToStreetEssh",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dateUpdated",
             "description": null,
             "args": [],
@@ -4604,6 +4620,18 @@
             "deprecationReason": null
           },
           {
+            "name": "previousStreetEssh",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "project",
             "description": null,
             "args": [],
@@ -4695,6 +4723,18 @@
             "type": {
               "kind": "ENUM",
               "name": "TimesHomelessPastThreeYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "user",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "User",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4900,7 +4940,7 @@
       {
         "kind": "ENUM",
         "name": "Ethnicity",
-        "description": "3.5.1",
+        "description": "3.05.1",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -5084,8 +5124,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5096,8 +5136,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -5132,13 +5172,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -5709,6 +5745,18 @@
             "deprecationReason": null
           },
           {
+            "name": "fieldName",
+            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms and for assessment population.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "funders",
             "description": "Include this item only for the listed funders",
             "args": [],
@@ -5893,24 +5941,24 @@
             "deprecationReason": null
           },
           {
-            "name": "queryField",
-            "description": "Name of the query input field that corresponds to this item. Only used for\nrecord creation/update forms, not for assessments.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "readOnly",
             "description": "Whether human editing is allowed",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recordType",
+            "description": "Record type to use for population",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RelatedRecordType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6383,7 +6431,7 @@
       {
         "kind": "ENUM",
         "name": "FundingSource",
-        "description": "2.6.1",
+        "description": "2.06.1",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -6753,7 +6801,7 @@
       {
         "kind": "ENUM",
         "name": "GeographyType",
-        "description": "2.8.7",
+        "description": "2.03.4",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -6932,6 +6980,18 @@
             "deprecationReason": null
           },
           {
+            "name": "domesticViolenceVictim",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dueDate",
             "description": null,
             "args": [],
@@ -7068,13 +7128,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7231,7 +7287,7 @@
       {
         "kind": "ENUM",
         "name": "HealthStatus",
-        "description": "4.27.1",
+        "description": "R7.1",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -7416,7 +7472,7 @@
       {
         "kind": "ENUM",
         "name": "HouseholdType",
-        "description": "2.7.2",
+        "description": "2.07.4",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -7507,12 +7563,36 @@
         "description": null,
         "fields": [
           {
+            "name": "adap",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "alimonyAmount",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "benefitsFromAnySource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7542,6 +7622,30 @@
                 "name": "Client",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "cobra",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "connectionWithSoar",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7619,6 +7723,18 @@
             "deprecationReason": null
           },
           {
+            "name": "employerProvided",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollment",
             "description": null,
             "args": [],
@@ -7647,6 +7763,18 @@
             "deprecationReason": null
           },
           {
+            "name": "hivaidsAssistance",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -7663,6 +7791,30 @@
             "deprecationReason": null
           },
           {
+            "name": "incomeFromAnySource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "indianHealthServices",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "informationDate",
             "description": null,
             "args": [],
@@ -7674,6 +7826,210 @@
                 "name": "ISO8601Date",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "insuranceFromAnySource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "medicaid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "medicare",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noAdapReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoAssistanceReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noCobraReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noEmployerProvidedReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noHivaidsAssistanceReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoAssistanceReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noIndianHealthServicesReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noMedicaidReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noMedicareReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noPrivatePayReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noRyanWhiteReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoAssistanceReason",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noSchipReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noStateHealthInsReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "noVaMedReason",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotInsured",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "otherBenefitsSource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "otherBenefitsSourceIdentify",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7703,6 +8059,42 @@
             "deprecationReason": null
           },
           {
+            "name": "otherInsurance",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "otherInsuranceIdentify",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "otherTanf",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "pensionAmount",
             "description": null,
             "args": [],
@@ -7721,6 +8113,54 @@
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "privatePay",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ryanWhiteMedDent",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "schip",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "snap",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7763,12 +8203,48 @@
             "deprecationReason": null
           },
           {
+            "name": "stateHealthIns",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "tanfAmount",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tanfChildCare",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "tanfTransportation",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7803,13 +8279,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -7833,6 +8305,30 @@
             "type": {
               "kind": "SCALAR",
               "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "vaMedicalServices",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "wic",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8782,7 +9278,7 @@
       {
         "kind": "ENUM",
         "name": "LivingSituation",
-        "description": "3.917.1",
+        "description": "3.12.1",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -9922,7 +10418,7 @@
       {
         "kind": "ENUM",
         "name": "NameDataQuality",
-        "description": "3.1.5",
+        "description": "3.01.5",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -9962,12 +10458,42 @@
       },
       {
         "kind": "ENUM",
-        "name": "NoYesMissing",
-        "description": "1.7",
+        "name": "NoAssistanceReason",
+        "description": "W3",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "APPLIED_CLIENT_NOT_ELIGIBLE",
+            "description": "(2) Applied; client not eligible",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "APPLIED_DECISION_PENDING",
+            "description": "(1) Applied; decision pending",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DID_NOT_APPLY",
+            "description": "(3) Client did not apply",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
@@ -9975,14 +10501,8 @@
             "deprecationReason": null
           },
           {
-            "name": "NO",
-            "description": "(0) No",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YES",
-            "description": "(1) Yes",
+            "name": "INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT",
+            "description": "(4) Insurance type not applicable for this client",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -12528,6 +13048,59 @@
       },
       {
         "kind": "ENUM",
+        "name": "ReasonNotInsured",
+        "description": "4.04.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "APPLIED_CLIENT_NOT_ELIGIBLE",
+            "description": "(2) Applied; client not eligible",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "APPLIED_DECISION_PENDING",
+            "description": "(1) Applied; decision pending",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DID_NOT_APPLY",
+            "description": "(3) Client did not apply",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INSURANCE_TYPE_N_A_FOR_THIS_CLIENT",
+            "description": "(4) Insurance type N/A for this client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "RecordType",
         "description": "1.4",
         "fields": null,
@@ -12638,6 +13211,65 @@
           {
             "name": "UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED",
             "description": "(3) Unsuccessful referral: provider rejected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "RelatedRecordType",
+        "description": "Related record type for a group of questions in an assessment",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": "CurrentLivingSituation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DISABILITY",
+            "description": "Disability",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EMPLOYMENT_EDUCATION",
+            "description": "ExmploymentEducation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ENROLLMENT",
+            "description": "Enrollment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXIT",
+            "description": "Exit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HEALTH_AND_DV",
+            "description": "HealthAndDv",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INCOME_BENEFIT",
+            "description": "IncomeBenefit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YOUTH_EDUCATION_STATUS",
+            "description": "YouthEducationStatus",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -12759,7 +13391,7 @@
       {
         "kind": "ENUM",
         "name": "SSNDataQuality",
-        "description": "3.2.2",
+        "description": "3.02.2",
         "fields": null,
         "inputFields": null,
         "interfaces": null,
@@ -13145,13 +13777,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "User",
-                "ofType": null
-              }
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -14345,7 +14973,7 @@
       {
         "kind": "ENUM",
         "name": "TimesHomelessPastThreeYears",
-        "description": "3.3917.4",
+        "description": "3.917.4",
         "fields": null,
         "inputFields": null,
         "interfaces": null,

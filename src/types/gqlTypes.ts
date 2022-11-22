@@ -62,7 +62,7 @@ export type Assessment = {
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   prioritizationStatus?: Maybe<PrioritizationStatus>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** AssessmentDetail */
@@ -95,7 +95,7 @@ export enum AssessmentRole {
   Intake = 'INTAKE',
   PostExit = 'POST_EXIT',
   /** Form for creating or editing resources directly */
-  Resource = 'RESOURCE',
+  Record = 'RECORD',
   Update = 'UPDATE',
 }
 
@@ -125,7 +125,7 @@ export type AssessmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** 2.7.4 */
+/** 2.07.6 */
 export enum Availability {
   /** (3) Overflow */
   Overflow = 'OVERFLOW',
@@ -135,7 +135,7 @@ export enum Availability {
   YearRound = 'YEAR_ROUND',
 }
 
-/** 2.7.3 */
+/** 2.07.5 */
 export enum BedType {
   /** (1) Facility-based */
   FacilityBased = 'FACILITY_BASED',
@@ -187,6 +187,7 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
+  includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -421,7 +422,7 @@ export type CreateServicePayload = {
   service?: Maybe<Service>;
 };
 
-/** 3.3.2 */
+/** 3.03.2 */
 export enum DobDataQuality {
   /** (2) Approximate or partial DOB reported */
   ApproximateOrPartialDobReported = 'APPROXIMATE_OR_PARTIAL_DOB_REPORTED',
@@ -595,7 +596,7 @@ export type Disability = {
   id: Scalars['ID'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']>;
   informationDate: Scalars['ISO8601Date'];
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** 4.10.2 */
@@ -677,6 +678,7 @@ export type Enrollment = {
   client: Client;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateToStreetEssh?: Maybe<Scalars['ISO8601Date']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   entryDate: Scalars['ISO8601Date'];
@@ -688,10 +690,12 @@ export type Enrollment = {
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
+  user?: Maybe<User>;
 };
 
 /** HUD Enrollment */
@@ -738,7 +742,7 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** 3.5.1 */
+/** 3.05.1 */
 export enum Ethnicity {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
@@ -764,11 +768,11 @@ export type Event = {
   eventDate: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']>;
-  probSolDivRrResult?: Maybe<NoYesMissing>;
-  referralCaseManageAfter?: Maybe<NoYesMissing>;
+  probSolDivRrResult?: Maybe<Scalars['Boolean']>;
+  referralCaseManageAfter?: Maybe<Scalars['Boolean']>;
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** HUD Event Sorting Options */
@@ -874,6 +878,11 @@ export type FormItem = {
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
+  /**
+   * Name of the field on the record (or on the query input type). Used for record
+   * creation/update forms and for assessment population.
+   */
+  fieldName?: Maybe<Scalars['String']>;
   /** Include this item only for the listed funders */
   funders?: Maybe<Array<FundingSource>>;
   /** Helper text for the item */
@@ -896,13 +905,10 @@ export type FormItem = {
   projectTypesExcluded?: Maybe<Array<ProjectType>>;
   /** Include this item only for the listed project types */
   projectTypesIncluded?: Maybe<Array<ProjectType>>;
-  /**
-   * Name of the query input field that corresponds to this item. Only used for
-   * record creation/update forms, not for assessments.
-   */
-  queryField?: Maybe<Scalars['String']>;
   /** Whether human editing is allowed */
   readOnly?: Maybe<Scalars['Boolean']>;
+  /** Record type to use for population */
+  recordType?: Maybe<RelatedRecordType>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
   repeats?: Maybe<Scalars['Boolean']>;
   /** Whether the item must be included in data results */
@@ -952,7 +958,7 @@ export type FundersPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** 2.6.1 */
+/** 2.06.1 */
 export enum FundingSource {
   /** (21) HHS: PATH - Street Outreach & Supportive Services Only */
   HhsPathStreetOutreachSupportiveServicesOnly = 'HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY',
@@ -1076,7 +1082,7 @@ export enum Gender {
   GenderTransgender = 'GENDER_TRANSGENDER',
 }
 
-/** 2.8.7 */
+/** 2.03.4 */
 export enum GeographyType {
   /** (3) Rural */
   Rural = 'RURAL',
@@ -1108,6 +1114,7 @@ export type HealthAndDv = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   dentalHealthStatus?: Maybe<HealthStatus>;
+  domesticViolenceVictim?: Maybe<NoYesReasonsForMissingData>;
   dueDate?: Maybe<Scalars['ISO8601Date']>;
   enrollment: Enrollment;
   feelingFrequency?: Maybe<FeelingFrequency>;
@@ -1118,7 +1125,7 @@ export type HealthAndDv = {
   mentalHealthStatus?: Maybe<HealthStatus>;
   pregnancyStatus?: Maybe<NoYesReasonsForMissingData>;
   supportFromOthers?: Maybe<WellbeingAgreement>;
-  user: User;
+  user?: Maybe<User>;
   whenOccurred?: Maybe<WhenDvOccurred>;
 };
 
@@ -1133,7 +1140,7 @@ export type HealthAndDvsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** 4.27.1 */
+/** R7.1 */
 export enum HealthStatus {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
@@ -1169,7 +1176,7 @@ export type HouseholdClient = {
   relationshipToHoH: RelationshipToHoH;
 };
 
-/** 2.7.2 */
+/** 2.07.4 */
 export enum HouseholdType {
   /** (1) Households without children */
   HouseholdsWithoutChildren = 'HOUSEHOLDS_WITHOUT_CHILDREN',
@@ -1191,31 +1198,68 @@ export enum HousingType {
 
 export type IncomeBenefit = {
   __typename?: 'IncomeBenefit';
+  adap?: Maybe<NoYesReasonsForMissingData>;
   alimonyAmount?: Maybe<Scalars['Float']>;
+  benefitsFromAnySource?: Maybe<NoYesReasonsForMissingData>;
   childSupportAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  cobra?: Maybe<Scalars['Boolean']>;
+  connectionWithSoar?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   earnedAmount?: Maybe<Scalars['Float']>;
+  employerProvided?: Maybe<Scalars['Boolean']>;
   enrollment: Enrollment;
   gaAmount?: Maybe<Scalars['Float']>;
+  hivaidsAssistance?: Maybe<NoYesReasonsForMissingData>;
   id: Scalars['ID'];
+  incomeFromAnySource?: Maybe<NoYesReasonsForMissingData>;
+  indianHealthServices?: Maybe<Scalars['Boolean']>;
   informationDate: Scalars['ISO8601Date'];
+  insuranceFromAnySource?: Maybe<NoYesReasonsForMissingData>;
+  medicaid?: Maybe<Scalars['Boolean']>;
+  medicare?: Maybe<Scalars['Boolean']>;
+  noAdapReason?: Maybe<NoAssistanceReason>;
+  noCobraReason?: Maybe<ReasonNotInsured>;
+  noEmployerProvidedReason?: Maybe<ReasonNotInsured>;
+  noHivaidsAssistanceReason?: Maybe<NoAssistanceReason>;
+  noIndianHealthServicesReason?: Maybe<ReasonNotInsured>;
+  noMedicaidReason?: Maybe<ReasonNotInsured>;
+  noMedicareReason?: Maybe<ReasonNotInsured>;
+  noPrivatePayReason?: Maybe<ReasonNotInsured>;
+  noRyanWhiteReason?: Maybe<NoAssistanceReason>;
+  noSchipReason?: Maybe<ReasonNotInsured>;
+  noStateHealthInsReason?: Maybe<ReasonNotInsured>;
+  noVaMedReason?: Maybe<ReasonNotInsured>;
+  otherBenefitsSource?: Maybe<Scalars['Boolean']>;
+  otherBenefitsSourceIdentify?: Maybe<Scalars['String']>;
   otherIncomeAmount?: Maybe<Scalars['Float']>;
   otherIncomeSourceIdentify?: Maybe<Scalars['String']>;
+  otherInsurance?: Maybe<Scalars['Boolean']>;
+  otherInsuranceIdentify?: Maybe<Scalars['String']>;
+  otherTanf?: Maybe<Scalars['Boolean']>;
   pensionAmount?: Maybe<Scalars['Float']>;
   privateDisabilityAmount?: Maybe<Scalars['Float']>;
+  privatePay?: Maybe<Scalars['Boolean']>;
+  ryanWhiteMedDent?: Maybe<NoYesReasonsForMissingData>;
+  schip?: Maybe<Scalars['Boolean']>;
+  snap?: Maybe<Scalars['Boolean']>;
   socSecRetirementAmount?: Maybe<Scalars['Float']>;
   ssdiAmount?: Maybe<Scalars['Float']>;
   ssiAmount?: Maybe<Scalars['Float']>;
+  stateHealthIns?: Maybe<Scalars['Boolean']>;
   tanfAmount?: Maybe<Scalars['Float']>;
+  tanfChildCare?: Maybe<Scalars['Boolean']>;
+  tanfTransportation?: Maybe<Scalars['Boolean']>;
   totalMonthlyIncome?: Maybe<Scalars['String']>;
   unemploymentAmount?: Maybe<Scalars['Float']>;
-  user: User;
+  user?: Maybe<User>;
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']>;
   vaDisabilityServiceAmount?: Maybe<Scalars['Float']>;
+  vaMedicalServices?: Maybe<Scalars['Boolean']>;
+  wic?: Maybe<Scalars['Boolean']>;
   workersCompAmount?: Maybe<Scalars['Float']>;
 };
 
@@ -1314,7 +1358,7 @@ export enum ItemType {
   Text = 'TEXT',
 }
 
-/** 3.917.1 */
+/** 3.12.1 */
 export enum LivingSituation {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
@@ -1572,7 +1616,7 @@ export type MutationUpdateServiceArgs = {
   input: UpdateServiceInput;
 };
 
-/** 3.1.5 */
+/** 3.01.5 */
 export enum NameDataQuality {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
@@ -1586,14 +1630,22 @@ export enum NameDataQuality {
   PartialStreetNameOrCodeNameReported = 'PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED',
 }
 
-/** 1.7 */
-export enum NoYesMissing {
+/** W3 */
+export enum NoAssistanceReason {
+  /** (2) Applied; client not eligible */
+  AppliedClientNotEligible = 'APPLIED_CLIENT_NOT_ELIGIBLE',
+  /** (1) Applied; decision pending */
+  AppliedDecisionPending = 'APPLIED_DECISION_PENDING',
+  /** (3) Client did not apply */
+  ClientDidNotApply = 'CLIENT_DID_NOT_APPLY',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
+  /** (4) Insurance type not applicable for this client */
+  InsuranceTypeNotApplicableForThisClient = 'INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT',
 }
 
 /** 1.8 */
@@ -1967,6 +2019,24 @@ export enum Race {
   RaceWhite = 'RACE_WHITE',
 }
 
+/** 4.04.A */
+export enum ReasonNotInsured {
+  /** (2) Applied; client not eligible */
+  AppliedClientNotEligible = 'APPLIED_CLIENT_NOT_ELIGIBLE',
+  /** (1) Applied; decision pending */
+  AppliedDecisionPending = 'APPLIED_DECISION_PENDING',
+  /** (3) Client did not apply */
+  ClientDidNotApply = 'CLIENT_DID_NOT_APPLY',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (4) Insurance type N/A for this client */
+  InsuranceTypeNAForThisClient = 'INSURANCE_TYPE_N_A_FOR_THIS_CLIENT',
+}
+
 /** 1.4 */
 export enum RecordType {
   /** (200) Bed night */
@@ -2007,6 +2077,26 @@ export enum ReferralResult {
   UnsuccessfulReferralProviderRejected = 'UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED',
 }
 
+/** Related record type for a group of questions in an assessment */
+export enum RelatedRecordType {
+  /** CurrentLivingSituation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Disability */
+  Disability = 'DISABILITY',
+  /** ExmploymentEducation */
+  EmploymentEducation = 'EMPLOYMENT_EDUCATION',
+  /** Enrollment */
+  Enrollment = 'ENROLLMENT',
+  /** Exit */
+  Exit = 'EXIT',
+  /** HealthAndDv */
+  HealthAndDv = 'HEALTH_AND_DV',
+  /** IncomeBenefit */
+  IncomeBenefit = 'INCOME_BENEFIT',
+  /** YouthEducationStatus */
+  YouthEducationStatus = 'YOUTH_EDUCATION_STATUS',
+}
+
 /** 3.15.1 */
 export enum RelationshipToHoH {
   /** (2) Child */
@@ -2045,7 +2135,7 @@ export enum ResidencePriorLengthOfStay {
   TwoToSixNights = 'TWO_TO_SIX_NIGHTS',
 }
 
-/** 3.2.2 */
+/** 3.02.2 */
 export enum SsnDataQuality {
   /** (2) Approximate or partial SSN reported */
   ApproximateOrPartialSsnReported = 'APPROXIMATE_OR_PARTIAL_SSN_REPORTED',
@@ -2095,7 +2185,7 @@ export type Service = {
   referralOutcome?: Maybe<PathReferralOutcome>;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
   typeProvided: ServiceTypeProvided;
-  user: User;
+  user?: Maybe<User>;
 };
 
 /** HUD Service Input */
@@ -2409,7 +2499,7 @@ export enum TargetPopulation {
   PersonsWithHivAids = 'PERSONS_WITH_HIV_AIDS',
 }
 
-/** 3.3917.4 */
+/** 3.917.4 */
 export enum TimesHomelessPastThreeYears {
   /** (8) Client doesn't know */
   ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
@@ -2672,7 +2762,8 @@ export type ItemFieldsFragment = {
   hidden?: boolean | null;
   readOnly?: boolean | null;
   repeats?: boolean | null;
-  queryField?: string | null;
+  fieldName?: string | null;
+  recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   enableBehavior?: EnableBehavior | null;
@@ -2731,7 +2822,8 @@ export type FormDefinitionWithJsonFragment = {
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
-      queryField?: string | null;
+      fieldName?: string | null;
+      recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       enableBehavior?: EnableBehavior | null;
@@ -2747,7 +2839,8 @@ export type FormDefinitionWithJsonFragment = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        queryField?: string | null;
+        fieldName?: string | null;
+        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         enableBehavior?: EnableBehavior | null;
@@ -2763,7 +2856,8 @@ export type FormDefinitionWithJsonFragment = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          queryField?: string | null;
+          fieldName?: string | null;
+          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
@@ -2779,7 +2873,8 @@ export type FormDefinitionWithJsonFragment = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            queryField?: string | null;
+            fieldName?: string | null;
+            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
@@ -2795,7 +2890,8 @@ export type FormDefinitionWithJsonFragment = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -2975,6 +3071,12 @@ export type AssessmentDetailFieldsFragment = {
   status: string;
 };
 
+export type UserFieldsFragment = {
+  __typename: 'User';
+  id: string;
+  name: string;
+};
+
 export type AssessmentFieldsFragment = {
   __typename?: 'Assessment';
   id: string;
@@ -2987,7 +3089,7 @@ export type AssessmentFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
-  user: { __typename?: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
   assessmentDetail?: {
     __typename?: 'AssessmentDetail';
     id: string;
@@ -3045,7 +3147,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          queryField?: string | null;
+          fieldName?: string | null;
+          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
@@ -3061,7 +3164,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            queryField?: string | null;
+            fieldName?: string | null;
+            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
@@ -3077,7 +3181,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -3093,7 +3198,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                queryField?: string | null;
+                fieldName?: string | null;
+                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
@@ -3109,7 +3215,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
-                  queryField?: string | null;
+                  fieldName?: string | null;
+                  recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   enableBehavior?: EnableBehavior | null;
@@ -3281,7 +3388,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
       };
     };
   } | null;
-  user: { __typename?: 'User'; id: string; name: string };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -3330,7 +3437,8 @@ export type GetAssessmentQuery = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            queryField?: string | null;
+            fieldName?: string | null;
+            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
@@ -3346,7 +3454,8 @@ export type GetAssessmentQuery = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -3362,7 +3471,8 @@ export type GetAssessmentQuery = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                queryField?: string | null;
+                fieldName?: string | null;
+                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
@@ -3378,7 +3488,8 @@ export type GetAssessmentQuery = {
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
-                  queryField?: string | null;
+                  fieldName?: string | null;
+                  recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   enableBehavior?: EnableBehavior | null;
@@ -3394,7 +3505,8 @@ export type GetAssessmentQuery = {
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
-                    queryField?: string | null;
+                    fieldName?: string | null;
+                    recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     enableBehavior?: EnableBehavior | null;
@@ -3566,7 +3678,7 @@ export type GetAssessmentQuery = {
         };
       };
     } | null;
-    user: { __typename?: 'User'; id: string; name: string };
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -3616,7 +3728,7 @@ export type GetEnrollmentAssessmentsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
-        user: { __typename?: 'User'; id: string; name: string };
+        user?: { __typename: 'User'; id: string; name: string } | null;
         assessmentDetail?: {
           __typename?: 'AssessmentDetail';
           id: string;
@@ -3664,7 +3776,8 @@ export type GetFormDefinitionByIdentifierQuery = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        queryField?: string | null;
+        fieldName?: string | null;
+        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         enableBehavior?: EnableBehavior | null;
@@ -3680,7 +3793,8 @@ export type GetFormDefinitionByIdentifierQuery = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          queryField?: string | null;
+          fieldName?: string | null;
+          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
@@ -3696,7 +3810,8 @@ export type GetFormDefinitionByIdentifierQuery = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            queryField?: string | null;
+            fieldName?: string | null;
+            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
@@ -3712,7 +3827,8 @@ export type GetFormDefinitionByIdentifierQuery = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -3728,7 +3844,8 @@ export type GetFormDefinitionByIdentifierQuery = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                queryField?: string | null;
+                fieldName?: string | null;
+                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
@@ -3929,7 +4046,8 @@ export type GetFormDefinitionQuery = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        queryField?: string | null;
+        fieldName?: string | null;
+        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         enableBehavior?: EnableBehavior | null;
@@ -3945,7 +4063,8 @@ export type GetFormDefinitionQuery = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          queryField?: string | null;
+          fieldName?: string | null;
+          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           enableBehavior?: EnableBehavior | null;
@@ -3961,7 +4080,8 @@ export type GetFormDefinitionQuery = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            queryField?: string | null;
+            fieldName?: string | null;
+            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             enableBehavior?: EnableBehavior | null;
@@ -3977,7 +4097,8 @@ export type GetFormDefinitionQuery = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -3993,7 +4114,8 @@ export type GetFormDefinitionQuery = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                queryField?: string | null;
+                fieldName?: string | null;
+                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4190,7 +4312,7 @@ export type CreateAssessmentMutation = {
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
-      user: { __typename?: 'User'; id: string; name: string };
+      user?: { __typename: 'User'; id: string; name: string } | null;
       assessmentDetail?: {
         __typename?: 'AssessmentDetail';
         id: string;
@@ -4269,7 +4391,8 @@ export type SaveAssessmentMutation = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              queryField?: string | null;
+              fieldName?: string | null;
+              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               enableBehavior?: EnableBehavior | null;
@@ -4285,7 +4408,8 @@ export type SaveAssessmentMutation = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                queryField?: string | null;
+                fieldName?: string | null;
+                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4301,7 +4425,8 @@ export type SaveAssessmentMutation = {
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
-                  queryField?: string | null;
+                  fieldName?: string | null;
+                  recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   enableBehavior?: EnableBehavior | null;
@@ -4317,7 +4442,8 @@ export type SaveAssessmentMutation = {
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
-                    queryField?: string | null;
+                    fieldName?: string | null;
+                    recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     enableBehavior?: EnableBehavior | null;
@@ -4333,7 +4459,8 @@ export type SaveAssessmentMutation = {
                       hidden?: boolean | null;
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
-                      queryField?: string | null;
+                      fieldName?: string | null;
+                      recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       enableBehavior?: EnableBehavior | null;
@@ -4505,7 +4632,7 @@ export type SaveAssessmentMutation = {
           };
         };
       } | null;
-      user: { __typename?: 'User'; id: string; name: string };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -4597,6 +4724,18 @@ export type EnrollmentFieldsFragment = {
   client: { __typename?: 'Client'; id: string };
 };
 
+export type EnrollmentFieldsFromAssessmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  previousStreetEssh?: boolean | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
 export type EnrollmentWithHoHFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -4643,8 +4782,8 @@ export type EventFieldsFragment = {
   event: EventType;
   eventDate: string;
   locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
+  probSolDivRrResult?: boolean | null;
+  referralCaseManageAfter?: boolean | null;
   referralResult?: ReferralResult | null;
   resultDate?: string | null;
   dateCreated: string;
@@ -4665,6 +4804,150 @@ export type ServiceFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+};
+
+export type IncomeBenefitFieldsFragment = {
+  __typename: 'IncomeBenefit';
+  adap?: NoYesReasonsForMissingData | null;
+  alimonyAmount?: number | null;
+  benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+  childSupportAmount?: number | null;
+  cobra?: boolean | null;
+  connectionWithSoar?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  earnedAmount?: number | null;
+  employerProvided?: boolean | null;
+  gaAmount?: number | null;
+  hivaidsAssistance?: NoYesReasonsForMissingData | null;
+  id: string;
+  incomeFromAnySource?: NoYesReasonsForMissingData | null;
+  indianHealthServices?: boolean | null;
+  informationDate: string;
+  insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+  medicaid?: boolean | null;
+  medicare?: boolean | null;
+  noAdapReason?: NoAssistanceReason | null;
+  noCobraReason?: ReasonNotInsured | null;
+  noEmployerProvidedReason?: ReasonNotInsured | null;
+  noHivaidsAssistanceReason?: NoAssistanceReason | null;
+  noIndianHealthServicesReason?: ReasonNotInsured | null;
+  noMedicaidReason?: ReasonNotInsured | null;
+  noMedicareReason?: ReasonNotInsured | null;
+  noPrivatePayReason?: ReasonNotInsured | null;
+  noRyanWhiteReason?: NoAssistanceReason | null;
+  noSchipReason?: ReasonNotInsured | null;
+  noStateHealthInsReason?: ReasonNotInsured | null;
+  noVaMedReason?: ReasonNotInsured | null;
+  otherBenefitsSource?: boolean | null;
+  otherBenefitsSourceIdentify?: string | null;
+  otherIncomeAmount?: number | null;
+  otherIncomeSourceIdentify?: string | null;
+  otherInsurance?: boolean | null;
+  otherInsuranceIdentify?: string | null;
+  otherTanf?: boolean | null;
+  pensionAmount?: number | null;
+  privateDisabilityAmount?: number | null;
+  privatePay?: boolean | null;
+  ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+  schip?: boolean | null;
+  snap?: boolean | null;
+  socSecRetirementAmount?: number | null;
+  ssdiAmount?: number | null;
+  ssiAmount?: number | null;
+  stateHealthIns?: boolean | null;
+  tanfAmount?: number | null;
+  tanfChildCare?: boolean | null;
+  tanfTransportation?: boolean | null;
+  totalMonthlyIncome?: string | null;
+  unemploymentAmount?: number | null;
+  vaDisabilityNonServiceAmount?: number | null;
+  vaDisabilityServiceAmount?: number | null;
+  vaMedicalServices?: boolean | null;
+  wic?: boolean | null;
+  workersCompAmount?: number | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    project: {
+      __typename?: 'Project';
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    household: { __typename?: 'Household'; id: string };
+    client: { __typename?: 'Client'; id: string };
+  };
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type DisabilityFieldsFragment = {
+  __typename: 'Disability';
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  disabilityResponse: DisabilityResponse;
+  disabilityType: DisabilityType;
+  id: string;
+  indefiniteAndImpairs?: number | null;
+  informationDate: string;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    project: {
+      __typename?: 'Project';
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    household: { __typename?: 'Household'; id: string };
+    client: { __typename?: 'Client'; id: string };
+  };
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type HealthAndDvFieldsFragment = {
+  __typename: 'HealthAndDv';
+  bounceBack?: WellbeingAgreement | null;
+  currentlyFleeing?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  dentalHealthStatus?: HealthStatus | null;
+  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+  dueDate?: string | null;
+  feelingFrequency?: FeelingFrequency | null;
+  generalHealthStatus?: HealthStatus | null;
+  id: string;
+  informationDate: string;
+  lifeValue?: WellbeingAgreement | null;
+  mentalHealthStatus?: HealthStatus | null;
+  pregnancyStatus?: NoYesReasonsForMissingData | null;
+  supportFromOthers?: WellbeingAgreement | null;
+  whenOccurred?: WhenDvOccurred | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    project: {
+      __typename?: 'Project';
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    household: { __typename?: 'Household'; id: string };
+    client: { __typename?: 'Client'; id: string };
+  };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -4764,6 +5047,37 @@ export type GetClientEnrollmentsQuery = {
         };
         household: { __typename?: 'Household'; id: string };
         client: { __typename?: 'Client'; id: string };
+      }>;
+    };
+  } | null;
+};
+
+export type GetRecentEnrollmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetRecentEnrollmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    enrollments: {
+      __typename?: 'EnrollmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        livingSituation?: LivingSituation | null;
+        lengthOfStay?: ResidencePriorLengthOfStay | null;
+        previousStreetEssh?: boolean | null;
+        dateToStreetEssh?: string | null;
+        timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+        monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -5189,8 +5503,8 @@ export type GetEnrollmentEventsQuery = {
         event: EventType;
         eventDate: string;
         locationCrisisOrPhHousing?: string | null;
-        probSolDivRrResult?: NoYesMissing | null;
-        referralCaseManageAfter?: NoYesMissing | null;
+        probSolDivRrResult?: boolean | null;
+        referralCaseManageAfter?: boolean | null;
         referralResult?: ReferralResult | null;
         resultDate?: string | null;
         dateCreated: string;
@@ -5281,6 +5595,201 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             };
           }>;
         };
+      }>;
+    };
+  } | null;
+};
+
+export type GetRecentIncomeBenefitsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetRecentIncomeBenefitsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    incomeBenefits: {
+      __typename?: 'IncomeBenefitsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename: 'IncomeBenefit';
+        adap?: NoYesReasonsForMissingData | null;
+        alimonyAmount?: number | null;
+        benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+        childSupportAmount?: number | null;
+        cobra?: boolean | null;
+        connectionWithSoar?: NoYesReasonsForMissingData | null;
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        earnedAmount?: number | null;
+        employerProvided?: boolean | null;
+        gaAmount?: number | null;
+        hivaidsAssistance?: NoYesReasonsForMissingData | null;
+        id: string;
+        incomeFromAnySource?: NoYesReasonsForMissingData | null;
+        indianHealthServices?: boolean | null;
+        informationDate: string;
+        insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+        medicaid?: boolean | null;
+        medicare?: boolean | null;
+        noAdapReason?: NoAssistanceReason | null;
+        noCobraReason?: ReasonNotInsured | null;
+        noEmployerProvidedReason?: ReasonNotInsured | null;
+        noHivaidsAssistanceReason?: NoAssistanceReason | null;
+        noIndianHealthServicesReason?: ReasonNotInsured | null;
+        noMedicaidReason?: ReasonNotInsured | null;
+        noMedicareReason?: ReasonNotInsured | null;
+        noPrivatePayReason?: ReasonNotInsured | null;
+        noRyanWhiteReason?: NoAssistanceReason | null;
+        noSchipReason?: ReasonNotInsured | null;
+        noStateHealthInsReason?: ReasonNotInsured | null;
+        noVaMedReason?: ReasonNotInsured | null;
+        otherBenefitsSource?: boolean | null;
+        otherBenefitsSourceIdentify?: string | null;
+        otherIncomeAmount?: number | null;
+        otherIncomeSourceIdentify?: string | null;
+        otherInsurance?: boolean | null;
+        otherInsuranceIdentify?: string | null;
+        otherTanf?: boolean | null;
+        pensionAmount?: number | null;
+        privateDisabilityAmount?: number | null;
+        privatePay?: boolean | null;
+        ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+        schip?: boolean | null;
+        snap?: boolean | null;
+        socSecRetirementAmount?: number | null;
+        ssdiAmount?: number | null;
+        ssiAmount?: number | null;
+        stateHealthIns?: boolean | null;
+        tanfAmount?: number | null;
+        tanfChildCare?: boolean | null;
+        tanfTransportation?: boolean | null;
+        totalMonthlyIncome?: string | null;
+        unemploymentAmount?: number | null;
+        vaDisabilityNonServiceAmount?: number | null;
+        vaDisabilityServiceAmount?: number | null;
+        vaMedicalServices?: boolean | null;
+        wic?: boolean | null;
+        workersCompAmount?: number | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          project: {
+            __typename?: 'Project';
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string };
+          client: { __typename?: 'Client'; id: string };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetRecentDisabilitiesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetRecentDisabilitiesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    disabilities: {
+      __typename?: 'DisabilitiesPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename: 'Disability';
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        disabilityResponse: DisabilityResponse;
+        disabilityType: DisabilityType;
+        id: string;
+        indefiniteAndImpairs?: number | null;
+        informationDate: string;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          project: {
+            __typename?: 'Project';
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string };
+          client: { __typename?: 'Client'; id: string };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetRecentHealthAndDvsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetRecentHealthAndDvsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    healthAndDvs: {
+      __typename?: 'HealthAndDvsPaginated';
+      nodesCount: number;
+      nodes: Array<{
+        __typename: 'HealthAndDv';
+        bounceBack?: WellbeingAgreement | null;
+        currentlyFleeing?: NoYesReasonsForMissingData | null;
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        dentalHealthStatus?: HealthStatus | null;
+        domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+        dueDate?: string | null;
+        feelingFrequency?: FeelingFrequency | null;
+        generalHealthStatus?: HealthStatus | null;
+        id: string;
+        informationDate: string;
+        lifeValue?: WellbeingAgreement | null;
+        mentalHealthStatus?: HealthStatus | null;
+        pregnancyStatus?: NoYesReasonsForMissingData | null;
+        supportFromOthers?: WellbeingAgreement | null;
+        whenOccurred?: WhenDvOccurred | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          project: {
+            __typename?: 'Project';
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string };
+          client: { __typename?: 'Client'; id: string };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -5582,6 +6091,7 @@ export type GetOrganizationWithPaginatedProjectsQuery = {
   __typename?: 'Query';
   organization?: {
     __typename?: 'Organization';
+    id: string;
     projects: {
       __typename?: 'ProjectsPaginated';
       offset: number;
@@ -6143,6 +6653,13 @@ export type DeleteProjectCocMutation = {
   } | null;
 };
 
+export const UserFieldsFragmentDoc = gql`
+  fragment UserFields on User {
+    __typename
+    id
+    name
+  }
+`;
 export const AssessmentDetailFieldsFragmentDoc = gql`
   fragment AssessmentDetailFields on AssessmentDetail {
     id
@@ -6173,8 +6690,7 @@ export const AssessmentFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
     user {
-      id
-      name
+      ...UserFields
     }
     assessmentDetail {
       ...AssessmentDetailFields
@@ -6183,6 +6699,7 @@ export const AssessmentFieldsFragmentDoc = gql`
       }
     }
   }
+  ${UserFieldsFragmentDoc}
   ${AssessmentDetailFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
 `;
@@ -6209,7 +6726,8 @@ export const ItemFieldsFragmentDoc = gql`
     hidden
     readOnly
     repeats
-    queryField
+    fieldName
+    recordType
     pickListReference
     bounds {
       type
@@ -6317,6 +6835,21 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
+  fragment EnrollmentFieldsFromAssessment on Enrollment {
+    id
+    livingSituation
+    lengthOfStay
+    previousStreetEssh
+    dateToStreetEssh
+    timesHomelessPastThreeYears
+    monthsHomelessPastThreeYears
+    user {
+      ...UserFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+`;
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
@@ -6395,6 +6928,132 @@ export const ServiceFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
   }
+`;
+export const IncomeBenefitFieldsFragmentDoc = gql`
+  fragment IncomeBenefitFields on IncomeBenefit {
+    __typename
+    adap
+    alimonyAmount
+    benefitsFromAnySource
+    childSupportAmount
+    cobra
+    connectionWithSoar
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    earnedAmount
+    employerProvided
+    enrollment {
+      ...EnrollmentFields
+    }
+    gaAmount
+    hivaidsAssistance
+    id
+    incomeFromAnySource
+    indianHealthServices
+    informationDate
+    insuranceFromAnySource
+    medicaid
+    medicare
+    noAdapReason
+    noCobraReason
+    noEmployerProvidedReason
+    noHivaidsAssistanceReason
+    noIndianHealthServicesReason
+    noMedicaidReason
+    noMedicareReason
+    noPrivatePayReason
+    noRyanWhiteReason
+    noSchipReason
+    noStateHealthInsReason
+    noVaMedReason
+    otherBenefitsSource
+    otherBenefitsSourceIdentify
+    otherIncomeAmount
+    otherIncomeSourceIdentify
+    otherInsurance
+    otherInsuranceIdentify
+    otherTanf
+    pensionAmount
+    privateDisabilityAmount
+    privatePay
+    ryanWhiteMedDent
+    schip
+    snap
+    socSecRetirementAmount
+    ssdiAmount
+    ssiAmount
+    stateHealthIns
+    tanfAmount
+    tanfChildCare
+    tanfTransportation
+    totalMonthlyIncome
+    unemploymentAmount
+    user {
+      ...UserFields
+    }
+    vaDisabilityNonServiceAmount
+    vaDisabilityServiceAmount
+    vaMedicalServices
+    wic
+    workersCompAmount
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${UserFieldsFragmentDoc}
+`;
+export const DisabilityFieldsFragmentDoc = gql`
+  fragment DisabilityFields on Disability {
+    __typename
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    disabilityResponse
+    disabilityType
+    enrollment {
+      ...EnrollmentFields
+    }
+    id
+    indefiniteAndImpairs
+    informationDate
+    user {
+      ...UserFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${UserFieldsFragmentDoc}
+`;
+export const HealthAndDvFieldsFragmentDoc = gql`
+  fragment HealthAndDvFields on HealthAndDv {
+    __typename
+    bounceBack
+    currentlyFleeing
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    dentalHealthStatus
+    domesticViolenceVictim
+    dueDate
+    enrollment {
+      ...EnrollmentFields
+    }
+    feelingFrequency
+    generalHealthStatus
+    id
+    informationDate
+    lifeValue
+    mentalHealthStatus
+    pregnancyStatus
+    supportFromOthers
+    user {
+      ...UserFields
+    }
+    whenOccurred
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${UserFieldsFragmentDoc}
 `;
 export const ProjectFieldsFragmentDoc = gql`
   fragment ProjectFields on Project {
@@ -7094,7 +7753,12 @@ export const GetClientEnrollmentsDocument = gql`
   query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        includeInProgress: true
+      ) {
         offset
         limit
         nodesCount
@@ -7158,6 +7822,80 @@ export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables
+>;
+export const GetRecentEnrollmentsDocument = gql`
+  query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        includeInProgress: false
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFieldsFromAssessment
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFromAssessmentFragmentDoc}
+`;
+
+/**
+ * __useGetRecentEnrollmentsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentEnrollmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetRecentEnrollmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >(GetRecentEnrollmentsDocument, options);
+}
+export function useGetRecentEnrollmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRecentEnrollmentsQuery,
+    GetRecentEnrollmentsQueryVariables
+  >(GetRecentEnrollmentsDocument, options);
+}
+export type GetRecentEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetRecentEnrollmentsQuery
+>;
+export type GetRecentEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetRecentEnrollmentsLazyQuery
+>;
+export type GetRecentEnrollmentsQueryResult = Apollo.QueryResult<
+  GetRecentEnrollmentsQuery,
+  GetRecentEnrollmentsQueryVariables
 >;
 export const CreateClientDocument = gql`
   mutation CreateClient($input: CreateClientInput!) {
@@ -7897,6 +8635,207 @@ export type GetClientHouseholdMemberCandidatesQueryResult = Apollo.QueryResult<
   GetClientHouseholdMemberCandidatesQuery,
   GetClientHouseholdMemberCandidatesQueryVariables
 >;
+export const GetRecentIncomeBenefitsDocument = gql`
+  query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      incomeBenefits(offset: $offset, limit: $limit) {
+        nodesCount
+        nodes {
+          ...IncomeBenefitFields
+        }
+      }
+    }
+  }
+  ${IncomeBenefitFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetRecentIncomeBenefitsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentIncomeBenefitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentIncomeBenefitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentIncomeBenefitsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetRecentIncomeBenefitsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRecentIncomeBenefitsQuery,
+    GetRecentIncomeBenefitsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRecentIncomeBenefitsQuery,
+    GetRecentIncomeBenefitsQueryVariables
+  >(GetRecentIncomeBenefitsDocument, options);
+}
+export function useGetRecentIncomeBenefitsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentIncomeBenefitsQuery,
+    GetRecentIncomeBenefitsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRecentIncomeBenefitsQuery,
+    GetRecentIncomeBenefitsQueryVariables
+  >(GetRecentIncomeBenefitsDocument, options);
+}
+export type GetRecentIncomeBenefitsQueryHookResult = ReturnType<
+  typeof useGetRecentIncomeBenefitsQuery
+>;
+export type GetRecentIncomeBenefitsLazyQueryHookResult = ReturnType<
+  typeof useGetRecentIncomeBenefitsLazyQuery
+>;
+export type GetRecentIncomeBenefitsQueryResult = Apollo.QueryResult<
+  GetRecentIncomeBenefitsQuery,
+  GetRecentIncomeBenefitsQueryVariables
+>;
+export const GetRecentDisabilitiesDocument = gql`
+  query GetRecentDisabilities($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      disabilities(offset: $offset, limit: $limit) {
+        nodesCount
+        nodes {
+          ...DisabilityFields
+        }
+      }
+    }
+  }
+  ${DisabilityFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetRecentDisabilitiesQuery__
+ *
+ * To run a query within a React component, call `useGetRecentDisabilitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentDisabilitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentDisabilitiesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetRecentDisabilitiesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRecentDisabilitiesQuery,
+    GetRecentDisabilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRecentDisabilitiesQuery,
+    GetRecentDisabilitiesQueryVariables
+  >(GetRecentDisabilitiesDocument, options);
+}
+export function useGetRecentDisabilitiesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentDisabilitiesQuery,
+    GetRecentDisabilitiesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRecentDisabilitiesQuery,
+    GetRecentDisabilitiesQueryVariables
+  >(GetRecentDisabilitiesDocument, options);
+}
+export type GetRecentDisabilitiesQueryHookResult = ReturnType<
+  typeof useGetRecentDisabilitiesQuery
+>;
+export type GetRecentDisabilitiesLazyQueryHookResult = ReturnType<
+  typeof useGetRecentDisabilitiesLazyQuery
+>;
+export type GetRecentDisabilitiesQueryResult = Apollo.QueryResult<
+  GetRecentDisabilitiesQuery,
+  GetRecentDisabilitiesQueryVariables
+>;
+export const GetRecentHealthAndDvsDocument = gql`
+  query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      healthAndDvs(offset: $offset, limit: $limit) {
+        nodesCount
+        nodes {
+          ...HealthAndDvFields
+        }
+      }
+    }
+  }
+  ${HealthAndDvFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetRecentHealthAndDvsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentHealthAndDvsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentHealthAndDvsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentHealthAndDvsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetRecentHealthAndDvsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetRecentHealthAndDvsQuery,
+    GetRecentHealthAndDvsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRecentHealthAndDvsQuery,
+    GetRecentHealthAndDvsQueryVariables
+  >(GetRecentHealthAndDvsDocument, options);
+}
+export function useGetRecentHealthAndDvsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentHealthAndDvsQuery,
+    GetRecentHealthAndDvsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRecentHealthAndDvsQuery,
+    GetRecentHealthAndDvsQueryVariables
+  >(GetRecentHealthAndDvsDocument, options);
+}
+export type GetRecentHealthAndDvsQueryHookResult = ReturnType<
+  typeof useGetRecentHealthAndDvsQuery
+>;
+export type GetRecentHealthAndDvsLazyQueryHookResult = ReturnType<
+  typeof useGetRecentHealthAndDvsLazyQuery
+>;
+export type GetRecentHealthAndDvsQueryResult = Apollo.QueryResult<
+  GetRecentHealthAndDvsQuery,
+  GetRecentHealthAndDvsQueryVariables
+>;
 export const GetAllOrganizationsDocument = gql`
   query GetAllOrganizations {
     organizations(limit: 500, sortOrder: NAME) {
@@ -8370,6 +9309,7 @@ export const GetOrganizationWithPaginatedProjectsDocument = gql`
     $offset: Int = 0
   ) {
     organization(id: $id) {
+      id
       projects(limit: $limit, offset: $offset) {
         offset
         limit

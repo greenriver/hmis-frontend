@@ -89,12 +89,7 @@ const FunderTable = ({ projectId }: { projectId: string }) => {
             ),
           },
         ]}
-        toNodes={(data: GetProjectFundersQuery) =>
-          data.project?.funders?.nodes || []
-        }
-        toNodesCount={(data: GetProjectFundersQuery) =>
-          data.project?.funders?.nodesCount
-        }
+        pagePath='project.funders'
         noData='No funding sources.'
       />
       <ConfirmationDialog
