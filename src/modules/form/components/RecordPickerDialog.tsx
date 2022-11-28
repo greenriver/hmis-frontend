@@ -1,3 +1,4 @@
+import { Stack, Tooltip, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -15,6 +16,12 @@ import IncomeBenefitsTable from '@/components/dashboard/enrollments/tables/Incom
 import { ColumnDef } from '@/components/elements/GenericTable';
 import { useDashboardClient } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
+import {
+  enrollmentName,
+  formatRelativeDate,
+  parseAndFormatDate,
+  parseHmisDateString,
+} from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormItem, RelatedRecordType } from '@/types/gqlTypes';
 
@@ -65,6 +72,29 @@ const tableComponent = (
   }
 };
 
+export const getInformationDate = (
+  recordType: RelatedRecordType,
+  record: any
+): string => {
+  if (hasInformationDate(record)) return record.informationDate;
+
+  if (recordType === RelatedRecordType.Enrollment) {
+    // FIXME not always entry date, figure out how to determine when it was collected
+    return record.entryDate;
+  }
+  return '';
+};
+
+const getEnrollmentDetails = (
+  recordType: RelatedRecordType,
+  record: any
+): string | undefined => {
+  if (recordType === RelatedRecordType.Enrollment) {
+    return enrollmentName(record, true);
+  }
+  return enrollmentName(record.enrollment, true);
+};
+
 const RecordPickerDialog = ({
   onSelected,
   onCancel,
@@ -76,22 +106,24 @@ const RecordPickerDialog = ({
   const { client } = useDashboardClient();
 
   const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
-    const commonColumns =
-      recordType === RelatedRecordType.Enrollment
-        ? []
-        : [
-            {
-              header: 'Information Date',
-              render: renderHmisField(
-                HmisEnums.RelatedRecordType[recordType],
-                'informationDate'
-              ),
-            },
-            {
-              header: 'Collected By',
-              render: 'user.name' as keyof RelatedRecord,
-            },
-          ];
+    const commonColumns: ColumnDef<RelatedRecord>[] = [
+      {
+        header: 'Collected On',
+        render: (record: RelatedRecord) =>
+          parseAndFormatDate(getInformationDate(recordType, record)),
+      },
+      {
+        header: 'Project',
+        render: (record: RelatedRecord) =>
+          getEnrollmentDetails(recordType, record),
+      },
+    ];
+    if (recordType !== RelatedRecordType.Enrollment) {
+      commonColumns.push({
+        header: 'Collected By',
+        render: 'user.name' as keyof RelatedRecord,
+      });
+    }
 
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item).map((i) => ({
@@ -120,8 +152,9 @@ const RecordPickerDialog = ({
       open={open}
       keepMounted={false}
       maxWidth='md'
-      fullWidth
+      // fullWidth
       onClose={onCancel}
+      sx={{ '.MuiDialog-paper': { px: 1, overflow: 'hidden', height: '100%' } }}
       {...other}
     >
       <DialogTitle
@@ -131,26 +164,59 @@ const RecordPickerDialog = ({
       >
         Choose record for <b>{item.text}</b>
       </DialogTitle>
-      <DialogContent sx={{ pb: 0 }}>
+      <DialogContent sx={{ pb: 0, overflow: 'hidden', height: '100%' }}>
         <TableComponent
           queryVariables={{ id: client.id }}
           defaultPageSize={5}
           columns={columns}
           vertical
-          renderVerticalHeaderCell={(record) => (
-            <Button
-              onClick={() => onSelected(record)}
-              variant='outlined'
-              size='small'
-              sx={{ backgroundColor: 'white' }}
-              fullWidth
-            >
-              Select
-            </Button>
-          )}
+          tableProps={{
+            size: 'small',
+            stickyHeader: true,
+            width: 'fit-content',
+          }}
+          renderVerticalHeaderCell={(record) => {
+            const informationDate = getInformationDate(recordType, record);
+            const date = parseHmisDateString(informationDate);
+            const relativeDate = date ? formatRelativeDate(date) : null;
+            return (
+              <Stack spacing={2} sx={{ py: 1 }}>
+                <Tooltip
+                  placement='top'
+                  arrow
+                  title={parseAndFormatDate(informationDate)}
+                  PopperProps={{
+                    sx: {
+                      '.MuiTooltip-tooltipPlacementTop': {
+                        mb: '6px !important',
+                      },
+                    },
+                  }}
+                >
+                  <Typography
+                    variant='body2'
+                    textAlign={'center'}
+                    fontWeight={600}
+                  >
+                    {relativeDate}
+                  </Typography>
+                </Tooltip>
+
+                <Button
+                  onClick={() => onSelected(record)}
+                  variant='outlined'
+                  size='small'
+                  sx={{ backgroundColor: 'white' }}
+                  fullWidth
+                >
+                  Select
+                </Button>
+              </Stack>
+            );
+          }}
         />
       </DialogContent>
-      <DialogActions sx={{ px: 4, pb: 2, justifyContent: 'center' }}>
+      <DialogActions sx={{ px: 4, py: 2, justifyContent: 'center' }}>
         <Button onClick={onCancel} variant='gray'>
           Close
         </Button>

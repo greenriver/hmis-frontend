@@ -1,5 +1,12 @@
-import { differenceInYears, format, isValid, parse, parseISO } from 'date-fns';
-import { isNil, sortBy } from 'lodash-es';
+import {
+  differenceInYears,
+  format,
+  formatDistanceToNowStrict,
+  isValid,
+  parse,
+  parseISO,
+} from 'date-fns';
+import { isNil, sortBy, startCase } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
@@ -9,6 +16,7 @@ import {
   EnrollmentFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
+  ProjectType,
   RecordType,
   RelationshipToHoH,
   ServiceFieldsFragment,
@@ -105,6 +113,10 @@ export const parseAndFormatDateTime = (dateString: string): string => {
   return formatDateForDisplay(parsed) || dateString;
 };
 
+export const formatRelativeDate = (date: Date): string => {
+  return `${formatDistanceToNowStrict(date)} ago`;
+};
+
 export const clientName = (client: ClientNameFragment) =>
   [client.preferredName || client.firstName, client.lastName]
     .filter(Boolean)
@@ -162,10 +174,21 @@ export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
 };
 
-export const enrollmentName = (enrollment: {
-  project: { projectName: string };
-}) => {
-  return enrollment.project.projectName;
+export const enrollmentName = (
+  enrollment: {
+    project: { projectName: string; projectType?: ProjectType | null };
+  },
+  includeType = false
+) => {
+  const projectName = enrollment.project?.projectName;
+  if (!includeType) return projectName;
+
+  let projectType = enrollment.project?.projectType as string | undefined;
+  if (!projectType) return projectName;
+
+  if (projectType.length > 3)
+    projectType = startCase(projectType.toLowerCase());
+  return `${projectName} (${projectType})`;
 };
 
 const trimNumericPrefix = (s: string) => s.replace(numericPrefix, '');

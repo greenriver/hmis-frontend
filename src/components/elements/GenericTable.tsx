@@ -108,7 +108,7 @@ const GenericTable = <T extends { id: string }>({
     def.key || (typeof def.header === 'string' ? def.header : '');
 
   const tableHead = vertical ? (
-    <TableHead>
+    <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
           <TableCell key='empty' />
@@ -133,8 +133,12 @@ const GenericTable = <T extends { id: string }>({
   );
 
   return (
-    <TableContainer>
-      <Table size='medium' sx={{ height: '1px' }} {...tableProps}>
+    <TableContainer sx={{ height: '100%', overflow: 'scroll' }}>
+      <Table
+        size='medium'
+        sx={{ height: vertical ? '100%' : '1px' }}
+        {...tableProps}
+      >
         {tableHead}
         <TableBody>
           {vertical &&
@@ -142,11 +146,14 @@ const GenericTable = <T extends { id: string }>({
               <TableRow key={key(def)}>
                 <HeaderCell
                   columnDef={def}
-                  sx={{ ...verticalCellSx(1), maxWidth: '30%' }}
+                  sx={{ ...verticalCellSx(1), width: '350px' }}
                   key={key(def)}
                 />
                 {rows.map((row, idx) => (
-                  <TableCell key={row.id} sx={verticalCellSx(idx)}>
+                  <TableCell
+                    key={row.id}
+                    sx={{ ...verticalCellSx(idx), width: '140px' }}
+                  >
                     {renderCellContents(row, def.render)}
                   </TableCell>
                 ))}

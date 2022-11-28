@@ -53,6 +53,7 @@ fragment EnrollmentFields on Enrollment {
   entryDate
   exitDate
   project {
+    id
     projectName
     projectType
   }
@@ -67,12 +68,19 @@ fragment EnrollmentFields on Enrollment {
 
 fragment EnrollmentFieldsFromAssessment on Enrollment {
   id
+  entryDate
+  exitDate
   livingSituation
   lengthOfStay
   previousStreetEssh
   dateToStreetEssh
   timesHomelessPastThreeYears
   monthsHomelessPastThreeYears
+  project {
+    id
+    projectName
+    projectType
+  }
   user {
     ...UserFields
   }
@@ -132,7 +140,12 @@ fragment IncomeBenefitFields on IncomeBenefit {
   earnedAmount
   employerProvided
   enrollment {
-    ...EnrollmentFields
+    id
+    project {
+      id
+      projectName
+      projectType
+    }
   }
   gaAmount
   hivaidsAssistance
@@ -196,7 +209,12 @@ fragment DisabilityFields on Disability {
   disabilityResponse
   disabilityType
   enrollment {
-    ...EnrollmentFields
+    id
+    project {
+      id
+      projectName
+      projectType
+    }
   }
   id
   indefiniteAndImpairs
@@ -218,7 +236,12 @@ fragment HealthAndDvFields on HealthAndDv {
   domesticViolenceVictim
   dueDate
   enrollment {
-    ...EnrollmentFields
+    id
+    project {
+      id
+      projectName
+      projectType
+    }
   }
   feelingFrequency
   generalHealthStatus

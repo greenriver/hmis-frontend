@@ -6,9 +6,11 @@ import { getPopulatableChildren } from '../../util/formUtil';
 import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
-  hasInformationDate,
+  getInformationDate,
   RelatedRecord,
 } from '../RecordPickerDialog';
+
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 const ItemGroup = ({
   item,
@@ -62,7 +64,7 @@ const ItemGroup = ({
         >
           {item.text && (
             <Stack justifyContent='space-between' direction='row'>
-              <Typography variant='h5' sx={{ mb: 3 }}>
+              <Typography variant='h5' sx={{ mb: 2 }}>
                 {item.text}
               </Typography>
               {item.recordType && (
@@ -78,13 +80,15 @@ const ItemGroup = ({
             </Stack>
           )}
           {sourceRecord && item.recordType && (
-            <Typography variant='body2' color='GrayText' fontStyle={'italic'}>
-              Autofilled with {startCase(item.recordType.toLowerCase())} record
-              {hasInformationDate(sourceRecord) ? (
-                <>
-                  from <b>{sourceRecord.informationDate}</b>
-                </>
-              ) : null}
+            <Typography
+              variant='body2'
+              fontStyle='bold'
+              sx={{ mb: 1, fontWeight: 600 }}
+            >
+              Filled with {startCase(item.recordType.toLowerCase())} record from{' '}
+              {parseAndFormatDate(
+                getInformationDate(item.recordType, sourceRecord)
+              )}
             </Typography>
           )}
           {wrappedChildren}
