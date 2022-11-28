@@ -101,7 +101,7 @@ const GenericTable = <T extends { id: string }>({
   const verticalCellSx = (idx: number): SxProps<Theme> => ({
     border: (theme: Theme) => `1px solid ${theme.palette.grey[200]}`,
     backgroundColor: (theme: Theme) =>
-      idx & 1 ? undefined : `${theme.palette.grey[50]}`,
+      idx & 1 ? undefined : theme.palette.background.default,
   });
 
   const key = (def: ColumnDef<T>) =>
@@ -111,7 +111,10 @@ const GenericTable = <T extends { id: string }>({
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
-          <TableCell key='empty' />
+          <TableCell
+            key='empty'
+            sx={{ backgroundColor: (theme) => theme.palette.background.paper }}
+          />
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
               {renderVerticalHeaderCell(row)}

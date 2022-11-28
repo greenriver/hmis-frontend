@@ -161,11 +161,12 @@ const RecordPickerDialog = ({
       >
         Choose record for <b>{item.text}</b>
       </DialogTitle>
-      <DialogContent sx={{ pb: 0, overflow: 'hidden', height: '100%' }}>
+      <DialogContent sx={{ pb: 6, overflow: 'hidden', height: '100%' }}>
         <TableComponent
           queryVariables={{ id: client.id }}
           defaultPageSize={5}
           columns={columns}
+          nonTablePagination
           vertical
           tableProps={{
             size: 'small',

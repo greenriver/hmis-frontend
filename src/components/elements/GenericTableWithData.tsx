@@ -7,6 +7,8 @@ import { Typography } from '@mui/material';
 import { get, startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
 
+import Pagination from './Pagination';
+
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
@@ -28,6 +30,7 @@ export interface Props<Query, QueryVariables, RowDataType>
   noData?: string;
   defaultPageSize?: number;
   recordType?: string; // record type for inferring columns if not provided
+  nonTablePagination?: boolean;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -54,6 +57,7 @@ const GenericTableWithData = <
   columns,
   recordType,
   fetchPolicy,
+  nonTablePagination = false,
   ...props
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
@@ -72,12 +76,32 @@ const GenericTableWithData = <
     }
   );
   if (error) throw error;
+
+  const rows = useMemo(
+    () => get(data, `${pagePath}.nodes`) || [],
+    [data, pagePath]
+  );
+  const nodesCount = useMemo(
+    () => get(data, `${pagePath}.nodesCount`) || [],
+    [data, pagePath]
+  );
   // if (!loading && !enrollment) throw Error('Client not found');
 
+  const nonTablePaginationProps = useMemo(() => {
+    if (!nonTablePagination) return undefined;
+    if (!nodesCount) return undefined;
+
+    return {
+      totalEntries: nodesCount,
+      limit: rowsPerPage,
+      offset: page * rowsPerPage,
+      setOffset: (value: number) => setPage(value / rowsPerPage),
+    };
+  }, [nodesCount, page, rowsPerPage, nonTablePagination]);
+
   const tablePaginationProps = useMemo(() => {
-    if (!data) return undefined;
-    const count = get(data, `${pagePath}.nodesCount`);
-    if (!count) return undefined;
+    if (nonTablePagination) return undefined;
+    if (!nodesCount) return undefined;
 
     return {
       rowsPerPage,
@@ -90,9 +114,9 @@ const GenericTableWithData = <
         setRowsPerPage(newRowsPerPage);
         setPage(0);
       },
-      count,
+      count: nodesCount,
     };
-  }, [data, page, rowsPerPage, pagePath, defaultPageSize]);
+  }, [nodesCount, page, rowsPerPage, defaultPageSize, nonTablePagination]);
 
   const columnDefs = useMemo(() => {
     if (columns) return columns;
@@ -106,14 +130,34 @@ const GenericTableWithData = <
   }
 
   return (
-    <GenericTable<RowDataType>
-      loading={loading}
-      rows={get(data, `${pagePath}.nodes`) || []}
-      paginated
-      tablePaginationProps={tablePaginationProps}
-      columns={columnDefs}
-      {...props}
-    />
+    <>
+      <GenericTable<RowDataType>
+        loading={loading}
+        rows={rows}
+        paginated={!nonTablePagination}
+        tablePaginationProps={
+          nonTablePagination ? undefined : tablePaginationProps
+        }
+        columns={columnDefs}
+        {...props}
+      />
+      {nonTablePagination &&
+        nonTablePaginationProps &&
+        nonTablePaginationProps.totalEntries > rows.length && (
+          <Pagination
+            {...nonTablePaginationProps}
+            shape='rounded'
+            size='small'
+            gridProps={{
+              sx: {
+                py: 2,
+                px: 1,
+                borderTop: (theme) => `1px solid ${theme.palette.grey[200]}`,
+              },
+            }}
+          />
+        )}
+    </>
   );
 };
 
