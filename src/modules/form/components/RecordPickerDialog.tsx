@@ -107,16 +107,22 @@ const RecordPickerDialog = ({
         render: (record: RelatedRecord) =>
           parseAndFormatDate(getInformationDate(recordType, record)),
       },
-      {
-        header: 'Project',
-        render: (record: RelatedRecord) =>
-          getEnrollmentDetails(recordType, record),
-      },
     ];
     if (recordType !== RelatedRecordType.Enrollment) {
       commonColumns.push({
         header: 'Collected By',
         render: 'user.name' as keyof RelatedRecord,
+      });
+    }
+    commonColumns.push({
+      header: 'Project',
+      render: (record: RelatedRecord) =>
+        getEnrollmentDetails(recordType, record),
+    });
+    if (import.meta.env.MODE === 'development') {
+      commonColumns.unshift({
+        header: 'ID',
+        render: 'id' as keyof RelatedRecord,
       });
     }
 
@@ -129,11 +135,7 @@ const RecordPickerDialog = ({
         i.fieldName as string
       ),
     }));
-    return [
-      { header: 'ID', render: 'id' as keyof RelatedRecord },
-      ...commonColumns,
-      ...dataColumns,
-    ];
+    return [...commonColumns, ...dataColumns];
   }, [item, recordType]);
 
   const TableComponent = tableComponent(recordType);
