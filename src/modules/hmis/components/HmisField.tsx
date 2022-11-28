@@ -1,6 +1,7 @@
 import { get, isNil } from 'lodash-es';
 
 import {
+  formatCurrency,
   getSchemaForType,
   parseAndFormatDate,
   parseAndFormatDateTime,
@@ -49,6 +50,8 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
       return parseAndFormatDate(value);
     case 'ISO8601DateTime':
       return parseAndFormatDateTime(value);
+    case 'Float':
+      return formatCurrency(value);
   }
   return value;
 };
