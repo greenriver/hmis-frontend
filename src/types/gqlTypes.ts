@@ -4717,6 +4717,7 @@ export type EnrollmentFieldsFragment = {
   inProgress: boolean;
   project: {
     __typename?: 'Project';
+    id: string;
     projectName: string;
     projectType?: ProjectType | null;
   };
@@ -4727,12 +4728,20 @@ export type EnrollmentFieldsFragment = {
 export type EnrollmentFieldsFromAssessmentFragment = {
   __typename?: 'Enrollment';
   id: string;
+  entryDate: string;
+  exitDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   previousStreetEssh?: boolean | null;
   dateToStreetEssh?: string | null;
   timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
   monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
@@ -4770,6 +4779,7 @@ export type EnrollmentWithHoHFragmentFragment = {
   };
   project: {
     __typename?: 'Project';
+    id: string;
     projectName: string;
     projectType?: ProjectType | null;
   };
@@ -4871,16 +4881,12 @@ export type IncomeBenefitFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
     project: {
       __typename?: 'Project';
+      id: string;
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string };
-    client: { __typename?: 'Client'; id: string };
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
@@ -4899,16 +4905,12 @@ export type DisabilityFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
     project: {
       __typename?: 'Project';
+      id: string;
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string };
-    client: { __typename?: 'Client'; id: string };
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
@@ -4936,16 +4938,12 @@ export type HealthAndDvFieldsFragment = {
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
     project: {
       __typename?: 'Project';
+      id: string;
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string };
-    client: { __typename?: 'Client'; id: string };
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
@@ -5042,6 +5040,7 @@ export type GetClientEnrollmentsQuery = {
         inProgress: boolean;
         project: {
           __typename?: 'Project';
+          id: string;
           projectName: string;
           projectType?: ProjectType | null;
         };
@@ -5071,12 +5070,20 @@ export type GetRecentEnrollmentsQuery = {
       nodes: Array<{
         __typename?: 'Enrollment';
         id: string;
+        entryDate: string;
+        exitDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         previousStreetEssh?: boolean | null;
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        project: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+        };
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
@@ -5184,6 +5191,7 @@ export type CreateEnrollmentMutation = {
       inProgress: boolean;
       project: {
         __typename?: 'Project';
+        id: string;
         projectName: string;
         projectType?: ProjectType | null;
       };
@@ -5244,6 +5252,7 @@ export type UpdateEnrollmentMutation = {
       };
       project: {
         __typename?: 'Project';
+        id: string;
         projectName: string;
         projectType?: ProjectType | null;
       };
@@ -5303,6 +5312,7 @@ export type SetHoHMutation = {
       };
       project: {
         __typename?: 'Project';
+        id: string;
         projectName: string;
         projectType?: ProjectType | null;
       };
@@ -5336,6 +5346,7 @@ export type DeleteEnrollmentMutation = {
       inProgress: boolean;
       project: {
         __typename?: 'Project';
+        id: string;
         projectName: string;
         projectType?: ProjectType | null;
       };
@@ -5396,6 +5407,7 @@ export type AddHouseholdMembersMutation = {
       };
       project: {
         __typename?: 'Project';
+        id: string;
         projectName: string;
         projectType?: ProjectType | null;
       };
@@ -5426,6 +5438,7 @@ export type GetEnrollmentQuery = {
     inProgress: boolean;
     project: {
       __typename?: 'Project';
+      id: string;
       projectName: string;
       projectType?: ProjectType | null;
     };
@@ -5474,6 +5487,7 @@ export type GetEnrollmentWithHoHQuery = {
     };
     project: {
       __typename?: 'Project';
+      id: string;
       projectName: string;
       projectType?: ProjectType | null;
     };
@@ -5679,16 +5693,12 @@ export type GetRecentIncomeBenefitsQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
           project: {
             __typename?: 'Project';
+            id: string;
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string };
-          client: { __typename?: 'Client'; id: string };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
@@ -5724,16 +5734,12 @@ export type GetRecentDisabilitiesQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
           project: {
             __typename?: 'Project';
+            id: string;
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string };
-          client: { __typename?: 'Client'; id: string };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
@@ -5778,16 +5784,12 @@ export type GetRecentHealthAndDvsQuery = {
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
           project: {
             __typename?: 'Project';
+            id: string;
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string };
-          client: { __typename?: 'Client'; id: string };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
@@ -6838,12 +6840,19 @@ export const ClientFieldsFragmentDoc = gql`
 export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
   fragment EnrollmentFieldsFromAssessment on Enrollment {
     id
+    entryDate
+    exitDate
     livingSituation
     lengthOfStay
     previousStreetEssh
     dateToStreetEssh
     timesHomelessPastThreeYears
     monthsHomelessPastThreeYears
+    project {
+      id
+      projectName
+      projectType
+    }
     user {
       ...UserFields
     }
@@ -6856,6 +6865,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     entryDate
     exitDate
     project {
+      id
       projectName
       projectType
     }
@@ -6945,7 +6955,12 @@ export const IncomeBenefitFieldsFragmentDoc = gql`
     earnedAmount
     employerProvided
     enrollment {
-      ...EnrollmentFields
+      id
+      project {
+        id
+        projectName
+        projectType
+      }
     }
     gaAmount
     hivaidsAssistance
@@ -6999,7 +7014,6 @@ export const IncomeBenefitFieldsFragmentDoc = gql`
     wic
     workersCompAmount
   }
-  ${EnrollmentFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const DisabilityFieldsFragmentDoc = gql`
@@ -7012,7 +7026,12 @@ export const DisabilityFieldsFragmentDoc = gql`
     disabilityResponse
     disabilityType
     enrollment {
-      ...EnrollmentFields
+      id
+      project {
+        id
+        projectName
+        projectType
+      }
     }
     id
     indefiniteAndImpairs
@@ -7021,7 +7040,6 @@ export const DisabilityFieldsFragmentDoc = gql`
       ...UserFields
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const HealthAndDvFieldsFragmentDoc = gql`
@@ -7037,7 +7055,12 @@ export const HealthAndDvFieldsFragmentDoc = gql`
     domesticViolenceVictim
     dueDate
     enrollment {
-      ...EnrollmentFields
+      id
+      project {
+        id
+        projectName
+        projectType
+      }
     }
     feelingFrequency
     generalHealthStatus
@@ -7052,7 +7075,6 @@ export const HealthAndDvFieldsFragmentDoc = gql`
     }
     whenOccurred
   }
-  ${EnrollmentFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const ProjectFieldsFragmentDoc = gql`

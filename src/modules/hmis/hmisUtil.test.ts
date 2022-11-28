@@ -1,9 +1,31 @@
 import {
+  enrollmentName,
   formatDateForGql,
   parseAndFormatDate,
   parseAndFormatDateTime,
   parseHmisDateString,
 } from './hmisUtil';
+
+import { ProjectType } from '@/types/gqlTypes';
+
+describe('Other fns', () => {
+  it('enrollment name', () => {
+    const withProjectType = {
+      project: { projectName: 'Foo Bar', projectType: ProjectType.Es },
+    };
+    const withProjectTypeDayShelter = {
+      project: { projectName: 'Foo Bar', projectType: ProjectType.DayShelter },
+    };
+    const withoutProjectType = { project: { projectName: 'Foo Bar' } };
+
+    expect(enrollmentName(withProjectType)).toBe('Foo Bar');
+    expect(enrollmentName(withProjectType, true)).toBe('Foo Bar (ES)');
+    expect(enrollmentName(withoutProjectType, true)).toBe('Foo Bar');
+    expect(enrollmentName(withProjectTypeDayShelter, true)).toBe(
+      'Foo Bar (Day Shelter)'
+    );
+  });
+});
 
 describe('Date fns', () => {
   describe('string -> string', () => {
