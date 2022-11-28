@@ -6,6 +6,7 @@ import {
   parseAndFormatDateTime,
 } from '../hmisUtil';
 
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { isHmisEnum } from '@/modules/form/util/formUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlSchemaType } from '@/types/gqlObjects';
@@ -32,14 +33,17 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
     if (value in enumMap) {
+      if (type === 'NoYesReasonsForMissingData') {
+        return <YesNoDisplay enumValue={value} />;
+      }
+
       const key = value as keyof typeof enumMap;
       return <>{enumMap[key]}</>;
     }
   }
   switch (type) {
     case 'Boolean':
-      if (value === true) return 'Yes';
-      if (value === false) return 'No';
+      if (!isNil(value)) return <YesNoDisplay booleanValue={value} />;
       break;
     case 'ISO8601Date':
       return parseAndFormatDate(value);

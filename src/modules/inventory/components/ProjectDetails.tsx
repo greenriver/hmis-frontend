@@ -3,7 +3,8 @@ import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
-import { parseAndFormatDate, yesNo } from '@/modules/hmis/hmisUtil';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   HopwaMedAssistedLivingFac,
@@ -41,7 +42,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Continuum Project',
-        value: yesNo(project.continuumProject) || notSpecified,
+        value: (
+          <YesNoDisplay
+            booleanValue={project.continuumProject}
+            fallback={notSpecified}
+          />
+        ),
       },
       {
         label: 'Housing Type',
@@ -53,7 +59,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'Residential Affiliation',
-              value: yesNo(project.residentialAffiliation) || notSpecified,
+              value: (
+                <YesNoDisplay
+                  booleanValue={project.residentialAffiliation}
+                  fallback={notSpecified}
+                />
+              ),
             },
           ]
         : []),
@@ -70,7 +81,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         : []),
       {
         label: 'HMIS Participating Project',
-        value: yesNo(project.HMISParticipatingProject) || notSpecified,
+        value: (
+          <YesNoDisplay
+            booleanValue={project.HMISParticipatingProject}
+            fallback={notSpecified}
+          />
+        ),
       },
       ...(project.targetPopulation &&
       project.targetPopulation !== TargetPopulation.NotApplicable
@@ -90,9 +106,14 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'HOPWA Medical Assisted Living Facility',
-              value: yesNo(
-                project.HOPWAMedAssistedLivingFac ===
-                  HopwaMedAssistedLivingFac.Yes
+              value: (
+                <YesNoDisplay
+                  booleanValue={
+                    project.HOPWAMedAssistedLivingFac ===
+                    HopwaMedAssistedLivingFac.Yes
+                  }
+                  fallback={notSpecified}
+                />
               ),
             },
           ]
