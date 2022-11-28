@@ -113,6 +113,13 @@ const RecordPickerDialog = ({
         header: 'Collected By',
         render: 'user.name' as keyof RelatedRecord,
       });
+      commonColumns.push({
+        header: 'Collection Stage',
+        render: renderHmisField(
+          HmisEnums.RelatedRecordType[recordType],
+          'dataCollectionStage'
+        ),
+      });
     }
     commonColumns.push({
       header: 'Project',
