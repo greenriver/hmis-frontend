@@ -1,4 +1,4 @@
-import { Stack, Tooltip, Typography } from '@mui/material';
+import { Stack } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,14 +14,10 @@ import EnrollmentsTable from '@/components/dashboard/enrollments/tables/Enrollme
 import HealthAndDvsTable from '@/components/dashboard/enrollments/tables/HealthAndDvsTable';
 import IncomeBenefitsTable from '@/components/dashboard/enrollments/tables/IncomeBenefitsTable';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import RelativeDate from '@/components/elements/RelativeDate';
 import { useDashboardClient } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import {
-  enrollmentName,
-  formatRelativeDate,
-  parseAndFormatDate,
-  parseHmisDateString,
-} from '@/modules/hmis/hmisUtil';
+import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormItem, RelatedRecordType } from '@/types/gqlTypes';
 
@@ -62,7 +58,6 @@ const tableComponent = (
       return HealthAndDvsTable;
     case RelatedRecordType.Enrollment:
       return EnrollmentsTable;
-    // Enrollment
     // YouthEducationStatus
     // EmploymentEducation
     // CurrentLivingSituation
@@ -177,37 +172,22 @@ const RecordPickerDialog = ({
           }}
           renderVerticalHeaderCell={(record) => {
             const informationDate = getInformationDate(recordType, record);
-            const date = parseHmisDateString(informationDate);
-            const relativeDate = date ? formatRelativeDate(date) : null;
             return (
               <Stack spacing={2} sx={{ py: 1 }}>
-                <Tooltip
-                  placement='top'
-                  arrow
-                  title={parseAndFormatDate(informationDate)}
-                  PopperProps={{
-                    sx: {
-                      '.MuiTooltip-tooltipPlacementTop': {
-                        mb: '6px !important',
-                      },
-                    },
-                  }}
-                >
-                  <Typography
-                    variant='body2'
-                    textAlign={'center'}
-                    fontWeight={600}
-                  >
-                    {relativeDate}
-                  </Typography>
-                </Tooltip>
-
+                <RelativeDate
+                  dateString={informationDate}
+                  variant='body2'
+                  textAlign={'center'}
+                  fontWeight={600}
+                  withTooltip
+                />
                 <Button
                   onClick={() => onSelected(record)}
                   variant='outlined'
                   size='small'
                   sx={{ backgroundColor: 'white' }}
                   fullWidth
+                  aria-label={`Select record from ${informationDate}`}
                 >
                   Select
                 </Button>
