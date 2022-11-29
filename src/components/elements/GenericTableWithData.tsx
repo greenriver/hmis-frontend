@@ -26,11 +26,13 @@ export interface Props<Query, QueryVariables, RowDataType>
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
-  pagePath: string;
+  pagePath?: string; // path to page, if paginated results
+  rowsPath?: string; // path to data rows, if non-paginated results
   noData?: string;
   defaultPageSize?: number;
   recordType?: string; // record type for inferring columns if not provided
-  nonTablePagination?: boolean;
+  nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
+  clientSidePagination?: boolean; // whether to use client-side pagination
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -52,6 +54,7 @@ const GenericTableWithData = <
   queryVariables,
   queryDocument,
   pagePath,
+  rowsPath,
   noData = 'None found',
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
@@ -68,23 +71,33 @@ const GenericTableWithData = <
     {
       variables: {
         ...queryVariables,
-        offset: page * rowsPerPage,
-        limit: rowsPerPage,
+        ...(!rowsPath && {
+          offset: page * rowsPerPage,
+          limit: rowsPerPage,
+        }),
       },
       notifyOnNetworkStatusChange: true,
       fetchPolicy,
     }
   );
+
   if (error) throw error;
 
-  const rows = useMemo(
-    () => get(data, `${pagePath}.nodes`) || [],
-    [data, pagePath]
-  );
-  const nodesCount = useMemo(
-    () => get(data, `${pagePath}.nodesCount`) || [],
-    [data, pagePath]
-  );
+  const rows = useMemo(() => {
+    if (pagePath) return get(data, `${pagePath}.nodes`) || [];
+    if (rowsPath) {
+      const all = get(data, rowsPath) || [];
+      const startIndex = page * rowsPerPage;
+      console.log('startIndex', startIndex);
+      return all.slice(startIndex, startIndex + rowsPerPage);
+    }
+    return data;
+  }, [data, pagePath, rowsPath, rowsPerPage, page]);
+  const nodesCount = useMemo(() => {
+    if (pagePath) return get(data, `${pagePath}.nodesCount`) || 0;
+    if (rowsPath) return (get(data, rowsPath) || []).length;
+    return rows.length;
+  }, [data, pagePath, rowsPath, rows]);
   // if (!loading && !enrollment) throw Error('Client not found');
 
   const nonTablePaginationProps = useMemo(() => {
@@ -125,7 +138,7 @@ const GenericTableWithData = <
     return [];
   }, [columns, recordType]);
 
-  if (!loading && data && get(data, `${pagePath}.nodesCount`) === 0) {
+  if (!loading && data && nodesCount === 0) {
     return <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>;
   }
 

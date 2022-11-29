@@ -157,6 +157,7 @@ export type Client = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   disabilities: DisabilitiesPaginated;
+  disabilityGroups: Array<DisabilityGroup>;
   dob?: Maybe<Scalars['ISO8601Date']>;
   dobDataQuality: DobDataQuality;
   enrollments: EnrollmentsPaginated;
@@ -596,6 +597,26 @@ export type Disability = {
   id: Scalars['ID'];
   indefiniteAndImpairs?: Maybe<Scalars['Int']>;
   informationDate: Scalars['ISO8601Date'];
+  user?: Maybe<User>;
+};
+
+/** Group of disability records that were collected at the same time */
+export type DisabilityGroup = {
+  __typename?: 'DisabilityGroup';
+  chronicHealthCondition?: Maybe<NoYesReasonsForMissingData>;
+  chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
+  dataCollectionStage: DataCollectionStage;
+  developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
+  enrollment: Enrollment;
+  hivAids?: Maybe<NoYesReasonsForMissingData>;
+  id: Scalars['ID'];
+  informationDate: Scalars['ISO8601Date'];
+  mentalHealthDisorder?: Maybe<NoYesReasonsForMissingData>;
+  mentalHealthDisorderIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
+  physicalDisability?: Maybe<NoYesReasonsForMissingData>;
+  physicalDisabilityIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
+  substanceUseDisorder?: Maybe<DisabilityResponse>;
+  substanceUseDisorderIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   user?: Maybe<User>;
 };
 
@@ -2081,8 +2102,8 @@ export enum ReferralResult {
 export enum RelatedRecordType {
   /** CurrentLivingSituation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Disability */
-  Disability = 'DISABILITY',
+  /** DisabilityGroup */
+  DisabilityGroup = 'DISABILITY_GROUP',
   /** ExmploymentEducation */
   EmploymentEducation = 'EMPLOYMENT_EDUCATION',
   /** Enrollment */
@@ -4891,17 +4912,21 @@ export type IncomeBenefitFieldsFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
-export type DisabilityFieldsFragment = {
-  __typename: 'Disability';
-  dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
-  dateDeleted?: string | null;
-  dateUpdated: string;
-  disabilityResponse: DisabilityResponse;
-  disabilityType: DisabilityType;
+export type DisabilityGroupFieldsFragment = {
+  __typename: 'DisabilityGroup';
   id: string;
-  indefiniteAndImpairs?: number | null;
+  dataCollectionStage: DataCollectionStage;
   informationDate: string;
+  chronicHealthCondition?: NoYesReasonsForMissingData | null;
+  chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  developmentalDisability?: NoYesReasonsForMissingData | null;
+  hivAids?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  physicalDisability?: NoYesReasonsForMissingData | null;
+  physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  substanceUseDisorder?: DisabilityResponse | null;
+  substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -5708,8 +5733,6 @@ export type GetRecentIncomeBenefitsQuery = {
 
 export type GetRecentDisabilitiesQueryVariables = Exact<{
   id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type GetRecentDisabilitiesQuery = {
@@ -5717,33 +5740,33 @@ export type GetRecentDisabilitiesQuery = {
   client?: {
     __typename?: 'Client';
     id: string;
-    disabilities: {
-      __typename?: 'DisabilitiesPaginated';
-      nodesCount: number;
-      nodes: Array<{
-        __typename: 'Disability';
-        dataCollectionStage: DataCollectionStage;
-        dateCreated: string;
-        dateDeleted?: string | null;
-        dateUpdated: string;
-        disabilityResponse: DisabilityResponse;
-        disabilityType: DisabilityType;
+    disabilityGroups: Array<{
+      __typename: 'DisabilityGroup';
+      id: string;
+      dataCollectionStage: DataCollectionStage;
+      informationDate: string;
+      chronicHealthCondition?: NoYesReasonsForMissingData | null;
+      chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      developmentalDisability?: NoYesReasonsForMissingData | null;
+      hivAids?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      physicalDisability?: NoYesReasonsForMissingData | null;
+      physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      substanceUseDisorder?: DisabilityResponse | null;
+      substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      enrollment: {
+        __typename?: 'Enrollment';
         id: string;
-        indefiniteAndImpairs?: number | null;
-        informationDate: string;
-        enrollment: {
-          __typename?: 'Enrollment';
+        project: {
+          __typename?: 'Project';
           id: string;
-          project: {
-            __typename?: 'Project';
-            id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
-          };
+          projectName: string;
+          projectType?: ProjectType | null;
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
-      }>;
-    };
+      };
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }>;
   } | null;
 };
 
@@ -7016,15 +7039,12 @@ export const IncomeBenefitFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const DisabilityFieldsFragmentDoc = gql`
-  fragment DisabilityFields on Disability {
+export const DisabilityGroupFieldsFragmentDoc = gql`
+  fragment DisabilityGroupFields on DisabilityGroup {
     __typename
+    id
     dataCollectionStage
-    dateCreated
-    dateDeleted
-    dateUpdated
-    disabilityResponse
-    disabilityType
+    informationDate
     enrollment {
       id
       project {
@@ -7033,12 +7053,19 @@ export const DisabilityFieldsFragmentDoc = gql`
         projectType
       }
     }
-    id
-    indefiniteAndImpairs
-    informationDate
     user {
       ...UserFields
     }
+    chronicHealthCondition
+    chronicHealthConditionIndefiniteAndImpairs
+    developmentalDisability
+    hivAids
+    mentalHealthDisorder
+    mentalHealthDisorderIndefiniteAndImpairs
+    physicalDisability
+    physicalDisabilityIndefiniteAndImpairs
+    substanceUseDisorder
+    substanceUseDisorderIndefiniteAndImpairs
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -8725,18 +8752,15 @@ export type GetRecentIncomeBenefitsQueryResult = Apollo.QueryResult<
   GetRecentIncomeBenefitsQueryVariables
 >;
 export const GetRecentDisabilitiesDocument = gql`
-  query GetRecentDisabilities($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetRecentDisabilities($id: ID!) {
     client(id: $id) {
       id
-      disabilities(offset: $offset, limit: $limit) {
-        nodesCount
-        nodes {
-          ...DisabilityFields
-        }
+      disabilityGroups {
+        ...DisabilityGroupFields
       }
     }
   }
-  ${DisabilityFieldsFragmentDoc}
+  ${DisabilityGroupFieldsFragmentDoc}
 `;
 
 /**
@@ -8752,8 +8776,6 @@ export const GetRecentDisabilitiesDocument = gql`
  * const { data, loading, error } = useGetRecentDisabilitiesQuery({
  *   variables: {
  *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
  *   },
  * });
  */
