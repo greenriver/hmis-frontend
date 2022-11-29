@@ -155,8 +155,8 @@ const RecordPickerDialog = ({
     <Dialog
       open={open}
       keepMounted={false}
-      maxWidth='md'
-      // fullWidth
+      maxWidth='lg'
+      fullWidth
       onClose={onCancel}
       sx={{ '.MuiDialog-paper': { px: 1, overflow: 'hidden', height: '100%' } }}
       {...other}

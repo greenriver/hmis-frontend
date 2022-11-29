@@ -88,17 +88,16 @@ const GenericTableWithData = <
     if (rowsPath) {
       const all = get(data, rowsPath) || [];
       const startIndex = page * rowsPerPage;
-      console.log('startIndex', startIndex);
       return all.slice(startIndex, startIndex + rowsPerPage);
     }
     return data;
   }, [data, pagePath, rowsPath, rowsPerPage, page]);
+
   const nodesCount = useMemo(() => {
     if (pagePath) return get(data, `${pagePath}.nodesCount`) || 0;
     if (rowsPath) return (get(data, rowsPath) || []).length;
     return rows.length;
   }, [data, pagePath, rowsPath, rows]);
-  // if (!loading && !enrollment) throw Error('Client not found');
 
   const nonTablePaginationProps = useMemo(() => {
     if (!nonTablePagination) return undefined;

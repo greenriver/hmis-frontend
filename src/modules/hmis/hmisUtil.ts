@@ -27,6 +27,12 @@ import {
  * Utility functions for transforming HMIS data elements into strings
  */
 
+export const MISSING_DATA_KEYS = [
+  'DATA_NOT_COLLECTED',
+  'CLIENT_REFUSED',
+  'CLIENT_DOESN_T_KNOW',
+];
+
 const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
 const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
 const currencyFormatter = new Intl.NumberFormat('en-US', {

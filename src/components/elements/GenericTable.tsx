@@ -153,10 +153,7 @@ const GenericTable = <T extends { id: string }>({
                   key={key(def)}
                 />
                 {rows.map((row, idx) => (
-                  <TableCell
-                    key={row.id}
-                    sx={{ ...verticalCellSx(idx), width: '140px' }}
-                  >
+                  <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
                     {renderCellContents(row, def.render)}
                   </TableCell>
                 ))}
