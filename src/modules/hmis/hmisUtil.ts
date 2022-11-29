@@ -29,6 +29,10 @@ import {
 
 const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
 const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
+const currencyFormatter = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+});
 
 export const formatDateForGql = (date: Date) => {
   try {
@@ -115,6 +119,11 @@ export const parseAndFormatDateTime = (dateString: string): string => {
 
 export const formatRelativeDate = (date: Date): string => {
   return `${formatDistanceToNowStrict(date)} ago`;
+};
+
+export const formatCurrency = (number?: number) => {
+  if (isNil(number)) return number;
+  return currencyFormatter.format(number);
 };
 
 export const clientName = (client: ClientNameFragment) =>
