@@ -127,6 +127,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'AutofillValue',
+    fields: [
+      {
+        name: 'autofillBehavior',
+        type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
+      },
+      {
+        name: 'valueBoolean',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'valueCode',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'valueNumber',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'Client',
     fields: [
       {
@@ -725,6 +746,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
+      },
+      {
+        name: 'disabledDisplay',
+        type: { kind: 'ENUM', name: 'DisabledDisplay', ofType: null },
       },
       {
         name: 'enableBehavior',

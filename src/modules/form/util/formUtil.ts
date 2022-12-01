@@ -6,11 +6,15 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnableBehavior,
   EnableOperator,
+  EnableWhen,
   FormDefinitionJson,
   FormItem,
   PickListOption,
   ValueBound,
 } from '@/types/gqlTypes';
+
+export type FormValues = Record<string, any | null | undefined>;
+export type ItemMap = Record<string, FormItem>;
 
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 
@@ -80,13 +84,10 @@ export const getItemMap = (
   definition: FormDefinitionJson,
   preserveNestedItems = true
 ) => {
-  const allItems: Record<string, FormItem> = {};
+  const allItems: ItemMap = {};
 
   // Recursive helper for traversing the FormDefinition
-  function rescursiveFillMap(
-    items: FormItem[],
-    itemMap: Record<string, FormItem>
-  ) {
+  function rescursiveFillMap(items: FormItem[], itemMap: ItemMap) {
     items.forEach((item: FormItem) => {
       const { item: children, ...rest } = item;
       if (preserveNestedItems) {
@@ -120,117 +121,126 @@ const findItem = (
 };
 
 /**
+ * Evaluate a single `enableWhen` condition.
+ * Used for enabling/disabling items AND for autofill.
+ */
+const evaluateEnableWhen = (
+  en: EnableWhen,
+  values: FormValues,
+  itemMap: ItemMap,
+  // pass function to avoid circular dependency
+  shouldEnableFn: (
+    item: FormItem,
+    values: FormValues,
+    itemMap: ItemMap
+  ) => boolean
+) => {
+  const linkId = en.question;
+
+  // Current form value to compare
+  let currentValue = values[linkId];
+  if (currentValue && isPickListOption(currentValue)) {
+    currentValue = en.answerGroupCode
+      ? currentValue.groupCode
+      : currentValue.code;
+  }
+
+  // Comparison value from the form definition
+  let comparisonValue;
+  if (en.operator !== EnableOperator.Exists) {
+    comparisonValue = [
+      en.answerBoolean,
+      en.answerCode,
+      en.answerGroupCode,
+      en.answerNumber,
+      en.answerCodes,
+    ].filter((e) => !isNil(e))[0];
+  }
+
+  let result;
+  switch (en.operator) {
+    case EnableOperator.Equal:
+      result = currentValue === comparisonValue;
+      break;
+    case EnableOperator.NotEqual:
+      result = currentValue !== comparisonValue;
+      break;
+    case EnableOperator.GreaterThan:
+      result =
+        !isNil(currentValue) &&
+        !isNil(comparisonValue) &&
+        currentValue > comparisonValue;
+      break;
+    case EnableOperator.GreaterThanEqual:
+      result =
+        !isNil(currentValue) &&
+        !isNil(comparisonValue) &&
+        currentValue >= comparisonValue;
+      break;
+    case EnableOperator.LessThan:
+      result =
+        !isNil(currentValue) &&
+        !isNil(comparisonValue) &&
+        currentValue < comparisonValue;
+      break;
+    case EnableOperator.LessThanEqual:
+      result =
+        !isNil(currentValue) &&
+        !isNil(comparisonValue) &&
+        currentValue <= comparisonValue;
+      break;
+    case EnableOperator.Exists:
+      result = !isNil(currentValue);
+      // flip the result if this is "not exists"
+      if (en.answerBoolean === false) {
+        result = !result;
+      }
+      break;
+    case EnableOperator.Enabled:
+      const dependentItem = itemMap[linkId];
+      result = shouldEnableFn(dependentItem, values, itemMap);
+      // flip the result if this is "not enabled"
+      if (en.answerBoolean === false) {
+        result = !result;
+      }
+      break;
+    case EnableOperator.In:
+      if (Array.isArray(comparisonValue)) {
+        result = !!comparisonValue.find((val) => val === currentValue);
+      } else {
+        console.warn("Can't use IN operator without array comparison value");
+      }
+      break;
+    default:
+      result = false;
+      console.warn('Unsupported enableWhen operator', en.operator);
+  }
+
+  // console.log(
+  //   'COMPARING:',
+  //   currentValue,
+  //   en.operator,
+  //   comparisonValue,
+  //   '?',
+  //   result
+  // );
+  return result;
+};
+
+/**
  * Decide whether an item should be enabled based on enableWhen logic.
- * NOTE for now this only takes ONE dependent question value for the sake of speed,
- * even though enableWhen can technically specify dependency on multiple different questions.
- * Will probably need to update to support that later.
- *
- * NOTE: only supports dependency on option questions right now
- *
- * @param dependentQuestionValue The value of the question that this item depends on
- * @param item FormItem that we're deciding whether to enable or not
- * @returns boolean
  */
 export const shouldEnableItem = (
   item: FormItem,
-  values: Record<string, any | null | undefined>,
-  itemMap: Record<string, FormItem>
+  values: FormValues,
+  itemMap: ItemMap
 ): boolean => {
   if (!item.enableWhen) return true;
 
   // Evaluate all enableWhen conditions
-  const booleans = item.enableWhen.map((en) => {
-    const linkId = en.question;
-
-    // Current form value to compare
-    let currentValue = values[linkId];
-    if (currentValue && isPickListOption(currentValue)) {
-      currentValue = en.answerGroupCode
-        ? currentValue.groupCode
-        : currentValue.code;
-    }
-
-    // Comparison value from the form definition
-    let comparisonValue;
-    if (en.operator !== EnableOperator.Exists) {
-      comparisonValue = [
-        en.answerBoolean,
-        en.answerCode,
-        en.answerGroupCode,
-        en.answerNumber,
-        en.answerCodes,
-      ].filter((e) => !isNil(e))[0];
-    }
-
-    let result;
-    switch (en.operator) {
-      case EnableOperator.Equal:
-        result = currentValue === comparisonValue;
-        break;
-      case EnableOperator.NotEqual:
-        result = currentValue !== comparisonValue;
-        break;
-      case EnableOperator.GreaterThan:
-        result =
-          !isNil(currentValue) &&
-          !isNil(comparisonValue) &&
-          currentValue > comparisonValue;
-        break;
-      case EnableOperator.GreaterThanEqual:
-        result =
-          !isNil(currentValue) &&
-          !isNil(comparisonValue) &&
-          currentValue >= comparisonValue;
-        break;
-      case EnableOperator.LessThan:
-        result =
-          !isNil(currentValue) &&
-          !isNil(comparisonValue) &&
-          currentValue < comparisonValue;
-        break;
-      case EnableOperator.LessThanEqual:
-        result =
-          !isNil(currentValue) &&
-          !isNil(comparisonValue) &&
-          currentValue <= comparisonValue;
-        break;
-      case EnableOperator.Exists:
-        result = !isNil(currentValue);
-        // flip the result if this is "not exists"
-        if (en.answerBoolean === false) {
-          result = !result;
-        }
-        break;
-      case EnableOperator.Enabled:
-        const dependentItem = itemMap[linkId];
-        result = shouldEnableItem(dependentItem, values, itemMap);
-        // flip the result if this is "not enabled"
-        if (en.answerBoolean === false) {
-          result = !result;
-        }
-        break;
-      case EnableOperator.In:
-        if (Array.isArray(comparisonValue)) {
-          result = !!comparisonValue.find((val) => val === currentValue);
-        } else {
-          console.warn("Can't use IN operator without array comparison value");
-        }
-        break;
-      default:
-        result = false;
-        console.warn('Unsupported enableWhen operator', en.operator);
-    }
-
-    // console.log(
-    //   'COMPARING:',
-    //   currentValue,
-    //   en.operator,
-    //   comparisonValue,
-    //   '?',
-    //   result
-    // );
-    return result;
-  });
+  const booleans = item.enableWhen.map((en) =>
+    evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
+  );
 
   // console.log(item.linkId, booleans);
   if (item.enableBehavior === EnableBehavior.Any) {
@@ -238,6 +248,49 @@ export const shouldEnableItem = (
   } else {
     return booleans.every(Boolean);
   }
+};
+
+/**
+ * Autofill values based on changed item.
+ * Changes `values` in place.
+ *
+ * @return boolen true if values changed
+ */
+export const autofillValues = (
+  item: FormItem,
+  values: FormValues,
+  itemMap: ItemMap
+): boolean => {
+  if (!item.autofillValues) return false;
+
+  // use `some` to stop iterating when true is returned
+  return item.autofillValues.some((av) => {
+    // Evaluate all enableWhen conditions
+    const booleans = (av.autofillWhen || []).map((en) =>
+      evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
+    );
+
+    const shouldAutofillValue =
+      av.autofillBehavior === EnableBehavior.Any
+        ? booleans.some(Boolean)
+        : booleans.every(Boolean);
+
+    if (shouldAutofillValue) {
+      const newValue = [av.valueBoolean, av.valueCode, av.valueNumber].filter(
+        (e) => !isNil(e)
+      )[0];
+      if (values[item.linkId] !== newValue) {
+        console.log(
+          `AUTOFILL: Changing ${item.linkId} from ${
+            values[item.linkId]
+          } to ${newValue}`
+        );
+        values[item.linkId] = newValue;
+        return true;
+      }
+    }
+    return false;
+  });
 };
 
 export const getBoundValue = (
@@ -296,12 +349,14 @@ export const getInitialValues = (
         recursiveFillInValues(item.item, values);
       }
       if (!item.initial) return;
-      console.log(item.initial);
+      // console.log(item.initial);
       // FIXME handle multiple initials for multi-select questions
       const initial = item.initial[0];
-      if (initial.valueBoolean) values[item.linkId] = initial.valueBoolean;
-      if (initial.valueNumber) values[item.linkId] = initial.valueNumber;
-      if (initial.valueCode) {
+      if (!isNil(initial.valueBoolean)) {
+        values[item.linkId] = initial.valueBoolean;
+      } else if (!isNil(initial.valueNumber)) {
+        values[item.linkId] = initial.valueNumber;
+      } else if (initial.valueCode) {
         values[item.linkId] = getOptionValue(initial.valueCode, item);
       }
     });

@@ -740,6 +740,85 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "AutofillValue",
+        "description": "Value to autofill based on conditional logic",
+        "fields": [
+          {
+            "name": "autofillBehavior",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "EnableBehavior",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "autofillWhen",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EnableWhen",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueBoolean",
+            "description": "If question is boolean type, autofill value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueCode",
+            "description": "If question is choice type, autofill value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueNumber",
+            "description": "If question is numeric, autofill value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "Availability",
         "description": "2.07.6",
@@ -4112,7 +4191,7 @@
           },
           {
             "name": "id",
-            "description": null,
+            "description": "Concatenated string of Disability record IDs",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -4326,6 +4405,29 @@
           {
             "name": "SUBSTANCE_USE_DISORDER",
             "description": "(10) Substance use disorder",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "DisabledDisplay",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "HIDDEN",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROTECTED",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -5900,6 +6002,26 @@
         "description": "A question or group of questions",
         "fields": [
           {
+            "name": "autofillValues",
+            "description": "Value(s) to autofill based on conditional logic",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "AutofillValue",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "bounds",
             "description": null,
             "args": [],
@@ -5938,6 +6060,18 @@
             "type": {
               "kind": "ENUM",
               "name": "DataCollectedAbout",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "disabledDisplay",
+            "description": "How to display item if it is disabled",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "DisabledDisplay",
               "ofType": null
             },
             "isDeprecated": false,
