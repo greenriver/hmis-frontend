@@ -7,8 +7,6 @@ import {
   ItemType,
 } from '@/types/gqlTypes';
 
-// TODO test getInitialValues
-
 const Items: Record<string, any> = {
   // Any type
   EnableIfExists: {
