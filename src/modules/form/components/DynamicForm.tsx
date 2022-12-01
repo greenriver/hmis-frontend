@@ -1,14 +1,16 @@
 import { Alert, Box, Button, Grid, Paper, Slide, Stack } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { isNil, pull } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
 import {
+  autofillValues,
+  buildAutofillDependencyMap,
+  buildCommonInputProps,
+  buildEnabledDependencyMap,
   getItemMap,
   shouldEnableItem,
-  buildCommonInputProps,
-  autofillValues,
 } from '../util/formUtil';
 
 import DynamicField from './DynamicField';
@@ -67,30 +69,38 @@ const DynamicForm: React.FC<Props> = ({
     Object.assign({}, initialValues)
   );
 
+  // List of link IDs that are currently disabled
+  const [disabledLinkIds, setDisabledLinkIds] = useState<string[]>([]);
+
   // console.log(values);
 
-  const itemMap = useMemo(() => getItemMap(definition), [definition]);
+  const itemMap = useMemo(() => {
+    const items = getItemMap(definition);
+
+    // On first render, evaluate enableWhen for each item and set `disabledLinkIds`
+    // After this, they will only be updated when dependent values change (see `updateDisabledLinkIds`)
+    const initiallyDisabled = Object.keys(items).filter(
+      (linkId) => !shouldEnableItem(items[linkId], initialValues, items)
+    );
+    setDisabledLinkIds(initiallyDisabled);
+    return items;
+  }, [definition, initialValues]);
 
   /**
    * Map { linkId => array of Link IDs that depend on it for autofill }
    */
-  const autofillDependencyMap = useMemo(() => {
-    const deps: Record<string, string[]> = {};
-    Object.values(itemMap).forEach((item) => {
-      if (!item.autofillValues) return;
+  const autofillDependencyMap = useMemo(
+    () => buildAutofillDependencyMap(itemMap),
+    [itemMap]
+  );
 
-      item.autofillValues.forEach((v) => {
-        (v.autofillWhen || []).forEach((w) => {
-          if (deps[w.question]) {
-            deps[w.question].push(item.linkId);
-          } else {
-            deps[w.question] = [item.linkId];
-          }
-        });
-      });
-    });
-    return deps;
-  }, [itemMap]);
+  /**
+   * Map { linkId => array of Link IDs that depend on it for enabled status }
+   */
+  const enabledDependencyMap = useMemo(
+    () => buildEnabledDependencyMap(itemMap),
+    [itemMap]
+  );
 
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
@@ -103,30 +113,61 @@ const DynamicForm: React.FC<Props> = ({
     [itemMap, autofillDependencyMap]
   );
 
+  /**
+   * Update the `disabledLinkIds` state.
+   * This only evaluates the enableWhen conditions for items that are
+   * dependent on the item that just changed ("changedLinkid").
+   */
+  const updateDisabledLinkIds = useCallback(
+    (changedLinkId: string, localValues: any) => {
+      if (!enabledDependencyMap[changedLinkId]) return;
+
+      setDisabledLinkIds((oldList) => {
+        const newList = [...oldList];
+        enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+          // autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+          const enabled = shouldEnableItem(
+            itemMap[dependentLinkId],
+            localValues,
+            itemMap
+          );
+          if (enabled && newList.includes(dependentLinkId)) {
+            pull(newList, dependentLinkId);
+          } else if (!enabled && !newList.includes(dependentLinkId)) {
+            newList.push(dependentLinkId);
+          }
+        });
+        return newList;
+      });
+    },
+    [itemMap, enabledDependencyMap]
+  );
+
   if (errors) console.log('Validation errors', errors);
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
       setPromptSave(true);
       setValues((currentValues) => {
+        const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        currentValues[linkId] = value;
-        updateAutofillValues(linkId, currentValues);
-        return { ...currentValues };
+        newValues[linkId] = value;
+        updateAutofillValues(linkId, newValues); // updates currentValues in-place
+        updateDisabledLinkIds(linkId, newValues); // calls setState for disabled link IDs
+
+        // TODO (maybe) clear values of disabled items if disabledDisplay is protected
+        return newValues;
       });
     },
-    [setValues, updateAutofillValues]
+    [updateAutofillValues, updateDisabledLinkIds]
   );
 
-  const severalItemsChanged = useCallback(
-    (values: Record<string, any>) => {
-      setPromptSave(true);
-      setValues((currentValues) => {
-        return { ...currentValues, ...values };
-      });
-    },
-    [setValues]
-  );
+  const severalItemsChanged = useCallback((values: Record<string, any>) => {
+    setPromptSave(true);
+    setValues((currentValues) => {
+      return { ...currentValues, ...values };
+    });
+  }, []);
 
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -145,16 +186,18 @@ const DynamicForm: React.FC<Props> = ({
     [values, onSaveDraft]
   );
 
-  const isEnabled = (item: FormItem): boolean => {
-    if (item.hidden) return false;
-    if (!item.enableWhen) {
-      // If it has nested items, only show if has any enabled children.
-      // Otherwise, show it.
-      return item.item ? item.item.some((i) => isEnabled(i)) : true;
-    }
+  const isEnabled = useCallback(
+    (item: FormItem): boolean => {
+      if (item.hidden) return false;
+      if (!item.enableWhen && item.item) {
+        // This is a group. Only show it if some children are enabled.
+        return item.item.some((i) => isEnabled(i));
+      }
 
-    return shouldEnableItem(item, values, itemMap);
-  };
+      return !disabledLinkIds.includes(item.linkId);
+    },
+    [disabledLinkIds]
+  );
 
   // Get errors for a particular field
   const getFieldErrors = useCallback(

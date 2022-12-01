@@ -438,3 +438,60 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   recursiveFind(item.item || [], result);
   return result;
 };
+
+/**
+ * Map { linkId => array of Link IDs that depend on it for autofill }
+ */
+export const buildAutofillDependencyMap = (
+  itemMap: ItemMap
+): Record<string, string[]> => {
+  const deps: Record<string, string[]> = {};
+  Object.values(itemMap).forEach((item) => {
+    if (!item.autofillValues) return;
+
+    item.autofillValues.forEach((v) => {
+      (v.autofillWhen || []).forEach((en) => {
+        if (!deps[en.question]) deps[en.question] = [];
+        deps[en.question].push(item.linkId);
+        if (en.compareQuestion) {
+          if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
+          deps[en.compareQuestion].push(item.linkId);
+        }
+      });
+    });
+  });
+  return deps;
+};
+
+/**
+ * Map { linkId => array of Link IDs that depend on it for enabled status }
+ */
+export const buildEnabledDependencyMap = (
+  itemMap: ItemMap
+): Record<string, string[]> => {
+  const deps: Record<string, string[]> = {};
+
+  function addEnableWhen(linkId: string, en: EnableWhen) {
+    if (!deps[en.question]) deps[en.question] = [];
+    deps[en.question].push(linkId);
+    if (en.compareQuestion) {
+      if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
+      deps[en.compareQuestion].push(linkId);
+    }
+
+    // If this item is dependent on another item being enabled,
+    // recusively add those to its dependency list
+    if (en.operator === EnableOperator.Enabled) {
+      (itemMap[en.question].enableWhen || []).forEach((en2) =>
+        addEnableWhen(linkId, en2)
+      );
+    }
+  }
+
+  Object.values(itemMap).forEach((item) => {
+    if (!item.enableWhen) return;
+    item.enableWhen.forEach((en) => addEnableWhen(item.linkId, en));
+  });
+  console.log(deps);
+  return deps;
+};
