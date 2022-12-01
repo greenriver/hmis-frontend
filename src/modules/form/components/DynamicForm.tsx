@@ -4,13 +4,19 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
-import { getBoundValue, getItemMap, shouldEnableItem } from '../util/formUtil';
+import {
+  autofillValues,
+  getBoundValue,
+  getItemMap,
+  shouldEnableItem,
+} from '../util/formUtil';
 
 import DynamicField, { DynamicInputCommonProps } from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 
 import {
   BoundType,
+  DisabledDisplay,
   FormDefinitionJson,
   FormItem,
   ItemType,
@@ -66,6 +72,38 @@ const DynamicForm: React.FC<Props> = ({
 
   const itemMap = useMemo(() => getItemMap(definition), [definition]);
 
+  /**
+   * Map { linkId => array of Link IDs that depend on it for autofill }
+   */
+  const autofillDependencyMap = useMemo(() => {
+    const deps: Record<string, string[]> = {};
+    Object.values(itemMap).forEach((item) => {
+      if (!item.autofillValues) return;
+
+      item.autofillValues.forEach((v) => {
+        (v.autofillWhen || []).forEach((w) => {
+          if (deps[w.question]) {
+            deps[w.question].push(item.linkId);
+          } else {
+            deps[w.question] = [item.linkId];
+          }
+        });
+      });
+    });
+    return deps;
+  }, [itemMap]);
+
+  // Updates localValues map in-place
+  const updateAutofillValues = useCallback(
+    (changedLinkId: string, localValues: any) => {
+      if (!autofillDependencyMap[changedLinkId]) return;
+      autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+        autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+      });
+    },
+    [itemMap, autofillDependencyMap]
+  );
+
   if (errors) console.log('Validation errors', errors);
 
   const itemChanged = useCallback(
@@ -74,10 +112,11 @@ const DynamicForm: React.FC<Props> = ({
       setValues((currentValues) => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         currentValues[linkId] = value;
+        updateAutofillValues(linkId, currentValues);
         return { ...currentValues };
       });
     },
-    [setValues]
+    [setValues, updateAutofillValues]
   );
 
   const severalItemsChanged = useCallback(
@@ -156,8 +195,8 @@ const DynamicForm: React.FC<Props> = ({
     nestingLevel: number,
     props?: OverrideableDynamicFieldProps
   ) => {
-    if (!isEnabled(item)) {
-      // console.log('Hidden:', item);
+    const isDisabled = !isEnabled(item);
+    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected) {
       return null;
     }
 
@@ -184,7 +223,10 @@ const DynamicForm: React.FC<Props> = ({
         value={values[item.linkId]}
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
-        inputProps={getCommonInputProps(item)}
+        inputProps={{
+          ...getCommonInputProps(item),
+          disabled: isDisabled || undefined,
+        }}
         horizontal={horizontal}
         {...props}
       />

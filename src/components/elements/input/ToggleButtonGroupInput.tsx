@@ -63,7 +63,7 @@ const ToggleButtonGroupInput = ({
         sx={{
           pr: horizontal ? 1 : undefined,
           backgroundColor: horizontal ? 'white' : undefined,
-          color: horizontal ? 'text.primary' : undefined,
+          color: props.disabled ? 'text.disabled' : 'text.primary',
         }}
       >
         {label}

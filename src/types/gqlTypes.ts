@@ -125,6 +125,19 @@ export type AssessmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+/** Value to autofill based on conditional logic */
+export type AutofillValue = {
+  __typename?: 'AutofillValue';
+  autofillBehavior?: Maybe<EnableBehavior>;
+  autofillWhen?: Maybe<Array<EnableWhen>>;
+  /** If question is boolean type, autofill value */
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  /** If question is choice type, autofill value */
+  valueCode?: Maybe<Scalars['String']>;
+  /** If question is numeric, autofill value */
+  valueNumber?: Maybe<Scalars['Int']>;
+};
+
 /** 2.07.6 */
 export enum Availability {
   /** (3) Overflow */
@@ -609,6 +622,7 @@ export type DisabilityGroup = {
   developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
   enrollment: Enrollment;
   hivAids?: Maybe<NoYesReasonsForMissingData>;
+  /** Concatenated string of Disability record IDs */
   id: Scalars['ID'];
   informationDate: Scalars['ISO8601Date'];
   mentalHealthDisorder?: Maybe<NoYesReasonsForMissingData>;
@@ -652,6 +666,11 @@ export enum DisabilityType {
   PhysicalDisability = 'PHYSICAL_DISABILITY',
   /** (10) Substance use disorder */
   SubstanceUseDisorder = 'SUBSTANCE_USE_DISORDER',
+}
+
+export enum DisabledDisplay {
+  Hidden = 'HIDDEN',
+  Protected = 'PROTECTED',
 }
 
 export enum EnableBehavior {
@@ -892,11 +911,15 @@ export type FormDefinitionJson = {
 /** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
+  /** Value(s) to autofill based on conditional logic */
+  autofillValues?: Maybe<Array<AutofillValue>>;
   bounds?: Maybe<Array<ValueBound>>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
+  /** How to display item if it is disabled */
+  disabledDisplay?: Maybe<DisabledDisplay>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
   /**
@@ -2771,6 +2794,17 @@ export type PickListOptionFieldsFragment = {
   initialSelected?: boolean | null;
 };
 
+export type EnableWhenFieldsFragment = {
+  __typename?: 'EnableWhen';
+  question: string;
+  operator: EnableOperator;
+  answerCode?: string | null;
+  answerCodes?: Array<string> | null;
+  answerNumber?: number | null;
+  answerBoolean?: boolean | null;
+  answerGroupCode?: string | null;
+};
+
 export type ItemFieldsFragment = {
   __typename: 'FormItem';
   linkId: string;
@@ -2787,6 +2821,7 @@ export type ItemFieldsFragment = {
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   dataCollectedAbout?: DataCollectedAbout | null;
+  disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
   bounds?: Array<{
     __typename?: 'ValueBound';
@@ -2820,6 +2855,23 @@ export type ItemFieldsFragment = {
     answerBoolean?: boolean | null;
     answerGroupCode?: string | null;
   }> | null;
+  autofillValues?: Array<{
+    __typename?: 'AutofillValue';
+    valueCode?: string | null;
+    valueBoolean?: boolean | null;
+    valueNumber?: number | null;
+    autofillBehavior?: EnableBehavior | null;
+    autofillWhen?: Array<{
+      __typename?: 'EnableWhen';
+      question: string;
+      operator: EnableOperator;
+      answerCode?: string | null;
+      answerCodes?: Array<string> | null;
+      answerNumber?: number | null;
+      answerBoolean?: boolean | null;
+      answerGroupCode?: string | null;
+    }> | null;
+  }> | null;
 };
 
 export type FormDefinitionWithJsonFragment = {
@@ -2847,6 +2899,7 @@ export type FormDefinitionWithJsonFragment = {
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       dataCollectedAbout?: DataCollectedAbout | null;
+      disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
       item?: Array<{
         __typename: 'FormItem';
@@ -2864,6 +2917,7 @@ export type FormDefinitionWithJsonFragment = {
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
         item?: Array<{
           __typename: 'FormItem';
@@ -2881,6 +2935,7 @@ export type FormDefinitionWithJsonFragment = {
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
           item?: Array<{
             __typename: 'FormItem';
@@ -2898,6 +2953,7 @@ export type FormDefinitionWithJsonFragment = {
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename: 'FormItem';
@@ -2915,6 +2971,7 @@ export type FormDefinitionWithJsonFragment = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
@@ -2947,6 +3004,23 @@ export type FormDefinitionWithJsonFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
               }> | null;
             }> | null;
             bounds?: Array<{
@@ -2981,6 +3055,23 @@ export type FormDefinitionWithJsonFragment = {
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
             }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              autofillBehavior?: EnableBehavior | null;
+              autofillWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+              }> | null;
+            }> | null;
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
@@ -3013,6 +3104,23 @@ export type FormDefinitionWithJsonFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            autofillBehavior?: EnableBehavior | null;
+            autofillWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+            }> | null;
           }> | null;
         }> | null;
         bounds?: Array<{
@@ -3047,6 +3155,23 @@ export type FormDefinitionWithJsonFragment = {
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
         }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          autofillBehavior?: EnableBehavior | null;
+          autofillWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+          }> | null;
+        }> | null;
       }> | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
@@ -3079,6 +3204,23 @@ export type FormDefinitionWithJsonFragment = {
         answerNumber?: number | null;
         answerBoolean?: boolean | null;
         answerGroupCode?: string | null;
+      }> | null;
+      autofillValues?: Array<{
+        __typename?: 'AutofillValue';
+        valueCode?: string | null;
+        valueBoolean?: boolean | null;
+        valueNumber?: number | null;
+        autofillBehavior?: EnableBehavior | null;
+        autofillWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question: string;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerCodes?: Array<string> | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
+        }> | null;
       }> | null;
     }>;
   };
@@ -3172,6 +3314,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
           item?: Array<{
             __typename: 'FormItem';
@@ -3189,6 +3332,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename: 'FormItem';
@@ -3206,6 +3350,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename: 'FormItem';
@@ -3223,6 +3368,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 item?: Array<{
                   __typename: 'FormItem';
@@ -3240,6 +3386,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
@@ -3272,6 +3419,23 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                  }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    autofillBehavior?: EnableBehavior | null;
+                    autofillWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                    }> | null;
                   }> | null;
                 }> | null;
                 bounds?: Array<{
@@ -3306,6 +3470,23 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
                 }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  autofillBehavior?: EnableBehavior | null;
+                  autofillWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                  }> | null;
+                }> | null;
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
@@ -3338,6 +3519,23 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
               }> | null;
             }> | null;
             bounds?: Array<{
@@ -3372,6 +3570,23 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
             }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              autofillBehavior?: EnableBehavior | null;
+              autofillWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+              }> | null;
+            }> | null;
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
@@ -3404,6 +3619,23 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             answerNumber?: number | null;
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            autofillBehavior?: EnableBehavior | null;
+            autofillWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+            }> | null;
           }> | null;
         }>;
       };
@@ -3462,6 +3694,7 @@ export type GetAssessmentQuery = {
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename: 'FormItem';
@@ -3479,6 +3712,7 @@ export type GetAssessmentQuery = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename: 'FormItem';
@@ -3496,6 +3730,7 @@ export type GetAssessmentQuery = {
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 item?: Array<{
                   __typename: 'FormItem';
@@ -3513,6 +3748,7 @@ export type GetAssessmentQuery = {
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
                   item?: Array<{
                     __typename: 'FormItem';
@@ -3530,6 +3766,7 @@ export type GetAssessmentQuery = {
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
+                    disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
@@ -3562,6 +3799,23 @@ export type GetAssessmentQuery = {
                       answerNumber?: number | null;
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
+                    }> | null;
+                    autofillValues?: Array<{
+                      __typename?: 'AutofillValue';
+                      valueCode?: string | null;
+                      valueBoolean?: boolean | null;
+                      valueNumber?: number | null;
+                      autofillBehavior?: EnableBehavior | null;
+                      autofillWhen?: Array<{
+                        __typename?: 'EnableWhen';
+                        question: string;
+                        operator: EnableOperator;
+                        answerCode?: string | null;
+                        answerCodes?: Array<string> | null;
+                        answerNumber?: number | null;
+                        answerBoolean?: boolean | null;
+                        answerGroupCode?: string | null;
+                      }> | null;
                     }> | null;
                   }> | null;
                   bounds?: Array<{
@@ -3596,6 +3850,23 @@ export type GetAssessmentQuery = {
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
                   }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    autofillBehavior?: EnableBehavior | null;
+                    autofillWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                    }> | null;
+                  }> | null;
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
@@ -3628,6 +3899,23 @@ export type GetAssessmentQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  autofillBehavior?: EnableBehavior | null;
+                  autofillWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                  }> | null;
                 }> | null;
               }> | null;
               bounds?: Array<{
@@ -3662,6 +3950,23 @@ export type GetAssessmentQuery = {
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
               }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
+              }> | null;
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
@@ -3694,6 +3999,23 @@ export type GetAssessmentQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              autofillBehavior?: EnableBehavior | null;
+              autofillWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+              }> | null;
             }> | null;
           }>;
         };
@@ -3801,6 +4123,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
         item?: Array<{
           __typename: 'FormItem';
@@ -3818,6 +4141,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
           item?: Array<{
             __typename: 'FormItem';
@@ -3835,6 +4159,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename: 'FormItem';
@@ -3852,6 +4177,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename: 'FormItem';
@@ -3869,6 +4195,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
@@ -3901,6 +4228,23 @@ export type GetFormDefinitionByIdentifierQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  autofillBehavior?: EnableBehavior | null;
+                  autofillWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                  }> | null;
                 }> | null;
               }> | null;
               bounds?: Array<{
@@ -3935,6 +4279,23 @@ export type GetFormDefinitionByIdentifierQuery = {
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
               }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
+              }> | null;
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
@@ -3967,6 +4328,23 @@ export type GetFormDefinitionByIdentifierQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              autofillBehavior?: EnableBehavior | null;
+              autofillWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+              }> | null;
             }> | null;
           }> | null;
           bounds?: Array<{
@@ -4001,6 +4379,23 @@ export type GetFormDefinitionByIdentifierQuery = {
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
           }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            autofillBehavior?: EnableBehavior | null;
+            autofillWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+            }> | null;
+          }> | null;
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
@@ -4033,6 +4428,23 @@ export type GetFormDefinitionByIdentifierQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+        }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          autofillBehavior?: EnableBehavior | null;
+          autofillWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+          }> | null;
         }> | null;
       }>;
     };
@@ -4071,6 +4483,7 @@ export type GetFormDefinitionQuery = {
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
         item?: Array<{
           __typename: 'FormItem';
@@ -4088,6 +4501,7 @@ export type GetFormDefinitionQuery = {
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
           item?: Array<{
             __typename: 'FormItem';
@@ -4105,6 +4519,7 @@ export type GetFormDefinitionQuery = {
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
             item?: Array<{
               __typename: 'FormItem';
@@ -4122,6 +4537,7 @@ export type GetFormDefinitionQuery = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename: 'FormItem';
@@ -4139,6 +4555,7 @@ export type GetFormDefinitionQuery = {
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
@@ -4171,6 +4588,23 @@ export type GetFormDefinitionQuery = {
                   answerNumber?: number | null;
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  autofillBehavior?: EnableBehavior | null;
+                  autofillWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                  }> | null;
                 }> | null;
               }> | null;
               bounds?: Array<{
@@ -4205,6 +4639,23 @@ export type GetFormDefinitionQuery = {
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
               }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
+              }> | null;
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
@@ -4237,6 +4688,23 @@ export type GetFormDefinitionQuery = {
               answerNumber?: number | null;
               answerBoolean?: boolean | null;
               answerGroupCode?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              autofillBehavior?: EnableBehavior | null;
+              autofillWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+              }> | null;
             }> | null;
           }> | null;
           bounds?: Array<{
@@ -4271,6 +4739,23 @@ export type GetFormDefinitionQuery = {
             answerBoolean?: boolean | null;
             answerGroupCode?: string | null;
           }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            autofillBehavior?: EnableBehavior | null;
+            autofillWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+            }> | null;
+          }> | null;
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
@@ -4303,6 +4788,23 @@ export type GetFormDefinitionQuery = {
           answerNumber?: number | null;
           answerBoolean?: boolean | null;
           answerGroupCode?: string | null;
+        }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          autofillBehavior?: EnableBehavior | null;
+          autofillWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+          }> | null;
         }> | null;
       }>;
     };
@@ -4416,6 +4918,7 @@ export type SaveAssessmentMutation = {
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               item?: Array<{
                 __typename: 'FormItem';
@@ -4433,6 +4936,7 @@ export type SaveAssessmentMutation = {
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 item?: Array<{
                   __typename: 'FormItem';
@@ -4450,6 +4954,7 @@ export type SaveAssessmentMutation = {
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
                   item?: Array<{
                     __typename: 'FormItem';
@@ -4467,6 +4972,7 @@ export type SaveAssessmentMutation = {
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
+                    disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
                     item?: Array<{
                       __typename: 'FormItem';
@@ -4484,6 +4990,7 @@ export type SaveAssessmentMutation = {
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
+                      disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
                       bounds?: Array<{
                         __typename?: 'ValueBound';
@@ -4516,6 +5023,23 @@ export type SaveAssessmentMutation = {
                         answerNumber?: number | null;
                         answerBoolean?: boolean | null;
                         answerGroupCode?: string | null;
+                      }> | null;
+                      autofillValues?: Array<{
+                        __typename?: 'AutofillValue';
+                        valueCode?: string | null;
+                        valueBoolean?: boolean | null;
+                        valueNumber?: number | null;
+                        autofillBehavior?: EnableBehavior | null;
+                        autofillWhen?: Array<{
+                          __typename?: 'EnableWhen';
+                          question: string;
+                          operator: EnableOperator;
+                          answerCode?: string | null;
+                          answerCodes?: Array<string> | null;
+                          answerNumber?: number | null;
+                          answerBoolean?: boolean | null;
+                          answerGroupCode?: string | null;
+                        }> | null;
                       }> | null;
                     }> | null;
                     bounds?: Array<{
@@ -4550,6 +5074,23 @@ export type SaveAssessmentMutation = {
                       answerBoolean?: boolean | null;
                       answerGroupCode?: string | null;
                     }> | null;
+                    autofillValues?: Array<{
+                      __typename?: 'AutofillValue';
+                      valueCode?: string | null;
+                      valueBoolean?: boolean | null;
+                      valueNumber?: number | null;
+                      autofillBehavior?: EnableBehavior | null;
+                      autofillWhen?: Array<{
+                        __typename?: 'EnableWhen';
+                        question: string;
+                        operator: EnableOperator;
+                        answerCode?: string | null;
+                        answerCodes?: Array<string> | null;
+                        answerNumber?: number | null;
+                        answerBoolean?: boolean | null;
+                        answerGroupCode?: string | null;
+                      }> | null;
+                    }> | null;
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
@@ -4582,6 +5123,23 @@ export type SaveAssessmentMutation = {
                     answerNumber?: number | null;
                     answerBoolean?: boolean | null;
                     answerGroupCode?: string | null;
+                  }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    autofillBehavior?: EnableBehavior | null;
+                    autofillWhen?: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                    }> | null;
                   }> | null;
                 }> | null;
                 bounds?: Array<{
@@ -4616,6 +5174,23 @@ export type SaveAssessmentMutation = {
                   answerBoolean?: boolean | null;
                   answerGroupCode?: string | null;
                 }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  autofillBehavior?: EnableBehavior | null;
+                  autofillWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                  }> | null;
+                }> | null;
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
@@ -4648,6 +5223,23 @@ export type SaveAssessmentMutation = {
                 answerNumber?: number | null;
                 answerBoolean?: boolean | null;
                 answerGroupCode?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                autofillBehavior?: EnableBehavior | null;
+                autofillWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                }> | null;
               }> | null;
             }>;
           };
@@ -6738,6 +7330,17 @@ export const PickListOptionFieldsFragmentDoc = gql`
     initialSelected
   }
 `;
+export const EnableWhenFieldsFragmentDoc = gql`
+  fragment EnableWhenFields on EnableWhen {
+    question
+    operator
+    answerCode
+    answerCodes
+    answerNumber
+    answerBoolean
+    answerGroupCode
+  }
+`;
 export const ItemFieldsFragmentDoc = gql`
   fragment ItemFields on FormItem {
     __typename
@@ -6769,18 +7372,23 @@ export const ItemFieldsFragmentDoc = gql`
       valueNumber
     }
     dataCollectedAbout
+    disabledDisplay
     enableBehavior
     enableWhen {
-      question
-      operator
-      answerCode
-      answerCodes
-      answerNumber
-      answerBoolean
-      answerGroupCode
+      ...EnableWhenFields
+    }
+    autofillValues {
+      valueCode
+      valueBoolean
+      valueNumber
+      autofillBehavior
+      autofillWhen {
+        ...EnableWhenFields
+      }
     }
   }
   ${PickListOptionFieldsFragmentDoc}
+  ${EnableWhenFieldsFragmentDoc}
 `;
 export const FormDefinitionWithJsonFragmentDoc = gql`
   fragment FormDefinitionWithJson on FormDefinition {

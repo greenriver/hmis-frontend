@@ -126,12 +126,15 @@ const RecordPickerDialog = ({
       render: (record: RelatedRecord) =>
         getEnrollmentDetails(recordType, record),
     });
-    // if (import.meta.env.MODE === 'development') {
-    //   commonColumns.unshift({
-    //     header: 'ID',
-    //     render: 'id' as keyof RelatedRecord,
-    //   });
-    // }
+    if (
+      import.meta.env.MODE === 'development' &&
+      recordType !== RelatedRecordType.DisabilityGroup
+    ) {
+      commonColumns.unshift({
+        header: 'ID',
+        render: 'id' as keyof RelatedRecord,
+      });
+    }
 
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item).map((i) => ({

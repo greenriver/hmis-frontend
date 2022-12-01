@@ -129,6 +129,7 @@ const InputGroupWithSummary = ({
       .some(Boolean);
   }, [values, childItemLinkIds, childItemType]);
 
+  // FIXME remove, replace with JSON-backed autofill logic
   // Update the value of the NoYesReasonsForMissingData summary child
   // Triggered when `sum` or `anyTrue` change
   useEffect(() => {

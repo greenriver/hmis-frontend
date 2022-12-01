@@ -82,6 +82,7 @@ export const HmisEnums = {
     HIV_AIDS: 'HIV/AIDS',
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
+  DisabledDisplay: { HIDDEN: 'HIDDEN', PROTECTED: 'PROTECTED' },
   EnableBehavior: { ALL: 'ALL', ANY: 'ANY' },
   EnableOperator: {
     ENABLED:
