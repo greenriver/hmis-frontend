@@ -1,4 +1,4 @@
-import { Alert, Typography } from '@mui/material';
+import { Alert, AlertColor, Typography } from '@mui/material';
 import DOMPurify from 'dompurify';
 import { useMemo } from 'react';
 
@@ -9,6 +9,13 @@ interface Props {
   maxWidth?: number;
 }
 
+const SeverityMap: Record<string, AlertColor> = {
+  [Component.AlertError]: 'error',
+  [Component.AlertSuccess]: 'success',
+  [Component.AlertInfo]: 'info',
+  [Component.AlertWarning]: 'warning',
+};
+
 const DynamicDisplay = ({ item, maxWidth }: Props) => {
   const html = useMemo(
     () => (item.text ? { __html: DOMPurify.sanitize(item.text) } : undefined),
@@ -18,9 +25,14 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
   if (!html) return null;
 
   switch (item.component) {
-    case Component.WarningAlert:
+    case Component.AlertError:
+    case Component.AlertSuccess:
+    case Component.AlertInfo:
+    case Component.AlertWarning:
       return (
-        <Alert severity='warning'>
+        <Alert
+          severity={SeverityMap[item.component as keyof typeof SeverityMap]}
+        >
           <div dangerouslySetInnerHTML={html} />
         </Alert>
       );
