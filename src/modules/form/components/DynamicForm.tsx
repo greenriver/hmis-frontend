@@ -5,17 +5,16 @@ import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
 import {
-  autofillValues,
-  getBoundValue,
   getItemMap,
   shouldEnableItem,
+  buildCommonInputProps,
+  autofillValues,
 } from '../util/formUtil';
 
-import DynamicField, { DynamicInputCommonProps } from './DynamicField';
+import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 
 import {
-  BoundType,
   DisabledDisplay,
   FormDefinitionJson,
   FormItem,
@@ -168,27 +167,6 @@ const DynamicForm: React.FC<Props> = ({
     [errors]
   );
 
-  const getCommonInputProps = useCallback(
-    (item: FormItem) => {
-      const inputProps: DynamicInputCommonProps = {
-        disabled: item.readOnly || undefined,
-      };
-
-      (item.bounds || []).forEach((bound) => {
-        const value = getBoundValue(bound, values);
-        if (bound.type === BoundType.Min) {
-          inputProps.min = value;
-        } else if (bound.type === BoundType.Max) {
-          inputProps.max = value;
-        } else {
-          console.warn('Unrecognized bound type', bound.type);
-        }
-      });
-      return inputProps;
-    },
-    [values]
-  );
-
   // Recursively render an item
   const renderItem = (
     item: FormItem,
@@ -224,7 +202,7 @@ const DynamicForm: React.FC<Props> = ({
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         inputProps={{
-          ...getCommonInputProps(item),
+          ...buildCommonInputProps(item, values),
           disabled: isDisabled || undefined,
         }}
         horizontal={horizontal}

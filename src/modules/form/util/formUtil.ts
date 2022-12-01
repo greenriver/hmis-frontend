@@ -1,9 +1,12 @@
+import { max, min } from 'date-fns';
 import { isNil } from 'lodash-es';
 
 import { parseHmisDateString } from '../../hmis/hmisUtil';
+import { DynamicInputCommonProps } from '../components/DynamicField';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  BoundType,
   EnableBehavior,
   EnableOperator,
   EnableWhen,
@@ -15,6 +18,7 @@ import {
 
 export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
+export type LocalConstants = Record<string, any>;
 
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 
@@ -154,6 +158,7 @@ const evaluateEnableWhen = (
       en.answerGroupCode,
       en.answerNumber,
       en.answerCodes,
+      en.compareQuestion ? values[en.compareQuestion] : undefined,
     ].filter((e) => !isNil(e))[0];
   }
 
@@ -306,6 +311,50 @@ export const getBoundValue = (
   return bound.valueNumber;
 };
 
+const compareNumOrDate = (
+  boundType: BoundType,
+  value: number | Date,
+  comparison: number | Date | undefined
+) => {
+  if (isNil(comparison)) return value;
+  if (isDate(comparison) && isDate(value)) {
+    // do inverse operation to choose the tightest bound
+    return boundType === BoundType.Min
+      ? max([value, comparison])
+      : min([value, comparison]);
+  }
+
+  // do inverse operation to choose the tightest bound
+  return boundType === BoundType.Min
+    ? Math.max(value as number, comparison as number)
+    : Math.min(value as number, comparison as number);
+};
+
+export const buildCommonInputProps = (
+  item: FormItem,
+  values: Record<string, any>
+): DynamicInputCommonProps => {
+  const inputProps: DynamicInputCommonProps = {};
+  if (item.readOnly) {
+    inputProps.disabled = true;
+  }
+
+  (item.bounds || []).forEach((bound) => {
+    const value = getBoundValue(bound, values);
+    if (isNil(value)) return;
+
+    if (bound.type === BoundType.Min) {
+      inputProps.min = compareNumOrDate(bound.type, value, inputProps.min);
+    } else if (bound.type === BoundType.Max) {
+      inputProps.max = compareNumOrDate(bound.type, value, inputProps.max);
+    } else {
+      console.warn('Unrecognized bound type', bound.type);
+    }
+  });
+
+  return inputProps;
+};
+
 /**
  * Convert string value to option value ({ code: "something" })
  */
@@ -335,7 +384,8 @@ export const getOptionValue = (value: string, item: FormItem) => {
  * Create initial form state based on initial values specified in the form definition
  */
 export const getInitialValues = (
-  definition: FormDefinitionJson
+  definition: FormDefinitionJson,
+  localConstants?: LocalConstants
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -349,8 +399,8 @@ export const getInitialValues = (
         recursiveFillInValues(item.item, values);
       }
       if (!item.initial) return;
-      // console.log(item.initial);
-      // FIXME handle multiple initials for multi-select questions
+
+      // TODO handle multiple initials for multi-select questions
       const initial = item.initial[0];
       if (!isNil(initial.valueBoolean)) {
         values[item.linkId] = initial.valueBoolean;
@@ -358,6 +408,11 @@ export const getInitialValues = (
         values[item.linkId] = initial.valueNumber;
       } else if (initial.valueCode) {
         values[item.linkId] = getOptionValue(initial.valueCode, item);
+      } else if (initial.valueLocalConstant) {
+        const varName = initial.valueLocalConstant.replace(/^\$/, '');
+        if (localConstants && varName in localConstants) {
+          values[item.linkId] = localConstants[varName];
+        }
       }
     });
   }

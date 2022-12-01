@@ -9,7 +9,10 @@ import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 
-import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDateRange,
+  parseHmisDateString,
+} from '@/modules/hmis/hmisUtil';
 import FunderTable from '@/modules/inventory/components/FunderTable';
 import InventoryTable from '@/modules/inventory/components/InventoryTable';
 import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
@@ -29,11 +32,18 @@ export const InactiveBanner = ({
 }) => {
   if (!project.operatingEndDate) return null;
   const endDate = parseHmisDateString(project.operatingEndDate);
-  return endDate && isBefore(endDate, addDays(new Date(), -1)) ? (
+  if (!endDate || !isBefore(endDate, addDays(new Date(), -1))) return null;
+
+  const dateRange = parseAndFormatDateRange(
+    project.operatingStartDate,
+    project.operatingEndDate
+  );
+  return (
     <Alert severity='info' sx={{ mb: 2 }}>
       This project is inactive
+      {dateRange && `. Project operated from ${dateRange}.`}
     </Alert>
-  ) : null;
+  );
 };
 
 const Project = () => {

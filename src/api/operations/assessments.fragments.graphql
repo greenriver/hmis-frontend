@@ -23,6 +23,7 @@ fragment EnableWhenFields on EnableWhen {
   answerNumber
   answerBoolean
   answerGroupCode
+  compareQuestion
 }
 fragment ItemFields on FormItem {
   __typename
@@ -52,6 +53,7 @@ fragment ItemFields on FormItem {
     valueCode
     valueBoolean
     valueNumber
+    valueLocalConstant
   }
   dataCollectedAbout
   disabledDisplay

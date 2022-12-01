@@ -1959,6 +1959,12 @@
             "description": "Component to render a group that contains children of the same type (eg all\nbooleans). Optionally has a choice item, which must be the first item.",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "WARNING_ALERT",
+            "description": "Display text as a warning alert",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -4590,6 +4596,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "compareQuestion",
+            "description": "The linkId of a question to compare with the question using the operator",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8868,6 +8886,18 @@
           {
             "name": "valueCode",
             "description": "If question is choice type, initial value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueLocalConstant",
+            "description": "Name of local variable to use as initial value if present. Variable type should match item type.",
             "args": [],
             "type": {
               "kind": "SCALAR",

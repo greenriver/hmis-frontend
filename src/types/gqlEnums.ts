@@ -40,6 +40,7 @@ export const HmisEnums = {
     CHECKBOX: 'Component to render a boolean input item as a checkbox',
     INPUT_GROUP:
       'Component to render a group that contains children of the same type (eg all booleans). Optionally has a choice item, which must be the first item.',
+    WARNING_ALERT: 'Display text as a warning alert',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB reported',

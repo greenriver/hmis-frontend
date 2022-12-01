@@ -70,7 +70,10 @@ export const yesNo = (bool: boolean | null | undefined) => {
 // Prefix on descriptions, like "(8) Client doesn't know"
 const numericPrefix = /^\([0-9]*\)\s/;
 
-export const parseHmisDateString = (dateString: string): Date | null => {
+export const parseHmisDateString = (
+  dateString: string | null | undefined
+): Date | null => {
+  if (isNil(dateString)) return null;
   // Check format first because parsing is too lenient
   // https://github.com/date-fns/date-fns/issues/942
   if (!dateString.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
