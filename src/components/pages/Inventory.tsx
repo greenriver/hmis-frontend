@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
@@ -8,6 +8,7 @@ import Loading from '../elements/Loading';
 import { InactiveBanner } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
+import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -31,7 +32,6 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   const title = create ? `Add Inventory` : `Edit Inventory`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
-  // FIXME why isn't cache working
   const { data, loading, error } = useGetInventoryQuery({
     variables: { id: inventoryId },
     skip: create,
@@ -40,6 +40,16 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   const onCompleted = useCallback(() => {
     navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId]);
+
+  // Local variables to use for form population.
+  // These variables names are referenced by the form definition!
+  const localConstants = useMemo(() => {
+    if (!project) return;
+    return {
+      projectStartDate: parseHmisDateString(project.operatingStartDate),
+      projectEndDate: parseHmisDateString(project.operatingEndDate),
+    };
+  }, [project]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
@@ -71,6 +81,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
                 data?.createInventory?.errors
               }
               submitButtonText='Create Inventory'
+              localConstants={localConstants}
               {...common}
             />
           ) : (
@@ -85,6 +96,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
               getErrors={(data: UpdateInventoryMutation) =>
                 data?.updateInventory?.errors
               }
+              localConstants={localConstants}
               {...common}
             />
           )}

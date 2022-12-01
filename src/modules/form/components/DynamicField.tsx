@@ -1,5 +1,4 @@
 import { Stack, Typography } from '@mui/material';
-import DOMPurify from 'dompurify';
 import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
@@ -7,6 +6,7 @@ import { usePickList } from '../hooks/usePickList';
 import { isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
+import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
 
@@ -119,14 +119,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   switch (item.type) {
     case ItemType.Display:
-      if (!item.text) return null;
-      return (
-        <Typography
-          variant='body2'
-          sx={{ mt: 4, maxWidth: maxWidth + 100 }}
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.text) }}
-        ></Typography>
-      );
+      return <DynamicDisplay maxWidth={maxWidth + 100} item={item} />;
     case ItemType.Boolean:
       if (item.component === Component.Checkbox) {
         return (

@@ -499,6 +499,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
       {
+        name: 'compareQuestion',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'operator',
         type: {
           kind: 'NON_NULL',
@@ -1358,6 +1362,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'valueCode',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'valueLocalConstant',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {

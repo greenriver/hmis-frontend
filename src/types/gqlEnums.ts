@@ -37,9 +37,14 @@ export const HmisEnums = {
     LAST_NAME_DESC: 'LAST_NAME_DESC',
   },
   Component: {
-    CHECKBOX: 'Component to render a boolean input item as a checkbox',
+    ALERT_ERROR: 'Display text as an error alert',
+    ALERT_INFO: 'Display text as an info alert',
+    ALERT_SUCCESS: 'Display text as a success alert',
+    ALERT_WARNING: 'Display text as a warning alert',
+    CHECKBOX: 'Render a boolean input item as a checkbox',
     INPUT_GROUP:
-      'Component to render a group that contains children of the same type (eg all booleans). Optionally has a choice item, which must be the first item.',
+      'Render a group that contains children of the same type (e.g. all booleans)',
+    RADIO_BUTTONS: 'Render a choice input item as radio buttons',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB reported',

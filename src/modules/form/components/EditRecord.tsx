@@ -1,7 +1,7 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 
-import { getItemMap } from '../util/formUtil';
+import { getInitialValues, getItemMap, LocalConstants } from '../util/formUtil';
 
 import Loading from '@/components/elements/Loading';
 import DynamicForm, {
@@ -31,6 +31,7 @@ interface Props<RecordType, Query, QueryVariables>
   record?: RecordType;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   inputVariables?: Record<string, any>;
+  localConstants?: LocalConstants;
   onCompleted: (data: Query) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
 }
@@ -49,6 +50,7 @@ const EditRecord = <
   getErrors,
   onCompleted,
   inputVariables = {},
+  localConstants = {},
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
@@ -85,11 +87,24 @@ const EditRecord = <
   });
 
   const initialValues = useMemo(() => {
-    if (!record || !itemMap) return {};
-    const values = createInitialValuesFromRecord(itemMap, record);
+    if (!itemMap || !definition) return {};
+    const initialValuesFromDefinition = getInitialValues(
+      definition,
+      localConstants
+    );
+    if (!record) return initialValuesFromDefinition;
+
+    const initialValuesFromRecord = createInitialValuesFromRecord(
+      itemMap,
+      record
+    );
+    const values = {
+      ...initialValuesFromDefinition,
+      ...initialValuesFromRecord,
+    };
     console.log('Initial form values:', values, 'from', record);
     return values;
-  }, [record, itemMap]);
+  }, [record, definition, itemMap, localConstants]);
 
   const submitHandler = useCallback(
     (values: Record<string, any>) => {
