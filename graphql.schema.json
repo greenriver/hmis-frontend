@@ -1949,20 +1949,44 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "ALERT_ERROR",
+            "description": "Display text as an error alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALERT_INFO",
+            "description": "Display text as an info alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALERT_SUCCESS",
+            "description": "Display text as a success alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALERT_WARNING",
+            "description": "Display text as a warning alert",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CHECKBOX",
-            "description": "Component to render a boolean input item as a checkbox",
+            "description": "Render a boolean input item as a checkbox",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "INPUT_GROUP",
-            "description": "Component to render a group that contains children of the same type (eg all\nbooleans). Optionally has a choice item, which must be the first item.",
+            "description": "Render a group that contains children of the same type (e.g. all booleans)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "WARNING_ALERT",
-            "description": "Display text as a warning alert",
+            "name": "RADIO_BUTTONS",
+            "description": "Render a choice input item as radio buttons",
             "isDeprecated": false,
             "deprecationReason": null
           }
