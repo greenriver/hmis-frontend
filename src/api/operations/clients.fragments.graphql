@@ -200,14 +200,11 @@ fragment IncomeBenefitFields on IncomeBenefit {
   workersCompAmount
 }
 
-fragment DisabilityFields on Disability {
+fragment DisabilityGroupFields on DisabilityGroup {
   __typename
+  id
   dataCollectionStage
-  dateCreated
-  dateDeleted
-  dateUpdated
-  disabilityResponse
-  disabilityType
+  informationDate
   enrollment {
     id
     project {
@@ -216,12 +213,19 @@ fragment DisabilityFields on Disability {
       projectType
     }
   }
-  id
-  indefiniteAndImpairs
-  informationDate
   user {
     ...UserFields
   }
+  chronicHealthCondition
+  chronicHealthConditionIndefiniteAndImpairs
+  developmentalDisability
+  hivAids
+  mentalHealthDisorder
+  mentalHealthDisorderIndefiniteAndImpairs
+  physicalDisability
+  physicalDisabilityIndefiniteAndImpairs
+  substanceUseDisorder
+  substanceUseDisorderIndefiniteAndImpairs
 }
 
 fragment HealthAndDvFields on HealthAndDv {

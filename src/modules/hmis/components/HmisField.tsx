@@ -1,8 +1,10 @@
+import { Typography } from '@mui/material';
 import { get, isNil } from 'lodash-es';
 
 import {
   formatCurrency,
   getSchemaForType,
+  MISSING_DATA_KEYS,
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '../hmisUtil';
@@ -34,12 +36,20 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
     if (value in enumMap) {
-      if (type === 'NoYesReasonsForMissingData') {
+      if (['NoYesReasonsForMissingData', 'DisabilityResponse'].includes(type)) {
         return <YesNoDisplay enumValue={value} />;
       }
 
       const key = value as keyof typeof enumMap;
-      return <>{enumMap[key]}</>;
+      const displayString = enumMap[key];
+      if (MISSING_DATA_KEYS.includes(value)) {
+        return (
+          <Typography variant='body2' color='text.disabled'>
+            {displayString}
+          </Typography>
+        );
+      }
+      return <>{displayString}</>;
     }
   }
   switch (type) {

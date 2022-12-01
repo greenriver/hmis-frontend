@@ -52,7 +52,7 @@ const tableComponent = (
   switch (recordType) {
     case RelatedRecordType.IncomeBenefit:
       return IncomeBenefitsTable;
-    case RelatedRecordType.Disability:
+    case RelatedRecordType.DisabilityGroup:
       return DisabilitiesTable;
     case RelatedRecordType.HealthAndDv:
       return HealthAndDvsTable;
@@ -126,12 +126,12 @@ const RecordPickerDialog = ({
       render: (record: RelatedRecord) =>
         getEnrollmentDetails(recordType, record),
     });
-    if (import.meta.env.MODE === 'development') {
-      commonColumns.unshift({
-        header: 'ID',
-        render: 'id' as keyof RelatedRecord,
-      });
-    }
+    // if (import.meta.env.MODE === 'development') {
+    //   commonColumns.unshift({
+    //     header: 'ID',
+    //     render: 'id' as keyof RelatedRecord,
+    //   });
+    // }
 
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item).map((i) => ({
@@ -155,8 +155,8 @@ const RecordPickerDialog = ({
     <Dialog
       open={open}
       keepMounted={false}
-      maxWidth='md'
-      // fullWidth
+      maxWidth='lg'
+      fullWidth
       onClose={onCancel}
       sx={{ '.MuiDialog-paper': { px: 1, overflow: 'hidden', height: '100%' } }}
       {...other}

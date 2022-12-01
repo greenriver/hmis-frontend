@@ -4,13 +4,28 @@ import { Stack, Typography, TypographyProps } from '@mui/material';
 import React, { ReactElement } from 'react';
 
 import { HmisEnums } from '@/types/gqlEnums';
-import { NoYesReasonsForMissingData } from '@/types/gqlTypes';
+import {
+  DisabilityResponse,
+  NoYesReasonsForMissingData,
+} from '@/types/gqlTypes';
 
 interface Props extends TypographyProps {
   booleanValue?: boolean | null;
-  enumValue?: NoYesReasonsForMissingData;
+  enumValue?: NoYesReasonsForMissingData | DisabilityResponse;
   fallback?: ReactElement;
 }
+
+const YES_VALUES: string[] = [
+  NoYesReasonsForMissingData.Yes,
+  DisabilityResponse.AlcoholUseDisorder,
+  DisabilityResponse.BothAlcoholAndDrugUseDisorders,
+  DisabilityResponse.DrugUseDisorder,
+];
+
+const NO_VALUES: string[] = [
+  NoYesReasonsForMissingData.No,
+  DisabilityResponse.No,
+];
 
 const YesNoDisplay: React.FC<Props> = ({
   booleanValue,
@@ -20,17 +35,25 @@ const YesNoDisplay: React.FC<Props> = ({
 }) => {
   let Icon;
   let text;
-  if (booleanValue === true || enumValue === NoYesReasonsForMissingData.Yes) {
+  if (booleanValue === true || YES_VALUES.includes(enumValue as string)) {
     Icon = CheckIcon;
-    text = 'YES';
+    text = enumValue
+      ? HmisEnums.DisabilityResponse[enumValue as DisabilityResponse] ||
+        HmisEnums.NoYesReasonsForMissingData[
+          enumValue as NoYesReasonsForMissingData
+        ]
+      : 'Yes';
   } else if (
     booleanValue === false ||
-    enumValue === NoYesReasonsForMissingData.No
+    NO_VALUES.includes(enumValue as string)
   ) {
     Icon = CloseIcon;
-    text = 'NO';
+    text = 'No';
   } else if (enumValue) {
-    text = HmisEnums.NoYesReasonsForMissingData[enumValue];
+    text =
+      HmisEnums.NoYesReasonsForMissingData[
+        enumValue as NoYesReasonsForMissingData
+      ] || enumValue;
   }
   if (!text) return fallback || null;
 

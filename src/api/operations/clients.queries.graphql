@@ -213,14 +213,11 @@ query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetRecentDisabilities($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetRecentDisabilities($id: ID!) {
   client(id: $id) {
     id
-    disabilities(offset: $offset, limit: $limit) {
-      nodesCount
-      nodes {
-        ...DisabilityFields
-      }
+    disabilityGroups {
+      ...DisabilityGroupFields
     }
   }
 }

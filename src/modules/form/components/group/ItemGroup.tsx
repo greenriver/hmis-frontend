@@ -1,5 +1,4 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { startCase } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
 import { getPopulatableChildren } from '../../util/formUtil';
@@ -85,7 +84,7 @@ const ItemGroup = ({
               fontStyle='bold'
               sx={{ mb: 1, fontWeight: 600 }}
             >
-              Filled with {startCase(item.recordType.toLowerCase())} record from{' '}
+              Filled with record from{' '}
               {parseAndFormatDate(
                 getInformationDate(item.recordType, sourceRecord)
               )}
