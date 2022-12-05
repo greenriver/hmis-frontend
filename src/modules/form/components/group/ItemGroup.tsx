@@ -40,16 +40,20 @@ const ItemGroup = ({
 
   const onSelectAutofillRecord = useCallback(
     (record: RelatedRecord) => {
+      console.log('chose record:', record);
       setSourceRecord(record);
       setDialogOpen(false);
-      // console.log('source', record);
+
       const newFormValues: Record<string, any> = {};
       getPopulatableChildren(item).forEach((i) => {
         if (!i.fieldName) return;
+
         const gqlValue = record[i.fieldName as keyof RelatedRecord];
         newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
+        console.log(i.fieldName, gqlValueToFormValue(gqlValue, i));
       });
-      // console.log('as values', newFormValues);
+
+      // FIXME: previously disabled still look disabled even when filled!
       severalItemsChanged(newFormValues);
     },
     [setDialogOpen, severalItemsChanged, item]
@@ -70,14 +74,23 @@ const ItemGroup = ({
                 {item.text}
               </Typography>
               {item.recordType && (
-                <Button
-                  onClick={() => setDialogOpen(true)}
-                  variant='outlined'
-                  size='small'
-                  sx={{ height: 'fit-content' }}
-                >
-                  FILL SECTION
-                </Button>
+                <Stack direction='row' spacing={1}>
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    sx={{ height: 'fit-content' }}
+                  >
+                    CLEAR
+                  </Button>
+                  <Button
+                    onClick={() => setDialogOpen(true)}
+                    variant='outlined'
+                    size='small'
+                    sx={{ height: 'fit-content' }}
+                  >
+                    FILL SECTION
+                  </Button>
+                </Stack>
               )}
             </Stack>
           )}

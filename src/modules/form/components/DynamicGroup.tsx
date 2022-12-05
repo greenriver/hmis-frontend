@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 import { DynamicFieldProps } from './DynamicField';
-import InputGroupWithSummary from './group/InputGroupWithSummary';
+import InputGroup from './group/InputGroup';
 import ItemGroup from './group/ItemGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
@@ -28,7 +28,7 @@ export interface GroupItemComponentProps {
 const DynamicGroup = (props: GroupItemComponentProps) => {
   switch (props.item.component) {
     case Component.InputGroup:
-      return <InputGroupWithSummary key={props.item.linkId} {...props} />;
+      return <InputGroup key={props.item.linkId} {...props} />;
     default:
       return <ItemGroup key={props.item.linkId} {...props} />;
   }

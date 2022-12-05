@@ -104,10 +104,12 @@ const DynamicForm: React.FC<Props> = ({
 
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
-    (changedLinkId: string, localValues: any) => {
-      if (!autofillDependencyMap[changedLinkId]) return;
-      autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-        autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+    (changedLinkIds: string[], localValues: any) => {
+      changedLinkIds.forEach((changedLinkId) => {
+        if (!autofillDependencyMap[changedLinkId]) return;
+        autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+          autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+        });
       });
     },
     [itemMap, autofillDependencyMap]
@@ -119,24 +121,30 @@ const DynamicForm: React.FC<Props> = ({
    * dependent on the item that just changed ("changedLinkid").
    */
   const updateDisabledLinkIds = useCallback(
-    (changedLinkId: string, localValues: any) => {
-      if (!enabledDependencyMap[changedLinkId]) return;
+    (changedLinkIds: string[], localValues: any) => {
+      // If none of these are dependencies, return immediately
+      if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
 
       setDisabledLinkIds((oldList) => {
         const newList = [...oldList];
-        enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-          // autofillValues(itemMap[dependentLinkId], localValues, itemMap);
-          const enabled = shouldEnableItem(
-            itemMap[dependentLinkId],
-            localValues,
-            itemMap
-          );
-          if (enabled && newList.includes(dependentLinkId)) {
-            pull(newList, dependentLinkId);
-          } else if (!enabled && !newList.includes(dependentLinkId)) {
-            newList.push(dependentLinkId);
-          }
+        changedLinkIds.forEach((changedLinkId) => {
+          if (!enabledDependencyMap[changedLinkId]) return;
+
+          enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+            // autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+            const enabled = shouldEnableItem(
+              itemMap[dependentLinkId],
+              localValues,
+              itemMap
+            );
+            if (enabled && newList.includes(dependentLinkId)) {
+              pull(newList, dependentLinkId);
+            } else if (!enabled && !newList.includes(dependentLinkId)) {
+              newList.push(dependentLinkId);
+            }
+          });
         });
+
         return newList;
       });
     },
@@ -152,8 +160,8 @@ const DynamicForm: React.FC<Props> = ({
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newValues[linkId] = value;
-        updateAutofillValues(linkId, newValues); // updates currentValues in-place
-        updateDisabledLinkIds(linkId, newValues); // calls setState for disabled link IDs
+        updateAutofillValues([linkId], newValues); // updates newValues in-place
+        updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
         return newValues;
@@ -162,12 +170,18 @@ const DynamicForm: React.FC<Props> = ({
     [updateAutofillValues, updateDisabledLinkIds]
   );
 
-  const severalItemsChanged = useCallback((values: Record<string, any>) => {
-    setPromptSave(true);
-    setValues((currentValues) => {
-      return { ...currentValues, ...values };
-    });
-  }, []);
+  const severalItemsChanged = useCallback(
+    (values: Record<string, any>) => {
+      setPromptSave(true);
+      setValues((currentValues) => {
+        const newValues = { ...currentValues, ...values };
+        // Update which link IDs are disabled or not, based on the Link IDs that have changed
+        updateDisabledLinkIds(Object.keys(values), newValues);
+        return newValues;
+      });
+    },
+    [updateDisabledLinkIds]
+  );
 
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {

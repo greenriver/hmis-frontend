@@ -48,6 +48,16 @@ export function isPickListOption(
   );
 }
 
+export function areEqualValues(
+  value1: any | null | undefined,
+  value2: any | null | undefined
+): boolean {
+  if (isPickListOption(value1) && isPickListOption(value2)) {
+    return value1.code === value2.code;
+  }
+  return value1 === value2;
+}
+
 const localResolvePickList = (
   pickListReference: string,
   includeDataNotCollected = false
@@ -79,6 +89,35 @@ export const resolveOptionList = (
     );
   }
   return null;
+};
+
+/**
+ * Convert string value to option value ({ code: "something" })
+ */
+export const getOptionValue = (
+  value: string | null | undefined,
+  item: FormItem
+) => {
+  if (!value) return null;
+  if (value && isDataNotCollected(value)) {
+    return null;
+  }
+  if (item.pickListReference) {
+    // This is a value for a choice item, like 'PSH', so transform it to the option object
+    const option = (localResolvePickList(item.pickListReference) || []).find(
+      (opt) => opt.code === value
+    );
+    return option || { code: value };
+  }
+  if (item.pickListOptions) {
+    const option = item.pickListOptions.find((opt) => opt.code === value);
+    if (!option)
+      console.error(
+        `Value '${value}' does not match answer options for question '${item.linkId}'`
+      );
+    return option || { code: value };
+  }
+  return { code: value };
 };
 
 /**
@@ -281,14 +320,17 @@ export const autofillValues = (
         : booleans.every(Boolean);
 
     if (shouldAutofillValue) {
-      const newValue = [av.valueBoolean, av.valueCode, av.valueNumber].filter(
-        (e) => !isNil(e)
-      )[0];
-      if (values[item.linkId] !== newValue) {
+      const newValue = [
+        av.valueBoolean,
+        av.valueNumber,
+        getOptionValue(av.valueCode, item),
+      ].filter((e) => !isNil(e))[0];
+
+      if (!areEqualValues(values[item.linkId], newValue)) {
         console.log(
-          `AUTOFILL: Changing ${item.linkId} from ${
+          `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
             values[item.linkId]
-          } to ${newValue}`
+          )} to ${JSON.stringify(newValue)}`
         );
         values[item.linkId] = newValue;
         return true;
@@ -353,31 +395,6 @@ export const buildCommonInputProps = (
   });
 
   return inputProps;
-};
-
-/**
- * Convert string value to option value ({ code: "something" })
- */
-export const getOptionValue = (value: string, item: FormItem) => {
-  if (value && isDataNotCollected(value)) {
-    return null;
-  }
-  if (item.pickListReference) {
-    // This is a value for a choice item, like 'PSH', so transform it to the option object
-    const option = (localResolvePickList(item.pickListReference) || []).find(
-      (opt) => opt.code === value
-    );
-    return option || { code: value };
-  }
-  if (item.pickListOptions) {
-    const option = item.pickListOptions.find((opt) => opt.code === value);
-    if (!option)
-      console.error(
-        `Value '${value}' does not match answer options for question '${item.linkId}'`
-      );
-    return option || { code: value };
-  }
-  return { code: value };
 };
 
 /**

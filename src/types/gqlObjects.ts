@@ -131,7 +131,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'autofillBehavior',
-        type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
+        },
       },
       {
         name: 'valueBoolean',
@@ -395,6 +399,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'ENUM',
           name: 'NoYesReasonsForMissingData',
           ofType: null,
+        },
+      },
+      {
+        name: 'disablingCondition',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'NoYesReasonsForMissingData',
+            ofType: null,
+          },
         },
       },
       {
