@@ -131,7 +131,6 @@ const DynamicForm: React.FC<Props> = ({
           if (!enabledDependencyMap[changedLinkId]) return;
 
           enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-            // autofillValues(itemMap[dependentLinkId], localValues, itemMap);
             const enabled = shouldEnableItem(
               itemMap[dependentLinkId],
               localValues,
