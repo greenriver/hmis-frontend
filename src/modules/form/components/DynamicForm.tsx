@@ -72,7 +72,7 @@ const DynamicForm: React.FC<Props> = ({
   // List of link IDs that are currently disabled
   const [disabledLinkIds, setDisabledLinkIds] = useState<string[]>([]);
 
-  // console.log(values);
+  console.debug(values);
 
   const itemMap = useMemo(() => {
     const items = getItemMap(definition);

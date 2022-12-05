@@ -1,7 +1,11 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { zipObject } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
-import { getPopulatableChildren } from '../../util/formUtil';
+import {
+  getAllChildLinkIds,
+  getPopulatableChildren,
+} from '../../util/formUtil';
 import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
@@ -40,7 +44,6 @@ const ItemGroup = ({
 
   const onSelectAutofillRecord = useCallback(
     (record: RelatedRecord) => {
-      console.log('chose record:', record);
       setSourceRecord(record);
       setDialogOpen(false);
 
@@ -50,14 +53,18 @@ const ItemGroup = ({
 
         const gqlValue = record[i.fieldName as keyof RelatedRecord];
         newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
-        console.log(i.fieldName, gqlValueToFormValue(gqlValue, i));
       });
 
-      // FIXME: previously disabled still look disabled even when filled!
       severalItemsChanged(newFormValues);
     },
     [setDialogOpen, severalItemsChanged, item]
   );
+
+  const onClear = useCallback(() => {
+    const linkIds = getAllChildLinkIds(item);
+    const updatedValues = zipObject(linkIds, []);
+    severalItemsChanged(updatedValues);
+  }, [item, severalItemsChanged]);
 
   if (nestingLevel === 0) {
     return (
@@ -79,6 +86,7 @@ const ItemGroup = ({
                     variant='outlined'
                     size='small'
                     sx={{ height: 'fit-content' }}
+                    onClick={onClear}
                   >
                     CLEAR
                   </Button>

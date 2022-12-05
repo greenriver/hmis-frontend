@@ -258,7 +258,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         );
       } else if (item.pickListReference === 'NoYesReasonsForMissingData') {
         inputComponent = (
-          //   <RadioButtonInput
+          //   <RadioGroupInput
           //   value={selectedVal}
           //   onChange={onChangeValue}
           //   id={item.linkId}

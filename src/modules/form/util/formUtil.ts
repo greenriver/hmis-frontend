@@ -12,6 +12,7 @@ import {
   EnableWhen,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   PickListOption,
   ValueBound,
 } from '@/types/gqlTypes';
@@ -25,6 +26,9 @@ export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
 };
+
+export const isQuestionItem = (item: FormItem): boolean =>
+  ![ItemType.Display, ItemType.Group].includes(item.type);
 
 export function isDate(value: any | null | undefined): value is Date {
   return (
@@ -452,6 +456,24 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   }
 
   const result: FormItem[] = [];
+  recursiveFind(item.item || [], result);
+  return result;
+};
+
+export const getAllChildLinkIds = (item: FormItem): string[] => {
+  function recursiveFind(items: FormItem[], ids: string[]) {
+    items.forEach((item) => {
+      if (Array.isArray(item.item)) {
+        recursiveFind(item.item, ids);
+      }
+
+      if (isQuestionItem(item)) {
+        ids.push(item.linkId);
+      }
+    });
+  }
+
+  const result: string[] = [];
   recursiveFind(item.item || [], result);
   return result;
 };

@@ -20,16 +20,16 @@ interface Props extends Omit<RadioGroupProps, 'onChange'> {
   options: Option[];
   onChange: (value: Option | null | undefined) => void;
 }
-export type RadioButtonInputProps = Props & DynamicInputCommonProps;
+export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
-const RadioButtonInput = ({
+const RadioGroupInput = ({
   label,
   options,
   onChange,
   value,
   error,
   ...props
-}: RadioButtonInputProps) => {
+}: RadioGroupInputProps) => {
   const htmlId = useId();
 
   const onChangeOption = useCallback(
@@ -93,4 +93,4 @@ const RadioButtonInput = ({
   );
 };
 
-export default RadioButtonInput;
+export default RadioGroupInput;
