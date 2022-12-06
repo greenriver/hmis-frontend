@@ -1,7 +1,12 @@
 import { Alert, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import {
+  generatePath,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
@@ -46,10 +51,17 @@ export const InactiveBanner = ({
   );
 };
 
+type ProjectLocationState = {
+  refetchFunder?: boolean;
+  refetchInventory?: boolean;
+  refetchProjectCoc?: boolean;
+};
+
 const Project = () => {
   const { projectId } = useParams() as {
     projectId: string;
   };
+  const { state } = useLocation() as { state: ProjectLocationState };
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [crumbs, loading, project] = useProjectCrumbs();
@@ -90,19 +102,34 @@ const Project = () => {
             <Typography variant='h5' sx={{ mb: 2 }}>
               Funding Sources
             </Typography>
-            <FunderTable projectId={projectId} />
+            <FunderTable
+              projectId={projectId}
+              fetchPolicy={
+                state?.refetchFunder ? 'cache-and-network' : undefined
+              }
+            />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project CoCs
             </Typography>
-            <ProjectCocTable projectId={projectId} />
+            <ProjectCocTable
+              projectId={projectId}
+              fetchPolicy={
+                state?.refetchProjectCoc ? 'cache-and-network' : undefined
+              }
+            />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
-            <InventoryTable projectId={projectId} />
+            <InventoryTable
+              projectId={projectId}
+              fetchPolicy={
+                state?.refetchInventory ? 'cache-and-network' : undefined
+              }
+            />
           </Paper>
         </Grid>
         <Grid item xs>

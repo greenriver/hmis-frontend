@@ -1,5 +1,6 @@
 import * as storage from './storage';
 
+import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 
 export interface HmisUser {
@@ -123,5 +124,6 @@ export async function logout() {
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   storage.removeUser();
+  apolloClient.resetStore();
   return response;
 }

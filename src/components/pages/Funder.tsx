@@ -38,8 +38,10 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }));
-  }, [navigate, projectId]);
+    navigate(generatePath(Routes.PROJECT, { projectId }), {
+      state: { refetchFunder: create ? true : false },
+    });
+  }, [navigate, create, projectId]);
 
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!

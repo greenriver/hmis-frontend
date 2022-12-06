@@ -38,8 +38,10 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }));
-  }, [navigate, projectId]);
+    navigate(generatePath(Routes.PROJECT, { projectId }), {
+      state: { refetchInventory: create ? true : false },
+    });
+  }, [navigate, projectId, create]);
 
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!
