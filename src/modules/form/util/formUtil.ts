@@ -19,6 +19,7 @@ import {
 
 export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
+export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
 
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
@@ -481,10 +482,8 @@ export const getAllChildLinkIds = (item: FormItem): string[] => {
 /**
  * Map { linkId => array of Link IDs that depend on it for autofill }
  */
-export const buildAutofillDependencyMap = (
-  itemMap: ItemMap
-): Record<string, string[]> => {
-  const deps: Record<string, string[]> = {};
+export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
 
@@ -505,10 +504,8 @@ export const buildAutofillDependencyMap = (
 /**
  * Map { linkId => array of Link IDs that depend on it for enabled status }
  */
-export const buildEnabledDependencyMap = (
-  itemMap: ItemMap
-): Record<string, string[]> => {
-  const deps: Record<string, string[]> = {};
+export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
 
   function addEnableWhen(linkId: string, en: EnableWhen) {
     if (!deps[en.question]) deps[en.question] = [];
@@ -531,6 +528,18 @@ export const buildEnabledDependencyMap = (
     if (!item.enableWhen) return;
     item.enableWhen.forEach((en) => addEnableWhen(item.linkId, en));
   });
-  console.log(deps);
   return deps;
+};
+
+/**
+ * List of link IDs that should be disabled, based on provided form values
+ */
+export const getDisabledLinkIds = (
+  itemMap: ItemMap,
+  values?: FormValues
+): string[] => {
+  if (!values) return [];
+  return Object.keys(itemMap).filter(
+    (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
+  );
 };
