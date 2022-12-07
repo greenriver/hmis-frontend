@@ -39,6 +39,7 @@ interface Props<RecordType, Query, QueryVariables>
   localConstants?: LocalConstants;
   onCompleted: (data: Query) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
+  confirmable?: boolean; // whether mutation supports `confirmed` for warning confirmation on submit
 }
 
 /**
@@ -54,6 +55,7 @@ const EditRecord = <
   queryDocument,
   getErrors,
   onCompleted,
+  confirmable = false,
   inputVariables = {},
   localConstants = {},
   ...props
@@ -82,20 +84,18 @@ const EditRecord = <
     QueryVariables
   >(queryDocument, {
     onCompleted: (data) => {
-      const errors = getErrors(data);
-      console.log(errors);
+      const errors = getErrors(data) || [];
 
-      if ((errors || []).length > 0) {
-        const warnings = (errors || []).filter(
-          (e) => e.type === CONFIRM_ERROR_TYPE
-        );
-        const validationErrors = (errors || []).filter(
+      if (errors.length > 0) {
+        const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
+        const validationErrors = errors.filter(
           (e) => e.type !== CONFIRM_ERROR_TYPE
         );
         if (validationErrors.length > 0) window.scrollTo(0, 0);
         setWarnings(warnings);
         setErrors(validationErrors);
       } else {
+        window.scrollTo(0, 0);
         onCompleted(data);
       }
     },
@@ -122,7 +122,7 @@ const EditRecord = <
   }, [record, definition, itemMap, localConstants]);
 
   const submitHandler = useCallback(
-    (values: Record<string, any>, confirmed?: boolean) => {
+    (values: Record<string, any>, confirmed = false) => {
       if (!itemMap) return;
       // Transform values into client input query variables
       const inputValues = transformSubmitValues({
@@ -137,12 +137,14 @@ const EditRecord = <
       const input = {
         input: { ...inputValues, ...inputVariables },
         id: record?.id,
-        confirmed,
+        confirmed: confirmable ? confirmed : undefined,
       };
 
+      setWarnings([]);
+      setErrors([]);
       void mutateFunction({ variables: { input } as QueryVariables });
     },
-    [itemMap, inputVariables, mutateFunction, record]
+    [itemMap, inputVariables, mutateFunction, record, confirmable]
   );
 
   if (definitionLoading) return <Loading />;

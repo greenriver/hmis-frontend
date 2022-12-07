@@ -67,6 +67,7 @@ const EditProject = () => {
             getErrors={(data: UpdateProjectMutation) =>
               data?.updateProject?.errors
             }
+            confirmable
           />
         </Grid>
       </Grid>

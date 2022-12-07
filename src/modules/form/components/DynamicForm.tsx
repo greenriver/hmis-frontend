@@ -177,18 +177,7 @@ const DynamicForm: React.FC<
         updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
-        // console.log('--');
-        // console.log('Internal Form State', JSON.stringify(newValues, null, 2));
-        // const transformed = transformSubmitValues({
-        //   itemMap,
-        //   values: newValues,
-        // });
-        // console.log('');
-        // console.log(
-        //   'Transformed for GQL',
-        //   JSON.stringify(transformed, null, 2)
-        // );
-        // console.log('');
+        console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -345,7 +334,7 @@ const DynamicForm: React.FC<
         <ConfirmationDialog
           id='confirmSubmit'
           open
-          title='Confirm submission'
+          title='Confirm Change'
           onConfirm={handleConfirm}
           onCancel={() => setDialogDismissed(true)}
           loading={loading || false}

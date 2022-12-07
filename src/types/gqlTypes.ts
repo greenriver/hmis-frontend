@@ -627,10 +627,7 @@ export type DisabilityGroup = {
   chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
   developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
-  /**
-   * Current disabling conditionn on the linked Enrollment. It may not matching up
-   * with the disabilities specified in this group.
-   */
+  /** Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group. */
   disablingCondition: NoYesReasonsForMissingData;
   enrollment: Enrollment;
   hivAids?: Maybe<NoYesReasonsForMissingData>;

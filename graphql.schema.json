@@ -4201,7 +4201,7 @@
           },
           {
             "name": "disablingCondition",
-            "description": "Current disabling conditionn on the linked Enrollment. It may not matching up\nwith the disabilities specified in this group.",
+            "description": "Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group.",
             "args": [],
             "type": {
               "kind": "NON_NULL",

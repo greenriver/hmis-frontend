@@ -61,21 +61,6 @@ const EditAssessment = () => {
     [saveAssessmentMutation, assessmentId]
   );
 
-  const saveDraftHandler = useCallback(
-    (values: Record<string, any>) => {
-      // if (!formDefinition) return;
-      console.log('Saved form state:', values);
-      const variables = {
-        assessmentId,
-        inProgress: true,
-        values,
-      };
-
-      void saveAssessmentMutation({ variables });
-    },
-    [saveAssessmentMutation, assessmentId]
-  );
-
   const initialValues = useMemo(() => {
     // TODO merge with getInitialValues(definition) ?
     const values = data?.assessment?.assessmentDetail?.values;
@@ -114,7 +99,6 @@ const EditAssessment = () => {
             <DynamicForm
               definition={formDefinition}
               onSubmit={submitHandler}
-              onSaveDraft={saveDraftHandler}
               initialValues={initialValues || undefined}
               loading={saveLoading}
               errors={errors}
