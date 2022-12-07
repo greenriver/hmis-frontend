@@ -1,13 +1,16 @@
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import GenericTableWithData, {
+  Props as GenericTableWithDataProps,
+} from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -44,16 +47,31 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
   },
 ];
 
-const InventoryTable = ({ projectId }: { projectId: string }) => {
+interface Props
+  extends Omit<
+    GenericTableWithDataProps<
+      GetProjectInventoriesQuery,
+      GetProjectInventoriesQueryVariables,
+      InventoryFieldsFragment
+    >,
+    'queryVariables' | 'queryDocument' | 'pagePath'
+  > {
+  projectId: string;
+}
+
+const InventoryTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
     null
   );
-  const [key, setKey] = useState(0);
+
   const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
     useDeleteInventoryMutation({
-      onCompleted: () => {
-        setDelete(null);
-        setKey((old) => old + 1);
+      onCompleted: (res) => {
+        const id = res.deleteInventory?.inventory?.id;
+        if (id) {
+          setDelete(null);
+          cache.evict({ id: `Inventory:${id}` });
+        }
       },
     });
 
@@ -63,47 +81,47 @@ const InventoryTable = ({ projectId }: { projectId: string }) => {
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
+  const tableColumns = useMemo(() => {
+    return [
+      ...columns,
+      {
+        key: 'actions',
+        width: '1%',
+        render: (record: InventoryFieldsFragment) => (
+          <Stack direction='row' spacing={1}>
+            <ButtonLink
+              to={generatePath(Routes.EDIT_INVENTORY, {
+                projectId,
+                inventoryId: record.id,
+              })}
+              size='small'
+              variant='outlined'
+            >
+              Edit
+            </ButtonLink>
+            <Button
+              onClick={() => setDelete(record)}
+              size='small'
+              variant='outlined'
+              color='error'
+            >
+              Delete
+            </Button>
+          </Stack>
+        ),
+      },
+    ];
+  }, [projectId]);
+
   return (
     <>
-      <GenericTableWithData<
-        GetProjectInventoriesQuery,
-        GetProjectInventoriesQueryVariables,
-        InventoryFieldsFragment
-      >
-        key={key}
+      <GenericTableWithData
         queryVariables={{ id: projectId }}
         queryDocument={GetProjectInventoriesDocument}
-        columns={[
-          ...columns,
-          {
-            key: 'actions',
-            width: '1%',
-            render: (record) => (
-              <Stack direction='row' spacing={1}>
-                <ButtonLink
-                  to={generatePath(Routes.EDIT_INVENTORY, {
-                    projectId,
-                    inventoryId: record.id,
-                  })}
-                  size='small'
-                  variant='outlined'
-                >
-                  Edit
-                </ButtonLink>
-                <Button
-                  onClick={() => setDelete(record)}
-                  size='small'
-                  variant='outlined'
-                  color='error'
-                >
-                  Delete
-                </Button>
-              </Stack>
-            ),
-          },
-        ]}
+        columns={tableColumns}
         pagePath='project.inventories'
         noData='No inventory.'
+        {...props}
       />
       <ConfirmationDialog
         id='deleteProjectCoc'

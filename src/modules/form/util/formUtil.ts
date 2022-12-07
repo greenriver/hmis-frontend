@@ -12,12 +12,14 @@ import {
   EnableWhen,
   FormDefinitionJson,
   FormItem,
+  ItemType,
   PickListOption,
   ValueBound,
 } from '@/types/gqlTypes';
 
 export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
+export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
 
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
@@ -25,6 +27,9 @@ export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
 };
+
+export const isQuestionItem = (item: FormItem): boolean =>
+  ![ItemType.Display, ItemType.Group].includes(item.type);
 
 export function isDate(value: any | null | undefined): value is Date {
   return (
@@ -46,6 +51,16 @@ export function isPickListOption(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     !!value.code
   );
+}
+
+export function areEqualValues(
+  value1: any | null | undefined,
+  value2: any | null | undefined
+): boolean {
+  if (isPickListOption(value1) && isPickListOption(value2)) {
+    return value1.code === value2.code;
+  }
+  return value1 === value2;
 }
 
 const localResolvePickList = (
@@ -79,6 +94,35 @@ export const resolveOptionList = (
     );
   }
   return null;
+};
+
+/**
+ * Convert string value to option value ({ code: "something" })
+ */
+export const getOptionValue = (
+  value: string | null | undefined,
+  item: FormItem
+) => {
+  if (!value) return null;
+  if (value && isDataNotCollected(value)) {
+    return null;
+  }
+  if (item.pickListReference) {
+    // This is a value for a choice item, like 'PSH', so transform it to the option object
+    const option = (localResolvePickList(item.pickListReference) || []).find(
+      (opt) => opt.code === value
+    );
+    return option || { code: value };
+  }
+  if (item.pickListOptions) {
+    const option = item.pickListOptions.find((opt) => opt.code === value);
+    if (!option)
+      console.error(
+        `Value '${value}' does not match answer options for question '${item.linkId}'`
+      );
+    return option || { code: value };
+  }
+  return { code: value };
 };
 
 /**
@@ -281,14 +325,17 @@ export const autofillValues = (
         : booleans.every(Boolean);
 
     if (shouldAutofillValue) {
-      const newValue = [av.valueBoolean, av.valueCode, av.valueNumber].filter(
-        (e) => !isNil(e)
-      )[0];
-      if (values[item.linkId] !== newValue) {
+      const newValue = [
+        av.valueBoolean,
+        av.valueNumber,
+        getOptionValue(av.valueCode, item),
+      ].filter((e) => !isNil(e))[0];
+
+      if (!areEqualValues(values[item.linkId], newValue)) {
         console.log(
-          `AUTOFILL: Changing ${item.linkId} from ${
+          `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
             values[item.linkId]
-          } to ${newValue}`
+          )} to ${JSON.stringify(newValue)}`
         );
         values[item.linkId] = newValue;
         return true;
@@ -356,31 +403,6 @@ export const buildCommonInputProps = (
 };
 
 /**
- * Convert string value to option value ({ code: "something" })
- */
-export const getOptionValue = (value: string, item: FormItem) => {
-  if (value && isDataNotCollected(value)) {
-    return null;
-  }
-  if (item.pickListReference) {
-    // This is a value for a choice item, like 'PSH', so transform it to the option object
-    const option = (localResolvePickList(item.pickListReference) || []).find(
-      (opt) => opt.code === value
-    );
-    return option || { code: value };
-  }
-  if (item.pickListOptions) {
-    const option = item.pickListOptions.find((opt) => opt.code === value);
-    if (!option)
-      console.error(
-        `Value '${value}' does not match answer options for question '${item.linkId}'`
-      );
-    return option || { code: value };
-  }
-  return { code: value };
-};
-
-/**
  * Create initial form state based on initial values specified in the form definition
  */
 export const getInitialValues = (
@@ -439,13 +461,29 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
   return result;
 };
 
+export const getAllChildLinkIds = (item: FormItem): string[] => {
+  function recursiveFind(items: FormItem[], ids: string[]) {
+    items.forEach((item) => {
+      if (Array.isArray(item.item)) {
+        recursiveFind(item.item, ids);
+      }
+
+      if (isQuestionItem(item)) {
+        ids.push(item.linkId);
+      }
+    });
+  }
+
+  const result: string[] = [];
+  recursiveFind(item.item || [], result);
+  return result;
+};
+
 /**
  * Map { linkId => array of Link IDs that depend on it for autofill }
  */
-export const buildAutofillDependencyMap = (
-  itemMap: ItemMap
-): Record<string, string[]> => {
-  const deps: Record<string, string[]> = {};
+export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
 
@@ -466,10 +504,8 @@ export const buildAutofillDependencyMap = (
 /**
  * Map { linkId => array of Link IDs that depend on it for enabled status }
  */
-export const buildEnabledDependencyMap = (
-  itemMap: ItemMap
-): Record<string, string[]> => {
-  const deps: Record<string, string[]> = {};
+export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+  const deps: LinkIdMap = {};
 
   function addEnableWhen(linkId: string, en: EnableWhen) {
     if (!deps[en.question]) deps[en.question] = [];
@@ -492,6 +528,18 @@ export const buildEnabledDependencyMap = (
     if (!item.enableWhen) return;
     item.enableWhen.forEach((en) => addEnableWhen(item.linkId, en));
   });
-  console.log(deps);
   return deps;
+};
+
+/**
+ * List of link IDs that should be disabled, based on provided form values
+ */
+export const getDisabledLinkIds = (
+  itemMap: ItemMap,
+  values?: FormValues
+): string[] => {
+  if (!values) return [];
+  return Object.keys(itemMap).filter(
+    (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
+  );
 };

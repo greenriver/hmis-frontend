@@ -9,7 +9,10 @@ import {
   buildAutofillDependencyMap,
   buildCommonInputProps,
   buildEnabledDependencyMap,
+  getDisabledLinkIds,
   getItemMap,
+  ItemMap,
+  LinkIdMap,
   shouldEnableItem,
 } from '../util/formUtil';
 
@@ -39,7 +42,14 @@ export interface Props {
   horizontal?: boolean;
 }
 
-const DynamicForm: React.FC<Props> = ({
+const DynamicForm: React.FC<
+  Props & {
+    itemMap: ItemMap;
+    autofillDependencyMap: LinkIdMap;
+    enabledDependencyMap: LinkIdMap;
+    initiallyDisabledLinkIds: string[];
+  }
+> = ({
   definition,
   onSubmit,
   onSaveDraft,
@@ -50,6 +60,10 @@ const DynamicForm: React.FC<Props> = ({
   loading,
   initialValues = {},
   errors,
+  itemMap,
+  autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
+  enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
+  initiallyDisabledLinkIds, // list of link IDs that are disabled to start, based off definition and initialValues
   showSavePrompt = false,
   horizontal = false,
 }) => {
@@ -70,44 +84,20 @@ const DynamicForm: React.FC<Props> = ({
   );
 
   // List of link IDs that are currently disabled
-  const [disabledLinkIds, setDisabledLinkIds] = useState<string[]>([]);
-
-  // console.log(values);
-
-  const itemMap = useMemo(() => {
-    const items = getItemMap(definition);
-
-    // On first render, evaluate enableWhen for each item and set `disabledLinkIds`
-    // After this, they will only be updated when dependent values change (see `updateDisabledLinkIds`)
-    const initiallyDisabled = Object.keys(items).filter(
-      (linkId) => !shouldEnableItem(items[linkId], initialValues, items)
-    );
-    setDisabledLinkIds(initiallyDisabled);
-    return items;
-  }, [definition, initialValues]);
-
-  /**
-   * Map { linkId => array of Link IDs that depend on it for autofill }
-   */
-  const autofillDependencyMap = useMemo(
-    () => buildAutofillDependencyMap(itemMap),
-    [itemMap]
+  const [disabledLinkIds, setDisabledLinkIds] = useState(
+    initiallyDisabledLinkIds
   );
 
-  /**
-   * Map { linkId => array of Link IDs that depend on it for enabled status }
-   */
-  const enabledDependencyMap = useMemo(
-    () => buildEnabledDependencyMap(itemMap),
-    [itemMap]
-  );
+  if (errors) console.log('Validation errors', errors);
 
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
-    (changedLinkId: string, localValues: any) => {
-      if (!autofillDependencyMap[changedLinkId]) return;
-      autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-        autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+    (changedLinkIds: string[], localValues: any) => {
+      changedLinkIds.forEach((changedLinkId) => {
+        if (!autofillDependencyMap[changedLinkId]) return;
+        autofillDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+          autofillValues(itemMap[dependentLinkId], localValues, itemMap);
+        });
       });
     },
     [itemMap, autofillDependencyMap]
@@ -119,31 +109,47 @@ const DynamicForm: React.FC<Props> = ({
    * dependent on the item that just changed ("changedLinkid").
    */
   const updateDisabledLinkIds = useCallback(
-    (changedLinkId: string, localValues: any) => {
-      if (!enabledDependencyMap[changedLinkId]) return;
+    (changedLinkIds: string[], localValues: any) => {
+      // If none of these are dependencies, return immediately
+      if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
 
       setDisabledLinkIds((oldList) => {
         const newList = [...oldList];
-        enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-          // autofillValues(itemMap[dependentLinkId], localValues, itemMap);
-          const enabled = shouldEnableItem(
-            itemMap[dependentLinkId],
-            localValues,
-            itemMap
-          );
-          if (enabled && newList.includes(dependentLinkId)) {
-            pull(newList, dependentLinkId);
-          } else if (!enabled && !newList.includes(dependentLinkId)) {
-            newList.push(dependentLinkId);
-          }
+        changedLinkIds.forEach((changedLinkId) => {
+          if (!enabledDependencyMap[changedLinkId]) return;
+
+          enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+            const enabled = shouldEnableItem(
+              itemMap[dependentLinkId],
+              localValues,
+              itemMap
+            );
+            if (enabled && newList.includes(dependentLinkId)) {
+              pull(newList, dependentLinkId);
+            } else if (!enabled && !newList.includes(dependentLinkId)) {
+              newList.push(dependentLinkId);
+            }
+          });
         });
+
         return newList;
       });
     },
     [itemMap, enabledDependencyMap]
   );
 
-  if (errors) console.log('Validation errors', errors);
+  const isEnabled = useCallback(
+    (item: FormItem): boolean => {
+      if (item.hidden) return false;
+      if (!item.enableWhen && item.item) {
+        // This is a group. Only show it if some children are enabled.
+        return item.item.some((i) => isEnabled(i));
+      }
+
+      return !disabledLinkIds.includes(item.linkId);
+    },
+    [disabledLinkIds]
+  );
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
@@ -152,22 +158,30 @@ const DynamicForm: React.FC<Props> = ({
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newValues[linkId] = value;
-        updateAutofillValues(linkId, newValues); // updates currentValues in-place
-        updateDisabledLinkIds(linkId, newValues); // calls setState for disabled link IDs
+        updateAutofillValues([linkId], newValues); // updates newValues in-place
+        updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
+        console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
     [updateAutofillValues, updateDisabledLinkIds]
   );
 
-  const severalItemsChanged = useCallback((values: Record<string, any>) => {
-    setPromptSave(true);
-    setValues((currentValues) => {
-      return { ...currentValues, ...values };
-    });
-  }, []);
+  const severalItemsChanged = useCallback(
+    (values: Record<string, any>) => {
+      setPromptSave(true);
+      setValues((currentValues) => {
+        const newValues = { ...currentValues, ...values };
+        // Update which link IDs are disabled or not, based on the Link IDs that have changed
+        updateDisabledLinkIds(Object.keys(values), newValues);
+        console.debug('DynamicForm', newValues);
+        return newValues;
+      });
+    },
+    [updateDisabledLinkIds]
+  );
 
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -184,19 +198,6 @@ const DynamicForm: React.FC<Props> = ({
       onSaveDraft(values);
     },
     [values, onSaveDraft]
-  );
-
-  const isEnabled = useCallback(
-    (item: FormItem): boolean => {
-      if (item.hidden) return false;
-      if (!item.enableWhen && item.item) {
-        // This is a group. Only show it if some children are enabled.
-        return item.item.some((i) => isEnabled(i));
-      }
-
-      return !disabledLinkIds.includes(item.linkId);
-    },
-    [disabledLinkIds]
   );
 
   // Get errors for a particular field
@@ -335,4 +336,38 @@ const DynamicForm: React.FC<Props> = ({
   );
 };
 
-export default DynamicForm;
+/**
+ * Wrapper component to do some pre computation on form definition
+ */
+const DynamicFormWithComputedData = ({
+  definition,
+  initialValues,
+  ...props
+}: Props) => {
+  const [
+    itemMap,
+    autofillDependencyMap,
+    enabledDependencyMap,
+    initiallyDisabledLinkIds,
+  ] = useMemo(() => {
+    const items = getItemMap(definition);
+    const autofillMap = buildAutofillDependencyMap(items);
+    const enabledMap = buildEnabledDependencyMap(items);
+    const disabled = getDisabledLinkIds(items, initialValues);
+    return [items, autofillMap, enabledMap, disabled];
+  }, [definition, initialValues]);
+
+  return (
+    <DynamicForm
+      initialValues={initialValues}
+      definition={definition}
+      itemMap={itemMap}
+      autofillDependencyMap={autofillDependencyMap}
+      enabledDependencyMap={enabledDependencyMap}
+      initiallyDisabledLinkIds={initiallyDisabledLinkIds}
+      {...props}
+    />
+  );
+};
+
+export default DynamicFormWithComputedData;

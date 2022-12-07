@@ -1,7 +1,11 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { zipObject } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
-import { getPopulatableChildren } from '../../util/formUtil';
+import {
+  getAllChildLinkIds,
+  getPopulatableChildren,
+} from '../../util/formUtil';
 import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
@@ -42,18 +46,25 @@ const ItemGroup = ({
     (record: RelatedRecord) => {
       setSourceRecord(record);
       setDialogOpen(false);
-      // console.log('source', record);
+
       const newFormValues: Record<string, any> = {};
       getPopulatableChildren(item).forEach((i) => {
         if (!i.fieldName) return;
+
         const gqlValue = record[i.fieldName as keyof RelatedRecord];
         newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
       });
-      // console.log('as values', newFormValues);
+
       severalItemsChanged(newFormValues);
     },
     [setDialogOpen, severalItemsChanged, item]
   );
+
+  const onClear = useCallback(() => {
+    const linkIds = getAllChildLinkIds(item);
+    const updatedValues = zipObject(linkIds, []);
+    severalItemsChanged(updatedValues);
+  }, [item, severalItemsChanged]);
 
   if (nestingLevel === 0) {
     return (
@@ -70,14 +81,24 @@ const ItemGroup = ({
                 {item.text}
               </Typography>
               {item.recordType && (
-                <Button
-                  onClick={() => setDialogOpen(true)}
-                  variant='outlined'
-                  size='small'
-                  sx={{ height: 'fit-content' }}
-                >
-                  FILL SECTION
-                </Button>
+                <Stack direction='row' spacing={1}>
+                  <Button
+                    variant='outlined'
+                    size='small'
+                    sx={{ height: 'fit-content' }}
+                    onClick={onClear}
+                  >
+                    CLEAR
+                  </Button>
+                  <Button
+                    onClick={() => setDialogOpen(true)}
+                    variant='outlined'
+                    size='small'
+                    sx={{ height: 'fit-content' }}
+                  >
+                    FILL SECTION
+                  </Button>
+                </Stack>
               )}
             </Stack>
           )}

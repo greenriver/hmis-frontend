@@ -32,8 +32,10 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }));
-  }, [navigate, projectId]);
+    navigate(generatePath(Routes.PROJECT, { projectId }), {
+      state: { refetchProjectCoc: create ? true : false },
+    });
+  }, [navigate, projectId, create]);
 
   const { data, loading, error } = useGetProjectCocQuery({
     variables: { id: cocId },

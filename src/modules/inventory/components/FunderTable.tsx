@@ -1,13 +1,16 @@
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { useState, useCallback } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import GenericTableWithData, {
+  Props as GenericTableWithDataProps,
+} from '@/components/elements/GenericTableWithData';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -32,16 +35,31 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   { header: 'Grant ID', render: 'grantId' },
 ];
 
-const FunderTable = ({ projectId }: { projectId: string }) => {
+interface Props
+  extends Omit<
+    GenericTableWithDataProps<
+      GetProjectFundersQuery,
+      GetProjectFundersQueryVariables,
+      FunderFieldsFragment
+    >,
+    'queryVariables' | 'queryDocument' | 'pagePath'
+  > {
+  projectId: string;
+}
+
+const FunderTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<FunderFieldsFragment | null>(
     null
   );
-  const [key, setKey] = useState(0);
+
   const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
     useDeleteFunderMutation({
-      onCompleted: () => {
-        setDelete(null);
-        setKey((old) => old + 1);
+      onCompleted: (res) => {
+        const id = res.deleteFunder?.funder?.id;
+        if (id) {
+          setDelete(null);
+          cache.evict({ id: `Funder:${id}` });
+        }
       },
     });
   const handleDelete = useCallback(() => {
@@ -50,47 +68,48 @@ const FunderTable = ({ projectId }: { projectId: string }) => {
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
+  // console.log('cache at table', cache.data.data);
+  const tableColumns = useMemo(() => {
+    return [
+      ...columns,
+      {
+        key: 'actions',
+        width: '1%',
+        render: (record: FunderFieldsFragment) => (
+          <Stack direction='row' spacing={1}>
+            <ButtonLink
+              to={generatePath(Routes.EDIT_FUNDER, {
+                projectId,
+                funderId: record.id,
+              })}
+              size='small'
+              variant='outlined'
+            >
+              Edit
+            </ButtonLink>
+            <Button
+              onClick={() => setDelete(record)}
+              size='small'
+              variant='outlined'
+              color='error'
+            >
+              Delete
+            </Button>
+          </Stack>
+        ),
+      },
+    ];
+  }, [projectId]);
+
   return (
     <>
-      <GenericTableWithData<
-        GetProjectFundersQuery,
-        GetProjectFundersQueryVariables,
-        FunderFieldsFragment
-      >
-        key={key}
+      <GenericTableWithData
         queryVariables={{ id: projectId }}
         queryDocument={GetProjectFundersDocument}
-        columns={[
-          ...columns,
-          {
-            key: 'actions',
-            width: '1%',
-            render: (record) => (
-              <Stack direction='row' spacing={1}>
-                <ButtonLink
-                  to={generatePath(Routes.EDIT_FUNDER, {
-                    projectId,
-                    funderId: record.id,
-                  })}
-                  size='small'
-                  variant='outlined'
-                >
-                  Edit
-                </ButtonLink>
-                <Button
-                  onClick={() => setDelete(record)}
-                  size='small'
-                  variant='outlined'
-                  color='error'
-                >
-                  Delete
-                </Button>
-              </Stack>
-            ),
-          },
-        ]}
+        columns={tableColumns}
         pagePath='project.funders'
         noData='No funding sources.'
+        {...props}
       />
       <ConfirmationDialog
         id='deleteProjectCoc'

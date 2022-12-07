@@ -216,6 +216,7 @@ fragment DisabilityGroupFields on DisabilityGroup {
   user {
     ...UserFields
   }
+  disablingCondition
   chronicHealthCondition
   chronicHealthConditionIndefiniteAndImpairs
   developmentalDisability

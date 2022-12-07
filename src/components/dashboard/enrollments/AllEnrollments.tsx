@@ -95,9 +95,6 @@ const AllEnrollments = () => {
             rowLinkTo={rowLinkTo}
             columns={columns}
             pagePath='client.enrollments'
-            // FIXME we shouldn't need this, but the cache for GetClientEnrollments
-            // isn't updated after a new enrollment is created. Figure out how to
-            // fix that with cache policies and remove this.
             fetchPolicy='cache-and-network'
           />
         </Paper>

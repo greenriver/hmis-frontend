@@ -25,7 +25,7 @@ const NumberInput = ({
       inputProps={{
         inputMode: 'numeric',
         pattern: '[0-9]*',
-        min,
+        min: '0' || min,
         max,
         ...inputProps,
       }}

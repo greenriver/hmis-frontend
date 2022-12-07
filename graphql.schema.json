@@ -749,9 +749,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "EnableBehavior",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "EnableBehavior",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -761,15 +765,19 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "LIST",
+              "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "NON_NULL",
+                "kind": "LIST",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "EnableWhen",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "EnableWhen",
+                    "ofType": null
+                  }
                 }
               }
             },
@@ -4187,6 +4195,22 @@
               "kind": "ENUM",
               "name": "NoYesReasonsForMissingData",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "disablingCondition",
+            "description": "Current disabling conditionn on the linked Enrollment. It may not matching up\nwith the disabilities specified in this group.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "NoYesReasonsForMissingData",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
