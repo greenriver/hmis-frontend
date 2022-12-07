@@ -6,9 +6,8 @@ import { Routes, DashboardRoutes } from './routes';
 
 import EditClient from '@/components/dashboard/EditClient';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import EditAssessment from '@/components/dashboard/enrollments/EditAssessment';
+import Assessment from '@/components/dashboard/enrollments/Assessment';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
-import NewAssessment from '@/components/dashboard/enrollments/NewAssessment';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
@@ -93,15 +92,15 @@ export const protectedRoutes = [
           },
           {
             path: DashboardRoutes.NEW_ASSESSMENT,
-            element: <NewAssessment />,
+            element: <Assessment />,
           },
           {
             path: DashboardRoutes.VIEW_ASSESSMENT,
-            element: <EditAssessment />,
+            element: <Assessment />,
           },
           {
             path: DashboardRoutes.EDIT_ASSESSMENT,
-            element: <EditAssessment />,
+            element: <Assessment />,
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,

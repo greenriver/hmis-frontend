@@ -49,24 +49,24 @@ query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
   }
 }
 
-mutation CreateAssessment(
-  $enrollmentId: ID!
-  $formDefinitionId: ID!
+mutation SaveAssessment(
+  $assessmentId: ID
+  $enrollmentId: ID
+  $formDefinitionId: ID
   $values: JsonObject!
   $assessmentDate: String
-  $inProgress: Boolean
 ) {
-  createAssessment(
+  saveAssessment(
     input: {
+      assessmentId: $assessmentId
       enrollmentId: $enrollmentId
       formDefinitionId: $formDefinitionId
       assessmentDate: $assessmentDate
       values: $values
-      inProgress: $inProgress
     }
   ) {
     assessment {
-      ...AssessmentFields
+      ...AssessmentWithDefinitionAndValues
     }
     errors {
       ...ValidationErrorFields
@@ -74,22 +74,26 @@ mutation CreateAssessment(
   }
 }
 
-mutation SaveAssessment(
-  $assessmentId: ID!
+mutation SubmitAssessment(
+  $assessmentId: ID
+  $enrollmentId: ID
+  $formDefinitionId: ID
   $values: JsonObject!
+  $hudValues: JsonObject
   $assessmentDate: String
-  $inProgress: Boolean
 ) {
-  saveAssessment(
+  submitAssessment(
     input: {
       assessmentId: $assessmentId
+      enrollmentId: $enrollmentId
+      formDefinitionId: $formDefinitionId
       assessmentDate: $assessmentDate
       values: $values
-      inProgress: $inProgress
+      hudValues: $hudValues
     }
   ) {
     assessment {
-      ...AssessmentWithDefinitionAndValues
+      ...AssessmentFields
     }
     errors {
       ...ValidationErrorFields

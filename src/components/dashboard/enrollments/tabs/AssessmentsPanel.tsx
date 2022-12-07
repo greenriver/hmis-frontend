@@ -1,4 +1,6 @@
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Stack, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
@@ -23,7 +25,7 @@ import {
 
 const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
-    header: 'Type',
+    header: 'CE Type',
     render: (a) =>
       a.assessmentType && HmisEnums.AssessmentType[a.assessmentType],
     linkTreatment: true,
@@ -43,18 +45,33 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Date',
     width: '10%',
+    linkTreatment: true,
     render: (e) => parseAndFormatDate(e.assessmentDate),
   },
   {
     header: 'Type',
     width: '10%',
-    linkTreatment: true,
-    render: (assessment) => assessment.assessmentDetail?.role,
+    render: (assessment) =>
+      startCase(assessment.assessmentDetail?.role?.toLowerCase()),
   },
   {
     header: 'Status',
     width: '10%',
-    render: (assessment) => assessment.assessmentDetail?.status,
+    render: (assessment) =>
+      assessment.inProgress ? (
+        <Stack direction='row' alignItems='center' gap={0.8}>
+          <ErrorOutlineIcon color='error' fontSize='small' />
+          <Typography
+            variant='body2'
+            color='error'
+            sx={{ textDecoration: 'none' }}
+          >
+            Incomplete
+          </Typography>
+        </Stack>
+      ) : (
+        'Completed'
+      ),
   },
 
   {

@@ -19,6 +19,7 @@ import {
   buildCommonInputProps,
   buildEnabledDependencyMap,
   CONFIRM_ERROR_TYPE,
+  FormValues,
   getDisabledLinkIds,
   getItemMap,
   ItemMap,
@@ -40,8 +41,8 @@ import {
 
 export interface Props {
   definition: FormDefinitionJson;
-  onSubmit: (values: Record<string, any>, confirmed?: boolean) => void;
-  onSaveDraft?: (values: Record<string, any>) => void;
+  onSubmit: (values: FormValues, confirmed?: boolean) => void;
+  onSaveDraft?: (values: FormValues) => void;
   onDiscard?: () => void;
   submitButtonText?: string;
   saveDraftButtonText?: string;
