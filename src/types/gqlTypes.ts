@@ -2693,6 +2693,7 @@ export type UpdateProjectCocPayload = {
 export type UpdateProjectInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  confirmed: Scalars['Boolean'];
   id: Scalars['ID'];
   input: ProjectInput;
 };

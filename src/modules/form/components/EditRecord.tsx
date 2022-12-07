@@ -1,7 +1,12 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 
-import { getInitialValues, getItemMap, LocalConstants } from '../util/formUtil';
+import {
+  CONFIRM_ERROR_TYPE,
+  getInitialValues,
+  getItemMap,
+  LocalConstants,
+} from '../util/formUtil';
 
 import Loading from '@/components/elements/Loading';
 import DynamicForm, {
@@ -54,6 +59,7 @@ const EditRecord = <
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
+  const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
 
   const {
     data,
@@ -77,9 +83,18 @@ const EditRecord = <
   >(queryDocument, {
     onCompleted: (data) => {
       const errors = getErrors(data);
+      console.log(errors);
+
       if ((errors || []).length > 0) {
-        window.scrollTo(0, 0);
-        setErrors(errors);
+        const warnings = (errors || []).filter(
+          (e) => e.type === CONFIRM_ERROR_TYPE
+        );
+        const validationErrors = (errors || []).filter(
+          (e) => e.type !== CONFIRM_ERROR_TYPE
+        );
+        if (validationErrors.length > 0) window.scrollTo(0, 0);
+        setWarnings(warnings);
+        setErrors(validationErrors);
       } else {
         onCompleted(data);
       }
@@ -107,7 +122,7 @@ const EditRecord = <
   }, [record, definition, itemMap, localConstants]);
 
   const submitHandler = useCallback(
-    (values: Record<string, any>) => {
+    (values: Record<string, any>, confirmed?: boolean) => {
       if (!itemMap) return;
       // Transform values into client input query variables
       const inputValues = transformSubmitValues({
@@ -122,6 +137,7 @@ const EditRecord = <
       const input = {
         input: { ...inputValues, ...inputVariables },
         id: record?.id,
+        confirmed,
       };
 
       void mutateFunction({ variables: { input } as QueryVariables });
@@ -135,16 +151,20 @@ const EditRecord = <
   if (!definition) throw Error('Definition not found');
 
   return (
-    <DynamicForm
-      definition={definition}
-      onSubmit={submitHandler}
-      submitButtonText='Save Changes'
-      discardButtonText='Discard'
-      initialValues={initialValues}
-      loading={saveLoading}
-      errors={errors}
-      {...props}
-    />
+    <>
+      <DynamicForm
+        definition={definition}
+        onSubmit={submitHandler}
+        submitButtonText='Save Changes'
+        discardButtonText='Discard'
+        initialValues={initialValues}
+        loading={saveLoading}
+        errors={errors}
+        warnings={warnings}
+        {...props}
+      />
+    </>
   );
 };
+
 export default EditRecord;

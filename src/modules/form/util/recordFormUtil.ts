@@ -11,8 +11,10 @@ import { compact, isNil } from 'lodash-es';
 import { formatDateForGql, parseHmisDateString } from '../../hmis/hmisUtil';
 
 import {
+  FormValues,
   getOptionValue,
   isDataNotCollected,
+  ItemMap,
   resolveOptionList,
 } from './formUtil';
 
@@ -71,9 +73,9 @@ const findDataNotCollectedCode = (item: FormItem): string | undefined => {
 
 type TransformSubmitValuesParams = {
   /** flattened form definition keyed on link id */
-  itemMap: Record<string, FormItem>;
+  itemMap: ItemMap;
   /** form state (from DynamicForm) to transform */
-  values: Record<string, any>;
+  values: FormValues;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
   autofillNotCollected?: boolean;
   /** whether to fill unanswered questions with `null` */

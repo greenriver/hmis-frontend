@@ -21,7 +21,7 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-
+export const CONFIRM_ERROR_TYPE = 'confirm_warning';
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
