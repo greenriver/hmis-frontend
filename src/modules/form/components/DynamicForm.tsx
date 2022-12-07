@@ -25,7 +25,6 @@ import {
   LinkIdMap,
   shouldEnableItem,
 } from '../util/formUtil';
-import { transformSubmitValues } from '../util/recordFormUtil';
 
 import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
@@ -178,22 +177,22 @@ const DynamicForm: React.FC<
         updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
-        console.log('--');
-        console.log('Internal Form State', JSON.stringify(newValues, null, 2));
-        const transformed = transformSubmitValues({
-          itemMap,
-          values: newValues,
-        });
-        console.log('');
-        console.log(
-          'Transformed for GQL',
-          JSON.stringify(transformed, null, 2)
-        );
-        console.log('');
+        // console.log('--');
+        // console.log('Internal Form State', JSON.stringify(newValues, null, 2));
+        // const transformed = transformSubmitValues({
+        //   itemMap,
+        //   values: newValues,
+        // });
+        // console.log('');
+        // console.log(
+        //   'Transformed for GQL',
+        //   JSON.stringify(transformed, null, 2)
+        // );
+        // console.log('');
         return newValues;
       });
     },
-    [updateAutofillValues, updateDisabledLinkIds, itemMap]
+    [updateAutofillValues, updateDisabledLinkIds]
   );
 
   const severalItemsChanged = useCallback(
