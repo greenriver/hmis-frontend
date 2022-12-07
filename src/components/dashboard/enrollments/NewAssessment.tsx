@@ -1,4 +1,4 @@
-import { Alert, Grid, Typography } from '@mui/material';
+import { Alert, Grid, Paper, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +7,9 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
+import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import FormStepper from '@/modules/form/components/FormStepper';
 import { getInitialValues } from '@/modules/form/util/formUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -104,6 +106,8 @@ const NewAssessment = () => {
     [definition]
   );
 
+  useScrollToHash(crumbsLoading || loading);
+
   if (crumbsLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
   if (error) throw error;
@@ -112,20 +116,27 @@ const NewAssessment = () => {
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <Grid container spacing={4} sx={{ pb: 20 }}>
-        <Grid item xs={9}>
-          {loading && <Loading />}
-          {!loading && !definition && (
-            <Alert severity='error'>{`Unable to load ${title} form.`}</Alert>
-          )}
-          {definition && (
-            <>
-              <Typography
-                variant='h3'
-                sx={{ mb: 3, textTransform: 'capitalize' }}
-              >
-                {title}
-              </Typography>
+      {definition && (
+        <Typography variant='h3' sx={{ mb: 3, textTransform: 'capitalize' }}>
+          {title}
+        </Typography>
+      )}
+      <Grid container spacing={4} sx={{ pb: 20, mt: 2 }}>
+        {loading && <Loading />}
+        {!loading && !definition && (
+          <Alert severity='error'>{`Unable to load ${title} form.`}</Alert>
+        )}
+        {definition && (
+          <>
+            <Grid item xs={3} sx={{ pr: 2 }}>
+              <Paper sx={{ p: 3 }}>
+                <Typography variant='h6' sx={{ mb: 2 }}>
+                  Form Navigation
+                </Typography>
+                <FormStepper definition={definition} />
+              </Paper>
+            </Grid>
+            <Grid item xs={9}>
               <DynamicForm
                 definition={definition}
                 initialValues={initialValues}
@@ -134,12 +145,10 @@ const NewAssessment = () => {
                 loading={saveLoading}
                 errors={errors}
                 showSavePrompt
-                // horizontal
               />
-            </>
-          )}
-        </Grid>
-        <Grid item xs></Grid>
+            </Grid>
+          </>
+        )}
       </Grid>
     </>
   );

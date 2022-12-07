@@ -1,12 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  generatePath,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers, {
@@ -21,6 +16,7 @@ import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
+import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import ClientSearch from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
@@ -31,7 +27,6 @@ import {
 } from '@/types/gqlTypes';
 
 const EditHousehold = () => {
-  const { pathname, hash, key } = useLocation();
   const navigate = useNavigate();
   const { clientId, enrollmentId } = useParams() as {
     clientId: string;
@@ -63,16 +58,7 @@ const EditHousehold = () => {
   const anythingLoading =
     breadcrumbsLoading || enrollmentLoading || recentMembersLoading;
 
-  useEffect(() => {
-    if (!hash || anythingLoading) return;
-    setTimeout(() => {
-      const id = hash.replace('#', '');
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView();
-      }
-    }, 0);
-  }, [pathname, hash, key, anythingLoading]);
+  useScrollToHash(anythingLoading);
 
   const currentMembers = useMemo(
     () => sortHouseholdMembers(data?.enrollment?.household.householdClients),

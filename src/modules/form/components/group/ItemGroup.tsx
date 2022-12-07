@@ -68,7 +68,7 @@ const ItemGroup = ({
 
   if (nestingLevel === 0) {
     return (
-      <Grid item>
+      <Grid item id={item.linkId}>
         <Paper
           sx={{
             py: 3,
