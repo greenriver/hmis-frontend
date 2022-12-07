@@ -25,12 +25,22 @@ const EditProject = () => {
 
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
-      const id = data?.updateProject?.project?.id;
-      if (id) {
-        navigate(generatePath(Routes.PROJECT, { projectId: id }));
+      const updatedProject = data?.updateProject?.project;
+      if (updatedProject?.id) {
+        // Force refresh inventory and funder if this project was just
+        // closed, since those can be closed as a side effect.
+        const state =
+          updatedProject?.operatingEndDate && !project?.operatingEndDate
+            ? { refetchInventory: true, refetchFunder: true }
+            : undefined;
+
+        navigate(
+          generatePath(Routes.PROJECT, { projectId: updatedProject?.id }),
+          { state }
+        );
       }
     },
-    [navigate]
+    [navigate, project]
   );
 
   if (loading) return <Loading />;
@@ -57,6 +67,7 @@ const EditProject = () => {
             getErrors={(data: UpdateProjectMutation) =>
               data?.updateProject?.errors
             }
+            confirmable
           />
         </Grid>
       </Grid>

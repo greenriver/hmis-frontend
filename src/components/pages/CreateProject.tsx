@@ -57,6 +57,7 @@ const CreateProject = () => {
               data?.createProject?.errors
             }
             submitButtonText='Create Project'
+            confirmable
           />
         </Grid>
       </Grid>

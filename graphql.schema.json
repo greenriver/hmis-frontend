@@ -4201,7 +4201,7 @@
           },
           {
             "name": "disablingCondition",
-            "description": "Current disabling conditionn on the linked Enrollment. It may not matching up\nwith the disabilities specified in this group.",
+            "description": "Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -16194,6 +16194,22 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "confirmed",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,

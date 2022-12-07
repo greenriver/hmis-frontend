@@ -1,4 +1,13 @@
-import { Alert, Box, Button, Grid, Paper, Slide, Stack } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Slide,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { isNil, pull } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +18,7 @@ import {
   buildAutofillDependencyMap,
   buildCommonInputProps,
   buildEnabledDependencyMap,
+  CONFIRM_ERROR_TYPE,
   getDisabledLinkIds,
   getItemMap,
   ItemMap,
@@ -19,6 +29,7 @@ import {
 import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 
+import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import {
   DisabledDisplay,
   FormDefinitionJson,
@@ -29,7 +40,7 @@ import {
 
 export interface Props {
   definition: FormDefinitionJson;
-  onSubmit: (values: Record<string, any>) => void;
+  onSubmit: (values: Record<string, any>, confirmed?: boolean) => void;
   onSaveDraft?: (values: Record<string, any>) => void;
   onDiscard?: () => void;
   submitButtonText?: string;
@@ -38,6 +49,7 @@ export interface Props {
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
+  warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
 }
@@ -59,7 +71,8 @@ const DynamicForm: React.FC<
   discardButtonText,
   loading,
   initialValues = {},
-  errors,
+  errors = [],
+  warnings = [],
   itemMap,
   autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
@@ -70,6 +83,8 @@ const DynamicForm: React.FC<
   const navigate = useNavigate();
 
   const [promptSave, setPromptSave] = useState<boolean | undefined>();
+
+  const [dialogDismissed, setDialogDismissed] = useState<boolean>(false);
   const saveButtonsRef = React.createRef<HTMLDivElement>();
   const isSaveButtonVisible = useElementInView(saveButtonsRef, '0px');
 
@@ -88,7 +103,7 @@ const DynamicForm: React.FC<
     initiallyDisabledLinkIds
   );
 
-  if (errors) console.log('Validation errors', errors);
+  if (errors.length > 0) console.log('Validation errors', errors);
 
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
@@ -186,8 +201,14 @@ const DynamicForm: React.FC<
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
+      setDialogDismissed(false);
       onSubmit(values);
     },
+    [values, onSubmit]
+  );
+
+  const handleConfirm = useCallback(
+    () => onSubmit(values, true),
     [values, onSubmit]
   );
 
@@ -206,7 +227,9 @@ const DynamicForm: React.FC<
       if (!errors) return undefined;
       if (!item.fieldName) return undefined;
       const attribute = item.fieldName;
-      return errors.filter((e) => e.attribute === attribute);
+      return errors.filter(
+        (e) => e.attribute === attribute && e.type !== CONFIRM_ERROR_TYPE
+      );
     },
     [errors]
   );
@@ -275,7 +298,7 @@ const DynamicForm: React.FC<
       <Button
         variant='contained'
         type='submit'
-        disabled={!!loading}
+        disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
         onClick={handleSubmit}
       >
         {loading ? 'Saving...' : submitButtonText || 'Submit'}
@@ -289,7 +312,7 @@ const DynamicForm: React.FC<
       onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
     >
       <Grid container direction='column' spacing={2}>
-        {errors && (
+        {errors.length > 0 && (
           <Grid item>
             <Alert severity='error' sx={{ mb: 1 }}>
               Please fix outstanding errors:
@@ -306,6 +329,23 @@ const DynamicForm: React.FC<
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
         {saveButtons}
       </Box>
+
+      {warnings.length > 0 && !dialogDismissed && (
+        <ConfirmationDialog
+          id='confirmSubmit'
+          open
+          title='Confirm Change'
+          onConfirm={handleConfirm}
+          onCancel={() => setDialogDismissed(true)}
+          loading={loading || false}
+        >
+          <Stack>
+            {warnings?.map((e) => (
+              <Typography key={e.fullMessage}>{e.fullMessage}</Typography>
+            ))}
+          </Stack>
+        </ConfirmationDialog>
+      )}
 
       {showSavePrompt && (
         <Slide in={promptSave} appear timeout={300} direction='up'>
