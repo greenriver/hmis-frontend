@@ -1094,6 +1094,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'alimony',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'alimonyAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
@@ -1104,6 +1108,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
+      },
+      {
+        name: 'childSupport',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'childSupportAmount',
@@ -1150,6 +1158,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'earned',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'earnedAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
@@ -1157,6 +1169,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'employerProvided',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      { name: 'ga', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'gaAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
@@ -1274,6 +1287,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
+        name: 'otherIncomeSource',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'otherIncomeSourceIdentify',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -1290,8 +1307,16 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'pension',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'pensionAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
+        name: 'privateDisability',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'privateDisabilityAmount',
@@ -1315,13 +1340,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       { name: 'snap', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
+        name: 'socSecRetirement',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'socSecRetirementAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
+      { name: 'ssdi', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'ssdiAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
+      { name: 'ssi', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'ssiAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
@@ -1330,6 +1361,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'stateHealthIns',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      { name: 'tanf', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
       {
         name: 'tanfAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
@@ -1347,12 +1379,24 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'unemployment',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'unemploymentAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
+        name: 'vaDisabilityNonService',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'vaDisabilityNonServiceAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
+        name: 'vaDisabilityService',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'vaDisabilityServiceAmount',
@@ -1363,6 +1407,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'wic', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'workersComp',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
       {
         name: 'workersCompAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
