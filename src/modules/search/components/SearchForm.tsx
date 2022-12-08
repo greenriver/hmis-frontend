@@ -2,15 +2,15 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {
   Box,
-  Grid,
   Button,
-  Stack,
-  Paper,
+  Grid,
   Link,
+  Paper,
+  Stack,
   Typography,
 } from '@mui/material';
 import { isEmpty, omit } from 'lodash-es';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ProjectSelect, {
@@ -18,7 +18,6 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
-import { getItemMap } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
@@ -48,10 +47,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
 }) => {
   const { t } = useTranslation();
   const [values, setValues] = useState<FormValues>(initialValues || {});
-  const itemMap = useMemo(
-    () => (definition ? getItemMap(definition, false) : undefined),
-    [definition]
-  );
 
   // If advanced parameters were specified in the URL parameters, expand the panel
   const hasInitialAdvanced = !isEmpty(omit(initialValues, defaultSearchKeys));
@@ -69,21 +64,23 @@ const SearchForm: React.FC<SearchFormProps> = ({
   const submitHandler = useCallback(
     (event: React.FormEvent<HTMLFormElement> | React.KeyboardEvent) => {
       event.preventDefault();
-      if (!itemMap) return;
+      if (!definition) return;
       // Transform values into ClientSearchInput query variables
       const variables = transformSubmitValues({
-        itemMap,
+        definition,
         values,
       });
-      onSubmit({
+      const input = {
         ...variables,
         textSearch: values.textSearch,
         ...(values.projects && {
           projects: values.projects.map((p) => p.code),
         }),
-      });
+      };
+      console.debug('Search', input);
+      onSubmit(input);
     },
-    [values, itemMap, onSubmit]
+    [values, definition, onSubmit]
   );
 
   const submitOnEnter = (event: React.KeyboardEvent) => {
