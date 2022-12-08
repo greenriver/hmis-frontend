@@ -112,7 +112,7 @@ export const transformSubmitValues = ({
       if (Array.isArray(item.item)) {
         const recordName = item.recordType
           ? HmisEnums.RelatedRecordType[item.recordType]
-          : undefined;
+          : currentRecord;
         rescursiveFillMap(item.item, result, recordName);
       }
 

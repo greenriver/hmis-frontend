@@ -121,6 +121,40 @@ describe('transformSubmitValues', () => {
     });
   });
 
+  it('prepends record type when nested', () => {
+    const def: FormDefinitionJson = {
+      item: [
+        {
+          type: ItemType.Group,
+          linkId: '1',
+          recordType: RelatedRecordType.Exit,
+          item: [
+            {
+              linkId: '1.1',
+              type: ItemType.Group,
+              item: [
+                {
+                  linkId: '1.1.1',
+                  type: ItemType.Boolean,
+                  fieldName: 'boolField',
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    };
+    const values = { '1.1.1': true };
+    const result = transformSubmitValues({
+      definition: def,
+      values,
+    });
+
+    expect(result).toStrictEqual({
+      'Exit.boolField': true,
+    });
+  });
+
   it('handles multi choice', () => {
     const values = {
       '1.6': [{ code: 'OPT_1' }, { code: 'OPT_2' }],
