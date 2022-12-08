@@ -83,7 +83,7 @@ const NewEnrollment = () => {
       })),
       inProgress: true,
     };
-    console.log(JSON.stringify(values, null, 2));
+    console.log('CreateEnrollment', values);
     void mutateFunction({
       variables: { input: values },
     });
