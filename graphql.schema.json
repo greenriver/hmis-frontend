@@ -12523,10 +12523,10 @@
           },
           {
             "name": "operatingEndDate",
-            "description": "Date with format yyyy-mm-dd",
+            "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "defaultValue": null,
@@ -12535,10 +12535,10 @@
           },
           {
             "name": "operatingStartDate",
-            "description": "Date with format yyyy-mm-dd",
+            "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "defaultValue": null,
@@ -14253,10 +14253,10 @@
           },
           {
             "name": "dateProvided",
-            "description": "Date with format yyyy-mm-dd",
+            "description": null,
             "type": {
               "kind": "SCALAR",
-              "name": "String",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "defaultValue": null,
