@@ -1,7 +1,11 @@
 import { formValueToGqlValue, transformSubmitValues } from './recordFormUtil';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import { FormDefinitionJson, ItemType } from '@/types/gqlTypes';
+import {
+  FormDefinitionJson,
+  ItemType,
+  RelatedRecordType,
+} from '@/types/gqlTypes';
 
 describe('formValueToGqlValue', () => {
   it('removes empty strings', () => {
@@ -89,6 +93,31 @@ describe('transformSubmitValues', () => {
       numField: 12,
       numField2: 1.5,
       choiceField: 'YES',
+    });
+  });
+
+  it('prepends record type', () => {
+    const clone = JSON.parse(JSON.stringify(definition));
+    clone.item[0].recordType = RelatedRecordType.Exit;
+    const values = {
+      '1.1': true,
+      '1.2': 'foo',
+      '1.3': undefined,
+      '1.4': '12',
+      '1.6': { code: 'YES', label: 'Yes' },
+      '1.7': null,
+    };
+    const result = transformSubmitValues({
+      definition: clone,
+      values,
+    });
+
+    expect(result).toStrictEqual({
+      'Exit.boolField': true,
+      'Exit.strField': 'foo',
+      'Exit.numField': 12,
+      'Exit.choiceField': 'YES',
+      'Exit.textField': null,
     });
   });
 
