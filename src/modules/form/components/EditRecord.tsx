@@ -123,10 +123,10 @@ const EditRecord = <
 
   const submitHandler = useCallback(
     (values: Record<string, any>, confirmed = false) => {
-      if (!itemMap) return;
+      if (!definition) return;
       // Transform values into client input query variables
       const inputValues = transformSubmitValues({
-        itemMap,
+        definition,
         values,
         autofillNotCollected: true,
         autofillNulls: true,
@@ -144,7 +144,7 @@ const EditRecord = <
       setErrors([]);
       void mutateFunction({ variables: { input } as QueryVariables });
     },
-    [itemMap, inputVariables, mutateFunction, record, confirmable]
+    [definition, inputVariables, mutateFunction, record, confirmable]
   );
 
   if (definitionLoading) return <Loading />;

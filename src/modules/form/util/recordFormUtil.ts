@@ -14,11 +14,16 @@ import {
   FormValues,
   getOptionValue,
   isDataNotCollected,
-  ItemMap,
   resolveOptionList,
 } from './formUtil';
 
-import { FormItem, ItemType, PickListOption } from '@/types/gqlTypes';
+import { HmisEnums } from '@/types/gqlEnums';
+import {
+  FormDefinitionJson,
+  FormItem,
+  ItemType,
+  PickListOption,
+} from '@/types/gqlTypes';
 
 /**
  * Transform form value shape into GraphQL value shape.
@@ -30,12 +35,16 @@ import { FormItem, ItemType, PickListOption } from '@/types/gqlTypes';
  * @returns transformed value
  */
 export const formValueToGqlValue = (value: any, item: FormItem): any => {
-  if (value instanceof Date) {
+  if (isNil(value)) return value;
+  if (value === '') return undefined;
+
+  if (item.type === ItemType.Date && value instanceof Date) {
     return formatDateForGql(value);
   }
 
-  if (item.type === ItemType.Integer) {
-    return parseInt(value);
+  if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
+    const num = Number(value);
+    return Number.isNaN(num) ? undefined : num;
   }
 
   if (
@@ -57,9 +66,6 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     }
   }
 
-  if (value === '') {
-    return undefined;
-  }
   return value;
 };
 
@@ -72,8 +78,7 @@ const findDataNotCollectedCode = (item: FormItem): string | undefined => {
 };
 
 type TransformSubmitValuesParams = {
-  /** flattened form definition keyed on link id */
-  itemMap: ItemMap;
+  definition: FormDefinitionJson;
   /** form state (from DynamicForm) to transform */
   values: FormValues;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
@@ -88,48 +93,63 @@ type TransformSubmitValuesParams = {
  * Given the form state of a completed form, transform it into
  * query variables for a mutation. This is used for dynamic forms that
  * edit one record directly, like the Client, Project, and Organization edit screens.
+ * It's also used when submitting an assessment, to generate `hudValues`
  */
 export const transformSubmitValues = ({
-  itemMap,
+  definition,
   values,
   autofillNotCollected = false,
   autofillNulls = false,
   autofillBooleans = false,
 }: TransformSubmitValuesParams) => {
-  // Map of variables to pass to gql mutation
+  // Recursive helper for traversing the FormDefinition
+  function rescursiveFillMap(
+    items: FormItem[],
+    result: Record<string, any>,
+    currentRecord?: string
+  ) {
+    items.forEach((item: FormItem) => {
+      if (Array.isArray(item.item)) {
+        const recordName = item.recordType
+          ? HmisEnums.RelatedRecordType[item.recordType]
+          : undefined;
+        rescursiveFillMap(item.item, result, recordName);
+      }
+
+      let key = item.fieldName;
+      if (!key) return;
+      if (currentRecord) key = `${currentRecord}.${key}`; // Enrollment.livingSituation, for example
+
+      let value;
+      if (item.linkId in values) {
+        // Transform into gql value, for example Date -> YYYY-MM-DD string
+        value = formValueToGqlValue(values[item.linkId], item);
+      }
+
+      if (typeof value !== 'undefined') {
+        result[key] = value;
+      }
+
+      if (autofillNotCollected && isNil(value)) {
+        // If we don't have a value, fill in Not Collected code if present
+        const notCollectedCode = findDataNotCollectedCode(item);
+        if (notCollectedCode) result[key] = notCollectedCode;
+      }
+      if (autofillNulls && isNil(result[key])) {
+        result[key] = null;
+      }
+      if (
+        autofillBooleans &&
+        isNil(result[key]) &&
+        item.type === ItemType.Boolean
+      ) {
+        result[key] = false;
+      }
+    });
+  }
+
   const result: Record<string, any> = {};
-
-  Object.values(itemMap).forEach((item: FormItem) => {
-    const key = item.fieldName;
-    if (!key) return;
-
-    let value;
-    if (item.linkId in values) {
-      // Transform into gql value, for example Date -> YYYY-MM-DD string
-      value = formValueToGqlValue(values[item.linkId], item);
-    }
-
-    if (typeof value !== 'undefined') {
-      result[key] = value;
-    }
-
-    if (autofillNotCollected && isNil(value)) {
-      // If we don't have a value, fill in Not Collected code if present
-      const notCollectedCode = findDataNotCollectedCode(item);
-      if (notCollectedCode) result[key] = notCollectedCode;
-    }
-    if (autofillNulls && isNil(result[key])) {
-      result[key] = null;
-    }
-    if (
-      autofillBooleans &&
-      isNil(result[key]) &&
-      item.type === ItemType.Boolean
-    ) {
-      result[key] = false;
-    }
-  });
-
+  rescursiveFillMap(definition.item, result);
   return result;
 };
 

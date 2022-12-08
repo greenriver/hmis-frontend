@@ -543,3 +543,27 @@ export const getDisabledLinkIds = (
     (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
   );
 };
+
+/**
+ * Given a list of link IDs, returns a list of the same link IDs including
+ * all their descendants link IDs.
+ */
+export const addDescendants = (
+  linkIds: string[],
+  definition: FormDefinitionJson
+): string[] => {
+  function recurAdd(items: FormItem[], ids: string[], parentIncluded: boolean) {
+    items.forEach((item: FormItem) => {
+      const include = parentIncluded || ids.includes(item.linkId);
+      if (include) ids.push(item.linkId);
+
+      if (Array.isArray(item.item)) {
+        recurAdd(item.item, ids, include);
+      }
+    });
+  }
+
+  const result: string[] = [...linkIds];
+  recurAdd(definition.item, result, false);
+  return result;
+};

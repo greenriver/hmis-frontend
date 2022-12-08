@@ -2,7 +2,7 @@ import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import { FormValues, getItemMap } from '@/modules/form/util/formUtil';
+import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -73,11 +73,6 @@ export function useAssessmentHandlers() {
     return `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`;
   }, [assessmentData, role]);
 
-  const itemMap = useMemo(
-    () => (definition ? getItemMap(definition, false) : undefined),
-    [definition]
-  );
-
   const formDefinitionId = useMemo(
     () => formDefinitionData?.getFormDefinition?.id,
     [formDefinitionData]
@@ -122,8 +117,8 @@ export function useAssessmentHandlers() {
 
   const submitHandler = useCallback(
     (values: FormValues) => {
-      if (!itemMap) return;
-      const hudValues = transformSubmitValues({ itemMap, values });
+      if (!definition) return;
+      const hudValues = transformSubmitValues({ definition, values });
       const variables = {
         assessmentId,
         enrollmentId,
@@ -137,7 +132,7 @@ export function useAssessmentHandlers() {
     [
       submitAssessmentMutation,
       assessmentId,
-      itemMap,
+      definition,
       formDefinitionId,
       enrollmentId,
     ]

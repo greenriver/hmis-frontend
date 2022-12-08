@@ -8,12 +8,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isNil, pull } from 'lodash-es';
+import { isNil, omit, pull } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
 import {
+  addDescendants,
   autofillValues,
   buildAutofillDependencyMap,
   buildCommonInputProps,
@@ -203,9 +204,12 @@ const DynamicForm: React.FC<
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       setDialogDismissed(false);
-      onSubmit(values);
+
+      // Exclude all disabled items, and their descendants, from values hash
+      const excluded = addDescendants(disabledLinkIds, definition);
+      onSubmit(omit(values, excluded));
     },
-    [values, onSubmit]
+    [values, onSubmit, disabledLinkIds, definition]
   );
 
   const handleConfirm = useCallback(
@@ -217,9 +221,12 @@ const DynamicForm: React.FC<
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       if (!onSaveDraft) return;
-      onSaveDraft(values);
+
+      // Exclude all disabled items, and their descendants, from values hash
+      const excluded = addDescendants(disabledLinkIds, definition);
+      onSaveDraft(omit(values, excluded));
     },
-    [values, onSaveDraft]
+    [values, onSaveDraft, definition, disabledLinkIds]
   );
 
   // Get errors for a particular field
