@@ -76,7 +76,8 @@ const DatePicker = ({
           {...textInputProps}
           {...params}
           error={error || !!errorMessage}
-          helperText={errorMessage}
+          // If there is a server error, show that instead of the local message
+          helperText={error ? undefined : errorMessage}
           FormHelperTextProps={{
             sx: { '&.Mui-error': { whiteSpace: 'nowrap' } },
           }}
