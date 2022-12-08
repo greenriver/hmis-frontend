@@ -185,7 +185,7 @@ const DynamicForm: React.FC<
         updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -199,7 +199,7 @@ const DynamicForm: React.FC<
         const newValues = { ...currentValues, ...values };
         // Update which link IDs are disabled or not, based on the Link IDs that have changed
         updateDisabledLinkIds(Object.keys(values), newValues);
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
