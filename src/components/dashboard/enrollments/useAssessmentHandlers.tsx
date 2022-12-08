@@ -127,7 +127,7 @@ export function useAssessmentHandlers() {
         hudValues,
       };
       console.debug('Submitting', variables);
-      // void submitAssessmentMutation({ variables });
+      void submitAssessmentMutation({ variables });
     },
     [
       submitAssessmentMutation,
@@ -147,7 +147,7 @@ export function useAssessmentHandlers() {
         values: values,
       };
       console.debug('Saving', variables);
-      // void saveAssessmentMutation({ variables });
+      void saveAssessmentMutation({ variables });
     },
     [saveAssessmentMutation, assessmentId, formDefinitionId, enrollmentId]
   );
