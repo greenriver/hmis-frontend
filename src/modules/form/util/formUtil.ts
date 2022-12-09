@@ -301,6 +301,9 @@ export const shouldEnableItem = (
 
 /**
  * Autofill values based on changed item.
+ * If there are multiple autofill rules, the first matching one is used
+ * ("matching" meaning autofill_when evaluated to true).
+ *
  * Changes `values` in place.
  *
  * @return boolen true if values changed

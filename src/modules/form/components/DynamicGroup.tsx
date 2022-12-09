@@ -18,7 +18,8 @@ export interface GroupItemComponentProps {
   nestingLevel: number;
   renderChildItem: (
     item: FormItem,
-    props?: OverrideableDynamicFieldProps
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
   values: Record<string, any>;
   itemChanged: (linkId: string, value: any) => void;

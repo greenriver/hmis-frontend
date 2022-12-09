@@ -9,7 +9,13 @@ import {
   Typography,
 } from '@mui/material';
 import { isNil, omit, pull } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
@@ -179,7 +185,7 @@ const DynamicForm: React.FC<
         updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -193,7 +199,7 @@ const DynamicForm: React.FC<
         const newValues = { ...currentValues, ...values };
         // Update which link IDs are disabled or not, based on the Link IDs that have changed
         updateDisabledLinkIds(Object.keys(values), newValues);
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -246,7 +252,8 @@ const DynamicForm: React.FC<
   const renderItem = (
     item: FormItem,
     nestingLevel: number,
-    props?: OverrideableDynamicFieldProps
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item);
     if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected) {
@@ -259,8 +266,8 @@ const DynamicForm: React.FC<
           item={item}
           key={item.linkId}
           nestingLevel={nestingLevel}
-          renderChildItem={(item, props) =>
-            renderItem(item, nestingLevel + 1, props)
+          renderChildItem={(item, props, fn) =>
+            renderItem(item, nestingLevel + 1, props, fn)
           }
           values={values}
           itemChanged={itemChanged}
@@ -268,7 +275,8 @@ const DynamicForm: React.FC<
         />
       );
     }
-    return (
+
+    const itemComponent = (
       <DynamicField
         key={item.linkId}
         item={item}
@@ -284,6 +292,10 @@ const DynamicForm: React.FC<
         {...props}
       />
     );
+    if (renderFn) {
+      return renderFn(itemComponent);
+    }
+    return itemComponent;
   };
 
   const saveButtons = (

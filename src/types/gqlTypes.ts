@@ -1233,8 +1233,10 @@ export enum HousingType {
 export type IncomeBenefit = {
   __typename?: 'IncomeBenefit';
   adap?: Maybe<NoYesReasonsForMissingData>;
+  alimony?: Maybe<Scalars['Boolean']>;
   alimonyAmount?: Maybe<Scalars['Float']>;
   benefitsFromAnySource?: Maybe<NoYesReasonsForMissingData>;
+  childSupport?: Maybe<Scalars['Boolean']>;
   childSupportAmount?: Maybe<Scalars['Float']>;
   client: Client;
   cobra?: Maybe<Scalars['Boolean']>;
@@ -1243,9 +1245,11 @@ export type IncomeBenefit = {
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
+  earned?: Maybe<Scalars['Boolean']>;
   earnedAmount?: Maybe<Scalars['Float']>;
   employerProvided?: Maybe<Scalars['Boolean']>;
   enrollment: Enrollment;
+  ga?: Maybe<Scalars['Boolean']>;
   gaAmount?: Maybe<Scalars['Float']>;
   hivaidsAssistance?: Maybe<NoYesReasonsForMissingData>;
   id: Scalars['ID'];
@@ -1270,30 +1274,41 @@ export type IncomeBenefit = {
   otherBenefitsSource?: Maybe<Scalars['Boolean']>;
   otherBenefitsSourceIdentify?: Maybe<Scalars['String']>;
   otherIncomeAmount?: Maybe<Scalars['Float']>;
+  otherIncomeSource?: Maybe<Scalars['Boolean']>;
   otherIncomeSourceIdentify?: Maybe<Scalars['String']>;
   otherInsurance?: Maybe<Scalars['Boolean']>;
   otherInsuranceIdentify?: Maybe<Scalars['String']>;
   otherTanf?: Maybe<Scalars['Boolean']>;
+  pension?: Maybe<Scalars['Boolean']>;
   pensionAmount?: Maybe<Scalars['Float']>;
+  privateDisability?: Maybe<Scalars['Boolean']>;
   privateDisabilityAmount?: Maybe<Scalars['Float']>;
   privatePay?: Maybe<Scalars['Boolean']>;
   ryanWhiteMedDent?: Maybe<NoYesReasonsForMissingData>;
   schip?: Maybe<Scalars['Boolean']>;
   snap?: Maybe<Scalars['Boolean']>;
+  socSecRetirement?: Maybe<Scalars['Boolean']>;
   socSecRetirementAmount?: Maybe<Scalars['Float']>;
+  ssdi?: Maybe<Scalars['Boolean']>;
   ssdiAmount?: Maybe<Scalars['Float']>;
+  ssi?: Maybe<Scalars['Boolean']>;
   ssiAmount?: Maybe<Scalars['Float']>;
   stateHealthIns?: Maybe<Scalars['Boolean']>;
+  tanf?: Maybe<Scalars['Boolean']>;
   tanfAmount?: Maybe<Scalars['Float']>;
   tanfChildCare?: Maybe<Scalars['Boolean']>;
   tanfTransportation?: Maybe<Scalars['Boolean']>;
   totalMonthlyIncome?: Maybe<Scalars['String']>;
+  unemployment?: Maybe<Scalars['Boolean']>;
   unemploymentAmount?: Maybe<Scalars['Float']>;
   user?: Maybe<User>;
+  vaDisabilityNonService?: Maybe<Scalars['Boolean']>;
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']>;
+  vaDisabilityService?: Maybe<Scalars['Boolean']>;
   vaDisabilityServiceAmount?: Maybe<Scalars['Float']>;
   vaMedicalServices?: Maybe<Scalars['Boolean']>;
   wic?: Maybe<Scalars['Boolean']>;
+  workersComp?: Maybe<Scalars['Boolean']>;
   workersCompAmount?: Maybe<Scalars['Float']>;
 };
 
@@ -5555,8 +5570,10 @@ export type ServiceFieldsFragment = {
 export type IncomeBenefitFieldsFragment = {
   __typename: 'IncomeBenefit';
   adap?: NoYesReasonsForMissingData | null;
+  alimony?: boolean | null;
   alimonyAmount?: number | null;
   benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+  childSupport?: boolean | null;
   childSupportAmount?: number | null;
   cobra?: boolean | null;
   connectionWithSoar?: NoYesReasonsForMissingData | null;
@@ -5564,8 +5581,10 @@ export type IncomeBenefitFieldsFragment = {
   dateCreated: string;
   dateDeleted?: string | null;
   dateUpdated: string;
+  earned?: boolean | null;
   earnedAmount?: number | null;
   employerProvided?: boolean | null;
+  ga?: boolean | null;
   gaAmount?: number | null;
   hivaidsAssistance?: NoYesReasonsForMissingData | null;
   id: string;
@@ -5590,30 +5609,42 @@ export type IncomeBenefitFieldsFragment = {
   otherBenefitsSource?: boolean | null;
   otherBenefitsSourceIdentify?: string | null;
   otherIncomeAmount?: number | null;
+  otherIncomeSource?: boolean | null;
   otherIncomeSourceIdentify?: string | null;
   otherInsurance?: boolean | null;
   otherInsuranceIdentify?: string | null;
   otherTanf?: boolean | null;
+  pension?: boolean | null;
   pensionAmount?: number | null;
+  privateDisability?: boolean | null;
   privateDisabilityAmount?: number | null;
   privatePay?: boolean | null;
   ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
   schip?: boolean | null;
   snap?: boolean | null;
+  socSecRetirement?: boolean | null;
   socSecRetirementAmount?: number | null;
+  ssdi?: boolean | null;
   ssdiAmount?: number | null;
+  ssi?: boolean | null;
   ssiAmount?: number | null;
   stateHealthIns?: boolean | null;
+  tanf?: boolean | null;
   tanfAmount?: number | null;
   tanfChildCare?: boolean | null;
   tanfTransportation?: boolean | null;
   totalMonthlyIncome?: string | null;
+  unemployment?: boolean | null;
   unemploymentAmount?: number | null;
+  vaDisabilityNonService?: boolean | null;
   vaDisabilityNonServiceAmount?: number | null;
+  vaDisabilityService?: boolean | null;
   vaDisabilityServiceAmount?: number | null;
   vaMedicalServices?: boolean | null;
   wic?: boolean | null;
+  workersComp?: boolean | null;
   workersCompAmount?: number | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -5624,7 +5655,6 @@ export type IncomeBenefitFieldsFragment = {
       projectType?: ProjectType | null;
     };
   };
-  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type DisabilityGroupFieldsFragment = {
@@ -6372,8 +6402,10 @@ export type GetRecentIncomeBenefitsQuery = {
       nodes: Array<{
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
+        alimony?: boolean | null;
         alimonyAmount?: number | null;
         benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+        childSupport?: boolean | null;
         childSupportAmount?: number | null;
         cobra?: boolean | null;
         connectionWithSoar?: NoYesReasonsForMissingData | null;
@@ -6381,8 +6413,10 @@ export type GetRecentIncomeBenefitsQuery = {
         dateCreated: string;
         dateDeleted?: string | null;
         dateUpdated: string;
+        earned?: boolean | null;
         earnedAmount?: number | null;
         employerProvided?: boolean | null;
+        ga?: boolean | null;
         gaAmount?: number | null;
         hivaidsAssistance?: NoYesReasonsForMissingData | null;
         id: string;
@@ -6407,30 +6441,42 @@ export type GetRecentIncomeBenefitsQuery = {
         otherBenefitsSource?: boolean | null;
         otherBenefitsSourceIdentify?: string | null;
         otherIncomeAmount?: number | null;
+        otherIncomeSource?: boolean | null;
         otherIncomeSourceIdentify?: string | null;
         otherInsurance?: boolean | null;
         otherInsuranceIdentify?: string | null;
         otherTanf?: boolean | null;
+        pension?: boolean | null;
         pensionAmount?: number | null;
+        privateDisability?: boolean | null;
         privateDisabilityAmount?: number | null;
         privatePay?: boolean | null;
         ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
         schip?: boolean | null;
         snap?: boolean | null;
+        socSecRetirement?: boolean | null;
         socSecRetirementAmount?: number | null;
+        ssdi?: boolean | null;
         ssdiAmount?: number | null;
+        ssi?: boolean | null;
         ssiAmount?: number | null;
         stateHealthIns?: boolean | null;
+        tanf?: boolean | null;
         tanfAmount?: number | null;
         tanfChildCare?: boolean | null;
         tanfTransportation?: boolean | null;
         totalMonthlyIncome?: string | null;
+        unemployment?: boolean | null;
         unemploymentAmount?: number | null;
+        vaDisabilityNonService?: boolean | null;
         vaDisabilityNonServiceAmount?: number | null;
+        vaDisabilityService?: boolean | null;
         vaDisabilityServiceAmount?: number | null;
         vaMedicalServices?: boolean | null;
         wic?: boolean | null;
+        workersComp?: boolean | null;
         workersCompAmount?: number | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -6441,7 +6487,6 @@ export type GetRecentIncomeBenefitsQuery = {
             projectType?: ProjectType | null;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -7700,18 +7745,9 @@ export const ServiceFieldsFragmentDoc = gql`
 export const IncomeBenefitFieldsFragmentDoc = gql`
   fragment IncomeBenefitFields on IncomeBenefit {
     __typename
-    adap
-    alimonyAmount
-    benefitsFromAnySource
-    childSupportAmount
-    cobra
-    connectionWithSoar
-    dataCollectionStage
-    dateCreated
-    dateDeleted
-    dateUpdated
-    earnedAmount
-    employerProvided
+    user {
+      ...UserFields
+    }
     enrollment {
       id
       project {
@@ -7720,6 +7756,22 @@ export const IncomeBenefitFieldsFragmentDoc = gql`
         projectType
       }
     }
+    adap
+    alimony
+    alimonyAmount
+    benefitsFromAnySource
+    childSupport
+    childSupportAmount
+    cobra
+    connectionWithSoar
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    earned
+    earnedAmount
+    employerProvided
+    ga
     gaAmount
     hivaidsAssistance
     id
@@ -7744,32 +7796,40 @@ export const IncomeBenefitFieldsFragmentDoc = gql`
     otherBenefitsSource
     otherBenefitsSourceIdentify
     otherIncomeAmount
+    otherIncomeSource
     otherIncomeSourceIdentify
     otherInsurance
     otherInsuranceIdentify
     otherTanf
+    pension
     pensionAmount
+    privateDisability
     privateDisabilityAmount
     privatePay
     ryanWhiteMedDent
     schip
     snap
+    socSecRetirement
     socSecRetirementAmount
+    ssdi
     ssdiAmount
+    ssi
     ssiAmount
     stateHealthIns
+    tanf
     tanfAmount
     tanfChildCare
     tanfTransportation
     totalMonthlyIncome
+    unemployment
     unemploymentAmount
-    user {
-      ...UserFields
-    }
+    vaDisabilityNonService
     vaDisabilityNonServiceAmount
+    vaDisabilityService
     vaDisabilityServiceAmount
     vaMedicalServices
     wic
+    workersComp
     workersCompAmount
   }
   ${UserFieldsFragmentDoc}

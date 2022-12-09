@@ -51,7 +51,7 @@ export const formatDateForGql = (date: Date) => {
   }
 };
 
-const formatDateForDisplay = (date: Date) => {
+export const formatDateForDisplay = (date: Date) => {
   try {
     return format(date, DATE_DISPLAY_FORMAT);
   } catch (RangeError) {
