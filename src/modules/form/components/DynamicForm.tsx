@@ -33,6 +33,7 @@ import {
   LinkIdMap,
   shouldEnableItem,
 } from '../util/formUtil';
+import { transformSubmitValues } from '../util/recordFormUtil';
 
 import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
@@ -213,7 +214,23 @@ const DynamicForm: React.FC<
 
       // Exclude all disabled items, and their descendants, from values hash
       const excluded = addDescendants(disabledLinkIds, definition);
-      onSubmit(omit(values, excluded));
+      const valuesToSubmit = omit(values, excluded);
+
+      // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
+      if (
+        import.meta.env.MODE !== 'production' &&
+        (event.ctrlKey || event.metaKey)
+      ) {
+        console.log('%c CURRENT FORM STATE:', 'color: #BB7AFF');
+        console.log(valuesToSubmit);
+        const hudValues = transformSubmitValues({
+          definition,
+          values: valuesToSubmit,
+        });
+        console.log(JSON.stringify(hudValues, null, 2));
+      } else {
+        onSubmit(valuesToSubmit);
+      }
     },
     [values, onSubmit, disabledLinkIds, definition]
   );
