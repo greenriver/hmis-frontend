@@ -1895,10 +1895,8 @@ export type ProjectInput = {
   continuumProject?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
   housingType?: InputMaybe<HousingType>;
-  /** Date with format yyyy-mm-dd */
-  operatingEndDate?: InputMaybe<Scalars['String']>;
-  /** Date with format yyyy-mm-dd */
-  operatingStartDate?: InputMaybe<Scalars['String']>;
+  operatingEndDate?: InputMaybe<Scalars['ISO8601Date']>;
+  operatingStartDate?: InputMaybe<Scalars['ISO8601Date']>;
   organizationId?: InputMaybe<Scalars['ID']>;
   projectName?: InputMaybe<Scalars['String']>;
   projectType?: InputMaybe<ProjectType>;
@@ -2249,8 +2247,7 @@ export type Service = {
 /** HUD Service Input */
 export type ServiceInput = {
   FAAmount?: InputMaybe<Scalars['Float']>;
-  /** Date with format yyyy-mm-dd */
-  dateProvided?: InputMaybe<Scalars['String']>;
+  dateProvided?: InputMaybe<Scalars['ISO8601Date']>;
   enrollmentId?: InputMaybe<Scalars['ID']>;
   movingOnOtherType?: InputMaybe<Scalars['String']>;
   otherTypeProvided?: InputMaybe<Scalars['String']>;
