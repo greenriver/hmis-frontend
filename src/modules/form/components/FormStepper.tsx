@@ -28,7 +28,12 @@ const FormStepper = ({ definition }: Props) => {
         <Step key={step.linkId}>
           <StepLabel
             StepIconComponent={RadioButtonUncheckedIcon}
-            StepIconProps={{ color: 'disabled' }}
+            StepIconProps={{
+              color: 'disabled',
+              error: undefined,
+              active: undefined,
+              completed: undefined,
+            }}
             sx={{ py: 0 }}
           >
             <RouterLink to={`${pathname}#${step.linkId}`}>
