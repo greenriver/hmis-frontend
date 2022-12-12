@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty, omit } from 'lodash-es';
+import { isEmpty, omit, omitBy, isNil, pick } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -37,6 +37,39 @@ export interface SearchFormProps {
 
 const defaultSearchKeys = ['textSearch', 'projects'];
 
+export const validateSearchFormInput = (values: Record<string, any>) => {
+  const requiredValueSet = omitBy(
+    pick(values, [
+      'personalId',
+      'firstName',
+      'lastName',
+      'ssnSerial',
+      'dob',
+      'textSearch',
+    ]),
+    (e) => isNil(e) || isEmpty(e)
+  );
+
+  const errors: Record<keyof typeof requiredValueSet, string> = {};
+
+  if (isEmpty(requiredValueSet)) {
+    errors.textSearch =
+      'Please enter a search term or specific search criteria';
+  } else {
+    if (
+      values.textSearch &&
+      typeof values.textSearch === 'string' &&
+      isEmpty(omit(requiredValueSet, ['textSearch'])) &&
+      values.textSearch.length < 4
+    ) {
+      errors.textSearch =
+        'Please enter more than three characters or add more specific search criteria';
+    }
+  }
+
+  return errors;
+};
+
 const SearchForm: React.FC<SearchFormProps> = ({
   definition,
   onSubmit,
@@ -51,6 +84,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
   // If advanced parameters were specified in the URL parameters, expand the panel
   const hasInitialAdvanced = !isEmpty(omit(initialValues, defaultSearchKeys));
   const [expanded, setExpanded] = useState(hasInitialAdvanced);
+
+  const [textSearchError, setTextSearchError] = useState<string | undefined>(
+    undefined
+  );
 
   const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
@@ -77,7 +114,19 @@ const SearchForm: React.FC<SearchFormProps> = ({
           projects: values.projects.map((p) => p.code),
         }),
       };
+
       console.debug('Search', input);
+
+      const errors = validateSearchFormInput(input);
+
+      if (!isEmpty(errors)) {
+        console.error('Invalid Search', { errors });
+        if (errors.textSearch) setTextSearchError(errors.textSearch);
+        return;
+      } else {
+        setTextSearchError(undefined);
+      }
+
       onSubmit(input);
     },
     [values, definition, onSubmit]
@@ -113,6 +162,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
               fieldChanged('textSearch', e.target.value);
             }}
             onKeyUp={submitOnEnter}
+            helperText={textSearchError}
+            error={!!textSearchError}
           />
         </Grid>
         {!hideProject && (
