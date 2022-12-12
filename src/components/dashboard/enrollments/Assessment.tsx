@@ -1,18 +1,23 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
+import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
+import FormStepper from '@/modules/form/components/FormStepper';
 import { getInitialValues } from '@/modules/form/util/formUtil';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { AssessmentRole } from '@/types/gqlTypes';
+import { clientName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { AssessmentRole, Client } from '@/types/gqlTypes';
 
-const EditAssessment = () => {
-  const [crumbs, crumbsLoading, enrollment] = useEnrollmentCrumbs('Assessment');
+const Assessment = () => {
+  const { client } = useOutletContext<{ client: Client | null }>();
+
+  const [crumbs, crumbsLoading, enrollment] = useEnrollmentCrumbs();
 
   const {
     submitHandler,
@@ -25,6 +30,14 @@ const EditAssessment = () => {
     assessmentTitle,
     assessmentRole,
   } = useAssessmentHandlers();
+
+  const crumbsWithDetails = useMemo(() => {
+    if (!crumbs || !client || !assessmentTitle) return;
+    return [
+      ...crumbs,
+      { label: `${assessmentTitle} for ${clientName(client)}`, to: '' },
+    ];
+  }, [crumbs, assessmentTitle, client]);
 
   const initialValues = useMemo(() => {
     if (dataLoading || !definition || !enrollment) return;
@@ -60,40 +73,76 @@ const EditAssessment = () => {
     }
   }, [enrollment, assessmentRole]);
 
+  useScrollToHash(crumbsLoading || dataLoading);
+
   if (crumbsLoading || dataLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
-      <Stack direction='row'>
-        <Typography variant='h4' sx={{ mb: 2, fontWeight: 400 }}>
-          <b>{assessmentTitle}</b>{' '}
-          {informationDate && ` - ${parseAndFormatDate(informationDate)}`}
-        </Typography>
-      </Stack>
-      <Grid container spacing={4}>
-        <Grid item xs={9}>
-          {!definition && `ERROR: form definition not found`}
-          {definition && (
-            <DynamicForm
-              definition={definition}
-              onSubmit={submitHandler}
-              onSaveDraft={
-                assessment && !assessment.inProgress
-                  ? undefined
-                  : saveDraftHandler
-              }
-              initialValues={initialValues || undefined}
-              loading={mutationLoading}
-              errors={errors}
-              showSavePrompt
-            />
-          )}
-        </Grid>
+      <Box
+        sx={{
+          position: 'sticky',
+          top: 10,
+          backgroundColor: (theme) => theme.palette.background.default,
+          zIndex: (theme) => theme.zIndex.appBar,
+          // hack to add 15px of space on top of crumbs when scrolled to the top
+          '&:before': {
+            content: '""',
+            backgroundColor: (theme) => theme.palette.background.default,
+            position: 'absolute',
+            height: '15px',
+            mt: '-15px',
+            width: '100%',
+          },
+        }}
+      >
+        {crumbsWithDetails && <Breadcrumbs crumbs={crumbsWithDetails} />}
+        <Stack direction='row'>
+          <Typography variant='h4' sx={{ mb: 4, fontWeight: 400 }}>
+            <b>{assessmentTitle}</b>{' '}
+            {informationDate && ` ${parseAndFormatDate(informationDate)}`}
+          </Typography>
+        </Stack>
+      </Box>
+      <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
+        {!definition && <Alert severity='error'>Unable to load form.</Alert>}
+        {definition && (
+          <>
+            <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
+              <Paper
+                sx={{
+                  p: 3,
+                  position: 'sticky',
+                  top: '115px', // hacky way to line up with top of form contents
+                }}
+              >
+                <Typography variant='h6' sx={{ mb: 2 }}>
+                  Form Navigation
+                </Typography>
+                <FormStepper definition={definition} />
+              </Paper>
+            </Grid>
+            <Grid item xs={9} sx={{ pt: '0 !important' }}>
+              <DynamicForm
+                definition={definition}
+                onSubmit={submitHandler}
+                onSaveDraft={
+                  assessment && !assessment.inProgress
+                    ? undefined
+                    : saveDraftHandler
+                }
+                initialValues={initialValues || undefined}
+                loading={mutationLoading}
+                errors={errors}
+                showSavePrompt
+              />
+            </Grid>
+          </>
+        )}
       </Grid>
     </>
   );
 };
 
-export default EditAssessment;
+export default Assessment;
