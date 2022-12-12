@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -8,9 +8,11 @@ import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import Loading from '@/components/elements/Loading';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { getInitialValues } from '@/modules/form/util/formUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { AssessmentRole } from '@/types/gqlTypes';
 
 const EditAssessment = () => {
-  const [crumbs, crumbsLoading] = useEnrollmentCrumbs('Assessment');
+  const [crumbs, crumbsLoading, enrollment] = useEnrollmentCrumbs('Assessment');
 
   const {
     submitHandler,
@@ -21,13 +23,21 @@ const EditAssessment = () => {
     mutationLoading,
     errors,
     assessmentTitle,
+    assessmentRole,
   } = useAssessmentHandlers();
 
   const initialValues = useMemo(() => {
-    if (dataLoading || !definition) return;
+    if (dataLoading || !definition || !enrollment) return;
+
+    // Local values that may be referenced by the FormDefinition
+    const localConstants = {
+      entryDate: enrollment.entryDate,
+      exitDate: enrollment.exitDate,
+    };
+
     let init;
     if (!assessment) {
-      init = getInitialValues(definition);
+      init = getInitialValues(definition, localConstants);
     } else {
       const values = assessment.assessmentDetail?.values;
       // FIXME make consistent
@@ -36,7 +46,19 @@ const EditAssessment = () => {
     }
     console.debug('Initial Form State', init);
     return init;
-  }, [assessment, definition, dataLoading]);
+  }, [assessment, definition, dataLoading, enrollment]);
+
+  const informationDate = useMemo(() => {
+    if (!enrollment) return;
+    switch (assessmentRole) {
+      case AssessmentRole.Intake:
+        return enrollment.entryDate;
+      case AssessmentRole.Exit:
+        return enrollment.exitDate;
+      default:
+        return;
+    }
+  }, [enrollment, assessmentRole]);
 
   if (crumbsLoading || dataLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
@@ -44,9 +66,12 @@ const EditAssessment = () => {
   return (
     <>
       <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h4' sx={{ mb: 2 }}>
-        {assessmentTitle}
-      </Typography>
+      <Stack direction='row'>
+        <Typography variant='h4' sx={{ mb: 2, fontWeight: 400 }}>
+          <b>{assessmentTitle}</b>{' '}
+          {informationDate && ` - ${parseAndFormatDate(informationDate)}`}
+        </Typography>
+      </Stack>
       <Grid container spacing={4}>
         <Grid item xs={9}>
           {!definition && `ERROR: form definition not found`}

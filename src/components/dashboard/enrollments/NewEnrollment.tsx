@@ -97,7 +97,7 @@ const NewEnrollment = () => {
 
   const crumbs = [
     {
-      label: 'Back to all enrollments',
+      label: 'All Enrollments',
       to: DashboardRoutes.ALL_ENROLLMENTS,
     },
     { label: `Add Enrollment`, to: pathname },

@@ -18,27 +18,31 @@ import {
 
 export function useAssessmentHandlers() {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const { clientId, enrollmentId, assessmentId, assessmentRole } =
-    useParams() as {
-      clientId: string;
-      enrollmentId: string;
-      assessmentId?: string;
-      assessmentRole?: string;
-    };
+  const {
+    clientId,
+    enrollmentId,
+    assessmentId,
+    assessmentRole: assessmentRoleParam,
+  } = useParams() as {
+    clientId: string;
+    enrollmentId: string;
+    assessmentId?: string;
+    assessmentRole?: string;
+  };
   const navigate = useNavigate();
 
   const role = useMemo(() => {
-    if (!assessmentRole) return;
+    if (!assessmentRoleParam) return;
     if (
       !Object.values<string>(AssessmentRole).includes(
-        assessmentRole.toUpperCase()
+        assessmentRoleParam.toUpperCase()
       )
     ) {
       // should be 404
-      throw Error(`Unrecognized role ${assessmentRole}`);
+      throw Error(`Unrecognized role ${assessmentRoleParam}`);
     }
-    return assessmentRole.toUpperCase() as AssessmentRole;
-  }, [assessmentRole]);
+    return assessmentRoleParam.toUpperCase() as AssessmentRole;
+  }, [assessmentRoleParam]);
 
   const {
     data: formDefinitionData,
@@ -68,9 +72,9 @@ export function useAssessmentHandlers() {
     [formDefinitionData, assessmentData]
   );
 
-  const assessmentTitle = useMemo(() => {
+  const [assessmentRole, assessmentTitle] = useMemo(() => {
     const arole = assessmentData?.assessment?.assessmentDetail?.role || role;
-    return `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`;
+    return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
   }, [assessmentData, role]);
 
   const formDefinitionId = useMemo(
@@ -161,6 +165,7 @@ export function useAssessmentHandlers() {
     submitHandler,
     saveDraftHandler,
     assessmentTitle,
+    assessmentRole,
     definition,
     assessment: assessmentData?.assessment,
     dataLoading: formDefinitionLoading || assessmentLoading,
@@ -170,6 +175,7 @@ export function useAssessmentHandlers() {
     submitHandler: (values: FormValues, confirmed?: boolean) => void;
     saveDraftHandler: (values: FormValues) => void;
     assessmentTitle: string;
+    assessmentRole?: AssessmentRole;
     definition?: FormDefinitionJson;
     assessment?: AssessmentWithDefinitionAndValuesFragment;
     dataLoading: boolean;
