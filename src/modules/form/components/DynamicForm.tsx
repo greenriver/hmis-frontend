@@ -103,7 +103,7 @@ const DynamicForm: React.FC<
   }, [isSaveButtonVisible, promptSave]);
 
   // Map { linkId => current value }
-  const [values, setValues] = useState<Record<string, any>>(
+  const [values, setValues] = useState<FormValues>(
     Object.assign({}, initialValues)
   );
 
@@ -298,7 +298,7 @@ const DynamicForm: React.FC<
         key={item.linkId}
         item={item}
         itemChanged={itemChanged}
-        value={values[item.linkId]}
+        value={isDisabled ? undefined : values[item.linkId]}
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
         inputProps={{
