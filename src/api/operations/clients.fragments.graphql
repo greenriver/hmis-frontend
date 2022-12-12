@@ -127,18 +127,9 @@ fragment ServiceFields on Service {
 
 fragment IncomeBenefitFields on IncomeBenefit {
   __typename
-  adap
-  alimonyAmount
-  benefitsFromAnySource
-  childSupportAmount
-  cobra
-  connectionWithSoar
-  dataCollectionStage
-  dateCreated
-  dateDeleted
-  dateUpdated
-  earnedAmount
-  employerProvided
+  user {
+    ...UserFields
+  }
   enrollment {
     id
     project {
@@ -147,6 +138,22 @@ fragment IncomeBenefitFields on IncomeBenefit {
       projectType
     }
   }
+  adap
+  alimony
+  alimonyAmount
+  benefitsFromAnySource
+  childSupport
+  childSupportAmount
+  cobra
+  connectionWithSoar
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  earned
+  earnedAmount
+  employerProvided
+  ga
   gaAmount
   hivaidsAssistance
   id
@@ -171,32 +178,40 @@ fragment IncomeBenefitFields on IncomeBenefit {
   otherBenefitsSource
   otherBenefitsSourceIdentify
   otherIncomeAmount
+  otherIncomeSource
   otherIncomeSourceIdentify
   otherInsurance
   otherInsuranceIdentify
   otherTanf
+  pension
   pensionAmount
+  privateDisability
   privateDisabilityAmount
   privatePay
   ryanWhiteMedDent
   schip
   snap
+  socSecRetirement
   socSecRetirementAmount
+  ssdi
   ssdiAmount
+  ssi
   ssiAmount
   stateHealthIns
+  tanf
   tanfAmount
   tanfChildCare
   tanfTransportation
   totalMonthlyIncome
+  unemployment
   unemploymentAmount
-  user {
-    ...UserFields
-  }
+  vaDisabilityNonService
   vaDisabilityNonServiceAmount
+  vaDisabilityService
   vaDisabilityServiceAmount
   vaMedicalServices
   wic
+  workersComp
   workersCompAmount
 }
 

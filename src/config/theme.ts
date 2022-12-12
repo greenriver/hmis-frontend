@@ -203,5 +203,12 @@ export default createTheme(theme, {
         option: { paddingLeft: 16 },
       },
     },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          marginLeft: 0,
+        },
+      },
+    },
   },
 });

@@ -83,7 +83,7 @@ const NewEnrollment = () => {
       })),
       inProgress: true,
     };
-    console.log(JSON.stringify(values, null, 2));
+    console.log('CreateEnrollment', values);
     void mutateFunction({
       variables: { input: values },
     });
@@ -97,7 +97,7 @@ const NewEnrollment = () => {
 
   const crumbs = [
     {
-      label: 'Back to all enrollments',
+      label: 'All Enrollments',
       to: DashboardRoutes.ALL_ENROLLMENTS,
     },
     { label: `Add Enrollment`, to: pathname },

@@ -29,7 +29,7 @@ export function useEnrollmentCrumbs(current?: string) {
   const crumbs = enrollment
     ? [
         {
-          label: 'Back to all enrollments',
+          label: 'All Enrollments',
           to: DashboardRoutes.ALL_ENROLLMENTS,
         },
         {

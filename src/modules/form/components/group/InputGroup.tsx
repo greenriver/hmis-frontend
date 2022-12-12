@@ -1,6 +1,6 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { isNumber, pick, reduce } from 'lodash-es';
-import { useMemo } from 'react';
+import { ReactNode, useCallback, useMemo } from 'react';
 
 import { maxWidthAtNestingLevel } from '../DynamicField';
 import { GroupItemComponentProps } from '../DynamicGroup';
@@ -34,6 +34,28 @@ const InputGroup = ({
     [isCurrency]
   );
 
+  const childRenderFunc = useCallback(
+    (linkId: string, index: number) => (children: ReactNode) =>
+      (
+        <Box
+          key={linkId}
+          sx={{
+            backgroundColor: (theme) =>
+              index & 1 ? undefined : theme.palette.grey[100],
+            pl: 1,
+            pb: 0.5,
+            pr: 0.5,
+            maxWidth: isCurrency
+              ? maxWidthAtNestingLevel(nestingLevel + 1)
+              : undefined,
+          }}
+        >
+          {children}
+        </Box>
+      ),
+    [isCurrency, nestingLevel]
+  );
+
   const wrappedChildren = useMemo(() => {
     return (
       <Grid
@@ -45,26 +67,20 @@ const InputGroup = ({
       >
         {renderChildItem &&
           item.item &&
-          item.item.map((childItem, idx) => (
-            <Box
-              key={childItem.linkId}
-              sx={{
-                backgroundColor: (theme) =>
-                  idx & 1 ? undefined : theme.palette.grey[100],
-                pl: 1,
-                pb: 0.5,
-                pr: 0.5,
-                maxWidth: isCurrency
-                  ? maxWidthAtNestingLevel(nestingLevel + 1)
-                  : undefined,
-              }}
-            >
-              {renderChildItem(childItem, childProps)}
-            </Box>
-          ))}
+          item.item
+            .filter((i) => !i.hidden)
+            .map((childItem, index) =>
+              renderChildItem(
+                childItem,
+                childProps,
+                // pass render function so child gets wrapped in box.
+                // can't wrap here because child might be hidden, in which case we shouldn't wrap it.
+                childRenderFunc(childItem.linkId, index)
+              )
+            )}
       </Grid>
     );
-  }, [renderChildItem, item, childProps, nestingLevel, isCurrency]);
+  }, [renderChildItem, item, childProps, childRenderFunc]);
 
   // Sum of child numeric inputs (if applicable)
   const sum = useMemo(() => {

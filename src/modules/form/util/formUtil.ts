@@ -301,6 +301,9 @@ export const shouldEnableItem = (
 
 /**
  * Autofill values based on changed item.
+ * If there are multiple autofill rules, the first matching one is used
+ * ("matching" meaning autofill_when evaluated to true).
+ *
  * Changes `values` in place.
  *
  * @return boolen true if values changed
@@ -542,4 +545,28 @@ export const getDisabledLinkIds = (
   return Object.keys(itemMap).filter(
     (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
   );
+};
+
+/**
+ * Given a list of link IDs, returns a list of the same link IDs including
+ * all their descendants link IDs.
+ */
+export const addDescendants = (
+  linkIds: string[],
+  definition: FormDefinitionJson
+): string[] => {
+  function recurAdd(items: FormItem[], ids: string[], parentIncluded: boolean) {
+    items.forEach((item: FormItem) => {
+      const include = parentIncluded || ids.includes(item.linkId);
+      if (include) ids.push(item.linkId);
+
+      if (Array.isArray(item.item)) {
+        recurAdd(item.item, ids, include);
+      }
+    });
+  }
+
+  const result: string[] = [...linkIds];
+  recurAdd(definition.item, result, false);
+  return result;
 };

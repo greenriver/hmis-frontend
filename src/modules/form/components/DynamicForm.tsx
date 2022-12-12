@@ -8,23 +8,32 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isNil, pull } from 'lodash-es';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { isNil, omit, pull } from 'lodash-es';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
 import {
+  addDescendants,
   autofillValues,
   buildAutofillDependencyMap,
   buildCommonInputProps,
   buildEnabledDependencyMap,
   CONFIRM_ERROR_TYPE,
+  FormValues,
   getDisabledLinkIds,
   getItemMap,
   ItemMap,
   LinkIdMap,
   shouldEnableItem,
 } from '../util/formUtil';
+import { transformSubmitValues } from '../util/recordFormUtil';
 
 import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
@@ -40,8 +49,8 @@ import {
 
 export interface Props {
   definition: FormDefinitionJson;
-  onSubmit: (values: Record<string, any>, confirmed?: boolean) => void;
-  onSaveDraft?: (values: Record<string, any>) => void;
+  onSubmit: (values: FormValues, confirmed?: boolean) => void;
+  onSaveDraft?: (values: FormValues) => void;
   onDiscard?: () => void;
   submitButtonText?: string;
   saveDraftButtonText?: string;
@@ -177,7 +186,7 @@ const DynamicForm: React.FC<
         updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
 
         // TODO (maybe) clear values of disabled items if disabledDisplay is protected
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -191,7 +200,7 @@ const DynamicForm: React.FC<
         const newValues = { ...currentValues, ...values };
         // Update which link IDs are disabled or not, based on the Link IDs that have changed
         updateDisabledLinkIds(Object.keys(values), newValues);
-        console.debug('DynamicForm', newValues);
+        // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
@@ -202,9 +211,28 @@ const DynamicForm: React.FC<
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       setDialogDismissed(false);
-      onSubmit(values);
+
+      // Exclude all disabled items, and their descendants, from values hash
+      const excluded = addDescendants(disabledLinkIds, definition);
+      const valuesToSubmit = omit(values, excluded);
+
+      // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
+      if (
+        import.meta.env.MODE !== 'production' &&
+        (event.ctrlKey || event.metaKey)
+      ) {
+        console.log('%c CURRENT FORM STATE:', 'color: #BB7AFF');
+        console.log(valuesToSubmit);
+        const hudValues = transformSubmitValues({
+          definition,
+          values: valuesToSubmit,
+        });
+        console.log(JSON.stringify(hudValues, null, 2));
+      } else {
+        onSubmit(valuesToSubmit);
+      }
     },
-    [values, onSubmit]
+    [values, onSubmit, disabledLinkIds, definition]
   );
 
   const handleConfirm = useCallback(
@@ -216,9 +244,12 @@ const DynamicForm: React.FC<
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       if (!onSaveDraft) return;
-      onSaveDraft(values);
+
+      // Exclude all disabled items, and their descendants, from values hash
+      const excluded = addDescendants(disabledLinkIds, definition);
+      onSaveDraft(omit(values, excluded));
     },
-    [values, onSaveDraft]
+    [values, onSaveDraft, definition, disabledLinkIds]
   );
 
   // Get errors for a particular field
@@ -238,7 +269,8 @@ const DynamicForm: React.FC<
   const renderItem = (
     item: FormItem,
     nestingLevel: number,
-    props?: OverrideableDynamicFieldProps
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item);
     if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected) {
@@ -251,8 +283,8 @@ const DynamicForm: React.FC<
           item={item}
           key={item.linkId}
           nestingLevel={nestingLevel}
-          renderChildItem={(item, props) =>
-            renderItem(item, nestingLevel + 1, props)
+          renderChildItem={(item, props, fn) =>
+            renderItem(item, nestingLevel + 1, props, fn)
           }
           values={values}
           itemChanged={itemChanged}
@@ -260,7 +292,8 @@ const DynamicForm: React.FC<
         />
       );
     }
-    return (
+
+    const itemComponent = (
       <DynamicField
         key={item.linkId}
         item={item}
@@ -276,6 +309,10 @@ const DynamicForm: React.FC<
         {...props}
       />
     );
+    if (renderFn) {
+      return renderFn(itemComponent);
+    }
+    return itemComponent;
   };
 
   const saveButtons = (
