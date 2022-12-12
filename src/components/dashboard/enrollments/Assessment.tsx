@@ -1,5 +1,6 @@
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
@@ -10,11 +11,13 @@ import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import { getInitialValues } from '@/modules/form/util/formUtil';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { AssessmentRole } from '@/types/gqlTypes';
+import { clientName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { AssessmentRole, Client } from '@/types/gqlTypes';
 
-const EditAssessment = () => {
-  const [crumbs, crumbsLoading, enrollment] = useEnrollmentCrumbs('Assessment');
+const Assessment = () => {
+  const { client } = useOutletContext<{ client: Client | null }>();
+
+  const [crumbs, crumbsLoading, enrollment] = useEnrollmentCrumbs();
 
   const {
     submitHandler,
@@ -27,6 +30,14 @@ const EditAssessment = () => {
     assessmentTitle,
     assessmentRole,
   } = useAssessmentHandlers();
+
+  const crumbsWithDetails = useMemo(() => {
+    if (!crumbs || !client || !assessmentTitle) return;
+    return [
+      ...crumbs,
+      { label: `${assessmentTitle} for ${clientName(client)}`, to: '' },
+    ];
+  }, [crumbs, assessmentTitle, client]);
 
   const initialValues = useMemo(() => {
     if (dataLoading || !definition || !enrollment) return;
@@ -86,15 +97,15 @@ const EditAssessment = () => {
           },
         }}
       >
-        <Breadcrumbs crumbs={crumbs} />
+        {crumbsWithDetails && <Breadcrumbs crumbs={crumbsWithDetails} />}
         <Stack direction='row'>
           <Typography variant='h4' sx={{ mb: 4, fontWeight: 400 }}>
             <b>{assessmentTitle}</b>{' '}
-            {informationDate && ` - ${parseAndFormatDate(informationDate)}`}
+            {informationDate && ` ${parseAndFormatDate(informationDate)}`}
           </Typography>
         </Stack>
       </Box>
-      <Grid container spacing={4} sx={{ pb: 20, mt: 0 }}>
+      <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
         {!definition && <Alert severity='error'>Unable to load form.</Alert>}
         {definition && (
           <>
@@ -134,4 +145,4 @@ const EditAssessment = () => {
   );
 };
 
-export default EditAssessment;
+export default Assessment;

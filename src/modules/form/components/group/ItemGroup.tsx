@@ -69,9 +69,9 @@ const ItemGroup = ({
   if (nestingLevel === 0) {
     return (
       <Grid item>
+        {/* empty div for anchor link. hack: 115px depends on height of sticky header */}
         <Box
           id={item.linkId}
-          // hack: 115 depends on height of sticky header
           sx={{ position: 'relative', top: '-115px', left: 0 }}
         ></Box>
         <Paper
