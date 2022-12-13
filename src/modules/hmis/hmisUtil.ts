@@ -184,9 +184,8 @@ export const lastUpdated = (client: ClientFieldsFragment) => {
   return parseAndFormatDateTime(client.dateUpdated);
 };
 
-// TODO implement
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const pronouns = (_client: ClientFieldsFragment) => null;
+export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
+  client.pronouns ? client.pronouns.join(', ') : null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);

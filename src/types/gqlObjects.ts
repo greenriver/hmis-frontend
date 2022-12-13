@@ -256,7 +256,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'pronouns',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
       },
       {
         name: 'race',
