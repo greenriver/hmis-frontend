@@ -37,39 +37,6 @@ export interface SearchFormProps {
 
 const defaultSearchKeys = ['textSearch', 'projects'];
 
-export const validateSearchFormInput = (values: Record<string, any>) => {
-  const requiredValueSet = omitBy(
-    pick(values, [
-      'personalId',
-      'firstName',
-      'lastName',
-      'ssnSerial',
-      'dob',
-      'textSearch',
-    ]),
-    (e) => isNil(e) || isEmpty(e)
-  );
-
-  const errors: Record<keyof typeof requiredValueSet, string> = {};
-
-  if (isEmpty(requiredValueSet)) {
-    errors.textSearch =
-      'Please enter a search term or specific search criteria';
-  } else {
-    if (
-      values.textSearch &&
-      typeof values.textSearch === 'string' &&
-      isEmpty(omit(requiredValueSet, ['textSearch'])) &&
-      values.textSearch.length < 4
-    ) {
-      errors.textSearch =
-        'Please enter more than three characters or add more specific search criteria';
-    }
-  }
-
-  return errors;
-};
-
 const SearchForm: React.FC<SearchFormProps> = ({
   definition,
   onSubmit,
@@ -87,6 +54,40 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const [textSearchError, setTextSearchError] = useState<string | undefined>(
     undefined
+  );
+
+  const validateSearchFormInput = useCallback(
+    (values: Record<string, any>) => {
+      const requiredValueSet = omitBy(
+        pick(values, [
+          'personalId',
+          'firstName',
+          'lastName',
+          'ssnSerial',
+          'dob',
+          'textSearch',
+        ]),
+        (e) => isNil(e) || isEmpty(e)
+      );
+
+      const errors: Record<keyof typeof requiredValueSet, string> = {};
+
+      if (isEmpty(requiredValueSet)) {
+        errors.textSearch = t<string>('clientSearch.missingCriteria');
+      } else {
+        if (
+          values.textSearch &&
+          typeof values.textSearch === 'string' &&
+          isEmpty(omit(requiredValueSet, ['textSearch'])) &&
+          values.textSearch.length < 4
+        ) {
+          errors.textSearch = t<string>('clientSearch.inputTooShort');
+        }
+      }
+
+      return errors;
+    },
+    [t]
   );
 
   const fieldChanged = (fieldId: string, value: any) => {
@@ -129,7 +130,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       onSubmit(input);
     },
-    [values, definition, onSubmit]
+    [values, definition, onSubmit, validateSearchFormInput]
   );
 
   const submitOnEnter = (event: React.KeyboardEvent) => {
