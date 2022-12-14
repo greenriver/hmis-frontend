@@ -24,7 +24,7 @@ jobs:
         yarn install
     - name: Start mock server
       run: |
-        yarn start
+        cd serverMock && yarn start
 
   build_and_test:
     runs-on: ubuntu-latest
