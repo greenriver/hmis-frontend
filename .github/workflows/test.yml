@@ -61,3 +61,5 @@ jobs:
         build: yarn build
         start: yarn preview
         browser: chrome
+        spec: |
+          cypress/e2e/mocked/*.cy.ts

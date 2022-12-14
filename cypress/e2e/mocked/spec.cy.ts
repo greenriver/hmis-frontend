@@ -1,12 +1,13 @@
 describe('HMIS', () => {
   beforeEach(() => {
     cy.visit('/');
-    // TODO just intercept and pass the form defs. mock serevr is too much to deal with
+    // cy.intercept('/hmis/user.json', (req) => {
+    //   req.reply({ email: 'noreply@example.com', name: 'Test User' });
+    // });
   });
 
   it('search and edit client', () => {
     cy.get('input[name="textSearch"]').type('ja sm{enter}');
-    // cy.testId('goToProfileButton').first().click();
     cy.testId('table-linkedCell').first().click();
     cy.testId('clientProfile').should('be.visible');
     cy.testId('editClientButton').first().click();
