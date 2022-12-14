@@ -86,7 +86,9 @@ jobs:
     - name: Run Cypress tests
       uses: cypress-io/github-action@v5.0.0
       env:
-        SERVER_URL: 'http://localhost:4000'
+        HMIS_SERVER_URL: 'http://localhost:4000'
+        HMIS_HOST: 'localhost'
+        CYPRESS_BASE_URL: 'https://127.0.0.1:5173/'
       with:
         install: false
         build: yarn build

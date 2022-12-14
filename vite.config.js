@@ -43,11 +43,11 @@ export default defineConfig(({ command, mode }) => {
       server: {
         port: 5173,
         open: true,
-        host: 'hmis.dev.test',
+        host: env.HMIS_HOST || 'hmis.dev.test',
         https: true,
         proxy: {
           '/hmis': {
-            target: env.SERVER_URL || 'https://hmis-warehouse.dev.test',
+            target: env.HMIS_SERVER_URL || 'https://hmis-warehouse.dev.test',
             changeOrigin: true,
             secure: false,
             // toProxy: true,
