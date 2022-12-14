@@ -10,6 +10,7 @@ jobs:
   # Start mock server to be used by Cypress tests
   mock_server:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     
     steps:
     - uses: actions/checkout@v3
@@ -80,10 +81,12 @@ jobs:
 
     - name: Run Cypress tests
       uses: cypress-io/github-action@v5.0.0
+      env:
+        SERVER_URL: 'http://localhost:4000'
       with:
         install: false
         build: yarn build
-        start: SERVER_URL=http://localhost:4000 yarn preview
+        start: yarn preview
         wait-on: 'http://localhost:4000'
         wait-on-timeout: 120
         browser: chrome
