@@ -33,7 +33,6 @@ export default defineConfig(({ command, mode }) => {
         ],
       },
     },
-    // TODO create another env for testing that proxies to the mock server
     ...(command !== 'build' && {
       preview: {
         // cypress expects on 5173
@@ -50,11 +49,6 @@ export default defineConfig(({ command, mode }) => {
             target: env.HMIS_SERVER_URL || 'https://hmis-warehouse.dev.test',
             changeOrigin: true,
             secure: false,
-            // toProxy: true,
-            // prependPath: true,
-            // localAddress: '127.0.0.1',
-            // xfwd: true,
-            // headers: {},
             configure: (proxy, options) => {
               console.debug('Starting proxy with options:', options);
             },
