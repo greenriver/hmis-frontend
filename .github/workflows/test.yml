@@ -29,19 +29,19 @@ jobs:
     #   run: |
     #     yarn audit --groups dependencies
 
-    # - name: Lint and Format
-    #   run: |
-    #     yarn tsc
-    #     yarn format:check
-    #     yarn lint:check
+    - name: Lint and Format
+      run: |
+        yarn tsc
+        yarn format:check
+        yarn lint:check
 
-    # - name: Test
-    #   run: |
-    #     yarn test
+    - name: Test
+      run: |
+        yarn test
 
-    # - name: Storybook smoke test
-    #   run: |
-    #     yarn storybook --smoke-test
+    - name: Storybook smoke test
+      run: |
+        yarn storybook --smoke-test
 
     - name: Start mock server
       run: |
@@ -61,6 +61,4 @@ jobs:
         install: false
         build: yarn build
         start: yarn preview
-        # wait-on: 'http://localhost:4000'
-        # wait-on-timeout: 120
         browser: chrome

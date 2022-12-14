@@ -26,13 +26,20 @@
 
 ### Run local development server
 
-1. Install npm dependencies
+1. Add to `/etc/hosts`:
+
+   ```sh
+   ::1         hmis.dev.test
+   127.0.0.1   hmis.dev.test
+   ```
+
+2. Install npm dependencies
 
    ```sh
    yarn install
    ```
 
-2. Run dev server with live reload
+3. Run dev server with live reload
 
    ```sh
    yarn dev
