@@ -199,7 +199,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={value || null}
             onChange={onChangeValue}
-            textInputProps={{ horizontal, sx: { width: FIXED_DATE_WIDTH } }}
+            textInputProps={{
+              name: item.linkId,
+              horizontal,
+              sx: { width: FIXED_DATE_WIDTH },
+            }}
             {...datePickerProps}
             {...commonInputProps}
           />
@@ -218,6 +222,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             textInputProps={{
+              name: item.linkId,
               horizontal,
               sx: {
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
@@ -286,6 +291,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             multiple={!!item.repeats}
             loading={pickListLoading}
             textInputProps={{
+              name: item.linkId,
               horizontal,
               sx: {
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,

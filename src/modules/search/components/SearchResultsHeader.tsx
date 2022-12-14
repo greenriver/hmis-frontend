@@ -45,6 +45,7 @@ const SearchResultsHeader = ({
           >
             <ToggleButton
               value={false}
+              data-testid='searchResultsTableButton'
               aria-label='table'
               size='small'
               disabled={disabled}
@@ -54,6 +55,7 @@ const SearchResultsHeader = ({
             </ToggleButton>
             <ToggleButton
               value={true}
+              data-testid='searchResultsCardsButton'
               aria-label='cards'
               size='small'
               disabled={disabled}

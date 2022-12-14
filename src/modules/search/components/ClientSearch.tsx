@@ -170,11 +170,10 @@ const ClientSearch: React.FC<Props> = ({
     };
   }, [searchClients, setSearchParams, setDerivedSearchParams]);
 
-  const handleChangeDisplayType = useMemo(() => {
-    return (_: any, checked: boolean) => {
-      setCards(checked);
-      setHasSetCards(true);
-    };
+  const handleChangeDisplayType = useCallback((_: any, checked: boolean) => {
+    if (isNil(checked)) return;
+    setCards(checked);
+    setHasSetCards(true);
   }, []);
 
   const rowLinkTo = useCallback(
