@@ -32,15 +32,7 @@
    yarn install
    ```
 
-2. Create local certs for development (only need to do this once)
-
-   ```sh
-   brew install mkcert
-   mkcert -install
-   yarn cert
-   ```
-
-3. Run dev server with live reload
+2. Run dev server with live reload
 
    ```sh
    yarn dev

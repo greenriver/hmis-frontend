@@ -1,11 +1,10 @@
-import { execSync } from 'child_process';
 import dns from 'dns';
-import fs from 'fs';
 import { resolve } from 'path';
 
 import react from '@vitejs/plugin-react';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
 
 dns.setDefaultResultOrder('ipv4first');
 
@@ -19,7 +18,7 @@ export default defineConfig(({ command, mode }) => {
         '@': resolve(__dirname, './src'),
       },
     },
-    plugins: [react()],
+    plugins: [react(), mkcert()],
     define: {
       __APP_ENV__: env.APP_ENV,
     },
@@ -45,10 +44,7 @@ export default defineConfig(({ command, mode }) => {
         port: 5173,
         open: true,
         host: 'hmis.dev.test',
-        https: {
-          key: fs.readFileSync('.cert/key.pem'),
-          cert: fs.readFileSync('.cert/cert.pem'),
-        },
+        https: true,
         proxy: {
           '/hmis': {
             target: env.SERVER_URL || 'https://hmis-warehouse.dev.test',
