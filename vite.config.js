@@ -12,6 +12,9 @@ dns.setDefaultResultOrder('ipv4first');
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  console.log(env);
+  console.log(mode);
+  console.log(env.SERVER_URL);
   return {
     envPrefix: 'PUBLIC_',
     resolve: {
@@ -34,6 +37,7 @@ export default defineConfig(({ command, mode }) => {
         ],
       },
     },
+    // TODO create another env for testing that proxies to the mock server
     ...(command !== 'build' && {
       server: {
         open: true,
@@ -44,7 +48,7 @@ export default defineConfig(({ command, mode }) => {
         },
         proxy: {
           '/hmis': {
-            target: 'https://hmis-warehouse.dev.test',
+            target: env.SERVER_URL || 'https://hmis-warehouse.dev.test',
             changeOrigin: true,
             secure: false,
             // toProxy: true,

@@ -71,6 +71,7 @@ const SearchResultsHeader = ({
               {t<string>('clientSearch.addClientPrompt')}
             </Typography>
             <ButtonLink
+              data-testid='addClientButton'
               size='small'
               variant='outlined'
               color='secondary'

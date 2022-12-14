@@ -101,6 +101,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={5}>
           <TextInput
+            name='textSearch'
             label='Search Clients'
             placeholder={
               hideInstructions

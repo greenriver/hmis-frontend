@@ -147,6 +147,7 @@ const ClientCard: React.FC<Props> = ({
               {showLinkToRecord && (
                 <Box sx={{ pt: 1 }}>
                   <ButtonLink
+                    data-testid='goToProfileButton'
                     variant='contained'
                     to={`/client/${client.id}`}
                     target={linkTargetBlank ? '_blank' : undefined}
@@ -159,6 +160,7 @@ const ClientCard: React.FC<Props> = ({
               {showEditLink && (
                 <Box sx={{ pt: 1 }}>
                   <ButtonLink
+                    data-testid='editClientButton'
                     variant='contained'
                     to={generatePath(DashboardRoutes.EDIT, {
                       clientId: client.id,

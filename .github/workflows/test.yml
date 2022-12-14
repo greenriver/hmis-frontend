@@ -18,6 +18,10 @@ jobs:
       with:
         node-version-file: '.nvmrc'
 
+    - name: Install dependencies for cypress
+      run: |
+        apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+
     - name: Install dependencies
       run: |
         corepack enable
