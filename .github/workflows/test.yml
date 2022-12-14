@@ -7,25 +7,6 @@ on:
     branches: [ stable ]
 
 jobs:
-  # Start mock server to be used by Cypress tests
-  # mock_server:
-  #   runs-on: ubuntu-latest
-  #   timeout-minutes: 30
-    
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: Setup Node
-  #     uses: actions/setup-node@v3
-  #     with:
-  #       node-version-file: '.nvmrc'
-  #   - name: Install dependencies
-  #     run: |
-  #       corepack enable
-  #       cd serverMock
-  #       yarn install
-  #   - name: Start mock server
-  #     run: |
-  #       cd serverMock && yarn start
 
   build:
     runs-on: ubuntu-latest
@@ -37,10 +18,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version-file: '.nvmrc'
-
-    # - name: Install dependencies for cypress
-    #   run: |
-    #     apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+        cache: 'yarn'
 
     - name: Install dependencies
       run: |
@@ -64,20 +42,6 @@ jobs:
     - name: Storybook smoke test
       run: |
         yarn storybook --smoke-test
-
-    # - name: Build
-    #   run: |
-    #     # yarn build
-    #     yarn cypress info
-    #     yarn cypress version
-    #     yarn cypress version --component package
-    #     yarn cypress version --component binary
-    #     yarn cypress version --component electron
-    #     yarn cypress version --component node
-
-    # - name: Serve production build against mock server
-    #   run: |
-    #     SERVER_URL=http://localhost:4000 yarn serve
 
     - name: Start mock server
       run: |
