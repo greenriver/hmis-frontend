@@ -39,7 +39,13 @@ export default defineConfig(({ command, mode }) => {
     },
     // TODO create another env for testing that proxies to the mock server
     ...(command !== 'build' && {
+      preview: {
+        // cypress expects on 4173
+        port: 5173,
+        strictPort: true,
+      },
       server: {
+        port: 5173,
         open: true,
         host: 'hmis.dev.test',
         https: {

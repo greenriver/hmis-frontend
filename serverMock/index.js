@@ -8,6 +8,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 
+import baseAssessment from './forms/assessments/base_assessment.json' assert { type: 'json' };
 import client from './forms/records/client.json' assert { type: 'json' };
 import funder from './forms/records/funder.json' assert { type: 'json' };
 import inventory from './forms/records/inventory.json' assert { type: 'json' };
@@ -30,21 +31,45 @@ const schema = await loadSchema('../graphql.schema.json', {
 });
 
 const resolvers = (store) => ({
+  ClientsPaginated: {
+    nodes: (root) => {
+      const offset = store.get(root, 'offset');
+      const limit = store.get(root, 'limit');
+      return store.get(root, 'nodes').slice(offset, offset + limit);
+    },
+  },
   Query: {
     formDefinition: (_, args) => ({
-      id: faker.random.numeric(3),
-      version: 0,
       role: 'RECORD',
-      status: 'draft',
       identifier: args.identifier,
       definition: definitions[args.identifier],
     }),
-    // clientSearch: (_, {offset, limit}) => {
+    // mock begining a new asssessment by role
+    getFormDefinition: (_, args, context) => {
+      return {
+        role: args.assessmentRole,
+        definition: baseAssessment,
+      };
+    },
+    enrollment: (_, args) => {
+      return {
+        id: args.id,
+      };
+    },
+    client: (_, args) => {
+      return {
+        id: args.id,
+      };
+    },
+    // clientSearch: (root, {offset, limit}) => {
     //   // FIXME get refs working
+    //   // console.log(root)
+    //   // console.log(offset, limit)
+    //   // console.log(store.get('Query', 'ROOT', 'clientSearch', 'ClientsPaginated', 'nodes'))
     //   return {
     //     offset: offset,
     //     limit: limit,
-    //     nodes: []
+    //     // nodes: []
     //   }
     // },
   },
@@ -53,8 +78,8 @@ const resolvers = (store) => ({
 const page = {
   offset: 0,
   limit: 10,
-  nodesCount: 10,
-  nodes: [...new Array(10)],
+  nodesCount: 30,
+  nodes: [...new Array(30)],
 };
 
 // Mock object
@@ -65,17 +90,24 @@ const mocks = {
   ID: () => faker.random.numeric(3),
   ISO8601Date: () => '2022-01-01',
   ISO8601DateTime: () => '2022-01-01T15:14:29.062',
+  JsonObject: () => {},
   Client: () => ({
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     dob: faker.date.birthdate().toISOString().substring(0, 10),
   }),
   ClientsPaginated: () => page,
-  // Don't mock form definitions
+
+  AssessmentDetail: () => ({
+    definition: {
+      definition: baseAssessment,
+    },
+  }),
+  // Explicitly set everything to empty, so they don't get filled in by the scalar mocks
+  // TODO pull these field names from schema..
   FormDefinitionJson: () => ({
     item: [],
   }),
-  // Explicitly set everything to empty, so they don't get filled in by the scalar mocks
   FormItem: () => ({
     autofillValues: null,
     bounds: null,
@@ -104,6 +136,16 @@ const mocks = {
     groupLabel: null,
     secondaryLabel: null,
     initialSelected: false,
+  }),
+  EnableWhen: () => ({
+    question: null,
+    operator: null,
+    answerCode: null,
+    answerCodes: null,
+    answerNumber: null,
+    answerBoolean: null,
+    answerGroupCode: null,
+    compareQuestion: null,
   }),
 };
 

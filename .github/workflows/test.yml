@@ -7,8 +7,28 @@ on:
     branches: [ stable ]
 
 jobs:
-  build:
+  # Start mock server to be used by Cypress tests
+  mock_server:
     runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version-file: '.nvmrc'
+    - name: Install dependencies
+      run: |
+        corepack enable
+        cd serverMock
+        yarn install
+    - name: Start mock server
+      run: |
+        yarn start
+
+  build_and_test:
+    runs-on: ubuntu-latest
+    needs: mock_server
     
     steps:
     - uses: actions/checkout@v3
@@ -18,9 +38,9 @@ jobs:
       with:
         node-version-file: '.nvmrc'
 
-    - name: Install dependencies for cypress
-      run: |
-        apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
+    # - name: Install dependencies for cypress
+    #   run: |
+    #     apt-get install libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
 
     - name: Install dependencies
       run: |
@@ -33,6 +53,7 @@ jobs:
 
     - name: Lint and Format
       run: |
+        yarn tsc
         yarn format:check
         yarn lint:check
 
@@ -46,4 +67,24 @@ jobs:
 
     - name: Build
       run: |
-        yarn build
+        # yarn build
+        yarn cypress info
+        yarn cypress version
+        yarn cypress version --component package
+        yarn cypress version --component binary
+        yarn cypress version --component electron
+        yarn cypress version --component node
+
+    # - name: Serve production build against mock server
+    #   run: |
+    #     SERVER_URL=http://localhost:4000 yarn serve
+
+    - name: Run Cypress tests
+      uses: cypress-io/github-action@v5.0.0
+      with:
+        install: false
+        build: yarn build
+        start: SERVER_URL=http://localhost:4000 yarn preview
+        wait-on: 'http://localhost:4000'
+        wait-on-timeout: 120
+        browser: chrome

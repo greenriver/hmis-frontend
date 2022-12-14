@@ -1,11 +1,12 @@
 describe('HMIS', () => {
   beforeEach(() => {
-    cy.visit('https://hmis.dev.test:5173');
+    cy.visit('/');
   });
 
   it('search and edit client', () => {
     cy.get('input[name="textSearch"]').type('ja sm{enter}');
-    cy.testId('goToProfileButton').first().click();
+    // cy.testId('goToProfileButton').first().click();
+    cy.testId('table-linkedCell').first().click();
     cy.testId('clientProfile').should('be.visible');
     cy.testId('editClientButton').first().click();
     // ensure all values are filled in
