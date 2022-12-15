@@ -10,7 +10,7 @@ describe('HMIS', () => {
     cy.get('input[name="textSearch"]').type('ja sm{enter}');
     cy.testId('table-linkedCell').first().click();
     cy.testId('clientProfile').should('be.visible');
-    cy.testId('editClientButton').first().click();
+    // cy.testId('editClientButton').first().click();
 
     // cy.testId('formField').each(($elem) => {
     //   cy.wrap($elem).find('input').as('input');
@@ -19,12 +19,5 @@ describe('HMIS', () => {
     //   // TODO need special case for multi-select which has empty value
     //   cy.get('@input').invoke('val').should('not.be.empty');
     // });
-  });
-
-  it('search and create new client', () => {
-    cy.get('input[name="textSearch"]').type('ja sm{enter}');
-    // cy.testId('addClientButton').first().click();
-    // fill in all values
-    // command-click and inspect the transformed values
   });
 });

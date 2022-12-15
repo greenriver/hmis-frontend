@@ -8,23 +8,6 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 
-import baseAssessment from './forms/assessments/base_assessment.json' assert { type: 'json' };
-import client from './forms/records/client.json' assert { type: 'json' };
-import funder from './forms/records/funder.json' assert { type: 'json' };
-import inventory from './forms/records/inventory.json' assert { type: 'json' };
-import organization from './forms/records/organization.json' assert { type: 'json' };
-import project from './forms/records/project.json' assert { type: 'json' };
-import project_coc from './forms/records/project_coc.json' assert { type: 'json' };
-
-const definitions = {
-  client,
-  funder,
-  inventory,
-  organization,
-  project,
-  project_coc,
-};
-
 const app = express();
 const schema = await loadSchema('../graphql.schema.json', {
   loaders: [new JsonFileLoader()],
@@ -39,18 +22,6 @@ const resolvers = (store) => ({
     },
   },
   Query: {
-    formDefinition: (_, args) => ({
-      role: 'RECORD',
-      identifier: args.identifier,
-      definition: definitions[args.identifier],
-    }),
-    // mock begining a new asssessment by role
-    getFormDefinition: (_, args, context) => {
-      return {
-        role: args.assessmentRole,
-        definition: baseAssessment,
-      };
-    },
     enrollment: (_, args) => {
       return {
         id: args.id,
@@ -97,55 +68,10 @@ const mocks = {
     dob: faker.date.birthdate().toISOString().substring(0, 10),
   }),
   ClientsPaginated: () => page,
-
   AssessmentDetail: () => ({
     definition: {
       definition: baseAssessment,
     },
-  }),
-  // Explicitly set everything to empty, so they don't get filled in by the scalar mocks
-  // TODO pull these field names from schema..
-  FormDefinitionJson: () => ({
-    item: [],
-  }),
-  FormItem: () => ({
-    autofillValues: null,
-    bounds: null,
-    component: null,
-    dataCollectedAbout: null,
-    disabledDisplay: null,
-    enableBehavior: null,
-    enableWhen: null,
-    fieldName: null,
-    helperText: null,
-    hidden: null,
-    initial: null,
-    item: null,
-    pickListOptions: null,
-    pickListReference: null,
-    prefix: null,
-    readOnly: null,
-    recordType: null,
-    repeats: null,
-    required: null,
-    text: null,
-  }),
-  PickListOption: () => ({
-    label: null,
-    groupCode: null,
-    groupLabel: null,
-    secondaryLabel: null,
-    initialSelected: false,
-  }),
-  EnableWhen: () => ({
-    question: null,
-    operator: null,
-    answerCode: null,
-    answerCodes: null,
-    answerNumber: null,
-    answerBoolean: null,
-    answerGroupCode: null,
-    compareQuestion: null,
   }),
 };
 

@@ -2,8 +2,10 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   e2e: {
+    defaultCommandTimeout: 8000,
+    // Can be overridden by CYPRESS_BASE_URL
     baseUrl: 'https://hmis.dev.test:5173/',
-    //prevent navigating to a default blank page between each test!
+    // Prevent navigating to a default blank page between each test
     testIsolation: false,
     setupNodeEvents(on, config) {
       // implement node event listeners here
