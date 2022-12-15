@@ -4,7 +4,9 @@ import {
   Box,
   Card,
   Grid,
+  MenuItem,
   Stack,
+  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -13,6 +15,8 @@ import { useTranslation } from 'react-i18next';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
+import { ClientSortOption } from '@/types/gqlTypes';
 
 /**
  * Component that appears above the search results
@@ -22,11 +26,15 @@ const SearchResultsHeader = ({
   disabled,
   cardsEnabled,
   onChangeCards,
+  sortOrder,
+  onChangeSortOrder,
 }: {
   showCardToggle: boolean;
   disabled: boolean;
   cardsEnabled: boolean;
   onChangeCards: (event: React.MouseEvent<HTMLElement>, value: any) => void;
+  sortOrder?: ClientSortOption | null | undefined;
+  onChangeSortOrder: (value: ClientSortOption) => void;
 }) => {
   const { t } = useTranslation();
   return (
@@ -35,7 +43,7 @@ const SearchResultsHeader = ({
       justifyContent='space-between'
       sx={showCardToggle ? { mb: 4 } : undefined}
     >
-      <Grid item>
+      <Grid item sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         {showCardToggle && (
           <ToggleButtonGroup
             value={cardsEnabled}
@@ -65,6 +73,20 @@ const SearchResultsHeader = ({
             </ToggleButton>
           </ToggleButtonGroup>
         )}
+        <TextField
+          value={sortOrder}
+          onChange={(e) =>
+            onChangeSortOrder(e.target.value as ClientSortOption)
+          }
+          select
+          label='Sort Order'
+        >
+          {Object.values(ClientSortOption).map((sortOrder) => (
+            <MenuItem key={sortOrder} value={sortOrder}>
+              {HmisEnums.ClientSortOption[sortOrder]}
+            </MenuItem>
+          ))}
+        </TextField>
       </Grid>
       <Grid item>
         <Card sx={{ pl: 2, py: 1, pr: 1 }}>

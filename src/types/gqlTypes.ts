@@ -186,7 +186,7 @@ export type Client = {
   nameSuffix?: Maybe<Scalars['String']>;
   personalId: Scalars['String'];
   preferredName?: Maybe<Scalars['String']>;
-  pronouns?: Maybe<Scalars['String']>;
+  pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
@@ -231,6 +231,7 @@ export type ClientInput = {
   nameDataQuality?: InputMaybe<NameDataQuality>;
   nameSuffix?: InputMaybe<Scalars['String']>;
   preferredName?: InputMaybe<Scalars['String']>;
+  pronouns?: InputMaybe<Array<Scalars['String']>>;
   race?: InputMaybe<Array<Race>>;
   ssn?: InputMaybe<Scalars['String']>;
   ssnDataQuality?: InputMaybe<SsnDataQuality>;
@@ -258,8 +259,20 @@ export type ClientSearchInput = {
 
 /** HUD Client Sorting Options */
 export enum ClientSortOption {
-  LastNameAsc = 'LAST_NAME_ASC',
-  LastNameDesc = 'LAST_NAME_DESC',
+  /** First Name A To Z */
+  FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
+  /** First Name Z To A */
+  FirstNameZToA = 'FIRST_NAME_Z_TO_A',
+  /** Last Name A To Z */
+  LastNameAToZ = 'LAST_NAME_A_TO_Z',
+  /** Last Name Z To A */
+  LastNameZToA = 'LAST_NAME_Z_TO_A',
+  /** Oldest To Youngest */
+  OldestToYoungest = 'OLDEST_TO_YOUNGEST',
+  /** Recently Added */
+  RecentlyAdded = 'RECENTLY_ADDED',
+  /** Youngest To Oldest */
+  YoungestToOldest = 'YOUNGEST_TO_OLDEST',
 }
 
 export type ClientsPaginated = {
@@ -5720,6 +5733,7 @@ export type SearchClientsQueryVariables = Exact<{
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<ClientSortOption>;
 }>;
 
 export type SearchClientsQuery = {
@@ -8478,8 +8492,18 @@ export type SubmitAssessmentMutationOptions = Apollo.BaseMutationOptions<
   SubmitAssessmentMutationVariables
 >;
 export const SearchClientsDocument = gql`
-  query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
-    clientSearch(input: $input, limit: $limit, offset: $offset) {
+  query SearchClients(
+    $input: ClientSearchInput!
+    $limit: Int
+    $offset: Int
+    $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+  ) {
+    clientSearch(
+      input: $input
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+    ) {
       offset
       limit
       nodesCount
@@ -8506,6 +8530,7 @@ export const SearchClientsDocument = gql`
  *      input: // value for 'input'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
