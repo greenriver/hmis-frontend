@@ -186,7 +186,7 @@ export type Client = {
   nameSuffix?: Maybe<Scalars['String']>;
   personalId: Scalars['String'];
   preferredName?: Maybe<Scalars['String']>;
-  pronouns?: Maybe<Scalars['String']>;
+  pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
@@ -231,6 +231,7 @@ export type ClientInput = {
   nameDataQuality?: InputMaybe<NameDataQuality>;
   nameSuffix?: InputMaybe<Scalars['String']>;
   preferredName?: InputMaybe<Scalars['String']>;
+  pronouns?: InputMaybe<Array<Scalars['String']>>;
   race?: InputMaybe<Array<Race>>;
   ssn?: InputMaybe<Scalars['String']>;
   ssnDataQuality?: InputMaybe<SsnDataQuality>;
@@ -5418,6 +5419,7 @@ export type ClientFieldsFragment = {
   dobDataQuality: DobDataQuality;
   ethnicity: Ethnicity;
   gender: Array<Gender>;
+  pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
   personalId: string;
   race: Array<Race>;
@@ -5736,6 +5738,7 @@ export type SearchClientsQuery = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5767,6 +5770,7 @@ export type GetClientQuery = {
     dobDataQuality: DobDataQuality;
     ethnicity: Ethnicity;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
     personalId: string;
     race: Array<Race>;
@@ -5874,6 +5878,7 @@ export type CreateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5916,6 +5921,7 @@ export type UpdateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -6360,6 +6366,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dobDataQuality: DobDataQuality;
               ethnicity: Ethnicity;
               gender: Array<Gender>;
+              pronouns: Array<string>;
               nameDataQuality: NameDataQuality;
               personalId: string;
               race: Array<Race>;
@@ -7624,6 +7631,7 @@ export const ClientFieldsFragmentDoc = gql`
     dobDataQuality
     ethnicity
     gender
+    pronouns
     nameDataQuality
     personalId
     race
