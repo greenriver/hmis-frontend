@@ -1,11 +1,11 @@
-import { Grid, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
-import { InactiveBanner } from './Project';
+import { InactiveChip } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -48,47 +48,49 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definitionIdentifier: 'project_coc',
+    title: (
+      <>
+        <Breadcrumbs crumbs={crumbs} />
+        <Stack direction={'row'} spacing={2}>
+          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+            {title}
+          </Typography>
+          <InactiveChip project={project} />
+        </Stack>
+      </>
+    ),
   };
   return (
     <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        {title}
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          <InactiveBanner project={project} />
-          {create ? (
-            <EditRecord<
-              ProjectCocFieldsFragment,
-              CreateProjectCocMutation,
-              CreateProjectCocMutationVariables
-            >
-              inputVariables={{ projectId }}
-              queryDocument={CreateProjectCocDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: CreateProjectCocMutation) =>
-                data?.createProjectCoc?.errors
-              }
-              {...common}
-            />
-          ) : (
-            <EditRecord<
-              ProjectCocFieldsFragment,
-              UpdateProjectCocMutation,
-              UpdateProjectCocMutationVariables
-            >
-              record={data?.projectCoc || undefined}
-              queryDocument={UpdateProjectCocDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: UpdateProjectCocMutation) =>
-                data?.updateProjectCoc?.errors
-              }
-              {...common}
-            />
-          )}
-        </Grid>
-      </Grid>
+      {create ? (
+        <EditRecord<
+          ProjectCocFieldsFragment,
+          CreateProjectCocMutation,
+          CreateProjectCocMutationVariables
+        >
+          inputVariables={{ projectId }}
+          queryDocument={CreateProjectCocDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: CreateProjectCocMutation) =>
+            data?.createProjectCoc?.errors
+          }
+          {...common}
+        />
+      ) : (
+        <EditRecord<
+          ProjectCocFieldsFragment,
+          UpdateProjectCocMutation,
+          UpdateProjectCocMutationVariables
+        >
+          record={data?.projectCoc || undefined}
+          queryDocument={UpdateProjectCocDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: UpdateProjectCocMutation) =>
+            data?.updateProjectCoc?.errors
+          }
+          {...common}
+        />
+      )}
     </ProjectLayout>
   );
 };

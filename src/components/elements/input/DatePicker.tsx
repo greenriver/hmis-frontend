@@ -4,13 +4,13 @@ import {
   DatePicker as MuiDatePicker,
   DatePickerProps,
 } from '@mui/x-date-pickers';
-import { getYear, isAfter, isBefore, isPast, isValid } from 'date-fns';
+import { isAfter, isBefore, isPast } from 'date-fns';
 import { useMemo, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
 import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
-import { isDate } from '@/modules/form/util/formUtil';
+import { isDate, isValidDate } from '@/modules/form/util/formUtil';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 
 interface PickerProps
@@ -40,9 +40,7 @@ const DatePicker = ({
   const handleBlur = () => {
     let msg = null;
     if (value && isDate(value)) {
-      if (!isValid(value)) {
-        msg = 'Invalid date';
-      } else if (getYear(value) < 1900) {
+      if (!isValidDate(value)) {
         msg = 'Invalid date';
       } else if (
         isDate(min) &&
@@ -52,9 +50,9 @@ const DatePicker = ({
         msg = `Must be in range ${formatDateForDisplay(
           min
         )} - ${formatDateForDisplay(max)}`;
-      } else if (isDate(min) && isBefore(value, min)) {
+      } else if (isDate(min) && isValidDate(min) && isBefore(value, min)) {
         msg = `Must be on or after ${formatDateForDisplay(min)}`;
-      } else if (isDate(max) && isAfter(value, max)) {
+      } else if (isDate(max) && isValidDate(max) && isAfter(value, max)) {
         msg = `Must be on or before ${formatDateForDisplay(max)}`;
       }
     }

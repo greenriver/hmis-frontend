@@ -1,8 +1,6 @@
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
-
-import PageHeader from '../layout/PageHeader';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
@@ -27,31 +25,24 @@ const CreateClient: React.FC = () => {
   );
 
   return (
-    <>
-      <PageHeader>
-        <Typography variant='h5'>Add New Client</Typography>
-      </PageHeader>
-      <Container maxWidth='lg' sx={{ pt: 3, pb: 20 }}>
-        <Grid container>
-          <Grid item xs={8}>
-            <EditRecord<
-              ClientFieldsFragment,
-              CreateClientMutation,
-              CreateClientMutationVariables
-            >
-              definitionIdentifier='client'
-              queryDocument={CreateClientDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: CreateClientMutation) =>
-                data?.createClient?.errors
-              }
-              submitButtonText='Create Client'
-              // horizontal
-            />
-          </Grid>
-        </Grid>
-      </Container>
-    </>
+    <Container maxWidth='lg' sx={{ pt: 3, pb: 20 }}>
+      <EditRecord<
+        ClientFieldsFragment,
+        CreateClientMutation,
+        CreateClientMutationVariables
+      >
+        definitionIdentifier='client'
+        queryDocument={CreateClientDocument}
+        onCompleted={onCompleted}
+        getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
+        submitButtonText='Create Client'
+        title={
+          <Typography variant='h3' sx={{ pt: 2, pb: 4 }}>
+            Add New Client
+          </Typography>
+        }
+      />
+    </Container>
   );
 };
 

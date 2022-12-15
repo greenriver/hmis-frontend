@@ -20,10 +20,11 @@ const ItemGroup = ({
   nestingLevel,
   renderChildItem,
   severalItemsChanged,
-}: GroupItemComponentProps) => {
+  horizontal,
+}: GroupItemComponentProps & { horizontal?: boolean }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
-  const direction = 'column'; // item.display?.direction ?? 'column';
+  const direction = horizontal ? 'row' : 'column'; // item.display?.direction ?? 'column';
   const isColumn = direction === 'column';
 
   const wrappedChildren = (
@@ -33,7 +34,8 @@ const ItemGroup = ({
       rowSpacing={isColumn ? 2 : 0}
       columnSpacing={isColumn ? 0 : 3}
       sx={{
-        //'& .MuiGrid-item:first-of-type': { pt: 0 }
+        '& .MuiGrid-item:first-of-type':
+          nestingLevel === 0 && !item.text ? { pt: 0 } : undefined,
         mt: 0,
       }}
     >
@@ -68,12 +70,7 @@ const ItemGroup = ({
 
   if (nestingLevel === 0) {
     return (
-      <Grid item>
-        {/* empty div for anchor link. hack: 115px depends on height of sticky header */}
-        <Box
-          id={item.linkId}
-          sx={{ position: 'relative', top: '-115px', left: 0 }}
-        ></Box>
+      <Grid id={item.linkId} item>
         <Paper
           sx={{
             py: 3,
@@ -134,15 +131,21 @@ const ItemGroup = ({
       </Grid>
     );
   }
+
   if (nestingLevel === 1) {
     return (
       <Grid item xs>
-        <Box sx={{ pl: 1, mb: 2 }}>
+        <Box sx={{ pl: horizontal ? undefined : 1, mb: 2 }}>
           <Box
-            sx={{
-              pl: 2,
-              borderLeft: (theme) => `2px solid ${theme.palette.grey[400]}`,
-            }}
+            sx={
+              horizontal
+                ? undefined
+                : {
+                    pl: 2,
+                    borderLeft: (theme) =>
+                      `2px solid ${theme.palette.grey[400]}`,
+                  }
+            }
           >
             {item.text && <Typography sx={{ mb: 2 }}>{item.text}</Typography>}
             {wrappedChildren}

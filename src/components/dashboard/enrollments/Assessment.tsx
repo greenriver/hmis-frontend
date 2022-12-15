@@ -73,7 +73,7 @@ const Assessment = () => {
     }
   }, [enrollment, assessmentRole]);
 
-  useScrollToHash(crumbsLoading || dataLoading);
+  useScrollToHash(crumbsLoading || dataLoading, 99);
 
   if (crumbsLoading || dataLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');

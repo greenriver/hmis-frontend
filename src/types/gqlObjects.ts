@@ -256,7 +256,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'pronouns',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
+        },
       },
       {
         name: 'race',
@@ -855,6 +867,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'required',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      { name: 'size', type: { kind: 'ENUM', name: 'InputSize', ofType: null } },
       { name: 'text', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'type',

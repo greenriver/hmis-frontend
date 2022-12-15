@@ -19,6 +19,7 @@ interface Props extends Omit<RadioGroupProps, 'onChange'> {
   name?: string;
   options: Option[];
   onChange: (value: Option | null | undefined) => void;
+  clearable?: boolean;
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -28,30 +29,41 @@ const RadioGroupInput = ({
   onChange,
   value,
   error,
+  row,
+  sx,
+  clearable,
   ...props
 }: RadioGroupInputProps) => {
   const htmlId = useId();
 
-  const onChangeOption = useCallback(
-    (_e: any, value: any) => {
-      if (isNil(value)) {
-        onChange(value);
+  const onClickOption = useCallback(
+    (
+      event:
+        | React.MouseEvent<HTMLLabelElement>
+        | React.KeyboardEvent<HTMLButtonElement>,
+      option: string
+    ) => {
+      event.preventDefault();
+      if (isNil(option)) {
+        onChange(option);
+      } else if (clearable && option === value?.code) {
+        onChange(null);
       } else {
-        onChange(options.find((o) => o.code === value));
+        onChange(options.find((o) => o.code === option));
       }
     },
-    [onChange, options]
+    [onChange, options, value, clearable]
   );
 
   // Prevent form submission on Enter. Enter should toggle the state.
   const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        onChangeOption(e, e.target.value);
-      }
+      if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space')
+        onClickOption(e, e.target.value);
+      // if (e.key.match(/(ArrowDown|ArrowUp|ArrowLeft|ArrowRight)/))
+      //   e.preventDefault();
     },
-    [onChangeOption]
+    [onClickOption]
   );
 
   return (
@@ -70,10 +82,18 @@ const RadioGroupInput = ({
           {label}
         </FormLabel>
         <RadioGroup
-          row
+          row={row}
           aria-labelledby={htmlId}
           value={value ? value.code : null}
-          onChange={onChangeOption}
+          onChange={() => null}
+          sx={{
+            ...(!row && {
+              'label:first-child': { pt: 1 },
+              // 'label:last-child': { pb: 1 },
+              'label .MuiRadio-root': { p: 1 },
+            }),
+            ...sx,
+          }}
           {...props}
         >
           {options.map(({ code, label }) => (
@@ -81,6 +101,7 @@ const RadioGroupInput = ({
               disabled={props.disabled}
               value={code}
               aria-label={label || code}
+              onClick={(e) => onClickOption(e, code)}
               control={<Radio onKeyDown={onKeyDown} />}
               key={code}
               label={label || code}

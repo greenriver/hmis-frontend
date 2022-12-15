@@ -15,12 +15,13 @@ import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
+import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import TextInput from '@/components/elements/input/TextInput';
-import ToggleButtonGroupInput from '@/components/elements/input/ToggleButtonGroupInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import {
   Component,
   FormItem,
+  InputSize,
   ItemType,
   ValidationError,
 } from '@/types/gqlTypes';
@@ -45,12 +46,19 @@ export interface DynamicFieldProps {
   horizontal?: boolean;
 }
 
-const getLabel = (item: FormItem) => {
+const getLabel = (item: FormItem, horizontal?: boolean) => {
   if (!item.prefix && !item.text) return null;
 
   return (
     <Stack direction='row' spacing={1}>
-      <Typography variant='body2'>{item.text}</Typography>
+      <Typography
+        variant='body2'
+        fontWeight={
+          item.component === Component.Checkbox || horizontal ? undefined : 600
+        }
+      >
+        {item.text}
+      </Typography>
       {item.required && (
         <Typography variant='body2' color='error'>
           (Required)
@@ -62,7 +70,8 @@ const getLabel = (item: FormItem) => {
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
 const MAX_INPUT_WIDTH = 400;
-const FIXED_DATE_WIDTH = 200;
+const FIXED_WIDTH_SMALL = 200;
+const FIXED_WIDTH_X_SMALL = 100;
 
 export const maxWidthAtNestingLevel = (nestingLevel: number) =>
   600 - nestingLevel * 26;
@@ -82,9 +91,20 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const onChangeValue = (val: any) => itemChanged(item.linkId, val);
   const onChangeEventValue = (_: any, val: any) =>
     itemChanged(item.linkId, val);
-  const label = getLabel(item);
-  const maxWidth = maxWidthAtNestingLevel(nestingLevel);
+  const label = getLabel(item, horizontal);
+  let maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = 250;
+  let width;
+
+  if (item.size === InputSize.Small || item.type === ItemType.Date) {
+    width = FIXED_WIDTH_SMALL;
+  } else if (item.size === InputSize.Xsmall) {
+    width = FIXED_WIDTH_X_SMALL;
+  }
+
+  if (item.component === Component.RadioButtons) {
+    maxWidth = 600;
+  }
 
   const commonContainerProps = { errors, horizontal };
 
@@ -162,9 +182,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={value || ''}
             onChange={onChangeEvent}
             multiline={multiline}
-            minRows={multiline ? 3 : undefined}
+            minRows={multiline ? 2 : undefined}
             horizontal={horizontal}
             sx={{
+              width,
               maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
               '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
             }}
@@ -183,6 +204,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEvent}
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
+            inputWidth={width}
             {...commonInputProps}
           />
         </InputContainer>
@@ -202,7 +224,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             textInputProps={{
               name: item.linkId,
               horizontal,
-              sx: { width: FIXED_DATE_WIDTH },
+              sx: { width },
             }}
             {...datePickerProps}
             {...commonInputProps}
@@ -261,25 +283,33 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             disabled={disabled}
           />
         );
-      } else if (item.pickListReference === 'NoYesReasonsForMissingData') {
+      } else if (
+        item.component === Component.RadioButtons ||
+        item.component === Component.RadioButtonsVertical ||
+        (options && options.length > 0 && options.length < 4) ||
+        item.pickListReference === 'NoYesReasonsForMissingData'
+      ) {
         inputComponent = (
-          //   <RadioGroupInput
+          <RadioGroupInput
+            sx={{ mb: 1 }}
+            value={selectedVal}
+            onChange={onChangeValue}
+            id={item.linkId}
+            name={item.linkId}
+            options={options || []}
+            row={item.component !== Component.RadioButtonsVertical}
+            clearable
+            {...commonInputProps}
+          />
+          // <ToggleButtonGroupInput
           //   value={selectedVal}
-          //   onChange={onChangeValue}
+          //   onChange={onChangeEventValue}
           //   id={item.linkId}
           //   name={item.linkId}
+          //   horizontal={horizontal}
           //   options={options || []}
           //   {...commonInputProps}
           // />
-          <ToggleButtonGroupInput
-            value={selectedVal}
-            onChange={onChangeEventValue}
-            id={item.linkId}
-            name={item.linkId}
-            horizontal={horizontal}
-            options={options || []}
-            {...commonInputProps}
-          />
         );
       } else {
         inputComponent = (

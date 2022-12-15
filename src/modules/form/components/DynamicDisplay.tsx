@@ -32,6 +32,7 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
       return (
         <Alert
           severity={SeverityMap[item.component as keyof typeof SeverityMap]}
+          sx={{ mt: 2 }}
         >
           <div dangerouslySetInnerHTML={html} />
         </Alert>
@@ -40,7 +41,7 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
       return (
         <Typography
           variant='body2'
-          sx={{ mt: 4, maxWidth }}
+          sx={{ mt: 2, maxWidth }}
           dangerouslySetInnerHTML={html}
         />
       );

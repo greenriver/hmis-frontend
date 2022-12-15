@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -26,30 +26,23 @@ const Profile = () => {
     [navigate]
   );
   return (
-    <>
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        Edit Client Details
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          <EditRecord<
-            ClientFieldsFragment,
-            UpdateClientMutation,
-            UpdateClientMutationVariables
-          >
-            definitionIdentifier='client'
-            record={client}
-            queryDocument={UpdateClientDocument}
-            onCompleted={onCompleted}
-            getErrors={(data: UpdateClientMutation) =>
-              data?.updateClient?.errors
-            }
-            submitButtonText='Save Changes'
-            // horizontal
-          />
-        </Grid>
-      </Grid>
-    </>
+    <EditRecord<
+      ClientFieldsFragment,
+      UpdateClientMutation,
+      UpdateClientMutationVariables
+    >
+      definitionIdentifier='client'
+      record={client}
+      queryDocument={UpdateClientDocument}
+      onCompleted={onCompleted}
+      getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
+      submitButtonText='Save Changes'
+      title={
+        <Typography variant='h3' sx={{ pt: 2, pb: 4 }}>
+          Edit Client Details
+        </Typography>
+      }
+    />
   );
 };
 
