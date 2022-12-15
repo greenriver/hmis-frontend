@@ -5463,6 +5463,7 @@ export type ClientFieldsFragment = {
   dobDataQuality: DobDataQuality;
   ethnicity: Ethnicity;
   gender: Array<Gender>;
+  pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
   personalId: string;
   race: Array<Race>;
@@ -5781,6 +5782,7 @@ export type SearchClientsQuery = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5812,6 +5814,7 @@ export type GetClientQuery = {
     dobDataQuality: DobDataQuality;
     ethnicity: Ethnicity;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
     personalId: string;
     race: Array<Race>;
@@ -5919,6 +5922,7 @@ export type CreateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5961,6 +5965,7 @@ export type UpdateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -6405,6 +6410,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dobDataQuality: DobDataQuality;
               ethnicity: Ethnicity;
               gender: Array<Gender>;
+              pronouns: Array<string>;
               nameDataQuality: NameDataQuality;
               personalId: string;
               race: Array<Race>;
@@ -7670,6 +7676,7 @@ export const ClientFieldsFragmentDoc = gql`
     dobDataQuality
     ethnicity
     gender
+    pronouns
     nameDataQuality
     personalId
     race
