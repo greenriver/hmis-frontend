@@ -196,6 +196,7 @@ const GenericTable = <T extends { id: string }>({
                         <RouterLink
                           to={rowLinkTo(row)}
                           plain={!linkTreatment}
+                          data-testid={linkTreatment && 'table-linkedCell'}
                           sx={{
                             height: '100%',
                             verticalAlign: 'middle',

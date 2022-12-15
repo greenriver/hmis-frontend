@@ -26,18 +26,17 @@
 
 ### Run local development server
 
-1. Install npm dependencies
+1. Add to `/etc/hosts`:
+
+   ```sh
+   ::1         hmis.dev.test
+   127.0.0.1   hmis.dev.test
+   ```
+
+2. Install npm dependencies
 
    ```sh
    yarn install
-   ```
-
-2. Create local certs for development (only need to do this once)
-
-   ```sh
-   brew install mkcert
-   mkcert -install
-   yarn cert
    ```
 
 3. Run dev server with live reload

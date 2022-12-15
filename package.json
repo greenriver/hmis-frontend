@@ -7,8 +7,8 @@
   },
   "scripts": {
     "dev": "DEBUG=vite:proxy vite --clearScreen false",
-    "build": "tsc && vite build",
-    "build:staging": "tsc && vite build --mode staging",
+    "build": "vite build",
+    "build:staging": "vite build --mode staging",
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -101,6 +101,7 @@
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
     "cross-env": "^7.0.3",
+    "cypress": "^12.0.2",
     "eslint": "^7.32.0 || ^8.2.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
@@ -118,6 +119,7 @@
     "rollup-plugin-visualizer": "^5.6.0",
     "storybook-addon-apollo-client": "^4.0.12",
     "ts-jest": "^28.0.2",
-    "ts-node": "^10.7.0"
+    "ts-node": "^10.7.0",
+    "vite-plugin-mkcert": "^1.10.1"
   }
 }
