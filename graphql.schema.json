@@ -2038,7 +2038,7 @@
           },
           {
             "name": "RADIO_BUTTONS_VERTICAL",
-            "description": "Render a choice input item as radio vertical buttons",
+            "description": "Render a choice input item as vertical radio buttons",
             "isDeprecated": false,
             "deprecationReason": null
           }

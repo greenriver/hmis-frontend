@@ -47,7 +47,7 @@ export const HmisEnums = {
       'Render a group that contains children of the same type (e.g. all booleans)',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
-      'Render a choice input item as radio vertical buttons',
+      'Render a choice input item as vertical radio buttons',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB',

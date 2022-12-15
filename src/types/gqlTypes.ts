@@ -291,7 +291,7 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
-  /** Render a choice input item as radio vertical buttons */
+  /** Render a choice input item as vertical radio buttons */
   RadioButtonsVertical = 'RADIO_BUTTONS_VERTICAL',
 }
 
