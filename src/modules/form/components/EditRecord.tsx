@@ -80,7 +80,7 @@ const EditRecord = <
     variables: { identifier: definitionIdentifier },
   });
 
-  useScrollToHash(definitionLoading, 70);
+  useScrollToHash(definitionLoading, 102);
 
   const definition: FormDefinitionJson | undefined = useMemo(
     () => data?.formDefinition?.definition,

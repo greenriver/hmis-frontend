@@ -29,6 +29,7 @@ const SearchResultsHeader = ({
   onChangeCards: (event: React.MouseEvent<HTMLElement>, value: any) => void;
 }) => {
   const { t } = useTranslation();
+
   return (
     <Grid
       container
@@ -78,6 +79,10 @@ const SearchResultsHeader = ({
               variant='outlined'
               color='secondary'
               to={Routes.CREATE_CLIENT}
+              // state={{
+              //   prevPath: `${pathname}${search || ''}`,
+              //   prevPathName: 'Search',
+              // }}
               target='_blank'
             >
               + Add Client

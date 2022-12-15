@@ -2,9 +2,11 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import Breadcrumbs from '../elements/Breadcrumbs';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
 import EditRecord from '@/modules/form/components/EditRecord';
+import { clientName } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -25,6 +27,18 @@ const Profile = () => {
     },
     [navigate]
   );
+  const crumbs = [
+    // { label: state?.prevPathName || 'Search', to: state?.prevPath || '/' },
+    {
+      label: clientName(client),
+      to: generatePath(Routes.CLIENT_DASHBOARD, { clientId: client.id }),
+    },
+    {
+      label: 'Edit Details',
+      to: '',
+    },
+  ];
+
   return (
     <EditRecord<
       ClientFieldsFragment,
@@ -37,10 +51,14 @@ const Profile = () => {
       onCompleted={onCompleted}
       getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
       submitButtonText='Save Changes'
+      navigationProps={{ top: '118px' }}
       title={
-        <Typography variant='h3' sx={{ pt: 2, pb: 4 }}>
-          Edit Client Details
-        </Typography>
+        <>
+          <Breadcrumbs crumbs={crumbs} />
+          <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
+            Edit Client Details
+          </Typography>
+        </>
       }
     />
   );
