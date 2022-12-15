@@ -132,7 +132,7 @@ const Project = () => {
         <Grid item xs={9}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Project Details
             </Typography>
             <ProjectDetails project={project} />

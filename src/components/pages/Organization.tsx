@@ -62,7 +62,7 @@ const Organization = () => {
 
           {hasDetails && (
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 2 }}>
                 Organization Details
               </Typography>
               <OrganizationDetails organization={organization} />
@@ -71,7 +71,7 @@ const Organization = () => {
 
           {organization && (
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 2 }}>
                 Projects
               </Typography>
               <ProjectsTable organizationId={organizationId} />
