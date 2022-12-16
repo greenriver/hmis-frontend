@@ -48,10 +48,6 @@ export interface Props
   definition: FormDefinitionJson;
   onSubmit: (values: FormValues, confirmed?: boolean) => void;
   onSaveDraft?: (values: FormValues) => void;
-  // onDiscard?: () => void;
-  // submitButtonText?: string;
-  // saveDraftButtonText?: string;
-  // discardButtonText?: string;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];

@@ -33,7 +33,6 @@ const FormActions = ({
         variant='contained'
         type='submit'
         disabled={disabled}
-        // disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
         onClick={onSubmit}
         sx={{ opacity: 1 }}
       >
