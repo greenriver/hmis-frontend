@@ -40,6 +40,7 @@ fragment ItemFields on FormItem {
   fieldName
   recordType
   pickListReference
+  size
   bounds {
     type
     question

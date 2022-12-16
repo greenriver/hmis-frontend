@@ -15,7 +15,7 @@ interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
   highlight?: boolean; // toggle highlight state
   horizontal?: boolean;
-  inputWidth?: string;
+  inputWidth?: string | number;
 }
 export type TextInputProps = Props & DynamicInputCommonProps;
 
@@ -51,12 +51,8 @@ const TextInput = ({
     ...sx,
   };
   let width = inputWidth;
-  if (horizontal && !width) {
-    if (inputProps.inputMode === 'numeric') {
-      width = '120px';
-    } else {
-      width = '320px';
-    }
+  if (!width && inputProps.inputMode === 'numeric') {
+    width = '120px';
   }
 
   return (

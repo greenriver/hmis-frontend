@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,7 @@ const EditOrganization = () => {
   const navigate = useNavigate();
 
   const { crumbs, loading, organization, organizationName } =
-    useOrganizationCrumbs('Edit');
+    useOrganizationCrumbs('Update Organization');
 
   const onCompleted = useCallback(
     (data: UpdateOrganizationMutation) => {
@@ -37,30 +37,29 @@ const EditOrganization = () => {
 
   return (
     <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        Edit {organizationName}
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          {loading && <Loading />}
-          {organization && (
-            <EditRecord<
-              OrganizationAllFieldsFragment,
-              UpdateOrganizationMutation,
-              UpdateOrganizationMutationVariables
-            >
-              definitionIdentifier='organization'
-              record={organization}
-              queryDocument={UpdateOrganizationDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: UpdateOrganizationMutation) =>
-                data?.updateOrganization?.errors
-              }
-            />
-          )}
-        </Grid>
-      </Grid>
+      {loading && <Loading />}
+      {organization && (
+        <EditRecord<
+          OrganizationAllFieldsFragment,
+          UpdateOrganizationMutation,
+          UpdateOrganizationMutationVariables
+        >
+          definitionIdentifier='organization'
+          record={organization}
+          queryDocument={UpdateOrganizationDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: UpdateOrganizationMutation) =>
+            data?.updateOrganization?.errors
+          }
+          submitButtonText='Update Organization'
+          title={
+            <>
+              <Breadcrumbs crumbs={crumbs} />
+              <Typography variant='h3'>Update {organizationName}</Typography>
+            </>
+          }
+        />
+      )}
     </ProjectLayout>
   );
 };

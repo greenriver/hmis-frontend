@@ -2886,6 +2886,7 @@ export type ItemFieldsFragment = {
   fieldName?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
+  size?: InputSize | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
@@ -2967,6 +2968,7 @@ export type FormDefinitionWithJsonFragment = {
       fieldName?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
+      size?: InputSize | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -2985,6 +2987,7 @@ export type FormDefinitionWithJsonFragment = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -3003,6 +3006,7 @@ export type FormDefinitionWithJsonFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3021,6 +3025,7 @@ export type FormDefinitionWithJsonFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3039,6 +3044,7 @@ export type FormDefinitionWithJsonFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -3397,6 +3403,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3415,6 +3422,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3433,6 +3441,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -3451,6 +3460,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -3469,6 +3479,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -3792,6 +3803,7 @@ export type GetAssessmentQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3810,6 +3822,7 @@ export type GetAssessmentQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -3828,6 +3841,7 @@ export type GetAssessmentQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -3846,6 +3860,7 @@ export type GetAssessmentQuery = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -3864,6 +3879,7 @@ export type GetAssessmentQuery = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    size?: InputSize | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -4236,6 +4252,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -4254,6 +4271,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -4272,6 +4290,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4290,6 +4309,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4308,6 +4328,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4611,6 +4632,7 @@ export type GetFormDefinitionQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -4629,6 +4651,7 @@ export type GetFormDefinitionQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -4647,6 +4670,7 @@ export type GetFormDefinitionQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4665,6 +4689,7 @@ export type GetFormDefinitionQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4683,6 +4708,7 @@ export type GetFormDefinitionQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5010,6 +5036,7 @@ export type SaveAssessmentMutation = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5028,6 +5055,7 @@ export type SaveAssessmentMutation = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5046,6 +5074,7 @@ export type SaveAssessmentMutation = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -5064,6 +5093,7 @@ export type SaveAssessmentMutation = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    size?: InputSize | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -5082,6 +5112,7 @@ export type SaveAssessmentMutation = {
                       fieldName?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
+                      size?: InputSize | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
@@ -5444,6 +5475,7 @@ export type ClientFieldsFragment = {
   dobDataQuality: DobDataQuality;
   ethnicity: Ethnicity;
   gender: Array<Gender>;
+  pronouns: Array<string>;
   nameDataQuality: NameDataQuality;
   personalId: string;
   race: Array<Race>;
@@ -5776,6 +5808,7 @@ export type SearchClientsQuery = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5842,6 +5875,7 @@ export type GetClientQuery = {
     dobDataQuality: DobDataQuality;
     ethnicity: Ethnicity;
     gender: Array<Gender>;
+    pronouns: Array<string>;
     nameDataQuality: NameDataQuality;
     personalId: string;
     race: Array<Race>;
@@ -5949,6 +5983,7 @@ export type CreateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -5991,6 +6026,7 @@ export type UpdateClientMutation = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -6435,6 +6471,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dobDataQuality: DobDataQuality;
               ethnicity: Ethnicity;
               gender: Array<Gender>;
+              pronouns: Array<string>;
               nameDataQuality: NameDataQuality;
               personalId: string;
               race: Array<Race>;
@@ -7600,6 +7637,7 @@ export const ItemFieldsFragmentDoc = gql`
     fieldName
     recordType
     pickListReference
+    size
     bounds {
       type
       question
@@ -7699,6 +7737,7 @@ export const ClientFieldsFragmentDoc = gql`
     dobDataQuality
     ethnicity
     gender
+    pronouns
     nameDataQuality
     personalId
     race

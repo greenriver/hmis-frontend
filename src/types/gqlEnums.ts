@@ -55,8 +55,8 @@ export const HmisEnums = {
       'Render a choice input item as vertical radio buttons',
   },
   DOBDataQuality: {
-    FULL_DOB_REPORTED: 'Full DOB reported',
-    APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Approximate or partial DOB reported',
+    FULL_DOB_REPORTED: 'Full DOB',
+    APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Partial DOB',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -394,9 +394,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NameDataQuality: {
-    FULL_NAME_REPORTED: 'Full name reported',
+    FULL_NAME_REPORTED: 'Full name',
     PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
-      'Partial, street name, or code name reported',
+      'Partial, street name, or code name',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -530,8 +530,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   SSNDataQuality: {
-    FULL_SSN_REPORTED: 'Full SSN reported',
-    APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Approximate or partial SSN reported',
+    FULL_SSN_REPORTED: 'Full SSN',
+    APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',

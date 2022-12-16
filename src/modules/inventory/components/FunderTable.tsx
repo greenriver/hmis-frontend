@@ -85,7 +85,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Edit
+              Update
             </ButtonLink>
             <Button
               onClick={() => setDelete(record)}

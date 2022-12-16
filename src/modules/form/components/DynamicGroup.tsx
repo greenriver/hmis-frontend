@@ -30,6 +30,8 @@ const DynamicGroup = (props: GroupItemComponentProps) => {
   switch (props.item.component) {
     case Component.InputGroup:
       return <InputGroup key={props.item.linkId} {...props} />;
+    case Component.HorizontalGroup:
+      return <ItemGroup key={props.item.linkId} horizontal {...props} />;
     default:
       return <ItemGroup key={props.item.linkId} {...props} />;
   }

@@ -1,4 +1,5 @@
 import {
+  differenceInDays,
   differenceInYears,
   format,
   formatDistanceToNowStrict,
@@ -184,12 +185,23 @@ export const lastUpdated = (client: ClientFieldsFragment) => {
   return parseAndFormatDateTime(client.dateUpdated);
 };
 
-// TODO implement
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const pronouns = (_client: ClientFieldsFragment) => null;
+export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
+  client.pronouns ? client.pronouns.join(', ') : null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
+};
+
+// Open, or closed within the last X days
+export const isRecentEnrollment = (
+  enrollment: EnrollmentFieldsFragment,
+  withinDays = 30
+) => {
+  if (!enrollment.exitDate) return true;
+  const exit = parseHmisDateString(enrollment.exitDate);
+  if (!exit) return false;
+
+  return differenceInDays(new Date(), exit) <= withinDays;
 };
 
 export const enrollmentName = (

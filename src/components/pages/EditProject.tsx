@@ -1,11 +1,11 @@
-import { Grid, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
-import { InactiveBanner } from './Project';
+import { InactiveChip } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -21,7 +21,7 @@ import {
 const EditProject = () => {
   const navigate = useNavigate();
 
-  const [crumbs, loading, project] = useProjectCrumbs('Edit');
+  const [crumbs, loading, project] = useProjectCrumbs('Update Project');
 
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
@@ -48,29 +48,32 @@ const EditProject = () => {
 
   return (
     <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        Edit {project.projectName}
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          <InactiveBanner project={project} />
-          <EditRecord<
-            ProjectAllFieldsFragment,
-            UpdateProjectMutation,
-            UpdateProjectMutationVariables
-          >
-            definitionIdentifier='project'
-            record={project}
-            queryDocument={UpdateProjectDocument}
-            onCompleted={onCompleted}
-            getErrors={(data: UpdateProjectMutation) =>
-              data?.updateProject?.errors
-            }
-            confirmable
-          />
-        </Grid>
-      </Grid>
+      <EditRecord<
+        ProjectAllFieldsFragment,
+        UpdateProjectMutation,
+        UpdateProjectMutationVariables
+      >
+        definitionIdentifier='project'
+        record={project}
+        queryDocument={UpdateProjectDocument}
+        onCompleted={onCompleted}
+        getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
+        confirmable
+        submitButtonText='Update Project'
+        navigationProps={{ top: '118px' }}
+        onDiscard={generatePath(Routes.PROJECT, { projectId: project?.id })}
+        title={
+          <>
+            <Breadcrumbs crumbs={crumbs} />
+            <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>
+              <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+                Update {project.projectName}
+              </Typography>
+              <InactiveChip project={project} />
+            </Stack>
+          </>
+        }
+      />
     </ProjectLayout>
   );
 };

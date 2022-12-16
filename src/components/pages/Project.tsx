@@ -1,4 +1,13 @@
-import { Alert, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Chip,
+  Grid,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
 import {
@@ -45,9 +54,39 @@ export const InactiveBanner = ({
   );
   return (
     <Alert severity='info' sx={{ mb: 2 }}>
-      This project is inactive
+      This project is closed
       {dateRange && `. Project operated from ${dateRange}.`}
     </Alert>
+  );
+};
+
+export const InactiveChip = ({
+  project,
+}: {
+  project: ProjectAllFieldsFragment;
+}) => {
+  if (!project.operatingEndDate) return null;
+  const endDate = parseHmisDateString(project.operatingEndDate);
+  if (!endDate || !isBefore(endDate, addDays(new Date(), -1))) return null;
+
+  const dateRange = parseAndFormatDateRange(
+    project.operatingStartDate,
+    project.operatingEndDate
+  );
+  return (
+    <Tooltip
+      title={
+        <Typography variant='body2'>{`Project Operated from ${dateRange}`}</Typography>
+      }
+      placement='right'
+      arrow
+    >
+      <Chip
+        label='Closed Project'
+        size='small'
+        sx={{ mt: 1, alignSelf: 'flex-end' }}
+      />
+    </Tooltip>
   );
 };
 
@@ -93,7 +132,7 @@ const Project = () => {
         <Grid item xs={9}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Project Details
             </Typography>
             <ProjectDetails project={project} />
@@ -182,7 +221,7 @@ const Project = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Edit Project
+                Update Project
               </ButtonLink>
               <Button
                 color='error'

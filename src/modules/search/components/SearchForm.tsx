@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty, omit, omitBy, isNil, pick } from 'lodash-es';
+import { isEmpty, omit, omitBy, isNil, pick, trim } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -79,15 +79,17 @@ const SearchForm: React.FC<SearchFormProps> = ({
           values.textSearch &&
           typeof values.textSearch === 'string' &&
           isEmpty(omit(requiredValueSet, ['textSearch'])) &&
-          values.textSearch.length < 4
+          trim(values.textSearch).length < 4
         ) {
-          errors.textSearch = t<string>('clientSearch.inputTooShort');
+          errors.textSearch = hideAdvanced
+            ? t<string>('clientSearch.inputTooShort')
+            : t<string>('clientSearch.inputTooShortAllowAdvanced');
         }
       }
 
       return errors;
     },
-    [t]
+    [t, hideAdvanced]
   );
 
   const fieldChanged = (fieldId: string, value: any) => {

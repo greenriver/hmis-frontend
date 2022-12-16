@@ -34,6 +34,7 @@ export const RITA_ACKROYD = {
   veteranStatus: NoYesReasonsForMissingData.ClientRefused,
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
+  pronouns: ['she/hers'],
   enrollments: {
     nodesCount: 5,
     offset: 0,
