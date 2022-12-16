@@ -1835,14 +1835,44 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "LAST_NAME_ASC",
-            "description": null,
+            "name": "FIRST_NAME_A_TO_Z",
+            "description": "First Name A To Z",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "LAST_NAME_DESC",
-            "description": null,
+            "name": "FIRST_NAME_Z_TO_A",
+            "description": "First Name Z To A",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAST_NAME_A_TO_Z",
+            "description": "Last Name A To Z",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAST_NAME_Z_TO_A",
+            "description": "Last Name Z To A",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OLDEST_TO_YOUNGEST",
+            "description": "Oldest To Youngest",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RECENTLY_ADDED",
+            "description": "Recently Added",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YOUNGEST_TO_OLDEST",
+            "description": "Youngest To Oldest",
             "isDeprecated": false,
             "deprecationReason": null
           }

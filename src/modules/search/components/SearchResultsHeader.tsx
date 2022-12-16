@@ -12,7 +12,11 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import GenericSelect from '@/components/elements/input/GenericSelect';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import { Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
+import { ClientSortOption } from '@/types/gqlTypes';
 
 /**
  * Component that appears above the search results
@@ -22,11 +26,15 @@ const SearchResultsHeader = ({
   disabled,
   cardsEnabled,
   onChangeCards,
+  sortOrder,
+  onChangeSortOrder,
 }: {
   showCardToggle: boolean;
   disabled: boolean;
   cardsEnabled: boolean;
   onChangeCards: (event: React.MouseEvent<HTMLElement>, value: any) => void;
+  sortOrder?: ClientSortOption | null | undefined;
+  onChangeSortOrder: (value: ClientSortOption) => void;
 }) => {
   const { t } = useTranslation();
 
@@ -36,36 +44,67 @@ const SearchResultsHeader = ({
       justifyContent='space-between'
       sx={showCardToggle ? { mb: 4 } : undefined}
     >
-      <Grid item>
+      <Grid item sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         {showCardToggle && (
-          <ToggleButtonGroup
-            value={cardsEnabled}
-            exclusive
-            onChange={onChangeCards}
-            aria-label='results display format'
-          >
-            <ToggleButton
-              value={false}
-              data-testid='searchResultsTableButton'
-              aria-label='table'
-              size='small'
-              disabled={disabled}
-            >
-              <ViewHeadlineIcon />
-              <Box sx={{ pl: 0.5 }}>Table</Box>
-            </ToggleButton>
-            <ToggleButton
-              value={true}
-              data-testid='searchResultsCardsButton'
-              aria-label='cards'
-              size='small'
-              disabled={disabled}
-            >
-              <ViewCompactIcon />
-              <Box sx={{ pl: 0.5 }}>Cards</Box>
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <LabelWithContent
+            label='View Results as'
+            labelId='results-display-format-label'
+            renderChildren={(labelElement) => (
+              <ToggleButtonGroup
+                value={cardsEnabled}
+                exclusive
+                onChange={onChangeCards}
+                aria-label='results display format'
+                aria-labelledby={
+                  (labelElement && labelElement.getAttribute('id')) || undefined
+                }
+              >
+                <ToggleButton
+                  value={false}
+                  data-testid='searchResultsTableButton'
+                  aria-label='table'
+                  size='small'
+                  disabled={disabled}
+                >
+                  <ViewHeadlineIcon />
+                  <Box sx={{ pl: 0.5 }}>Table</Box>
+                </ToggleButton>
+                <ToggleButton
+                  value={true}
+                  data-testid='searchResultsCardsButton'
+                  aria-label='cards'
+                  size='small'
+                  disabled={disabled}
+                >
+                  <ViewCompactIcon />
+                  <Box sx={{ pl: 0.5 }}>Cards</Box>
+                </ToggleButton>
+              </ToggleButtonGroup>
+            )}
+          />
         )}
+        <GenericSelect<ClientSortOption, false, false>
+          options={Object.values(ClientSortOption)}
+          sx={{ width: 250 }}
+          getOptionLabel={(option) => HmisEnums.ClientSortOption[option]}
+          label='Sorted by'
+          onChange={(_e, value) => value && onChangeSortOrder(value)}
+          value={sortOrder}
+        />
+        {/* <TextField
+          value={sortOrder}
+          onChange={(e) =>
+            onChangeSortOrder(e.target.value as ClientSortOption)
+          }
+          select
+          label='Sort Order'
+        >
+          {Object.values(ClientSortOption).map((sortOrder) => (
+            <MenuItem key={sortOrder} value={sortOrder}>
+              {HmisEnums.ClientSortOption[sortOrder]}
+            </MenuItem>
+          ))}
+        </TextField> */}
       </Grid>
       <Grid item>
         <Card sx={{ pl: 2, py: 1, pr: 1 }}>
