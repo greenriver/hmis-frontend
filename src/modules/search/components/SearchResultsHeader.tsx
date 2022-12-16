@@ -4,9 +4,7 @@ import {
   Box,
   Card,
   Grid,
-  MenuItem,
   Stack,
-  TextField,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -14,6 +12,8 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import GenericSelect from '@/components/elements/input/GenericSelect';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ClientSortOption } from '@/types/gqlTypes';
@@ -45,35 +45,52 @@ const SearchResultsHeader = ({
     >
       <Grid item sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         {showCardToggle && (
-          <ToggleButtonGroup
-            value={cardsEnabled}
-            exclusive
-            onChange={onChangeCards}
-            aria-label='results display format'
-          >
-            <ToggleButton
-              value={false}
-              data-testid='searchResultsTableButton'
-              aria-label='table'
-              size='small'
-              disabled={disabled}
-            >
-              <ViewHeadlineIcon />
-              <Box sx={{ pl: 0.5 }}>Table</Box>
-            </ToggleButton>
-            <ToggleButton
-              value={true}
-              data-testid='searchResultsCardsButton'
-              aria-label='cards'
-              size='small'
-              disabled={disabled}
-            >
-              <ViewCompactIcon />
-              <Box sx={{ pl: 0.5 }}>Cards</Box>
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <LabelWithContent
+            label='View Results as'
+            labelId='results-display-format-label'
+            renderChildren={(labelElement) => (
+              <ToggleButtonGroup
+                value={cardsEnabled}
+                exclusive
+                onChange={onChangeCards}
+                aria-label='results display format'
+                aria-labelledby={
+                  (labelElement && labelElement.getAttribute('id')) || undefined
+                }
+              >
+                <ToggleButton
+                  value={false}
+                  data-testid='searchResultsTableButton'
+                  aria-label='table'
+                  size='small'
+                  disabled={disabled}
+                >
+                  <ViewHeadlineIcon />
+                  <Box sx={{ pl: 0.5 }}>Table</Box>
+                </ToggleButton>
+                <ToggleButton
+                  value={true}
+                  data-testid='searchResultsCardsButton'
+                  aria-label='cards'
+                  size='small'
+                  disabled={disabled}
+                >
+                  <ViewCompactIcon />
+                  <Box sx={{ pl: 0.5 }}>Cards</Box>
+                </ToggleButton>
+              </ToggleButtonGroup>
+            )}
+          />
         )}
-        <TextField
+        <GenericSelect<ClientSortOption, false, false>
+          options={Object.values(ClientSortOption)}
+          sx={{ width: 250 }}
+          getOptionLabel={(option) => HmisEnums.ClientSortOption[option]}
+          label='Sorted by'
+          onChange={(_e, value) => value && onChangeSortOrder(value)}
+          value={sortOrder}
+        />
+        {/* <TextField
           value={sortOrder}
           onChange={(e) =>
             onChangeSortOrder(e.target.value as ClientSortOption)
@@ -86,7 +103,7 @@ const SearchResultsHeader = ({
               {HmisEnums.ClientSortOption[sortOrder]}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
       </Grid>
       <Grid item>
         <Card sx={{ pl: 2, py: 1, pr: 1 }}>

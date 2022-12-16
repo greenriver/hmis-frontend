@@ -16,7 +16,7 @@ export interface GenericSelectProps<
 }
 
 const GenericSelect = <
-  T extends object,
+  T extends string | object,
   Multiple extends boolean | undefined,
   Creatable extends boolean | undefined
 >({

@@ -119,6 +119,11 @@ const ClientSearch: React.FC<Props> = ({
   );
   const [offset, setOffset] = useState(0);
 
+  const handleSetSortOrder: typeof setSortOrder = useCallback((value) => {
+    setOffset(0);
+    return setSortOrder(value);
+  }, []);
+
   const [searchClients, { data, loading, error }] = useSearchClientsLazyQuery({
     variables: {
       input: {},
@@ -212,7 +217,7 @@ const ClientSearch: React.FC<Props> = ({
           cardsEnabled={!!cards}
           onChangeCards={handleChangeDisplayType}
           sortOrder={sortOrder}
-          onChangeSortOrder={setSortOrder}
+          onChangeSortOrder={handleSetSortOrder}
         />
       )}
       {loading && <Loading />}
