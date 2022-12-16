@@ -53,7 +53,7 @@ const EditHousehold = () => {
   const enrollmentLoading = loading && networkStatus !== 4;
 
   const [crumbs, breadcrumbsLoading, enrollment] =
-    useEnrollmentCrumbs('Edit Household');
+    useEnrollmentCrumbs('Update Household');
 
   const anythingLoading =
     breadcrumbsLoading || enrollmentLoading || recentMembersLoading;
@@ -174,7 +174,7 @@ const EditHousehold = () => {
       <Grid container spacing={4} sx={{ pb: 10 }}>
         <Grid item xs={12}>
           <Typography variant='h3' sx={{ mb: 2 }}>
-            <b>Edit Household</b>
+            <b>Update Household</b>
             {` for ${enrollmentName(enrollment)} `} enrollment
           </Typography>
           {currentMembers && (

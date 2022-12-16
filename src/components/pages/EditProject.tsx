@@ -21,7 +21,7 @@ import {
 const EditProject = () => {
   const navigate = useNavigate();
 
-  const [crumbs, loading, project] = useProjectCrumbs('Edit');
+  const [crumbs, loading, project] = useProjectCrumbs('Update Project');
 
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
@@ -59,13 +59,15 @@ const EditProject = () => {
         onCompleted={onCompleted}
         getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
         confirmable
+        submitButtonText='Update Project'
         navigationProps={{ top: '118px' }}
+        onDiscard={generatePath(Routes.PROJECT, { projectId: project?.id })}
         title={
           <>
             <Breadcrumbs crumbs={crumbs} />
             <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>
               <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-                Edit {project.projectName}
+                Update {project.projectName}
               </Typography>
               <InactiveChip project={project} />
             </Stack>

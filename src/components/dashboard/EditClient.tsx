@@ -34,7 +34,7 @@ const Profile = () => {
       to: generatePath(Routes.CLIENT_DASHBOARD, { clientId: client.id }),
     },
     {
-      label: 'Edit Details',
+      label: 'Update Client Details',
       to: '',
     },
   ];
@@ -56,7 +56,7 @@ const Profile = () => {
         <>
           <Breadcrumbs crumbs={crumbs} />
           <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
-            Edit Client Details
+            Update Client Details
           </Typography>
         </>
       }

@@ -71,7 +71,7 @@ const ViewEnrollment = () => {
                   startIcon={<EditIcon fontSize='small' />}
                   to={`${editHouseholdPath}`}
                 >
-                  Edit Household
+                  Update Household
                 </ButtonLink>
               </Stack>
               <HouseholdMemberTable

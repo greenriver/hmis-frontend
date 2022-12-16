@@ -29,7 +29,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     inventoryId: string; // Not present if create!
   };
-  const title = create ? `Add Inventory` : `Edit Inventory`;
+  const title = create ? `Add Inventory` : `Update Inventory`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const { data, loading, error } = useGetInventoryQuery({
@@ -102,6 +102,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: UpdateInventoryMutation) =>
             data?.updateInventory?.errors
           }
+          submitButtonText='Update Inventory'
           localConstants={localConstants}
           {...common}
         />
