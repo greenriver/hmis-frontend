@@ -67,3 +67,8 @@ Preview production build
 ```sh
 yarn build && yarn preview
 ```
+
+## Backend configuration
+
+The frontend communicates with with a [OpenPath warehouse](https://github.com/greenriver/hmis-warehouse) which must be
+[configured separately](docs/warehouse.md).
