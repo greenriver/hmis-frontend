@@ -58,7 +58,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               )}
           </RouterLink>
           <ButtonLink variant='text' to='/' sx={{ ml: 2 }} color='secondary'>
-            Dashboard
+            Clients
           </ButtonLink>
           <ButtonLink
             variant='text'

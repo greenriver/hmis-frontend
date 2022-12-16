@@ -1,10 +1,12 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
+import Breadcrumbs from '../elements/Breadcrumbs';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
 import EditRecord from '@/modules/form/components/EditRecord';
+import { clientName } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -25,31 +27,40 @@ const Profile = () => {
     },
     [navigate]
   );
+  const crumbs = [
+    // { label: state?.prevPathName || 'Search', to: state?.prevPath || '/' },
+    {
+      label: clientName(client),
+      to: generatePath(Routes.CLIENT_DASHBOARD, { clientId: client.id }),
+    },
+    {
+      label: 'Edit Details',
+      to: '',
+    },
+  ];
+
   return (
-    <>
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        Edit Client Details
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          <EditRecord<
-            ClientFieldsFragment,
-            UpdateClientMutation,
-            UpdateClientMutationVariables
-          >
-            definitionIdentifier='client'
-            record={client}
-            queryDocument={UpdateClientDocument}
-            onCompleted={onCompleted}
-            getErrors={(data: UpdateClientMutation) =>
-              data?.updateClient?.errors
-            }
-            submitButtonText='Save Changes'
-            // horizontal
-          />
-        </Grid>
-      </Grid>
-    </>
+    <EditRecord<
+      ClientFieldsFragment,
+      UpdateClientMutation,
+      UpdateClientMutationVariables
+    >
+      definitionIdentifier='client'
+      record={client}
+      queryDocument={UpdateClientDocument}
+      onCompleted={onCompleted}
+      getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
+      submitButtonText='Save Changes'
+      navigationProps={{ top: '118px' }}
+      title={
+        <>
+          <Breadcrumbs crumbs={crumbs} />
+          <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
+            Edit Client Details
+          </Typography>
+        </>
+      }
+    />
   );
 };
 

@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -37,30 +37,28 @@ const EditOrganization = () => {
 
   return (
     <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        Edit {organizationName}
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          {loading && <Loading />}
-          {organization && (
-            <EditRecord<
-              OrganizationAllFieldsFragment,
-              UpdateOrganizationMutation,
-              UpdateOrganizationMutationVariables
-            >
-              definitionIdentifier='organization'
-              record={organization}
-              queryDocument={UpdateOrganizationDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: UpdateOrganizationMutation) =>
-                data?.updateOrganization?.errors
-              }
-            />
-          )}
-        </Grid>
-      </Grid>
+      {loading && <Loading />}
+      {organization && (
+        <EditRecord<
+          OrganizationAllFieldsFragment,
+          UpdateOrganizationMutation,
+          UpdateOrganizationMutationVariables
+        >
+          definitionIdentifier='organization'
+          record={organization}
+          queryDocument={UpdateOrganizationDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: UpdateOrganizationMutation) =>
+            data?.updateOrganization?.errors
+          }
+          title={
+            <>
+              <Breadcrumbs crumbs={crumbs} />
+              <Typography variant='h3'>Edit {organizationName}</Typography>
+            </>
+          }
+        />
+      )}
     </ProjectLayout>
   );
 };

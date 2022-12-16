@@ -1,4 +1,5 @@
 import {
+  differenceInDays,
   differenceInYears,
   format,
   formatDistanceToNowStrict,
@@ -189,6 +190,18 @@ export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
+};
+
+// Open, or closed within the last X days
+export const isRecentEnrollment = (
+  enrollment: EnrollmentFieldsFragment,
+  withinDays = 30
+) => {
+  if (!enrollment.exitDate) return true;
+  const exit = parseHmisDateString(enrollment.exitDate);
+  if (!exit) return false;
+
+  return differenceInDays(new Date(), exit) <= withinDays;
 };
 
 export const enrollmentName = (
