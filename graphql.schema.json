@@ -2049,6 +2049,12 @@
             "deprecationReason": null
           },
           {
+            "name": "HORIZONTAL_GROUP",
+            "description": "Render a group of inputs horizontally",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "INPUT_GROUP",
             "description": "Render a group that contains children of the same type (e.g. all booleans)",
             "isDeprecated": false,
@@ -2057,6 +2063,12 @@
           {
             "name": "RADIO_BUTTONS",
             "description": "Render a choice input item as radio buttons",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RADIO_BUTTONS_VERTICAL",
+            "description": "Render a choice input item as vertical radio buttons",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -6328,6 +6340,18 @@
             "deprecationReason": null
           },
           {
+            "name": "size",
+            "description": "Size of the input element",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "InputSize",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "text",
             "description": "Primary text for the item",
             "args": [],
@@ -9059,6 +9083,41 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "InputSize",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "LARGE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MEDIUM",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SMALL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "XSMALL",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {

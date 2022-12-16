@@ -47,9 +47,12 @@ export const HmisEnums = {
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
+    RADIO_BUTTONS_VERTICAL:
+      'Render a choice input item as vertical radio buttons',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB reported',
@@ -284,6 +287,12 @@ export const HmisEnums = {
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
+  },
+  InputSize: {
+    LARGE: 'LARGE',
+    MEDIUM: 'MEDIUM',
+    SMALL: 'SMALL',
+    XSMALL: 'XSMALL',
   },
   InventorySortOption: { START_DATE: 'START_DATE' },
   ItemType: {

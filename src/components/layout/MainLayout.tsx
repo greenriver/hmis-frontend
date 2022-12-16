@@ -1,5 +1,6 @@
 import {
   AppBar,
+  Box,
   Button,
   Chip,
   CssBaseline,
@@ -16,6 +17,7 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import OmniSearch from '@/modules/search/components/OmniSearch';
 import { Routes } from '@/routes/routes';
 
 interface Props {
@@ -37,7 +39,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         elevation={0}
         sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
       >
-        <Toolbar sx={{ flexWrap: 'wrap' }}>
+        <Toolbar sx={{ flexWrap: 'wrap', gap: 2 }}>
           <RouterLink
             variant='h1'
             color='secondary'
@@ -57,26 +59,17 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 />
               )}
           </RouterLink>
-          <ButtonLink variant='text' to='/' sx={{ ml: 2 }} color='secondary'>
+          <ButtonLink variant='text' to='/' color='secondary'>
             Dashboard
           </ButtonLink>
-          <ButtonLink
-            variant='text'
-            to={Routes.ALL_PROJECTS}
-            sx={{ ml: 2 }}
-            color='secondary'
-          >
+          <ButtonLink variant='text' to={Routes.ALL_PROJECTS} color='secondary'>
             Projects
           </ButtonLink>
-          <Typography variant='body2' sx={{ ml: 8 }}>
-            {user.name}
-          </Typography>
-          <Button
-            variant='text'
-            sx={{ ml: 2 }}
-            onClick={logoutUser}
-            color='secondary'
-          >
+          <Box>
+            <OmniSearch />
+          </Box>
+          <Typography variant='body2'>{user.name}</Typography>
+          <Button variant='text' onClick={logoutUser} color='secondary'>
             Sign Out
           </Button>
         </Toolbar>
