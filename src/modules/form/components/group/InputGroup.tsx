@@ -63,7 +63,7 @@ const InputGroup = ({
         direction={'column'}
         rowSpacing={2}
         columnSpacing={0}
-        sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 3 }}
+        sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 2 }}
       >
         {renderChildItem &&
           item.item &&
@@ -97,7 +97,7 @@ const InputGroup = ({
   }, [values, childItemLinkIds, isCurrency]);
 
   return (
-    <Box sx={{ py: 3 }}>
+    <Box sx={{ pt: 2 }}>
       {item.text && <Typography>{item.text}</Typography>}
       {wrappedChildren}
       {isCurrency && (

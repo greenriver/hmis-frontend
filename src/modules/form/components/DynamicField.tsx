@@ -93,7 +93,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     itemChanged(item.linkId, val);
   const label = getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = 250;
+  const minWidth = undefined;
   let width;
 
   if (item.size === InputSize.Small || item.type === ItemType.Date) {
@@ -136,6 +136,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       }
     },
   });
+
+  const placeholder =
+    item.size === InputSize.Xsmall
+      ? undefined
+      : `Select ${item.briefText || item.text}...`;
 
   switch (item.type) {
     case ItemType.Display:
@@ -243,6 +248,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            placeholder={placeholder}
             textInputProps={{
               name: item.linkId,
               horizontal,
@@ -286,12 +292,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else if (
         item.component === Component.RadioButtons ||
         item.component === Component.RadioButtonsVertical ||
-        (options && options.length > 0 && options.length < 4) ||
-        item.pickListReference === 'NoYesReasonsForMissingData'
+        (options && options.length > 0 && options.length < 4)
       ) {
         inputComponent = (
           <RadioGroupInput
-            sx={{ mb: 1 }}
             value={selectedVal}
             onChange={onChangeValue}
             id={item.linkId}
@@ -299,6 +303,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             options={options || []}
             row={item.component !== Component.RadioButtonsVertical}
             clearable
+            checkbox
             {...commonInputProps}
           />
           // <ToggleButtonGroupInput
@@ -320,10 +325,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            placeholder={placeholder}
             textInputProps={{
               name: item.linkId,
               horizontal,
               sx: {
+                width,
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
                 '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
               },

@@ -772,6 +772,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormItem',
     fields: [
       {
+        name: 'briefText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'component',
         type: { kind: 'ENUM', name: 'Component', ofType: null },
       },

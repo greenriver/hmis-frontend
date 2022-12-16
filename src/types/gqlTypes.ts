@@ -299,6 +299,8 @@ export enum Component {
   Checkbox = 'CHECKBOX',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
+  /** Render contents in an info box */
+  InfoGroup = 'INFO_GROUP',
   /** Render a group that contains children of the same type (e.g. all booleans) */
   InputGroup = 'INPUT_GROUP',
   /** Render a choice input item as radio buttons */
@@ -921,6 +923,8 @@ export type FormItem = {
   /** Value(s) to autofill based on conditional logic */
   autofillValues?: Maybe<Array<AutofillValue>>;
   bounds?: Maybe<Array<ValueBound>>;
+  /** Label to use for placeholder and population table */
+  briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
@@ -2878,6 +2882,7 @@ export type ItemFieldsFragment = {
   component?: Component | null;
   prefix?: string | null;
   text?: string | null;
+  briefText?: string | null;
   helperText?: string | null;
   required?: boolean | null;
   hidden?: boolean | null;
@@ -2960,6 +2965,7 @@ export type FormDefinitionWithJsonFragment = {
       component?: Component | null;
       prefix?: string | null;
       text?: string | null;
+      briefText?: string | null;
       helperText?: string | null;
       required?: boolean | null;
       hidden?: boolean | null;
@@ -2979,6 +2985,7 @@ export type FormDefinitionWithJsonFragment = {
         component?: Component | null;
         prefix?: string | null;
         text?: string | null;
+        briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
         hidden?: boolean | null;
@@ -2998,6 +3005,7 @@ export type FormDefinitionWithJsonFragment = {
           component?: Component | null;
           prefix?: string | null;
           text?: string | null;
+          briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
@@ -3017,6 +3025,7 @@ export type FormDefinitionWithJsonFragment = {
             component?: Component | null;
             prefix?: string | null;
             text?: string | null;
+            briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
@@ -3036,6 +3045,7 @@ export type FormDefinitionWithJsonFragment = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -3395,6 +3405,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           component?: Component | null;
           prefix?: string | null;
           text?: string | null;
+          briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
@@ -3414,6 +3425,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             component?: Component | null;
             prefix?: string | null;
             text?: string | null;
+            briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
@@ -3433,6 +3445,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -3452,6 +3465,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 component?: Component | null;
                 prefix?: string | null;
                 text?: string | null;
+                briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
@@ -3471,6 +3485,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   component?: Component | null;
                   prefix?: string | null;
                   text?: string | null;
+                  briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   hidden?: boolean | null;
@@ -3795,6 +3810,7 @@ export type GetAssessmentQuery = {
             component?: Component | null;
             prefix?: string | null;
             text?: string | null;
+            briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
@@ -3814,6 +3830,7 @@ export type GetAssessmentQuery = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -3833,6 +3850,7 @@ export type GetAssessmentQuery = {
                 component?: Component | null;
                 prefix?: string | null;
                 text?: string | null;
+                briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
@@ -3852,6 +3870,7 @@ export type GetAssessmentQuery = {
                   component?: Component | null;
                   prefix?: string | null;
                   text?: string | null;
+                  briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   hidden?: boolean | null;
@@ -3871,6 +3890,7 @@ export type GetAssessmentQuery = {
                     component?: Component | null;
                     prefix?: string | null;
                     text?: string | null;
+                    briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
                     hidden?: boolean | null;
@@ -4244,6 +4264,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         component?: Component | null;
         prefix?: string | null;
         text?: string | null;
+        briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
         hidden?: boolean | null;
@@ -4263,6 +4284,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           component?: Component | null;
           prefix?: string | null;
           text?: string | null;
+          briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
@@ -4282,6 +4304,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             component?: Component | null;
             prefix?: string | null;
             text?: string | null;
+            briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
@@ -4301,6 +4324,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -4320,6 +4344,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 component?: Component | null;
                 prefix?: string | null;
                 text?: string | null;
+                briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
@@ -4624,6 +4649,7 @@ export type GetFormDefinitionQuery = {
         component?: Component | null;
         prefix?: string | null;
         text?: string | null;
+        briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
         hidden?: boolean | null;
@@ -4643,6 +4669,7 @@ export type GetFormDefinitionQuery = {
           component?: Component | null;
           prefix?: string | null;
           text?: string | null;
+          briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           hidden?: boolean | null;
@@ -4662,6 +4689,7 @@ export type GetFormDefinitionQuery = {
             component?: Component | null;
             prefix?: string | null;
             text?: string | null;
+            briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             hidden?: boolean | null;
@@ -4681,6 +4709,7 @@ export type GetFormDefinitionQuery = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -4700,6 +4729,7 @@ export type GetFormDefinitionQuery = {
                 component?: Component | null;
                 prefix?: string | null;
                 text?: string | null;
+                briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
@@ -5028,6 +5058,7 @@ export type SaveAssessmentMutation = {
               component?: Component | null;
               prefix?: string | null;
               text?: string | null;
+              briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               hidden?: boolean | null;
@@ -5047,6 +5078,7 @@ export type SaveAssessmentMutation = {
                 component?: Component | null;
                 prefix?: string | null;
                 text?: string | null;
+                briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 hidden?: boolean | null;
@@ -5066,6 +5098,7 @@ export type SaveAssessmentMutation = {
                   component?: Component | null;
                   prefix?: string | null;
                   text?: string | null;
+                  briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   hidden?: boolean | null;
@@ -5085,6 +5118,7 @@ export type SaveAssessmentMutation = {
                     component?: Component | null;
                     prefix?: string | null;
                     text?: string | null;
+                    briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
                     hidden?: boolean | null;
@@ -5104,6 +5138,7 @@ export type SaveAssessmentMutation = {
                       component?: Component | null;
                       prefix?: string | null;
                       text?: string | null;
+                      briefText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
                       hidden?: boolean | null;
@@ -7581,6 +7616,7 @@ export const ItemFieldsFragmentDoc = gql`
     component
     prefix
     text
+    briefText
     helperText
     required
     hidden

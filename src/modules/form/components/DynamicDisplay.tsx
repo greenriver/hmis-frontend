@@ -41,7 +41,7 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
       return (
         <Typography
           variant='body2'
-          sx={{ mt: 2, maxWidth }}
+          sx={{ maxWidth }}
           dangerouslySetInnerHTML={html}
         />
       );

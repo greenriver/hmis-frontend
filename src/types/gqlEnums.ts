@@ -48,6 +48,7 @@ export const HmisEnums = {
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
+    INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
