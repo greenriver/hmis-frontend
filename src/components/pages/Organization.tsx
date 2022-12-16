@@ -111,7 +111,7 @@ const Organization = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Edit Organization
+                Update Organization
               </ButtonLink>
               <Button
                 color='error'
@@ -119,7 +119,7 @@ const Organization = () => {
                 onClick={() => setOpen(true)}
                 sx={{ justifyContent: 'left' }}
               >
-                Delete organization
+                Delete Organization
               </Button>
             </Stack>
           </Paper>
