@@ -5492,6 +5492,19 @@ export type ClientFieldsFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientOmniSearchFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  dob?: string | null;
+  gender: Array<Gender>;
+  personalId: string;
+  firstName?: string | null;
+  middleName?: string | null;
+  preferredName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
 export type HouseholdClientFieldsFragment = {
   __typename?: 'HouseholdClient';
   id: string;
@@ -5796,6 +5809,41 @@ export type SearchClientsQuery = {
       ethnicity: Ethnicity;
       gender: Array<Gender>;
       pronouns: Array<string>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      ssn?: string | null;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: NoYesReasonsForMissingData;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      preferredName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    }>;
+  };
+};
+
+export type OmniSearchClientsQueryVariables = Exact<{
+  input: ClientSearchInput;
+}>;
+
+export type OmniSearchClientsQuery = {
+  __typename?: 'Query';
+  clientSearch: {
+    __typename?: 'ClientsPaginated';
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Client';
+      id: string;
+      dob?: string | null;
+      dobDataQuality: DobDataQuality;
+      ethnicity: Ethnicity;
+      gender: Array<Gender>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -7703,6 +7751,16 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ClientOmniSearchFieldsFragmentDoc = gql`
+  fragment ClientOmniSearchFields on Client {
+    id
+    dob
+    gender
+    personalId
+    ...ClientName
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
   fragment EnrollmentFieldsFromAssessment on Enrollment {
     id
@@ -8619,6 +8677,69 @@ export type SearchClientsLazyQueryHookResult = ReturnType<
 export type SearchClientsQueryResult = Apollo.QueryResult<
   SearchClientsQuery,
   SearchClientsQueryVariables
+>;
+export const OmniSearchClientsDocument = gql`
+  query OmniSearchClients($input: ClientSearchInput!) {
+    clientSearch(input: $input, limit: 5) {
+      limit
+      nodesCount
+      nodes {
+        ...ClientFields
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useOmniSearchClientsQuery__
+ *
+ * To run a query within a React component, call `useOmniSearchClientsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOmniSearchClientsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOmniSearchClientsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOmniSearchClientsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OmniSearchClientsQuery,
+    OmniSearchClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    OmniSearchClientsQuery,
+    OmniSearchClientsQueryVariables
+  >(OmniSearchClientsDocument, options);
+}
+export function useOmniSearchClientsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OmniSearchClientsQuery,
+    OmniSearchClientsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OmniSearchClientsQuery,
+    OmniSearchClientsQueryVariables
+  >(OmniSearchClientsDocument, options);
+}
+export type OmniSearchClientsQueryHookResult = ReturnType<
+  typeof useOmniSearchClientsQuery
+>;
+export type OmniSearchClientsLazyQueryHookResult = ReturnType<
+  typeof useOmniSearchClientsLazyQuery
+>;
+export type OmniSearchClientsQueryResult = Apollo.QueryResult<
+  OmniSearchClientsQuery,
+  OmniSearchClientsQueryVariables
 >;
 export const GetClientDocument = gql`
   query GetClient($id: ID!) {

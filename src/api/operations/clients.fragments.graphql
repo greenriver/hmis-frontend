@@ -33,6 +33,14 @@ fragment ClientFields on Client {
   ...ClientName
 }
 
+fragment ClientOmniSearchFields on Client {
+  id
+  dob
+  gender
+  personalId
+  ...ClientName
+}
+
 fragment HouseholdClientFields on HouseholdClient {
   id
   relationshipToHoH
