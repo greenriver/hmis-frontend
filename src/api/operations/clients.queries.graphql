@@ -24,7 +24,7 @@ query OmniSearchClients($input: ClientSearchInput!) {
     limit
     nodesCount
     nodes {
-      ...ClientFields
+      ...ClientOmniSearchFields
     }
   }
 }

@@ -1931,6 +1931,14 @@ export type ProjectInput = {
   trackingMethod?: InputMaybe<TrackingMethod>;
 };
 
+/** HMIS Project search input */
+export type ProjectSearchInput = {
+  /** Project primary key */
+  id?: InputMaybe<Scalars['ID']>;
+  /** Omnisearch string */
+  textSearch?: InputMaybe<Scalars['String']>;
+};
+
 /** HUD Project Sorting Options */
 export enum ProjectSortOption {
   Name = 'NAME',
@@ -2006,6 +2014,8 @@ export type Query = {
   project?: Maybe<Project>;
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
+  /** Search for projects */
+  projectSearch: ProjectsPaginated;
   /** Get a list of projects */
   projects: ProjectsPaginated;
 };
@@ -2067,6 +2077,14 @@ export type QueryProjectArgs = {
 
 export type QueryProjectCocArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryProjectSearchArgs = {
+  input: ProjectSearchInput;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
 export type QueryProjectsArgs = {
@@ -5841,18 +5859,8 @@ export type OmniSearchClientsQuery = {
       __typename?: 'Client';
       id: string;
       dob?: string | null;
-      dobDataQuality: DobDataQuality;
-      ethnicity: Ethnicity;
       gender: Array<Gender>;
-      nameDataQuality: NameDataQuality;
       personalId: string;
-      race: Array<Race>;
-      ssn?: string | null;
-      ssnDataQuality: SsnDataQuality;
-      veteranStatus: NoYesReasonsForMissingData;
-      dateCreated: string;
-      dateDeleted?: string | null;
-      dateUpdated: string;
       firstName?: string | null;
       middleName?: string | null;
       preferredName?: string | null;
@@ -6703,6 +6711,13 @@ export type ProjectFieldsFragment = {
   };
 };
 
+export type ProjectOmniSearchFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  projectName: string;
+  projectType?: ProjectType | null;
+};
+
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
@@ -6844,6 +6859,25 @@ export type GetProjectQuery = {
       organizationName: string;
     };
   } | null;
+};
+
+export type OmniSearchProjectsQueryVariables = Exact<{
+  input: ProjectSearchInput;
+}>;
+
+export type OmniSearchProjectsQuery = {
+  __typename?: 'Query';
+  projectSearch: {
+    __typename?: 'ProjectsPaginated';
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    }>;
+  };
 };
 
 export type DeleteProjectMutationVariables = Exact<{
@@ -8032,6 +8066,13 @@ export const ProjectFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ProjectOmniSearchFieldsFragmentDoc = gql`
+  fragment ProjectOmniSearchFields on Project {
+    id
+    projectName
+    projectType
+  }
+`;
 export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
     id
@@ -8684,11 +8725,11 @@ export const OmniSearchClientsDocument = gql`
       limit
       nodesCount
       nodes {
-        ...ClientFields
+        ...ClientOmniSearchFields
       }
     }
   }
-  ${ClientFieldsFragmentDoc}
+  ${ClientOmniSearchFieldsFragmentDoc}
 `;
 
 /**
@@ -9997,6 +10038,69 @@ export type GetProjectLazyQueryHookResult = ReturnType<
 export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
+>;
+export const OmniSearchProjectsDocument = gql`
+  query OmniSearchProjects($input: ProjectSearchInput!) {
+    projectSearch(input: $input, limit: 5) {
+      limit
+      nodesCount
+      nodes {
+        ...ProjectOmniSearchFields
+      }
+    }
+  }
+  ${ProjectOmniSearchFieldsFragmentDoc}
+`;
+
+/**
+ * __useOmniSearchProjectsQuery__
+ *
+ * To run a query within a React component, call `useOmniSearchProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOmniSearchProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOmniSearchProjectsQuery({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useOmniSearchProjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    OmniSearchProjectsQuery,
+    OmniSearchProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    OmniSearchProjectsQuery,
+    OmniSearchProjectsQueryVariables
+  >(OmniSearchProjectsDocument, options);
+}
+export function useOmniSearchProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    OmniSearchProjectsQuery,
+    OmniSearchProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    OmniSearchProjectsQuery,
+    OmniSearchProjectsQueryVariables
+  >(OmniSearchProjectsDocument, options);
+}
+export type OmniSearchProjectsQueryHookResult = ReturnType<
+  typeof useOmniSearchProjectsQuery
+>;
+export type OmniSearchProjectsLazyQueryHookResult = ReturnType<
+  typeof useOmniSearchProjectsLazyQuery
+>;
+export type OmniSearchProjectsQueryResult = Apollo.QueryResult<
+  OmniSearchProjectsQuery,
+  OmniSearchProjectsQueryVariables
 >;
 export const DeleteProjectDocument = gql`
   mutation DeleteProject($input: DeleteProjectInput!) {

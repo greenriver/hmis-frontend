@@ -11,37 +11,82 @@ import {
   CircularProgress,
   List,
 } from '@mui/material';
-import { flatten, isEmpty } from 'lodash-es';
-import React, { useState } from 'react';
+import { flatten, isEmpty, sortBy } from 'lodash-es';
+import React, { useMemo, useState, useCallback } from 'react';
 import { generatePath, useNavigate, useLocation } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { clientName } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
-import { useOmniSearchClientsQuery } from '@/types/gqlTypes';
+import {
+  useOmniSearchClientsQuery,
+  useOmniSearchProjectsQuery,
+} from '@/types/gqlTypes';
 
 const OmniSearch: React.FC = () => {
   const [value, setValue] = useState<string | null>('');
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { data, loading } = useOmniSearchClientsQuery({
-    variables: { input: { textSearch: value } },
-    skip: !value,
-  });
+  const { data: clientsData, loading: clientsLoading } =
+    useOmniSearchClientsQuery({
+      variables: { input: { textSearch: value } },
+      skip: !value,
+    });
+  const { data: projectsData, loading: projectsLoading } =
+    useOmniSearchProjectsQuery({
+      variables: { input: { textSearch: value } },
+      skip: !value,
+    });
 
-  const clients = data?.clientSearch?.nodes || [];
+  const options = useMemo(() => {
+    const clients = clientsData?.clientSearch?.nodes || [];
+    const projects = projectsData?.projectSearch?.nodes || [];
+    return sortBy([...clients, ...projects], '__typename');
+  }, [clientsData, projectsData]);
+
+  const loading = clientsLoading || projectsLoading;
+
+  const getOptionTargetPath = useCallback(
+    (option: NonNullable<typeof options>[number]) => {
+      let targetPath: string | null = null;
+      if (option.__typename === 'Client') {
+        targetPath = generatePath(Routes.CLIENT_DASHBOARD, {
+          clientId: option.id,
+        });
+      }
+      if (option.__typename === 'Project') {
+        targetPath = generatePath(Routes.EDIT_PROJECT, {
+          projectId: option.id,
+        });
+      }
+      return targetPath;
+    },
+    []
+  );
+
+  const getOptionLabel = useCallback(
+    (option: NonNullable<typeof options>[number]) => {
+      let label = option.id;
+      if (option.__typename === 'Client') label = clientName(option);
+      if (option.__typename === 'Project') label = option.projectName;
+      return label;
+    },
+    []
+  );
 
   const values = useAutocomplete({
     id: 'omnisearch',
-    options: data?.clientSearch?.nodes || [],
+    options,
     filterOptions: (x) => x,
     groupBy: (option) => option.__typename || 'other',
-    getOptionLabel: (option) => option.firstName || option.id,
+    getOptionLabel,
     onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
-    onChange: (_e, option) =>
-      option &&
-      navigate(generatePath(Routes.CLIENT_DASHBOARD, { clientId: option.id })),
+    onChange: (_e, option) => {
+      if (!option) return;
+      const targetPath = getOptionTargetPath(option);
+      if (targetPath) navigate(targetPath);
+    },
     isOptionEqualToValue: (o, v) => o.id === v.id,
     inputValue: value || '',
     clearOnBlur: false,
@@ -65,6 +110,7 @@ const OmniSearch: React.FC = () => {
         open={values.popupOpen}
         anchorEl={values.anchorEl}
         placement='bottom-start'
+        sx={{ zIndex: (theme) => theme.zIndex.modal }}
       >
         <Paper
           sx={{
@@ -103,10 +149,10 @@ const OmniSearch: React.FC = () => {
                     ['Client', 'Clients'],
                     ['Project', 'Projects'],
                   ].map(([key, label]) => {
-                    const options = flatten(
+                    const optionGroup = flatten(
                       (
                         values.groupedOptions as AutocompleteGroupedOption<
-                          NonNullable<typeof clients>[number]
+                          NonNullable<typeof options>[number]
                         >[]
                       )
                         .filter((opt) => opt.group === key)
@@ -116,24 +162,27 @@ const OmniSearch: React.FC = () => {
                     return (
                       <Grid item key={key}>
                         <Typography variant='overline'>{label}</Typography>
-                        {isEmpty(options) ? (
+                        {isEmpty(optionGroup) ? (
                           <Typography color='text.disabled' variant='body2'>
                             No {label} found
                           </Typography>
                         ) : (
-                          options.map((option, index) => {
-                            const targetPath = generatePath(
-                              Routes.CLIENT_DASHBOARD,
-                              { clientId: option.id }
-                            );
+                          optionGroup.map((option) => {
                             return (
                               <div key={option.id}>
                                 <MenuItem
-                                  tabIndex={0}
-                                  selected={targetPath === location.pathname}
-                                  {...values.getOptionProps({ option, index })}
+                                  selected={
+                                    getOptionTargetPath(option) ===
+                                    location.pathname
+                                  }
+                                  {...values.getOptionProps({
+                                    option,
+                                    index: options.findIndex(
+                                      (e) => e.id === option.id
+                                    ),
+                                  })}
                                 >
-                                  {clientName(option)}
+                                  {getOptionLabel(option)}
                                 </MenuItem>
                               </div>
                             );
