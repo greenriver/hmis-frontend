@@ -13858,6 +13858,12 @@
             "deprecationReason": null
           },
           {
+            "name": "ENROLLMENT_COC",
+            "description": "EnrollmentCoc",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "EXIT",
             "description": "Exit",
             "isDeprecated": false,

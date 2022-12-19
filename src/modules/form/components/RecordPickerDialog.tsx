@@ -41,7 +41,7 @@ interface Props extends Omit<DialogProps, 'children'> {
   onCancel: () => void;
 }
 
-const tableComponent = (
+export const tableComponentForType = (
   recordType: RelatedRecordType
 ):
   | typeof IncomeBenefitsTable
@@ -148,7 +148,7 @@ const RecordPickerDialog = ({
     return [...commonColumns, ...dataColumns];
   }, [item, recordType]);
 
-  const TableComponent = tableComponent(recordType);
+  const TableComponent = tableComponentForType(recordType);
   if (!TableComponent) {
     console.error('not implemented', item.recordType);
     return null;
