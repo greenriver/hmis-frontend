@@ -32,6 +32,7 @@ fragment ItemFields on FormItem {
   component
   prefix
   text
+  briefText
   helperText
   required
   hidden

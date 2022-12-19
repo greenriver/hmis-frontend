@@ -3,6 +3,7 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
+  Checkbox,
   Radio,
   RadioGroup,
   RadioGroupProps,
@@ -19,7 +20,8 @@ interface Props extends Omit<RadioGroupProps, 'onChange'> {
   name?: string;
   options: Option[];
   onChange: (value: Option | null | undefined) => void;
-  clearable?: boolean;
+  clearable?: boolean; // whether you can click again to clear the radio button value
+  checkbox?: boolean; // display as exclusive checkbox group
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
 
@@ -32,6 +34,7 @@ const RadioGroupInput = ({
   row,
   sx,
   clearable,
+  checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
   const htmlId = useId();
@@ -66,6 +69,9 @@ const RadioGroupInput = ({
     [onClickOption]
   );
 
+  const GroupComponent = checkbox ? FormGroup : RadioGroup;
+  const ControlComponent = checkbox ? Checkbox : Radio;
+
   return (
     <FormGroup>
       <FormControl>
@@ -81,10 +87,10 @@ const RadioGroupInput = ({
         >
           {label}
         </FormLabel>
-        <RadioGroup
+        <GroupComponent
           row={row}
           aria-labelledby={htmlId}
-          value={value ? value.code : null}
+          // value={value ? value.code : null}
           onChange={() => null}
           sx={{
             ...(!row && {
@@ -102,13 +108,22 @@ const RadioGroupInput = ({
               value={code}
               aria-label={label || code}
               onClick={(e) => onClickOption(e, code)}
-              control={<Radio onKeyDown={onKeyDown} />}
+              control={<ControlComponent onKeyDown={onKeyDown} />}
+              checked={value?.code === code ? true : false}
               key={code}
               label={label || code}
-              componentsProps={{ typography: { variant: 'body2' } }}
+              componentsProps={{
+                typography: {
+                  variant: 'body2',
+                  color:
+                    checkbox && value && value?.code !== code
+                      ? 'gray'
+                      : undefined,
+                },
+              }}
             />
           ))}
-        </RadioGroup>
+        </GroupComponent>
       </FormControl>
     </FormGroup>
   );

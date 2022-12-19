@@ -100,7 +100,7 @@ const Assessment = () => {
         {crumbsWithDetails && <Breadcrumbs crumbs={crumbsWithDetails} />}
         <Stack direction='row'>
           <Typography variant='h4' sx={{ mb: 4, fontWeight: 400 }}>
-            <b>{assessmentTitle}</b>{' '}
+            <b>{assessmentTitle}</b>
             {informationDate && ` ${parseAndFormatDate(informationDate)}`}
           </Typography>
         </Stack>
