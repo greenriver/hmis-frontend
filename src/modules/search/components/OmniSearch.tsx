@@ -87,7 +87,7 @@ const OmniSearch: React.FC = () => {
           ) : (
             <Grid
               container
-              component={List}
+              component={List} // getListBoxProps expects to attach to a <ul>, and List is a ul with no default styling
               spacing={2}
               {...values.getListboxProps()}
             >
