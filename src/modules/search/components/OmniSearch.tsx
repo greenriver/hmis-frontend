@@ -12,9 +12,11 @@ import {
 } from '@mui/material';
 import { flatten, isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { generatePath, Link as RouterLink } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
+import { clientName } from '@/modules/hmis/hmisUtil';
+import { Routes } from '@/routes/routes';
 import { useOmniSearchClientsQuery } from '@/types/gqlTypes';
 
 const OmniSearch: React.FC = () => {
@@ -109,12 +111,12 @@ const OmniSearch: React.FC = () => {
                               <div key={option.id}>
                                 <MenuItem
                                   component={RouterLink}
-                                  to={`/client/${option.id}`}
+                                  to={generatePath(Routes.CLIENT_DASHBOARD, {
+                                    clientId: option.id,
+                                  })}
                                   onClick={() => values.anchorEl?.blur()}
                                 >
-                                  {[option.firstName, option.lastName].join(
-                                    ' '
-                                  )}
+                                  {clientName(option)}
                                 </MenuItem>
                               </div>
                             );
