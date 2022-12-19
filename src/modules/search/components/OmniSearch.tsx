@@ -9,10 +9,11 @@ import {
   AutocompleteGroupedOption,
   MenuItem,
   CircularProgress,
+  List,
 } from '@mui/material';
 import { flatten, isEmpty } from 'lodash-es';
 import React, { useState } from 'react';
-import { generatePath, Link as RouterLink } from 'react-router-dom';
+import { generatePath, useNavigate, useLocation } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { clientName } from '@/modules/hmis/hmisUtil';
@@ -20,7 +21,9 @@ import { Routes } from '@/routes/routes';
 import { useOmniSearchClientsQuery } from '@/types/gqlTypes';
 
 const OmniSearch: React.FC = () => {
-  const [value, setValue] = useState<string | null>(null);
+  const [value, setValue] = useState<string | null>('');
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const { data, loading } = useOmniSearchClientsQuery({
     variables: { input: { textSearch: value } },
@@ -35,7 +38,11 @@ const OmniSearch: React.FC = () => {
     filterOptions: (x) => x,
     groupBy: (option) => option.__typename || 'other',
     getOptionLabel: (option) => option.firstName || option.id,
-    onInputChange: (_e, value) => setValue(value),
+    onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
+    onChange: (_e, option) =>
+      option &&
+      navigate(generatePath(Routes.CLIENT_DASHBOARD, { clientId: option.id })),
+    isOptionEqualToValue: (o, v) => o.id === v.id,
     inputValue: value || '',
     clearOnBlur: false,
   });
@@ -43,7 +50,10 @@ const OmniSearch: React.FC = () => {
   return (
     <Box {...values.getRootProps()}>
       <TextInput
-        inputProps={values.getInputProps()}
+        inputProps={{
+          ...values.getInputProps(),
+          value,
+        }}
         placeholder='Search'
         size='small'
         InputProps={{
@@ -75,7 +85,12 @@ const OmniSearch: React.FC = () => {
               <CircularProgress color='inherit' />
             </Box>
           ) : (
-            <Grid container spacing={2}>
+            <Grid
+              container
+              component={List}
+              spacing={2}
+              {...values.getListboxProps()}
+            >
               {!value ? (
                 <Grid item xs={12}>
                   <Typography color='text.disabled'>
@@ -106,15 +121,17 @@ const OmniSearch: React.FC = () => {
                             No {label} found
                           </Typography>
                         ) : (
-                          options.map((option) => {
+                          options.map((option, index) => {
+                            const targetPath = generatePath(
+                              Routes.CLIENT_DASHBOARD,
+                              { clientId: option.id }
+                            );
                             return (
                               <div key={option.id}>
                                 <MenuItem
-                                  component={RouterLink}
-                                  to={generatePath(Routes.CLIENT_DASHBOARD, {
-                                    clientId: option.id,
-                                  })}
-                                  onClick={() => values.anchorEl?.blur()}
+                                  tabIndex={0}
+                                  selected={targetPath === location.pathname}
+                                  {...values.getOptionProps({ option, index })}
                                 >
                                   {clientName(option)}
                                 </MenuItem>
