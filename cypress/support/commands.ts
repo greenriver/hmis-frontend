@@ -39,9 +39,6 @@ Cypress.Commands.add('getByIds', (ids) => {
   cy.get(ids.map((id) => `[id="${id}"]`).join(', '));
 });
 
-// cy.get('[data-cy="cell-2-17"], [data-cy="cell-4-10"]')
-//   .should('have.length', 2)
-//   .click({multiple: true, ctrlKey: true})
 Cypress.Commands.add('inputId', (id) => {
   cy.get(`input[id="${id}"]`);
 });
@@ -58,18 +55,6 @@ Cypress.Commands.add('displayItem', (linkId) => {
 Cypress.Commands.add('displayItems', (linkIds) => {
   cy.get(linkIds.map((id) => `[data-testid="display-${id}"]`).join(', '));
 });
-
-// Cypress.Commands.add('displayItems', (shouldExist = [], shouldntExist = []) => {
-//   shouldExist.forEach((id) => {
-//     cy.displayItem(id).should('exist');
-//   });
-//   shouldntExist.forEach((id) => {
-//     cy.displayItem(id).should('not.exist');
-//   });
-// });
-
-// 3.917.A
-// TODO ADD: select option
 
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
@@ -93,6 +78,11 @@ declare global {
 
       // Assessment section assertions
       assertPriorLivingSituation(): null;
+      assertIncomeAndSources(): null;
+      assertNonCashBenefits(): null;
+      assertHealthInsurance(): null;
+      assertDisability(): null;
+      assertHealthAndDV(): null;
     }
   }
 }

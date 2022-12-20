@@ -1,11 +1,8 @@
 /// <reference types="cypress" />
 
-/**
- * Assert all HUD logic for Prior Living Situation
- * https://www.hudexchange.info/programs/hmis/hmis-data-standards/standards/Universal_Data_Elements.htm
- *
- * TODO: assert hudValues
- */
+// https://www.hudexchange.info/programs/hmis/hmis-data-standards/standards/Universal_Data_Elements.htm
+
+// 3.917 Prior Living Situation
 Cypress.Commands.add('assertPriorLivingSituation', () => {
   // Messages shown if a "break" happens
   const breakInstitutional = '3.917.A';
@@ -72,3 +69,5 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   );
   cy.getByIds(threeFourFive).should('exist');
 });
+
+Cypress.Commands.add('assertIncomeAndSources', () => {});
