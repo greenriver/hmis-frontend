@@ -2168,6 +2168,8 @@ export enum RelatedRecordType {
   EmploymentEducation = 'EMPLOYMENT_EDUCATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** EnrollmentCoc */
+  EnrollmentCoc = 'ENROLLMENT_COC',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
@@ -4177,6 +4179,7 @@ export type GetAssessmentQuery = {
 
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
+  projectId?: InputMaybe<Scalars['ID']>;
 }>;
 
 export type GetPickListQuery = {
@@ -5879,6 +5882,7 @@ export type OmniSearchClientsQuery = {
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
+      pronouns: Array<string>;
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
@@ -8223,8 +8227,8 @@ export type GetAssessmentQueryResult = Apollo.QueryResult<
   GetAssessmentQueryVariables
 >;
 export const GetPickListDocument = gql`
-  query GetPickList($pickListType: PickListType!) {
-    pickList(pickListType: $pickListType) {
+  query GetPickList($pickListType: PickListType!, $projectId: ID) {
+    pickList(pickListType: $pickListType, projectId: $projectId) {
       ...PickListOptionFields
     }
   }
@@ -8244,6 +8248,7 @@ export const GetPickListDocument = gql`
  * const { data, loading, error } = useGetPickListQuery({
  *   variables: {
  *      pickListType: // value for 'pickListType'
+ *      projectId: // value for 'projectId'
  *   },
  * });
  */

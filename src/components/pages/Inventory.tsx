@@ -60,6 +60,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definitionIdentifier: 'inventory',
+    projectId,
     title: (
       <>
         <Breadcrumbs crumbs={crumbs} />

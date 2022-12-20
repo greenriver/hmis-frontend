@@ -133,6 +133,7 @@ const Assessment = () => {
                     : saveDraftHandler
                 }
                 initialValues={initialValues || undefined}
+                projectId={enrollment?.project?.id}
                 loading={mutationLoading}
                 errors={errors}
                 showSavePrompt

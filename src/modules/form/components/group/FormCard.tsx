@@ -11,6 +11,7 @@ import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
   getInformationDate,
   RelatedRecord,
+  tableComponentForType,
 } from '../RecordPickerDialog';
 
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -61,7 +62,7 @@ const FormCard = ({
             <Typography variant='h5' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
-            {item.recordType && (
+            {item.recordType && tableComponentForType(item.recordType) && (
               <Stack direction='row' spacing={1}>
                 <Button
                   variant='outlined'
@@ -110,7 +111,7 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {item.recordType && (
+        {item.recordType && tableComponentForType(item.recordType) && (
           <RecordPickerDialog
             id={`recordPickerDialog-${item.linkId}`}
             item={item}
