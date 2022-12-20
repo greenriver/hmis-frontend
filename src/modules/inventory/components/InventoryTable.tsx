@@ -90,6 +90,16 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
             <ButtonLink
+              to={generatePath(Routes.MANAGE_INVENTORY_BEDS, {
+                projectId,
+                inventoryId: record.id,
+              })}
+              size='small'
+              variant='outlined'
+            >
+              Beds
+            </ButtonLink>
+            <ButtonLink
               to={generatePath(Routes.EDIT_INVENTORY, {
                 projectId,
                 inventoryId: record.id,

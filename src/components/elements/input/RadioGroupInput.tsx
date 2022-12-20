@@ -94,7 +94,7 @@ const RadioGroupInput = ({
           onChange={() => null}
           sx={{
             ...(!row && {
-              'label:first-child': { pt: 1 },
+              'label:first-of-type': { pt: 1 },
               // 'label:last-child': { pb: 1 },
               'label .MuiRadio-root': { p: 1 },
             }),

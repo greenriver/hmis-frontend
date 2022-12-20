@@ -6,54 +6,99 @@ import { maxWidthAtNestingLevel } from '../DynamicField';
 import { GroupItemComponentProps } from '../DynamicGroup';
 
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
-import { ItemType } from '@/types/gqlTypes';
+import { FormItem, ItemType } from '@/types/gqlTypes';
 
 const InputGroup = ({
   item,
   values,
   renderChildItem,
   nestingLevel,
+  itemChanged,
+  severalItemsChanged,
 }: GroupItemComponentProps) => {
-  const childItemLinkIds: string[] = useMemo(
-    () => item.item?.map((item) => item.linkId) || [],
-    [item]
-  );
+  const [childItems, summaryItem] = useMemo(() => {
+    const childs: FormItem[] = (item.item || []).filter((i) => !i.hidden);
+    let summary: FormItem | undefined;
+    if (childs[childs.length - 1]?.type === ItemType.Display) {
+      summary = childs.pop();
+    }
+    return [childs, summary];
+  }, [item]);
 
-  const childItemType = useMemo(
-    () => (item.item ? item.item[1].type : undefined),
-    [item]
-  );
+  const childItemType = useMemo(() => childItems[0]?.type, [childItems]);
 
-  const isCurrency = useMemo(
-    () => childItemType === ItemType.Currency,
+  const isNumeric = useMemo(
+    () =>
+      childItemType &&
+      [ItemType.Currency, ItemType.Integer].includes(childItemType),
     [childItemType]
   );
 
+  // Sum of child numeric inputs (if applicable)
+  const itemChangedOverride = useCallback(
+    (linkId: string, value: any) => {
+      if (!summaryItem || !isNumeric) return itemChanged(linkId, value);
+      const valuesCopy = JSON.parse(JSON.stringify(values));
+      valuesCopy[linkId] = value;
+      const relevant = pick(
+        valuesCopy,
+        childItems.map((i) => i.linkId)
+      );
+      const sum = reduce(
+        relevant,
+        (sum, value) => {
+          const val = parseFloat(value);
+          return isNumber(val) && !isNaN(val) ? sum + val : sum;
+        },
+        0
+      );
+      severalItemsChanged({ [summaryItem.linkId]: sum, [linkId]: value });
+    },
+    [
+      values,
+      childItems,
+      itemChanged,
+      severalItemsChanged,
+      isNumeric,
+      summaryItem,
+    ]
+  );
+
   const childProps = useMemo(
-    () => (isCurrency ? { horizontal: true } : undefined),
-    [isCurrency]
+    () => ({
+      horizontal: isNumeric ? true : undefined,
+      itemChanged: itemChangedOverride,
+    }),
+    [isNumeric, itemChangedOverride]
   );
 
   const childRenderFunc = useCallback(
-    (linkId: string, index: number) => (children: ReactNode) =>
+    (item: FormItem, index: number) => (children: ReactNode) =>
       (
         <Box
-          key={linkId}
+          key={item.linkId}
           sx={{
             backgroundColor: (theme) =>
               index & 1 ? undefined : theme.palette.grey[100],
             pl: 1,
             pb: 0.5,
             pr: 0.5,
-            maxWidth: isCurrency
+            maxWidth: isNumeric
               ? maxWidthAtNestingLevel(nestingLevel + 1)
               : undefined,
+            ...(item.type === ItemType.String
+              ? {
+                  label: {
+                    width: '100%',
+                  },
+                }
+              : undefined),
           }}
         >
           {children}
         </Box>
       ),
-    [isCurrency, nestingLevel]
+    [nestingLevel, isNumeric]
   );
 
   const wrappedChildren = useMemo(() => {
@@ -66,41 +111,25 @@ const InputGroup = ({
         sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 2 }}
       >
         {renderChildItem &&
-          item.item &&
-          item.item
-            .filter((i) => !i.hidden)
-            .map((childItem, index) =>
-              renderChildItem(
-                childItem,
-                childProps,
-                // pass render function so child gets wrapped in box.
-                // can't wrap here because child might be hidden, in which case we shouldn't wrap it.
-                childRenderFunc(childItem.linkId, index)
-              )
-            )}
+          childItems &&
+          childItems.map((childItem, index) =>
+            renderChildItem(
+              childItem,
+              childProps,
+              // pass render function so child gets wrapped in box.
+              // can't wrap here because child might be hidden, in which case we shouldn't wrap it.
+              childRenderFunc(childItem, index)
+            )
+          )}
       </Grid>
     );
-  }, [renderChildItem, item, childProps, childRenderFunc]);
-
-  // Sum of child numeric inputs (if applicable)
-  const sum = useMemo(() => {
-    if (!isCurrency) return 0;
-    const relevant = pick(values, childItemLinkIds);
-    return reduce(
-      relevant,
-      (sum, value) => {
-        const val = parseFloat(value);
-        return isNumber(val) && !isNaN(val) ? sum + val : sum;
-      },
-      0
-    );
-  }, [values, childItemLinkIds, isCurrency]);
+  }, [renderChildItem, childItems, childProps, childRenderFunc]);
 
   return (
     <Box sx={{ pt: 2 }}>
       {item.text && <Typography>{item.text}</Typography>}
       {wrappedChildren}
-      {isCurrency && (
+      {isNumeric && summaryItem && (
         <Stack
           justifyContent='space-between'
           direction='row'
@@ -113,9 +142,11 @@ const InputGroup = ({
             maxWidth: maxWidthAtNestingLevel(nestingLevel + 1),
           }}
         >
-          <Typography>Monthly Total Income</Typography>
+          <Typography>{summaryItem.text || 'Total'}</Typography>
           <Typography sx={{ width: '120px', pl: 1 }}>
-            {formatCurrency(sum || 0)}
+            {childItemType === ItemType.Currency
+              ? formatCurrency(values[summaryItem.linkId] || 0)
+              : values[summaryItem.linkId] || 0}
           </Typography>
         </Stack>
       )}
