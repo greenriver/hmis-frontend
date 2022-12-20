@@ -43,6 +43,14 @@ const DESCRIPTIONS_OVERRIDES = {
   },
 };
 
+const POSITION_MAPS = {
+  ClientSortOption: [
+    (desc) => desc.match(/^First Name/),
+    (desc) => desc.match(/^Last Name/),
+    (desc) => desc.match(/^Age/),
+  ],
+};
+
 const alphabeticalCompare = (first, second) => {
   const m = first.description.match(CODE_PATTERN_NUMERIC);
   const m2 = second.description.match(CODE_PATTERN_NUMERIC);
@@ -54,6 +62,15 @@ const alphabeticalCompare = (first, second) => {
   }
 
   return first.description.localeCompare(second.description);
+};
+
+const positionCompare = (first, second, positionMap) => {
+  const n1 = positionMap.findIndex((f) => f(first.description));
+  const n2 = positionMap.findIndex((f) => f(second.description));
+
+  if (n1 > n2) return 1;
+  if (n1 < n2) return -1;
+  return alphabeticalCompare(first, second);
 };
 
 // Get numeric sort value from enum value
@@ -99,6 +116,8 @@ schema.__schema.types.forEach((type) => {
         if (ALPHABETICAL.includes(type.name)) {
           return alphabeticalCompare(a, b);
         }
+        if (type.name in POSITION_MAPS)
+          return positionCompare(a, b, POSITION_MAPS[type.name]);
         const first = getSortValue(a, type.name);
         const second = getSortValue(b, type.name);
         if (first !== null && second !== null) return first - second;

@@ -84,7 +84,9 @@ const SearchResultsHeader = ({
           />
         )}
         <GenericSelect<ClientSortOption, false, false>
-          options={Object.values(ClientSortOption)}
+          options={
+            Object.keys(HmisEnums.ClientSortOption) as ClientSortOption[]
+          }
           sx={{ width: 250 }}
           getOptionLabel={(option) => HmisEnums.ClientSortOption[option]}
           label='Sorted by'
