@@ -8,6 +8,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { isEmpty } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
@@ -125,9 +126,11 @@ const ClientCard: React.FC<Props> = ({
         <Stack spacing={1}>
           <Stack direction='row' spacing={1}>
             <Typography variant='h5'>{clientName(client)}</Typography>
-            <Typography variant='h5' color='text.secondary'>
-              {pronouns(client)}
-            </Typography>
+            {!isEmpty(client.pronouns) && (
+              <Typography variant='h5' color='text.secondary'>
+                ({pronouns(client)})
+              </Typography>
+            )}
           </Stack>
           <Stack spacing={1} direction='row'>
             <Box
