@@ -502,6 +502,7 @@ export const HmisEnums = {
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
     ENROLLMENT: 'Enrollment',
+    ENROLLMENT_COC: 'EnrollmentCoc',
     EXIT: 'Exit',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',

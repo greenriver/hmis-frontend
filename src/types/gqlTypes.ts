@@ -2166,6 +2166,8 @@ export enum RelatedRecordType {
   EmploymentEducation = 'EMPLOYMENT_EDUCATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',
+  /** EnrollmentCoc */
+  EnrollmentCoc = 'ENROLLMENT_COC',
   /** Exit */
   Exit = 'EXIT',
   /** HealthAndDv */
