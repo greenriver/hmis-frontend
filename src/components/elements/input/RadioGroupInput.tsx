@@ -7,6 +7,7 @@ import {
   Radio,
   RadioGroup,
   RadioGroupProps,
+  FormHelperText,
 } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
@@ -34,6 +35,7 @@ const RadioGroupInput = ({
   row,
   sx,
   clearable,
+  helperText,
   checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
@@ -124,6 +126,7 @@ const RadioGroupInput = ({
             />
           ))}
         </GroupComponent>
+        {helperText && <FormHelperText>{helperText}</FormHelperText>}
       </FormControl>
     </FormGroup>
   );

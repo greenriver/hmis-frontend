@@ -50,8 +50,9 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
+      inventoryId: inventoryId,
     };
-  }, [project]);
+  }, [project, inventoryId]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');

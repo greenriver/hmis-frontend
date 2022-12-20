@@ -114,6 +114,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     disabled,
     label,
     error: !!(errors && errors.length > 0),
+    helperText: item.helperText,
     ...inputProps,
   };
 
