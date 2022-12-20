@@ -27,7 +27,7 @@ import {
 } from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
-  id: string;
+  id?: string;
   disabled?: boolean;
   label?: ReactNode;
   error?: boolean;
