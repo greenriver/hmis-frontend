@@ -259,20 +259,18 @@ export type ClientSearchInput = {
 
 /** HUD Client Sorting Options */
 export enum ClientSortOption {
-  /** First Name A To Z */
+  /** Age: Oldest to Youngest */
+  AgeOldestToYoungest = 'AGE_OLDEST_TO_YOUNGEST',
+  /** Age: Youngest to Oldest */
+  AgeYoungestToOldest = 'AGE_YOUNGEST_TO_OLDEST',
+  /** First Name: A-Z */
   FirstNameAToZ = 'FIRST_NAME_A_TO_Z',
-  /** First Name Z To A */
+  /** First Name: Z-A */
   FirstNameZToA = 'FIRST_NAME_Z_TO_A',
-  /** Last Name A To Z */
+  /** Last Name: A-Z */
   LastNameAToZ = 'LAST_NAME_A_TO_Z',
-  /** Last Name Z To A */
+  /** Last Name: Z-A */
   LastNameZToA = 'LAST_NAME_Z_TO_A',
-  /** Oldest To Youngest */
-  OldestToYoungest = 'OLDEST_TO_YOUNGEST',
-  /** Recently Added */
-  RecentlyAdded = 'RECENTLY_ADDED',
-  /** Youngest To Oldest */
-  YoungestToOldest = 'YOUNGEST_TO_OLDEST',
 }
 
 export type ClientsPaginated = {
