@@ -53,6 +53,7 @@ const FinishIntakeButton = ({
       ) : (
         <ButtonLink
           variant='outlined'
+          data-testid='finishIntakeButton'
           color={isNewOrInProgress ? 'error' : 'primary'}
           to={
             loading

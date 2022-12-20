@@ -211,6 +211,7 @@ const ClientCard: React.FC<Props> = ({
         <Stack spacing={1}>
           <ButtonLink
             fullWidth
+            data-testid='enrollButton'
             variant='outlined'
             color='secondary'
             to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {

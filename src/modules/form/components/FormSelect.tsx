@@ -18,7 +18,11 @@ const optionLabel = (option: Option): string => {
 };
 
 const renderOption = (props: object, option: Option) => (
-  <li {...props} key={optionId(option)}>
+  <li
+    {...props}
+    key={optionId(option)}
+    data-testid={`option-${optionId(option)}`}
+  >
     <Box sx={{ display: 'flex', justifyContent: 'space-between', width: 1 }}>
       <Typography variant='body2'>{optionLabel(option)}</Typography>
       {option.secondaryLabel && (
