@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -102,6 +103,7 @@ export function useAssessmentHandlers() {
           navigate(enrollmentPath);
         }
       },
+      onError: () => window.scrollTo(0, 0),
     });
 
   const [
@@ -117,6 +119,7 @@ export function useAssessmentHandlers() {
         navigate(enrollmentPath);
       }
     },
+    onError: () => window.scrollTo(0, 0),
   });
 
   const submitHandler = useCallback(
@@ -156,8 +159,6 @@ export function useAssessmentHandlers() {
     [saveAssessmentMutation, assessmentId, formDefinitionId, enrollmentId]
   );
 
-  if (saveError) throw saveError;
-  if (submitError) throw submitError;
   if (formDefinitionError) throw formDefinitionError;
   if (assessmentError) throw assessmentError;
 
@@ -171,6 +172,7 @@ export function useAssessmentHandlers() {
     dataLoading: formDefinitionLoading || assessmentLoading,
     mutationLoading: saveLoading || submitLoading,
     errors,
+    apolloError: saveError || submitError,
   } as {
     submitHandler: (values: FormValues, confirmed?: boolean) => void;
     saveDraftHandler: (values: FormValues) => void;
@@ -181,5 +183,6 @@ export function useAssessmentHandlers() {
     dataLoading: boolean;
     mutationLoading: boolean;
     errors: ValidationError[];
+    apolloError?: ApolloError;
   };
 }
