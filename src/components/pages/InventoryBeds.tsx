@@ -1,7 +1,9 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
+import { ColumnDef } from '../elements/GenericTable';
+import GenericTableWithData from '../elements/GenericTableWithData';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -9,7 +11,55 @@ import { InactiveChip } from './Project';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import { useGetInventoryQuery } from '@/types/gqlTypes';
+import {
+  Bed,
+  GetBedsDocument,
+  GetUnitsDocument,
+  Unit,
+  useGetInventoryQuery,
+} from '@/types/gqlTypes';
+
+const unitColumns: ColumnDef<Unit>[] = [
+  {
+    key: 'name',
+    render: 'name',
+  },
+  {
+    key: 'count',
+    render: () => <>N beds</>,
+  },
+  {
+    key: 'delete',
+    render: () => (
+      <Button size='small' variant='outlined'>
+        Delete
+      </Button>
+    ),
+  },
+];
+
+const bedColumns: ColumnDef<Bed>[] = [
+  {
+    key: 'type',
+    render: 'bedType',
+  },
+  {
+    key: 'name',
+    render: 'name',
+  },
+  {
+    key: 'gender',
+    render: () => <>gender</>,
+  },
+  {
+    key: 'delete',
+    render: () => (
+      <Button size='small' variant='outlined'>
+        Delete
+      </Button>
+    ),
+  },
+];
 
 const InventoryBeds = () => {
   // const navigate = useNavigate();
@@ -72,11 +122,25 @@ const InventoryBeds = () => {
             <Typography variant='h5' sx={{ mb: 2 }}>
               Units
             </Typography>
+            <GenericTableWithData
+              queryVariables={{ id: inventoryId }}
+              queryDocument={GetUnitsDocument}
+              columns={unitColumns}
+              pagePath='inventory.units'
+              noData='No units.'
+            />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Beds
             </Typography>
+            <GenericTableWithData
+              queryVariables={{ id: inventoryId }}
+              queryDocument={GetBedsDocument}
+              columns={bedColumns}
+              pagePath='inventory.beds'
+              noData='No beds.'
+            />
           </Paper>
         </Grid>
       </Grid>

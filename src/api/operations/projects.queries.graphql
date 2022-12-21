@@ -40,6 +40,34 @@ query GetInventory($id: ID!) {
   }
 }
 
+query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  inventory(id: $id) {
+    id
+    units(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UnitFields
+      }
+    }
+  }
+}
+
+query GetBeds($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  inventory(id: $id) {
+    id
+    beds(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...BedFields
+      }
+    }
+  }
+}
+
 query GetProjectCoc($id: ID!) {
   projectCoc(id: $id) {
     ...ProjectCocFields
