@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import Breadcrumbs from '../elements/Breadcrumbs';
 import { ColumnDef } from '../elements/GenericTable';
 import GenericTableWithData from '../elements/GenericTableWithData';
+import TextInput from '../elements/input/TextInput';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -23,12 +24,14 @@ import {
 const unitColumns: ColumnDef<Unit>[] = [
   {
     key: 'name',
-    width: '50%',
-    render: 'name',
+    header: 'Unit Name',
+    width: '80%',
+    render: (unit) => <TextInput value={unit.name || ''} />,
   },
   {
     key: 'count',
-    width: '50%',
+    header: '# Beds',
+    width: '20%',
     render: (unit) => `${unit.bedCount} beds`,
   },
   {
@@ -44,18 +47,27 @@ const unitColumns: ColumnDef<Unit>[] = [
 const bedColumns: ColumnDef<Bed>[] = [
   {
     key: 'type',
-    width: '30%',
+    header: 'Type',
+    width: '20%',
     render: (bed) => HmisEnums.InventoryBedType[bed.bedType],
   },
   {
     key: 'name',
+    header: 'Name',
     width: '30%',
-    render: 'name',
+    render: (bed) => <TextInput value={bed.name || ''} />,
   },
   {
     key: 'gender',
+    header: 'Gender',
+    width: '20%',
+    render: (bed) => <TextInput value={bed.gender || ''} placeholder='Any' />,
+  },
+  {
+    key: 'unit',
+    header: 'Unit',
     width: '30%',
-    render: () => <>[gender]</>,
+    render: (bed) => <TextInput value={bed.unit.name || bed.unit.id} />,
   },
   {
     key: 'delete',

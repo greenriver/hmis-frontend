@@ -122,7 +122,7 @@ const GenericTableWithData = <
       onRowsPerPageChange: (
         event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
       ) => {
-        const newRowsPerPage = parseInt(event.target.value, defaultPageSize);
+        const newRowsPerPage = parseInt(event.target.value) || defaultPageSize;
         setRowsPerPage(newRowsPerPage);
         setPage(0);
       },
