@@ -84,27 +84,15 @@ const SearchResultsHeader = ({
           />
         )}
         <GenericSelect<ClientSortOption, false, false>
-          options={Object.values(ClientSortOption)}
+          options={
+            Object.keys(HmisEnums.ClientSortOption) as ClientSortOption[]
+          }
           sx={{ width: 250 }}
           getOptionLabel={(option) => HmisEnums.ClientSortOption[option]}
           label='Sorted by'
           onChange={(_e, value) => value && onChangeSortOrder(value)}
           value={sortOrder}
         />
-        {/* <TextField
-          value={sortOrder}
-          onChange={(e) =>
-            onChangeSortOrder(e.target.value as ClientSortOption)
-          }
-          select
-          label='Sort Order'
-        >
-          {Object.values(ClientSortOption).map((sortOrder) => (
-            <MenuItem key={sortOrder} value={sortOrder}>
-              {HmisEnums.ClientSortOption[sortOrder]}
-            </MenuItem>
-          ))}
-        </TextField> */}
       </Grid>
       <Grid item>
         <Card sx={{ pl: 2, py: 1, pr: 1 }}>
@@ -118,10 +106,6 @@ const SearchResultsHeader = ({
               variant='outlined'
               color='secondary'
               to={Routes.CREATE_CLIENT}
-              // state={{
-              //   prevPath: `${pathname}${search || ''}`,
-              //   prevPathName: 'Search',
-              // }}
               target='_blank'
             >
               + Add Client
