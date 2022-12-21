@@ -1,8 +1,8 @@
+import * as Sentry from '@sentry/react';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { Routes, DashboardRoutes } from './routes';
+import { DashboardRoutes, Routes } from './routes';
 
 import EditClient from '@/components/dashboard/EditClient';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
@@ -11,7 +11,7 @@ import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
-import ErrorFallback from '@/components/elements/ErrorFallback';
+import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
@@ -32,9 +32,9 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Sentry.ErrorBoundary fallback={fullPageErrorFallback}>
           <Outlet />
-        </ErrorBoundary>
+        </Sentry.ErrorBoundary>
       </Suspense>
     </MainLayout>
   );
