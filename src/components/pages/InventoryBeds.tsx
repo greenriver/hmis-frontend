@@ -1,4 +1,14 @@
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
@@ -9,6 +19,10 @@ import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import DynamicForm from '@/modules/form/components/DynamicForm';
+import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
+import { FormValues } from '@/modules/form/util/formUtil';
+import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -87,10 +101,26 @@ const InventoryBeds = () => {
   };
   const title = 'Beds and Units';
   const [crumbs, crumbsLoading, project] = useProjectCrumbs();
-
+  const [dialogOpen, setDialogOpen] = useState<'BEDS' | 'UNITS' | null>(null);
   const { data, loading, error } = useGetInventoryQuery({
     variables: { id: inventoryId },
   });
+
+  const handleCreateBeds = useCallback((values: FormValues) => {
+    const input = transformSubmitValues({
+      definition: BedsDefinition,
+      values,
+    });
+    console.log(input);
+  }, []);
+
+  const handleCreateUnits = useCallback((values: FormValues) => {
+    const input = transformSubmitValues({
+      definition: UnitsDefinition,
+      values,
+    });
+    console.log(input);
+  }, []);
 
   // const onCompleted = useCallback(() => {
   //   navigate(generatePath(Routes.PROJECT, { projectId }), {
@@ -103,22 +133,6 @@ const InventoryBeds = () => {
   if (!data?.inventory) throw Error('Inventory not found');
   if (error) throw error;
 
-  /**
-   Actions:
-
-   Delete Unit
-   Undelete Unit
-   Set Unit name
-
-   Delete Bed
-   Undelete Bed
-   Set Bed name
-   Set Bed gender
-   Set Unit for Bed
-
-
-   // LATER: bulk add
-   */
   return (
     <ProjectLayout>
       <Breadcrumbs
@@ -135,11 +149,26 @@ const InventoryBeds = () => {
         <InactiveChip project={project} />
       </Stack>
       <Grid container spacing={4}>
-        <Grid item xs={9}>
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Units
-            </Typography>
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2, mb: 4 }}>
+            <Stack
+              gap={3}
+              direction='row'
+              justifyContent={'space-between'}
+              sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+            >
+              <Typography variant='h5' sx={{ mb: 0 }}>
+                Units
+              </Typography>
+              <Button
+                size='small'
+                variant='outlined'
+                color='secondary'
+                onClick={() => setDialogOpen('UNITS')}
+              >
+                + Add Units
+              </Button>
+            </Stack>
             <GenericTableWithData
               defaultPageSize={5}
               queryVariables={{ id: inventoryId }}
@@ -150,9 +179,24 @@ const InventoryBeds = () => {
             />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Beds
-            </Typography>
+            <Stack
+              gap={3}
+              direction='row'
+              justifyContent={'space-between'}
+              sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+            >
+              <Typography variant='h5' sx={{ mb: 0 }}>
+                Beds
+              </Typography>
+              <Button
+                size='small'
+                variant='outlined'
+                color='secondary'
+                onClick={() => setDialogOpen('BEDS')}
+              >
+                + Add Beds
+              </Button>
+            </Stack>
             <GenericTableWithData
               defaultPageSize={5}
               queryVariables={{ id: inventoryId }}
@@ -164,6 +208,35 @@ const InventoryBeds = () => {
           </Paper>
         </Grid>
       </Grid>
+      <Dialog open={!!dialogOpen} fullWidth onClose={() => setDialogOpen(null)}>
+        <DialogTitle
+          typography='h5'
+          sx={{ textTransform: 'none', mb: 2 }}
+          color='text.primary'
+        >
+          {dialogOpen === 'BEDS' ? 'Create Beds' : 'Create Units'}
+        </DialogTitle>
+        <DialogContent sx={{}}>
+          {dialogOpen === 'UNITS' && (
+            <DynamicForm
+              definition={UnitsDefinition}
+              submitButtonText='Create Units'
+              discardButtonText='Cancel'
+              onDiscard={() => setDialogOpen(null)}
+              onSubmit={handleCreateUnits}
+            />
+          )}
+          {dialogOpen === 'BEDS' && (
+            <DynamicForm
+              definition={BedsDefinition}
+              submitButtonText='Create Beds'
+              discardButtonText='Cancel'
+              onDiscard={() => setDialogOpen(null)}
+              onSubmit={handleCreateBeds}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
     </ProjectLayout>
   );
 };

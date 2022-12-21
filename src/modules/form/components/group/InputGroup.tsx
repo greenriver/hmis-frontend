@@ -126,7 +126,7 @@ const InputGroup = ({
   }, [renderChildItem, childItems, childProps, childRenderFunc]);
 
   return (
-    <Box sx={{ pt: 2 }}>
+    <Box sx={{ pt: 2, pl: nestingLevel === 0 ? 2 : undefined }}>
       {item.text && <Typography>{item.text}</Typography>}
       {wrappedChildren}
       {isNumeric && summaryItem && (

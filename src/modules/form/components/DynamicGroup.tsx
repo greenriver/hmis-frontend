@@ -31,7 +31,8 @@ export interface GroupItemComponentProps {
 
 const DynamicGroup = (props: GroupItemComponentProps) => {
   // Always render top-level groups as cards
-  if (props.nestingLevel === 0) {
+  console.log('DynamicGroup', props);
+  if (props.nestingLevel === 0 && !props.item.component) {
     return <FormCard key={props.item.linkId} {...props} />;
   }
 

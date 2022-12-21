@@ -148,7 +148,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const placeholder =
     item.size === InputSize.Xsmall
       ? undefined
-      : `Select ${item.briefText || item.text}...`;
+      : `Select ${item.briefText || item.text || ''}...`;
 
   switch (item.type) {
     case ItemType.Display:

@@ -7,7 +7,6 @@ const QuestionGroup = ({
   nestingLevel,
   renderChildItem,
 }: GroupItemComponentProps) => {
-  console.log('k....', item.text);
   const wrappedChildren = (
     <Grid
       container
