@@ -11,6 +11,7 @@ import { InactiveChip } from './Project';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   Bed,
   GetBedsDocument,
@@ -22,11 +23,13 @@ import {
 const unitColumns: ColumnDef<Unit>[] = [
   {
     key: 'name',
+    width: '50%',
     render: 'name',
   },
   {
     key: 'count',
-    render: () => <>N beds</>,
+    width: '50%',
+    render: (unit) => `${unit.bedCount} beds`,
   },
   {
     key: 'delete',
@@ -41,15 +44,18 @@ const unitColumns: ColumnDef<Unit>[] = [
 const bedColumns: ColumnDef<Bed>[] = [
   {
     key: 'type',
-    render: 'bedType',
+    width: '30%',
+    render: (bed) => HmisEnums.InventoryBedType[bed.bedType],
   },
   {
     key: 'name',
+    width: '30%',
     render: 'name',
   },
   {
     key: 'gender',
-    render: () => <>gender</>,
+    width: '30%',
+    render: () => <>[gender]</>,
   },
   {
     key: 'delete',
@@ -123,6 +129,7 @@ const InventoryBeds = () => {
               Units
             </Typography>
             <GenericTableWithData
+              defaultPageSize={5}
               queryVariables={{ id: inventoryId }}
               queryDocument={GetUnitsDocument}
               columns={unitColumns}
@@ -135,6 +142,7 @@ const InventoryBeds = () => {
               Beds
             </Typography>
             <GenericTableWithData
+              defaultPageSize={5}
               queryVariables={{ id: inventoryId }}
               queryDocument={GetBedsDocument}
               columns={bedColumns}

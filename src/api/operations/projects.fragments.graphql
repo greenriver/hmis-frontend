@@ -69,6 +69,7 @@ fragment InventoryFields on Inventory {
 fragment UnitFields on Unit {
   id
   name
+  bedCount
   startDate
   endDate
 }

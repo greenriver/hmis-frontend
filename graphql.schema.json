@@ -868,8 +868,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "InventoryBedType",
                 "ofType": null
               }
             },
@@ -9569,6 +9569,30 @@
             "description": null,
             "args": [
               {
+                "name": "active",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "bedType",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "InventoryBedType",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -9822,6 +9846,18 @@
             "description": null,
             "args": [
               {
+                "name": "active",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -9898,6 +9934,59 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "InventoryBedType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CHRONIC",
+            "description": "Chronic",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CHRONIC_VETERAN",
+            "description": "Chronic Veteran",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CHRONIC_YOUTH",
+            "description": "Chronic Youth",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VETERAN",
+            "description": "Veteran",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YOUTH",
+            "description": "Youth",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YOUTH_VETERAN",
+            "description": "Youth Veteran",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -16248,6 +16337,22 @@
         "name": "Unit",
         "description": null,
         "fields": [
+          {
+            "name": "bedCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "beds",
             "description": null,

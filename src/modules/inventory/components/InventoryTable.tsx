@@ -24,7 +24,6 @@ import {
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {
     header: 'CoC Code',
-    linkTreatment: true,
     render: 'cocCode',
   },
   {
@@ -38,12 +37,8 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
       HmisEnums.HouseholdType[i.householdType],
   },
   {
-    header: 'Units',
-    render: 'unitInventory',
-  },
-  {
     header: 'Beds',
-    render: 'bedInventory',
+    render: (i) => i.bedInventory,
   },
 ];
 

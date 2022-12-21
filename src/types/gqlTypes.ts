@@ -150,7 +150,7 @@ export enum Availability {
 
 export type Bed = {
   __typename?: 'Bed';
-  bedType: Scalars['String'];
+  bedType: InventoryBedType;
   endDate?: Maybe<Scalars['ISO8601Date']>;
   gender?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -1425,14 +1425,34 @@ export type Inventory = {
 };
 
 export type InventoryBedsArgs = {
+  active?: InputMaybe<Scalars['Boolean']>;
+  bedType?: InputMaybe<InventoryBedType>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type InventoryUnitsArgs = {
+  active?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 };
+
+export enum InventoryBedType {
+  /** Chronic */
+  Chronic = 'CHRONIC',
+  /** Chronic Veteran */
+  ChronicVeteran = 'CHRONIC_VETERAN',
+  /** Chronic Youth */
+  ChronicYouth = 'CHRONIC_YOUTH',
+  /** Other */
+  Other = 'OTHER',
+  /** Veteran */
+  Veteran = 'VETERAN',
+  /** Youth */
+  Youth = 'YOUTH',
+  /** Youth Veteran */
+  YouthVeteran = 'YOUTH_VETERAN',
+}
 
 export type InventoryInput = {
   availability?: InputMaybe<Availability>;
@@ -2683,6 +2703,7 @@ export enum TrackingMethod {
 
 export type Unit = {
   __typename?: 'Unit';
+  bedCount: Scalars['Int'];
   beds: Array<Bed>;
   endDate?: Maybe<Scalars['ISO8601Date']>;
   id: Scalars['ID'];
@@ -6876,6 +6897,7 @@ export type UnitFieldsFragment = {
   __typename?: 'Unit';
   id: string;
   name?: string | null;
+  bedCount: number;
   startDate: string;
   endDate?: string | null;
 };
@@ -6883,7 +6905,7 @@ export type UnitFieldsFragment = {
 export type BedFieldsFragment = {
   __typename?: 'Bed';
   id: string;
-  bedType: string;
+  bedType: InventoryBedType;
   name?: string | null;
   gender?: string | null;
   startDate: string;
@@ -7041,6 +7063,7 @@ export type GetUnitsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  active?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type GetUnitsQuery = {
@@ -7057,6 +7080,7 @@ export type GetUnitsQuery = {
         __typename?: 'Unit';
         id: string;
         name?: string | null;
+        bedCount: number;
         startDate: string;
         endDate?: string | null;
       }>;
@@ -7068,6 +7092,8 @@ export type GetBedsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  bedType?: InputMaybe<InventoryBedType>;
+  active?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type GetBedsQuery = {
@@ -7083,7 +7109,7 @@ export type GetBedsQuery = {
       nodes: Array<{
         __typename?: 'Bed';
         id: string;
-        bedType: string;
+        bedType: InventoryBedType;
         name?: string | null;
         gender?: string | null;
         startDate: string;
@@ -8280,6 +8306,7 @@ export const UnitFieldsFragmentDoc = gql`
   fragment UnitFields on Unit {
     id
     name
+    bedCount
     startDate
     endDate
   }
@@ -10370,10 +10397,15 @@ export type GetInventoryQueryResult = Apollo.QueryResult<
   GetInventoryQueryVariables
 >;
 export const GetUnitsDocument = gql`
-  query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetUnits(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $active: Boolean
+  ) {
     inventory(id: $id) {
       id
-      units(limit: $limit, offset: $offset) {
+      units(limit: $limit, offset: $offset, active: $active) {
         offset
         limit
         nodesCount
@@ -10401,6 +10433,7 @@ export const GetUnitsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      active: // value for 'active'
  *   },
  * });
  */
@@ -10434,10 +10467,16 @@ export type GetUnitsQueryResult = Apollo.QueryResult<
   GetUnitsQueryVariables
 >;
 export const GetBedsDocument = gql`
-  query GetBeds($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetBeds(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $bedType: InventoryBedType
+    $active: Boolean
+  ) {
     inventory(id: $id) {
       id
-      beds(limit: $limit, offset: $offset) {
+      beds(limit: $limit, offset: $offset, bedType: $bedType, active: $active) {
         offset
         limit
         nodesCount
@@ -10465,6 +10504,8 @@ export const GetBedsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      bedType: // value for 'bedType'
+ *      active: // value for 'active'
  *   },
  * });
  */

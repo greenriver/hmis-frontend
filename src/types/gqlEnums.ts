@@ -294,6 +294,15 @@ export const HmisEnums = {
     SMALL: 'SMALL',
     XSMALL: 'XSMALL',
   },
+  InventoryBedType: {
+    CHRONIC: 'Chronic',
+    CHRONIC_VETERAN: 'Chronic Veteran',
+    CHRONIC_YOUTH: 'Chronic Youth',
+    OTHER: 'Other',
+    VETERAN: 'Veteran',
+    YOUTH: 'Youth',
+    YOUTH_VETERAN: 'Youth Veteran',
+  },
   InventorySortOption: { START_DATE: 'START_DATE' },
   ItemType: {
     BOOLEAN: 'BOOLEAN',

@@ -40,10 +40,10 @@ query GetInventory($id: ID!) {
   }
 }
 
-query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0, $active: Boolean) {
   inventory(id: $id) {
     id
-    units(limit: $limit, offset: $offset) {
+    units(limit: $limit, offset: $offset, active: $active) {
       offset
       limit
       nodesCount
@@ -54,10 +54,16 @@ query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetBeds($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetBeds(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $bedType: InventoryBedType
+  $active: Boolean
+) {
   inventory(id: $id) {
     id
-    beds(limit: $limit, offset: $offset) {
+    beds(limit: $limit, offset: $offset, bedType: $bedType, active: $active) {
       offset
       limit
       nodesCount
