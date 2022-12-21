@@ -70,7 +70,6 @@ const ClientDashboard: React.FC = () => {
   } = useGetClientQuery({
     variables: { id: params.clientId },
   });
-  if (error) console.error('boop!', error.graphQLErrors);
   if (error) throw error;
 
   const initialTab = useMemo(() => {
