@@ -10,28 +10,36 @@ beforeEach(() => {
   cy.visit('/');
 });
 
-it('should perform HUD intake assessment', () => {
-  // cy.createClient('Cy First', 'Cy Last');
-  // cy.testId('enrollButton').click();
-  // cy.testId('projectSelect').click();
-  // cy.get('li[role="option"]').first().click();
-  // cy.testId('createEnrollmentButton').first().click();
-  // cy.testId('finishIntakeButton').click();
-  cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
+it(
+  'should perform HUD intake assessment',
+  {
+    viewportHeight: 1000, // extra long height so its easier to see what's going on
+    viewportWidth: 1024,
+  },
+  () => {
+    // cy.createClient('Cy First', 'Cy Last');
+    // cy.testId('enrollButton').click();
+    // cy.testId('projectSelect').click();
+    // cy.get('li[role="option"]').first().click();
+    // cy.testId('createEnrollmentButton').first().click();
+    // cy.testId('finishIntakeButton').click();
+    cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
 
-  // Client Location - skip because we don't know about this project
-  cy.inputId('3.16').click();
+    // Client Location - skip because we don't know about this project
+    cy.inputId('3.16').click();
 
-  // Prior Living Situation
-  cy.assertPriorLivingSituation();
+    // Prior Living Situation
+    cy.assertPriorLivingSituation();
 
-  // Income and Sources
+    // Income and Sources
+    cy.assertIncomeAndSources();
 
-  // Non-Cash Benefits
+    // Non-Cash Benefits
 
-  // Health Insurance
+    // Health Insurance
 
-  // Disability
+    // Disability
 
-  // Health and DV
-});
+    // Health and DV
+  }
+);

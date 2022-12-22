@@ -4,6 +4,13 @@
 Cypress.Commands.add('testId', (id, pseudo) => {
   return cy.get(`[data-testid="${id}"]${pseudo || ''}`);
 });
+Cypress.Commands.add(
+  'findTestId',
+  { prevSubject: true },
+  (subject, id, pseudo) => {
+    return subject.find(`[data-testid="${id}"]${pseudo || ''}`);
+  }
+);
 
 Cypress.Commands.add('login', (email, password) => {
   cy.session(
@@ -48,6 +55,21 @@ Cypress.Commands.add('choose', (id, optionCode) => {
   cy.testId(`option-${optionCode}`).click();
 });
 
+Cypress.Commands.add('checkOption', (id, optionCode) => {
+  cy.get(`[id="${id}"] input[value="${optionCode}"]`).check();
+});
+Cypress.Commands.add('uncheckOption', (id, optionCode) => {
+  cy.get(`[id="${id}"] input[value="${optionCode}"]`).uncheck({ force: true });
+});
+
+Cypress.Commands.add('getChecked', (id, value) => {
+  cy.get(
+    `[id="${id}"] [data-checked="true"] ${
+      value ? `input[value="${value}"]` : ''
+    }`
+  );
+});
+
 Cypress.Commands.add('displayItem', (linkId) => {
   cy.testId(`display-${linkId}`);
 });
@@ -56,8 +78,25 @@ Cypress.Commands.add('displayItems', (linkIds) => {
   cy.get(linkIds.map((id) => `[data-testid="display-${id}"]`).join(', '));
 });
 
+Cypress.Commands.add('expectHudValuesToInclude', (values) => {
+  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.window().then((win) => {
+    expect(win.debug.hudValues).to.include(values);
+  });
+});
+
+Cypress.Commands.add('expectHudValuesToNotHaveKeys', (keys) => {
+  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.window().then((win) => {
+    expect(win.debug.hudValues).not.to.have.keys(keys);
+  });
+});
+
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
+  interface Window {
+    debug: any;
+  }
   namespace Cypress {
     interface Chainable {
       // Actions
@@ -68,13 +107,23 @@ declare global {
         lastName: string
       ): Chainable<JQuery<Element>>;
 
+      // Form actions
+      checkOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
+      uncheckOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
+
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
+      findTestId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
       getById(id: string): Chainable<JQuery<Element>>;
       inputId(id: string): Chainable<JQuery<Element>>;
       getByIds(ids: string[]): Chainable<JQuery<Element>>;
       displayItem(linkId: string): Chainable<JQuery<Element>>;
       displayItems(linkIds: string[]): Chainable<JQuery<Element>>;
+      getChecked(id: string, value?: string): Chainable<JQuery<Element>>;
+
+      // Assertions
+      expectHudValuesToInclude(values: Record<string, any>): null;
+      expectHudValuesToNotHaveKeys(keys: string[]): null;
 
       // Assessment section assertions
       assertPriorLivingSituation(): null;
