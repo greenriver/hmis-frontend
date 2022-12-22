@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty, omit, omitBy, isNil, pick, trim } from 'lodash-es';
+import { isEmpty, omit, omitBy, isNil, trim } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -58,28 +58,16 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const validateSearchFormInput = useCallback(
     (values: Record<string, any>) => {
-      const requiredValueSet = omitBy(
-        pick(values, [
-          'personalId',
-          'firstName',
-          'lastName',
-          'ssnSerial',
-          'dob',
-          'textSearch',
-        ]),
-        (e) => isNil(e) || isEmpty(e)
-      );
+      const errors: Record<keyof typeof values, string> = {};
 
-      const errors: Record<keyof typeof requiredValueSet, string> = {};
-
-      if (isEmpty(requiredValueSet)) {
+      if (isEmpty(omitBy(values, (e) => isNil(e) || isEmpty(e)))) {
         errors.textSearch = t<string>('clientSearch.missingCriteria');
       } else {
         if (
           values.textSearch &&
           typeof values.textSearch === 'string' &&
-          isEmpty(omit(requiredValueSet, ['textSearch'])) &&
-          trim(values.textSearch).length < 4
+          isEmpty(omit(values, ['textSearch'])) &&
+          trim(values.textSearch).length < 3
         ) {
           errors.textSearch = hideAdvanced
             ? t<string>('clientSearch.inputTooShort')

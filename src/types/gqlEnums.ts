@@ -33,12 +33,12 @@ export const HmisEnums = {
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
   ClientSortOption: {
-    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
-    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
     FIRST_NAME_A_TO_Z: 'First Name: A-Z',
     FIRST_NAME_Z_TO_A: 'First Name: Z-A',
     LAST_NAME_A_TO_Z: 'Last Name: A-Z',
     LAST_NAME_Z_TO_A: 'Last Name: Z-A',
+    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
   Component: {
     ALERT_ERROR: 'Display text as an error alert',

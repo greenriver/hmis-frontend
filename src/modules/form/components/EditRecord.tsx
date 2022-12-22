@@ -11,6 +11,7 @@ import {
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
@@ -91,27 +92,25 @@ const EditRecord = <
     [definition]
   );
 
-  const [mutateFunction, { loading: saveLoading, error }] = useMutation<
-    Query,
-    QueryVariables
-  >(queryDocument, {
-    onCompleted: (data) => {
-      const errors = getErrors(data) || [];
+  const [mutateFunction, { loading: saveLoading, error: mutationError }] =
+    useMutation<Query, QueryVariables>(queryDocument, {
+      onCompleted: (data) => {
+        const errors = getErrors(data) || [];
 
-      if (errors.length > 0) {
-        const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
-        const validationErrors = errors.filter(
-          (e) => e.type !== CONFIRM_ERROR_TYPE
-        );
-        if (validationErrors.length > 0) window.scrollTo(0, 0);
-        setWarnings(warnings);
-        setErrors(validationErrors);
-      } else {
-        window.scrollTo(0, 0);
-        onCompleted(data);
-      }
-    },
-  });
+        if (errors.length > 0) {
+          const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
+          const validationErrors = errors.filter(
+            (e) => e.type !== CONFIRM_ERROR_TYPE
+          );
+          if (validationErrors.length > 0) window.scrollTo(0, 0);
+          setWarnings(warnings);
+          setErrors(validationErrors);
+        } else {
+          window.scrollTo(0, 0);
+          onCompleted(data);
+        }
+      },
+    });
 
   const initialValues = useMemo(() => {
     if (!itemMap || !definition) return {};
@@ -167,22 +166,28 @@ const EditRecord = <
   );
 
   if (definitionLoading) return <Loading />;
-  if (error) console.error(error); // FIXME handle error on form submission
   if (definitionError) console.error(definitionError);
   if (!definition) throw Error('Definition not found');
 
   const form = (
-    <DynamicForm
-      definition={definition}
-      onSubmit={submitHandler}
-      submitButtonText='Save Changes'
-      discardButtonText='Discard'
-      initialValues={initialValues}
-      loading={saveLoading}
-      errors={errors}
-      warnings={warnings}
-      {...props}
-    />
+    <>
+      <DynamicForm
+        definition={definition}
+        onSubmit={submitHandler}
+        submitButtonText='Save Changes'
+        discardButtonText='Discard'
+        initialValues={initialValues}
+        loading={saveLoading}
+        errors={errors}
+        warnings={warnings}
+        {...props}
+      />
+      {mutationError && (
+        <Box sx={{ mt: 3 }}>
+          <ApolloErrorAlert error={mutationError} />
+        </Box>
+      )}
+    </>
   );
 
   if (leftNav) {

@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
@@ -85,15 +86,6 @@ export function useAssessmentHandlers() {
     [formDefinitionData]
   );
 
-  const enrollmentPath = useMemo(
-    () =>
-      generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-        enrollmentId,
-        clientId,
-      }),
-    [enrollmentId, clientId]
-  );
-
   const handleCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
       let errors;
@@ -117,14 +109,20 @@ export function useAssessmentHandlers() {
           fieldName: 'assessments',
         });
       }
-      navigate(enrollmentPath);
+      navigate(
+        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          enrollmentId,
+          clientId,
+        })
+      );
     },
-    [enrollmentId, enrollmentPath, setErrors, role, navigate]
+    [enrollmentId, clientId, setErrors, role, navigate]
   );
 
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
     useSaveAssessmentMutation({
       onCompleted: handleCompleted,
+      onError: () => window.scrollTo(0, 0),
     });
 
   const [
@@ -132,6 +130,7 @@ export function useAssessmentHandlers() {
     { loading: submitLoading, error: submitError },
   ] = useSubmitAssessmentMutation({
     onCompleted: handleCompleted,
+    onError: () => window.scrollTo(0, 0),
   });
 
   const submitHandler = useCallback(
@@ -171,8 +170,6 @@ export function useAssessmentHandlers() {
     [saveAssessmentMutation, assessmentId, formDefinitionId, enrollmentId]
   );
 
-  if (saveError) throw saveError;
-  if (submitError) throw submitError;
   if (formDefinitionError) throw formDefinitionError;
   if (assessmentError) throw assessmentError;
 
@@ -186,6 +183,7 @@ export function useAssessmentHandlers() {
     dataLoading: formDefinitionLoading || assessmentLoading,
     mutationLoading: saveLoading || submitLoading,
     errors,
+    apolloError: saveError || submitError,
   } as {
     submitHandler: (values: FormValues, confirmed?: boolean) => void;
     saveDraftHandler: (values: FormValues) => void;
@@ -196,5 +194,6 @@ export function useAssessmentHandlers() {
     dataLoading: boolean;
     mutationLoading: boolean;
     errors: ValidationError[];
+    apolloError?: ApolloError;
   };
 }
