@@ -111,7 +111,7 @@ const AssessmentsPanel = ({
   );
 
   return (
-    <Stack>
+    <Stack data-testid='assessmentsPanel'>
       <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
         <Typography variant='h5'>Assessments</Typography>
         <ButtonLink

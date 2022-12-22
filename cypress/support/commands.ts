@@ -85,6 +85,13 @@ Cypress.Commands.add('expectHudValuesToInclude', (values) => {
   });
 });
 
+Cypress.Commands.add('expectHudValuesToDeepEqual', (values) => {
+  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.window().then((win) => {
+    expect(win.debug.hudValues).to.deep.equal(values);
+  });
+});
+
 Cypress.Commands.add('expectHudValuesToNotHaveKeys', (keys) => {
   cy.testId('submitFormButton').first().click({ ctrlKey: true });
   cy.window().then((win) => {
@@ -123,6 +130,7 @@ declare global {
 
       // Assertions
       expectHudValuesToInclude(values: Record<string, any>): null;
+      expectHudValuesToDeepEqual(values: Record<string, any>): null;
       expectHudValuesToNotHaveKeys(keys: string[]): null;
 
       // Assessment section assertions
