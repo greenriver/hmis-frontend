@@ -221,8 +221,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       // item.type === ItemType.Dob
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
-      // attempt to parse date?
-      console.log('value', value);
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker

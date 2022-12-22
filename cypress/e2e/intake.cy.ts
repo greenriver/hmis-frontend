@@ -18,6 +18,7 @@ it(
     viewportWidth: 1024,
   },
   () => {
+    // Set up new client, enroll, and begin intake
     cy.createClient('Cy First', 'Cy Last');
     cy.testId('enrollButton').click();
     cy.testId('projectSelect').click();
@@ -47,13 +48,55 @@ it(
     // Health and DV
     cy.assertHealthAndDV();
 
+    // Deep-equal compare when closing and re-opening WIP saved assessment
     cy.testId('submitFormButton').first().click({ ctrlKey: true });
     cy.window().then((win) => {
       const hudValues = win.debug.hudValues;
-
       // Save assessment
       cy.testId('saveFormButton').first().click();
+      // Re-open assessment and assert that hudValues match previous
+      cy.testId('assessmentsPanel').find('table').find('a').first().click();
+      cy.expectHudValuesToDeepEqual(hudValues);
+    });
 
+    // Make a change and save
+    const incomeFromAnySource = '4.02.2';
+    cy.checkOption(incomeFromAnySource, 'NO');
+    cy.testId('saveFormButton').first().click();
+
+    // Re-open and ensure change was persisted
+    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.expectHudValuesToInclude({
+      'IncomeBenefit.incomeFromAnySource': 'NO',
+    });
+
+    // Make a change and submit
+    cy.checkOption(incomeFromAnySource, 'CLIENT_REFUSED');
+    cy.testId('submitFormButton').first().click();
+
+    // Re-open and make sure CLIENT_REFUSED saved
+    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.testId('saveFormButton').should('not.exist');
+    cy.expectHudValuesToInclude({
+      'IncomeBenefit.incomeFromAnySource': 'CLIENT_REFUSED',
+    });
+
+    // Change to YES and submit
+    cy.checkOption(incomeFromAnySource, 'YES');
+    cy.testId('submitFormButton').first().click();
+
+    // Re-open and make sure YES saved
+    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.expectHudValuesToInclude({
+      'IncomeBenefit.incomeFromAnySource': 'YES',
+    });
+
+    // Deep-equal compare when closing and re-opening submitted assessment
+    cy.testId('submitFormButton').first().click({ ctrlKey: true });
+    cy.window().then((win) => {
+      const hudValues = win.debug.hudValues;
+      // Submit assessment
+      cy.testId('submitFormButton').first().click();
       // Re-open assessment and assert that hudValues match previous
       cy.testId('assessmentsPanel').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);

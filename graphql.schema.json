@@ -1835,44 +1835,38 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "AGE_OLDEST_TO_YOUNGEST",
+            "description": "Age: Oldest to Youngest",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AGE_YOUNGEST_TO_OLDEST",
+            "description": "Age: Youngest to Oldest",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "FIRST_NAME_A_TO_Z",
-            "description": "First Name A To Z",
+            "description": "First Name: A-Z",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "FIRST_NAME_Z_TO_A",
-            "description": "First Name Z To A",
+            "description": "First Name: Z-A",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "LAST_NAME_A_TO_Z",
-            "description": "Last Name A To Z",
+            "description": "Last Name: A-Z",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "LAST_NAME_Z_TO_A",
-            "description": "Last Name Z To A",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OLDEST_TO_YOUNGEST",
-            "description": "Oldest To Youngest",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RECENTLY_ADDED",
-            "description": "Recently Added",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YOUNGEST_TO_OLDEST",
-            "description": "Youngest To Oldest",
+            "description": "Last Name: Z-A",
             "isDeprecated": false,
             "deprecationReason": null
           }

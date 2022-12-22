@@ -4,11 +4,14 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   FormDefinitionJson,
+  SaveAssessmentMutation,
+  SubmitAssessmentMutation,
   useGetAssessmentQuery,
   useGetFormDefinitionQuery,
   useSaveAssessmentMutation,
@@ -91,32 +94,44 @@ export function useAssessmentHandlers() {
     [enrollmentId, clientId]
   );
 
+  const handleCompleted = useCallback(
+    (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
+      let errors;
+      if (data.hasOwnProperty('saveAssessment')) {
+        errors = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
+      } else {
+        errors =
+          (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
+      }
+      if (errors.length > 0) {
+        window.scrollTo(0, 0);
+        setErrors(errors);
+        return;
+      }
+
+      // Save/Submit was successful.
+      // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
+      if (role) {
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'assessments',
+        });
+      }
+      navigate(enrollmentPath);
+    },
+    [enrollmentId, enrollmentPath, setErrors, role, navigate]
+  );
+
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
     useSaveAssessmentMutation({
-      onCompleted: (data) => {
-        const errors = data.saveAssessment?.errors || [];
-        if (errors.length > 0) {
-          window.scrollTo(0, 0);
-          setErrors(errors);
-        } else {
-          navigate(enrollmentPath);
-        }
-      },
+      onCompleted: handleCompleted,
     });
 
   const [
     submitAssessmentMutation,
     { loading: submitLoading, error: submitError },
   ] = useSubmitAssessmentMutation({
-    onCompleted: (data) => {
-      const errors = data.submitAssessment?.errors || [];
-      if (errors.length > 0) {
-        window.scrollTo(0, 0);
-        setErrors(errors);
-      } else {
-        navigate(enrollmentPath);
-      }
-    },
+    onCompleted: handleCompleted,
   });
 
   const submitHandler = useCallback(
