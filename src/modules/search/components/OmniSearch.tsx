@@ -56,7 +56,7 @@ const OmniSearch: React.FC = () => {
         });
       }
       if (option.__typename === 'Project') {
-        targetPath = generatePath(Routes.EDIT_PROJECT, {
+        targetPath = generatePath(Routes.PROJECT, {
           projectId: option.id,
         });
       }
