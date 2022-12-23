@@ -2071,6 +2071,12 @@
             "description": "Render a choice input item as vertical radio buttons",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "SSN",
+            "description": "SSN input component",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null

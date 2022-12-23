@@ -16,6 +16,7 @@ import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
+import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import {
@@ -185,6 +186,24 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.String:
     case ItemType.Text:
+      if (item.component === Component.Ssn)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <SsnInput
+              id={item.linkId}
+              name={item.linkId}
+              value={value || ''}
+              onChange={onChangeValue}
+              sx={{
+                width,
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              }}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+
       const multiline = item.type === ItemType.Text;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
