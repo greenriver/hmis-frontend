@@ -313,10 +313,10 @@ const createDirectUploadMock = {
     query: CreateDirectUploadMutationDocument,
     variables: {
       input: {
-        checksum: 'oBCm7XgFaE0M6tPSdyS5pw==',
+        checksum: 'upfCZclwF7d84KD6gbjppQ==',
         filename: 'image.jpeg',
         contentType: 'image/jpeg',
-        byteSize: 397415,
+        byteSize: 467145,
       },
     },
   },
