@@ -36,7 +36,10 @@ const FormStepper = ({ definition }: Props) => {
             }}
             sx={{ py: 0 }}
           >
-            <RouterLink to={`${pathname}#${step.linkId}`}>
+            <RouterLink
+              to={`${pathname}#${step.linkId}`}
+              data-testid={`formNavTo-${step.linkId}`}
+            >
               {step.label}
             </RouterLink>
           </StepLabel>

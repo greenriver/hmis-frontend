@@ -97,7 +97,7 @@ const InputGroup = ({
   }, [values, childItemLinkIds, isCurrency]);
 
   return (
-    <Box sx={{ pt: 2 }}>
+    <Box sx={{ pt: 2 }} id={item.linkId}>
       {item.text && <Typography>{item.text}</Typography>}
       {wrappedChildren}
       {isCurrency && (
@@ -114,7 +114,7 @@ const InputGroup = ({
           }}
         >
           <Typography>Monthly Total Income</Typography>
-          <Typography sx={{ width: '120px', pl: 1 }}>
+          <Typography sx={{ width: '120px', pl: 1 }} data-testid='inputSum'>
             {formatCurrency(sum || 0)}
           </Typography>
         </Stack>

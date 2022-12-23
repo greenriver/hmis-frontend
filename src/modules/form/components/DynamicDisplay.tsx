@@ -40,6 +40,7 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
     default:
       return (
         <Typography
+          data-testid={`display-${item.linkId}`}
           variant='body2'
           sx={{ maxWidth }}
           dangerouslySetInnerHTML={html}

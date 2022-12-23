@@ -59,6 +59,7 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
 
   return (
     <GenericSelect
+      data-testid='projectSelect'
       getOptionLabel={(option) => option.label || option.code}
       groupBy={(option) => option.groupLabel || ''}
       label={label}
