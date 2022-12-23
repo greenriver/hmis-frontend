@@ -9,7 +9,8 @@ import MultiFieldInput from '../MultiFieldInput';
 type SsnInputProps = {
   onChange?: (value: string) => any;
   onlylast4?: boolean;
-} & Omit<TextFieldProps, 'onChange'>;
+  value?: string;
+} & Omit<TextFieldProps, 'onChange' | 'value'>;
 
 const SsnInput = ({
   inputProps,
@@ -56,6 +57,8 @@ const SsnInput = ({
     };
   }, [value, onlylast4]);
 
+  const hasValue = !!value?.replace(/X/g, '').trim() || false;
+
   return (
     <MultiFieldInput<TextFieldProps>
       inputs={[
@@ -65,6 +68,7 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
+            placeholder: hasValue ? undefined : '000',
           },
         },
         {
@@ -73,6 +77,7 @@ const SsnInput = ({
           inputProps: {
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
+            placeholder: hasValue ? undefined : '00',
           },
         },
         {
@@ -80,6 +85,7 @@ const SsnInput = ({
           chars: 4,
           inputProps: {
             ...baseInputProps,
+            placeholder: hasValue ? undefined : '0000',
           },
         },
       ]}
