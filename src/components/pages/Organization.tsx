@@ -91,6 +91,7 @@ const Organization = () => {
             <Stack spacing={1}>
               <Typography variant='h6'>Add to Organization</Typography>
               <ButtonLink
+                data-testid='addProjectButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}

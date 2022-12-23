@@ -335,7 +335,7 @@ const DynamicForm: React.FC<
           <Grid item>
             <Alert severity='error' sx={{ mb: 1 }}>
               Please fix outstanding errors:
-              <Box component='ul' sx={{ pl: 2 }}>
+              <Box component='ul' sx={{ pl: 2 }} data-testid='formErrorAlert'>
                 {errors.map(({ message, fullMessage }) => (
                   <li key={fullMessage || message}>{fullMessage || message}</li>
                 ))}

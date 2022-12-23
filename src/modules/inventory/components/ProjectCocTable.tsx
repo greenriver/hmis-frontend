@@ -83,6 +83,7 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
         render: (record: ProjectCocFieldsFragment) => (
           <Stack direction='row' spacing={1}>
             <ButtonLink
+              data-testid='updateButton'
               to={generatePath(Routes.EDIT_COC, {
                 projectId,
                 cocId: record.id,
@@ -93,6 +94,7 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
               Update
             </ButtonLink>
             <Button
+              data-testid='deleteButton'
               onClick={() => setDelete(record)}
               size='small'
               variant='outlined'

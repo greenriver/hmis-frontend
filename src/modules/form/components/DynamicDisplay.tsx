@@ -31,6 +31,7 @@ const DynamicDisplay = ({ item, maxWidth }: Props) => {
     case Component.AlertWarning:
       return (
         <Alert
+          data-testid={`alert-${item.linkId}`}
           severity={SeverityMap[item.component as keyof typeof SeverityMap]}
           sx={{ mt: 2 }}
         >

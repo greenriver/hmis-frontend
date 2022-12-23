@@ -91,6 +91,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
             <ButtonLink
+              data-testid='updateButton'
               to={generatePath(Routes.EDIT_INVENTORY, {
                 projectId,
                 inventoryId: record.id,
@@ -101,6 +102,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
               Update
             </ButtonLink>
             <Button
+              data-testid='deleteButton'
               onClick={() => setDelete(record)}
               size='small'
               variant='outlined'

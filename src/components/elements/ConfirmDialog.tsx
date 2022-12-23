@@ -28,10 +28,18 @@ const ConfirmationDialog = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent sx={{}}>{children}</DialogContent>
       <DialogActions sx={{ px: 4, pb: 2, justifyContent: 'center' }}>
-        <Button onClick={onCancel} variant='gray'>
+        <Button
+          onClick={onCancel}
+          variant='gray'
+          data-testid='cancelDialogAction'
+        >
           Cancel
         </Button>
-        <Button onClick={onConfirm} disabled={loading}>
+        <Button
+          onClick={onConfirm}
+          disabled={loading}
+          data-testid='confirmDialogAction'
+        >
           {loading ? 'Loading...' : 'Confirm'}
         </Button>
       </DialogActions>

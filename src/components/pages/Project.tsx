@@ -125,19 +125,19 @@ const Project = () => {
             </Typography>
             <ProjectDetails project={project} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='funderCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Funding Sources
             </Typography>
             <FunderTable projectId={projectId} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='projectCocCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project CoCs
             </Typography>
             <ProjectCocTable projectId={projectId} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='inventoryCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
@@ -149,6 +149,7 @@ const Project = () => {
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Project</Typography>
               <ButtonLink
+                data-testid='addFunderButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
@@ -157,6 +158,7 @@ const Project = () => {
                 + Add Funding Source
               </ButtonLink>
               <ButtonLink
+                data-testid='addProjectCocButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
@@ -165,6 +167,7 @@ const Project = () => {
                 + Add Project CoC
               </ButtonLink>
               <ButtonLink
+                data-testid='addInventoryButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
