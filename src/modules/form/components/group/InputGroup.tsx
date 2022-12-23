@@ -1,5 +1,5 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
-import { isNumber, pick, reduce } from 'lodash-es';
+import { isFinite, pick, reduce } from 'lodash-es';
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { maxWidthAtNestingLevel } from '../DynamicField';
@@ -90,7 +90,7 @@ const InputGroup = ({
       relevant,
       (sum, value) => {
         const val = parseFloat(value);
-        return isNumber(val) && !isNaN(val) ? sum + val : sum;
+        return isFinite(val) ? sum + val : sum;
       },
       0
     );
