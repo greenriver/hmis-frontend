@@ -13,6 +13,7 @@ import {
   Ethnicity,
   DobDataQuality,
   NoYesReasonsForMissingData,
+  CreateDirectUploadMutationDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -307,6 +308,32 @@ const enrollmentWithHoHMock = {
   },
 };
 
+const createDirectUploadMock = {
+  request: {
+    query: CreateDirectUploadMutationDocument,
+    variables: {
+      input: {
+        checksum: 'oBCm7XgFaE0M6tPSdyS5pw==',
+        filename: 'image.jpeg',
+        contentType: 'image/jpeg',
+        byteSize: 397415,
+      },
+    },
+  },
+  result: {
+    data: {
+      createDirectUpload: {
+        __typename: 'DirectUpload',
+        filename: 'image.json',
+        headers: '{}',
+        url: 'http://example.com',
+        blobId: '1',
+        signedBlobId: '1',
+      },
+    },
+  },
+};
+
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
@@ -314,6 +341,7 @@ const mocks: any[] = [
   clientLookupMock,
   clientWithEnrollmentsMock,
   enrollmentWithHoHMock,
+  createDirectUploadMock,
 ];
 
 export default mocks;
