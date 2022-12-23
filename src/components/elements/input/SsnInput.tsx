@@ -38,13 +38,15 @@ const SsnInput = ({
     let third = '';
     if (inputStr.match(/-/)) {
       [first, second, third] = inputStr.split('-');
-    } else if (inputStr.match(/^[\w ]+$/)) {
-      [, first, second, third] = padStart(inputStr, 9, ' ').match(
-        /([\w ]{3})([\w ]{2})([\w ]{4})/
+    } else if (inputStr.match(/^[\dX]+$/)) {
+      [, first, second, third] = padStart(inputStr, 9, 'X').match(
+        /([\dX]{3})([\dX]{2})([\dX]{4})/
       ) || [null, '', '', ''];
-      [first, second, third] = [first, second, third].map((str) => str.trim());
+      [first, second, third] = [first, second, third].map((str) =>
+        str.replace(/X/g, '')
+      );
     } else if (!isNil(inputStr)) {
-      console.error(`Invalid input value ${inputStr}`);
+      console.error(`Invalid input value "${inputStr}"`);
     }
 
     return {
@@ -86,9 +88,9 @@ const SsnInput = ({
         onChange &&
         onChange(
           [
-            padEnd((values.first || '').replace(/\D/g, ''), 3),
-            padEnd((values.second || '').replace(/\D/g, ''), 2),
-            padEnd((values.third || '').replace(/\D/g, ''), 4),
+            padEnd((values.first || '').replace(/[^\dX]/g, ''), 3, 'X'),
+            padEnd((values.second || '').replace(/[^\dX]/g, ''), 2, 'X'),
+            padEnd((values.third || '').replace(/[^\dX]/g, ''), 4, 'X'),
           ].join('')
         )
       }
