@@ -11,6 +11,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateInventoryDocument,
@@ -38,9 +39,11 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }), {
-      state: { refetchInventory: create ? true : false },
-    });
+    // Force refresh table if we just created a new record
+    if (create) {
+      cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+    }
+    navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId, create]);
 
   // Local variables to use for form population.

@@ -10,6 +10,7 @@ import { InactiveChip } from './Project';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateProjectCocDocument,
@@ -32,9 +33,11 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }), {
-      state: { refetchProjectCoc: create ? true : false },
-    });
+    // Force refresh table if we just created a new record
+    if (create) {
+      cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
+    }
+    navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId, create]);
 
   const { data, loading, error } = useGetProjectCocQuery({

@@ -10,6 +10,7 @@ import { InactiveChip } from './Project';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   ProjectAllFieldsFragment,
@@ -26,18 +27,16 @@ const EditProject = () => {
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
       const updatedProject = data?.updateProject?.project;
-      if (updatedProject?.id) {
+      if (updatedProject) {
+        const id = updatedProject.id;
         // Force refresh inventory and funder if this project was just
         // closed, since those can be closed as a side effect.
-        const state =
-          updatedProject?.operatingEndDate && !project?.operatingEndDate
-            ? { refetchInventory: true, refetchFunder: true }
-            : undefined;
+        if (updatedProject?.operatingEndDate && !project?.operatingEndDate) {
+          cache.evict({ id: `Project:${id}`, fieldName: 'funders' });
+          cache.evict({ id: `Project:${id}`, fieldName: 'inventories' });
+        }
 
-        navigate(
-          generatePath(Routes.PROJECT, { projectId: updatedProject?.id }),
-          { state }
-        );
+        navigate(generatePath(Routes.PROJECT, { projectId: id }));
       }
     },
     [navigate, project]

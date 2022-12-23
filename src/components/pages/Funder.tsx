@@ -11,6 +11,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateFunderDocument,
@@ -38,9 +39,11 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }), {
-      state: { refetchFunder: create ? true : false },
-    });
+    // Force refresh table if we just created a new record
+    if (create) {
+      cache.evict({ id: `Project:${projectId}`, fieldName: 'funders' });
+    }
+    navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, create, projectId]);
 
   // Local variables to use for form population.
