@@ -5,7 +5,7 @@ import {
   DatePickerProps,
 } from '@mui/x-date-pickers';
 import { isAfter, isBefore, isPast } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -37,7 +37,7 @@ const DatePicker = ({
   }, [min, max]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleBlur = () => {
+  const handleBlur = useCallback(() => {
     let msg = null;
     if (value && isDate(value)) {
       if (!isValidDate(value)) {
@@ -57,7 +57,7 @@ const DatePicker = ({
       }
     }
     setErrorMessage(msg);
-  };
+  }, [value, max, min]);
 
   return (
     <MuiDatePicker
