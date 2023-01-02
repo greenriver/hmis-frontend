@@ -53,6 +53,7 @@ export const HmisEnums = {
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SSN: 'SSN input component',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB',
