@@ -8,6 +8,12 @@ fragment ProjectFields on Project {
   }
 }
 
+fragment ProjectOmniSearchFields on Project {
+  id
+  projectName
+  projectType
+}
+
 fragment OrganizationFields on Organization {
   id
   organizationName
