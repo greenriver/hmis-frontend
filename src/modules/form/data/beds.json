@@ -5,7 +5,7 @@
       "linkId": "unit",
       "required": true,
       "text": "Unit",
-      "fieldName": "unit",
+      "fieldName": "unitId",
       "pickListReference": "AVAILABLE_UNITS",
       "helperText": "Beds created will be assigned to the selected unit. Beds can be re-assigned at a later step."
     },
@@ -65,7 +65,6 @@
         {
           "type": "DISPLAY",
           "linkId": "sum",
-          "fieldName": "bedInventory",
           "text": "Total Bed Count"
         }
       ]

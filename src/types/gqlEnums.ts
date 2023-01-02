@@ -435,6 +435,7 @@ export const HmisEnums = {
     UNKNOWN: 'Unknown',
   },
   PickListType: {
+    AVAILABLE_UNITS: 'AVAILABLE_UNITS',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     GEOCODE: 'GEOCODE',

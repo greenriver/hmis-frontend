@@ -4,8 +4,16 @@ query GetAssessment($id: ID!) {
   }
 }
 
-query GetPickList($pickListType: PickListType!, $projectId: ID) {
-  pickList(pickListType: $pickListType, projectId: $projectId) {
+query GetPickList(
+  $pickListType: PickListType!
+  $projectId: ID
+  $inventoryId: ID
+) {
+  pickList(
+    pickListType: $pickListType
+    projectId: $projectId
+    inventoryId: $inventoryId
+  ) {
     ...PickListOptionFields
   }
 }

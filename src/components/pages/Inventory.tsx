@@ -53,9 +53,9 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
-      inventoryId: inventoryId,
+      // inventoryId: inventoryId,
     };
-  }, [project, inventoryId]);
+  }, [project]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
@@ -85,7 +85,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           CreateInventoryMutation,
           CreateInventoryMutationVariables
         >
-          inputVariables={{ projectId }}
+          inputVariables={{ projectId, unitInventory: 0, bedInventory: 0 }}
           queryDocument={CreateInventoryDocument}
           onCompleted={onCompleted}
           getErrors={(data: CreateInventoryMutation) =>

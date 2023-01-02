@@ -323,3 +323,25 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
     }
   }
 }
+
+mutation CreateBeds($input: CreateBedsInput!) {
+  createBeds(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateUnits($input: CreateUnitsInput!) {
+  createUnits(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

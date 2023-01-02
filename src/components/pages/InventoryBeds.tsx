@@ -29,9 +29,13 @@ import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   Bed,
+  CreateBedsInput,
+  CreateUnitsInput,
   GetBedsDocument,
   GetUnitsDocument,
   Unit,
+  useCreateBedsMutation,
+  useCreateUnitsMutation,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
 
@@ -40,7 +44,7 @@ const unitColumns: ColumnDef<Unit>[] = [
     key: 'name',
     header: 'Unit Name',
     width: '80%',
-    render: (unit) => <TextInput value={unit.name || ''} />,
+    render: (unit) => unit.name,
   },
   {
     key: 'count',
@@ -106,21 +110,37 @@ const InventoryBeds = () => {
     variables: { id: inventoryId },
   });
 
-  const handleCreateBeds = useCallback((values: FormValues) => {
-    const input = transformSubmitValues({
-      definition: BedsDefinition,
-      values,
-    });
-    console.log(input);
-  }, []);
+  const [createBeds] = useCreateBedsMutation({
+    onCompleted: () => setDialogOpen(null),
+  });
+  const [createUnits] = useCreateUnitsMutation({
+    onCompleted: () => setDialogOpen(null),
+  });
 
-  const handleCreateUnits = useCallback((values: FormValues) => {
-    const input = transformSubmitValues({
-      definition: UnitsDefinition,
-      values,
-    });
-    console.log(input);
-  }, []);
+  const handleCreateBeds = useCallback(
+    (values: FormValues) => {
+      const input = transformSubmitValues({
+        definition: BedsDefinition,
+        values,
+      });
+      input.inventoryId = inventoryId;
+      createBeds({ variables: { input: { input } as CreateBedsInput } });
+    },
+    [createBeds, inventoryId]
+  );
+
+  const handleCreateUnits = useCallback(
+    (values: FormValues) => {
+      const input = transformSubmitValues({
+        definition: UnitsDefinition,
+        values,
+      });
+      input.inventoryId = inventoryId;
+      if (!input.prefix) input.prefix = 'Unit';
+      createUnits({ variables: { input: { input } as CreateUnitsInput } });
+    },
+    [createUnits, inventoryId]
+  );
 
   // const onCompleted = useCallback(() => {
   //   navigate(generatePath(Routes.PROJECT, { projectId }), {
@@ -233,6 +253,7 @@ const InventoryBeds = () => {
               discardButtonText='Cancel'
               onDiscard={() => setDialogOpen(null)}
               onSubmit={handleCreateBeds}
+              pickListQueryVariables={{ inventoryId }}
             />
           )}
         </DialogContent>

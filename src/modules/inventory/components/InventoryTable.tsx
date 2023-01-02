@@ -36,10 +36,6 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
     render: (i: InventoryFieldsFragment) =>
       HmisEnums.HouseholdType[i.householdType],
   },
-  {
-    header: 'Beds',
-    render: (i) => i.bedInventory,
-  },
 ];
 
 interface Props
@@ -52,9 +48,10 @@ interface Props
     'queryVariables' | 'queryDocument' | 'pagePath'
   > {
   projectId: string;
+  es?: boolean;
 }
 
-const InventoryTable = ({ projectId, ...props }: Props) => {
+const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
     null
   );
@@ -80,12 +77,24 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
   const tableColumns = useMemo(() => {
     return [
       ...columns,
+      ...(es
+        ? []
+        : [
+            {
+              header: 'Units',
+              render: 'unitInventory' as keyof InventoryFieldsFragment,
+            },
+          ]),
+      {
+        header: 'Beds',
+        render: 'bedInventory' as keyof InventoryFieldsFragment,
+      },
       {
         key: 'actions',
         width: '1%',
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
-            <ButtonLink
+            {/* <ButtonLink
               to={generatePath(Routes.MANAGE_INVENTORY_BEDS, {
                 projectId,
                 inventoryId: record.id,
@@ -94,7 +103,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
               variant='outlined'
             >
               Beds
-            </ButtonLink>
+            </ButtonLink> */}
             <ButtonLink
               to={generatePath(Routes.EDIT_INVENTORY, {
                 projectId,
@@ -117,7 +126,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
         ),
       },
     ];
-  }, [projectId]);
+  }, [projectId, es]);
 
   return (
     <>
