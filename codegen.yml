@@ -11,6 +11,7 @@ generates:
       scalars:
         ISO8601DateTime: string
         ISO8601Date: string
+        Base64: string
   ./graphql.schema.json:
     plugins:
       - 'introspection'

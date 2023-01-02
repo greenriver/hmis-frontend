@@ -19,6 +19,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A base64 encoded string */
+  Base64: string;
   /** An ISO 8601-encoded date */
   ISO8601Date: string;
   /** An ISO 8601-encoded datetime */
@@ -179,6 +181,7 @@ export type Client = {
   gender: Array<Gender>;
   healthAndDvs: HealthAndDvsPaginated;
   id: Scalars['ID'];
+  image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
   lastName?: Maybe<Scalars['String']>;
   middleName?: Maybe<Scalars['String']>;
@@ -217,6 +220,14 @@ export type ClientHealthAndDvsArgs = {
 export type ClientIncomeBenefitsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+/** Client Image */
+export type ClientImage = {
+  __typename?: 'ClientImage';
+  base64: Scalars['Base64'];
+  contentType: Scalars['String'];
+  id: Scalars['ID'];
 };
 
 /** HMIS Client input */
@@ -1935,6 +1946,14 @@ export type ProjectInput = {
   trackingMethod?: InputMaybe<TrackingMethod>;
 };
 
+/** HMIS Project search input */
+export type ProjectSearchInput = {
+  /** Project primary key */
+  id?: InputMaybe<Scalars['ID']>;
+  /** Omnisearch string */
+  textSearch?: InputMaybe<Scalars['String']>;
+};
+
 /** HUD Project Sorting Options */
 export enum ProjectSortOption {
   Name = 'NAME',
@@ -2010,6 +2029,8 @@ export type Query = {
   project?: Maybe<Project>;
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
+  /** Search for projects */
+  projectSearch: ProjectsPaginated;
   /** Get a list of projects */
   projects: ProjectsPaginated;
 };
@@ -2071,6 +2092,14 @@ export type QueryProjectArgs = {
 
 export type QueryProjectCocArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryProjectSearchArgs = {
+  input: ProjectSearchInput;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
 export type QueryProjectsArgs = {
@@ -5899,6 +5928,13 @@ export type ClientFieldsFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientImageFieldsFragment = {
+  __typename?: 'ClientImage';
+  id: string;
+  contentType: string;
+  base64: string;
+};
+
 export type ClientOmniSearchFieldsFragment = {
   __typename?: 'Client';
   id: string;
@@ -6298,6 +6334,23 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+  } | null;
+};
+
+export type GetClientImageQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetClientImageQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    image?: {
+      __typename?: 'ClientImage';
+      id: string;
+      contentType: string;
+      base64: string;
+    } | null;
   } | null;
 };
 
@@ -8160,6 +8213,13 @@ export const ClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ClientImageFieldsFragmentDoc = gql`
+  fragment ClientImageFields on ClientImage {
+    id
+    contentType
+    base64
+  }
+`;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
     id
@@ -9204,6 +9264,67 @@ export type GetClientLazyQueryHookResult = ReturnType<
 export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
+>;
+export const GetClientImageDocument = gql`
+  query GetClientImage($id: ID!) {
+    client(id: $id) {
+      image {
+        ...ClientImageFields
+      }
+    }
+  }
+  ${ClientImageFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientImageQuery__
+ *
+ * To run a query within a React component, call `useGetClientImageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientImageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientImageQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientImageQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientImageQuery,
+    GetClientImageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClientImageQuery, GetClientImageQueryVariables>(
+    GetClientImageDocument,
+    options
+  );
+}
+export function useGetClientImageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientImageQuery,
+    GetClientImageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClientImageQuery, GetClientImageQueryVariables>(
+    GetClientImageDocument,
+    options
+  );
+}
+export type GetClientImageQueryHookResult = ReturnType<
+  typeof useGetClientImageQuery
+>;
+export type GetClientImageLazyQueryHookResult = ReturnType<
+  typeof useGetClientImageLazyQuery
+>;
+export type GetClientImageQueryResult = Apollo.QueryResult<
+  GetClientImageQuery,
+  GetClientImageQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
   query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
