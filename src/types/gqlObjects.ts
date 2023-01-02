@@ -310,6 +310,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientImage',
+    fields: [
+      {
+        name: 'base64',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Base64', ofType: null },
+        },
+      },
+      {
+        name: 'contentType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Disability',
     fields: [
       {
@@ -771,6 +800,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'FormItem',
     fields: [
+      {
+        name: 'briefText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'component',
         type: { kind: 'ENUM', name: 'Component', ofType: null },

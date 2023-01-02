@@ -14,6 +14,7 @@ import {
 
 export function usePickList(
   item: FormItem,
+  projectId?: string,
   fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>
 ) {
   const resolved = useMemo(() => resolveOptionList(item), [item]);
@@ -25,7 +26,10 @@ export function usePickList(
   );
 
   const { data, loading, error } = useGetPickListQuery({
-    variables: { pickListType: item.pickListReference as PickListType },
+    variables: {
+      pickListType: item.pickListReference as PickListType,
+      projectId,
+    },
     // Skip if it was already resolve with local enums, or if it's an unrecognized reference
     skip: !!resolved || !isKnownType,
     ...fetchOptions,
@@ -37,8 +41,9 @@ export function usePickList(
 
   if (error) throw error;
 
-  return [pickList, loading] as [
+  return [pickList, loading, !!resolved] as [
     pickList: PickListOption[] | undefined,
-    loading: boolean
+    loading: boolean,
+    isLocal: boolean
   ];
 }

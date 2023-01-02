@@ -162,7 +162,12 @@ const NewEnrollment = () => {
           )}
 
           <Grid item xs={4}>
-            <Button disabled={loading} onClick={onSubmit} fullWidth>
+            <Button
+              data-testid='createEnrollmentButton'
+              disabled={loading}
+              onClick={onSubmit}
+              fullWidth
+            >
               {loading
                 ? 'Submitting...'
                 : numMembers > 1

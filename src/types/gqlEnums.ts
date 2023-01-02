@@ -33,13 +33,12 @@ export const HmisEnums = {
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
   ClientSortOption: {
-    FIRST_NAME_A_TO_Z: 'First Name A To Z',
-    FIRST_NAME_Z_TO_A: 'First Name Z To A',
-    LAST_NAME_A_TO_Z: 'Last Name A To Z',
-    LAST_NAME_Z_TO_A: 'Last Name Z To A',
-    OLDEST_TO_YOUNGEST: 'Oldest To Youngest',
-    RECENTLY_ADDED: 'Recently Added',
-    YOUNGEST_TO_OLDEST: 'Youngest To Oldest',
+    FIRST_NAME_A_TO_Z: 'First Name: A-Z',
+    FIRST_NAME_Z_TO_A: 'First Name: Z-A',
+    LAST_NAME_A_TO_Z: 'Last Name: A-Z',
+    LAST_NAME_Z_TO_A: 'Last Name: Z-A',
+    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
   Component: {
     ALERT_ERROR: 'Display text as an error alert',
@@ -48,11 +47,13 @@ export const HmisEnums = {
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
+    INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SSN: 'SSN input component',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB',
@@ -502,6 +503,7 @@ export const HmisEnums = {
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
     ENROLLMENT: 'Enrollment',
+    ENROLLMENT_COC: 'EnrollmentCoc',
     EXIT: 'Exit',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',

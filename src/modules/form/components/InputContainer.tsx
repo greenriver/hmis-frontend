@@ -14,7 +14,7 @@ const InputContainer = ({
   children: ReactNode;
   horizontal: boolean;
 }) => (
-  <Grid item sx={sx} data-testid='formField'>
+  <Grid item sx={{ ...sx }} data-testid='formField'>
     {children}
     {errors &&
       errors.map(({ message, fullMessage }) => (

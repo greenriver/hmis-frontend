@@ -41,7 +41,7 @@ interface Props extends Omit<DialogProps, 'children'> {
   onCancel: () => void;
 }
 
-const tableComponent = (
+export const tableComponentForType = (
   recordType: RelatedRecordType
 ):
   | typeof IncomeBenefitsTable
@@ -139,7 +139,7 @@ const RecordPickerDialog = ({
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item).map((i) => ({
       key: i.fieldName || undefined,
-      header: i.text || startCase(i.fieldName as string),
+      header: i.briefText || i.text || startCase(i.fieldName as string),
       render: renderHmisField(
         HmisEnums.RelatedRecordType[recordType],
         i.fieldName as string
@@ -148,7 +148,7 @@ const RecordPickerDialog = ({
     return [...commonColumns, ...dataColumns];
   }, [item, recordType]);
 
-  const TableComponent = tableComponent(recordType);
+  const TableComponent = tableComponentForType(recordType);
   if (!TableComponent) {
     console.error('not implemented', item.recordType);
     return null;

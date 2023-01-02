@@ -54,6 +54,7 @@ export interface Props
   warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
+  projectId?: string; // used by picklist query
 }
 
 const DynamicForm: React.FC<
@@ -81,6 +82,7 @@ const DynamicForm: React.FC<
   initiallyDisabledLinkIds, // list of link IDs that are disabled to start, based off definition and initialValues
   showSavePrompt = false,
   horizontal = false,
+  projectId,
 }) => {
   const navigate = useNavigate();
 
@@ -220,6 +222,7 @@ const DynamicForm: React.FC<
           definition,
           values: valuesToSubmit,
         });
+        window.debug = { hudValues };
         console.log(JSON.stringify(hudValues, null, 2));
       } else {
         onSubmit(valuesToSubmit);
@@ -299,6 +302,7 @@ const DynamicForm: React.FC<
           disabled: isDisabled || undefined,
         }}
         horizontal={horizontal}
+        projectId={projectId}
         {...props}
       />
     );

@@ -35,6 +35,14 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientImage($id: ID!) {
+  client(id: $id) {
+    image {
+      ...ClientImageFields
+    }
+  }
+}
+
 query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id

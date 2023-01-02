@@ -16,6 +16,7 @@ import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
+import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import {
@@ -27,6 +28,7 @@ import {
 } from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
+  id?: string;
   disabled?: boolean;
   label?: ReactNode;
   error?: boolean;
@@ -44,6 +46,7 @@ export interface DynamicFieldProps {
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
+  projectId?: string; // used by picklist query
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -85,6 +88,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   horizontal = false,
   errors,
   inputProps,
+  projectId,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -93,7 +97,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     itemChanged(item.linkId, val);
   const label = getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
-  const minWidth = 250;
+  const minWidth = undefined;
   let width;
 
   if (item.size === InputSize.Small || item.type === ItemType.Date) {
@@ -112,30 +116,41 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     disabled,
     label,
     error: !!(errors && errors.length > 0),
+    id: item.linkId,
     ...inputProps,
   };
 
-  const [options, pickListLoading] = usePickList(item, {
-    onCompleted: (data) => {
-      if (!data?.pickList) return;
+  const [options, pickListLoading, isLocalPickList] = usePickList(
+    item,
+    projectId,
+    {
+      fetchPolicy: 'network-only', // Always fetch, because ProjectCoC records may have changed
+      onCompleted: (data) => {
+        if (!data?.pickList) return;
 
-      if (value) {
-        const fullOption = data.pickList.find((o) => o.code === value.code);
-        if (fullOption) {
-          // Update the value so that it shows the complete label
-          itemChanged(item.linkId, fullOption);
+        if (value) {
+          const fullOption = data.pickList.find((o) => o.code === value.code);
+          if (fullOption) {
+            // Update the value so that it shows the complete label
+            itemChanged(item.linkId, fullOption);
+          } else {
+            console.warn(
+              `Selected value '${value.code}' is not present in option list '${item.pickListReference}'`
+            );
+          }
         } else {
-          console.warn(
-            `Selected value '${value.code}' is not present in option list '${item.pickListReference}'`
-          );
+          // Set initial value if applicable
+          const initial = data.pickList.find((o) => o.initialSelected);
+          if (initial) itemChanged(item.linkId, initial);
         }
-      } else {
-        // Set initial value if applicable
-        const initial = data.pickList.find((o) => o.initialSelected);
-        if (initial) itemChanged(item.linkId, initial);
-      }
-    },
-  });
+      },
+    }
+  );
+
+  const placeholder =
+    item.size === InputSize.Xsmall
+      ? undefined
+      : `Select ${item.briefText || item.text}...`;
 
   switch (item.type) {
     case ItemType.Display:
@@ -149,8 +164,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               onChange={(e) =>
                 itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
               }
-              id={item.linkId}
-              name={item.linkId}
               horizontal={horizontal}
               {...commonInputProps}
             />
@@ -162,8 +175,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <YesNoInput
             value={value}
             onChange={onChangeEventValue}
-            id={item.linkId}
-            name={item.linkId}
             nullable={!item.required}
             horizontal={horizontal}
             // includeNullOption
@@ -173,12 +184,28 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.String:
     case ItemType.Text:
+      if (item.component === Component.Ssn)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <SsnInput
+              id={item.linkId}
+              name={item.linkId}
+              value={value || ''}
+              onChange={onChangeValue}
+              sx={{
+                width,
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              }}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+
       const multiline = item.type === ItemType.Text;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
-            id={item.linkId}
-            name={item.linkId}
             value={value || ''}
             onChange={onChangeEvent}
             multiline={multiline}
@@ -198,8 +225,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
-            id={item.linkId}
-            name={item.linkId}
             value={isNil(value) ? '' : value}
             onChange={onChangeEvent}
             horizontal={horizontal}
@@ -222,7 +247,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={value || null}
             onChange={onChangeValue}
             textInputProps={{
-              name: item.linkId,
+              id: item.linkId,
               horizontal,
               sx: { width },
             }}
@@ -243,8 +268,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            placeholder={placeholder}
             textInputProps={{
-              name: item.linkId,
               horizontal,
               sx: {
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
@@ -286,19 +311,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else if (
         item.component === Component.RadioButtons ||
         item.component === Component.RadioButtonsVertical ||
-        (options && options.length > 0 && options.length < 4) ||
-        item.pickListReference === 'NoYesReasonsForMissingData'
+        (isLocalPickList && options && options.length > 0 && options.length < 4)
       ) {
         inputComponent = (
           <RadioGroupInput
-            sx={{ mb: 1 }}
             value={selectedVal}
             onChange={onChangeValue}
-            id={item.linkId}
-            name={item.linkId}
             options={options || []}
             row={item.component !== Component.RadioButtonsVertical}
             clearable
+            checkbox
             {...commonInputProps}
           />
           // <ToggleButtonGroupInput
@@ -320,10 +342,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
+            placeholder={placeholder}
             textInputProps={{
               name: item.linkId,
               horizontal,
               sx: {
+                width,
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
                 '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
               },
