@@ -93,7 +93,7 @@ mutation SubmitAssessment(
     }
   ) {
     assessment {
-      ...AssessmentFields
+      ...AssessmentWithDefinitionAndValues
     }
     errors {
       ...ValidationErrorFields

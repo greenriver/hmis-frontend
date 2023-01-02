@@ -8,24 +8,38 @@ import {
 } from '@/types/gqlTypes';
 
 describe('formValueToGqlValue', () => {
-  it('removes empty strings', () => {
+  it('transform value into string', () => {
     const item = { linkId: 'abc', type: ItemType.String };
     expect(formValueToGqlValue('', item)).toBe(undefined);
-  });
-
-  it('leaves nulls, strings, and integers', () => {
-    const item = { linkId: 'abc', type: ItemType.String };
-
-    expect(formValueToGqlValue(null, item)).toBe(null);
-    expect(formValueToGqlValue(undefined, item)).toBe(undefined);
-    expect(formValueToGqlValue(0, item)).toBe(0);
-    expect(formValueToGqlValue(10, item)).toBe(10);
     expect(formValueToGqlValue('value', item)).toBe('value');
   });
 
-  it('transforms dates', () => {
+  it('leaves nulls and undefined as-is', () => {
+    const item = { linkId: 'abc', type: ItemType.String };
+    expect(formValueToGqlValue(null, item)).toBe(null);
+    expect(formValueToGqlValue(undefined, item)).toBe(undefined);
+  });
+
+  it('transforms value into date string', () => {
     const item = { linkId: 'abc', type: ItemType.Date };
     expect(formValueToGqlValue(new Date(2020, 0, 31), item)).toBe('2020-01-31');
+    expect(formValueToGqlValue('2020-01-31', item)).toBe('2020-01-31');
+    expect(formValueToGqlValue('2020-01-31T05:00:00.000Z', item)).toBe(
+      '2020-01-31'
+    );
+    expect(formValueToGqlValue('not-a-valid-date', item)).toBe(undefined);
+    expect(formValueToGqlValue(new Date('invalid'), item)).toBe(undefined);
+    expect(formValueToGqlValue('', item)).toBe(undefined);
+  });
+
+  it('transforms value into integer', () => {
+    const item = { linkId: 'abc', type: ItemType.Integer };
+    expect(formValueToGqlValue(1, item)).toBe(1);
+    expect(formValueToGqlValue(-1, item)).toBe(-1);
+    expect(formValueToGqlValue(0, item)).toBe(0);
+    expect(formValueToGqlValue('100', item)).toBe(100);
+    expect(formValueToGqlValue('00100', item)).toBe(100);
+    expect(formValueToGqlValue('not a number', item)).toBe(undefined);
   });
 
   it('transforms single-select choice', () => {

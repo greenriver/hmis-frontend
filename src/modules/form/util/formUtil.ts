@@ -319,7 +319,6 @@ export const autofillValues = (
   if (!item.autofillValues) return false;
 
   // use `some` to stop iterating when true is returned
-  console.log(item.autofillValues);
   return item.autofillValues.some((av) => {
     // Evaluate all enableWhen conditions
     const booleans = (av.autofillWhen || []).map((en) =>

@@ -222,6 +222,7 @@ const DynamicForm: React.FC<
           definition,
           values: valuesToSubmit,
         });
+        window.debug = { hudValues };
         console.log(JSON.stringify(hudValues, null, 2));
       } else {
         onSubmit(valuesToSubmit);
