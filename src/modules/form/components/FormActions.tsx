@@ -30,6 +30,7 @@ const FormActions = ({
   >
     <Stack direction='row' spacing={2}>
       <Button
+        data-testid='submitFormButton'
         variant='contained'
         type='submit'
         disabled={disabled}
@@ -40,6 +41,7 @@ const FormActions = ({
       </Button>
       {onSaveDraft && (
         <Button
+          data-testid='saveFormButton'
           variant='outlined'
           type='submit'
           disabled={disabled}
@@ -51,11 +53,15 @@ const FormActions = ({
       )}
     </Stack>
     {onDiscard && typeof onDiscard === 'string' ? (
-      <ButtonLink variant='gray' to={onDiscard}>
+      <ButtonLink data-testid='discardFormButton' variant='gray' to={onDiscard}>
         {discardButtonText}
       </ButtonLink>
     ) : (
-      <Button variant='gray' onClick={onDiscard as MouseEventHandler}>
+      <Button
+        data-testid='discardFormButton'
+        variant='gray'
+        onClick={onDiscard as MouseEventHandler}
+      >
         {discardButtonText}
       </Button>
     )}

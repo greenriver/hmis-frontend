@@ -106,11 +106,17 @@ const RadioGroupInput = ({
         >
           {options.map(({ code, label }) => (
             <FormControlLabel
+              data-testid={`option-${code}`}
               disabled={props.disabled}
               value={code}
               aria-label={label || code}
               onClick={(e) => onClickOption(e, code)}
-              control={<ControlComponent onKeyDown={onKeyDown} />}
+              control={
+                <ControlComponent
+                  onKeyDown={onKeyDown}
+                  data-checked={value?.code === code ? true : false}
+                />
+              }
               checked={value?.code === code ? true : false}
               key={code}
               label={label || code}

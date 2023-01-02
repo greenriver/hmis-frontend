@@ -16,6 +16,7 @@ import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
+import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import {
@@ -27,6 +28,7 @@ import {
 } from '@/types/gqlTypes';
 
 export interface DynamicInputCommonProps {
+  id?: string;
   disabled?: boolean;
   label?: ReactNode;
   error?: boolean;
@@ -115,6 +117,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     label,
     error: !!(errors && errors.length > 0),
     helperText: item.helperText,
+    id: item.linkId,
     ...inputProps,
   };
 
@@ -162,8 +165,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               onChange={(e) =>
                 itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
               }
-              id={item.linkId}
-              name={item.linkId}
               horizontal={horizontal}
               {...commonInputProps}
             />
@@ -175,8 +176,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <YesNoInput
             value={value}
             onChange={onChangeEventValue}
-            id={item.linkId}
-            name={item.linkId}
             nullable={!item.required}
             horizontal={horizontal}
             // includeNullOption
@@ -186,12 +185,28 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.String:
     case ItemType.Text:
+      if (item.component === Component.Ssn)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <SsnInput
+              id={item.linkId}
+              name={item.linkId}
+              value={value || ''}
+              onChange={onChangeValue}
+              sx={{
+                width,
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              }}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+
       const multiline = item.type === ItemType.Text;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <TextInput
-            id={item.linkId}
-            name={item.linkId}
             value={value || ''}
             onChange={onChangeEvent}
             multiline={multiline}
@@ -211,8 +226,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <NumberInput
-            id={item.linkId}
-            name={item.linkId}
             value={isNil(value) ? '' : value}
             onChange={onChangeEvent}
             horizontal={horizontal}
@@ -235,7 +248,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={value || null}
             onChange={onChangeValue}
             textInputProps={{
-              name: item.linkId,
+              id: item.linkId,
               horizontal,
               sx: { width },
             }}
@@ -258,7 +271,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             loading={pickListLoading}
             placeholder={placeholder}
             textInputProps={{
-              name: item.linkId,
               horizontal,
               sx: {
                 maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
@@ -306,8 +318,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           <RadioGroupInput
             value={selectedVal}
             onChange={onChangeValue}
-            id={item.linkId}
-            name={item.linkId}
             options={options || []}
             row={item.component !== Component.RadioButtonsVertical}
             clearable

@@ -1,5 +1,5 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
-import { isNumber, pick, reduce } from 'lodash-es';
+import { isFinite, pick, reduce } from 'lodash-es';
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { maxWidthAtNestingLevel } from '../DynamicField';
@@ -48,7 +48,7 @@ const InputGroup = ({
         relevant,
         (sum, value) => {
           const val = parseFloat(value);
-          return isNumber(val) && !isNaN(val) ? sum + val : sum;
+          return isFinite(val) ? sum + val : sum;
         },
         0
       );
@@ -126,7 +126,7 @@ const InputGroup = ({
   }, [renderChildItem, childItems, childProps, childRenderFunc]);
 
   return (
-    <Box sx={{ pt: 2, pl: nestingLevel === 0 ? 2 : undefined }}>
+    <Box sx={{ pt: 2 }} id={item.linkId}>
       {item.text && <Typography>{item.text}</Typography>}
       {wrappedChildren}
       {isNumeric && summaryItem && (
@@ -143,7 +143,7 @@ const InputGroup = ({
           }}
         >
           <Typography>{summaryItem.text || 'Total'}</Typography>
-          <Typography sx={{ width: '120px', pl: 1 }}>
+          <Typography sx={{ width: '120px', pl: 1 }} data-testid='inputSum'>
             {childItemType === ItemType.Currency
               ? formatCurrency(values[summaryItem.linkId] || 0)
               : values[summaryItem.linkId] || 0}

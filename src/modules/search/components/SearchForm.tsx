@@ -166,7 +166,9 @@ const SearchForm: React.FC<SearchFormProps> = ({
               onChange={(_, selectedOption) => {
                 fieldChanged('projects', selectedOption);
               }}
-              textInputProps={{ placeholder: 'Choose projects...' }}
+              textInputProps={{
+                placeholder: 'Choose projects...',
+              }}
               multiple
             />
           </Grid>

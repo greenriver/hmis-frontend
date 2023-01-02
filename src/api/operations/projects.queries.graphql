@@ -16,6 +16,16 @@ query GetProject($id: ID!) {
   }
 }
 
+query OmniSearchProjects($input: ProjectSearchInput!) {
+  projectSearch(input: $input, limit: 5) {
+    limit
+    nodesCount
+    nodes {
+      ...ProjectOmniSearchFields
+    }
+  }
+}
+
 mutation DeleteProject($input: DeleteProjectInput!) {
   deleteProject(input: $input) {
     clientMutationId

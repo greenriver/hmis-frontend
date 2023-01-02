@@ -24,7 +24,7 @@ query OmniSearchClients($input: ClientSearchInput!) {
     limit
     nodesCount
     nodes {
-      ...ClientFields
+      ...ClientOmniSearchFields
     }
   }
 }
@@ -32,6 +32,14 @@ query OmniSearchClients($input: ClientSearchInput!) {
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields
+  }
+}
+
+query GetClientImage($id: ID!) {
+  client(id: $id) {
+    image {
+      ...ClientImageFields
+    }
   }
 }
 

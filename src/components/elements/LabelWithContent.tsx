@@ -4,6 +4,7 @@ import {
   InputLabelProps,
   BoxProps,
   useTheme,
+  Typography,
 } from '@mui/material';
 import React, { useRef } from 'react';
 
@@ -13,6 +14,7 @@ export type LabelWithContentProps = {
   LabelProps?: InputLabelProps;
   children?: React.ReactNode;
   renderChildren?: (label: HTMLLabelElement | null) => React.ReactNode;
+  helperText?: React.ReactNode;
 } & BoxProps;
 
 const LabelWithContent = ({
@@ -21,6 +23,7 @@ const LabelWithContent = ({
   labelId,
   renderChildren,
   LabelProps = {},
+  helperText,
   ...props
 }: LabelWithContentProps): JSX.Element => {
   const theme = useTheme();
@@ -42,6 +45,15 @@ const LabelWithContent = ({
       <Box sx={{ marginTop: 0.5 }}>
         {renderChildren ? renderChildren(labelRef.current) : children}
       </Box>
+      {helperText && (
+        <Typography
+          variant='body2'
+          color='textSecondary'
+          sx={{ fontSize: 12, mt: 0.5 }}
+        >
+          {helperText}
+        </Typography>
+      )}
     </Box>
   );
 };

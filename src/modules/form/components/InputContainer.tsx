@@ -14,7 +14,6 @@ const InputContainer = ({
   children: ReactNode;
   horizontal: boolean;
 }) => (
-  // FIXME need margin when wrapping, but too much space
   <Grid item sx={{ ...sx }} data-testid='formField'>
     {children}
     {errors &&

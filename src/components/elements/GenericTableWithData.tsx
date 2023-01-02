@@ -3,12 +3,14 @@ import {
   useQuery,
   WatchQueryFetchPolicy,
 } from '@apollo/client';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { get, startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
 
 import Pagination from './Pagination';
 
+import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
@@ -173,4 +175,18 @@ const GenericTableWithData = <
   );
 };
 
-export default GenericTableWithData;
+const WrappedGenericTableWithData = <
+  Query,
+  QueryVariables,
+  RowDataType extends { id: string }
+>(
+  props: Props<Query, QueryVariables, RowDataType>
+) => (
+  <Box>
+    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
+      <GenericTableWithData {...props} />
+    </Sentry.ErrorBoundary>
+  </Box>
+);
+
+export default WrappedGenericTableWithData;

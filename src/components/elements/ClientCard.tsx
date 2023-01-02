@@ -29,6 +29,7 @@ import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   useGetClientEnrollmentsQuery,
+  useGetClientImageQuery,
 } from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
@@ -109,132 +110,157 @@ const ClientCard: React.FC<Props> = ({
   showEditLink = false,
   showLinkToRecord = false,
   linkTargetBlank = false,
-}) => (
-  <Card sx={{ mb: 2, p: 2 }}>
-    {showNotices && (
-      <Grid container spacing={4} justifyContent='space-between'>
-        <Grid item xs={4}>
-          <Alert severity='error'>An immediate action needs to be taken</Alert>
+}) => {
+  const { data, loading: imageLoading = false } = useGetClientImageQuery({
+    variables: { id: client.id },
+  });
+  const { base64, contentType = 'image/png' } = data?.client?.image || {};
+  return (
+    <Card sx={{ mb: 2, p: 2 }}>
+      {showNotices && (
+        <Grid container spacing={4} justifyContent='space-between'>
+          <Grid item xs={4}>
+            <Alert severity='error'>
+              An immediate action needs to be taken
+            </Alert>
+          </Grid>
+          <Grid item xs={4}>
+            <Alert severity='info'>Information notes</Alert>
+          </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Alert severity='info'>Information notes</Alert>
-        </Grid>
-      </Grid>
-    )}
-    <Grid container sx={{ p: 1 }}>
-      <Grid item xs={5}>
-        <Stack spacing={1}>
-          <Stack direction='row' spacing={1}>
-            <Typography variant='h5'>{clientName(client)}</Typography>
-            {!isEmpty(client.pronouns) && (
-              <Typography variant='h5' color='text.secondary'>
-                ({pronouns(client)})
-              </Typography>
-            )}
-          </Stack>
-          <Stack spacing={1} direction='row'>
-            <Box
-              component='img'
-              alt='client'
-              src='https://dummyimage.com/150x150/e8e8e8/aaa'
-              sx={{
-                height: 150,
-                width: 150,
-                mr: 1,
-              }}
-            />
-            <Stack spacing={0.5} sx={{ pr: 1 }}>
-              <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
-                ID {client.personalId}
-              </Typography>
-              {client.dob && (
-                <ClickToShow text='Date of Birth' variant='body2'>
-                  <Typography variant='body2'>{dob(client)}</Typography>
-                </ClickToShow>
-              )}
-              {client.ssn && (
-                <ClickToShow text='SSN' variant='body2'>
-                  <Typography variant='body2'>{client.ssn}</Typography>
-                </ClickToShow>
-              )}
-              {client.dob && (
-                <Typography variant='body2'>
-                  Current Age: {age(client)}
+      )}
+      <Grid container sx={{ p: 1 }}>
+        <Grid item xs={5}>
+          <Stack spacing={1}>
+            <Stack direction='row' spacing={1}>
+              <Typography variant='h5'>{clientName(client)}</Typography>
+              {!isEmpty(client.pronouns) && (
+                <Typography variant='h5' color='text.secondary'>
+                  ({pronouns(client)})
                 </Typography>
               )}
-              {showLinkToRecord && (
-                <Box sx={{ pt: 1 }}>
-                  <ButtonLink
-                    data-testid='goToProfileButton'
-                    variant='contained'
-                    to={`/client/${client.id}`}
-                    target={linkTargetBlank ? '_blank' : undefined}
-                    color='secondary'
-                  >
-                    Go to Profile
-                  </ButtonLink>
-                </Box>
-              )}
-              {showEditLink && (
-                <Box sx={{ pt: 1 }}>
-                  <ButtonLink
-                    data-testid='editClientButton'
-                    variant='contained'
-                    to={generatePath(DashboardRoutes.EDIT, {
-                      clientId: client.id,
-                    })}
-                    target={linkTargetBlank ? '_blank' : undefined}
-                    color='secondary'
-                    size='small'
-                  >
-                    Update Client Details
-                  </ButtonLink>
-                </Box>
-              )}
             </Stack>
+            <Stack spacing={1} direction='row'>
+              {imageLoading ? (
+                <Skeleton
+                  variant='rectangular'
+                  sx={{
+                    height: 150,
+                    width: 150,
+                    mr: 1,
+                  }}
+                />
+              ) : (
+                <Box
+                  component='img'
+                  alt='client'
+                  src={
+                    base64
+                      ? `data:${contentType};base64,${base64}`
+                      : 'https://dummyimage.com/150x150/e8e8e8/aaa'
+                  }
+                  sx={{
+                    height: 150,
+                    width: 150,
+                    mr: 1,
+                  }}
+                />
+              )}
+
+              <Stack spacing={0.5} sx={{ pr: 1 }}>
+                <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
+                  ID {client.personalId}
+                </Typography>
+                {client.dob && (
+                  <ClickToShow text='Date of Birth' variant='body2'>
+                    <Typography variant='body2'>{dob(client)}</Typography>
+                  </ClickToShow>
+                )}
+                {client.ssn && (
+                  <ClickToShow text='SSN' variant='body2'>
+                    <Typography variant='body2'>{client.ssn}</Typography>
+                  </ClickToShow>
+                )}
+                {client.dob && (
+                  <Typography variant='body2'>
+                    Current Age: {age(client)}
+                  </Typography>
+                )}
+                {showLinkToRecord && (
+                  <Box sx={{ pt: 1 }}>
+                    <ButtonLink
+                      data-testid='goToProfileButton'
+                      variant='contained'
+                      to={`/client/${client.id}`}
+                      target={linkTargetBlank ? '_blank' : undefined}
+                      color='secondary'
+                    >
+                      Go to Profile
+                    </ButtonLink>
+                  </Box>
+                )}
+                {showEditLink && (
+                  <Box sx={{ pt: 1 }}>
+                    <ButtonLink
+                      data-testid='editClientButton'
+                      variant='contained'
+                      to={generatePath(DashboardRoutes.EDIT, {
+                        clientId: client.id,
+                      })}
+                      target={linkTargetBlank ? '_blank' : undefined}
+                      color='secondary'
+                      size='small'
+                    >
+                      Update Client Details
+                    </ButtonLink>
+                  </Box>
+                )}
+              </Stack>
+            </Stack>
+            <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+              Last Updated on {lastUpdated(client)}
+            </Typography>
           </Stack>
-          <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-            Last Updated on {lastUpdated(client)}
+        </Grid>
+        <Grid item xs={5}>
+          <Typography variant='h6' sx={{ mb: 1 }}>
+            Recent Enrollments
           </Typography>
-        </Stack>
+          <RecentEnrollments
+            clientId={client.id}
+            linkTargetBlank={linkTargetBlank}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <Typography variant='h6' sx={{ mb: 1 }}>
+            Actions
+          </Typography>
+          <Stack spacing={1}>
+            <ButtonLink
+              fullWidth
+              variant='outlined'
+              color='secondary'
+              data-testid='enrollButton'
+              to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+                clientId: client.id,
+              })}
+            >
+              Enroll
+            </ButtonLink>
+            <Button fullWidth variant='outlined' color='error'>
+              Exit
+            </Button>
+            <Button variant='outlined' color='secondary'>
+              Case Notes
+            </Button>
+            <Button variant='outlined' color='secondary'>
+              Add Service
+            </Button>
+          </Stack>
+        </Grid>
       </Grid>
-      <Grid item xs={5}>
-        <Typography variant='h6' sx={{ mb: 1 }}>
-          Recent Enrollments
-        </Typography>
-        <RecentEnrollments
-          clientId={client.id}
-          linkTargetBlank={linkTargetBlank}
-        />
-      </Grid>
-      <Grid item xs={2}>
-        <Typography variant='h6' sx={{ mb: 1 }}>
-          Actions
-        </Typography>
-        <Stack spacing={1}>
-          <ButtonLink
-            fullWidth
-            variant='outlined'
-            color='secondary'
-            to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
-              clientId: client.id,
-            })}
-          >
-            Enroll
-          </ButtonLink>
-          <Button fullWidth variant='outlined' color='error'>
-            Exit
-          </Button>
-          <Button variant='outlined' color='secondary'>
-            Case Notes
-          </Button>
-          <Button variant='outlined' color='secondary'>
-            Add Service
-          </Button>
-        </Stack>
-      </Grid>
-    </Grid>
-  </Card>
-);
+    </Card>
+  );
+};
 
 export default ClientCard;
