@@ -1,13 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Slide,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Alert, Box, Grid, Stack, Typography } from '@mui/material';
 import { isNil, omit, pull } from 'lodash-es';
 import React, {
   ReactNode,
@@ -37,6 +28,8 @@ import { transformSubmitValues } from '../util/recordFormUtil';
 
 import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
+import FormActions, { FormActionProps } from './FormActions';
+import SaveSlide from './SaveSlide';
 
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import {
@@ -47,20 +40,21 @@ import {
   ValidationError,
 } from '@/types/gqlTypes';
 
-export interface Props {
+export interface Props
+  extends Omit<
+    FormActionProps,
+    'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
+  > {
   definition: FormDefinitionJson;
   onSubmit: (values: FormValues, confirmed?: boolean) => void;
   onSaveDraft?: (values: FormValues) => void;
-  onDiscard?: () => void;
-  submitButtonText?: string;
-  saveDraftButtonText?: string;
-  discardButtonText?: string;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
+  projectId?: string; // used by picklist query
 }
 
 const DynamicForm: React.FC<
@@ -88,6 +82,7 @@ const DynamicForm: React.FC<
   initiallyDisabledLinkIds, // list of link IDs that are disabled to start, based off definition and initialValues
   showSavePrompt = false,
   horizontal = false,
+  projectId,
 }) => {
   const navigate = useNavigate();
 
@@ -95,7 +90,7 @@ const DynamicForm: React.FC<
 
   const [dialogDismissed, setDialogDismissed] = useState<boolean>(false);
   const saveButtonsRef = React.createRef<HTMLDivElement>();
-  const isSaveButtonVisible = useElementInView(saveButtonsRef, '0px');
+  const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
   useEffect(() => {
     if (isNil(promptSave)) return;
@@ -227,6 +222,7 @@ const DynamicForm: React.FC<
           definition,
           values: valuesToSubmit,
         });
+        window.debug = { hudValues };
         console.log(JSON.stringify(hudValues, null, 2));
       } else {
         onSubmit(valuesToSubmit);
@@ -306,6 +302,7 @@ const DynamicForm: React.FC<
           disabled: isDisabled || undefined,
         }}
         horizontal={horizontal}
+        projectId={projectId}
         {...props}
       />
     );
@@ -316,31 +313,16 @@ const DynamicForm: React.FC<
   };
 
   const saveButtons = (
-    <Stack direction='row' spacing={1}>
-      <Button variant='gray' onClick={onDiscard || (() => navigate(-1))}>
-        {discardButtonText || 'Discard'}
-      </Button>
-      {onSaveDraft && (
-        <Button
-          variant='outlined'
-          type='submit'
-          disabled={!!loading}
-          onClick={handleSaveDraft}
-        >
-          {loading
-            ? 'Saving...'
-            : saveDraftButtonText || 'Save and Finish Later'}
-        </Button>
-      )}
-      <Button
-        variant='contained'
-        type='submit'
-        disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
-        onClick={handleSubmit}
-      >
-        {loading ? 'Saving...' : submitButtonText || 'Submit'}
-      </Button>
-    </Stack>
+    <FormActions
+      onSubmit={handleSubmit}
+      onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+      onDiscard={onDiscard || (() => navigate(-1))}
+      submitButtonText={submitButtonText}
+      saveDraftButtonText={saveDraftButtonText}
+      discardButtonText={discardButtonText}
+      disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
+      loading={loading}
+    />
   );
 
   return (
@@ -385,29 +367,14 @@ const DynamicForm: React.FC<
       )}
 
       {showSavePrompt && (
-        <Slide in={promptSave} appear timeout={300} direction='up'>
-          <Paper
-            elevation={2}
-            square
-            sx={{
-              position: 'fixed',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              flexDirection: 'row-reverse',
-              opacity: 0.9,
-              py: 2,
-              px: 8,
-            }}
-          >
-            <Stack direction='row' spacing={3} alignItems='center'>
-              {/* <Typography>There are unsaved changes.</Typography> */}
-              {saveButtons}
-            </Stack>
-          </Paper>
-        </Slide>
+        <SaveSlide
+          in={promptSave && !isSaveButtonVisible}
+          appear
+          timeout={300}
+          direction='up'
+        >
+          {saveButtons}
+        </SaveSlide>
       )}
     </Box>
   );

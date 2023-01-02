@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty, omit } from 'lodash-es';
+import { isEmpty, omit, omitBy, isNil, trim } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -52,6 +52,34 @@ const SearchForm: React.FC<SearchFormProps> = ({
   const hasInitialAdvanced = !isEmpty(omit(initialValues, defaultSearchKeys));
   const [expanded, setExpanded] = useState(hasInitialAdvanced);
 
+  const [textSearchError, setTextSearchError] = useState<string | undefined>(
+    undefined
+  );
+
+  const validateSearchFormInput = useCallback(
+    (values: Record<string, any>) => {
+      const errors: Record<keyof typeof values, string> = {};
+
+      if (isEmpty(omitBy(values, (e) => isNil(e) || isEmpty(e)))) {
+        errors.textSearch = t<string>('clientSearch.missingCriteria');
+      } else {
+        if (
+          values.textSearch &&
+          typeof values.textSearch === 'string' &&
+          isEmpty(omit(values, ['textSearch'])) &&
+          trim(values.textSearch).length < 3
+        ) {
+          errors.textSearch = hideAdvanced
+            ? t<string>('clientSearch.inputTooShort')
+            : t<string>('clientSearch.inputTooShortAllowAdvanced');
+        }
+      }
+
+      return errors;
+    },
+    [t, hideAdvanced]
+  );
+
   const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -77,10 +105,22 @@ const SearchForm: React.FC<SearchFormProps> = ({
           projects: values.projects.map((p) => p.code),
         }),
       };
+
       console.debug('Search', input);
+
+      const errors = validateSearchFormInput(input);
+
+      if (!isEmpty(errors)) {
+        console.error('Invalid Search', { errors });
+        if (errors.textSearch) setTextSearchError(errors.textSearch);
+        return;
+      } else {
+        setTextSearchError(undefined);
+      }
+
       onSubmit(input);
     },
-    [values, definition, onSubmit]
+    [values, definition, onSubmit, validateSearchFormInput]
   );
 
   const submitOnEnter = (event: React.KeyboardEvent) => {
@@ -101,6 +141,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
         <Grid item xs={5}>
           <TextInput
+            name='textSearch'
             label='Search Clients'
             placeholder={
               hideInstructions
@@ -113,6 +154,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
               fieldChanged('textSearch', e.target.value);
             }}
             onKeyUp={submitOnEnter}
+            helperText={textSearchError}
+            error={!!textSearchError}
           />
         </Grid>
         {!hideProject && (
@@ -123,7 +166,9 @@ const SearchForm: React.FC<SearchFormProps> = ({
               onChange={(_, selectedOption) => {
                 fieldChanged('projects', selectedOption);
               }}
-              textInputProps={{ placeholder: 'Choose projects...' }}
+              textInputProps={{
+                placeholder: 'Choose projects...',
+              }}
               multiple
             />
           </Grid>

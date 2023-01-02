@@ -58,7 +58,8 @@ const FunderTable = ({ projectId, ...props }: Props) => {
         const id = res.deleteFunder?.funder?.id;
         if (id) {
           setDelete(null);
-          cache.evict({ id: `Funder:${id}` });
+          // Force re-fetch table
+          cache.evict({ id: `Project:${projectId}`, fieldName: 'funders' });
         }
       },
     });
@@ -85,7 +86,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Edit
+              Update
             </ButtonLink>
             <Button
               onClick={() => setDelete(record)}

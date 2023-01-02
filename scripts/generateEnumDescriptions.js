@@ -27,6 +27,30 @@ const SORT_FIRST = {
   NoYesReasonsForMissingData: ['YES'],
 };
 
+const DESCRIPTIONS_OVERRIDES = {
+  DOBDataQuality: {
+    APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Partial DOB',
+    FULL_DOB_REPORTED: 'Full DOB',
+  },
+  SSNDataQuality: {
+    APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
+    FULL_SSN_REPORTED: 'Full SSN',
+  },
+  NameDataQuality: {
+    FULL_NAME_REPORTED: 'Full name',
+    PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
+      'Partial, street name, or code name',
+  },
+};
+
+const POSITION_MAPS = {
+  ClientSortOption: [
+    (desc) => desc.match(/^First Name/),
+    (desc) => desc.match(/^Last Name/),
+    (desc) => desc.match(/^Age/),
+  ],
+};
+
 const alphabeticalCompare = (first, second) => {
   const m = first.description.match(CODE_PATTERN_NUMERIC);
   const m2 = second.description.match(CODE_PATTERN_NUMERIC);
@@ -38,6 +62,15 @@ const alphabeticalCompare = (first, second) => {
   }
 
   return first.description.localeCompare(second.description);
+};
+
+const positionCompare = (first, second, positionMap) => {
+  const n1 = positionMap.findIndex((f) => f(first.description));
+  const n2 = positionMap.findIndex((f) => f(second.description));
+
+  if (n1 > n2) return 1;
+  if (n1 < n2) return -1;
+  return alphabeticalCompare(first, second);
 };
 
 // Get numeric sort value from enum value
@@ -72,12 +105,19 @@ schema.__schema.types.forEach((type) => {
     // we might want to drop that from some, like race/gender
     const enumValues = type.enumValues
       // .filter((a) => !!a.description)
+      .map((val) => ({
+        ...val,
+        description:
+          DESCRIPTIONS_OVERRIDES[type]?.[val.name] || val.description,
+      }))
       .sort((a, b) => {
         if (!a.description || !b.description) return 1;
 
         if (ALPHABETICAL.includes(type.name)) {
           return alphabeticalCompare(a, b);
         }
+        if (type.name in POSITION_MAPS)
+          return positionCompare(a, b, POSITION_MAPS[type.name]);
         const first = getSortValue(a, type.name);
         const second = getSortValue(b, type.name);
         if (first !== null && second !== null) return first - second;
@@ -109,9 +149,10 @@ schema.__schema.types.forEach((type) => {
 
     const values = enumValues.map((elem) => {
       let description = elem.description?.replaceAll(/\n/g, ' ') || elem.name;
-      // if (enumValues.length < 15) {
       description = description.replace(CODE_PATTERN, '');
-      // }
+      if (DESCRIPTIONS_OVERRIDES[type.name]?.[elem.name]) {
+        description = DESCRIPTIONS_OVERRIDES[type.name]?.[elem.name];
+      }
       return `${elem.name}: "${description}"`;
     });
 

@@ -8,7 +8,8 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { Fragment } from 'react';
+import { isEmpty } from 'lodash-es';
+import { Fragment, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from './ButtonLink';
@@ -22,6 +23,7 @@ import {
   dob,
   age,
   entryExitRange,
+  isRecentEnrollment,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -46,36 +48,50 @@ const RecentEnrollments = ({
     variables: { id: clientId },
   });
 
+  const recentEnrollments = useMemo(
+    () =>
+      client
+        ? client.enrollments.nodes.filter((enrollment) =>
+            isRecentEnrollment(enrollment)
+          )
+        : undefined,
+    [client]
+  );
+
   if (error) throw error;
   if (loading || !client)
     return <Skeleton variant='rectangular' width={230} height={150} />;
 
-  if (client.enrollments.nodesCount === 0)
+  if (recentEnrollments && recentEnrollments.length === 0)
     return <Typography>None.</Typography>;
 
   return (
     <Grid container spacing={0.5}>
-      {client.enrollments.nodes.map((enrollment) => (
-        <Fragment key={enrollment.id}>
-          <Grid item xs={6}>
-            <RouterLink
-              to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                clientId: client.id,
-                enrollmentId: enrollment.id,
-              })}
-              target={linkTargetBlank ? '_blank' : undefined}
-              variant='body2'
-            >
-              {enrollment.project.projectName}
-            </RouterLink>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant='body2' sx={{ ml: 1, color: 'text.secondary' }}>
-              {entryExitRange(enrollment)}
-            </Typography>
-          </Grid>
-        </Fragment>
-      ))}
+      {recentEnrollments &&
+        recentEnrollments.map((enrollment) => (
+          <Fragment key={enrollment.id}>
+            <Grid item xs={6}>
+              <RouterLink
+                to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                  clientId: client.id,
+                  enrollmentId: enrollment.id,
+                })}
+                target={linkTargetBlank ? '_blank' : undefined}
+                variant='body2'
+              >
+                {enrollment.project.projectName}
+              </RouterLink>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography
+                variant='body2'
+                sx={{ ml: 1, color: 'text.secondary' }}
+              >
+                {entryExitRange(enrollment)}
+              </Typography>
+            </Grid>
+          </Fragment>
+        ))}
     </Grid>
   );
 };
@@ -118,9 +134,11 @@ const ClientCard: React.FC<Props> = ({
           <Stack spacing={1}>
             <Stack direction='row' spacing={1}>
               <Typography variant='h5'>{clientName(client)}</Typography>
-              <Typography variant='h5' color='text.secondary'>
-                {pronouns(client)}
-              </Typography>
+              {!isEmpty(client.pronouns) && (
+                <Typography variant='h5' color='text.secondary'>
+                  ({pronouns(client)})
+                </Typography>
+              )}
             </Stack>
             <Stack spacing={1} direction='row'>
               {imageLoading ? (
@@ -171,6 +189,7 @@ const ClientCard: React.FC<Props> = ({
                 {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink
+                      data-testid='goToProfileButton'
                       variant='contained'
                       to={`/client/${client.id}`}
                       target={linkTargetBlank ? '_blank' : undefined}
@@ -183,6 +202,7 @@ const ClientCard: React.FC<Props> = ({
                 {showEditLink && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink
+                      data-testid='editClientButton'
                       variant='contained'
                       to={generatePath(DashboardRoutes.EDIT, {
                         clientId: client.id,
@@ -191,7 +211,7 @@ const ClientCard: React.FC<Props> = ({
                       color='secondary'
                       size='small'
                     >
-                      Edit Client Details
+                      Update Client Details
                     </ButtonLink>
                   </Box>
                 )}
@@ -220,6 +240,7 @@ const ClientCard: React.FC<Props> = ({
               fullWidth
               variant='outlined'
               color='secondary'
+              data-testid='enrollButton'
               to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
                 clientId: client.id,
               })}

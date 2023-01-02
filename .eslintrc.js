@@ -37,7 +37,11 @@ module.exports = {
         // 'plugin:@typescript-eslint/recommended-requiring-type-checking',
       ],
       parserOptions: {
-        project: ['./tsconfig.json'],
+        project: [
+          './tsconfig.json',
+          './cypress/tsconfig.json',
+          './cypress.config.ts',
+        ],
       },
       rules: {
         'import/extensions': 'off',
@@ -96,5 +100,10 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
   },
-  ignorePatterns: ['jest.config.ts', 'gqltypes.ts'],
+  ignorePatterns: [
+    'jest.config.ts',
+    'gqltypes.ts',
+    'cypress.config.ts',
+    'serverMock',
+  ],
 };

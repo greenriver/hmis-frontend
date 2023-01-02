@@ -29,6 +29,7 @@ import SearchForm, {
 import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
 import {
   ClientFieldsFragment,
+  ClientSortOption,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
 
@@ -112,13 +113,23 @@ const ClientSearch: React.FC<Props> = ({
   const [cards, setCards] = useState<boolean>(false);
   // whether user has manually selected display format
   const [hasSetCards, setHasSetCards] = useState<boolean>(false);
+  // Sort option
+  const [sortOrder, setSortOrder] = useState<ClientSortOption>(
+    ClientSortOption.LastNameAToZ
+  );
   const [offset, setOffset] = useState(0);
+
+  const handleSetSortOrder: typeof setSortOrder = useCallback((value) => {
+    setOffset(0);
+    return setSortOrder(value);
+  }, []);
 
   const [searchClients, { data, loading, error }] = useSearchClientsLazyQuery({
     variables: {
       input: {},
       limit: pageSize,
       offset,
+      sortOrder,
     },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'network-only',
@@ -147,11 +158,11 @@ const ClientSearch: React.FC<Props> = ({
       setInitialValues(initState);
       // Perform search using the cache so when you nav back/forward it doesn't refetch
       searchClients({
-        variables: { input: variables },
+        variables: { input: variables, sortOrder },
         fetchPolicy: 'cache-first',
       });
     }
-  }, [derivedSearchParams, searchParams, searchClients]);
+  }, [derivedSearchParams, searchParams, searchClients, sortOrder]);
 
   // When form is submitted, update the search parameters and perform the search
   const handleSubmitSearch = useMemo(() => {
@@ -170,11 +181,10 @@ const ClientSearch: React.FC<Props> = ({
     };
   }, [searchClients, setSearchParams, setDerivedSearchParams]);
 
-  const handleChangeDisplayType = useMemo(() => {
-    return (_: any, checked: boolean) => {
-      setCards(checked);
-      setHasSetCards(true);
-    };
+  const handleChangeDisplayType = useCallback((_: any, checked: boolean) => {
+    if (isNil(checked)) return;
+    setCards(checked);
+    setHasSetCards(true);
   }, []);
 
   const rowLinkTo = useCallback(
@@ -206,6 +216,8 @@ const ClientSearch: React.FC<Props> = ({
           disabled={!hasResults}
           cardsEnabled={!!cards}
           onChangeCards={handleChangeDisplayType}
+          sortOrder={sortOrder}
+          onChangeSortOrder={handleSetSortOrder}
         />
       )}
       {loading && <Loading />}

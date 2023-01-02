@@ -62,7 +62,7 @@ const Organization = () => {
 
           {hasDetails && (
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 2 }}>
                 Organization Details
               </Typography>
               <OrganizationDetails organization={organization} />
@@ -71,7 +71,7 @@ const Organization = () => {
 
           {organization && (
             <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h6' sx={{ mb: 2 }}>
+              <Typography variant='h5' sx={{ mb: 2 }}>
                 Projects
               </Typography>
               <ProjectsTable organizationId={organizationId} />
@@ -111,7 +111,7 @@ const Organization = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Edit Organization
+                Update Organization
               </ButtonLink>
               <Button
                 color='error'
@@ -119,7 +119,7 @@ const Organization = () => {
                 onClick={() => setOpen(true)}
                 sx={{ justifyContent: 'left' }}
               >
-                Delete organization
+                Delete Organization
               </Button>
             </Stack>
           </Paper>

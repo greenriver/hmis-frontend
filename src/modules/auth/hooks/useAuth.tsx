@@ -152,7 +152,11 @@ export function AuthProvider({
   // Check if there is a currently active session when the provider is mounted for the first time
   useEffect(() => {
     sessionsApi
-      .getCurrentUser()
+      // Fetch session from backend on page load.
+      // We could call "getCurrentUser" (looks in local storage) to speed
+      // things up, but it would result in a flashing screen before logout
+      // if the user session has already expired.
+      .fetchCurrentUser()
       .then((user) => setUser(user))
       .catch(() => {})
       .finally(() => setLoadingInitial(false));

@@ -1,6 +1,26 @@
-query SearchClients($input: ClientSearchInput!, $limit: Int, $offset: Int) {
-  clientSearch(input: $input, limit: $limit, offset: $offset) {
+query SearchClients(
+  $input: ClientSearchInput!
+  $limit: Int
+  $offset: Int
+  $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+) {
+  clientSearch(
+    input: $input
+    limit: $limit
+    offset: $offset
+    sortOrder: $sortOrder
+  ) {
     offset
+    limit
+    nodesCount
+    nodes {
+      ...ClientFields
+    }
+  }
+}
+
+query OmniSearchClients($input: ClientSearchInput!) {
+  clientSearch(input: $input, limit: 5) {
     limit
     nodesCount
     nodes {

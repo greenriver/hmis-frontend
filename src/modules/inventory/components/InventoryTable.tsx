@@ -70,7 +70,8 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
         const id = res.deleteInventory?.inventory?.id;
         if (id) {
           setDelete(null);
-          cache.evict({ id: `Inventory:${id}` });
+          // Force re-fetch table
+          cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
         }
       },
     });
@@ -97,7 +98,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Edit
+              Update
             </ButtonLink>
             <Button
               onClick={() => setDelete(record)}

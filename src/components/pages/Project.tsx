@@ -1,12 +1,16 @@
-import { Alert, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Button,
+  Chip,
+  Grid,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
-import {
-  generatePath,
-  useLocation,
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
@@ -45,23 +49,46 @@ export const InactiveBanner = ({
   );
   return (
     <Alert severity='info' sx={{ mb: 2 }}>
-      This project is inactive
+      This project is closed
       {dateRange && `. Project operated from ${dateRange}.`}
     </Alert>
   );
 };
 
-type ProjectLocationState = {
-  refetchFunder?: boolean;
-  refetchInventory?: boolean;
-  refetchProjectCoc?: boolean;
+export const InactiveChip = ({
+  project,
+}: {
+  project: ProjectAllFieldsFragment;
+}) => {
+  if (!project.operatingEndDate) return null;
+  const endDate = parseHmisDateString(project.operatingEndDate);
+  if (!endDate || !isBefore(endDate, addDays(new Date(), -1))) return null;
+
+  const dateRange = parseAndFormatDateRange(
+    project.operatingStartDate,
+    project.operatingEndDate
+  );
+  return (
+    <Tooltip
+      title={
+        <Typography variant='body2'>{`Project Operated from ${dateRange}`}</Typography>
+      }
+      placement='right'
+      arrow
+    >
+      <Chip
+        label='Closed Project'
+        size='small'
+        sx={{ mt: 1, alignSelf: 'flex-end' }}
+      />
+    </Tooltip>
+  );
 };
 
 const Project = () => {
   const { projectId } = useParams() as {
     projectId: string;
   };
-  const { state } = useLocation() as { state: ProjectLocationState };
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [crumbs, loading, project] = useProjectCrumbs();
@@ -93,7 +120,7 @@ const Project = () => {
         <Grid item xs={9}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
+            <Typography variant='h5' sx={{ mb: 2 }}>
               Project Details
             </Typography>
             <ProjectDetails project={project} />
@@ -102,34 +129,19 @@ const Project = () => {
             <Typography variant='h5' sx={{ mb: 2 }}>
               Funding Sources
             </Typography>
-            <FunderTable
-              projectId={projectId}
-              fetchPolicy={
-                state?.refetchFunder ? 'cache-and-network' : undefined
-              }
-            />
+            <FunderTable projectId={projectId} />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project CoCs
             </Typography>
-            <ProjectCocTable
-              projectId={projectId}
-              fetchPolicy={
-                state?.refetchProjectCoc ? 'cache-and-network' : undefined
-              }
-            />
+            <ProjectCocTable projectId={projectId} />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
-            <InventoryTable
-              projectId={projectId}
-              fetchPolicy={
-                state?.refetchInventory ? 'cache-and-network' : undefined
-              }
-            />
+            <InventoryTable projectId={projectId} />
           </Paper>
         </Grid>
         <Grid item xs>
@@ -182,7 +194,7 @@ const Project = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Edit Project
+                Update Project
               </ButtonLink>
               <Button
                 color='error'

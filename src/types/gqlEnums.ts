@@ -33,8 +33,12 @@ export const HmisEnums = {
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
   ClientSortOption: {
-    LAST_NAME_ASC: 'LAST_NAME_ASC',
-    LAST_NAME_DESC: 'LAST_NAME_DESC',
+    FIRST_NAME_A_TO_Z: 'First Name: A-Z',
+    FIRST_NAME_Z_TO_A: 'First Name: Z-A',
+    LAST_NAME_A_TO_Z: 'Last Name: A-Z',
+    LAST_NAME_Z_TO_A: 'Last Name: Z-A',
+    AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
+    AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
   Component: {
     ALERT_ERROR: 'Display text as an error alert',
@@ -42,13 +46,18 @@ export const HmisEnums = {
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
+    INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
+    RADIO_BUTTONS_VERTICAL:
+      'Render a choice input item as vertical radio buttons',
+    SSN: 'SSN input component',
   },
   DOBDataQuality: {
-    FULL_DOB_REPORTED: 'Full DOB reported',
-    APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Approximate or partial DOB reported',
+    FULL_DOB_REPORTED: 'Full DOB',
+    APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Partial DOB',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -280,6 +289,12 @@ export const HmisEnums = {
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
   },
+  InputSize: {
+    LARGE: 'LARGE',
+    MEDIUM: 'MEDIUM',
+    SMALL: 'SMALL',
+    XSMALL: 'XSMALL',
+  },
   InventorySortOption: { START_DATE: 'START_DATE' },
   ItemType: {
     BOOLEAN: 'BOOLEAN',
@@ -380,9 +395,9 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NameDataQuality: {
-    FULL_NAME_REPORTED: 'Full name reported',
+    FULL_NAME_REPORTED: 'Full name',
     PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
-      'Partial, street name, or code name reported',
+      'Partial, street name, or code name',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -488,6 +503,7 @@ export const HmisEnums = {
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
     ENROLLMENT: 'Enrollment',
+    ENROLLMENT_COC: 'EnrollmentCoc',
     EXIT: 'Exit',
     HEALTH_AND_DV: 'HealthAndDv',
     INCOME_BENEFIT: 'IncomeBenefit',
@@ -516,8 +532,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   SSNDataQuality: {
-    FULL_SSN_REPORTED: 'Full SSN reported',
-    APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Approximate or partial SSN reported',
+    FULL_SSN_REPORTED: 'Full SSN',
+    APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',

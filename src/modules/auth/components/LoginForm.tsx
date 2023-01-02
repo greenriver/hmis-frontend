@@ -1,5 +1,5 @@
-import { Box, Button, Alert } from '@mui/material';
-import { FormEvent, useState } from 'react';
+import { Alert, Box, Button } from '@mui/material';
+import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
 
 import { isHmisResponseError } from '../api/sessions';
 
@@ -23,10 +23,23 @@ const LoginForm = () => {
   const [password, setPassword] = useState('');
   if (error) console.error(`Error logging in: ${error.message}`);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    login({ email, password });
-  }
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
+      event.preventDefault();
+      login({ email, password });
+    },
+    [email, login, password]
+  );
+
+  const onKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleSubmit(e);
+      }
+    },
+    [handleSubmit]
+  );
 
   if (prompt2fa) return <OneTimePassword />;
 
@@ -51,6 +64,7 @@ const LoginForm = () => {
         type='password'
         autoComplete='current-password'
         value={password}
+        onKeyDown={onKeyDown}
         onChange={(e) => setPassword(e.target.value)}
       />
 

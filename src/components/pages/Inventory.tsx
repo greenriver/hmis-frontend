@@ -1,16 +1,17 @@
-import { Grid, Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
-import { InactiveBanner } from './Project';
+import { InactiveChip } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateInventoryDocument,
@@ -29,7 +30,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     inventoryId: string; // Not present if create!
   };
-  const title = create ? `Add Inventory` : `Edit Inventory`;
+  const title = create ? `Add Inventory` : `Update Inventory`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const { data, loading, error } = useGetInventoryQuery({
@@ -38,9 +39,11 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(() => {
-    navigate(generatePath(Routes.PROJECT, { projectId }), {
-      state: { refetchInventory: create ? true : false },
-    });
+    // Force refresh table if we just created a new record
+    if (create) {
+      cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+    }
+    navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId, create]);
 
   // Local variables to use for form population.
@@ -60,50 +63,54 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
 
   const common = {
     definitionIdentifier: 'inventory',
+    projectId,
+    title: (
+      <>
+        <Breadcrumbs crumbs={crumbs} />
+        <Stack direction={'row'} spacing={2}>
+          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+            {title}
+          </Typography>
+          <InactiveChip project={project} />
+        </Stack>
+      </>
+    ),
   };
   return (
     <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        {title}
-      </Typography>
-      <Grid container>
-        <Grid item xs={9}>
-          <InactiveBanner project={project} />
-          {create ? (
-            <EditRecord<
-              InventoryFieldsFragment,
-              CreateInventoryMutation,
-              CreateInventoryMutationVariables
-            >
-              inputVariables={{ projectId }}
-              queryDocument={CreateInventoryDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: CreateInventoryMutation) =>
-                data?.createInventory?.errors
-              }
-              submitButtonText='Create Inventory'
-              localConstants={localConstants}
-              {...common}
-            />
-          ) : (
-            <EditRecord<
-              InventoryFieldsFragment,
-              UpdateInventoryMutation,
-              UpdateInventoryMutationVariables
-            >
-              record={data?.inventory || undefined}
-              queryDocument={UpdateInventoryDocument}
-              onCompleted={onCompleted}
-              getErrors={(data: UpdateInventoryMutation) =>
-                data?.updateInventory?.errors
-              }
-              localConstants={localConstants}
-              {...common}
-            />
-          )}
-        </Grid>
-      </Grid>
+      {create ? (
+        <EditRecord<
+          InventoryFieldsFragment,
+          CreateInventoryMutation,
+          CreateInventoryMutationVariables
+        >
+          inputVariables={{ projectId }}
+          queryDocument={CreateInventoryDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: CreateInventoryMutation) =>
+            data?.createInventory?.errors
+          }
+          submitButtonText='Create Inventory'
+          localConstants={localConstants}
+          {...common}
+        />
+      ) : (
+        <EditRecord<
+          InventoryFieldsFragment,
+          UpdateInventoryMutation,
+          UpdateInventoryMutationVariables
+        >
+          record={data?.inventory || undefined}
+          queryDocument={UpdateInventoryDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: UpdateInventoryMutation) =>
+            data?.updateInventory?.errors
+          }
+          submitButtonText='Update Inventory'
+          localConstants={localConstants}
+          {...common}
+        />
+      )}
     </ProjectLayout>
   );
 };

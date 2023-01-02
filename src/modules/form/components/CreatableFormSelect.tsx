@@ -51,6 +51,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
   options,
   onChange,
   error,
+  placeholder,
   ...props
 }: GenericSelectProps<Option, Multiple, boolean> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
@@ -70,6 +71,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
       selectOnFocus={!!openchoice}
       clearOnBlur={!!openchoice}
       handleHomeEndKeys={!!openchoice}
+      forcePopupIcon={!!openchoice}
       freeSolo
       filterOptions={
         openchoice
@@ -92,7 +94,7 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
           : undefined
       }
       {...props}
-      textInputProps={{ ...props.textInputProps, error }}
+      textInputProps={{ ...props.textInputProps, placeholder, error }}
       onChange={
         onChange
           ? (event, newValue, ...rest) => {

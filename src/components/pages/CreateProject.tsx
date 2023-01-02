@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
@@ -36,31 +36,27 @@ const CreateProject = () => {
 
   return (
     <ProjectLayout>
-      {crumbs && <Breadcrumbs crumbs={crumbs} />}
-      {organizationName && (
-        <Typography variant='h3' sx={{ mb: 4 }}>
-          Add a new Project to {organizationName}
-        </Typography>
-      )}
-      <Grid container>
-        <Grid item xs={9}>
-          <EditRecord<
-            ProjectAllFieldsFragment,
-            CreateProjectMutation,
-            CreateProjectMutationVariables
-          >
-            definitionIdentifier='project'
-            queryDocument={CreateProjectDocument}
-            onCompleted={onCompleted}
-            inputVariables={{ organizationId }}
-            getErrors={(data: CreateProjectMutation) =>
-              data?.createProject?.errors
-            }
-            submitButtonText='Create Project'
-            confirmable
-          />
-        </Grid>
-      </Grid>
+      <EditRecord<
+        ProjectAllFieldsFragment,
+        CreateProjectMutation,
+        CreateProjectMutationVariables
+      >
+        definitionIdentifier='project'
+        queryDocument={CreateProjectDocument}
+        onCompleted={onCompleted}
+        inputVariables={{ organizationId }}
+        getErrors={(data: CreateProjectMutation) => data?.createProject?.errors}
+        submitButtonText='Create Project'
+        navigationProps={{ top: '118px' }}
+        title={
+          <>
+            <Breadcrumbs crumbs={crumbs} />
+            <Typography variant='h3' sx={{ pt: 0, mt: 0, pb: 4 }}>
+              Add a new Project to {organizationName}
+            </Typography>
+          </>
+        }
+      />
     </ProjectLayout>
   );
 };

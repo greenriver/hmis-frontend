@@ -20,6 +20,7 @@ fragment ClientFields on Client {
   dobDataQuality
   ethnicity
   gender
+  pronouns
   nameDataQuality
   personalId
   race
@@ -36,6 +37,14 @@ fragment ClientImageFields on ClientImage {
   id
   contentType
   base64
+}
+
+fragment ClientOmniSearchFields on Client {
+  id
+  dob
+  gender
+  personalId
+  ...ClientName
 }
 
 fragment HouseholdClientFields on HouseholdClient {

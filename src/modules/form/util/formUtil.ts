@@ -1,4 +1,4 @@
-import { max, min } from 'date-fns';
+import { getYear, isValid, max, min } from 'date-fns';
 import { isNil } from 'lodash-es';
 
 import { parseHmisDateString } from '../../hmis/hmisUtil';
@@ -40,6 +40,9 @@ export function isDate(value: any | null | undefined): value is Date {
     typeof value.getMonth === 'function'
   );
 }
+
+export const isValidDate = (value: Date, maxYear = 1900) =>
+  isDate(value) && isValid(value) && getYear(value) > maxYear;
 
 export function isPickListOption(
   value: any | null | undefined
@@ -327,24 +330,26 @@ export const autofillValues = (
         ? booleans.some(Boolean)
         : booleans.every(Boolean);
 
-    if (shouldAutofillValue) {
-      const newValue = [
-        av.valueBoolean,
-        av.valueNumber,
-        getOptionValue(av.valueCode, item),
-      ].filter((e) => !isNil(e))[0];
+    if (!shouldAutofillValue) return false;
 
-      if (!areEqualValues(values[item.linkId], newValue)) {
-        console.log(
-          `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
-            values[item.linkId]
-          )} to ${JSON.stringify(newValue)}`
-        );
-        values[item.linkId] = newValue;
-        return true;
-      }
+    const newValue = [
+      av.valueBoolean,
+      av.valueNumber,
+      getOptionValue(av.valueCode, item),
+    ].filter((e) => !isNil(e))[0];
+
+    if (!areEqualValues(values[item.linkId], newValue)) {
+      // console.log(
+      //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
+      //     values[item.linkId]
+      //   )} to ${JSON.stringify(newValue)}`,
+      //   av
+      // );
+      values[item.linkId] = newValue;
     }
-    return false;
+
+    // Stop iterating through enable when conditions
+    return true;
   });
 };
 

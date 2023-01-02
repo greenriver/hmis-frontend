@@ -62,7 +62,8 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
         const id = res.deleteProjectCoc?.projectCoc?.id;
         if (id) {
           setDelete(null);
-          cache.evict({ id: `ProjectCoc:${id}` });
+          // Force re-fetch table
+          cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
         }
       },
     });
@@ -89,7 +90,7 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Edit
+              Update
             </ButtonLink>
             <Button
               onClick={() => setDelete(record)}
@@ -111,7 +112,6 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
         queryVariables={{ id: projectId }}
         queryDocument={GetProjectProjectCocsDocument}
         columns={tableColumns}
-        fetchPolicy='cache-and-network'
         pagePath='project.projectCocs'
         noData='No Project CoC records.'
         {...props}

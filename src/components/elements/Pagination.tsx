@@ -68,6 +68,7 @@ const Pagination: React.FC<Props> = ({
       container
       justifyContent='space-between'
       alignItems='center'
+      data-testid='pagination'
       {...gridProps}
     >
       <PaginationSummary

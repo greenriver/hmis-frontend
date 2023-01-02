@@ -1,4 +1,5 @@
 import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import * as Sentry from '@sentry/react';
 import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
@@ -6,6 +7,10 @@ import { useAssessmentHandlers } from './useAssessmentHandlers';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import {
+  ApolloErrorAlert,
+  alertErrorFallback,
+} from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
@@ -29,6 +34,7 @@ const Assessment = () => {
     errors,
     assessmentTitle,
     assessmentRole,
+    apolloError,
   } = useAssessmentHandlers();
 
   const crumbsWithDetails = useMemo(() => {
@@ -73,7 +79,7 @@ const Assessment = () => {
     }
   }, [enrollment, assessmentRole]);
 
-  useScrollToHash(crumbsLoading || dataLoading);
+  useScrollToHash(crumbsLoading || dataLoading, 99);
 
   if (crumbsLoading || dataLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
@@ -100,7 +106,7 @@ const Assessment = () => {
         {crumbsWithDetails && <Breadcrumbs crumbs={crumbsWithDetails} />}
         <Stack direction='row'>
           <Typography variant='h4' sx={{ mb: 4, fontWeight: 400 }}>
-            <b>{assessmentTitle}</b>{' '}
+            <b>{assessmentTitle}</b>
             {informationDate && ` ${parseAndFormatDate(informationDate)}`}
           </Typography>
         </Stack>
@@ -124,6 +130,11 @@ const Assessment = () => {
               </Paper>
             </Grid>
             <Grid item xs={9} sx={{ pt: '0 !important' }}>
+              {apolloError && (
+                <Box sx={{ mb: 3 }}>
+                  <ApolloErrorAlert error={apolloError} />
+                </Box>
+              )}
               <DynamicForm
                 definition={definition}
                 onSubmit={submitHandler}
@@ -133,6 +144,7 @@ const Assessment = () => {
                     : saveDraftHandler
                 }
                 initialValues={initialValues || undefined}
+                projectId={enrollment?.project?.id}
                 loading={mutationLoading}
                 errors={errors}
                 showSavePrompt
@@ -145,4 +157,12 @@ const Assessment = () => {
   );
 };
 
-export default Assessment;
+const WrappedAssessment = () => (
+  <Box>
+    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
+      <Assessment />
+    </Sentry.ErrorBoundary>
+  </Box>
+);
+
+export default WrappedAssessment;

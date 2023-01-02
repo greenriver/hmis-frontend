@@ -32,6 +32,7 @@ fragment ItemFields on FormItem {
   component
   prefix
   text
+  briefText
   helperText
   required
   hidden
@@ -40,6 +41,7 @@ fragment ItemFields on FormItem {
   fieldName
   recordType
   pickListReference
+  size
   bounds {
     type
     question

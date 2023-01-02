@@ -26,18 +26,17 @@
 
 ### Run local development server
 
-1. Install npm dependencies
+1. Add to `/etc/hosts`:
+
+   ```sh
+   ::1         hmis.dev.test
+   127.0.0.1   hmis.dev.test
+   ```
+
+2. Install npm dependencies
 
    ```sh
    yarn install
-   ```
-
-2. Create local certs for development (only need to do this once)
-
-   ```sh
-   brew install mkcert
-   mkcert -install
-   yarn cert
    ```
 
 3. Run dev server with live reload
@@ -68,3 +67,8 @@ Preview production build
 ```sh
 yarn build && yarn preview
 ```
+
+## Backend configuration
+
+The frontend communicates with with a [OpenPath warehouse](https://github.com/greenriver/hmis-warehouse) which must be
+[configured separately](docs/warehouse.md).
