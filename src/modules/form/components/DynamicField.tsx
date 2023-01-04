@@ -46,7 +46,7 @@ export interface DynamicFieldProps {
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
-  projectId?: string; // used by picklist query
+  pickListRelationId?: string;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -88,7 +88,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   horizontal = false,
   errors,
   inputProps,
-  projectId,
+  pickListRelationId,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -116,13 +116,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     disabled,
     label,
     error: !!(errors && errors.length > 0),
+    helperText: item.helperText,
     id: item.linkId,
     ...inputProps,
   };
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,
-    projectId,
+    pickListRelationId,
     {
       fetchPolicy: 'network-only', // Always fetch, because ProjectCoC records may have changed
       onCompleted: (data) => {
@@ -150,7 +151,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const placeholder =
     item.size === InputSize.Xsmall
       ? undefined
-      : `Select ${item.briefText || item.text}...`;
+      : `Select ${item.briefText || item.text || ''}...`;
 
   switch (item.type) {
     case ItemType.Display:

@@ -53,6 +53,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
+      // inventoryId: inventoryId,
     };
   }, [project]);
 
@@ -84,7 +85,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           CreateInventoryMutation,
           CreateInventoryMutationVariables
         >
-          inputVariables={{ projectId }}
+          inputVariables={{ projectId, unitInventory: 0, bedInventory: 0 }}
           queryDocument={CreateInventoryDocument}
           onCompleted={onCompleted}
           getErrors={(data: CreateInventoryMutation) =>
@@ -92,6 +93,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Create Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       ) : (
@@ -108,6 +110,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Update Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       )}

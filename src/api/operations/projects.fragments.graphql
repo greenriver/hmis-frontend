@@ -72,6 +72,27 @@ fragment InventoryFields on Inventory {
   youthVetBedInventory
 }
 
+fragment UnitFields on Unit {
+  id
+  name
+  bedCount
+  startDate
+  endDate
+}
+
+fragment BedFields on Bed {
+  id
+  bedType
+  name
+  gender
+  startDate
+  endDate
+  unit {
+    id
+    name
+  }
+}
+
 fragment ProjectCocFields on ProjectCoc {
   address1
   address2

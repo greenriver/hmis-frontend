@@ -50,6 +50,40 @@ query GetInventory($id: ID!) {
   }
 }
 
+query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0, $active: Boolean) {
+  inventory(id: $id) {
+    id
+    units(limit: $limit, offset: $offset, active: $active) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UnitFields
+      }
+    }
+  }
+}
+
+query GetBeds(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $bedType: InventoryBedType
+  $active: Boolean
+) {
+  inventory(id: $id) {
+    id
+    beds(limit: $limit, offset: $offset, bedType: $bedType, active: $active) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...BedFields
+      }
+    }
+  }
+}
+
 query GetProjectCoc($id: ID!) {
   projectCoc(id: $id) {
     ...ProjectCocFields
@@ -283,6 +317,28 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
     clientMutationId
     projectCoc {
       id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateBeds($input: CreateBedsInput!) {
+  createBeds(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateUnits($input: CreateUnitsInput!) {
+  createUnits(input: $input) {
+    inventory {
+      ...InventoryFields
     }
     errors {
       ...ValidationErrorFields

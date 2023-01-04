@@ -6,6 +6,7 @@ export const Routes = {
   EDIT_PROJECT: '/projects/:projectId/edit',
   NEW_INVENTORY: '/projects/:projectId/inventory/new',
   EDIT_INVENTORY: '/projects/:projectId/inventory/:inventoryId/edit',
+  MANAGE_INVENTORY_BEDS: '/projects/:projectId/inventory/:inventoryId/beds',
   NEW_FUNDER: '/projects/:projectId/funder/new',
   EDIT_FUNDER: '/projects/:projectId/funder/:funderId/edit',
   NEW_COC: '/projects/:projectId/coc/new',

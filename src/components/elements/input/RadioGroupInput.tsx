@@ -7,6 +7,7 @@ import {
   Radio,
   RadioGroup,
   RadioGroupProps,
+  FormHelperText,
 } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
@@ -34,6 +35,7 @@ const RadioGroupInput = ({
   row,
   sx,
   clearable,
+  helperText,
   checkbox = false,
   ...props
 }: RadioGroupInputProps) => {
@@ -94,7 +96,7 @@ const RadioGroupInput = ({
           onChange={() => null}
           sx={{
             ...(!row && {
-              'label:first-child': { pt: 1 },
+              'label:first-of-type': { pt: 1 },
               // 'label:last-child': { pb: 1 },
               'label .MuiRadio-root': { p: 1 },
             }),
@@ -130,6 +132,7 @@ const RadioGroupInput = ({
             />
           ))}
         </GroupComponent>
+        {helperText && <FormHelperText>{helperText}</FormHelperText>}
       </FormControl>
     </FormGroup>
   );
