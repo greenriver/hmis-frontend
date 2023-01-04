@@ -35,6 +35,12 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientImage($id: ID!) {
+  client(id: $id) {
+    ...ClientImage
+  }
+}
+
 query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
@@ -90,6 +96,18 @@ mutation UpdateClient($input: UpdateClientInput!) {
     clientMutationId
     client {
       ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
+  updateClientImage(input: { clientId: $clientId, imageBlobId: $imageBlobId }) {
+    clientMutationId
+    client {
+      ...ClientImage
     }
     errors {
       ...ValidationErrorFields

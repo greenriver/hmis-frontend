@@ -4,15 +4,18 @@ import {
   Button,
   Card,
   Grid,
+  Link,
   Skeleton,
   Stack,
   Typography,
+  BoxProps,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from './ButtonLink';
+import ClientImageUploadDialog from './input/ClientImageUploadDialog';
 import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
@@ -28,6 +31,7 @@ import {
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  ClientImageFragment,
   useGetClientEnrollmentsQuery,
 } from '@/types/gqlTypes';
 
@@ -103,6 +107,62 @@ interface Props {
   linkTargetBlank?: boolean;
 }
 
+export const ClientCardImageElement = ({
+  client,
+  base64,
+  url,
+  ...props
+}: {
+  client?: ClientImageFragment;
+  base64?: string;
+  url?: string;
+} & BoxProps<'img'>) => {
+  let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
+
+  if (client?.image?.base64)
+    src = `data:image/jpeg;base64,${client.image.base64}`;
+  if (base64) src = `data:image/jpeg;base64,${base64}`;
+  if (url) src = url;
+
+  return (
+    <Box
+      alt='client'
+      src={src}
+      {...props}
+      sx={{
+        height: 150,
+        width: 150,
+        ...props.sx,
+      }}
+      component='img'
+    />
+  );
+};
+
+export const ClientCardImage = ({ client }: { client: Props['client'] }) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  const handleClose = useCallback(() => setOpen(false), []);
+  const handleOpen = useCallback(() => setOpen(true), []);
+
+  return (
+    <>
+      <ClientImageUploadDialog
+        open={open}
+        onClose={handleClose}
+        clientId={client.id}
+      />
+      <Link component='button'>
+        <ClientCardImageElement
+          client={client}
+          sx={{ mr: 1 }}
+          onClick={handleOpen}
+        />
+      </Link>
+    </>
+  );
+};
+
 const ClientCard: React.FC<Props> = ({
   client,
   showNotices = false,
@@ -133,20 +193,27 @@ const ClientCard: React.FC<Props> = ({
             )}
           </Stack>
           <Stack spacing={1} direction='row'>
-            <Box
-              component='img'
-              alt='client'
-              src={
-                client.image?.base64
-                  ? `data:image/jpeg;base64,${client.image.base64}`
-                  : 'https://dummyimage.com/150x150/e8e8e8/aaa'
-              }
-              sx={{
-                height: 150,
-                width: 150,
-                mr: 1,
-              }}
+            {/* <ClientImageUploadDialog
+              open={true}
+              clientId={client.id}
             />
+            <Link component="button">
+              <Box
+                component='img'
+                alt='client'
+                src={
+                  client.image?.base64
+                    ? `data:image/jpeg;base64,${client.image.base64}`
+                    : 'https://dummyimage.com/150x150/e8e8e8/aaa'
+                }
+                sx={{
+                  height: 150,
+                  width: 150,
+                  mr: 1,
+                }}
+              />
+            </Link> */}
+            <ClientCardImage client={client} />
             <Stack spacing={0.5} sx={{ pr: 1 }}>
               <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
                 ID {client.personalId}

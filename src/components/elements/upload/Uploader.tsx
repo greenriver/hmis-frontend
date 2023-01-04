@@ -12,12 +12,14 @@ import useDirectUpload from './useDirectUpload';
 import { DirectUpload } from '@/types/gqlTypes';
 
 const Uploader: React.FC<{
-  onUpload: (upload: DirectUpload, file: File) => Promise<any>;
+  onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
   file?: File;
 }> = ({ onUpload, file: fileProp }) => {
   const [currentFile, setCurrentFile] = useState<File>();
   const [loading, setLoading] = useState<boolean>(false);
   const file = fileProp || currentFile;
+  const fileImageUrl =
+    file && file.type.match(/^image/) ? URL.createObjectURL(file) : undefined;
   // const isEmpty = !file;
 
   const [uploadFile] = useDirectUpload();
@@ -78,7 +80,20 @@ const Uploader: React.FC<{
           )}
           {!loading && file && (
             <>
-              <FileIcon style={{ fontSize: '72px', color: 'inherit' }} />
+              {fileImageUrl ? (
+                <Box
+                  component='img'
+                  alt='file preview'
+                  src={fileImageUrl}
+                  sx={{
+                    width: '72px',
+                    height: '72px',
+                    borderRadius: (theme) => `${theme.shape.borderRadius}px`,
+                  }}
+                />
+              ) : (
+                <FileIcon style={{ fontSize: '72px', color: 'inherit' }} />
+              )}
               <Typography variant='subtitle1' color='inherit'>
                 {file?.name}
               </Typography>

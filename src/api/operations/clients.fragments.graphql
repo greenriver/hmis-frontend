@@ -14,7 +14,7 @@ fragment ClientName on Client {
   nameSuffix
 }
 
-fragment ClientFile on Client {
+fragment ClientImage on Client {
   id
   image {
     id
@@ -40,7 +40,7 @@ fragment ClientFields on Client {
   dateDeleted
   dateUpdated
   ...ClientName
-  ...ClientFile
+  ...ClientImage
 }
 
 fragment ClientOmniSearchFields on Client {
