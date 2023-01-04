@@ -400,7 +400,7 @@ const DynamicFormWithComputedData = ({
     const items = getItemMap(definition);
     const autofillMap = buildAutofillDependencyMap(items);
     const enabledMap = buildEnabledDependencyMap(items);
-    const disabled = getDisabledLinkIds(items, initialValues);
+    const disabled = getDisabledLinkIds(items, initialValues || {});
     return [items, autofillMap, enabledMap, disabled];
   }, [definition, initialValues]);
 
