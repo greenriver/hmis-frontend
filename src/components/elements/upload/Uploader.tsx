@@ -39,8 +39,8 @@ const Uploader: React.FC<{
 
   const { getRootProps, isDragActive, getInputProps } = useDropzone({
     onDropAccepted: uploadAndCreate,
-    noClick: true,
-    noKeyboard: true,
+    // noClick: true,
+    // noKeyboard: true,
     multiple: false,
     accept: {
       'image/*': ['.png', '.jpg', '.jpeg'],
@@ -55,6 +55,10 @@ const Uploader: React.FC<{
         borderRadius: 4,
         border: `3px dashed ${palette.divider}`,
         backgroundColor: isDragActive ? palette.grey[200] : 'transparent',
+        cursor: 'pointer',
+        '&:hover': {
+          backgroundColor: palette.grey[200],
+        },
       })}
       {...getRootProps()}
     >
@@ -74,7 +78,7 @@ const Uploader: React.FC<{
             <>
               <UploadIcon style={{ fontSize: '72px', color: 'inherit' }} />
               <Typography variant='subtitle1' color='inherit'>
-                Drag file here to upload
+                Drag file or click here to upload
               </Typography>
             </>
           )}
