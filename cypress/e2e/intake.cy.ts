@@ -19,13 +19,13 @@ it(
   },
   () => {
     // Set up new client, enroll, and begin intake
-    // cy.createClient('Cy First', 'Cy Last');
-    // cy.testId('enrollButton').click();
-    // cy.testId('projectSelect').click();
-    // cy.get('li[role="option"]').first().click();
-    // cy.testId('createEnrollmentButton').first().click();
-    // cy.testId('finishIntakeButton').click();
-    cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
+    cy.createClient('Cy First', 'Cy Last');
+    cy.testId('enrollButton').click();
+    cy.testId('projectSelect').click();
+    cy.get('li[role="option"]').first().click();
+    cy.testId('createEnrollmentButton').first().click();
+    cy.testId('finishIntakeButton').click();
+    // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
 
     // Client Location - skip because we don't know about this project
     cy.inputId('3.16').click();

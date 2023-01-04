@@ -275,13 +275,13 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
     'IncomeBenefit.otherBenefitsSource': true,
     'IncomeBenefit.otherBenefitsSourceIdentify': 'other description',
   };
-  cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
+  cy.expectHudValuesToInclude(expectedHudValues);
 
   // When disabled, all income values should be removed from hudValues
   cy.checkOption(fromAnySource, 'NO');
   cy.getById(inputGroup).should('not.exist');
 
-  cy.expectHudValuesSectionToDeepEqual({
+  cy.expectHudValuesToInclude({
     'IncomeBenefit.benefitsFromAnySource': 'NO',
   });
   cy.expectHudValuesToNotHaveKeys([
@@ -296,11 +296,11 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
 
   // When re-enabled, old income values should be added back
   cy.checkOption(fromAnySource, 'YES');
-  cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
+  cy.expectHudValuesToInclude(expectedHudValues);
 
   // Un-check WIC should save it as "false"
   cy.getById(`4.03.4`).find('input').uncheck();
-  cy.expectHudValuesSectionToDeepEqual({
+  cy.expectHudValuesToInclude({
     ...expectedHudValues,
     'IncomeBenefit.wic': false,
   });
@@ -360,13 +360,13 @@ Cypress.Commands.add('assertHealthInsurance', () => {
     'IncomeBenefit.otherInsurance': true,
     'IncomeBenefit.otherInsuranceIdentify': 'other description',
   };
-  cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
+  cy.expectHudValuesToInclude(expectedHudValues);
 
   // When disabled, all income values should be removed from hudValues
   cy.checkOption(fromAnySource, 'NO');
   cy.getById(inputGroup).should('not.exist');
 
-  cy.expectHudValuesSectionToDeepEqual({
+  cy.expectHudValuesToInclude({
     'IncomeBenefit.insuranceFromAnySource': 'NO',
   });
   cy.expectHudValuesToNotHaveKeys([
@@ -385,11 +385,11 @@ Cypress.Commands.add('assertHealthInsurance', () => {
 
   // When re-enabled, old income values should be added back
   cy.checkOption(fromAnySource, 'YES');
-  cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
+  cy.expectHudValuesToInclude(expectedHudValues);
 
   // Un-check Medicare should save it as "false"
   cy.getById(`4.04.4`).find('input').uncheck();
-  cy.expectHudValuesSectionToDeepEqual({
+  cy.expectHudValuesToInclude({
     ...expectedHudValues,
     'IncomeBenefit.medicare': false,
   });

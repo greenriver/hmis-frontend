@@ -177,10 +177,10 @@ const DynamicForm: React.FC<
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newValues[linkId] = value;
-        updateAutofillValues([linkId], newValues); // updates newValues in-place
-        updateDisabledLinkIds([linkId], newValues); // calls setState for disabled link IDs
-
-        // TODO (maybe) clear values of disabled items if disabledDisplay is protected
+        // Updates dependent autofill questions (modifies newValues in-place)
+        updateAutofillValues([linkId], newValues);
+        // Update list of disabled linkIds based on new values
+        updateDisabledLinkIds([linkId], newValues);
         // console.debug('DynamicForm', newValues);
         return newValues;
       });
@@ -193,13 +193,15 @@ const DynamicForm: React.FC<
       setPromptSave(true);
       setValues((currentValues) => {
         const newValues = { ...currentValues, ...values };
-        // Update which link IDs are disabled or not, based on the Link IDs that have changed
+        // Updates dependent autofill questions (modifies newValues in-place)
+        updateAutofillValues(Object.keys(values), newValues);
+        // Update list of disabled linkIds based on new values
         updateDisabledLinkIds(Object.keys(values), newValues);
         // console.debug('DynamicForm', newValues);
         return newValues;
       });
     },
-    [updateDisabledLinkIds]
+    [updateDisabledLinkIds, updateAutofillValues]
   );
 
   const handleSubmit = useCallback(
