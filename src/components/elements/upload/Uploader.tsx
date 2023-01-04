@@ -84,6 +84,7 @@ const Uploader: React.FC<UploaderProps> = ({
         '&:hover': {
           backgroundColor: palette.grey[200],
         },
+        p: 2,
       })}
       {...getRootProps()}
     >

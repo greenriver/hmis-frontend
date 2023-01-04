@@ -68,14 +68,18 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         ) : (
           client && (
             <Grid container spacing={2} justifyContent='space-around'>
-              <Grid item>
-                <Typography>Current Photo</Typography>
-                {client.image && <ClientCardImageElement client={client} />}
-              </Grid>
-              <Grid item>
-                <Typography>New Photo</Typography>
-                {client.image && <ClientCardImageElement url={newPhotoSrc} />}
-              </Grid>
+              {client.image && (
+                <>
+                  <Grid item>
+                    <Typography>Current Photo</Typography>
+                    <ClientCardImageElement client={client} />
+                  </Grid>
+                  <Grid item>
+                    <Typography>New Photo</Typography>
+                    <ClientCardImageElement url={newPhotoSrc} />
+                  </Grid>
+                </>
+              )}
               <Grid item xs={12}>
                 <Uploader
                   onUpload={(upload, file) => {
