@@ -82,6 +82,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     setNewBlobId(upload.blobId);
                     setNewPhotoSrc(URL.createObjectURL(file));
                   }}
+                  onClear={() => {
+                    setNewBlobId(undefined);
+                    setNewPhotoSrc(undefined);
+                  }}
                 />
               </Grid>
             </Grid>

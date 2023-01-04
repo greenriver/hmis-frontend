@@ -1,8 +1,16 @@
 import {
   CloudUpload as UploadIcon,
   Description as FileIcon,
+  HighlightOff as HighlightOffIcon,
 } from '@mui/icons-material';
-import { Grid, Typography, CircularProgress, Box } from '@mui/material';
+import {
+  Grid,
+  Typography,
+  CircularProgress,
+  Box,
+  Link,
+  Tooltip,
+} from '@mui/material';
 import { first } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -11,11 +19,19 @@ import useDirectUpload from './useDirectUpload';
 
 import { DirectUpload } from '@/types/gqlTypes';
 
-const Uploader: React.FC<{
+export type UploaderProps = {
   onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
+  onClear?: (upload?: DirectUpload, file?: File) => any;
   file?: File;
-}> = ({ onUpload, file: fileProp }) => {
+};
+
+const Uploader: React.FC<UploaderProps> = ({
+  onUpload,
+  onClear = () => {},
+  file: fileProp,
+}) => {
   const [currentFile, setCurrentFile] = useState<File>();
+  const [currentUpload, setCurrentUpload] = useState<DirectUpload>();
   const [loading, setLoading] = useState<boolean>(false);
   const file = fileProp || currentFile;
   const fileImageUrl =
@@ -30,7 +46,10 @@ const Uploader: React.FC<{
         setLoading(true);
         setCurrentFile(file);
         uploadFile(file)
-          .then((res) => onUpload(res, file))
+          .then((res) => {
+            setCurrentUpload(res);
+            onUpload(res, file);
+          })
           .then(() => setLoading(false));
       }
     },
@@ -46,6 +65,12 @@ const Uploader: React.FC<{
       'image/*': ['.png', '.jpg', '.jpeg'],
     },
   });
+
+  const handleClear = useCallback<NonNullable<UploaderProps['onClear']>>(() => {
+    onClear(currentUpload, currentFile);
+    setCurrentFile(undefined);
+    setCurrentUpload(undefined);
+  }, [currentUpload, currentFile, onClear]);
 
   return (
     <Box
@@ -101,6 +126,29 @@ const Uploader: React.FC<{
               <Typography variant='subtitle1' color='inherit'>
                 {file?.name}
               </Typography>
+              <Tooltip title='Clear uploaded image'>
+                <Link
+                  component='button'
+                  underline='none'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleClear();
+                  }}
+                >
+                  <Typography
+                    variant='caption'
+                    color='textSecondary'
+                    sx={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      lineHeight: 0,
+                    }}
+                  >
+                    <HighlightOffIcon fontSize='inherit' />
+                    &ensp;Clear
+                  </Typography>
+                </Link>
+              </Tooltip>
             </>
           )}
           {loading && (
