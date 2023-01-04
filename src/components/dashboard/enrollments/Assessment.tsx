@@ -8,8 +8,8 @@ import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import {
-  ApolloErrorAlert,
   alertErrorFallback,
+  ApolloErrorAlert,
 } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -144,7 +144,7 @@ const Assessment = () => {
                     : saveDraftHandler
                 }
                 initialValues={initialValues || undefined}
-                projectId={enrollment?.project?.id}
+                pickListRelationId={enrollment?.project?.id}
                 loading={mutationLoading}
                 errors={errors}
                 showSavePrompt

@@ -17,9 +17,7 @@ fragment ClientName on Client {
 fragment ClientImage on Client {
   id
   image {
-    id
-    base64
-    contentType
+    ...ClientImageFields
   }
 }
 
@@ -41,6 +39,12 @@ fragment ClientFields on Client {
   dateUpdated
   ...ClientName
   ...ClientImage
+}
+
+fragment ClientImageFields on ClientImage {
+  id
+  contentType
+  base64
 }
 
 fragment ClientOmniSearchFields on Client {

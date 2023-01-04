@@ -31,6 +31,7 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { Routes } from '@/routes/routes';
 import {
   ProjectAllFieldsFragment,
+  ProjectType,
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
 
@@ -141,7 +142,10 @@ const Project = () => {
             <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
-            <InventoryTable projectId={projectId} />
+            <InventoryTable
+              projectId={projectId}
+              es={project.projectType === ProjectType.Es}
+            />
           </Paper>
         </Grid>
         <Grid item xs>

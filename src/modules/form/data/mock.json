@@ -95,8 +95,9 @@
         {
           "type": "STRING",
           "required": false,
-          "linkId": "string-4",
-          "text": "String"
+          "linkId": "ssn",
+          "text": "SSN",
+          "component": "SSN"
         }
       ]
     },

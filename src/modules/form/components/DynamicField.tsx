@@ -16,6 +16,7 @@ import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
+import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import Uploader from '@/components/elements/upload/Uploader';
@@ -46,7 +47,7 @@ export interface DynamicFieldProps {
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
-  projectId?: string; // used by picklist query
+  pickListRelationId?: string;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -88,7 +89,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   horizontal = false,
   errors,
   inputProps,
-  projectId,
+  pickListRelationId,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -116,13 +117,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     disabled,
     label,
     error: !!(errors && errors.length > 0),
+    helperText: item.helperText,
     id: item.linkId,
     ...inputProps,
   };
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,
-    projectId,
+    pickListRelationId,
     {
       fetchPolicy: 'network-only', // Always fetch, because ProjectCoC records may have changed
       onCompleted: (data) => {
@@ -150,7 +152,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   const placeholder =
     item.size === InputSize.Xsmall
       ? undefined
-      : `Select ${item.briefText || item.text}...`;
+      : `Select ${item.briefText || item.text || ''}...`;
 
   switch (item.type) {
     case ItemType.Display:
@@ -184,6 +186,24 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.String:
     case ItemType.Text:
+      if (item.component === Component.Ssn)
+        return (
+          <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+            <SsnInput
+              id={item.linkId}
+              name={item.linkId}
+              value={value || ''}
+              onChange={onChangeValue}
+              sx={{
+                width,
+                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
+              }}
+              {...commonInputProps}
+            />
+          </InputContainer>
+        );
+
       const multiline = item.type === ItemType.Text;
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>

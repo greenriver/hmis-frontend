@@ -4900,6 +4900,11 @@ acorn@^8.4.1, acorn@^8.5.0, acorn@^8.6.0, acorn@^8.7.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.1.tgz#0197122c843d1bf6d0a5e83220a788f278f63c30"
   integrity sha512-Xx54uLJQZ19lKygFXOWsscKUbsBZW0CPykPhVQdhIeIwrbPmJzqeASDInc8nKBnp/JT6igTs82qPXz069H8I/A==
 
+add@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/add/-/add-2.0.6.tgz#248f0a9f6e5a528ef2295dbeec30532130ae2235"
+  integrity sha512-j5QzrmsokwWWp6kUcJQySpbG+xfOBqqKnup3OIk1pz+kB/80SLorZ9V8zHFLO92Lcd+hbvq8bT+zOGoPkmBV0Q==
+
 address@^1.0.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/address/-/address-1.2.0.tgz#d352a62c92fee90f89a693eccd2a8b2139ab02d9"
@@ -13929,6 +13934,11 @@ storybook-addon-apollo-client@^4.0.12:
     "@storybook/addons" "^6.5.9"
     "@storybook/components" "^6.5.9"
     tslib "^2.4.0"
+
+storybook-addon-state@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/storybook-addon-state/-/storybook-addon-state-1.0.3.tgz#f7657c7acfb2ac2adcbdccdd2ba6d95ebddd90a7"
+  integrity sha512-0lpedSYu2xIlq4QK/8YH4Cuj6vt2p8iRCcJBb4JFxyLZ6RAMHFFkf072BKl4WrU1LfLq3/7SD4snvxRoTjvsvw==
 
 stream-browserify@^2.0.1:
   version "2.0.2"

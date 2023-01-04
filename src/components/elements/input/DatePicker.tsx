@@ -28,6 +28,7 @@ const DatePicker = ({
   min,
   max,
   value,
+  helperText,
   ...props
 }: Props) => {
   const defaultOpenMonth = useMemo(() => {
@@ -75,7 +76,7 @@ const DatePicker = ({
           {...params}
           error={error || !!errorMessage}
           // If there is a server error, show that instead of the local message
-          helperText={error ? undefined : errorMessage}
+          helperText={error ? undefined : errorMessage || helperText}
           FormHelperTextProps={{
             sx: { '&.Mui-error': { whiteSpace: 'nowrap' } },
           }}

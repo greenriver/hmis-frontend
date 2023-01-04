@@ -1,0 +1,19 @@
+{
+  "item": [
+    {
+      "type": "INTEGER",
+      "linkId": "unit",
+      "required": true,
+      "text": "Number of Units",
+      "fieldName": "count"
+    },
+    {
+      "type": "STRING",
+      "linkId": "name",
+      "required": false,
+      "text": "Unit Name Prefix",
+      "fieldName": "prefix",
+      "helperText": "If left blank, units will be named 'Unit 1', 'Unit 2', etc."
+    }
+  ]
+}
