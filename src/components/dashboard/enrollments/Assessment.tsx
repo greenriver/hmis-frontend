@@ -112,7 +112,22 @@ const Assessment = () => {
         </Stack>
       </Box>
       <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-        {!definition && <Alert severity='error'>Unable to load form.</Alert>}
+        {!definition && (
+          <Alert severity='error'>
+            <Stack direction={'row'} spacing={0.5}>
+              <span>Unable to load form. </span>
+              {import.meta.env.MODE === 'development' && (
+                <>
+                  <span>Did you run</span>
+                  <Typography variant='body2' sx={{ fontFamily: 'Monospace' }}>
+                    rails driver:hmis:seed_definitions
+                  </Typography>
+                  <span>?</span>
+                </>
+              )}
+            </Stack>
+          </Alert>
+        )}
         {definition && (
           <>
             <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
@@ -126,7 +141,7 @@ const Assessment = () => {
                 <Typography variant='h6' sx={{ mb: 2 }}>
                   Form Navigation
                 </Typography>
-                <FormStepper definition={definition} />
+                <FormStepper items={definition.item} />
               </Paper>
             </Grid>
             <Grid item xs={9} sx={{ pt: '0 !important' }}>
