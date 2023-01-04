@@ -2,14 +2,14 @@ import { Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import FormStepper from '@/modules/form/components/FormStepper';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { FormItem } from '@/types/gqlTypes';
 
 export interface FormNavigationProps {
-  definition: FormDefinitionJson;
+  items: FormItem[];
   children: ReactNode;
   top?: string;
 }
-const FormNavigation = ({ definition, children, top }: FormNavigationProps) => (
+const FormNavigation = ({ items, children, top }: FormNavigationProps) => (
   <>
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <Paper
@@ -22,7 +22,7 @@ const FormNavigation = ({ definition, children, top }: FormNavigationProps) => (
         <Typography variant='h6' sx={{ mb: 2 }}>
           Form Navigation
         </Typography>
-        <FormStepper definition={definition} />
+        <FormStepper items={items} />
       </Paper>
     </Grid>
     <Grid item xs={9} sx={{ pt: '0 !important' }}>

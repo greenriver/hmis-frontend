@@ -4,22 +4,20 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import RouterLink from '@/components/elements/RouterLink';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { FormItem } from '@/types/gqlTypes';
 
 export interface Props {
-  definition: FormDefinitionJson;
+  items: FormItem[];
 }
-const FormStepper = ({ definition }: Props) => {
+const FormStepper = ({ items }: Props) => {
   const { pathname } = useLocation();
   const steps = useMemo(
     () =>
-      (definition.item || [])
-        .filter((i) => !i.hidden)
-        .map((i) => ({
-          label: i.text,
-          linkId: i.linkId,
-        })),
-    [definition]
+      items.map((i) => ({
+        label: i.text,
+        linkId: i.linkId,
+      })),
+    [items]
   );
 
   return (

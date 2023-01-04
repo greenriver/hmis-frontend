@@ -7,6 +7,7 @@ import {
   getInitialValues,
   getItemMap,
   LocalConstants,
+  shouldEnableItem,
 } from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
@@ -158,12 +159,23 @@ const EditRecord = <
     [definition, inputVariables, mutateFunction, record, confirmable]
   );
 
-  const leftNav = useMemo(
-    () =>
-      definition &&
-      definition.item.filter((i) => i.type === ItemType.Group).length >= 3,
-    [definition]
-  );
+  // Top-level items for the left nav (of >=3 groups)
+  const leftNavItems = useMemo(() => {
+    if (!definition || !itemMap) return false;
+
+    let topLevelItems = definition.item.filter(
+      (i) => i.type === ItemType.Group && !i.hidden
+    );
+
+    if (topLevelItems.length < 3) return false;
+
+    // Remove disabled groups
+    topLevelItems = topLevelItems.filter((item) =>
+      shouldEnableItem(item, initialValues, itemMap)
+    );
+    if (topLevelItems.length < 3) return false;
+    return topLevelItems;
+  }, [itemMap, definition, initialValues]);
 
   if (definitionLoading) return <Loading />;
   if (definitionError) console.error(definitionError);
@@ -190,7 +202,7 @@ const EditRecord = <
     </>
   );
 
-  if (leftNav) {
+  if (leftNavItems) {
     return (
       <>
         <Box
@@ -213,7 +225,7 @@ const EditRecord = <
           {title}
         </Box>
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation definition={definition} {...navigationProps}>
+          <FormNavigation items={leftNavItems} {...navigationProps}>
             {form}
           </FormNavigation>
         </Grid>
