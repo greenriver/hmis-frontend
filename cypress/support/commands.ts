@@ -51,8 +51,11 @@ Cypress.Commands.add('inputId', (id) => {
 });
 
 Cypress.Commands.add('choose', (id, optionCode) => {
-  cy.inputId(id).click();
-  cy.testId(`option-${optionCode}`).click();
+  cy.inputId(id).click({ force: true });
+  cy.get('.MuiAutocomplete-listbox')
+    .findTestId(`option-${optionCode}`)
+    .as('option');
+  cy.get('@option').click();
 });
 
 Cypress.Commands.add('checkOption', (id, optionCode) => {
@@ -82,6 +85,19 @@ Cypress.Commands.add('expectHudValuesToInclude', (values) => {
   cy.testId('submitFormButton').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(win.debug.hudValues).to.include(values);
+  });
+});
+
+Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
+  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.window().then((win) => {
+    expect(
+      Object.fromEntries(
+        Object.entries(win.debug.hudValues).filter(([key]) =>
+          key.includes(`${Object.keys(values)[0].split('.')[0]}.`)
+        )
+      )
+    ).to.deep.equal(values);
   });
 });
 
@@ -131,6 +147,7 @@ declare global {
       // Assertions
       expectHudValuesToInclude(values: Record<string, any>): null;
       expectHudValuesToDeepEqual(values: Record<string, any>): null;
+      expectHudValuesSectionToDeepEqual(values: Record<string, any>): null;
       expectHudValuesToNotHaveKeys(keys: string[]): null;
 
       // Assessment section assertions

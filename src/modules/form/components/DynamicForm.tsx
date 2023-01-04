@@ -297,13 +297,14 @@ const DynamicForm: React.FC<
         value={isDisabled ? undefined : values[item.linkId]}
         nestingLevel={nestingLevel}
         errors={getFieldErrors(item)}
-        inputProps={{
-          ...buildCommonInputProps(item, values),
-          disabled: isDisabled || undefined,
-        }}
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
         {...props}
+        inputProps={{
+          ...props?.inputProps,
+          ...buildCommonInputProps(item, values),
+          disabled: isDisabled || undefined,
+        }}
       />
     );
     if (renderFn) {

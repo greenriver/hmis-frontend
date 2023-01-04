@@ -2511,6 +2511,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INPUT_TABLE",
+            "description": "Render inputs as a table. Each nested group is rendered as a row.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "RADIO_BUTTONS",
             "description": "Render a choice input item as radio buttons",
             "isDeprecated": false,
