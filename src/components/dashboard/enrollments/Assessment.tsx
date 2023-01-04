@@ -126,7 +126,7 @@ const Assessment = () => {
                 <Typography variant='h6' sx={{ mb: 2 }}>
                   Form Navigation
                 </Typography>
-                <FormStepper definition={definition} />
+                <FormStepper items={definition.item} />
               </Paper>
             </Grid>
             <Grid item xs={9} sx={{ pt: '0 !important' }}>

@@ -48,7 +48,7 @@ export interface Props<RecordType, Query, QueryVariables>
   getErrors: (data: Query) => ValidationError[] | undefined;
   confirmable?: boolean; // whether mutation supports `confirmed` for warning confirmation on submit
   title: ReactNode;
-  navigationProps?: Omit<FormNavigationProps, 'definition' | 'children'>;
+  navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
 }
 
 /**

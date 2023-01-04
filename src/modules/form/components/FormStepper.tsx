@@ -13,10 +13,12 @@ const FormStepper = ({ items }: Props) => {
   const { pathname } = useLocation();
   const steps = useMemo(
     () =>
-      items.map((i) => ({
-        label: i.text,
-        linkId: i.linkId,
-      })),
+      items
+        .filter((i) => !i.hidden)
+        .map((i) => ({
+          label: i.text,
+          linkId: i.linkId,
+        })),
     [items]
   );
 
