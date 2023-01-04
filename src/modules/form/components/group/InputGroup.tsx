@@ -107,7 +107,7 @@ const InputGroup = ({
         columnSpacing={0}
         sx={{
           '& .MuiGrid-item': { pt: 0 },
-          mt: 2,
+          mt: 0,
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
           maxWidth: isNumeric
             ? maxWidthAtNestingLevel(nestingLevel + 1)
@@ -137,8 +137,8 @@ const InputGroup = ({
   ]);
 
   return (
-    <Box sx={{ pt: 2 }} id={item.linkId}>
-      {item.text && <Typography>{item.text}</Typography>}
+    <Box id={item.linkId}>
+      {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
       {wrappedChildren}
       {isNumeric && summaryItem && (
         <Stack

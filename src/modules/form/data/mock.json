@@ -216,9 +216,16 @@
       "text": "Numeric Input Group",
       "item": [
         {
+          "type": "STRING",
+          "hidden": true,
+          "linkId": "string-10",
+          "text": "String"
+        },
+        {
           "type": "GROUP",
           "linkId": "input-group",
           "component": "INPUT_GROUP",
+          "text": "Group title",
           "item": [
             {
               "type": "CURRENCY",
