@@ -9,13 +9,12 @@ import {
   GetPickListQueryVariables,
   PickListOption,
   PickListType,
-  QueryPickListArgs,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 
 export function usePickList(
   item: FormItem,
-  variables?: Omit<QueryPickListArgs, 'pickListType'>,
+  relationId?: string,
   fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>
 ) {
   const resolved = useMemo(() => resolveOptionList(item), [item]);
@@ -29,7 +28,7 @@ export function usePickList(
   const { data, loading, error } = useGetPickListQuery({
     variables: {
       pickListType: item.pickListReference as PickListType,
-      ...variables,
+      relationId,
     },
     // Skip if it was already resolve with local enums, or if it's an unrecognized reference
     skip: !!resolved || !isKnownType,

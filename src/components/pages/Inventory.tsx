@@ -93,6 +93,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Create Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       ) : (
@@ -109,6 +110,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Update Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       )}

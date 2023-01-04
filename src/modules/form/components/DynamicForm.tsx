@@ -37,7 +37,6 @@ import {
   FormDefinitionJson,
   FormItem,
   ItemType,
-  QueryPickListArgs,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -55,7 +54,7 @@ export interface Props
   warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
-  pickListQueryVariables?: Omit<QueryPickListArgs, 'pickListType'>;
+  pickListRelationId?: string;
 }
 
 const DynamicForm: React.FC<
@@ -83,7 +82,7 @@ const DynamicForm: React.FC<
   initiallyDisabledLinkIds, // list of link IDs that are disabled to start, based off definition and initialValues
   showSavePrompt = false,
   horizontal = false,
-  pickListQueryVariables,
+  pickListRelationId,
 }) => {
   const navigate = useNavigate();
 
@@ -303,7 +302,7 @@ const DynamicForm: React.FC<
           disabled: isDisabled || undefined,
         }}
         horizontal={horizontal}
-        pickListQueryVariables={pickListQueryVariables}
+        pickListRelationId={pickListRelationId}
         {...props}
       />
     );

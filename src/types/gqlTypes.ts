@@ -2192,9 +2192,8 @@ export type QueryOrganizationsArgs = {
 };
 
 export type QueryPickListArgs = {
-  inventoryId?: InputMaybe<Scalars['ID']>;
   pickListType: PickListType;
-  projectId?: InputMaybe<Scalars['ID']>;
+  relationId?: InputMaybe<Scalars['ID']>;
 };
 
 export type QueryProjectArgs = {
@@ -4348,8 +4347,7 @@ export type GetAssessmentQuery = {
 
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
-  projectId?: InputMaybe<Scalars['ID']>;
-  inventoryId?: InputMaybe<Scalars['ID']>;
+  relationId?: InputMaybe<Scalars['ID']>;
 }>;
 
 export type GetPickListQuery = {
@@ -9005,16 +9003,8 @@ export type GetAssessmentQueryResult = Apollo.QueryResult<
   GetAssessmentQueryVariables
 >;
 export const GetPickListDocument = gql`
-  query GetPickList(
-    $pickListType: PickListType!
-    $projectId: ID
-    $inventoryId: ID
-  ) {
-    pickList(
-      pickListType: $pickListType
-      projectId: $projectId
-      inventoryId: $inventoryId
-    ) {
+  query GetPickList($pickListType: PickListType!, $relationId: ID) {
+    pickList(pickListType: $pickListType, relationId: $relationId) {
       ...PickListOptionFields
     }
   }
@@ -9034,8 +9024,7 @@ export const GetPickListDocument = gql`
  * const { data, loading, error } = useGetPickListQuery({
  *   variables: {
  *      pickListType: // value for 'pickListType'
- *      projectId: // value for 'projectId'
- *      inventoryId: // value for 'inventoryId'
+ *      relationId: // value for 'relationId'
  *   },
  * });
  */

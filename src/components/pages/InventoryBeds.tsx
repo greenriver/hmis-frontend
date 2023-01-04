@@ -253,7 +253,7 @@ const InventoryBeds = () => {
               discardButtonText='Cancel'
               onDiscard={() => setDialogOpen(null)}
               onSubmit={handleCreateBeds}
-              pickListQueryVariables={{ inventoryId }}
+              pickListRelationId={inventoryId}
             />
           )}
         </DialogContent>

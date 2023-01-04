@@ -24,7 +24,6 @@ import {
   FormItem,
   InputSize,
   ItemType,
-  QueryPickListArgs,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -47,7 +46,7 @@ export interface DynamicFieldProps {
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
-  pickListQueryVariables?: Omit<QueryPickListArgs, 'pickListType'>;
+  pickListRelationId?: string;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -89,7 +88,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   horizontal = false,
   errors,
   inputProps,
-  pickListQueryVariables,
+  pickListRelationId,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -124,7 +123,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,
-    pickListQueryVariables,
+    pickListRelationId,
     {
       fetchPolicy: 'network-only', // Always fetch, because ProjectCoC records may have changed
       onCompleted: (data) => {
