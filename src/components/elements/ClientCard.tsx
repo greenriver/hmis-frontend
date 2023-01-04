@@ -136,7 +136,11 @@ const ClientCard: React.FC<Props> = ({
             <Box
               component='img'
               alt='client'
-              src='https://dummyimage.com/150x150/e8e8e8/aaa'
+              src={
+                client.image?.base64
+                  ? `data:image/jpeg;base64,${client.image.base64}`
+                  : 'https://dummyimage.com/150x150/e8e8e8/aaa'
+              }
               sx={{
                 height: 150,
                 width: 150,

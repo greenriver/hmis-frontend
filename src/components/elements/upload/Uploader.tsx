@@ -11,7 +11,7 @@ import useDirectUpload from './useDirectUpload';
 
 import { DirectUpload } from '@/types/gqlTypes';
 
-const UploadManager: React.FC<{
+const Uploader: React.FC<{
   onUpload: (upload: DirectUpload, file: File) => Promise<any>;
   file?: File;
 }> = ({ onUpload, file: fileProp }) => {
@@ -98,4 +98,4 @@ const UploadManager: React.FC<{
   );
 };
 
-export default UploadManager;
+export default Uploader;

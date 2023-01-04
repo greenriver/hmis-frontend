@@ -14,6 +14,15 @@ fragment ClientName on Client {
   nameSuffix
 }
 
+fragment ClientFile on Client {
+  id
+  image {
+    id
+    base64
+    contentType
+  }
+}
+
 fragment ClientFields on Client {
   id
   dob
@@ -31,6 +40,7 @@ fragment ClientFields on Client {
   dateDeleted
   dateUpdated
   ...ClientName
+  ...ClientFile
 }
 
 fragment ClientOmniSearchFields on Client {

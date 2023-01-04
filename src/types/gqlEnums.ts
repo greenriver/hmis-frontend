@@ -303,6 +303,7 @@ export const HmisEnums = {
     DATE: 'DATE',
     DISPLAY: 'DISPLAY',
     GROUP: 'GROUP',
+    IMAGE: 'IMAGE',
     INTEGER: 'INTEGER',
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',

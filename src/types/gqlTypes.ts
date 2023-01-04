@@ -1478,6 +1478,7 @@ export enum ItemType {
   Date = 'DATE',
   Display = 'DISPLAY',
   Group = 'GROUP',
+  Image = 'IMAGE',
   Integer = 'INTEGER',
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
@@ -5943,6 +5944,17 @@ export type ClientNameFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientFileFragment = {
+  __typename?: 'Client';
+  id: string;
+  image?: {
+    __typename?: 'ClientImage';
+    id: string;
+    base64: any;
+    contentType: string;
+  } | null;
+};
+
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   id: string;
@@ -5965,6 +5977,12 @@ export type ClientFieldsFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+  image?: {
+    __typename?: 'ClientImage';
+    id: string;
+    base64: any;
+    contentType: string;
+  } | null;
 };
 
 export type ClientOmniSearchFieldsFragment = {
@@ -6298,6 +6316,12 @@ export type SearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      image?: {
+        __typename?: 'ClientImage';
+        id: string;
+        base64: any;
+        contentType: string;
+      } | null;
     }>;
   };
 };
@@ -6334,6 +6358,12 @@ export type OmniSearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      image?: {
+        __typename?: 'ClientImage';
+        id: string;
+        base64: any;
+        contentType: string;
+      } | null;
     }>;
   };
 };
@@ -6366,6 +6396,12 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    image?: {
+      __typename?: 'ClientImage';
+      id: string;
+      base64: any;
+      contentType: string;
+    } | null;
   } | null;
 };
 
@@ -6474,6 +6510,12 @@ export type CreateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      image?: {
+        __typename?: 'ClientImage';
+        id: string;
+        base64: any;
+        contentType: string;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -6517,6 +6559,12 @@ export type UpdateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      image?: {
+        __typename?: 'ClientImage';
+        id: string;
+        base64: any;
+        contentType: string;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -6962,6 +7010,12 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
+              image?: {
+                __typename?: 'ClientImage';
+                id: string;
+                base64: any;
+                contentType: string;
+              } | null;
             };
           }>;
         };
@@ -8223,6 +8277,16 @@ export const ClientNameFragmentDoc = gql`
     nameSuffix
   }
 `;
+export const ClientFileFragmentDoc = gql`
+  fragment ClientFile on Client {
+    id
+    image {
+      id
+      base64
+      contentType
+    }
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     id
@@ -8241,8 +8305,10 @@ export const ClientFieldsFragmentDoc = gql`
     dateDeleted
     dateUpdated
     ...ClientName
+    ...ClientFile
   }
   ${ClientNameFragmentDoc}
+  ${ClientFileFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
