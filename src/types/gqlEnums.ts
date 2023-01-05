@@ -50,6 +50,8 @@ export const HmisEnums = {
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
+    INPUT_TABLE:
+      'Render inputs as a table. Each nested group is rendered as a row.',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',

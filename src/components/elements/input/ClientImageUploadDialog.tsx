@@ -1,3 +1,4 @@
+import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Button,
   ButtonProps,
@@ -9,6 +10,7 @@ import {
   DialogTitle,
   Grid,
   Typography,
+  Box,
 } from '@mui/material';
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
@@ -17,6 +19,7 @@ import { ClientCardImageElement } from '../ClientCard';
 import Uploader from '../upload/Uploader';
 
 import {
+  useDeleteClientImageMutation,
   useGetClientImageQuery,
   useUpdateClientImageMutation,
 } from '@/types/gqlTypes';
@@ -30,13 +33,20 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   onClose,
   ...props
 }) => {
-  const { data: { client } = {}, loading } = useGetClientImageQuery({
+  const {
+    data: { client } = {},
+    loading: fetching,
+    refetch: refetchClient,
+  } = useGetClientImageQuery({
     variables: { id: clientId },
   });
   const [mutate, { loading: updating }] = useUpdateClientImageMutation();
+  const [deleteImage, { loading: deleting }] = useDeleteClientImageMutation();
 
   const [newPhotoSrc, setNewPhotoSrc] = useState<string | undefined>();
   const [newBlobId, setNewBlobId] = useState<string | undefined>();
+
+  const mutationLoading = updating || deleting;
 
   const handleClose = useCallback<NonNullable<ButtonProps['onClick']>>(
     (e) => {
@@ -57,13 +67,22 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
     [newBlobId, clientId, mutate, handleClose]
   );
 
-  if (!loading && !client) return null;
+  const handleDelete = useCallback<NonNullable<ButtonProps['onClick']>>(
+    (e) => {
+      deleteImage({ variables: { clientId } })
+        .then(() => refetchClient())
+        .then((data) => !data.data?.client?.image && handleClose(e));
+    },
+    [clientId, deleteImage, handleClose, refetchClient]
+  );
+
+  if (!fetching && !client) return null;
 
   return (
     <Dialog {...omit(props, 'children')} onClose={onClose}>
       <DialogTitle>Upload Client Photo</DialogTitle>
       <DialogContent>
-        {loading ? (
+        {fetching ? (
           <CircularProgress />
         ) : (
           client && (
@@ -97,8 +116,26 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions>
+        {client?.image && (
+          <Box flexGrow={1}>
+            <Button
+              variant='outlined'
+              color='error'
+              disabled={mutationLoading}
+              startIcon={<DeleteIcon />}
+              onClick={handleDelete}
+              endIcon={
+                deleting ? (
+                  <CircularProgress size={15} color='inherit' />
+                ) : undefined
+              }
+            >
+              Remove Photo
+            </Button>
+          </Box>
+        )}
         <Button
-          disabled={!newBlobId || updating}
+          disabled={!newBlobId || mutationLoading}
           onClick={handleSave}
           endIcon={
             updating ? (
@@ -108,7 +145,11 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         >
           Save
         </Button>
-        <Button variant='outlined' onClick={handleClose}>
+        <Button
+          variant='outlined'
+          onClick={handleClose}
+          disabled={mutationLoading}
+        >
           Cancel
         </Button>
       </DialogActions>

@@ -115,6 +115,18 @@ mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
   }
 }
 
+mutation DeleteClientImage($clientId: ID!) {
+  deleteClientImage(input: { clientId: $clientId }) {
+    clientMutationId
+    client {
+      ...ClientImage
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   createEnrollment(input: $input) {
     clientMutationId
