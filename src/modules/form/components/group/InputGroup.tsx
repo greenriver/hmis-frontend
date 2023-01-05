@@ -83,9 +83,6 @@ const InputGroup = ({
             pl: 1,
             pb: 0.5,
             pr: 0.5,
-            maxWidth: isNumeric
-              ? maxWidthAtNestingLevel(nestingLevel + 1)
-              : undefined,
             ...(item.type === ItemType.String
               ? {
                   label: {
@@ -98,7 +95,7 @@ const InputGroup = ({
           {children}
         </Box>
       ),
-    [nestingLevel, isNumeric]
+    []
   );
 
   const wrappedChildren = useMemo(() => {
@@ -108,7 +105,14 @@ const InputGroup = ({
         direction={'column'}
         rowSpacing={2}
         columnSpacing={0}
-        sx={{ '& .MuiGrid-item': { pt: 0 }, mt: 2 }}
+        sx={{
+          '& .MuiGrid-item': { pt: 0 },
+          mt: 0,
+          border: (theme) => `1px solid ${theme.palette.grey[200]}`,
+          maxWidth: isNumeric
+            ? maxWidthAtNestingLevel(nestingLevel + 1)
+            : undefined,
+        }}
       >
         {renderChildItem &&
           childItems &&
@@ -123,11 +127,18 @@ const InputGroup = ({
           )}
       </Grid>
     );
-  }, [renderChildItem, childItems, childProps, childRenderFunc]);
+  }, [
+    renderChildItem,
+    nestingLevel,
+    isNumeric,
+    childItems,
+    childProps,
+    childRenderFunc,
+  ]);
 
   return (
-    <Box sx={{ pt: 2 }} id={item.linkId}>
-      {item.text && <Typography>{item.text}</Typography>}
+    <Box id={item.linkId}>
+      {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
       {wrappedChildren}
       {isNumeric && summaryItem && (
         <Stack

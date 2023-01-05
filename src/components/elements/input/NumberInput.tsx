@@ -70,7 +70,7 @@ const NumberInput = ({
       {...props}
       error={error || !!errorMessage}
       // If there is a server error, show that instead of the local message
-      helperText={error ? undefined : errorMessage}
+      helperText={error ? undefined : errorMessage || props.helperText}
     />
   );
 };

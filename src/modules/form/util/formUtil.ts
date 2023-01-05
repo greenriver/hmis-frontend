@@ -544,9 +544,8 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
  */
 export const getDisabledLinkIds = (
   itemMap: ItemMap,
-  values?: FormValues
+  values: FormValues
 ): string[] => {
-  if (!values) return [];
   return Object.keys(itemMap).filter(
     (linkId) => !shouldEnableItem(itemMap[linkId], values, itemMap)
   );

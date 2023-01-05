@@ -347,6 +347,8 @@ export enum Component {
   InfoGroup = 'INFO_GROUP',
   /** Render a group that contains children of the same type (e.g. all booleans) */
   InputGroup = 'INPUT_GROUP',
+  /** Render inputs as a table. Each nested group is rendered as a row. */
+  InputTable = 'INPUT_TABLE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
