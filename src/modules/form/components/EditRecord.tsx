@@ -14,6 +14,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
+import { totalStickyBarHeight } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   Props as DynamicFormProps,
@@ -82,7 +83,7 @@ const EditRecord = <
     variables: { identifier: definitionIdentifier },
   });
 
-  useScrollToHash(definitionLoading, 102);
+  useScrollToHash(definitionLoading, totalStickyBarHeight);
 
   const definition: FormDefinitionJson | undefined = useMemo(
     () => data?.formDefinition?.definition,
@@ -207,19 +208,19 @@ const EditRecord = <
       <>
         <Box
           sx={{
-            position: 'sticky',
-            top: 10,
+            // position: 'sticky',
+            // top: 10,
             backgroundColor: (theme) => theme.palette.background.default,
             zIndex: (theme) => theme.zIndex.appBar,
             // hack to add 15px of space on top of crumbs when scrolled to the top
-            '&:before': {
-              content: '""',
-              backgroundColor: (theme) => theme.palette.background.default,
-              position: 'absolute',
-              height: '15px',
-              mt: '-14px',
-              width: '100%',
-            },
+            // '&:before': {
+            //   content: '""',
+            //   backgroundColor: (theme) => theme.palette.background.default,
+            //   position: 'absolute',
+            //   height: '15px',
+            //   mt: '-14px',
+            //   width: '100%',
+            // },
           }}
         >
           {title}

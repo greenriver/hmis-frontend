@@ -12,6 +12,7 @@ import {
   ApolloErrorAlert,
 } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
+import { totalStickyBarHeight } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
@@ -79,7 +80,7 @@ const Assessment = () => {
     }
   }, [enrollment, assessmentRole]);
 
-  useScrollToHash(crumbsLoading || dataLoading, 99);
+  useScrollToHash(crumbsLoading || dataLoading, totalStickyBarHeight);
 
   if (crumbsLoading || dataLoading) return <Loading />;
   if (!crumbs) throw Error('Enrollment not found');
@@ -88,19 +89,19 @@ const Assessment = () => {
     <>
       <Box
         sx={{
-          position: 'sticky',
-          top: 10,
+          // position: 'sticky',
+          // top: totalStickyBarHeight + 24,
           backgroundColor: (theme) => theme.palette.background.default,
           zIndex: (theme) => theme.zIndex.appBar,
           // hack to add 15px of space on top of crumbs when scrolled to the top
-          '&:before': {
-            content: '""',
-            backgroundColor: (theme) => theme.palette.background.default,
-            position: 'absolute',
-            height: '15px',
-            mt: '-15px',
-            width: '100%',
-          },
+          // '&:before': {
+          //   content: '""',
+          //   backgroundColor: (theme) => theme.palette.background.default,
+          //   position: 'absolute',
+          //   height: '24px',
+          //   mt: '-24px',
+          //   width: '100%',
+          // },
         }}
       >
         {crumbsWithDetails && <Breadcrumbs crumbs={crumbsWithDetails} />}
@@ -135,7 +136,7 @@ const Assessment = () => {
                 sx={{
                   p: 3,
                   position: 'sticky',
-                  top: '115px', // hacky way to line up with top of form contents
+                  top: totalStickyBarHeight + 16,
                 }}
               >
                 <Typography variant='h6' sx={{ mb: 2 }}>

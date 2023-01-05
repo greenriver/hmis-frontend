@@ -47,7 +47,6 @@ const CreateProject = () => {
         inputVariables={{ organizationId }}
         getErrors={(data: CreateProjectMutation) => data?.createProject?.errors}
         submitButtonText='Create Project'
-        navigationProps={{ top: '118px' }}
         title={
           <>
             <Breadcrumbs crumbs={crumbs} />

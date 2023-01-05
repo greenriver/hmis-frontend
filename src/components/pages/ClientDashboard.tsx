@@ -1,6 +1,15 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Button, Container, Stack, Tab, Typography } from '@mui/material';
+import { TabContext, TabPanel } from '@mui/lab';
+import {
+  Box,
+  Divider,
+  lighten,
+  Stack,
+  SxProps,
+  Tab,
+  Tabs,
+  Theme,
+  Typography,
+} from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import {
   generatePath,
@@ -12,51 +21,18 @@ import {
   useParams,
 } from 'react-router-dom';
 
+import ClientCardMini from '../elements/ClientCardMini';
 import Loading from '../elements/Loading';
-import PageHeader from '../layout/PageHeader';
+import { totalStickyBarHeight } from '../layout/MainLayout';
 
-import { clientName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { Client, useGetClientQuery } from '@/types/gqlTypes';
 
-const tabs = [
-  {
-    label: 'Profile',
-    path: DashboardRoutes.PROFILE,
-  },
-  {
-    label: 'Enrollments',
-    path: DashboardRoutes.ALL_ENROLLMENTS,
-  },
-  {
-    label: 'History',
-    path: DashboardRoutes.HISTORY,
-  },
-  {
-    label: 'Assessments',
-    path: DashboardRoutes.ASSESSMENTS,
-  },
-  {
-    label: 'Notes',
-    path: DashboardRoutes.NOTES,
-  },
-  {
-    label: 'Files',
-    path: DashboardRoutes.FILES,
-  },
-  {
-    label: 'Contact',
-    path: DashboardRoutes.CONTACT,
-  },
-  {
-    label: 'Locations',
-    path: DashboardRoutes.LOCATIONS,
-  },
-  {
-    label: 'Referrals',
-    path: DashboardRoutes.REFERRALS,
-  },
-];
+type TabDef = { label: string; path?: string; url?: string };
+type TabGroupDef = { label: string; children: TabDef[] };
+
+const navWidth = 256;
+const miniCardHeight = 140;
 
 const ClientDashboard: React.FC = () => {
   const params = useParams() as { clientId: string };
@@ -72,12 +48,81 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
+  const tabs: TabGroupDef[] = useMemo(
+    () => [
+      {
+        label: 'Client Navigation',
+        children: [
+          {
+            label: 'Overview',
+            path: DashboardRoutes.PROFILE,
+          },
+          {
+            label: 'Enrollments',
+            path: DashboardRoutes.ALL_ENROLLMENTS,
+          },
+          {
+            label: 'Assessments',
+            path: DashboardRoutes.ASSESSMENTS,
+          },
+          {
+            label: 'Notes',
+            path: DashboardRoutes.NOTES,
+          },
+          {
+            label: 'Files',
+            path: DashboardRoutes.FILES,
+          },
+          {
+            label: 'Contact',
+            path: DashboardRoutes.CONTACT,
+          },
+          {
+            label: 'Locations',
+            path: DashboardRoutes.LOCATIONS,
+          },
+          {
+            label: 'Referrals',
+            path: DashboardRoutes.REFERRALS,
+          },
+        ],
+      },
+
+      {
+        label: 'Administrative',
+        children: [
+          {
+            label: 'Audit History',
+            path: DashboardRoutes.HISTORY,
+          },
+          ...(client && import.meta.env.PUBLIC_WAREHOUSE_URL
+            ? [
+                {
+                  label: 'View in Warehouse',
+                  path: undefined,
+                  url: `${import.meta.env.PUBLIC_WAREHOUSE_URL}clients/${
+                    client.id
+                  }/from_source`,
+                },
+              ]
+            : []),
+        ],
+      },
+    ],
+    [client]
+  );
+
+  const flattenedTabs = useMemo(
+    () => tabs.map((t) => t.children).flat(),
+    [tabs]
+  );
+
   const initialTab = useMemo(() => {
-    const matchedRoute = tabs.find(({ path }) =>
-      pathname.startsWith(generatePath(path, params))
+    const matchedRoute = flattenedTabs.find(
+      (t) => t.path && pathname.startsWith(generatePath(t.path, params))
     );
-    return matchedRoute?.path || tabs[0].path;
-  }, [pathname, params]);
+    return matchedRoute?.path || (flattenedTabs[0].path as string);
+  }, [pathname, flattenedTabs, params]);
 
   const [currentTab, setCurrentTab] = useState<string>(initialTab);
 
@@ -92,75 +137,145 @@ const ClientDashboard: React.FC = () => {
     [client]
   );
 
-  if (loading) return <Loading />;
+  if (loading || !flattenedTabs || !tabs) return <Loading />;
   if (!client) throw Error('Client not found');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();
+    console.log(newValue);
     navigate(generatePath(newValue, params), { replace: true });
     setCurrentTab(newValue);
   };
 
+  const tabSx: SxProps<Theme> = {
+    alignItems: 'flex-start',
+    textTransform: 'capitalize',
+    textAlign: 'left',
+    '&:hover': {
+      backgroundColor: (theme) => lighten(theme.palette.secondary.light, 0.9),
+    },
+    opacity: 1,
+    typography: 'body1',
+    color: 'text.primary',
+  };
+
+  const activeTabSx: SxProps<Theme> = {
+    fontWeight: 600,
+    color: (theme) => theme.palette.secondary.dark,
+  };
+
   return (
     <>
-      <PageHeader>
-        <Stack spacing={2} direction='row' justifyContent='space-between'>
-          <Typography variant='h4'>{clientName(client)}</Typography>
-          {import.meta.env.PUBLIC_WAREHOUSE_URL && (
-            <Button
-              variant='text'
-              size='small'
-              href={`${import.meta.env.PUBLIC_WAREHOUSE_URL}clients/${
-                client.id
-              }/from_source`}
-              target='_blank'
-              endIcon={
-                <OpenInNewIcon
-                  fontSize='small'
-                  sx={{ '&.MuiSvgIcon-fontSizeSmall': { fontSize: '16px' } }}
-                />
-              }
-            >
-              View in Warehouse
-            </Button>
-          )}
-        </Stack>
-      </PageHeader>
-      <Box sx={{ width: '100%', typography: 'body1' }}>
+      <Box
+        sx={{
+          typography: 'body1',
+          display: 'flex',
+          flexDirection: 'row',
+        }}
+      >
         <TabContext value={currentTab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList
-              onChange={handleChange}
-              aria-label='client dashboard tabs'
-              indicatorColor='secondary'
-              textColor='secondary'
-              variant='fullWidth'
+          <Stack
+            sx={{
+              width: navWidth,
+              borderRight: (theme) => `1px solid ${theme.palette.grey[300]}`,
+              backgroundColor: (theme) => theme.palette.background.paper,
+            }}
+          >
+            <Box
+              sx={{
+                py: 2,
+                px: 2,
+                position: 'sticky',
+                height: miniCardHeight,
+                top: totalStickyBarHeight,
+                zIndex: (theme) => theme.zIndex.appBar,
+                borderBottom: (theme) => `1px solid ${theme.palette.grey[300]}`,
+              }}
             >
-              {tabs.map(({ label, path }) => (
-                <Tab
-                  label={label}
-                  key={path}
-                  value={path}
-                  component={Link}
-                  to={generatePath(path, params)}
-                  sx={{
-                    textTransform: 'capitalize',
-                    fontWeight: currentTab === path ? 'bold' : undefined,
-                  }}
-                />
-              ))}
-            </TabList>
-          </Box>
+              <ClientCardMini client={client} />
+            </Box>
+            <Box
+              sx={{
+                position: 'sticky',
+                top: totalStickyBarHeight + miniCardHeight,
+                height: '1px',
+              }}
+            >
+              <Box
+                sx={{
+                  overflowY: 'auto',
+                  height: `calc(100vh - ${
+                    totalStickyBarHeight + miniCardHeight
+                  }px)`,
+                  width: navWidth,
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                  borderRight: (theme) =>
+                    `1px solid ${theme.palette.grey[300]}`,
+                }}
+              >
+                <Tabs
+                  onChange={handleChange}
+                  aria-label='client dashboard tabs'
+                  orientation='vertical'
+                >
+                  {tabs.map(({ label, children }, idx) => {
+                    return (
+                      <>
+                        <Typography variant='h6' sx={{ pl: 2, mt: 2, mb: 1 }}>
+                          {label}
+                        </Typography>
+                        {children.map(({ label, path, url }) =>
+                          path ? (
+                            <Tab
+                              label={label}
+                              key={path}
+                              value={path}
+                              component={Link}
+                              to={generatePath(path, params)}
+                              tabIndex={0}
+                              sx={{
+                                ...tabSx,
+                                ...(currentTab === path
+                                  ? activeTabSx
+                                  : undefined),
+                              }}
+                            />
+                          ) : (
+                            <Tab
+                              label={label}
+                              key={label}
+                              component={'a'}
+                              href={url}
+                              sx={{
+                                ...tabSx,
+                                ...(currentTab === path
+                                  ? activeTabSx
+                                  : undefined),
+                              }}
+                            />
+                          )
+                        )}
+                        {idx < tabs.length - 1 && <Divider sx={{ my: 1 }} />}
+                      </>
+                    );
+                  })}
+                </Tabs>
+              </Box>
+            </Box>
+          </Stack>
+
           {/* Render inactive tab panels too (as empty divs) for accessibility https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/#wai-aria-roles-states-and-properties-22 */}
-          {tabs.map(({ path }) => (
-            <TabPanel value={path} key={path}>
-              {path === currentTab && (
-                <Container maxWidth='xl'>
+          {flattenedTabs.map(({ path }) =>
+            path ? (
+              <TabPanel value={path} key={path} sx={{ width: '100%' }}>
+                {path === currentTab && (
+                  // <Container maxWidth='xl' sx={{ border: '1px solid green' }}>
                   <Outlet context={outletContext} />
-                </Container>
-              )}
-            </TabPanel>
-          ))}
+                  // </Container>
+                )}
+              </TabPanel>
+            ) : null
+          )}
         </TabContext>
       </Box>
     </>

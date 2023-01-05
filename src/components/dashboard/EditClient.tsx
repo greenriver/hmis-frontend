@@ -51,7 +51,6 @@ const Profile = () => {
       onCompleted={onCompleted}
       getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
       submitButtonText='Save Changes'
-      navigationProps={{ top: '118px' }}
       title={
         <>
           <Breadcrumbs crumbs={crumbs} />

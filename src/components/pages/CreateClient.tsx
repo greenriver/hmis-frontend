@@ -48,7 +48,6 @@ const CreateClient: React.FC = () => {
         onCompleted={onCompleted}
         getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
         submitButtonText='Create Client'
-        navigationProps={{ top: '118px' }}
         title={
           <>
             <Breadcrumbs crumbs={crumbs} />

@@ -59,7 +59,6 @@ const EditProject = () => {
         getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
         confirmable
         submitButtonText='Update Project'
-        navigationProps={{ top: '118px' }}
         onDiscard={generatePath(Routes.PROJECT, { projectId: project?.id })}
         title={
           <>
