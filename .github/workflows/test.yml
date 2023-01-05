@@ -57,10 +57,11 @@ jobs:
         HMIS_HOST: 'localhost'
         CYPRESS_BASE_URL: 'https://127.0.0.1:5173/'
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DEBUG: 'vite:plugin:mkcert'
       with:
         install: false
         build: yarn build
-        start: DEBUG=vite:plugin:mkcert yarn preview
+        start: yarn preview
         browser: chrome
         spec: |
           cypress/e2e/mocked/*.cy.ts
