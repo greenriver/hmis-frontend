@@ -6,14 +6,14 @@ import { generatePath, useParams } from 'react-router-dom';
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
-import { useIntakeAssessment } from './useIntakeAssessment';
+// import { useIntakeAssessment } from './useIntakeAssessment';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import ButtonLink from '@/components/elements/ButtonLink';
 import Loading from '@/components/elements/Loading';
-import { parseAndFormatDate, enrollmentName } from '@/modules/hmis/hmisUtil';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { AssessmentRole } from '@/types/gqlTypes';
+// import { AssessmentRole } from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
   const { clientId, enrollmentId } = useParams() as {
@@ -21,7 +21,7 @@ const ViewEnrollment = () => {
     clientId: string;
   };
   const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
-  const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
+  // const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
   const editHouseholdPath = useMemo(
     () =>
       generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
@@ -34,16 +34,16 @@ const ViewEnrollment = () => {
   if (loading) return <Loading />;
   if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
-  let enrollmentStatus = '';
-  if (enrollment.exitDate) {
-    enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  } else if (assessment && assessment.inProgress) {
-    enrollmentStatus = 'Intake Incomplete';
-  } else if (!fetchIntakeStatus.loading && !assessment) {
-    enrollmentStatus = 'Intake Incomplete';
-  } else if (!fetchIntakeStatus.loading) {
-    enrollmentStatus = 'Active';
-  }
+  // let enrollmentStatus = '';
+  // if (enrollment.exitDate) {
+  //   enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
+  // } else if (assessment && assessment.inProgress) {
+  //   enrollmentStatus = 'Intake Incomplete';
+  // } else if (!fetchIntakeStatus.loading && !assessment) {
+  //   enrollmentStatus = 'Intake Incomplete';
+  // } else if (!fetchIntakeStatus.loading) {
+  //   enrollmentStatus = 'Active';
+  // }
 
   return (
     <>
@@ -52,7 +52,7 @@ const ViewEnrollment = () => {
         {enrollmentName(enrollment)}
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={9}>
+        <Grid item xs={12}>
           <Stack spacing={2}>
             <Paper sx={{ p: 2 }}>
               <Stack
@@ -93,7 +93,7 @@ const ViewEnrollment = () => {
             </Paper>
           </Stack>
         </Grid>
-        <Grid item xs>
+        {/* <Grid item xs>
           <Paper sx={{ p: 2 }}>
             <Stack spacing={2} sx={{ mb: 3 }}>
               <Typography variant='h6'>Enrollment Status</Typography>
@@ -134,7 +134,7 @@ const ViewEnrollment = () => {
               </ButtonLink>
             </Stack>
           </Paper>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

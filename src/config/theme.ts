@@ -178,6 +178,7 @@ export default createTheme(theme, {
       styleOverrides: {
         outlined: {
           fontWeight: 600,
+          backgroundColor: 'white',
           // borderWidth: '2px',
           // lineHeight: 'initial',
           // '&:hover': {

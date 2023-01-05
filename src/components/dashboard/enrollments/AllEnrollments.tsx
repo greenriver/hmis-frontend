@@ -1,7 +1,7 @@
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
@@ -79,43 +79,39 @@ const AllEnrollments = () => {
   );
 
   return (
-    <Grid container spacing={4}>
-      <Grid item xs={8}>
-        <Paper sx={{ p: 2 }}>
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            Enrollments
-          </Typography>
-          <GenericTableWithData<
-            GetClientEnrollmentsQuery,
-            GetClientEnrollmentsQueryVariables,
-            EnrollmentFieldsFragment
-          >
-            queryVariables={{ id: clientId }}
-            queryDocument={GetClientEnrollmentsDocument}
-            rowLinkTo={rowLinkTo}
-            columns={columns}
-            pagePath='client.enrollments'
-            fetchPolicy='cache-and-network'
-          />
-        </Paper>
-      </Grid>
-      <Grid item xs>
-        <Paper sx={{ p: 2 }}>
-          <Typography variant='h6' sx={{ mb: 2 }}>
-            Actions
-          </Typography>
-          <ButtonLink
-            variant='outlined'
-            color='secondary'
-            to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
-              clientId,
-            })}
-          >
-            + Add Enrollment
-          </ButtonLink>
-        </Paper>
-      </Grid>
-    </Grid>
+    <>
+      <Stack
+        gap={3}
+        direction='row'
+        justifyContent={'space-between'}
+        sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+      >
+        <Typography variant='h3'>All Enrollments</Typography>
+        <ButtonLink
+          variant='outlined'
+          color='secondary'
+          to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+            clientId,
+          })}
+        >
+          + Add Enrollment
+        </ButtonLink>
+      </Stack>
+      <Paper sx={{ p: 2 }}>
+        <GenericTableWithData<
+          GetClientEnrollmentsQuery,
+          GetClientEnrollmentsQueryVariables,
+          EnrollmentFieldsFragment
+        >
+          queryVariables={{ id: clientId }}
+          queryDocument={GetClientEnrollmentsDocument}
+          rowLinkTo={rowLinkTo}
+          columns={columns}
+          pagePath='client.enrollments'
+          fetchPolicy='cache-and-network'
+        />
+      </Paper>
+    </>
   );
 };
 
