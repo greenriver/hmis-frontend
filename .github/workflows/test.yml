@@ -59,7 +59,7 @@ jobs:
       with:
         install: false
         build: yarn build
-        start: yarn preview
+        start: DEBUG=vite:plugin:mkcert yarn preview
         browser: chrome
         spec: |
           cypress/e2e/mocked/*.cy.ts
