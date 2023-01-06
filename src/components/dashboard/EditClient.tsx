@@ -34,6 +34,9 @@ const Profile = () => {
     >
       definitionIdentifier='client'
       record={client}
+      localConstants={{
+        clientId: client.id,
+      }}
       queryDocument={UpdateClientDocument}
       onCompleted={onCompleted}
       getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}

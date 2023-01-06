@@ -37,9 +37,7 @@ query GetClient($id: ID!) {
 
 query GetClientImage($id: ID!) {
   client(id: $id) {
-    image {
-      ...ClientImageFields
-    }
+    ...ClientImage
   }
 }
 
@@ -98,6 +96,30 @@ mutation UpdateClient($input: UpdateClientInput!) {
     clientMutationId
     client {
       ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
+  updateClientImage(input: { clientId: $clientId, imageBlobId: $imageBlobId }) {
+    clientMutationId
+    client {
+      ...ClientImage
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteClientImage($clientId: ID!) {
+  deleteClientImage(input: { clientId: $clientId }) {
+    clientMutationId
+    client {
+      ...ClientImage
     }
     errors {
       ...ValidationErrorFields
