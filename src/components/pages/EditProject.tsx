@@ -2,7 +2,6 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -46,7 +45,7 @@ const EditProject = () => {
   if (!crumbs || !project) throw Error('Project not found');
 
   return (
-    <ProjectLayout>
+    <ProjectLayout crumbs={crumbs}>
       <EditRecord<
         ProjectAllFieldsFragment,
         UpdateProjectMutation,
@@ -62,7 +61,6 @@ const EditProject = () => {
         onDiscard={generatePath(Routes.PROJECT, { projectId: project?.id })}
         title={
           <>
-            <Breadcrumbs crumbs={crumbs} />
             <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>
               <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
                 Update {project.projectName}

@@ -14,7 +14,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
-import { totalStickyBarHeight } from '@/components/layout/MainLayout';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   Props as DynamicFormProps,
@@ -83,7 +83,7 @@ const EditRecord = <
     variables: { identifier: definitionIdentifier },
   });
 
-  useScrollToHash(definitionLoading, totalStickyBarHeight);
+  useScrollToHash(definitionLoading, STICKY_BAR_HEIGHT);
 
   const definition: FormDefinitionJson | undefined = useMemo(
     () => data?.formDefinition?.definition,

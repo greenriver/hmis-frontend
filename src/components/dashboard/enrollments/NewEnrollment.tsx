@@ -1,9 +1,8 @@
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import {
   generatePath,
-  useLocation,
   useNavigate,
   useOutletContext,
   useParams,
@@ -12,7 +11,6 @@ import {
 import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
 
-import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
@@ -28,7 +26,6 @@ import {
 } from '@/types/gqlTypes';
 
 const NewEnrollment = () => {
-  const { pathname } = useLocation();
   const [project, setProject] = useState<ProjectOption | null>(null);
   const [entryDate, setEntryDate] = useState<Date | null>(new Date());
   const [projectError, setProjectError] = useState(false);
@@ -95,24 +92,17 @@ const NewEnrollment = () => {
   }
   if (error) throw error;
 
-  const crumbs = [
-    {
-      label: 'All Enrollments',
-      to: DashboardRoutes.ALL_ENROLLMENTS,
-    },
-    { label: `Add Enrollment`, to: pathname },
-  ];
-
   const numMembers = Object.keys(members).length;
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4}>
         <Grid item xs={11}>
-          <Typography variant='h5' sx={{ mb: 2 }}>
-            <b>Create enrollment</b>
-            {` for ${clientName(client)}`}
+          <Typography variant='h4' sx={{ mb: 2 }}>
+            Create enrollment
+            <Box component='span' fontWeight={400}>
+              {` for ${clientName(client)}`}
+            </Box>
           </Typography>
 
           <Paper sx={{ p: 2, mb: 2 }}>

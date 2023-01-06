@@ -1,27 +1,26 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useOutletContext, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
-import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
-// import { useIntakeAssessment } from './useIntakeAssessment';
+import { useIntakeAssessment } from './useIntakeAssessment';
 
-import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import ButtonLink from '@/components/elements/ButtonLink';
-import Loading from '@/components/elements/Loading';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-// import { AssessmentRole } from '@/types/gqlTypes';
+import { AssessmentRole } from '@/types/gqlTypes';
 
 const ViewEnrollment = () => {
+  const { enrollment } = useOutletContext<DashboardContext>();
   const { clientId, enrollmentId } = useParams() as {
     enrollmentId: string;
     clientId: string;
   };
-  const [crumbs, loading, enrollment] = useEnrollmentCrumbs();
-  // const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
+
+  const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
   const editHouseholdPath = useMemo(
     () =>
       generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
@@ -31,28 +30,26 @@ const ViewEnrollment = () => {
     [clientId, enrollmentId]
   );
 
-  if (loading) return <Loading />;
-  if (!crumbs || !enrollment) throw Error('Enrollment not found');
+  if (!enrollment) throw Error('Enrollment not found');
 
-  // let enrollmentStatus = '';
-  // if (enrollment.exitDate) {
-  //   enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  // } else if (assessment && assessment.inProgress) {
-  //   enrollmentStatus = 'Intake Incomplete';
-  // } else if (!fetchIntakeStatus.loading && !assessment) {
-  //   enrollmentStatus = 'Intake Incomplete';
-  // } else if (!fetchIntakeStatus.loading) {
-  //   enrollmentStatus = 'Active';
-  // }
+  let enrollmentStatus = '';
+  if (enrollment.exitDate) {
+    enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
+  } else if (assessment && assessment.inProgress) {
+    enrollmentStatus = 'Intake Incomplete';
+  } else if (!fetchIntakeStatus.loading && !assessment) {
+    enrollmentStatus = 'Intake Incomplete';
+  } else if (!fetchIntakeStatus.loading) {
+    enrollmentStatus = 'Active';
+  }
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
       <Typography variant='h4' sx={{ mb: 2 }}>
         {enrollmentName(enrollment)}
       </Typography>
       <Grid container spacing={4}>
-        <Grid item xs={12}>
+        <Grid item xs={9}>
           <Stack spacing={2}>
             <Paper sx={{ p: 2 }}>
               <Stack
@@ -93,7 +90,7 @@ const ViewEnrollment = () => {
             </Paper>
           </Stack>
         </Grid>
-        {/* <Grid item xs>
+        <Grid item xs>
           <Paper sx={{ p: 2 }}>
             <Stack spacing={2} sx={{ mb: 3 }}>
               <Typography variant='h6'>Enrollment Status</Typography>
@@ -134,7 +131,7 @@ const ViewEnrollment = () => {
               </ButtonLink>
             </Stack>
           </Paper>
-        </Grid> */}
+        </Grid>
       </Grid>
     </>
   );

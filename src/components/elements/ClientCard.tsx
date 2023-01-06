@@ -13,23 +13,23 @@ import { Fragment, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import ButtonLink from './ButtonLink';
+import ClientImage from './ClientImage';
 import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
 import {
-  lastUpdated,
-  clientName,
-  pronouns,
-  dob,
   age,
+  clientName,
+  dob,
   entryExitRange,
   isRecentEnrollment,
+  lastUpdated,
+  pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   useGetClientEnrollmentsQuery,
-  useGetClientImageQuery,
 } from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
@@ -111,10 +111,6 @@ const ClientCard: React.FC<Props> = ({
   showLinkToRecord = false,
   linkTargetBlank = false,
 }) => {
-  const { data, loading: imageLoading = false } = useGetClientImageQuery({
-    variables: { id: client.id },
-  });
-  const { base64, contentType = 'image/png' } = data?.client?.image || {};
   return (
     <Card sx={{ mb: 2, p: 2 }}>
       {showNotices && (
@@ -141,31 +137,7 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
             <Stack spacing={1} direction='row'>
-              {imageLoading ? (
-                <Skeleton
-                  variant='rectangular'
-                  sx={{
-                    height: 150,
-                    width: 150,
-                    mr: 1,
-                  }}
-                />
-              ) : (
-                <Box
-                  component='img'
-                  alt='client'
-                  src={
-                    base64
-                      ? `data:${contentType};base64,${base64}`
-                      : 'https://dummyimage.com/150x150/e8e8e8/aaa'
-                  }
-                  sx={{
-                    height: 150,
-                    width: 150,
-                    mr: 1,
-                  }}
-                />
-              )}
+              <ClientImage clientId={client.id} showPlaceholder />
 
               <Stack spacing={0.5} sx={{ pr: 1 }}>
                 <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>

@@ -11,7 +11,6 @@ import {
 import { useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import { ColumnDef } from '../elements/GenericTable';
 import GenericTableWithData from '../elements/GenericTableWithData';
 import TextInput from '../elements/input/TextInput';
@@ -154,14 +153,13 @@ const InventoryBeds = () => {
   if (error) throw error;
 
   return (
-    <ProjectLayout>
-      <Breadcrumbs
-        crumbs={[
-          ...crumbs,
-          { label: 'Inventory', to: Routes.EDIT_INVENTORY },
-          { label: title, to: '' },
-        ]}
-      />
+    <ProjectLayout
+      crumbs={[
+        ...crumbs,
+        { label: 'Inventory', to: Routes.EDIT_INVENTORY },
+        { label: title, to: '' },
+      ]}
+    >
       <Stack direction={'row'} spacing={2} sx={{ mb: 4 }}>
         <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
           {title}

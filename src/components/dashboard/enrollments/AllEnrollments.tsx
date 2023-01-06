@@ -86,7 +86,7 @@ const AllEnrollments = () => {
         justifyContent={'space-between'}
         sx={{ mb: 2, pr: 1, alignItems: 'center' }}
       >
-        <Typography variant='h3'>All Enrollments</Typography>
+        <Typography variant='h4'>All Enrollments</Typography>
         <ButtonLink
           variant='outlined'
           color='secondary'

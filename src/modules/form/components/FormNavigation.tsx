@@ -1,7 +1,7 @@
 import { Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { totalStickyBarHeight } from '@/components/layout/MainLayout';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import FormStepper from '@/modules/form/components/FormStepper';
 import { FormItem } from '@/types/gqlTypes';
 
@@ -17,7 +17,7 @@ const FormNavigation = ({ items, children }: FormNavigationProps) => (
         sx={{
           p: 3,
           position: 'sticky',
-          top: totalStickyBarHeight + 16,
+          top: STICKY_BAR_HEIGHT + 16,
         }}
       >
         <Typography variant='h6' sx={{ mb: 2 }}>

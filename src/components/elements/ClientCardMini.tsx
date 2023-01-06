@@ -1,5 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 
+import ClientImage from './ClientImage';
+
 import {
   clientName,
   pronouns,
@@ -27,14 +29,19 @@ const ClientCardMini = ({ client }: Props) => {
           {secondaryName}
         </Typography>
       )}
-      {clientAge && (
-        <Typography variant='body2'>
-          <b>Age:</b> {clientAge}
-        </Typography>
-      )}
-      {clientPronouns && (
-        <Typography variant='body2'>{clientPronouns}</Typography>
-      )}
+      <Stack direction='row' gap={1}>
+        <ClientImage clientId={client.id} width={80} height={80} />
+        <Stack gap={0.5}>
+          {clientAge && (
+            <Typography variant='body2'>
+              <b>Age:</b> {clientAge}
+            </Typography>
+          )}
+          {clientPronouns && (
+            <Typography variant='body2'>{clientPronouns}</Typography>
+          )}
+        </Stack>
+      </Stack>
     </Stack>
   );
 };

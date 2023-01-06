@@ -30,7 +30,7 @@ const showWarehouseLinkBar =
   import.meta.env.PUBLIC_CAS_URL;
 
 const appBarHeight = 64;
-export const totalStickyBarHeight = showWarehouseLinkBar
+export const STICKY_BAR_HEIGHT = showWarehouseLinkBar
   ? appBarHeight + warehouseLinkBarHeight
   : appBarHeight;
 
@@ -53,7 +53,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           top: showWarehouseLinkBar ? warehouseLinkBarHeight : 0,
         }}
       >
-        <Toolbar sx={{ flexWrap: 'wrap', gap: 2 }}>
+        {/* fixme: make responsive */}
+        <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 2 }}>
           <RouterLink
             variant='h1'
             color='secondary'

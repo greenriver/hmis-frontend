@@ -2,7 +2,6 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -36,7 +35,7 @@ const EditOrganization = () => {
   if (!crumbs || !organization) throw Error('Organization not found');
 
   return (
-    <ProjectLayout>
+    <ProjectLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
         <EditRecord<
@@ -53,10 +52,7 @@ const EditOrganization = () => {
           }
           submitButtonText='Update Organization'
           title={
-            <>
-              <Breadcrumbs crumbs={crumbs} />
-              <Typography variant='h3'>Update {organizationName}</Typography>
-            </>
+            <Typography variant='h3'>Update {organizationName}</Typography>
           }
         />
       )}
