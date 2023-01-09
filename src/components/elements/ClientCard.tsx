@@ -184,6 +184,7 @@ const ClientCard: React.FC<Props> = ({
     loading: imageLoading = false,
   } = useGetClientImageQuery({
     variables: { id: client.id },
+    skip: hideImage,
   });
 
   return (
