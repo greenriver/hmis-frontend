@@ -130,6 +130,7 @@ export const ClientCardImageElement = ({
     <Box
       alt='client'
       src={src}
+      crossOrigin={url ? '' : undefined}
       {...props}
       sx={{
         height: 150,

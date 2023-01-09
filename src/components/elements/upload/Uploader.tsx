@@ -115,7 +115,7 @@ const Uploader: React.FC<UploaderProps> = ({
                   component='img'
                   alt='file preview'
                   src={fileImageUrl}
-                  crossOrigin='use-credentials'
+                  crossOrigin=''
                   sx={{
                     width: '72px',
                     height: '72px',
