@@ -13,6 +13,8 @@ import {
   Ethnicity,
   DobDataQuality,
   NoYesReasonsForMissingData,
+  CreateDirectUploadMutationDocument,
+  GetClientImageDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -234,6 +236,30 @@ const clientLookupMock = {
   },
 };
 
+const clientImageLookupMock = {
+  request: {
+    query: GetClientImageDocument,
+    variables: {
+      id: '9999',
+    },
+  },
+  result: {
+    data: {
+      client: {
+        __typename: 'Client',
+        id: '9999',
+        image: {
+          __typename: 'ClientImage',
+          id: 1,
+          contentType: 'image/jpeg',
+          base64:
+            'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII',
+        },
+      },
+    },
+  },
+};
+
 const clientWithEnrollmentsMock = {
   request: {
     query: GetClientEnrollmentsDocument,
@@ -307,13 +333,47 @@ const enrollmentWithHoHMock = {
   },
 };
 
+const createDirectUploadMock = {
+  request: {
+    query: CreateDirectUploadMutationDocument,
+    variables: {
+      input: {
+        checksum: 'upfCZclwF7d84KD6gbjppQ==',
+        filename: 'image.jpeg',
+        contentType: 'image/jpeg',
+        byteSize: 467145,
+      },
+    },
+  },
+  result: {
+    data: {
+      createDirectUpload: {
+        __typename: 'DirectUpload',
+        filename: 'image.json',
+        headers: '{}',
+        url: 'http://example.com',
+        blobId: '1',
+        signedBlobId: '1',
+      },
+    },
+  },
+};
+
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
   clientSearchMockNextPage,
   clientLookupMock,
+  clientImageLookupMock,
+  clientImageLookupMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
   clientWithEnrollmentsMock,
   enrollmentWithHoHMock,
+  createDirectUploadMock,
 ];
 
 export default mocks;

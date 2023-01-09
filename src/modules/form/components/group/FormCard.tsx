@@ -69,6 +69,7 @@ const FormCard = ({
                   size='small'
                   sx={{ height: 'fit-content' }}
                   onClick={onClear}
+                  data-testid='clearButton'
                 >
                   CLEAR
                 </Button>

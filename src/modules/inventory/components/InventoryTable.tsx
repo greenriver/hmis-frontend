@@ -24,7 +24,6 @@ import {
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {
     header: 'CoC Code',
-    linkTreatment: true,
     render: 'cocCode',
   },
   {
@@ -36,14 +35,6 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
     header: 'Household Type',
     render: (i: InventoryFieldsFragment) =>
       HmisEnums.HouseholdType[i.householdType],
-  },
-  {
-    header: 'Units',
-    render: 'unitInventory',
-  },
-  {
-    header: 'Beds',
-    render: 'bedInventory',
   },
 ];
 
@@ -57,9 +48,10 @@ interface Props
     'queryVariables' | 'queryDocument' | 'pagePath'
   > {
   projectId: string;
+  es?: boolean;
 }
 
-const InventoryTable = ({ projectId, ...props }: Props) => {
+const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
     null
   );
@@ -85,11 +77,33 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
   const tableColumns = useMemo(() => {
     return [
       ...columns,
+      ...(es
+        ? []
+        : [
+            {
+              header: 'Units',
+              render: 'unitInventory' as keyof InventoryFieldsFragment,
+            },
+          ]),
+      {
+        header: 'Beds',
+        render: 'bedInventory' as keyof InventoryFieldsFragment,
+      },
       {
         key: 'actions',
         width: '1%',
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
+            {/* <ButtonLink
+              to={generatePath(Routes.MANAGE_INVENTORY_BEDS, {
+                projectId,
+                inventoryId: record.id,
+              })}
+              size='small'
+              variant='outlined'
+            >
+              Beds
+            </ButtonLink> */}
             <ButtonLink
               data-testid='updateButton'
               to={generatePath(Routes.EDIT_INVENTORY, {
@@ -114,7 +128,7 @@ const InventoryTable = ({ projectId, ...props }: Props) => {
         ),
       },
     ];
-  }, [projectId]);
+  }, [projectId, es]);
 
   return (
     <>

@@ -1,3 +1,4 @@
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import {
   Breadcrumbs as MuiBreadcrumbs,
   BreadcrumbsProps,
@@ -7,15 +8,23 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 
+export interface Breadcrumb {
+  label: string;
+  to: string;
+}
 interface Props extends BreadcrumbsProps {
-  crumbs: { label: string; to: string }[];
+  crumbs: Breadcrumb[];
 }
 
 const Breadcrumbs = ({ crumbs, ...rest }: Props) => {
   const params = useParams();
 
   return (
-    <MuiBreadcrumbs aria-label='breadcrumb' sx={{ mb: 3 }} {...rest}>
+    <MuiBreadcrumbs
+      aria-label='breadcrumb'
+      separator={<KeyboardArrowRightIcon fontSize='small' sx={{ mx: 0 }} />}
+      {...rest}
+    >
       {crumbs.map(({ label, to }, index) => {
         if (index === crumbs.length - 1) {
           return (

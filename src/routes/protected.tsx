@@ -24,6 +24,7 @@ import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
+// import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
@@ -53,6 +54,7 @@ export const protectedRoutes = [
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
       { path: Routes.NEW_INVENTORY, element: <Inventory create /> },
       { path: Routes.EDIT_INVENTORY, element: <Inventory /> },
+      // { path: Routes.MANAGE_INVENTORY_BEDS, element: <InventoryBeds /> },
       {
         path: Routes.NEW_FUNDER,
         element: <Funder create={true} />,
@@ -75,7 +77,7 @@ export const protectedRoutes = [
         path: Routes.CLIENT_DASHBOARD,
         element: <ClientDashboard />,
         children: [
-          { path: '', element: <Profile /> },
+          { path: '', element: <Navigate to='profile' /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
           { path: DashboardRoutes.EDIT, element: <EditClient /> },
           {
@@ -113,6 +115,7 @@ export const protectedRoutes = [
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },
+          { path: '*', element: <Navigate to='profile' /> },
         ],
       },
       { path: '/', element: <Dashboard /> },

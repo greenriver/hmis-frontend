@@ -152,6 +152,44 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'Bed',
+    fields: [
+      {
+        name: 'bedType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'InventoryBedType', ofType: null },
+        },
+      },
+      {
+        name: 'endDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'gender',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'startDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Client',
     fields: [
       {
@@ -305,6 +343,80 @@ export const HmisObjectSchemas: GqlSchema[] = [
             name: 'NoYesReasonsForMissingData',
             ofType: null,
           },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ClientImage',
+    fields: [
+      {
+        name: 'base64',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Base64', ofType: null },
+        },
+      },
+      {
+        name: 'contentType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'DirectUpload',
+    fields: [
+      {
+        name: 'blobId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'filename',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'headers',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'signedBlobId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'url',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
       },
     ],
@@ -1897,6 +2009,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'Unit',
+    fields: [
+      {
+        name: 'bedCount',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'endDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'startDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
     ],

@@ -6,6 +6,7 @@ export const Routes = {
   EDIT_PROJECT: '/projects/:projectId/edit',
   NEW_INVENTORY: '/projects/:projectId/inventory/new',
   EDIT_INVENTORY: '/projects/:projectId/inventory/:inventoryId/edit',
+  MANAGE_INVENTORY_BEDS: '/projects/:projectId/inventory/:inventoryId/beds',
   NEW_FUNDER: '/projects/:projectId/funder/new',
   EDIT_FUNDER: '/projects/:projectId/funder/:funderId/edit',
   NEW_COC: '/projects/:projectId/coc/new',
@@ -19,7 +20,7 @@ export const Routes = {
 // Routes within the client dashboard
 const subRoutes = {
   PROFILE: 'profile',
-  EDIT: 'edit',
+  EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
   VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
   EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',

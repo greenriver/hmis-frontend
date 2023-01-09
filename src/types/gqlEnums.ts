@@ -50,9 +50,12 @@ export const HmisEnums = {
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
+    INPUT_TABLE:
+      'Render inputs as a table. Each nested group is rendered as a row.',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
+    SSN: 'SSN input component',
   },
   DOBDataQuality: {
     FULL_DOB_REPORTED: 'Full DOB',
@@ -294,6 +297,15 @@ export const HmisEnums = {
     SMALL: 'SMALL',
     XSMALL: 'XSMALL',
   },
+  InventoryBedType: {
+    CHRONIC: 'Chronic',
+    CHRONIC_VETERAN: 'Chronic Veteran',
+    CHRONIC_YOUTH: 'Chronic Youth',
+    OTHER: 'Other',
+    VETERAN: 'Veteran',
+    YOUTH: 'Youth',
+    YOUTH_VETERAN: 'Youth Veteran',
+  },
   InventorySortOption: { START_DATE: 'START_DATE' },
   ItemType: {
     BOOLEAN: 'BOOLEAN',
@@ -302,6 +314,7 @@ export const HmisEnums = {
     DATE: 'DATE',
     DISPLAY: 'DISPLAY',
     GROUP: 'GROUP',
+    IMAGE: 'IMAGE',
     INTEGER: 'INTEGER',
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
@@ -425,6 +438,7 @@ export const HmisEnums = {
     UNKNOWN: 'Unknown',
   },
   PickListType: {
+    AVAILABLE_UNITS: 'AVAILABLE_UNITS',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     GEOCODE: 'GEOCODE',

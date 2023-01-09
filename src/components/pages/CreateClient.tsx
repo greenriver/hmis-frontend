@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
@@ -48,11 +48,12 @@ const CreateClient: React.FC = () => {
         onCompleted={onCompleted}
         getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
         submitButtonText='Create Client'
-        navigationProps={{ top: '118px' }}
         title={
           <>
-            <Breadcrumbs crumbs={crumbs} />
-            <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
+            <Box sx={{ mb: 2 }}>
+              <Breadcrumbs crumbs={crumbs} />
+            </Box>
+            <Typography variant='h3' sx={{ pt: 0, pb: 3 }}>
               Add New Client
             </Typography>
           </>

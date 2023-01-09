@@ -2,7 +2,6 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -53,6 +52,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
+      // inventoryId: inventoryId,
     };
   }, [project]);
 
@@ -65,26 +65,23 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     definitionIdentifier: 'inventory',
     projectId,
     title: (
-      <>
-        <Breadcrumbs crumbs={crumbs} />
-        <Stack direction={'row'} spacing={2}>
-          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-            {title}
-          </Typography>
-          <InactiveChip project={project} />
-        </Stack>
-      </>
+      <Stack direction={'row'} spacing={2}>
+        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+          {title}
+        </Typography>
+        <InactiveChip project={project} />
+      </Stack>
     ),
   };
   return (
-    <ProjectLayout>
+    <ProjectLayout crumbs={crumbs}>
       {create ? (
         <EditRecord<
           InventoryFieldsFragment,
           CreateInventoryMutation,
           CreateInventoryMutationVariables
         >
-          inputVariables={{ projectId }}
+          inputVariables={{ projectId, unitInventory: 0, bedInventory: 0 }}
           queryDocument={CreateInventoryDocument}
           onCompleted={onCompleted}
           getErrors={(data: CreateInventoryMutation) =>
@@ -92,6 +89,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Create Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       ) : (
@@ -108,6 +106,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           }
           submitButtonText='Update Inventory'
           localConstants={localConstants}
+          pickListRelationId={projectId}
           {...common}
         />
       )}

@@ -3,78 +3,278 @@
     {
       "type": "GROUP",
       "linkId": "group-1",
-      "text": "Group Title",
+      "text": "Basic Input Types",
       "required": false,
       "item": [
         {
           "type": "STRING",
           "required": true,
           "linkId": "string-1",
-          "text": "String"
+          "text": "String",
+          "helperText": "This is helper text"
         },
         {
           "type": "INTEGER",
           "required": false,
           "linkId": "int-1",
           "text": "Integer (max = 5)",
-          "bounds": [{ "type": "MAX", "valueNumber": 5 }]
+          "bounds": [{ "type": "MAX", "valueNumber": 5 }],
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "CURRENCY",
+          "required": false,
+          "linkId": "curr-1",
+          "text": "Currency (max = 100)",
+          "bounds": [{ "type": "MAX", "valueNumber": 100 }],
+          "helperText": "This is helper text"
         },
         {
           "type": "BOOLEAN",
           "required": false,
           "linkId": "boolean-1",
-          "text": "Boolean"
+          "text": "Boolean",
+          "helperText": "This is helper text"
         },
         {
           "type": "DATE",
           "required": false,
           "linkId": "date-1",
-          "text": "Date"
+          "text": "Date",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "STRING",
+          "required": false,
+          "linkId": "ssn",
+          "text": "SSN",
+          "component": "SSN",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "TEXT",
+          "required": false,
+          "linkId": "text-1",
+          "text": "Text Field",
+          "helperText": "This is helper text"
         },
         {
           "type": "CHOICE",
-          "linkId": "project",
-          "text": "Projects",
+          "linkId": "choice-2",
+          "text": "Choice Option",
+          "pickListReference": "NoYesReasonsForMissingData",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "CHOICE",
           "repeats": true,
-          "pickListReference": "projects"
+          "linkId": "multi-choice",
+          "text": "Multi Select",
+          "pickListReference": "NoYesReasonsForMissingData",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "CHOICE",
+          "component": "RADIO_BUTTONS",
+          "linkId": "radio-1",
+          "text": "Choice Option",
+          "pickListReference": "NoYesReasonsForMissingData",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "CHOICE",
+          "component": "RADIO_BUTTONS_VERTICAL",
+          "linkId": "vertical-radio-1",
+          "text": "Choice Option",
+          "pickListReference": "NoYesReasonsForMissingData",
+          "helperText": "This is helper text"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "alert-example",
+          "component": "ALERT_INFO",
+          "text": "This is a display item <b>in an alert box</b>"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "display-example",
+          "text": "This is a display item <b>with HTML</b><ul><li>List item!</li></ul>End of display item."
         }
       ]
     },
     {
       "type": "GROUP",
       "linkId": "group-3",
+      "text": "Dependencies",
       "item": [
         {
           "type": "CHOICE",
           "linkId": "choice-1",
-          "text": "HMIS Enum choice",
-          "pickListReference": "RecordType"
+          "text": "Choice with dependencies",
+          "briefText": "something",
+          "pickListReference": "NoYesReasonsForMissingData",
+          "helperText": "This is helper text"
         },
         {
           "type": "STRING",
           "required": false,
           "linkId": "string-4",
-          "text": "Details (select yes to enable)",
-          "enableBehavior": "all",
+          "text": "Details (depends on previous)",
+          "helperText": "This is helper text",
+          "disabledDisplay": "PROTECTED",
+          "enableBehavior": "ALL",
           "enableWhen": [
             {
               "question": "choice-1",
               "operator": "EQUAL",
-              "answerCode": "1"
+              "answerCode": "YES"
             }
           ]
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "groupWithTable",
+      "text": "Group with Table",
+      "item": [
+        {
+          "type": "GROUP",
+          "linkId": "disability-table",
+          "component": "INPUT_TABLE",
+          "item": [
+            {
+              "type": "GROUP",
+              "linkId": "disability-table-r1",
+              "text": "First row",
+              "item": [
+                {
+                  "type": "CHOICE",
+                  "linkId": "4.05.2",
+                  "text": "Physical Disability",
+                  "fieldName": "physicalDisability",
+                  "pickListReference": "NoYesReasonsForMissingData"
+                },
+                {
+                  "type": "CHOICE",
+                  "linkId": "4.05.A",
+                  "text": "Is this a disabling condition?",
+                  "briefText": "Disabling Condition",
+                  "fieldName": "physicalDisabilityIndefiniteAndImpairs",
+                  "pickListReference": "NoYesReasonsForMissingData"
+                }
+              ]
+            },
+            {
+              "type": "GROUP",
+              "linkId": "disability-table-r2",
+              "text": "Second row",
+              "item": [
+                {
+                  "type": "CHOICE",
+                  "linkId": "4.06.2",
+                  "text": "Developmental Disability",
+                  "fieldName": "developmentalDisability",
+                  "pickListReference": "NoYesReasonsForMissingData"
+                },
+                {
+                  "type": "DISPLAY",
+                  "linkId": "4.06.2-info",
+                  "text": "<i style='color:gray;'>Not applicable.</i>"
+                }
+              ]
+            },
+            {
+              "type": "GROUP",
+              "linkId": "disability-table-r3",
+              "text": "Third row",
+              "item": [
+                {
+                  "type": "CHOICE",
+                  "linkId": "4.07.2",
+                  "text": "Chronic Health Condition",
+                  "fieldName": "chronicHealthCondition",
+                  "pickListReference": "NoYesReasonsForMissingData"
+                },
+                {
+                  "type": "CHOICE",
+                  "linkId": "4.07.A",
+                  "text": "Is this a disabling condition?",
+                  "briefText": "Disabling Condition",
+                  "fieldName": "chronicHealthConditionIndefiniteAndImpairs",
+                  "pickListReference": "NoYesReasonsForMissingData"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "groupWithNumberTable",
+      "text": "Numeric Input Group",
+      "item": [
+        {
+          "type": "STRING",
+          "hidden": true,
+          "linkId": "string-10",
+          "text": "String"
         },
         {
-          "type": "CHOICE",
-          "linkId": "choice-2",
-          "text": "Dependent (select yes to enable)",
-          "pickListReference": "yesNoMissing",
-          "enableBehavior": "all",
-          "enableWhen": [
+          "type": "GROUP",
+          "linkId": "input-group",
+          "component": "INPUT_GROUP",
+          "text": "Group title",
+          "item": [
             {
-              "question": "choice-1",
-              "operator": "EQUAL",
-              "answerCode": "1"
+              "type": "CURRENCY",
+              "linkId": "n1",
+              "text": "Question 1"
+            },
+            {
+              "type": "CURRENCY",
+              "linkId": "n2",
+              "text": "Question 2"
+            },
+            {
+              "type": "CURRENCY",
+              "linkId": "n3",
+              "text": "Question 3",
+              "helperText": "This is helper text"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "groupWithCheckboxTable",
+      "text": "Checkbox Input Group",
+      "item": [
+        {
+          "type": "GROUP",
+          "linkId": "checkbox-input-group",
+          "component": "INPUT_GROUP",
+          "item": [
+            {
+              "type": "BOOLEAN",
+              "component": "CHECKBOX",
+              "linkId": "c1",
+              "text": "Question 1"
+            },
+            {
+              "type": "BOOLEAN",
+              "component": "CHECKBOX",
+              "linkId": "c2",
+              "text": "Question 2"
+            },
+            {
+              "type": "BOOLEAN",
+              "component": "CHECKBOX",
+              "linkId": "c3",
+              "text": "Question 3",
+              "helperText": "This is helper text"
             }
           ]
         }
@@ -83,20 +283,21 @@
     {
       "type": "GROUP",
       "required": false,
-      "linkId": "group-2",
-      "text": "Another group",
+      "linkId": "image",
+      "text": "Image",
       "item": [
         {
-          "type": "STRING",
+          "type": "IMAGE",
           "required": false,
-          "linkId": "string-3",
-          "text": "String"
+          "linkId": "image_blob_id",
+          "text": "Image"
         },
         {
-          "type": "STRING",
+          "type": "DISPLAY",
+          "linkId": "image-alert",
           "required": false,
-          "linkId": "string-4",
-          "text": "String"
+          "text": "You must use the image from the uploader story to test this uploader component",
+          "component": "ALERT_INFO"
         }
       ]
     }

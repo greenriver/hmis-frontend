@@ -58,6 +58,7 @@ const mocks = {
   Int: () => faker.datatype.number(100),
   Float: () => faker.datatype.float({ max: 100, precision: 0.01 }),
   String: () => faker.animal.cat(),
+  Base64: () => faker.datatype.string(50),
   ID: () => faker.random.numeric(3),
   ISO8601Date: () => '2022-01-01',
   ISO8601DateTime: () => '2022-01-01T15:14:29.062',

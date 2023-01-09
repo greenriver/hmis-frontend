@@ -1,11 +1,14 @@
 import {
+  Box,
   InputLabelProps,
   InputProps,
   SelectProps,
+  Stack,
   SxProps,
   TextField,
   TextFieldProps,
   Theme,
+  Typography,
 } from '@mui/material';
 import { useId } from 'react';
 
@@ -23,6 +26,7 @@ export const horizontalInputSx: SxProps<Theme> = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
+
   // backgroundImage: (theme: Theme) =>
   // `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
   // backgroundPosition: 'center',
@@ -46,25 +50,21 @@ const TextInput = ({
 }: TextInputProps) => {
   const htmlId = useId();
 
-  const sxProps: SxProps<Theme> = {
-    ...(horizontal ? horizontalInputSx : {}),
-    ...sx,
-  };
   let width = inputWidth;
   if (!width && inputProps.inputMode === 'numeric') {
     width = '120px';
   }
 
-  return (
+  const textField = (
     <TextField
       id={htmlId}
       fullWidth={fullWidth}
-      label={hiddenLabel ? undefined : label}
+      label={hiddenLabel || horizontal ? undefined : label}
       onKeyPress={(e) =>
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
       {...props}
-      sx={sxProps}
+      sx={sx}
       inputProps={{
         ...inputProps,
         minLength: min,
@@ -108,6 +108,23 @@ const TextInput = ({
       SelectProps={props.SelectProps as SelectProps}
     />
   );
+
+  if (horizontal) {
+    return (
+      <Stack
+        sx={{
+          ...horizontalInputSx,
+          '.MuiFormHelperText-root':
+            inputProps.inputMode === 'numeric' ? { width, mr: 0 } : {},
+        }}
+        justifyContent='space-between'
+      >
+        <Typography sx={{ flexBasis: '80%' }}>{label}</Typography>
+        <Box sx={{ justifyContent: 'flex-end', pt: 0.5 }}>{textField}</Box>
+      </Stack>
+    );
+  }
+  return textField;
 };
 
 export default TextInput;

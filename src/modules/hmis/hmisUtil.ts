@@ -136,8 +136,19 @@ export const formatCurrency = (number?: number) => {
   return currencyFormatter.format(number);
 };
 
-export const clientName = (client: ClientNameFragment) =>
-  [client.preferredName || client.firstName, client.lastName]
+export const clientName = (client: ClientNameFragment, full = true) => {
+  const actualNameComponents = full
+    ? [client.firstName, client.middleName, client.lastName, client.nameSuffix]
+    : [client.firstName, client.lastName];
+  const actualName = actualNameComponents.filter(Boolean).join(' ');
+  if (!client.preferredName) {
+    return actualName;
+  }
+  return `${client.preferredName} (${actualName})`;
+};
+
+export const clientFullNameWithoutPreferred = (client: ClientNameFragment) =>
+  [client.firstName, client.middleName, client.lastName, client.nameSuffix]
     .filter(Boolean)
     .join(' ');
 

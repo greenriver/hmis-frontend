@@ -8,6 +8,12 @@ fragment ProjectFields on Project {
   }
 }
 
+fragment ProjectOmniSearchFields on Project {
+  id
+  projectName
+  projectType
+}
+
 fragment OrganizationFields on Organization {
   id
   organizationName
@@ -64,6 +70,27 @@ fragment InventoryFields on Inventory {
   vetBedInventory
   youthBedInventory
   youthVetBedInventory
+}
+
+fragment UnitFields on Unit {
+  id
+  name
+  bedCount
+  startDate
+  endDate
+}
+
+fragment BedFields on Bed {
+  id
+  bedType
+  name
+  gender
+  startDate
+  endDate
+  unit {
+    id
+    name
+  }
 }
 
 fragment ProjectCocFields on ProjectCoc {

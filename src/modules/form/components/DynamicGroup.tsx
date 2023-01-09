@@ -5,6 +5,7 @@ import { DynamicFieldProps } from './DynamicField';
 import FormCard from './group/FormCard';
 import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
+import InputTable from './group/InputTable';
 import QuestionGroup from './group/QuestionGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
@@ -31,13 +32,15 @@ export interface GroupItemComponentProps {
 
 const DynamicGroup = (props: GroupItemComponentProps) => {
   // Always render top-level groups as cards
-  if (props.nestingLevel === 0) {
+  if (props.nestingLevel === 0 && !props.item.component) {
     return <FormCard key={props.item.linkId} {...props} />;
   }
 
   switch (props.item.component) {
     case Component.InputGroup:
       return <InputGroup key={props.item.linkId} {...props} />;
+    case Component.InputTable:
+      return <InputTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
       return <HorizontalGroup key={props.item.linkId} {...props} />;
     case Component.InfoGroup:

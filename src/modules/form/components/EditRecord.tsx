@@ -7,12 +7,14 @@ import {
   getInitialValues,
   getItemMap,
   LocalConstants,
+  shouldEnableItem,
 } from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   Props as DynamicFormProps,
@@ -47,7 +49,7 @@ export interface Props<RecordType, Query, QueryVariables>
   getErrors: (data: Query) => ValidationError[] | undefined;
   confirmable?: boolean; // whether mutation supports `confirmed` for warning confirmation on submit
   title: ReactNode;
-  navigationProps?: Omit<FormNavigationProps, 'definition' | 'children'>;
+  navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
 }
 
 /**
@@ -81,7 +83,7 @@ const EditRecord = <
     variables: { identifier: definitionIdentifier },
   });
 
-  useScrollToHash(definitionLoading, 102);
+  useScrollToHash(definitionLoading, STICKY_BAR_HEIGHT);
 
   const definition: FormDefinitionJson | undefined = useMemo(
     () => data?.formDefinition?.definition,
@@ -158,12 +160,23 @@ const EditRecord = <
     [definition, inputVariables, mutateFunction, record, confirmable]
   );
 
-  const leftNav = useMemo(
-    () =>
-      definition &&
-      definition.item.filter((i) => i.type === ItemType.Group).length >= 3,
-    [definition]
-  );
+  // Top-level items for the left nav (of >=3 groups)
+  const leftNavItems = useMemo(() => {
+    if (!definition || !itemMap) return false;
+
+    let topLevelItems = definition.item.filter(
+      (i) => i.type === ItemType.Group && !i.hidden
+    );
+
+    if (topLevelItems.length < 3) return false;
+
+    // Remove disabled groups
+    topLevelItems = topLevelItems.filter((item) =>
+      shouldEnableItem(item, initialValues, itemMap)
+    );
+    if (topLevelItems.length < 3) return false;
+    return topLevelItems;
+  }, [itemMap, definition, initialValues]);
 
   if (definitionLoading) return <Loading />;
   if (definitionError) console.error(definitionError);
@@ -190,30 +203,30 @@ const EditRecord = <
     </>
   );
 
-  if (leftNav) {
+  if (leftNavItems) {
     return (
       <>
         <Box
           sx={{
-            position: 'sticky',
-            top: 10,
+            // position: 'sticky',
+            // top: 10,
             backgroundColor: (theme) => theme.palette.background.default,
             zIndex: (theme) => theme.zIndex.appBar,
             // hack to add 15px of space on top of crumbs when scrolled to the top
-            '&:before': {
-              content: '""',
-              backgroundColor: (theme) => theme.palette.background.default,
-              position: 'absolute',
-              height: '15px',
-              mt: '-14px',
-              width: '100%',
-            },
+            // '&:before': {
+            //   content: '""',
+            //   backgroundColor: (theme) => theme.palette.background.default,
+            //   position: 'absolute',
+            //   height: '15px',
+            //   mt: '-14px',
+            //   width: '100%',
+            // },
           }}
         >
           {title}
         </Box>
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation definition={definition} {...navigationProps}>
+          <FormNavigation items={leftNavItems} {...navigationProps}>
             {form}
           </FormNavigation>
         </Grid>

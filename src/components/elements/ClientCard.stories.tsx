@@ -19,6 +19,29 @@ Default.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,
 };
 
+export const WithPreferredName = Template.bind({});
+WithPreferredName.args = {
+  client: { ...RITA_ACKROYD, preferredName: 'RJ' } as ClientFieldsFragment,
+  hideImage: true,
+};
+
+export const WithoutImage = Template.bind({});
+WithoutImage.args = {
+  client: RITA_ACKROYD as ClientFieldsFragment,
+  hideImage: true,
+};
+
+export const WithFewerDetails = Template.bind({});
+WithFewerDetails.args = {
+  client: {
+    ...RITA_ACKROYD,
+    pronouns: [],
+    ssn: null,
+    dob: null,
+  } as ClientFieldsFragment,
+  hideImage: true,
+};
+
 export const WithLinkAndNotices = Template.bind({});
 WithLinkAndNotices.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,

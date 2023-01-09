@@ -1,6 +1,7 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useOutletContext, useParams } from 'react-router-dom';
 
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import apolloClient from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -10,6 +11,7 @@ import {
 } from '@/types/gqlTypes';
 
 export function useEnrollmentCrumbs(current?: string) {
+  const { client } = useOutletContext<DashboardContext>();
   const { pathname } = useLocation();
   const { enrollmentId } = useParams() as { enrollmentId: string };
 
@@ -28,6 +30,10 @@ export function useEnrollmentCrumbs(current?: string) {
 
   const crumbs = enrollment
     ? [
+        {
+          label: clientName(client),
+          to: DashboardRoutes.PROFILE,
+        },
         {
           label: 'All Enrollments',
           to: DashboardRoutes.ALL_ENROLLMENTS,

@@ -13,7 +13,7 @@ import { useCallback } from 'react';
 import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
-import WarehouseLinkBar from './WarehouseLinkBar';
+import WarehouseLinkBar, { warehouseLinkBarHeight } from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
@@ -24,6 +24,16 @@ interface Props {
   children: React.ReactNode;
 }
 
+const showWarehouseLinkBar =
+  import.meta.env.MODE === 'staging' &&
+  import.meta.env.PUBLIC_WAREHOUSE_URL &&
+  import.meta.env.PUBLIC_CAS_URL;
+
+const appBarHeight = 64;
+export const STICKY_BAR_HEIGHT = showWarehouseLinkBar
+  ? appBarHeight + warehouseLinkBarHeight
+  : appBarHeight;
+
 const MainLayout: React.FC<Props> = ({ children }) => {
   const { logout, user, loading } = useAuth();
   const logoutUser = useCallback(() => logout(true), [logout]);
@@ -32,14 +42,19 @@ const MainLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <React.Fragment>
-      <WarehouseLinkBar />
+      {showWarehouseLinkBar && <WarehouseLinkBar />}
       <AppBar
-        position='static'
+        position='sticky'
         color='default'
         elevation={0}
-        sx={{ borderBottom: (theme) => `1px solid ${theme.palette.divider}` }}
+        sx={{
+          height: appBarHeight,
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+          top: showWarehouseLinkBar ? warehouseLinkBarHeight : 0,
+        }}
       >
-        <Toolbar sx={{ flexWrap: 'wrap', gap: 2 }}>
+        {/* fixme: make responsive */}
+        <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 2 }}>
           <RouterLink
             variant='h1'
             color='secondary'
