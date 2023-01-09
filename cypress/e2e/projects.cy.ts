@@ -19,10 +19,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('navToProjects').click();
   cy.testId('addOrganizationButton').click();
   cy.inputId('name').safeType('X Test Organization');
-  cy.getById('description').safeType(
-    'Description{enter}line two{enter}line three'
-  );
-  cy.getById('contact').safeType('Contact{enter}line two{enter}line three');
+  cy.getById('description').type('Description{enter}line two{enter}line three');
+  cy.getById('contact').type('Contact{enter}line two{enter}line three');
   cy.getById('victimServiceProvider').find('button[value="false"]').click();
   cy.testId('submitFormButton').click();
 
