@@ -16,13 +16,7 @@ import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
 import { SearchFormDefinition } from '@/modules/form/data';
-import {
-  age,
-  clientFirstNameAndPreferred,
-  clientName,
-  dob,
-  last4SSN,
-} from '@/modules/hmis/hmisUtil';
+import { age, clientName, dob, last4SSN } from '@/modules/hmis/hmisUtil';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -58,12 +52,15 @@ export const CLIENT_COLUMNS: {
   },
   first: {
     header: 'First Name',
-    render: (client: ClientFieldsFragment) =>
-      clientFirstNameAndPreferred(client),
+    render: 'firstName',
   },
   last: {
     header: 'Last Name',
     render: 'lastName',
+  },
+  preferred: {
+    header: 'Preferred Name',
+    render: 'preferredName',
   },
   dobAge: {
     header: 'DOB / Age',
@@ -81,7 +78,8 @@ export const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.ssn,
   { ...CLIENT_COLUMNS.first, width: '15%', linkTreatment: true },
-  { ...CLIENT_COLUMNS.last, width: '25%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.preferred, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
 
