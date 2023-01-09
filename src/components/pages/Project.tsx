@@ -12,7 +12,6 @@ import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
@@ -112,8 +111,7 @@ const Project = () => {
   if (!crumbs || !project) throw Error('Project not found');
 
   return (
-    <ProjectLayout>
-      <Breadcrumbs crumbs={crumbs} />
+    <ProjectLayout crumbs={crumbs}>
       <Typography variant='h3' sx={{ mb: 4 }}>
         {project.projectName}
       </Typography>

@@ -20,7 +20,7 @@ export const Routes = {
 // Routes within the client dashboard
 const subRoutes = {
   PROFILE: 'profile',
-  EDIT: 'edit',
+  EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
   VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
   EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',

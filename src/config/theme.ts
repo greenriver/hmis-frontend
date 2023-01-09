@@ -4,6 +4,25 @@ import { createTheme, experimental_sx as sx } from '@mui/material';
 declare module '@mui/material/Button' {
   interface ButtonPropsVariantOverrides {
     gray: true;
+    transparent: true;
+  }
+}
+
+declare module '@mui/material/styles' {
+  // interface TypographyVariants {
+  //   body3: React.CSSProperties;
+  // }
+
+  // // allow configuration using `createTheme`
+  // interface TypographyVariantsOptions {
+  //   body3?: React.CSSProperties;
+  // }
+
+  interface Palette {
+    borders: Record<string, string>;
+  }
+  interface PaletteOptions {
+    borders: Record<'light', string>;
   }
 }
 
@@ -18,6 +37,9 @@ const theme = createTheme({
     },
     error: {
       main: '#B23842',
+    },
+    borders: {
+      light: '#E5E5E5',
     },
   },
 });
@@ -60,6 +82,14 @@ export default createTheme(theme, {
   },
 
   components: {
+    MuiTypography: {
+      styleOverrides: {
+        h4: {
+          // marginBottom: 16,
+          // color: 'red',
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         elevation: 0,
@@ -178,6 +208,7 @@ export default createTheme(theme, {
       styleOverrides: {
         outlined: {
           fontWeight: 600,
+          backgroundColor: 'white',
           // borderWidth: '2px',
           // lineHeight: 'initial',
           // '&:hover': {

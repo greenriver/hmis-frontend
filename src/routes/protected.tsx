@@ -77,7 +77,7 @@ export const protectedRoutes = [
         path: Routes.CLIENT_DASHBOARD,
         element: <ClientDashboard />,
         children: [
-          { path: '', element: <Profile /> },
+          { path: '', element: <Navigate to='profile' /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
           { path: DashboardRoutes.EDIT, element: <EditClient /> },
           {
@@ -115,6 +115,7 @@ export const protectedRoutes = [
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },
+          { path: '*', element: <Navigate to='profile' /> },
         ],
       },
       { path: '/', element: <Dashboard /> },

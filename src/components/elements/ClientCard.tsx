@@ -1,6 +1,7 @@
 import {
   Alert,
   Box,
+  BoxProps,
   Button,
   Card,
   Grid,
@@ -8,7 +9,6 @@ import {
   Skeleton,
   Stack,
   Typography,
-  BoxProps,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { Fragment, useCallback, useMemo, useState } from 'react';
@@ -20,13 +20,13 @@ import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
 import {
-  lastUpdated,
-  clientName,
-  pronouns,
-  dob,
   age,
+  clientName,
+  dob,
   entryExitRange,
   isRecentEnrollment,
+  lastUpdated,
+  pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -106,6 +106,7 @@ interface Props {
   showLinkToRecord?: boolean;
   showEditLink?: boolean;
   linkTargetBlank?: boolean;
+  hideImage?: boolean;
 }
 
 export const ClientCardImageElement = ({
@@ -176,13 +177,16 @@ const ClientCard: React.FC<Props> = ({
   showEditLink = false,
   showLinkToRecord = false,
   linkTargetBlank = false,
+  hideImage = false,
 }) => {
   const {
     data: { client: clientImageData } = {},
     loading: imageLoading = false,
   } = useGetClientImageQuery({
     variables: { id: client.id },
+    skip: hideImage,
   });
+
   return (
     <Card sx={{ mb: 2, p: 2 }}>
       {showNotices && (
@@ -209,7 +213,7 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
             <Stack spacing={1} direction='row'>
-              {imageLoading ? (
+              {hideImage ? null : imageLoading ? (
                 <Skeleton
                   variant='rectangular'
                   sx={{
@@ -221,24 +225,23 @@ const ClientCard: React.FC<Props> = ({
               ) : (
                 <ClientCardImage client={clientImageData || undefined} />
               )}
+
               <Stack spacing={0.5} sx={{ pr: 1 }}>
                 <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
                   ID {client.personalId}
                 </Typography>
                 {client.dob && (
-                  <ClickToShow text='Date of Birth' variant='body2'>
-                    <Typography variant='body2'>{dob(client)}</Typography>
-                  </ClickToShow>
+                  <Stack direction='row' gap={0.5}>
+                    <ClickToShow text='Reveal DOB' variant='body2'>
+                      <Typography variant='body2'>{dob(client)}</Typography>
+                    </ClickToShow>
+                    <Typography variant='body2'>({age(client)})</Typography>
+                  </Stack>
                 )}
                 {client.ssn && (
-                  <ClickToShow text='SSN' variant='body2'>
+                  <ClickToShow text='Reveal SSN' variant='body2'>
                     <Typography variant='body2'>{client.ssn}</Typography>
                   </ClickToShow>
-                )}
-                {client.dob && (
-                  <Typography variant='body2'>
-                    Current Age: {age(client)}
-                  </Typography>
                 )}
                 {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>

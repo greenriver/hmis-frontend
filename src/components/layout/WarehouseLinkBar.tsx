@@ -5,9 +5,9 @@ import { AppBar, Button, Toolbar } from '@mui/material';
 
 import ButtonLink from '../elements/ButtonLink';
 
-const height = '40px';
+export const warehouseLinkBarHeight = 40;
 const linkStyles = {
-  height,
+  height: warehouseLinkBarHeight,
   color: 'white',
   borderRadius: 0,
   py: 0,
@@ -16,19 +16,14 @@ const linkStyles = {
 };
 
 const WarehouseLinkBar = () => {
-  if (import.meta.env.MODE !== 'staging') return null;
-
-  if (!import.meta.env.PUBLIC_WAREHOUSE_URL && !import.meta.env.PUBLIC_CAS_URL)
-    return null;
-
   return (
     <AppBar
-      position='static'
+      position='sticky'
       color='default'
       elevation={0}
       sx={{
         backgroundColor: (theme) => theme.palette.grey[900],
-        height,
+        height: warehouseLinkBarHeight,
         border: 'none',
       }}
     >

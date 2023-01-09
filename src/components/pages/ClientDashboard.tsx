@@ -1,67 +1,29 @@
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Button, Container, Stack, Tab, Typography } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  generatePath,
-  Link,
-  Outlet,
-  useLocation,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom';
+import { useCallback, useMemo, useState } from 'react';
+import { Outlet, useOutletContext, useParams } from 'react-router-dom';
 
+import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
+import ClientCardMini from '../elements/ClientCardMini';
 import Loading from '../elements/Loading';
-import PageHeader from '../layout/PageHeader';
+import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
+import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
+import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
+import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
-import { clientName } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
-import { Client, useGetClientQuery } from '@/types/gqlTypes';
-
-const tabs = [
-  {
-    label: 'Profile',
-    path: DashboardRoutes.PROFILE,
-  },
-  {
-    label: 'Enrollments',
-    path: DashboardRoutes.ALL_ENROLLMENTS,
-  },
-  {
-    label: 'History',
-    path: DashboardRoutes.HISTORY,
-  },
-  {
-    label: 'Assessments',
-    path: DashboardRoutes.ASSESSMENTS,
-  },
-  {
-    label: 'Notes',
-    path: DashboardRoutes.NOTES,
-  },
-  {
-    label: 'Files',
-    path: DashboardRoutes.FILES,
-  },
-  {
-    label: 'Contact',
-    path: DashboardRoutes.CONTACT,
-  },
-  {
-    label: 'Locations',
-    path: DashboardRoutes.LOCATIONS,
-  },
-  {
-    label: 'Referrals',
-    path: DashboardRoutes.REFERRALS,
-  },
-];
+import {
+  ClientFieldsFragment,
+  EnrollmentFieldsFragment,
+  useGetClientQuery,
+} from '@/types/gqlTypes';
 
 const ClientDashboard: React.FC = () => {
-  const params = useParams() as { clientId: string };
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const params = useParams() as {
+    clientId: string;
+    enrollmentId?: string;
+  };
+
+  const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
+    Record<string, string> | undefined
+  >();
 
   const {
     data: { client } = {},
@@ -72,102 +34,73 @@ const ClientDashboard: React.FC = () => {
   });
   if (error) throw error;
 
-  const initialTab = useMemo(() => {
-    const matchedRoute = tabs.find(({ path }) =>
-      pathname.startsWith(generatePath(path, params))
-    );
-    return matchedRoute?.path || tabs[0].path;
-  }, [pathname, params]);
-
-  const [currentTab, setCurrentTab] = useState<string>(initialTab);
-
-  useEffect(() => {
-    setCurrentTab(initialTab);
-  }, [initialTab]);
-
-  const outletContext = useMemo(
-    () => ({
-      client,
-    }),
-    [client]
+  const { enrollment, loading: enrollmentLoading } = useEnrollment(
+    params.enrollmentId
   );
 
-  if (loading) return <Loading />;
-  if (!client) throw Error('Client not found');
+  const navItems: NavItem[] = useDashboardNavItems(client?.id);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    event.preventDefault();
-    navigate(generatePath(newValue, params), { replace: true });
-    setCurrentTab(newValue);
-  };
+  const outletContext: DashboardContext | undefined = useMemo(
+    () =>
+      client && !enrollmentLoading
+        ? {
+            client,
+            overrideBreadcrumbTitles,
+            enrollment,
+          }
+        : undefined,
+    [client, enrollment, enrollmentLoading]
+  );
+
+  const [desktopNavIsOpen, setDesktopNavState] = useState(true);
+  const [mobileNavIsOpen, setMobileNavState] = useState(false);
+
+  const handleCloseMobileMenu = useCallback(() => {
+    setMobileNavState(false);
+  }, []);
+  const handleOpenMobileMenu = useCallback(() => {
+    console.log('handleOpenMobileMenu');
+    setMobileNavState(true);
+  }, []);
+  const handleCloseDesktopMenu = useCallback(() => {
+    setDesktopNavState(false);
+  }, []);
+  const handleOpenDesktopMenu = useCallback(() => {
+    setDesktopNavState(true);
+  }, []);
+
+  if (loading || enrollmentLoading || !navItems) return <Loading />;
+  if (!client || !outletContext) throw Error('Client not found');
 
   return (
-    <>
-      <PageHeader>
-        <Stack spacing={2} direction='row' justifyContent='space-between'>
-          <Typography variant='h4'>{clientName(client)}</Typography>
-          {import.meta.env.PUBLIC_WAREHOUSE_URL && (
-            <Button
-              variant='text'
-              size='small'
-              href={`${import.meta.env.PUBLIC_WAREHOUSE_URL}clients/${
-                client.id
-              }/from_source`}
-              target='_blank'
-              endIcon={
-                <OpenInNewIcon
-                  fontSize='small'
-                  sx={{ '&.MuiSvgIcon-fontSizeSmall': { fontSize: '16px' } }}
-                />
-              }
-            >
-              View in Warehouse
-            </Button>
-          )}
-        </Stack>
-      </PageHeader>
-      <Box sx={{ width: '100%', typography: 'body1' }}>
-        <TabContext value={currentTab}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList
-              onChange={handleChange}
-              aria-label='client dashboard tabs'
-              indicatorColor='secondary'
-              textColor='secondary'
-              variant='fullWidth'
-            >
-              {tabs.map(({ label, path }) => (
-                <Tab
-                  label={label}
-                  key={path}
-                  value={path}
-                  component={Link}
-                  to={generatePath(path, params)}
-                  sx={{
-                    textTransform: 'capitalize',
-                    fontWeight: currentTab === path ? 'bold' : undefined,
-                  }}
-                />
-              ))}
-            </TabList>
-          </Box>
-          {/* Render inactive tab panels too (as empty divs) for accessibility https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/#wai-aria-roles-states-and-properties-22 */}
-          {tabs.map(({ path }) => (
-            <TabPanel value={path} key={path}>
-              {path === currentTab && (
-                <Container maxWidth='xl'>
-                  <Outlet context={outletContext} />
-                </Container>
-              )}
-            </TabPanel>
-          ))}
-        </TabContext>
-      </Box>
-    </>
+    <DashboardContentContainer
+      navHeader={<ClientCardMini client={client} />}
+      desktopNavIsOpen={desktopNavIsOpen}
+      mobileNavIsOpen={mobileNavIsOpen}
+      handleCloseMobileMenu={handleCloseMobileMenu}
+      handleCloseDesktopMenu={handleCloseDesktopMenu}
+      handleOpenDesktopMenu={handleOpenDesktopMenu}
+      handleOpenMobileMenu={handleOpenMobileMenu}
+      // TODO add back to standardize headers
+      // header={header}
+      sidebar={<SideNavMenu items={navItems} />}
+      contextHeader={
+        <ContextHeaderContent
+          breadcrumbOverrides={breadcrumbOverrides}
+          dashboardContext={outletContext}
+        />
+      }
+    >
+      <Outlet context={outletContext} />
+    </DashboardContentContainer>
   );
 };
 
-type ContextType = { client: Client };
-export const useDashboardClient = () => useOutletContext<ContextType>();
+export type DashboardContext = {
+  client: ClientFieldsFragment;
+  enrollment?: EnrollmentFieldsFragment;
+  overrideBreadcrumbTitles: (crumbs: any) => void;
+};
+export const useDashboardClient = () => useOutletContext<DashboardContext>();
 
 export default ClientDashboard;

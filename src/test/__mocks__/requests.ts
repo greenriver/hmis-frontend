@@ -14,6 +14,7 @@ import {
   DobDataQuality,
   NoYesReasonsForMissingData,
   CreateDirectUploadMutationDocument,
+  GetClientImageDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -235,6 +236,30 @@ const clientLookupMock = {
   },
 };
 
+const clientImageLookupMock = {
+  request: {
+    query: GetClientImageDocument,
+    variables: {
+      id: '9999',
+    },
+  },
+  result: {
+    data: {
+      client: {
+        __typename: 'Client',
+        id: '9999',
+        image: {
+          __typename: 'ClientImage',
+          id: 1,
+          contentType: 'image/jpeg',
+          base64:
+            'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII',
+        },
+      },
+    },
+  },
+};
+
 const clientWithEnrollmentsMock = {
   request: {
     query: GetClientEnrollmentsDocument,
@@ -339,6 +364,13 @@ const mocks: any[] = [
   clientSearchMock,
   clientSearchMockNextPage,
   clientLookupMock,
+  clientImageLookupMock,
+  clientImageLookupMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
+  clientWithEnrollmentsMock,
   clientWithEnrollmentsMock,
   enrollmentWithHoHMock,
   createDirectUploadMock,

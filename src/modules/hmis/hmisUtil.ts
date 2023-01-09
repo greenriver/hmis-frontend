@@ -141,6 +141,11 @@ export const clientName = (client: ClientNameFragment) =>
     .filter(Boolean)
     .join(' ');
 
+export const clientFullNameWithoutPreferred = (client: ClientNameFragment) =>
+  [client.firstName, client.middleName, client.lastName, client.nameSuffix]
+    .filter(Boolean)
+    .join(' ');
+
 export const clientFirstNameAndPreferred = (client: ClientNameFragment) => {
   if (client.preferredName && !client.firstName) return client.preferredName;
   if (!client.preferredName && client.firstName) return client.firstName;

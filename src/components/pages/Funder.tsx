@@ -2,7 +2,6 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { generatePath, useNavigate, useParams } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -64,19 +63,16 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   const common = {
     definitionIdentifier: 'funder',
     title: (
-      <>
-        <Breadcrumbs crumbs={crumbs} />
-        <Stack direction={'row'} spacing={2}>
-          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-            {title}
-          </Typography>
-          <InactiveChip project={project} />
-        </Stack>
-      </>
+      <Stack direction={'row'} spacing={2}>
+        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+          {title}
+        </Typography>
+        <InactiveChip project={project} />
+      </Stack>
     ),
   };
   return (
-    <ProjectLayout>
+    <ProjectLayout crumbs={crumbs}>
       {create ? (
         <EditRecord<
           FunderFieldsFragment,

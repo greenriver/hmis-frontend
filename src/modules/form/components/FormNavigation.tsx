@@ -1,6 +1,7 @@
 import { Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import FormStepper from '@/modules/form/components/FormStepper';
 import { FormItem } from '@/types/gqlTypes';
 
@@ -9,14 +10,14 @@ export interface FormNavigationProps {
   children: ReactNode;
   top?: string;
 }
-const FormNavigation = ({ items, children, top }: FormNavigationProps) => (
+const FormNavigation = ({ items, children }: FormNavigationProps) => (
   <>
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <Paper
         sx={{
           p: 3,
           position: 'sticky',
-          top: top || '86px', // hacky way to line up with top of form contents
+          top: STICKY_BAR_HEIGHT + 16,
         }}
       >
         <Typography variant='h6' sx={{ mb: 2 }}>

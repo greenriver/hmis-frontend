@@ -2,8 +2,6 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { generatePath, useNavigate } from 'react-router-dom';
 
-import Breadcrumbs from '../elements/Breadcrumbs';
-
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
@@ -39,7 +37,7 @@ const CreateOrganization = () => {
   if (!crumbs) throw Error('Organization not found');
 
   return (
-    <ProjectLayout>
+    <ProjectLayout crumbs={crumbs}>
       <EditRecord<
         OrganizationAllFieldsFragment,
         CreateOrganizationMutation,
@@ -54,7 +52,6 @@ const CreateOrganization = () => {
         submitButtonText='Create Organization'
         title={
           <>
-            <Breadcrumbs crumbs={crumbs} />
             <Typography variant='h3'>Create a new organization</Typography>
           </>
         }

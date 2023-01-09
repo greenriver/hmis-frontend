@@ -1,17 +1,17 @@
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-import ClientCard from './ClientCard';
+import ClientCardMini from './ClientCardMini';
 
 import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
-  title: 'ClientCard',
-  component: ClientCard,
-} as ComponentMeta<typeof ClientCard>;
+  title: 'ClientCardMini',
+  component: ClientCardMini,
+} as ComponentMeta<typeof ClientCardMini>;
 
-const Template: ComponentStory<typeof ClientCard> = (args) => (
-  <ClientCard {...args} />
+const Template: ComponentStory<typeof ClientCardMini> = (args) => (
+  <ClientCardMini {...args} />
 );
 
 export const Default = Template.bind({});
@@ -23,11 +23,4 @@ export const WithoutImage = Template.bind({});
 WithoutImage.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,
   hideImage: true,
-};
-
-export const WithLinkAndNotices = Template.bind({});
-WithLinkAndNotices.args = {
-  client: RITA_ACKROYD as ClientFieldsFragment,
-  showNotices: true,
-  showLinkToRecord: true,
 };

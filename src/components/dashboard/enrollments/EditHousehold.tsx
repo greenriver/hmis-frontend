@@ -1,7 +1,12 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import {
+  generatePath,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers, {
@@ -10,12 +15,11 @@ import AssociatedHouseholdMembers, {
 import EditHouseholdMemberTable from './household/EditHouseholdMemberTable';
 import RelationshipToHohSelect from './household/RelationshipToHohSelect';
 import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
-import { useEnrollmentCrumbs } from './useEnrollmentCrumbs';
 
-import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
+import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import ClientSearch from '@/modules/search/components/ClientSearch';
@@ -28,6 +32,8 @@ import {
 
 const EditHousehold = () => {
   const navigate = useNavigate();
+  const { enrollment } = useOutletContext<DashboardContext>();
+  // const { client, overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
   const { clientId, enrollmentId } = useParams() as {
     clientId: string;
     enrollmentId: string;
@@ -52,11 +58,8 @@ const EditHousehold = () => {
     });
   const enrollmentLoading = loading && networkStatus !== 4;
 
-  const [crumbs, breadcrumbsLoading, enrollment] =
-    useEnrollmentCrumbs('Update Household');
-
   const anythingLoading =
-    breadcrumbsLoading || enrollmentLoading || recentMembersLoading;
+    recentMembersLoading || enrollmentLoading || !enrollment;
 
   useScrollToHash(anythingLoading);
 
@@ -161,7 +164,6 @@ const EditHousehold = () => {
   ]);
 
   if (anythingLoading) return <Loading />;
-  if (!crumbs || !enrollment) throw Error('Enrollment not found');
 
   const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
     ...householdMemberColumns,
@@ -170,12 +172,13 @@ const EditHousehold = () => {
 
   return (
     <>
-      <Breadcrumbs crumbs={crumbs} />
       <Grid container spacing={4} sx={{ pb: 10 }}>
         <Grid item xs={12}>
-          <Typography variant='h3' sx={{ mb: 2 }}>
-            <b>Update Household</b>
-            {` for ${enrollmentName(enrollment)} `} enrollment
+          <Typography variant='h4' sx={{ mb: 2 }}>
+            Update Household
+            <Box component='span' fontWeight={400}>
+              {` for ${enrollmentName(enrollment)} `} enrollment
+            </Box>
           </Typography>
           {currentMembers && (
             <>
@@ -201,7 +204,7 @@ const EditHousehold = () => {
               </Button>
             </>
           )}
-          <Typography variant='h3' sx={{ mb: 2 }} id='add'>
+          <Typography variant='h4' sx={{ mb: 2 }} id='add' fontWeight={400}>
             Add Clients to Household
           </Typography>
           {eligibleMembers && eligibleMembers.length > 0 && (
