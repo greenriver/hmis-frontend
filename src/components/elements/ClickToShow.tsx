@@ -22,6 +22,7 @@ const ClickToShow: React.FC<Props> = ({
         color: 'text.disabled',
         justifyContent: 'flex-start',
         width: 'fit-content',
+        textAlign: 'left',
         // userSelect: 'text',
         p: 0,
       }}
