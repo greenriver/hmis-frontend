@@ -24,3 +24,19 @@ WithoutImage.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,
   hideImage: true,
 };
+
+export const WithPreferredName = Template.bind({});
+WithPreferredName.args = {
+  client: { ...RITA_ACKROYD, preferredName: 'RJ' } as ClientFieldsFragment,
+  hideImage: true,
+};
+
+export const WithFewerDetails = Template.bind({});
+WithFewerDetails.args = {
+  client: {
+    ...RITA_ACKROYD,
+    pronouns: [],
+    dob: null,
+  } as ClientFieldsFragment,
+  hideImage: true,
+};
