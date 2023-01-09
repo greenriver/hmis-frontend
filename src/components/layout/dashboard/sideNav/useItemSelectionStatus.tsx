@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { NavItem } from '../SideNavMenu';
+import { NavItem } from './SideNavMenu';
 
 export type Options = {
   item: NavItem;
-  selected?: string | undefined | null;
 };
 
 export const useItemSelectionStatus = ({ item }: Options) => {

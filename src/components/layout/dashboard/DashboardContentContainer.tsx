@@ -2,7 +2,7 @@ import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';
 
-import ContextHeader from './ContextHeader';
+import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
 import { useIsMobile } from '@/hooks/useIsMobile';

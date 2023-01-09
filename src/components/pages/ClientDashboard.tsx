@@ -4,10 +4,10 @@ import { Outlet, useOutletContext, useParams } from 'react-router-dom';
 import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
 import ClientCardMini from '../elements/ClientCardMini';
 import Loading from '../elements/Loading';
-import ContextHeaderContent from '../layout/dashboard/ContextHeaderContent';
+import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
-import { NavItem, SideNavMenu } from '../layout/dashboard/SideNavMenu';
-import { useDashboardNavItems } from '../layout/dashboard/useDashboardNavItems';
+import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
+import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
 import {
   ClientFieldsFragment,

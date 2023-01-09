@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
-import Category from './sideNav/Category';
+import Category from './ItemCategory';
 
 export interface NavItem {
   id: string;
@@ -13,13 +13,11 @@ export interface NavItem {
   type?: 'topic' | 'category' | 'section';
 }
 
-export interface SideNavMenuProps {
+interface SideNavMenuProps {
   items: NavItem[];
 }
 
-export const getHtmlIdForItem = (navItem: NavItem) => `nav_${navItem.id}`;
-
-export const SideNavMenu: React.FC<SideNavMenuProps> = ({ items }) => {
+const SideNavMenu = ({ items }: SideNavMenuProps) => {
   return (
     <Box>
       {items.map((item, index) => (
@@ -28,3 +26,5 @@ export const SideNavMenu: React.FC<SideNavMenuProps> = ({ items }) => {
     </Box>
   );
 };
+
+export default SideNavMenu;

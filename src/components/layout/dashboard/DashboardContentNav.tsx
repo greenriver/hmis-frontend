@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 import { STICKY_BAR_HEIGHT } from '../MainLayout';
 
-import { CONTEXT_HEADER_HEIGHT } from './ContextHeader';
+import { CONTEXT_HEADER_HEIGHT } from './contextHeader/ContextHeader';
 import { sidebarWidth } from './DashboardContentContainer';
 
 const SITE_HEADER_HEIGHT = STICKY_BAR_HEIGHT;

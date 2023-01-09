@@ -1,22 +1,15 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import {
-  Box,
-  Collapse,
-  IconButton,
-  lighten,
-  Link,
-  Typography,
-} from '@mui/material';
+import { Box, Collapse, IconButton, lighten, Link } from '@mui/material';
 import React, {
   cloneElement,
   useCallback,
   useEffect,
+  useId,
   useRef,
   useState,
 } from 'react';
 
-import { getHtmlIdForItem, NavItem } from '../SideNavMenu';
-
+import { NavItem } from './SideNavMenu';
 import { useItemSelectionStatus } from './useItemSelectionStatus';
 
 import RouterLink from '@/components/elements/RouterLink';
@@ -25,53 +18,25 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 export type ItemBaseProps = {
   item: NavItem;
   collapsible?: boolean; // whether children can be collapsed
-  renderTitle?: (
-    title: NavItem['title'],
-    selected?: boolean
-  ) => React.ReactNode;
-  renderChild: (
-    item: NavItem,
-    selected?: string | null | undefined
-  ) => React.ReactNode;
+  renderTitle?: (title: NavItem['title']) => React.ReactNode;
+  renderChild?: (item: NavItem) => React.ReactNode;
   showIcon?: boolean;
-  selected?: string | undefined | null;
   itemIndent?: number;
 };
-
-export const StandardText: React.FC<{
-  fontWeight?: number;
-  selectedFontWeight?: number;
-  title: NavItem['title'];
-  selected?: boolean;
-}> = ({ fontWeight = 600, selectedFontWeight = 700, selected, title }) => (
-  <Typography
-    component='span'
-    variant='inherit'
-    sx={{
-      fontWeight: selected ? selectedFontWeight : fontWeight,
-      opacity: selected ? 1 : 0.85,
-    }}
-  >
-    {title}
-  </Typography>
-);
 
 const defaultRenderTitle: NonNullable<ItemBaseProps['renderTitle']> = (title) =>
   title;
 
-export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
+const ItemBase = ({
   item,
-  selected,
   showIcon = false,
   collapsible = false,
   itemIndent = 0,
   renderTitle = defaultRenderTitle,
   renderChild,
-}) => {
-  const { isSelected, hasItems } = useItemSelectionStatus({
-    item,
-    selected,
-  });
+}: ItemBaseProps) => {
+  const htmlId = useId();
+  const { isSelected, hasItems } = useItemSelectionStatus({ item });
 
   const [open, setOpen] = useState<boolean>(
     (isSelected && hasItems) || false
@@ -98,15 +63,16 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
     py: 0.5,
     px: 2,
     textDecoration: 'none',
-    color: 'inherit',
     textOverflow: 'ellipsis',
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
     display: 'block',
+    color: isSelected ? 'secondary.main' : 'text.primary',
+    fontWeight: isSelected ? 600 : 400,
   };
 
   return (
-    <Box ref={itemRef} id={getHtmlIdForItem(item)}>
+    <Box ref={itemRef} id={htmlId}>
       <Box
         onClick={collapsible && hasItems ? handleToggle : undefined}
         role={collapsible && hasItems ? 'button' : undefined}
@@ -128,7 +94,7 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
               : undefined,
           backgroundColor: (theme) =>
             isSelected
-              ? lighten(theme.palette.secondary.light, 0.9)
+              ? lighten(theme.palette.secondary.light, 0.85)
               : undefined,
         }}
       >
@@ -143,19 +109,7 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
             {item.icon && cloneElement(item.icon, { fontSize: 'inherit' })}
           </Box>
         )}
-        <Box
-          // className={clsx({
-          //   selected: isSelected || isDirectChildSelected,
-          //   active: isActive,
-          // })}
-          sx={{
-            width: '100%',
-            overflowX: 'hidden',
-            '&.selected': {
-              color: '#0060F0',
-            },
-          }}
-        >
+        <Box sx={{ width: '100%', overflowX: 'hidden' }}>
           {item.href ? (
             <Link
               variant='body1'
@@ -163,7 +117,7 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
               onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
               sx={itemSx}
             >
-              {renderTitle(item.title || item.id, isSelected)}
+              {renderTitle(item.title || item.id)}
             </Link>
           ) : item.path ? (
             <RouterLink
@@ -174,10 +128,10 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
               plain
             >
               {/* {item.title} */}
-              {renderTitle(item.title || item.id, isSelected)}
+              {renderTitle(item.title || item.id)}
             </RouterLink>
           ) : (
-            renderTitle(item.title || item.id, isSelected)
+            renderTitle(item.title || item.id)
           )}
         </Box>
         {collapsible && hasItems && (
@@ -196,23 +150,25 @@ export const SideNavMenuMenuItemBase: React.FC<ItemBaseProps> = ({
       {collapsible && hasItems && (
         <Collapse in={open}>
           <Box sx={{ ml: itemIndent + 2 }}>
-            {item.items?.map((item) => (
-              <React.Fragment key={item.id}>
-                {renderChild(item, selected)}
-              </React.Fragment>
-            ))}
+            {renderChild &&
+              item.items?.map((item) => (
+                <React.Fragment key={item.id}>
+                  {renderChild(item)}
+                </React.Fragment>
+              ))}
           </Box>
         </Collapse>
       )}
       {!collapsible && hasItems && (
         <Box sx={{ ml: itemIndent }}>
-          {item.items?.map((item) => (
-            <React.Fragment key={item.id}>
-              {renderChild(item, selected)}
-            </React.Fragment>
-          ))}
+          {renderChild &&
+            item.items?.map((item) => (
+              <React.Fragment key={item.id}>{renderChild(item)}</React.Fragment>
+            ))}
         </Box>
       )}
     </Box>
   );
 };
+
+export default ItemBase;

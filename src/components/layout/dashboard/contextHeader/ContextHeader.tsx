@@ -1,12 +1,10 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
-// import { DEFAULT_MARGIN_STR, SITE_HEADER_HEIGHT } from "layout/configuration";
-// import { useTheme } from '@mui/material/styles';
 import React, { ReactNode } from 'react';
 
-import { STICKY_BAR_HEIGHT } from '../MainLayout';
-// import MenuButton from "common/components/Buttons/MenuButton";
-// import { useIsMobile } from "common/util/hooks/useIsMobile";
+import { STICKY_BAR_HEIGHT } from '../../MainLayout';
+
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props {
   isOpen: boolean;
@@ -21,8 +19,7 @@ const ContextHeader: React.FC<Props> = ({
   isOpen,
   handleOpenMenu,
 }) => {
-  // const theme = useTheme();
-  const isMobile = false; //useIsMobile();
+  const isMobile = useIsMobile();
   return (
     <AppBar
       position='sticky'
