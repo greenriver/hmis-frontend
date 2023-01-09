@@ -6,17 +6,17 @@ import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
 import ClientCard from '@/components/elements/ClientCard';
+import ClientName from '@/components/elements/ClientName';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
-import LinkToClient from '@/components/elements/LinkToClient';
 import Loading from '@/components/elements/Loading';
 import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { age, clientName, dob, last4SSN } from '@/modules/hmis/hmisUtil';
+import { age, dob, last4SSN } from '@/modules/hmis/hmisUtil';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -41,13 +41,17 @@ export const CLIENT_COLUMNS: {
   name: {
     header: 'Name',
     key: 'name',
-    render: (client: ClientFieldsFragment) => clientName(client),
+    render: (client: ClientFieldsFragment) => <ClientName client={client} />,
   },
   linkedName: {
     header: 'Name',
     key: 'name',
     render: (client: ClientFieldsFragment) => (
-      <LinkToClient client={client} target='_blank' />
+      <ClientName
+        client={client}
+        routerLinkProps={{ target: '_blank' }}
+        linkToProfile
+      />
     ),
   },
   first: {
