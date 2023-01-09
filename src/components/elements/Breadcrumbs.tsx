@@ -16,13 +16,21 @@ interface Props extends BreadcrumbsProps {
   crumbs: Breadcrumb[];
 }
 
-const Breadcrumbs = ({ crumbs, ...rest }: Props) => {
+const Breadcrumbs = ({ crumbs, sx, ...rest }: Props) => {
   const params = useParams();
 
   return (
     <MuiBreadcrumbs
       aria-label='breadcrumb'
       separator={<KeyboardArrowRightIcon fontSize='small' sx={{ mx: 0 }} />}
+      sx={{
+        '.MuiBreadcrumbs-li': {
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'no-wrap',
+        },
+        ...sx,
+      }}
       {...rest}
     >
       {crumbs.map(({ label, to }, index) => {
