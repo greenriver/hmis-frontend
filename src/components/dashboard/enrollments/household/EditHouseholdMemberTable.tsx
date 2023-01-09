@@ -18,10 +18,10 @@ import HohIndicatorTableCell from './HohIndicatorTableCell';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
+import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
-import LinkToClient from '@/components/elements/LinkToClient';
 import usePrevious from '@/hooks/usePrevious';
-import { age, clientName, dob } from '@/modules/hmis/hmisUtil';
+import { age, clientBriefName, dob } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
   HouseholdClientFieldsFragment,
@@ -159,10 +159,10 @@ const EditHouseholdMemberTable = ({
         key: 'name',
         width: '20%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <LinkToClient
+          <ClientName
             client={hc.client}
-            target='_blank'
-            disabled={hc.client.id === clientId}
+            routerLinkProps={{ target: '_blank' }}
+            linkToProfile={hc.client.id !== clientId}
           />
         ),
       },
@@ -253,12 +253,13 @@ const EditHouseholdMemberTable = ({
             {proposedHoH && hoh && (
               <DialogContentText>
                 You are changing the head of household from{' '}
-                <b>{clientName(hoh)}</b> to <b>{clientName(proposedHoH)}</b>
+                <b>{clientBriefName(hoh)}</b> to{' '}
+                <b>{clientBriefName(proposedHoH)}</b>
               </DialogContentText>
             )}
             {proposedHoH && !hoh && (
               <DialogContentText>
-                Set <b>{clientName(proposedHoH)}</b> as Head of Household.
+                Set <b>{clientBriefName(proposedHoH)}</b> as Head of Household.
               </DialogContentText>
             )}
           </DialogContent>

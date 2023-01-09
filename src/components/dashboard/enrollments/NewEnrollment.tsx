@@ -16,7 +16,7 @@ import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
 import Loading from '@/components/elements/Loading';
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   Client,
@@ -101,7 +101,7 @@ const NewEnrollment = () => {
           <Typography variant='h4' sx={{ mb: 2 }}>
             Create enrollment
             <Box component='span' fontWeight={400}>
-              {` for ${clientName(client)}`}
+              {` for ${clientBriefName(client)}`}
             </Box>
           </Typography>
 
@@ -161,10 +161,10 @@ const NewEnrollment = () => {
               {loading
                 ? 'Submitting...'
                 : numMembers > 1
-                ? `Enroll ${clientName(client)} and ${numMembers - 1} other${
-                    numMembers > 2 ? 's' : ''
-                  }`
-                : `Enroll ${clientName(client)}`}
+                ? `Enroll ${clientBriefName(client)} and ${
+                    numMembers - 1
+                  } other${numMembers > 2 ? 's' : ''}`
+                : `Enroll ${clientBriefName(client)}`}
             </Button>
             {(projectError || dateError) && (
               <Typography variant='body2' color='error' sx={{ mt: 1 }}>

@@ -1,11 +1,11 @@
 import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
+import ClientName from '@/components/elements/ClientName';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
-import LinkToClient from '@/components/elements/LinkToClient';
 import { last4SSN, dob, age } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
@@ -14,7 +14,13 @@ export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
     header: 'Name',
     width: '15%',
     key: 'name',
-    render: (client) => <LinkToClient client={client} target='_blank' />,
+    render: (client) => (
+      <ClientName
+        client={client}
+        routerLinkProps={{ target: '_blank' }}
+        linkToProfile
+      />
+    ),
   },
   {
     header: 'SSN',

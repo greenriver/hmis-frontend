@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { matchRoutes, useLocation } from 'react-router-dom';
 
 import { DashboardContext } from '@/components/pages/ClientDashboard';
-import { clientName, enrollmentName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 
 type CrumbConfig = {
@@ -33,7 +33,7 @@ export const useDashboardBreadcrumbs = (
       /**
        * Map each path to it's title and it's direct parent
        */
-      [DashboardRoutes.PROFILE]: { title: clientName(context.client) },
+      [DashboardRoutes.PROFILE]: { title: clientBriefName(context.client) },
       [DashboardRoutes.EDIT]: {
         title: 'Update Client Details',
         parent: DashboardRoutes.PROFILE,

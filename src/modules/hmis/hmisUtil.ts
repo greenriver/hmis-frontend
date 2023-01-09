@@ -136,29 +136,19 @@ export const formatCurrency = (number?: number) => {
   return currencyFormatter.format(number);
 };
 
-export const clientName = (client: ClientNameFragment, full = true) => {
-  const actualNameComponents = full
+export const clientNameWithoutPreferred = (
+  client: ClientNameFragment,
+  full = true
+) => {
+  const nameComponents = full
     ? [client.firstName, client.middleName, client.lastName, client.nameSuffix]
     : [client.firstName, client.lastName];
-  const actualName = actualNameComponents.filter(Boolean).join(' ');
-  if (!client.preferredName) {
-    return actualName;
-  }
-  return `${client.preferredName} (${actualName})`;
+  return nameComponents.filter(Boolean).join(' ');
 };
 
-export const clientFullNameWithoutPreferred = (client: ClientNameFragment) =>
-  [client.firstName, client.middleName, client.lastName, client.nameSuffix]
-    .filter(Boolean)
-    .join(' ');
-
-export const clientFirstNameAndPreferred = (client: ClientNameFragment) => {
-  if (client.preferredName && !client.firstName) return client.preferredName;
-  if (!client.preferredName && client.firstName) return client.firstName;
-  if (client.preferredName && client.firstName)
-    return `${client.preferredName} (${client.firstName})`;
-  return null;
-};
+export const clientBriefName = (client: ClientNameFragment) =>
+  client.preferredName ||
+  [client.firstName, client.lastName].filter(Boolean).join(' ');
 
 export const clientInitials = (client: ClientNameFragment) =>
   [client.preferredName || client.firstName, client.lastName]

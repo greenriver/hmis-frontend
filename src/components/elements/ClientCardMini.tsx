@@ -3,10 +3,9 @@ import { Stack, Typography } from '@mui/material';
 import ClientImage from './ClientImage';
 
 import {
-  clientName,
+  clientNameWithoutPreferred,
   pronouns,
   age,
-  clientFullNameWithoutPreferred,
 } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
@@ -16,9 +15,10 @@ interface Props {
 }
 
 const ClientCardMini = ({ client, hideImage = false }: Props) => {
-  const primaryName = client.preferredName || clientName(client);
+  const primaryName =
+    client.preferredName || clientNameWithoutPreferred(client);
   const secondaryName = client.preferredName
-    ? clientFullNameWithoutPreferred(client)
+    ? clientNameWithoutPreferred(client)
     : null;
   const clientAge = age(client);
   const clientPronouns = pronouns(client);
@@ -26,7 +26,7 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
     <Stack gap={0.5}>
       <Typography variant='h4'>{primaryName}</Typography>
       {secondaryName && (
-        <Typography variant='body1' color='text.secondary' fontStyle={'italic'}>
+        <Typography variant='body1' color='text.secondary' fontStyle='italic'>
           {secondaryName}
         </Typography>
       )}

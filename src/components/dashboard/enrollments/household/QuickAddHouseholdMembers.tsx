@@ -10,7 +10,7 @@ import { SyntheticEvent, useState } from 'react';
 import AssociatedHouseholdMembers from './AssociatedHouseholdMembers';
 import RelationshipToHohSelect from './RelationshipToHohSelect';
 
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientFieldsFragment, RelationshipToHoH } from '@/types/gqlTypes';
 
 const IncludeMemberSwitch = ({
@@ -144,7 +144,7 @@ const QuickAddHouseholdMembers = ({
       <Stack spacing={1}>
         <Typography variant='body2'>
           Use the toggles to enroll previously associated clients in the same
-          household as <b>{clientName(recentMembers[0])}</b>.
+          household as <b>{clientBriefName(recentMembers[0])}</b>.
         </Typography>
         <Typography variant='body2'>
           Additional household members can be added at a later step.

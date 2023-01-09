@@ -6,11 +6,10 @@ import FinishIntakeButton from '../FinishIntakeButton';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
+import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import RouterLink from '@/components/elements/RouterLink';
 import {
-  clientName,
   parseAndFormatDate,
   relationshipToHohForDisplay,
   sortHouseholdMembers,
@@ -57,19 +56,23 @@ const HouseholdMemberTable = ({
       {
         header: 'Name',
         render: (h: HouseholdClientFieldsFragment) => {
-          return h.client.id === clientId ? (
-            clientName(h.client)
-          ) : (
-            <RouterLink
-              to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                clientId: h.client.id,
-                enrollmentId,
-              })}
-              target='_blank'
-              variant='body2'
-            >
-              {clientName(h.client)}
-            </RouterLink>
+          const viewEnrollmentPath = generatePath(
+            DashboardRoutes.VIEW_ENROLLMENT,
+            {
+              clientId: h.client.id,
+              enrollmentId,
+            }
+          );
+          const routerLinkProps =
+            h.client.id !== clientId
+              ? {
+                  to: viewEnrollmentPath,
+                  target: '_blank',
+                }
+              : undefined;
+
+          return (
+            <ClientName client={h.client} routerLinkProps={routerLinkProps} />
           );
         },
       },
