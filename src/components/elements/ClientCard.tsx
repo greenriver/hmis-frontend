@@ -106,6 +106,7 @@ interface Props {
   showLinkToRecord?: boolean;
   showEditLink?: boolean;
   linkTargetBlank?: boolean;
+  hideImage?: boolean;
 }
 
 export const ClientCardImageElement = ({
@@ -176,6 +177,7 @@ const ClientCard: React.FC<Props> = ({
   showEditLink = false,
   showLinkToRecord = false,
   linkTargetBlank = false,
+  hideImage = false,
 }) => {
   const {
     data: { client: clientImageData } = {},
@@ -210,7 +212,7 @@ const ClientCard: React.FC<Props> = ({
               )}
             </Stack>
             <Stack spacing={1} direction='row'>
-              {imageLoading ? (
+              {hideImage ? null : imageLoading ? (
                 <Skeleton
                   variant='rectangular'
                   sx={{
@@ -228,19 +230,17 @@ const ClientCard: React.FC<Props> = ({
                   ID {client.personalId}
                 </Typography>
                 {client.dob && (
-                  <ClickToShow text='Date of Birth' variant='body2'>
-                    <Typography variant='body2'>{dob(client)}</Typography>
-                  </ClickToShow>
+                  <Stack direction='row' gap={0.5}>
+                    <ClickToShow text='Reveal DOB' variant='body2'>
+                      <Typography variant='body2'>{dob(client)}</Typography>
+                    </ClickToShow>
+                    <Typography variant='body2'>({age(client)})</Typography>
+                  </Stack>
                 )}
                 {client.ssn && (
-                  <ClickToShow text='SSN' variant='body2'>
+                  <ClickToShow text='Reveal SSN' variant='body2'>
                     <Typography variant='body2'>{client.ssn}</Typography>
                   </ClickToShow>
-                )}
-                {client.dob && (
-                  <Typography variant='body2'>
-                    Current Age: {age(client)}
-                  </Typography>
                 )}
                 {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>

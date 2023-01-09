@@ -1,8 +1,8 @@
-import { Box, Skeleton } from '@mui/material';
+import { Box, BoxProps, Skeleton } from '@mui/material';
 
 import { useGetClientImageQuery } from '@/types/gqlTypes';
 
-interface Props {
+interface Props extends BoxProps {
   clientId: string;
   showPlaceholder?: boolean;
   width?: number;
@@ -13,6 +13,7 @@ const ClientImage: React.FC<Props> = ({
   showPlaceholder = false,
   width = 150,
   height = 150,
+  ...props
 }) => {
   const { data, loading: imageLoading = false } = useGetClientImageQuery({
     variables: { id: clientId },
@@ -42,7 +43,9 @@ const ClientImage: React.FC<Props> = ({
           ? `data:${contentType};base64,${base64}`
           : `https://dummyimage.com/${width}x${height}/e8e8e8/aaa`
       }
+      {...props}
       sx={{
+        ...props.sx,
         height,
         width,
         mr: 1,

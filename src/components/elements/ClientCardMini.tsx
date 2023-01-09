@@ -12,9 +12,10 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
   client: ClientFieldsFragment;
+  hideImage?: boolean;
 }
 
-const ClientCardMini = ({ client }: Props) => {
+const ClientCardMini = ({ client, hideImage = false }: Props) => {
   const primaryName = client.preferredName || clientName(client);
   const secondaryName = client.preferredName
     ? clientFullNameWithoutPreferred(client)
@@ -29,8 +30,10 @@ const ClientCardMini = ({ client }: Props) => {
           {secondaryName}
         </Typography>
       )}
-      <Stack direction='row' gap={1}>
-        <ClientImage clientId={client.id} width={80} height={80} />
+      <Stack direction='row' gap={1} sx={{ mt: 1 }}>
+        {!hideImage && (
+          <ClientImage clientId={client.id} width={80} height={80} />
+        )}
         <Stack gap={0.5}>
           {clientAge && (
             <Typography variant='body2'>
