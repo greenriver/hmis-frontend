@@ -6,7 +6,14 @@ const config: StorybookViteConfig = {
   async viteFinal(config) {
     return mergeConfig(config, {
       resolve: {
-        alias: { '@': resolve(__dirname, './../src') },
+        alias: {
+          '@': resolve(__dirname, './../src'),
+          // Mock for the ActiveRecord BlobUpload module
+          '@rails/activestorage/src/blob_upload': resolve(
+            __dirname,
+            './../src/test/__mocks__/activeStorageBlob.js'
+          ),
+        },
       },
     });
   },

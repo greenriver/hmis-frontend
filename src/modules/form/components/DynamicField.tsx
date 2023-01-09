@@ -19,6 +19,7 @@ import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
+import Uploader from '@/components/elements/upload/Uploader';
 import {
   Component,
   FormItem,
@@ -361,6 +362,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           {inputComponent}
+        </InputContainer>
+      );
+    case ItemType.Image:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <Uploader
+            onUpload={async (upload, file) => {
+              console.log({ upload, file });
+              onChangeValue(upload.blobId);
+            }}
+          />
         </InputContainer>
       );
     default:

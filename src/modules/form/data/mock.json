@@ -279,6 +279,27 @@
           ]
         }
       ]
+    },
+    {
+      "type": "GROUP",
+      "required": false,
+      "linkId": "image",
+      "text": "Image",
+      "item": [
+        {
+          "type": "IMAGE",
+          "required": false,
+          "linkId": "image_blob_id",
+          "text": "Image"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "image-alert",
+          "required": false,
+          "text": "You must use the image from the uploader story to test this uploader component",
+          "component": "ALERT_INFO"
+        }
+      ]
     }
   ]
 }

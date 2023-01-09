@@ -14,6 +14,13 @@ fragment ClientName on Client {
   nameSuffix
 }
 
+fragment ClientImage on Client {
+  id
+  image {
+    ...ClientImageFields
+  }
+}
+
 fragment ClientFields on Client {
   id
   dob
@@ -31,6 +38,7 @@ fragment ClientFields on Client {
   dateDeleted
   dateUpdated
   ...ClientName
+  ...ClientImage
 }
 
 fragment ClientImageFields on ClientImage {
