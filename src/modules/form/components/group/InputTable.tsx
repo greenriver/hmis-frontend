@@ -26,7 +26,7 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
               key={rowItem.linkId}
               sx={{
                 backgroundColor: (theme) =>
-                  index & 1 ? undefined : theme.palette.grey[100],
+                  index & 1 ? undefined : theme.palette.grey[50],
               }}
             >
               <TableCell sx={{ width: '250px', py: 2.5 }}>

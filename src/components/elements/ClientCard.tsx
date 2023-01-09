@@ -33,6 +33,7 @@ import {
   ClientFieldsFragment,
   ClientImageFragment,
   useGetClientEnrollmentsQuery,
+  useGetClientImageQuery,
 } from '@/types/gqlTypes';
 
 const RecentEnrollments = ({
