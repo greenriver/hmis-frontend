@@ -20,6 +20,7 @@ const ContextHeader: React.FC<Props> = ({
   handleOpenMenu,
 }) => {
   const isMobile = useIsMobile();
+  console.log(isMobile, isOpen);
   return (
     <AppBar
       position='sticky'
@@ -41,14 +42,14 @@ const ContextHeader: React.FC<Props> = ({
       }}
     >
       <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-        {!isOpen && !isMobile && (
+        {(!isOpen || isMobile) && (
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              mr: { sm: 3, lg: 4 },
-              pr: { sm: 1, lg: 2 },
-              borderRightColor: isMobile ? 'transparent' : 'borders.light',
+              mr: { xs: 2, sm: 2, lg: 4 },
+              pr: { xs: 1, sm: 1, lg: 2 },
+              borderRightColor: 'borders.light',
               borderRightWidth: 1,
               borderRightStyle: 'solid',
             }}

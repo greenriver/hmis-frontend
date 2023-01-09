@@ -62,6 +62,7 @@ const DashboardContentContainer: React.FC<Props> = ({
           flex: '1 1 100%',
           alignItems: 'flex-start',
           maxWidth: '100%',
+          width: isMobile ? '100%' : undefined,
         }}
       >
         {sidebar && (
@@ -77,12 +78,16 @@ const DashboardContentContainer: React.FC<Props> = ({
         )}
         <Box
           component='main'
-          sx={{
-            minWidth: { sm: '100vh', md: desktopContainerWidth },
-            transition:
-              'min-width .25s ease-in-out, transform .25s ease-in-out',
-            transform: { sm: 'none', md: desktopTransform },
-          }}
+          sx={
+            isMobile
+              ? { width: '100%' }
+              : {
+                  minWidth: { sm: '100vh', md: desktopContainerWidth },
+                  transition:
+                    'min-width .25s ease-in-out, transform .25s ease-in-out',
+                  transform: { sm: 'none', md: desktopTransform },
+                }
+          }
         >
           {contextHeader && (
             <ContextHeader
@@ -101,8 +106,8 @@ const DashboardContentContainer: React.FC<Props> = ({
           )}
           <Box
             sx={{
-              py: { sm: 2 },
-              px: { sm: 3, lg: 4 },
+              py: { xs: 1, sm: 2 },
+              px: { xs: 2, sm: 3, lg: 4 },
               maxWidth: `${maxPageWidth}px`,
             }}
           >
