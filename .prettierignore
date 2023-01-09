@@ -1,6 +1,7 @@
 .*
 !.eslintrc.js
 !.storybook
+docker
 yarn.lock
 build
 dist
