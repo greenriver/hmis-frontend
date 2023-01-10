@@ -25,6 +25,9 @@ export type UploaderProps = {
   file?: File;
 };
 
+const MAX_BYTES = 8000000;
+const ACCEPTED_FILE_TYPES = ['.png', '.jpg', '.jpeg'];
+
 const Uploader: React.FC<UploaderProps> = ({
   onUpload,
   onClear = () => {},
@@ -33,6 +36,7 @@ const Uploader: React.FC<UploaderProps> = ({
   const [currentFile, setCurrentFile] = useState<File>();
   const [currentUpload, setCurrentUpload] = useState<DirectUpload>();
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | undefined>();
   const file = fileProp || currentFile;
   const fileImageUrl =
     file && file.type.match(/^image/) ? URL.createObjectURL(file) : undefined;
@@ -58,11 +62,33 @@ const Uploader: React.FC<UploaderProps> = ({
 
   const { getRootProps, isDragActive, getInputProps } = useDropzone({
     onDropAccepted: uploadAndCreate,
-    // noClick: true,
-    // noKeyboard: true,
     multiple: false,
     accept: {
-      'image/*': ['.png', '.jpg', '.jpeg'],
+      'image/*': ACCEPTED_FILE_TYPES,
+    },
+    maxSize: MAX_BYTES,
+    onDrop: (acceptedFiles, fileRejections) => {
+      fileRejections.forEach((file) => {
+        file.errors.forEach((err) => {
+          if (err.code === 'file-too-large') {
+            setError(
+              `Image is too large. File size must be under ${
+                MAX_BYTES / 1000000
+              } MB.`
+            );
+          } else if (err.code === 'file-invalid-type') {
+            setError(
+              `Unsupported file type. Supported file types are: ${ACCEPTED_FILE_TYPES.join(
+                ', '
+              )}`
+            );
+          } else {
+            setError(`Error: ${err.message || err.code}`);
+          }
+          setCurrentFile(undefined);
+        });
+      });
+      acceptedFiles.forEach(() => setError(undefined));
     },
   });
 
@@ -159,6 +185,11 @@ const Uploader: React.FC<UploaderProps> = ({
                 Uploading ...
               </Typography>
             </>
+          )}
+          {error && (
+            <Typography variant='subtitle1' color='error' sx={{ mt: 2 }}>
+              {error}
+            </Typography>
           )}
         </Grid>
       </Grid>

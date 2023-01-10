@@ -21,7 +21,7 @@ import RouterLink from './RouterLink';
 import ClickToShow from '@/components/elements/ClickToShow';
 import {
   age,
-  clientName,
+  clientNameWithoutPreferred,
   dob,
   entryExitRange,
   isRecentEnrollment,
@@ -186,6 +186,11 @@ const ClientCard: React.FC<Props> = ({
     variables: { id: client.id },
     skip: hideImage,
   });
+  const primaryName =
+    client.preferredName || clientNameWithoutPreferred(client);
+  const secondaryName = client.preferredName
+    ? clientNameWithoutPreferred(client)
+    : null;
 
   return (
     <Card sx={{ mb: 2, p: 2 }}>
@@ -205,7 +210,7 @@ const ClientCard: React.FC<Props> = ({
         <Grid item xs={5}>
           <Stack spacing={1}>
             <Stack direction='row' spacing={1}>
-              <Typography variant='h5'>{clientName(client)}</Typography>
+              <Typography variant='h5'>{primaryName}</Typography>
               {!isEmpty(client.pronouns) && (
                 <Typography variant='h5' color='text.secondary'>
                   ({pronouns(client)})
@@ -227,9 +232,19 @@ const ClientCard: React.FC<Props> = ({
               )}
 
               <Stack spacing={0.5} sx={{ pr: 1 }}>
+                {secondaryName && (
+                  <Typography
+                    variant='body1'
+                    color='text.secondary'
+                    fontStyle='italic'
+                  >
+                    {secondaryName}
+                  </Typography>
+                )}
                 <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
                   ID {client.personalId}
                 </Typography>
+
                 {client.dob && (
                   <Stack direction='row' gap={0.5}>
                     <ClickToShow text='Reveal DOB' variant='body2'>

@@ -16,7 +16,7 @@ import React, { useMemo, useState, useCallback } from 'react';
 import { generatePath, useNavigate, useLocation } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
-import { clientName } from '@/modules/hmis/hmisUtil';
+import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
   useOmniSearchClientsQuery,
@@ -68,7 +68,8 @@ const OmniSearch: React.FC = () => {
   const getOptionLabel = useCallback(
     (option: NonNullable<typeof options>[number]) => {
       let label = option.id;
-      if (option.__typename === 'Client') label = clientName(option);
+      if (option.__typename === 'Client')
+        label = clientNameWithoutPreferred(option);
       if (option.__typename === 'Project') label = option.projectName;
       return label;
     },

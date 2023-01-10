@@ -1,5 +1,6 @@
 import { Box } from '@mui/material';
 
+import { CONTEXT_HEADER_HEIGHT } from './ContextHeader';
 import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
@@ -27,7 +28,15 @@ const ContextHeaderContent: React.FC<Props> = ({
       justifyContent='space-between'
       flex={1}
     >
-      <Breadcrumbs crumbs={breadcrumbs} />
+      <Breadcrumbs
+        crumbs={breadcrumbs}
+        sx={{
+          '.MuiBreadcrumbs-ol': {
+            overflow: 'hidden',
+            height: CONTEXT_HEADER_HEIGHT,
+          },
+        }}
+      />
     </Box>
   );
 };
