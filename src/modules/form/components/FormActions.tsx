@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import { Button, Stack } from '@mui/material';
 import { MouseEventHandler } from 'react';
 
@@ -22,6 +23,7 @@ const FormActions = ({
   saveDraftButtonText = 'Save and Finish Later',
   discardButtonText = 'Discard',
   disabled,
+  loading,
 }: FormActionProps) => (
   <Stack
     direction='row'
@@ -29,31 +31,38 @@ const FormActions = ({
     justifyContent={onSaveDraft ? 'space-between' : undefined}
   >
     <Stack direction='row' spacing={2}>
-      <Button
+      <LoadingButton
         data-testid='submitFormButton'
         variant='contained'
         type='submit'
         disabled={disabled}
         onClick={onSubmit}
         sx={{ opacity: 1 }}
+        loading={loading}
       >
         {submitButtonText}
-      </Button>
+      </LoadingButton>
       {onSaveDraft && (
-        <Button
+        <LoadingButton
           data-testid='saveFormButton'
           variant='outlined'
           type='submit'
           disabled={disabled}
           onClick={onSaveDraft}
           sx={{ backgroundColor: 'white' }}
+          loading={loading}
         >
           {saveDraftButtonText}
-        </Button>
+        </LoadingButton>
       )}
     </Stack>
     {onDiscard && typeof onDiscard === 'string' ? (
-      <ButtonLink data-testid='discardFormButton' variant='gray' to={onDiscard}>
+      <ButtonLink
+        data-testid='discardFormButton'
+        variant='gray'
+        to={onDiscard}
+        disabled={disabled || loading}
+      >
         {discardButtonText}
       </ButtonLink>
     ) : (
@@ -61,6 +70,7 @@ const FormActions = ({
         data-testid='discardFormButton'
         variant='gray'
         onClick={onDiscard as MouseEventHandler}
+        disabled={disabled || loading}
       >
         {discardButtonText}
       </Button>

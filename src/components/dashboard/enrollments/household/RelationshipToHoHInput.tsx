@@ -20,7 +20,6 @@ interface Props
 const RelationshipToHoHInput = ({
   enrollmentId,
   relationshipToHoH,
-
   ...props
 }: Props) => {
   // Store selected relationship in state so that it can be reflected immediately

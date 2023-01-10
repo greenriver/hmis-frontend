@@ -345,3 +345,47 @@ mutation CreateUnits($input: CreateUnitsInput!) {
     }
   }
 }
+
+mutation DeleteUnits($input: DeleteUnitsInput!) {
+  deleteUnits(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteBeds($input: DeleteBedsInput!) {
+  deleteBeds(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateUnits($input: UpdateUnitsInput!) {
+  updateUnits(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateBeds($input: UpdateBedsInput!) {
+  updateBeds(input: $input) {
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

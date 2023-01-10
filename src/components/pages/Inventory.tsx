@@ -41,6 +41,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     // Force refresh table if we just created a new record
     if (create) {
       cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+      // TODO navigate to bed/unit management
     }
     navigate(generatePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId, create]);
