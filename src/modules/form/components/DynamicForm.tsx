@@ -107,8 +107,6 @@ const DynamicForm: React.FC<
     initiallyDisabledLinkIds
   );
 
-  if (errors.length > 0) console.log('Validation errors', errors);
-
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
     (changedLinkIds: string[], localValues: any) => {
@@ -338,7 +336,7 @@ const DynamicForm: React.FC<
           <Grid item>
             <Alert severity='error' sx={{ mb: 1 }}>
               Please fix outstanding errors:
-              <Box component='ul' sx={{ pl: 2 }}>
+              <Box component='ul' sx={{ pl: 2 }} data-testid='formErrorAlert'>
                 {errors.map(({ message, fullMessage }) => (
                   <li key={fullMessage || message}>{fullMessage || message}</li>
                 ))}

@@ -118,25 +118,25 @@ const Project = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <InactiveBanner project={project} />
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='projectDetailsCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project Details
             </Typography>
             <ProjectDetails project={project} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='funderCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Funding Sources
             </Typography>
             <FunderTable projectId={projectId} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='projectCocCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project CoCs
             </Typography>
             <ProjectCocTable projectId={projectId} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='inventoryCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Inventory
             </Typography>
@@ -151,6 +151,7 @@ const Project = () => {
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Project</Typography>
               <ButtonLink
+                data-testid='addFunderButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
@@ -159,6 +160,7 @@ const Project = () => {
                 + Add Funding Source
               </ButtonLink>
               <ButtonLink
+                data-testid='addProjectCocButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
@@ -167,6 +169,7 @@ const Project = () => {
                 + Add Project CoC
               </ButtonLink>
               <ButtonLink
+                data-testid='addInventoryButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
@@ -189,6 +192,7 @@ const Project = () => {
           <Paper sx={{ p: 2 }}>
             <Stack>
               <ButtonLink
+                data-testid='updateProjectButton'
                 variant='text'
                 color='secondary'
                 to={generatePath(Routes.EDIT_PROJECT, {
@@ -199,6 +203,7 @@ const Project = () => {
                 Update Project
               </ButtonLink>
               <Button
+                data-testid='deleteProjectButton'
                 color='error'
                 variant='text'
                 onClick={() => setOpen(true)}

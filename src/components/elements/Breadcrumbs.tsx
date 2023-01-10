@@ -3,6 +3,7 @@ import {
   Breadcrumbs as MuiBreadcrumbs,
   BreadcrumbsProps,
   Typography,
+  TypographyVariant,
 } from '@mui/material';
 import { generatePath, useParams } from 'react-router-dom';
 
@@ -14,9 +15,10 @@ export interface Breadcrumb {
 }
 interface Props extends BreadcrumbsProps {
   crumbs: Breadcrumb[];
+  variant?: TypographyVariant;
 }
 
-const Breadcrumbs = ({ crumbs, sx, ...rest }: Props) => {
+const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
   const params = useParams();
 
   return (
@@ -36,7 +38,7 @@ const Breadcrumbs = ({ crumbs, sx, ...rest }: Props) => {
       {crumbs.map(({ label, to }, index) => {
         if (index === crumbs.length - 1) {
           return (
-            <Typography variant='body2' key={to}>
+            <Typography variant={variant} key={to}>
               {label}
             </Typography>
           );
@@ -45,7 +47,12 @@ const Breadcrumbs = ({ crumbs, sx, ...rest }: Props) => {
         // Fill in path with params we already have (e.g. replace :clientId with id)
         const filledInPath = generatePath(to, params);
         return (
-          <RouterLink to={filledInPath} key={to} variant='body2'>
+          <RouterLink
+            to={filledInPath}
+            key={to}
+            variant={variant}
+            data-testid={`breadcrumb-${index}`}
+          >
             {label}
           </RouterLink>
         );

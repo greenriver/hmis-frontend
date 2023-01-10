@@ -74,10 +74,20 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 />
               )}
           </RouterLink>
-          <ButtonLink variant='text' to='/' color='secondary'>
+          <ButtonLink
+            variant='text'
+            to='/'
+            color='secondary'
+            data-testid='navToClients'
+          >
             Clients
           </ButtonLink>
-          <ButtonLink variant='text' to={Routes.ALL_PROJECTS} color='secondary'>
+          <ButtonLink
+            variant='text'
+            to={Routes.ALL_PROJECTS}
+            color='secondary'
+            data-testid='navToProjects'
+          >
             Projects
           </ButtonLink>
           <Box>

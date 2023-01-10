@@ -79,6 +79,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
         render: (record: FunderFieldsFragment) => (
           <Stack direction='row' spacing={1}>
             <ButtonLink
+              data-testid='updateButton'
               to={generatePath(Routes.EDIT_FUNDER, {
                 projectId,
                 funderId: record.id,
@@ -89,6 +90,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
               Update
             </ButtonLink>
             <Button
+              data-testid='deleteButton'
               onClick={() => setDelete(record)}
               size='small'
               variant='outlined'

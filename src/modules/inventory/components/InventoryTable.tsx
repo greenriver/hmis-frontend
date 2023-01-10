@@ -105,6 +105,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               Beds
             </ButtonLink> */}
             <ButtonLink
+              data-testid='updateButton'
               to={generatePath(Routes.EDIT_INVENTORY, {
                 projectId,
                 inventoryId: record.id,
@@ -115,6 +116,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               Update
             </ButtonLink>
             <Button
+              data-testid='deleteButton'
               onClick={() => setDelete(record)}
               size='small'
               variant='outlined'

@@ -52,10 +52,19 @@ Cypress.Commands.add('inputId', (id) => {
 
 Cypress.Commands.add('choose', (id, optionCode) => {
   cy.inputId(id).click({ force: true });
-  cy.get('.MuiAutocomplete-listbox')
+  cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
+    'not.exist'
+  );
+  // cy.get(`.MuiAutocomplete-listbox [data-testid="option-${optionCode}"]`)
+  cy.get(`.MuiAutocomplete-listbox`)
     .findTestId(`option-${optionCode}`)
     .as('option');
+
   cy.get('@option').click();
+});
+
+Cypress.Commands.add('safeType', { prevSubject: true }, (subject, str) => {
+  return cy.wrap(subject).type(str).should('have.value', str);
 });
 
 Cypress.Commands.add('checkOption', (id, optionCode) => {
@@ -125,6 +134,7 @@ declare global {
       // Actions
       login(email: string, password: string): Chainable<JQuery<Element>>;
       choose(id: string, optionCode: string): Chainable<JQuery<Element>>;
+      safeType(str: string): Chainable<JQuery<Element>>;
       createClient(
         firstName: string,
         lastName: string

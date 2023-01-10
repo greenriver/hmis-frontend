@@ -30,6 +30,7 @@ const AllProjects = () => {
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>
               <ButtonLink
+                data-testid='addOrganizationButton'
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
