@@ -67,7 +67,7 @@ const Organization = () => {
           )}
 
           {organization && (
-            <Paper sx={{ p: 2, mb: 2 }}>
+            <Paper sx={{ p: 2, mb: 2 }} data-testid='projectsCard'>
               <Typography variant='h5' sx={{ mb: 2 }}>
                 Projects
               </Typography>

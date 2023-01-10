@@ -118,7 +118,7 @@ const Project = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <InactiveBanner project={project} />
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='projectDetailsCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Project Details
             </Typography>
@@ -192,6 +192,7 @@ const Project = () => {
           <Paper sx={{ p: 2 }}>
             <Stack>
               <ButtonLink
+                data-testid='updateProjectButton'
                 variant='text'
                 color='secondary'
                 to={generatePath(Routes.EDIT_PROJECT, {
@@ -202,6 +203,7 @@ const Project = () => {
                 Update Project
               </ButtonLink>
               <Button
+                data-testid='deleteProjectButton'
                 color='error'
                 variant='text'
                 onClick={() => setOpen(true)}

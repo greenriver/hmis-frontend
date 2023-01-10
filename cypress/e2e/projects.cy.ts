@@ -25,9 +25,9 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('submitFormButton').click();
 
   /*** Create project ***/
-
+  const projectName = 'X Test Project';
   cy.testId('addProjectButton').click();
-  cy.inputId('2.02.2').safeType('X Test Project');
+  cy.inputId('2.02.2').safeType(projectName);
   cy.getById('description').safeType('Project Description');
   cy.getById('contact').safeType('Project Contact');
 
@@ -62,12 +62,64 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Fix and resubmit
   cy.inputId('2.02.4').clear(); // clear end date
+  const expectedFormValues = {
+    projectName: 'X Test Project',
+    description: 'Project Description',
+    contactInformation: 'Project Contact',
+    operatingStartDate: '2022-01-01',
+    operatingEndDate: null,
+    projectType: 'DAY_SHELTER',
+  };
+  cy.expectHudValuesToDeepEqual(expectedFormValues);
   cy.testId('submitFormButton').click();
 
-  // Edit project, assert details updated
-  // TODO
+  // Confirm details are correct
+  cy.testId('projectDetailsCard').contains('Day Shelter');
 
-  // cy.visit('/projects/688');
+  // Navigate to Organization page
+  cy.testId('breadcrumb-1').click();
+
+  // Assert project shows up in table
+  cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('projectsCard')
+    .find('table tbody tr')
+    .contains(projectName)
+    .should('exist');
+
+  // Navigate back to project page
+  cy.testId('projectsCard').find('table tbody tr').click();
+
+  // Edit project, assert details updated
+  cy.testId('updateProjectButton').click();
+  // Form values should have nulls filled in
+  cy.expectHudValuesToDeepEqual({
+    ...expectedFormValues,
+    housingType: null,
+    targetPopulation: 'NOT_APPLICABLE',
+    HOPWAMedAssistedLivingFac: null,
+    continuumProject: null,
+    HMISParticipatingProject: null,
+  });
+
+  const newProjectName = 'X Renamed Project';
+  cy.inputId('2.02.2').clear().safeType(newProjectName);
+  cy.choose(projectType, ProjectType.Ph);
+  cy.testId('submitFormButton').click();
+
+  // Assert changes to project details are reflected
+  cy.get('h3').first().contains(newProjectName);
+  cy.testId('projectDetailsCard').contains('Permanent Housing');
+
+  // Navigate to Organization page, ensure change to project type is reflected there too
+  cy.testId('breadcrumb-1').click();
+  cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('projectsCard')
+    .find('table tbody tr')
+    .contains('Permanent Housing')
+    .should('exist');
+
+  // Navigate back to project page
+  cy.testId('projectsCard').find('table tbody tr').click();
 
   /*** Funder ***/
 
@@ -102,13 +154,19 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     .should('exist');
 
   cy.inputId('end').clear();
+  cy.expectHudValuesToDeepEqual({
+    endDate: null,
+    funder: 'LOCAL_OR_OTHER_FUNDING_SOURCE',
+    grantId: 'ABC123',
+    otherFunder: 'other funder details',
+    startDate: '2022-01-01',
+  });
   cy.testId('submitFormButton').click();
 
   cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
   cy.testId('funderCard').findTestId('updateButton').click();
 
   // Edit funder, assert table updated
-
   cy.choose('funder', FundingSource.HudCocSafeHaven);
   cy.inputId('other').should('not.exist');
   cy.testId('submitFormButton').click();
@@ -124,6 +182,12 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('grant-id').safeType('ABC123');
   cy.inputId('start').safeType('01/01/2022');
   cy.inputId('end').safeType('01/01/2025');
+  cy.expectHudValuesToDeepEqual({
+    endDate: '2025-01-01',
+    funder: 'HUD_ESG_CV',
+    grantId: 'ABC123',
+    startDate: '2022-01-01',
+  });
   cy.testId('submitFormButton').click();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 2);
 
@@ -137,7 +201,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   /*** Project CoC ***/
   cy.testId('addProjectCocButton').click();
-  // TODO
+
   cy.testId('discardFormButton').click();
 
   /*** Inventory ***/
