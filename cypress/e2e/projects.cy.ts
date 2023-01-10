@@ -199,15 +199,144 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('confirmDialogAction').click();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
 
-  /*** Project CoC ***/
-  cy.testId('addProjectCocButton').click();
+  /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
 
+  cy.testId('addInventoryButton').click();
+  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
+  cy.checkOption('es-availability', 'OVERFLOW');
+  cy.checkOption('es-bed-type', 'VOUCHER');
+  cy.inputId('2.07.1').safeType('01/01/2022');
+  cy.testId('submitFormButton').click();
+  cy.testId('formErrorAlert').contains('CoC code must exist').should('exist');
   cy.testId('discardFormButton').click();
+
+  /*** Project CoC ***/
+
+  // Create new ProjectCoC
+  cy.testId('addProjectCocButton').click();
+  cy.choose('coc', 'MA-505');
+  cy.choose('geocode', '250126');
+  cy.checkOption('geotype', 'RURAL');
+  cy.inputId('address1').safeType('Addr 1');
+  cy.inputId('address2').safeType('Addr 2');
+  cy.inputId('city').safeType('City');
+  cy.inputId('zip').safeType('00001');
+  cy.expectHudValuesToDeepEqual({
+    cocCode: 'MA-505',
+    geocode: '250126',
+    geographyType: 'RURAL',
+    address1: 'Addr 1',
+    address2: 'Addr 2',
+    city: 'City',
+    state: 'MA', // SHould be auto-filled
+    zip: '00001',
+  });
+  cy.testId('submitFormButton').click();
+
+  // Assert it shows up
+  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('projectCocCard')
+    .find('table tbody tr')
+    .contains('MA-505')
+    .should('exist');
+
+  // Update it and ensure changes are reflected in the table
+  cy.testId('projectCocCard').findTestId('updateButton').click();
+  cy.choose('state', 'AZ');
+  cy.testId('submitFormButton').click();
+  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('projectCocCard')
+    .find('table tbody tr')
+    .contains('AZ')
+    .should('exist');
+
+  // Add another ProjectCoC
+  cy.testId('addProjectCocButton').click();
+  cy.choose('coc', 'MA-502');
+  cy.choose('geocode', '250126');
+  cy.expectHudValuesToDeepEqual({
+    cocCode: 'MA-502',
+    geocode: '250126',
+    state: 'MA',
+  });
+  cy.testId('submitFormButton').click();
+  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 2);
+
+  // Delete the second ProjectCoC
+  cy.testId('projectCocCard').findTestId('deleteButton').first().click();
+  cy.testId('confirmDialogAction').click();
+  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
 
   /*** Inventory ***/
+
+  // Create new Inventory
   cy.testId('addInventoryButton').click();
-  // TODO
-  cy.testId('discardFormButton').click();
+  cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
+  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
+  cy.checkOption('es-availability', 'OVERFLOW');
+  cy.checkOption('es-bed-type', 'VOUCHER');
+
+  cy.inputId('2.07.1').safeType('01/01/2022'); // start date
+  cy.inputId('2.07.2').safeType('01/01/2020'); // end date (invalid, must be after start)
+
+  cy.testId('submitFormButton').click();
+  cy.testId('formErrorAlert')
+    .contains('Inventory end date must be on or after start date')
+    .should('exist');
+
+  // Fix end date
+  cy.inputId('2.07.2').clear().safeType('01/01/2023');
+
+  cy.expectHudValuesToDeepEqual({
+    cocCode: 'MA-505',
+    householdType: 'HOUSEHOLDS_WITH_ONLY_CHILDREN',
+    availability: 'OVERFLOW',
+    esBedType: 'VOUCHER',
+    inventoryStartDate: '2022-01-01',
+    inventoryEndDate: '2023-01-01',
+  });
+
+  // Submit (create Inventory)
+  cy.testId('submitFormButton').click();
+
+  // Assert it shows up in table
+  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('inventoryCard')
+    .find('table tbody tr')
+    .contains('Households with only children')
+    .should('exist');
+
+  // Update it and ensure changes are reflected in the table
+  cy.testId('inventoryCard').findTestId('updateButton').click();
+  cy.checkOption('hhtype', 'HOUSEHOLDS_WITHOUT_CHILDREN');
+  cy.testId('submitFormButton').click();
+  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('inventoryCard')
+    .find('table tbody tr')
+    .contains('Households without children')
+    .should('exist');
+
+  // Add another Inventory record
+  cy.testId('addInventoryButton').click();
+  cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
+  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD');
+  cy.inputId('2.07.1').safeType('01/01/2020'); // start date (too early)
+
+  // Try to submit, expect error
+  cy.testId('submitFormButton').click();
+  cy.testId('formErrorAlert')
+    .contains('Inventory start date must be on or after project start date')
+    .should('exist');
+
+  // Fix start date and submit again
+  cy.inputId('2.07.1').clear().safeType('06/01/2022');
+  cy.testId('submitFormButton').click();
+  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 2);
+
+  // Delete an Inventory record
+  cy.testId('inventoryCard').findTestId('deleteButton').first().click();
+  cy.testId('confirmDialogAction').click();
+  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
 

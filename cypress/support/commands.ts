@@ -52,9 +52,14 @@ Cypress.Commands.add('inputId', (id) => {
 
 Cypress.Commands.add('choose', (id, optionCode) => {
   cy.inputId(id).click({ force: true });
-  cy.get('.MuiAutocomplete-listbox')
+  cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
+    'not.exist'
+  );
+  // cy.get(`.MuiAutocomplete-listbox [data-testid="option-${optionCode}"]`)
+  cy.get(`.MuiAutocomplete-listbox`)
     .findTestId(`option-${optionCode}`)
     .as('option');
+
   cy.get('@option').click();
 });
 

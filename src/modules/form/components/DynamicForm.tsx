@@ -107,8 +107,6 @@ const DynamicForm: React.FC<
     initiallyDisabledLinkIds
   );
 
-  if (errors.length > 0) console.log('Validation errors', errors);
-
   // Updates localValues map in-place
   const updateAutofillValues = useCallback(
     (changedLinkIds: string[], localValues: any) => {
