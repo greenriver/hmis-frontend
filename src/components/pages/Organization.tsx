@@ -58,7 +58,7 @@ const Organization = () => {
           {loading && <Loading />}
 
           {hasDetails && (
-            <Paper sx={{ p: 2, mb: 2 }}>
+            <Paper sx={{ p: 2, mb: 2 }} data-testid='organizationDetailsCard'>
               <Typography variant='h5' sx={{ mb: 2 }}>
                 Organization Details
               </Typography>
@@ -102,6 +102,7 @@ const Organization = () => {
           <Paper sx={{ p: 2 }}>
             <Stack>
               <ButtonLink
+                data-testid='updateOrganizationButton'
                 variant='text'
                 color='secondary'
                 to={generatePath(Routes.EDIT_ORGANIZATION, {
@@ -112,6 +113,7 @@ const Organization = () => {
                 Update Organization
               </ButtonLink>
               <Button
+                data-testid='deleteOrganizationButton'
                 color='error'
                 variant='text'
                 onClick={() => setOpen(true)}

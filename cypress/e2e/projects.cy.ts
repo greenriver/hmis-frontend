@@ -14,8 +14,9 @@ beforeEach(() => {
 });
 
 it('should create and update Organization, Project, Funder, Project CoC, and Inventory', () => {
-  /*** Create organization ***/
+  /*** Organization ***/
 
+  // Create organization
   cy.testId('navToProjects').click();
   cy.testId('addOrganizationButton').click();
   cy.inputId('name').safeType('X Test Organization');
@@ -23,8 +24,16 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.getById('contact').type('Contact{enter}line two{enter}line three');
   cy.getById('victimServiceProvider').find('button[value="false"]').click();
   cy.testId('submitFormButton').click();
+  cy.testId('organizationDetailsCard').contains('line two');
 
-  /*** Create project ***/
+  // Update organization
+  cy.testId('updateOrganizationButton').click();
+  cy.getById('description').clear().safeType('Updated description');
+  cy.testId('submitFormButton').click();
+  cy.testId('organizationDetailsCard').contains('Updated description');
+
+  /*** Project ***/
+
   const projectName = 'X Test Project';
   cy.testId('addProjectButton').click();
   cy.inputId('2.02.2').safeType(projectName);
@@ -334,11 +343,20 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 2);
 
   // Delete an Inventory record
-  cy.testId('inventoryCard').findTestId('deleteButton').first().click();
+  cy.testId('inventoryCard').findTestId('deleteButton').last().click();
   cy.testId('confirmDialogAction').click();
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
+  cy.testId('updateProjectButton').click();
+  cy.inputId('2.02.4').clear().safeType('01/31/2022');
+  cy.testId('submitFormButton').click();
+  cy.testId('confirmDialogAction').click();
 
-  // TODO
+  /*** Delete project and organization ***/
+  cy.testId('deleteProjectButton').click();
+  cy.testId('confirmDialogAction').click();
+
+  cy.testId('deleteOrganizationButton').click();
+  cy.testId('confirmDialogAction').click();
 });
