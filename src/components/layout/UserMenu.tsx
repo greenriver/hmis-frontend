@@ -55,7 +55,7 @@ const UserMenu: React.FC = () => {
         </MenuItem>
         <MenuItem onClick={logoutUser}>
           <ListItemIcon>
-            <LogoutIcon />
+            <LogoutIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>Sign Out</ListItemText>
         </MenuItem>
