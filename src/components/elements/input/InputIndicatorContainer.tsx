@@ -22,7 +22,6 @@ const InputIndicatorContainer = ({
 
   // Hide "completed" checkmark after a few seconds
   useEffect(() => {
-    console.log('useEffect', success);
     if (!success) return;
     setShowCheckmark(true);
     const timer = setTimeout(function () {
