@@ -49,7 +49,7 @@ const UserMenu: React.FC = () => {
       >
         <MenuItem component={Link} href={getManageAccountLink()} target='_blank'>
           <ListItemIcon>
-            <OpenInNewIcon />
+            <OpenInNewIcon fontSize='small' />
           </ListItemIcon>
           <ListItemText>Manage Account</ListItemText>
         </MenuItem>
