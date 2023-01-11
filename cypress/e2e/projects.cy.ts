@@ -307,6 +307,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Submit (create Inventory)
   cy.testId('submitFormButton').click();
+  cy.get('h3').first().contains('Beds and Units');
   // Navigate to Project page
   cy.testId('breadcrumb-2').click();
 
@@ -342,6 +343,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Fix start date and submit again
   cy.inputId('2.07.1').clear().safeType('06/01/2022');
   cy.testId('submitFormButton').click();
+  cy.get('h3').first().contains('Beds and Units');
 
   // Navigate to Project page
   cy.testId('breadcrumb-2').click();
