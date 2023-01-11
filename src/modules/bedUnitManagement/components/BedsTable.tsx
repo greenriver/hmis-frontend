@@ -6,6 +6,7 @@ import { evictBedsQuery, evictUnitPickList } from '../bedUnitUtil';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import LiveSelect from '@/modules/dataFetching/components/LiveSelect';
+import LiveTextInput from '@/modules/dataFetching/components/LiveTextInput';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   Bed,

@@ -26,11 +26,11 @@ const RelationshipToHoHInput = ({
   const [relationship, setRelationship] = useState<RelationshipToHoH | null>(
     relationshipToHoH
   );
-  const [done, setDone] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [updateEnrollment, { loading, error: updateError }] =
     useUpdateEnrollmentMutation({
       onCompleted: () => {
-        setDone(true);
+        setCompleted(true);
       },
     });
 
@@ -39,19 +39,9 @@ const RelationshipToHoHInput = ({
     setRelationship(relationshipToHoH);
   }, [relationshipToHoH]);
 
-  useEffect(() => {
-    // Hide "done" checkmark after a few seconds
-    if (!done) return;
-    const timer = setTimeout(function () {
-      setDone(false);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [done]);
-
   const onChange = useMemo(
     () => (_: any, selected: Option | null) => {
-      setDone(false);
+      setCompleted(false);
       setRelationship(selected ? selected.value : null);
       void updateEnrollment({
         variables: {
@@ -71,7 +61,7 @@ const RelationshipToHoHInput = ({
     <InputIndicatorContainer
       loading={loading}
       error={!!updateError}
-      success={done}
+      success={completed}
     >
       <RelationshipToHohSelect
         value={relationship || null}

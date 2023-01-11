@@ -2,6 +2,7 @@ import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { isNil } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
+import InputIndicatorContainer from '@/components/elements/input/InputIndicatorContainer';
 import TextInput, {
   TextInputProps,
 } from '@/components/elements/input/TextInput';
@@ -22,15 +23,21 @@ const LiveTextInput = <Mutation, MutationVariables>({
   initialValue,
   ...props
 }: Props<Mutation, MutationVariables>) => {
+  // Current value
   const [current, setCurrent] = useState<string | null>(null);
-  const [mutate, { error }] = useMutation<Mutation, MutationVariables>(
+  // Indicator success status
+  const [completed, setCompleted] = useState(false);
+
+  const [mutate, { error, loading }] = useMutation<Mutation, MutationVariables>(
     queryDocument,
     {
       onCompleted: (data) => {
         console.debug('Saved:', getValueFromResponse(data));
+        setCompleted(true);
       },
     }
   );
+
   if (error) console.error(error);
 
   // update state
@@ -45,6 +52,7 @@ const LiveTextInput = <Mutation, MutationVariables>({
     (value: string | null) => {
       if (isNil(value)) return;
       if (value === initialValue) return;
+      setCompleted(false);
       console.debug('Mutating:', value);
       void mutate({
         variables: constructVariables(value),
@@ -56,11 +64,19 @@ const LiveTextInput = <Mutation, MutationVariables>({
 
   // TODO: reflect loading state, reflect server value
   return (
-    <TextInput
-      onChange={handleChange}
-      value={isNil(current) ? initialValue : current}
-      {...props}
-    />
+    <InputIndicatorContainer
+      loading={loading}
+      error={!!error}
+      success={completed}
+      position='right'
+    >
+      <TextInput
+        onChange={handleChange}
+        value={isNil(current) ? initialValue : current}
+        fullWidth
+        {...props}
+      />
+    </InputIndicatorContainer>
   );
 };
 
