@@ -1,6 +1,10 @@
 import { LoadingButton } from '@mui/lab';
 
-import { evictBedsQuery, evictUnitsQuery } from '../bedUnitUtil';
+import {
+  evictBedsQuery,
+  evictUnitPickList,
+  evictUnitsQuery,
+} from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -62,6 +66,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
             };
           }}
           getValueFromResponse={(data) => {
+            evictUnitPickList(inventoryId);
             const units = data?.updateUnits?.units || [];
             if (units.length === 1) {
               return units[0].name || '';
@@ -87,7 +92,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
 
   return (
     <GenericTableWithData
-      defaultPageSize={5}
+      defaultPageSize={10}
       queryVariables={{ id: inventoryId }}
       queryDocument={GetUnitsDocument}
       columns={unitColumns}

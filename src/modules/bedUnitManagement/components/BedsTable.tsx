@@ -101,6 +101,10 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
       width: '35%',
       render: (bed) => (
         <LiveSelect<UpdateBedsMutation, UpdateBedsMutationVariables>
+          key={
+            // re-render if unit name changes
+            pickList.find(({ code }) => code === bed.unit.id)?.label || bed.id
+          }
           options={pickList}
           textInputProps={{
             placeholder: 'Select unit',
@@ -134,7 +138,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
   ];
   return (
     <GenericTableWithData
-      defaultPageSize={5}
+      defaultPageSize={10}
       queryVariables={{ id: inventoryId }}
       queryDocument={GetBedsDocument}
       columns={bedColumns}
