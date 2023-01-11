@@ -63,9 +63,12 @@ const LiveSelect = <Mutation, MutationVariables>({
       <GenericSelect<PickListOption, false, false>
         renderOption={(props, option) => (
           <li {...props} key={option.code}>
-            <Typography variant='body2'>{option.label}</Typography>
+            <Typography variant='body2'>
+              {option.label || option.code}
+            </Typography>
           </li>
         )}
+        getOptionLabel={(option) => option.label || option.code || ''}
         onChange={handleChange}
         value={current}
         disabled={loading}
