@@ -47,7 +47,7 @@ const UserMenu: React.FC = () => {
         }}
         {...bindMenu(popupState)}
       >
-        <MenuItem component={Link} href={getManageAccountLink()}>
+        <MenuItem component={Link} href={getManageAccountLink()} target='_blank'>
           <ListItemIcon>
             <OpenInNewIcon />
           </ListItemIcon>
