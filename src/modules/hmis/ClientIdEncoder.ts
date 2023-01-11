@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { startOfToday } from 'date-fns';
 
-export default class ClientIdDecoder {
+export default class ClientIdEncoder {
   static PROTECT_IDS = import.meta.env.PUBLIC_PROTECTED_IDS === 'true';
 
   static INITIAL_DELIMITER = import.meta.env.PUBLIC_INITIAL_DELIMITER || '==';
@@ -14,12 +14,12 @@ export default class ClientIdDecoder {
 
   static DELIMITER_REGEX = new RegExp(`^${this.INITIAL_DELIMITER}`);
 
-  static encode(id: number): string {
+  static encode(id: number | string): string {
     if (!this.PROTECT_IDS) return String(id);
 
     const dayStamp = startOfToday().valueOf() / (60 * 60 * 24);
 
-    return this.obfuscate(id, dayStamp);
+    return this.obfuscate(parseInt(String(id)), dayStamp);
   }
 
   static obfuscate(id: number, dayStamp: number): string {
@@ -39,10 +39,10 @@ export default class ClientIdDecoder {
     return !!id.match(this.DELIMITER_REGEX);
   }
 
-  static decode(encoded: string | number | null | undefined) {
+  static decode(encoded: string): string {
     if (!encoded || !this.isEncoded(encoded)) return encoded;
     const [id] = this.deobfuscate(String(encoded));
-    return id;
+    return String(id);
   }
 
   static deobfuscate(slug: string) {

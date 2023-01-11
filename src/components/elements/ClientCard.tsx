@@ -19,6 +19,7 @@ import ClientImageUploadDialog from './input/ClientImageUploadDialog';
 import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
+import ClientIdEncoder from '@/modules/hmis/ClientIdEncoder';
 import {
   age,
   clientNameWithoutPreferred,
@@ -263,7 +264,9 @@ const ClientCard: React.FC<Props> = ({
                     <ButtonLink
                       data-testid='goToProfileButton'
                       variant='contained'
-                      to={`/client/${client.id}`}
+                      to={generatePath(DashboardRoutes.PROFILE, {
+                        clientId: ClientIdEncoder.encode(client.id),
+                      })}
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
                     >
@@ -277,7 +280,7 @@ const ClientCard: React.FC<Props> = ({
                       data-testid='editClientButton'
                       variant='contained'
                       to={generatePath(DashboardRoutes.EDIT, {
-                        clientId: client.id,
+                        clientId: ClientIdEncoder.encode(client.id),
                       })}
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
@@ -314,7 +317,7 @@ const ClientCard: React.FC<Props> = ({
               color='secondary'
               data-testid='enrollButton'
               to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
-                clientId: client.id,
+                clientId: ClientIdEncoder.encode(client.id),
               })}
             >
               Enroll

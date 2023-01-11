@@ -9,6 +9,7 @@ import DashboardContentContainer from '../layout/dashboard/DashboardContentConta
 import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
+import ClientIdEncoder from '@/modules/hmis/ClientIdEncoder';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -30,7 +31,7 @@ const ClientDashboard: React.FC = () => {
     loading,
     error,
   } = useGetClientQuery({
-    variables: { id: params.clientId },
+    variables: { id: ClientIdEncoder.decode(params.clientId) },
   });
   if (error) throw error;
 
