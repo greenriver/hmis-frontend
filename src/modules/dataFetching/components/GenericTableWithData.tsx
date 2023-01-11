@@ -8,7 +8,7 @@ import * as Sentry from '@sentry/react';
 import { get, startCase } from 'lodash-es';
 import { useMemo, useState } from 'react';
 
-import Pagination from './Pagination';
+import Pagination from '../../../components/elements/Pagination';
 
 import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import GenericTable, {

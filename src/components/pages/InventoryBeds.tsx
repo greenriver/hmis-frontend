@@ -91,12 +91,6 @@ const InventoryBeds = () => {
     [createUnits, inventoryId]
   );
 
-  // const onCompleted = useCallback(() => {
-  //   navigate(generatePath(Routes.PROJECT, { projectId }), {
-  //     state: { refetchInventory: false },
-  //   });
-  // }, [navigate, projectId]);
-
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
   if (!data?.inventory) throw Error('Inventory not found');

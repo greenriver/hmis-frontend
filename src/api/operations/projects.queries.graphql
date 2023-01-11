@@ -326,6 +326,7 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
 
 mutation CreateBeds($input: CreateBedsInput!) {
   createBeds(input: $input) {
+    clientMutationId
     inventory {
       ...InventoryFields
     }
@@ -337,6 +338,7 @@ mutation CreateBeds($input: CreateBedsInput!) {
 
 mutation CreateUnits($input: CreateUnitsInput!) {
   createUnits(input: $input) {
+    clientMutationId
     inventory {
       ...InventoryFields
     }
@@ -348,6 +350,7 @@ mutation CreateUnits($input: CreateUnitsInput!) {
 
 mutation DeleteUnits($input: DeleteUnitsInput!) {
   deleteUnits(input: $input) {
+    clientMutationId
     inventory {
       ...InventoryFields
     }
@@ -359,6 +362,7 @@ mutation DeleteUnits($input: DeleteUnitsInput!) {
 
 mutation DeleteBeds($input: DeleteBedsInput!) {
   deleteBeds(input: $input) {
+    clientMutationId
     inventory {
       ...InventoryFields
     }
@@ -370,8 +374,9 @@ mutation DeleteBeds($input: DeleteBedsInput!) {
 
 mutation UpdateUnits($input: UpdateUnitsInput!) {
   updateUnits(input: $input) {
-    inventory {
-      ...InventoryFields
+    clientMutationId
+    units {
+      ...UnitFields
     }
     errors {
       ...ValidationErrorFields
@@ -381,8 +386,9 @@ mutation UpdateUnits($input: UpdateUnitsInput!) {
 
 mutation UpdateBeds($input: UpdateBedsInput!) {
   updateBeds(input: $input) {
-    inventory {
-      ...InventoryFields
+    clientMutationId
+    beds {
+      ...BedFields
     }
     errors {
       ...ValidationErrorFields

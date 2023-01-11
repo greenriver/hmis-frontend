@@ -7,7 +7,7 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {

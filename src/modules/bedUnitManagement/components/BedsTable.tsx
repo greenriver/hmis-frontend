@@ -1,18 +1,20 @@
 import { LoadingButton } from '@mui/lab';
-import { Typography } from '@mui/material';
+import { useMemo } from 'react';
 
-import { evictUnitsQuery } from '../bedUnitUtil';
+import { evictBedsQuery, evictUnitPickList } from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import GenericSelect from '@/components/elements/input/GenericSelect';
-import TextInput from '@/components/elements/input/TextInput';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import LiveSelect from '@/modules/dataFetching/components/LiveSelect';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   Bed,
   GetBedsDocument,
   PickListOption,
   PickListType,
+  UpdateBedsDocument,
+  UpdateBedsMutation,
+  UpdateBedsMutationVariables,
   useDeleteBedsMutation,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
@@ -26,8 +28,8 @@ const DeleteBedButton = ({
 }) => {
   const [deleteBeds, { loading, error }] = useDeleteBedsMutation({
     onCompleted: () => {
-      evictUnitsQuery(inventoryId);
-      // evictBedsQuery(inventoryId);
+      // evictUnitsQuery(inventoryId);
+      evictBedsQuery(inventoryId);
     },
   });
   if (error) throw error;
@@ -49,14 +51,16 @@ const DeleteBedButton = ({
 };
 
 const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
-  const { data, loading } = useGetPickListQuery({
+  const { data } = useGetPickListQuery({
     variables: {
       pickListType: PickListType.AvailableUnits,
       relationId: inventoryId,
     },
     fetchPolicy: 'network-only',
   });
-  console.log('loading unit list', loading);
+  const pickList: PickListOption[] = useMemo(() => {
+    return data?.pickList || [];
+  }, [data]);
 
   const bedColumns: ColumnDef<Bed>[] = [
     {
@@ -69,34 +73,54 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
       key: 'name',
       header: 'Name',
       width: '35%',
-      render: (bed) => <TextInput value={bed.name || ''} />,
+      render: (bed) => (
+        <LiveTextInput<UpdateBedsMutation, UpdateBedsMutationVariables>
+          key={`${bed.id}-name`}
+          queryDocument={UpdateBedsDocument}
+          initialValue={bed.name || ''}
+          constructVariables={(name) => {
+            return {
+              input: { inventoryId, bedIds: [bed.id], name: name || null },
+            };
+          }}
+          getValueFromResponse={(data) => {
+            evictUnitPickList(inventoryId);
+            const beds = data?.updateBeds?.beds || [];
+            if (beds.length === 1) {
+              return beds[0].name || '';
+            }
+            return '';
+          }}
+        />
+      ),
     },
-    // {
-    //   key: 'gender',
-    //   header: 'Gender',
-    //   width: '20%',
-    //   render: (bed) => <TextInput value={bed.gender || ''} placeholder='Any' />,
-    // },
     {
       key: 'unit',
       header: 'Unit',
       width: '35%',
       render: (bed) => (
-        <GenericSelect<PickListOption, false, false>
-          options={data?.pickList || []}
+        <LiveSelect<UpdateBedsMutation, UpdateBedsMutationVariables>
+          options={pickList}
           textInputProps={{
-            placeholder: 'Select unitrelationship',
+            placeholder: 'Select unit',
           }}
-          value={(data?.pickList || []).find(
-            ({ code }) => code === bed.unit.id
-          )}
+          value={pickList.find(({ code }) => code === bed.unit.id) || null}
           size='small'
-          renderOption={(props, option) => (
-            <li {...props} key={option.code}>
-              <Typography variant='body2'>{option.label}</Typography>
-            </li>
-          )}
-          fullWidth
+          disableClearable
+          queryDocument={UpdateBedsDocument}
+          constructVariables={(option: PickListOption) => {
+            return {
+              input: { inventoryId, bedIds: [bed.id], unit: option.code },
+            };
+          }}
+          getOptionFromResponse={(data) => {
+            const beds = data?.updateBeds?.beds || [];
+            if (beds && beds.length === 1) {
+              const unitId = beds[0].unit.id;
+              return pickList.find(({ code }) => code === unitId) || null;
+            }
+            return null;
+          }}
         />
       ),
     },

@@ -199,7 +199,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
             direction='row'
             rowSpacing={2}
             columnSpacing={2}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              '>.MuiGrid-item': {
+                width: '250px',
+                flexGrow: 1,
+              },
+            }}
           >
             {definition.item?.map((item: FormItem) => (
               <DynamicField

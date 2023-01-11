@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {

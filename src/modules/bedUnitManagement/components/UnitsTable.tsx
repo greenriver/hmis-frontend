@@ -3,11 +3,14 @@ import { LoadingButton } from '@mui/lab';
 import { evictBedsQuery, evictUnitsQuery } from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
-import TextInput from '@/components/elements/input/TextInput';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import LiveTextInput from '@/modules/dataFetching/components/LiveTextInput';
 import {
   GetUnitsDocument,
   Unit,
+  UpdateUnitsDocument,
+  UpdateUnitsMutation,
+  UpdateUnitsMutationVariables,
   useDeleteUnitsMutation,
 } from '@/types/gqlTypes';
 
@@ -48,7 +51,25 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
       key: 'name',
       header: 'Unit Name',
       width: '30%',
-      render: (unit) => <TextInput value={unit.name || ''} />,
+      render: (unit) => (
+        <LiveTextInput<UpdateUnitsMutation, UpdateUnitsMutationVariables>
+          key={`${unit.id}-name`}
+          queryDocument={UpdateUnitsDocument}
+          initialValue={unit.name || ''}
+          constructVariables={(name) => {
+            return {
+              input: { inventoryId, unitIds: [unit.id], name: name || null },
+            };
+          }}
+          getValueFromResponse={(data) => {
+            const units = data?.updateUnits?.units || [];
+            if (units.length === 1) {
+              return units[0].name || '';
+            }
+            return '';
+          }}
+        />
+      ),
     },
     {
       key: 'count',

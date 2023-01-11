@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';

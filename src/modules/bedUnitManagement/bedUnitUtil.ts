@@ -6,11 +6,8 @@ export const evictBedsQuery = (inventoryId: string) =>
     id: `Inventory:${inventoryId}`,
     fieldName: 'beds',
   });
-export const evictUnitsQuery = (inventoryId: string) => {
-  cache.evict({
-    id: `Inventory:${inventoryId}`,
-    fieldName: 'units',
-  });
+
+export const evictUnitPickList = (inventoryId: string) => {
   cache.evict({
     id: 'ROOT_QUERY',
     fieldName: 'pickList',
@@ -19,4 +16,12 @@ export const evictUnitsQuery = (inventoryId: string) => {
       relationId: inventoryId,
     },
   });
+};
+
+export const evictUnitsQuery = (inventoryId: string) => {
+  cache.evict({
+    id: `Inventory:${inventoryId}`,
+    fieldName: 'units',
+  });
+  evictUnitPickList(inventoryId);
 };
