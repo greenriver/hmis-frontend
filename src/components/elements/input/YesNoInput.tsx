@@ -1,5 +1,7 @@
 import {
+  FormControl,
   FormGroup,
+  FormHelperText,
   FormLabel,
   Theme,
   ToggleButton,
@@ -26,6 +28,7 @@ export type YesNoInputProps = Props & DynamicInputCommonProps;
 
 const YesNoInput = ({
   label,
+  helperText,
   nullable = true,
   includeNullOption = false,
   trueLabel = 'Yes',
@@ -55,63 +58,66 @@ const YesNoInput = ({
   };
 
   return (
-    <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
-      <FormLabel
-        id={htmlId}
-        error={error}
-        sx={{
-          pr: horizontal ? 1 : undefined,
-          backgroundColor: horizontal ? 'white' : undefined,
-          color: props.disabled ? 'text.disabled' : 'text.primary',
-        }}
-      >
-        {label}
-      </FormLabel>
-      <ToggleButtonGroup
-        exclusive
-        aria-labelledby={htmlId}
-        sx={{
-          pt: 0.5,
-          mt: 0.5,
-          backgroundColor: horizontal ? 'white' : undefined,
-        }}
-        size='small'
-        onChange={handleChange}
-        value={
-          includeNullOption && isNil(value) && typeof value !== 'undefined'
-            ? -1
-            : value
-        }
-        {...props}
-      >
-        <ToggleButton
-          value={true}
-          aria-label={trueLabel}
-          color='secondary'
-          sx={buttonSx}
+    <FormControl>
+      <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
+        <FormLabel
+          id={htmlId}
+          error={error}
+          sx={{
+            pr: horizontal ? 1 : undefined,
+            backgroundColor: horizontal ? 'white' : undefined,
+            color: props.disabled ? 'text.disabled' : 'text.primary',
+          }}
         >
-          {trueLabel}
-        </ToggleButton>
-        <ToggleButton
-          value={false}
-          aria-label={falseLabel}
-          color='secondary'
-          sx={buttonSx}
+          {label}
+        </FormLabel>
+        <ToggleButtonGroup
+          exclusive
+          aria-labelledby={htmlId}
+          sx={{
+            pt: 0.5,
+            mt: 0.5,
+            backgroundColor: horizontal ? 'white' : undefined,
+          }}
+          size='small'
+          onChange={handleChange}
+          value={
+            includeNullOption && isNil(value) && typeof value !== 'undefined'
+              ? -1
+              : value
+          }
+          {...props}
         >
-          {falseLabel}
-        </ToggleButton>
-        {includeNullOption && (
           <ToggleButton
-            value={-1}
-            aria-label={nullOptionLabel}
+            value={true}
+            aria-label={trueLabel}
             color='secondary'
             sx={buttonSx}
           >
-            {nullOptionLabel}
+            {trueLabel}
           </ToggleButton>
-        )}
-      </ToggleButtonGroup>
-    </FormGroup>
+          <ToggleButton
+            value={false}
+            aria-label={falseLabel}
+            color='secondary'
+            sx={buttonSx}
+          >
+            {falseLabel}
+          </ToggleButton>
+          {includeNullOption && (
+            <ToggleButton
+              value={-1}
+              aria-label={nullOptionLabel}
+              color='secondary'
+              sx={buttonSx}
+            >
+              {nullOptionLabel}
+            </ToggleButton>
+          )}
+        </ToggleButtonGroup>
+      </FormGroup>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </FormControl>
   );
 };
 
