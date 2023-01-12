@@ -8,7 +8,6 @@ import {
   TextField,
   TextFieldProps,
   Theme,
-  Typography,
 } from '@mui/material';
 import { useId } from 'react';
 
@@ -26,13 +25,6 @@ export const horizontalInputSx: SxProps<Theme> = {
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
-
-  // backgroundImage: (theme: Theme) =>
-  // `linear-gradient(to right, ${theme.palette.grey[200]} 33%, rgba(255,255,255,0) 0%)`,
-  // backgroundPosition: 'center',
-  // backgroundSize: '8px 3px',
-  // backgroundRepeat: 'repeat-x',
-  // flexWrap: 'nowrap',
 };
 
 const TextInput = ({
@@ -119,7 +111,7 @@ const TextInput = ({
         }}
         justifyContent='space-between'
       >
-        <Typography sx={{ flexBasis: '80%' }}>{label}</Typography>
+        <Box sx={{ flexBasis: '80%' }}>{label}</Box>
         <Box sx={{ justifyContent: 'flex-end', pt: 0.5 }}>{textField}</Box>
       </Stack>
     );

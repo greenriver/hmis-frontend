@@ -8,15 +8,14 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
-import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
-
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
 import Loading from '@/components/elements/Loading';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
+import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   Client,

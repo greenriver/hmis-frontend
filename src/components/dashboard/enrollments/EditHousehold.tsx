@@ -8,20 +8,19 @@ import {
   useParams,
 } from 'react-router-dom';
 
-import AddToHouseholdButton from './household/AddToHouseholdButton';
-import AssociatedHouseholdMembers, {
-  householdMemberColumns,
-} from './household/AssociatedHouseholdMembers';
-import EditHouseholdMemberTable from './household/EditHouseholdMemberTable';
-import RelationshipToHohSelect from './household/RelationshipToHohSelect';
-import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
-
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import AddToHouseholdButton from '@/modules/household/components/AddToHouseholdButton';
+import AssociatedHouseholdMembers, {
+  householdMemberColumns,
+} from '@/modules/household/components/AssociatedHouseholdMembers';
+import EditHouseholdMemberTable from '@/modules/household/components/EditHouseholdMemberTable';
+import RelationshipToHohSelect from '@/modules/household/components/RelationshipToHohSelect';
+import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
 import ClientSearch from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
 import {

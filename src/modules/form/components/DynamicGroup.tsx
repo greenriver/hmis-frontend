@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { DynamicFieldProps } from './DynamicField';
@@ -38,6 +38,13 @@ const DynamicGroup = (props: GroupItemComponentProps) => {
 
   switch (props.item.component) {
     case Component.InputGroup:
+      if (props.nestingLevel === 0) {
+        return (
+          <Grid item>
+            <InputGroup key={props.item.linkId} {...props} />
+          </Grid>
+        );
+      }
       return <InputGroup key={props.item.linkId} {...props} />;
     case Component.InputTable:
       return <InputTable key={props.item.linkId} {...props} />;

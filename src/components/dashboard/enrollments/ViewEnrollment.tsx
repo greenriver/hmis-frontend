@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import { generatePath, useOutletContext, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import HouseholdMemberTable from './household/HouseholdMemberTable';
 import { useIntakeAssessment } from './useIntakeAssessment';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 

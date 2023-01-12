@@ -37,13 +37,26 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     skip: create,
   });
 
-  const onCompleted = useCallback(() => {
-    // Force refresh table if we just created a new record
-    if (create) {
-      cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
-    }
-    navigate(generatePath(Routes.PROJECT, { projectId }));
-  }, [navigate, projectId, create]);
+  const onCompleted = useCallback(
+    (data: CreateInventoryMutation) => {
+      if (create) {
+        cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+        const id = data?.createInventory?.inventory?.id;
+        if (id) {
+          navigate(
+            generatePath(Routes.MANAGE_INVENTORY_BEDS, {
+              projectId,
+              inventoryId: id,
+            })
+          );
+          return;
+        }
+      }
+
+      navigate(generatePath(Routes.PROJECT, { projectId }));
+    },
+    [navigate, projectId, create]
+  );
 
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!

@@ -2,10 +2,9 @@
 import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
-import FinishIntakeButton from '../FinishIntakeButton';
-
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
+import FinishIntakeButton from '@/components/dashboard/enrollments/FinishIntakeButton';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';

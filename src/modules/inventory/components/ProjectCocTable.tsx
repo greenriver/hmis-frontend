@@ -9,7 +9,7 @@ import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
-} from '@/components/elements/GenericTableWithData';
+} from '@/modules/dataFetching/components/GenericTableWithData';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {

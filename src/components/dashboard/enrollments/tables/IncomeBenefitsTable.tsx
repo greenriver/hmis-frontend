@@ -1,6 +1,6 @@
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
-} from '@/components/elements/GenericTableWithData';
+} from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   GetRecentIncomeBenefitsDocument,
   GetRecentIncomeBenefitsQuery,

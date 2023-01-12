@@ -8,7 +8,7 @@ import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
-} from '@/components/elements/GenericTableWithData';
+} from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -94,7 +94,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         width: '1%',
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
-            {/* <ButtonLink
+            <ButtonLink
               to={generatePath(Routes.MANAGE_INVENTORY_BEDS, {
                 projectId,
                 inventoryId: record.id,
@@ -103,7 +103,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               variant='outlined'
             >
               Beds
-            </ButtonLink> */}
+            </ButtonLink>
             <ButtonLink
               data-testid='updateButton'
               to={generatePath(Routes.EDIT_INVENTORY, {
