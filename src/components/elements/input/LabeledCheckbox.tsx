@@ -1,8 +1,10 @@
 import {
   Checkbox,
+  FormControl,
   FormControlLabel,
   FormControlLabelProps,
   FormGroup,
+  FormHelperText,
 } from '@mui/material';
 import { KeyboardEventHandler, SyntheticEvent, useCallback } from 'react';
 
@@ -20,6 +22,7 @@ const LabeledCheckbox = ({
   label,
   error,
   onChange,
+  helperText,
   horizontal = false,
   ...props
 }: Props & DynamicInputCommonProps) => {
@@ -53,22 +56,25 @@ const LabeledCheckbox = ({
   );
 
   return (
-    <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
-      <FormControlLabel
-        control={<Checkbox sx={checkboxSx} onKeyDown={onKeyDown} />}
-        labelPlacement={horizontal ? 'start' : 'end'}
-        label={label}
-        sx={{
-          color: error ? (theme) => theme.palette.error.main : undefined,
-          '.MuiCheckbox-root': {
+    <FormControl>
+      <FormGroup sx={horizontal ? horizontalInputSx : undefined}>
+        <FormControlLabel
+          control={<Checkbox sx={checkboxSx} onKeyDown={onKeyDown} />}
+          labelPlacement={horizontal ? 'start' : 'end'}
+          label={label}
+          sx={{
             color: error ? (theme) => theme.palette.error.main : undefined,
-          },
-          ...labelSx,
-        }}
-        onChange={onChange}
-        {...props}
-      />
-    </FormGroup>
+            '.MuiCheckbox-root': {
+              color: error ? (theme) => theme.palette.error.main : undefined,
+            },
+            ...labelSx,
+          }}
+          onChange={onChange}
+          {...props}
+        />
+      </FormGroup>
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
+    </FormControl>
   );
 };
 

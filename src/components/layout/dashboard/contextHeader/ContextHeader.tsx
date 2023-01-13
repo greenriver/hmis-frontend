@@ -20,7 +20,7 @@ const ContextHeader: React.FC<Props> = ({
   handleOpenMenu,
 }) => {
   const isMobile = useIsMobile();
-  console.log(isMobile, isOpen);
+
   return (
     <AppBar
       position='sticky'

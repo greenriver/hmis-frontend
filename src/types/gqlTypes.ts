@@ -2063,6 +2063,7 @@ export enum PickListType {
   AvailableUnits = 'AVAILABLE_UNITS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  Destination = 'DESTINATION',
   Geocode = 'GEOCODE',
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
