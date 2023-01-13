@@ -64,7 +64,7 @@ const RadioGroupInput = ({
   const onKeyDown: KeyboardEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       if (e.key === 'Enter' || e.key === ' ' || e.code === 'Space')
-        onClickOption(e, e.target.value);
+        onClickOption(e, (e.target as HTMLInputElement).value);
       // if (e.key.match(/(ArrowDown|ArrowUp|ArrowLeft|ArrowRight)/))
       //   e.preventDefault();
     },
