@@ -5,6 +5,7 @@ import { generatePath, useNavigate, useParams } from 'react-router-dom';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateProjectDocument,
@@ -24,10 +25,14 @@ const CreateProject = () => {
     (data: CreateProjectMutation) => {
       const id = data?.createProject?.project?.id;
       if (id) {
+        cache.evict({
+          id: `Organization:${organizationId}`,
+          fieldName: 'projects',
+        });
         navigate(generatePath(Routes.PROJECT, { projectId: id }));
       }
     },
-    [navigate]
+    [navigate, organizationId]
   );
 
   if (!crumbs) throw Error('Organization not found');
