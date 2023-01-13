@@ -16,16 +16,39 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   // These should be hidden if we have an earlier "break"
   const threeFourFive = ['3.917.3', '3.917.4', '3.917.5'];
 
-  // Institutional 90+ days
+  // Ensure losUnderThreshold doesn't get populated if no LOS is selected
+  cy.choose('3.917.1', 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+  });
+
+  // Fill in some dependent fields before testing breaks, so that we can ensure they don't end up in the HUD result
+  cy.inputId('3.917.3').type('01012022'); // date to street essh
+  cy.choose('3.917.4', 'ONE_TIME'); // times homeless
+  cy.choose('3.917.5', 'NUM_4'); // months homeless
+
+  // Institutional 90+ days (break)
   cy.choose('3.917.1', 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME');
   cy.choose('3.917.2', 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR');
   cy.displayItem(breakInstitutional).should('exist');
   cy.displayItems([breakPermanent, breakLast]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+    'Enrollment.lengthOfStay': 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
+    'Enrollment.losUnderThreshold': false,
+  });
+
+  // Institutional 1+ year (break)
   cy.choose('3.917.2', 'ONE_YEAR_OR_LONGER');
   cy.displayItem(breakInstitutional).should('exist');
   cy.displayItems([breakPermanent, breakLast]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
+    'Enrollment.lengthOfStay': 'ONE_YEAR_OR_LONGER',
+    'Enrollment.losUnderThreshold': false,
+  });
 
   // Reset
   cy.choose('3.917.2', 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS');
@@ -34,10 +57,15 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   );
   cy.getByIds(threeFourFive).should('exist');
 
-  // Temp/permanent 7+ days
+  // Temp/permanent 7+ days (break)
   cy.choose('3.917.1', 'HOST_HOME_NON_CRISIS');
   cy.displayItem(breakPermanent).should('exist');
   cy.displayItems([breakInstitutional, breakLast]).should('not.exist');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
+    'Enrollment.lengthOfStay': 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
+    'Enrollment.losUnderThreshold': false,
+  });
 
   cy.choose('3.917.2', 'ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH');
   cy.displayItem(breakPermanent).should('exist');
@@ -59,28 +87,40 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'not.exist'
   );
   cy.getByIds(threeFourFive).should('exist');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
+    'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
+    // its no a break (it IS under the treshold)
+    'Enrollment.losUnderThreshold': true,
+    // previously filled in dependent fields are present
+    'Enrollment.dateToStreetEssh': '2022-01-01',
+    'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
+    'Enrollment.monthsHomelessPastThreeYears': 'NUM_4',
+  });
 
-  // Stop data collection if not homeless on night before
+  // Set previousStreetEssh to false, causing break to appear
   cy.getById('3.917.C').find('button[value="false"]').click();
   cy.displayItem(breakLast).should('exist');
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
+  cy.expectHudValuesSectionToDeepEqual({
+    'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
+    'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
+    'Enrollment.losUnderThreshold': true,
+    'Enrollment.previousStreetEssh': false,
+  });
 
-  // Re-enable
+  // Set previousStreetEssh to true, causing break to disappear
   cy.getById('3.917.C').find('button[value="true"]').click();
   cy.displayItems([breakInstitutional, breakPermanent, breakLast]).should(
     'not.exist'
   );
   cy.getByIds(threeFourFive).should('exist');
 
-  // Fill in DateToStreetESSH and times/months homeless
-  cy.inputId('3.917.3').type('01012022');
-  cy.choose('3.917.4', 'ONE_TIME');
-  cy.choose('3.917.5', 'NUM_4');
-
   const expectedHudValues = {
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
+    'Enrollment.losUnderThreshold': true,
     'Enrollment.previousStreetEssh': true,
     'Enrollment.dateToStreetEssh': '2022-01-01',
     'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
@@ -103,10 +143,6 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     ...expectedHudValues,
     'Enrollment.previousStreetEssh': null,
   });
-
-  // Make previousStreetEssh true
-  // cy.getById('3.917.C').find('button[value="true"]').click();
-  // cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
 });
 
 /**

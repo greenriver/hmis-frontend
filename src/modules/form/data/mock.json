@@ -74,10 +74,28 @@
           "helperText": "This is helper text"
         },
         {
+          "type": "OPEN_CHOICE",
+          "link_id": "multi-open",
+          "text": "Multi Open Choice",
+          "helperText": "You can type anything into this box",
+          "repeats": true,
+          "pickListOptions": [
+            {
+              "code": "she/her"
+            },
+            {
+              "code": "he/him"
+            },
+            {
+              "code": "they/them"
+            }
+          ]
+        },
+        {
           "type": "CHOICE",
           "component": "RADIO_BUTTONS",
           "linkId": "radio-1",
-          "text": "Choice Option",
+          "text": "Choice Option as Radio",
           "pickListReference": "NoYesReasonsForMissingData",
           "helperText": "This is helper text"
         },
@@ -85,7 +103,7 @@
           "type": "CHOICE",
           "component": "RADIO_BUTTONS_VERTICAL",
           "linkId": "vertical-radio-1",
-          "text": "Choice Option",
+          "text": "Choice Option as Vertical Radio",
           "pickListReference": "NoYesReasonsForMissingData",
           "helperText": "This is helper text"
         },
