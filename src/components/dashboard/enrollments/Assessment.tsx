@@ -101,7 +101,7 @@ const Assessment = () => {
         }}
       >
         <Stack direction='row'>
-          <Typography variant='h4' sx={{ mb: 2, kfontWeight: 400 }}>
+          <Typography variant='h4' sx={{ mb: 2, fontWeight: 400 }}>
             <b>{assessmentTitle}</b>
             {informationDate && ` ${parseAndFormatDate(informationDate)}`}
           </Typography>

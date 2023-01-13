@@ -6144,6 +6144,18 @@
             "deprecationReason": null
           },
           {
+            "name": "losUnderThreshold",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "monthsHomelessPastThreeYears",
             "description": null,
             "args": [],
@@ -12760,6 +12772,35 @@
           {
             "name": "INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT",
             "description": "(4) Insurance type not applicable for this client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "NoYesMissing",
+        "description": "1.7",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES",
+            "description": "(1) Yes",
             "isDeprecated": false,
             "deprecationReason": null
           }

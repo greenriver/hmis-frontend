@@ -10,7 +10,7 @@ beforeEach(() => {
   cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
   cy.visit('/');
 });
-// TODO add one for exit
+
 it(
   'should perform HUD intake assessment',
   {

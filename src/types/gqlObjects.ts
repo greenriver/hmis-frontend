@@ -736,6 +736,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'LivingSituation', ofType: null },
       },
       {
+        name: 'losUnderThreshold',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
         name: 'monthsHomelessPastThreeYears',
         type: {
           kind: 'ENUM',
