@@ -33,7 +33,7 @@ const CloseMenuRow = ({ onClose }: { onClose: VoidFunction }) => (
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    <Typography variant='h6'>Menu</Typography>
+    <Typography variant='h6'>Client Navigation</Typography>
     <Button
       variant='transparent'
       onClick={onClose}
@@ -109,7 +109,8 @@ const DashboardContentNav: React.FC<Props> = ({
           <Box
             sx={{
               px: 2,
-              py: 2,
+              pt: 2,
+              pb: 3,
               borderBottomColor: 'borders.light',
               borderBottomWidth: 1,
               borderBottomStyle: 'solid',

@@ -39,8 +39,9 @@ const DashboardContentContainer: React.FC<Props> = ({
   const theme = useTheme();
   const maxPageWidth = theme.breakpoints.values.xl;
   const desktopContainerWidth = desktopNavIsOpen
-    ? `calc(100vw - ${sidebarWidth}px)` // FIXME causes horizontal scrollbar when vertical scroll is present
-    : '100%';
+    ? // FIXME using vw causes horizontal scrollbar when vertical scroll is present
+      `calc(100vw - ${sidebarWidth}px)`
+    : '100vw';
   const desktopTransform = desktopNavIsOpen
     ? ''
     : `translateX(-${sidebarWidth}px)`;

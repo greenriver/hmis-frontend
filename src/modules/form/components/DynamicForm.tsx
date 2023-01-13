@@ -367,7 +367,7 @@ const DynamicForm: React.FC<
         </ConfirmationDialog>
       )}
 
-      {showSavePrompt && (
+      {showSavePrompt && !isSaveButtonVisible && (
         <SaveSlide
           in={promptSave && !isSaveButtonVisible}
           appear

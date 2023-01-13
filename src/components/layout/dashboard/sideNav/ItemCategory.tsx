@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 
 import ItemBase, { ItemBaseProps } from './ItemBase';
@@ -9,7 +9,7 @@ interface Props extends ItemBaseProps {
 }
 
 /**
- * A menu item that represents a category (like 'Client Navigation')
+ * A menu item that represents a category (like 'Administrative')
  */
 const ItemCategory = ({ item, first }: Props) => {
   return (
@@ -17,12 +17,12 @@ const ItemCategory = ({ item, first }: Props) => {
       item={item}
       showIcon
       renderTitle={(title) => (
-        <Box sx={{ width: '100%' }}>
-          {!first && <Divider />}
-          <Typography variant='h6' sx={{ pt: first ? 0 : 2, px: 2 }}>
-            {title}
-          </Typography>
-        </Box>
+        // <Box sx={{ width: '100%' }}>
+        //   {!first && <Divider />}
+        <Typography variant='h6' sx={{ pt: first ? 0 : 2, px: 2 }}>
+          {title}
+        </Typography>
+        // </Box>
       )}
       renderChild={(item) => {
         let ChildComponent = Topic;
