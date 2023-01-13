@@ -22,7 +22,15 @@ it(
     cy.createClient('Cy First', 'Cy Last');
     cy.testId('enrollButton').click();
     cy.testId('projectSelect').click();
-    cy.get('li[role="option"]').first().click();
+    cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
+      'not.exist'
+    );
+    cy.get(`.MuiAutocomplete-listbox`)
+      .find('li[role="option"]')
+      .first()
+      .as('firstProject');
+    cy.get('@firstProject').click();
+
     cy.testId('createEnrollmentButton').first().click();
     cy.testId('finishIntakeButton').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');

@@ -25,7 +25,7 @@ const UserMenu: React.FC = () => {
   const logoutUser = useCallback(() => logout(true), [logout]);
 
   if (!user) return null;
-
+  const manageAccountLink = getManageAccountLink();
   return (
     <>
       <Button
@@ -47,12 +47,14 @@ const UserMenu: React.FC = () => {
         }}
         {...bindMenu(popupState)}
       >
-        <MenuItem component={Link} href={getManageAccountLink()} target='_blank'>
-          <ListItemIcon>
-            <OpenInNewIcon fontSize='small' />
-          </ListItemIcon>
-          <ListItemText>Manage Account</ListItemText>
-        </MenuItem>
+        {manageAccountLink && (
+          <MenuItem component={Link} href={manageAccountLink} target='_blank'>
+            <ListItemIcon>
+              <OpenInNewIcon fontSize='small' />
+            </ListItemIcon>
+            <ListItemText>Manage Account</ListItemText>
+          </MenuItem>
+        )}
         <MenuItem onClick={logoutUser}>
           <ListItemIcon>
             <LogoutIcon fontSize='small' />
