@@ -11,6 +11,7 @@ import OrganizationDetails from '@/modules/inventory/components/OrganizationDeta
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
 
@@ -30,20 +31,12 @@ const Organization = () => {
   const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
     useDeleteOrganizationMutation({
       variables: { input: { id: organizationId } },
-      onCompleted: () => navigate(generatePath(Routes.ALL_PROJECTS)),
+      onCompleted: () => {
+        cache.evict({ id: 'ROOT_QUERY', fieldName: 'organizations' });
+        navigate(generatePath(Routes.ALL_PROJECTS));
+      },
     });
   if (deleteError) console.error(deleteError);
-
-  // const projects = useMemo(
-  //   () =>
-  //     sortBy(organization?.projects || [], [
-  //       (p) => !!p.operatingEndDate,
-  //       'operatingStartDate',
-  //       'operatingEndDate',
-  //       'projectName',
-  //     ]),
-  //   [organization]
-  // );
 
   const hasDetails = organization && organization?.description;
 

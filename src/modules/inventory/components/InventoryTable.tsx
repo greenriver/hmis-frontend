@@ -82,12 +82,12 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         : [
             {
               header: 'Units',
-              render: 'unitInventory' as keyof InventoryFieldsFragment,
+              render: 'units.nodesCount' as keyof InventoryFieldsFragment,
             },
           ]),
       {
         header: 'Beds',
-        render: 'bedInventory' as keyof InventoryFieldsFragment,
+        render: 'beds.nodesCount' as keyof InventoryFieldsFragment,
       },
       {
         key: 'actions',

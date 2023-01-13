@@ -7644,10 +7644,6 @@ export type ProjectAllFieldsFragment = {
 export type InventoryFieldsFragment = {
   __typename?: 'Inventory';
   availability?: Availability | null;
-  bedInventory: number;
-  chBedInventory?: number | null;
-  chVetBedInventory?: number | null;
-  chYouthBedInventory?: number | null;
   cocCode: string;
   dateCreated: string;
   dateDeleted?: string | null;
@@ -7657,11 +7653,8 @@ export type InventoryFieldsFragment = {
   id: string;
   inventoryEndDate?: string | null;
   inventoryStartDate: string;
-  otherBedInventory?: number | null;
-  unitInventory: number;
-  vetBedInventory?: number | null;
-  youthBedInventory?: number | null;
-  youthVetBedInventory?: number | null;
+  beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+  units: { __typename?: 'UnitsPaginated'; nodesCount: number };
 };
 
 export type UnitFieldsFragment = {
@@ -7828,10 +7821,6 @@ export type GetInventoryQuery = {
   inventory?: {
     __typename?: 'Inventory';
     availability?: Availability | null;
-    bedInventory: number;
-    chBedInventory?: number | null;
-    chVetBedInventory?: number | null;
-    chYouthBedInventory?: number | null;
     cocCode: string;
     dateCreated: string;
     dateDeleted?: string | null;
@@ -7841,11 +7830,8 @@ export type GetInventoryQuery = {
     id: string;
     inventoryEndDate?: string | null;
     inventoryStartDate: string;
-    otherBedInventory?: number | null;
-    unitInventory: number;
-    vetBedInventory?: number | null;
-    youthBedInventory?: number | null;
-    youthVetBedInventory?: number | null;
+    beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+    units: { __typename?: 'UnitsPaginated'; nodesCount: number };
   } | null;
 };
 
@@ -8171,10 +8157,6 @@ export type GetProjectInventoriesQuery = {
       nodes: Array<{
         __typename?: 'Inventory';
         availability?: Availability | null;
-        bedInventory: number;
-        chBedInventory?: number | null;
-        chVetBedInventory?: number | null;
-        chYouthBedInventory?: number | null;
         cocCode: string;
         dateCreated: string;
         dateDeleted?: string | null;
@@ -8184,11 +8166,8 @@ export type GetProjectInventoriesQuery = {
         id: string;
         inventoryEndDate?: string | null;
         inventoryStartDate: string;
-        otherBedInventory?: number | null;
-        unitInventory: number;
-        vetBedInventory?: number | null;
-        youthBedInventory?: number | null;
-        youthVetBedInventory?: number | null;
+        beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+        units: { __typename?: 'UnitsPaginated'; nodesCount: number };
       }>;
     };
   } | null;
@@ -8273,10 +8252,6 @@ export type CreateInventoryMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8286,11 +8261,8 @@ export type CreateInventoryMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8315,10 +8287,6 @@ export type UpdateInventoryMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8328,11 +8296,8 @@ export type UpdateInventoryMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8554,10 +8519,6 @@ export type CreateBedsMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8567,11 +8528,8 @@ export type CreateBedsMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8596,10 +8554,6 @@ export type CreateUnitsMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8609,11 +8563,8 @@ export type CreateUnitsMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8638,10 +8589,6 @@ export type DeleteUnitsMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8651,11 +8598,8 @@ export type DeleteUnitsMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8680,10 +8624,6 @@ export type DeleteBedsMutation = {
     inventory?: {
       __typename?: 'Inventory';
       availability?: Availability | null;
-      bedInventory: number;
-      chBedInventory?: number | null;
-      chVetBedInventory?: number | null;
-      chYouthBedInventory?: number | null;
       cocCode: string;
       dateCreated: string;
       dateDeleted?: string | null;
@@ -8693,11 +8633,8 @@ export type DeleteBedsMutation = {
       id: string;
       inventoryEndDate?: string | null;
       inventoryStartDate: string;
-      otherBedInventory?: number | null;
-      unitInventory: number;
-      vetBedInventory?: number | null;
-      youthBedInventory?: number | null;
-      youthVetBedInventory?: number | null;
+      beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+      units: { __typename?: 'UnitsPaginated'; nodesCount: number };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9339,10 +9276,6 @@ export const ProjectAllFieldsFragmentDoc = gql`
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
     availability
-    bedInventory
-    chBedInventory
-    chVetBedInventory
-    chYouthBedInventory
     cocCode
     dateCreated
     dateDeleted
@@ -9352,11 +9285,12 @@ export const InventoryFieldsFragmentDoc = gql`
     id
     inventoryEndDate
     inventoryStartDate
-    otherBedInventory
-    unitInventory
-    vetBedInventory
-    youthBedInventory
-    youthVetBedInventory
+    beds {
+      nodesCount
+    }
+    units {
+      nodesCount
+    }
   }
 `;
 export const UnitFieldsFragmentDoc = gql`
