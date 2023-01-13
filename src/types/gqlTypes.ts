@@ -902,6 +902,7 @@ export type Enrollment = {
   inProgress: Scalars['Boolean'];
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
+  losUnderThreshold?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
@@ -1971,6 +1972,16 @@ export enum NoAssistanceReason {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Insurance type not applicable for this client */
   InsuranceTypeNotApplicableForThisClient = 'INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT',
+}
+
+/** 1.7 */
+export enum NoYesMissing {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
 }
 
 /** 1.8 */

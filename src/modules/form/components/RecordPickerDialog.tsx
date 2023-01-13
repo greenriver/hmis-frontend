@@ -137,14 +137,16 @@ const RecordPickerDialog = ({
     }
 
     // Select which fields to show in table based on child items in the group
-    const dataColumns = getPopulatableChildren(item).map((i) => ({
-      key: i.fieldName || undefined,
-      header: i.briefText || i.text || startCase(i.fieldName as string),
-      render: renderHmisField(
-        HmisEnums.RelatedRecordType[recordType],
-        i.fieldName as string
-      ),
-    }));
+    const dataColumns = getPopulatableChildren(item)
+      .filter((item) => !item.hidden)
+      .map((i) => ({
+        key: i.fieldName || undefined,
+        header: i.briefText || i.text || startCase(i.fieldName as string),
+        render: renderHmisField(
+          HmisEnums.RelatedRecordType[recordType],
+          i.fieldName as string
+        ),
+      }));
     return [...commonColumns, ...dataColumns];
   }, [item, recordType]);
 
