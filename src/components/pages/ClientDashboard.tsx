@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Outlet, useOutletContext, useParams } from 'react-router-dom';
 
 import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
@@ -9,6 +9,8 @@ import DashboardContentContainer from '../layout/dashboard/DashboardContentConta
 import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
+import useCurrentPath from '@/hooks/useCurrentPath';
+import { HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -52,8 +54,17 @@ const ClientDashboard: React.FC = () => {
     [client, enrollment, enrollmentLoading]
   );
 
+  const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
   const [mobileNavIsOpen, setMobileNavState] = useState(false);
+
+  // Auto-hide nav for certain pages, like assessments
+  useEffect(() => {
+    if (!currentPath) return;
+    if (HIDE_NAV_ROUTES.includes(currentPath)) {
+      setDesktopNavState(false);
+    }
+  }, [currentPath]);
 
   const handleCloseMobileMenu = useCallback(() => {
     setMobileNavState(false);

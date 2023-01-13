@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
-import { matchRoutes, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 
@@ -85,34 +86,22 @@ export const useDashboardBreadcrumbs = (
   );
   const { pathname } = useLocation();
 
+  const currentPath = useCurrentPath();
   const breadcrumbs = useMemo(() => {
-    const matches = matchRoutes(
-      Object.values(DashboardRoutes).map((s) => ({
-        path: s,
-      })),
-      pathname
-    );
-    if (!matches) {
+    if (!currentPath) {
       console.warn('route not recognized', pathname);
       return [];
     }
 
-    const route = matches[0].route;
-    if (!route.path) {
-      console.warn('route not recognized', pathname);
-      return [];
-    }
-
-    const paths: string[] = [route.path];
-    buildParentPaths(route.path, paths, crumbConfig);
-
+    const paths = [currentPath];
+    buildParentPaths(currentPath, paths, crumbConfig);
     const crumbs = paths.map((path) => ({
       to: path,
       label: breadcrumbOverrides?.[path] || crumbConfig[path]?.title || 'Page',
     }));
 
     return crumbs;
-  }, [pathname, breadcrumbOverrides, crumbConfig]);
+  }, [pathname, breadcrumbOverrides, crumbConfig, currentPath]);
 
   return breadcrumbs;
 };
