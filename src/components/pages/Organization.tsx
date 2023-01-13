@@ -11,9 +11,9 @@ import OrganizationDetails from '@/modules/inventory/components/OrganizationDeta
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
-import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 
 const Organization = () => {
   const { organizationId } = useParams() as {
@@ -32,7 +32,8 @@ const Organization = () => {
     useDeleteOrganizationMutation({
       variables: { input: { id: organizationId } },
       onCompleted: () => {
-        cache.evict({ id: 'ROOT_QUERY', fieldName: 'organizations' });
+        evictPickList(PickListType.Project);
+        evictQuery('organizations');
         navigate(generatePath(Routes.ALL_PROJECTS));
       },
     });

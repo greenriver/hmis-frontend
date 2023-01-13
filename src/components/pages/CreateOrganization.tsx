@@ -5,14 +5,15 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
-import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   CreateOrganizationDocument,
   CreateOrganizationMutation,
   CreateOrganizationMutationVariables,
   OrganizationAllFieldsFragment,
+  PickListType,
 } from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 
 const CreateOrganization = () => {
   const navigate = useNavigate();
@@ -29,7 +30,8 @@ const CreateOrganization = () => {
     (data: CreateOrganizationMutation) => {
       const id = data?.createOrganization?.organization?.id;
       if (id) {
-        cache.evict({ id: 'ROOT_QUERY', fieldName: 'organizations' });
+        evictPickList(PickListType.Project);
+        evictQuery('organizations');
         navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
       }
     },

@@ -30,10 +30,12 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
+  PickListType,
   ProjectAllFieldsFragment,
   ProjectType,
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 
 export const InactiveBanner = ({
   project,
@@ -104,6 +106,7 @@ const Project = () => {
             id: `Organization:${organizationId}`,
             fieldName: 'projects',
           });
+          evictPickList(PickListType.Project);
           navigate(
             generatePath(Routes.ORGANIZATION, {
               organizationId,
