@@ -164,7 +164,7 @@ const EditHousehold = () => {
 
   if (anythingLoading) return <Loading />;
 
-  const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
+  const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
     ...householdMemberColumns,
     ...addToEnrollmentColumns,
   ];
@@ -232,7 +232,7 @@ const EditHousehold = () => {
               searchResultsTableProps={{
                 rowLinkTo: undefined,
                 tableProps: { size: 'small' },
-                columns: searchResultColumns,
+                columns: SEARCH_RESULT_COLUMNS,
               }}
             />
           </Paper>
