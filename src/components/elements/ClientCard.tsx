@@ -50,6 +50,10 @@ const RecentEnrollments = ({
     error,
   } = useGetClientEnrollmentsQuery({
     variables: { id: clientId },
+    // Don't let this list get stale because we use it on the client profile.
+    // We can remove this once we replace the client profile, and are only using the
+    // ClientCard for search results.
+    fetchPolicy: 'cache-and-network',
   });
 
   const recentEnrollments = useMemo(

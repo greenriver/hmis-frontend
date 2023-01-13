@@ -12,7 +12,8 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 
 const Organization = () => {
   const { organizationId } = useParams() as {
@@ -30,20 +31,13 @@ const Organization = () => {
   const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
     useDeleteOrganizationMutation({
       variables: { input: { id: organizationId } },
-      onCompleted: () => navigate(generatePath(Routes.ALL_PROJECTS)),
+      onCompleted: () => {
+        evictPickList(PickListType.Project);
+        evictQuery('organizations');
+        navigate(generatePath(Routes.ALL_PROJECTS));
+      },
     });
   if (deleteError) console.error(deleteError);
-
-  // const projects = useMemo(
-  //   () =>
-  //     sortBy(organization?.projects || [], [
-  //       (p) => !!p.operatingEndDate,
-  //       'operatingStartDate',
-  //       'operatingEndDate',
-  //       'projectName',
-  //     ]),
-  //   [organization]
-  // );
 
   const hasDetails = organization && organization?.description;
 

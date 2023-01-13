@@ -27,12 +27,15 @@ import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
+  PickListType,
   ProjectAllFieldsFragment,
   ProjectType,
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 
 export const InactiveBanner = ({
   project,
@@ -96,14 +99,23 @@ const Project = () => {
   const [deleteProject, { loading: deleteLoading, error: deleteError }] =
     useDeleteProjectMutation({
       variables: { input: { id: projectId } },
-      onCompleted: () =>
-        project
-          ? navigate(
-              generatePath(Routes.ORGANIZATION, {
-                organizationId: project?.organization.id,
-              })
-            )
-          : navigate(-1),
+      onCompleted: () => {
+        if (project) {
+          const organizationId = project.organization.id;
+          cache.evict({
+            id: `Organization:${organizationId}`,
+            fieldName: 'projects',
+          });
+          evictPickList(PickListType.Project);
+          navigate(
+            generatePath(Routes.ORGANIZATION, {
+              organizationId,
+            })
+          );
+        } else {
+          navigate(-1);
+        }
+      },
     });
 
   if (loading) return <Loading />;

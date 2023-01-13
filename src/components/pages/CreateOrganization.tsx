@@ -11,7 +11,9 @@ import {
   CreateOrganizationMutation,
   CreateOrganizationMutationVariables,
   OrganizationAllFieldsFragment,
+  PickListType,
 } from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 
 const CreateOrganization = () => {
   const navigate = useNavigate();
@@ -28,6 +30,8 @@ const CreateOrganization = () => {
     (data: CreateOrganizationMutation) => {
       const id = data?.createOrganization?.organization?.id;
       if (id) {
+        evictPickList(PickListType.Project);
+        evictQuery('organizations');
         navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
       }
     },
