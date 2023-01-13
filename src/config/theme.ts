@@ -1,4 +1,4 @@
-import { createTheme, experimental_sx as sx } from '@mui/material';
+import { createTheme } from '@mui/material';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -98,7 +98,7 @@ export default createTheme(theme, {
     },
     MuiTableCell: {
       styleOverrides: {
-        sizeMedium: sx({
+        sizeMedium: theme.unstable_sx({
           py: '8px',
         }),
       },
@@ -120,7 +120,7 @@ export default createTheme(theme, {
         variant: 'body2',
       },
       styleOverrides: {
-        root: sx({
+        root: theme.unstable_sx({
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
