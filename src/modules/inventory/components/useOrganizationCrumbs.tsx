@@ -20,6 +20,7 @@ export function useOrganizationCrumbs(current?: string) {
   const organizationNameFragment = apolloClient.readFragment({
     id: `Organization:${organizationId}`,
     fragment: OrganizationFieldsFragmentDoc,
+    fragmentName: 'OrganizationFields',
   });
 
   const {

@@ -23,6 +23,7 @@ export function useProjectCrumbs(current?: string) {
   const project = apolloClient.readFragment({
     id: `Project:${projectId}`,
     fragment: ProjectAllFieldsFragmentDoc,
+    fragmentName: 'ProjectAllFields',
   });
 
   const { loading, error } = useGetProjectQuery({

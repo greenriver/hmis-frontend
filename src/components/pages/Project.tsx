@@ -25,6 +25,7 @@ import FunderTable from '@/modules/inventory/components/FunderTable';
 import InventoryTable from '@/modules/inventory/components/InventoryTable';
 import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
+import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
@@ -157,12 +158,12 @@ const Project = () => {
               es={project.projectType === ProjectType.Es}
             />
           </Paper>
-          {/* <Paper sx={{ p: 2, mb: 2 }} data-testid='clientsCard'>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='clientsCard'>
             <Typography variant='h5' sx={{ mb: 2 }}>
-              Clients
+              Enrollments
             </Typography>
-            <ClientsTable projectId={projectId} />
-          </Paper> */}
+            <ProjectEnrollmentsTable projectId={projectId} />
+          </Paper>
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>
