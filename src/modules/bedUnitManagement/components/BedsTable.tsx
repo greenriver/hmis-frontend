@@ -154,7 +154,13 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
           queryDocument={UpdateBedsDocument}
           constructVariables={(option) => {
             return {
-              input: { inventoryId, bedIds: [bed.id], unit: option?.code },
+              input: {
+                inventoryId,
+                bedIds: [bed.id],
+                unit: option?.code,
+                gender: bed.gender,
+                name: bed.name,
+              },
             };
           }}
           getOptionFromResponse={(data) => {
