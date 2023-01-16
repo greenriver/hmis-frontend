@@ -15,7 +15,11 @@ const DetailGrid = ({ data }: { data: Item[] }) => {
             <Typography variant='body2' sx={{ fontWeight: 'bold' }}>
               {label}
             </Typography>
-            <Typography variant='body2'>{value}</Typography>
+            {typeof value === 'string' ? (
+              <Typography variant='body2'>{value}</Typography>
+            ) : (
+              value
+            )}
           </Stack>
         </Grid>
       ))}
