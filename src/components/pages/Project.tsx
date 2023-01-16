@@ -157,6 +157,12 @@ const Project = () => {
               es={project.projectType === ProjectType.Es}
             />
           </Paper>
+          {/* <Paper sx={{ p: 2, mb: 2 }} data-testid='clientsCard'>
+            <Typography variant='h5' sx={{ mb: 2 }}>
+              Clients
+            </Typography>
+            <ClientsTable projectId={projectId} />
+          </Paper> */}
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>

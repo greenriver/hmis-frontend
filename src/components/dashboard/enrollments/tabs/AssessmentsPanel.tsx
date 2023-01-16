@@ -121,7 +121,7 @@ const AssessmentsPanel = ({
           to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
             clientId,
             enrollmentId,
-            assessmentRole: AssessmentRole.Update,
+            assessmentRole: AssessmentRole.Update.toLowerCase(),
           })}
         >
           + Add Assessment

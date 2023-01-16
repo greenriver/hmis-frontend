@@ -78,7 +78,7 @@ export const CLIENT_COLUMNS: {
   },
 };
 
-export const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
+export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
   CLIENT_COLUMNS.ssn,
   { ...CLIENT_COLUMNS.first, width: '15%', linkTreatment: true },
@@ -246,7 +246,7 @@ const ClientSearch: React.FC<Props> = ({
             ) : (
               <WrapperComponent>
                 <GenericTable
-                  columns={searchResultColumns}
+                  columns={SEARCH_RESULT_COLUMNS}
                   rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
                   {...searchResultsTableProps}

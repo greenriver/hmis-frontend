@@ -38,8 +38,7 @@ const FinishIntakeButton = ({
 
   const isNewOrInProgress = !existingIntakePath || !intakeCompleted;
 
-  const canExit =
-    !enrollment.inProgress && !enrollment.exitDate && intakeCompleted;
+  const canExit = !enrollment.inProgress && !enrollment.exitDate;
 
   if (loading)
     return <Skeleton variant='rectangular' width={110} height={30} />;
@@ -47,7 +46,16 @@ const FinishIntakeButton = ({
   return (
     <Stack direction='row' spacing={1}>
       {canExit ? (
-        <ButtonLink variant='outlined' size='small' to='' {...props}>
+        <ButtonLink
+          variant='outlined'
+          size='small'
+          to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+            clientId,
+            enrollmentId,
+            assessmentRole: AssessmentRole.Exit.toLowerCase(),
+          })}
+          {...props}
+        >
           Exit
         </ButtonLink>
       ) : (

@@ -97,15 +97,16 @@ const HouseholdMemberTable = ({
       {
         header: '',
         key: 'actions',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <FinishIntakeButton
-            size='small'
-            fullWidth
-            enrollmentId={hc.enrollment.id}
-            clientId={hc.client.id}
-            enrollment={hc.enrollment}
-          />
-        ),
+        render: (hc: HouseholdClientFieldsFragment) =>
+          hc.client.id === clientId ? (
+            <FinishIntakeButton
+              size='small'
+              fullWidth
+              enrollmentId={hc.enrollment.id}
+              clientId={hc.client.id}
+              enrollment={hc.enrollment}
+            />
+          ) : null,
       },
     ];
   }, [clientId, enrollmentId]);
