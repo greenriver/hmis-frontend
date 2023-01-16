@@ -3,9 +3,10 @@ import { Stack, Typography } from '@mui/material';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
-  parseAndFormatDate,
   eventReferralResult,
+  parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -19,7 +20,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
     header: 'Type',
-    render: (e) => HmisEnums.EventType[e.event],
+    render: (e) => <HmisEnum value={e.event} enumMap={HmisEnums.EventType} />,
   },
   {
     header: 'Date',

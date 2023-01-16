@@ -7,6 +7,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import LiveSelect from '@/modules/dataFetching/components/LiveSelect';
 import LiveTextInput from '@/modules/dataFetching/components/LiveTextInput';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   Bed,
@@ -68,7 +69,9 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
       key: 'type',
       header: 'Bed Type',
       width: '30%',
-      render: (bed) => HmisEnums.InventoryBedType[bed.bedType],
+      render: (bed) => (
+        <HmisEnum value={bed.bedType} enumMap={HmisEnums.InventoryBedType} />
+      ),
     },
     {
       key: 'name',
