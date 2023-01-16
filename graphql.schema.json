@@ -502,7 +502,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -595,7 +595,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -848,7 +848,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -1137,7 +1137,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3757,7 +3757,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -3833,7 +3833,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5649,7 +5649,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5690,7 +5690,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -6648,7 +6648,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -6895,7 +6895,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -7175,7 +7175,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8411,7 +8411,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8565,7 +8565,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8606,7 +8606,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -9099,7 +9099,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -9272,7 +9272,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -9289,7 +9289,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -11536,7 +11536,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -11739,7 +11739,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -12913,7 +12913,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -12978,7 +12978,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -13001,7 +13001,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -13048,7 +13048,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -13486,7 +13486,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -13667,7 +13667,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14870,6 +14870,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "OPH",
             "description": "Permanent Housing Only",
             "isDeprecated": false,
@@ -15828,7 +15834,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -15887,7 +15893,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -15940,7 +15946,7 @@
         "enumValues": [
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16052,7 +16058,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16111,7 +16117,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16194,7 +16200,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -16715,6 +16721,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
             "description": "(12) Child care",
             "isDeprecated": false,
@@ -16747,12 +16759,6 @@
           {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
             "description": "(5) Income support services",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16817,12 +16823,6 @@
             "deprecationReason": null
           },
           {
-            "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__INVALID",
-            "description": "(-1) Invalid value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING",
             "description": "(1) VA vocational and rehabilitation counseling",
             "isDeprecated": false,
@@ -16849,12 +16849,6 @@
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INCOME_SUPPORT_SERVICES",
             "description": "(3) Income support services",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16918,12 +16912,6 @@
             "deprecationReason": null
           },
           {
-            "name": "BED_NIGHT__INVALID",
-            "description": "(-1) Invalid value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES",
             "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
             "isDeprecated": false,
@@ -16932,12 +16920,6 @@
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT",
             "description": "(4) Housing referral/placement",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16956,12 +16938,6 @@
           {
             "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE",
             "description": "(1) Subsidized housing application assistance",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HOPWA_FINANCIAL_ASSISTANCE__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17044,12 +17020,6 @@
             "deprecationReason": null
           },
           {
-            "name": "HOPWA_SERVICE__INVALID",
-            "description": "(-1) Invalid value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "HOPWA_SERVICE__LIFE_SKILLS_TRAINING",
             "description": "(9) Life skills training",
             "isDeprecated": false,
@@ -17082,12 +17052,6 @@
           {
             "name": "HOPWA_SERVICE__TRANSPORTATION",
             "description": "(13) Transportation",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HUD_VASH_OTH_VOUCHER_TRACKING__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17164,6 +17128,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH",
             "description": "(1) Community mental health",
             "isDeprecated": false,
@@ -17190,12 +17160,6 @@
           {
             "name": "PATH_REFERRAL__INCOME_ASSISTANCE",
             "description": "(8) Income assistance",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PATH_REFERRAL__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17278,12 +17242,6 @@
             "deprecationReason": null
           },
           {
-            "name": "PATH_SERVICE__INVALID",
-            "description": "(-1) Invalid value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "PATH_SERVICE__ONE_TIME_RENT_FOR_EVICTION_PREVENTION",
             "description": "(12) One-time rent for eviction prevention",
             "isDeprecated": false,
@@ -17352,12 +17310,6 @@
           {
             "name": "RHY_SERVICE_CONNECTIONS__HOME_BASED_SERVICES",
             "description": "(26) Home-based Services",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RHY_SERVICE_CONNECTIONS__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17452,12 +17404,6 @@
             "deprecationReason": null
           },
           {
-            "name": "SSVF_FINANCIAL_ASSISTANCE__INVALID",
-            "description": "(-1) Invalid value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "SSVF_FINANCIAL_ASSISTANCE__MOVING_COSTS",
             "description": "(5) Moving costs",
             "isDeprecated": false,
@@ -17520,12 +17466,6 @@
           {
             "name": "SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS",
             "description": "(5) Direct provision of other public benefits",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SSVF_SERVICE__INVALID",
-            "description": "(-1) Invalid value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17973,7 +17913,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -18026,7 +17966,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -18067,7 +18007,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19992,7 +19932,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -20057,7 +19997,7 @@
           },
           {
             "name": "INVALID",
-            "description": "(-1) Invalid value",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },

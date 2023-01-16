@@ -2,7 +2,7 @@
 
 export const HmisEnums = {
   AssessmentLevel: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
@@ -18,19 +18,19 @@ export const HmisEnums = {
   },
   AssessmentSortOption: { ASSESSMENT_DATE: 'ASSESSMENT_DATE' },
   AssessmentType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     PHONE: 'Phone',
     VIRTUAL: 'Virtual',
     IN_PERSON: 'In Person',
   },
   Availability: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     YEAR_ROUND: 'Year-round',
     SEASONAL: 'Seasonal',
     OVERFLOW: 'Overflow',
   },
   BedType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     FACILITY_BASED: 'Facility-based',
     VOUCHER: 'Voucher',
     OTHER: 'Other',
@@ -62,7 +62,7 @@ export const HmisEnums = {
     SSN: 'SSN input component',
   },
   DOBDataQuality: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     FULL_DOB_REPORTED: 'Full DOB',
     APPROXIMATE_OR_PARTIAL_DOB_REPORTED: 'Partial DOB',
     CLIENT_REFUSED: 'Client refused',
@@ -80,7 +80,7 @@ export const HmisEnums = {
     VETERAN_HOH: 'VETERAN_HOH',
   },
   DataCollectionStage: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     PROJECT_ENTRY: 'Project entry',
     UPDATE: 'Update',
     PROJECT_EXIT: 'Project exit',
@@ -88,7 +88,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post-exit',
   },
   DisabilityResponse: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NO: 'No',
     ALCOHOL_USE_DISORDER: 'Alcohol use disorder',
     DRUG_USE_DISORDER: 'Drug use disorder',
@@ -98,7 +98,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   DisabilityType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     PHYSICAL_DISABILITY: 'Physical disability',
     DEVELOPMENTAL_DISABILITY: 'Developmental disability',
     CHRONIC_HEALTH_CONDITION: 'Chronic health condition',
@@ -123,7 +123,7 @@ export const HmisEnums = {
   },
   EnrollmentSortOption: { MOST_RECENT: 'MOST_RECENT' },
   Ethnicity: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NON_HISPANIC_NON_LATIN_A_O_X: 'Non-Hispanic/Non-Latin(a)(o)(x)',
     HISPANIC_LATIN_A_O_X: 'Hispanic/Latin(a)(o)(x)',
     CLIENT_REFUSED: 'Client refused',
@@ -132,7 +132,7 @@ export const HmisEnums = {
   },
   EventSortOption: { EVENT_DATE: 'EVENT_DATE' },
   EventType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     REFERRAL_TO_PREVENTION_ASSISTANCE_PROJECT:
       'Referral to Prevention Assistance project',
     PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE:
@@ -171,7 +171,7 @@ export const HmisEnums = {
       'Referral to Non-continuum services: No availability in continuum services',
   },
   FeelingFrequency: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NOT_AT_ALL: 'Not at all',
     ONCE_A_MONTH: 'Once a month',
     SEVERAL_TIMES_A_MONTH: 'Several times a month',
@@ -183,7 +183,6 @@ export const HmisEnums = {
   },
   FunderSortOption: { START_DATE: 'START_DATE' },
   FundingSource: {
-    INVALID: '(-1) Invalid value',
     HHS_PATH_STREET_OUTREACH_SUPPORTIVE_SERVICES_ONLY:
       'HHS: PATH - Street Outreach & Supportive Services Only',
     HHS_RHY_BASIC_CENTER_PROGRAM_PREVENTION_AND_SHELTER:
@@ -256,6 +255,7 @@ export const HmisEnums = {
       'VA: Grant Per Diem - Transition in Place',
     VA_SUPPORTIVE_SERVICES_FOR_VETERAN_FAMILIES:
       'VA: Supportive Services for Veteran Families',
+    INVALID: 'Invalid Value',
     LOCAL_OR_OTHER_FUNDING_SOURCE: 'Local or Other Funding Source',
     N_A: 'N/A',
   },
@@ -271,20 +271,20 @@ export const HmisEnums = {
     GENDER_DATA_NOT_COLLECTED: 'Data not collected',
   },
   GeographyType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     URBAN: 'Urban',
     SUBURBAN: 'Suburban',
     RURAL: 'Rural',
     UNKNOWN_DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NO: 'No',
     YES: 'Yes',
     NON_HOPWA_FUNDED_PROJECT: 'Non-HOPWA Funded Project',
   },
   HealthStatus: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     EXCELLENT: 'Excellent',
     VERY_GOOD: 'Very good',
     GOOD: 'Good',
@@ -295,14 +295,14 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   HouseholdType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
     HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD:
       'Households with at least one adult and one child',
     HOUSEHOLDS_WITH_ONLY_CHILDREN: 'Households with only children',
   },
   HousingType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     SITE_BASED_SINGLE_SITE: 'Site-based - single site',
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
@@ -338,7 +338,7 @@ export const HmisEnums = {
     TEXT: 'TEXT',
   },
   LivingSituation: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     EMERGENCY_SHELTER_INCLUDING_HOTEL_OR_MOTEL_PAID_FOR_WITH_EMERGENCY_SHELTER_VOUCHER_OR_RHY_FUNDED_HOST_HOME_SHELTER:
       'Emergency shelter, including hotel or motel paid for with emergency shelter voucher, or RHY-funded Host Home shelter',
     TRANSITIONAL_HOUSING_FOR_HOMELESS_PERSONS_INCLUDING_HOMELESS_YOUTH:
@@ -407,7 +407,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   MonthsHomelessPastThreeYears: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NUM_1: '1',
     NUM_2: '2',
     NUM_3: '3',
@@ -426,7 +426,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NameDataQuality: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     FULL_NAME_REPORTED: 'Full name',
     PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
       'Partial, street name, or code name',
@@ -435,7 +435,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoAssistanceReason: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     APPLIED_DECISION_PENDING: 'Applied; decision pending',
     APPLIED_CLIENT_NOT_ELIGIBLE: 'Applied; client not eligible',
     CLIENT_DID_NOT_APPLY: 'Client did not apply',
@@ -446,14 +446,14 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesMissing: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NO: 'No',
     YES: 'Yes',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   NoYesReasonsForMissingData: {
     YES: 'Yes',
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     NO: 'No',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
@@ -461,7 +461,7 @@ export const HmisEnums = {
   },
   OrganizationSortOption: { NAME: 'NAME' },
   PATHReferralOutcome: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     ATTAINED: 'Attained',
     NOT_ATTAINED: 'Not attained',
     UNKNOWN: 'Unknown',
@@ -478,7 +478,7 @@ export const HmisEnums = {
     STATE: 'STATE',
   },
   PrioritizationStatus: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     PLACED_ON_PRIORITIZATION_LIST: 'Placed on prioritization list',
     NOT_PLACED_ON_PRIORITIZATION_LIST: 'Not placed on prioritization list',
   },
@@ -490,6 +490,7 @@ export const HmisEnums = {
     CE: 'Coordinated Entry',
     DAY_SHELTER: 'Day Shelter',
     ES: 'Emergency Shelter',
+    INVALID: 'Invalid Value',
     OPH: 'Permanent Housing Only',
     PH: 'Permanent Housing',
     PREVENTION: 'Homelessness Prevention',
@@ -512,7 +513,7 @@ export const HmisEnums = {
     RACE_NOT_COLLECTED: 'Data not collected',
   },
   ReasonNotInsured: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     APPLIED_DECISION_PENDING: 'Applied; decision pending',
     APPLIED_CLIENT_NOT_ELIGIBLE: 'Applied; client not eligible',
     CLIENT_DID_NOT_APPLY: 'Client did not apply',
@@ -522,7 +523,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RecordType: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     CONTACT_12: 'Contact 12',
     CONTACT_13: 'Contact 13',
     PATH_SERVICE: 'PATH service',
@@ -538,7 +539,7 @@ export const HmisEnums = {
     C2_MOVING_ON_ASSISTANCE_PROVIDED: 'C2 Moving On Assistance Provided',
   },
   ReferralResult: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED: 'Successful referral: client accepted',
     UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED:
       'Unsuccessful referral: client rejected',
@@ -557,7 +558,7 @@ export const HmisEnums = {
     YOUTH_EDUCATION_STATUS: 'YouthEducationStatus',
   },
   RelationshipToHoH: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     SELF_HEAD_OF_HOUSEHOLD: 'Self (head of household)',
     CHILD: 'Child',
     SPOUSE_OR_PARTNER: 'Spouse or partner',
@@ -568,7 +569,7 @@ export const HmisEnums = {
   ResidencePriorLengthOfStay: {
     ONE_NIGHT_OR_LESS: 'One night or less',
     TWO_TO_SIX_NIGHTS: 'Two to six nights',
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH:
       'One week or more, but less than one month',
     ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS:
@@ -581,7 +582,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   SSNDataQuality: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     FULL_SSN_REPORTED: 'Full SSN',
     APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
     CLIENT_REFUSED: 'Client refused',
@@ -590,12 +591,6 @@ export const HmisEnums = {
   },
   ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
   ServiceSubTypeProvided: {
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__INVALID:
-      '(-1) Invalid value',
-    SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__INVALID:
-      '(-1) Invalid value',
-    SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__INVALID:
-      '(-1) Invalid value',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
       'Child care',
     SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
@@ -652,18 +647,10 @@ export const HmisEnums = {
       'Transportation services',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS__VA_VOCATIONAL_AND_REHABILITATION_COUNSELING:
       'VA vocational and rehabilitation counseling',
+    INVALID: 'Invalid Value',
   },
   ServiceTypeProvided: {
-    BED_NIGHT__INVALID: '(-1) Invalid value',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__INVALID: '(-1) Invalid value',
-    HOPWA_FINANCIAL_ASSISTANCE__INVALID: '(-1) Invalid value',
-    HOPWA_SERVICE__INVALID: '(-1) Invalid value',
-    HUD_VASH_OTH_VOUCHER_TRACKING__INVALID: '(-1) Invalid value',
-    PATH_REFERRAL__INVALID: '(-1) Invalid value',
-    PATH_SERVICE__INVALID: '(-1) Invalid value',
-    RHY_SERVICE_CONNECTIONS__INVALID: '(-1) Invalid value',
-    SSVF_FINANCIAL_ASSISTANCE__INVALID: '(-1) Invalid value',
-    SSVF_SERVICE__INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
       'Subsidized housing application assistance',
     HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
@@ -804,13 +791,13 @@ export const HmisEnums = {
       'Transportation services: vehicle repair/maintenance',
   },
   TargetPopulation: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
     PERSONS_WITH_HIV_AIDS: 'Persons with HIV/AIDS',
     NOT_APPLICABLE: 'Not applicable',
   },
   TimesHomelessPastThreeYears: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     ONE_TIME: 'One time',
     TWO_TIMES: 'Two times',
     THREE_TIMES: 'Three times',
@@ -820,12 +807,12 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   TrackingMethod: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
   },
   WellbeingAgreement: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     STRONGLY_DISAGREE: 'Strongly disagree',
     SOMEWHAT_DISAGREE: 'Somewhat disagree',
     NEITHER_AGREE_NOR_DISAGREE: 'Neither agree nor disagree',
@@ -836,7 +823,7 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   WhenDVOccurred: {
-    INVALID: '(-1) Invalid value',
+    INVALID: 'Invalid Value',
     WITHIN_THE_PAST_THREE_MONTHS: 'Within the past three months',
     THREE_TO_SIX_MONTHS_AGO_EXCLUDING_SIX_MONTHS_EXACTLY:
       'Three to six months ago (excluding six months exactly)',
