@@ -5,6 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { DashboardRoutes, Routes } from './routes';
 
 import EditClient from '@/components/dashboard/EditClient';
+import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import Assessment from '@/components/dashboard/enrollments/Assessment';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
@@ -109,7 +110,7 @@ export const protectedRoutes = [
             element: <AllEnrollments />,
           },
           { path: DashboardRoutes.HISTORY, element: null },
-          { path: DashboardRoutes.ASSESSMENTS, element: null },
+          { path: DashboardRoutes.ASSESSMENTS, element: <AllAssessments /> },
           { path: DashboardRoutes.NOTES, element: null },
           { path: DashboardRoutes.FILES, element: null },
           { path: DashboardRoutes.CONTACT, element: null },

@@ -11,6 +11,7 @@ export function useEnrollment(enrollmentId?: string) {
     ? apolloClient.readFragment({
         id: `Enrollment:${enrollmentId}`,
         fragment: EnrollmentFieldsFragmentDoc,
+        fragmentName: 'EnrollmentFields',
       })
     : undefined;
 

@@ -203,6 +203,7 @@ export enum BoundType {
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
+  assessments: AssessmentsPaginated;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -229,6 +230,14 @@ export type Client = {
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
   veteranStatus: NoYesReasonsForMissingData;
+};
+
+/** HUD Client */
+export type ClientAssessmentsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  role?: InputMaybe<AssessmentRole>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
 /** HUD Client */
@@ -898,6 +907,7 @@ export type Enrollment = {
   events: EventsPaginated;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
   household: Household;
+  householdSize: Scalars['Int'];
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
@@ -2101,6 +2111,7 @@ export type Project = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   description?: Maybe<Scalars['String']>;
+  enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
   housingType?: Maybe<HousingType>;
   id: Scalars['ID'];
@@ -2114,6 +2125,13 @@ export type Project = {
   residentialAffiliation?: Maybe<Scalars['Boolean']>;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
+};
+
+export type ProjectEnrollmentsArgs = {
+  includeInProgress?: InputMaybe<Scalars['Boolean']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
 export type ProjectFundersArgs = {
@@ -6321,6 +6339,7 @@ export type EnrollmentFieldsFragment = {
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  householdSize: number;
   project: {
     __typename?: 'Project';
     id: string;
@@ -6357,6 +6376,7 @@ export type EnrollmentWithHoHFragmentFragment = {
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  householdSize: number;
   household: {
     __typename?: 'Household';
     id: string;
@@ -6722,6 +6742,7 @@ export type GetClientEnrollmentsQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        householdSize: number;
         project: {
           __typename?: 'Project';
           id: string;
@@ -6730,6 +6751,71 @@ export type GetClientEnrollmentsQuery = {
         };
         household: { __typename?: 'Household'; id: string };
         client: { __typename?: 'Client'; id: string };
+      }>;
+    };
+  } | null;
+};
+
+export type GetClientAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientAssessmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        inProgress: boolean;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string };
+          client: { __typename?: 'Client'; id: string };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        assessmentDetail?: {
+          __typename?: 'AssessmentDetail';
+          id: string;
+          dataCollectionStage?: DataCollectionStage | null;
+          role: AssessmentRole;
+          status: string;
+          definition: {
+            __typename?: 'FormDefinition';
+            id: string;
+            version: number;
+            role: AssessmentRole;
+            status: string;
+            identifier: string;
+          };
+        } | null;
       }>;
     };
   } | null;
@@ -6948,6 +7034,7 @@ export type CreateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       project: {
         __typename?: 'Project';
         id: string;
@@ -6983,6 +7070,7 @@ export type UpdateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       household: {
         __typename?: 'Household';
         id: string;
@@ -7043,6 +7131,7 @@ export type SetHoHMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       household: {
         __typename?: 'Household';
         id: string;
@@ -7103,6 +7192,7 @@ export type DeleteEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       project: {
         __typename?: 'Project';
         id: string;
@@ -7138,6 +7228,7 @@ export type AddHouseholdMembersMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      householdSize: number;
       household: {
         __typename?: 'Household';
         id: string;
@@ -7195,6 +7286,7 @@ export type GetEnrollmentQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    householdSize: number;
     project: {
       __typename?: 'Project';
       id: string;
@@ -7218,6 +7310,7 @@ export type GetEnrollmentWithHoHQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    householdSize: number;
     household: {
       __typename?: 'Household';
       id: string;
@@ -7748,6 +7841,50 @@ export type GetProjectQuery = {
       __typename?: 'Organization';
       id: string;
       organizationName: string;
+    };
+  } | null;
+};
+
+export type GetProjectEnrollmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectEnrollmentsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    enrollments: {
+      __typename?: 'EnrollmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate: string;
+        exitDate?: string | null;
+        inProgress: boolean;
+        householdSize: number;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          middleName?: string | null;
+          preferredName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+        project: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+        };
+        household: { __typename?: 'Household'; id: string };
+      }>;
     };
   } | null;
 };
@@ -8988,6 +9125,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     household {
       id
     }
+    householdSize
     client {
       id
     }
@@ -10146,6 +10284,80 @@ export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables
+>;
+export const GetClientAssessmentsDocument = gql`
+  query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      assessments(limit: $limit, offset: $offset, sortOrder: ASSESSMENT_DATE) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+          enrollment {
+            id
+            ...EnrollmentFields
+          }
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetClientAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetClientAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >(GetClientAssessmentsDocument, options);
+}
+export function useGetClientAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >(GetClientAssessmentsDocument, options);
+}
+export type GetClientAssessmentsQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentsQuery
+>;
+export type GetClientAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentsLazyQuery
+>;
+export type GetClientAssessmentsQueryResult = Apollo.QueryResult<
+  GetClientAssessmentsQuery,
+  GetClientAssessmentsQueryVariables
 >;
 export const GetRecentEnrollmentsDocument = gql`
   query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
@@ -11394,6 +11606,85 @@ export type GetProjectLazyQueryHookResult = ReturnType<
 export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
+>;
+export const GetProjectEnrollmentsDocument = gql`
+  query GetProjectEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    project(id: $id) {
+      id
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        includeInProgress: true
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EnrollmentFields
+          client {
+            id
+            ...ClientName
+          }
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${ClientNameFragmentDoc}
+`;
+
+/**
+ * __useGetProjectEnrollmentsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectEnrollmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectEnrollmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectEnrollmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectEnrollmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectEnrollmentsQuery,
+    GetProjectEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectEnrollmentsQuery,
+    GetProjectEnrollmentsQueryVariables
+  >(GetProjectEnrollmentsDocument, options);
+}
+export function useGetProjectEnrollmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectEnrollmentsQuery,
+    GetProjectEnrollmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectEnrollmentsQuery,
+    GetProjectEnrollmentsQueryVariables
+  >(GetProjectEnrollmentsDocument, options);
+}
+export type GetProjectEnrollmentsQueryHookResult = ReturnType<
+  typeof useGetProjectEnrollmentsQuery
+>;
+export type GetProjectEnrollmentsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectEnrollmentsLazyQuery
+>;
+export type GetProjectEnrollmentsQueryResult = Apollo.QueryResult<
+  GetProjectEnrollmentsQuery,
+  GetProjectEnrollmentsQueryVariables
 >;
 export const OmniSearchProjectsDocument = gql`
   query OmniSearchProjects($input: ProjectSearchInput!) {

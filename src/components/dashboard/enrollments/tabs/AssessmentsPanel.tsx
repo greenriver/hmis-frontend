@@ -1,9 +1,9 @@
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
+import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -57,21 +57,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Status',
     width: '10%',
-    render: (assessment) =>
-      assessment.inProgress ? (
-        <Stack direction='row' alignItems='center' gap={0.8}>
-          <ErrorOutlineIcon color='error' fontSize='small' />
-          <Typography
-            variant='body2'
-            color='error'
-            sx={{ textDecoration: 'none' }}
-          >
-            Incomplete
-          </Typography>
-        </Stack>
-      ) : (
-        'Completed'
-      ),
+    render: (assessment) => <AssessmentStatus assessment={assessment} />,
   },
 
   {
