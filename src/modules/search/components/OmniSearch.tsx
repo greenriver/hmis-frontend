@@ -35,13 +35,13 @@ const OmniSearch: React.FC = () => {
     });
   const { data: projectsData, loading: projectsLoading } =
     useOmniSearchProjectsQuery({
-      variables: { input: { textSearch: value } },
+      variables: { searchTerm: value as string },
       skip: !value,
     });
 
   const options = useMemo(() => {
     const clients = clientsData?.clientSearch?.nodes || [];
-    const projects = projectsData?.projectSearch?.nodes || [];
+    const projects = projectsData?.projects?.nodes || [];
     return sortBy([...clients, ...projects], '__typename');
   }, [clientsData, projectsData]);
 

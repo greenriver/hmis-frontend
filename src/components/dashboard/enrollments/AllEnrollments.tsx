@@ -6,6 +6,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -23,8 +24,16 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   },
   {
     header: 'Project',
-    render: (e) => e.project.projectName,
-    linkTreatment: true,
+    render: (e) => (
+      // <Stack direction='row' alignItems='end'>
+      <Typography variant='body2'>{e.project.projectName}</Typography>
+    ),
+  },
+  {
+    header: 'Project Type',
+    render: (e) => (
+      <ProjectTypeChip projectType={e.project.projectType} sx={{ px: 0.5 }} />
+    ),
   },
   {
     header: 'Date Range',

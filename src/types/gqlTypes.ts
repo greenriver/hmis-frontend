@@ -260,6 +260,7 @@ export type ClientEnrollmentsArgs = {
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -2075,6 +2076,7 @@ export type OrganizationProjectsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -2180,6 +2182,7 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
+  clientSearchTerm?: InputMaybe<Scalars['String']>;
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2260,14 +2263,6 @@ export type ProjectInput = {
   trackingMethod?: InputMaybe<TrackingMethod>;
 };
 
-/** HMIS Project search input */
-export type ProjectSearchInput = {
-  /** Project primary key */
-  id?: InputMaybe<Scalars['ID']>;
-  /** Omnisearch string */
-  textSearch?: InputMaybe<Scalars['String']>;
-};
-
 /** HUD Project Sorting Options */
 export enum ProjectSortOption {
   Name = 'NAME',
@@ -2337,7 +2332,6 @@ export type Query = {
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
   organization?: Maybe<Organization>;
-  /** Get a list of organizations */
   organizations: OrganizationsPaginated;
   /** Get list of options for pick list */
   pickList: Array<PickListOption>;
@@ -2345,9 +2339,6 @@ export type Query = {
   project?: Maybe<Project>;
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
-  /** Search for projects */
-  projectSearch: ProjectsPaginated;
-  /** Get a list of projects */
   projects: ProjectsPaginated;
 };
 
@@ -2410,18 +2401,11 @@ export type QueryProjectCocArgs = {
   id: Scalars['ID'];
 };
 
-export type QueryProjectSearchArgs = {
-  input: ProjectSearchInput;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  sortOrder?: InputMaybe<ProjectSortOption>;
-};
-
 export type QueryProjectsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -7929,6 +7913,7 @@ export type GetProjectQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
+  clientSearchTerm?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -7972,12 +7957,12 @@ export type GetProjectEnrollmentsQuery = {
 };
 
 export type OmniSearchProjectsQueryVariables = Exact<{
-  input: ProjectSearchInput;
+  searchTerm: Scalars['String'];
 }>;
 
 export type OmniSearchProjectsQuery = {
   __typename?: 'Query';
-  projectSearch: {
+  projects: {
     __typename?: 'ProjectsPaginated';
     limit: number;
     nodesCount: number;
@@ -8177,6 +8162,7 @@ export type DeleteOrganizationMutation = {
 
 export type GetOrganizationWithPaginatedProjectsQueryVariables = Exact<{
   id: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -11693,7 +11679,12 @@ export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQueryVariables
 >;
 export const GetProjectEnrollmentsDocument = gql`
-  query GetProjectEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetProjectEnrollments(
+    $id: ID!
+    $clientSearchTerm: String
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
     project(id: $id) {
       id
       enrollments(
@@ -11701,6 +11692,7 @@ export const GetProjectEnrollmentsDocument = gql`
         offset: $offset
         sortOrder: MOST_RECENT
         includeInProgress: true
+        clientSearchTerm: $clientSearchTerm
       ) {
         offset
         limit
@@ -11732,6 +11724,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      clientSearchTerm: // value for 'clientSearchTerm'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
@@ -11772,8 +11765,8 @@ export type GetProjectEnrollmentsQueryResult = Apollo.QueryResult<
   GetProjectEnrollmentsQueryVariables
 >;
 export const OmniSearchProjectsDocument = gql`
-  query OmniSearchProjects($input: ProjectSearchInput!) {
-    projectSearch(input: $input, limit: 5) {
+  query OmniSearchProjects($searchTerm: String!) {
+    projects(searchTerm: $searchTerm, limit: 5) {
       limit
       nodesCount
       nodes {
@@ -11796,7 +11789,7 @@ export const OmniSearchProjectsDocument = gql`
  * @example
  * const { data, loading, error } = useOmniSearchProjectsQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      searchTerm: // value for 'searchTerm'
  *   },
  * });
  */
@@ -12319,12 +12312,13 @@ export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<
 export const GetOrganizationWithPaginatedProjectsDocument = gql`
   query GetOrganizationWithPaginatedProjects(
     $id: ID!
+    $searchTerm: String
     $limit: Int = 10
     $offset: Int = 0
   ) {
     organization(id: $id) {
       id
-      projects(limit: $limit, offset: $offset) {
+      projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
         offset
         limit
         nodesCount
@@ -12350,6 +12344,7 @@ export const GetOrganizationWithPaginatedProjectsDocument = gql`
  * const { data, loading, error } = useGetOrganizationWithPaginatedProjectsQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      searchTerm: // value for 'searchTerm'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

@@ -284,3 +284,10 @@ export const sortHouseholdMembers = (
 export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);
 };
+
+export const briefProjectType = (projectType: ProjectType) => {
+  if (projectType.length > 3) {
+    return startCase(projectType.toLowerCase());
+  }
+  return projectType;
+};
