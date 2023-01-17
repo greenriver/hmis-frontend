@@ -87,7 +87,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Update
+              Edit
             </ButtonLink>
             <Button
               data-testid='deleteButton'

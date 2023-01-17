@@ -1306,6 +1306,18 @@
             "description": null,
             "args": [
               {
+                "name": "inProgress",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -1330,12 +1342,20 @@
                 "deprecationReason": null
               },
               {
-                "name": "role",
+                "name": "roles",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "AssessmentRole",
+                      "ofType": null
+                    }
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -5911,6 +5931,18 @@
             "description": null,
             "args": [
               {
+                "name": "inProgress",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -5935,12 +5967,20 @@
                 "deprecationReason": null
               },
               {
-                "name": "role",
+                "name": "roles",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "AssessmentRole",
+                      "ofType": null
+                    }
+                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,

@@ -28,7 +28,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     cocId: string;
   };
-  const title = create ? `Add Project CoC` : `Update Project CoC`;
+  const title = create ? `Add Project CoC` : `Edit Project CoC`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const onCompleted = useCallback(() => {
@@ -85,7 +85,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
           record={data?.projectCoc || undefined}
           queryDocument={UpdateProjectCocDocument}
           onCompleted={onCompleted}
-          submitButtonText='Update Project CoC'
+          submitButtonText='Save Changes'
           getErrors={(data: UpdateProjectCocMutation) =>
             data?.updateProjectCoc?.errors
           }
