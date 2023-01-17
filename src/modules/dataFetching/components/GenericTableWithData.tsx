@@ -3,10 +3,10 @@ import {
   useQuery,
   WatchQueryFetchPolicy,
 } from '@apollo/client';
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { get, startCase } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, ReactNode } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
 
@@ -35,6 +35,7 @@ export interface Props<Query, QueryVariables, RowDataType>
   recordType?: string; // record type for inferring columns if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
+  header?: ReactNode;
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -63,6 +64,7 @@ const GenericTableWithData = <
   recordType,
   fetchPolicy,
   nonTablePagination = false,
+  header,
   ...props
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
@@ -139,39 +141,45 @@ const GenericTableWithData = <
     return [];
   }, [columns, recordType]);
 
-  if (!loading && data && nodesCount === 0) {
-    return <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>;
-  }
-
   return (
-    <>
-      <GenericTable<RowDataType>
-        loading={loading}
-        rows={rows}
-        paginated={!nonTablePagination}
-        tablePaginationProps={
-          nonTablePagination ? undefined : tablePaginationProps
-        }
-        columns={columnDefs}
-        {...props}
-      />
-      {nonTablePagination &&
-        nonTablePaginationProps &&
-        nonTablePaginationProps.totalEntries > rows.length && (
-          <Pagination
-            {...nonTablePaginationProps}
-            shape='rounded'
-            size='small'
-            gridProps={{
-              sx: {
-                py: 2,
-                px: 1,
-                borderTop: (theme) => `1px solid ${theme.palette.grey[200]}`,
-              },
-            }}
-          />
+    <Stack spacing={1}>
+      {header && <Box sx={{ px: 2, py: 1 }}>{header}</Box>}
+      <Box>
+        {!loading && data && nodesCount === 0 ? (
+          <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>
+        ) : (
+          <>
+            <GenericTable<RowDataType>
+              loading={loading}
+              rows={rows}
+              paginated={!nonTablePagination}
+              tablePaginationProps={
+                nonTablePagination ? undefined : tablePaginationProps
+              }
+              columns={columnDefs}
+              {...props}
+            />
+            {nonTablePagination &&
+              nonTablePaginationProps &&
+              nonTablePaginationProps.totalEntries > rows.length && (
+                <Pagination
+                  {...nonTablePaginationProps}
+                  shape='rounded'
+                  size='small'
+                  gridProps={{
+                    sx: {
+                      py: 2,
+                      px: 1,
+                      borderTop: (theme) =>
+                        `1px solid ${theme.palette.grey[200]}`,
+                    },
+                  }}
+                />
+              )}
+          </>
         )}
-    </>
+      </Box>
+    </Stack>
   );
 };
 

@@ -16,7 +16,12 @@ query GetProject($id: ID!) {
   }
 }
 
-query GetProjectEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetProjectEnrollments(
+  $id: ID!
+  $clientSearchTerm: String
+  $limit: Int = 10
+  $offset: Int = 0
+) {
   project(id: $id) {
     id
     enrollments(
@@ -24,6 +29,7 @@ query GetProjectEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       offset: $offset
       sortOrder: MOST_RECENT
       includeInProgress: true
+      clientSearchTerm: $clientSearchTerm
     ) {
       offset
       limit
@@ -39,8 +45,8 @@ query GetProjectEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query OmniSearchProjects($input: ProjectSearchInput!) {
-  projectSearch(input: $input, limit: 5) {
+query OmniSearchProjects($searchTerm: String!) {
+  projects(searchTerm: $searchTerm, limit: 5) {
     limit
     nodesCount
     nodes {
@@ -133,12 +139,13 @@ mutation DeleteOrganization($input: DeleteOrganizationInput!) {
 
 query GetOrganizationWithPaginatedProjects(
   $id: ID!
+  $searchTerm: String
   $limit: Int = 10
   $offset: Int = 0
 ) {
   organization(id: $id) {
     id
-    projects(limit: $limit, offset: $offset) {
+    projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
       offset
       limit
       nodesCount
