@@ -1,7 +1,11 @@
 import { LoadingButton } from '@mui/lab';
 import { useMemo } from 'react';
 
-import { evictBedsQuery, evictUnitPickList } from '../bedUnitUtil';
+import {
+  evictBedsQuery,
+  evictUnitPickList,
+  evictUnitsQuery,
+} from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -68,7 +72,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
     {
       key: 'type',
       header: 'Bed Type',
-      width: '30%',
+      width: '20%',
       render: (bed) => (
         <HmisEnum value={bed.bedType} enumMap={HmisEnums.InventoryBedType} />
       ),
@@ -76,7 +80,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
     {
       key: 'name',
       header: 'Name',
-      width: '35%',
+      width: '25%',
       render: (bed) => (
         <LiveTextInput<UpdateBedsMutation, UpdateBedsMutationVariables>
           key={`${bed.id}-name`}
@@ -84,7 +88,12 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
           initialValue={bed.name || ''}
           constructVariables={(name) => {
             return {
-              input: { inventoryId, bedIds: [bed.id], name: name || null },
+              input: {
+                inventoryId,
+                bedIds: [bed.id],
+                name: name || null,
+                gender: bed.gender,
+              },
             };
           }}
           getValueFromResponse={(data) => {
@@ -94,6 +103,40 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
               return beds[0].name || '';
             }
             return '';
+          }}
+        />
+      ),
+    },
+    {
+      key: 'gender',
+      header: 'Gender',
+      width: '10%',
+      render: (bed) => (
+        <LiveSelect<UpdateBedsMutation, UpdateBedsMutationVariables>
+          options={[{ code: 'M' }, { code: 'F' }]}
+          textInputProps={{
+            placeholder: 'Any',
+          }}
+          value={bed.gender ? { code: bed.gender } : null}
+          size='small'
+          queryDocument={UpdateBedsDocument}
+          constructVariables={(option: PickListOption | null) => {
+            return {
+              input: {
+                inventoryId,
+                bedIds: [bed.id],
+                gender: option?.code || null,
+                name: bed.name,
+              },
+            };
+          }}
+          getOptionFromResponse={(data) => {
+            const beds = data?.updateBeds?.beds || [];
+            if (beds && beds.length === 1) {
+              const gender = beds[0].gender;
+              if (gender) return { code: gender };
+            }
+            return null;
           }}
         />
       ),
@@ -116,12 +159,19 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
           size='small'
           disableClearable
           queryDocument={UpdateBedsDocument}
-          constructVariables={(option: PickListOption) => {
+          constructVariables={(option) => {
             return {
-              input: { inventoryId, bedIds: [bed.id], unit: option.code },
+              input: {
+                inventoryId,
+                bedIds: [bed.id],
+                unit: option?.code,
+                gender: bed.gender,
+                name: bed.name,
+              },
             };
           }}
           getOptionFromResponse={(data) => {
+            evictUnitsQuery(inventoryId);
             const beds = data?.updateBeds?.beds || [];
             if (beds && beds.length === 1) {
               const unitId = beds[0].unit.id;
