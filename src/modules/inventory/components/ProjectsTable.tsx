@@ -38,7 +38,13 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   },
 ];
 
-const ProjectsTable = ({ organizationId }: { organizationId: string }) => {
+const ProjectsTable = ({
+  organizationId,
+  hideSearch = false,
+}: {
+  organizationId: string;
+  hideSearch?: boolean;
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
@@ -58,13 +64,15 @@ const ProjectsTable = ({ organizationId }: { organizationId: string }) => {
       ProjectAllFieldsFragment
     >
       header={
-        <TextInput
-          name='search projects'
-          placeholder='Search...'
-          value={search || null}
-          onChange={(e) => setSearch(e.target.value)}
-          inputWidth='200px'
-        />
+        !hideSearch && (
+          <TextInput
+            name='search projects'
+            placeholder='Search...'
+            value={search || null}
+            onChange={(e) => setSearch(e.target.value)}
+            inputWidth='200px'
+          />
+        )
       }
       queryVariables={{ id: organizationId, searchTerm: debouncedSearch }}
       queryDocument={GetOrganizationWithPaginatedProjectsDocument}

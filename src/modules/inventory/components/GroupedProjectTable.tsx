@@ -107,7 +107,7 @@ const GroupedProjectTable = ({
               >
                 View Organization
               </ButtonLink>
-              <ProjectsTable organizationId={organization.id} />
+              <ProjectsTable organizationId={organization.id} hideSearch />
             </Stack>
           </AccordionDetails>
         </Accordion>
