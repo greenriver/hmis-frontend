@@ -1,7 +1,11 @@
 import { LoadingButton } from '@mui/lab';
 import { useMemo } from 'react';
 
-import { evictBedsQuery, evictUnitPickList } from '../bedUnitUtil';
+import {
+  evictBedsQuery,
+  evictUnitPickList,
+  evictUnitsQuery,
+} from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -164,6 +168,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
             };
           }}
           getOptionFromResponse={(data) => {
+            evictUnitsQuery(inventoryId);
             const beds = data?.updateBeds?.beds || [];
             if (beds && beds.length === 1) {
               const unitId = beds[0].unit.id;
