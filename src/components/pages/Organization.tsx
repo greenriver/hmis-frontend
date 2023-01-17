@@ -104,7 +104,7 @@ const Organization = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Update Organization
+                Edit Organization
               </ButtonLink>
               <Button
                 data-testid='deleteOrganizationButton'

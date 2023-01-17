@@ -219,7 +219,7 @@ const Project = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Update Project
+                Edit Project
               </ButtonLink>
               <Button
                 data-testid='deleteProjectButton'

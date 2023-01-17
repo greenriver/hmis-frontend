@@ -19,7 +19,7 @@ const EditOrganization = () => {
   const navigate = useNavigate();
 
   const { crumbs, loading, organization, organizationName } =
-    useOrganizationCrumbs('Update Organization');
+    useOrganizationCrumbs('Edit Organization');
 
   const onCompleted = useCallback(
     (data: UpdateOrganizationMutation) => {
@@ -50,10 +50,8 @@ const EditOrganization = () => {
           getErrors={(data: UpdateOrganizationMutation) =>
             data?.updateOrganization?.errors
           }
-          submitButtonText='Update Organization'
-          title={
-            <Typography variant='h3'>Update {organizationName}</Typography>
-          }
+          submitButtonText='Save Organization'
+          title={<Typography variant='h3'>Edit {organizationName}</Typography>}
         />
       )}
     </ProjectLayout>

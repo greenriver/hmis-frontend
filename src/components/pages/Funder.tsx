@@ -29,7 +29,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     funderId: string; // Not present if create!
   };
-  const title = create ? `Add Funder` : `Update Funder`;
+  const title = create ? `Add Funder` : `Edit Funder`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const { data, loading, error } = useGetFunderQuery({
@@ -97,7 +97,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
           queryDocument={UpdateFunderDocument}
           onCompleted={onCompleted}
           getErrors={(data: UpdateFunderMutation) => data?.updateFunder?.errors}
-          submitButtonText='Update Funder'
+          submitButtonText='Save Changes'
           localConstants={localConstants}
           {...common}
         />

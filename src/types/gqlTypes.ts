@@ -234,9 +234,10 @@ export type Client = {
 
 /** HUD Client */
 export type ClientAssessmentsArgs = {
+  inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  role?: InputMaybe<AssessmentRole>;
+  roles?: InputMaybe<Array<AssessmentRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -924,9 +925,10 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
+  inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  role?: InputMaybe<AssessmentRole>;
+  roles?: InputMaybe<Array<AssessmentRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -4574,7 +4576,8 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  role?: InputMaybe<AssessmentRole>;
+  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
+  inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type GetEnrollmentAssessmentsQuery = {
@@ -9606,14 +9609,16 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $role: AssessmentRole
+    $roles: [AssessmentRole!]
+    $inProgress: Boolean
   ) {
     enrollment(id: $id) {
       id
       assessments(
         limit: $limit
         offset: $offset
-        role: $role
+        roles: $roles
+        inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
         offset
@@ -9643,7 +9648,8 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      role: // value for 'role'
+ *      roles: // value for 'roles'
+ *      inProgress: // value for 'inProgress'
  *   },
  * });
  */
