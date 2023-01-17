@@ -174,7 +174,7 @@ const EditHousehold = () => {
       <Grid container spacing={4} sx={{ pb: 10 }}>
         <Grid item xs={12}>
           <Typography variant='h4' sx={{ mb: 2 }}>
-            Update Household
+            Edit Household
             <Box component='span' fontWeight={400}>
               {` for ${enrollmentName(enrollment)} `} enrollment
             </Box>

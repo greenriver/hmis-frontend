@@ -36,7 +36,7 @@ export const useDashboardBreadcrumbs = (
        */
       [DashboardRoutes.PROFILE]: { title: clientBriefName(context.client) },
       [DashboardRoutes.EDIT]: {
-        title: 'Update Client Details',
+        title: 'Edit Client Details',
         parent: DashboardRoutes.PROFILE,
       },
       [DashboardRoutes.ALL_ENROLLMENTS]: {
@@ -66,7 +66,7 @@ export const useDashboardBreadcrumbs = (
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
       [DashboardRoutes.EDIT_HOUSEHOLD]: {
-        title: 'Update Household',
+        title: 'Edit Household',
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
       [DashboardRoutes.ASSESSMENTS]: {

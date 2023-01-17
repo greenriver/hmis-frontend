@@ -4,7 +4,8 @@ import { generatePath } from 'react-router-dom';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
-import FinishIntakeButton from '@/components/dashboard/enrollments/FinishIntakeButton';
+import HouseholdMemberActionButton from '@/components/dashboard/enrollments/HouseholdMemberActionButton';
+import { useRecentAssessments } from '@/components/dashboard/enrollments/useRecentAssessments';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
@@ -36,6 +37,9 @@ const HouseholdMemberTable = ({
   } = useGetEnrollmentWithHoHQuery({
     variables: { id: enrollmentId },
   });
+
+  const { loading: assessmentsLoading, ...assessments } =
+    useRecentAssessments(enrollmentId);
 
   const householdMembers = useMemo(
     () => sortHouseholdMembers(enrollment?.household.householdClients),
@@ -76,17 +80,17 @@ const HouseholdMemberTable = ({
         },
       },
       {
-        header: 'Start Date',
+        header: 'Entry Date',
         render: (hc: HouseholdClientFieldsFragment) =>
           hc.enrollment.entryDate
             ? parseAndFormatDate(hc.enrollment.entryDate)
             : 'Unknown',
       },
       {
-        header: 'Exit Date',
+        header: 'Status',
         render: (hc: HouseholdClientFieldsFragment) =>
           hc.enrollment.exitDate
-            ? parseAndFormatDate(hc.enrollment.exitDate)
+            ? `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
             : 'Active',
       },
       {
@@ -99,20 +103,22 @@ const HouseholdMemberTable = ({
         key: 'actions',
         render: (hc: HouseholdClientFieldsFragment) =>
           hc.client.id === clientId ? (
-            <FinishIntakeButton
+            <HouseholdMemberActionButton
               size='small'
+              variant='outlined'
               fullWidth
               enrollmentId={hc.enrollment.id}
               clientId={hc.client.id}
               enrollment={hc.enrollment}
+              {...assessments}
             />
           ) : null,
       },
     ];
-  }, [clientId, enrollmentId]);
+  }, [clientId, enrollmentId, assessments]);
 
   if (error) throw error;
-  if (loading) return <Loading />;
+  if (loading || assessmentsLoading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
 
   return (

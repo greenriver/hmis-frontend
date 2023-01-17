@@ -14,14 +14,16 @@ query GetEnrollmentAssessments(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $role: AssessmentRole
+  $roles: [AssessmentRole!]
+  $inProgress: Boolean
 ) {
   enrollment(id: $id) {
     id
     assessments(
       limit: $limit
       offset: $offset
-      role: $role
+      roles: $roles
+      inProgress: $inProgress
       sortOrder: ASSESSMENT_DATE
     ) {
       offset

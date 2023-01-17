@@ -287,7 +287,7 @@ const ClientCard: React.FC<Props> = ({
                       color='secondary'
                       size='small'
                     >
-                      Update Client Details
+                      Edit Client Details
                     </ButtonLink>
                   </Box>
                 )}

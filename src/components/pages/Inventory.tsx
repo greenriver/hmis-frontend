@@ -29,7 +29,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     inventoryId: string; // Not present if create!
   };
-  const title = create ? `Add Inventory` : `Update Inventory`;
+  const title = create ? `Add Inventory` : `Edit Inventory`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const { data, loading, error } = useGetInventoryQuery({
