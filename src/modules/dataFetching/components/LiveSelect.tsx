@@ -11,7 +11,7 @@ import { PickListOption } from '@/types/gqlTypes';
 export interface Props<Mutation, MutationVariables>
   extends Omit<GenericSelectProps<PickListOption, false, false>, 'onChange'> {
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
-  constructVariables: (option: PickListOption) => MutationVariables;
+  constructVariables: (option: PickListOption | null) => MutationVariables;
   getOptionFromResponse: (data: Mutation) => PickListOption | null;
 }
 
@@ -46,7 +46,6 @@ const LiveSelect = <Mutation, MutationVariables>({
     option: PickListOption | null
   ) => {
     setCurrent(option);
-    if (!option) return;
     setCompleted(false);
     void mutate({
       variables: constructVariables(option),

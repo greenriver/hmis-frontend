@@ -2964,6 +2964,7 @@ export type UpdateBedsInput = {
   bedIds: Array<Scalars['ID']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  gender?: InputMaybe<Scalars['String']>;
   inventoryId: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
   unit?: InputMaybe<Scalars['ID']>;
