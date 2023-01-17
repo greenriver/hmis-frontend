@@ -1,18 +1,19 @@
 import {
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
-  Checkbox,
   Radio,
   RadioGroup,
   RadioGroupProps,
-  FormHelperText,
 } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
 
 import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 type Option = PickListOption;
@@ -25,6 +26,36 @@ interface Props extends Omit<RadioGroupProps, 'onChange'> {
   checkbox?: boolean; // display as exclusive checkbox group
 }
 export type RadioGroupInputProps = Props & DynamicInputCommonProps;
+
+const InvalidValueCheckbox = ({
+  control,
+}: {
+  control: React.ReactElement<any, any>;
+}) => (
+  <FormControlLabel
+    data-testid={`option-invalid`}
+    disabled={true}
+    value='invalid'
+    aria-label='invalid option'
+    control={control}
+    checked
+    key='invalid'
+    label='Invalid value'
+    sx={{
+      '.MuiFormControlLabel-label.Mui-disabled': {
+        color: 'error.dark',
+      },
+      '.MuiCheckbox-root.Mui-disabled': {
+        color: 'error.main',
+      },
+    }}
+    componentsProps={{
+      typography: {
+        variant: 'body2',
+      },
+    }}
+  />
+);
 
 const RadioGroupInput = ({
   label,
@@ -131,6 +162,9 @@ const RadioGroupInput = ({
               }}
             />
           ))}
+          {value?.code === INVALID_ENUM && (
+            <InvalidValueCheckbox control={<ControlComponent data-checked />} />
+          )}
         </GroupComponent>
         {helperText && <FormHelperText>{helperText}</FormHelperText>}
       </FormControl>

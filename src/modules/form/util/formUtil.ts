@@ -1,7 +1,7 @@
 import { getYear, isValid, max, min } from 'date-fns';
 import { isNil } from 'lodash-es';
 
-import { parseHmisDateString } from '../../hmis/hmisUtil';
+import { INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
 
 import { HmisEnums } from '@/types/gqlEnums';
@@ -75,10 +75,12 @@ const localResolvePickList = (
     if (!includeDataNotCollected) {
       values = values.filter(([code]) => !isDataNotCollected(code));
     }
-    return values.map(([code, label]) => ({
-      code: code.toString(),
-      label,
-    }));
+    return values
+      .filter((pair) => pair[0] !== INVALID_ENUM)
+      .map(([code, label]) => ({
+        code: code.toString(),
+        label,
+      }));
   }
 
   return null;

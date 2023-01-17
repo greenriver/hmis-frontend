@@ -3,6 +3,7 @@ import { generatePath } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -22,12 +23,9 @@ const ProjectsTable = ({ organizationId }: { organizationId: string }) => {
     },
     {
       header: 'Type',
-      render: (project: ProjectAllFieldsFragment) =>
-        project.projectType
-          ? HmisEnums.ProjectType[project.projectType]
-          : project.continuumProject
-          ? 'Continuum Project'
-          : null,
+      render: (project: ProjectAllFieldsFragment) => (
+        <HmisEnum value={project.projectType} enumMap={HmisEnums.ProjectType} />
+      ),
     },
     {
       header: 'Operating Period',

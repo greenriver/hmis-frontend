@@ -9,6 +9,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -33,8 +34,9 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
   },
   {
     header: 'Household Type',
-    render: (i: InventoryFieldsFragment) =>
-      HmisEnums.HouseholdType[i.householdType],
+    render: (i: InventoryFieldsFragment) => (
+      <HmisEnum value={i.householdType} enumMap={HmisEnums.HouseholdType} />
+    ),
   },
 ];
 

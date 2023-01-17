@@ -3,6 +3,7 @@ import { Stack, Typography } from '@mui/material';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -20,7 +21,9 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
   },
   {
     header: 'Type',
-    render: (e) => HmisEnums.RecordType[e.recordType],
+    render: (e) => (
+      <HmisEnum value={e.recordType} enumMap={HmisEnums.RecordType} />
+    ),
   },
   {
     header: 'Details',

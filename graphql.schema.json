@@ -499,6 +499,12 @@
             "description": "(2) Housing Needs Assessment",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -587,6 +593,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "IN_PERSON",
             "description": "(3) In Person",
@@ -834,6 +846,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "OVERFLOW",
             "description": "(3) Overflow",
@@ -1114,6 +1132,12 @@
           {
             "name": "FACILITY_BASED",
             "description": "(1) Facility-based",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -3750,6 +3774,12 @@
             "description": "(1) Full DOB reported",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -3818,6 +3848,12 @@
           {
             "name": "ANNUAL_ASSESSMENT",
             "description": "(5) Annual assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5632,6 +5668,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NO",
             "description": "(0) No",
             "isDeprecated": false,
@@ -5663,6 +5705,12 @@
           {
             "name": "HIV_AIDS",
             "description": "(8) HIV/AIDS",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -6639,6 +6687,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NON_HISPANIC_NON_LATIN_A_O_X",
             "description": "(0) Non-Hispanic/Non-Latin(a)(o)(x)",
             "isDeprecated": false,
@@ -6879,6 +6933,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE",
             "description": "(2) Problem Solving/Diversion/Rapid Resolution intervention or service",
@@ -7150,6 +7210,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -8384,6 +8450,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "LOCAL_OR_OTHER_FUNDING_SOURCE",
             "description": "(46) Local or Other Funding Source",
             "isDeprecated": false,
@@ -8532,6 +8604,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "RURAL",
             "description": "(3) Rural",
             "isDeprecated": false,
@@ -8566,6 +8644,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "NO",
             "description": "(0) No",
@@ -9054,6 +9138,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "POOR",
             "description": "(5) Poor",
             "isDeprecated": false,
@@ -9219,6 +9309,12 @@
             "description": "(4) Households with only children",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -9231,6 +9327,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "SITE_BASED_CLUSTERED_MULTIPLE_SITES",
             "description": "(2) Site-based - clustered / multiple sites",
@@ -11473,6 +11575,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY",
             "description": "(7) Jail, prison or juvenile detention facility",
             "isDeprecated": false,
@@ -11666,6 +11774,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -12838,6 +12952,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED",
             "description": "(2) Partial, street name, or code name reported",
             "isDeprecated": false,
@@ -12895,6 +13015,12 @@
             "description": "(4) Insurance type not applicable for this client",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -12910,6 +13036,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -12951,6 +13083,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -13387,6 +13525,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NOT_ATTAINED",
             "description": "(2) Not attained",
             "isDeprecated": false,
@@ -13561,6 +13705,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "NOT_PLACED_ON_PRIORITIZATION_LIST",
             "description": "(2) Not placed on prioritization list",
@@ -14760,6 +14910,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "OPH",
             "description": "Permanent Housing Only",
             "isDeprecated": false,
@@ -15715,6 +15871,12 @@
             "description": "(4) Insurance type N/A for this client",
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -15770,6 +15932,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PATH_REFERRAL",
             "description": "(161) PATH referral",
             "isDeprecated": false,
@@ -15816,6 +15984,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED",
             "description": "(1) Successful referral: client accepted",
@@ -15923,6 +16097,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "OTHER_RELATIVE",
             "description": "(4) Other relative",
             "isDeprecated": false,
@@ -15972,6 +16152,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16049,6 +16235,12 @@
           {
             "name": "FULL_SSN_REPORTED",
             "description": "(1) Full SSN reported",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -16569,6 +16761,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE",
             "description": "(12) Child care",
             "isDeprecated": false,
@@ -16966,6 +17164,12 @@
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY",
             "description": "(6) Voucher was ported locally",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17748,6 +17952,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NOT_APPLICABLE",
             "description": "(4) Not applicable",
             "isDeprecated": false,
@@ -17795,6 +18005,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ONE_TIME",
             "description": "(1) One time",
             "isDeprecated": false,
@@ -17826,6 +18042,12 @@
           {
             "name": "ENTRY_EXIT_DATE",
             "description": "(0) Entry/Exit Date",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19761,6 +19983,12 @@
             "deprecationReason": null
           },
           {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "NEITHER_AGREE_NOR_DISAGREE",
             "description": "(2) Neither agree nor disagree",
             "isDeprecated": false,
@@ -19816,6 +20044,12 @@
           {
             "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           },

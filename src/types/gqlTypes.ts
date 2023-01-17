@@ -85,6 +85,8 @@ export enum AssessmentLevel {
   CrisisNeedsAssessment = 'CRISIS_NEEDS_ASSESSMENT',
   /** (2) Housing Needs Assessment */
   HousingNeedsAssessment = 'HOUSING_NEEDS_ASSESSMENT',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** Assessment Role */
@@ -108,6 +110,8 @@ export enum AssessmentSortOption {
 
 /** 4.19.3 */
 export enum AssessmentType {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (3) In Person */
   InPerson = 'IN_PERSON',
   /** (1) Phone */
@@ -142,6 +146,8 @@ export type AutofillValue = {
 
 /** 2.07.6 */
 export enum Availability {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (3) Overflow */
   Overflow = 'OVERFLOW',
   /** (2) Seasonal */
@@ -178,6 +184,8 @@ export type BedInput = {
 export enum BedType {
   /** (1) Facility-based */
   FacilityBased = 'FACILITY_BASED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (3) Other */
   Other = 'OTHER',
   /** (2) Voucher */
@@ -551,6 +559,8 @@ export enum DobDataQuality {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full DOB reported */
   FullDobReported = 'FULL_DOB_REPORTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 export enum DataCollectedAbout {
@@ -567,6 +577,8 @@ export enum DataCollectedAbout {
 export enum DataCollectionStage {
   /** (5) Annual assessment */
   AnnualAssessment = 'ANNUAL_ASSESSMENT',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (6) Post-exit */
   PostExit = 'POST_EXIT',
   /** (1) Project entry */
@@ -829,6 +841,8 @@ export enum DisabilityResponse {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (2) Drug use disorder */
   DrugUseDisorder = 'DRUG_USE_DISORDER',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) No */
   No = 'NO',
 }
@@ -841,6 +855,8 @@ export enum DisabilityType {
   DevelopmentalDisability = 'DEVELOPMENTAL_DISABILITY',
   /** (8) HIV/AIDS */
   HivAids = 'HIV_AIDS',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (9) Mental health disorder */
   MentalHealthDisorder = 'MENTAL_HEALTH_DISORDER',
   /** (5) Physical disability */
@@ -978,6 +994,8 @@ export enum Ethnicity {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Hispanic/Latin(a)(o)(x) */
   HispanicLatinAOX = 'HISPANIC_LATIN_A_O_X',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) Non-Hispanic/Non-Latin(a)(o)(x) */
   NonHispanicNonLatinAOX = 'NON_HISPANIC_NON_LATIN_A_O_X',
 }
@@ -1008,6 +1026,8 @@ export enum EventSortOption {
 
 /** 4.20.2 */
 export enum EventType {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Problem Solving/Diversion/Rapid Resolution intervention or service */
   ProblemSolvingDiversionRapidResolutionInterventionOrService = 'PROBLEM_SOLVING_DIVERSION_RAPID_RESOLUTION_INTERVENTION_OR_SERVICE',
   /** (18) Referral to a Housing Stability Voucher */
@@ -1067,6 +1087,8 @@ export enum FeelingFrequency {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) Not at all */
   NotAtAll = 'NOT_AT_ALL',
   /** (1) Once a month */
@@ -1268,6 +1290,8 @@ export enum FundingSource {
   HudPublicAndIndianHousingPihPrograms = 'HUD_PUBLIC_AND_INDIAN_HOUSING_PIH_PROGRAMS',
   /** (12) HUD: Rural Housing Stability Assistance Program */
   HudRuralHousingStabilityAssistanceProgram = 'HUD_RURAL_HOUSING_STABILITY_ASSISTANCE_PROGRAM',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (46) Local or Other Funding Source */
   LocalOrOtherFundingSource = 'LOCAL_OR_OTHER_FUNDING_SOURCE',
   /** (34) N/A */
@@ -1318,6 +1342,8 @@ export enum Gender {
 
 /** 2.03.4 */
 export enum GeographyType {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (3) Rural */
   Rural = 'RURAL',
   /** (2) Suburban */
@@ -1330,6 +1356,8 @@ export enum GeographyType {
 
 /** 2.02.9 */
 export enum HopwaMedAssistedLivingFac {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) No */
   No = 'NO',
   /** (2) Non-HOPWA Funded Project */
@@ -1388,6 +1416,8 @@ export enum HealthStatus {
   Fair = 'FAIR',
   /** (3) Good */
   Good = 'GOOD',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (5) Poor */
   Poor = 'POOR',
   /** (2) Very good */
@@ -1418,10 +1448,14 @@ export enum HouseholdType {
   HouseholdsWithAtLeastOneAdultAndOneChild = 'HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD',
   /** (4) Households with only children */
   HouseholdsWithOnlyChildren = 'HOUSEHOLDS_WITH_ONLY_CHILDREN',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** 2.02.D */
 export enum HousingType {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Site-based - clustered / multiple sites */
   SiteBasedClusteredMultipleSites = 'SITE_BASED_CLUSTERED_MULTIPLE_SITES',
   /** (1) Site-based - single site */
@@ -1671,6 +1705,8 @@ export enum LivingSituation {
   HotelOrMotelPaidForWithoutEmergencyShelterVoucher = 'HOTEL_OR_MOTEL_PAID_FOR_WITHOUT_EMERGENCY_SHELTER_VOUCHER',
   /** (27) Interim Housing */
   InterimHousing = 'INTERIM_HOUSING',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (7) Jail, prison or juvenile detention facility */
   JailPrisonOrJuvenileDetentionFacility = 'JAIL_PRISON_OR_JUVENILE_DETENTION_FACILITY',
   /** (25) Long-term care facility or nursing home */
@@ -1740,6 +1776,8 @@ export enum MonthsHomelessPastThreeYears {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (113) More than 12 months */
   MoreThan_12Months = 'MORE_THAN_12_MONTHS',
   /** (101) 1 */
@@ -1964,6 +2002,8 @@ export enum NameDataQuality {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full name reported */
   FullNameReported = 'FULL_NAME_REPORTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Partial, street name, or code name reported */
   PartialStreetNameOrCodeNameReported = 'PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED',
 }
@@ -1984,12 +2024,16 @@ export enum NoAssistanceReason {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Insurance type not applicable for this client */
   InsuranceTypeNotApplicableForThisClient = 'INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** 1.7 */
 export enum NoYesMissing {
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) No */
   No = 'NO',
   /** (1) Yes */
@@ -2004,6 +2048,8 @@ export enum NoYesReasonsForMissingData {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (0) No */
   No = 'NO',
   /** (1) Yes */
@@ -2060,6 +2106,8 @@ export type OrganizationsPaginated = {
 export enum PathReferralOutcome {
   /** (1) Attained */
   Attained = 'ATTAINED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Not attained */
   NotAttained = 'NOT_ATTAINED',
   /** (3) Unknown */
@@ -2096,6 +2144,8 @@ export enum PickListType {
 
 /** 4.19.7 */
 export enum PrioritizationStatus {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Not placed on prioritization list */
   NotPlacedOnPrioritizationList = 'NOT_PLACED_ON_PRIORITIZATION_LIST',
   /** (1) Placed on prioritization list */
@@ -2232,6 +2282,8 @@ export enum ProjectType {
   DayShelter = 'DAY_SHELTER',
   /** Emergency Shelter */
   Es = 'ES',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** Permanent Housing Only */
   Oph = 'OPH',
   /** Other */
@@ -2409,6 +2461,8 @@ export enum ReasonNotInsured {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Insurance type N/A for this client */
   InsuranceTypeNAForThisClient = 'INSURANCE_TYPE_N_A_FOR_THIS_CLIENT',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** 1.4 */
@@ -2427,6 +2481,8 @@ export enum RecordType {
   HopwaService = 'HOPWA_SERVICE',
   /** (210) HUD-VASH OTH voucher tracking */
   HudVashOthVoucherTracking = 'HUD_VASH_OTH_VOUCHER_TRACKING',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (161) PATH referral */
   PathReferral = 'PATH_REFERRAL',
   /** (141) PATH service */
@@ -2443,6 +2499,8 @@ export enum RecordType {
 
 /** 4.20.D */
 export enum ReferralResult {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (1) Successful referral: client accepted */
   SuccessfulReferralClientAccepted = 'SUCCESSFUL_REFERRAL_CLIENT_ACCEPTED',
   /** (2) Unsuccessful referral: client rejected */
@@ -2479,6 +2537,8 @@ export enum RelationshipToHoH {
   Child = 'CHILD',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (4) Other relative */
   OtherRelative = 'OTHER_RELATIVE',
   /** (1) Self (head of household) */
@@ -2497,6 +2557,8 @@ export enum ResidencePriorLengthOfStay {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (4) 90 days or more but less than one year */
   Num_90DaysOrMoreButLessThanOneYear = 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
   /** (3) One month or more, but less than 90 days */
@@ -2523,6 +2585,8 @@ export enum SsnDataQuality {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (1) Full SSN reported */
   FullSsnReported = 'FULL_SSN_REPORTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** Autogenerated input type of SaveAssessment */
@@ -2589,6 +2653,8 @@ export enum ServiceSortOption {
 
 /** HUD Service TypeProvided:SubTypeProvided aggregate (V2.A, V2.B, V2.C) */
 export enum ServiceSubTypeProvided {
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (12) Child care */
   SsvfServiceAssistanceObtainingCoordinatingOtherPublicBenefitsChildCare = 'SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE',
   /** (2) Daily living services */
@@ -2723,6 +2789,8 @@ export enum ServiceTypeProvided {
   HudVashOthVoucherTrackingVoucherWasConvertedToHousingChoiceVoucher = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_CONVERTED_TO_HOUSING_CHOICE_VOUCHER',
   /** (6) Voucher was ported locally */
   HudVashOthVoucherTrackingVoucherWasPortedLocally = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (1) Community mental health */
   PathReferralCommunityMentalHealth = 'PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH',
   /** (5) Educational services */
@@ -2900,6 +2968,8 @@ export type SubmitAssessmentPayload = {
 export enum TargetPopulation {
   /** (1) Domestic violence victims */
   DomesticViolenceVictims = 'DOMESTIC_VIOLENCE_VICTIMS',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (4) Not applicable */
   NotApplicable = 'NOT_APPLICABLE',
   /** (3) Persons with HIV/AIDS */
@@ -2916,6 +2986,8 @@ export enum TimesHomelessPastThreeYears {
   DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (4) Four or more times */
   FourOrMoreTimes = 'FOUR_OR_MORE_TIMES',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (1) One time */
   OneTime = 'ONE_TIME',
   /** (3) Three times */
@@ -2928,6 +3000,8 @@ export enum TimesHomelessPastThreeYears {
 export enum TrackingMethod {
   /** (0) Entry/Exit Date */
   EntryExitDate = 'ENTRY_EXIT_DATE',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (3) Night-by-Night */
   NightByNight = 'NIGHT_BY_NIGHT',
 }
@@ -3193,6 +3267,8 @@ export enum WellbeingAgreement {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (2) Neither agree nor disagree */
   NeitherAgreeNorDisagree = 'NEITHER_AGREE_NOR_DISAGREE',
   /** (3) Somewhat agree */
@@ -3213,6 +3289,8 @@ export enum WhenDvOccurred {
   ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
   DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
   /** (4) One year or more */
   OneYearOrMore = 'ONE_YEAR_OR_MORE',
   /** (3) Six months to one year ago (excluding one year exactly) */

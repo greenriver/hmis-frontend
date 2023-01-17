@@ -7,6 +7,7 @@ import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
@@ -26,14 +27,16 @@ import {
 const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'CE Type',
-    render: (a) =>
-      a.assessmentType && HmisEnums.AssessmentType[a.assessmentType],
+    render: (a) => (
+      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
+    ),
     linkTreatment: true,
   },
   {
     header: 'Level',
-    render: (a) =>
-      a.assessmentLevel && HmisEnums.AssessmentLevel[a.assessmentLevel],
+    render: (a) => (
+      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+    ),
   },
   {
     header: 'Location',

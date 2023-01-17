@@ -8,11 +8,7 @@
 
 import { compact, isNil } from 'lodash-es';
 
-import {
-  formatDateForGql,
-  parseHmisDateString,
-  parseHmisDateTimeString,
-} from '../../hmis/hmisUtil';
+import { formatDateForGql, parseHmisDateString } from '../../hmis/hmisUtil';
 
 import {
   FormValues,
@@ -47,7 +43,6 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     let date = value;
     if (typeof date === 'string') {
       date = parseHmisDateString(value);
-      if (!date) date = parseHmisDateTimeString(value);
     }
     if (date instanceof Date) return formatDateForGql(date) || undefined;
     // If this isn't parseable/formattable into a date, return undefined
