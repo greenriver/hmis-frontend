@@ -141,42 +141,50 @@ const GenericTableWithData = <
     return [];
   }, [columns, recordType]);
 
+  const noResults = !loading && data && nodesCount === 0;
+
+  if (!header && noResults) {
+    return <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>;
+  }
+
+  const tableContents = (
+    <>
+      <GenericTable<RowDataType>
+        loading={loading}
+        rows={rows}
+        paginated={!nonTablePagination}
+        tablePaginationProps={
+          nonTablePagination ? undefined : tablePaginationProps
+        }
+        columns={columnDefs}
+        {...props}
+      />
+      {nonTablePagination && nonTablePaginationProps && (
+        <Pagination
+          {...nonTablePaginationProps}
+          shape='rounded'
+          size='small'
+          gridProps={{
+            sx: {
+              py: 2,
+              px: 1,
+              borderTop: (theme) => `1px solid ${theme.palette.grey[200]}`,
+            },
+          }}
+        />
+      )}
+    </>
+  );
+  if (!header) return tableContents;
+
   return (
     <Stack spacing={1}>
-      {header && <Box sx={{ px: 2, py: 1 }}>{header}</Box>}
+      <Box sx={{ px: 2, py: 1 }}>{header}</Box>
       <Box>
-        {!loading && data && nodesCount === 0 ? (
+        {noResults ? (
           <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>
         ) : (
-          <>
-            <GenericTable<RowDataType>
-              loading={loading}
-              rows={rows}
-              paginated={!nonTablePagination}
-              tablePaginationProps={
-                nonTablePagination ? undefined : tablePaginationProps
-              }
-              columns={columnDefs}
-              {...props}
-            />
-            {nonTablePagination &&
-              nonTablePaginationProps &&
-              nonTablePaginationProps.totalEntries > rows.length && (
-                <Pagination
-                  {...nonTablePaginationProps}
-                  shape='rounded'
-                  size='small'
-                  gridProps={{
-                    sx: {
-                      py: 2,
-                      px: 1,
-                      borderTop: (theme) =>
-                        `1px solid ${theme.palette.grey[200]}`,
-                    },
-                  }}
-                />
-              )}
-          </>
+          tableContents
         )}
       </Box>
     </Stack>

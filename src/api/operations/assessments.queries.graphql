@@ -102,3 +102,29 @@ mutation SubmitAssessment(
     }
   }
 }
+
+query GetAssessmentsForPopulation(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $roles: [AssessmentRole!]
+  $inProgress: Boolean
+) {
+  client(id: $id) {
+    id
+    assessments(
+      limit: $limit
+      offset: $offset
+      roles: $roles
+      inProgress: $inProgress
+      sortOrder: ASSESSMENT_DATE
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentWithValues
+      }
+    }
+  }
+}

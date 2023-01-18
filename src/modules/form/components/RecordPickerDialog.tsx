@@ -5,10 +5,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { startCase } from 'lodash-es';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import { getPopulatableChildren } from '../util/formUtil';
+import {
+  getRecordPickerColumns,
+  isAssessment,
+  isEnrollment,
+  isTypicalRelatedRecord,
+  PopulatableSourceRecordType,
+  RelatedRecord,
+} from '../util/recordPickerUtil';
 
+import AssessmentsTable from '@/components/dashboard/enrollments/tables/AssessmentsTable';
 import DisabilitiesTable from '@/components/dashboard/enrollments/tables/DisabilitiesTable';
 import EnrollmentsTable from '@/components/dashboard/enrollments/tables/EnrollmentsTable';
 import HealthAndDvsTable from '@/components/dashboard/enrollments/tables/HealthAndDvsTable';
@@ -17,39 +26,33 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { useDashboardClient } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormItem, RelatedRecordType } from '@/types/gqlTypes';
-
-export type RelatedRecord = { id: string };
-type RelatedRecordWithInformationDate = {
-  id: string;
-  informationDate: string;
-};
-
-export const hasInformationDate = (
-  r: RelatedRecord | RelatedRecordWithInformationDate
-): r is RelatedRecordWithInformationDate => {
-  return r.hasOwnProperty('informationDate');
-};
+import { AssessmentRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
-  item: FormItem;
-  recordType: RelatedRecordType;
+  item?: FormItem;
+  recordType: PopulatableSourceRecordType;
+  description?: ReactNode;
   onSelected: (record: RelatedRecord) => void;
   onCancel: () => void;
+  role?: AssessmentRole;
 }
 
 export const tableComponentForType = (
-  recordType: RelatedRecordType
+  recordType: PopulatableSourceRecordType
 ):
   | typeof IncomeBenefitsTable
   | typeof DisabilitiesTable
   | typeof HealthAndDvsTable
   | typeof EnrollmentsTable
+  | typeof AssessmentsTable
   | null => {
   switch (recordType) {
+    // YouthEducationStatus
+    // EmploymentEducation
+    // CurrentLivingSituation
+    // Exit
     case RelatedRecordType.IncomeBenefit:
       return IncomeBenefitsTable;
     case RelatedRecordType.DisabilityGroup:
@@ -58,36 +61,11 @@ export const tableComponentForType = (
       return HealthAndDvsTable;
     case RelatedRecordType.Enrollment:
       return EnrollmentsTable;
-    // YouthEducationStatus
-    // EmploymentEducation
-    // CurrentLivingSituation
-    // Exit
+    case 'Assessment':
+      return AssessmentsTable;
     default:
       return null;
   }
-};
-
-export const getInformationDate = (
-  recordType: RelatedRecordType,
-  record: any
-): string => {
-  if (hasInformationDate(record)) return record.informationDate;
-
-  if (recordType === RelatedRecordType.Enrollment) {
-    // FIXME not always entry date, figure out how to determine when it was collected
-    return record.entryDate;
-  }
-  return '';
-};
-
-const getEnrollmentDetails = (
-  recordType: RelatedRecordType,
-  record: any
-): string | undefined => {
-  if (recordType === RelatedRecordType.Enrollment) {
-    return enrollmentName(record, true);
-  }
-  return enrollmentName(record.enrollment, true);
 };
 
 const RecordPickerDialog = ({
@@ -96,45 +74,17 @@ const RecordPickerDialog = ({
   item,
   recordType,
   open,
+  role,
+  description,
   ...other
 }: Props) => {
   const { client } = useDashboardClient();
 
   const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
-    const commonColumns: ColumnDef<RelatedRecord>[] = [
-      {
-        header: 'Collected On',
-        render: (record: RelatedRecord) =>
-          parseAndFormatDate(getInformationDate(recordType, record)),
-      },
-    ];
-    if (recordType !== RelatedRecordType.Enrollment) {
-      commonColumns.push({
-        header: 'Collected By',
-        render: 'user.name' as keyof RelatedRecord,
-      });
-      commonColumns.push({
-        header: 'Collection Stage',
-        render: renderHmisField(
-          HmisEnums.RelatedRecordType[recordType],
-          'dataCollectionStage'
-        ),
-      });
-    }
-    commonColumns.push({
-      header: 'Project',
-      render: (record: RelatedRecord) =>
-        getEnrollmentDetails(recordType, record),
-    });
-    if (
-      import.meta.env.MODE === 'development' &&
-      recordType !== RelatedRecordType.DisabilityGroup
-    ) {
-      commonColumns.unshift({
-        header: 'ID',
-        render: 'id' as keyof RelatedRecord,
-      });
-    }
+    const metadataColumns: ColumnDef<RelatedRecord>[] =
+      getRecordPickerColumns(recordType);
+
+    if (!item) return metadataColumns;
 
     // Select which fields to show in table based on child items in the group
     const dataColumns = getPopulatableChildren(item)
@@ -143,17 +93,22 @@ const RecordPickerDialog = ({
         key: i.fieldName || undefined,
         header: i.briefText || i.text || startCase(i.fieldName as string),
         render: renderHmisField(
-          HmisEnums.RelatedRecordType[recordType],
+          HmisEnums.RelatedRecordType[recordType as RelatedRecordType],
           i.fieldName as string
         ),
       }));
-    return [...commonColumns, ...dataColumns];
+    return [...metadataColumns, ...dataColumns];
   }, [item, recordType]);
 
   const TableComponent = tableComponentForType(recordType);
   if (!TableComponent) {
-    console.error('not implemented', item.recordType);
+    console.error('not implemented', item?.recordType);
     return null;
+  }
+  // Need to set heigh on the dialog in order for the scrolling to work
+  let height = '90%';
+  if (columns.length < 8) {
+    height = `${columns.length * 60 + 250}px`;
   }
 
   return (
@@ -163,7 +118,9 @@ const RecordPickerDialog = ({
       maxWidth='lg'
       fullWidth
       onClose={onCancel}
-      sx={{ '.MuiDialog-paper': { px: 1, overflow: 'hidden', height: '100%' } }}
+      sx={{
+        '.MuiDialog-paper': { px: 1, overflow: 'hidden', height },
+      }}
       {...other}
     >
       <DialogTitle
@@ -171,11 +128,29 @@ const RecordPickerDialog = ({
         sx={{ textTransform: 'none' }}
         color='text.primary'
       >
-        Choose record for <b>{item.text}</b>
+        {item ? (
+          <>
+            Choose record for <b>{item.text}</b>
+          </>
+        ) : (
+          'Choose Assessment'
+        )}
       </DialogTitle>
-      <DialogContent sx={{ pb: 6, overflow: 'hidden', height: '100%' }}>
+
+      <DialogContent
+        sx={{
+          pb: 6,
+          overflow: 'hidden',
+          height: '100%', // need for scrolling
+          '> .MuiBox-root': { height: '100%' }, // need for scrolling
+        }}
+      >
+        {description}
         <TableComponent
-          queryVariables={{ id: client.id }}
+          queryVariables={{
+            id: client.id,
+            ...(role ? { roles: [role], inProgress: false } : undefined),
+          }}
           defaultPageSize={5}
           columns={columns}
           nonTablePagination
@@ -186,7 +161,14 @@ const RecordPickerDialog = ({
             width: 'fit-content',
           }}
           renderVerticalHeaderCell={(record) => {
-            const informationDate = getInformationDate(recordType, record);
+            const informationDate = isTypicalRelatedRecord(record)
+              ? record.informationDate
+              : isEnrollment(record)
+              ? record.entryDate
+              : isAssessment(record)
+              ? record.assessmentDate
+              : '';
+
             return (
               <Stack spacing={2} sx={{ py: 1 }}>
                 <RelativeDate
