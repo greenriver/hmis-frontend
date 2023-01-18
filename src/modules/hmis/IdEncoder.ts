@@ -14,15 +14,14 @@ export default class IdEncoder {
 
   static DELIMITER_REGEX = new RegExp(`^${this.INITIAL_DELIMITER}`);
 
-  static encode(id: number | string): string {
-    if (!this.PROTECT_IDS) return String(id);
+  static encode(id: number | string, force?: boolean): string {
+    if (!force && !this.PROTECT_IDS) return String(id);
 
-    const dayStamp = startOfToday().valueOf() / (60 * 60 * 24);
-
-    return this.obfuscate(parseInt(String(id)), dayStamp);
+    return this.obfuscate(parseInt(String(id)));
   }
 
-  static obfuscate(id: number, dayStamp: number): string {
+  static obfuscate(id: number): string {
+    const dayStamp = startOfToday().valueOf() / (60 * 60 * 24);
     const composed = id * 2 ** 32 + dayStamp;
     const keyHex = CryptoJS.enc.Base64.parse(this.KEY);
     const encrypted = CryptoJS.DES.encrypt(composed.toString(16), keyHex, {
@@ -40,12 +39,11 @@ export default class IdEncoder {
 
   static decode(encoded: string): string {
     if (!encoded || !this.isEncoded(encoded)) return encoded;
-    const [id] = this.deobfuscate(String(encoded));
+    const id = this.deobfuscate(String(encoded));
     return String(id);
   }
 
   static deobfuscate(slug: string) {
-    // TODO: Make this match the backend
     const encrypted = atob(slug.replace(this.DELIMITER_REGEX, ''));
 
     const keyHex = CryptoJS.enc.Base64.parse(this.KEY);
@@ -55,9 +53,9 @@ export default class IdEncoder {
     }).toString(CryptoJS.enc.Utf8);
 
     const composed = parseInt(decrypted, 16);
-    const dayStamp = composed >> 32;
+    // const dayStamp = composed >> 32;
     const id = Math.round(composed / 2 ** 32);
 
-    return [id, dayStamp];
+    return id;
   }
 }
