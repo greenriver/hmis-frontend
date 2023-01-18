@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -12,6 +12,7 @@ import {
   CreateOrganizationMutationVariables,
   OrganizationAllFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const CreateOrganization = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const CreateOrganization = () => {
     (data: CreateOrganizationMutation) => {
       const id = data?.createOrganization?.organization?.id;
       if (id) {
-        navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
+        navigate(generateSafePath(Routes.ORGANIZATION, { organizationId: id }));
       }
     },
     [navigate]

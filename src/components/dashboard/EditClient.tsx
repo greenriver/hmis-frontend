@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useDashboardClient } from '../pages/ClientDashboard';
 
@@ -12,6 +12,7 @@ import {
   UpdateClientMutation,
   UpdateClientMutationVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const Profile = () => {
   const { client } = useDashboardClient();
@@ -20,7 +21,7 @@ const Profile = () => {
     (data: UpdateClientMutation) => {
       const id = data?.updateClient?.client?.id;
       if (id) {
-        navigate(generatePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
+        navigate(generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
       }
     },
     [navigate]

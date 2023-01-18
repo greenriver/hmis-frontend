@@ -2,7 +2,6 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -22,6 +21,7 @@ import {
   GetEnrollmentAssessmentsQueryVariables,
   ProjectType,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
@@ -95,7 +95,7 @@ const AssessmentsPanel = ({
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generatePath(DashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: assessment.id,
@@ -118,7 +118,7 @@ const AssessmentsPanel = ({
           variant='outlined'
           color='secondary'
           size='small'
-          to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+          to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
             clientId,
             enrollmentId,
             assessmentRole: AssessmentRole.Update,

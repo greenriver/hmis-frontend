@@ -9,7 +9,6 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { ColumnDef } from '../elements/GenericTable';
 import GenericTableWithData from '../elements/GenericTableWithData';
@@ -18,6 +17,7 @@ import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
 import { FormValues } from '@/modules/form/util/formUtil';
@@ -98,7 +98,7 @@ const bedColumns: ColumnDef<Bed>[] = [
 
 const InventoryBeds = () => {
   // const navigate = useNavigate();
-  const { inventoryId } = useParams() as {
+  const { inventoryId } = useSafeParams() as {
     projectId: string;
     inventoryId: string;
   };
@@ -142,7 +142,7 @@ const InventoryBeds = () => {
   );
 
   // const onCompleted = useCallback(() => {
-  //   navigate(generatePath(Routes.PROJECT, { projectId }), {
+  //   navigate(generateSafePath(Routes.PROJECT, { projectId }), {
   //     state: { refetchInventory: false },
   //   });
   // }, [navigate, projectId]);

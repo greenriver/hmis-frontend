@@ -1,7 +1,6 @@
 import { Skeleton } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import { useIntakeAssessment } from './useIntakeAssessment';
 
@@ -11,6 +10,7 @@ import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props extends Omit<ButtonLinkProps, 'to' | 'ref'> {
   enrollmentId: string;
@@ -28,7 +28,7 @@ const FinishIntakeButton = ({
 
   const [existingIntakePath, intakeCompleted] = useMemo(() => {
     if (!assessment) return [];
-    const path = generatePath(DashboardRoutes.EDIT_ASSESSMENT, {
+    const path = generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
       clientId,
       enrollmentId,
       assessmentId: assessment.id,
@@ -59,7 +59,7 @@ const FinishIntakeButton = ({
             loading
               ? ''
               : existingIntakePath ||
-                generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+                generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
                   assessmentRole: AssessmentRole.Intake.toLowerCase(),

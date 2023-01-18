@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
@@ -14,6 +14,7 @@ import {
   UpdateOrganizationMutation,
   UpdateOrganizationMutationVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const EditOrganization = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const EditOrganization = () => {
     (data: UpdateOrganizationMutation) => {
       const id = data?.updateOrganization?.organization?.id;
       if (id) {
-        navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
+        navigate(generateSafePath(Routes.ORGANIZATION, { organizationId: id }));
       }
     },
     [navigate]

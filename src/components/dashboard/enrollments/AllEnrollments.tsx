@@ -3,7 +3,6 @@ import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -17,6 +16,7 @@ import {
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
@@ -72,7 +72,7 @@ const AllEnrollments = () => {
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
-      generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
         clientId,
         enrollmentId: enrollment.id,
       }),
@@ -91,7 +91,7 @@ const AllEnrollments = () => {
         <ButtonLink
           variant='outlined'
           color='secondary'
-          to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+          to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
             clientId,
           })}
         >

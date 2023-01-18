@@ -1,11 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
@@ -21,10 +22,11 @@ import {
   UpdateProjectCocMutationVariables,
   useGetProjectCocQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const { projectId, cocId } = useParams() as {
+  const { projectId, cocId } = useSafeParams() as {
     projectId: string;
     cocId: string;
   };
@@ -36,7 +38,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
     if (create) {
       cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
     }
-    navigate(generatePath(Routes.PROJECT, { projectId }));
+    navigate(generateSafePath(Routes.PROJECT, { projectId }));
   }, [navigate, projectId, create]);
 
   const { data, loading, error } = useGetProjectCocQuery({

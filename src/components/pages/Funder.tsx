@@ -1,11 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -22,10 +23,11 @@ import {
   UpdateFunderMutationVariables,
   useGetFunderQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const Funder = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const { projectId, funderId } = useParams() as {
+  const { projectId, funderId } = useSafeParams() as {
     projectId: string;
     funderId: string; // Not present if create!
   };
@@ -42,7 +44,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     if (create) {
       cache.evict({ id: `Project:${projectId}`, fieldName: 'funders' });
     }
-    navigate(generatePath(Routes.PROJECT, { projectId }));
+    navigate(generateSafePath(Routes.PROJECT, { projectId }));
   }, [navigate, create, projectId]);
 
   // Local variables to use for form population.

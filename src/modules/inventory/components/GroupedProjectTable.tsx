@@ -7,13 +7,13 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ProjectsTable from './ProjectsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { Routes } from '@/routes/routes';
 import { GetAllOrganizationsQuery } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const GroupedProjectTable = ({
   organizations,
@@ -100,7 +100,7 @@ const GroupedProjectTable = ({
                 variant='outlined'
                 color='secondary'
                 size='small'
-                to={generatePath(Routes.ORGANIZATION, {
+                to={generateSafePath(Routes.ORGANIZATION, {
                   organizationId: organization.id,
                 })}
                 sx={{ mx: 1, my: 1, float: 'left', width: 150 }}

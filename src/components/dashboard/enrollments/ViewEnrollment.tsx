@@ -1,7 +1,7 @@
 import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { generatePath, useOutletContext, useParams } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdMemberTable from './household/HouseholdMemberTable';
@@ -9,13 +9,15 @@ import { useIntakeAssessment } from './useIntakeAssessment';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import useSafeParams from '@/hooks/useSafeParams';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const ViewEnrollment = () => {
   const { enrollment } = useOutletContext<DashboardContext>();
-  const { clientId, enrollmentId } = useParams() as {
+  const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
     clientId: string;
   };
@@ -23,7 +25,7 @@ const ViewEnrollment = () => {
   const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
   const editHouseholdPath = useMemo(
     () =>
-      generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
+      generateSafePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
         clientId,
         enrollmentId,
       }),
@@ -105,7 +107,7 @@ const ViewEnrollment = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+                to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
                   assessmentRole: AssessmentRole.Update,

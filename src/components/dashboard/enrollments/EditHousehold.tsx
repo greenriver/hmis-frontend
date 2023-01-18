@@ -1,12 +1,7 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
-import {
-  generatePath,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import AddToHouseholdButton from './household/AddToHouseholdButton';
 import AssociatedHouseholdMembers, {
@@ -20,6 +15,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import ClientSearch from '@/modules/search/components/ClientSearch';
@@ -29,12 +25,13 @@ import {
   RelationshipToHoH,
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const EditHousehold = () => {
   const navigate = useNavigate();
   const { enrollment } = useOutletContext<DashboardContext>();
   // const { client, overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
-  const { clientId, enrollmentId } = useParams() as {
+  const { clientId, enrollmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
   };
@@ -80,7 +77,7 @@ const EditHousehold = () => {
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
           clientId,
           enrollmentId,
         })

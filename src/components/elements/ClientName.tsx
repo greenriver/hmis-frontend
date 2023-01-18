@@ -1,12 +1,12 @@
 import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import { forwardRef } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import RouterLink, { RouterLinkProps } from './RouterLink';
 
 import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props extends TypographyProps {
   client: ClientNameFragment;
@@ -40,7 +40,7 @@ const ClientName = forwardRef<Props, any>(
         <RouterLink
           to={
             linkToProfile
-              ? generatePath(Routes.CLIENT_DASHBOARD, {
+              ? generateSafePath(Routes.CLIENT_DASHBOARD, {
                   clientId: client.id,
                 })
               : undefined

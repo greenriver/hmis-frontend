@@ -1,21 +1,23 @@
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const Organization = () => {
-  const { organizationId } = useParams() as {
+  const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
 
@@ -30,7 +32,7 @@ const Organization = () => {
   const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
     useDeleteOrganizationMutation({
       variables: { input: { id: organizationId } },
-      onCompleted: () => navigate(generatePath(Routes.ALL_PROJECTS)),
+      onCompleted: () => navigate(generateSafePath(Routes.ALL_PROJECTS)),
     });
   if (deleteError) console.error(deleteError);
 
@@ -92,7 +94,7 @@ const Organization = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.CREATE_PROJECT, { organizationId })}
+                to={generateSafePath(Routes.CREATE_PROJECT, { organizationId })}
               >
                 + Add Project
               </ButtonLink>
@@ -105,7 +107,7 @@ const Organization = () => {
                 data-testid='updateOrganizationButton'
                 variant='text'
                 color='secondary'
-                to={generatePath(Routes.EDIT_ORGANIZATION, {
+                to={generateSafePath(Routes.EDIT_ORGANIZATION, {
                   organizationId,
                 })}
                 sx={{ justifyContent: 'left' }}
