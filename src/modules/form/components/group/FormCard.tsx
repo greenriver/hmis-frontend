@@ -7,10 +7,12 @@ import {
   getPopulatableChildren,
 } from '../../util/formUtil';
 import { gqlValueToFormValue } from '../../util/recordFormUtil';
+import {
+  isTypicalRelatedRecord,
+  RelatedRecord,
+} from '../../util/recordPickerUtil';
 import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
-  getInformationDate,
-  RelatedRecord,
   tableComponentForType,
 } from '../RecordPickerDialog';
 
@@ -21,14 +23,15 @@ const FormCard = ({
   severalItemsChanged,
   renderChildItem,
 }: GroupItemComponentProps) => {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
+
   const onClear = useCallback(() => {
     const linkIds = getAllChildLinkIds(item);
     const updatedValues = zipObject(linkIds, []);
     severalItemsChanged(updatedValues);
+    setSourceRecord(undefined);
   }, [item, severalItemsChanged]);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
 
   const onSelectAutofillRecord = useCallback(
     (record: RelatedRecord) => {
@@ -87,12 +90,10 @@ const FormCard = ({
         )}
 
         {/* Source record description */}
-        {sourceRecord && item.recordType && (
+        {sourceRecord && isTypicalRelatedRecord(sourceRecord) && (
           <Typography variant='body2' sx={{ mb: 3 }}>
             Filled with record from{' '}
-            {parseAndFormatDate(
-              getInformationDate(item.recordType, sourceRecord)
-            )}
+            {parseAndFormatDate(sourceRecord.informationDate)}
           </Typography>
         )}
 

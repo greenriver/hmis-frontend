@@ -132,7 +132,7 @@ fragment AssessmentFields on Assessment {
   }
 }
 
-# contains big JSON definition & current values
+# contains big JSON definition & form values
 fragment AssessmentWithDefinitionAndValues on Assessment {
   ...AssessmentFields
   assessmentDetail {
@@ -141,5 +141,18 @@ fragment AssessmentWithDefinitionAndValues on Assessment {
     definition {
       ...FormDefinitionWithJson
     }
+  }
+}
+
+# contains form values
+fragment AssessmentWithValues on Assessment {
+  ...AssessmentFields
+  assessmentDetail {
+    ...AssessmentDetailFields
+    values
+  }
+  enrollment {
+    id
+    ...EnrollmentFields
   }
 }

@@ -136,7 +136,7 @@ const GenericTable = <T extends { id: string }>({
   );
 
   return (
-    <TableContainer sx={{ height: '100%' }}>
+    <TableContainer sx={{ height: '100%', overflow: 'auto' }}>
       <Table
         size='medium'
         sx={{ height: vertical ? '100%' : '1px' }}

@@ -4210,6 +4210,53 @@ export type AssessmentWithDefinitionAndValuesFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
+export type AssessmentWithValuesFragment = {
+  __typename?: 'Assessment';
+  id: string;
+  inProgress: boolean;
+  assessmentDate: string;
+  assessmentLevel?: AssessmentLevel | null;
+  assessmentLocation: string;
+  assessmentType?: AssessmentType | null;
+  prioritizationStatus?: PrioritizationStatus | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  assessmentDetail?: {
+    __typename?: 'AssessmentDetail';
+    values?: any | null;
+    id: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    role: AssessmentRole;
+    status: string;
+    definition: {
+      __typename?: 'FormDefinition';
+      id: string;
+      version: number;
+      role: AssessmentRole;
+      status: string;
+      identifier: string;
+    };
+  } | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    householdSize: number;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    household: { __typename?: 'Household'; id: string };
+    client: { __typename?: 'Client'; id: string };
+  };
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
 export type GetAssessmentQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -6294,6 +6341,74 @@ export type SubmitAssessmentMutation = {
       fullMessage?: string | null;
       id?: string | null;
     }>;
+  } | null;
+};
+
+export type GetAssessmentsForPopulationQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
+  inProgress?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+export type GetAssessmentsForPopulationQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        inProgress: boolean;
+        assessmentDate: string;
+        assessmentLevel?: AssessmentLevel | null;
+        assessmentLocation: string;
+        assessmentType?: AssessmentType | null;
+        prioritizationStatus?: PrioritizationStatus | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        assessmentDetail?: {
+          __typename?: 'AssessmentDetail';
+          values?: any | null;
+          id: string;
+          dataCollectionStage?: DataCollectionStage | null;
+          role: AssessmentRole;
+          status: string;
+          definition: {
+            __typename?: 'FormDefinition';
+            id: string;
+            version: number;
+            role: AssessmentRole;
+            status: string;
+            identifier: string;
+          };
+        } | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string };
+          client: { __typename?: 'Client'; id: string };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+    };
   } | null;
 };
 
@@ -9090,6 +9205,42 @@ export const AssessmentWithDefinitionAndValuesFragmentDoc = gql`
   ${AssessmentDetailFieldsFragmentDoc}
   ${FormDefinitionWithJsonFragmentDoc}
 `;
+export const EnrollmentFieldsFragmentDoc = gql`
+  fragment EnrollmentFields on Enrollment {
+    id
+    entryDate
+    exitDate
+    project {
+      id
+      projectName
+      projectType
+    }
+    inProgress
+    household {
+      id
+    }
+    householdSize
+    client {
+      id
+    }
+  }
+`;
+export const AssessmentWithValuesFragmentDoc = gql`
+  fragment AssessmentWithValues on Assessment {
+    ...AssessmentFields
+    assessmentDetail {
+      ...AssessmentDetailFields
+      values
+    }
+    enrollment {
+      id
+      ...EnrollmentFields
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${AssessmentDetailFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -9178,26 +9329,6 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
-`;
-export const EnrollmentFieldsFragmentDoc = gql`
-  fragment EnrollmentFields on Enrollment {
-    id
-    entryDate
-    exitDate
-    project {
-      id
-      projectName
-      projectType
-    }
-    inProgress
-    household {
-      id
-    }
-    householdSize
-    client {
-      id
-    }
-  }
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -10028,6 +10159,89 @@ export type SubmitAssessmentMutationResult =
 export type SubmitAssessmentMutationOptions = Apollo.BaseMutationOptions<
   SubmitAssessmentMutation,
   SubmitAssessmentMutationVariables
+>;
+export const GetAssessmentsForPopulationDocument = gql`
+  query GetAssessmentsForPopulation(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $roles: [AssessmentRole!]
+    $inProgress: Boolean
+  ) {
+    client(id: $id) {
+      id
+      assessments(
+        limit: $limit
+        offset: $offset
+        roles: $roles
+        inProgress: $inProgress
+        sortOrder: ASSESSMENT_DATE
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentWithValues
+        }
+      }
+    }
+  }
+  ${AssessmentWithValuesFragmentDoc}
+`;
+
+/**
+ * __useGetAssessmentsForPopulationQuery__
+ *
+ * To run a query within a React component, call `useGetAssessmentsForPopulationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetAssessmentsForPopulationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetAssessmentsForPopulationQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      roles: // value for 'roles'
+ *      inProgress: // value for 'inProgress'
+ *   },
+ * });
+ */
+export function useGetAssessmentsForPopulationQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetAssessmentsForPopulationQuery,
+    GetAssessmentsForPopulationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetAssessmentsForPopulationQuery,
+    GetAssessmentsForPopulationQueryVariables
+  >(GetAssessmentsForPopulationDocument, options);
+}
+export function useGetAssessmentsForPopulationLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetAssessmentsForPopulationQuery,
+    GetAssessmentsForPopulationQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetAssessmentsForPopulationQuery,
+    GetAssessmentsForPopulationQueryVariables
+  >(GetAssessmentsForPopulationDocument, options);
+}
+export type GetAssessmentsForPopulationQueryHookResult = ReturnType<
+  typeof useGetAssessmentsForPopulationQuery
+>;
+export type GetAssessmentsForPopulationLazyQueryHookResult = ReturnType<
+  typeof useGetAssessmentsForPopulationLazyQuery
+>;
+export type GetAssessmentsForPopulationQueryResult = Apollo.QueryResult<
+  GetAssessmentsForPopulationQuery,
+  GetAssessmentsForPopulationQueryVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
