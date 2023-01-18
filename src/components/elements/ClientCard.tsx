@@ -12,14 +12,12 @@ import {
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { Fragment, useCallback, useMemo, useState } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from './ButtonLink';
 import ClientImageUploadDialog from './input/ClientImageUploadDialog';
 import RouterLink from './RouterLink';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import ClientIdEncoder from '@/modules/hmis/ClientIdEncoder';
 import {
   age,
   clientNameWithoutPreferred,
@@ -36,6 +34,7 @@ import {
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const RecentEnrollments = ({
   clientId,
@@ -77,7 +76,7 @@ const RecentEnrollments = ({
           <Fragment key={enrollment.id}>
             <Grid item xs={6}>
               <RouterLink
-                to={generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
                   clientId: client.id,
                   enrollmentId: enrollment.id,
                 })}
@@ -264,8 +263,8 @@ const ClientCard: React.FC<Props> = ({
                     <ButtonLink
                       data-testid='goToProfileButton'
                       variant='contained'
-                      to={generatePath(DashboardRoutes.PROFILE, {
-                        clientId: ClientIdEncoder.encode(client.id),
+                      to={generateSafePath(DashboardRoutes.PROFILE, {
+                        clientId: client.id,
                       })}
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
@@ -279,8 +278,8 @@ const ClientCard: React.FC<Props> = ({
                     <ButtonLink
                       data-testid='editClientButton'
                       variant='contained'
-                      to={generatePath(DashboardRoutes.EDIT, {
-                        clientId: ClientIdEncoder.encode(client.id),
+                      to={generateSafePath(DashboardRoutes.EDIT, {
+                        clientId: client.id,
                       })}
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
@@ -316,8 +315,8 @@ const ClientCard: React.FC<Props> = ({
               variant='outlined'
               color='secondary'
               data-testid='enrollButton'
-              to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
-                clientId: ClientIdEncoder.encode(client.id),
+              to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+                clientId: client.id,
               })}
             >
               Enroll

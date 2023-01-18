@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Outlet, useOutletContext, useParams } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
 import ClientCardMini from '../elements/ClientCardMini';
@@ -9,7 +9,7 @@ import DashboardContentContainer from '../layout/dashboard/DashboardContentConta
 import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
-import ClientIdEncoder from '@/modules/hmis/ClientIdEncoder';
+import useSafeParams from '@/hooks/useSafeParams';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -17,7 +17,7 @@ import {
 } from '@/types/gqlTypes';
 
 const ClientDashboard: React.FC = () => {
-  const params = useParams() as {
+  const params = useSafeParams() as {
     clientId: string;
     enrollmentId?: string;
   };
@@ -31,7 +31,7 @@ const ClientDashboard: React.FC = () => {
     loading,
     error,
   } = useGetClientQuery({
-    variables: { id: ClientIdEncoder.decode(params.clientId) },
+    variables: { id: params.clientId },
   });
   if (error) throw error;
 

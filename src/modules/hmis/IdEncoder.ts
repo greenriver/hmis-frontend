@@ -1,7 +1,7 @@
 import CryptoJS from 'crypto-js';
 import { startOfToday } from 'date-fns';
 
-export default class ClientIdEncoder {
+export default class IdEncoder {
   static PROTECT_IDS = import.meta.env.PUBLIC_PROTECTED_IDS === 'true';
 
   static INITIAL_DELIMITER = import.meta.env.PUBLIC_INITIAL_DELIMITER || '==';
@@ -23,7 +23,6 @@ export default class ClientIdEncoder {
   }
 
   static obfuscate(id: number, dayStamp: number): string {
-    // TODO: Make this match the backend
     const composed = id * 2 ** 32 + dayStamp;
     const keyHex = CryptoJS.enc.Base64.parse(this.KEY);
     const encrypted = CryptoJS.DES.encrypt(composed.toString(16), keyHex, {

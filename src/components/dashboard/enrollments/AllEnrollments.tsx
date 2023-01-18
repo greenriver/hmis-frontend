@@ -3,11 +3,12 @@ import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/components/elements/GenericTableWithData';
+import useSafeParams from '@/hooks/useSafeParams';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -67,7 +68,7 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
 ];
 
 const AllEnrollments = () => {
-  const { clientId } = useParams() as { clientId: string };
+  const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
