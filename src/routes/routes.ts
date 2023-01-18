@@ -24,6 +24,7 @@ const subRoutes = {
   NEW_ENROLLMENT: 'enrollments/new',
   VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
   EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
+  EXIT_HOUSEHOLD: 'enrollments/:enrollmentId/exit-household',
   NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentRole/new',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
   EDIT_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId/edit',
@@ -50,4 +51,11 @@ export const HIDE_NAV_ROUTES = [
   DashboardRoutes.VIEW_ASSESSMENT,
   DashboardRoutes.NEW_ASSESSMENT,
   DashboardRoutes.EDIT_ASSESSMENT,
+];
+
+export const FOCUS_MODE_ROUTES = [
+  {
+    route: DashboardRoutes.EXIT_HOUSEHOLD,
+    previous: DashboardRoutes.VIEW_ENROLLMENT,
+  },
 ];

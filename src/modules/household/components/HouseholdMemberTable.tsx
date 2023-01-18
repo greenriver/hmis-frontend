@@ -3,21 +3,20 @@ import { useMemo } from 'react';
 import { generatePath } from 'react-router-dom';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
+import { useHouseholdMembers } from './useHouseholdMembers';
 
 import HouseholdMemberActionButton from '@/components/dashboard/enrollments/HouseholdMemberActionButton';
 import { useRecentAssessments } from '@/components/dashboard/enrollments/useRecentAssessments';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import {
-  parseAndFormatDate,
-  relationshipToHohForDisplay,
-  sortHouseholdMembers,
-} from '@/modules/hmis/hmisUtil';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
-  useGetEnrollmentWithHoHQuery,
+  RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 /**
@@ -30,21 +29,11 @@ const HouseholdMemberTable = ({
   clientId: string;
   enrollmentId: string;
 }) => {
-  const {
-    data: { enrollment: enrollment } = {},
-    loading,
-    error,
-  } = useGetEnrollmentWithHoHQuery({
-    variables: { id: enrollmentId },
-  });
+  const [householdMembers, { loading, error }] =
+    useHouseholdMembers(enrollmentId);
 
   const { loading: assessmentsLoading, ...assessments } =
     useRecentAssessments(enrollmentId);
-
-  const householdMembers = useMemo(
-    () => sortHouseholdMembers(enrollment?.household.householdClients),
-    [enrollment]
-  );
 
   const columns = useMemo(() => {
     return [
@@ -95,8 +84,15 @@ const HouseholdMemberTable = ({
       },
       {
         header: 'Relationship to HoH',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          relationshipToHohForDisplay(hc.relationshipToHoH),
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <HmisEnum
+            value={hc.relationshipToHoH}
+            enumMap={{
+              ...HmisEnums.RelationshipToHoH,
+              [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
+            }}
+          />
+        ),
       },
       {
         header: '',
@@ -119,7 +115,6 @@ const HouseholdMemberTable = ({
 
   if (error) throw error;
   if (loading || assessmentsLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
 
   return (
     <GenericTable<HouseholdClientFieldsFragment>

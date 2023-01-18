@@ -9,6 +9,7 @@ import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import Assessment from '@/components/dashboard/enrollments/Assessment';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
+import ExitHousehold from '@/components/dashboard/enrollments/ExitHousehold';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
@@ -93,6 +94,11 @@ export const protectedRoutes = [
             path: DashboardRoutes.EDIT_HOUSEHOLD,
             element: <EditHousehold />,
           },
+          {
+            path: DashboardRoutes.EXIT_HOUSEHOLD,
+            element: <ExitHousehold />,
+          },
+
           {
             path: DashboardRoutes.NEW_ASSESSMENT,
             element: <Assessment />,

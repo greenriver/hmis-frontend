@@ -18,7 +18,6 @@ import {
   HouseholdClientFieldsFragment,
   ProjectType,
   RecordType,
-  RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeProvided,
 } from '@/types/gqlTypes';
@@ -68,9 +67,6 @@ export const yesNo = (bool: boolean | null | undefined) => {
   if (isNil(bool)) return null;
   return bool ? 'Yes' : 'No';
 };
-
-// Prefix on descriptions, like "(8) Client doesn't know"
-const numericPrefix = /^\([0-9]*\)\s/;
 
 export const parseHmisDateString = (
   dateString: string | null | undefined
@@ -213,20 +209,6 @@ export const enrollmentName = (
   if (projectType.length > 3)
     projectType = startCase(projectType.toLowerCase());
   return `${projectName} (${projectType})`;
-};
-
-const trimNumericPrefix = (s: string) => s.replace(numericPrefix, '');
-
-export const relationshipToHohForDisplay = (
-  relationship?: RelationshipToHoH
-) => {
-  if (isNil(relationship)) return '';
-  if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
-    return 'Self (HoH)';
-  // if (relationship === RelationshipToHoH.DataNotCollected) return null;
-  const description = HmisEnums.RelationshipToHoH[relationship];
-  if (!description) return relationship;
-  return trimNumericPrefix(description);
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {

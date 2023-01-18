@@ -1,25 +1,31 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
 import React, { ReactNode } from 'react';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { STICKY_BAR_HEIGHT } from '../../MainLayout';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface Props {
   isOpen: boolean;
   handleOpenMenu: () => void;
   children?: ReactNode;
+  focusMode?: string;
 }
 
 export const CONTEXT_HEADER_HEIGHT = 48;
 
 const ContextHeader: React.FC<Props> = ({
   children,
+  focusMode,
   isOpen,
   handleOpenMenu,
 }) => {
   const isMobile = useIsMobile();
+  const params = useParams();
 
   return (
     <AppBar
@@ -41,30 +47,43 @@ const ContextHeader: React.FC<Props> = ({
         px: { sm: 1, lg: 2 },
       }}
     >
-      <Box display='flex' alignItems='stretch' width='100%' flex={1}>
-        {(!isOpen || isMobile) && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              mr: { xs: 2, sm: 2, lg: 4 },
-              pr: { xs: 1, sm: 1, lg: 2 },
-              borderRightColor: 'borders.light',
-              borderRightWidth: 1,
-              borderRightStyle: 'solid',
-            }}
+      {focusMode ? (
+        <Box>
+          <ButtonLink
+            to={generatePath(focusMode, params)}
+            variant='transparent'
+            startIcon={<ArrowBackIcon fontSize='small' />}
+            sx={{ height: '32px', fontWeight: 600 }}
           >
-            <Button
-              startIcon={<MenuIcon />}
-              variant='transparent'
-              onClick={handleOpenMenu}
+            Back
+          </ButtonLink>
+        </Box>
+      ) : (
+        <Box display='flex' alignItems='stretch' width='100%' flex={1}>
+          {(!isOpen || isMobile) && (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                mr: { xs: 2, sm: 2, lg: 4 },
+                pr: { xs: 1, sm: 1, lg: 2 },
+                borderRightColor: 'borders.light',
+                borderRightWidth: 1,
+                borderRightStyle: 'solid',
+              }}
             >
-              Menu
-            </Button>
-          </Box>
-        )}
-        {children}
-      </Box>
+              <Button
+                startIcon={<MenuIcon />}
+                variant='transparent'
+                onClick={handleOpenMenu}
+              >
+                Menu
+              </Button>
+            </Box>
+          )}
+          {children}
+        </Box>
+      )}
     </AppBar>
   );
 };

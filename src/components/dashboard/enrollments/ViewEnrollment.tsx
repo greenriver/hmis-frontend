@@ -1,9 +1,8 @@
-import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
 import { generatePath, useOutletContext, useParams } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
+import HouseholdActionButtons from './HouseholdActionButtons';
 import { useRecentAssessments } from './useRecentAssessments';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -21,14 +20,14 @@ const ViewEnrollment = () => {
   };
 
   const { intake, loading } = useRecentAssessments(enrollmentId);
-  const editHouseholdPath = useMemo(
-    () =>
-      generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
-        clientId,
-        enrollmentId,
-      }),
-    [clientId, enrollmentId]
-  );
+  // const editHouseholdPath = useMemo(
+  //   () =>
+  //     generatePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
+  //       clientId,
+  //       enrollmentId,
+  //     }),
+  //   [clientId, enrollmentId]
+  // );
 
   if (!enrollment) throw Error('Enrollment not found');
 
@@ -61,7 +60,7 @@ const ViewEnrollment = () => {
                 <Typography variant='h5' sx={{ mb: 0 }}>
                   Household
                 </Typography>
-                <ButtonLink
+                {/* <ButtonLink
                   size='small'
                   variant='outlined'
                   color='secondary'
@@ -69,13 +68,17 @@ const ViewEnrollment = () => {
                   to={`${editHouseholdPath}`}
                 >
                   Edit Household
-                </ButtonLink>
+                </ButtonLink> */}
               </Stack>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
-              <ButtonLink
+              <HouseholdActionButtons
+                clientId={clientId}
+                enrollmentId={enrollmentId}
+              />
+              {/* <ButtonLink
                 size='small'
                 variant='outlined'
                 color='secondary'
@@ -84,6 +87,15 @@ const ViewEnrollment = () => {
               >
                 + Add Household Members
               </ButtonLink>
+              <ButtonLink
+                size='small'
+                variant='outlined'
+                color='secondary'
+                sx={{ mt: 2, ml: 6 }}
+                to={`${editHouseholdPath}#add`}
+              >
+                + Exit Household
+              </ButtonLink> */}
             </Paper>
             <Paper sx={{ p: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
