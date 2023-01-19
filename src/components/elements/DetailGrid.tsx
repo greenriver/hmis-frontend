@@ -12,10 +12,14 @@ const DetailGrid = ({ data }: { data: Item[] }) => {
       {data.map(({ label, value }) => (
         <Grid item xs={4} key={label}>
           <Stack>
-            <Typography variant='subtitle2' sx={{ fontWeight: 'bold' }}>
+            <Typography variant='body2' sx={{ fontWeight: 'bold' }}>
               {label}
             </Typography>
-            <Typography variant='subtitle2'>{value}</Typography>
+            {typeof value === 'string' ? (
+              <Typography variant='body2'>{value}</Typography>
+            ) : (
+              value
+            )}
           </Stack>
         </Grid>
       ))}

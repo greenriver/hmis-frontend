@@ -12,7 +12,7 @@ export const useDashboardNavItems = (clientId?: string) => {
     return [
       {
         id: 'client-nav',
-        title: 'Client Navigation',
+        // title: 'Client Navigation',
         type: 'category',
         items: [
           {

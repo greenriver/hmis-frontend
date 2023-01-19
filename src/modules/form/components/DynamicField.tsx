@@ -20,6 +20,7 @@ import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import Uploader from '@/components/elements/upload/Uploader';
+import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import {
   Component,
   FormItem,
@@ -113,10 +114,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
 
   const commonContainerProps = { errors, horizontal };
 
+  const isInvalidEnumValue =
+    value === INVALID_ENUM || value?.code === INVALID_ENUM;
+
   const commonInputProps: DynamicInputCommonProps = {
     disabled,
     label,
-    error: !!(errors && errors.length > 0),
+    error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: item.linkId,
     ...inputProps,

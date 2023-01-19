@@ -22,9 +22,17 @@ it(
     cy.createClient('Cy First', 'Cy Last');
     cy.testId('enrollButton').click();
     cy.testId('projectSelect').click();
-    cy.get('li[role="option"]').first().click();
+    cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
+      'not.exist'
+    );
+    cy.get(`.MuiAutocomplete-listbox`)
+      .find('li[role="option"]')
+      .first()
+      .as('firstProject');
+    cy.get('@firstProject').click();
+
     cy.testId('createEnrollmentButton').first().click();
-    cy.testId('finishIntakeButton').click();
+    cy.testId('beginIntake').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
 
     // Client Location - skip because we don't know about this project
@@ -65,7 +73,8 @@ it(
     cy.testId('saveFormButton').first().click();
 
     // Re-open and ensure change was persisted
-    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    // cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.testId('finishIntake').click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'NO',
     });

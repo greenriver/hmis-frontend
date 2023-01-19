@@ -26,14 +26,18 @@ import FunderTable from '@/modules/inventory/components/FunderTable';
 import InventoryTable from '@/modules/inventory/components/InventoryTable';
 import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
+import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
+  PickListType,
   ProjectAllFieldsFragment,
   ProjectType,
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 export const InactiveBanner = ({
@@ -98,14 +102,23 @@ const Project = () => {
   const [deleteProject, { loading: deleteLoading, error: deleteError }] =
     useDeleteProjectMutation({
       variables: { input: { id: projectId } },
-      onCompleted: () =>
-        project
-          ? navigate(
-              generateSafePath(Routes.ORGANIZATION, {
-                organizationId: project?.organization.id,
-              })
-            )
-          : navigate(-1),
+      onCompleted: () => {
+        if (project) {
+          const organizationId = project.organization.id;
+          cache.evict({
+            id: `Organization:${organizationId}`,
+            fieldName: 'projects',
+          });
+          evictPickList(PickListType.Project);
+          navigate(
+            generateSafePath(Routes.ORGANIZATION, {
+              organizationId,
+            })
+          );
+        } else {
+          navigate(-1);
+        }
+      },
     });
 
   if (loading) return <Loading />;
@@ -146,6 +159,12 @@ const Project = () => {
               projectId={projectId}
               es={project.projectType === ProjectType.Es}
             />
+          </Paper>
+          <Paper sx={{ p: 2, mb: 2 }} data-testid='clientsCard'>
+            <Typography variant='h5' sx={{ mb: 2 }}>
+              Enrollments
+            </Typography>
+            <ProjectEnrollmentsTable projectId={projectId} />
           </Paper>
         </Grid>
         <Grid item xs>
@@ -202,7 +221,7 @@ const Project = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Update Project
+                Edit Project
               </ButtonLink>
               <Button
                 data-testid='deleteProjectButton'

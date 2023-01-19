@@ -1,16 +1,15 @@
-import { Typography } from '@mui/material';
 import { get, isNil } from 'lodash-es';
 
 import {
   formatCurrency,
   getSchemaForType,
-  MISSING_DATA_KEYS,
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '../hmisUtil';
 
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { isHmisEnum } from '@/modules/form/util/formUtil';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlSchemaType } from '@/types/gqlObjects';
 
@@ -35,22 +34,10 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (!type) return value;
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
-    if (value in enumMap) {
-      if (['NoYesReasonsForMissingData', 'DisabilityResponse'].includes(type)) {
-        return <YesNoDisplay enumValue={value} />;
-      }
-
-      const key = value as keyof typeof enumMap;
-      const displayString = enumMap[key];
-      if (MISSING_DATA_KEYS.includes(value)) {
-        return (
-          <Typography variant='body2' color='text.disabled'>
-            {displayString}
-          </Typography>
-        );
-      }
-      return <>{displayString}</>;
+    if (['NoYesReasonsForMissingData', 'DisabilityResponse'].includes(type)) {
+      return <YesNoDisplay enumValue={value} />;
     }
+    return <HmisEnum value={value} enumMap={enumMap} />;
   }
   switch (type) {
     case 'Boolean':

@@ -708,6 +708,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'householdSize',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -734,6 +742,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'livingSituation',
         type: { kind: 'ENUM', name: 'LivingSituation', ofType: null },
+      },
+      {
+        name: 'losUnderThreshold',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'monthsHomelessPastThreeYears',

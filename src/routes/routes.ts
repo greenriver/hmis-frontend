@@ -45,3 +45,9 @@ for (key in subRoutes) {
 }
 
 export const DashboardRoutes: { [k in SubRoutesType]: string } = subRoutes;
+
+export const HIDE_NAV_ROUTES = [
+  DashboardRoutes.VIEW_ASSESSMENT,
+  DashboardRoutes.NEW_ASSESSMENT,
+  DashboardRoutes.EDIT_ASSESSMENT,
+];

@@ -7,7 +7,8 @@ import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
-} from '@/components/elements/GenericTableWithData';
+} from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -33,8 +34,9 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
   },
   {
     header: 'Household Type',
-    render: (i: InventoryFieldsFragment) =>
-      HmisEnums.HouseholdType[i.householdType],
+    render: (i: InventoryFieldsFragment) => (
+      <HmisEnum value={i.householdType} enumMap={HmisEnums.HouseholdType} />
+    ),
   },
 ];
 
@@ -82,19 +84,19 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         : [
             {
               header: 'Units',
-              render: 'unitInventory' as keyof InventoryFieldsFragment,
+              render: 'units.nodesCount' as keyof InventoryFieldsFragment,
             },
           ]),
       {
         header: 'Beds',
-        render: 'bedInventory' as keyof InventoryFieldsFragment,
+        render: 'beds.nodesCount' as keyof InventoryFieldsFragment,
       },
       {
         key: 'actions',
         width: '1%',
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
-            {/* <ButtonLink
+            <ButtonLink
               to={generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
                 projectId,
                 inventoryId: record.id,
@@ -103,7 +105,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               variant='outlined'
             >
               Beds
-            </ButtonLink> */}
+            </ButtonLink>
             <ButtonLink
               data-testid='updateButton'
               to={generateSafePath(Routes.EDIT_INVENTORY, {
@@ -113,7 +115,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Update
+              Edit
             </ButtonLink>
             <Button
               data-testid='deleteButton'

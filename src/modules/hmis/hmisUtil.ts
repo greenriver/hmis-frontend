@@ -4,7 +4,6 @@ import {
   format,
   formatDistanceToNowStrict,
   isValid,
-  parse,
   parseISO,
 } from 'date-fns';
 import { isNil, sortBy, startCase } from 'lodash-es';
@@ -33,6 +32,8 @@ export const MISSING_DATA_KEYS = [
   'CLIENT_REFUSED',
   'CLIENT_DOESN_T_KNOW',
 ];
+
+export const INVALID_ENUM = 'INVALID';
 
 const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
 const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
@@ -77,20 +78,12 @@ export const parseHmisDateString = (
   if (isNil(dateString)) return null;
   // Check format first because parsing is too lenient
   // https://github.com/date-fns/date-fns/issues/942
-  if (!dateString.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/)) {
+  // Matches date YYYY-MM-DD and ISO datetime
+  if (!dateString.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}[A-Z+]?.*/)) {
     return null;
   }
-  const date = parse(dateString, HMIS_DATE_FORMAT, new Date());
-  return isValid(date) ? date : null;
-};
-
-export const parseHmisDateTimeString = (dateString: string): Date | null => {
   const date = parseISO(dateString);
-  if (!isValid(date)) {
-    console.error(`Failed to parse datetime: ${dateString}`);
-    return null;
-  }
-  return date;
+  return isValid(date) ? date : null;
 };
 
 export const parseAndFormatDate = (dateString: string): string => {
@@ -122,7 +115,7 @@ export const parseAndFormatDateRange = (
 
 export const parseAndFormatDateTime = (dateString: string): string => {
   if (!dateString) return dateString;
-  const parsed = parseHmisDateTimeString(dateString);
+  const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
   return formatDateForDisplay(parsed) || dateString;
 };
@@ -290,4 +283,11 @@ export const sortHouseholdMembers = (
 
 export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);
+};
+
+export const briefProjectType = (projectType: ProjectType) => {
+  if (projectType.length > 3) {
+    return startCase(projectType.toLowerCase());
+  }
+  return projectType;
 };

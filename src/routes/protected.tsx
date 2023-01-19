@@ -5,6 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { DashboardRoutes, Routes } from './routes';
 
 import EditClient from '@/components/dashboard/EditClient';
+import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import Assessment from '@/components/dashboard/enrollments/Assessment';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
@@ -24,7 +25,7 @@ import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
-// import InventoryBeds from '@/components/pages/InventoryBeds';
+import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
@@ -54,7 +55,7 @@ export const protectedRoutes = [
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
       { path: Routes.NEW_INVENTORY, element: <Inventory create /> },
       { path: Routes.EDIT_INVENTORY, element: <Inventory /> },
-      // { path: Routes.MANAGE_INVENTORY_BEDS, element: <InventoryBeds /> },
+      { path: Routes.MANAGE_INVENTORY_BEDS, element: <InventoryBeds /> },
       {
         path: Routes.NEW_FUNDER,
         element: <Funder create={true} />,
@@ -77,7 +78,7 @@ export const protectedRoutes = [
         path: Routes.CLIENT_DASHBOARD,
         element: <ClientDashboard />,
         children: [
-          { path: '', element: <Navigate to='profile' /> },
+          { path: '', element: <Navigate to='profile' replace /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
           { path: DashboardRoutes.EDIT, element: <EditClient /> },
           {
@@ -109,13 +110,13 @@ export const protectedRoutes = [
             element: <AllEnrollments />,
           },
           { path: DashboardRoutes.HISTORY, element: null },
-          { path: DashboardRoutes.ASSESSMENTS, element: null },
+          { path: DashboardRoutes.ASSESSMENTS, element: <AllAssessments /> },
           { path: DashboardRoutes.NOTES, element: null },
           { path: DashboardRoutes.FILES, element: null },
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },
-          { path: '*', element: <Navigate to='profile' /> },
+          { path: '*', element: <Navigate to='profile' replace /> },
         ],
       },
       { path: '/', element: <Dashboard /> },

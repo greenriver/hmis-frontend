@@ -5,6 +5,7 @@ import { DynamicInputCommonProps } from './DynamicField';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
+import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 type Option = PickListOption;
@@ -14,7 +15,9 @@ const optionId = (option: Option): string => {
 };
 
 const optionLabel = (option: Option): string => {
-  return option.label || option.code || '';
+  if (option.label) return option.label;
+  if (option.code === INVALID_ENUM) return 'Invalid Value';
+  return option.code || '';
 };
 
 const renderOption = (props: object, option: Option) => (

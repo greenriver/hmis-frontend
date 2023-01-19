@@ -22,7 +22,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const EditProject = () => {
   const navigate = useNavigate();
 
-  const [crumbs, loading, project] = useProjectCrumbs('Update Project');
+  const [crumbs, loading, project] = useProjectCrumbs('Edit Project');
 
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
@@ -58,13 +58,13 @@ const EditProject = () => {
         onCompleted={onCompleted}
         getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
         confirmable
-        submitButtonText='Update Project'
+        submitButtonText='Save Changes'
         onDiscard={generateSafePath(Routes.PROJECT, { projectId: project?.id })}
         title={
           <>
             <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>
               <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-                Update {project.projectName}
+                Edit {project.projectName}
               </Typography>
               <InactiveChip project={project} />
             </Stack>

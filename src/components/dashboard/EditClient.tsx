@@ -45,7 +45,7 @@ const Profile = () => {
       title={
         <>
           <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
-            Update Client Details
+            Edit Client Details
           </Typography>
         </>
       }

@@ -138,47 +138,66 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Grid>
         </Grid>
       )}
-      <Grid container direction='row' spacing={2} sx={{ mb: 2 }}>
-        <Grid item xs={5}>
-          <TextInput
-            name='textSearch'
-            label='Search Clients'
-            placeholder={
-              hideInstructions
-                ? 'Search by name, DOB, SSN, or Personal ID'
-                : 'Search clients...'
-            }
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={values.textSearch || ''}
-            onChange={(e) => {
-              fieldChanged('textSearch', e.target.value);
-            }}
-            onKeyUp={submitOnEnter}
-            helperText={textSearchError}
-            error={!!textSearchError}
-          />
-        </Grid>
-        {!hideProject && (
-          <Grid item xs={4}>
-            <ProjectSelect
+      <Grid container>
+        <Grid
+          item
+          gap={2}
+          alignItems='end'
+          sx={{ mb: 2, display: 'flex' }}
+          xs={12}
+          sm={12}
+          md={hideProject ? 8 : 10}
+          lg={hideProject ? 6 : 12}
+          flexWrap='wrap'
+        >
+          <Grid item xs={hideProject ? 8 : 5}>
+            <TextInput
+              name='textSearch'
+              label='Search Clients'
+              placeholder={
+                hideInstructions
+                  ? 'Search by name, DOB, SSN, or Personal ID'
+                  : 'Search clients...'
+              }
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              value={values.projects || []}
-              onChange={(_, selectedOption) => {
-                fieldChanged('projects', selectedOption);
+              value={values.textSearch || ''}
+              onChange={(e) => {
+                fieldChanged('textSearch', e.target.value);
               }}
-              textInputProps={{
-                placeholder: 'Choose projects...',
-              }}
-              multiple
+              onKeyUp={submitOnEnter}
+              helperText={textSearchError}
+              error={!!textSearchError}
             />
           </Grid>
-        )}
-        <Grid item xs={2}>
-          <Button variant='outlined' type='submit' sx={{ mt: 3 }}>
-            Search
-          </Button>
+          {!hideProject && (
+            <Grid item xs={4}>
+              <ProjectSelect
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                value={values.projects || []}
+                onChange={(_, selectedOption) => {
+                  fieldChanged('projects', selectedOption);
+                }}
+                sx={{ minWidth: '200px' }}
+                textInputProps={{
+                  placeholder: 'Choose projects...',
+                }}
+                multiple
+              />
+            </Grid>
+          )}
+          <Grid item xs={2}>
+            <Button
+              variant='outlined'
+              type='submit'
+              sx={{ py: 0.8, maxWidth: '150px' }}
+              fullWidth
+            >
+              Search
+            </Button>
+          </Grid>
         </Grid>
       </Grid>
+
       {!hideAdvanced && (
         <Button
           variant='outlined'
@@ -199,7 +218,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
             direction='row'
             rowSpacing={2}
             columnSpacing={2}
-            sx={{ mb: 2 }}
+            sx={{
+              mb: 2,
+              '>.MuiGrid-item': {
+                width: '250px',
+                flexGrow: 1,
+              },
+            }}
           >
             {definition.item?.map((item: FormItem) => (
               <DynamicField

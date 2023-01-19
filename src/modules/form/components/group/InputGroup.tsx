@@ -106,7 +106,7 @@ const InputGroup = ({
         rowSpacing={2}
         columnSpacing={0}
         sx={{
-          '& .MuiGrid-item': { pt: 0 },
+          '& .MuiGrid-item': { pt: 0, maxWidth: '100%' },
           mt: 0,
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
           maxWidth: isNumeric

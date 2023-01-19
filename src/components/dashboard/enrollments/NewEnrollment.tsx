@@ -3,9 +3,6 @@ import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-import QuickAddHouseholdMembers from './household/QuickAddHouseholdMembers';
-import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
-
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
@@ -13,6 +10,8 @@ import ProjectSelect, {
 import Loading from '@/components/elements/Loading';
 import useSafeParams from '@/hooks/useSafeParams';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
+import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   Client,

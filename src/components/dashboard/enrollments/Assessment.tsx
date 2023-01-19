@@ -1,6 +1,15 @@
-import { Alert, Box, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import * as Sentry from '@sentry/react';
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -16,14 +25,33 @@ import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
+import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import { getInitialValues } from '@/modules/form/util/formUtil';
+import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { AssessmentRole } from '@/types/gqlTypes';
+import { AssessmentRole, AssessmentWithValuesFragment } from '@/types/gqlTypes';
 
 const Assessment = () => {
   const { enrollment, overrideBreadcrumbTitles } =
     useOutletContext<DashboardContext>();
+
+  // Whether record picker dialog is open for autofill
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Most recently selected "source" assesment for autofill
+  const [sourceAssessment, setSourceAssessment] = useState<
+    AssessmentWithValuesFragment | undefined
+  >();
+  // Trigger for reloading initial values and form if a source assesment is chosen for autofill.
+  // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
+  const [reloadInitialValues, setReloadInitialValues] = useState(false);
+
+  const onSelectAutofillRecord = useCallback((record: RelatedRecord) => {
+    setSourceAssessment(record as AssessmentWithValuesFragment);
+    setDialogOpen(false);
+    setReloadInitialValues((old) => !old);
+  }, []);
 
   const {
     submitHandler,
@@ -38,6 +66,8 @@ const Assessment = () => {
     apolloError,
   } = useAssessmentHandlers();
 
+  // Set initial values for the assessment. This happens on initial load,
+  // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
     if (dataLoading || !definition || !enrollment) return;
 
@@ -47,18 +77,33 @@ const Assessment = () => {
       exitDate: enrollment.exitDate,
     };
 
+    const source = sourceAssessment || assessment;
     let init;
-    if (!assessment) {
+    if (!source) {
       init = getInitialValues(definition, localConstants);
     } else {
-      const values = assessment.assessmentDetail?.values;
+      const values = source.assessmentDetail?.values;
       // FIXME make consistent
       init = typeof values === 'string' ? JSON.parse(values) : values;
       // Should we merge with initial values here?
     }
-    console.debug('Initial Form State', init);
+    console.debug(
+      'Initial Form State',
+      init,
+      'from source:',
+      source?.id || 'none'
+    );
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const unused = reloadInitialValues; // reference trigger
     return init;
-  }, [assessment, definition, dataLoading, enrollment]);
+  }, [
+    assessment,
+    definition,
+    dataLoading,
+    enrollment,
+    sourceAssessment,
+    reloadInitialValues,
+  ]);
 
   const informationDate = useMemo(() => {
     if (!enrollment) return;
@@ -101,7 +146,7 @@ const Assessment = () => {
         }}
       >
         <Stack direction='row'>
-          <Typography variant='h4' sx={{ mb: 2, kfontWeight: 400 }}>
+          <Typography variant='h4' sx={{ mb: 2, fontWeight: 400 }}>
             <b>{assessmentTitle}</b>
             {informationDate && ` ${parseAndFormatDate(informationDate)}`}
           </Typography>
@@ -127,18 +172,38 @@ const Assessment = () => {
         {definition && (
           <>
             <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
-              <Paper
+              <Box
                 sx={{
-                  p: 3,
                   position: 'sticky',
                   top: STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT + 16,
                 }}
               >
-                <Typography variant='h6' sx={{ mb: 2 }}>
-                  Form Navigation
-                </Typography>
-                <FormStepper items={definition.item} />
-              </Paper>
+                <Paper sx={{ p: 2 }}>
+                  <Typography variant='h6' sx={{ mb: 2 }}>
+                    Form Navigation
+                  </Typography>
+                  <FormStepper items={definition.item} />
+                </Paper>
+
+                {!assessment && (
+                  <Tooltip
+                    title={
+                      'Choose a previous assessment to copy into this assessment'
+                    }
+                    placement='bottom-end'
+                    arrow
+                  >
+                    <Button
+                      variant='outlined'
+                      onClick={() => setDialogOpen(true)}
+                      sx={{ height: 'fit-content', mt: 3 }}
+                      fullWidth
+                    >
+                      Autofill Assessment
+                    </Button>
+                  </Tooltip>
+                )}
+              </Box>
             </Grid>
             <Grid item xs={9} sx={{ pt: '0 !important' }}>
               {apolloError && (
@@ -147,6 +212,8 @@ const Assessment = () => {
                 </Box>
               )}
               <DynamicForm
+                // Remount component if a source assessment has been selected
+                key={`${sourceAssessment?.id}-${reloadInitialValues}`}
                 definition={definition}
                 onSubmit={submitHandler}
                 onSaveDraft={
@@ -164,6 +231,26 @@ const Assessment = () => {
           </>
         )}
       </Grid>
+
+      {/* Dialog for selecting autofill record */}
+      {definition && (
+        <RecordPickerDialog
+          id='assessmentPickerDialog'
+          recordType='Assessment'
+          open={dialogOpen}
+          role={assessmentRole}
+          onSelected={onSelectAutofillRecord}
+          onCancel={() => setDialogOpen(false)}
+          description={
+            // <Alert severity='info' icon={false} sx={{ mb: 2 }}>
+            <Typography variant='body2' sx={{ mb: 2 }}>
+              Select a previous assessment to populate the current assessment.
+              Any changes you have made will be overwritten.
+            </Typography>
+            // </Alert>
+          }
+        />
+      )}
     </>
   );
 };

@@ -2,6 +2,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableRow,
   Typography,
 } from '@mui/material';
@@ -12,6 +13,14 @@ import { ItemType } from '@/types/gqlTypes';
 
 const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
   <Table sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}` }}>
+    <TableHead>
+      <TableRow>
+        {/* TODO: move table headers into the form definition */}
+        <TableCell></TableCell>
+        <TableCell>Status</TableCell>
+        <TableCell>Disabling Condition</TableCell>
+      </TableRow>
+    </TableHead>
     <TableBody>
       {item.item &&
         item.item.map((rowItem, index) => {
@@ -29,7 +38,7 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
                   index & 1 ? undefined : theme.palette.grey[50],
               }}
             >
-              <TableCell sx={{ width: '250px', py: 2.5 }}>
+              <TableCell sx={{ width: '250px', py: 3 }}>
                 <Typography variant='body2' fontWeight={600}>
                   {rowItem.text}
                 </Typography>

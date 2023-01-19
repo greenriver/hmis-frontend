@@ -71,6 +71,8 @@ const ItemBase = ({
     fontWeight: isSelected ? 600 : 400,
   };
 
+  const hasTitle = !!item.title;
+
   return (
     <Box ref={itemRef} id={htmlId}>
       <Box
@@ -80,7 +82,7 @@ const ItemBase = ({
           display: 'flex',
           cursor: isClickable ? 'pointer' : undefined,
           alignItems: 'center',
-          py: 0.75,
+          py: hasTitle ? 0.75 : undefined,
           // pr: 0.75,
           // pl: 2,
           // gap: 1,
@@ -127,12 +129,11 @@ const ItemBase = ({
               sx={itemSx}
               plain
             >
-              {/* {item.title} */}
               {renderTitle(item.title || item.id)}
             </RouterLink>
-          ) : (
-            renderTitle(item.title || item.id)
-          )}
+          ) : item.title ? (
+            renderTitle(item.title)
+          ) : null}
         </Box>
         {collapsible && hasItems && (
           <Box

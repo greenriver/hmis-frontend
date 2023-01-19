@@ -10,14 +10,17 @@ import {
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 
-import { ColumnDef } from '../elements/GenericTable';
-import GenericTableWithData from '../elements/GenericTableWithData';
-import TextInput from '../elements/input/TextInput';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
+import {
+  evictBedsQuery,
+  evictUnitsQuery,
+} from '@/modules/bedUnitManagement/bedUnitUtil';
+import BedsTable from '@/modules/bedUnitManagement/components/BedsTable';
+import UnitsTable from '@/modules/bedUnitManagement/components/UnitsTable';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
 import { FormValues } from '@/modules/form/util/formUtil';
@@ -25,76 +28,13 @@ import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
-  Bed,
   CreateBedsInput,
   CreateUnitsInput,
-  GetBedsDocument,
-  GetUnitsDocument,
-  Unit,
   useCreateBedsMutation,
   useCreateUnitsMutation,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
-
-const unitColumns: ColumnDef<Unit>[] = [
-  {
-    key: 'name',
-    header: 'Unit Name',
-    width: '80%',
-    render: (unit) => unit.name,
-  },
-  {
-    key: 'count',
-    header: '# Beds',
-    width: '20%',
-    render: (unit) => `${unit.bedCount} beds`,
-  },
-  {
-    key: 'delete',
-    render: () => (
-      <Button size='small' variant='outlined'>
-        Delete
-      </Button>
-    ),
-  },
-];
-
-const bedColumns: ColumnDef<Bed>[] = [
-  {
-    key: 'type',
-    header: 'Type',
-    width: '20%',
-    render: (bed) => HmisEnums.InventoryBedType[bed.bedType],
-  },
-  {
-    key: 'name',
-    header: 'Name',
-    width: '30%',
-    render: (bed) => <TextInput value={bed.name || ''} />,
-  },
-  {
-    key: 'gender',
-    header: 'Gender',
-    width: '20%',
-    render: (bed) => <TextInput value={bed.gender || ''} placeholder='Any' />,
-  },
-  {
-    key: 'unit',
-    header: 'Unit',
-    width: '30%',
-    render: (bed) => <TextInput value={bed.unit.name || bed.unit.id} />,
-  },
-  {
-    key: 'delete',
-    render: () => (
-      <Button size='small' variant='outlined'>
-        Delete
-      </Button>
-    ),
-  },
-];
 
 const InventoryBeds = () => {
   // const navigate = useNavigate();
@@ -109,12 +49,22 @@ const InventoryBeds = () => {
     variables: { id: inventoryId },
   });
 
-  const [createBeds] = useCreateBedsMutation({
-    onCompleted: () => setDialogOpen(null),
+  const [createBeds, { loading: createBedsLoading }] = useCreateBedsMutation({
+    onCompleted: () => {
+      evictBedsQuery(inventoryId);
+      evictUnitsQuery(inventoryId);
+      setDialogOpen(null);
+    },
   });
-  const [createUnits] = useCreateUnitsMutation({
-    onCompleted: () => setDialogOpen(null),
-  });
+  const [createUnits, { loading: createUnitsLoading }] = useCreateUnitsMutation(
+    {
+      onCompleted: () => {
+        // evictBedsQuery(inventoryId);
+        evictUnitsQuery(inventoryId);
+        setDialogOpen(null);
+      },
+    }
+  );
 
   const handleCreateBeds = useCallback(
     (values: FormValues) => {
@@ -140,12 +90,6 @@ const InventoryBeds = () => {
     },
     [createUnits, inventoryId]
   );
-
-  // const onCompleted = useCallback(() => {
-  //   navigate(generateSafePath(Routes.PROJECT, { projectId }), {
-  //     state: { refetchInventory: false },
-  //   });
-  // }, [navigate, projectId]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
@@ -187,14 +131,7 @@ const InventoryBeds = () => {
                 + Add Units
               </Button>
             </Stack>
-            <GenericTableWithData
-              defaultPageSize={5}
-              queryVariables={{ id: inventoryId }}
-              queryDocument={GetUnitsDocument}
-              columns={unitColumns}
-              pagePath='inventory.units'
-              noData='No units.'
-            />
+            <UnitsTable inventoryId={inventoryId} />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Stack
@@ -215,14 +152,7 @@ const InventoryBeds = () => {
                 + Add Beds
               </Button>
             </Stack>
-            <GenericTableWithData
-              defaultPageSize={5}
-              queryVariables={{ id: inventoryId }}
-              queryDocument={GetBedsDocument}
-              columns={bedColumns}
-              pagePath='inventory.beds'
-              noData='No beds.'
-            />
+            <BedsTable inventoryId={inventoryId} />
           </Paper>
         </Grid>
       </Grid>
@@ -242,6 +172,7 @@ const InventoryBeds = () => {
               discardButtonText='Cancel'
               onDiscard={() => setDialogOpen(null)}
               onSubmit={handleCreateUnits}
+              loading={createUnitsLoading}
             />
           )}
           {dialogOpen === 'BEDS' && (
@@ -252,6 +183,7 @@ const InventoryBeds = () => {
               onDiscard={() => setDialogOpen(null)}
               onSubmit={handleCreateBeds}
               pickListRelationId={inventoryId}
+              loading={createBedsLoading}
             />
           )}
         </DialogContent>

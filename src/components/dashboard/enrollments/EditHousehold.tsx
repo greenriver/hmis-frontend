@@ -3,14 +3,6 @@ import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 
-import AddToHouseholdButton from './household/AddToHouseholdButton';
-import AssociatedHouseholdMembers, {
-  householdMemberColumns,
-} from './household/AssociatedHouseholdMembers';
-import EditHouseholdMemberTable from './household/EditHouseholdMemberTable';
-import RelationshipToHohSelect from './household/RelationshipToHohSelect';
-import { useRecentHouseholdMembers } from './household/useRecentHouseholdMembers';
-
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
@@ -18,6 +10,13 @@ import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
+import AddToHouseholdButton from '@/modules/household/components/AddToHouseholdButton';
+import AssociatedHouseholdMembers, {
+  householdMemberColumns,
+} from '@/modules/household/components/AssociatedHouseholdMembers';
+import EditHouseholdMemberTable from '@/modules/household/components/EditHouseholdMemberTable';
+import RelationshipToHohSelect from '@/modules/household/components/RelationshipToHohSelect';
+import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
 import ClientSearch from '@/modules/search/components/ClientSearch';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -162,7 +161,7 @@ const EditHousehold = () => {
 
   if (anythingLoading) return <Loading />;
 
-  const searchResultColumns: ColumnDef<ClientFieldsFragment>[] = [
+  const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
     ...householdMemberColumns,
     ...addToEnrollmentColumns,
   ];
@@ -172,7 +171,7 @@ const EditHousehold = () => {
       <Grid container spacing={4} sx={{ pb: 10 }}>
         <Grid item xs={12}>
           <Typography variant='h4' sx={{ mb: 2 }}>
-            Update Household
+            Edit Household
             <Box component='span' fontWeight={400}>
               {` for ${enrollmentName(enrollment)} `} enrollment
             </Box>
@@ -230,7 +229,7 @@ const EditHousehold = () => {
               searchResultsTableProps={{
                 rowLinkTo: undefined,
                 tableProps: { size: 'small' },
-                columns: searchResultColumns,
+                columns: SEARCH_RESULT_COLUMNS,
               }}
             />
           </Paper>

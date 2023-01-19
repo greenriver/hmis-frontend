@@ -1,25 +1,16 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  Chip,
-  CssBaseline,
-  Toolbar,
-  Typography,
-} from '@mui/material';
+import { AppBar, Box, Chip, CssBaseline, Toolbar } from '@mui/material';
 import * as React from 'react';
-import { useCallback } from 'react';
 
 import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
+import UserMenu from './UserMenu';
 import WarehouseLinkBar, { warehouseLinkBarHeight } from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import OmniSearch from '@/modules/search/components/OmniSearch';
 import { Routes } from '@/routes/routes';
-
 interface Props {
   children: React.ReactNode;
 }
@@ -35,8 +26,7 @@ export const STICKY_BAR_HEIGHT = showWarehouseLinkBar
   : appBarHeight;
 
 const MainLayout: React.FC<Props> = ({ children }) => {
-  const { logout, user, loading } = useAuth();
-  const logoutUser = useCallback(() => logout(true), [logout]);
+  const { user, loading } = useAuth();
 
   if (loading || !user) return <Loading />;
 
@@ -93,10 +83,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           <Box>
             <OmniSearch />
           </Box>
-          <Typography variant='body2'>{user.name}</Typography>
-          <Button variant='text' onClick={logoutUser} color='secondary'>
-            Sign Out
-          </Button>
+          <UserMenu />
         </Toolbar>
       </AppBar>
       <CssBaseline />

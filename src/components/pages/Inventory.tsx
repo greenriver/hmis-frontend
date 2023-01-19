@@ -31,7 +31,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     projectId: string;
     inventoryId: string; // Not present if create!
   };
-  const title = create ? `Add Inventory` : `Update Inventory`;
+  const title = create ? `Add Inventory` : `Edit Inventory`;
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   const { data, loading, error } = useGetInventoryQuery({
@@ -39,13 +39,26 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     skip: create,
   });
 
-  const onCompleted = useCallback(() => {
-    // Force refresh table if we just created a new record
-    if (create) {
-      cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
-    }
-    navigate(generateSafePath(Routes.PROJECT, { projectId }));
-  }, [navigate, projectId, create]);
+  const onCompleted = useCallback(
+    (data: CreateInventoryMutation) => {
+      if (create) {
+        cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+        const id = data?.createInventory?.inventory?.id;
+        if (id) {
+          navigate(
+            generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
+              projectId,
+              inventoryId: id,
+            })
+          );
+          return;
+        }
+      }
+
+      navigate(generateSafePath(Routes.PROJECT, { projectId }));
+    },
+    [navigate, projectId, create]
+  );
 
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!

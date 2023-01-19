@@ -7,7 +7,8 @@ import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
-} from '@/components/elements/GenericTableWithData';
+} from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -25,7 +26,9 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   {
     header: 'Funder',
     linkTreatment: true,
-    render: (f: FunderFieldsFragment) => HmisEnums.FundingSource[f.funder],
+    render: (f: FunderFieldsFragment) => (
+      <HmisEnum value={f.funder} enumMap={HmisEnums.FundingSource} />
+    ),
   },
   {
     header: 'Active Period',
@@ -87,7 +90,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
               size='small'
               variant='outlined'
             >
-              Update
+              Edit
             </ButtonLink>
             <Button
               data-testid='deleteButton'
@@ -126,7 +129,11 @@ const FunderTable = ({ projectId, ...props }: Props) => {
           <>
             <Typography>
               Are you sure you want to delete funding source record for{' '}
-              <strong>{HmisEnums.FundingSource[recordToDelete.funder]}</strong>?
+              <strong>
+                {HmisEnums.FundingSource[recordToDelete.funder] ||
+                  recordToDelete.funder}
+              </strong>
+              ?
             </Typography>
             <Typography>This action cannot be undone.</Typography>
           </>

@@ -42,9 +42,19 @@ const SearchResultsHeader = ({
     <Grid
       container
       justifyContent='space-between'
-      sx={showCardToggle ? { mb: 4 } : undefined}
+      alignItems='end'
+      sx={{ mb: 3 }}
     >
-      <Grid item sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+      <Grid
+        item
+        flexWrap='wrap'
+        sx={{
+          display: 'flex',
+          gap: 1,
+          alignItems: 'center',
+          label: { color: 'text.secondary' },
+        }}
+      >
         {showCardToggle && (
           <LabelWithContent
             label='View Results as'
@@ -87,7 +97,7 @@ const SearchResultsHeader = ({
           options={
             Object.keys(HmisEnums.ClientSortOption) as ClientSortOption[]
           }
-          sx={{ width: 250 }}
+          sx={{ width: 250, mr: 1 }}
           getOptionLabel={(option) => HmisEnums.ClientSortOption[option]}
           label='Sorted by'
           onChange={(_e, value) => value && onChangeSortOrder(value)}
@@ -95,18 +105,18 @@ const SearchResultsHeader = ({
         />
       </Grid>
       <Grid item>
-        <Card sx={{ pl: 2, py: 1, pr: 1 }}>
-          <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
+        <Card sx={{ pl: 2, py: 1.5, pr: 1, mt: 1 }}>
+          <Stack direction='row' spacing={2} sx={{ alignItems: 'center' }}>
             <Typography variant='body2'>
               {t<string>('clientSearch.addClientPrompt')}
             </Typography>
             <ButtonLink
               data-testid='addClientButton'
-              size='small'
               variant='outlined'
               color='secondary'
               to={Routes.CREATE_CLIENT}
               target='_blank'
+              sx={{ px: 3 }}
             >
               + Add Client
             </ButtonLink>

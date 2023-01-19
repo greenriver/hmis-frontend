@@ -4,13 +4,13 @@ import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import HouseholdMemberTable from './household/HouseholdMemberTable';
-import { useIntakeAssessment } from './useIntakeAssessment';
+import { useRecentAssessments } from './useRecentAssessments';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -22,7 +22,7 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  const [assessment, fetchIntakeStatus] = useIntakeAssessment(enrollmentId);
+  const { intake, loading } = useRecentAssessments(enrollmentId);
   const editHouseholdPath = useMemo(
     () =>
       generateSafePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
@@ -37,11 +37,11 @@ const ViewEnrollment = () => {
   let enrollmentStatus = '';
   if (enrollment.exitDate) {
     enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  } else if (assessment && assessment.inProgress) {
+  } else if (loading) {
+    enrollmentStatus = '';
+  } else if (intake && intake.inProgress) {
     enrollmentStatus = 'Intake Incomplete';
-  } else if (!fetchIntakeStatus.loading && !assessment) {
-    enrollmentStatus = 'Intake Incomplete';
-  } else if (!fetchIntakeStatus.loading) {
+  } else {
     enrollmentStatus = 'Active';
   }
 
@@ -70,7 +70,7 @@ const ViewEnrollment = () => {
                   startIcon={<EditIcon fontSize='small' />}
                   to={`${editHouseholdPath}`}
                 >
-                  Update Household
+                  Edit Household
                 </ButtonLink>
               </Stack>
               <HouseholdMemberTable
@@ -110,7 +110,7 @@ const ViewEnrollment = () => {
                 to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
-                  assessmentRole: AssessmentRole.Update,
+                  assessmentRole: AssessmentRole.Update.toLowerCase(),
                 })}
               >
                 + Assessment

@@ -84,6 +84,7 @@ fragment EnrollmentFields on Enrollment {
   household {
     id
   }
+  householdSize
   client {
     id
   }

@@ -13,7 +13,8 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Organization = () => {
@@ -32,20 +33,14 @@ const Organization = () => {
   const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
     useDeleteOrganizationMutation({
       variables: { input: { id: organizationId } },
-      onCompleted: () => navigate(generateSafePath(Routes.ALL_PROJECTS)),
+      onCompleted: () => {
+        evictPickList(PickListType.Project);
+        evictQuery('organizations');
+        navigate(generateSafePath(Routes.ALL_PROJECTS));
+      },
     });
-  if (deleteError) console.error(deleteError);
 
-  // const projects = useMemo(
-  //   () =>
-  //     sortBy(organization?.projects || [], [
-  //       (p) => !!p.operatingEndDate,
-  //       'operatingStartDate',
-  //       'operatingEndDate',
-  //       'projectName',
-  //     ]),
-  //   [organization]
-  // );
+  if (deleteError) console.error(deleteError);
 
   const hasDetails = organization && organization?.description;
 
@@ -112,7 +107,7 @@ const Organization = () => {
                 })}
                 sx={{ justifyContent: 'left' }}
               >
-                Update Organization
+                Edit Organization
               </ButtonLink>
               <Button
                 data-testid='deleteOrganizationButton'

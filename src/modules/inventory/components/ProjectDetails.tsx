@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -14,7 +15,7 @@ import {
 } from '@/types/gqlTypes';
 
 const notSpecified = (
-  <Typography variant='inherit' color='text.secondary'>
+  <Typography variant='body2' color='text.secondary'>
     Not specified
   </Typography>
 );
@@ -37,8 +38,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Project Type',
-        value:
-          project.projectType && HmisEnums.ProjectType[project.projectType],
+        value: (
+          <HmisEnum
+            value={project.projectType}
+            enumMap={HmisEnums.ProjectType}
+          />
+        ),
       },
       {
         label: 'Continuum Project',
@@ -51,9 +56,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
       },
       {
         label: 'Housing Type',
-        value:
-          (project.housingType && HmisEnums.HousingType[project.housingType]) ||
-          notSpecified,
+        value: (
+          <HmisEnum
+            value={project.housingType}
+            enumMap={HmisEnums.HousingType}
+          />
+        ),
       },
       ...(project.projectType === ProjectType.ServicesOnly
         ? [
@@ -72,10 +80,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'Tracking Method',
-              value:
-                (project.trackingMethod &&
-                  HmisEnums.TrackingMethod[project.trackingMethod]) ||
-                notSpecified,
+              value: (
+                <HmisEnum
+                  value={project.trackingMethod}
+                  enumMap={HmisEnums.TrackingMethod}
+                />
+              ),
             },
           ]
         : []),
@@ -93,10 +103,12 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         ? [
             {
               label: 'Target Population',
-              value:
-                (project.targetPopulation &&
-                  HmisEnums.TargetPopulation[project.targetPopulation]) ||
-                notSpecified,
+              value: (
+                <HmisEnum
+                  value={project.targetPopulation}
+                  enumMap={HmisEnums.TargetPopulation}
+                />
+              ),
             },
           ]
         : []),
