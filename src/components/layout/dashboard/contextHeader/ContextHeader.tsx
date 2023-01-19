@@ -64,7 +64,7 @@ const ContextHeader: React.FC<Props> = ({
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                mr: { xs: 2, sm: 2, lg: 4 },
+                pl: 2,
                 pr: { xs: 1, sm: 1, lg: 2 },
                 borderRightColor: 'borders.light',
                 borderRightWidth: 1,

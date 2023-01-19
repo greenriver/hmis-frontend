@@ -59,8 +59,10 @@ const ClientDashboard: React.FC = () => {
       ({ route }) => route === currentPath
     );
     if (focused) {
-      // Path that you go "back" to when exiting focus mode∏
+      // Path that you go "back" to when exiting focus mode
       setFocusMode(focused.previous);
+    } else {
+      setFocusMode(undefined);
     }
   }, [currentPath]);
 

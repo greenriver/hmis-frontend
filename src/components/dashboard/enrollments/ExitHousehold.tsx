@@ -58,7 +58,7 @@ const EditHousehold = () => {
             borderBottomColor: 'borders.light',
             borderBottomStyle: 'solid',
             pt: 2,
-            px: { sm: 3, lg: 5 },
+            px: { xs: 1, sm: 3, lg: 5 },
             ml: { xs: -2, sm: -3, lg: -4 },
             mt: { xs: -1, sm: -2 },
             // Has same scrollbar issue
