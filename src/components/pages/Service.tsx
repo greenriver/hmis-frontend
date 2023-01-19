@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
-// import { useCallback } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // import Loading from '../elements/Loading';
 
@@ -8,39 +8,50 @@ import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 // import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 // import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
-// import { cache } from '@/providers/apolloClient';
-// import { Routes } from '@/routes/routes';
+import { cache } from '@/providers/apolloClient';
+import { DashboardRoutes } from '@/routes/routes';
 import {
-  CreateProjectCocDocument,
-  CreateProjectCocMutation,
-  CreateProjectCocMutationVariables,
-  ProjectCocFieldsFragment,
-  UpdateProjectCocDocument,
-  UpdateProjectCocMutation,
-  UpdateProjectCocMutationVariables,
+  // CreateProjectCocDocument,
+  // CreateProjectCocMutation,
+  // CreateProjectCocMutationVariables,
+  AddServiceToEnrollmentDocument,
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables,
+  ServiceFieldsFragment,
+  // ProjectCocFieldsFragment,
+  // UpdateProjectCocDocument,
+  // UpdateProjectCocMutation,
+  // UpdateProjectCocMutationVariables,
   // useGetProjectCocQuery,
 } from '@/types/gqlTypes';
-// import generateSafePath from '@/utils/generateSafePath';
+import generateSafePath from '@/utils/generateSafePath';
 
 const Service = ({ create = false }: { create?: boolean }) => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const {
+    clientId,
     enrollmentId,
     // serviceId,
   } = useSafeParams() as {
     enrollmentId: string;
     serviceId: string;
+    clientId: string;
   };
   const title = create ? `Add Service` : `Edit Service`;
   // const [crumbs, crumbsLoading, enrollment] = useProjectCrumbs(title);
 
-  // const onCompleted = useCallback(() => {
-  //   // Force refresh table if we just created a new record
-  //   if (create) {
-  //     cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
-  //   }
-  //   navigate(generateSafePath(Routes.PROJECT, { projectId }));
-  // }, [navigate, projectId, create]);
+  const onCompleted = useCallback(() => {
+    // Force refresh table if we just created a new record
+    if (create) {
+      cache.evict({ id: `Enrollment:${enrollmentId}`, fieldName: 'services' });
+    }
+    navigate(
+      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        enrollmentId,
+        clientId,
+      })
+    );
+  }, [navigate, enrollmentId, clientId, create]);
 
   // const { data, loading, error } = useGetProjectCocQuery({
   //   variables: { id: cocId },
@@ -66,29 +77,29 @@ const Service = ({ create = false }: { create?: boolean }) => {
     <>
       {create ? (
         <EditRecord<
-          ProjectCocFieldsFragment,
-          CreateProjectCocMutation,
-          CreateProjectCocMutationVariables
+          ServiceFieldsFragment,
+          AddServiceToEnrollmentMutation,
+          AddServiceToEnrollmentMutationVariables
         >
           inputVariables={{ enrollmentId }}
-          queryDocument={CreateProjectCocDocument}
-          // onCompleted={onCompleted}
-          // getErrors={(data: CreateProjectCocMutation) =>
-          //   data?.createProjectCoc?.errors
-          // }
-          onCompleted={() => {}}
-          getErrors={() => undefined}
+          queryDocument={AddServiceToEnrollmentDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: AddServiceToEnrollmentMutation) =>
+            data?.createService?.errors
+          }
+          // onCompleted={() => {}}
+          // getErrors={() => undefined}
           submitButtonText='Add Service'
           {...common}
         />
       ) : (
         <EditRecord<
-          ProjectCocFieldsFragment,
-          UpdateProjectCocMutation,
-          UpdateProjectCocMutationVariables
+          ServiceFieldsFragment,
+          AddServiceToEnrollmentMutation,
+          AddServiceToEnrollmentMutationVariables
         >
           // record={data?.projectCoc || undefined}
-          queryDocument={UpdateProjectCocDocument}
+          queryDocument={AddServiceToEnrollmentDocument}
           // onCompleted={onCompleted}
           // getErrors={(data: UpdateProjectCocMutation) =>
           //   data?.updateProjectCoc?.errors

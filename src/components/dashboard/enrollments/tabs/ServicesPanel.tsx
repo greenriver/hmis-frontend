@@ -61,7 +61,7 @@ const ServicesPanel = ({
         variant='outlined'
         color='secondary'
         size='small'
-        to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
+        to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
           clientId,
           enrollmentId,
         })}
