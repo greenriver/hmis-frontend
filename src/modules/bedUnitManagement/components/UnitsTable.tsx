@@ -38,6 +38,7 @@ const UnitsTable = ({ inventoryId }: { inventoryId: string }) => {
     deleteUnits({
       variables: { input: { unitIds: [recordToDelete.id], inventoryId } },
     });
+    setDelete(null);
   }, [recordToDelete, deleteUnits, inventoryId]);
 
   const unitColumns: ColumnDef<Unit>[] = useMemo(
