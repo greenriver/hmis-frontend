@@ -17,11 +17,10 @@ import ButtonLink from './ButtonLink';
 import ClientImageUploadDialog from './input/ClientImageUploadDialog';
 import RouterLink from './RouterLink';
 
-import ClickToShow from '@/components/elements/ClickToShow';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import {
-  age,
   clientNameWithoutPreferred,
-  dob,
   entryExitRange,
   isRecentEnrollment,
   lastUpdated,
@@ -248,20 +247,8 @@ const ClientCard: React.FC<Props> = ({
                 <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
                   ID {client.personalId}
                 </Typography>
-
-                {client.dob && (
-                  <Stack direction='row' gap={0.5}>
-                    <ClickToShow text='Reveal DOB' variant='body2'>
-                      <Typography variant='body2'>{dob(client)}</Typography>
-                    </ClickToShow>
-                    <Typography variant='body2'>({age(client)})</Typography>
-                  </Stack>
-                )}
-                {client.ssn && (
-                  <ClickToShow text='Reveal SSN' variant='body2'>
-                    <Typography variant='body2'>{client.ssn}</Typography>
-                  </ClickToShow>
-                )}
+                <ClientDobAge client={client} />
+                <ClientSsn client={client} />
                 {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink

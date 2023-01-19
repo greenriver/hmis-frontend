@@ -100,7 +100,7 @@ const QuickAddHouseholdMembers = ({
     {
       header: 'Relationship to HoH',
       key: 'relationship',
-      width: '25%',
+      width: '120px',
       render: (client: ClientFieldsFragment) => (
         <RelationshipToHohSelect
           disabled={!(client.id in members)}
@@ -129,6 +129,7 @@ const QuickAddHouseholdMembers = ({
       header: '',
       key: 'add',
       width: '15%',
+      minWidth: '180px',
       render: (client: ClientFieldsFragment) =>
         client.id !== clientId && (
           <IncludeMemberSwitch

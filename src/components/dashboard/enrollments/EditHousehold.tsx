@@ -136,6 +136,7 @@ const EditHousehold = () => {
         header: '',
         key: 'add',
         width: '10%',
+        minWidth: '180px',
         render: (client: ClientFieldsFragment) => {
           if (!enrollment) return;
           return (

@@ -23,7 +23,10 @@ const RelationshipToHohSelect = ({
   ...props
 }: Props) => {
   const relationshipToHohOptions = useMemo(() => {
-    const excluded = [RelationshipToHoH.SelfHeadOfHousehold];
+    const excluded = [
+      RelationshipToHoH.SelfHeadOfHousehold,
+      RelationshipToHoH.Invalid,
+    ];
     if (!showDataNotCollected)
       excluded.push(RelationshipToHoH.DataNotCollected);
 

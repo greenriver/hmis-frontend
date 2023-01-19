@@ -6441,10 +6441,15 @@ export type ClientImageFragment = {
   } | null;
 };
 
-export type ClientFieldsFragment = {
+export type ClientIdentificationFieldsFragment = {
   __typename?: 'Client';
   id: string;
   dob?: string | null;
+  ssn?: string | null;
+};
+
+export type ClientFieldsFragment = {
+  __typename?: 'Client';
   dobDataQuality: DobDataQuality;
   ethnicity: Ethnicity;
   gender: Array<Gender>;
@@ -6452,12 +6457,14 @@ export type ClientFieldsFragment = {
   nameDataQuality: NameDataQuality;
   personalId: string;
   race: Array<Race>;
-  ssn?: string | null;
   ssnDataQuality: SsnDataQuality;
   veteranStatus: NoYesReasonsForMissingData;
   dateCreated: string;
   dateDeleted?: string | null;
   dateUpdated: string;
+  id: string;
+  dob?: string | null;
+  ssn?: string | null;
   firstName?: string | null;
   middleName?: string | null;
   preferredName?: string | null;
@@ -6498,12 +6505,13 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
-    dob?: string | null;
     firstName?: string | null;
     middleName?: string | null;
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    dob?: string | null;
+    ssn?: string | null;
   };
   enrollment: {
     __typename?: 'Enrollment';
@@ -6568,12 +6576,13 @@ export type EnrollmentWithHoHFragmentFragment = {
       client: {
         __typename?: 'Client';
         id: string;
-        dob?: string | null;
         firstName?: string | null;
         middleName?: string | null;
         preferredName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
+        dob?: string | null;
+        ssn?: string | null;
       };
       enrollment: {
         __typename?: 'Enrollment';
@@ -6791,8 +6800,6 @@ export type SearchClientsQuery = {
     nodesCount: number;
     nodes: Array<{
       __typename?: 'Client';
-      id: string;
-      dob?: string | null;
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
@@ -6800,12 +6807,14 @@ export type SearchClientsQuery = {
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
-      ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
       veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
+      id: string;
+      dob?: string | null;
+      ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
       preferredName?: string | null;
@@ -6854,8 +6863,6 @@ export type GetClientQuery = {
   __typename?: 'Query';
   client?: {
     __typename?: 'Client';
-    id: string;
-    dob?: string | null;
     dobDataQuality: DobDataQuality;
     ethnicity: Ethnicity;
     gender: Array<Gender>;
@@ -6863,12 +6870,14 @@ export type GetClientQuery = {
     nameDataQuality: NameDataQuality;
     personalId: string;
     race: Array<Race>;
-    ssn?: string | null;
     ssnDataQuality: SsnDataQuality;
     veteranStatus: NoYesReasonsForMissingData;
     dateCreated: string;
     dateDeleted?: string | null;
     dateUpdated: string;
+    id: string;
+    dob?: string | null;
+    ssn?: string | null;
     firstName?: string | null;
     middleName?: string | null;
     preferredName?: string | null;
@@ -7052,8 +7061,6 @@ export type CreateClientMutation = {
     clientMutationId?: string | null;
     client?: {
       __typename?: 'Client';
-      id: string;
-      dob?: string | null;
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
@@ -7061,12 +7068,14 @@ export type CreateClientMutation = {
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
-      ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
       veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
+      id: string;
+      dob?: string | null;
+      ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
       preferredName?: string | null;
@@ -7101,8 +7110,6 @@ export type UpdateClientMutation = {
     clientMutationId?: string | null;
     client?: {
       __typename?: 'Client';
-      id: string;
-      dob?: string | null;
       dobDataQuality: DobDataQuality;
       ethnicity: Ethnicity;
       gender: Array<Gender>;
@@ -7110,12 +7117,14 @@ export type UpdateClientMutation = {
       nameDataQuality: NameDataQuality;
       personalId: string;
       race: Array<Race>;
-      ssn?: string | null;
       ssnDataQuality: SsnDataQuality;
       veteranStatus: NoYesReasonsForMissingData;
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
+      id: string;
+      dob?: string | null;
+      ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
       preferredName?: string | null;
@@ -7262,12 +7271,13 @@ export type UpdateEnrollmentMutation = {
           client: {
             __typename?: 'Client';
             id: string;
-            dob?: string | null;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
+            dob?: string | null;
+            ssn?: string | null;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -7323,12 +7333,13 @@ export type SetHoHMutation = {
           client: {
             __typename?: 'Client';
             id: string;
-            dob?: string | null;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
+            dob?: string | null;
+            ssn?: string | null;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -7420,12 +7431,13 @@ export type AddHouseholdMembersMutation = {
           client: {
             __typename?: 'Client';
             id: string;
-            dob?: string | null;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
+            dob?: string | null;
+            ssn?: string | null;
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -7502,12 +7514,13 @@ export type GetEnrollmentWithHoHQuery = {
         client: {
           __typename?: 'Client';
           id: string;
-          dob?: string | null;
           firstName?: string | null;
           middleName?: string | null;
           preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
+          dob?: string | null;
+          ssn?: string | null;
         };
         enrollment: {
           __typename?: 'Enrollment';
@@ -7620,8 +7633,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
             __typename?: 'HouseholdClient';
             client: {
               __typename?: 'Client';
-              id: string;
-              dob?: string | null;
               dobDataQuality: DobDataQuality;
               ethnicity: Ethnicity;
               gender: Array<Gender>;
@@ -7629,12 +7640,14 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               nameDataQuality: NameDataQuality;
               personalId: string;
               race: Array<Race>;
-              ssn?: string | null;
               ssnDataQuality: SsnDataQuality;
               veteranStatus: NoYesReasonsForMissingData;
               dateCreated: string;
               dateDeleted?: string | null;
               dateUpdated: string;
+              id: string;
+              dob?: string | null;
+              ssn?: string | null;
               firstName?: string | null;
               middleName?: string | null;
               preferredName?: string | null;
@@ -9250,6 +9263,13 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     id
   }
 `;
+export const ClientIdentificationFieldsFragmentDoc = gql`
+  fragment ClientIdentificationFields on Client {
+    id
+    dob
+    ssn
+  }
+`;
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     firstName
@@ -9277,8 +9297,7 @@ export const ClientImageFragmentDoc = gql`
 `;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
-    id
-    dob
+    ...ClientIdentificationFields
     dobDataQuality
     ethnicity
     gender
@@ -9286,7 +9305,6 @@ export const ClientFieldsFragmentDoc = gql`
     nameDataQuality
     personalId
     race
-    ssn
     ssnDataQuality
     veteranStatus
     dateCreated
@@ -9295,6 +9313,7 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientName
     ...ClientImage
   }
+  ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
 `;
@@ -9337,7 +9356,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     client {
       id
       ...ClientName
-      dob
+      ...ClientIdentificationFields
     }
     enrollment {
       id
@@ -9347,6 +9366,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
     }
   }
   ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
 `;
 export const EnrollmentWithHoHFragmentFragmentDoc = gql`
   fragment EnrollmentWithHoHFragment on Enrollment {
