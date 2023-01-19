@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material';
+import { Paper } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
@@ -16,7 +16,8 @@ import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { age, dob, last4SSN } from '@/modules/hmis/hmisUtil';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -35,8 +36,9 @@ export const CLIENT_COLUMNS: {
   id: { header: 'ID', render: 'id', width: '10%' },
   ssn: {
     header: 'SSN',
+    key: 'ssn',
     width: '8%',
-    render: (client: ClientFieldsFragment) => last4SSN(client),
+    render: (client: ClientFieldsFragment) => <ClientSsn client={client} />,
   },
   name: {
     header: 'Name',
@@ -68,13 +70,8 @@ export const CLIENT_COLUMNS: {
   },
   dobAge: {
     header: 'DOB / Age',
-    render: (row: ClientFieldsFragment) =>
-      row.dob && (
-        <Stack direction='row' spacing={1}>
-          <span>{dob(row)}</span>
-          <span>{`(${age(row)})`}</span>
-        </Stack>
-      ),
+    key: 'dob',
+    render: (client: ClientFieldsFragment) => <ClientDobAge client={client} />,
   },
 };
 

@@ -8,7 +8,6 @@ import {
   DialogTitle,
   FormControlLabel,
   Radio,
-  Stack,
   Tooltip,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
@@ -21,9 +20,9 @@ import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
-import { age, clientBriefName, dob } from '@/modules/hmis/hmisUtil';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
-  ClientFieldsFragment,
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
   useSetHoHMutation,
@@ -138,14 +137,6 @@ const EditHouseholdMemberTable = ({
 
   const columns = useMemo(() => {
     return [
-      // {
-      //   header: '',
-      //   key: 'thumbnail',
-      //   width: '1%',
-      //   render: (hc: HouseholdClientFieldsFragment) => (
-      //     <Avatar alt='client'>{clientInitials(hc.client)}</Avatar>
-      //   ),
-      // },
       {
         header: '',
         key: 'indicator',
@@ -166,24 +157,13 @@ const EditHouseholdMemberTable = ({
           />
         ),
       },
-      // {
-      //   header: 'SSN',
-      //   key: 'ssn',
-      //   width: '1%',
-      //   render: ({ client }: HouseholdClientFieldsFragment) =>
-      //     last4SSN(client),
-      // },
       {
+        width: '20%',
         header: 'DOB / Age',
         key: 'dob',
-        width: '5%',
-        render: ({ client }: HouseholdClientFieldsFragment) =>
-          client.dob && (
-            <Stack direction='row' spacing={1}>
-              <span>{dob(client as ClientFieldsFragment)}</span>
-              <span>{`(${age(client as ClientFieldsFragment)})`}</span>
-            </Stack>
-          ),
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <ClientDobAge client={hc.client} />
+        ),
       },
       {
         header: <Box sx={{ pl: 4 }}>Entry Date</Box>,

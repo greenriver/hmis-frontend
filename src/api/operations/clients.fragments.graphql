@@ -21,9 +21,14 @@ fragment ClientImage on Client {
   }
 }
 
-fragment ClientFields on Client {
+fragment ClientIdentificationFields on Client {
   id
   dob
+  ssn
+}
+
+fragment ClientFields on Client {
+  ...ClientIdentificationFields
   dobDataQuality
   ethnicity
   gender
@@ -31,7 +36,6 @@ fragment ClientFields on Client {
   nameDataQuality
   personalId
   race
-  ssn
   ssnDataQuality
   veteranStatus
   dateCreated
@@ -61,7 +65,7 @@ fragment HouseholdClientFields on HouseholdClient {
   client {
     id
     ...ClientName
-    dob
+    ...ClientIdentificationFields
   }
   enrollment {
     id
