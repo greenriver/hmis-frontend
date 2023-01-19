@@ -1,7 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
@@ -21,6 +20,7 @@ import {
   InventoryFieldsFragment,
   useDeleteInventoryMutation,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {
@@ -97,7 +97,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         render: (record: InventoryFieldsFragment) => (
           <Stack direction='row' spacing={1}>
             <ButtonLink
-              to={generatePath(Routes.MANAGE_INVENTORY_BEDS, {
+              to={generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
                 projectId,
                 inventoryId: record.id,
               })}
@@ -108,7 +108,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
             </ButtonLink>
             <ButtonLink
               data-testid='updateButton'
-              to={generatePath(Routes.EDIT_INVENTORY, {
+              to={generateSafePath(Routes.EDIT_INVENTORY, {
                 projectId,
                 inventoryId: record.id,
               })}

@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
 
@@ -12,6 +12,7 @@ import {
   CreateClientMutation,
   CreateClientMutationVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const CreateClient: React.FC = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const CreateClient: React.FC = () => {
     (data: CreateClientMutation) => {
       const id = data?.createClient?.client?.id;
       if (id) {
-        navigate(generatePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
+        navigate(generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
       }
     },
     [navigate]

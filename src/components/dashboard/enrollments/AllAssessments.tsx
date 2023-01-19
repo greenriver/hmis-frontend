@@ -1,10 +1,10 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   parseAndFormatDate,
@@ -16,6 +16,7 @@ import {
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 type AssessmentType = NonNullable<
   NonNullable<GetClientAssessmentsQuery['client']>['assessments']
@@ -51,11 +52,11 @@ const columns: ColumnDef<AssessmentType>[] = [
 ];
 
 const AllAssessments = () => {
-  const { clientId } = useParams() as { clientId: string };
+  const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
     (record: AssessmentType) =>
-      generatePath(DashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId: record.enrollment.id,
         assessmentId: record.id,

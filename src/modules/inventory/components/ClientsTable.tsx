@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -11,13 +10,14 @@ import {
   SearchClientsQuery,
   SearchClientsQueryVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const ClientsTable = ({ projectId }: { projectId: string }) => {
   const columns: ColumnDef<ClientFieldsFragment>[] = [CLIENT_COLUMNS.name];
 
   const rowLinkTo = useCallback(
     (client: ClientFieldsFragment) =>
-      generatePath(DashboardRoutes.PROFILE, {
+      generateSafePath(DashboardRoutes.PROFILE, {
         clientId: client.id,
       }),
     []

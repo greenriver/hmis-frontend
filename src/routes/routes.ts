@@ -38,7 +38,7 @@ const subRoutes = {
   REFERRALS: 'referrals',
 };
 
-// Add prefix "/client/:clientId" to all, so we can use `generatePath`
+// Add prefix "/client/:clientId" to all, so we can use `generateSafePath`
 type SubRoutesType = keyof typeof subRoutes;
 let key: SubRoutesType;
 for (key in subRoutes) {

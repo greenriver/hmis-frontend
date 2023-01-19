@@ -1,7 +1,8 @@
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import { ALL_PROJECTS_CRUMB } from './useProjectCrumbs';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import apolloClient from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -11,7 +12,7 @@ import {
 } from '@/types/gqlTypes';
 
 export function useOrganizationCrumbs(current?: string) {
-  const { organizationId } = useParams() as {
+  const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
   const { pathname } = useLocation();

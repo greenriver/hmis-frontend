@@ -9,12 +9,12 @@ import {
   Typography,
 } from '@mui/material';
 import { useCallback, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import {
   evictBedsQuery,
   evictUnitsQuery,
@@ -38,7 +38,7 @@ import {
 
 const InventoryBeds = () => {
   // const navigate = useNavigate();
-  const { inventoryId } = useParams() as {
+  const { inventoryId } = useSafeParams() as {
     projectId: string;
     inventoryId: string;
   };

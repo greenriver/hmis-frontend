@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import { NavItem } from './SideNavMenu';
 
 import { DashboardRoutes } from '@/routes/routes';
+import generateSafePath from '@/utils/generateSafePath';
 
 export const useDashboardNavItems = (clientId?: string) => {
   const navItems: NavItem[] = useMemo(() => {
@@ -18,17 +18,17 @@ export const useDashboardNavItems = (clientId?: string) => {
           {
             id: 'overview',
             title: 'Overview',
-            path: generatePath(DashboardRoutes.PROFILE, params),
+            path: generateSafePath(DashboardRoutes.PROFILE, params),
           },
           {
             id: 'enrollments',
             title: 'Enrollments',
-            path: generatePath(DashboardRoutes.ALL_ENROLLMENTS, params),
+            path: generateSafePath(DashboardRoutes.ALL_ENROLLMENTS, params),
           },
           {
             id: 'assessments',
             title: 'Assessments',
-            path: generatePath(DashboardRoutes.ASSESSMENTS, params),
+            path: generateSafePath(DashboardRoutes.ASSESSMENTS, params),
           },
           {
             id: 'services-and-contacts',
@@ -51,12 +51,12 @@ export const useDashboardNavItems = (clientId?: string) => {
           {
             id: 'notes',
             title: 'Notes',
-            path: generatePath(DashboardRoutes.NOTES, params),
+            path: generateSafePath(DashboardRoutes.NOTES, params),
           },
           {
             id: 'files',
             title: 'Files',
-            path: generatePath(DashboardRoutes.FILES, params),
+            path: generateSafePath(DashboardRoutes.FILES, params),
           },
           // {
           //   title: 'Contact',

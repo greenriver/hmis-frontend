@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -14,6 +14,7 @@ import {
   PickListType,
 } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
+import generateSafePath from '@/utils/generateSafePath';
 
 const CreateOrganization = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const CreateOrganization = () => {
       if (id) {
         evictPickList(PickListType.Project);
         evictQuery('organizations');
-        navigate(generatePath(Routes.ORGANIZATION, { organizationId: id }));
+        navigate(generateSafePath(Routes.ORGANIZATION, { organizationId: id }));
       }
     },
     [navigate]

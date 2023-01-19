@@ -1,7 +1,8 @@
 import { Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
@@ -13,10 +14,11 @@ import {
   CreateProjectMutationVariables,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const CreateProject = () => {
   const navigate = useNavigate();
-  const { organizationId } = useParams() as {
+  const { organizationId } = useSafeParams() as {
     organizationId: string;
   };
   const { crumbs, organizationName } = useOrganizationCrumbs('Add Project');
@@ -29,7 +31,7 @@ const CreateProject = () => {
           id: `Organization:${organizationId}`,
           fieldName: 'projects',
         });
-        navigate(generatePath(Routes.PROJECT, { projectId: id }));
+        navigate(generateSafePath(Routes.PROJECT, { projectId: id }));
       }
     },
     [navigate, organizationId]

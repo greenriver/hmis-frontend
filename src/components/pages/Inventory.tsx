@@ -1,11 +1,12 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -22,10 +23,11 @@ import {
   UpdateInventoryMutationVariables,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const Inventory = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const { projectId, inventoryId } = useParams() as {
+  const { projectId, inventoryId } = useSafeParams() as {
     projectId: string;
     inventoryId: string; // Not present if create!
   };
@@ -44,7 +46,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
         const id = data?.createInventory?.inventory?.id;
         if (id) {
           navigate(
-            generatePath(Routes.MANAGE_INVENTORY_BEDS, {
+            generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
               projectId,
               inventoryId: id,
             })
@@ -53,7 +55,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
         }
       }
 
-      navigate(generatePath(Routes.PROJECT, { projectId }));
+      navigate(generateSafePath(Routes.PROJECT, { projectId }));
     },
     [navigate, projectId, create]
   );

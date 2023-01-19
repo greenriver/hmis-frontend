@@ -5,9 +5,11 @@ import {
   Typography,
   TypographyVariant,
 } from '@mui/material';
-import { generatePath, useParams } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
+
+import useSafeParams from '@/hooks/useSafeParams';
+import generateSafePath from '@/utils/generateSafePath';
 
 export interface Breadcrumb {
   label: string;
@@ -19,7 +21,7 @@ interface Props extends BreadcrumbsProps {
 }
 
 const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
-  const params = useParams();
+  const params = useSafeParams();
 
   return (
     <MuiBreadcrumbs
@@ -45,7 +47,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
         }
 
         // Fill in path with params we already have (e.g. replace :clientId with id)
-        const filledInPath = generatePath(to, params);
+        const filledInPath = generateSafePath(to, params);
         return (
           <RouterLink
             to={filledInPath}
