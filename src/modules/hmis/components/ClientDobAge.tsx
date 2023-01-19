@@ -9,16 +9,27 @@ interface Props {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
+  reveal?: boolean;
 }
 
-const ClientDobAge = ({ client, noValue, variant = 'body2' }: Props) => {
+const ClientDobAge = ({
+  client,
+  noValue,
+  reveal,
+  variant = 'body2',
+}: Props) => {
   if (!client.dob) return <>{noValue}</> || null;
 
+  const dobComponent = <Typography variant={variant}>{dob(client)}</Typography>;
   return (
     <Stack direction='row' gap={0.5}>
-      <ClickToShow text='Reveal DOB' variant={variant}>
-        <Typography variant={variant}>{dob(client)}</Typography>
-      </ClickToShow>
+      {reveal ? (
+        dobComponent
+      ) : (
+        <ClickToShow text='Reveal DOB' variant={variant}>
+          {dobComponent}
+        </ClickToShow>
+      )}
       <Typography variant={variant}>({age(client)})</Typography>
     </Stack>
   );

@@ -9,11 +9,15 @@ interface Props extends TypographyProps {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
+  lastFour?: boolean; // show the last 4 digits only (not hidden)
 }
 
-const ClientSsn = ({ client, noValue, variant = 'body2' }: Props) => {
+const ClientSsn = ({ client, noValue, lastFour, variant = 'body2' }: Props) => {
   const masked = maskSSN(client.ssn || undefined);
   if (!masked) return <>{noValue}</> || null;
+
+  if (lastFour)
+    return <Typography variant={variant}>{masked.slice(-4)}</Typography>;
 
   return (
     <ClickToShow text='Reveal SSN' variant={variant}>

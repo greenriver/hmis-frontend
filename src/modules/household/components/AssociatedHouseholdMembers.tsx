@@ -11,7 +11,7 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
-    width: '15%',
+    width: '20%',
     key: 'name',
     render: (client) => (
       <ClientName
@@ -21,8 +21,8 @@ export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
       />
     ),
   },
-  { ...CLIENT_COLUMNS.ssn, width: '10%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
+  { ...CLIENT_COLUMNS.ssn, width: '15%' },
+  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
 ];
 
 interface Props

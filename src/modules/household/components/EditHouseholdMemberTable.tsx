@@ -162,7 +162,7 @@ const EditHouseholdMemberTable = ({
         header: 'DOB / Age',
         key: 'dob',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <ClientDobAge client={hc.client} />
+          <ClientDobAge client={hc.client} reveal />
         ),
       },
       {
