@@ -10,6 +10,15 @@ describe('Obfuscation methods', () => {
     expect(input).toEqual(result);
   });
 
+  it('works on various IDs', () => {
+    [0, 1, 2, 7, 16, 32, 97, 99, 100, 600, 9999].forEach((num) => {
+      const obfuscated = IdEncoder.obfuscate(num);
+      const result = IdEncoder.deobfuscate(obfuscated);
+
+      expect(num).toEqual(result);
+    });
+  });
+
   it('encodes and decodes correctly', () => {
     const input = 123;
 

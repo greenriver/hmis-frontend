@@ -53,7 +53,10 @@ export default class IdEncoder {
     }).toString(CryptoJS.enc.Utf8);
 
     const composed = parseInt(decrypted, 16);
+
+    // NOTE: for the future, we could expire these based on the date stamp.
     // const dayStamp = composed >> 32;
+
     const id = Math.round(composed / 2 ** 32);
 
     return id;
