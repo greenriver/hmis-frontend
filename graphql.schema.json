@@ -13721,7 +13721,37 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL_OUTCOME",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE_TYPE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "STATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUB_TYPE_PROVIDED_3",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUB_TYPE_PROVIDED_4",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SUB_TYPE_PROVIDED_5",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

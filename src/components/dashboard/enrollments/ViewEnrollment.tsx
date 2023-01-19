@@ -118,8 +118,11 @@ const ViewEnrollment = () => {
               <ButtonLink
                 variant='outlined'
                 color='secondary'
-                to=''
                 sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
+                  clientId,
+                  enrollmentId,
+                })}
               >
                 + Service
               </ButtonLink>

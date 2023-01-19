@@ -5,6 +5,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
+import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetEnrollmentServicesDocument,
@@ -12,6 +13,7 @@ import {
   GetEnrollmentServicesQueryVariables,
   ServiceFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ServiceFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
@@ -55,7 +57,15 @@ const ServicesPanel = ({
   <Stack>
     <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
       <Typography variant='h5'>Services</Typography>
-      <ButtonLink variant='outlined' color='secondary' size='small' to=''>
+      <ButtonLink
+        variant='outlined'
+        color='secondary'
+        size='small'
+        to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
+          clientId,
+          enrollmentId,
+        })}
+      >
         + Add Service
       </ButtonLink>
     </Stack>

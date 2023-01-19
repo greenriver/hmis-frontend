@@ -2141,7 +2141,12 @@ export enum PickListType {
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   Project = 'PROJECT',
+  ReferralOutcome = 'REFERRAL_OUTCOME',
+  ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
+  SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
+  SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
+  SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
 }
 
 /** 4.19.7 */
