@@ -3,6 +3,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  DataCollectionStage,
   DisabilityGroupFieldsFragment,
   EnrollmentFieldsFragment,
   EnrollmentFieldsFromAssessmentFragment,
@@ -49,31 +50,35 @@ export const isAssessment = (r: RelatedRecord): r is AssessmentFragment => {
   return r.__typename == 'Assessment';
 };
 
+const dataCollectionVerb = {
+  [DataCollectionStage.AnnualAssessment]: 'Annual at',
+  [DataCollectionStage.PostExit]: 'Post-Exit from',
+  [DataCollectionStage.ProjectEntry]: 'Intake at',
+  [DataCollectionStage.ProjectExit]: 'Exit from',
+  [DataCollectionStage.Update]: 'Update at',
+  [DataCollectionStage.Invalid]: '',
+};
+
 export const typicalRecordPickerColumns = [
   {
-    header: 'Collected On',
+    header: 'Date Collected',
     render: (record: RelatedRecord) =>
       isTypicalRelatedRecord(record) &&
-      parseAndFormatDate(record.informationDate),
+      [parseAndFormatDate(record.informationDate), record.user?.name]
+        .filter((s) => !!s)
+        .join(' by '),
   },
   {
-    header: 'Collected By',
-    render: 'user.name' as keyof RelatedRecord,
-  },
-  {
-    header: 'Collection Stage',
-    render: (record: RelatedRecord) =>
-      isTypicalRelatedRecord(record) && (
-        <HmisEnum
-          value={record.dataCollectionStage}
-          enumMap={HmisEnums.DataCollectionStage}
-        />
-      ),
-  },
-  {
-    header: 'Project',
-    render: (record: RelatedRecord) =>
-      isTypicalRelatedRecord(record) && enrollmentName(record.enrollment, true),
+    header: 'Collection Point',
+    render: (record: RelatedRecord) => {
+      if (!isTypicalRelatedRecord(record)) return null; //make TS happy
+      return [
+        dataCollectionVerb[record.dataCollectionStage],
+        enrollmentName(record.enrollment, true),
+      ]
+        .filter((s) => !!s)
+        .join(' by ');
+    },
   },
 ];
 

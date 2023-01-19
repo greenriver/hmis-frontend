@@ -38,7 +38,6 @@ const ContextHeader: React.FC<Props> = ({
         borderBottomColor: 'borders.light',
         borderBottomStyle: 'solid',
         py: 0,
-        px: { sm: 1, lg: 2 },
       }}
     >
       <Box display='flex' alignItems='stretch' width='100%' flex={1}>
@@ -47,7 +46,7 @@ const ContextHeader: React.FC<Props> = ({
             sx={{
               display: 'flex',
               alignItems: 'center',
-              mr: { xs: 2, sm: 2, lg: 4 },
+              pl: 2,
               pr: { xs: 1, sm: 1, lg: 2 },
               borderRightColor: 'borders.light',
               borderRightWidth: 1,

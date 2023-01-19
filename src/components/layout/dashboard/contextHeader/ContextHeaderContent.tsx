@@ -27,6 +27,7 @@ const ContextHeaderContent: React.FC<Props> = ({
       alignItems='center'
       justifyContent='space-between'
       flex={1}
+      sx={{ pl: 3 }}
     >
       <Breadcrumbs
         crumbs={breadcrumbs}

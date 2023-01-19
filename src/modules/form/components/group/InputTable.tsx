@@ -21,7 +21,17 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
         <TableCell>Disabling Condition</TableCell>
       </TableRow>
     </TableHead>
-    <TableBody>
+    <TableBody
+      sx={{
+        // Highlight last row. TODO: move to form definition
+        '.MuiTableRow-root:last-child': {
+          backgroundColor: '#ffffe6',
+          td: {
+            py: 2,
+          },
+        },
+      }}
+    >
       {item.item &&
         item.item.map((rowItem, index) => {
           if (!rowItem.item || rowItem.type !== ItemType.Group) {
@@ -49,7 +59,10 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
               {rowItem.item.map((cellItem, idx) => (
                 <TableCell
                   key={cellItem.linkId}
-                  sx={{ minWidth: '220px', maxWidth: '250px' }}
+                  sx={{
+                    minWidth: '220px',
+                    maxWidth: '250px',
+                  }}
                 >
                   {renderChildItem(cellItem, {
                     inputProps: {
