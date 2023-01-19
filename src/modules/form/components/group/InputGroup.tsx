@@ -85,6 +85,7 @@ const InputGroup = ({
             pr: 0.5,
             ...(item.type === ItemType.String
               ? {
+                  pt: 0.5,
                   label: {
                     width: '100%',
                   },

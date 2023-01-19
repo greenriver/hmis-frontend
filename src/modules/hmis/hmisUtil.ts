@@ -12,6 +12,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   ClientFieldsFragment,
+  ClientIdentificationFieldsFragment,
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
@@ -145,30 +146,40 @@ export const clientInitials = (client: ClientNameFragment) =>
     .map((s) => (s ? s[0] : ''))
     .join('');
 
-export const dob = (client: ClientFieldsFragment) => {
+export const dob = (client: ClientIdentificationFieldsFragment) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);
 };
 
-export const age = (client: ClientFieldsFragment) => {
+export const age = (client: ClientIdentificationFieldsFragment) => {
   if (!client.dob) return '';
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
 };
 
-export const last4SSN = (client: ClientFieldsFragment) => {
-  if (!client.ssn) return '';
-  let end = client.ssn.slice(-4);
-  if (end.length < 4) {
-    end = [...Array(4 - end.length).fill('*'), end].join('');
-  }
-  return end;
-};
+// export const last4SSN = (client: ClientFieldsFragment) => {
+//   if (!client.ssn) return '';
+//   let end = client.ssn.slice(-4);
+//   if (end.length < 4) {
+//     end = [...Array(4 - end.length).fill('*'), end].join('');
+//   }
+//   return end;
+// };
 
-export const maskedSSN = (client: ClientFieldsFragment) => {
-  if (!client.ssn) return '';
-  const lastFour = last4SSN(client);
-  return `***-**-${lastFour}`;
+export const maskSSN = (value?: string) => {
+  if (!value) return null;
+  let cleaned = value.replace(/[^\d|X|x]/g, '');
+
+  // Trim if too long (shouldn't happen)
+  if (cleaned.length > 9) {
+    cleaned = cleaned.slice(-9);
+  }
+  // Fill if too short
+  if (cleaned.length < 9) {
+    cleaned = [...Array(9 - cleaned.length).fill('X'), cleaned].join('');
+  }
+
+  return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
 export const lastUpdated = (client: ClientFieldsFragment) => {

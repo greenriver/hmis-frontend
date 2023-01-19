@@ -44,7 +44,6 @@ const ContextHeader: React.FC<Props> = ({
         borderBottomColor: 'borders.light',
         borderBottomStyle: 'solid',
         py: 0,
-        px: { sm: 1, lg: 2 },
       }}
     >
       {focusMode ? (

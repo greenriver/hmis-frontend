@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import { useMemo } from 'react';
 
 import ClientName from '@/components/elements/ClientName';
@@ -6,13 +5,13 @@ import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
-import { last4SSN, dob, age } from '@/modules/hmis/hmisUtil';
+import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
   {
     header: 'Name',
-    width: '15%',
+    width: '20%',
     key: 'name',
     render: (client) => (
       <ClientName
@@ -22,24 +21,8 @@ export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
       />
     ),
   },
-  {
-    header: 'SSN',
-    key: 'ssn',
-    width: '1%',
-    render: (client) => last4SSN(client),
-  },
-  {
-    header: 'DOB / Age',
-    width: '1%',
-    key: 'dob',
-    render: (client) =>
-      client.dob && (
-        <Stack direction='row' spacing={1}>
-          <span>{dob(client)}</span>
-          <span>{`(${age(client)})`}</span>
-        </Stack>
-      ),
-  },
+  { ...CLIENT_COLUMNS.ssn, width: '15%' },
+  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
 ];
 
 interface Props
