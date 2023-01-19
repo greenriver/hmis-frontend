@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { flatten, isEmpty, sortBy } from 'lodash-es';
 import React, { useMemo, useState, useCallback } from 'react';
-import { generatePath, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
@@ -22,6 +22,7 @@ import {
   useOmniSearchClientsQuery,
   useOmniSearchProjectsQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const OmniSearch: React.FC = () => {
   const [value, setValue] = useState<string | null>('');
@@ -51,12 +52,12 @@ const OmniSearch: React.FC = () => {
     (option: NonNullable<typeof options>[number]) => {
       let targetPath: string | null = null;
       if (option.__typename === 'Client') {
-        targetPath = generatePath(Routes.CLIENT_DASHBOARD, {
+        targetPath = generateSafePath(Routes.CLIENT_DASHBOARD, {
           clientId: option.id,
         });
       }
       if (option.__typename === 'Project') {
-        targetPath = generatePath(Routes.PROJECT, {
+        targetPath = generateSafePath(Routes.PROJECT, {
           projectId: option.id,
         });
       }

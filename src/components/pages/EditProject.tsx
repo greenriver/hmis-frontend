@@ -1,6 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
@@ -17,6 +17,7 @@ import {
   UpdateProjectMutation,
   UpdateProjectMutationVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const EditProject = () => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const EditProject = () => {
           cache.evict({ id: `Project:${id}`, fieldName: 'inventories' });
         }
 
-        navigate(generatePath(Routes.PROJECT, { projectId: id }));
+        navigate(generateSafePath(Routes.PROJECT, { projectId: id }));
       }
     },
     [navigate, project]
@@ -58,7 +59,7 @@ const EditProject = () => {
         getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
         confirmable
         submitButtonText='Save Changes'
-        onDiscard={generatePath(Routes.PROJECT, { projectId: project?.id })}
+        onDiscard={generateSafePath(Routes.PROJECT, { projectId: project?.id })}
         title={
           <>
             <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>

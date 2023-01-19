@@ -1,6 +1,5 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
 
@@ -19,6 +18,7 @@ import {
   HouseholdClientFieldsFragment,
   useGetEnrollmentWithHoHQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 /**
  * Table showing all members that belong to a given household
@@ -59,7 +59,7 @@ const HouseholdMemberTable = ({
       {
         header: 'Name',
         render: (h: HouseholdClientFieldsFragment) => {
-          const viewEnrollmentPath = generatePath(
+          const viewEnrollmentPath = generateSafePath(
             DashboardRoutes.VIEW_ENROLLMENT,
             {
               clientId: h.client.id,

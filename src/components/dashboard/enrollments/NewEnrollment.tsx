@@ -1,18 +1,14 @@
 import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
-import {
-  generatePath,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
   Option as ProjectOption,
 } from '@/components/elements/input/ProjectSelect';
 import Loading from '@/components/elements/Loading';
+import useSafeParams from '@/hooks/useSafeParams';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
@@ -23,6 +19,7 @@ import {
   RelationshipToHoH,
   useCreateEnrollmentMutation,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const NewEnrollment = () => {
   const [project, setProject] = useState<ProjectOption | null>(null);
@@ -30,7 +27,7 @@ const NewEnrollment = () => {
   const [projectError, setProjectError] = useState(false);
   const [dateError, setDateError] = useState(false);
   const navigate = useNavigate();
-  const { clientId } = useParams() as {
+  const { clientId } = useSafeParams() as {
     clientId: string;
   };
   // map client id -> realtionship-to-hoh
@@ -52,11 +49,11 @@ const NewEnrollment = () => {
             (e) => e.client.id === clientId
           )?.id;
           const path = enrollmentId
-            ? generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+            ? generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
                 clientId,
                 enrollmentId,
               })
-            : generatePath(DashboardRoutes.ALL_ENROLLMENTS, {
+            : generateSafePath(DashboardRoutes.ALL_ENROLLMENTS, {
                 clientId,
               });
           navigate(path);

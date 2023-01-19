@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ClientName from '@/components/elements/ClientName';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -15,6 +14,7 @@ import {
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
@@ -43,7 +43,7 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
 
   const rowLinkTo = useCallback(
     (en: EnrollmentFieldsFragment) =>
-      generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
         clientId: en.client.id,
         enrollmentId: en.id,
       }),

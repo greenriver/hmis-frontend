@@ -1,5 +1,4 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
@@ -8,6 +7,8 @@ import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTa
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { Routes } from '@/routes/routes';
 import { useGetAllOrganizationsQuery } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
+
 const AllProjects = () => {
   const { data, loading, error } = useGetAllOrganizationsQuery();
 
@@ -34,7 +35,7 @@ const AllProjects = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.CREATE_ORGANIZATION)}
+                to={generateSafePath(Routes.CREATE_ORGANIZATION)}
               >
                 + Add Organization
               </ButtonLink>

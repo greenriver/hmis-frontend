@@ -1,7 +1,6 @@
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
@@ -21,6 +20,7 @@ import {
   GetProjectFundersQueryVariables,
   useDeleteFunderMutation,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<FunderFieldsFragment>[] = [
   {
@@ -83,7 +83,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
           <Stack direction='row' spacing={1}>
             <ButtonLink
               data-testid='updateButton'
-              to={generatePath(Routes.EDIT_FUNDER, {
+              to={generateSafePath(Routes.EDIT_FUNDER, {
                 projectId,
                 funderId: record.id,
               })}

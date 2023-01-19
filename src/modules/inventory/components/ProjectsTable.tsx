@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
@@ -15,6 +14,7 @@ import {
   GetOrganizationWithPaginatedProjectsQueryVariables,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
@@ -51,7 +51,7 @@ const ProjectsTable = ({
 
   const rowLinkTo = useCallback(
     (project: ProjectAllFieldsFragment) =>
-      generatePath(Routes.PROJECT, {
+      generateSafePath(Routes.PROJECT, {
         projectId: project.id,
       }),
     []

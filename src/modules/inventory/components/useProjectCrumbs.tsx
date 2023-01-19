@@ -1,5 +1,6 @@
-import { generatePath, useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import apolloClient from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -7,6 +8,7 @@ import {
   ProjectAllFieldsFragmentDoc,
   useGetProjectQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 export const ALL_PROJECTS_CRUMB = {
   label: 'All Projects & Organizations',
@@ -15,7 +17,7 @@ export const ALL_PROJECTS_CRUMB = {
 
 export function useProjectCrumbs(current?: string) {
   const { pathname } = useLocation();
-  const { projectId } = useParams() as {
+  const { projectId } = useSafeParams() as {
     projectId: string;
   };
 
@@ -38,7 +40,7 @@ export function useProjectCrumbs(current?: string) {
         ALL_PROJECTS_CRUMB,
         {
           label: project.organization.organizationName,
-          to: generatePath(Routes.ORGANIZATION, {
+          to: generateSafePath(Routes.ORGANIZATION, {
             organizationId: project.organization.id,
           }),
         },

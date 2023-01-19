@@ -10,13 +10,14 @@ import {
 } from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import {
   parseAndFormatDateRange,
   parseHmisDateString,
@@ -37,6 +38,7 @@ import {
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
+import generateSafePath from '@/utils/generateSafePath';
 
 export const InactiveBanner = ({
   project,
@@ -90,7 +92,7 @@ export const InactiveChip = ({
 };
 
 const Project = () => {
-  const { projectId } = useParams() as {
+  const { projectId } = useSafeParams() as {
     projectId: string;
   };
   const navigate = useNavigate();
@@ -109,7 +111,7 @@ const Project = () => {
           });
           evictPickList(PickListType.Project);
           navigate(
-            generatePath(Routes.ORGANIZATION, {
+            generateSafePath(Routes.ORGANIZATION, {
               organizationId,
             })
           );
@@ -174,7 +176,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.NEW_FUNDER, { projectId })}
+                to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
               >
                 + Add Funding Source
               </ButtonLink>
@@ -183,7 +185,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.NEW_COC, { projectId })}
+                to={generateSafePath(Routes.NEW_COC, { projectId })}
               >
                 + Add Project CoC
               </ButtonLink>
@@ -192,7 +194,7 @@ const Project = () => {
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
-                to={generatePath(Routes.NEW_INVENTORY, { projectId })}
+                to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
               >
                 + Add Inventory
               </ButtonLink>
@@ -214,7 +216,7 @@ const Project = () => {
                 data-testid='updateProjectButton'
                 variant='text'
                 color='secondary'
-                to={generatePath(Routes.EDIT_PROJECT, {
+                to={generateSafePath(Routes.EDIT_PROJECT, {
                   projectId,
                 })}
                 sx={{ justifyContent: 'left' }}

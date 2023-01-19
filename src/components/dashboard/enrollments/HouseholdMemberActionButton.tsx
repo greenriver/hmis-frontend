@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { DashboardRoutes } from '@/routes/routes';
@@ -8,6 +7,7 @@ import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props extends Omit<ButtonLinkProps, 'to' | 'ref'> {
   enrollmentId: string;
@@ -35,7 +35,7 @@ const HouseholdMemberActionButton = ({
 }: Props) => {
   const pathToAssessment = useCallback(
     (id: string) =>
-      generatePath(DashboardRoutes.EDIT_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: id,
@@ -44,7 +44,7 @@ const HouseholdMemberActionButton = ({
   );
   const pathToNewAssessment = useCallback(
     (role: AssessmentRole) =>
-      generatePath(DashboardRoutes.NEW_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentRole: role.toLowerCase(),

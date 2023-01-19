@@ -1,12 +1,12 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Container, Tab } from '@mui/material';
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 import AssessmentsPanel from './tabs/AssessmentsPanel';
 import EventsPanel from './tabs/EventsPanel';
 import ServicesPanel from './tabs/ServicesPanel';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
 const tabs = [
@@ -35,7 +35,7 @@ const EnrollmentRecordTabs = ({
 }: {
   enrollment: EnrollmentFieldsFragment;
 }) => {
-  const { clientId, enrollmentId } = useParams() as {
+  const { clientId, enrollmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
   };

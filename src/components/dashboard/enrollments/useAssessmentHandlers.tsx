@@ -1,8 +1,9 @@
 import { ApolloError } from '@apollo/client';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
-import { generatePath, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
+import useSafeParams from '@/hooks/useSafeParams';
 import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { cache } from '@/providers/apolloClient';
@@ -19,6 +20,7 @@ import {
   useSubmitAssessmentMutation,
   ValidationError,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 export function useAssessmentHandlers() {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
@@ -27,7 +29,7 @@ export function useAssessmentHandlers() {
     enrollmentId,
     assessmentId,
     assessmentRole: assessmentRoleParam,
-  } = useParams() as {
+  } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
     assessmentId?: string;
@@ -110,7 +112,7 @@ export function useAssessmentHandlers() {
         });
       }
       navigate(
-        generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
           enrollmentId,
           clientId,
         })

@@ -1,10 +1,10 @@
 import { Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
@@ -15,6 +15,7 @@ import {
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
@@ -46,11 +47,11 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
 ];
 
 const AllEnrollments = () => {
-  const { clientId } = useParams() as { clientId: string };
+  const { clientId } = useSafeParams() as { clientId: string };
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
-      generatePath(DashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
         clientId,
         enrollmentId: enrollment.id,
       }),
@@ -69,7 +70,7 @@ const AllEnrollments = () => {
         <ButtonLink
           variant='outlined'
           color='secondary'
-          to={generatePath(DashboardRoutes.NEW_ENROLLMENT, {
+          to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
             clientId,
           })}
         >

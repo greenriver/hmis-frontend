@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Outlet, useOutletContext, useParams } from 'react-router-dom';
+import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
 import ClientCardMini from '../elements/ClientCardMini';
@@ -10,6 +10,7 @@ import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
 import useCurrentPath from '@/hooks/useCurrentPath';
+import useSafeParams from '@/hooks/useSafeParams';
 import { HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -18,7 +19,7 @@ import {
 } from '@/types/gqlTypes';
 
 const ClientDashboard: React.FC = () => {
-  const params = useParams() as {
+  const params = useSafeParams() as {
     clientId: string;
     enrollmentId?: string;
   };
