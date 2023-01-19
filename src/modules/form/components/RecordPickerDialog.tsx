@@ -106,10 +106,7 @@ const RecordPickerDialog = ({
     return null;
   }
   // Need to set heigh on the dialog in order for the scrolling to work
-  let height = '90%';
-  if (columns.length < 8) {
-    height = `${columns.length * 60 + 250}px`;
-  }
+  const height = `${Math.min(columns.length * 60 + 250, 850)}px`;
 
   return (
     <Dialog
