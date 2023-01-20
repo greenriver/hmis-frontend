@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { useCallback } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -15,6 +16,11 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+interface Props {
+  clientId: string;
+  enrollmentId: string;
+}
+
 const columns: ColumnDef<ServiceFieldsFragment>[] = [
   { header: 'ID', render: 'id' },
   {
@@ -23,16 +29,21 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
   },
   {
     header: 'Type',
+    linkTreatment: true,
     render: (e) => (
-      <HmisEnum value={e.recordType} enumMap={HmisEnums.RecordType} />
+      <HmisEnum
+        value={e.recordType}
+        color='inherit'
+        enumMap={HmisEnums.RecordType}
+      />
     ),
   },
   {
     header: 'Details',
     render: (e) => (
       <Stack>
-        {serviceDetails(e).map((s) => (
-          <Typography variant='body2' sx={{ pl: 1 }}>
+        {serviceDetails(e).map((s, i) => (
+          <Typography key={i} variant='body2' sx={{ pl: 1 }}>
             {s}
           </Typography>
         ))}
@@ -46,41 +57,47 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
   },
 ];
 
-const ServicesPanel = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  clientId,
-  enrollmentId,
-}: {
-  clientId: string;
-  enrollmentId: string;
-}) => (
-  <Stack>
-    <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
-      <Typography variant='h5'>Services</Typography>
-      <ButtonLink
-        variant='outlined'
-        color='secondary'
-        size='small'
-        to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
-          clientId,
-          enrollmentId,
-        })}
+const ServicesPanel: React.FC<Props> = ({ clientId, enrollmentId }) => {
+  const rowLinkTo = useCallback(
+    (record: ServiceFieldsFragment) =>
+      generateSafePath(DashboardRoutes.EDIT_SERVICE, {
+        clientId,
+        enrollmentId,
+        serviceId: record.id,
+      }),
+    [clientId, enrollmentId]
+  );
+
+  return (
+    <Stack>
+      <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
+        <Typography variant='h5'>Services</Typography>
+        <ButtonLink
+          variant='outlined'
+          color='secondary'
+          size='small'
+          to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
+            clientId,
+            enrollmentId,
+          })}
+        >
+          + Add Service
+        </ButtonLink>
+      </Stack>
+      <GenericTableWithData<
+        GetEnrollmentServicesQuery,
+        GetEnrollmentServicesQueryVariables,
+        ServiceFieldsFragment
       >
-        + Add Service
-      </ButtonLink>
+        rowLinkTo={rowLinkTo}
+        queryVariables={{ id: enrollmentId }}
+        queryDocument={GetEnrollmentServicesDocument}
+        columns={columns}
+        pagePath='enrollment.services'
+        noData='No services.'
+      />
     </Stack>
-    <GenericTableWithData<
-      GetEnrollmentServicesQuery,
-      GetEnrollmentServicesQueryVariables,
-      ServiceFieldsFragment
-    >
-      queryVariables={{ id: enrollmentId }}
-      queryDocument={GetEnrollmentServicesDocument}
-      columns={columns}
-      pagePath='enrollment.services'
-      noData='No services.'
-    />
-  </Stack>
-);
+  );
+};
 
 export default ServicesPanel;

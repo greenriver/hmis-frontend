@@ -2,7 +2,7 @@ import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// import Loading from '../elements/Loading';
+import Loading from '../elements/Loading';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -11,28 +11,20 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
-  // CreateProjectCocDocument,
-  // CreateProjectCocMutation,
-  // CreateProjectCocMutationVariables,
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
   AddServiceToEnrollmentMutationVariables,
   ServiceFieldsFragment,
-  // ProjectCocFieldsFragment,
-  // UpdateProjectCocDocument,
-  // UpdateProjectCocMutation,
-  // UpdateProjectCocMutationVariables,
-  // useGetProjectCocQuery,
+  UpdateServiceDocument,
+  UpdateServiceMutation,
+  UpdateServiceMutationVariables,
+  useGetServiceQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Service = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
-  const {
-    clientId,
-    enrollmentId,
-    // serviceId,
-  } = useSafeParams() as {
+  const { clientId, enrollmentId, serviceId } = useSafeParams() as {
     enrollmentId: string;
     serviceId: string;
     clientId: string;
@@ -53,15 +45,15 @@ const Service = ({ create = false }: { create?: boolean }) => {
     );
   }, [navigate, enrollmentId, clientId, create]);
 
-  // const { data, loading, error } = useGetProjectCocQuery({
-  //   variables: { id: cocId },
-  //   skip: create,
-  // });
+  const { data, loading, error } = useGetServiceQuery({
+    variables: { id: serviceId },
+    skip: create,
+  });
 
-  // if (loading || crumbsLoading) return <Loading />;
+  if (loading) return <Loading />;
   // if (crumbsLoading) return <Loading />
-  // if (error) throw error;
-  // if (!crumbs || !enrollment) throw Error('Enrollment not found');
+  if (error) throw error;
+  if (!create && !loading && !data?.service) throw Error('Service not found');
 
   const common = {
     definitionIdentifier: 'service',
@@ -87,25 +79,21 @@ const Service = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: AddServiceToEnrollmentMutation) =>
             data?.createService?.errors
           }
-          // onCompleted={() => {}}
-          // getErrors={() => undefined}
           submitButtonText='Add Service'
           {...common}
         />
       ) : (
         <EditRecord<
           ServiceFieldsFragment,
-          AddServiceToEnrollmentMutation,
-          AddServiceToEnrollmentMutationVariables
+          UpdateServiceMutation,
+          UpdateServiceMutationVariables
         >
-          // record={data?.projectCoc || undefined}
-          queryDocument={AddServiceToEnrollmentDocument}
-          // onCompleted={onCompleted}
-          // getErrors={(data: UpdateProjectCocMutation) =>
-          //   data?.updateProjectCoc?.errors
-          // }
-          onCompleted={() => {}}
-          getErrors={() => undefined}
+          record={data?.service || undefined}
+          queryDocument={UpdateServiceDocument}
+          onCompleted={onCompleted}
+          getErrors={(data: UpdateServiceMutation) =>
+            data?.updateService?.errors
+          }
           submitButtonText='Save Changes'
           {...common}
         />

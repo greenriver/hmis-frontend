@@ -127,8 +127,8 @@ const GenericTable = <T extends { id: string }>({
     <TableHead>
       {hasHeaders && (
         <TableRow>
-          {columns.map((def) => (
-            <HeaderCell columnDef={def} key={key(def)} />
+          {columns.map((def, i) => (
+            <HeaderCell columnDef={def} key={key(def) || i} />
           ))}
         </TableRow>
       )}
@@ -145,8 +145,8 @@ const GenericTable = <T extends { id: string }>({
         {tableHead}
         <TableBody>
           {vertical &&
-            columns.map((def) => (
-              <TableRow key={key(def)}>
+            columns.map((def, i) => (
+              <TableRow key={key(def) || i}>
                 <HeaderCell
                   columnDef={def}
                   sx={{ ...verticalCellSx(1), width: '350px' }}
@@ -184,7 +184,7 @@ const GenericTable = <T extends { id: string }>({
 
                   return (
                     <TableCell
-                      key={key(def)}
+                      key={key(def) || index}
                       width={width}
                       sx={
                         rowLinkTo && {
