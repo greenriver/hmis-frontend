@@ -18,6 +18,7 @@ import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 
 import useSafeParams from '@/hooks/useSafeParams';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   parseAndFormatDateRange,
   parseHmisDateString,
@@ -134,9 +135,14 @@ const Project = () => {
         <Grid item xs={9}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }} data-testid='projectDetailsCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Project Details
-            </Typography>
+            <Stack
+              justifyContent={'space-between'}
+              direction='row'
+              sx={{ mb: 2 }}
+            >
+              <Typography variant='h5'>Project Details</Typography>
+              <IdDisplay id={project.id} />
+            </Stack>
             <ProjectDetails project={project} />
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }} data-testid='funderCard'>

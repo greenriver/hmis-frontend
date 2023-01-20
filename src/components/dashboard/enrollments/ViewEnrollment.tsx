@@ -8,6 +8,7 @@ import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes } from '@/routes/routes';
@@ -38,9 +39,10 @@ const ViewEnrollment = () => {
 
   return (
     <>
-      <Typography variant='h4' sx={{ mb: 2 }}>
-        {enrollmentName(enrollment)}
-      </Typography>
+      <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 2 }}>
+        <Typography variant='h4'>{enrollmentName(enrollment)}</Typography>
+        <IdDisplay id={enrollment.id} />
+      </Stack>
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
