@@ -1,4 +1,10 @@
-import { Autocomplete, AutocompleteProps } from '@mui/material';
+import {
+  Autocomplete,
+  AutocompleteProps,
+  CircularProgress,
+  InputAdornment,
+} from '@mui/material';
+import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
@@ -41,10 +47,23 @@ const GenericSelect = <
         <TextInput
           {...params}
           {...inputProps}
-          InputProps={{ ...params.InputProps, ...inputProps.InputProps }}
+          InputProps={{
+            ...params.InputProps,
+            startAdornment: rest.loading ? (
+              <InputAdornment position='start'>
+                <CircularProgress size={15} color='inherit' />
+              </InputAdornment>
+            ) : undefined,
+            ...inputProps.InputProps,
+          }}
           InputLabelProps={{
             ...params.InputLabelProps,
             ...inputProps.InputLabelProps,
+          }}
+          inputProps={{
+            ...params.inputProps,
+            value: rest.loading ? '' : params.inputProps.value,
+            ...inputProps.inputProps,
           }}
           disabled={rest.disabled}
           // Only render placeholder if no values are selected
@@ -53,6 +72,8 @@ const GenericSelect = <
         />
       )}
       {...rest}
+      // Allow parent to control disabled state; Otherwise just disable when loading
+      disabled={!isNil(rest.disabled) ? rest.disabled : rest.loading}
     />
   );
 };
