@@ -445,12 +445,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  NoYesMissing: {
-    INVALID: 'Invalid Value',
-    NO: 'No',
-    YES: 'Yes',
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
   NoYesReasonsForMissingData: {
     YES: 'Yes',
     INVALID: 'Invalid Value',

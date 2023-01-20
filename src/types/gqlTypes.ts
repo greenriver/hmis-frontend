@@ -932,7 +932,7 @@ export type Enrollment = {
   intakeAssessment?: Maybe<Assessment>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
-  losUnderThreshold?: Maybe<NoYesMissing>;
+  losUnderThreshold?: Maybe<Scalars['Boolean']>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
@@ -2029,18 +2029,6 @@ export enum NoAssistanceReason {
   InsuranceTypeNotApplicableForThisClient = 'INSURANCE_TYPE_NOT_APPLICABLE_FOR_THIS_CLIENT',
   /** Invalid Value */
   Invalid = 'INVALID',
-}
-
-/** 1.7 */
-export enum NoYesMissing {
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
 }
 
 /** 1.8 */

@@ -6361,8 +6361,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "ENUM",
-              "name": "NoYesMissing",
+              "kind": "SCALAR",
+              "name": "Boolean",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13063,41 +13063,6 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "NoYesMissing",
-        "description": "1.7",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "DATA_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "NO",
-            "description": "(0) No",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "YES",
-            "description": "(1) Yes",
             "isDeprecated": false,
             "deprecationReason": null
           }
