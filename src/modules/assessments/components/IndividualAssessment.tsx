@@ -133,6 +133,7 @@ const IndividualAssessment = ({
           assessment={assessment}
           enrollment={enrollment}
           top={topOffsetHeight}
+          embeddedInWorkflow={embeddedInWorkflow}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>

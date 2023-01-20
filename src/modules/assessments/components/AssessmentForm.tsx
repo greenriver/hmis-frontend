@@ -33,6 +33,7 @@ interface Props {
   assessment?: AssessmentWithDefinitionAndValuesFragment;
   top?: number;
   navigationTitle: ReactNode;
+  embeddedInWorkflow?: boolean;
 }
 const AssessmentForm = ({
   assessment,
@@ -40,6 +41,7 @@ const AssessmentForm = ({
   definition,
   navigationTitle,
   enrollment,
+  embeddedInWorkflow,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
@@ -69,7 +71,8 @@ const AssessmentForm = ({
     definition,
     enrollment.client.id,
     enrollment.id,
-    assessment?.id
+    assessment?.id,
+    !embeddedInWorkflow
   );
 
   // Set initial values for the assessment. This happens on initial load,

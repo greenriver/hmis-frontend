@@ -20,7 +20,8 @@ export function useAssessmentHandlers(
   definition: FormDefinition,
   clientId: string,
   enrollmentId: string,
-  assessmentId?: string
+  assessmentId?: string,
+  navigateOnComplete?: boolean
 ) {
   const formDefinitionId = definition.id;
 
@@ -51,15 +52,24 @@ export function useAssessmentHandlers(
           fieldName: 'assessments',
         });
       }
-      // TODO pull out, not wanted for householw worklow
-      navigate(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-          enrollmentId,
-          clientId,
-        })
-      );
+
+      if (navigateOnComplete) {
+        navigate(
+          generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+            enrollmentId,
+            clientId,
+          })
+        );
+      }
     },
-    [enrollmentId, clientId, setErrors, assessmentId, navigate]
+    [
+      enrollmentId,
+      clientId,
+      setErrors,
+      assessmentId,
+      navigate,
+      navigateOnComplete,
+    ]
   );
 
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =

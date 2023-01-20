@@ -16,6 +16,7 @@ export function useHouseholdMembers(
   const { data: { enrollment: enrollment } = {}, ...status } =
     useGetEnrollmentWithHouseholdQuery({
       variables: { id: enrollmentId },
+      fetchPolicy: 'cache-and-network',
     });
 
   const householdMembers: HouseholdClientFieldsWithAssessmentsFragment[] =
