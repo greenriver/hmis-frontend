@@ -51,10 +51,6 @@ const MemberTab = ({
   />
 );
 
-/**
- * TODO: think about how you would "apply changes to all assessments" (would it save or apply locally?)
- */
-
 const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
   // TODO exclude exited if exiting
   // exclude completed intakes if intake-ing

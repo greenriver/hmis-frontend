@@ -25,7 +25,14 @@ export function useAssessment(
       enrollmentId,
       assessmentRole: assessmentRoleParam as AssessmentRole,
     },
-    skip: !assessmentRoleParam, // skip if editing an existing assessment
+    // skip if editing an existing assessment
+    skip: !assessmentRoleParam,
+    // FIXME: for now always use network because theh response depends on the enrollment details (HoH status, age status, etc)
+    // Should figure out a way to cache when possible
+    fetchPolicy: 'cache-and-network',
+    onCompleted: (data) => {
+      console.log('fetched fd for', enrollmentId, data);
+    },
   });
 
   const {
