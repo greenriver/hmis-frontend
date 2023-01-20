@@ -93,7 +93,7 @@ const NewEnrollment = () => {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item xs={11}>
+        <Grid item xs={12}>
           <Typography variant='h4' sx={{ mb: 2 }}>
             Create enrollment
             <Box component='span' fontWeight={400}>

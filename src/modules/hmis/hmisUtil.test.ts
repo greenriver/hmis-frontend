@@ -1,4 +1,5 @@
 import {
+  maskSSN,
   enrollmentName,
   formatDateForGql,
   parseAndFormatDate,
@@ -24,6 +25,17 @@ describe('Other fns', () => {
     expect(enrollmentName(withProjectTypeDayShelter, true)).toBe(
       'Foo Bar (Day Shelter)'
     );
+  });
+
+  it('masks SSN', () => {
+    expect(maskSSN('1234')).toBe('XXX-XX-1234');
+    expect(maskSSN('123')).toBe('XXX-XX-X123');
+    expect(maskSSN('123456789')).toBe('123-45-6789');
+    expect(maskSSN('123-45-6789')).toBe('123-45-6789');
+    expect(maskSSN('123XX6789')).toBe('123-XX-6789');
+    expect(maskSSN('XXX456789')).toBe('XXX-45-6789');
+    expect(maskSSN('abcd1234')).toBe('XXX-XX-1234');
+    expect(maskSSN('000123456789')).toBe('123-45-6789');
   });
 });
 

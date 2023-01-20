@@ -1,4 +1,4 @@
-import { Paper, Stack } from '@mui/material';
+import { Paper } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
@@ -15,8 +15,10 @@ import Loading from '@/components/elements/Loading';
 import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { age, dob, last4SSN } from '@/modules/hmis/hmisUtil';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -33,11 +35,6 @@ export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<ClientFieldsFragment>;
 } = {
   id: { header: 'ID', render: 'id', width: '10%' },
-  ssn: {
-    header: 'SSN',
-    width: '8%',
-    render: (client: ClientFieldsFragment) => last4SSN(client),
-  },
   name: {
     header: 'Name',
     key: 'name',
@@ -66,24 +63,38 @@ export const CLIENT_COLUMNS: {
     header: 'Preferred Name',
     render: 'preferredName',
   },
+  ssn: {
+    header: 'SSN',
+    key: 'ssn',
+    width: '8%',
+    render: (client: ClientFieldsFragment) => (
+      <ClientSsn client={client} lastFour />
+    ),
+    // dontLink: true,
+  },
   dobAge: {
     header: 'DOB / Age',
-    render: (row: ClientFieldsFragment) =>
-      row.dob && (
-        <Stack direction='row' spacing={1}>
-          <span>{dob(row)}</span>
-          <span>{`(${age(row)})`}</span>
-        </Stack>
-      ),
+    key: 'dob',
+    render: (client: ClientFieldsFragment) => (
+      <ClientDobAge client={client} reveal />
+    ),
+    // dontLink: true,
   },
 };
 
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
-  CLIENT_COLUMNS.ssn,
   { ...CLIENT_COLUMNS.first, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.preferred, width: '15%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.ssn, width: '10%' },
+  { ...CLIENT_COLUMNS.dobAge, width: '10%' },
+];
+
+export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
+  CLIENT_COLUMNS.id,
+  { ...CLIENT_COLUMNS.name, width: '15%', linkTreatment: true },
+  { ...CLIENT_COLUMNS.ssn, width: '10%' },
   { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
 
@@ -120,6 +131,8 @@ const ClientSearch: React.FC<Props> = ({
     ClientSortOption.LastNameAToZ
   );
   const [offset, setOffset] = useState(0);
+
+  const isMobile = useIsMobile();
 
   const handleSetSortOrder: typeof setSortOrder = useCallback((value) => {
     setOffset(0);
@@ -246,7 +259,11 @@ const ClientSearch: React.FC<Props> = ({
             ) : (
               <WrapperComponent>
                 <GenericTable
-                  columns={SEARCH_RESULT_COLUMNS}
+                  columns={
+                    isMobile
+                      ? MOBILE_SEARCH_RESULT_COLUMNS
+                      : SEARCH_RESULT_COLUMNS
+                  }
                   rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
                   {...searchResultsTableProps}
