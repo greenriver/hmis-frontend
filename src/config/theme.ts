@@ -28,6 +28,10 @@ declare module '@mui/material/styles' {
 
 // Dynamic installation-specific theming
 const theme = createTheme({
+  // For some reason this declaration has to be included here rather than below to take effect
+  typography: {
+    fontFamily: '"Open Sans", sans-serif',
+  },
   palette: {
     background: {
       default: '#F9F9F9',
@@ -46,7 +50,6 @@ const theme = createTheme({
 
 export default createTheme(theme, {
   typography: {
-    fontFamily: "'Open Sans', sans-serif",
     h1: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 18,
