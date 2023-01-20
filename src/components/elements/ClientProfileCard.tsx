@@ -20,6 +20,7 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameWithoutPreferred, pronouns } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientImageFragment,
@@ -83,11 +84,17 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             content: (
               <ClientProfileCardTextTable
                 content={{
-                  Race: client.race.join(', '),
-                  Ethnicity: client.ethnicity,
-                  Gender: client.gender.join(', '),
+                  Race: client.race.map((e) => HmisEnums.Race[e]).join(', '),
+                  Ethnicity: client.ethnicity
+                    ? HmisEnums.Ethnicity[client.ethnicity]
+                    : null,
+                  Gender: client.gender
+                    .map((e) => HmisEnums.Gender[e])
+                    .join(', '),
                   Pronouns: pronouns(client),
-                  'Veteran Status': client.veteranStatus,
+                  'Veteran Status': client.veteranStatus
+                    ? HmisEnums.NoYesReasonsForMissingData[client.veteranStatus]
+                    : null,
                 }}
               />
             ),
