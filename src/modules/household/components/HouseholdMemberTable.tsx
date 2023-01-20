@@ -55,7 +55,7 @@ const HouseholdMemberTable = ({
             DashboardRoutes.VIEW_ENROLLMENT,
             {
               clientId: h.client.id,
-              enrollmentId,
+              enrollmentId: h.enrollment.id,
             }
           );
           const routerLinkProps = isCurrentClient

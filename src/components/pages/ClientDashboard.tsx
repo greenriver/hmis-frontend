@@ -98,6 +98,8 @@ const ClientDashboard: React.FC = () => {
 
   if (loading || enrollmentLoading || !navItems) return <Loading />;
   if (!client || !outletContext) throw Error('Client not found');
+  if (enrollment && enrollment.client.id !== params.clientId)
+    throw Error('Page not found');
 
   return (
     <DashboardContentContainer
