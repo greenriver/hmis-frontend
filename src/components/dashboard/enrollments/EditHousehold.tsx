@@ -183,8 +183,8 @@ const EditHousehold = () => {
           </Typography>
           {currentMembers && (
             <>
-              <Paper sx={{ p: 2, mb: 2 }}>
-                <Typography variant='h5' sx={{ mb: 3 }}>
+              <Paper sx={{ pt: 2, mb: 2 }}>
+                <Typography variant='h5' sx={{ px: 3, mb: 2 }}>
                   Current Household
                 </Typography>
                 <EditHouseholdMemberTable
@@ -209,8 +209,8 @@ const EditHousehold = () => {
             Add Clients to Household
           </Typography>
           {eligibleMembers && eligibleMembers.length > 0 && (
-            <Paper sx={{ p: 2, mb: 2 }}>
-              <Typography variant='h5' sx={{ mb: 2 }}>
+            <Paper sx={{ pt: 2, mb: 2 }}>
+              <Typography variant='h5' sx={{ px: 3, mb: 2 }}>
                 Previously Associated Members
               </Typography>
               <AssociatedHouseholdMembers

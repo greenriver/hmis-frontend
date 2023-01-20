@@ -1,5 +1,5 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
@@ -84,9 +84,15 @@ const HouseholdMemberTable = ({
       {
         header: 'Status',
         render: (hc: HouseholdClientFieldsFragment) =>
-          hc.enrollment.exitDate
-            ? `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
-            : 'Active',
+          hc.enrollment.exitDate ? (
+            `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
+          ) : hc.enrollment.inProgress ? (
+            <Typography variant='body2' color='error'>
+              Incomplete
+            </Typography>
+          ) : (
+            'Active'
+          ),
       },
       {
         header: 'Relationship to HoH',

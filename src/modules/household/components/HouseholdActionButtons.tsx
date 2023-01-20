@@ -87,7 +87,7 @@ const HouseholdActionButtons = ({
           <ButtonLink
             disabled={!canExit}
             variant='outlined'
-            color='error'
+            color='secondary'
             startIcon={<ExitToAppIcon fontSize='small' />}
             to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
           >

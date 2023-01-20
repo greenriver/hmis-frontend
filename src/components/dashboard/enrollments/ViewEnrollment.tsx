@@ -44,7 +44,7 @@ const ViewEnrollment = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
-            <Paper sx={{ py: 2 }}>
+            <Paper sx={{ pt: 2 }}>
               <Stack
                 gap={3}
                 direction='row'
