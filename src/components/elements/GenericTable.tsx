@@ -60,6 +60,7 @@ export interface Props<T> {
   vertical?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
+  headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
 }
 
 const clickableRowStyles = {
@@ -73,7 +74,19 @@ const HeaderCell = ({
 }: {
   columnDef: ColumnDef<any>;
   sx?: SxProps<Theme>;
-}) => <TableCell sx={{ fontWeight: 600, ...sx }}>{header}</TableCell>;
+}) => (
+  <TableCell
+    sx={{
+      borderBottomColor: 'borders.dark',
+      borderBottomWidth: 2,
+      borderBottomStyle: 'solid',
+      pb: 1,
+      ...sx,
+    }}
+  >
+    {header}
+  </TableCell>
+);
 
 const GenericTable = <T extends { id: string }>({
   rows,
@@ -88,6 +101,7 @@ const GenericTable = <T extends { id: string }>({
   actionRow,
   tableProps,
   rowSx,
+  headerCellSx,
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
   if (loading) return <Loading />;
@@ -131,7 +145,11 @@ const GenericTable = <T extends { id: string }>({
       {hasHeaders && (
         <TableRow>
           {columns.map((def) => (
-            <HeaderCell columnDef={def} key={key(def)} />
+            <HeaderCell
+              columnDef={def}
+              key={key(def)}
+              sx={headerCellSx ? headerCellSx(def) : undefined}
+            />
           ))}
         </TableRow>
       )}

@@ -1,5 +1,13 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { AppBar, Grid, Stack, Tab, Typography } from '@mui/material';
+import {
+  AppBar,
+  Grid,
+  Stack,
+  Tab,
+  Typography,
+  TabProps,
+  Alert,
+} from '@mui/material';
 import { ReactNode, useMemo, useState } from 'react';
 
 import IndividualAssessment from './IndividualAssessment';
@@ -23,18 +31,43 @@ interface Props {
 
 export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 72;
 
+type MemberTabDefinition = {
+  name?: string;
+  id: string;
+  isHoh: boolean;
+  enrollmentId: string;
+  assessmentId?: string;
+};
+
+const MemberTab = ({
+  definition,
+  sx,
+  ...props
+}: TabProps & { definition: MemberTabDefinition }) => (
+  <Tab
+    sx={{ ...sx }}
+    {...props}
+    label={definition.isHoh ? `(HoH) ${definition.name}` : definition.name}
+  />
+);
+
 /**
  * TODO: think about how you would "apply changes to all assessments" (would it save or apply locally?)
  */
 
 const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
+  // TODO exclude exited if exiting
+  // exclude completed intakes if intake-ing
   const [householdMembers, { loading, error }] = useHouseholdMembers(
-    enrollment.id
+    enrollment.id,
+    type === 'ENTRY' ? 'INCOMPLETE_ENTRY' : 'INCOMPLETE_EXIT'
   );
+
+  console.debug('Household Members', householdMembers);
 
   const [currentTab, setCurrentTab] = useState<string | undefined>();
 
-  const tabs = useMemo(() => {
+  const tabs: MemberTabDefinition[] = useMemo(() => {
     const tabs = householdMembers.map((hc) => ({
       name: clientBriefName(hc.client),
       id: hc.client.id,
@@ -50,15 +83,15 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
   }, [householdMembers, type]);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+    // TODO can we know if we have unsaved changes and warn about them?
     event.preventDefault();
+    window.scrollTo(0, 0);
     setCurrentTab(newValue);
   };
 
   if (loading) return <Loading />;
   if (error) throw error;
 
-  // difference is that we don't have the assessment ID
-  // fetch here for all
   return (
     <>
       <TabContext value={currentTab || ''}>
@@ -84,32 +117,45 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
             width: '100vw',
           }}
         >
-          <Stack gap={2} direction='row'>
-            <Stack gap={1} sx={{ mr: 10, pb: 2 }}>
-              {title}
-              {enrollment && (
-                <Typography variant='body1'>
-                  {enrollmentName(enrollment)}
-                </Typography>
-              )}
-            </Stack>
-            <TabList
-              onChange={handleChangeTab}
-              aria-label='household member tabs'
-              sx={{ '.MuiTabs-flexContainer': { height: '100%' } }}
-            >
-              {tabs.map((t) => (
-                <Tab
-                  key={t.id}
-                  label={t.isHoh ? `(HoH) ${t.name}` : t.name}
-                  value={t.id}
-                  sx={{ justifyContent: 'end', pb: 2, px: 4 }}
-                />
-              ))}
-            </TabList>
-          </Stack>
+          <Grid container sx={{ height: '100%', alignItems: 'center' }}>
+            <Grid item xs={3}>
+              <Stack gap={0.2}>
+                {title}
+                {enrollment && (
+                  <Typography variant='body1'>
+                    {enrollmentName(enrollment)}
+                  </Typography>
+                )}
+              </Stack>
+            </Grid>
+            <Grid item xs={1} sm={0.1}></Grid>
+            <Grid item xs={8} sx={{ height: '100%' }}>
+              <TabList
+                onChange={handleChangeTab}
+                aria-label='household member tabs'
+                sx={{
+                  '&.MuiTabs-root': { height: '100%' },
+                  '.MuiTabs-flexContainer': { height: '100%' },
+                }}
+              >
+                {tabs.map((definition) => (
+                  <MemberTab
+                    value={definition.id}
+                    key={definition.id}
+                    definition={definition}
+                    sx={{
+                      justifyContent: 'end',
+                      fontWeight: 800,
+                      pb: 2,
+                      px: 4,
+                    }}
+                  />
+                ))}
+              </TabList>
+            </Grid>
+          </Grid>
         </AppBar>
-        <Grid container spacing={4} sx={{ py: 3 }}>
+        <Grid container spacing={4} sx={{ py: 2 }}>
           <Grid item xs={12}>
             {tabs.map(({ id, name, enrollmentId, assessmentId }) => (
               <TabPanel value={id} key={id} sx={{ py: 0 }}>
@@ -126,6 +172,12 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
                 />
               </TabPanel>
             ))}
+            {tabs.length === 0 && (
+              <Alert severity='info'>
+                No household members can be{' '}
+                {type === 'ENTRY' ? 'entered' : 'exited'} at this time
+              </Alert>
+            )}
           </Grid>
         </Grid>
       </TabContext>

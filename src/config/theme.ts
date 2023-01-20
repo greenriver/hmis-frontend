@@ -22,7 +22,7 @@ declare module '@mui/material/styles' {
     borders: Record<string, string>;
   }
   interface PaletteOptions {
-    borders: Record<'light', string>;
+    borders: Record<'light' | 'dark', string>;
   }
 }
 
@@ -40,6 +40,7 @@ const theme = createTheme({
     },
     borders: {
       light: '#E5E5E5',
+      dark: '#c9c9c9',
     },
   },
 });

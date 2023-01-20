@@ -14,6 +14,7 @@ interface Props extends TypographyProps {
   stackProps?: StackProps;
   routerLinkProps?: RouterLinkProps;
   linkToProfile?: boolean;
+  bold?: boolean;
 }
 
 const ClientName = forwardRef<Props, any>(
@@ -25,6 +26,7 @@ const ClientName = forwardRef<Props, any>(
       routerLinkProps,
       variant = 'body2',
       linkToProfile = false,
+      bold = false,
       ...props
     },
     ref
@@ -34,6 +36,16 @@ const ClientName = forwardRef<Props, any>(
     const secondaryName = client.preferredName
       ? clientNameWithoutPreferred(client)
       : null;
+
+    const primaryNameText = (
+      <Typography
+        variant={variant}
+        fontWeight={bold ? 800 : undefined}
+        {...props}
+      >
+        {primaryName}
+      </Typography>
+    );
 
     const primaryNameComponent =
       routerLinkProps?.to || linkToProfile ? (
@@ -48,31 +60,25 @@ const ClientName = forwardRef<Props, any>(
           {...routerLinkProps}
           ref={ref}
         >
-          <Typography variant={variant} {...props}>
-            {primaryName}
-          </Typography>
+          {primaryNameText}
         </RouterLink>
       ) : (
-        <Typography variant={variant} {...props}>
-          {primaryName}
-        </Typography>
+        primaryNameText
       );
-
-    if (!secondaryName) {
-      return primaryNameComponent;
-    }
 
     return (
       <Stack direction='row' gap={1} {...stackProps}>
         {primaryNameComponent}
-        <Typography
-          variant={variant}
-          color='text.secondary'
-          fontStyle='italic'
-          {...secondaryNameProps}
-        >
-          {secondaryName}
-        </Typography>
+        {secondaryName && (
+          <Typography
+            variant={variant}
+            color='text.secondary'
+            fontStyle='italic'
+            {...secondaryNameProps}
+          >
+            {secondaryName}
+          </Typography>
+        )}
       </Stack>
     );
   }

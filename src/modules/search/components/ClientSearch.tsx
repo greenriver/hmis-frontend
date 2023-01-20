@@ -266,6 +266,9 @@ const ClientSearch: React.FC<Props> = ({
                   }
                   rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
+                  headerCellSx={() => ({
+                    fontWeight: 800,
+                  })}
                   {...searchResultsTableProps}
                 />
               </WrapperComponent>

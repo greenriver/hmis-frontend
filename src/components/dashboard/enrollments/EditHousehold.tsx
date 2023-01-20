@@ -60,8 +60,12 @@ const EditHousehold = () => {
   useScrollToHash(anythingLoading);
 
   const currentMembers = useMemo(
-    () => sortHouseholdMembers(data?.enrollment?.household.householdClients),
-    [data]
+    () =>
+      sortHouseholdMembers(
+        data?.enrollment?.household.householdClients,
+        clientId
+      ),
+    [data, clientId]
   );
   const currentMembersMap = useMemo(() => {
     const hc = data?.enrollment?.household.householdClients || [];

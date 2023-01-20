@@ -17,7 +17,7 @@ import {
   RelatedRecord,
 } from '../util/recordPickerUtil';
 
-import AssessmentsTable from '@/components/dashboard/enrollments/tables/AssessmentsTable';
+import AssessmentsForPopulationTable from '@/components/dashboard/enrollments/tables/AssessmentsForPopulationTable';
 import DisabilitiesTable from '@/components/dashboard/enrollments/tables/DisabilitiesTable';
 import EnrollmentsTable from '@/components/dashboard/enrollments/tables/EnrollmentsTable';
 import HealthAndDvsTable from '@/components/dashboard/enrollments/tables/HealthAndDvsTable';
@@ -46,7 +46,7 @@ export const tableComponentForType = (
   | typeof DisabilitiesTable
   | typeof HealthAndDvsTable
   | typeof EnrollmentsTable
-  | typeof AssessmentsTable
+  | typeof AssessmentsForPopulationTable
   | null => {
   switch (recordType) {
     // YouthEducationStatus
@@ -62,7 +62,7 @@ export const tableComponentForType = (
     case RelatedRecordType.Enrollment:
       return EnrollmentsTable;
     case 'Assessment':
-      return AssessmentsTable;
+      return AssessmentsForPopulationTable;
     default:
       return null;
   }

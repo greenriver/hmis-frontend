@@ -74,7 +74,7 @@ const AllAssessments = () => {
       >
         <Typography variant='h4'>All Assessments</Typography>
       </Stack>
-      <Paper sx={{ p: 2 }}>
+      <Paper>
         <GenericTableWithData<
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,

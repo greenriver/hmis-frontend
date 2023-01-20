@@ -1,16 +1,16 @@
-import { Box, Button, Grid, Paper, Tooltip, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   alertErrorFallback,
   ApolloErrorAlert,
 } from '@/components/elements/ErrorFallback';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
-import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
@@ -42,11 +42,6 @@ const AssessmentForm = ({
   enrollment,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
-  const { clientId, enrollmentId, assessmentId } = useSafeParams() as {
-    clientId: string;
-    enrollmentId: string;
-    assessmentId?: string;
-  };
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -70,7 +65,12 @@ const AssessmentForm = ({
     mutationLoading,
     errors,
     apolloError,
-  } = useAssessmentHandlers(definition, clientId, enrollmentId, assessmentId);
+  } = useAssessmentHandlers(
+    definition,
+    enrollment.client.id,
+    enrollment.id,
+    assessment?.id
+  );
 
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
@@ -131,12 +131,11 @@ const AssessmentForm = ({
           </Paper>
 
           {!assessment && (
-            <Tooltip
+            <ButtonTooltipContainer
               title={
                 'Choose a previous assessment to copy into this assessment'
               }
               placement='bottom-end'
-              arrow
             >
               <Button
                 variant='outlined'
@@ -146,7 +145,7 @@ const AssessmentForm = ({
               >
                 Autofill Assessment
               </Button>
-            </Tooltip>
+            </ButtonTooltipContainer>
           )}
         </Box>
       </Grid>

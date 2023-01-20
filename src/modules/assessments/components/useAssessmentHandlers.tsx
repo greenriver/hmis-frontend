@@ -51,6 +51,7 @@ export function useAssessmentHandlers(
           fieldName: 'assessments',
         });
       }
+      // TODO pull out, not wanted for householw worklow
       navigate(
         generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
           enrollmentId,

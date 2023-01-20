@@ -121,7 +121,11 @@ const IndividualAssessment = ({
           </Typography>
         </Stack>
       )}
-      {!definition && <MissingDefinitionAlert />}
+      {!definition && (
+        <MissingDefinitionAlert
+          hasAssessmentDetail={!!assessment?.assessmentDetail}
+        />
+      )}
       {definition && (
         <AssessmentForm
           assessmentRole={assessmentRole}

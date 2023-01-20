@@ -4,7 +4,6 @@ import { useOutletContext } from 'react-router-dom';
 import { useRecentAssessments } from '../../../modules/assessments/components/useRecentAssessments';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import HouseholdActionButtons from './HouseholdActionButtons';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
@@ -23,15 +22,6 @@ const ViewEnrollment = () => {
   };
 
   const { intake, loading } = useRecentAssessments(enrollmentId);
-
-  // const editHouseholdPath = useMemo(
-  //   () =>
-  //     generateSafePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
-  //       clientId,
-  //       enrollmentId,
-  //     }),
-  //   [clientId, enrollmentId]
-  // );
 
   if (!enrollment) throw Error('Enrollment not found');
 
@@ -54,54 +44,23 @@ const ViewEnrollment = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ py: 2 }}>
               <Stack
                 gap={3}
                 direction='row'
                 justifyContent={'space-between'}
-                sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+                sx={{ mb: 2, px: 3, alignItems: 'center' }}
               >
                 <Typography variant='h5' sx={{ mb: 0 }}>
                   Household
                 </Typography>
-                {/* <ButtonLink
-                  size='small'
-                  variant='outlined'
-                  color='secondary'
-                  startIcon={<EditIcon fontSize='small' />}
-                  to={`${editHouseholdPath}`}
-                >
-                  Edit Household
-                </ButtonLink> */}
               </Stack>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
-              <HouseholdActionButtons
-                clientId={clientId}
-                enrollmentId={enrollmentId}
-              />
-              {/* <ButtonLink
-                size='small'
-                variant='outlined'
-                color='secondary'
-                sx={{ mt: 2, ml: 6 }}
-                to={`${editHouseholdPath}#add`}
-              >
-                + Add Household Members
-              </ButtonLink>
-              <ButtonLink
-                size='small'
-                variant='outlined'
-                color='secondary'
-                sx={{ mt: 2, ml: 6 }}
-                to={`${editHouseholdPath}#add`}
-              >
-                + Exit Household
-              </ButtonLink> */}
             </Paper>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ py: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>
           </Stack>

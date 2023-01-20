@@ -274,8 +274,16 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
 export const sortHouseholdMembers = (
   members?:
     | HouseholdClientFieldsFragment[]
-    | HouseholdClientFieldsWithAssessmentsFragment[]
-) => sortBy(members || [], [(c) => c.client.lastName, (c) => c.client.id]);
+    | HouseholdClientFieldsWithAssessmentsFragment[],
+  activeClientId?: string
+) => {
+  const sorted = sortBy(members || [], [
+    (c) => (c.client.id === activeClientId ? -1 : 1),
+    (c) => c.client.lastName,
+    (c) => c.client.id,
+  ]);
+  return sorted;
+};
 
 export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);

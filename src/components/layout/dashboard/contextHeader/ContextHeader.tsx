@@ -53,7 +53,7 @@ const ContextHeader: React.FC<Props> = ({
             to={generateSafePath(focusMode, params)}
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
-            sx={{ height: '32px', fontWeight: 600 }}
+            sx={{ height: '32px', fontWeight: 600, ml: 2 }}
           >
             Back
           </ButtonLink>

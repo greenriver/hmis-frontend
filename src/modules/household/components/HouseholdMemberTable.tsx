@@ -1,10 +1,12 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
+import { Box } from '@mui/material';
 import { useMemo } from 'react';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
+import HouseholdActionButtons from './HouseholdActionButtons';
+import HouseholdMemberActionButton from './HouseholdMemberActionButton';
 import { useHouseholdMembers } from './useHouseholdMembers';
 
-import HouseholdMemberActionButton from '@/components/dashboard/enrollments/HouseholdMemberActionButton';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
@@ -48,6 +50,7 @@ const HouseholdMemberTable = ({
       {
         header: 'Name',
         render: (h: HouseholdClientFieldsFragment) => {
+          const isCurrentClient = h.client.id === clientId;
           const viewEnrollmentPath = generateSafePath(
             DashboardRoutes.VIEW_ENROLLMENT,
             {
@@ -55,16 +58,19 @@ const HouseholdMemberTable = ({
               enrollmentId,
             }
           );
-          const routerLinkProps =
-            h.client.id !== clientId
-              ? {
-                  to: viewEnrollmentPath,
-                  target: '_blank',
-                }
-              : undefined;
+          const routerLinkProps = isCurrentClient
+            ? undefined
+            : {
+                to: viewEnrollmentPath,
+                target: '_blank',
+              };
 
           return (
-            <ClientName client={h.client} routerLinkProps={routerLinkProps} />
+            <ClientName
+              client={h.client}
+              routerLinkProps={routerLinkProps}
+              bold={isCurrentClient}
+            />
           );
         },
       },
@@ -117,21 +123,30 @@ const HouseholdMemberTable = ({
   if (loading || assessmentsLoading) return <Loading />;
 
   return (
-    <GenericTable<HouseholdClientFieldsFragment>
-      rows={householdMembers}
-      columns={columns}
-      rowSx={(hc) => ({
-        borderLeft:
-          hc.client.id === clientId
-            ? (theme) => `3px solid ${theme.palette.secondary.main}`
-            : undefined,
-        'td:nth-of-type(1)': { px: 0 },
-        'td:last-child': {
-          whiteSpace: 'nowrap',
-          width: '1%',
-        },
-      })}
-    />
+    <>
+      <GenericTable<HouseholdClientFieldsFragment>
+        rows={householdMembers}
+        columns={columns}
+        rowSx={() => ({
+          td: { py: 2 },
+          // HoH indicator column
+          'td:nth-of-type(1)': { pl: 1, pr: 0 },
+          // Button column
+          'td:last-child': {
+            py: 0,
+            whiteSpace: 'nowrap',
+            width: '1%',
+          },
+        })}
+      />
+      <Box sx={{ px: 3 }}>
+        <HouseholdActionButtons
+          householdMembers={householdMembers}
+          clientId={clientId}
+          enrollmentId={enrollmentId}
+        />
+      </Box>
+    </>
   );
 };
 

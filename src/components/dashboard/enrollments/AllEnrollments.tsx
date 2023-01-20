@@ -77,7 +77,7 @@ const AllEnrollments = () => {
           + Add Enrollment
         </ButtonLink>
       </Stack>
-      <Paper sx={{ p: 2 }}>
+      <Paper>
         <GenericTableWithData<
           GetClientEnrollmentsQuery,
           GetClientEnrollmentsQueryVariables,
