@@ -5,10 +5,10 @@ import HohIndicatorTableCell from './HohIndicatorTableCell';
 import { useHouseholdMembers } from './useHouseholdMembers';
 
 import HouseholdMemberActionButton from '@/components/dashboard/enrollments/HouseholdMemberActionButton';
-import { useRecentAssessments } from '@/components/dashboard/enrollments/useRecentAssessments';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';

@@ -2,7 +2,7 @@ import {
   GetClientDocument,
   SearchClientsDocument,
   GetPickListDocument,
-  GetEnrollmentWithHoHDocument,
+  GetEnrollmentWithHouseholdDocument,
   GetClientEnrollmentsDocument,
   RelationshipToHoH,
   PickListOption,
@@ -278,7 +278,7 @@ const clientWithEnrollmentsMock = {
 
 const enrollmentWithHoHMock = {
   request: {
-    query: GetEnrollmentWithHoHDocument,
+    query: GetEnrollmentWithHouseholdDocument,
     variables: {
       id: '5',
     },

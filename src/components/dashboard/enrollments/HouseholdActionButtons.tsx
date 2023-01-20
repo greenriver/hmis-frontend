@@ -1,31 +1,19 @@
 import EditIcon from '@mui/icons-material/Edit';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { Stack } from '@mui/material';
-import { useMemo } from 'react';
-import { generatePath } from 'react-router-dom';
+import { useCallback } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardRoutes } from '@/routes/routes';
+import generateSafePath from '@/utils/generateSafePath';
 interface Props {
   enrollmentId: string;
   clientId: string;
 }
 
 const HouseholdActionButtons = ({ enrollmentId, clientId }: Props) => {
-  const editHouseholdPath = useMemo(
-    () =>
-      generatePath(DashboardRoutes.EDIT_HOUSEHOLD, {
-        clientId,
-        enrollmentId,
-      }),
-    [clientId, enrollmentId]
-  );
-  const exitPath = useMemo(
-    () =>
-      generatePath(DashboardRoutes.EXIT_HOUSEHOLD, {
-        clientId,
-        enrollmentId,
-      }),
+  const buildPath = useCallback(
+    (route: string) => generateSafePath(route, { clientId, enrollmentId }),
     [clientId, enrollmentId]
   );
 
@@ -39,7 +27,7 @@ const HouseholdActionButtons = ({ enrollmentId, clientId }: Props) => {
         variant='outlined'
         color='secondary'
         startIcon={<EditIcon fontSize='small' />}
-        to={editHouseholdPath}
+        to={buildPath(DashboardRoutes.EDIT_HOUSEHOLD)}
       >
         Manage Household
       </ButtonLink>
@@ -48,9 +36,18 @@ const HouseholdActionButtons = ({ enrollmentId, clientId }: Props) => {
         variant='outlined'
         color='error'
         startIcon={<ExitToAppIcon fontSize='small' />}
-        to={exitPath}
+        to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
       >
         Exit Household
+      </ButtonLink>
+      <ButtonLink
+        // disabled
+        variant='outlined'
+        color='error'
+        startIcon={<ExitToAppIcon fontSize='small' />}
+        to={buildPath(DashboardRoutes.HOUSEHOLD_INTAKE)}
+      >
+        Enter Household
       </ButtonLink>
     </Stack>
   );

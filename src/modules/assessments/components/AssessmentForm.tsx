@@ -1,7 +1,6 @@
 import { Box, Button, Grid, Paper, Tooltip, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
-import { useCallback, useMemo, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
@@ -11,7 +10,6 @@ import {
 } from '@/components/elements/ErrorFallback';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
@@ -23,17 +21,27 @@ import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
+  EnrollmentFieldsFragment,
   FormDefinition,
 } from '@/types/gqlTypes';
 
 interface Props {
+  enrollment: EnrollmentFieldsFragment;
   // assessmentTitle: string;
   assessmentRole?: AssessmentRole;
   definition: FormDefinition;
   assessment?: AssessmentWithDefinitionAndValuesFragment;
+  top?: number;
+  navigationTitle: ReactNode;
 }
-const Assessment = ({ assessment, assessmentRole, definition }: Props) => {
-  const { enrollment } = useOutletContext<DashboardContext>();
+const AssessmentForm = ({
+  assessment,
+  assessmentRole,
+  definition,
+  navigationTitle,
+  enrollment,
+  top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
+}: Props) => {
   const { clientId, enrollmentId, assessmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;
@@ -103,10 +111,7 @@ const Assessment = ({ assessment, assessmentRole, definition }: Props) => {
     reloadInitialValues,
   ]);
 
-  useScrollToHash(
-    !enrollment || mutationLoading,
-    STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT
-  );
+  useScrollToHash(!enrollment || mutationLoading, top);
 
   // if (dataLoading) return <Loading />;
   if (!enrollment) throw Error('Enrollment not found');
@@ -117,13 +122,11 @@ const Assessment = ({ assessment, assessmentRole, definition }: Props) => {
         <Box
           sx={{
             position: 'sticky',
-            top: STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT + 16,
+            top: top + 16,
           }}
         >
           <Paper sx={{ p: 2 }}>
-            <Typography variant='h6' sx={{ mb: 2 }}>
-              Form Navigation
-            </Typography>
+            {navigationTitle}
             <FormStepper items={definition.definition.item} />
           </Paper>
 
@@ -195,7 +198,7 @@ const Assessment = ({ assessment, assessmentRole, definition }: Props) => {
 const WrappedAssessment = (props: Props) => (
   <Box>
     <Sentry.ErrorBoundary fallback={alertErrorFallback}>
-      <Assessment {...props} />
+      <AssessmentForm {...props} />
     </Sentry.ErrorBoundary>
   </Box>
 );

@@ -2,12 +2,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
 import React, { ReactNode } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
 
 import { STICKY_BAR_HEIGHT } from '../../MainLayout';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import useSafeParams from '@/hooks/useSafeParams';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   isOpen: boolean;
@@ -25,7 +26,7 @@ const ContextHeader: React.FC<Props> = ({
   handleOpenMenu,
 }) => {
   const isMobile = useIsMobile();
-  const params = useParams();
+  const params = useSafeParams();
 
   return (
     <AppBar
@@ -49,7 +50,7 @@ const ContextHeader: React.FC<Props> = ({
       {focusMode ? (
         <Box>
           <ButtonLink
-            to={generatePath(focusMode, params)}
+            to={generateSafePath(focusMode, params)}
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600 }}

@@ -6233,6 +6233,18 @@
             "deprecationReason": null
           },
           {
+            "name": "exitAssessment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Assessment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "exitDate",
             "description": null,
             "args": [],
@@ -6304,6 +6316,18 @@
                 "name": "Boolean",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "intakeAssessment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Assessment",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

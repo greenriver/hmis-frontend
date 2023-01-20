@@ -9,7 +9,8 @@ import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
 import AssessmentPage from '@/components/dashboard/enrollments/AssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
-import ExitHousehold from '@/components/dashboard/enrollments/ExitHousehold';
+import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
+import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
@@ -95,10 +96,13 @@ export const protectedRoutes = [
             element: <EditHousehold />,
           },
           {
-            path: DashboardRoutes.EXIT_HOUSEHOLD,
-            element: <ExitHousehold />,
+            path: DashboardRoutes.HOUSEHOLD_EXIT,
+            element: <HouseholdExit />,
           },
-
+          {
+            path: DashboardRoutes.HOUSEHOLD_INTAKE,
+            element: <HouseholdIntake />,
+          },
           {
             path: DashboardRoutes.NEW_ASSESSMENT,
             element: <AssessmentPage />,

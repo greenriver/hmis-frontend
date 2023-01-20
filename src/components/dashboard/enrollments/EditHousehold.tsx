@@ -22,7 +22,7 @@ import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   RelationshipToHoH,
-  useGetEnrollmentWithHoHQuery,
+  useGetEnrollmentWithHouseholdQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -48,7 +48,7 @@ const EditHousehold = () => {
   >({});
 
   const { data, loading, refetch, networkStatus } =
-    useGetEnrollmentWithHoHQuery({
+    useGetEnrollmentWithHouseholdQuery({
       variables: { id: enrollmentId },
       notifyOnNetworkStatusChange: true,
     });

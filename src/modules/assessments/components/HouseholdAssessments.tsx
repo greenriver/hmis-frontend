@@ -1,23 +1,36 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { AppBar, Grid, Stack, Tab, Typography } from '@mui/material';
-import { useMemo, useState } from 'react';
-import { useOutletContext, useParams } from 'react-router-dom';
+import { ReactNode, useMemo, useState } from 'react';
+
+import IndividualAssessment from './IndividualAssessment';
 
 import Loading from '@/components/elements/Loading';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
-import { RelationshipToHoH } from '@/types/gqlTypes';
+import {
+  AssessmentRole,
+  EnrollmentFieldsFragment,
+  RelationshipToHoH,
+} from '@/types/gqlTypes';
 
-const EditHousehold = () => {
-  const { enrollment } = useOutletContext<DashboardContext>();
-  const { enrollmentId } = useParams() as {
-    enrollmentId: string;
-  };
-  const [householdMembers, { loading, error }] =
-    useHouseholdMembers(enrollmentId);
+interface Props {
+  enrollment: EnrollmentFieldsFragment;
+  type: 'ENTRY' | 'EXIT';
+  title: ReactNode;
+}
+
+export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 72;
+
+/**
+ * TODO: think about how you would "apply changes to all assessments" (would it save or apply locally?)
+ */
+
+const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
+  const [householdMembers, { loading, error }] = useHouseholdMembers(
+    enrollment.id
+  );
 
   const [currentTab, setCurrentTab] = useState<string | undefined>();
 
@@ -26,10 +39,15 @@ const EditHousehold = () => {
       name: clientBriefName(hc.client),
       id: hc.client.id,
       isHoh: hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
+      enrollmentId: hc.enrollment.id,
+      assessmentId:
+        type === 'ENTRY'
+          ? hc.enrollment.intakeAssessment?.id
+          : hc.enrollment.exitAssessment?.id,
     }));
     if (tabs.length > 0) setCurrentTab(tabs[0].id);
     return tabs;
-  }, [householdMembers]);
+  }, [householdMembers, type]);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     event.preventDefault();
@@ -39,6 +57,8 @@ const EditHousehold = () => {
   if (loading) return <Loading />;
   if (error) throw error;
 
+  // difference is that we don't have the assessment ID
+  // fetch here for all
   return (
     <>
       <TabContext value={currentTab || ''}>
@@ -49,7 +69,7 @@ const EditHousehold = () => {
           sx={{
             borderTop: 'unset',
             borderLeft: 'unset',
-            // height: CONTEXT_HEADER_HEIGHT,
+            height: HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
             alignItems: 'stretch',
             justifyContent: 'center',
             top: STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
@@ -57,19 +77,16 @@ const EditHousehold = () => {
             borderBottomWidth: '1px',
             borderBottomColor: 'borders.light',
             borderBottomStyle: 'solid',
-            pt: 2,
-            px: { xs: 1, sm: 3, lg: 5 },
+            px: { sm: 3, lg: 5 },
             ml: { xs: -2, sm: -3, lg: -4 },
             mt: { xs: -1, sm: -2 },
-            // Has same scrollbar issue
+            // Has same scrollbar gutter issue
             width: '100vw',
           }}
         >
           <Stack gap={2} direction='row'>
             <Stack gap={1} sx={{ mr: 10, pb: 2 }}>
-              <Typography variant='body1' fontWeight={600}>
-                Exit Household from Enrollment
-              </Typography>
+              {title}
               {enrollment && (
                 <Typography variant='body1'>
                   {enrollmentName(enrollment)}
@@ -94,9 +111,19 @@ const EditHousehold = () => {
         </AppBar>
         <Grid container spacing={4} sx={{ py: 3 }}>
           <Grid item xs={12}>
-            {tabs.map(({ id, name }) => (
-              <TabPanel value={id} key={id}>
-                <Typography>Exiting {name}...</Typography>
+            {tabs.map(({ id, name, enrollmentId, assessmentId }) => (
+              <TabPanel value={id} key={id} sx={{ py: 0 }}>
+                <IndividualAssessment
+                  clientName={name}
+                  embeddedInWorkflow
+                  enrollmentId={enrollmentId}
+                  assessmentId={assessmentId}
+                  assessmentRole={
+                    type === 'ENTRY'
+                      ? AssessmentRole.Intake
+                      : AssessmentRole.Exit
+                  }
+                />
               </TabPanel>
             ))}
           </Grid>
@@ -105,4 +132,4 @@ const EditHousehold = () => {
     </>
   );
 };
-export default EditHousehold;
+export default HouseholdAssessments;

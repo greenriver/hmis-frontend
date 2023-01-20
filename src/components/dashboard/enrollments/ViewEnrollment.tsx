@@ -1,9 +1,10 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
 
+import { useRecentAssessments } from '../../../modules/assessments/components/useRecentAssessments';
+
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 import HouseholdActionButtons from './HouseholdActionButtons';
-import { useRecentAssessments } from './useRecentAssessments';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';

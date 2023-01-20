@@ -69,10 +69,6 @@ export const useDashboardBreadcrumbs = (
         title: 'Edit Household',
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EXIT_HOUSEHOLD]: {
-        title: 'Exit Household',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
-      },
       [DashboardRoutes.ASSESSMENTS]: {
         title: 'Assessments',
         parent: DashboardRoutes.PROFILE,

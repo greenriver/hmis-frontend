@@ -75,6 +75,22 @@ fragment HouseholdClientFields on HouseholdClient {
   }
 }
 
+fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
+  ...HouseholdClientFields
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
+    }
+  }
+}
+
 fragment EnrollmentFields on Enrollment {
   id
   entryDate
@@ -114,7 +130,7 @@ fragment EnrollmentFieldsFromAssessment on Enrollment {
   }
 }
 
-fragment EnrollmentWithHoHFragment on Enrollment {
+fragment EnrollmentWithHouseholdFragment on Enrollment {
   ...EnrollmentFields
   household {
     id

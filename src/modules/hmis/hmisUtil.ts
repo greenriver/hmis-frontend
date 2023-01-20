@@ -17,6 +17,7 @@ import {
   EnrollmentFieldsFragment,
   EventFieldsFragment,
   HouseholdClientFieldsFragment,
+  HouseholdClientFieldsWithAssessmentsFragment,
   ProjectType,
   RecordType,
   ServiceFieldsFragment,
@@ -271,7 +272,9 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
 };
 
 export const sortHouseholdMembers = (
-  members?: HouseholdClientFieldsFragment[]
+  members?:
+    | HouseholdClientFieldsFragment[]
+    | HouseholdClientFieldsWithAssessmentsFragment[]
 ) => sortBy(members || [], [(c) => c.client.lastName, (c) => c.client.id]);
 
 export const getSchemaForType = (type: string) => {
