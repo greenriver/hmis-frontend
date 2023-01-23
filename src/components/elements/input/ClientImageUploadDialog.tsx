@@ -1,3 +1,4 @@
+import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
   Button,
@@ -7,16 +8,16 @@ import {
   DialogActions,
   DialogContent,
   DialogProps,
-  DialogTitle,
   Grid,
   Typography,
   Box,
+  IconButton,
 } from '@mui/material';
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
-import { ClientCardImageElement } from '../ClientCard';
-import Uploader from '../upload/Uploader';
+import { ClientCardImageElement } from '../ClientProfileCard';
+import Uploader from '../upload/UploaderBase';
 
 import {
   useDeleteClientImageMutation,
@@ -80,7 +81,28 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
 
   return (
     <Dialog {...omit(props, 'children')} onClose={onClose}>
-      <DialogTitle>Upload Client Photo</DialogTitle>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          p: 2,
+          borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+        }}
+        component='div'
+      >
+        <Typography sx={{ flexGrow: 1 }} variant='h5' component='p'>
+          Upload Client Photo
+        </Typography>
+        <Box>
+          <IconButton
+            size='small'
+            onClick={(e) => onClose && onClose(e, 'escapeKeyDown')}
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      </Box>
       <DialogContent>
         {fetching ? (
           <CircularProgress />
@@ -90,11 +112,35 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               {client.image && (
                 <>
                   <Grid item>
-                    <Typography>Current Photo</Typography>
+                    <Typography variant='body2' gutterBottom align='center'>
+                      Current Photo
+                    </Typography>
                     <ClientCardImageElement client={client} />
+                    {client?.image && (
+                      <Box>
+                        <Button
+                          variant='outlined'
+                          color='error'
+                          size='small'
+                          fullWidth
+                          disabled={mutationLoading}
+                          startIcon={<DeleteIcon />}
+                          onClick={handleDelete}
+                          endIcon={
+                            deleting ? (
+                              <CircularProgress size={15} color='inherit' />
+                            ) : undefined
+                          }
+                        >
+                          Remove Photo
+                        </Button>
+                      </Box>
+                    )}
                   </Grid>
                   <Grid item>
-                    <Typography>New Photo</Typography>
+                    <Typography variant='body2' gutterBottom align='center'>
+                      New Photo
+                    </Typography>
                     <ClientCardImageElement url={newPhotoSrc} />
                   </Grid>
                 </>
@@ -115,8 +161,8 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
           )
         )}
       </DialogContent>
-      <DialogActions>
-        {client?.image && (
+      <DialogActions sx={{ gap: 2 }}>
+        {/* {client?.image && (
           <Box flexGrow={1}>
             <Button
               variant='outlined'
@@ -133,7 +179,14 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
               Remove Photo
             </Button>
           </Box>
-        )}
+        )} */}
+        <Button
+          variant='outlined'
+          onClick={handleClose}
+          disabled={mutationLoading}
+        >
+          Cancel
+        </Button>
         <Button
           disabled={!newBlobId || mutationLoading}
           onClick={handleSave}
@@ -144,13 +197,6 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
           }
         >
           Save
-        </Button>
-        <Button
-          variant='outlined'
-          onClick={handleClose}
-          disabled={mutationLoading}
-        >
-          Cancel
         </Button>
       </DialogActions>
     </Dialog>

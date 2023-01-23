@@ -32,6 +32,11 @@ export const MISSING_DATA_KEYS = [
   'DATA_NOT_COLLECTED',
   'CLIENT_REFUSED',
   'CLIENT_DOESN_T_KNOW',
+  'GENDER_CLIENT_DOESN_T_KNOW',
+  'GENDER_CLIENT_REFUSED',
+  'RACE_UNKNOWN',
+  'RACE_REFUSED',
+  'RACE_NOT_COLLECTED',
 ];
 
 export const INVALID_ENUM = 'INVALID';
@@ -186,12 +191,21 @@ export const maskSSN = (value?: string) => {
   return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
-export const lastUpdated = (client: ClientFieldsFragment) => {
-  return parseAndFormatDateTime(client.dateUpdated);
+export const lastUpdated = (
+  client: ClientFieldsFragment,
+  includeUser = false
+) => {
+  const str = parseAndFormatDateTime(client.dateUpdated);
+  if (includeUser && client.user) {
+    return `${str || 'unknown'} by ${client.user.name}`;
+  }
+  return str;
 };
 
 export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
-  client.pronouns ? client.pronouns.join(', ') : null;
+  client.pronouns && client.pronouns.length > 0
+    ? client.pronouns.join(', ')
+    : null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
@@ -266,8 +280,7 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
   const isOtherMovingOn =
     e.recordType === RecordType.C2MovingOnAssistanceProvided &&
-    e.typeProvided ===
-      ServiceTypeProvided.C2MovingOnAssistanceProvidedOtherPleaseSpecify;
+    e.typeProvided === ServiceTypeProvided.C2MovingOnAssistanceProvidedOther;
 
   // Don't show 'other' if we have the other value
   if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)

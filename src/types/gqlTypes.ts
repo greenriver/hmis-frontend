@@ -237,6 +237,7 @@ export type Client = {
   race: Array<Race>;
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
+  user?: Maybe<User>;
   veteranStatus: NoYesReasonsForMissingData;
 };
 
@@ -923,14 +924,16 @@ export type Enrollment = {
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   entryDate: Scalars['ISO8601Date'];
   events: EventsPaginated;
+  exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
   household: Household;
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
+  intakeAssessment?: Maybe<Assessment>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
-  losUnderThreshold?: Maybe<NoYesMissing>;
+  losUnderThreshold?: Maybe<Scalars['Boolean']>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
@@ -2029,18 +2032,6 @@ export enum NoAssistanceReason {
   Invalid = 'INVALID',
 }
 
-/** 1.7 */
-export enum NoYesMissing {
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
-}
-
 /** 1.8 */
 export enum NoYesReasonsForMissingData {
   /** (8) Client doesn't know */
@@ -2707,8 +2698,8 @@ export enum ServiceTypeProvided {
   C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
   /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
   C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
-  /** (5) Other (please specify) */
-  C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY',
+  /** (5) Other */
+  C2MovingOnAssistanceProvidedOther = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER',
   /** (1) Subsidized housing application assistance */
   C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
   /** (7) Mortgage assistance */
@@ -6470,6 +6461,7 @@ export type ClientFieldsFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6820,6 +6812,7 @@ export type SearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -6883,6 +6876,7 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    user?: { __typename: 'User'; id: string; name: string } | null;
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -7081,6 +7075,7 @@ export type CreateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7130,6 +7125,7 @@ export type UpdateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7653,6 +7649,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
               image?: {
                 __typename?: 'ClientImage';
                 id: string;
@@ -9312,10 +9309,14 @@ export const ClientFieldsFragmentDoc = gql`
     dateUpdated
     ...ClientName
     ...ClientImage
+    user {
+      ...UserFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
+  ${UserFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
