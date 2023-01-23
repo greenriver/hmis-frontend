@@ -34,9 +34,30 @@ const SimpleAccordion: React.FC<SimpleAccordionProps> = ({
   return (
     <>
       {items.map((item) => (
-        <Accordion {...AccordionProps} key={item.key}>
+        <Accordion
+          key={item.key}
+          sx={{
+            '&::before': {
+              height: '0px',
+            },
+          }}
+          {...AccordionProps}
+        >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
+            sx={{
+              minHeight: '48px',
+              '.MuiAccordionSummary-content': {
+                my: 1,
+                '&.Mui-expanded': {
+                  my: 1,
+                },
+              },
+              '&.Mui-expanded': {
+                minHeight: '48px',
+                my: 0,
+              },
+            }}
             {...AccordionSummaryProps}
             aria-controls={`${item.key}-content`}
             id={`${item.key}-header`}

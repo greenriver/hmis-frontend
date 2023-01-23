@@ -77,13 +77,11 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0,
         },
-        '& .Mui-expanded:first-of-type': {
-          mt: 0,
-        },
       }}
     >
       <SimpleAccordion
         renderHeader={(header) => <Typography>{header}</Typography>}
+        AccordionProps={{ defaultExpanded: true }}
         items={[
           {
             key: 'Demographics',
@@ -105,18 +103,18 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               />
             ),
           },
-          {
-            key: 'Case Manager',
-            content: 'TK',
-          },
-          {
-            key: 'Housing Status',
-            content: 'TK',
-          },
-          {
-            key: 'Client Contact Information',
-            content: 'TK',
-          },
+          // {
+          //   key: 'Case Manager',
+          //   content: 'TK',
+          // },
+          // {
+          //   key: 'Housing Status',
+          //   content: 'TK',
+          // },
+          // {
+          //   key: 'Client Contact Information',
+          //   content: 'TK',
+          // },
         ]}
       />
     </Box>
