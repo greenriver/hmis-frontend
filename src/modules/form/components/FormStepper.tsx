@@ -62,7 +62,7 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
                   '.MuiStepLabel-root': { py: 0 },
                   '.MuiStepLabel-iconContainer': { display: 'none' },
                   '.MuiStepLabel-label': {
-                    color: (theme) => theme.palette.action.active,
+                    color: '#1976d2',
                     textDecoration: 'underline',
                     textDecorationColor: 'rgba(25, 118, 210, 0.4)',
                   },

@@ -42,9 +42,6 @@ const theme = createTheme({
       light: '#E5E5E5',
       dark: '#c9c9c9',
     },
-    action: {
-      active: '#1976d2',
-    },
   },
 });
 
