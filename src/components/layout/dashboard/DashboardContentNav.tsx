@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 import { STICKY_BAR_HEIGHT } from '../MainLayout';
 
 import { CONTEXT_HEADER_HEIGHT } from './contextHeader/ContextHeader';
-import { sidebarWidth } from './DashboardContentContainer';
+import { DESKTOP_NAV_SIDEBAR_WIDTH } from './DashboardContentContainer';
 
 const SITE_HEADER_HEIGHT = STICKY_BAR_HEIGHT;
 
@@ -99,8 +99,10 @@ const DashboardContentNav: React.FC<Props> = ({
             position: 'static',
             borderTop: 'unset',
             // boxShadow: 'none',
-            width: sidebarWidth,
-            transform: desktopNavIsOpen ? '' : `translateX(-${sidebarWidth})`,
+            width: DESKTOP_NAV_SIDEBAR_WIDTH,
+            transform: desktopNavIsOpen
+              ? ''
+              : `translateX(-${DESKTOP_NAV_SIDEBAR_WIDTH})`,
           },
         })}
       >

@@ -69,12 +69,29 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
+    veteranStatus
   }
   enrollment {
     id
     entryDate
     exitDate
     inProgress
+  }
+}
+
+fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
+  ...HouseholdClientFields
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+    intakeAssessment {
+      id
+    }
+    exitAssessment {
+      id
+    }
   }
 }
 
@@ -88,6 +105,7 @@ fragment EnrollmentFields on Enrollment {
     projectType
   }
   inProgress
+  relationshipToHoH
   household {
     id
   }
@@ -117,7 +135,7 @@ fragment EnrollmentFieldsFromAssessment on Enrollment {
   }
 }
 
-fragment EnrollmentWithHoHFragment on Enrollment {
+fragment EnrollmentWithHouseholdFragment on Enrollment {
   ...EnrollmentFields
   household {
     id

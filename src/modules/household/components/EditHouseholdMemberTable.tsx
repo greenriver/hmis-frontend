@@ -154,6 +154,7 @@ const EditHouseholdMemberTable = ({
             client={hc.client}
             routerLinkProps={{ target: '_blank' }}
             linkToProfile={hc.client.id !== clientId}
+            bold={hc.client.id === clientId}
           />
         ),
       },
@@ -262,11 +263,8 @@ const EditHouseholdMemberTable = ({
       <GenericTable<HouseholdClientFieldsFragment>
         rows={currentMembers}
         columns={columns}
-        rowSx={(hc) => ({
-          borderLeft:
-            hc.client.id === clientId
-              ? (theme) => `3px solid ${theme.palette.secondary.main}`
-              : undefined,
+        rowSx={() => ({
+          // HoH indicator column
           'td:nth-of-type(1)': { px: 0 },
         })}
       />

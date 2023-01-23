@@ -63,7 +63,7 @@ it(
       // Save assessment
       cy.testId('saveFormButton').first().click();
       // Re-open assessment and assert that hudValues match previous
-      cy.testId('assessmentsPanel').find('table').find('a').first().click();
+      cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
     });
 
@@ -73,7 +73,7 @@ it(
     cy.testId('saveFormButton').first().click();
 
     // Re-open and ensure change was persisted
-    // cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    // cy.testId('panel-assessments').find('table').find('a').first().click();
     cy.testId('finishIntake').click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'NO',
@@ -84,7 +84,7 @@ it(
     cy.testId('submitFormButton').first().click();
 
     // Re-open and make sure CLIENT_REFUSED saved
-    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.testId('panel-assessments').find('table').find('a').first().click();
     cy.testId('saveFormButton').should('not.exist');
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'CLIENT_REFUSED',
@@ -95,7 +95,7 @@ it(
     cy.testId('submitFormButton').first().click();
 
     // Re-open and make sure YES saved
-    cy.testId('assessmentsPanel').find('table').find('a').first().click();
+    cy.testId('panel-assessments').find('table').find('a').first().click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'YES',
     });
@@ -107,7 +107,7 @@ it(
       // Submit assessment
       cy.testId('submitFormButton').first().click();
       // Re-open assessment and assert that hudValues match previous
-      cy.testId('assessmentsPanel').find('table').find('a').first().click();
+      cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
     });
   }

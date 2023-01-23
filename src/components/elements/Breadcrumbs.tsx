@@ -29,9 +29,12 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       separator={<KeyboardArrowRightIcon fontSize='small' sx={{ mx: 0 }} />}
       sx={{
         '.MuiBreadcrumbs-li': {
-          overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'no-wrap',
+        },
+        ol: {
+          // padding for focus ring
+          paddingLeft: '5px',
         },
         ...sx,
       }}
@@ -50,6 +53,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
         const filledInPath = generateSafePath(to, params);
         return (
           <RouterLink
+            aria-label={label}
             to={filledInPath}
             key={to}
             variant={variant}

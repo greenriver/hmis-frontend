@@ -7,8 +7,10 @@ import { DashboardRoutes, Routes } from './routes';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import Assessment from '@/components/dashboard/enrollments/Assessment';
+import AssessmentPage from '@/components/dashboard/enrollments/AssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
+import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
+import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
@@ -94,16 +96,24 @@ export const protectedRoutes = [
             element: <EditHousehold />,
           },
           {
+            path: DashboardRoutes.HOUSEHOLD_EXIT,
+            element: <HouseholdExit />,
+          },
+          {
+            path: DashboardRoutes.HOUSEHOLD_INTAKE,
+            element: <HouseholdIntake />,
+          },
+          {
             path: DashboardRoutes.NEW_ASSESSMENT,
-            element: <Assessment />,
+            element: <AssessmentPage />,
           },
           {
             path: DashboardRoutes.VIEW_ASSESSMENT,
-            element: <Assessment />,
+            element: <AssessmentPage />,
           },
           {
             path: DashboardRoutes.EDIT_ASSESSMENT,
-            element: <Assessment />,
+            element: <AssessmentPage />,
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,

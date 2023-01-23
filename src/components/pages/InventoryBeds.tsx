@@ -112,12 +112,12 @@ const InventoryBeds = () => {
       </Stack>
       <Grid container spacing={4}>
         <Grid item xs={12}>
-          <Paper sx={{ p: 2, mb: 4 }}>
+          <Paper sx={{ mb: 4 }}>
             <Stack
               gap={3}
               direction='row'
               justifyContent={'space-between'}
-              sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+              sx={{ m: 2, pr: 1, alignItems: 'center' }}
             >
               <Typography variant='h5' sx={{ mb: 0 }}>
                 Units
@@ -133,12 +133,12 @@ const InventoryBeds = () => {
             </Stack>
             <UnitsTable inventoryId={inventoryId} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
+          <Paper sx={{ mb: 2 }}>
             <Stack
               gap={3}
               direction='row'
               justifyContent={'space-between'}
-              sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+              sx={{ m: 2, pr: 1, alignItems: 'center' }}
             >
               <Typography variant='h5' sx={{ mb: 0 }}>
                 Beds

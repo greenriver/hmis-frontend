@@ -15,7 +15,6 @@ const ItemCategory = ({ item, first }: Props) => {
   return (
     <ItemBase
       item={item}
-      showIcon
       renderTitle={(title) => (
         // <Box sx={{ width: '100%' }}>
         //   {!first && <Divider />}

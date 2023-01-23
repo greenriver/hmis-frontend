@@ -1,92 +1,41 @@
 import { ApolloError } from '@apollo/client';
-import { startCase } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useSafeParams from '@/hooks/useSafeParams';
 import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentRole,
-  AssessmentWithDefinitionAndValuesFragment,
-  FormDefinitionJson,
+  FormDefinition,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
-  useGetAssessmentQuery,
-  useGetFormDefinitionQuery,
   useSaveAssessmentMutation,
   useSubmitAssessmentMutation,
   ValidationError,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-export function useAssessmentHandlers() {
+type Args = {
+  definition: FormDefinition;
+  clientId: string;
+  enrollmentId: string;
+  assessmentId?: string;
+  navigateOnComplete?: boolean;
+};
+
+export function useAssessmentHandlers({
+  definition,
+  clientId,
+  enrollmentId,
+  assessmentId,
+  navigateOnComplete,
+}: Args) {
+  const formDefinitionId = definition.id;
+
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const {
-    clientId,
-    enrollmentId,
-    assessmentId,
-    assessmentRole: assessmentRoleParam,
-  } = useSafeParams() as {
-    clientId: string;
-    enrollmentId: string;
-    assessmentId?: string;
-    assessmentRole?: string;
-  };
+
   const navigate = useNavigate();
-
-  const role = useMemo(() => {
-    if (!assessmentRoleParam) return;
-    if (
-      !Object.values<string>(AssessmentRole).includes(
-        assessmentRoleParam.toUpperCase()
-      )
-    ) {
-      // should be 404
-      throw Error(`Unrecognized role ${assessmentRoleParam}`);
-    }
-    return assessmentRoleParam.toUpperCase() as AssessmentRole;
-  }, [assessmentRoleParam]);
-
-  const {
-    data: formDefinitionData,
-    loading: formDefinitionLoading,
-    error: formDefinitionError,
-  } = useGetFormDefinitionQuery({
-    variables: {
-      enrollmentId,
-      assessmentRole: role as AssessmentRole,
-    },
-    skip: !role, // skip if editing an existing assessment
-  });
-
-  const {
-    data: assessmentData,
-    loading: assessmentLoading,
-    error: assessmentError,
-  } = useGetAssessmentQuery({
-    variables: { id: assessmentId as string },
-    skip: !assessmentId, // skip if creating a new assessment
-  });
-
-  const definition = useMemo(
-    () =>
-      formDefinitionData?.getFormDefinition?.definition ||
-      assessmentData?.assessment?.assessmentDetail?.definition?.definition,
-    [formDefinitionData, assessmentData]
-  );
-
-  const [assessmentRole, assessmentTitle] = useMemo(() => {
-    const arole = assessmentData?.assessment?.assessmentDetail?.role || role;
-    return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
-  }, [assessmentData, role]);
-
-  const formDefinitionId = useMemo(
-    () => formDefinitionData?.getFormDefinition?.id,
-    [formDefinitionData]
-  );
 
   const handleCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
@@ -105,20 +54,30 @@ export function useAssessmentHandlers() {
 
       // Save/Submit was successful.
       // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
-      if (role) {
+      if (!assessmentId) {
         cache.evict({
           id: `Enrollment:${enrollmentId}`,
           fieldName: 'assessments',
         });
       }
-      navigate(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-          enrollmentId,
-          clientId,
-        })
-      );
+
+      if (navigateOnComplete) {
+        navigate(
+          generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+            enrollmentId,
+            clientId,
+          })
+        );
+      }
     },
-    [enrollmentId, clientId, setErrors, role, navigate]
+    [
+      enrollmentId,
+      clientId,
+      setErrors,
+      assessmentId,
+      navigate,
+      navigateOnComplete,
+    ]
   );
 
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
@@ -138,7 +97,10 @@ export function useAssessmentHandlers() {
   const submitHandler = useCallback(
     (values: FormValues) => {
       if (!definition) return;
-      const hudValues = transformSubmitValues({ definition, values });
+      const hudValues = transformSubmitValues({
+        definition: definition.definition,
+        values,
+      });
       const variables = {
         assessmentId,
         enrollmentId,
@@ -172,27 +134,15 @@ export function useAssessmentHandlers() {
     [saveAssessmentMutation, assessmentId, formDefinitionId, enrollmentId]
   );
 
-  if (formDefinitionError) throw formDefinitionError;
-  if (assessmentError) throw assessmentError;
-
   return {
     submitHandler,
     saveDraftHandler,
-    assessmentTitle,
-    assessmentRole,
-    definition,
-    assessment: assessmentData?.assessment,
-    dataLoading: formDefinitionLoading || assessmentLoading,
     mutationLoading: saveLoading || submitLoading,
     errors,
     apolloError: saveError || submitError,
   } as {
     submitHandler: (values: FormValues, confirmed?: boolean) => void;
     saveDraftHandler: (values: FormValues) => void;
-    assessmentTitle: string;
-    assessmentRole?: AssessmentRole;
-    definition?: FormDefinitionJson;
-    assessment?: AssessmentWithDefinitionAndValuesFragment;
     dataLoading: boolean;
     mutationLoading: boolean;
     errors: ValidationError[];

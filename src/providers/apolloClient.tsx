@@ -44,7 +44,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 export const cache = new InMemoryCache({
-  typePolicies: {},
+  typePolicies: {
+    // FormDefinition: {
+    //   // Singleton types that have no identifying field can use an empty
+    //   // array for their keyFields.
+    //   keyFields: [],
+    // },
+  },
 });
 
 const apolloClient = new ApolloClient({

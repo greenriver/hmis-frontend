@@ -1,31 +1,36 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Container, Tab } from '@mui/material';
+import { Box, Tab } from '@mui/material';
 import { useState } from 'react';
 
-import AssessmentsPanel from './tabs/AssessmentsPanel';
-import EventsPanel from './tabs/EventsPanel';
-import ServicesPanel from './tabs/ServicesPanel';
+import AssessmentsTable from './tabs/AssessmentsTable';
+import EventsTable from './tabs/EventsTable';
+import ServicesTable from './tabs/ServicesTable';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
 const tabs = [
   {
+    key: 'assessments',
     label: 'Assessments',
-    Component: AssessmentsPanel,
+    Component: AssessmentsTable,
   },
   {
+    key: 'services',
     label: 'Services',
-    Component: ServicesPanel,
+    Component: ServicesTable,
   },
   {
+    key: 'events',
     label: 'CE Events',
-    Component: EventsPanel,
+    Component: EventsTable,
   },
   {
+    key: 'notes',
     label: 'Case Notes',
   },
   {
+    key: 'history',
     label: 'Edit History',
   },
 ];
@@ -70,18 +75,19 @@ const EnrollmentRecordTabs = ({
         </TabList>
       </Box>
       {/* Render inactive tab panels too (as empty divs) for accessibility https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/#wai-aria-roles-states-and-properties-22 */}
-      {tabs.map(({ label, Component }) => (
-        <TabPanel value={label} key={label}>
-          {label === currentTab && (
-            <Container maxWidth='xl'>
-              {Component && (
-                <Component
-                  clientId={clientId}
-                  enrollmentId={enrollmentId}
-                  enrollment={enrollment}
-                />
-              )}
-            </Container>
+      {tabs.map(({ key, label, Component }) => (
+        <TabPanel
+          value={label}
+          key={key}
+          sx={{ pt: 1, pb: 1, px: 0, mx: 0, h5: { ml: 3 } }}
+          data-testid={`panel-${key}`}
+        >
+          {label === currentTab && Component && (
+            <Component
+              clientId={clientId}
+              enrollmentId={enrollmentId}
+              enrollment={enrollment}
+            />
           )}
         </TabPanel>
       ))}

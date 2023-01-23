@@ -144,7 +144,7 @@ const GenericTableWithData = <
   const noResults = !loading && data && nodesCount === 0;
 
   if (!header && noResults) {
-    return <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>;
+    return <Typography sx={{ px: 2, py: 1 }}>{noData}</Typography>;
   }
 
   const tableContents = (
@@ -182,7 +182,7 @@ const GenericTableWithData = <
       <Box sx={{ px: 2, py: 1 }}>{header}</Box>
       <Box>
         {noResults ? (
-          <Typography sx={{ px: 2, pb: 1 }}>{noData}</Typography>
+          <Typography sx={{ px: 2, py: 1 }}>{noData}</Typography>
         ) : (
           tableContents
         )}

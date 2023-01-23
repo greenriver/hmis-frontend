@@ -15,13 +15,14 @@ interface Props {
   navHeader: ReactNode;
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
+  focusMode?: string;
   handleOpenDesktopMenu: VoidFunction;
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
 }
 
-export const sidebarWidth = 300;
+export const DESKTOP_NAV_SIDEBAR_WIDTH = 300;
 
 const DashboardContentContainer: React.FC<Props> = ({
   children,
@@ -31,6 +32,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   desktopNavIsOpen,
   mobileNavIsOpen,
   navHeader,
+  focusMode,
   handleOpenDesktopMenu,
   handleOpenMobileMenu,
   handleCloseMobileMenu,
@@ -38,13 +40,15 @@ const DashboardContentContainer: React.FC<Props> = ({
 }) => {
   const theme = useTheme();
   const maxPageWidth = theme.breakpoints.values.xl;
+
   const desktopContainerWidth = desktopNavIsOpen
     ? // FIXME using vw causes horizontal scrollbar when vertical scroll is present
-      `calc(100vw - ${sidebarWidth}px)`
+      // Need to add -15px (or width of scrollbar) to calc if vertical scrollbar is present
+      `calc(100vw - ${DESKTOP_NAV_SIDEBAR_WIDTH}px)`
     : '100vw';
   const desktopTransform = desktopNavIsOpen
     ? ''
-    : `translateX(-${sidebarWidth}px)`;
+    : `translateX(-${DESKTOP_NAV_SIDEBAR_WIDTH}px)`;
   const isMobile = useIsMobile();
 
   return (
@@ -92,6 +96,7 @@ const DashboardContentContainer: React.FC<Props> = ({
         >
           {contextHeader && (
             <ContextHeader
+              focusMode={focusMode}
               isOpen={desktopNavIsOpen}
               handleOpenMenu={
                 isMobile ? handleOpenMobileMenu : handleOpenDesktopMenu

@@ -7,7 +7,10 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import {
+  enrollmentName,
+  parseAndFormatDateRange,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -25,10 +28,9 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   },
   {
     header: 'Project',
-    render: (e) => (
-      // <Stack direction='row' alignItems='end'>
-      <Typography variant='body2'>{e.project.projectName}</Typography>
-    ),
+    render: (row) => enrollmentName(row),
+    linkTreatment: true,
+    ariaLabel: (row) => enrollmentName(row),
   },
   {
     header: 'Project Type',
@@ -77,7 +79,7 @@ const AllEnrollments = () => {
           + Add Enrollment
         </ButtonLink>
       </Stack>
-      <Paper sx={{ p: 2 }}>
+      <Paper>
         <GenericTableWithData<
           GetClientEnrollmentsQuery,
           GetClientEnrollmentsQueryVariables,

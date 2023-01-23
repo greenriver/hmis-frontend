@@ -2,6 +2,8 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { CONTEXT_HEADER_HEIGHT } from '../layout/dashboard/contextHeader/ContextHeader';
+import { STICKY_BAR_HEIGHT } from '../layout/MainLayout';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -42,6 +44,7 @@ const Profile = () => {
       onCompleted={onCompleted}
       getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
       submitButtonText='Save Changes'
+      top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
         <>
           <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>

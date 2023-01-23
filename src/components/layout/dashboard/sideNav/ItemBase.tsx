@@ -1,13 +1,6 @@
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Box, Collapse, IconButton, lighten, Link } from '@mui/material';
-import React, {
-  cloneElement,
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 import { NavItem } from './SideNavMenu';
 import { useItemSelectionStatus } from './useItemSelectionStatus';
@@ -20,7 +13,6 @@ export type ItemBaseProps = {
   collapsible?: boolean; // whether children can be collapsed
   renderTitle?: (title: NavItem['title']) => React.ReactNode;
   renderChild?: (item: NavItem) => React.ReactNode;
-  showIcon?: boolean;
   itemIndent?: number;
 };
 
@@ -29,7 +21,6 @@ const defaultRenderTitle: NonNullable<ItemBaseProps['renderTitle']> = (title) =>
 
 const ItemBase = ({
   item,
-  showIcon = false,
   collapsible = false,
   itemIndent = 0,
   renderTitle = defaultRenderTitle,
@@ -60,7 +51,7 @@ const ItemBase = ({
 
   const isClickable = collapsible || !hasItems;
   const itemSx = {
-    py: 0.5,
+    // py: 0.5,
     px: 2,
     textDecoration: 'none',
     textOverflow: 'ellipsis',
@@ -71,8 +62,6 @@ const ItemBase = ({
     fontWeight: isSelected ? 600 : 400,
   };
 
-  const hasTitle = !!item.title;
-
   return (
     <Box ref={itemRef} id={htmlId}>
       <Box
@@ -82,12 +71,7 @@ const ItemBase = ({
           display: 'flex',
           cursor: isClickable ? 'pointer' : undefined,
           alignItems: 'center',
-          py: hasTitle ? 0.75 : undefined,
-          // pr: 0.75,
-          // pl: 2,
-          // gap: 1,
           transition: 'background-color 0.2s',
-          // borderRadius: '1000px',
           '&:hover':
             isClickable && !isSelected
               ? {
@@ -100,41 +84,43 @@ const ItemBase = ({
               : undefined,
         }}
       >
-        {showIcon && (
+        {item.title && (
           <Box
             sx={{
-              fontSize: 14,
-              display: 'flex',
-              color: isSelected ? '#0060F0' : '#9E9E9E',
+              width: '100%',
+              overflowX: 'hidden',
+              border: '2px solid transparent',
+              py: 1,
+              px: 1,
             }}
           >
-            {item.icon && cloneElement(item.icon, { fontSize: 'inherit' })}
+            {item.href ? (
+              <Link
+                variant='body1'
+                href={item.href || '#'}
+                aria-label={item.title as string}
+                onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
+                sx={itemSx}
+              >
+                {renderTitle(item.title || item.id)}
+              </Link>
+            ) : item.path ? (
+              <RouterLink
+                aria-label={item.title}
+                // class='Mui-focusVisible'
+                variant='body1'
+                to={item.path}
+                onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
+                sx={itemSx}
+                plain
+              >
+                {renderTitle(item.title || item.id)}
+              </RouterLink>
+            ) : (
+              renderTitle(item.title)
+            )}
           </Box>
         )}
-        <Box sx={{ width: '100%', overflowX: 'hidden' }}>
-          {item.href ? (
-            <Link
-              variant='body1'
-              href={item.href || '#'}
-              onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
-              sx={itemSx}
-            >
-              {renderTitle(item.title || item.id)}
-            </Link>
-          ) : item.path ? (
-            <RouterLink
-              variant='body1'
-              to={item.path}
-              onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
-              sx={itemSx}
-              plain
-            >
-              {renderTitle(item.title || item.id)}
-            </RouterLink>
-          ) : item.title ? (
-            renderTitle(item.title)
-          ) : null}
-        </Box>
         {collapsible && hasItems && (
           <Box
             sx={{
@@ -142,7 +128,16 @@ const ItemBase = ({
               transform: `rotate(${open ? '90' : '0'}deg)`,
             }}
           >
-            <IconButton onClick={handleToggle} size='small'>
+            <IconButton
+              onClick={handleToggle}
+              aria-label={item.title as string}
+              size='small'
+              sx={{
+                '&.Mui-focusVisible': {
+                  outlineOffset: '-2px',
+                },
+              }}
+            >
               <KeyboardArrowRightIcon fontSize='small' />
             </IconButton>
           </Box>

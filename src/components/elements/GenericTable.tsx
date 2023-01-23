@@ -46,6 +46,8 @@ export interface ColumnDef<T> {
   linkTreatment?: boolean;
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.
   dontLink?: boolean;
+  // aria label, for use with linkTreatment
+  ariaLabel?: (row: T) => string;
 }
 export interface Props<T> {
   rows: T[];
@@ -61,6 +63,7 @@ export interface Props<T> {
   noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
+  headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
 }
 
 const clickableRowStyles = {
@@ -74,7 +77,19 @@ const HeaderCell = ({
 }: {
   columnDef: ColumnDef<any>;
   sx?: SxProps<Theme>;
-}) => <TableCell sx={{ fontWeight: 600, ...sx }}>{header}</TableCell>;
+}) => (
+  <TableCell
+    sx={{
+      borderBottomColor: 'borders.dark',
+      borderBottomWidth: 2,
+      borderBottomStyle: 'solid',
+      pb: 1,
+      ...sx,
+    }}
+  >
+    {header}
+  </TableCell>
+);
 
 const GenericTable = <T extends { id: string }>({
   rows,
@@ -90,6 +105,7 @@ const GenericTable = <T extends { id: string }>({
   tableProps,
   noHead = false,
   rowSx,
+  headerCellSx,
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
   if (loading) return <Loading />;
@@ -133,7 +149,11 @@ const GenericTable = <T extends { id: string }>({
       {hasHeaders && (
         <TableRow>
           {columns.map((def) => (
-            <HeaderCell columnDef={def} key={key(def)} />
+            <HeaderCell
+              columnDef={def}
+              key={key(def)}
+              sx={headerCellSx ? headerCellSx(def) : undefined}
+            />
           ))}
         </TableRow>
       )}
@@ -188,6 +208,7 @@ const GenericTable = <T extends { id: string }>({
                     width,
                     minWidth,
                     linkTreatment,
+                    ariaLabel,
                     dontLink = false,
                   } = def;
                   const isFirstLinkWithTreatment =
@@ -205,6 +226,7 @@ const GenericTable = <T extends { id: string }>({
                       {isLinked ? (
                         <RouterLink
                           to={rowLinkTo(row)}
+                          aria-label={ariaLabel && ariaLabel(row)}
                           plain={!linkTreatment}
                           data-testid={linkTreatment && 'table-linkedCell'}
                           sx={{
