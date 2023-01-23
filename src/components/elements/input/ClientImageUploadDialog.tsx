@@ -15,7 +15,7 @@ import {
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
-import { ClientCardImageElement } from '../ClientCard';
+import { ClientCardImageElement } from '../ClientProfileCard';
 import Uploader from '../upload/Uploader';
 
 import {

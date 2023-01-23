@@ -33,6 +33,9 @@ const theme = createTheme({
     fontFamily: '"Open Sans", sans-serif',
   },
   palette: {
+    primary: {
+      main: '#1976D2',
+    },
     background: {
       default: '#F9F9F9',
     },
@@ -40,7 +43,7 @@ const theme = createTheme({
       main: '#75559F',
     },
     error: {
-      main: '#B23842',
+      main: '#D32F2F',
     },
     borders: {
       light: '#E5E5E5',

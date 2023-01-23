@@ -1,11 +1,15 @@
 import EditIcon from '@mui/icons-material/Edit';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
+  alpha,
   Box,
   BoxProps,
+  Button,
   Card,
   Grid,
   Link,
   Skeleton,
+  SxProps,
   Typography,
 } from '@mui/material';
 import { format } from 'date-fns';
@@ -45,8 +49,7 @@ export const ClientProfileCardTextTable = ({
           borderBottom: 0,
           py: 0.5,
           px: 1,
-          whiteSpace: 'nowrap',
-          '&:first-of-type': { pl: 0, width: '1px' },
+          '&:first-of-type': { pl: 0, width: '1px', whiteSpace: 'nowrap' },
         },
       }}
       columns={[
@@ -121,13 +124,16 @@ export const ClientCardImageElement = ({
   client,
   base64,
   url,
+  size = 150,
   ...props
 }: {
   client?: ClientImageFragment;
   base64?: string;
   url?: string;
+  size?: number;
 } & BoxProps<'img'>) => {
-  let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
+  // let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
+  let src;
 
   if (client?.image?.base64)
     src = `data:image/jpeg;base64,${client.image.base64}`;
@@ -140,19 +146,41 @@ export const ClientCardImageElement = ({
       src={src}
       {...props}
       sx={{
-        height: 175,
-        width: 175,
+        height: size,
+        width: size,
+        backgroundColor: (theme) => theme.palette.grey[100],
         ...props.sx,
       }}
-      component='img'
+      component={src ? 'img' : undefined}
+      children={
+        src ? undefined : (
+          <Typography
+            sx={{
+              color: (theme) => theme.palette.text.disabled,
+              borderBottom: 0,
+              display: 'flex',
+              flexGrow: 1,
+              height: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            variant='body2'
+            component='span'
+          >
+            No Client Photo
+          </Typography>
+        )
+      }
     />
   );
 };
 
 export const ClientCardImage = ({
   client,
+  size = 150,
 }: {
   client?: ClientImageFragment;
+  size?: number;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
 
@@ -161,6 +189,17 @@ export const ClientCardImage = ({
 
   if (!client) return <ClientCardImageElement />;
 
+  const overlaySx: SxProps = {
+    opacity: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    inset: 0,
+    transition: 'opacity 0.2s',
+    '&:hover': { opacity: 1 },
+  };
+
   return (
     <>
       <ClientImageUploadDialog
@@ -168,8 +207,73 @@ export const ClientCardImage = ({
         onClose={handleClose}
         clientId={client.id}
       />
-      <Link component='button'>
-        <ClientCardImageElement client={client} onClick={handleOpen} />
+      <Link
+        component='button'
+        underline='none'
+        sx={{
+          position: 'relative',
+          width: size,
+          height: size,
+          '&:focus-within > .overlay': {
+            opacity: 1,
+          },
+        }}
+      >
+        <ClientCardImageElement
+          size={size}
+          client={client}
+          onClick={handleOpen}
+        />
+        {client.image?.base64 ? (
+          // Has photo
+          <Box
+            className='overlay'
+            sx={{
+              ...overlaySx,
+              backgroundColor: 'rgba(0,0,0, 0.5)',
+            }}
+          >
+            <Button
+              size='small'
+              sx={(theme) => ({
+                borderRadius: 100,
+                backgroundColor: alpha(theme.palette.grey[200], 0.25),
+                '&:hover': {
+                  backgroundColor: alpha(theme.palette.grey[200], 0.4),
+                },
+              })}
+              onClick={handleOpen}
+              startIcon={<EditIcon />}
+            >
+              Update Photo
+            </Button>
+          </Box>
+        ) : (
+          // No photo
+          <Box
+            className='overlay'
+            sx={{
+              ...overlaySx,
+              backgroundColor: (theme) => theme.palette.grey[100],
+            }}
+          >
+            <Button
+              size='small'
+              sx={(theme) => ({
+                borderRadius: 100,
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.grey[200],
+                '&:hover': {
+                  backgroundColor: theme.palette.grey[300],
+                },
+              })}
+              onClick={handleOpen}
+              startIcon={<PhotoCameraIcon />}
+            >
+              Add Client Photo
+            </Button>
+          </Box>
+        )}
       </Link>
     </>
   );
@@ -187,8 +291,6 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
   const secondaryName = client.preferredName
     ? clientNameWithoutPreferred(client)
     : null;
-
-  console.log({ client });
 
   return (
     <>
@@ -223,7 +325,10 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                 }}
               />
             ) : (
-              <ClientCardImage client={clientImageData || undefined} />
+              <ClientCardImage
+                size={175}
+                client={clientImageData || undefined}
+              />
             )}
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <ClientProfileCardTextTable

@@ -1,4 +1,4 @@
-import { Box, Card, Skeleton, Typography } from '@mui/material';
+import { Box, Card, CircularProgress, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 
@@ -43,8 +43,21 @@ const RecentEnrollments = ({
   );
 
   if (error) throw error;
-  if (loading || !client)
-    return <Skeleton variant='rectangular' width='100%' height={50} />;
+  if (loading || !client) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          color: (theme) => theme.palette.text.disabled,
+          p: 2,
+        }}
+      >
+        <CircularProgress color='inherit' />
+      </Box>
+    );
+  }
 
   if (recentEnrollments && recentEnrollments.length === 0)
     return (
