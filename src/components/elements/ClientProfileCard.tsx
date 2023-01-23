@@ -16,11 +16,13 @@ import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from './ButtonLink';
 import ClientImageUploadDialog from './input/ClientImageUploadDialog';
+import NotSpecified from './NotSpecified';
 import SimpleAccordion from './SimpleAccordion';
 import SimpleTable from './SimpleTable';
 
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameWithoutPreferred,
   lastUpdated,
@@ -88,17 +90,31 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             content: (
               <ClientProfileCardTextTable
                 content={{
-                  Race: client.race.map((e) => HmisEnums.Race[e]).join(', '),
-                  Ethnicity: client.ethnicity
-                    ? HmisEnums.Ethnicity[client.ethnicity]
-                    : null,
-                  Gender: client.gender
-                    .map((e) => HmisEnums.Gender[e])
-                    .join(', '),
-                  Pronouns: pronouns(client),
-                  'Veteran Status': client.veteranStatus
-                    ? HmisEnums.NoYesReasonsForMissingData[client.veteranStatus]
-                    : null,
+                  Race: (
+                    <MultiHmisEnum
+                      values={client.race}
+                      enumMap={HmisEnums.Race}
+                    />
+                  ),
+                  Ethnicity: (
+                    <HmisEnum
+                      value={client.ethnicity}
+                      enumMap={HmisEnums.Ethnicity}
+                    />
+                  ),
+                  Gender: (
+                    <MultiHmisEnum
+                      values={client.gender}
+                      enumMap={HmisEnums.Gender}
+                    />
+                  ),
+                  Pronouns: pronouns(client) || <NotSpecified />,
+                  'Veteran Status': (
+                    <HmisEnum
+                      value={client.veteranStatus}
+                      enumMap={HmisEnums.NoYesReasonsForMissingData}
+                    />
+                  ),
                 }}
               />
             ),

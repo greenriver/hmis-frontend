@@ -1,4 +1,4 @@
-import { Typography, TypographyProps } from '@mui/material';
+import { Stack, Typography, TypographyProps } from '@mui/material';
 
 import { isDataNotCollected } from '@/modules/form/util/formUtil';
 import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
@@ -24,6 +24,19 @@ const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
     <Typography variant='body2' color={color} {...props}>
       {label}
     </Typography>
+  );
+};
+
+export const MultiHmisEnum = ({
+  values,
+  ...props
+}: Omit<Props, 'value'> & { values: any[] }) => {
+  return (
+    <Stack direction='row' divider={<>,&nbsp;</>}>
+      {values.map((val) => (
+        <HmisEnum value={val} key={val} {...props} />
+      ))}
+    </Stack>
   );
 };
 
