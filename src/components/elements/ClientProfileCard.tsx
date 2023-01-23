@@ -12,7 +12,6 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { format } from 'date-fns';
 import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from './ButtonLink';
@@ -22,7 +21,11 @@ import SimpleTable from './SimpleTable';
 
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
-import { clientNameWithoutPreferred, pronouns } from '@/modules/hmis/hmisUtil';
+import {
+  clientNameWithoutPreferred,
+  lastUpdated,
+  pronouns,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -361,11 +364,8 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   Update Client Details
                 </ButtonLink>
 
-                <Typography color='GrayText' variant='body2'>
-                  <em>
-                    Last Updated{' '}
-                    {format(new Date(client.dateUpdated), 'M/d/yyyy')} by [TK]
-                  </em>
+                <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
+                  Last Updated on {lastUpdated(client, true)}
                 </Typography>
               </Box>
             </Box>

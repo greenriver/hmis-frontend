@@ -186,8 +186,15 @@ export const maskSSN = (value?: string) => {
   return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
-export const lastUpdated = (client: ClientFieldsFragment) => {
-  return parseAndFormatDateTime(client.dateUpdated);
+export const lastUpdated = (
+  client: ClientFieldsFragment,
+  includeUser = false
+) => {
+  const str = parseAndFormatDateTime(client.dateUpdated);
+  if (includeUser) {
+    return `${str || 'unknown'} by ${client.user.name}`;
+  }
+  return str;
 };
 
 export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
