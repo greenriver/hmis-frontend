@@ -923,11 +923,13 @@ export type Enrollment = {
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
   entryDate: Scalars['ISO8601Date'];
   events: EventsPaginated;
+  exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
   household: Household;
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
+  intakeAssessment?: Maybe<Assessment>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
   losUnderThreshold?: Maybe<NoYesMissing>;

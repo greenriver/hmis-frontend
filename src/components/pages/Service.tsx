@@ -30,7 +30,6 @@ const Service = ({ create = false }: { create?: boolean }) => {
     clientId: string;
   };
   const title = create ? `Add Service` : `Edit Service`;
-  // const [crumbs, crumbsLoading, enrollment] = useProjectCrumbs(title);
 
   const onCompleted = useCallback(() => {
     // Force refresh table if we just created a new record

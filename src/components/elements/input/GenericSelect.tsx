@@ -4,7 +4,6 @@ import {
   CircularProgress,
   InputAdornment,
 } from '@mui/material';
-import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
@@ -49,11 +48,12 @@ const GenericSelect = <
           {...inputProps}
           InputProps={{
             ...params.InputProps,
-            startAdornment: rest.loading ? (
-              <InputAdornment position='start'>
-                <CircularProgress size={15} color='inherit' />
-              </InputAdornment>
-            ) : undefined,
+            startAdornment:
+              rest.loading && value ? (
+                <InputAdornment position='start'>
+                  <CircularProgress size={15} color='inherit' />
+                </InputAdornment>
+              ) : undefined,
             ...inputProps.InputProps,
           }}
           InputLabelProps={{
@@ -72,8 +72,6 @@ const GenericSelect = <
         />
       )}
       {...rest}
-      // Allow parent to control disabled state; Otherwise just disable when loading
-      disabled={!isNil(rest.disabled) ? rest.disabled : rest.loading}
     />
   );
 };
