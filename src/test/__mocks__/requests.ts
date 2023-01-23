@@ -47,6 +47,7 @@ export const RITA_ACKROYD = {
         id: '5',
         entryDate: '2022-06-18',
         exitDate: null,
+        householdSize: 1,
         project: { projectName: 'White Pine' },
       },
       {
