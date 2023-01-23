@@ -27,7 +27,7 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
             Enroll
           </ButtonLink>
         </Grid>
-        <Grid item xs={12} sm={6}>
+        {/* <Grid item xs={12} sm={6}>
           <Button fullWidth variant='outlined' color='error'>
             Exit
           </Button>
@@ -36,7 +36,7 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
           <Button fullWidth variant='outlined'>
             Case Notes
           </Button>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} sm={6}>
           <Button fullWidth variant='outlined'>
             Add Service
