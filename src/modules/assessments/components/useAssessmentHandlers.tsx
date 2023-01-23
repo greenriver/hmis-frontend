@@ -16,13 +16,21 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-export function useAssessmentHandlers(
-  definition: FormDefinition,
-  clientId: string,
-  enrollmentId: string,
-  assessmentId?: string,
-  navigateOnComplete?: boolean
-) {
+type Args = {
+  definition: FormDefinition;
+  clientId: string;
+  enrollmentId: string;
+  assessmentId?: string;
+  navigateOnComplete?: boolean;
+};
+
+export function useAssessmentHandlers({
+  definition,
+  clientId,
+  enrollmentId,
+  assessmentId,
+  navigateOnComplete,
+}: Args) {
   const formDefinitionId = definition.id;
 
   const [errors, setErrors] = useState<ValidationError[] | undefined>();

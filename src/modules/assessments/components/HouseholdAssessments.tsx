@@ -15,6 +15,7 @@ import IndividualAssessment from './IndividualAssessment';
 import Loading from '@/components/elements/Loading';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
 import {
@@ -37,6 +38,8 @@ type MemberTabDefinition = {
   isHoh: boolean;
   enrollmentId: string;
   assessmentId?: string;
+  client: ClientNameDobVeteranFields;
+  relationshipToHoH: RelationshipToHoH;
 };
 
 const MemberTab = ({
@@ -63,7 +66,7 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
 
   const [currentTab, setCurrentTab] = useState<string | undefined>();
 
-  const tabs: MemberTabDefinition[] = useMemo(() => {
+  const tabs = useMemo(() => {
     const tabs = householdMembers.map((hc) => ({
       name: clientBriefName(hc.client),
       id: hc.client.id,
@@ -73,7 +76,13 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
         type === 'ENTRY'
           ? hc.enrollment.intakeAssessment?.id
           : hc.enrollment.exitAssessment?.id,
+      client: {
+        dob: hc.client.dob,
+        veteranStatus: hc.client.veteranStatus,
+      },
+      relationshipToHoH: hc.relationshipToHoH,
     }));
+
     if (tabs.length > 0) setCurrentTab(tabs[0].id);
     return tabs;
   }, [householdMembers, type]);
@@ -153,21 +162,32 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
         </AppBar>
         <Grid container spacing={4} sx={{ py: 2 }}>
           <Grid item xs={12}>
-            {tabs.map(({ id, name, enrollmentId, assessmentId }) => (
-              <TabPanel value={id} key={id} sx={{ py: 0 }}>
-                <IndividualAssessment
-                  clientName={name}
-                  embeddedInWorkflow
-                  enrollmentId={enrollmentId}
-                  assessmentId={assessmentId}
-                  assessmentRole={
-                    type === 'ENTRY'
-                      ? AssessmentRole.Intake
-                      : AssessmentRole.Exit
-                  }
-                />
-              </TabPanel>
-            ))}
+            {tabs.map(
+              ({
+                id,
+                name,
+                enrollmentId,
+                assessmentId,
+                client,
+                relationshipToHoH,
+              }) => (
+                <TabPanel value={id} key={id} sx={{ py: 0 }}>
+                  <IndividualAssessment
+                    clientName={name}
+                    client={client}
+                    relationshipToHoH={relationshipToHoH}
+                    embeddedInWorkflow
+                    enrollmentId={enrollmentId}
+                    assessmentId={assessmentId}
+                    assessmentRole={
+                      type === 'ENTRY'
+                        ? AssessmentRole.Intake
+                        : AssessmentRole.Exit
+                    }
+                  />
+                </TabPanel>
+              )
+            )}
             {tabs.length === 0 && (
               <Alert severity='info'>
                 No household members can be{' '}

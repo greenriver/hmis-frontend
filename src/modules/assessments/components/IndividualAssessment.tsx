@@ -14,9 +14,14 @@ import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
-import { AssessmentRole, EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import {
+  AssessmentRole,
+  EnrollmentFieldsFragment,
+  RelationshipToHoH,
+} from '@/types/gqlTypes';
 
 interface Props {
   enrollmentId: string;
@@ -24,6 +29,8 @@ interface Props {
   assessmentRole?: AssessmentRole;
   embeddedInWorkflow?: boolean;
   clientName?: string;
+  relationshipToHoH: RelationshipToHoH;
+  client: ClientNameDobVeteranFields;
 }
 
 const assessmentPrefix = (role: AssessmentRole) => {
@@ -64,6 +71,8 @@ const IndividualAssessment = ({
   assessmentRole: assessmentRoleParam,
   embeddedInWorkflow = false,
   clientName,
+  client,
+  relationshipToHoH,
 }: Props) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
@@ -77,7 +86,13 @@ const IndividualAssessment = ({
     loading: dataLoading,
     assessmentTitle,
     assessmentRole,
-  } = useAssessment(enrollmentId, assessmentId, assessmentRoleParam);
+  } = useAssessment({
+    enrollmentId,
+    assessmentId,
+    assessmentRoleParam,
+    client,
+    relationshipToHoH,
+  });
 
   const informationDate = useMemo(
     () => assessmentDate(assessmentRole, enrollment),

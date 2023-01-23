@@ -66,6 +66,7 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
+    veteranStatus
   }
   enrollment {
     id
@@ -101,6 +102,7 @@ fragment EnrollmentFields on Enrollment {
     projectType
   }
   inProgress
+  relationshipToHoH
   household {
     id
   }

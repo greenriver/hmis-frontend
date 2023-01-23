@@ -4234,6 +4234,7 @@ export type AssessmentWithValuesFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -6386,6 +6387,7 @@ export type GetAssessmentsForPopulationQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -6495,6 +6497,7 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
     preferredName?: string | null;
@@ -6528,6 +6531,7 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
     preferredName?: string | null;
@@ -6544,6 +6548,7 @@ export type EnrollmentFieldsFragment = {
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
   householdSize: number;
   project: {
     __typename?: 'Project';
@@ -6581,6 +6586,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
   householdSize: number;
   household: {
     __typename?: 'Household';
@@ -6592,6 +6598,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
       client: {
         __typename?: 'Client';
         id: string;
+        veteranStatus: NoYesReasonsForMissingData;
         firstName?: string | null;
         middleName?: string | null;
         preferredName?: string | null;
@@ -6948,6 +6955,7 @@ export type GetClientEnrollmentsQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        relationshipToHoH: RelationshipToHoH;
         householdSize: number;
         project: {
           __typename?: 'Project';
@@ -6996,6 +7004,7 @@ export type GetClientAssessmentsQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -7240,6 +7249,7 @@ export type CreateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -7276,6 +7286,7 @@ export type UpdateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7287,6 +7298,7 @@ export type UpdateEnrollmentMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7338,6 +7350,7 @@ export type SetHoHMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7349,6 +7362,7 @@ export type SetHoHMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7400,6 +7414,7 @@ export type DeleteEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -7436,6 +7451,7 @@ export type AddHouseholdMembersMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7447,6 +7463,7 @@ export type AddHouseholdMembersMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7495,6 +7512,7 @@ export type GetEnrollmentQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -7519,6 +7537,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     household: {
       __typename?: 'Household';
@@ -7539,6 +7558,7 @@ export type GetEnrollmentWithHouseholdQuery = {
         client: {
           __typename?: 'Client';
           id: string;
+          veteranStatus: NoYesReasonsForMissingData;
           firstName?: string | null;
           middleName?: string | null;
           preferredName?: string | null;
@@ -8080,6 +8100,7 @@ export type GetProjectEnrollmentsQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        relationshipToHoH: RelationshipToHoH;
         householdSize: number;
         client: {
           __typename?: 'Client';
@@ -9247,6 +9268,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       projectType
     }
     inProgress
+    relationshipToHoH
     household {
       id
     }
@@ -9353,6 +9375,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       ...ClientName
       ...ClientIdentificationFields
+      veteranStatus
     }
     enrollment {
       id

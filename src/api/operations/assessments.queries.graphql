@@ -36,8 +36,6 @@ query GetEnrollmentAssessments(
   }
 }
 
-# NOTE: should only be used for Record Editing forms
-# which don't have data_collected_about conditions
 query GetFormDefinitionByIdentifier($identifier: String!) {
   formDefinition(identifier: $identifier) {
     ...FormDefinitionWithJson

@@ -67,13 +67,13 @@ const AssessmentForm = ({
     mutationLoading,
     errors,
     apolloError,
-  } = useAssessmentHandlers(
+  } = useAssessmentHandlers({
     definition,
-    enrollment.client.id,
-    enrollment.id,
-    assessment?.id,
-    !embeddedInWorkflow
-  );
+    clientId: enrollment.client.id,
+    enrollmentId: enrollment.id,
+    assessmentId: assessment?.id,
+    navigateOnComplete: !embeddedInWorkflow,
+  });
 
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.

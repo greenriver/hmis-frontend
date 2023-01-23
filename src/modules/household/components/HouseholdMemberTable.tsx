@@ -123,7 +123,7 @@ const HouseholdMemberTable = ({
           ) : null,
       },
     ];
-  }, [clientId, enrollmentId, assessments]);
+  }, [clientId, assessments]);
 
   if (error) throw error;
   if (loading || assessmentsLoading) return <Loading />;

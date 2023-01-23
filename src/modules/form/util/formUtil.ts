@@ -1,19 +1,23 @@
 import { getYear, isValid, max, min } from 'date-fns';
 import { isNil } from 'lodash-es';
 
-import { INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
+import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   BoundType,
+  DataCollectedAbout,
   EnableBehavior,
   EnableOperator,
   EnableWhen,
   FormDefinitionJson,
+  FormDefinitionWithJsonFragment,
   FormItem,
   ItemType,
+  NoYesReasonsForMissingData,
   PickListOption,
+  RelationshipToHoH,
   ValueBound,
 } from '@/types/gqlTypes';
 
@@ -575,4 +579,45 @@ export const addDescendants = (
   const result: string[] = [...linkIds];
   recurAdd(definition.item, result, false);
   return result;
+};
+
+export type ClientNameDobVeteranFields = {
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+};
+
+/**
+ * Apply "data collected about" filters.
+ * Returns a modified copy of the definition.
+ */
+export const applyDataCollectedAbout = (
+  items: FormDefinitionWithJsonFragment['definition']['item'],
+  client: ClientNameDobVeteranFields,
+  relationshipToHoH: RelationshipToHoH
+) => {
+  // const clone = { ...definition };
+  return items.filter((item) => {
+    if (!item.dataCollectedAbout) return true;
+    switch (item.dataCollectedAbout) {
+      case DataCollectedAbout.AllClients:
+        return true;
+      case DataCollectedAbout.Hoh:
+        return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
+      case DataCollectedAbout.HohAndAdults:
+        return (
+          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
+          isNil(client.dob) ||
+          age(client) >= 18
+        );
+      case DataCollectedAbout.VeteranHoh:
+        return (
+          relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold &&
+          client.veteranStatus === NoYesReasonsForMissingData.Yes
+        );
+      default:
+        return true;
+    }
+  });
+  // clone.item = items;
+  // return clone;
 };

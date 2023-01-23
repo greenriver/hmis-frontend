@@ -12,7 +12,6 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   ClientFieldsFragment,
-  ClientIdentificationFieldsFragment,
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
@@ -147,12 +146,12 @@ export const clientInitials = (client: ClientNameFragment) =>
     .map((s) => (s ? s[0] : ''))
     .join('');
 
-export const dob = (client: ClientIdentificationFieldsFragment) => {
+export const dob = (client: { dob?: string | null }) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);
 };
 
-export const age = (client: ClientIdentificationFieldsFragment) => {
+export const age = (client: { dob?: string | null }) => {
   if (!client.dob) return '';
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);

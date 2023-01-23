@@ -2,20 +2,35 @@ import { startCase } from 'lodash-es';
 import { useMemo } from 'react';
 
 import {
+  applyDataCollectedAbout,
+  ClientNameDobVeteranFields,
+} from '@/modules/form/util/formUtil';
+import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   FormDefinition,
+  RelationshipToHoH,
   useGetAssessmentQuery,
   useGetFormDefinitionQuery,
 } from '@/types/gqlTypes';
 
-export function useAssessment(
-  enrollmentId: string,
+type Args = {
+  enrollmentId: string;
+  relationshipToHoH: RelationshipToHoH;
+  client: ClientNameDobVeteranFields;
   // If editing, we have the assessment ID.
-  assessmentId?: string,
+  assessmentId?: string;
   // If create new, we have the role.
-  assessmentRoleParam?: AssessmentRole
-) {
+  assessmentRoleParam?: AssessmentRole;
+};
+
+export function useAssessment({
+  enrollmentId,
+  relationshipToHoH,
+  client,
+  assessmentId,
+  assessmentRoleParam,
+}: Args) {
   const {
     data: formDefinitionData,
     loading: formDefinitionLoading,
@@ -27,12 +42,6 @@ export function useAssessment(
     },
     // skip if editing an existing assessment
     skip: !assessmentRoleParam,
-    // FIXME: for now always use network because theh response depends on the enrollment details (HoH status, age status, etc)
-    // Should figure out a way to cache when possible
-    fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      console.log('fetched fd for', enrollmentId, data);
-    },
   });
 
   const {
@@ -44,12 +53,21 @@ export function useAssessment(
     skip: !assessmentId, // skip if creating a new assessment
   });
 
-  const definition = useMemo(
-    () =>
+  // Apply "Data Collected About" conditionals to form definition based on client details.
+  // I.E. drop irrelevant item groups for children, non-HOH, non-Veterans, etc
+  const definition = useMemo(() => {
+    const formDef =
       formDefinitionData?.getFormDefinition ||
-      assessmentData?.assessment?.assessmentDetail?.definition,
-    [formDefinitionData, assessmentData]
-  );
+      assessmentData?.assessment?.assessmentDetail?.definition;
+    if (!formDef) return;
+    const mutable = { ...formDef };
+    mutable.definition.item = applyDataCollectedAbout(
+      formDef.definition.item,
+      client,
+      relationshipToHoH
+    );
+    return mutable;
+  }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
   const [assessmentRole, assessmentTitle] = useMemo(() => {
     const arole =
