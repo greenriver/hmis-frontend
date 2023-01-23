@@ -9,7 +9,7 @@ import MultiFieldInput from '../MultiFieldInput';
 type SsnInputProps = {
   onChange?: (value: string | null) => any;
   onlylast4?: boolean;
-  value?: string;
+  value?: string | null;
 } & Omit<TextFieldProps, 'onChange' | 'value'>;
 
 const SsnInput = ({

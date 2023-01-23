@@ -196,7 +196,7 @@ export const lastUpdated = (
   includeUser = false
 ) => {
   const str = parseAndFormatDateTime(client.dateUpdated);
-  if (includeUser) {
+  if (includeUser && client.user) {
     return `${str || 'unknown'} by ${client.user.name}`;
   }
   return str;
@@ -280,8 +280,7 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
   const isOtherMovingOn =
     e.recordType === RecordType.C2MovingOnAssistanceProvided &&
-    e.typeProvided ===
-      ServiceTypeProvided.C2MovingOnAssistanceProvidedOtherPleaseSpecify;
+    e.typeProvided === ServiceTypeProvided.C2MovingOnAssistanceProvidedOther;
 
   // Don't show 'other' if we have the other value
   if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)
