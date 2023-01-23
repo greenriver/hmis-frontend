@@ -43,6 +43,9 @@ fragment ClientFields on Client {
   dateUpdated
   ...ClientName
   ...ClientImage
+  user {
+    ...UserFields
+  }
 }
 
 fragment ClientImageFields on ClientImage {

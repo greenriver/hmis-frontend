@@ -1951,6 +1951,18 @@
             "deprecationReason": null
           },
           {
+            "name": "user",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "veteranStatus",
             "description": null,
             "args": [],
@@ -16891,8 +16903,8 @@
             "deprecationReason": null
           },
           {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY",
-            "description": "(5) Other (please specify)",
+            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER",
+            "description": "(5) Other",
             "isDeprecated": false,
             "deprecationReason": null
           },

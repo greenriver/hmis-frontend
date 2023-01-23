@@ -7,9 +7,9 @@ import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput from '../MultiFieldInput';
 
 type SsnInputProps = {
-  onChange?: (value: string) => any;
+  onChange?: (value: string | null) => any;
   onlylast4?: boolean;
-  value?: string;
+  value?: string | null;
 } & Omit<TextFieldProps, 'onChange' | 'value'>;
 
 const SsnInput = ({
@@ -46,7 +46,7 @@ const SsnInput = ({
       [first, second, third] = [first, second, third].map((str) =>
         str.replace(/X/g, '')
       );
-    } else if (!isNil(inputStr)) {
+    } else if (!isNil(inputStr) && inputStr !== '') {
       console.error(`Invalid input value "${inputStr}"`);
     }
 
@@ -93,11 +93,13 @@ const SsnInput = ({
       onChange={(values) =>
         onChange &&
         onChange(
-          [
-            padEnd((values.first || '').replace(/[^\dX]/g, ''), 3, 'X'),
-            padEnd((values.second || '').replace(/[^\dX]/g, ''), 2, 'X'),
-            padEnd((values.third || '').replace(/[^\dX]/g, ''), 4, 'X'),
-          ].join('')
+          values.first || values.second || values.third
+            ? [
+                padEnd((values.first || '').replace(/[^\dX]/g, ''), 3, 'X'),
+                padEnd((values.second || '').replace(/[^\dX]/g, ''), 2, 'X'),
+                padEnd((values.third || '').replace(/[^\dX]/g, ''), 4, 'X'),
+              ].join('')
+            : null
         )
       }
       renderInputs={(inputs) => (

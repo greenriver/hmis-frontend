@@ -3,7 +3,7 @@ import { Box } from '@mui/system';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
-import Uploader from './Uploader';
+import Uploader from './UploaderBase';
 
 export default {
   title: 'Uploader',

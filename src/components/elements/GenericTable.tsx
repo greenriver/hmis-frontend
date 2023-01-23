@@ -60,6 +60,7 @@ export interface Props<T> {
   actionRow?: ReactNode;
   tableProps?: TableProps;
   vertical?: boolean;
+  noHead?: boolean;
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
@@ -102,6 +103,7 @@ const GenericTable = <T extends { id: string }>({
   tablePaginationProps,
   actionRow,
   tableProps,
+  noHead = false,
   rowSx,
   headerCellSx,
 }: Props<T>) => {
@@ -126,7 +128,7 @@ const GenericTable = <T extends { id: string }>({
   const key = (def: ColumnDef<T>) =>
     def.key || (typeof def.header === 'string' ? def.header : '');
 
-  const tableHead = vertical ? (
+  const tableHead = noHead ? null : vertical ? (
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
