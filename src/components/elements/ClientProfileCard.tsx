@@ -1,11 +1,10 @@
 import EditIcon from '@mui/icons-material/Edit';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
-  alpha,
   Box,
   BoxProps,
-  Button,
   Card,
+  Chip,
   Grid,
   Link,
   Skeleton,
@@ -83,6 +82,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
     >
       <SimpleAccordion
         renderHeader={(header) => <Typography>{header}</Typography>}
+        renderContent={(content) => content}
         AccordionProps={{ defaultExpanded: true }}
         items={[
           {
@@ -257,21 +257,13 @@ export const ClientCardImage = ({
               backgroundColor: 'rgba(0,0,0, 0.5)',
             }}
           >
-            <Button
-              size='small'
-              sx={(theme) => ({
-                borderRadius: 100,
-                pointerEvents: 'all',
-                backgroundColor: alpha(theme.palette.grey[200], 0.25),
-                '&:hover': {
-                  backgroundColor: alpha(theme.palette.grey[200], 0.4),
-                },
-              })}
-              onClick={handleOpen}
-              startIcon={<EditIcon />}
-            >
-              Update Photo
-            </Button>
+            <Chip
+              label='Update Photo'
+              icon={<EditIcon />}
+              sx={{
+                backgroundColor: (theme) => theme.palette.grey[200],
+              }}
+            />
           </Box>
         ) : (
           // No photo
@@ -282,22 +274,7 @@ export const ClientCardImage = ({
               backgroundColor: (theme) => theme.palette.grey[100],
             }}
           >
-            <Button
-              size='small'
-              sx={(theme) => ({
-                borderRadius: 100,
-                pointerEvents: 'all',
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.grey[200],
-                '&:hover': {
-                  backgroundColor: theme.palette.grey[300],
-                },
-              })}
-              onClick={handleOpen}
-              startIcon={<PhotoCameraIcon />}
-            >
-              Add Client Photo
-            </Button>
+            <Chip label='Add Client Photo' icon={<PhotoCameraIcon />} />
           </Box>
         )}
       </Link>
@@ -363,7 +340,9 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
               <ClientProfileCardTextTable
                 content={{
-                  Pronouns: pronouns(client),
+                  ...(pronouns(client)
+                    ? { Pronouns: pronouns(client) }
+                    : undefined),
                   Age: <ClientDobAge client={client} />,
                   Social: <ClientSsn client={client} />,
                 }}

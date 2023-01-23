@@ -198,7 +198,9 @@ export const lastUpdated = (
 };
 
 export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
-  client.pronouns ? client.pronouns.join(', ') : null;
+  client.pronouns && client.pronouns.length > 0
+    ? client.pronouns.join(', ')
+    : null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
