@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 import { format } from 'date-fns';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from './ButtonLink';
 import ClientImageUploadDialog from './input/ClientImageUploadDialog';
@@ -83,7 +83,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         renderHeader={(header) => <Typography>{header}</Typography>}
         items={[
           {
-            key: 'Client Contact Information',
+            key: 'Demographics',
             content: (
               <ClientProfileCardTextTable
                 content={{
@@ -111,7 +111,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             content: 'TK',
           },
           {
-            key: 'Demographics',
+            key: 'Client Contact Information',
             content: 'TK',
           },
         ]}
@@ -149,6 +149,7 @@ export const ClientCardImageElement = ({
         height: size,
         width: size,
         backgroundColor: (theme) => theme.palette.grey[100],
+        borderRadius: (theme) => `${theme.shape.borderRadius}px`,
         ...props.sx,
       }}
       component={src ? 'img' : undefined}
@@ -183,8 +184,13 @@ export const ClientCardImage = ({
   size?: number;
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const linkRef = useRef<HTMLButtonElement | null>(null);
 
-  const handleClose = useCallback(() => setOpen(false), []);
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    // Without this the overlay will continue to show after the modal is closed
+    setTimeout(() => linkRef.current?.blur());
+  }, []);
   const handleOpen = useCallback(() => setOpen(true), []);
 
   if (!client) return <ClientCardImageElement />;
@@ -211,6 +217,7 @@ export const ClientCardImage = ({
         component='button'
         underline='none'
         onClick={handleOpen}
+        ref={linkRef}
         sx={{
           position: 'relative',
           width: size,
