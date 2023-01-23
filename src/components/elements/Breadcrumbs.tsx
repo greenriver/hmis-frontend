@@ -29,7 +29,6 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       separator={<KeyboardArrowRightIcon fontSize='small' sx={{ mx: 0 }} />}
       sx={{
         '.MuiBreadcrumbs-li': {
-          // overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'no-wrap',
         },
@@ -59,7 +58,6 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
             key={to}
             variant={variant}
             data-testid={`breadcrumb-${index}`}
-            // sx={{ p: 1 }}
           >
             {label}
           </RouterLink>

@@ -20,20 +20,7 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  // const { intake, loading } = useRecentAssessments(enrollmentId);
-
   if (!enrollment) throw Error('Enrollment not found');
-
-  // let enrollmentStatus = '';
-  // if (enrollment.exitDate) {
-  //   enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  // } else if (loading) {
-  //   enrollmentStatus = '';
-  // } else if (intake && intake.inProgress) {
-  //   enrollmentStatus = 'Intake Incomplete';
-  // } else {
-  //   enrollmentStatus = 'Active';
-  // }
 
   return (
     <>

@@ -11,10 +11,12 @@ import { isNil, sortBy, startCase } from 'lodash-es';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
+  AssessmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
   HouseholdClientFieldsWithAssessmentsFragment,
   ProjectType,
@@ -136,6 +138,18 @@ export const clientNameWithoutPreferred = (
   return nameComponents.filter(Boolean).join(' ');
 };
 
+export const clientNameAllParts = (client: ClientNameFragment) => {
+  return [
+    client.preferredName,
+    client.firstName,
+    client.middleName,
+    client.lastName,
+    client.nameSuffix,
+  ]
+    .filter(Boolean)
+    .join(' ');
+};
+
 export const clientBriefName = (client: ClientNameFragment) =>
   client.preferredName ||
   [client.firstName, client.lastName].filter(Boolean).join(' ');
@@ -220,6 +234,20 @@ export const enrollmentName = (
   if (projectType.length > 3)
     projectType = startCase(projectType.toLowerCase());
   return `${projectName} (${projectType})`;
+};
+
+export const assessmentRoleDisplay = (assessment: AssessmentFieldsFragment) => {
+  return startCase(assessment.assessmentDetail?.role?.toLowerCase());
+};
+
+export const assessmentDescription = (
+  assessment: NonNullable<
+    NonNullable<GetClientAssessmentsQuery['client']>['assessments']
+  >['nodes'][0]
+) => {
+  return `${assessmentRoleDisplay(assessment)} assessment at ${enrollmentName(
+    assessment.enrollment
+  )} on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {

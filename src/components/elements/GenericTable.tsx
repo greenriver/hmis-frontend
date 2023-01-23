@@ -46,6 +46,8 @@ export interface ColumnDef<T> {
   linkTreatment?: boolean;
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.
   dontLink?: boolean;
+  // aria label, for use with linkTreatment
+  ariaLabel?: (row: T) => string;
 }
 export interface Props<T> {
   rows: T[];
@@ -204,6 +206,7 @@ const GenericTable = <T extends { id: string }>({
                     width,
                     minWidth,
                     linkTreatment,
+                    ariaLabel,
                     dontLink = false,
                   } = def;
                   const isFirstLinkWithTreatment =
@@ -221,7 +224,7 @@ const GenericTable = <T extends { id: string }>({
                       {isLinked ? (
                         <RouterLink
                           to={rowLinkTo(row)}
-                          // TODO needs aria-label
+                          aria-label={ariaLabel && ariaLabel(row)}
                           plain={!linkTreatment}
                           data-testid={linkTreatment && 'table-linkedCell'}
                           sx={{

@@ -18,12 +18,13 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
-    header: 'Name',
+    header: 'Project Name',
     render: 'projectName',
     linkTreatment: true,
+    ariaLabel: (row) => row.projectName,
   },
   {
-    header: 'Type',
+    header: 'Project Type',
     render: (project: ProjectAllFieldsFragment) => (
       <HmisEnum value={project.projectType} enumMap={HmisEnums.ProjectType} />
     ),

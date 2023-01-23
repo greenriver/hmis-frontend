@@ -50,6 +50,7 @@ export interface Props<RecordType, Query, QueryVariables>
   confirmable?: boolean; // whether mutation supports `confirmed` for warning confirmation on submit
   title: ReactNode;
   navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
+  top?: number;
 }
 
 /**
@@ -70,6 +71,7 @@ const EditRecord = <
   confirmable = false,
   inputVariables = {},
   localConstants = {},
+  top = STICKY_BAR_HEIGHT,
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
@@ -83,7 +85,7 @@ const EditRecord = <
     variables: { identifier: definitionIdentifier },
   });
 
-  useScrollToHash(definitionLoading, STICKY_BAR_HEIGHT);
+  useScrollToHash(definitionLoading, top);
 
   const definition: FormDefinitionJson | undefined = useMemo(
     () => data?.formDefinition?.definition,
@@ -208,25 +210,14 @@ const EditRecord = <
       <>
         <Box
           sx={{
-            // position: 'sticky',
-            // top: 10,
             backgroundColor: (theme) => theme.palette.background.default,
             zIndex: (theme) => theme.zIndex.appBar,
-            // hack to add 15px of space on top of crumbs when scrolled to the top
-            // '&:before': {
-            //   content: '""',
-            //   backgroundColor: (theme) => theme.palette.background.default,
-            //   position: 'absolute',
-            //   height: '15px',
-            //   mt: '-14px',
-            //   width: '100%',
-            // },
           }}
         >
           {title}
         </Box>
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation items={leftNavItems} {...navigationProps}>
+          <FormNavigation items={leftNavItems} top={top} {...navigationProps}>
             {form}
           </FormNavigation>
         </Grid>

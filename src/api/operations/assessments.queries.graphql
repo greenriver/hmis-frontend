@@ -128,30 +128,3 @@ query GetAssessmentsForPopulation(
     }
   }
 }
-
-# query GetHouseholdAssessments($id: ID!, $role: AssessmentRole!) {
-#   enrollment(id: $id) {
-#     id
-#     household {
-#       id
-#       householdClients {
-#         ...HouseholdClientFields
-#         enrollment {
-#           id
-#           entryDate
-#           exitDate
-#           inProgress
-#           assessments(roles: [$role], limit: 1) {
-#             nodes {
-#               ...AssessmentFields
-#               enrollment {
-#                 id
-#                 ...EnrollmentFields
-#               }
-#             }
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
