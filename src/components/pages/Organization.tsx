@@ -6,6 +6,7 @@ import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
+import TitleCard from '../elements/TitleCard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
@@ -64,12 +65,9 @@ const Organization = () => {
           )}
 
           {organization && (
-            <Paper sx={{ p: 2, mb: 2 }} data-testid='projectsCard'>
-              <Typography variant='h5' sx={{ mb: 2 }}>
-                Projects
-              </Typography>
+            <TitleCard data-testid='projectsCard' title='Projects'>
               <ProjectsTable organizationId={organizationId} />
-            </Paper>
+            </TitleCard>
           )}
         </Grid>
         <Grid item xs>

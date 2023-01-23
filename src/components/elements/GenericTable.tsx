@@ -221,6 +221,7 @@ const GenericTable = <T extends { id: string }>({
                       {isLinked ? (
                         <RouterLink
                           to={rowLinkTo(row)}
+                          // TODO needs aria-label
                           plain={!linkTreatment}
                           data-testid={linkTreatment && 'table-linkedCell'}
                           sx={{

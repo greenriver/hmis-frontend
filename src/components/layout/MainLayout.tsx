@@ -49,7 +49,6 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             variant='h1'
             color='secondary'
             noWrap
-            sx={{ flexGrow: 1 }}
             underline='none'
             to='/'
           >
@@ -64,6 +63,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
                 />
               )}
           </RouterLink>
+          <Box display='flex' sx={{ flexGrow: 1 }}></Box>
           <ButtonLink
             variant='text'
             to='/'

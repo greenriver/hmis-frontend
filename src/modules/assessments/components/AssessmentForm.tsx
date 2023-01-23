@@ -138,12 +138,7 @@ const AssessmentForm = ({
           </Paper>
 
           {!assessment && (
-            <ButtonTooltipContainer
-              title={
-                'Choose a previous assessment to copy into this assessment'
-              }
-              placement='bottom-end'
-            >
+            <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
               <Button
                 variant='outlined'
                 onClick={() => setDialogOpen(true)}

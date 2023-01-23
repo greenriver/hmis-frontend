@@ -21,6 +21,7 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import {
   clientNameWithoutPreferred,
+  enrollmentName,
   entryExitRange,
   isRecentEnrollment,
   lastUpdated,
@@ -79,6 +80,7 @@ const RecentEnrollments = ({
           <Fragment key={enrollment.id}>
             <Grid item xs={6}>
               <RouterLink
+                aria-label={enrollmentName(enrollment)}
                 to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
                   clientId: client.id,
                   enrollmentId: enrollment.id,
@@ -86,7 +88,7 @@ const RecentEnrollments = ({
                 target={linkTargetBlank ? '_blank' : undefined}
                 variant='body2'
               >
-                {enrollment.project.projectName}
+                {enrollmentName(enrollment)}
               </RouterLink>
             </Grid>
             <Grid item xs={6}>
@@ -275,6 +277,7 @@ const ClientCard: React.FC<Props> = ({
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
                       size='small'
+                      aria-label='Edit Client Details'
                     >
                       Edit Client Details
                     </ButtonLink>

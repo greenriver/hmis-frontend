@@ -1,15 +1,13 @@
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
 
-import { useRecentAssessments } from '../../../modules/assessments/components/useRecentAssessments';
-
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
@@ -22,20 +20,20 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  const { intake, loading } = useRecentAssessments(enrollmentId);
+  // const { intake, loading } = useRecentAssessments(enrollmentId);
 
   if (!enrollment) throw Error('Enrollment not found');
 
-  let enrollmentStatus = '';
-  if (enrollment.exitDate) {
-    enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  } else if (loading) {
-    enrollmentStatus = '';
-  } else if (intake && intake.inProgress) {
-    enrollmentStatus = 'Intake Incomplete';
-  } else {
-    enrollmentStatus = 'Active';
-  }
+  // let enrollmentStatus = '';
+  // if (enrollment.exitDate) {
+  //   enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
+  // } else if (loading) {
+  //   enrollmentStatus = '';
+  // } else if (intake && intake.inProgress) {
+  //   enrollmentStatus = 'Intake Incomplete';
+  // } else {
+  //   enrollmentStatus = 'Active';
+  // }
 
   return (
     <>
@@ -69,13 +67,6 @@ const ViewEnrollment = () => {
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2 }}>
-            <Stack spacing={2} sx={{ mb: 3 }}>
-              <Typography variant='h6'>Enrollment Status</Typography>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                {enrollmentStatus}
-              </Typography>
-            </Stack>
-
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>
               <ButtonLink

@@ -17,6 +17,7 @@ const ClickToShow: React.FC<Props> = ({
   return (
     <Button
       variant='text'
+      aria-label={text}
       sx={{
         textDecoration: 'none',
         color: 'text.disabled',
