@@ -33,8 +33,8 @@ const SimpleAccordion: React.FC<SimpleAccordionProps> = ({
 }) => {
   return (
     <>
-      {items.map((item, i) => (
-        <Accordion defaultExpanded={i === 0} {...AccordionProps} key={item.key}>
+      {items.map((item) => (
+        <Accordion {...AccordionProps} key={item.key}>
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             {...AccordionSummaryProps}
