@@ -84,7 +84,7 @@ const RecentEnrollments = ({
           header: 'Members',
           render: (e) => (
             <Typography color='GrayText' variant='inherit' noWrap>
-              {e.householdSize || '?'} Member{e.householdSize === 1 ? '' : s}
+              {e.householdSize || '?'} Member{e.householdSize === 1 ? '' : 's'}
             </Typography>
           ),
         },

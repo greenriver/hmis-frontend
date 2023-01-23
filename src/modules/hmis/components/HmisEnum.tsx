@@ -3,14 +3,12 @@ import { Stack, Typography, TypographyProps } from '@mui/material';
 import { isDataNotCollected } from '@/modules/form/util/formUtil';
 import { INVALID_ENUM, MISSING_DATA_KEYS } from '@/modules/hmis/hmisUtil';
 
-interface Props extends TypographyProps {
-  value?: any;
-  enumMap: Record<string, string>;
-  noValue?: string;
-}
-const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
-  let color: 'text.primary' | 'text.secondary' | 'error' = 'text.primary';
-
+const getLabelAndColor = (
+  enumMap: Record<string, string>,
+  value?: any,
+  noValue?: string
+) => {
+  let color: TypographyProps['color'] = 'text.primary';
   let label = enumMap[value];
   if (!label) {
     label = noValue || 'Not Specified';
@@ -20,6 +18,19 @@ const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
   } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
     color = 'text.secondary';
   }
+  return [label, color];
+};
+interface Props extends TypographyProps {
+  value?: any;
+  enumMap: Record<string, string>;
+  noValue?: string;
+}
+
+/**
+ * Render a single Enum value
+ */
+const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
+  const [label, color] = getLabelAndColor(enumMap, value, noValue);
   return (
     <Typography variant='body2' color={color} {...props}>
       {label}
@@ -27,6 +38,9 @@ const HmisEnum = ({ value, enumMap, noValue, ...props }: Props) => {
   );
 };
 
+/**
+ * Render multiple Enum values
+ */
 export const MultiHmisEnum = ({
   values,
   enumMap,
@@ -43,24 +57,14 @@ export const MultiHmisEnum = ({
       </Stack>
     );
   }
-  let color: 'text.primary' | 'text.secondary' | 'error' = 'text.primary';
-
+  let color = 'text.primary';
   let label = '';
-  // If there is only one value, set the text color to match it
-  if (values.length === 0) {
-    label = noValue || 'Not Specified';
-    color = 'text.secondary';
-  } else if (values.length === 1) {
+
+  if (values.length <= 1) {
     const value = values[0];
-    let label = enumMap[value];
-    if (!label) {
-      label = noValue || 'Not Specified';
-      color = 'text.secondary';
-    } else if (value === INVALID_ENUM) {
-      color = 'error';
-    } else if (isDataNotCollected(value) || MISSING_DATA_KEYS.includes(value)) {
-      color = 'text.secondary';
-    }
+    const [firstLabel, firstColor] = getLabelAndColor(enumMap, value, noValue);
+    label = firstLabel;
+    color = firstColor;
   } else {
     label = values
       .map((val) => enumMap[val])
