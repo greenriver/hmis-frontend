@@ -197,7 +197,7 @@ export const ClientCardImage = ({
     position: 'absolute',
     inset: 0,
     transition: 'opacity 0.2s',
-    '&:hover': { opacity: 1 },
+    pointerEvents: 'none',
   };
 
   return (
@@ -210,6 +210,7 @@ export const ClientCardImage = ({
       <Link
         component='button'
         underline='none'
+        onClick={handleOpen}
         sx={{
           position: 'relative',
           width: size,
@@ -217,13 +218,12 @@ export const ClientCardImage = ({
           '&:focus-within > .overlay': {
             opacity: 1,
           },
+          '&:hover > .overlay': {
+            opacity: 1,
+          },
         }}
       >
-        <ClientCardImageElement
-          size={size}
-          client={client}
-          onClick={handleOpen}
-        />
+        <ClientCardImageElement size={size} client={client} />
         {client.image?.base64 ? (
           // Has photo
           <Box
@@ -237,6 +237,7 @@ export const ClientCardImage = ({
               size='small'
               sx={(theme) => ({
                 borderRadius: 100,
+                pointerEvents: 'all',
                 backgroundColor: alpha(theme.palette.grey[200], 0.25),
                 '&:hover': {
                   backgroundColor: alpha(theme.palette.grey[200], 0.4),
@@ -261,6 +262,7 @@ export const ClientCardImage = ({
               size='small'
               sx={(theme) => ({
                 borderRadius: 100,
+                pointerEvents: 'all',
                 color: theme.palette.text.primary,
                 backgroundColor: theme.palette.grey[200],
                 '&:hover': {
