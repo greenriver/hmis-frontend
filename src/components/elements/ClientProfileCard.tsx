@@ -33,6 +33,7 @@ import {
   ClientFieldsFragment,
   ClientImageFragment,
   useGetClientImageQuery,
+  Gender,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -53,7 +54,12 @@ export const ClientProfileCardTextTable = ({
           borderBottom: 0,
           py: 0.5,
           px: 1,
-          '&:first-of-type': { pl: 0, width: '1px', whiteSpace: 'nowrap' },
+          '&:first-of-type': {
+            pl: 0,
+            width: '1px',
+            whiteSpace: 'nowrap',
+            verticalAlign: 'baseline',
+          },
         },
       }}
       columns={[
@@ -94,6 +100,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                     <MultiHmisEnum
                       values={client.race}
                       enumMap={HmisEnums.Race}
+                      oneRowPerValue
                     />
                   ),
                   Ethnicity: (
@@ -105,7 +112,10 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                   Gender: (
                     <MultiHmisEnum
                       values={client.gender}
-                      enumMap={HmisEnums.Gender}
+                      enumMap={{
+                        ...HmisEnums.Gender,
+                        [Gender.GenderNoSingleGender]: 'Non-Binary',
+                      }}
                     />
                   ),
                   Pronouns: pronouns(client) || <NotSpecified />,
@@ -343,8 +353,12 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ...(pronouns(client)
                     ? { Pronouns: pronouns(client) }
                     : undefined),
-                  Age: <ClientDobAge client={client} />,
-                  Social: <ClientSsn client={client} />,
+                  Age: (
+                    <ClientDobAge client={client} noValue={<NotSpecified />} />
+                  ),
+                  Social: (
+                    <ClientSsn client={client} noValue={<NotSpecified />} />
+                  ),
                 }}
               />
               <Box sx={{ flexGrow: 1 }}>
@@ -358,7 +372,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     clientId: client.id,
                   })}
                 >
-                  Update Client Details
+                  Edit Client Details
                 </ButtonLink>
 
                 <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
