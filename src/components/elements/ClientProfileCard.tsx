@@ -316,7 +316,11 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography sx={{ float: 'right', ml: 1, mb: 1 }}>
+            <Typography
+              color='text.secondary'
+              variant='body2'
+              sx={{ float: 'right', ml: 1, mb: 1 }}
+            >
               <strong>ID</strong> {client.id}
             </Typography>
             <Typography variant='h4'>{primaryName}</Typography>

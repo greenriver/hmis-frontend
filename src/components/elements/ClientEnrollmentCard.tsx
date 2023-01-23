@@ -2,9 +2,10 @@ import { Box, Card, CircularProgress, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 
+import EnrollmentStatus from './EnrollmentStatus';
 import GenericTable from './GenericTable';
 
-import { isRecentEnrollment } from '@/modules/hmis/hmisUtil';
+import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -19,16 +20,12 @@ const RecentEnrollments = ({
   clientId: string;
   linkTargetBlank?: boolean;
 }) => {
-  // Fetch recent enrollments
   const {
     data: { client } = {},
     loading,
     error,
   } = useGetClientEnrollmentsQuery({
     variables: { id: clientId },
-    // Don't let this list get stale because we use it on the client profile.
-    // We can remove this once we replace the client profile, and are only using the
-    // ClientCard for search results.
     fetchPolicy: 'cache-and-network',
   });
 
@@ -75,23 +72,19 @@ const RecentEnrollments = ({
           key: 'name',
           header: 'Name',
           linkTreatment: true,
-          render: (e) => e.project.projectName,
+          render: (e) => enrollmentName(e),
         },
         {
           key: 'status',
           header: 'Status',
-          render: (e) => (
-            <Typography color='GrayText' variant='inherit'>
-              {e.exitDate ? 'Complete' : 'Incomplete'}
-            </Typography>
-          ),
+          render: (e) => <EnrollmentStatus enrollment={e} />,
         },
         {
           key: 'members',
           header: 'Members',
           render: (e) => (
             <Typography color='GrayText' variant='inherit' noWrap>
-              {e.householdSize || '?'} Members
+              {e.householdSize || '?'} Member{e.householdSize === 1 ? '' : s}
             </Typography>
           ),
         },
