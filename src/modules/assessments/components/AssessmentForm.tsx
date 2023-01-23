@@ -130,7 +130,11 @@ const AssessmentForm = ({
         >
           <Paper sx={{ p: 2 }}>
             {navigationTitle}
-            <FormStepper items={definition.definition.item} />
+            <FormStepper
+              items={definition.definition.item}
+              scrollOffset={top}
+              useUrlHash={!embeddedInWorkflow}
+            />
           </Paper>
 
           {!assessment && (

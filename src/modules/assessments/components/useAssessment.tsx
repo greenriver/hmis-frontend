@@ -60,7 +60,7 @@ export function useAssessment({
       formDefinitionData?.getFormDefinition ||
       assessmentData?.assessment?.assessmentDetail?.definition;
     if (!formDef) return;
-    const mutable = { ...formDef };
+    const mutable = { ...formDef, definition: { ...formDef.definition } };
     mutable.definition.item = applyDataCollectedAbout(
       formDef.definition.item,
       client,
