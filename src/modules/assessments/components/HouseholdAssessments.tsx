@@ -1,14 +1,15 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import {
+  Alert,
   AppBar,
   Grid,
   Stack,
   Tab,
-  Typography,
   TabProps,
-  Alert,
+  Typography,
 } from '@mui/material';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import IndividualAssessment from './IndividualAssessment';
 
@@ -55,21 +56,21 @@ const MemberTab = ({
 );
 
 const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
-  // TODO exclude exited if exiting
-  // exclude completed intakes if intake-ing
   const [householdMembers, { loading, error }] = useHouseholdMembers(
     enrollment.id,
     type === 'ENTRY' ? 'INCOMPLETE_ENTRY' : 'INCOMPLETE_EXIT'
   );
 
-  console.debug('Household Members', householdMembers);
+  // console.debug('Household Members', householdMembers);
 
-  const [currentTab, setCurrentTab] = useState<string | undefined>();
+  const { hash } = useLocation();
+
+  const [currentTab, setCurrentTab] = useState<string | undefined>('1');
 
   const tabs = useMemo(() => {
-    const tabs = householdMembers.map((hc) => ({
+    const tabs = householdMembers.map((hc, index) => ({
       name: clientBriefName(hc.client),
-      id: hc.client.id,
+      id: (index + 1).toString(),
       isHoh: hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
       enrollmentId: hc.enrollment.id,
       assessmentId:
@@ -82,16 +83,22 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
       },
       relationshipToHoH: hc.relationshipToHoH,
     }));
-
-    if (tabs.length > 0) setCurrentTab(tabs[0].id);
     return tabs;
   }, [householdMembers, type]);
+
+  useEffect(() => {
+    const hashNum = hash ? parseInt(hash.replace('#', '')) : -1;
+    if (isFinite(hashNum) && hashNum >= 0 && hashNum <= tabs.length) {
+      setCurrentTab(hashNum.toString());
+    }
+  }, [hash, tabs]);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
     // TODO can we know if we have unsaved changes and warn about them?
     event.preventDefault();
-    window.scrollTo(0, 0);
     setCurrentTab(newValue);
+    window.scrollTo(0, 0);
+    window.location.replace(`#${newValue}`);
   };
 
   if (loading) return <Loading />;
