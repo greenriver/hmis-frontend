@@ -6,7 +6,7 @@ import {
 import { Box, Stack, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
 import { get, startCase } from 'lodash-es';
-import { useMemo, useState, ReactNode } from 'react';
+import { useMemo, useState, ReactNode, useEffect } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
 
@@ -15,6 +15,7 @@ import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
+import Loading from '@/components/elements/Loading';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
@@ -69,22 +70,29 @@ const GenericTableWithData = <
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
+  const [hasRefetched, setHasRefetched] = useState(false);
 
-  const { data, loading, error } = useQuery<Query, QueryVariables>(
-    queryDocument,
-    {
-      variables: {
-        ...queryVariables,
-        ...(!rowsPath && {
-          offset: page * rowsPerPage,
-          limit: rowsPerPage,
-        }),
-      },
-      notifyOnNetworkStatusChange: true,
-      fetchPolicy,
-    }
-  );
+  const { data, loading, error, networkStatus } = useQuery<
+    Query,
+    QueryVariables
+  >(queryDocument, {
+    variables: {
+      ...queryVariables,
+      ...(!rowsPath && {
+        offset: page * rowsPerPage,
+        limit: rowsPerPage,
+      }),
+    },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy,
+  });
 
+  useEffect(() => {
+    // See for statuses 2/3/4:  https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L12-L28
+    if ([2, 3, 4].includes(networkStatus)) setHasRefetched(true);
+  }, [networkStatus]);
+
+  console.log(loading, networkStatus);
   if (error) throw error;
 
   const rows = useMemo(() => {
@@ -141,50 +149,53 @@ const GenericTableWithData = <
     return [];
   }, [columns, recordType]);
 
+  // If this is the first time loading, return loading (hide search headers)
+  if (loading && !hasRefetched) return <Loading />;
+
   const noResults = !loading && data && nodesCount === 0;
+  const noResultsOnFirstLoad = noResults && !hasRefetched;
 
-  if (!header && noResults) {
-    return <Typography sx={{ px: 2, py: 1 }}>{noData}</Typography>;
-  }
-
-  const tableContents = (
-    <>
-      <GenericTable<RowDataType>
-        loading={loading}
-        rows={rows}
-        paginated={!nonTablePagination}
-        tablePaginationProps={
-          nonTablePagination ? undefined : tablePaginationProps
-        }
-        columns={columnDefs}
-        {...props}
-      />
-      {nonTablePagination && nonTablePaginationProps && (
-        <Pagination
-          {...nonTablePaginationProps}
-          shape='rounded'
-          size='small'
-          gridProps={{
-            sx: {
-              py: 2,
-              px: 1,
-              borderTop: (theme) => `1px solid ${theme.palette.grey[200]}`,
-            },
-          }}
-        />
-      )}
-    </>
-  );
-  if (!header) return tableContents;
+  // Hide pagination when possible
+  const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
   return (
     <Stack spacing={1}>
-      <Box sx={{ px: 2, py: 1 }}>{header}</Box>
+      {header && !noResultsOnFirstLoad && (
+        <Box sx={{ px: 2, py: 1, '.MuiInputLabel-root': { fontWeight: 600 } }}>
+          {header}
+        </Box>
+      )}
       <Box>
         {noResults ? (
-          <Typography sx={{ px: 2, py: 1 }}>{noData}</Typography>
+          <Typography sx={{ px: 2, pt: 1, pb: 2 }}>{noData}</Typography>
         ) : (
-          tableContents
+          <>
+            <GenericTable<RowDataType>
+              loading={loading}
+              rows={rows}
+              paginated={!nonTablePagination && !hidePagination}
+              tablePaginationProps={
+                nonTablePagination ? undefined : tablePaginationProps
+              }
+              columns={columnDefs}
+              {...props}
+            />
+            {nonTablePagination && nonTablePaginationProps && !hidePagination && (
+              <Pagination
+                {...nonTablePaginationProps}
+                shape='rounded'
+                size='small'
+                gridProps={{
+                  sx: {
+                    py: 2,
+                    px: 1,
+                    borderTop: (theme) =>
+                      `1px solid ${theme.palette.grey[200]}`,
+                  },
+                }}
+              />
+            )}
+          </>
         )}
       </Box>
     </Stack>

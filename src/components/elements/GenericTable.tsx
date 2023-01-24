@@ -263,26 +263,23 @@ const GenericTable = <T extends { id: string }>({
             ))}
           {actionRow}
         </TableBody>
-        {paginated &&
-          rows &&
-          tablePaginationProps &&
-          tablePaginationProps.count > rows.length && (
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, 50]}
-                  SelectProps={{
-                    inputProps: {
-                      'aria-label': 'rows per page',
-                    },
-                    native: true,
-                  }}
-                  sx={{ borderBottom: 'none' }}
-                  {...tablePaginationProps}
-                />
-              </TableRow>
-            </TableFooter>
-          )}
+        {paginated && tablePaginationProps && (
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                SelectProps={{
+                  inputProps: {
+                    'aria-label': 'rows per page',
+                  },
+                  native: true,
+                }}
+                sx={{ borderBottom: 'none' }}
+                {...tablePaginationProps}
+              />
+            </TableRow>
+          </TableFooter>
+        )}
       </Table>
     </TableContainer>
   );

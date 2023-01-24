@@ -67,9 +67,10 @@ const ProjectsTable = ({
       header={
         !hideSearch && (
           <TextInput
+            label='Search Projects'
             name='search projects'
             placeholder='Search...'
-            value={search || null}
+            value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='200px'
           />
