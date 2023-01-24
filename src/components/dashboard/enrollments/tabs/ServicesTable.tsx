@@ -69,24 +69,6 @@ const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
 
   return (
     <Stack>
-      {/*
-        It looks like this was removed in stable, but I wasn't sure since it showed up as part of a merge conflict.
-        I decided to just comment it out in case we wanted to add it back. If not, this should be removed
-      */}
-      {/* <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
-        <Typography variant='h5'>Services</Typography>
-        <ButtonLink
-          variant='outlined'
-          color='secondary'
-          size='small'
-          to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
-            clientId,
-            enrollmentId,
-          })}
-        >
-          + Add Service
-        </ButtonLink>
-      </Stack> */}
       <GenericTableWithData<
         GetEnrollmentServicesQuery,
         GetEnrollmentServicesQueryVariables,
