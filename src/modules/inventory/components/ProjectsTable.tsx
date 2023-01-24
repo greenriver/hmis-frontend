@@ -18,12 +18,13 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
-    header: 'Name',
+    header: 'Project Name',
     render: 'projectName',
     linkTreatment: true,
+    ariaLabel: (row) => row.projectName,
   },
   {
-    header: 'Type',
+    header: 'Project Type',
     render: (project: ProjectAllFieldsFragment) => (
       <HmisEnum value={project.projectType} enumMap={HmisEnums.ProjectType} />
     ),
@@ -66,9 +67,10 @@ const ProjectsTable = ({
       header={
         !hideSearch && (
           <TextInput
+            label='Search Projects'
             name='search projects'
             placeholder='Search...'
-            value={search || null}
+            value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='200px'
           />

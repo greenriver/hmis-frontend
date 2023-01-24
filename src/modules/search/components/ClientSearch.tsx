@@ -19,6 +19,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { SearchFormDefinition } from '@/modules/form/data';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -84,7 +85,12 @@ export const CLIENT_COLUMNS: {
 
 export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
-  { ...CLIENT_COLUMNS.first, width: '15%', linkTreatment: true },
+  {
+    ...CLIENT_COLUMNS.first,
+    width: '15%',
+    linkTreatment: true,
+    ariaLabel: (row) => clientNameAllParts(row),
+  },
   { ...CLIENT_COLUMNS.last, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.preferred, width: '15%', linkTreatment: true },
   { ...CLIENT_COLUMNS.ssn, width: '10%' },
@@ -93,7 +99,12 @@ export const SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
 
 export const MOBILE_SEARCH_RESULT_COLUMNS: ColumnDef<ClientFieldsFragment>[] = [
   CLIENT_COLUMNS.id,
-  { ...CLIENT_COLUMNS.name, width: '15%', linkTreatment: true },
+  {
+    ...CLIENT_COLUMNS.name,
+    width: '15%',
+    linkTreatment: true,
+    ariaLabel: (row) => clientNameAllParts(row),
+  },
   { ...CLIENT_COLUMNS.ssn, width: '10%' },
   { ...CLIENT_COLUMNS.dobAge, width: '10%' },
 ];
@@ -266,6 +277,9 @@ const ClientSearch: React.FC<Props> = ({
                   }
                   rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
+                  headerCellSx={() => ({
+                    fontWeight: 800,
+                  })}
                   {...searchResultsTableProps}
                 />
               </WrapperComponent>

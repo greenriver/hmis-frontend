@@ -49,6 +49,7 @@ const GroupedProjectTable = ({
             mb: 1,
             '&.Mui-expanded': {
               my: 1,
+              mb: 3,
             },
             '&::before': {
               height: '0px',
@@ -81,32 +82,34 @@ const GroupedProjectTable = ({
               <Typography variant='body1' sx={{ fontWeight: 600 }}>
                 {organization.organizationName}
               </Typography>
-
-              <Typography variant='body1'>
-                {organization.projects.nodesCount} project
-                {organization.projects.nodesCount !== 1 ? 's' : ''}
-              </Typography>
+              <Stack direction='row' alignItems='center' gap={2}>
+                {organization.id in expanded && (
+                  <ButtonLink
+                    variant='outlined'
+                    color='secondary'
+                    size='small'
+                    to={generateSafePath(Routes.ORGANIZATION, {
+                      organizationId: organization.id,
+                    })}
+                  >
+                    View Organization
+                  </ButtonLink>
+                )}
+                <Typography variant='body1'>
+                  {organization.projects.nodesCount} project
+                  {organization.projects.nodesCount !== 1 ? 's' : ''}
+                </Typography>
+              </Stack>
             </Stack>
           </AccordionSummary>
           <AccordionDetails
             sx={{
               px: 0,
-              py: 1,
+              py: 0,
               borderTop: (theme) => `1px solid ${theme.palette.grey[300]}`,
             }}
           >
             <Stack spacing={2}>
-              <ButtonLink
-                variant='outlined'
-                color='secondary'
-                size='small'
-                to={generateSafePath(Routes.ORGANIZATION, {
-                  organizationId: organization.id,
-                })}
-                sx={{ mx: 1, my: 1, float: 'left', width: 150 }}
-              >
-                View Organization
-              </ButtonLink>
               <ProjectsTable organizationId={organization.id} hideSearch />
             </Stack>
           </AccordionDetails>

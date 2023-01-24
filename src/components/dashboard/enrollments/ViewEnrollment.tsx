@@ -1,15 +1,13 @@
-import EditIcon from '@mui/icons-material/Edit';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-import { useRecentAssessments } from './useRecentAssessments';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
-import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
@@ -22,85 +20,40 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  const { intake, loading } = useRecentAssessments(enrollmentId);
-  const editHouseholdPath = useMemo(
-    () =>
-      generateSafePath(`${DashboardRoutes.EDIT_HOUSEHOLD}`, {
-        clientId,
-        enrollmentId,
-      }),
-    [clientId, enrollmentId]
-  );
-
   if (!enrollment) throw Error('Enrollment not found');
-
-  let enrollmentStatus = '';
-  if (enrollment.exitDate) {
-    enrollmentStatus = `Exited on ${parseAndFormatDate(enrollment.exitDate)}`;
-  } else if (loading) {
-    enrollmentStatus = '';
-  } else if (intake && intake.inProgress) {
-    enrollmentStatus = 'Intake Incomplete';
-  } else {
-    enrollmentStatus = 'Active';
-  }
 
   return (
     <>
-      <Typography variant='h4' sx={{ mb: 2 }}>
-        {enrollmentName(enrollment)}
-      </Typography>
+      <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 2 }}>
+        <Typography variant='h4'>{enrollmentName(enrollment)}</Typography>
+        <IdDisplay id={enrollment.id} />
+      </Stack>
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ pt: 2 }}>
               <Stack
                 gap={3}
                 direction='row'
                 justifyContent={'space-between'}
-                sx={{ mb: 2, pr: 1, alignItems: 'center' }}
+                sx={{ mb: 2, px: 3, alignItems: 'center' }}
               >
                 <Typography variant='h5' sx={{ mb: 0 }}>
                   Household
                 </Typography>
-                <ButtonLink
-                  size='small'
-                  variant='outlined'
-                  color='secondary'
-                  startIcon={<EditIcon fontSize='small' />}
-                  to={`${editHouseholdPath}`}
-                >
-                  Edit Household
-                </ButtonLink>
               </Stack>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
-              <ButtonLink
-                size='small'
-                variant='outlined'
-                color='secondary'
-                sx={{ mt: 2, ml: 6 }}
-                to={`${editHouseholdPath}#add`}
-              >
-                + Add Household Members
-              </ButtonLink>
             </Paper>
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ py: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>
           </Stack>
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2 }}>
-            <Stack spacing={2} sx={{ mb: 3 }}>
-              <Typography variant='h6'>Enrollment Status</Typography>
-              <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                {enrollmentStatus}
-              </Typography>
-            </Stack>
-
             <Stack spacing={2}>
               <Typography variant='h6'>Add to Enrollment</Typography>
               <ButtonLink

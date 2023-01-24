@@ -1,26 +1,25 @@
 import {
   Alert,
   Box,
-  BoxProps,
   Button,
   Card,
   Grid,
-  Link,
   Skeleton,
   Stack,
   Typography,
 } from '@mui/material';
 import { isEmpty } from 'lodash-es';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useMemo } from 'react';
 
 import ButtonLink from './ButtonLink';
-import ClientImageUploadDialog from './input/ClientImageUploadDialog';
+import { ClientCardImageElement } from './ClientProfileCard';
 import RouterLink from './RouterLink';
 
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import {
   clientNameWithoutPreferred,
+  enrollmentName,
   entryExitRange,
   isRecentEnrollment,
   lastUpdated,
@@ -29,7 +28,6 @@ import {
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
-  ClientImageFragment,
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
@@ -42,17 +40,12 @@ const RecentEnrollments = ({
   clientId: string;
   linkTargetBlank?: boolean;
 }) => {
-  // Fetch recent enrollments
   const {
     data: { client } = {},
     loading,
     error,
   } = useGetClientEnrollmentsQuery({
     variables: { id: clientId },
-    // Don't let this list get stale because we use it on the client profile.
-    // We can remove this once we replace the client profile, and are only using the
-    // ClientCard for search results.
-    fetchPolicy: 'cache-and-network',
   });
 
   const recentEnrollments = useMemo(
@@ -79,6 +72,7 @@ const RecentEnrollments = ({
           <Fragment key={enrollment.id}>
             <Grid item xs={6}>
               <RouterLink
+                aria-label={enrollmentName(enrollment)}
                 to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
                   clientId: client.id,
                   enrollmentId: enrollment.id,
@@ -86,7 +80,7 @@ const RecentEnrollments = ({
                 target={linkTargetBlank ? '_blank' : undefined}
                 variant='body2'
               >
-                {enrollment.project.projectName}
+                {enrollmentName(enrollment)}
               </RouterLink>
             </Grid>
             <Grid item xs={6}>
@@ -111,68 +105,6 @@ interface Props {
   linkTargetBlank?: boolean;
   hideImage?: boolean;
 }
-
-export const ClientCardImageElement = ({
-  client,
-  base64,
-  url,
-  ...props
-}: {
-  client?: ClientImageFragment;
-  base64?: string;
-  url?: string;
-} & BoxProps<'img'>) => {
-  let src = 'https://dummyimage.com/150x150/e8e8e8/aaa';
-
-  if (client?.image?.base64)
-    src = `data:image/jpeg;base64,${client.image.base64}`;
-  if (base64) src = `data:image/jpeg;base64,${base64}`;
-  if (url) src = url;
-
-  return (
-    <Box
-      alt='client'
-      src={src}
-      {...props}
-      sx={{
-        height: 150,
-        width: 150,
-        ...props.sx,
-      }}
-      component='img'
-    />
-  );
-};
-
-export const ClientCardImage = ({
-  client,
-}: {
-  client?: ClientImageFragment;
-}) => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  const handleClose = useCallback(() => setOpen(false), []);
-  const handleOpen = useCallback(() => setOpen(true), []);
-
-  if (!client) return <ClientCardImageElement />;
-
-  return (
-    <>
-      <ClientImageUploadDialog
-        open={open}
-        onClose={handleClose}
-        clientId={client.id}
-      />
-      <Link component='button'>
-        <ClientCardImageElement
-          client={client}
-          sx={{ mr: 1 }}
-          onClick={handleOpen}
-        />
-      </Link>
-    </>
-  );
-};
 
 const ClientCard: React.FC<Props> = ({
   client,
@@ -231,7 +163,10 @@ const ClientCard: React.FC<Props> = ({
                   }}
                 />
               ) : (
-                <ClientCardImage client={clientImageData || undefined} />
+                <ClientCardImageElement
+                  size={150}
+                  client={clientImageData || undefined}
+                />
               )}
 
               <Stack spacing={0.5} sx={{ pr: 1 }}>
@@ -275,6 +210,7 @@ const ClientCard: React.FC<Props> = ({
                       target={linkTargetBlank ? '_blank' : undefined}
                       color='secondary'
                       size='small'
+                      aria-label='Edit Client Details'
                     >
                       Edit Client Details
                     </ButtonLink>

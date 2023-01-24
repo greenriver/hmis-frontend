@@ -11,15 +11,16 @@ import { isNil, sortBy, startCase } from 'lodash-es';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisObjectSchemas } from '@/types/gqlObjects';
 import {
+  AssessmentFieldsFragment,
   ClientFieldsFragment,
-  ClientIdentificationFieldsFragment,
   ClientNameFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
+  GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
+  HouseholdClientFieldsWithAssessmentsFragment,
   ProjectType,
   RecordType,
-  RelationshipToHoH,
   ServiceFieldsFragment,
   ServiceTypeProvided,
 } from '@/types/gqlTypes';
@@ -32,6 +33,11 @@ export const MISSING_DATA_KEYS = [
   'DATA_NOT_COLLECTED',
   'CLIENT_REFUSED',
   'CLIENT_DOESN_T_KNOW',
+  'GENDER_CLIENT_DOESN_T_KNOW',
+  'GENDER_CLIENT_REFUSED',
+  'RACE_UNKNOWN',
+  'RACE_REFUSED',
+  'RACE_NOT_COLLECTED',
 ];
 
 export const INVALID_ENUM = 'INVALID';
@@ -69,9 +75,6 @@ export const yesNo = (bool: boolean | null | undefined) => {
   if (isNil(bool)) return null;
   return bool ? 'Yes' : 'No';
 };
-
-// Prefix on descriptions, like "(8) Client doesn't know"
-const numericPrefix = /^\([0-9]*\)\s/;
 
 export const parseHmisDateString = (
   dateString: string | null | undefined
@@ -140,6 +143,18 @@ export const clientNameWithoutPreferred = (
   return nameComponents.filter(Boolean).join(' ');
 };
 
+export const clientNameAllParts = (client: ClientNameFragment) => {
+  return [
+    client.preferredName,
+    client.firstName,
+    client.middleName,
+    client.lastName,
+    client.nameSuffix,
+  ]
+    .filter(Boolean)
+    .join(' ');
+};
+
 export const clientBriefName = (client: ClientNameFragment) =>
   client.preferredName ||
   [client.firstName, client.lastName].filter(Boolean).join(' ');
@@ -150,12 +165,12 @@ export const clientInitials = (client: ClientNameFragment) =>
     .map((s) => (s ? s[0] : ''))
     .join('');
 
-export const dob = (client: ClientIdentificationFieldsFragment) => {
+export const dob = (client: { dob?: string | null }) => {
   if (!client.dob) return '';
   return parseAndFormatDate(client.dob);
 };
 
-export const age = (client: ClientIdentificationFieldsFragment) => {
+export const age = (client: { dob?: string | null }) => {
   if (!client.dob) return '';
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
@@ -186,12 +201,21 @@ export const maskSSN = (value?: string) => {
   return cleaned.replace(/^(...)(.{2})(.{0,4}).*/, '$1-$2-$3');
 };
 
-export const lastUpdated = (client: ClientFieldsFragment) => {
-  return parseAndFormatDateTime(client.dateUpdated);
+export const lastUpdated = (
+  client: ClientFieldsFragment,
+  includeUser = false
+) => {
+  const str = parseAndFormatDateTime(client.dateUpdated);
+  if (includeUser && client.user) {
+    return `${str || 'unknown'} by ${client.user.name}`;
+  }
+  return str;
 };
 
 export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
-  client.pronouns ? client.pronouns.join(', ') : null;
+  client.pronouns && client.pronouns.length > 0
+    ? client.pronouns.join(', ')
+    : null;
 
 export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
   return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
@@ -226,18 +250,18 @@ export const enrollmentName = (
   return `${projectName} (${projectType})`;
 };
 
-const trimNumericPrefix = (s: string) => s.replace(numericPrefix, '');
+export const assessmentRoleDisplay = (assessment: AssessmentFieldsFragment) => {
+  return startCase(assessment.assessmentDetail?.role?.toLowerCase());
+};
 
-export const relationshipToHohForDisplay = (
-  relationship?: RelationshipToHoH
+export const assessmentDescription = (
+  assessment: NonNullable<
+    NonNullable<GetClientAssessmentsQuery['client']>['assessments']
+  >['nodes'][0]
 ) => {
-  if (isNil(relationship)) return '';
-  if (relationship === RelationshipToHoH.SelfHeadOfHousehold)
-    return 'Self (HoH)';
-  // if (relationship === RelationshipToHoH.DataNotCollected) return null;
-  const description = HmisEnums.RelationshipToHoH[relationship];
-  if (!description) return relationship;
-  return trimNumericPrefix(description);
+  return `${assessmentRoleDisplay(assessment)} assessment at ${enrollmentName(
+    assessment.enrollment
+  )} on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {
@@ -266,8 +290,7 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
   const isOtherMovingOn =
     e.recordType === RecordType.C2MovingOnAssistanceProvided &&
-    e.typeProvided ===
-      ServiceTypeProvided.C2MovingOnAssistanceProvidedOtherPleaseSpecify;
+    e.typeProvided === ServiceTypeProvided.C2MovingOnAssistanceProvidedOther;
 
   // Don't show 'other' if we have the other value
   if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)
@@ -289,8 +312,18 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
 };
 
 export const sortHouseholdMembers = (
-  members?: HouseholdClientFieldsFragment[]
-) => sortBy(members || [], [(c) => c.client.lastName, (c) => c.client.id]);
+  members?:
+    | HouseholdClientFieldsFragment[]
+    | HouseholdClientFieldsWithAssessmentsFragment[],
+  activeClientId?: string
+) => {
+  const sorted = sortBy(members || [], [
+    (c) => (c.client.id === activeClientId ? -1 : 1),
+    (c) => c.client.lastName,
+    (c) => c.client.id,
+  ]);
+  return sorted;
+};
 
 export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);

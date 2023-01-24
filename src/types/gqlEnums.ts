@@ -445,12 +445,6 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
-  NoYesMissing: {
-    INVALID: 'Invalid Value',
-    NO: 'No',
-    YES: 'Yes',
-    DATA_NOT_COLLECTED: 'Data not collected',
-  },
   NoYesReasonsForMissingData: {
     YES: 'Yes',
     INVALID: 'Invalid Value',
@@ -703,8 +697,7 @@ export const HmisEnums = {
       'Utility fee payment assistance',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS:
       'Assistance obtaining/coordinating other public benefits',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY:
-      'Other (please specify)',
+    C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER: 'Other',
     HOPWA_SERVICE__EDUCATION: 'Education',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING:
       'Voucher in use - veteran moved into housing',

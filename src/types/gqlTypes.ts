@@ -237,6 +237,7 @@ export type Client = {
   race: Array<Race>;
   ssn?: Maybe<Scalars['String']>;
   ssnDataQuality: SsnDataQuality;
+  user?: Maybe<User>;
   veteranStatus: NoYesReasonsForMissingData;
 };
 
@@ -932,7 +933,7 @@ export type Enrollment = {
   intakeAssessment?: Maybe<Assessment>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
-  losUnderThreshold?: Maybe<NoYesMissing>;
+  losUnderThreshold?: Maybe<Scalars['Boolean']>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   previousStreetEssh?: Maybe<Scalars['Boolean']>;
   project: Project;
@@ -2031,18 +2032,6 @@ export enum NoAssistanceReason {
   Invalid = 'INVALID',
 }
 
-/** 1.7 */
-export enum NoYesMissing {
-  /** (99) Data not collected */
-  DataNotCollected = 'DATA_NOT_COLLECTED',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** (0) No */
-  No = 'NO',
-  /** (1) Yes */
-  Yes = 'YES',
-}
-
 /** 1.8 */
 export enum NoYesReasonsForMissingData {
   /** (8) Client doesn't know */
@@ -2720,8 +2709,8 @@ export enum ServiceTypeProvided {
   C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
   /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
   C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
-  /** (5) Other (please specify) */
-  C2MovingOnAssistanceProvidedOtherPleaseSpecify = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER_PLEASE_SPECIFY',
+  /** (5) Other */
+  C2MovingOnAssistanceProvidedOther = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER',
   /** (1) Subsidized housing application assistance */
   C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
   /** (7) Mortgage assistance */
@@ -4257,6 +4246,7 @@ export type AssessmentWithValuesFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -6409,6 +6399,7 @@ export type GetAssessmentsForPopulationQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -6483,6 +6474,7 @@ export type ClientFieldsFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6518,6 +6510,7 @@ export type HouseholdClientFieldsFragment = {
   client: {
     __typename?: 'Client';
     id: string;
+    veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
     preferredName?: string | null;
@@ -6535,12 +6528,40 @@ export type HouseholdClientFieldsFragment = {
   };
 };
 
+export type HouseholdClientFieldsWithAssessmentsFragment = {
+  __typename?: 'HouseholdClient';
+  id: string;
+  relationshipToHoH: RelationshipToHoH;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+  };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    veteranStatus: NoYesReasonsForMissingData;
+    firstName?: string | null;
+    middleName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    dob?: string | null;
+    ssn?: string | null;
+  };
+};
+
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
   householdSize: number;
   project: {
     __typename?: 'Project';
@@ -6572,12 +6593,13 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
-export type EnrollmentWithHoHFragmentFragment = {
+export type EnrollmentWithHouseholdFragmentFragment = {
   __typename?: 'Enrollment';
   id: string;
   entryDate: string;
   exitDate?: string | null;
   inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
   householdSize: number;
   household: {
     __typename?: 'Household';
@@ -6589,6 +6611,7 @@ export type EnrollmentWithHoHFragmentFragment = {
       client: {
         __typename?: 'Client';
         id: string;
+        veteranStatus: NoYesReasonsForMissingData;
         firstName?: string | null;
         middleName?: string | null;
         preferredName?: string | null;
@@ -6833,6 +6856,7 @@ export type SearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -6896,6 +6920,7 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    user?: { __typename: 'User'; id: string; name: string } | null;
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -6945,6 +6970,7 @@ export type GetClientEnrollmentsQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        relationshipToHoH: RelationshipToHoH;
         householdSize: number;
         project: {
           __typename?: 'Project';
@@ -6993,6 +7019,7 @@ export type GetClientAssessmentsQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -7094,6 +7121,7 @@ export type CreateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7143,6 +7171,7 @@ export type UpdateClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7237,6 +7266,7 @@ export type CreateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -7273,6 +7303,7 @@ export type UpdateEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7284,6 +7315,7 @@ export type UpdateEnrollmentMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7335,6 +7367,7 @@ export type SetHoHMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7346,6 +7379,7 @@ export type SetHoHMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7397,6 +7431,7 @@ export type DeleteEnrollmentMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -7433,6 +7468,7 @@ export type AddHouseholdMembersMutation = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -7444,6 +7480,7 @@ export type AddHouseholdMembersMutation = {
           client: {
             __typename?: 'Client';
             id: string;
+            veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
             preferredName?: string | null;
@@ -7582,6 +7619,7 @@ export type GetEnrollmentQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -7594,11 +7632,11 @@ export type GetEnrollmentQuery = {
   } | null;
 };
 
-export type GetEnrollmentWithHoHQueryVariables = Exact<{
+export type GetEnrollmentWithHouseholdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
-export type GetEnrollmentWithHoHQuery = {
+export type GetEnrollmentWithHouseholdQuery = {
   __typename?: 'Query';
   enrollment?: {
     __typename?: 'Enrollment';
@@ -7606,6 +7644,7 @@ export type GetEnrollmentWithHoHQuery = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
     householdSize: number;
     household: {
       __typename?: 'Household';
@@ -7614,9 +7653,19 @@ export type GetEnrollmentWithHoHQuery = {
         __typename?: 'HouseholdClient';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
+          exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+        };
         client: {
           __typename?: 'Client';
           id: string;
+          veteranStatus: NoYesReasonsForMissingData;
           firstName?: string | null;
           middleName?: string | null;
           preferredName?: string | null;
@@ -7624,13 +7673,6 @@ export type GetEnrollmentWithHoHQuery = {
           nameSuffix?: string | null;
           dob?: string | null;
           ssn?: string | null;
-        };
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
         };
       }>;
     };
@@ -7756,6 +7798,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
+              user?: { __typename: 'User'; id: string; name: string } | null;
               image?: {
                 __typename?: 'ClientImage';
                 id: string;
@@ -8165,6 +8208,7 @@ export type GetProjectEnrollmentsQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        relationshipToHoH: RelationshipToHoH;
         householdSize: number;
         client: {
           __typename?: 'Client';
@@ -9332,6 +9376,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       projectType
     }
     inProgress
+    relationshipToHoH
     household {
       id
     }
@@ -9415,10 +9460,14 @@ export const ClientFieldsFragmentDoc = gql`
     dateUpdated
     ...ClientName
     ...ClientImage
+    user {
+      ...UserFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
+  ${UserFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
@@ -9429,6 +9478,44 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
     ...ClientName
   }
   ${ClientNameFragmentDoc}
+`;
+export const HouseholdClientFieldsFragmentDoc = gql`
+  fragment HouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      veteranStatus
+    }
+    enrollment {
+      id
+      entryDate
+      exitDate
+      inProgress
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+`;
+export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
+  fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
+    ...HouseholdClientFields
+    enrollment {
+      id
+      entryDate
+      exitDate
+      inProgress
+      intakeAssessment {
+        id
+      }
+      exitAssessment {
+        id
+      }
+    }
+  }
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
   fragment EnrollmentFieldsFromAssessment on Enrollment {
@@ -9452,27 +9539,8 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const HouseholdClientFieldsFragmentDoc = gql`
-  fragment HouseholdClientFields on HouseholdClient {
-    id
-    relationshipToHoH
-    client {
-      id
-      ...ClientName
-      ...ClientIdentificationFields
-    }
-    enrollment {
-      id
-      entryDate
-      exitDate
-      inProgress
-    }
-  }
-  ${ClientNameFragmentDoc}
-  ${ClientIdentificationFieldsFragmentDoc}
-`;
-export const EnrollmentWithHoHFragmentFragmentDoc = gql`
-  fragment EnrollmentWithHoHFragment on Enrollment {
+export const EnrollmentWithHouseholdFragmentFragmentDoc = gql`
+  fragment EnrollmentWithHouseholdFragment on Enrollment {
     ...EnrollmentFields
     household {
       id
@@ -11139,14 +11207,14 @@ export const UpdateEnrollmentDocument = gql`
     updateEnrollment(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentWithHoHFragment
+        ...EnrollmentWithHouseholdFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentWithHoHFragmentFragmentDoc}
+  ${EnrollmentWithHouseholdFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type UpdateEnrollmentMutationFn = Apollo.MutationFunction<
@@ -11197,14 +11265,14 @@ export const SetHoHDocument = gql`
     setHoHForEnrollment(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentWithHoHFragment
+        ...EnrollmentWithHouseholdFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentWithHoHFragmentFragmentDoc}
+  ${EnrollmentWithHouseholdFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SetHoHMutationFn = Apollo.MutationFunction<
@@ -11310,14 +11378,14 @@ export const AddHouseholdMembersDocument = gql`
     addHouseholdMembersToEnrollment(input: $input) {
       clientMutationId
       enrollments {
-        ...EnrollmentWithHoHFragment
+        ...EnrollmentWithHouseholdFragment
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentWithHoHFragmentFragmentDoc}
+  ${EnrollmentWithHouseholdFragmentFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type AddHouseholdMembersMutationFn = Apollo.MutationFunction<
@@ -11595,64 +11663,71 @@ export type GetEnrollmentQueryResult = Apollo.QueryResult<
   GetEnrollmentQuery,
   GetEnrollmentQueryVariables
 >;
-export const GetEnrollmentWithHoHDocument = gql`
-  query GetEnrollmentWithHoH($id: ID!) {
+export const GetEnrollmentWithHouseholdDocument = gql`
+  query GetEnrollmentWithHousehold($id: ID!) {
     enrollment(id: $id) {
-      ...EnrollmentWithHoHFragment
+      ...EnrollmentFields
+      household {
+        id
+        householdClients {
+          ...HouseholdClientFieldsWithAssessments
+        }
+      }
     }
   }
-  ${EnrollmentWithHoHFragmentFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsWithAssessmentsFragmentDoc}
 `;
 
 /**
- * __useGetEnrollmentWithHoHQuery__
+ * __useGetEnrollmentWithHouseholdQuery__
  *
- * To run a query within a React component, call `useGetEnrollmentWithHoHQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentWithHoHQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetEnrollmentWithHouseholdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentWithHouseholdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetEnrollmentWithHoHQuery({
+ * const { data, loading, error } = useGetEnrollmentWithHouseholdQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetEnrollmentWithHoHQuery(
+export function useGetEnrollmentWithHouseholdQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentWithHoHQuery,
-    GetEnrollmentWithHoHQueryVariables
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-    GetEnrollmentWithHoHQuery,
-    GetEnrollmentWithHoHQueryVariables
-  >(GetEnrollmentWithHoHDocument, options);
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
 }
-export function useGetEnrollmentWithHoHLazyQuery(
+export function useGetEnrollmentWithHouseholdLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentWithHoHQuery,
-    GetEnrollmentWithHoHQueryVariables
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetEnrollmentWithHoHQuery,
-    GetEnrollmentWithHoHQueryVariables
-  >(GetEnrollmentWithHoHDocument, options);
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
 }
-export type GetEnrollmentWithHoHQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHoHQuery
+export type GetEnrollmentWithHouseholdQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdQuery
 >;
-export type GetEnrollmentWithHoHLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHoHLazyQuery
+export type GetEnrollmentWithHouseholdLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdLazyQuery
 >;
-export type GetEnrollmentWithHoHQueryResult = Apollo.QueryResult<
-  GetEnrollmentWithHoHQuery,
-  GetEnrollmentWithHoHQueryVariables
+export type GetEnrollmentWithHouseholdQueryResult = Apollo.QueryResult<
+  GetEnrollmentWithHouseholdQuery,
+  GetEnrollmentWithHouseholdQueryVariables
 >;
 export const GetEnrollmentEventsDocument = gql`
   query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {

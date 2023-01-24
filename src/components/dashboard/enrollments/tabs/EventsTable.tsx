@@ -1,6 +1,3 @@
-import { Stack, Typography } from '@mui/material';
-
-import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -32,7 +29,7 @@ const columns: ColumnDef<EventFieldsFragment>[] = [
   },
 ];
 
-const EventsPanel = ({
+const EventsTable = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   clientId,
   enrollmentId,
@@ -40,25 +37,18 @@ const EventsPanel = ({
   clientId: string;
   enrollmentId: string;
 }) => (
-  <Stack>
-    <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
-      <Typography variant='h5'>Events</Typography>
-      <ButtonLink variant='outlined' color='secondary' size='small' to=''>
-        + Add Event
-      </ButtonLink>
-    </Stack>
-    <GenericTableWithData<
-      GetEnrollmentEventsQuery,
-      GetEnrollmentEventsQueryVariables,
-      EventFieldsFragment
-    >
-      queryVariables={{ id: enrollmentId }}
-      queryDocument={GetEnrollmentEventsDocument}
-      columns={columns}
-      pagePath='enrollment.events'
-      noData='No events.'
-    />
-  </Stack>
+  <GenericTableWithData<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables,
+    EventFieldsFragment
+  >
+    queryVariables={{ id: enrollmentId }}
+    queryDocument={GetEnrollmentEventsDocument}
+    columns={columns}
+    pagePath='enrollment.events'
+    noData='No events.'
+    headerCellSx={() => ({ color: 'text.secondary' })}
+  />
 );
 
-export default EventsPanel;
+export default EventsTable;

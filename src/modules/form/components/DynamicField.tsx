@@ -19,7 +19,7 @@ import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
-import Uploader from '@/components/elements/upload/Uploader';
+import Uploader from '@/components/elements/upload/UploaderBase';
 import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import {
   Component,

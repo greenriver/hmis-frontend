@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
+import NotSpecified from '@/components/elements/NotSpecified';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -14,11 +15,7 @@ import {
   TargetPopulation,
 } from '@/types/gqlTypes';
 
-const notSpecified = (
-  <Typography variant='body2' color='text.secondary'>
-    Not specified
-  </Typography>
-);
+const notSpecified = <NotSpecified />;
 
 const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
   const data = useMemo(

@@ -58,9 +58,10 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
     >
       header={
         <TextInput
+          label='Search Clients'
           name='search client'
           placeholder='Search clients...'
-          value={search}
+          value={search || ''}
           onChange={(e) => setSearch(e.target.value)}
           inputWidth='200px'
         />

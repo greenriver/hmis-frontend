@@ -1,5 +1,4 @@
 import { Paper, Stack, Typography } from '@mui/material';
-import { startCase } from 'lodash-es';
 import { useCallback } from 'react';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
@@ -7,6 +6,9 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
+  assessmentDescription,
+  assessmentRoleDisplay,
+  enrollmentName,
   parseAndFormatDate,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
@@ -24,26 +26,27 @@ type AssessmentType = NonNullable<
 
 const columns: ColumnDef<AssessmentType>[] = [
   {
-    header: 'Type',
-    width: '15%',
-    render: (assessment) =>
-      startCase(assessment.assessmentDetail?.role?.toLowerCase()),
-  },
-  {
-    header: 'Date',
-    width: '15%',
-    // linkTreatment: true,
-    render: (e) => parseAndFormatDate(e.assessmentDate),
-  },
-  {
     header: 'Status',
     width: '15%',
     render: (a) => <AssessmentStatus assessment={a} />,
   },
   {
-    header: 'Project',
-    render: (a) => a.enrollment.project.projectName,
+    header: 'Type',
+    width: '15%',
+    render: (assessment) => `${assessmentRoleDisplay(assessment)} Assessment`,
+    linkTreatment: true,
+    ariaLabel: (row) => assessmentDescription(row),
   },
+  {
+    header: 'Project',
+    render: (row) => enrollmentName(row.enrollment),
+  },
+  {
+    header: 'Date',
+    width: '15%',
+    render: (e) => parseAndFormatDate(e.assessmentDate),
+  },
+
   {
     header: 'Enrollment Period',
     render: (a) =>
@@ -74,7 +77,7 @@ const AllAssessments = () => {
       >
         <Typography variant='h4'>All Assessments</Typography>
       </Stack>
-      <Paper sx={{ p: 2 }}>
+      <Paper>
         <GenericTableWithData<
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,

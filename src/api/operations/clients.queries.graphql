@@ -161,7 +161,7 @@ mutation UpdateEnrollment($input: UpdateEnrollmentInput!) {
   updateEnrollment(input: $input) {
     clientMutationId
     enrollment {
-      ...EnrollmentWithHoHFragment
+      ...EnrollmentWithHouseholdFragment
     }
     errors {
       ...ValidationErrorFields
@@ -173,7 +173,7 @@ mutation SetHoH($input: SetHoHForEnrollmentInput!) {
   setHoHForEnrollment(input: $input) {
     clientMutationId
     enrollment {
-      ...EnrollmentWithHoHFragment
+      ...EnrollmentWithHouseholdFragment
     }
     errors {
       ...ValidationErrorFields
@@ -197,7 +197,7 @@ mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
   addHouseholdMembersToEnrollment(input: $input) {
     clientMutationId
     enrollments {
-      ...EnrollmentWithHoHFragment
+      ...EnrollmentWithHouseholdFragment
     }
     errors {
       ...ValidationErrorFields
@@ -241,11 +241,29 @@ query GetEnrollment($id: ID!) {
   }
 }
 
-query GetEnrollmentWithHoH($id: ID!) {
+query GetEnrollmentWithHousehold($id: ID!) {
   enrollment(id: $id) {
-    ...EnrollmentWithHoHFragment
+    ...EnrollmentFields
+    household {
+      id
+      householdClients {
+        ...HouseholdClientFieldsWithAssessments
+      }
+    }
   }
 }
+
+# query GetEnrollmentWithHouseholdAssessments($id: ID!) {
+#   enrollment(id: $id) {
+#     ...EnrollmentFields
+#     household {
+#       id
+#       householdClients {
+#         ...HouseholdClientFieldsWithAssessments
+#       }
+#     }
+#   }
+# }
 
 query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {

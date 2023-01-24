@@ -1,7 +1,6 @@
 import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 
-import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -57,7 +56,7 @@ const columns: ColumnDef<ServiceFieldsFragment>[] = [
   },
 ];
 
-const ServicesPanel: React.FC<Props> = ({ clientId, enrollmentId }) => {
+const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
   const rowLinkTo = useCallback(
     (record: ServiceFieldsFragment) =>
       generateSafePath(DashboardRoutes.EDIT_SERVICE, {
@@ -70,7 +69,11 @@ const ServicesPanel: React.FC<Props> = ({ clientId, enrollmentId }) => {
 
   return (
     <Stack>
-      <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
+      {/*
+        It looks like this was removed in stable, but I wasn't sure since it showed up as part of a merge conflict.
+        I decided to just comment it out in case we wanted to add it back. If not, this should be removed
+      */}
+      {/* <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
         <Typography variant='h5'>Services</Typography>
         <ButtonLink
           variant='outlined'
@@ -83,7 +86,7 @@ const ServicesPanel: React.FC<Props> = ({ clientId, enrollmentId }) => {
         >
           + Add Service
         </ButtonLink>
-      </Stack>
+      </Stack> */}
       <GenericTableWithData<
         GetEnrollmentServicesQuery,
         GetEnrollmentServicesQueryVariables,
@@ -95,9 +98,10 @@ const ServicesPanel: React.FC<Props> = ({ clientId, enrollmentId }) => {
         columns={columns}
         pagePath='enrollment.services'
         noData='No services.'
+        headerCellSx={() => ({ color: 'text.secondary' })}
       />
     </Stack>
   );
 };
 
-export default ServicesPanel;
+export default ServicesTable;

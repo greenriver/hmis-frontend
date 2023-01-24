@@ -1,9 +1,7 @@
-import { Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
-import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -15,7 +13,6 @@ import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
-  AssessmentRole,
   EnrollmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
@@ -73,7 +70,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   },
 ];
 
-const AssessmentsPanel = ({
+const AssessmentsTable = ({
   clientId,
   enrollmentId,
   enrollment,
@@ -100,36 +97,20 @@ const AssessmentsPanel = ({
   );
 
   return (
-    <Stack data-testid='assessmentsPanel'>
-      <Stack sx={{ mb: 2, alignItems: 'center' }} direction='row' gap={3}>
-        <Typography variant='h5'>Assessments</Typography>
-        <ButtonLink
-          variant='outlined'
-          color='secondary'
-          size='small'
-          to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
-            clientId,
-            enrollmentId,
-            assessmentRole: AssessmentRole.Update.toLowerCase(),
-          })}
-        >
-          + Add Assessment
-        </ButtonLink>
-      </Stack>
-      <GenericTableWithData<
-        GetEnrollmentAssessmentsQuery,
-        GetEnrollmentAssessmentsQueryVariables,
-        AssessmentFieldsFragment
-      >
-        queryVariables={{ id: enrollmentId }}
-        queryDocument={GetEnrollmentAssessmentsDocument}
-        rowLinkTo={rowLinkTo}
-        columns={tableColumns}
-        pagePath='enrollment.assessments'
-        noData='No assessments.'
-      />
-    </Stack>
+    <GenericTableWithData<
+      GetEnrollmentAssessmentsQuery,
+      GetEnrollmentAssessmentsQueryVariables,
+      AssessmentFieldsFragment
+    >
+      queryVariables={{ id: enrollmentId }}
+      queryDocument={GetEnrollmentAssessmentsDocument}
+      rowLinkTo={rowLinkTo}
+      columns={tableColumns}
+      pagePath='enrollment.assessments'
+      noData='No assessments.'
+      headerCellSx={() => ({ color: 'text.secondary' })}
+    />
   );
 };
 
-export default AssessmentsPanel;
+export default AssessmentsTable;

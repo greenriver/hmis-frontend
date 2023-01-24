@@ -45,6 +45,7 @@ export const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
               (e as GraphQLError & { backtrace: string[] })?.backtrace || []
             ).map((line) => (
               <Typography
+                key={line}
                 variant='caption'
                 sx={{ fontFamily: 'Monospace', display: 'block' }}
               >

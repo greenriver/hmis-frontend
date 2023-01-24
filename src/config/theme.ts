@@ -22,13 +22,20 @@ declare module '@mui/material/styles' {
     borders: Record<string, string>;
   }
   interface PaletteOptions {
-    borders: Record<'light', string>;
+    borders: Record<'light' | 'dark', string>;
   }
 }
 
 // Dynamic installation-specific theming
 const theme = createTheme({
+  // For some reason this declaration has to be included here rather than below to take effect
+  typography: {
+    fontFamily: '"Open Sans", sans-serif',
+  },
   palette: {
+    primary: {
+      main: '#1976D2',
+    },
     background: {
       default: '#F9F9F9',
     },
@@ -36,17 +43,17 @@ const theme = createTheme({
       main: '#75559F',
     },
     error: {
-      main: '#B23842',
+      main: '#D32F2F',
     },
     borders: {
       light: '#E5E5E5',
+      dark: '#c9c9c9',
     },
   },
 });
 
 export default createTheme(theme, {
   typography: {
-    fontFamily: "'Open Sans', sans-serif",
     h1: {
       fontFamily: "'Montserrat', sans-serif",
       fontSize: 18,

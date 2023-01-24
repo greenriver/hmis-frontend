@@ -745,7 +745,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'losUnderThreshold',
-        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'monthsHomelessPastThreeYears',

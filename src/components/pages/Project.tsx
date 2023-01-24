@@ -16,8 +16,10 @@ import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
+import TitleCard from '../elements/TitleCard';
 
 import useSafeParams from '@/hooks/useSafeParams';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   parseAndFormatDateRange,
   parseHmisDateString,
@@ -134,38 +136,31 @@ const Project = () => {
         <Grid item xs={9}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }} data-testid='projectDetailsCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Project Details
-            </Typography>
+            <Stack
+              justifyContent={'space-between'}
+              direction='row'
+              sx={{ mb: 2 }}
+            >
+              <Typography variant='h5'>Project Details</Typography>
+              <IdDisplay id={project.id} />
+            </Stack>
             <ProjectDetails project={project} />
           </Paper>
-          <Paper sx={{ p: 2, mb: 2 }} data-testid='funderCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Funding Sources
-            </Typography>
+          <TitleCard data-testid='funderCard' title='Funding Sources'>
             <FunderTable projectId={projectId} />
-          </Paper>
-          <Paper sx={{ p: 2, mb: 2 }} data-testid='projectCocCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Project CoCs
-            </Typography>
+          </TitleCard>
+          <TitleCard data-testid='projectCocCard' title='Project CoCs'>
             <ProjectCocTable projectId={projectId} />
-          </Paper>
-          <Paper sx={{ p: 2, mb: 2 }} data-testid='inventoryCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Inventory
-            </Typography>
+          </TitleCard>
+          <TitleCard data-testid='inventoryCard' title='Inventory'>
             <InventoryTable
               projectId={projectId}
               es={project.projectType === ProjectType.Es}
             />
-          </Paper>
-          <Paper sx={{ p: 2, mb: 2 }} data-testid='clientsCard'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Enrollments
-            </Typography>
+          </TitleCard>
+          <TitleCard data-testid='clientsCard' title='Enrollments'>
             <ProjectEnrollmentsTable projectId={projectId} />
-          </Paper>
+          </TitleCard>
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>

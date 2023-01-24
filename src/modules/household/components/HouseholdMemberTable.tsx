@@ -1,22 +1,23 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
+import { Box, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
 import HohIndicatorTableCell from './HohIndicatorTableCell';
+import HouseholdActionButtons from './HouseholdActionButtons';
+import HouseholdMemberActionButton from './HouseholdMemberActionButton';
+import { useHouseholdMembers } from './useHouseholdMembers';
 
-import HouseholdMemberActionButton from '@/components/dashboard/enrollments/HouseholdMemberActionButton';
-import { useRecentAssessments } from '@/components/dashboard/enrollments/useRecentAssessments';
 import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
-import {
-  parseAndFormatDate,
-  relationshipToHohForDisplay,
-  sortHouseholdMembers,
-} from '@/modules/hmis/hmisUtil';
+import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   HouseholdClientFieldsFragment,
-  useGetEnrollmentWithHoHQuery,
+  RelationshipToHoH,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -30,21 +31,11 @@ const HouseholdMemberTable = ({
   clientId: string;
   enrollmentId: string;
 }) => {
-  const {
-    data: { enrollment: enrollment } = {},
-    loading,
-    error,
-  } = useGetEnrollmentWithHoHQuery({
-    variables: { id: enrollmentId },
-  });
+  const [householdMembers, { loading, error }] =
+    useHouseholdMembers(enrollmentId);
 
   const { loading: assessmentsLoading, ...assessments } =
     useRecentAssessments(enrollmentId);
-
-  const householdMembers = useMemo(
-    () => sortHouseholdMembers(enrollment?.household.householdClients),
-    [enrollment]
-  );
 
   const columns = useMemo(() => {
     return [
@@ -59,23 +50,27 @@ const HouseholdMemberTable = ({
       {
         header: 'Name',
         render: (h: HouseholdClientFieldsFragment) => {
+          const isCurrentClient = h.client.id === clientId;
           const viewEnrollmentPath = generateSafePath(
             DashboardRoutes.VIEW_ENROLLMENT,
             {
               clientId: h.client.id,
-              enrollmentId,
+              enrollmentId: h.enrollment.id,
             }
           );
-          const routerLinkProps =
-            h.client.id !== clientId
-              ? {
-                  to: viewEnrollmentPath,
-                  target: '_blank',
-                }
-              : undefined;
+          const routerLinkProps = isCurrentClient
+            ? undefined
+            : {
+                to: viewEnrollmentPath,
+                target: '_blank',
+              };
 
           return (
-            <ClientName client={h.client} routerLinkProps={routerLinkProps} />
+            <ClientName
+              client={h.client}
+              routerLinkProps={routerLinkProps}
+              bold={isCurrentClient}
+            />
           );
         },
       },
@@ -89,14 +84,27 @@ const HouseholdMemberTable = ({
       {
         header: 'Status',
         render: (hc: HouseholdClientFieldsFragment) =>
-          hc.enrollment.exitDate
-            ? `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
-            : 'Active',
+          hc.enrollment.exitDate ? (
+            `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
+          ) : hc.enrollment.inProgress ? (
+            <Typography variant='body2' color='error'>
+              Incomplete
+            </Typography>
+          ) : (
+            'Active'
+          ),
       },
       {
         header: 'Relationship to HoH',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          relationshipToHohForDisplay(hc.relationshipToHoH),
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <HmisEnum
+            value={hc.relationshipToHoH}
+            enumMap={{
+              ...HmisEnums.RelationshipToHoH,
+              [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
+            }}
+          />
+        ),
       },
       {
         header: '',
@@ -115,28 +123,36 @@ const HouseholdMemberTable = ({
           ) : null,
       },
     ];
-  }, [clientId, enrollmentId, assessments]);
+  }, [clientId, assessments]);
 
   if (error) throw error;
   if (loading || assessmentsLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
 
   return (
-    <GenericTable<HouseholdClientFieldsFragment>
-      rows={householdMembers}
-      columns={columns}
-      rowSx={(hc) => ({
-        borderLeft:
-          hc.client.id === clientId
-            ? (theme) => `3px solid ${theme.palette.secondary.main}`
-            : undefined,
-        'td:nth-of-type(1)': { px: 0 },
-        'td:last-child': {
-          whiteSpace: 'nowrap',
-          width: '1%',
-        },
-      })}
-    />
+    <>
+      <GenericTable<HouseholdClientFieldsFragment>
+        rows={householdMembers}
+        columns={columns}
+        rowSx={() => ({
+          td: { py: 2 },
+          // HoH indicator column
+          'td:nth-of-type(1)': { pl: 1, pr: 0 },
+          // Button column
+          'td:last-child': {
+            py: 0,
+            whiteSpace: 'nowrap',
+            width: '1%',
+          },
+        })}
+      />
+      <Box sx={{ px: 3 }}>
+        <HouseholdActionButtons
+          householdMembers={householdMembers}
+          clientId={clientId}
+          enrollmentId={enrollmentId}
+        />
+      </Box>
+    </>
   );
 };
 

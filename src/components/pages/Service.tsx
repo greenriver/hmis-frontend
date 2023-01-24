@@ -6,8 +6,6 @@ import Loading from '../elements/Loading';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-// import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-// import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {

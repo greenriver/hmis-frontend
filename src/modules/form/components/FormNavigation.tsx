@@ -8,16 +8,20 @@ import { FormItem } from '@/types/gqlTypes';
 export interface FormNavigationProps {
   items: FormItem[];
   children: ReactNode;
-  top?: string;
+  top?: number;
 }
-const FormNavigation = ({ items, children }: FormNavigationProps) => (
+const FormNavigation = ({
+  items,
+  children,
+  top = STICKY_BAR_HEIGHT,
+}: FormNavigationProps) => (
   <>
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
       <Paper
         sx={{
           p: 3,
           position: 'sticky',
-          top: STICKY_BAR_HEIGHT + 16,
+          top: top + 16,
         }}
       >
         <Typography variant='h6' sx={{ mb: 2 }}>

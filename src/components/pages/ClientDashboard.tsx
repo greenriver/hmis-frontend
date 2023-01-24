@@ -11,7 +11,7 @@ import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNa
 
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
-import { HIDE_NAV_ROUTES } from '@/routes/routes';
+import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -43,29 +43,32 @@ const ClientDashboard: React.FC = () => {
 
   const navItems: NavItem[] = useDashboardNavItems(client?.id);
 
-  const outletContext: DashboardContext | undefined = useMemo(
-    () =>
-      client && !enrollmentLoading
-        ? {
-            client,
-            overrideBreadcrumbTitles,
-            enrollment,
-          }
-        : undefined,
-    [client, enrollment, enrollmentLoading]
-  );
-
   const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
   const [mobileNavIsOpen, setMobileNavState] = useState(false);
+  const [focusMode, setFocusMode] = useState<string | undefined>();
 
-  // Auto-hide nav for certain pages, like assessments
   useEffect(() => {
     if (!currentPath) return;
+    // Auto-hide nav for certain pages, like assessments
     if (HIDE_NAV_ROUTES.includes(currentPath)) {
       setDesktopNavState(false);
     }
+    // Auto-enable focus mode for certain pages, like household exit
+    const focused = FOCUS_MODE_ROUTES.find(
+      ({ route }) => route === currentPath
+    );
+    if (focused) {
+      // Path that you go "back" to when exiting focus mode
+      setFocusMode(focused.previous);
+    } else {
+      setFocusMode(undefined);
+    }
   }, [currentPath]);
+
+  useEffect(() => {
+    if (focusMode) setDesktopNavState(false);
+  }, [focusMode]);
 
   const handleCloseMobileMenu = useCallback(() => {
     setMobileNavState(false);
@@ -81,8 +84,22 @@ const ClientDashboard: React.FC = () => {
     setDesktopNavState(true);
   }, []);
 
+  const outletContext: DashboardContext | undefined = useMemo(
+    () =>
+      client && !enrollmentLoading
+        ? {
+            client,
+            overrideBreadcrumbTitles,
+            enrollment,
+          }
+        : undefined,
+    [client, enrollment, enrollmentLoading]
+  );
+
   if (loading || enrollmentLoading || !navItems) return <Loading />;
   if (!client || !outletContext) throw Error('Client not found');
+  if (enrollment && enrollment.client.id !== params.clientId)
+    throw Error('Page not found');
 
   return (
     <DashboardContentContainer
@@ -102,6 +119,7 @@ const ClientDashboard: React.FC = () => {
           dashboardContext={outletContext}
         />
       }
+      focusMode={focusMode}
     >
       <Outlet context={outletContext} />
     </DashboardContentContainer>

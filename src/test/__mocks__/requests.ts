@@ -2,7 +2,7 @@ import {
   GetClientDocument,
   SearchClientsDocument,
   GetPickListDocument,
-  GetEnrollmentWithHoHDocument,
+  GetEnrollmentWithHouseholdDocument,
   GetClientEnrollmentsDocument,
   RelationshipToHoH,
   PickListOption,
@@ -47,6 +47,7 @@ export const RITA_ACKROYD = {
         id: '5',
         entryDate: '2022-06-18',
         exitDate: null,
+        householdSize: 1,
         project: { projectName: 'White Pine' },
       },
       {
@@ -79,6 +80,12 @@ export const RITA_ACKROYD = {
       },
     ],
   },
+};
+
+export const RITA_ACKROYD_WITHOUT_ENROLLMENTS = {
+  ...RITA_ACKROYD,
+  id: '9998',
+  enrollments: [],
 };
 
 const projectsForSelectMock = {
@@ -276,9 +283,25 @@ const clientWithEnrollmentsMock = {
   },
 };
 
+const clientWithoutEnrollmentsMock = {
+  request: {
+    query: GetClientEnrollmentsDocument,
+    variables: {
+      id: '9998',
+      limit: 10,
+      offset: 0,
+    },
+  },
+  result: {
+    data: {
+      client: RITA_ACKROYD_WITHOUT_ENROLLMENTS,
+    },
+  },
+};
+
 const enrollmentWithHoHMock = {
   request: {
-    query: GetEnrollmentWithHoHDocument,
+    query: GetEnrollmentWithHouseholdDocument,
     variables: {
       id: '5',
     },
@@ -372,6 +395,7 @@ const mocks: any[] = [
   clientWithEnrollmentsMock,
   clientWithEnrollmentsMock,
   clientWithEnrollmentsMock,
+  clientWithoutEnrollmentsMock,
   enrollmentWithHoHMock,
   createDirectUploadMock,
 ];

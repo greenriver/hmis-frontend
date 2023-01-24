@@ -1,7 +1,7 @@
 import { LoadingButton } from '@mui/lab';
-import { Tooltip } from '@mui/material';
 import { useMemo, useState } from 'react';
 
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
@@ -54,34 +54,28 @@ const RemoveFromHouseholdButton = ({
   );
 
   const isDisabled = !!disabledReason || disabled || loading || done || !!error;
-  const button = (
-    <LoadingButton
-      loading={loading}
-      loadingIndicator='Removing..'
-      fullWidth
-      variant='outlined'
-      color='error'
-      disabled={isDisabled}
-      onClick={disabledReason ? undefined : onClick}
-      sx={{
-        root: {
-          '&.Mui-disabled': {
-            pointerEvents: 'auto',
-          },
-        },
-      }}
-    >
-      {done ? 'Removed' : 'Remove'}
-    </LoadingButton>
-  );
 
-  if (disabledReason) {
-    return (
-      <Tooltip title={disabledReason} placement='top' arrow>
-        <span>{button}</span>
-      </Tooltip>
-    );
-  }
-  return button;
+  return (
+    <ButtonTooltipContainer title={disabledReason} placement='top'>
+      <LoadingButton
+        loading={loading}
+        loadingIndicator='Removing..'
+        fullWidth
+        variant='outlined'
+        color='error'
+        disabled={isDisabled}
+        onClick={disabledReason ? undefined : onClick}
+        sx={{
+          root: {
+            '&.Mui-disabled': {
+              pointerEvents: 'auto',
+            },
+          },
+        }}
+      >
+        {done ? 'Removed' : 'Remove'}
+      </LoadingButton>
+    </ButtonTooltipContainer>
+  );
 };
 export default RemoveFromHouseholdButton;

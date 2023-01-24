@@ -18,12 +18,13 @@ interface Props extends Omit<ButtonLinkProps, 'to' | 'ref'> {
   exit?: AssessmentFieldsFragment;
 }
 
-// if no intake assessment exists AND the enrollment is WIP: prompt to begin new intake
-// else if WIP intake exists: prompt to complete it
-// else if WIP exit exists: prompt to complete it
-// else if WIP annual exists: prompt to complete it
-// else if enrollment is non-WIP AND enrollment is non-Exited AND no Exit assessment exists: show exit button
-
+/* Action button for a single household member
+ 
+if no intake assessment exists AND the enrollment is WIP: prompt to begin new intake
+else if WIP intake exists: prompt to complete it
+else if WIP exit exists: prompt to complete it
+else if WIP annual exists: prompt to complete it
+else if enrollment is non-WIP AND enrollment is non-Exited AND no Exit assessment exists: show exit button */
 const HouseholdMemberActionButton = ({
   enrollmentId,
   clientId,
