@@ -1,7 +1,5 @@
 import { ColumnDef } from '@/components/elements/GenericTable';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   DataCollectionStage,
   DisabilityGroupFieldsFragment,
@@ -59,9 +57,12 @@ const dataCollectionVerb = {
   [DataCollectionStage.Invalid]: '',
 };
 
+const COLLECTION_DATE = 'Date Collected';
+const COLLECTION_STAGE = 'Collection Point';
+
 export const typicalRecordPickerColumns = [
   {
-    header: 'Date Collected',
+    header: COLLECTION_DATE,
     render: (record: RelatedRecord) =>
       isTypicalRelatedRecord(record) &&
       [parseAndFormatDate(record.informationDate), record.user?.name]
@@ -69,7 +70,7 @@ export const typicalRecordPickerColumns = [
         .join(' by '),
   },
   {
-    header: 'Collection Point',
+    header: COLLECTION_STAGE,
     render: (record: RelatedRecord) => {
       if (!isTypicalRelatedRecord(record)) return null; //make TS happy
       return [
@@ -77,43 +78,52 @@ export const typicalRecordPickerColumns = [
         enrollmentName(record.enrollment, true),
       ]
         .filter((s) => !!s)
-        .join(' by ');
+        .join(' ');
     },
   },
 ];
 
 export const enrollmentColumns = [
   {
-    header: 'Project',
+    header: COLLECTION_DATE,
     render: (record: RelatedRecord) =>
-      isEnrollment(record) && enrollmentName(record, true),
+      isEnrollment(record) && parseAndFormatDate(record.entryDate),
+  },
+  {
+    header: COLLECTION_STAGE,
+    render: (record: RelatedRecord) => {
+      if (!isEnrollment(record)) return null; //make TS happy
+      return [
+        dataCollectionVerb[DataCollectionStage.ProjectEntry],
+        enrollmentName(record, true),
+      ]
+        .filter((s) => !!s)
+        .join(' ');
+    },
   },
 ];
 
 export const assessmentColumns = [
   {
-    header: 'Collected On',
+    header: COLLECTION_DATE,
     render: (record: RelatedRecord) =>
-      isAssessment(record) && parseAndFormatDate(record.assessmentDate),
+      isAssessment(record) &&
+      [parseAndFormatDate(record.assessmentDate), record.user?.name]
+        .filter((s) => !!s)
+        .join(' by '),
   },
   {
-    header: 'Collected By',
-    render: 'user.name' as keyof RelatedRecord,
-  },
-  {
-    header: 'Collection Stage',
+    header: COLLECTION_STAGE,
     render: (record: RelatedRecord) =>
-      isAssessment(record) && (
-        <HmisEnum
-          value={record.assessmentDetail?.dataCollectionStage}
-          enumMap={HmisEnums.DataCollectionStage}
-        />
-      ),
-  },
-  {
-    header: 'Project',
-    render: (record: RelatedRecord) =>
-      isAssessment(record) && enrollmentName(record.enrollment, true),
+      isAssessment(record) &&
+      [
+        record.assessmentDetail?.dataCollectionStage
+          ? dataCollectionVerb[record.assessmentDetail.dataCollectionStage]
+          : undefined,
+        enrollmentName(record.enrollment, true),
+      ]
+        .filter((s) => !!s)
+        .join(' '),
   },
 ];
 
