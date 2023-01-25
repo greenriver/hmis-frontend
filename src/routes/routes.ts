@@ -29,6 +29,8 @@ const subRoutes = {
   NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentRole/new',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
   EDIT_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId/edit',
+  NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
+  EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
   ALL_ENROLLMENTS: 'enrollments',
   HISTORY: 'history',
   ASSESSMENTS: 'assessments',

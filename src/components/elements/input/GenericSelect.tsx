@@ -1,4 +1,9 @@
-import { Autocomplete, AutocompleteProps } from '@mui/material';
+import {
+  Autocomplete,
+  AutocompleteProps,
+  CircularProgress,
+  InputAdornment,
+} from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
@@ -32,6 +37,15 @@ const GenericSelect = <
   };
 
   const { placeholder, ...inputProps } = textInputProps || {};
+
+  // Show a loading indicator if we have a value but the picklist is still loading
+  const startAdornment =
+    rest.loading && hasValue(value) ? (
+      <InputAdornment position='start' sx={{ pl: 1 }}>
+        <CircularProgress size={15} color='inherit' />
+      </InputAdornment>
+    ) : undefined;
+
   return (
     <Autocomplete
       options={options}
@@ -41,10 +55,19 @@ const GenericSelect = <
         <TextInput
           {...params}
           {...inputProps}
-          InputProps={{ ...params.InputProps, ...inputProps.InputProps }}
+          InputProps={{
+            ...params.InputProps,
+            ...(startAdornment ? { startAdornment } : undefined),
+            ...inputProps.InputProps,
+          }}
           InputLabelProps={{
             ...params.InputLabelProps,
             ...inputProps.InputLabelProps,
+          }}
+          inputProps={{
+            ...params.inputProps,
+            value: rest.loading ? '' : params.inputProps.value,
+            ...inputProps.inputProps,
           }}
           disabled={rest.disabled}
           // Only render placeholder if no values are selected

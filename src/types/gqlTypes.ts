@@ -2132,7 +2132,12 @@ export enum PickListType {
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   Project = 'PROJECT',
+  ReferralOutcome = 'REFERRAL_OUTCOME',
+  ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
+  SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
+  SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
+  SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
 }
 
 /** 4.19.7 */
@@ -2331,6 +2336,8 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  /** Service lookup */
+  service?: Maybe<Service>;
 };
 
 export type QueryAssessmentArgs = {
@@ -2398,6 +2405,10 @@ export type QueryProjectsArgs = {
   projectTypes?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
+};
+
+export type QueryServiceArgs = {
+  id: Scalars['ID'];
 };
 
 /** HUD Race (1.7) */
@@ -7506,6 +7517,96 @@ export type AddHouseholdMembersMutation = {
   } | null;
 };
 
+export type GetServiceQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetServiceQuery = {
+  __typename?: 'Query';
+  service?: {
+    __typename?: 'Service';
+    id: string;
+    dateProvided: string;
+    movingOnOtherType?: string | null;
+    recordType: RecordType;
+    referralOutcome?: PathReferralOutcome | null;
+    subTypeProvided?: ServiceSubTypeProvided | null;
+    typeProvided: ServiceTypeProvided;
+    otherTypeProvided?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+  } | null;
+};
+
+export type AddServiceToEnrollmentMutationVariables = Exact<{
+  input: CreateServiceInput;
+}>;
+
+export type AddServiceToEnrollmentMutation = {
+  __typename?: 'Mutation';
+  createService?: {
+    __typename?: 'CreateServicePayload';
+    clientMutationId?: string | null;
+    service?: {
+      __typename?: 'Service';
+      id: string;
+      dateProvided: string;
+      movingOnOtherType?: string | null;
+      recordType: RecordType;
+      referralOutcome?: PathReferralOutcome | null;
+      subTypeProvided?: ServiceSubTypeProvided | null;
+      typeProvided: ServiceTypeProvided;
+      otherTypeProvided?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
+export type UpdateServiceMutationVariables = Exact<{
+  input: UpdateServiceInput;
+}>;
+
+export type UpdateServiceMutation = {
+  __typename?: 'Mutation';
+  updateService?: {
+    __typename?: 'UpdateServicePayload';
+    clientMutationId?: string | null;
+    service?: {
+      __typename?: 'Service';
+      id: string;
+      dateProvided: string;
+      movingOnOtherType?: string | null;
+      recordType: RecordType;
+      referralOutcome?: PathReferralOutcome | null;
+      subTypeProvided?: ServiceSubTypeProvided | null;
+      typeProvided: ServiceTypeProvided;
+      otherTypeProvided?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: string;
+      attribute?: string | null;
+      message: string;
+      fullMessage?: string | null;
+      id?: string | null;
+    }>;
+  } | null;
+};
+
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -11329,6 +11430,179 @@ export type AddHouseholdMembersMutationResult =
 export type AddHouseholdMembersMutationOptions = Apollo.BaseMutationOptions<
   AddHouseholdMembersMutation,
   AddHouseholdMembersMutationVariables
+>;
+export const GetServiceDocument = gql`
+  query GetService($id: ID!) {
+    service(id: $id) {
+      ...ServiceFields
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceQuery__
+ *
+ * To run a query within a React component, call `useGetServiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceQuery,
+    GetServiceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetServiceQuery, GetServiceQueryVariables>(
+    GetServiceDocument,
+    options
+  );
+}
+export function useGetServiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceQuery,
+    GetServiceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetServiceQuery, GetServiceQueryVariables>(
+    GetServiceDocument,
+    options
+  );
+}
+export type GetServiceQueryHookResult = ReturnType<typeof useGetServiceQuery>;
+export type GetServiceLazyQueryHookResult = ReturnType<
+  typeof useGetServiceLazyQuery
+>;
+export type GetServiceQueryResult = Apollo.QueryResult<
+  GetServiceQuery,
+  GetServiceQueryVariables
+>;
+export const AddServiceToEnrollmentDocument = gql`
+  mutation AddServiceToEnrollment($input: CreateServiceInput!) {
+    createService(input: $input) {
+      clientMutationId
+      service {
+        ...ServiceFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type AddServiceToEnrollmentMutationFn = Apollo.MutationFunction<
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables
+>;
+
+/**
+ * __useAddServiceToEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useAddServiceToEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddServiceToEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addServiceToEnrollmentMutation, { data, loading, error }] = useAddServiceToEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddServiceToEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddServiceToEnrollmentMutation,
+    AddServiceToEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddServiceToEnrollmentMutation,
+    AddServiceToEnrollmentMutationVariables
+  >(AddServiceToEnrollmentDocument, options);
+}
+export type AddServiceToEnrollmentMutationHookResult = ReturnType<
+  typeof useAddServiceToEnrollmentMutation
+>;
+export type AddServiceToEnrollmentMutationResult =
+  Apollo.MutationResult<AddServiceToEnrollmentMutation>;
+export type AddServiceToEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables
+>;
+export const UpdateServiceDocument = gql`
+  mutation UpdateService($input: UpdateServiceInput!) {
+    updateService(input: $input) {
+      clientMutationId
+      service {
+        ...ServiceFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateServiceMutationFn = Apollo.MutationFunction<
+  UpdateServiceMutation,
+  UpdateServiceMutationVariables
+>;
+
+/**
+ * __useUpdateServiceMutation__
+ *
+ * To run a mutation, you first call `useUpdateServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateServiceMutation, { data, loading, error }] = useUpdateServiceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateServiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateServiceMutation,
+    UpdateServiceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateServiceMutation,
+    UpdateServiceMutationVariables
+  >(UpdateServiceDocument, options);
+}
+export type UpdateServiceMutationHookResult = ReturnType<
+  typeof useUpdateServiceMutation
+>;
+export type UpdateServiceMutationResult =
+  Apollo.MutationResult<UpdateServiceMutation>;
+export type UpdateServiceMutationOptions = Apollo.BaseMutationOptions<
+  UpdateServiceMutation,
+  UpdateServiceMutationVariables
 >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {

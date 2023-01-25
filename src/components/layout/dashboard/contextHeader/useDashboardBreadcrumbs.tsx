@@ -65,6 +65,14 @@ export const useDashboardBreadcrumbs = (
         title: 'Assessment',
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
+      [DashboardRoutes.NEW_SERVICE]: {
+        title: 'Add Service',
+        parent: DashboardRoutes.VIEW_ENROLLMENT,
+      },
+      [DashboardRoutes.EDIT_SERVICE]: {
+        title: 'Edit Service',
+        parent: DashboardRoutes.VIEW_ENROLLMENT,
+      },
       [DashboardRoutes.EDIT_HOUSEHOLD]: {
         title: 'Edit Household',
         parent: DashboardRoutes.VIEW_ENROLLMENT,

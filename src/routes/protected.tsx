@@ -31,6 +31,7 @@ import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
+import Service from '@/components/pages/Service';
 
 const App = () => {
   return (
@@ -114,6 +115,14 @@ export const protectedRoutes = [
           {
             path: DashboardRoutes.EDIT_ASSESSMENT,
             element: <AssessmentPage />,
+          },
+          {
+            path: DashboardRoutes.NEW_SERVICE,
+            element: <Service create />,
+          },
+          {
+            path: DashboardRoutes.EDIT_SERVICE,
+            element: <Service />,
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,
