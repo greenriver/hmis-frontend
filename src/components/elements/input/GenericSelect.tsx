@@ -37,6 +37,15 @@ const GenericSelect = <
   };
 
   const { placeholder, ...inputProps } = textInputProps || {};
+
+  // Show a loading indicator if we have a value but the picklist is still loading
+  const startAdornment =
+    rest.loading && hasValue(value) ? (
+      <InputAdornment position='start' sx={{ pl: 1 }}>
+        <CircularProgress size={15} color='inherit' />
+      </InputAdornment>
+    ) : undefined;
+
   return (
     <Autocomplete
       options={options}
@@ -48,12 +57,7 @@ const GenericSelect = <
           {...inputProps}
           InputProps={{
             ...params.InputProps,
-            startAdornment:
-              rest.loading && value ? (
-                <InputAdornment position='start'>
-                  <CircularProgress size={15} color='inherit' />
-                </InputAdornment>
-              ) : undefined,
+            ...(startAdornment ? { startAdornment } : undefined),
             ...inputProps.InputProps,
           }}
           InputLabelProps={{
