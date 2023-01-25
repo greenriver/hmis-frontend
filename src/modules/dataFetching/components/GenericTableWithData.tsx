@@ -37,6 +37,7 @@ export interface Props<Query, QueryVariables, RowDataType>
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
+  fullHeight?: boolean; // used for scrollable table body
 }
 
 function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
@@ -65,6 +66,7 @@ const GenericTableWithData = <
   recordType,
   fetchPolicy,
   nonTablePagination = false,
+  fullHeight = false,
   header,
   ...props
 }: Props<Query, QueryVariables, RowDataType>) => {
@@ -92,7 +94,6 @@ const GenericTableWithData = <
     if ([2, 3, 4].includes(networkStatus)) setHasRefetched(true);
   }, [networkStatus]);
 
-  console.log(loading, networkStatus);
   if (error) throw error;
 
   const rows = useMemo(() => {
@@ -158,14 +159,15 @@ const GenericTableWithData = <
   // Hide pagination when possible
   const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
+  const containerSx = fullHeight ? { height: '100%' } : undefined;
   return (
-    <Stack spacing={1}>
+    <Stack spacing={1} sx={containerSx}>
       {header && !noResultsOnFirstLoad && (
         <Box sx={{ px: 2, py: 1, '.MuiInputLabel-root': { fontWeight: 600 } }}>
           {header}
         </Box>
       )}
-      <Box>
+      <Box sx={containerSx}>
         {noResults ? (
           <Typography sx={{ px: 2, pt: 1, pb: 2 }}>{noData}</Typography>
         ) : (
@@ -209,7 +211,7 @@ const WrappedGenericTableWithData = <
 >(
   props: Props<Query, QueryVariables, RowDataType>
 ) => (
-  <Box>
+  <Box sx={props.fullHeight ? { height: '100%' } : undefined}>
     <Sentry.ErrorBoundary fallback={alertErrorFallback}>
       <GenericTableWithData {...props} />
     </Sentry.ErrorBoundary>

@@ -105,7 +105,7 @@ const RecordPickerDialog = ({
     console.error('not implemented', item?.recordType);
     return null;
   }
-  // Need to set heigh on the dialog in order for the scrolling to work
+  // Need to set height on the dialog in order for the scrolling to work
   const height = `${Math.min(columns.length * 60 + 250, 850)}px`;
 
   return (
@@ -139,7 +139,6 @@ const RecordPickerDialog = ({
           pb: 6,
           overflow: 'hidden',
           height: '100%', // need for scrolling
-          '> .MuiBox-root': { height: '100%' }, // need for scrolling
         }}
       >
         {description}
@@ -152,6 +151,7 @@ const RecordPickerDialog = ({
           columns={columns}
           nonTablePagination
           vertical
+          fullHeight
           tableProps={{
             size: 'small',
             stickyHeader: true,
