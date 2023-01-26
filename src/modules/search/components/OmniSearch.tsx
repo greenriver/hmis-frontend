@@ -10,8 +10,10 @@ import {
   MenuItem,
   CircularProgress,
   List,
+  Divider,
+  Link,
 } from '@mui/material';
-import { flatten, isEmpty, sortBy } from 'lodash-es';
+import { flatten, isEmpty } from 'lodash-es';
 import React, { useMemo, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -41,9 +43,20 @@ const OmniSearch: React.FC = () => {
     });
 
   const options = useMemo(() => {
-    const clients = clientsData?.clientSearch?.nodes || [];
-    const projects = projectsData?.projects?.nodes || [];
-    return sortBy([...clients, ...projects], '__typename');
+    const allClients = clientsData?.clientSearch?.nodes || [];
+    const projects = projectsData?.projects?.nodes?.slice(0, 4) || [];
+    const clients = allClients.slice(0, 4);
+
+    const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
+      id: 'seeMore',
+      __typename: 'SeeMore',
+    };
+
+    return [
+      ...clients,
+      ...(allClients.length > 4 ? [seeMoreOption] : []),
+      ...projects,
+    ];
   }, [clientsData, projectsData]);
 
   const loading = clientsLoading || projectsLoading;
@@ -61,17 +74,26 @@ const OmniSearch: React.FC = () => {
           projectId: option.id,
         });
       }
+      if (option.__typename === 'SeeMore') {
+        const search = value
+          ? new URLSearchParams({ textSearch: value })
+          : undefined;
+        targetPath =
+          generateSafePath(Routes.CLIENT_SEARCH) + (search ? `?${search}` : '');
+      }
       return targetPath;
     },
-    []
+    [value]
   );
 
   const getOptionLabel = useCallback(
     (option: NonNullable<typeof options>[number]) => {
-      let label = option.id;
+      let label: React.ReactNode = option.id;
       if (option.__typename === 'Client')
         label = clientNameWithoutPreferred(option);
       if (option.__typename === 'Project') label = option.projectName;
+      if (option.__typename === 'SeeMore')
+        label = <Link variant='inherit'>See All Clients</Link>;
       return label;
     },
     []
@@ -81,8 +103,8 @@ const OmniSearch: React.FC = () => {
     id: 'omnisearch',
     options,
     filterOptions: (x) => x,
+    getOptionLabel: (x) => x.id,
     groupBy: (option) => option.__typename || 'other',
-    getOptionLabel,
     onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
     onChange: (_e, option) => {
       if (!option) return;
@@ -111,7 +133,7 @@ const OmniSearch: React.FC = () => {
       <Popper
         open={values.popupOpen}
         anchorEl={values.anchorEl}
-        placement='bottom-start'
+        placement='bottom-end'
         sx={{ zIndex: (theme) => theme.zIndex.modal }}
       >
         <Paper
@@ -157,25 +179,45 @@ const OmniSearch: React.FC = () => {
                           NonNullable<typeof options>[number]
                         >[]
                       )
-                        .filter((opt) => opt.group === key)
-                        .map((g) => g.options)
+                        .filter(
+                          (opt) =>
+                            opt.group === key ||
+                            (key === 'Client' && opt.group === 'SeeMore')
+                        )
+                        .reduce(
+                          (acc, g) => [...acc, ...g.options],
+                          [] as NonNullable<typeof options>
+                        )
                     );
 
                     return (
-                      <Grid item key={key}>
-                        <Typography variant='overline'>{label}</Typography>
-                        {isEmpty(optionGroup) ? (
-                          <Typography color='text.disabled' variant='body2'>
-                            No {label} found
+                      <Grid item xs={12} key={key}>
+                        <Box sx={{ mx: 2, mb: 0.5 }}>
+                          <Typography
+                            sx={{
+                              fontWeight: 700,
+                              fontSize: 12,
+                              color: (theme) => theme.palette.secondary.main,
+                              textTransform: 'uppercase',
+                              mb: 1,
+                            }}
+                          >
+                            {label}
                           </Typography>
+                          <Divider />
+                        </Box>
+                        {isEmpty(optionGroup) ? (
+                          <MenuItem disabled>No {label} found</MenuItem>
                         ) : (
-                          optionGroup.map((option) => {
-                            return (
-                              <div key={option.id}>
+                          <>
+                            {optionGroup.map((option) => {
+                              return (
                                 <MenuItem
+                                  key={option.id}
                                   selected={
+                                    option.__typename !== 'SeeMore' &&
                                     getOptionTargetPath(option) ===
-                                    location.pathname
+                                      location.pathname
                                   }
                                   {...values.getOptionProps({
                                     option,
@@ -186,9 +228,9 @@ const OmniSearch: React.FC = () => {
                                 >
                                   {getOptionLabel(option)}
                                 </MenuItem>
-                              </div>
-                            );
-                          })
+                              );
+                            })}
+                          </>
                         )}
                       </Grid>
                     );
