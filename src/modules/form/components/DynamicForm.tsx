@@ -7,7 +7,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import useElementInView from '../hooks/useElementInView';
 import {
@@ -40,11 +39,7 @@ import {
   ValidationError,
 } from '@/types/gqlTypes';
 
-export interface Props
-  extends Omit<
-    FormActionProps,
-    'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
-  > {
+export interface DynamicFormProps {
   definition: FormDefinitionJson;
   onSubmit: (values: FormValues, confirmed?: boolean) => void;
   onSaveDraft?: (values: FormValues) => void;
@@ -55,10 +50,14 @@ export interface Props
   showSavePrompt?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
+  FormActionProps?: Omit<
+    FormActionProps,
+    'loading' | 'onSubmit' | 'onSaveDraft'
+  >;
 }
 
 const DynamicForm: React.FC<
-  Props & {
+  DynamicFormProps & {
     itemMap: ItemMap;
     autofillDependencyMap: LinkIdMap;
     enabledDependencyMap: LinkIdMap;
@@ -68,10 +67,6 @@ const DynamicForm: React.FC<
   definition,
   onSubmit,
   onSaveDraft,
-  onDiscard,
-  submitButtonText,
-  saveDraftButtonText,
-  discardButtonText,
   loading,
   initialValues = {},
   errors = [],
@@ -83,9 +78,8 @@ const DynamicForm: React.FC<
   showSavePrompt = false,
   horizontal = false,
   pickListRelationId,
+  FormActionProps = {},
 }) => {
-  const navigate = useNavigate();
-
   const [promptSave, setPromptSave] = useState<boolean | undefined>();
 
   const [dialogDismissed, setDialogDismissed] = useState<boolean>(false);
@@ -317,12 +311,9 @@ const DynamicForm: React.FC<
     <FormActions
       onSubmit={handleSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      onDiscard={onDiscard || (() => navigate(-1))}
-      submitButtonText={submitButtonText}
-      saveDraftButtonText={saveDraftButtonText}
-      discardButtonText={discardButtonText}
       disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
       loading={loading}
+      {...FormActionProps}
     />
   );
 
@@ -388,7 +379,7 @@ const DynamicFormWithComputedData = ({
   definition,
   initialValues,
   ...props
-}: Props) => {
+}: DynamicFormProps) => {
   const [
     itemMap,
     autofillDependencyMap,

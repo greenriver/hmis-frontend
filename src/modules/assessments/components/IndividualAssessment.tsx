@@ -31,6 +31,7 @@ interface Props {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
+  onSuccess?: VoidFunction;
 }
 
 const assessmentPrefix = (role: AssessmentRole) => {
@@ -73,6 +74,7 @@ const IndividualAssessment = ({
   clientName,
   client,
   relationshipToHoH,
+  onSuccess,
 }: Props) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
@@ -143,12 +145,14 @@ const IndividualAssessment = ({
       )}
       {definition && (
         <AssessmentForm
+          key={assessment?.id}
           assessmentRole={assessmentRole}
           definition={definition}
           assessment={assessment}
           enrollment={enrollment}
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
+          onSuccess={onSuccess}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>

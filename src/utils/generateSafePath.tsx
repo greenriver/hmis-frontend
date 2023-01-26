@@ -5,16 +5,16 @@ import IdEncoder from '@/modules/hmis/IdEncoder';
 export const isIdParam = (key: string) => key.match(/Id$/);
 
 const generateSafePath: typeof generatePath = (basePath, params) => {
-  const safeParams = { ...params };
+  if (!params) return generatePath(basePath);
 
-  for (const key in params) {
-    if (isIdParam(key) && params[key])
-      safeParams[key] = IdEncoder.encode(params[key] as string);
+  const safeParams = Object.assign({}, params) as NonNullable<typeof params>;
+
+  for (const key in safeParams) {
+    if (isIdParam(key) && safeParams[key])
+      safeParams[key] = IdEncoder.encode(safeParams[key] as string);
   }
 
-  const path = generatePath(basePath, safeParams);
-
-  return path;
+  return generatePath(basePath, safeParams);
 };
 
 export default generateSafePath;

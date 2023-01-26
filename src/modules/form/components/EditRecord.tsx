@@ -17,7 +17,7 @@ import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
-  Props as DynamicFormProps,
+  DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
 import {
   createInitialValuesFromRecord,
@@ -189,13 +189,15 @@ const EditRecord = <
       <DynamicForm
         definition={definition}
         onSubmit={submitHandler}
-        submitButtonText='Save Changes'
-        discardButtonText='Discard'
         initialValues={initialValues}
         loading={saveLoading}
         errors={errors}
         warnings={warnings}
         {...props}
+        FormActionProps={{
+          submitButtonText: 'Save Changes',
+          ...props.FormActionProps,
+        }}
       />
       {mutationError && (
         <Box sx={{ mt: 3 }}>

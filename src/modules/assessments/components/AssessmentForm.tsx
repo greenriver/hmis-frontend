@@ -1,18 +1,16 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import {
-  alertErrorFallback,
-  ApolloErrorAlert,
-} from '@/components/elements/ErrorFallback';
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
-import DynamicForm from '@/modules/form/components/DynamicForm';
+import DynamicForm, {
+  DynamicFormProps,
+} from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import { getInitialValues } from '@/modules/form/util/formUtil';
@@ -34,6 +32,8 @@ interface Props {
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
+  onSuccess?: VoidFunction;
+  FormActionProps?: DynamicFormProps['FormActionProps'];
 }
 const AssessmentForm = ({
   assessment,
@@ -42,6 +42,8 @@ const AssessmentForm = ({
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
+  onSuccess,
+  FormActionProps,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
@@ -69,10 +71,9 @@ const AssessmentForm = ({
     apolloError,
   } = useAssessmentHandlers({
     definition,
-    clientId: enrollment.client.id,
     enrollmentId: enrollment.id,
     assessmentId: assessment?.id,
-    navigateOnComplete: !embeddedInWorkflow,
+    onSuccess,
   });
 
   // Set initial values for the assessment. This happens on initial load,
@@ -96,12 +97,13 @@ const AssessmentForm = ({
       init = typeof values === 'string' ? JSON.parse(values) : values;
       // Should we merge with initial values here?
     }
-    console.debug(
-      'Initial Form State',
-      init,
-      'from source:',
-      source?.id || 'none'
-    );
+    // console.debug(
+    //   enrollment.id,
+    //   'Initial Form State',
+    //   init,
+    //   'from source:',
+    //   source?.id || 'none'
+    // );
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
     return init;
@@ -149,6 +151,11 @@ const AssessmentForm = ({
               </Button>
             </ButtonTooltipContainer>
           )}
+          {import.meta.env.MODE === 'development' && (
+            <Typography variant='body2' color='text.secondary' sx={{ my: 2 }}>
+              <b>Assessment ID:</b> {assessment?.id || 'N/A'}
+            </Typography>
+          )}
         </Box>
       </Grid>
       <Grid item xs={9} sx={{ pt: '0 !important' }}>
@@ -159,7 +166,7 @@ const AssessmentForm = ({
         )}
         <DynamicForm
           // Remount component if a source assessment has been selected
-          key={`${sourceAssessment?.id}-${reloadInitialValues}`}
+          key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
           definition={definition.definition}
           onSubmit={submitHandler}
           onSaveDraft={
@@ -170,6 +177,7 @@ const AssessmentForm = ({
           loading={mutationLoading}
           errors={errors}
           showSavePrompt
+          FormActionProps={FormActionProps}
         />
       </Grid>
 
@@ -196,12 +204,4 @@ const AssessmentForm = ({
   );
 };
 
-const WrappedAssessment = (props: Props) => (
-  <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
-      <AssessmentForm {...props} />
-    </Sentry.ErrorBoundary>
-  </Box>
-);
-
-export default WrappedAssessment;
+export default AssessmentForm;

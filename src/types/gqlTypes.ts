@@ -6538,8 +6538,16 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
-    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
-    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    intakeAssessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+    } | null;
+    exitAssessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+    } | null;
   };
   client: {
     __typename?: 'Client';
@@ -7659,8 +7667,16 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
-          intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
-          exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+          intakeAssessment?: {
+            __typename?: 'Assessment';
+            id: string;
+            inProgress: boolean;
+          } | null;
+          exitAssessment?: {
+            __typename?: 'Assessment';
+            id: string;
+            inProgress: boolean;
+          } | null;
         };
         client: {
           __typename?: 'Client';
@@ -9509,9 +9525,11 @@ export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
       inProgress
       intakeAssessment {
         id
+        inProgress
       }
       exitAssessment {
         id
+        inProgress
       }
     }
   }

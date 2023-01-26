@@ -1,6 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import { Button, Stack } from '@mui/material';
 import { MouseEventHandler } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 
@@ -24,58 +25,61 @@ const FormActions = ({
   discardButtonText = 'Discard',
   disabled,
   loading,
-}: FormActionProps) => (
-  <Stack
-    direction='row'
-    spacing={2}
-    justifyContent={onSaveDraft ? 'space-between' : undefined}
-  >
-    <Stack direction='row' spacing={2}>
-      <LoadingButton
-        data-testid='submitFormButton'
-        variant='contained'
-        type='submit'
-        disabled={disabled}
-        onClick={onSubmit}
-        sx={{ opacity: 1 }}
-        loading={loading}
-      >
-        {submitButtonText}
-      </LoadingButton>
-      {onSaveDraft && (
+}: FormActionProps) => {
+  const navigate = useNavigate();
+  return (
+    <Stack
+      direction='row'
+      spacing={2}
+      justifyContent={onSaveDraft ? 'space-between' : undefined}
+    >
+      <Stack direction='row' spacing={2}>
         <LoadingButton
-          data-testid='saveFormButton'
-          variant='outlined'
+          data-testid='submitFormButton'
+          variant='contained'
           type='submit'
           disabled={disabled}
-          onClick={onSaveDraft}
-          sx={{ backgroundColor: 'white' }}
+          onClick={onSubmit}
+          sx={{ opacity: 1 }}
           loading={loading}
         >
-          {saveDraftButtonText}
+          {submitButtonText}
         </LoadingButton>
+        {onSaveDraft && (
+          <LoadingButton
+            data-testid='saveFormButton'
+            variant='outlined'
+            type='submit'
+            disabled={disabled}
+            onClick={onSaveDraft}
+            sx={{ backgroundColor: 'white' }}
+            loading={loading}
+          >
+            {saveDraftButtonText}
+          </LoadingButton>
+        )}
+      </Stack>
+      {onDiscard && typeof onDiscard === 'string' ? (
+        <ButtonLink
+          data-testid='discardFormButton'
+          variant='gray'
+          to={onDiscard}
+          disabled={disabled || loading}
+        >
+          {discardButtonText}
+        </ButtonLink>
+      ) : (
+        <Button
+          data-testid='discardFormButton'
+          variant='gray'
+          onClick={(onDiscard as MouseEventHandler) || (() => navigate(-1))}
+          disabled={disabled || loading}
+        >
+          {discardButtonText}
+        </Button>
       )}
     </Stack>
-    {onDiscard && typeof onDiscard === 'string' ? (
-      <ButtonLink
-        data-testid='discardFormButton'
-        variant='gray'
-        to={onDiscard}
-        disabled={disabled || loading}
-      >
-        {discardButtonText}
-      </ButtonLink>
-    ) : (
-      <Button
-        data-testid='discardFormButton'
-        variant='gray'
-        onClick={onDiscard as MouseEventHandler}
-        disabled={disabled || loading}
-      >
-        {discardButtonText}
-      </Button>
-    )}
-  </Stack>
-);
+  );
+};
 
 export default FormActions;

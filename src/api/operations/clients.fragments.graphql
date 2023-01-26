@@ -88,9 +88,11 @@ fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
     inProgress
     intakeAssessment {
       id
+      inProgress
     }
     exitAssessment {
       id
+      inProgress
     }
   }
 }

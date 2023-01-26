@@ -168,9 +168,11 @@ const InventoryBeds = () => {
           {dialogOpen === 'UNITS' && (
             <DynamicForm
               definition={UnitsDefinition}
-              submitButtonText='Create Units'
-              discardButtonText='Cancel'
-              onDiscard={() => setDialogOpen(null)}
+              FormActionProps={{
+                submitButtonText: 'Create Units',
+                discardButtonText: 'Cancel',
+                onDiscard: () => setDialogOpen(null),
+              }}
               onSubmit={handleCreateUnits}
               loading={createUnitsLoading}
             />
@@ -178,9 +180,11 @@ const InventoryBeds = () => {
           {dialogOpen === 'BEDS' && (
             <DynamicForm
               definition={BedsDefinition}
-              submitButtonText='Create Beds'
-              discardButtonText='Cancel'
-              onDiscard={() => setDialogOpen(null)}
+              FormActionProps={{
+                submitButtonText: 'Create Beds',
+                discardButtonText: 'Cancel',
+                onDiscard: () => setDialogOpen(null),
+              }}
               onSubmit={handleCreateBeds}
               pickListRelationId={inventoryId}
               loading={createBedsLoading}

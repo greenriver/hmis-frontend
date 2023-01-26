@@ -1,11 +1,8 @@
 import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
-import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
 import {
   FormDefinition,
   SaveAssessmentMutation,
@@ -14,28 +11,23 @@ import {
   useSubmitAssessmentMutation,
   ValidationError,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 type Args = {
   definition: FormDefinition;
-  clientId: string;
   enrollmentId: string;
   assessmentId?: string;
-  navigateOnComplete?: boolean;
+  onSuccess?: VoidFunction;
 };
 
 export function useAssessmentHandlers({
   definition,
-  clientId,
   enrollmentId,
   assessmentId,
-  navigateOnComplete,
+  onSuccess,
 }: Args) {
   const formDefinitionId = definition.id;
 
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-
-  const navigate = useNavigate();
 
   const handleCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
@@ -52,32 +44,9 @@ export function useAssessmentHandlers({
         return;
       }
 
-      // Save/Submit was successful.
-      // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
-      if (!assessmentId) {
-        cache.evict({
-          id: `Enrollment:${enrollmentId}`,
-          fieldName: 'assessments',
-        });
-      }
-
-      if (navigateOnComplete) {
-        navigate(
-          generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-            enrollmentId,
-            clientId,
-          })
-        );
-      }
+      if (onSuccess) onSuccess();
     },
-    [
-      enrollmentId,
-      clientId,
-      setErrors,
-      assessmentId,
-      navigate,
-      navigateOnComplete,
-    ]
+    [setErrors, onSuccess]
   );
 
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
