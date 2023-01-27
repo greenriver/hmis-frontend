@@ -2048,6 +2048,9 @@ export enum NoYesReasonsForMissingData {
   Yes = 'YES',
 }
 
+/** Results from client/project omnisearch */
+export type OmnisearchResult = Client | Project;
+
 /** HUD Organization */
 export type Organization = {
   __typename?: 'Organization';
@@ -2336,6 +2339,7 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  recentItems: Array<OmnisearchResult>;
   /** Service lookup */
   service?: Maybe<Service>;
 };
@@ -6892,6 +6896,32 @@ export type OmniSearchClientsQuery = {
   };
 };
 
+export type GetRecentItemsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetRecentItemsQuery = {
+  __typename?: 'Query';
+  recentItems: Array<
+    | {
+        __typename?: 'Client';
+        id: string;
+        dob?: string | null;
+        gender: Array<Gender>;
+        personalId: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        preferredName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      }
+    | {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      }
+  >;
+};
+
 export type GetClientQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -10573,6 +10603,70 @@ export type OmniSearchClientsLazyQueryHookResult = ReturnType<
 export type OmniSearchClientsQueryResult = Apollo.QueryResult<
   OmniSearchClientsQuery,
   OmniSearchClientsQueryVariables
+>;
+export const GetRecentItemsDocument = gql`
+  query GetRecentItems {
+    recentItems {
+      ... on Client {
+        ...ClientOmniSearchFields
+      }
+      ... on Project {
+        ...ProjectOmniSearchFields
+      }
+    }
+  }
+  ${ClientOmniSearchFieldsFragmentDoc}
+  ${ProjectOmniSearchFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetRecentItemsQuery__
+ *
+ * To run a query within a React component, call `useGetRecentItemsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRecentItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRecentItemsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRecentItemsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetRecentItemsQuery,
+    GetRecentItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetRecentItemsQuery, GetRecentItemsQueryVariables>(
+    GetRecentItemsDocument,
+    options
+  );
+}
+export function useGetRecentItemsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRecentItemsQuery,
+    GetRecentItemsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetRecentItemsQuery, GetRecentItemsQueryVariables>(
+    GetRecentItemsDocument,
+    options
+  );
+}
+export type GetRecentItemsQueryHookResult = ReturnType<
+  typeof useGetRecentItemsQuery
+>;
+export type GetRecentItemsLazyQueryHookResult = ReturnType<
+  typeof useGetRecentItemsLazyQuery
+>;
+export type GetRecentItemsQueryResult = Apollo.QueryResult<
+  GetRecentItemsQuery,
+  GetRecentItemsQueryVariables
 >;
 export const GetClientDocument = gql`
   query GetClient($id: ID!) {

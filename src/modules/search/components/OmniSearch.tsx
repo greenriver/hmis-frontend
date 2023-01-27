@@ -21,6 +21,7 @@ import TextInput from '@/components/elements/input/TextInput';
 import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
+  useGetRecentItemsQuery,
   useOmniSearchClientsQuery,
   useOmniSearchProjectsQuery,
 } from '@/types/gqlTypes';
@@ -41,10 +42,13 @@ const OmniSearch: React.FC = () => {
       variables: { searchTerm: value as string },
       skip: !value,
     });
+  const { data: recentItemsData, loading: recentItemsLoading } =
+    useGetRecentItemsQuery();
 
-  const options = useMemo(() => {
+  const optionsBase = useMemo(() => {
     const allClients = clientsData?.clientSearch?.nodes || [];
     const projects = projectsData?.projects?.nodes?.slice(0, 4) || [];
+    const recentItems = recentItemsData?.recentItems?.slice(0, 2) || [];
     const clients = allClients.slice(0, 4);
 
     const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
@@ -52,24 +56,47 @@ const OmniSearch: React.FC = () => {
       __typename: 'SeeMore',
     };
 
+    return {
+      recentItems: recentItems.map(
+        (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
+      ),
+      clients,
+      seeMoreOptions: allClients.length > 4 ? [seeMoreOption] : [],
+      projects,
+    };
+  }, [clientsData, projectsData, recentItemsData]);
+
+  const options = useMemo(() => {
+    const { recentItems, clients, seeMoreOptions, projects } = optionsBase;
     return [
+      ...(value ? [] : recentItems),
       ...clients,
-      ...(allClients.length > 4 ? [seeMoreOption] : []),
+      ...(value && value.length > 2 ? seeMoreOptions : []),
       ...projects,
     ];
-  }, [clientsData, projectsData]);
+  }, [optionsBase, value]);
 
-  const loading = clientsLoading || projectsLoading;
+  const loading = clientsLoading || projectsLoading || recentItemsLoading;
+
+  type Option = NonNullable<typeof options>[number];
 
   const getOptionTargetPath = useCallback(
-    (option: NonNullable<typeof options>[number]) => {
+    (option: Option) => {
       let targetPath: string | null = null;
-      if (option.__typename === 'Client') {
+      if (
+        option.__typename === 'Client' ||
+        (option.__typename === 'RecentItem' &&
+          option.item.__typename === 'Client')
+      ) {
         targetPath = generateSafePath(Routes.CLIENT_DASHBOARD, {
           clientId: option.id,
         });
       }
-      if (option.__typename === 'Project') {
+      if (
+        option.__typename === 'Project' ||
+        (option.__typename === 'RecentItem' &&
+          option.item.__typename === 'Project')
+      ) {
         targetPath = generateSafePath(Routes.PROJECT, {
           projectId: option.id,
         });
@@ -86,18 +113,25 @@ const OmniSearch: React.FC = () => {
     [value]
   );
 
-  const getOptionLabel = useCallback(
-    (option: NonNullable<typeof options>[number]) => {
-      let label: React.ReactNode = option.id;
-      if (option.__typename === 'Client')
-        label = clientNameWithoutPreferred(option);
-      if (option.__typename === 'Project') label = option.projectName;
-      if (option.__typename === 'SeeMore')
-        label = <Link variant='inherit'>See All Clients</Link>;
-      return label;
-    },
-    []
-  );
+  const getOptionLabel = useCallback((option: Option) => {
+    let label: React.ReactNode = option.id;
+    if (option.__typename === 'Client')
+      label = clientNameWithoutPreferred(option);
+    if (
+      option.__typename === 'RecentItem' &&
+      option.item.__typename === 'Client'
+    )
+      label = clientNameWithoutPreferred(option.item);
+    if (option.__typename === 'Project') label = option.projectName;
+    if (
+      option.__typename === 'RecentItem' &&
+      option.item.__typename === 'Project'
+    )
+      label = option.item.projectName;
+    if (option.__typename === 'SeeMore')
+      label = <Link variant='inherit'>See All Clients</Link>;
+    return label;
+  }, []);
 
   const values = useAutocomplete({
     id: 'omnisearch',
@@ -161,15 +195,18 @@ const OmniSearch: React.FC = () => {
               spacing={2}
               {...values.getListboxProps()}
             >
-              {!value ? (
+              {isEmpty(options) ? (
                 <Grid item xs={12}>
                   <Typography color='text.disabled'>
-                    Search for clients and/or projects
+                    {value
+                      ? 'No Results found'
+                      : 'Search for clients or projects'}
                   </Typography>
                 </Grid>
               ) : (
                 <>
                   {[
+                    ['RecentItem', 'Recent Items'],
                     ['Client', 'Clients'],
                     ['Project', 'Projects'],
                   ].map(([key, label]) => {
@@ -190,6 +227,10 @@ const OmniSearch: React.FC = () => {
                         )
                     );
 
+                    console.log(key, { optionGroup });
+
+                    if (isEmpty(optionGroup)) return null;
+
                     return (
                       <Grid item xs={12} key={key}>
                         <Box sx={{ mx: 2, mb: 0.5 }}>
@@ -206,32 +247,26 @@ const OmniSearch: React.FC = () => {
                           </Typography>
                           <Divider />
                         </Box>
-                        {isEmpty(optionGroup) ? (
-                          <MenuItem disabled>No {label} found</MenuItem>
-                        ) : (
-                          <>
-                            {optionGroup.map((option) => {
-                              return (
-                                <MenuItem
-                                  key={option.id}
-                                  selected={
-                                    option.__typename !== 'SeeMore' &&
-                                    getOptionTargetPath(option) ===
-                                      location.pathname
-                                  }
-                                  {...values.getOptionProps({
-                                    option,
-                                    index: options.findIndex(
-                                      (e) => e.id === option.id
-                                    ),
-                                  })}
-                                >
-                                  {getOptionLabel(option)}
-                                </MenuItem>
-                              );
-                            })}
-                          </>
-                        )}
+                        {optionGroup.map((option) => {
+                          return (
+                            <MenuItem
+                              key={option.id}
+                              selected={
+                                option.__typename !== 'SeeMore' &&
+                                getOptionTargetPath(option) ===
+                                  location.pathname
+                              }
+                              {...values.getOptionProps({
+                                option,
+                                index: options.findIndex(
+                                  (e) => e.id === option.id
+                                ),
+                              })}
+                            >
+                              {getOptionLabel(option)}
+                            </MenuItem>
+                          );
+                        })}
                       </Grid>
                     );
                   })}

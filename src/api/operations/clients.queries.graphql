@@ -29,6 +29,17 @@ query OmniSearchClients($input: ClientSearchInput!) {
   }
 }
 
+query GetRecentItems {
+  recentItems {
+    ... on Client {
+      ...ClientOmniSearchFields
+    }
+    ... on Project {
+      ...ProjectOmniSearchFields
+    }
+  }
+}
+
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields

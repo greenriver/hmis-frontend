@@ -13129,6 +13129,27 @@
         "possibleTypes": null
       },
       {
+        "kind": "UNION",
+        "name": "OmnisearchResult",
+        "description": "Results from client/project omnisearch",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": [
+          {
+            "kind": "OBJECT",
+            "name": "Client",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Project",
+            "ofType": null
+          }
+        ]
+      },
+      {
         "kind": "OBJECT",
         "name": "Organization",
         "description": "HUD Organization",
@@ -15715,6 +15736,30 @@
                 "kind": "OBJECT",
                 "name": "ProjectsPaginated",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recentItems",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "UNION",
+                    "name": "OmnisearchResult",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
