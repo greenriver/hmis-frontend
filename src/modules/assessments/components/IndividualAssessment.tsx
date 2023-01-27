@@ -3,7 +3,7 @@ import * as Sentry from '@sentry/react';
 import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
-import { HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT } from './HouseholdAssessments';
+import { HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT } from './household/HouseholdAssessments';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import { useEnrollment } from '@/components/dashboard/enrollments/useEnrollment';

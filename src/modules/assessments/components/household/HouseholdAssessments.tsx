@@ -1,11 +1,6 @@
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import PendingIcon from '@mui/icons-material/Pending';
 import {
   Alert,
   AppBar,
-  Box,
-  BoxProps,
   Grid,
   Stack,
   Tab,
@@ -15,7 +10,10 @@ import {
 import { memo, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import IndividualAssessment from './IndividualAssessment';
+import IndividualAssessment from '../IndividualAssessment';
+
+import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
+import TabLabel from './TabLabel';
 
 import Loading from '@/components/elements/Loading';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
@@ -52,74 +50,7 @@ const tabPanelA11yProps = (key: string) => {
   };
 };
 
-type AssessmentStatus = 'not-started' | 'started' | 'submitted';
-
-const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
-  return (
-    <Stack direction='row' alignItems='center' gap={1}>
-      {status === 'not-started' && (
-        <>
-          <CancelIcon fontSize='small' />
-          <Typography variant='subtitle2'>Not Started</Typography>
-        </>
-      )}
-      {status === 'started' && (
-        <>
-          <PendingIcon fontSize='small' />
-          <Typography variant='subtitle2'>Started</Typography>
-        </>
-      )}
-      {status === 'submitted' && (
-        <>
-          <CheckCircleIcon fontSize='small' />
-          <Typography variant='subtitle2'>Completed</Typography>
-        </>
-      )}
-    </Stack>
-  );
-};
-
-const TabLabel = ({
-  name,
-  isHoh,
-  assessmentId,
-  assessmentInProgress,
-}: {
-  name: string;
-  isHoh: boolean;
-  assessmentId?: string;
-  assessmentInProgress?: boolean;
-}) => {
-  let status: AssessmentStatus = 'not-started';
-  if (assessmentId && !assessmentInProgress) {
-    status = 'submitted';
-  } else if (assessmentId) {
-    status = 'started';
-  }
-  return (
-    <Stack gap={1}>
-      <Typography variant='inherit'>
-        {isHoh ? `(HoH) ${name}` : name}
-      </Typography>
-      <TabIndicator status={status} />
-    </Stack>
-  );
-};
-
-const AlwaysMountedTabPanel = ({
-  sx,
-  children,
-  active,
-  ...props
-}: BoxProps & { active: boolean }) => (
-  <Box
-    role='tabpanel'
-    {...props}
-    sx={{ ...sx, display: active ? undefined : 'none' }}
-  >
-    {children}
-  </Box>
-);
+export type AssessmentStatus = 'not-started' | 'started' | 'submitted';
 
 type TabDefinition = {
   id: string;
@@ -346,4 +277,5 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
     </>
   );
 };
+
 export default HouseholdAssessments;
