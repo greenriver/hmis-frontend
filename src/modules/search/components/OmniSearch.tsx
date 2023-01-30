@@ -17,8 +17,8 @@ import { flatten, isEmpty } from 'lodash-es';
 import React, { useMemo, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+import ClientName from '@/components/elements/ClientName';
 import TextInput from '@/components/elements/input/TextInput';
-import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import {
   useGetRecentItemsQuery,
@@ -116,12 +116,12 @@ const OmniSearch: React.FC = () => {
   const getOptionLabel = useCallback((option: Option) => {
     let label: React.ReactNode = option.id;
     if (option.__typename === 'Client')
-      label = clientNameWithoutPreferred(option);
+      label = <ClientName client={option} variant='body1' />;
     if (
       option.__typename === 'RecentItem' &&
       option.item.__typename === 'Client'
     )
-      label = clientNameWithoutPreferred(option.item);
+      label = <ClientName client={option.item} variant='body1' />;
     if (option.__typename === 'Project') label = option.projectName;
     if (
       option.__typename === 'RecentItem' &&
@@ -226,8 +226,6 @@ const OmniSearch: React.FC = () => {
                           [] as NonNullable<typeof options>
                         )
                     );
-
-                    console.log(key, { optionGroup });
 
                     if (isEmpty(optionGroup)) return null;
 
