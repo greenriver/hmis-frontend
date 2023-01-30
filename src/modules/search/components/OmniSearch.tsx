@@ -54,7 +54,7 @@ const OmniSearch: React.FC = () => {
     useClearRecentItemsMutation();
 
   const optionsBase = useMemo(() => {
-    const allClients = clientsData?.clientSearch?.nodes || [];
+    const allClients = clientsData?.clientOmniSearch?.nodes || [];
     const projects = projectsData?.projects?.nodes?.slice(0, 4) || [];
     const recentItems =
       recentItemsData?.currentUser?.recentItems?.slice(0, 2) || [];

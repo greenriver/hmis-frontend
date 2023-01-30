@@ -1,5 +1,5 @@
 query OmniSearchClients($input: ClientSearchInput!) {
-  clientSearch(input: $input, limit: 5) {
+  clientOmniSearch(input: $input, limit: 5) {
     limit
     nodesCount
     nodes {

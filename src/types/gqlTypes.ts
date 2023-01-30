@@ -2341,6 +2341,8 @@ export type Query = {
   assessment?: Maybe<Assessment>;
   /** Client lookup */
   client?: Maybe<Client>;
+  /** Client omnisearch */
+  clientOmniSearch: ClientsPaginated;
   /** Search for clients */
   clientSearch: ClientsPaginated;
   currentUser?: Maybe<User>;
@@ -2374,6 +2376,13 @@ export type QueryAssessmentArgs = {
 
 export type QueryClientArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryClientOmniSearchArgs = {
+  input: ClientSearchInput;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<ClientSortOption>;
 };
 
 export type QueryClientSearchArgs = {
@@ -8026,7 +8035,7 @@ export type OmniSearchClientsQueryVariables = Exact<{
 
 export type OmniSearchClientsQuery = {
   __typename?: 'Query';
-  clientSearch: {
+  clientOmniSearch: {
     __typename?: 'ClientsPaginated';
     limit: number;
     nodesCount: number;
@@ -12209,7 +12218,7 @@ export type GetRecentHealthAndDvsQueryResult = Apollo.QueryResult<
 >;
 export const OmniSearchClientsDocument = gql`
   query OmniSearchClients($input: ClientSearchInput!) {
-    clientSearch(input: $input, limit: 5) {
+    clientOmniSearch(input: $input, limit: 5) {
       limit
       nodesCount
       nodes {
