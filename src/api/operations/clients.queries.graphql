@@ -19,27 +19,6 @@ query SearchClients(
   }
 }
 
-query OmniSearchClients($input: ClientSearchInput!) {
-  clientSearch(input: $input, limit: 5) {
-    limit
-    nodesCount
-    nodes {
-      ...ClientOmniSearchFields
-    }
-  }
-}
-
-query GetRecentItems {
-  recentItems {
-    ... on Client {
-      ...ClientOmniSearchFields
-    }
-    ... on Project {
-      ...ProjectOmniSearchFields
-    }
-  }
-}
-
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields

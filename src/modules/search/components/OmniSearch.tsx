@@ -21,6 +21,10 @@ import ClientName from '@/components/elements/ClientName';
 import TextInput from '@/components/elements/input/TextInput';
 import { Routes } from '@/routes/routes';
 import {
+  AddRecentItemMutationVariables,
+  RecentItemType,
+  useAddRecentItemMutation,
+  useClearRecentItemsMutation,
   useGetRecentItemsQuery,
   useOmniSearchClientsQuery,
   useOmniSearchProjectsQuery,
@@ -45,10 +49,15 @@ const OmniSearch: React.FC = () => {
   const { data: recentItemsData, loading: recentItemsLoading } =
     useGetRecentItemsQuery();
 
+  const [addRecentItem] = useAddRecentItemMutation();
+  const [clearRecentItems, { loading: clearingRecentItems }] =
+    useClearRecentItemsMutation();
+
   const optionsBase = useMemo(() => {
     const allClients = clientsData?.clientSearch?.nodes || [];
     const projects = projectsData?.projects?.nodes?.slice(0, 4) || [];
-    const recentItems = recentItemsData?.recentItems?.slice(0, 2) || [];
+    const recentItems =
+      recentItemsData?.currentUser?.recentItems?.slice(0, 2) || [];
     const clients = allClients.slice(0, 4);
 
     const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
@@ -83,6 +92,7 @@ const OmniSearch: React.FC = () => {
   const getOptionTargetPath = useCallback(
     (option: Option) => {
       let targetPath: string | null = null;
+
       if (
         option.__typename === 'Client' ||
         (option.__typename === 'RecentItem' &&
@@ -133,6 +143,36 @@ const OmniSearch: React.FC = () => {
     return label;
   }, []);
 
+  const handleSelectItem = useCallback(
+    (option: Option) => {
+      let input: AddRecentItemMutationVariables | undefined;
+
+      if (option.__typename === 'Client')
+        input = { itemType: RecentItemType.Client, itemId: option.id };
+      if (
+        option.__typename === 'RecentItem' &&
+        option.item.__typename === 'Client'
+      )
+        input = { itemType: RecentItemType.Client, itemId: option.item.id };
+      if (option.__typename === 'Project')
+        input = { itemType: RecentItemType.Project, itemId: option.id };
+      if (
+        option.__typename === 'RecentItem' &&
+        option.item.__typename === 'Project'
+      )
+        input = { itemType: RecentItemType.Project, itemId: option.item.id };
+
+      if (input)
+        addRecentItem({
+          variables: input,
+        });
+
+      const targetPath = getOptionTargetPath(option);
+      if (targetPath) navigate(targetPath);
+    },
+    [addRecentItem, getOptionTargetPath, navigate]
+  );
+
   const values = useAutocomplete({
     id: 'omnisearch',
     options,
@@ -140,11 +180,7 @@ const OmniSearch: React.FC = () => {
     getOptionLabel: (x) => x.id,
     groupBy: (option) => option.__typename || 'other',
     onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
-    onChange: (_e, option) => {
-      if (!option) return;
-      const targetPath = getOptionTargetPath(option);
-      if (targetPath) navigate(targetPath);
-    },
+    onChange: (_e, option) => option && handleSelectItem(option),
     isOptionEqualToValue: (o, v) => o.id === v.id,
     inputValue: value || '',
     clearOnBlur: false,
@@ -232,17 +268,51 @@ const OmniSearch: React.FC = () => {
                     return (
                       <Grid item xs={12} key={key}>
                         <Box sx={{ mx: 2, mb: 0.5 }}>
-                          <Typography
+                          <Box
                             sx={{
-                              fontWeight: 700,
-                              fontSize: 12,
-                              color: (theme) => theme.palette.secondary.main,
-                              textTransform: 'uppercase',
-                              mb: 1,
+                              display: 'flex',
+                              alignItems: 'baseline',
+                              gap: 4,
                             }}
                           >
-                            {label}
-                          </Typography>
+                            <Typography
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: 12,
+                                color: (theme) => theme.palette.secondary.main,
+                                textTransform: 'uppercase',
+                                mb: 1,
+                              }}
+                            >
+                              {label}
+                            </Typography>
+                            {key === 'RecentItem' && (
+                              <Box
+                                sx={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                }}
+                              >
+                                <>
+                                  <CircularProgress
+                                    size={14}
+                                    sx={{
+                                      transition: 'opacity 0.2s',
+                                      opacity: clearingRecentItems ? 1 : 0,
+                                    }}
+                                  />
+                                  &nbsp;
+                                </>
+                                <Link
+                                  component='button'
+                                  variant='body2'
+                                  onClick={() => clearRecentItems()}
+                                >
+                                  Clear Recents
+                                </Link>
+                              </Box>
+                            )}
+                          </Box>
                           <Divider />
                         </Box>
                         {optionGroup.map((option) => {

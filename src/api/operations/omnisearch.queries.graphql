@@ -1,0 +1,61 @@
+query OmniSearchClients($input: ClientSearchInput!) {
+  clientSearch(input: $input, limit: 5) {
+    limit
+    nodesCount
+    nodes {
+      ...ClientOmniSearchFields
+    }
+  }
+}
+
+query OmniSearchProjects($searchTerm: String!) {
+  projects(searchTerm: $searchTerm, limit: 5) {
+    limit
+    nodesCount
+    nodes {
+      ...ProjectOmniSearchFields
+    }
+  }
+}
+
+query GetRecentItems {
+  currentUser {
+    id
+    recentItems {
+      ... on Client {
+        ...ClientOmniSearchFields
+      }
+      ... on Project {
+        ...ProjectOmniSearchFields
+      }
+    }
+  }
+}
+
+mutation AddRecentItem($itemId: ID!, $itemType: RecentItemType!) {
+  addRecentItem(input: { itemId: $itemId, itemType: $itemType }) {
+    id
+    recentItems {
+      ... on Client {
+        ...ClientOmniSearchFields
+      }
+      ... on Project {
+        ...ProjectOmniSearchFields
+      }
+    }
+  }
+}
+
+mutation ClearRecentItems {
+  clearRecentItems(input: {}) {
+    id
+    recentItems {
+      ... on Client {
+        ...ClientOmniSearchFields
+      }
+      ... on Project {
+        ...ProjectOmniSearchFields
+      }
+    }
+  }
+}
