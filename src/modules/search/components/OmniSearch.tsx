@@ -38,7 +38,7 @@ const OmniSearch: React.FC = () => {
 
   const { data: clientsData, loading: clientsLoading } =
     useOmniSearchClientsQuery({
-      variables: { input: { textSearch: value } },
+      variables: { textSearch: value || '' },
       skip: !value,
     });
   const { data: projectsData, loading: projectsLoading } =

@@ -2390,10 +2390,10 @@ export type QueryClientArgs = {
 };
 
 export type QueryClientOmniSearchArgs = {
-  input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ClientSortOption>;
+  textSearch: Scalars['String'];
 };
 
 export type QueryClientSearchArgs = {
@@ -8040,7 +8040,7 @@ export type GetRecentHealthAndDvsQuery = {
 };
 
 export type OmniSearchClientsQueryVariables = Exact<{
-  input: ClientSearchInput;
+  textSearch: Scalars['String'];
 }>;
 
 export type OmniSearchClientsQuery = {
@@ -12227,8 +12227,8 @@ export type GetRecentHealthAndDvsQueryResult = Apollo.QueryResult<
   GetRecentHealthAndDvsQueryVariables
 >;
 export const OmniSearchClientsDocument = gql`
-  query OmniSearchClients($input: ClientSearchInput!) {
-    clientOmniSearch(input: $input, limit: 5) {
+  query OmniSearchClients($textSearch: String!) {
+    clientOmniSearch(textSearch: $textSearch, limit: 5) {
       limit
       nodesCount
       nodes {
@@ -12251,7 +12251,7 @@ export const OmniSearchClientsDocument = gql`
  * @example
  * const { data, loading, error } = useOmniSearchClientsQuery({
  *   variables: {
- *      input: // value for 'input'
+ *      textSearch: // value for 'textSearch'
  *   },
  * });
  */
