@@ -56,6 +56,17 @@ export type AddRecentItemInput = {
   itemType: RecentItemType;
 };
 
+/** User account for a user of the system */
+export type ApplicationUser = {
+  __typename?: 'ApplicationUser';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  recentItems: Array<OmnisearchResult>;
+};
+
 /** HUD Assessment */
 export type Assessment = {
   __typename?: 'Assessment';
@@ -1827,8 +1838,8 @@ export enum MonthsHomelessPastThreeYears {
 export type Mutation = {
   __typename?: 'Mutation';
   addHouseholdMembersToEnrollment?: Maybe<AddHouseholdMembersToEnrollmentPayload>;
-  addRecentItem?: Maybe<UserAccount>;
-  clearRecentItems?: Maybe<UserAccount>;
+  addRecentItem?: Maybe<ApplicationUser>;
+  clearRecentItems?: Maybe<ApplicationUser>;
   createBeds?: Maybe<CreateBedsPayload>;
   createClient?: Maybe<CreateClientPayload>;
   createDirectUpload?: Maybe<DirectUpload>;
@@ -2345,7 +2356,7 @@ export type Query = {
   clientOmniSearch: ClientsPaginated;
   /** Search for clients */
   clientSearch: ClientsPaginated;
-  currentUser?: Maybe<UserAccount>;
+  currentUser?: Maybe<ApplicationUser>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   /** Form definition lookup by identifier */
@@ -3266,17 +3277,6 @@ export type User = {
   dateUpdated: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   name: Scalars['String'];
-};
-
-/** User account for a user of the system */
-export type UserAccount = {
-  __typename?: 'UserAccount';
-  dateCreated: Scalars['ISO8601DateTime'];
-  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
-  dateUpdated: Scalars['ISO8601DateTime'];
-  id: Scalars['ID'];
-  name: Scalars['String'];
-  recentItems: Array<OmnisearchResult>;
 };
 
 export type ValidationError = {
@@ -8088,7 +8088,7 @@ export type GetRecentItemsQueryVariables = Exact<{ [key: string]: never }>;
 export type GetRecentItemsQuery = {
   __typename?: 'Query';
   currentUser?: {
-    __typename?: 'UserAccount';
+    __typename?: 'ApplicationUser';
     id: string;
     recentItems: Array<
       | {
@@ -8121,7 +8121,7 @@ export type AddRecentItemMutationVariables = Exact<{
 export type AddRecentItemMutation = {
   __typename?: 'Mutation';
   addRecentItem?: {
-    __typename?: 'UserAccount';
+    __typename?: 'ApplicationUser';
     id: string;
     recentItems: Array<
       | {
@@ -8151,7 +8151,7 @@ export type ClearRecentItemsMutationVariables = Exact<{ [key: string]: never }>;
 export type ClearRecentItemsMutation = {
   __typename?: 'Mutation';
   clearRecentItems?: {
-    __typename?: 'UserAccount';
+    __typename?: 'ApplicationUser';
     id: string;
     recentItems: Array<
       | {
