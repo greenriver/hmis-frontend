@@ -1827,8 +1827,8 @@ export enum MonthsHomelessPastThreeYears {
 export type Mutation = {
   __typename?: 'Mutation';
   addHouseholdMembersToEnrollment?: Maybe<AddHouseholdMembersToEnrollmentPayload>;
-  addRecentItem?: Maybe<User>;
-  clearRecentItems?: Maybe<User>;
+  addRecentItem?: Maybe<UserAccount>;
+  clearRecentItems?: Maybe<UserAccount>;
   createBeds?: Maybe<CreateBedsPayload>;
   createClient?: Maybe<CreateClientPayload>;
   createDirectUpload?: Maybe<DirectUpload>;
@@ -2345,7 +2345,7 @@ export type Query = {
   clientOmniSearch: ClientsPaginated;
   /** Search for clients */
   clientSearch: ClientsPaginated;
-  currentUser?: Maybe<User>;
+  currentUser?: Maybe<UserAccount>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   /** Form definition lookup by identifier */
@@ -3261,6 +3261,16 @@ export type UpdateUnitsPayload = {
 /** HUD User */
 export type User = {
   __typename?: 'User';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+/** User account for a user of the system */
+export type UserAccount = {
+  __typename?: 'UserAccount';
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -8078,7 +8088,7 @@ export type GetRecentItemsQueryVariables = Exact<{ [key: string]: never }>;
 export type GetRecentItemsQuery = {
   __typename?: 'Query';
   currentUser?: {
-    __typename?: 'User';
+    __typename?: 'UserAccount';
     id: string;
     recentItems: Array<
       | {
@@ -8111,7 +8121,7 @@ export type AddRecentItemMutationVariables = Exact<{
 export type AddRecentItemMutation = {
   __typename?: 'Mutation';
   addRecentItem?: {
-    __typename?: 'User';
+    __typename?: 'UserAccount';
     id: string;
     recentItems: Array<
       | {
@@ -8141,7 +8151,7 @@ export type ClearRecentItemsMutationVariables = Exact<{ [key: string]: never }>;
 export type ClearRecentItemsMutation = {
   __typename?: 'Mutation';
   clearRecentItems?: {
-    __typename?: 'User';
+    __typename?: 'UserAccount';
     id: string;
     recentItems: Array<
       | {
