@@ -42,7 +42,10 @@ fragment ItemFields on FormItem {
   recordType
   pickListReference
   size
+  assessmentDate
   bounds {
+    id
+    severity
     type
     question
     valueNumber

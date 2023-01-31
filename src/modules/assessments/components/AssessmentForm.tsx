@@ -1,14 +1,10 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import {
-  alertErrorFallback,
-  ApolloErrorAlert,
-} from '@/components/elements/ErrorFallback';
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -169,6 +165,7 @@ const AssessmentForm = ({
           pickListRelationId={enrollment?.project?.id}
           loading={mutationLoading}
           errors={errors}
+          excludeDisabledItemsOnSubmit
           showSavePrompt
         />
       </Grid>
@@ -196,12 +193,4 @@ const AssessmentForm = ({
   );
 };
 
-const WrappedAssessment = (props: Props) => (
-  <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
-      <AssessmentForm {...props} />
-    </Sentry.ErrorBoundary>
-  </Box>
-);
-
-export default WrappedAssessment;
+export default AssessmentForm;

@@ -809,6 +809,14 @@ export const HmisEnums = {
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
   },
+  ValidationSeverity: { error: 'error', warning: 'warning' },
+  ValidationType: {
+    data_not_collected: 'data_not_collected',
+    invalid: 'invalid',
+    out_of_range: 'out_of_range',
+    required: 'required',
+    server_error: 'server_error',
+  },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',
     STRONGLY_DISAGREE: 'Strongly disagree',

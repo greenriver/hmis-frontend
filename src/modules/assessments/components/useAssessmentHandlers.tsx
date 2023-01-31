@@ -2,6 +2,7 @@ import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
 import { FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { cache } from '@/providers/apolloClient';
@@ -94,22 +95,20 @@ export function useAssessmentHandlers({
     onError: () => window.scrollTo(0, 0),
   });
 
-  const submitHandler = useCallback(
-    (values: FormValues) => {
+  const submitHandler: DynamicFormOnSubmit = useCallback(
+    (values, hudValues, confirmed = false) => {
       if (!definition) return;
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-      });
-      const variables = {
+      setErrors([]);
+      const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
         values,
         hudValues,
+        confirmed,
       };
-      console.debug('Submitting', variables);
-      void submitAssessmentMutation({ variables });
+      console.debug('Submitting', input, confirmed);
+      void submitAssessmentMutation({ variables: { input: { input } } });
     },
     [
       submitAssessmentMutation,
@@ -122,16 +121,31 @@ export function useAssessmentHandlers({
 
   const saveDraftHandler = useCallback(
     (values: FormValues) => {
-      const variables = {
+      if (!definition) return;
+      setErrors([]);
+      const hudValues = transformSubmitValues({
+        definition: definition.definition,
+        values,
+        limitFields: ['informationDate', 'Exit.exitDate'],
+        autofillNulls: true,
+      });
+      const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values: values,
+        values,
+        hudValues,
       };
-      console.debug('Saving', variables);
-      void saveAssessmentMutation({ variables });
+      console.debug('Saving', input);
+      void saveAssessmentMutation({ variables: { input: { input } } });
     },
-    [saveAssessmentMutation, assessmentId, formDefinitionId, enrollmentId]
+    [
+      saveAssessmentMutation,
+      assessmentId,
+      definition,
+      formDefinitionId,
+      enrollmentId,
+    ]
   );
 
   return {
@@ -141,9 +155,8 @@ export function useAssessmentHandlers({
     errors,
     apolloError: saveError || submitError,
   } as {
-    submitHandler: (values: FormValues, confirmed?: boolean) => void;
+    submitHandler: DynamicFormOnSubmit;
     saveDraftHandler: (values: FormValues) => void;
-    dataLoading: boolean;
     mutationLoading: boolean;
     errors: ValidationError[];
     apolloError?: ApolloError;

@@ -896,6 +896,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormItem',
     fields: [
       {
+        name: 'assessmentDate',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'briefText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -1004,6 +1008,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'ItemType', ofType: null },
         },
+      },
+      {
+        name: 'warnIfEmpty',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },
@@ -2109,7 +2117,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'fullMessage',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -2125,11 +2137,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
       {
+        name: 'readableAttribute',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'severity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ValidationSeverity', ofType: null },
+        },
+      },
+      {
         name: 'type',
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: { kind: 'ENUM', name: 'ValidationType', ofType: null },
         },
       },
     ],
@@ -2137,9 +2161,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ValueBound',
     fields: [
+      { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'question',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'severity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ValidationSeverity', ofType: null },
+        },
       },
       {
         name: 'type',

@@ -1,8 +1,10 @@
 fragment ValidationErrorFields on ValidationError {
   type
   attribute
+  readableAttribute
   message
   fullMessage
+  severity
   id
 }
 

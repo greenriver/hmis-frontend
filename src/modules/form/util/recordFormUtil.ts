@@ -94,6 +94,10 @@ type TransformSubmitValuesParams = {
   autofillNulls?: boolean;
   /** whether to fill unanswered boolean questions `false` */
   autofillBooleans?: boolean;
+  /** only transform specified field names */
+  limitFields?: string[];
+  /** link ids to exclude from the result */
+  excludeLinkIds?: string[];
 };
 
 /**
@@ -108,6 +112,8 @@ export const transformSubmitValues = ({
   autofillNotCollected = false,
   autofillNulls = false,
   autofillBooleans = false,
+  limitFields = [],
+  excludeLinkIds = [],
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
@@ -125,7 +131,13 @@ export const transformSubmitValues = ({
 
       let key = item.fieldName;
       if (!key) return;
-      if (currentRecord) key = `${currentRecord}.${key}`; // Enrollment.livingSituation, for example
+      // Prefix key like "Enrollment.livingSituation"
+      if (currentRecord) key = `${currentRecord}.${key}`;
+
+      if (limitFields.length > 0 && limitFields.indexOf(key) === -1) return;
+      if (excludeLinkIds.includes(item.linkId)) return;
+
+      if (excludeLinkIds.length > 0) key = item.linkId; // FIXME ******
 
       let value;
       if (item.linkId in values) {

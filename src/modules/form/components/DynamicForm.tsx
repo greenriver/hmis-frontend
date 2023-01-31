@@ -1,4 +1,4 @@
-import { Alert, Box, Grid, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid } from '@mui/material';
 import { isNil, omit, pull } from 'lodash-es';
 import React, {
   ReactNode,
@@ -16,7 +16,7 @@ import {
   buildAutofillDependencyMap,
   buildCommonInputProps,
   buildEnabledDependencyMap,
-  CONFIRM_ERROR_TYPE,
+  debugFormValues,
   FormValues,
   getDisabledLinkIds,
   getItemMap,
@@ -30,6 +30,9 @@ import DynamicField from './DynamicField';
 import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
+import ValidationErrorDisplay, {
+  ValidationWarningDisplay,
+} from './ValidationErrorDisplay';
 
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import {
@@ -38,7 +41,14 @@ import {
   FormItem,
   ItemType,
   ValidationError,
+  ValidationSeverity,
 } from '@/types/gqlTypes';
+
+export type DynamicFormOnSubmit = (
+  rawValues: FormValues,
+  hudValues: FormValues,
+  confirmed?: boolean
+) => void;
 
 export interface Props
   extends Omit<
@@ -46,15 +56,16 @@ export interface Props
     'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
   > {
   definition: FormDefinitionJson;
-  onSubmit: (values: FormValues, confirmed?: boolean) => void;
+  onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
-  warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
+  /** Whether to drop all disabled items from hudValues before calling onSubmit. We want this for Assessments but not record editing. */
+  excludeDisabledItemsOnSubmit?: boolean;
 }
 
 const DynamicForm: React.FC<
@@ -74,14 +85,14 @@ const DynamicForm: React.FC<
   discardButtonText,
   loading,
   initialValues = {},
-  errors = [],
-  warnings = [],
+  errors: validations,
   itemMap,
   autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   initiallyDisabledLinkIds, // list of link IDs that are disabled to start, based off definition and initialValues
   showSavePrompt = false,
   horizontal = false,
+  excludeDisabledItemsOnSubmit = false,
   pickListRelationId,
 }) => {
   const navigate = useNavigate();
@@ -202,39 +213,42 @@ const DynamicForm: React.FC<
     [updateDisabledLinkIds, updateAutofillValues]
   );
 
+  const getValuesToSubmit = useCallback(() => {
+    // Exclude all disabled items and their descendants from values
+    const excluded = addDescendants(disabledLinkIds, definition);
+    const valuesToSubmit = omit(values, excluded);
+    const hudValues = transformSubmitValues({
+      definition,
+      values: valuesToSubmit,
+      autofillNotCollected: true,
+      autofillNulls: true,
+      excludeLinkIds: excludeDisabledItemsOnSubmit ? excluded : [],
+    });
+    return [valuesToSubmit, hudValues];
+  }, [values, disabledLinkIds, definition, excludeDisabledItemsOnSubmit]);
+
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
       setDialogDismissed(false);
-
-      // Exclude all disabled items, and their descendants, from values hash
-      const excluded = addDescendants(disabledLinkIds, definition);
-      const valuesToSubmit = omit(values, excluded);
-
+      const [valuesToSubmit, hudValues] = getValuesToSubmit();
       // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
       if (
         import.meta.env.MODE !== 'production' &&
         (event.ctrlKey || event.metaKey)
       ) {
-        console.log('%c CURRENT FORM STATE:', 'color: #BB7AFF');
-        console.log(valuesToSubmit);
-        const hudValues = transformSubmitValues({
-          definition,
-          values: valuesToSubmit,
-        });
-        window.debug = { hudValues };
-        console.log(JSON.stringify(hudValues, null, 2));
+        debugFormValues(valuesToSubmit, hudValues);
       } else {
-        onSubmit(valuesToSubmit);
+        onSubmit(valuesToSubmit, hudValues, false);
       }
     },
-    [values, onSubmit, disabledLinkIds, definition]
+    [onSubmit, getValuesToSubmit]
   );
 
-  const handleConfirm = useCallback(
-    () => onSubmit(values, true),
-    [values, onSubmit]
-  );
+  const handleConfirm = useCallback(() => {
+    const [valuesToSubmit, hudValues] = getValuesToSubmit();
+    onSubmit(valuesToSubmit, hudValues, true);
+  }, [onSubmit, getValuesToSubmit]);
 
   const handleSaveDraft = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -248,15 +262,28 @@ const DynamicForm: React.FC<
     [values, onSaveDraft, definition, disabledLinkIds]
   );
 
+  const errors = useMemo(
+    () =>
+      (validations || []).filter(
+        (e) => e.severity === ValidationSeverity.Error
+      ),
+    [validations]
+  );
+
+  const warnings = useMemo(
+    () =>
+      (validations || []).filter(
+        (e) => e.severity === ValidationSeverity.Warning
+      ),
+    [validations]
+  );
+
   // Get errors for a particular field
   const getFieldErrors = useCallback(
     (item: FormItem) => {
-      if (!errors) return undefined;
-      if (!item.fieldName) return undefined;
-      const attribute = item.fieldName;
-      return errors.filter(
-        (e) => e.attribute === attribute && e.type !== CONFIRM_ERROR_TYPE
-      );
+      if (!errors || !item.fieldName) return undefined;
+      // TODO: add link id to error response instead?
+      return errors.filter((e) => e.attribute === item.fieldName);
     },
     [errors]
   );
@@ -321,7 +348,10 @@ const DynamicForm: React.FC<
       submitButtonText={submitButtonText}
       saveDraftButtonText={saveDraftButtonText}
       discardButtonText={discardButtonText}
-      disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
+      disabled={
+        !!loading ||
+        (errors.length === 0 && warnings.length > 0 && !dialogDismissed)
+      }
       loading={loading}
     />
   );
@@ -334,13 +364,9 @@ const DynamicForm: React.FC<
       <Grid container direction='column' spacing={2}>
         {errors.length > 0 && (
           <Grid item>
-            <Alert severity='error' sx={{ mb: 1 }}>
-              Please fix outstanding errors:
-              <Box component='ul' sx={{ pl: 2 }} data-testid='formErrorAlert'>
-                {errors.map(({ message, fullMessage }) => (
-                  <li key={fullMessage || message}>{fullMessage || message}</li>
-                ))}
-              </Box>
+            <Alert severity='error' sx={{ mb: 1 }} data-testid='formErrorAlert'>
+              <AlertTitle>Please fix outstanding errors</AlertTitle>
+              <ValidationErrorDisplay errors={errors} />
             </Alert>
           </Grid>
         )}
@@ -350,20 +376,19 @@ const DynamicForm: React.FC<
         {saveButtons}
       </Box>
 
-      {warnings.length > 0 && !dialogDismissed && (
+      {/** FIXME: keep this up while loading submittion onConfirm */}
+      {warnings.length > 0 && errors.length === 0 && !dialogDismissed && (
         <ConfirmationDialog
           id='confirmSubmit'
           open
-          title='Confirm Change'
+          title='Ignore Warnings?'
           onConfirm={handleConfirm}
           onCancel={() => setDialogDismissed(true)}
           loading={loading || false}
+          confirmText='Submit Assessment'
+          sx={{ '.MuiDialog-paper': { minWidth: '400px' } }}
         >
-          <Stack>
-            {warnings?.map((e) => (
-              <Typography key={e.fullMessage}>{e.fullMessage}</Typography>
-            ))}
-          </Stack>
+          <ValidationWarningDisplay warnings={warnings} />
         </ConfirmationDialog>
       )}
 

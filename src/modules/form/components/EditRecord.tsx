@@ -3,7 +3,6 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import {
-  CONFIRM_ERROR_TYPE,
   getInitialValues,
   getItemMap,
   LocalConstants,
@@ -17,12 +16,10 @@ import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
+  DynamicFormOnSubmit,
   Props as DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
-import {
-  createInitialValuesFromRecord,
-  transformSubmitValues,
-} from '@/modules/form/util/recordFormUtil';
+import { createInitialValuesFromRecord } from '@/modules/form/util/recordFormUtil';
 import {
   FormDefinitionJson,
   ItemType,
@@ -75,7 +72,6 @@ const EditRecord = <
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
 
   const {
     data,
@@ -100,17 +96,10 @@ const EditRecord = <
     useMutation<Query, QueryVariables>(queryDocument, {
       onCompleted: (data) => {
         const errors = getErrors(data) || [];
-
+        window.scrollTo(0, 0);
         if (errors.length > 0) {
-          const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
-          const validationErrors = errors.filter(
-            (e) => e.type !== CONFIRM_ERROR_TYPE
-          );
-          if (validationErrors.length > 0) window.scrollTo(0, 0);
-          setWarnings(warnings);
-          setErrors(validationErrors);
+          setErrors(errors);
         } else {
-          window.scrollTo(0, 0);
           onCompleted(data);
         }
       },
@@ -136,26 +125,17 @@ const EditRecord = <
     return values;
   }, [record, definition, itemMap, localConstants]);
 
-  const submitHandler = useCallback(
-    (values: Record<string, any>, confirmed = false) => {
+  const submitHandler: DynamicFormOnSubmit = useCallback(
+    (_values, hudValues, confirmed = false) => {
       if (!definition) return;
-      // Transform values into client input query variables
-      const inputValues = transformSubmitValues({
-        definition,
-        values,
-        autofillNotCollected: true,
-        autofillNulls: true,
-        autofillBooleans: false,
-      });
-      console.log('Submitted form values:', inputValues);
-
+      console.log('Submitting form values:', hudValues);
+      // TODO: add back variation of transformSubmitValues here to replace linkID keys with fieldName keys
       const input = {
-        input: { ...inputValues, ...inputVariables },
+        input: { ...hudValues, ...inputVariables },
         id: record?.id,
         confirmed: confirmable ? confirmed : undefined,
       };
 
-      setWarnings([]);
       setErrors([]);
       void mutateFunction({ variables: { input } as QueryVariables });
     },
@@ -194,7 +174,6 @@ const EditRecord = <
         initialValues={initialValues}
         loading={saveLoading}
         errors={errors}
-        warnings={warnings}
         {...props}
       />
       {mutationError && (

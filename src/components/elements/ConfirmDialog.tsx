@@ -10,6 +10,7 @@ interface Props extends DialogProps {
   open: boolean;
   loading: boolean;
   children: React.ReactNode;
+  confirmText?: string;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -21,6 +22,7 @@ const ConfirmationDialog = ({
   children,
   open,
   loading,
+  confirmText,
   ...other
 }: Props) => {
   return (
@@ -40,7 +42,7 @@ const ConfirmationDialog = ({
           disabled={loading}
           data-testid='confirmDialogAction'
         >
-          {loading ? 'Loading...' : 'Confirm'}
+          {loading ? 'Loading...' : confirmText || 'Confirm'}
         </Button>
       </DialogActions>
     </Dialog>

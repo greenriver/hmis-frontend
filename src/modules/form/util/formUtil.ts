@@ -25,7 +25,6 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-export const CONFIRM_ERROR_TYPE = 'confirm_warning';
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
@@ -594,9 +593,8 @@ export const applyDataCollectedAbout = (
   items: FormDefinitionWithJsonFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) => {
-  // const clone = { ...definition };
-  return items.filter((item) => {
+) =>
+  items.filter((item) => {
     if (!item.dataCollectedAbout) return true;
     switch (item.dataCollectedAbout) {
       case DataCollectedAbout.AllClients:
@@ -618,6 +616,11 @@ export const applyDataCollectedAbout = (
         return true;
     }
   });
-  // clone.item = items;
-  // return clone;
+
+export const debugFormValues = (values: FormValues, hudValues: FormValues) => {
+  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  console.log(values);
+  window.debug = { hudValues };
+  console.log('%c HUD VALUES:', 'color: #BB7AFF');
+  console.log(hudValues);
 };

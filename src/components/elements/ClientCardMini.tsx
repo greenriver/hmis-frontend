@@ -1,4 +1,5 @@
 import { Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 
 import ClientImage from './ClientImage';
 
@@ -35,7 +36,7 @@ const ClientCardMini = ({ client, hideImage = false }: Props) => {
           <ClientImage clientId={client.id} width={80} height={80} />
         )}
         <Stack gap={0.5}>
-          {clientAge && (
+          {!isNil(clientAge) && (
             <Typography variant='body2'>
               <b>Age:</b> {clientAge}
             </Typography>

@@ -481,6 +481,89 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "AssessmentInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "assessmentId",
+            "description": "Required if updating an existing assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "confirmed",
+            "description": "Whether warnings have been confirmed",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollmentId",
+            "description": "Required if saving a new assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formDefinitionId",
+            "description": "Required if saving a new assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hudValues",
+            "description": "Transformed HUD values as JSON",
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "values",
+            "description": "Raw form state as JSON",
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "AssessmentLevel",
         "description": "4.19.4",
@@ -7460,6 +7543,18 @@
         "description": "A question or group of questions",
         "fields": [
           {
+            "name": "assessmentDate",
+            "description": "Whether this item corresponds to the assessment date. Must be used with DATE\ntype. Should be used no more than once per form",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autofillValues",
             "description": "Value(s) to autofill based on conditional logic",
             "args": [],
@@ -7481,7 +7576,7 @@
           },
           {
             "name": "bounds",
-            "description": null,
+            "description": "Bounds applied to the input value",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -7581,7 +7676,7 @@
           },
           {
             "name": "fieldName",
-            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms and for assessment population.",
+            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms, for assessment population, and for assessment extraction.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -7789,7 +7884,7 @@
           },
           {
             "name": "recordType",
-            "description": "Record type to use for population",
+            "description": "Record type to use for population and extraction",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -7859,6 +7954,18 @@
                 "name": "ItemType",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "warnIfEmpty",
+            "description": "Whether to show a warning if this question is unanswered",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -16246,30 +16353,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "assessmentDate",
-            "description": "Date with format yyyy-mm-dd",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentId",
-            "description": "Required if updating an existing assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "clientMutationId",
             "description": "A unique identifier for the client performing the mutation.",
             "type": {
@@ -16282,38 +16365,14 @@
             "deprecationReason": null
           },
           {
-            "name": "enrollmentId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "formDefinitionId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "values",
-            "description": "Form state as JSON",
+            "name": "input",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "JsonObject",
+                "kind": "INPUT_OBJECT",
+                "name": "AssessmentInput",
                 "ofType": null
               }
             },
@@ -17778,30 +17837,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "assessmentDate",
-            "description": "Date with format yyyy-mm-dd",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentId",
-            "description": "Required if updating an existing assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "clientMutationId",
             "description": "A unique identifier for the client performing the mutation.",
             "type": {
@@ -17814,50 +17849,14 @@
             "deprecationReason": null
           },
           {
-            "name": "enrollmentId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "formDefinitionId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hudValues",
-            "description": "Transformed HUD values as JSON",
-            "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "values",
-            "description": "Form state as JSON",
+            "name": "input",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "JsonObject",
+                "kind": "INPUT_OBJECT",
+                "name": "AssessmentInput",
                 "ofType": null
               }
             },
@@ -19816,9 +19815,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -19864,6 +19867,34 @@
             "deprecationReason": null
           },
           {
+            "name": "readableAttribute",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "severity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ValidationSeverity",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "type",
             "description": null,
             "args": [],
@@ -19871,8 +19902,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "ValidationType",
                 "ofType": null
               }
             },
@@ -19886,18 +19917,110 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "ValidationSeverity",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "error",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "warning",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ValidationType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "data_not_collected",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "invalid",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "out_of_range",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "required",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "server_error",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "ValueBound",
-        "description": "Bound for the response value. The bound may or may not be dependent on another questions answer.",
+        "description": "Bound applied to the response value. The bound may or may not be dependent on another questions answer.",
         "fields": [
           {
-            "name": "question",
-            "description": "Link ID of dependent question, if bound value should be equal to the questions answer",
+            "name": "id",
+            "description": "Unique identifier for this bound",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "question",
+            "description": "Link ID of dependent question, if this items value should be compared to another items value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "severity",
+            "description": "Severity of bound. If error, user will be unable to submit a value that does not meet this condition.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ValidationSeverity",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
