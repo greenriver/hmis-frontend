@@ -158,6 +158,10 @@ const RecordPickerDialog = ({
             width: 'fit-content',
           }}
           renderVerticalHeaderCell={(record) => {
+            const dateUpdated = isTypicalRelatedRecord(record)
+              ? record.dateUpdated
+              : undefined;
+
             const informationDate = isTypicalRelatedRecord(record)
               ? record.informationDate
               : isEnrollment(record)
@@ -169,11 +173,12 @@ const RecordPickerDialog = ({
             return (
               <Stack spacing={2} sx={{ py: 1 }}>
                 <RelativeDate
-                  dateString={informationDate}
+                  dateString={dateUpdated || informationDate}
                   variant='body2'
                   textAlign={'center'}
                   fontWeight={600}
                   withTooltip
+                  prefix='Last Updated on '
                 />
                 <Button
                   onClick={() => onSelected(record)}

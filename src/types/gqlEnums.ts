@@ -16,7 +16,10 @@ export const HmisEnums = {
     RECORD: 'Form for creating or editing resources directly',
     UPDATE: 'UPDATE',
   },
-  AssessmentSortOption: { ASSESSMENT_DATE: 'ASSESSMENT_DATE' },
+  AssessmentSortOption: {
+    ASSESSMENT_DATE: 'ASSESSMENT_DATE',
+    DATE_UPDATED: 'DATE_UPDATED',
+  },
   AssessmentType: {
     INVALID: 'Invalid Value',
     PHONE: 'Phone',
@@ -50,12 +53,12 @@ export const HmisEnums = {
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    DISABILITY_TABLE:
+      'Specialized component for rendering disabilities in a table',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
-    INPUT_TABLE:
-      'Render inputs as a table. Each nested group is rendered as a row.',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',

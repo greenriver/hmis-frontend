@@ -9,8 +9,14 @@ import {
 interface Props extends TypographyProps {
   dateString: string;
   withTooltip?: boolean;
+  prefix?: string;
 }
-const RelativeDate = ({ dateString, withTooltip, ...props }: Props) => {
+const RelativeDate = ({
+  dateString,
+  withTooltip,
+  prefix = '',
+  ...props
+}: Props) => {
   const date = parseHmisDateString(dateString);
   const formattedDateString = parseAndFormatDate(dateString);
   const relativeDateString = date ? formatRelativeDate(date) : null;
@@ -27,7 +33,12 @@ const RelativeDate = ({ dateString, withTooltip, ...props }: Props) => {
     <Tooltip
       placement='top'
       arrow
-      title={formattedDateString}
+      title={
+        <Typography variant='inherit'>
+          {prefix}
+          {formattedDateString}
+        </Typography>
+      }
       PopperProps={{
         sx: {
           '.MuiTooltip-tooltipPlacementTop': {

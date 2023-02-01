@@ -6,9 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 
-interface Props extends Omit<DialogProps, 'title'> {
-  title: React.ReactNode;
-  open: boolean;
+interface Props extends DialogProps {
   loading: boolean;
   children: React.ReactNode;
   confirmText?: string;
@@ -21,13 +19,12 @@ const ConfirmationDialog = ({
   onCancel,
   title,
   children,
-  open,
   loading,
   confirmText,
   ...other
 }: Props) => {
   return (
-    <Dialog open={open} keepMounted={false} {...other}>
+    <Dialog keepMounted={false} {...other}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent sx={{}}>{children}</DialogContent>
       <DialogActions sx={{ px: 4, pb: 2, justifyContent: 'center' }}>

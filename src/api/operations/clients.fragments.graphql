@@ -293,6 +293,8 @@ fragment DisabilityGroupFields on DisabilityGroup {
   physicalDisabilityIndefiniteAndImpairs
   substanceUseDisorder
   substanceUseDisorderIndefiniteAndImpairs
+  dateCreated
+  dateUpdated
 }
 
 fragment HealthAndDvFields on HealthAndDv {

@@ -121,6 +121,7 @@ export enum AssessmentRole {
 /** HUD Assessment Sorting Options */
 export enum AssessmentSortOption {
   AssessmentDate = 'ASSESSMENT_DATE',
+  DateUpdated = 'DATE_UPDATED',
 }
 
 /** 4.19.3 */
@@ -377,14 +378,14 @@ export enum Component {
   AlertWarning = 'ALERT_WARNING',
   /** Render a boolean input item as a checkbox */
   Checkbox = 'CHECKBOX',
+  /** Specialized component for rendering disabilities in a table */
+  DisabilityTable = 'DISABILITY_TABLE',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
   /** Render contents in an info box */
   InfoGroup = 'INFO_GROUP',
   /** Render a group that contains children of the same type (e.g. all booleans) */
   InputGroup = 'INPUT_GROUP',
-  /** Render inputs as a table. Each nested group is rendered as a row. */
-  InputTable = 'INPUT_TABLE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -827,8 +828,10 @@ export type DisabilityGroup = {
   chronicHealthCondition?: Maybe<NoYesReasonsForMissingData>;
   chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
   developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
-  /** Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group. */
+  /** Current disabling condition on the linked Enrollment. It may not match up with the disabilities specified in this group. */
   disablingCondition: NoYesReasonsForMissingData;
   enrollment: Enrollment;
   hivAids?: Maybe<NoYesReasonsForMissingData>;
@@ -6901,6 +6904,8 @@ export type DisabilityGroupFieldsFragment = {
   physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   substanceUseDisorder?: DisabilityResponse | null;
   substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  dateCreated: string;
+  dateUpdated: string;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -8094,6 +8099,8 @@ export type GetRecentDisabilitiesQuery = {
       physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       substanceUseDisorder?: DisabilityResponse | null;
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      dateCreated: string;
+      dateUpdated: string;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -9898,6 +9905,8 @@ export const DisabilityGroupFieldsFragmentDoc = gql`
     physicalDisabilityIndefiniteAndImpairs
     substanceUseDisorder
     substanceUseDisorderIndefiniteAndImpairs
+    dateCreated
+    dateUpdated
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -10523,7 +10532,7 @@ export const GetAssessmentsForPopulationDocument = gql`
         offset: $offset
         roles: $roles
         inProgress: $inProgress
-        sortOrder: ASSESSMENT_DATE
+        sortOrder: DATE_UPDATED
       ) {
         offset
         limit

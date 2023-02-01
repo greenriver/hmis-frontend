@@ -374,7 +374,19 @@ const DynamicForm: React.FC<
           onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
           confirmText='Submit Assessment'
-          sx={{ '.MuiDialog-paper': { minWidth: '400px' } }}
+          sx={{
+            '.MuiDialog-paper': {
+              minWidth: '400px',
+              // backgroundColor: (theme) =>
+              //   lighten(theme.palette.warning.light, 0.85),
+            },
+            '.MuiDialogTitle-root': {
+              textTransform: 'unset',
+              color: 'text.primary',
+              fontSize: 18,
+              fontWeight: 800,
+            },
+          }}
         >
           {warnings.length && <ValidationWarningDisplay warnings={warnings} />}
         </ConfirmationDialog>

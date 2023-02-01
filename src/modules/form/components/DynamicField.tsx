@@ -37,6 +37,7 @@ export interface DynamicInputCommonProps {
   helperText?: ReactNode;
   min?: any;
   max?: any;
+  placeholder?: string;
 }
 
 export interface DynamicFieldProps {

@@ -664,6 +664,12 @@
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "DATE_UPDATED",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "possibleTypes": null
@@ -2729,6 +2735,12 @@
             "deprecationReason": null
           },
           {
+            "name": "DISABILITY_TABLE",
+            "description": "Specialized component for rendering disabilities in a table",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "HORIZONTAL_GROUP",
             "description": "Render a group of inputs horizontally",
             "isDeprecated": false,
@@ -2743,12 +2755,6 @@
           {
             "name": "INPUT_GROUP",
             "description": "Render a group that contains children of the same type (e.g. all booleans)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INPUT_TABLE",
-            "description": "Render inputs as a table. Each nested group is rendered as a row.",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -5561,6 +5567,38 @@
             "deprecationReason": null
           },
           {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "developmentalDisability",
             "description": null,
             "args": [],
@@ -5574,7 +5612,7 @@
           },
           {
             "name": "disablingCondition",
-            "description": "Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group.",
+            "description": "Current disabling condition on the linked Enrollment. It may not match up with the disabilities specified in this group.",
             "args": [],
             "type": {
               "kind": "NON_NULL",

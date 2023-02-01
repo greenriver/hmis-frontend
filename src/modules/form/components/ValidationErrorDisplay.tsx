@@ -16,7 +16,9 @@ export const ValidationWarningDisplay = ({
     <Box>
       {grouped.dnc && (
         <>
-          <Typography fontWeight={600}>Missing HUD Elements:</Typography>
+          <Typography>
+            The following elements will be saved as <b>Data Not Collected</b>:
+          </Typography>
           <Box component='ul' sx={{ mt: 1, mb: 2, pl: 3 }}>
             {grouped.dnc.map((e) => (
               <li key={e.fullMessage}>
