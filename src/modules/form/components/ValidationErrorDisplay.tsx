@@ -19,7 +19,7 @@ export const ValidationWarningDisplay = ({
           <Typography fontWeight={600}>Missing HUD Elements:</Typography>
           <Box component='ul' sx={{ mt: 1, mb: 2, pl: 3 }}>
             {grouped.dnc.map((e) => (
-              <li>
+              <li key={e.fullMessage}>
                 <Typography>{e.readableAttribute || e.attribute}</Typography>
               </li>
             ))}
@@ -31,7 +31,7 @@ export const ValidationWarningDisplay = ({
           <Typography fontWeight={600}>Other warnings:</Typography>
           <Box component='ul' sx={{ mt: 1, mb: 0, pl: 3 }}>
             {grouped.other.map((e) => (
-              <li>
+              <li key={e.fullMessage}>
                 <Typography>{e.fullMessage}</Typography>
               </li>
             ))}

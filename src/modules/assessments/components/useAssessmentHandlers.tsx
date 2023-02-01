@@ -53,6 +53,8 @@ export function useAssessmentHandlers({
         return;
       }
 
+      setErrors([]);
+
       // Save/Submit was successful.
       // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
       if (!assessmentId) {
@@ -98,7 +100,6 @@ export function useAssessmentHandlers({
   const submitHandler: DynamicFormOnSubmit = useCallback(
     (values, hudValues, confirmed = false) => {
       if (!definition) return;
-      setErrors([]);
       const input = {
         assessmentId,
         enrollmentId,
@@ -122,7 +123,6 @@ export function useAssessmentHandlers({
   const saveDraftHandler = useCallback(
     (values: FormValues) => {
       if (!definition) return;
-      setErrors([]);
       const hudValues = transformSubmitValues({
         definition: definition.definition,
         values,

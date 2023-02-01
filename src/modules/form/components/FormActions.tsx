@@ -33,7 +33,6 @@ const FormActions = ({
     <Stack direction='row' spacing={2}>
       <LoadingButton
         data-testid='submitFormButton'
-        variant='contained'
         type='submit'
         disabled={disabled}
         onClick={onSubmit}

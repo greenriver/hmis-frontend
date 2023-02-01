@@ -198,6 +198,11 @@ export default createTheme(theme, {
         },
       },
     },
+    MuiLoadingButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+    },
     MuiButton: {
       defaultProps: {
         variant: 'contained',

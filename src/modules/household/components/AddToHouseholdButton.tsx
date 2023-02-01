@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { format } from 'date-fns';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
@@ -51,7 +51,6 @@ const AddToHouseholdButton = ({
 
   let text = 'Add to Enrollment';
   let color: 'secondary' | 'error' = 'secondary';
-  if (loading) text = 'Adding...';
   if (added) text = 'Added';
   if (error) {
     text = 'Error';
@@ -79,16 +78,17 @@ const AddToHouseholdButton = ({
   );
 
   return (
-    <Button
+    <LoadingButton
       disabled={added}
       color={color}
       fullWidth
       size='small'
       onClick={onClick}
       sx={{ maxWidth: '180px' }}
+      loading={loading}
     >
       {text}
-    </Button>
+    </LoadingButton>
   );
 };
 

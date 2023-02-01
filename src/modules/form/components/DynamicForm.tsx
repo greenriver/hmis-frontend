@@ -35,13 +35,13 @@ import ValidationErrorDisplay, {
 } from './ValidationErrorDisplay';
 
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import { useValidations } from '@/modules/assessments/components/useValidations';
 import {
   DisabledDisplay,
   FormDefinitionJson,
   FormItem,
   ItemType,
   ValidationError,
-  ValidationSeverity,
 } from '@/types/gqlTypes';
 
 export type DynamicFormOnSubmit = (
@@ -98,8 +98,8 @@ const DynamicForm: React.FC<
   const navigate = useNavigate();
 
   const [promptSave, setPromptSave] = useState<boolean | undefined>();
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
-  const [dialogDismissed, setDialogDismissed] = useState<boolean>(false);
   const saveButtonsRef = React.createRef<HTMLDivElement>();
   const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
@@ -107,6 +107,14 @@ const DynamicForm: React.FC<
     if (isNil(promptSave)) return;
     setPromptSave(!isSaveButtonVisible);
   }, [isSaveButtonVisible, promptSave]);
+
+  const { errors, warnings } = useValidations(validations);
+
+  useEffect(() => {
+    if (warnings.length && !errors.length) {
+      setShowConfirmDialog(true);
+    }
+  }, [errors, warnings]);
 
   // Map { linkId => current value }
   const [values, setValues] = useState<FormValues>(
@@ -230,7 +238,7 @@ const DynamicForm: React.FC<
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
-      setDialogDismissed(false);
+      // setDialogDismissed(false);
       const [valuesToSubmit, hudValues] = getValuesToSubmit();
       // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
       if (
@@ -260,22 +268,6 @@ const DynamicForm: React.FC<
       onSaveDraft(omit(values, excluded));
     },
     [values, onSaveDraft, definition, disabledLinkIds]
-  );
-
-  const errors = useMemo(
-    () =>
-      (validations || []).filter(
-        (e) => e.severity === ValidationSeverity.Error
-      ),
-    [validations]
-  );
-
-  const warnings = useMemo(
-    () =>
-      (validations || []).filter(
-        (e) => e.severity === ValidationSeverity.Warning
-      ),
-    [validations]
   );
 
   // Get errors for a particular field
@@ -348,10 +340,7 @@ const DynamicForm: React.FC<
       submitButtonText={submitButtonText}
       saveDraftButtonText={saveDraftButtonText}
       discardButtonText={discardButtonText}
-      disabled={
-        !!loading ||
-        (errors.length === 0 && warnings.length > 0 && !dialogDismissed)
-      }
+      disabled={!!loading || showConfirmDialog}
       loading={loading}
     />
   );
@@ -376,19 +365,18 @@ const DynamicForm: React.FC<
         {saveButtons}
       </Box>
 
-      {/** FIXME: keep this up while loading submittion onConfirm */}
-      {warnings.length > 0 && errors.length === 0 && !dialogDismissed && (
+      {showConfirmDialog && (
         <ConfirmationDialog
           id='confirmSubmit'
           open
           title='Ignore Warnings?'
           onConfirm={handleConfirm}
-          onCancel={() => setDialogDismissed(true)}
+          onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
           confirmText='Submit Assessment'
           sx={{ '.MuiDialog-paper': { minWidth: '400px' } }}
         >
-          <ValidationWarningDisplay warnings={warnings} />
+          {warnings.length && <ValidationWarningDisplay warnings={warnings} />}
         </ConfirmationDialog>
       )}
 
