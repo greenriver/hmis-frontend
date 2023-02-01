@@ -127,6 +127,11 @@ fragment EnrollmentFieldsFromAssessment on Enrollment {
   dateToStreetEssh
   timesHomelessPastThreeYears
   monthsHomelessPastThreeYears
+  intakeAssessment {
+    user {
+      name
+    }
+  }
   project {
     id
     projectName

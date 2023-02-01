@@ -173,12 +173,13 @@ const RecordPickerDialog = ({
             return (
               <Stack spacing={2} sx={{ py: 1 }}>
                 <RelativeDate
-                  dateString={dateUpdated || informationDate}
+                  dateString={informationDate}
+                  dateUpdated={dateUpdated}
                   variant='body2'
                   textAlign={'center'}
                   fontWeight={600}
                   withTooltip
-                  prefix='Last Updated on '
+                  prefix='Assessment Date: '
                 />
                 <Button
                   onClick={() => onSelected(record)}

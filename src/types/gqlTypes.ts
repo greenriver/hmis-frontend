@@ -6714,6 +6714,10 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   dateToStreetEssh?: string | null;
   timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
   monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  intakeAssessment?: {
+    __typename?: 'Assessment';
+    user?: { __typename?: 'User'; name: string } | null;
+  } | null;
   project: {
     __typename?: 'Project';
     id: string;
@@ -7210,6 +7214,10 @@ export type GetRecentEnrollmentsQuery = {
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        intakeAssessment?: {
+          __typename?: 'Assessment';
+          user?: { __typename?: 'User'; name: string } | null;
+        } | null;
         project: {
           __typename?: 'Project';
           id: string;
@@ -9731,6 +9739,11 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
     dateToStreetEssh
     timesHomelessPastThreeYears
     monthsHomelessPastThreeYears
+    intakeAssessment {
+      user {
+        name
+      }
+    }
     project {
       id
       projectName
@@ -10532,7 +10545,7 @@ export const GetAssessmentsForPopulationDocument = gql`
         offset: $offset
         roles: $roles
         inProgress: $inProgress
-        sortOrder: DATE_UPDATED
+        sortOrder: ASSESSMENT_DATE
       ) {
         offset
         limit

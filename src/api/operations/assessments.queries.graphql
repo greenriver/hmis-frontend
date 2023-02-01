@@ -87,7 +87,7 @@ query GetAssessmentsForPopulation(
       offset: $offset
       roles: $roles
       inProgress: $inProgress
-      sortOrder: DATE_UPDATED
+      sortOrder: ASSESSMENT_DATE
     ) {
       offset
       limit
