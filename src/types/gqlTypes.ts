@@ -853,8 +853,8 @@ export type DisabilityGroup = {
   chronicHealthCondition?: Maybe<NoYesReasonsForMissingData>;
   chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
-  dateCreated: Scalars['ISO8601DateTime'];
-  dateUpdated: Scalars['ISO8601DateTime'];
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']>;
   developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
   /** Current disabling condition on the linked Enrollment. It may not match up with the disabilities specified in this group. */
   disablingCondition: NoYesReasonsForMissingData;
@@ -6962,8 +6962,8 @@ export type DisabilityGroupFieldsFragment = {
   physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   substanceUseDisorder?: DisabilityResponse | null;
   substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-  dateCreated: string;
-  dateUpdated: string;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -8136,8 +8136,8 @@ export type GetRecentDisabilitiesQuery = {
       physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       substanceUseDisorder?: DisabilityResponse | null;
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-      dateCreated: string;
-      dateUpdated: string;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
