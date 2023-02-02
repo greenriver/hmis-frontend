@@ -12,6 +12,7 @@ export const Routes = {
   EDIT_FUNDER: '/projects/:projectId/funder/:funderId/edit',
   NEW_COC: '/projects/:projectId/coc/new',
   EDIT_COC: '/projects/:projectId/coc/:cocId/edit',
+  ADD_SERVICES: '/projects/:projectId/add-services',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',

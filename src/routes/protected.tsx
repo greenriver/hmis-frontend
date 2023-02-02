@@ -18,6 +18,7 @@ import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
+import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
@@ -74,6 +75,10 @@ export const protectedRoutes = [
       {
         path: Routes.EDIT_COC,
         element: <ProjectCoc />,
+      },
+      {
+        path: Routes.ADD_SERVICES,
+        element: <AddServices />,
       },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
