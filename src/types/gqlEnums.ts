@@ -521,6 +521,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  RecentItemType: { Client: 'Client', Project: 'Project' },
   RecordType: {
     INVALID: 'Invalid Value',
     CONTACT_12: 'Contact 12',
