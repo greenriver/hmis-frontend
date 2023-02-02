@@ -1,4 +1,5 @@
 export const Routes = {
+  CLIENT_SEARCH: '/',
   CREATE_CLIENT: '/client/new',
   CLIENT_DASHBOARD: '/client/:clientId',
   ALL_PROJECTS: '/projects',
