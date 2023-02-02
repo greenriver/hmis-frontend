@@ -225,6 +225,18 @@ mutation UpdateService($input: UpdateServiceInput!) {
   }
 }
 
+mutation DeleteService($input: DeleteServiceInput!) {
+  deleteService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields
