@@ -1053,7 +1053,7 @@
           },
           {
             "name": "valueBoolean",
-            "description": "If question is boolean type, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1065,7 +1065,7 @@
           },
           {
             "name": "valueCode",
-            "description": "If question is choice type, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1077,7 +1077,7 @@
           },
           {
             "name": "valueNumber",
-            "description": "If question is numeric, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1089,7 +1089,7 @@
           },
           {
             "name": "valueQuestion",
-            "description": "Link ID of question to autofill value from",
+            "description": "Link ID of question to autofill the value from if condition is med",
             "args": [],
             "type": {
               "kind": "SCALAR",

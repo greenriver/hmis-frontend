@@ -171,13 +171,13 @@ export type AutofillValue = {
   __typename?: 'AutofillValue';
   autofillBehavior: EnableBehavior;
   autofillWhen: Array<EnableWhen>;
-  /** If question is boolean type, autofill value */
+  /** Value to autofill if condition is met */
   valueBoolean?: Maybe<Scalars['Boolean']>;
-  /** If question is choice type, autofill value */
+  /** Value to autofill if condition is met */
   valueCode?: Maybe<Scalars['String']>;
-  /** If question is numeric, autofill value */
+  /** Value to autofill if condition is met */
   valueNumber?: Maybe<Scalars['Int']>;
-  /** Link ID of question to autofill value from */
+  /** Link ID of question to autofill the value from if condition is med */
   valueQuestion?: Maybe<Scalars['String']>;
 };
 

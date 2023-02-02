@@ -45,7 +45,7 @@ describe('Date fns', () => {
       expect(parseAndFormatDate('2021-12-01')).toBe('12/01/2021');
       expect(parseAndFormatDate('2021-01-31')).toBe('01/31/2021');
       expect(parseAndFormatDateTime('2021-12-01T03:10:49-04:00')).toBe(
-        '12/01/2021'
+        '12/01/2021 02:10 AM'
       );
     });
 
