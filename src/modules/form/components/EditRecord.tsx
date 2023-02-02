@@ -129,7 +129,6 @@ const EditRecord = <
     (_values, hudValues, confirmed = false) => {
       if (!definition) return;
       console.log('Submitting form values:', hudValues);
-      // TODO: add back variation of transformSubmitValues here to replace linkID keys with fieldName keys
       const input = {
         input: { ...hudValues, ...inputVariables },
         id: record?.id,

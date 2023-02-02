@@ -71,6 +71,7 @@ const InventoryBeds = () => {
       const input = transformSubmitValues({
         definition: BedsDefinition,
         values,
+        keyByFieldName: true,
       });
       input.inventoryId = inventoryId;
       createBeds({ variables: { input: { input } as CreateBedsInput } });
@@ -83,6 +84,7 @@ const InventoryBeds = () => {
       const input = transformSubmitValues({
         definition: UnitsDefinition,
         values,
+        keyByFieldName: true,
       });
       input.inventoryId = inventoryId;
       if (!input.prefix) input.prefix = 'Unit';

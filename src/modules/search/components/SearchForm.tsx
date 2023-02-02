@@ -97,6 +97,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       const variables = transformSubmitValues({
         definition,
         values,
+        keyByFieldName: true,
       });
       const input = {
         ...variables,

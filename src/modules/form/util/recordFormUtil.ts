@@ -94,8 +94,10 @@ type TransformSubmitValuesParams = {
   autofillNulls?: boolean;
   /** whether to fill unanswered boolean questions `false` */
   autofillBooleans?: boolean;
-  /** only transform specified field names */
-  limitFields?: string[];
+  /** ONLY transform the assessment date field */
+  assessmentDateOnly?: boolean;
+  /** key results field name (instead of link ID) */
+  keyByFieldName?: boolean;
   /** link ids to exclude from the result */
   excludeLinkIds?: string[];
 };
@@ -109,10 +111,11 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values,
+  keyByFieldName = false,
   autofillNotCollected = false,
   autofillNulls = false,
   autofillBooleans = false,
-  limitFields = [],
+  assessmentDateOnly = false,
   excludeLinkIds = [],
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
@@ -128,16 +131,14 @@ export const transformSubmitValues = ({
           : currentRecord;
         rescursiveFillMap(item.item, result, recordName);
       }
-
-      let key = item.fieldName;
-      if (!key) return;
-      // Prefix key like "Enrollment.livingSituation"
-      if (currentRecord) key = `${currentRecord}.${key}`;
-
-      if (limitFields.length > 0 && limitFields.indexOf(key) === -1) return;
+      if (!item.fieldName) return;
+      if (assessmentDateOnly && !item.assessmentDate) return;
       if (excludeLinkIds.includes(item.linkId)) return;
 
-      if (excludeLinkIds.length > 0) key = item.linkId; // FIXME ******
+      // Build key for result map
+      let key = keyByFieldName ? item.fieldName : item.linkId;
+      // Prefix key like "Enrollment.livingSituation"
+      if (keyByFieldName && currentRecord) key = `${currentRecord}.${key}`;
 
       let value;
       if (item.linkId in values) {
@@ -181,8 +182,7 @@ export const gqlValueToFormValue = (
 
   switch (item.type) {
     case ItemType.Date:
-      return parseHmisDateString(value);
-
+      return typeof value === 'string' ? parseHmisDateString(value) : value;
     case ItemType.Choice:
     case ItemType.OpenChoice:
       if (Array.isArray(value)) {

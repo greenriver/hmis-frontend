@@ -126,9 +126,8 @@ export function useAssessmentHandlers({
       const hudValues = transformSubmitValues({
         definition: definition.definition,
         values,
-        limitFields: ['informationDate', 'Exit.exitDate'],
+        assessmentDateOnly: true,
         autofillNulls: true,
-        excludeLinkIds: ['foo'],
       });
       const input = {
         assessmentId,
