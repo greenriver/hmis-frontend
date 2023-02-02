@@ -108,6 +108,7 @@ const AssessmentsTable = ({
       columns={tableColumns}
       pagePath='enrollment.assessments'
       noData='No assessments.'
+      defaultPageSize={3}
       headerCellSx={() => ({ color: 'text.secondary' })}
     />
   );

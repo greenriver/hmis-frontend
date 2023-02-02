@@ -47,7 +47,7 @@ const ViewEnrollment = () => {
                 enrollmentId={enrollmentId}
               />
             </Paper>
-            <Paper sx={{ py: 2 }}>
+            <Paper sx={{ pt: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>
           </Stack>
