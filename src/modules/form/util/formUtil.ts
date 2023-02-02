@@ -4,6 +4,8 @@ import { isNil } from 'lodash-es';
 import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
 
+import { gqlValueToFormValue } from './recordFormUtil';
+
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   BoundType,
@@ -14,6 +16,7 @@ import {
   FormDefinitionJson,
   FormDefinitionWithJsonFragment,
   FormItem,
+  InitialBehavior,
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
@@ -420,7 +423,8 @@ export const buildCommonInputProps = (
  */
 export const getInitialValues = (
   definition: FormDefinitionJson,
-  localConstants?: LocalConstants
+  localConstants?: LocalConstants,
+  behavior?: InitialBehavior
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -437,6 +441,9 @@ export const getInitialValues = (
 
       // TODO handle multiple initials for multi-select questions
       const initial = item.initial[0];
+
+      if (behavior && initial.initialBehavior !== behavior) return;
+
       if (!isNil(initial.valueBoolean)) {
         values[item.linkId] = initial.valueBoolean;
       } else if (!isNil(initial.valueNumber)) {
@@ -445,8 +452,10 @@ export const getInitialValues = (
         values[item.linkId] = getOptionValue(initial.valueCode, item);
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
+        console.log(varName);
         if (localConstants && varName in localConstants) {
-          values[item.linkId] = localConstants[varName];
+          const value = localConstants[varName];
+          values[item.linkId] = gqlValueToFormValue(value, item) || value;
         }
       }
     });

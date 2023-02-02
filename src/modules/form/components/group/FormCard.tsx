@@ -1,6 +1,6 @@
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { zipObject } from 'lodash-es';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import {
   getAllChildLinkIds,
@@ -25,6 +25,12 @@ const FormCard = ({
 }: GroupItemComponentProps) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
+
+  const fillable = useMemo(
+    () =>
+      item.recordType && item.prefill && tableComponentForType(item.recordType),
+    [item]
+  );
 
   const onClear = useCallback(() => {
     const linkIds = getAllChildLinkIds(item);
@@ -65,7 +71,7 @@ const FormCard = ({
             <Typography variant='h5' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
-            {item.recordType && tableComponentForType(item.recordType) && (
+            {fillable && (
               <Stack direction='row' spacing={1}>
                 <Button
                   variant='outlined'
@@ -113,7 +119,7 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {item.recordType && tableComponentForType(item.recordType) && (
+        {fillable && (
           <RecordPickerDialog
             id={`recordPickerDialog-${item.linkId}`}
             item={item}

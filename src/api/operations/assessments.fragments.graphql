@@ -43,6 +43,7 @@ fragment ItemFields on FormItem {
   pickListReference
   size
   assessmentDate
+  prefill
   bounds {
     id
     severity

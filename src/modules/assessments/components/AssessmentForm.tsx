@@ -1,4 +1,5 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import { assign, cloneDeep } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -19,6 +20,7 @@ import {
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
+  InitialBehavior,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -85,12 +87,17 @@ const AssessmentForm = ({
     const source = sourceAssessment || assessment;
     let init;
     if (!source) {
+      // Set initial values based solely on FormDefinition
       init = getInitialValues(definition.definition, localConstants);
     } else {
-      const values = source.assessmentDetail?.values;
-      // FIXME make consistent
-      init = typeof values === 'string' ? JSON.parse(values) : values;
-      // Should we merge with initial values here?
+      // Set initial values from source and add any overrides from FormDefinition
+      init = cloneDeep(source.assessmentDetail?.values || {});
+      const initials = getInitialValues(
+        definition.definition,
+        localConstants,
+        InitialBehavior.Overwrite
+      );
+      assign(init, initials);
     }
     console.debug(
       'Initial Form State',

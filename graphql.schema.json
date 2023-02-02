@@ -8050,6 +8050,18 @@
             "deprecationReason": null
           },
           {
+            "name": "prefill",
+            "description": "Whether to allow pre-filling section from recent records. Should only be\nenabled in conjunction with record_type and for top-level group items.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "prefix",
             "description": "Prefix for the item label",
             "args": [],

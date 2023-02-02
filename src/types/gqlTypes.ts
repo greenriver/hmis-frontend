@@ -1208,6 +1208,11 @@ export type FormItem = {
   pickListOptions?: Maybe<Array<PickListOption>>;
   /** Reference to value set of possible answer options */
   pickListReference?: Maybe<Scalars['String']>;
+  /**
+   * Whether to allow pre-filling section from recent records. Should only be
+   * enabled in conjunction with record_type and for top-level group items.
+   */
+  prefill?: Maybe<Scalars['Boolean']>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
   /** Exclude this item for the listed project types */
@@ -3427,6 +3432,7 @@ export type ItemFieldsFragment = {
   pickListReference?: string | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
+  prefill?: boolean | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
@@ -3514,6 +3520,7 @@ export type FormDefinitionWithJsonFragment = {
       pickListReference?: string | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
+      prefill?: boolean | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -3535,6 +3542,7 @@ export type FormDefinitionWithJsonFragment = {
         pickListReference?: string | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -3556,6 +3564,7 @@ export type FormDefinitionWithJsonFragment = {
           pickListReference?: string | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3577,6 +3586,7 @@ export type FormDefinitionWithJsonFragment = {
             pickListReference?: string | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3598,6 +3608,7 @@ export type FormDefinitionWithJsonFragment = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -3974,6 +3985,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           pickListReference?: string | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3995,6 +4007,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             pickListReference?: string | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4016,6 +4029,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4037,6 +4051,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4058,6 +4073,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   pickListReference?: string | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -4447,6 +4463,7 @@ export type GetAssessmentQuery = {
             pickListReference?: string | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4468,6 +4485,7 @@ export type GetAssessmentQuery = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4489,6 +4507,7 @@ export type GetAssessmentQuery = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4510,6 +4529,7 @@ export type GetAssessmentQuery = {
                   pickListReference?: string | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -4531,6 +4551,7 @@ export type GetAssessmentQuery = {
                     pickListReference?: string | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -4923,6 +4944,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         pickListReference?: string | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -4944,6 +4966,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           pickListReference?: string | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -4965,6 +4988,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             pickListReference?: string | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4986,6 +5010,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5007,6 +5032,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5328,6 +5354,7 @@ export type GetFormDefinitionQuery = {
         pickListReference?: string | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -5349,6 +5376,7 @@ export type GetFormDefinitionQuery = {
           pickListReference?: string | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -5370,6 +5398,7 @@ export type GetFormDefinitionQuery = {
             pickListReference?: string | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -5391,6 +5420,7 @@ export type GetFormDefinitionQuery = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5412,6 +5442,7 @@ export type GetFormDefinitionQuery = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5753,6 +5784,7 @@ export type SaveAssessmentMutation = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5774,6 +5806,7 @@ export type SaveAssessmentMutation = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5795,6 +5828,7 @@ export type SaveAssessmentMutation = {
                   pickListReference?: string | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -5816,6 +5850,7 @@ export type SaveAssessmentMutation = {
                     pickListReference?: string | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -5837,6 +5872,7 @@ export type SaveAssessmentMutation = {
                       pickListReference?: string | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
+                      prefill?: boolean | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
@@ -6192,6 +6228,7 @@ export type SubmitAssessmentMutation = {
               pickListReference?: string | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -6213,6 +6250,7 @@ export type SubmitAssessmentMutation = {
                 pickListReference?: string | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -6234,6 +6272,7 @@ export type SubmitAssessmentMutation = {
                   pickListReference?: string | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -6255,6 +6294,7 @@ export type SubmitAssessmentMutation = {
                     pickListReference?: string | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -6276,6 +6316,7 @@ export type SubmitAssessmentMutation = {
                       pickListReference?: string | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
+                      prefill?: boolean | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
@@ -9693,6 +9734,7 @@ export const ItemFieldsFragmentDoc = gql`
     pickListReference
     size
     assessmentDate
+    prefill
     bounds {
       id
       severity

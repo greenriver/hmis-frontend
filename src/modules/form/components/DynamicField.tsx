@@ -20,7 +20,7 @@ import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoInput from '@/components/elements/input/YesNoInput';
 import Uploader from '@/components/elements/upload/UploaderBase';
-import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
+import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   Component,
   FormItem,
@@ -242,16 +242,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         </InputContainer>
       );
     case ItemType.Date:
-      // case ItemType.Dob:
       const datePickerProps = {};
+      const dateValue =
+        value && typeof value === 'string' ? parseHmisDateString(value) : value;
       // item.type === ItemType.Dob
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={value || null}
+            value={dateValue || null}
             onChange={onChangeValue}
             textInputProps={{
               id: item.linkId,

@@ -4,8 +4,8 @@ import { HmisEnums } from './gqlEnums';
 import { Scalars } from './gqlTypes';
 
 export interface GqlSchemaType {
-  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM' | 'UNION';
-  name: keyof Scalars | keyof typeof HmisEnums | 'OmnisearchResult' | null;
+  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM';
+  name: keyof Scalars | keyof typeof HmisEnums | null;
   ofType: GqlSchemaType | null;
 }
 
@@ -1023,6 +1023,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'pickListReference',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'prefill',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
         name: 'prefix',
