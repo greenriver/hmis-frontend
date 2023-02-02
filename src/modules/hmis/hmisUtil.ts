@@ -128,7 +128,7 @@ export const formatRelativeDate = (date: Date): string => {
   return `${formatDistanceToNowStrict(date)} ago`;
 };
 
-export const formatCurrency = (number?: number) => {
+export const formatCurrency = (number?: number | null) => {
   if (isNil(number)) return number;
   return currencyFormatter.format(number);
 };
@@ -306,6 +306,8 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     e.subTypeProvided
       ? HmisEnums.ServiceSubTypeProvided[e.subTypeProvided]
       : null,
+    formatCurrency(e.FAAmount),
+    e.referralOutcome ? HmisEnums.PATHReferralOutcome[e.referralOutcome] : null,
   ].filter(
     (s) => s !== null && s !== '' && typeof s !== 'undefined'
   ) as string[];
