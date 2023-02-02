@@ -206,6 +206,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'valueNumber',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
+      {
+        name: 'valueQuestion',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
@@ -1634,6 +1638,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'InitialValue',
     fields: [
+      {
+        name: 'initialBehavior',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'InitialBehavior', ofType: null },
+        },
+      },
       {
         name: 'valueBoolean',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },

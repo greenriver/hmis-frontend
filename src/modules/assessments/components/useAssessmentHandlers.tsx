@@ -128,6 +128,7 @@ export function useAssessmentHandlers({
         values,
         limitFields: ['informationDate', 'Exit.exitDate'],
         autofillNulls: true,
+        excludeLinkIds: ['foo'],
       });
       const input = {
         assessmentId,

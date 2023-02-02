@@ -311,6 +311,12 @@ export const HmisEnums = {
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
   },
+  InitialBehavior: {
+    IF_EMPTY:
+      'When loading the form, only set the specified initial value if there is no existing value.',
+    OVERWRITE:
+      'When loading the form, always overwrite the existing value with specified initial value.',
+  },
   InputSize: {
     LARGE: 'LARGE',
     MEDIUM: 'MEDIUM',
@@ -816,7 +822,9 @@ export const HmisEnums = {
   ValidationSeverity: { error: 'error', warning: 'warning' },
   ValidationType: {
     data_not_collected: 'data_not_collected',
+    information: 'information',
     invalid: 'invalid',
+    not_found: 'not_found',
     out_of_range: 'out_of_range',
     required: 'required',
     server_error: 'server_error',

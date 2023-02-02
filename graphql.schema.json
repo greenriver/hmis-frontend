@@ -1086,6 +1086,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "valueQuestion",
+            "description": "Link ID of question to autofill value from",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -10873,13 +10885,52 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "InitialBehavior",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "IF_EMPTY",
+            "description": "When loading the form, only set the specified initial value if there is no existing value.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OVERWRITE",
+            "description": "When loading the form, always overwrite the existing value with specified initial value.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "InitialValue",
         "description": "Initial value when item is first rendered",
         "fields": [
           {
+            "name": "initialBehavior",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "InitialBehavior",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "valueBoolean",
-            "description": "If question is boolean type, initial value",
+            "description": "Boolean to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -10891,7 +10942,7 @@
           },
           {
             "name": "valueCode",
-            "description": "If question is choice type, initial value",
+            "description": "Code to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -10915,7 +10966,7 @@
           },
           {
             "name": "valueNumber",
-            "description": "If question is numeric, initial value",
+            "description": "Number to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -20356,7 +20407,19 @@
             "deprecationReason": null
           },
           {
+            "name": "information",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "invalid",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not_found",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

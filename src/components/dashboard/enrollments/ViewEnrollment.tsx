@@ -1,3 +1,5 @@
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 import { useOutletContext } from 'react-router-dom';
 
@@ -9,7 +11,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
-import { DashboardRoutes } from '@/routes/routes';
+import { DashboardRoutes, Routes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -26,7 +28,7 @@ const ViewEnrollment = () => {
     <>
       <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 2 }}>
         <Typography variant='h4'>{enrollmentName(enrollment)}</Typography>
-        <IdDisplay id={enrollment.id} />
+        <IdDisplay prefix='Enrollment' id={enrollment.id} />
       </Stack>
       <Grid container spacing={4}>
         <Grid item xs={9}>
@@ -55,7 +57,7 @@ const ViewEnrollment = () => {
         <Grid item xs>
           <Paper sx={{ p: 2 }}>
             <Stack spacing={2}>
-              <Typography variant='h6'>Add to Enrollment</Typography>
+              <Typography variant='h6'>Actions</Typography>
               <ButtonLink
                 variant='outlined'
                 color='secondary'
@@ -65,30 +67,58 @@ const ViewEnrollment = () => {
                   enrollmentId,
                   assessmentRole: AssessmentRole.Update.toLowerCase(),
                 })}
+                startIcon={<LibraryAddIcon fontSize='small' />}
               >
-                + Assessment
+                New Assessment
               </ButtonLink>
               <ButtonLink
                 variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
+                startIcon={<LibraryAddIcon fontSize='small' />}
                 to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
                   clientId,
                   enrollmentId,
                 })}
               >
-                + Service
+                Add Service
               </ButtonLink>
               <ButtonLink
                 variant='outlined'
                 color='secondary'
                 to=''
+                startIcon={<LibraryAddIcon fontSize='small' />}
                 sx={{ pl: 3, justifyContent: 'left' }}
               >
-                + Event
+                Add Event
+              </ButtonLink>
+              <ButtonLink
+                variant='outlined'
+                color='secondary'
+                fullWidth
+                startIcon={<OpenInNewIcon fontSize='small' />}
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(Routes.PROJECT, {
+                  projectId: enrollment.project.id,
+                })}
+              >
+                Open Project
               </ButtonLink>
             </Stack>
           </Paper>
+          {/* <Box sx={{ mt: 3 }} key='projectLink'>
+            <ButtonLink
+              variant='outlined'
+              color='secondary'
+              fullWidth
+              endIcon={<OpenInNewIcon fontSize='small' />}
+              to={generateSafePath(Routes.PROJECT, {
+                projectId: enrollment.project.id,
+              })}
+            >
+              Open Project
+            </ButtonLink>
+          </Box> */}
         </Grid>
       </Grid>
     </>

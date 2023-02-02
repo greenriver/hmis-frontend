@@ -46,7 +46,7 @@ export const MISSING_DATA_KEYS = [
 export const INVALID_ENUM = 'INVALID';
 
 const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
-const DATETIME_DISPLAY_FORMAT = 'MM/dd/yyyy h:mm a';
+const DATETIME_DISPLAY_FORMAT = 'MM/dd/yyyy hh:mm a';
 const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -136,7 +136,7 @@ export const parseAndFormatDateTime = (dateString: string): string => {
   if (!dateString) return dateString;
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
-  return formatDateForDisplay(parsed) || dateString;
+  return formatDateTimeForDisplay(parsed) || dateString;
 };
 
 export const formatRelativeDateTime = (date: Date): string => {

@@ -59,6 +59,7 @@ fragment ItemFields on FormItem {
     valueBoolean
     valueNumber
     valueLocalConstant
+    initialBehavior
   }
   dataCollectedAbout
   disabledDisplay

@@ -177,6 +177,8 @@ export type AutofillValue = {
   valueCode?: Maybe<Scalars['String']>;
   /** If question is numeric, autofill value */
   valueNumber?: Maybe<Scalars['Int']>;
+  /** Link ID of question to autofill value from */
+  valueQuestion?: Maybe<Scalars['String']>;
 };
 
 /** 2.07.6 */
@@ -1612,16 +1614,24 @@ export type IncomeBenefitsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+export enum InitialBehavior {
+  /** When loading the form, only set the specified initial value if there is no existing value. */
+  IfEmpty = 'IF_EMPTY',
+  /** When loading the form, always overwrite the existing value with specified initial value. */
+  Overwrite = 'OVERWRITE',
+}
+
 /** Initial value when item is first rendered */
 export type InitialValue = {
   __typename?: 'InitialValue';
-  /** If question is boolean type, initial value */
+  initialBehavior: InitialBehavior;
+  /** Boolean to set as initial value */
   valueBoolean?: Maybe<Scalars['Boolean']>;
-  /** If question is choice type, initial value */
+  /** Code to set as initial value */
   valueCode?: Maybe<Scalars['String']>;
   /** Name of local variable to use as initial value if present. Variable type should match item type. */
   valueLocalConstant?: Maybe<Scalars['String']>;
-  /** If question is numeric, initial value */
+  /** Number to set as initial value */
   valueNumber?: Maybe<Scalars['Int']>;
 };
 
@@ -3304,7 +3314,9 @@ export enum ValidationSeverity {
 
 export enum ValidationType {
   DataNotCollected = 'data_not_collected',
+  Information = 'information',
   Invalid = 'invalid',
+  NotFound = 'not_found',
   OutOfRange = 'out_of_range',
   Required = 'required',
   ServerError = 'server_error',
@@ -3442,6 +3454,7 @@ export type ItemFieldsFragment = {
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     valueLocalConstant?: string | null;
+    initialBehavior: InitialBehavior;
   }> | null;
   enableWhen?: Array<{
     __typename?: 'EnableWhen';
@@ -3612,6 +3625,7 @@ export type FormDefinitionWithJsonFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -3667,6 +3681,7 @@ export type FormDefinitionWithJsonFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -3722,6 +3737,7 @@ export type FormDefinitionWithJsonFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -3777,6 +3793,7 @@ export type FormDefinitionWithJsonFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -3832,6 +3849,7 @@ export type FormDefinitionWithJsonFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         valueLocalConstant?: string | null;
+        initialBehavior: InitialBehavior;
       }> | null;
       enableWhen?: Array<{
         __typename?: 'EnableWhen';
@@ -4067,6 +4085,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -4122,6 +4141,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -4177,6 +4197,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -4232,6 +4253,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -4287,6 +4309,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -4535,6 +4558,7 @@ export type GetAssessmentQuery = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -4590,6 +4614,7 @@ export type GetAssessmentQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -4645,6 +4670,7 @@ export type GetAssessmentQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -4700,6 +4726,7 @@ export type GetAssessmentQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -4755,6 +4782,7 @@ export type GetAssessmentQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -5006,6 +5034,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -5061,6 +5090,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -5116,6 +5146,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -5171,6 +5202,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -5226,6 +5258,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -5406,6 +5439,7 @@ export type GetFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -5461,6 +5495,7 @@ export type GetFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -5516,6 +5551,7 @@ export type GetFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -5571,6 +5607,7 @@ export type GetFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -5626,6 +5663,7 @@ export type GetFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -5826,6 +5864,7 @@ export type SaveAssessmentMutation = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         valueLocalConstant?: string | null;
+                        initialBehavior: InitialBehavior;
                       }> | null;
                       enableWhen?: Array<{
                         __typename?: 'EnableWhen';
@@ -5881,6 +5920,7 @@ export type SaveAssessmentMutation = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -5936,6 +5976,7 @@ export type SaveAssessmentMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -5991,6 +6032,7 @@ export type SaveAssessmentMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -6046,6 +6088,7 @@ export type SaveAssessmentMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -6260,6 +6303,7 @@ export type SubmitAssessmentMutation = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         valueLocalConstant?: string | null;
+                        initialBehavior: InitialBehavior;
                       }> | null;
                       enableWhen?: Array<{
                         __typename?: 'EnableWhen';
@@ -6315,6 +6359,7 @@ export type SubmitAssessmentMutation = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -6370,6 +6415,7 @@ export type SubmitAssessmentMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -6425,6 +6471,7 @@ export type SubmitAssessmentMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -6480,6 +6527,7 @@ export type SubmitAssessmentMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -9661,6 +9709,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueBoolean
       valueNumber
       valueLocalConstant
+      initialBehavior
     }
     dataCollectedAbout
     disabledDisplay
