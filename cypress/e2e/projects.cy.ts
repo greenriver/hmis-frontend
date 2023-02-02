@@ -78,6 +78,13 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     operatingStartDate: '2022-01-01',
     operatingEndDate: null,
     projectType: 'DAY_SHELTER',
+    HMISParticipatingProject: null,
+    HOPWAMedAssistedLivingFac: null,
+    continuumProject: null,
+    housingType: null,
+    residentialAffiliation: null,
+    targetPopulation: 'NOT_APPLICABLE',
+    trackingMethod: null,
   };
   cy.expectHudValuesToDeepEqual(expectedFormValues);
   cy.testId('submitFormButton').click();
