@@ -24,7 +24,6 @@ interface Props {
 }
 
 const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
-  { header: 'ID', render: 'id' },
   {
     header: 'Date Provided',
     render: (e) => parseAndFormatDate(e.dateProvided),
@@ -45,17 +44,12 @@ const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
     render: (e) => (
       <Stack>
         {serviceDetails(e).map((s, i) => (
-          <Typography key={i} variant='body2' sx={{ pl: 1 }}>
+          <Typography key={i} variant='body2'>
             {s}
           </Typography>
         ))}
       </Stack>
     ),
-  },
-  {
-    header: '',
-    //TODO or faa amount
-    render: (e) => e.referralOutcome,
   },
 ];
 
