@@ -3,11 +3,11 @@ name: Build and test app
 on:
   push:
     branches:
-      - 'stable'
+      - stable
       - 'release-*'
   pull_request:
     branches:
-      - 'stable'
+      - stable
       - 'release-*'
 
 jobs:
