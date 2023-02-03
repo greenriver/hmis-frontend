@@ -72,7 +72,6 @@ const AssessmentForm = ({
     assessmentId: assessment?.id,
     navigateOnComplete: !embeddedInWorkflow,
   });
-
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {

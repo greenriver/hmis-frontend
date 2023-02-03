@@ -111,13 +111,8 @@ const DynamicForm: React.FC<
   const { errors, warnings } = useValidations(validations);
 
   useEffect(() => {
-    if (warnings.length && !errors.length) {
-      // if we only have warnings and no errors, show dialog
-      setShowConfirmDialog(true);
-    } else if (errors.length) {
-      // if errors occurred _after_ approving warnings, hide dialog
-      setShowConfirmDialog(false);
-    }
+    // if we have warnings and no errors, show dialog. otherwise hide it.
+    setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
   }, [errors, warnings]);
 
   // Map { linkId => current value }
@@ -393,7 +388,9 @@ const DynamicForm: React.FC<
             },
           }}
         >
-          {warnings.length && <ValidationWarningDisplay warnings={warnings} />}
+          {warnings.length > 0 && (
+            <ValidationWarningDisplay warnings={warnings} />
+          )}
         </ConfirmationDialog>
       )}
 

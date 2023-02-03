@@ -38,7 +38,7 @@ export function useAssessmentHandlers({
 
   const navigate = useNavigate();
 
-  const handleCompleted = useCallback(
+  const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
       let errors;
       if (data.hasOwnProperty('saveAssessment')) {
@@ -47,6 +47,7 @@ export function useAssessmentHandlers({
         errors =
           (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
       }
+
       if (errors.length > 0) {
         window.scrollTo(0, 0);
         setErrors(errors);
@@ -85,7 +86,7 @@ export function useAssessmentHandlers({
 
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
     useSaveAssessmentMutation({
-      onCompleted: handleCompleted,
+      onCompleted,
       onError: () => window.scrollTo(0, 0),
     });
 
@@ -93,7 +94,7 @@ export function useAssessmentHandlers({
     submitAssessmentMutation,
     { loading: submitLoading, error: submitError },
   ] = useSubmitAssessmentMutation({
-    onCompleted: handleCompleted,
+    onCompleted,
     onError: () => window.scrollTo(0, 0),
   });
 
