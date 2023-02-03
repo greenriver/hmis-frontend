@@ -131,6 +131,9 @@ const NewEnrollment = () => {
                   setEntryDate(value);
                   setDateError(false);
                 }}
+                textInputProps={{
+                  id: 'entry-date',
+                }}
               />
             </Stack>
           </Paper>

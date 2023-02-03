@@ -1,5 +1,13 @@
 /// <reference types="cypress" />
 
+import {
+  AlphaIncomeSources,
+  EmptyDisabilityGroup,
+  EmptyInsurance,
+  EmptyNonCashBenefits,
+  EmptyPriorLivingSituation,
+} from './assessmentConstants';
+
 // https://www.hudexchange.info/programs/hmis/hmis-data-standards/standards/Universal_Data_Elements.htm
 
 /**
@@ -19,6 +27,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   // Ensure losUnderThreshold doesn't get populated if no LOS is selected
   cy.choose('3.917.1', 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
   });
 
@@ -88,6 +97,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   );
   cy.getByIds(threeFourFive).should('exist');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     // its no a break (it IS under the treshold)
@@ -104,6 +114,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
+    // ...defaultValues,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     'Enrollment.losUnderThreshold': true,
@@ -149,22 +160,6 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
  * Income and Sources
  */
 Cypress.Commands.add('assertIncomeAndSources', () => {
-  const alphaIncomeSources = [
-    'A',
-    'B',
-    'C',
-    'D',
-    'E',
-    'F',
-    'G',
-    'H',
-    'I',
-    'J',
-    'K',
-    'L',
-    'M',
-    'N',
-  ];
   const incomePerSource = 5;
   const fromAnySource = '4.02.2';
   const inputGroup = 'income-sources-group';
@@ -185,7 +180,7 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
   cy.getChecked(fromAnySource).should('not.exist');
 
   // Fill in number for each income source
-  alphaIncomeSources.forEach((letter) => {
+  AlphaIncomeSources.forEach((letter) => {
     // Ensure that YES is auto-selected when value is entered
     cy.inputId(`4.02.${letter}`).type(incomePerSource.toString());
     cy.getChecked(fromAnySource, 'YES').should('exist');
@@ -202,10 +197,12 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
 
   cy.getById(inputGroup)
     .findTestId('inputSum')
-    .contains(incomePerSource * (alphaIncomeSources.length + 1))
+    .contains(incomePerSource * (AlphaIncomeSources.length + 1))
     .should('exist');
 
   const expectedHudValues = {
+    ...EmptyInsurance,
+    ...EmptyNonCashBenefits,
     'IncomeBenefit.incomeFromAnySource': 'YES',
     'IncomeBenefit.earned': true,
     'IncomeBenefit.earnedAmount': incomePerSource,
@@ -246,6 +243,8 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
   cy.getById(inputGroup).should('not.exist');
 
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyInsurance,
+    ...EmptyNonCashBenefits,
     'IncomeBenefit.incomeFromAnySource': 'NO',
   });
   cy.expectHudValuesToNotHaveKeys([
@@ -451,6 +450,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.05.A', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.physicalDisability': 'YES',
     'DisabilityGroup.physicalDisabilityIndefiniteAndImpairs': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
@@ -466,6 +466,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.06.2', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.developmentalDisability': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
   });
@@ -485,6 +486,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.07.A', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.chronicHealthCondition': 'YES',
     'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
@@ -499,6 +501,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.08.2', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.hivAids': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
   });
@@ -518,6 +521,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.09.A', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.mentalHealthDisorder': 'YES',
     'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
@@ -538,6 +542,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.choose('4.10.A', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.substanceUseDisorder': 'DRUG_USE_DISORDER',
     'DisabilityGroup.substanceUseDisorderIndefiniteAndImpairs': 'YES',
     'DisabilityGroup.disablingCondition': 'YES',
@@ -553,20 +558,35 @@ Cypress.Commands.add('assertDisability', () => {
   cy.getById(overallCondition).should('have.value', 'No');
   cy.choose(overallCondition, 'YES');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.chronicHealthCondition': 'YES',
+    'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
     'DisabilityGroup.mentalHealthDisorder': 'YES',
+    'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
     'DisabilityGroup.disablingCondition': 'YES',
   });
   cy.getById(overallCondition).clear();
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.chronicHealthCondition': 'YES',
+    'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
     'DisabilityGroup.mentalHealthDisorder': 'YES',
-    'DisabilityGroup.disablingCondition': null,
+    'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
+    'DisabilityGroup.disablingCondition': 'DATA_NOT_COLLECTED',
   });
   cy.choose(overallCondition, 'NO');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyDisabilityGroup,
     'DisabilityGroup.chronicHealthCondition': 'YES',
+    'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
     'DisabilityGroup.mentalHealthDisorder': 'YES',
+    'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs':
+      'DATA_NOT_COLLECTED',
     'DisabilityGroup.disablingCondition': 'NO',
   });
 });
@@ -581,6 +601,9 @@ Cypress.Commands.add('assertHealthAndDV', () => {
   cy.inputId('4.11.A').should('be.disabled');
   cy.getById('4.11.B').find('input').should('be.disabled');
 
+  cy.expectHudValuesSectionToDeepEqual({
+    'HealthAndDv.domesticViolenceVictim': 'DATA_NOT_COLLECTED',
+  });
   // Fill out
   cy.checkOption('4.11.2', 'YES');
   cy.choose('4.11.A', 'ONE_YEAR_OR_MORE');

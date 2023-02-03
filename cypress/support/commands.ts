@@ -102,8 +102,10 @@ Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
   cy.window().then((win) => {
     expect(
       Object.fromEntries(
-        Object.entries(win.debug.hudValues).filter(([key]) =>
-          key.includes(`${Object.keys(values)[0].split('.')[0]}.`)
+        Object.entries(win.debug.hudValues).filter(
+          ([key]) =>
+            key.includes(`${Object.keys(values)[0].split('.')[0]}.`) &&
+            key !== 'Enrollment.entryDate'
         )
       )
     ).to.deep.equal(values);

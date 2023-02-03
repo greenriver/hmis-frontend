@@ -220,35 +220,39 @@ const DynamicForm: React.FC<
     [updateDisabledLinkIds, updateAutofillValues]
   );
 
-  const getValuesToSubmit = useCallback(() => {
-    // Exclude all disabled items and their descendants from values
-    const excluded = addDescendants(disabledLinkIds, definition);
-    const valuesToSubmit = omit(values, excluded);
-    const hudValues = transformSubmitValues({
-      definition,
-      values: valuesToSubmit,
-      autofillNotCollected: true,
-      autofillNulls: true,
-      excludeLinkIds: excludeDisabledItemsOnSubmit ? excluded : [],
-      keyByFieldName: !excludeDisabledItemsOnSubmit, // hack because we know we only set excludeDisabledItemsOnSubmit for assessments. clean up when record forms are switched over to assessment mechanism.
-    });
-    return [valuesToSubmit, hudValues];
-  }, [values, disabledLinkIds, definition, excludeDisabledItemsOnSubmit]);
+  const getValuesToSubmit = useCallback(
+    (keyByFieldName?: boolean) => {
+      // Exclude all disabled items and their descendants from values
+      const excluded = addDescendants(disabledLinkIds, definition);
+      const valuesToSubmit = omit(values, excluded);
+      const hudValues = transformSubmitValues({
+        definition,
+        values: valuesToSubmit,
+        autofillNotCollected: true,
+        autofillNulls: true,
+        excludeLinkIds: excludeDisabledItemsOnSubmit ? excluded : [],
+        keyByFieldName: !excludeDisabledItemsOnSubmit || keyByFieldName, // hack because we know we only set excludeDisabledItemsOnSubmit for assessments. clean up when record forms are switched over to assessment mechanism.
+      });
+      return [valuesToSubmit, hudValues];
+    },
+    [values, disabledLinkIds, definition, excludeDisabledItemsOnSubmit]
+  );
 
   const handleSubmit = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
-      // setDialogDismissed(false);
-      const [valuesToSubmit, hudValues] = getValuesToSubmit();
       // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
       if (
         import.meta.env.MODE !== 'production' &&
         (event.ctrlKey || event.metaKey)
       ) {
+        const [valuesToSubmit, hudValues] = getValuesToSubmit(true);
         debugFormValues(valuesToSubmit, hudValues);
-      } else {
-        onSubmit(valuesToSubmit, hudValues, false);
+        return;
       }
+
+      const [valuesToSubmit, hudValues] = getValuesToSubmit();
+      onSubmit(valuesToSubmit, hudValues, false);
     },
     [onSubmit, getValuesToSubmit]
   );
