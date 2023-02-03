@@ -92,3 +92,30 @@ export const EmptyDisabilityGroup = {
   'DisabilityGroup.substanceUseDisorder': 'DATA_NOT_COLLECTED',
   'DisabilityGroup.disablingCondition': 'DATA_NOT_COLLECTED',
 };
+
+export const EmptyProjectCoc = {
+  cocCode: null,
+  geocode: null,
+  geographyType: 'UNKNOWN_DATA_NOT_COLLECTED',
+  address1: null,
+  address2: null,
+  city: null,
+  state: 'MA',
+  zip: null,
+};
+
+export const EmptyProject = {
+  projectName: null,
+  description: null,
+  contactInformation: null,
+  operatingStartDate: null,
+  operatingEndDate: null,
+  projectType: null,
+  trackingMethod: null,
+  residentialAffiliation: null,
+  housingType: null,
+  targetPopulation: 'NOT_APPLICABLE',
+  HOPWAMedAssistedLivingFac: null,
+  continuumProject: null,
+  HMISParticipatingProject: null,
+};

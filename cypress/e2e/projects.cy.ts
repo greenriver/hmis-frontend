@@ -6,6 +6,8 @@
 
 Cypress.session.clearAllSavedSessions();
 
+import { EmptyProject, EmptyProjectCoc } from 'support/assessmentConstants';
+
 import { FundingSource, ProjectType } from '../../src/types/gqlTypes';
 
 beforeEach(() => {
@@ -72,19 +74,12 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Fix and resubmit
   cy.inputId('2.02.4').clear(); // clear end date
   const expectedFormValues = {
+    ...EmptyProject,
     projectName: 'X Test Project',
     description: 'Project Description',
     contactInformation: 'Project Contact',
     operatingStartDate: '2022-01-01',
-    operatingEndDate: null,
     projectType: 'DAY_SHELTER',
-    HMISParticipatingProject: null,
-    HOPWAMedAssistedLivingFac: null,
-    continuumProject: null,
-    housingType: null,
-    residentialAffiliation: null,
-    targetPopulation: 'NOT_APPLICABLE',
-    trackingMethod: null,
   };
   cy.expectHudValuesToDeepEqual(expectedFormValues);
   cy.testId('submitFormButton').click();
@@ -149,9 +144,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('other').should('exist');
 
   cy.testId('submitFormButton').click();
-  cy.testId('formErrorAlert')
-    .contains('Other funder must exist')
-    .should('exist');
+  cy.testId('formErrorAlert').contains('Other funder').should('exist');
 
   cy.inputId('other').safeType('other funder details');
 
@@ -202,6 +195,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     endDate: '2025-01-01',
     funder: 'HUD_ESG_CV',
     grantId: 'ABC123',
+    otherFunder: null,
     startDate: '2022-01-01',
   });
   cy.testId('submitFormButton').click();
@@ -223,7 +217,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.checkOption('es-bed-type', 'VOUCHER');
   cy.inputId('2.07.1').safeType('01/01/2022');
   cy.testId('submitFormButton').click();
-  cy.testId('formErrorAlert').contains('CoC code must exist').should('exist');
+  cy.testId('formErrorAlert').contains('CoC code').should('exist');
   cy.testId('discardFormButton').click();
 
   /*** Project CoC ***/
@@ -238,6 +232,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('city').safeType('City');
   cy.inputId('zip').safeType('00001');
   cy.expectHudValuesToDeepEqual({
+    ...EmptyProjectCoc,
     cocCode: 'MA-505',
     geocode: '250126',
     geographyType: 'RURAL',
@@ -271,6 +266,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.choose('coc', 'MA-502');
   cy.choose('geocode', '250126');
   cy.expectHudValuesToDeepEqual({
+    ...EmptyProjectCoc,
     cocCode: 'MA-502',
     geocode: '250126',
     state: 'MA',
