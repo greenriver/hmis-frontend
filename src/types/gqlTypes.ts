@@ -7880,10 +7880,12 @@ export type UpdateServiceMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
+      type: ValidationType;
       attribute?: string | null;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;

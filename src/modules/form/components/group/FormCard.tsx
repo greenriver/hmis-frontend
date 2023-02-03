@@ -119,7 +119,7 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {fillable && (
+        {fillable && item.recordType && (
           <RecordPickerDialog
             id={`recordPickerDialog-${item.linkId}`}
             item={item}

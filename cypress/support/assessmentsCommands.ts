@@ -114,7 +114,6 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
-    // ...defaultValues,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     'Enrollment.losUnderThreshold': true,

@@ -174,7 +174,7 @@ const RecordPickerDialog = ({
               <Stack spacing={2} sx={{ py: 1 }}>
                 <RelativeDate
                   dateString={informationDate}
-                  dateUpdated={dateUpdated}
+                  dateUpdated={dateUpdated || undefined}
                   variant='body2'
                   textAlign={'center'}
                   fontWeight={600}
