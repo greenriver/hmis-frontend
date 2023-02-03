@@ -4,50 +4,56 @@ import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
-import EditRecord from '@/modules/form/components/EditRecord';
+import useSafeParams from '@/hooks/useSafeParams';
+import BulkAdd from '@/modules/bulk/components/BulkAdd';
+import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
-  ServiceFieldsFragment,
-  UpdateProjectCocDocument,
-  UpdateProjectCocMutation,
-  UpdateProjectCocMutationVariables,
+  AddServiceToEnrollmentDocument,
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables,
+  EnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
 
 const BulkAddServices = () => {
-  // const navigate = useNavigate();
-  // const { projectId } = useSafeParams() as {
-  //   projectId: string;
-  // };
+  const { projectId } = useSafeParams() as {
+    projectId: string;
+  };
   const title = 'Add Services';
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
 
   if (crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
 
-  const common = {
-    definitionIdentifier: 'service',
-    title: (
-      <Stack direction={'row'} spacing={2}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-        <InactiveChip project={project} />
-      </Stack>
-    ),
-  };
   return (
     <ProjectLayout crumbs={crumbs}>
-      <EditRecord<
-        ServiceFieldsFragment,
-        UpdateProjectCocMutation,
-        UpdateProjectCocMutationVariables
+      <BulkAdd<
+        EnrollmentFieldsFragment,
+        AddServiceToEnrollmentMutation,
+        AddServiceToEnrollmentMutationVariables
       >
-        queryDocument={UpdateProjectCocDocument}
+        mutationDocument={AddServiceToEnrollmentDocument}
+        renderTable={(additionalColumns) => (
+          <ProjectEnrollmentsTable
+            projectId={projectId}
+            additionalColumns={additionalColumns}
+          />
+        )}
+        definitionIdentifier='service'
+        getInputFromTarget={(formData, enrollment) => ({
+          input: { ...formData, enrollmentId: enrollment.id },
+        })}
+        getErrors={(data) => data.createService?.errors}
         onCompleted={console.log}
-        submitButtonText='Save Changes'
-        getErrors={() => []}
-        {...common}
+        title={
+          <Stack direction={'row'} spacing={2}>
+            <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+              {title}
+            </Typography>
+            <InactiveChip project={project} />
+          </Stack>
+        }
       />
     </ProjectLayout>
   );

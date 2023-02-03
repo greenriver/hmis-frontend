@@ -1196,6 +1196,8 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']>;
+  /** Whether to apply this field to all clients or a single client when bulk creating */
+  serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;
   /** Primary text for the item */
@@ -2673,6 +2675,11 @@ export type Service = {
   user?: Maybe<User>;
 };
 
+export enum ServiceDetailType {
+  Bulk = 'BULK',
+  Client = 'CLIENT',
+}
+
 /** HUD Service Input */
 export type ServiceInput = {
   FAAmount?: InputMaybe<Scalars['Float']>;
@@ -3388,6 +3395,7 @@ export type ItemFieldsFragment = {
   fieldName?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
+  serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
@@ -3471,6 +3479,7 @@ export type FormDefinitionWithJsonFragment = {
       fieldName?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
+      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
@@ -3491,6 +3500,7 @@ export type FormDefinitionWithJsonFragment = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
@@ -3511,6 +3521,7 @@ export type FormDefinitionWithJsonFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
@@ -3531,6 +3542,7 @@ export type FormDefinitionWithJsonFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
@@ -3551,6 +3563,7 @@ export type FormDefinitionWithJsonFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -3911,6 +3924,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
@@ -3931,6 +3945,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
@@ -3951,6 +3966,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -3971,6 +3987,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -3991,6 +4008,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
@@ -4364,6 +4382,7 @@ export type GetAssessmentQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
@@ -4384,6 +4403,7 @@ export type GetAssessmentQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -4404,6 +4424,7 @@ export type GetAssessmentQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -4424,6 +4445,7 @@ export type GetAssessmentQuery = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
@@ -4444,6 +4466,7 @@ export type GetAssessmentQuery = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
@@ -4820,6 +4843,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
@@ -4840,6 +4864,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
@@ -4860,6 +4885,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
@@ -4880,6 +4906,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -4900,6 +4927,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -5205,6 +5233,7 @@ export type GetFormDefinitionQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
@@ -5225,6 +5254,7 @@ export type GetFormDefinitionQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
@@ -5245,6 +5275,7 @@ export type GetFormDefinitionQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
@@ -5265,6 +5296,7 @@ export type GetFormDefinitionQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -5285,6 +5317,7 @@ export type GetFormDefinitionQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -5614,6 +5647,7 @@ export type SaveAssessmentMutation = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -5634,6 +5668,7 @@ export type SaveAssessmentMutation = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -5654,6 +5689,7 @@ export type SaveAssessmentMutation = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
@@ -5674,6 +5710,7 @@ export type SaveAssessmentMutation = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
@@ -5694,6 +5731,7 @@ export type SaveAssessmentMutation = {
                       fieldName?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
+                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
@@ -6036,6 +6074,7 @@ export type SubmitAssessmentMutation = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
@@ -6056,6 +6095,7 @@ export type SubmitAssessmentMutation = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
@@ -6076,6 +6116,7 @@ export type SubmitAssessmentMutation = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
@@ -6096,6 +6137,7 @@ export type SubmitAssessmentMutation = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
@@ -6116,6 +6158,7 @@ export type SubmitAssessmentMutation = {
                       fieldName?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
+                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
@@ -9437,6 +9480,7 @@ export const ItemFieldsFragmentDoc = gql`
     fieldName
     recordType
     pickListReference
+    serviceDetailType
     size
     bounds {
       type
