@@ -112,7 +112,11 @@ const DynamicForm: React.FC<
 
   useEffect(() => {
     if (warnings.length && !errors.length) {
+      // if we only have warnings and no errors, show dialog
       setShowConfirmDialog(true);
+    } else if (errors.length) {
+      // if errors occurred _after_ approving warnings, hide dialog
+      setShowConfirmDialog(false);
     }
   }, [errors, warnings]);
 
