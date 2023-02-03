@@ -1,10 +1,15 @@
 import { TypedDocumentNode } from '@apollo/client';
 import { CircularProgress, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 
+import DynamicField from '@/modules/form/components/DynamicField';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
-import { LocalConstants } from '@/modules/form/util/formUtil';
+import {
+  buildCommonInputProps,
+  FormValues,
+  LocalConstants,
+} from '@/modules/form/util/formUtil';
 import {
   FormDefinitionJson,
   FormItem,
@@ -59,11 +64,16 @@ export interface Props<
   inputVariables?: Record<string, any>;
   localConstants?: LocalConstants;
   renderList?: (
-    items: { node: ReactNode; label?: string | null | undefined }[],
+    items: {
+      getNode: (target: TargetType) => ReactNode;
+      item: FormItem;
+      label?: string | null | undefined;
+    }[],
     actions: RenderListActions<TargetType>
   ) => React.ReactNode;
   onCompleted: (data: Query) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
+  getKeyForItem: (item: TargetType) => string;
   getInputFromItem: (
     formData: Record<string, any>,
     target: TargetType
@@ -90,10 +100,13 @@ const BulkAdd = <
     // onCompleted,
     // getErrors,
     getInputFromItem,
+    getKeyForItem,
     // title,
   } = props;
   // const [errors, setErrors] = useState<ValidationError[] | undefined>();
   // const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
+
+  const [targetValues, setTargetValues] = useState<FormValues>({});
 
   const [bulkDefinition, allTargetItems] = useMemo(
     () => extractClientItemsFromDefinition(definition),
@@ -112,7 +125,9 @@ const BulkAdd = <
   );
 
   const handleSelect: RenderListActions<TargetType>['onSelect'] = (item) => {
-    const input = getInputFromItem(getCleanedValues(), item);
+    const baseInput = getCleanedValues();
+    const targetInput = targetValues[getKeyForItem(item)];
+    const input = getInputFromItem({ ...baseInput, ...targetInput }, item);
     console.log({ input });
   };
 
@@ -139,7 +154,30 @@ const BulkAdd = <
       >
         {renderList &&
           renderList(
-            targetItems.map((item) => ({ label: item.text, node: <>TEST</> })),
+            targetItems.map((item) => ({
+              label: item.text,
+              item,
+              getNode: (target) => (
+                <DynamicField
+                  noLabel
+                  nestingLevel={0}
+                  key={item.linkId}
+                  item={item}
+                  itemChanged={(linkId, value) =>
+                    setTargetValues({
+                      ...targetValues,
+                      [getKeyForItem(target)]: { [linkId]: value },
+                    })
+                  }
+                  value={targetValues?.[getKeyForItem(target)]?.[item.linkId]}
+                  // errors={getFieldErrors(item)}
+                  {...props}
+                  inputProps={{
+                    ...buildCommonInputProps(item, values),
+                  }}
+                />
+              ),
+            })),
             { onSelect: handleSelect }
           )}
       </Paper>

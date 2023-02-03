@@ -1,5 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 
+import { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
@@ -39,10 +40,13 @@ const BulkAddServices = () => {
             noLinks
             projectId={projectId}
             additionalColumns={[
-              ...items.map((item) => ({
-                header: item.label,
-                render: () => item.node,
-              })),
+              ...items.map(
+                (item) =>
+                  ({
+                    header: item.label,
+                    render: (enrollment) => item.getNode(enrollment),
+                  } as ColumnDef<EnrollmentFieldsFragment>)
+              ),
               {
                 header: '',
                 render: (enrollment) => (
@@ -61,6 +65,7 @@ const BulkAddServices = () => {
         getInputFromItem={(formData, enrollment) => ({
           input: { ...formData, enrollmentId: enrollment.id },
         })}
+        getKeyForItem={(enrollment) => enrollment.id}
         getErrors={(data) => data.createService?.errors}
         onCompleted={console.log}
         title={

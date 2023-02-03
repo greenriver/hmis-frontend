@@ -180,32 +180,4 @@ const DynamicForm: React.FC<Props> = ({
   );
 };
 
-/**
- * Wrapper component to do some pre computation on form definition
- */
-// const DynamicFormWithComputedData = ({
-//   definition,
-//   initialValues,
-//   ...props
-// }: Props) => {
-//   const {
-//     items: itemMap,
-//     autofillMap: autofillDependencyMap,
-//     enabledMap: enabledDependencyMap,
-//     disabled: initiallyDisabledLinkIds,
-//   } = useComputedData({ definition, initialValues })
-
-//   return (
-//     <DynamicForm
-//       initialValues={initialValues}
-//       definition={definition}
-//       itemMap={itemMap}
-//       autofillDependencyMap={autofillDependencyMap}
-//       enabledDependencyMap={enabledDependencyMap}
-//       initiallyDisabledLinkIds={initiallyDisabledLinkIds}
-//       {...props}
-//     />
-//   );
-// };
-
 export default DynamicForm;
