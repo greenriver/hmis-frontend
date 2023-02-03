@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 
 import Loading from '../elements/Loading';
 
@@ -34,14 +34,31 @@ const BulkAddServices = () => {
         AddServiceToEnrollmentMutationVariables
       >
         mutationDocument={AddServiceToEnrollmentDocument}
-        renderTable={(additionalColumns) => (
+        renderList={(items, { onSelect }) => (
           <ProjectEnrollmentsTable
+            noLinks
             projectId={projectId}
-            additionalColumns={additionalColumns}
+            additionalColumns={[
+              ...items.map((item) => ({
+                header: item.label,
+                render: () => item.node,
+              })),
+              {
+                header: '',
+                render: (enrollment) => (
+                  <Button
+                    color='secondary'
+                    onClick={() => onSelect(enrollment)}
+                  >
+                    Assign
+                  </Button>
+                ),
+              },
+            ]}
           />
         )}
         definitionIdentifier='service'
-        getInputFromTarget={(formData, enrollment) => ({
+        getInputFromItem={(formData, enrollment) => ({
           input: { ...formData, enrollmentId: enrollment.id },
         })}
         getErrors={(data) => data.createService?.errors}

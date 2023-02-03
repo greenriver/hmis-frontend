@@ -2,20 +2,23 @@ import { omit } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
+  isShown,
   Props as DynamicFormFieldsProps,
 } from '../components/DynamicFormFields';
 import { addDescendants, FormValues } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 const useDynamicFormFields = ({
   definition,
   initialValues,
+  bulk,
 }: {
   definition: FormDefinitionJson;
   initialValues?: Record<string, any>;
+  bulk?: boolean;
 }) => {
   const {
     items: itemMap,
@@ -37,6 +40,11 @@ const useDynamicFormFields = ({
     return omit(values, excluded);
   }, [definition, disabledLinkIds, values]);
 
+  const shouldShowItem = useCallback(
+    (item: FormItem) => isShown(item, disabledLinkIds),
+    [disabledLinkIds]
+  );
+
   const renderFields = useCallback(
     (
       props: Omit<
@@ -49,6 +57,7 @@ const useDynamicFormFields = ({
         | 'setDisabledLinkIds'
         | 'values'
         | 'setValues'
+        | 'bulk'
       >
     ) => (
       <DynamicFormFields
@@ -62,6 +71,7 @@ const useDynamicFormFields = ({
           setDisabledLinkIds,
           values,
           setValues,
+          bulk,
         }}
       />
     ),
@@ -72,6 +82,7 @@ const useDynamicFormFields = ({
       enabledDependencyMap,
       disabledLinkIds,
       values,
+      bulk,
     ]
   );
 
@@ -80,8 +91,9 @@ const useDynamicFormFields = ({
       renderFields,
       values,
       getCleanedValues,
+      shouldShowItem,
     }),
-    [renderFields, values, getCleanedValues]
+    [renderFields, values, getCleanedValues, shouldShowItem]
   );
 };
 

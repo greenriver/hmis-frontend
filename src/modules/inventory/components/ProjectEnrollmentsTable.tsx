@@ -39,9 +39,11 @@ const baseColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
 const ProjectEnrollmentsTable = ({
   projectId,
   additionalColumns,
+  noLinks = false,
 }: {
   projectId: string;
   additionalColumns?: typeof baseColumns;
+  noLinks?: boolean;
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -80,7 +82,7 @@ const ProjectEnrollmentsTable = ({
       queryVariables={{ id: projectId, clientSearchTerm: debouncedSearch }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns}
-      rowLinkTo={rowLinkTo}
+      rowLinkTo={noLinks ? undefined : rowLinkTo}
       noData='No clients.'
       pagePath='project.enrollments'
     />

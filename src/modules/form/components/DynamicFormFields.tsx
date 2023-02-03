@@ -19,6 +19,7 @@ import {
   FormDefinitionJson,
   FormItem,
   ItemType,
+  ServiceDetailType,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -27,6 +28,7 @@ export interface Props {
   errors?: ValidationError[];
   warnings?: ValidationError[];
   horizontal?: boolean;
+  bulk?: boolean;
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
@@ -39,9 +41,33 @@ export interface Props {
   setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
+export const isEnabled = (
+  item: FormItem,
+  disabledLinkIds: string[] = []
+): boolean => {
+  if (item.hidden) return false;
+  if (!item.enableWhen && item.item) {
+    // This is a group. Only show it if some children are enabled.
+    return item.item.some((i) => isEnabled(i, disabledLinkIds));
+  }
+  // console.log({disabledLinkIds})
+  return !disabledLinkIds.includes(item.linkId);
+};
+
+export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
+  if (
+    !isEnabled(item, disabledLinkIds) &&
+    item.disabledDisplay !== DisabledDisplay.Protected
+  )
+    return false;
+
+  return true;
+};
+
 const DynamicFormFields: React.FC<Props> = ({
   definition,
   errors = [],
+  bulk,
   itemMap,
   autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
@@ -100,19 +126,6 @@ const DynamicFormFields: React.FC<Props> = ({
       });
     },
     [itemMap, enabledDependencyMap, setDisabledLinkIds]
-  );
-
-  const isEnabled = useCallback(
-    (item: FormItem): boolean => {
-      if (item.hidden) return false;
-      if (!item.enableWhen && item.item) {
-        // This is a group. Only show it if some children are enabled.
-        return item.item.some((i) => isEnabled(i));
-      }
-      // console.log({disabledLinkIds})
-      return !disabledLinkIds.includes(item.linkId);
-    },
-    [disabledLinkIds]
   );
 
   const itemChanged = useCallback(
@@ -178,10 +191,10 @@ const DynamicFormFields: React.FC<Props> = ({
     props?: OverrideableDynamicFieldProps,
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
-    const isDisabled = !isEnabled(item);
-    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected) {
+    const isDisabled = !isEnabled(item, disabledLinkIds);
+    if (!isShown(item, disabledLinkIds)) return null;
+    if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
-    }
 
     if (item.type === ItemType.Group) {
       return (

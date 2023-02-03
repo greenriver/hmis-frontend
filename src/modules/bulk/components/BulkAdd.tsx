@@ -1,8 +1,8 @@
 import { TypedDocumentNode } from '@apollo/client';
-import { CircularProgress } from '@mui/material';
-import { ReactNode } from 'react';
+import { CircularProgress, Paper } from '@mui/material';
+import { Stack } from '@mui/system';
+import { ReactNode, useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import { LocalConstants } from '@/modules/form/util/formUtil';
 import {
@@ -45,6 +45,10 @@ const extractClientItemsFromDefinition = (
   return [bulkDefinition, targetItems];
 };
 
+export interface RenderListActions<TargetType> {
+  onSelect: (item: TargetType) => any;
+}
+
 export interface Props<
   TargetType,
   Query,
@@ -54,10 +58,13 @@ export interface Props<
   mutationDocument: TypedDocumentNode<Query, QueryVariables>;
   inputVariables?: Record<string, any>;
   localConstants?: LocalConstants;
-  renderTable?: (columns: ColumnDef<TargetType>[]) => React.ReactNode;
+  renderList?: (
+    items: { node: ReactNode; label?: string | null | undefined }[],
+    actions: RenderListActions<TargetType>
+  ) => React.ReactNode;
   onCompleted: (data: Query) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
-  getInputFromTarget: (
+  getInputFromItem: (
     formData: Record<string, any>,
     target: TargetType
   ) => QueryVariables['input'];
@@ -79,29 +86,65 @@ const BulkAdd = <
     // mutationDocument,
     // inputVariables,
     // localConstants,
-    // tableComponent,
-    // getTableProps,
+    renderList,
     // onCompleted,
     // getErrors,
-    // getInputFromTarget,
+    getInputFromItem,
     // title,
   } = props;
   // const [errors, setErrors] = useState<ValidationError[] | undefined>();
   // const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
 
-  const [bulkDefinition, targetItems] =
-    extractClientItemsFromDefinition(definition);
+  const [bulkDefinition, allTargetItems] = useMemo(
+    () => extractClientItemsFromDefinition(definition),
+    [definition]
+  );
 
-  const { renderFields, values } = useDynamicFormFields({
-    definition: bulkDefinition,
+  const { renderFields, values, shouldShowItem, getCleanedValues } =
+    useDynamicFormFields({
+      definition,
+      bulk: true,
+    });
+
+  const targetItems = useMemo(
+    () => allTargetItems.filter(shouldShowItem),
+    [allTargetItems, shouldShowItem]
+  );
+
+  const handleSelect: RenderListActions<TargetType>['onSelect'] = (item) => {
+    const input = getInputFromItem(getCleanedValues(), item);
+    console.log({ input });
+  };
+
+  console.log({
+    props,
+    definition,
+    bulkDefinition,
+    allTargetItems,
+    targetItems,
+    values,
   });
 
-  console.log({ props, definition, bulkDefinition, targetItems, values });
-
-  return renderFields({
-    // errors,
-    // warnings,
-  });
+  return (
+    <Stack gap={2}>
+      {renderFields({
+        // errors,
+        // warnings,
+      })}
+      <Paper
+        sx={{
+          py: 3,
+          px: 2.5,
+        }}
+      >
+        {renderList &&
+          renderList(
+            targetItems.map((item) => ({ label: item.text, node: <>TEST</> })),
+            { onSelect: handleSelect }
+          )}
+      </Paper>
+    </Stack>
+  );
 
   // useScrollToHash(definitionLoading, top);
 
