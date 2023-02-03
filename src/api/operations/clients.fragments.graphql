@@ -175,7 +175,7 @@ fragment ServiceFields on Service {
   subTypeProvided
   typeProvided
   otherTypeProvided
-
+  FAAmount
   dateCreated
   dateUpdated
   dateDeleted
