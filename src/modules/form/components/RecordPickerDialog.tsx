@@ -158,9 +158,10 @@ const RecordPickerDialog = ({
             width: 'fit-content',
           }}
           renderVerticalHeaderCell={(record) => {
-            const dateUpdated = isTypicalRelatedRecord(record)
-              ? record.dateUpdated
-              : undefined;
+            const dateUpdated =
+              isTypicalRelatedRecord(record) || isAssessment(record)
+                ? record.dateUpdated
+                : undefined;
 
             const informationDate = isTypicalRelatedRecord(record)
               ? record.informationDate
