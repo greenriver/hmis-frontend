@@ -92,7 +92,6 @@ const OmniSearch: React.FC = () => {
   const getOptionTargetPath = useCallback(
     (option: Option) => {
       let targetPath: string | null = null;
-
       if (
         option.__typename === 'Client' ||
         (option.__typename === 'RecentItem' &&
@@ -318,7 +317,7 @@ const OmniSearch: React.FC = () => {
                         {optionGroup.map((option) => {
                           return (
                             <MenuItem
-                              key={option.id}
+                              key={`${option.__typename}:${option.id}`}
                               selected={
                                 option.__typename !== 'SeeMore' &&
                                 getOptionTargetPath(option) ===
@@ -326,9 +325,19 @@ const OmniSearch: React.FC = () => {
                               }
                               {...values.getOptionProps({
                                 option,
-                                index: options.findIndex(
-                                  (e) => e.id === option.id
-                                ),
+                                index: options.findIndex((e) => {
+                                  if (e.__typename === 'RecentItem')
+                                    return (
+                                      option.__typename === 'RecentItem' &&
+                                      e.item.__typename ===
+                                        option.item.__typename &&
+                                      e.id === option.id
+                                    );
+                                  return (
+                                    e.__typename === option.__typename &&
+                                    e.id === option.id
+                                  );
+                                }),
                               })}
                             >
                               {getOptionLabel(option)}
