@@ -131,21 +131,21 @@ const DynamicFormFields: React.FC<Props> = ({
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
       if (itemsChangedProp) itemsChangedProp(linkId, value);
-      let newValues: FormValues | undefined;
       setValues((currentValues) => {
-        newValues = { ...currentValues };
+        const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newValues[linkId] = value;
-        // console.debug('DynamicForm', newValues);
+
+        // These must fire on the next render cycle otherwise it's a react lifecycle error
+        setTimeout(() => {
+          // Updates dependent autofill questions (modifies newValues in-place)
+          updateAutofillValues([linkId], newValues);
+          // Update list of disabled linkIds based on new values
+          updateDisabledLinkIds([linkId], newValues);
+        });
+
         return newValues;
       });
-      // ! This has to happen outside of setValues otherwise it causes an update during render error
-      if (newValues) {
-        // Updates dependent autofill questions (modifies newValues in-place)
-        updateAutofillValues([linkId], newValues);
-        // Update list of disabled linkIds based on new values
-        updateDisabledLinkIds([linkId], newValues);
-      }
     },
     [updateAutofillValues, updateDisabledLinkIds, setValues, itemsChangedProp]
   );

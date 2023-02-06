@@ -6760,6 +6760,7 @@ export type ServiceFieldsFragment = {
   subTypeProvided?: ServiceSubTypeProvided | null;
   typeProvided: ServiceTypeProvided;
   otherTypeProvided?: string | null;
+  FAAmount?: number | null;
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
@@ -7605,6 +7606,7 @@ export type GetServiceQuery = {
     subTypeProvided?: ServiceSubTypeProvided | null;
     typeProvided: ServiceTypeProvided;
     otherTypeProvided?: string | null;
+    FAAmount?: number | null;
     dateCreated: string;
     dateUpdated: string;
     dateDeleted?: string | null;
@@ -7630,6 +7632,7 @@ export type AddServiceToEnrollmentMutation = {
       subTypeProvided?: ServiceSubTypeProvided | null;
       typeProvided: ServiceTypeProvided;
       otherTypeProvided?: string | null;
+      FAAmount?: number | null;
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
@@ -7664,6 +7667,7 @@ export type UpdateServiceMutation = {
       subTypeProvided?: ServiceSubTypeProvided | null;
       typeProvided: ServiceTypeProvided;
       otherTypeProvided?: string | null;
+      FAAmount?: number | null;
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
@@ -7818,6 +7822,7 @@ export type GetEnrollmentServicesQuery = {
         subTypeProvided?: ServiceSubTypeProvided | null;
         typeProvided: ServiceTypeProvided;
         otherTypeProvided?: string | null;
+        FAAmount?: number | null;
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
@@ -9768,6 +9773,7 @@ export const ServiceFieldsFragmentDoc = gql`
     subTypeProvided
     typeProvided
     otherTypeProvided
+    FAAmount
     dateCreated
     dateUpdated
     dateDeleted
