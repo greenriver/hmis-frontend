@@ -1385,33 +1385,33 @@ export enum FundingSource {
 /** HUD Gender (1.7) */
 export enum Gender {
   /** (8) Client doesn't know */
-  GenderClientDoesnTKnow = 'GENDER_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  GenderClientRefused = 'GENDER_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  GenderDataNotCollected = 'GENDER_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (0) Female */
-  GenderFemale = 'GENDER_FEMALE',
+  Female = 'FEMALE',
   /** (1) Male */
-  GenderMale = 'GENDER_MALE',
+  Male = 'MALE',
   /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
-  GenderNoSingleGender = 'GENDER_NO_SINGLE_GENDER',
+  NoSingleGender = 'NO_SINGLE_GENDER',
   /** (6) Questioning */
-  GenderQuestioning = 'GENDER_QUESTIONING',
+  Questioning = 'QUESTIONING',
   /** (5) Transgender */
-  GenderTransgender = 'GENDER_TRANSGENDER',
+  Transgender = 'TRANSGENDER',
 }
 
 /** 2.03.4 */
 export enum GeographyType {
+  /** (99) Unknown / data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (3) Rural */
   Rural = 'RURAL',
   /** (2) Suburban */
   Suburban = 'SUBURBAN',
-  /** (99) Unknown / data not collected */
-  UnknownDataNotCollected = 'UNKNOWN_DATA_NOT_COLLECTED',
   /** (1) Urban */
   Urban = 'URBAN',
 }
@@ -2503,21 +2503,21 @@ export type QueryServiceArgs = {
 /** HUD Race (1.7) */
 export enum Race {
   /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
-  RaceAmIndAkNative = 'RACE_AM_IND_AK_NATIVE',
+  AmIndAkNative = 'AM_IND_AK_NATIVE',
   /** (Asian) Asian or Asian American */
-  RaceAsian = 'RACE_ASIAN',
+  Asian = 'ASIAN',
   /** (BlackAfAmerican) Black, African American, or African */
-  RaceBlackAfAmerican = 'RACE_BLACK_AF_AMERICAN',
-  /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
-  RaceNativeHiPacific = 'RACE_NATIVE_HI_PACIFIC',
-  /** (99) Data not collected */
-  RaceNotCollected = 'RACE_NOT_COLLECTED',
-  /** (9) Client refused */
-  RaceRefused = 'RACE_REFUSED',
+  BlackAfAmerican = 'BLACK_AF_AMERICAN',
   /** (8) Client doesn't know */
-  RaceUnknown = 'RACE_UNKNOWN',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
+  NativeHiPacific = 'NATIVE_HI_PACIFIC',
   /** (White) White */
-  RaceWhite = 'RACE_WHITE',
+  White = 'WHITE',
 }
 
 /** 4.04.A */

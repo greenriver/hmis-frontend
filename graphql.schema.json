@@ -8951,49 +8951,49 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "GENDER_CLIENT_DOESN_T_KNOW",
+            "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_CLIENT_REFUSED",
+            "name": "CLIENT_REFUSED",
             "description": "(9) Client refused",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_DATA_NOT_COLLECTED",
+            "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_FEMALE",
+            "name": "FEMALE",
             "description": "(0) Female",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_MALE",
+            "name": "MALE",
             "description": "(1) Male",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_NO_SINGLE_GENDER",
+            "name": "NO_SINGLE_GENDER",
             "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_QUESTIONING",
+            "name": "QUESTIONING",
             "description": "(6) Questioning",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_TRANSGENDER",
+            "name": "TRANSGENDER",
             "description": "(5) Transgender",
             "isDeprecated": false,
             "deprecationReason": null
@@ -9010,6 +9010,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Unknown / data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "INVALID",
             "description": "Invalid Value",
             "isDeprecated": false,
@@ -9024,12 +9030,6 @@
           {
             "name": "SUBURBAN",
             "description": "(2) Suburban",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNKNOWN_DATA_NOT_COLLECTED",
-            "description": "(99) Unknown / data not collected",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16313,49 +16313,49 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "RACE_AM_IND_AK_NATIVE",
+            "name": "AM_IND_AK_NATIVE",
             "description": "(AmIndAKNative) American Indian, Alaska Native, or Indigenous",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_ASIAN",
+            "name": "ASIAN",
             "description": "(Asian) Asian or Asian American",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_BLACK_AF_AMERICAN",
+            "name": "BLACK_AF_AMERICAN",
             "description": "(BlackAfAmerican) Black, African American, or African",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_NATIVE_HI_PACIFIC",
-            "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_UNKNOWN",
+            "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_WHITE",
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NATIVE_HI_PACIFIC",
+            "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WHITE",
             "description": "(White) White",
             "isDeprecated": false,
             "deprecationReason": null
