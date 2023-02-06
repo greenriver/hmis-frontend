@@ -516,6 +516,7 @@ Cypress.Commands.add('assertDisability', () => {
   cy.getById(overallCondition).should('have.value', 'No');
   cy.choose('4.09.2', 'YES');
   cy.getById(overallCondition).should('have.value', 'No');
+  cy.getById('4.09.A').should('not.be.disabled');
   cy.getById('4.09.A').should('be.enabled');
   cy.choose('4.09.A', 'YES');
   cy.getById(overallCondition).should('have.value', 'Yes');
