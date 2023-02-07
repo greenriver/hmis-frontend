@@ -188,7 +188,8 @@ const DynamicFormFields: React.FC<Props> = ({
     renderFn?: (children: ReactNode) => ReactNode
   ) => {
     const isDisabled = !isEnabled(item, disabledLinkIds);
-    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected) return null;
+    if (isDisabled && item.disabledDisplay !== DisabledDisplay.Protected)
+      return null;
     if (bulk && item.serviceDetailType === ServiceDetailType.Client)
       return null;
 

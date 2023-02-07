@@ -168,6 +168,7 @@ const Project = () => {
               <Typography variant='h6'>Client Related Actions</Typography>
               <ButtonLink
                 data-testid='recordServicesButton'
+                variant='outlined'
                 color='secondary'
                 sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
