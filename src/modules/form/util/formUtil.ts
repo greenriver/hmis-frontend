@@ -18,6 +18,7 @@ import {
   NoYesReasonsForMissingData,
   PickListOption,
   RelationshipToHoH,
+  ServiceDetailType,
   ValueBound,
 } from '@/types/gqlTypes';
 
@@ -620,4 +621,20 @@ export const applyDataCollectedAbout = (
   });
   // clone.item = items;
   // return clone;
+};
+
+/**
+ * Extracts target-only fields from the form definition
+ * @param definition The form definition to pull items from
+ * @returns The items that are target-only
+ */
+export const extractClientItemsFromDefinition = (
+  definition: FormDefinitionJson
+) => {
+  const itemMap = getItemMap(definition, false); // flattened map { linkId => item }
+  const targetItems = Object.values(itemMap).filter(
+    ({ serviceDetailType }) => serviceDetailType === ServiceDetailType.Client
+  );
+
+  return targetItems;
 };

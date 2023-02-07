@@ -11,6 +11,7 @@ import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import {
   buildCommonInputProps,
   CONFIRM_ERROR_TYPE,
+  extractClientItemsFromDefinition,
   FormValues,
   LocalConstants,
 } from '@/modules/form/util/formUtil';
@@ -20,22 +21,7 @@ import {
   FormItem,
   useGetFormDefinitionByIdentifierQuery,
   ValidationError,
-  ServiceDetailType,
 } from '@/types/gqlTypes';
-
-const extractClientItemsFromDefinition = (definition: FormDefinitionJson) => {
-    const itemMap = getItemMap(definition, false); // flattened map { linkId => item }
-    const targetItems = Object.values(itemMap).filter(
-      ({ serviceDetailType }) => serviceDetailType === ServiceDetailType.Client
-    );
-
-  const bulkDefinition: FormDefinitionJson = {
-    ...definition,
-    item: traverse(definition.item),
-  };
-
-  return { bulkDefinition, targetItems } as const;
-};
 
 export interface RenderListOptions<TargetType> {
   onSelect: (target: TargetType) => void;
@@ -99,7 +85,7 @@ const BulkAdd = <
     {}
   );
 
-  const { targetItems: allTargetItems } = useMemo(
+  const allTargetItems = useMemo(
     () => extractClientItemsFromDefinition(definition),
     [definition]
   );
