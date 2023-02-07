@@ -172,11 +172,18 @@ const OmniSearch: React.FC = () => {
     [addRecentItem, getOptionTargetPath, navigate]
   );
 
+  const getKeyForOption = useCallback((option: Option): string => {
+    if (option.__typename === 'RecentItem')
+      return [option.__typename, option.item.__typename, option.id].join(':');
+    return [option.__typename, option.id].join(':');
+  }, []);
+
   const values = useAutocomplete({
     id: 'omnisearch',
     options,
+    value: null, // This must be null to ensure the autocomplete fires onChange every time an item is selected
     filterOptions: (x) => x,
-    getOptionLabel: (x) => x.id,
+    getOptionLabel: (x) => getKeyForOption(x),
     groupBy: (option) => option.__typename || 'other',
     onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
     onChange: (_e, option) => option && handleSelectItem(option),
@@ -326,16 +333,9 @@ const OmniSearch: React.FC = () => {
                               {...values.getOptionProps({
                                 option,
                                 index: options.findIndex((e) => {
-                                  if (e.__typename === 'RecentItem')
-                                    return (
-                                      option.__typename === 'RecentItem' &&
-                                      e.item.__typename ===
-                                        option.item.__typename &&
-                                      e.id === option.id
-                                    );
                                   return (
-                                    e.__typename === option.__typename &&
-                                    e.id === option.id
+                                    getKeyForOption(e) ===
+                                    getKeyForOption(option)
                                   );
                                 }),
                               })}
