@@ -135,14 +135,10 @@ const DynamicFormFields: React.FC<Props> = ({
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         newValues[linkId] = value;
-
-        // These must fire on the next render cycle otherwise it's a react lifecycle error
-        setTimeout(() => {
-          // Updates dependent autofill questions (modifies newValues in-place)
-          updateAutofillValues([linkId], newValues);
-          // Update list of disabled linkIds based on new values
-          updateDisabledLinkIds([linkId], newValues);
-        });
+        // Updates dependent autofill questions (modifies newValues in-place)
+        updateAutofillValues([linkId], newValues);
+        // Update list of disabled linkIds based on new values
+        updateDisabledLinkIds([linkId], newValues);
 
         return newValues;
       });

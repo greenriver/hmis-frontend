@@ -54,7 +54,7 @@ const extractClientItemsFromDefinition = (definition: FormDefinitionJson) => {
 };
 
 export interface RenderListOptions<TargetType> {
-  onSelect: (item: TargetType) => any;
+  onSelect: (target: TargetType) => void;
   mutationLoading?: boolean;
 }
 
@@ -64,7 +64,7 @@ export interface Props<TargetType, Query, QueryVariables> {
   inputVariables?: Record<string, any>;
   localConstants?: LocalConstants;
   renderList?: (
-    items: {
+    targets: {
       getNode: (
         target: TargetType,
         props?: Partial<DynamicFieldProps>
@@ -74,10 +74,12 @@ export interface Props<TargetType, Query, QueryVariables> {
     }[],
     options: RenderListOptions<TargetType>
   ) => React.ReactNode;
-  onCompleted: (data: Query) => void;
+  onCompleted?: (target: TargetType, data: Query) => void;
+  onSuccess?: (target: TargetType, data: Query) => void;
+  onError?: (target: TargetType, errors: ValidationError[]) => void;
   getErrors: (data: Query) => ValidationError[] | undefined;
-  getKeyForItem: (item: TargetType) => string;
-  getInputFromItem: (
+  getKeyForTarget: (target: TargetType) => string;
+  getInputFromTarget: (
     formData: Record<string, any>,
     target: TargetType
   ) => QueryVariables;
@@ -97,13 +99,13 @@ const BulkAdd = <
   const {
     definition,
     mutationDocument,
-    // inputVariables,
-    // localConstants,
     renderList,
     onCompleted,
+    onSuccess,
+    onError,
     getErrors,
-    getInputFromItem,
-    getKeyForItem,
+    getInputFromTarget,
+    getKeyForTarget,
     title,
   } = props;
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
@@ -132,38 +134,43 @@ const BulkAdd = <
   const [mutateFunction, { loading: mutationLoading }] = useMutation<
     Query,
     QueryVariables
-  >(mutationDocument, {
-    onCompleted: (data) => {
-      const errors = getErrors(data) || [];
+  >(mutationDocument);
 
-      if (errors.length > 0) {
-        const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
-        const validationErrors = errors.filter(
-          (e) => e.type !== CONFIRM_ERROR_TYPE
-        );
-        if (validationErrors.length > 0) window.scrollTo(0, 0);
-        setWarnings(warnings);
-        setErrors(validationErrors);
-      } else {
-        window.scrollTo(0, 0);
-        onCompleted(data);
-        setWarnings([]);
-        setErrors([]);
-      }
-    },
-  });
-
-  const handleSelect: RenderListOptions<TargetType>['onSelect'] = (item) => {
+  const handleSelect: RenderListOptions<TargetType>['onSelect'] = (target) => {
     const inputValues = transformSubmitValues({
       definition,
-      values: { ...getCleanedValues(), ...targetValues[getKeyForItem(item)] },
+      values: {
+        ...getCleanedValues(),
+        ...targetValues[getKeyForTarget(target)],
+      },
       autofillNotCollected: true,
       autofillNulls: true,
       autofillBooleans: false,
     });
-    const input = getInputFromItem(inputValues, item);
+    const input = getInputFromTarget(inputValues, target);
 
-    mutateFunction({ variables: input });
+    return mutateFunction({
+      variables: input,
+      onCompleted: (data) => {
+        const errors = getErrors(data) || [];
+
+        if (errors.length > 0) {
+          const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
+          const validationErrors = errors.filter(
+            (e) => e.type !== CONFIRM_ERROR_TYPE
+          );
+          if (validationErrors.length > 0) window.scrollTo(0, 0);
+          setWarnings(warnings);
+          setErrors(validationErrors);
+          if (onError) onError(target, validationErrors);
+        } else {
+          if (onSuccess) onSuccess(target, data);
+          setWarnings([]);
+          setErrors([]);
+        }
+        if (onCompleted) onCompleted(target, data);
+      },
+    });
   };
 
   return (
@@ -174,14 +181,14 @@ const BulkAdd = <
         // warnings,
       })}
       {!isEmpty(errors) &&
-        errors?.map((e) => (
-          <Alert key={e.id} severity='error'>
+        errors?.map((e, i) => (
+          <Alert key={i} severity='error'>
             {e.fullMessage}
           </Alert>
         ))}
       {!isEmpty(warnings) &&
-        warnings?.map((e) => (
-          <Alert key={e.id} severity='warning'>
+        warnings?.map((e, i) => (
+          <Alert key={i} severity='warning'>
             {e.fullMessage}
           </Alert>
         ))}
@@ -205,10 +212,10 @@ const BulkAdd = <
                   itemChanged={(linkId, value) =>
                     setTargetValues({
                       ...targetValues,
-                      [getKeyForItem(target)]: { [linkId]: value },
+                      [getKeyForTarget(target)]: { [linkId]: value },
                     })
                   }
-                  value={targetValues?.[getKeyForItem(target)]?.[item.linkId]}
+                  value={targetValues?.[getKeyForTarget(target)]?.[item.linkId]}
                   {...props}
                   {...fieldProps}
                   inputProps={{

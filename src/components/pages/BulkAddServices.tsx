@@ -32,9 +32,9 @@ const BulkAddServices = () => {
   };
   const title = 'Record Services';
   const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
-  const [workingEnrollmentId, setWorkingEnrollmentId] = useState<
-    string | undefined
-  >();
+  const [loadingEnrollmentIds, setLoadingEnrollmentIds] = useState<string[]>(
+    []
+  );
   const [enrollmentsAdded, setEnrollmentsAdded] = useState<string[]>([]);
 
   if (crumbsLoading) return <Loading />;
@@ -71,12 +71,15 @@ const BulkAddServices = () => {
                       color='secondary'
                       onClick={() => {
                         onSelect(enrollment);
-                        setWorkingEnrollmentId(enrollment.id);
+                        setLoadingEnrollmentIds((ids) => [
+                          ...ids,
+                          enrollment.id,
+                        ]);
                       }}
                       disabled={enrollmentsAdded.includes(enrollment.id)}
                       startIcon={
                         mutationLoading &&
-                        workingEnrollmentId === enrollment.id ? (
+                        loadingEnrollmentIds.includes(enrollment.id) ? (
                           <CircularProgress color='inherit' size={15} />
                         ) : enrollmentsAdded.includes(enrollment.id) ? (
                           <CheckIcon />
@@ -94,22 +97,26 @@ const BulkAddServices = () => {
           />
         )}
         definitionIdentifier='service'
-        getInputFromItem={(formData, enrollment) => ({
+        getInputFromTarget={(formData, enrollment) => ({
           input: {
             input: { ...formData, enrollmentId: enrollment.id },
           },
         })}
-        getKeyForItem={(enrollment) => enrollment.id}
+        getKeyForTarget={(enrollment) => enrollment.id}
         getErrors={(data) => data.createService?.errors}
-        onCompleted={(data) => {
+        onSuccess={(enrollment, data) => {
           const service = data?.createService?.service;
 
           if (service)
-            setEnrollmentsAdded(
-              uniq(compact([...enrollmentsAdded, workingEnrollmentId]))
+            setEnrollmentsAdded((added) =>
+              uniq(compact([...added, enrollment.id]))
             );
-          setWorkingEnrollmentId(undefined);
         }}
+        onCompleted={(enrollment) =>
+          setLoadingEnrollmentIds((ids) =>
+            ids.filter((id) => id !== enrollment.id)
+          )
+        }
         title={
           <Stack direction={'row'} spacing={2}>
             <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
