@@ -24,26 +24,10 @@ import {
 } from '@/types/gqlTypes';
 
 const extractClientItemsFromDefinition = (definition: FormDefinitionJson) => {
-  const targetItems: FormItem[] = [];
-
-  const traverse = (items: FormItem[]): FormItem[] => {
-    return items.reduce((acc, item) => {
-      if (item.serviceDetailType === ServiceDetailType.Client) {
-        targetItems.push(item);
-        return acc;
-      }
-      if (item.item) {
-        return [
-          ...acc,
-          {
-            ...item,
-            item: traverse(item.item),
-          },
-        ];
-      }
-      return [...acc, item];
-    }, [] as FormItem[]);
-  };
+    const itemMap = getItemMap(definition, false); // flattened map { linkId => item }
+    const targetItems = Object.values(itemMap).filter(
+      ({ serviceDetailType }) => serviceDetailType === ServiceDetailType.Client
+    );
 
   const bulkDefinition: FormDefinitionJson = {
     ...definition,
