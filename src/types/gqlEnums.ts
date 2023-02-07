@@ -536,7 +536,7 @@ export const HmisEnums = {
     RHY_REFERRAL: 'RHY referral',
     BED_NIGHT: 'Bed night',
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH voucher tracking',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED: 'C2 Moving On Assistance Provided',
+    MOVING_ON_ASSISTANCE: 'Moving On Assistance',
   },
   ReferralResult: {
     INVALID: 'Invalid Value',
@@ -651,57 +651,57 @@ export const HmisEnums = {
   },
   ServiceTypeProvided: {
     INVALID: 'Invalid Value',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
-      'Subsidized housing application assistance',
     HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
     HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE:
       'Adult day care and personal assistance',
     HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA:
       'Referral package forwarded to PHA',
+    MOVING_ON_ASSISTANCE__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
+      'Subsidized housing application assistance',
     PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH: 'Community mental health',
     PATH_SERVICE__RE_ENGAGEMENT: 'Re-engagement',
     SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
     SSVF_SERVICE__OUTREACH_SERVICES: 'Outreach services',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
-      'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS: 'Security deposits',
     HOPWA_SERVICE__CASE_MANAGEMENT: 'Case management',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA:
       'Voucher denied by PHA',
+    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
+      'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     PATH_REFERRAL__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     PATH_SERVICE__SCREENING: 'Screening',
     RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL:
       'Community service/service learning (CSL)',
     SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT: 'Security deposit',
     SSVF_SERVICE__CASE_MANAGEMENT_SERVICES: 'Case management services',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
-      'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS: 'Utility deposits',
     HOPWA_SERVICE__CHILD_CARE: 'Child care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA:
       'Voucher issued by PHA',
+    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
+      'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE: 'Primary health/dental care',
     PATH_SERVICE__HABILITATION_REHABILITATION: 'Habilitation/rehabilitation',
     SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT: 'Utility deposit',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS:
       'Assistance obtaining VA benefits',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT:
-      'Housing referral/placement',
     HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS: 'Utility payments',
     HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES:
       'Criminal justice/legal services',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED:
       'Voucher revoked or expired',
+    MOVING_ON_ASSISTANCE__HOUSING_REFERRAL_PLACEMENT:
+      'Housing referral/placement',
     PATH_REFERRAL__JOB_TRAINING: 'Job training',
     PATH_SERVICE__COMMUNITY_MENTAL_HEALTH: 'Community mental health',
     SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE:
       'Utility fee payment assistance',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS:
       'Assistance obtaining/coordinating other public benefits',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER: 'Other',
     HOPWA_SERVICE__EDUCATION: 'Education',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING:
       'Voucher in use - veteran moved into housing',
+    MOVING_ON_ASSISTANCE__OTHER: 'Other',
     PATH_REFERRAL__EDUCATIONAL_SERVICES: 'Educational services',
     PATH_SERVICE__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     RHY_SERVICE_CONNECTIONS__EDUCATION: 'Education',
