@@ -21,10 +21,10 @@ const useDynamicFormFields = ({
   bulk?: boolean;
 }) => {
   const {
-    items: itemMap,
-    autofillMap: autofillDependencyMap,
-    enabledMap: enabledDependencyMap,
-    disabled: initiallyDisabledLinkIds = [],
+    itemMap,
+    autofillDependencyMap,
+    enabledDependencyMap,
+    initiallyDisabledLinkIds = [],
   } = useComputedData({ definition, initialValues });
 
   const [disabledLinkIds, setDisabledLinkIds] = useState(

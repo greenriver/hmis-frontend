@@ -16,11 +16,19 @@ interface Args {
 
 const useComputedData = ({ definition, initialValues }: Args) => {
   return useMemo(() => {
-    const items = definition ? getItemMap(definition) : {};
-    const autofillMap = buildAutofillDependencyMap(items);
-    const enabledMap = buildEnabledDependencyMap(items);
-    const disabled = getDisabledLinkIds(items, initialValues || {});
-    return { items, autofillMap, enabledMap, disabled };
+    const itemMap = definition ? getItemMap(definition) : {};
+    const autofillDependencyMap = buildAutofillDependencyMap(itemMap);
+    const enabledDependencyMap = buildEnabledDependencyMap(itemMap);
+    const initiallyDisabledLinkIds = getDisabledLinkIds(
+      itemMap,
+      initialValues || {}
+    );
+    return {
+      itemMap,
+      autofillDependencyMap,
+      enabledDependencyMap,
+      initiallyDisabledLinkIds,
+    };
   }, [definition, initialValues]);
 };
 
