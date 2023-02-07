@@ -309,8 +309,8 @@ export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
     e.recordType === RecordType.HudVashOthVoucherTracking &&
     e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
   const isOtherMovingOn =
-    e.recordType === RecordType.C2MovingOnAssistanceProvided &&
-    e.typeProvided === ServiceTypeProvided.C2MovingOnAssistanceProvidedOther;
+    e.recordType === RecordType.MovingOnAssistance &&
+    e.typeProvided === ServiceTypeProvided.MovingOnAssistanceOther;
 
   // Don't show 'other' if we have the other value
   if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)

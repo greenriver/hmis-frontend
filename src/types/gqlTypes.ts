@@ -2550,8 +2550,6 @@ export enum RecentItemType {
 export enum RecordType {
   /** (200) Bed night */
   BedNight = 'BED_NIGHT',
-  /** (300) C2 Moving On Assistance Provided */
-  C2MovingOnAssistanceProvided = 'C2_MOVING_ON_ASSISTANCE_PROVIDED',
   /** (12) Contact 12 */
   Contact_12 = 'CONTACT_12',
   /** (13) Contact 13 */
@@ -2564,6 +2562,8 @@ export enum RecordType {
   HudVashOthVoucherTracking = 'HUD_VASH_OTH_VOUCHER_TRACKING',
   /** Invalid Value */
   Invalid = 'INVALID',
+  /** (300) Moving On Assistance */
+  MovingOnAssistance = 'MOVING_ON_ASSISTANCE',
   /** (161) PATH referral */
   PathReferral = 'PATH_REFERRAL',
   /** (141) PATH service */
@@ -2789,16 +2789,6 @@ export enum ServiceSubTypeProvided {
 export enum ServiceTypeProvided {
   /** (200) BedNight */
   BedNightBedNight = 'BED_NIGHT__BED_NIGHT',
-  /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
-  C2MovingOnAssistanceProvidedFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES',
-  /** (4) Housing referral/placement */
-  C2MovingOnAssistanceProvidedHousingReferralPlacement = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT',
-  /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
-  C2MovingOnAssistanceProvidedNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
-  /** (5) Other */
-  C2MovingOnAssistanceProvidedOther = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER',
-  /** (1) Subsidized housing application assistance */
-  C2MovingOnAssistanceProvidedSubsidizedHousingApplicationAssistance = 'C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
   /** (7) Mortgage assistance */
   HopwaFinancialAssistanceMortgageAssistance = 'HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE',
   /** (1) Rental assistance */
@@ -2863,6 +2853,16 @@ export enum ServiceTypeProvided {
   HudVashOthVoucherTrackingVoucherWasPortedLocally = 'HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_WAS_PORTED_LOCALLY',
   /** Invalid Value */
   Invalid = 'INVALID',
+  /** (2) Financial assistance for Moving On (e.g., security deposit, moving expenses) */
+  MovingOnAssistanceFinancialAssistanceForMovingOnEGSecurityDepositMovingExpenses = 'MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES',
+  /** (4) Housing referral/placement */
+  MovingOnAssistanceHousingReferralPlacement = 'MOVING_ON_ASSISTANCE__HOUSING_REFERRAL_PLACEMENT',
+  /** (3) Non-financial assistance for Moving On (e.g., housing navigation, transition support) */
+  MovingOnAssistanceNonFinancialAssistanceForMovingOnEGHousingNavigationTransitionSupport = 'MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT',
+  /** (5) Other */
+  MovingOnAssistanceOther = 'MOVING_ON_ASSISTANCE__OTHER',
+  /** (1) Subsidized housing application assistance */
+  MovingOnAssistanceSubsidizedHousingApplicationAssistance = 'MOVING_ON_ASSISTANCE__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE',
   /** (1) Community mental health */
   PathReferralCommunityMentalHealth = 'PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH',
   /** (5) Educational services */

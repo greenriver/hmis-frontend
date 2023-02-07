@@ -92,7 +92,6 @@ const OmniSearch: React.FC = () => {
   const getOptionTargetPath = useCallback(
     (option: Option) => {
       let targetPath: string | null = null;
-
       if (
         option.__typename === 'Client' ||
         (option.__typename === 'RecentItem' &&
@@ -173,11 +172,18 @@ const OmniSearch: React.FC = () => {
     [addRecentItem, getOptionTargetPath, navigate]
   );
 
+  const getKeyForOption = useCallback((option: Option): string => {
+    if (option.__typename === 'RecentItem')
+      return [option.__typename, option.item.__typename, option.id].join(':');
+    return [option.__typename, option.id].join(':');
+  }, []);
+
   const values = useAutocomplete({
     id: 'omnisearch',
     options,
+    value: null, // This must be null to ensure the autocomplete fires onChange every time an item is selected
     filterOptions: (x) => x,
-    getOptionLabel: (x) => x.id,
+    getOptionLabel: (x) => getKeyForOption(x),
     groupBy: (option) => option.__typename || 'other',
     onInputChange: (_e, value, reason) => reason === 'input' && setValue(value),
     onChange: (_e, option) => option && handleSelectItem(option),
@@ -318,7 +324,7 @@ const OmniSearch: React.FC = () => {
                         {optionGroup.map((option) => {
                           return (
                             <MenuItem
-                              key={option.id}
+                              key={`${option.__typename}:${option.id}`}
                               selected={
                                 option.__typename !== 'SeeMore' &&
                                 getOptionTargetPath(option) ===
@@ -326,9 +332,12 @@ const OmniSearch: React.FC = () => {
                               }
                               {...values.getOptionProps({
                                 option,
-                                index: options.findIndex(
-                                  (e) => e.id === option.id
-                                ),
+                                index: options.findIndex((e) => {
+                                  return (
+                                    getKeyForOption(e) ===
+                                    getKeyForOption(option)
+                                  );
+                                }),
                               })}
                             >
                               {getOptionLabel(option)}

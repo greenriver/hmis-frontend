@@ -16460,12 +16460,6 @@
             "deprecationReason": null
           },
           {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED",
-            "description": "(300) C2 Moving On Assistance Provided",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "CONTACT_12",
             "description": "(12) Contact 12",
             "isDeprecated": false,
@@ -16498,6 +16492,12 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE",
+            "description": "(300) Moving On Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -17468,36 +17468,6 @@
             "deprecationReason": null
           },
           {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES",
-            "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT",
-            "description": "(4) Housing referral/placement",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT",
-            "description": "(3) Non-financial assistance for Moving On (e.g., housing navigation, transition support)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER",
-            "description": "(5) Other",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE",
-            "description": "(1) Subsidized housing application assistance",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "HOPWA_FINANCIAL_ASSISTANCE__MORTGAGE_ASSISTANCE",
             "description": "(7) Mortgage assistance",
             "isDeprecated": false,
@@ -17686,6 +17656,36 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES",
+            "description": "(2) Financial assistance for Moving On (e.g., security deposit, moving expenses)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE__HOUSING_REFERRAL_PLACEMENT",
+            "description": "(4) Housing referral/placement",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT",
+            "description": "(3) Non-financial assistance for Moving On (e.g., housing navigation, transition support)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE__OTHER",
+            "description": "(5) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MOVING_ON_ASSISTANCE__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE",
+            "description": "(1) Subsidized housing application assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
