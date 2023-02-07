@@ -76,7 +76,10 @@ const BulkAddServices = () => {
                           enrollment.id,
                         ]);
                       }}
-                      disabled={enrollmentsAdded.includes(enrollment.id)}
+                      disabled={
+                        loadingEnrollmentIds.includes(enrollment.id) ||
+                        enrollmentsAdded.includes(enrollment.id)
+                      }
                       startIcon={
                         mutationLoading &&
                         loadingEnrollmentIds.includes(enrollment.id) ? (
