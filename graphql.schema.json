@@ -8162,6 +8162,18 @@
             "deprecationReason": null
           },
           {
+            "name": "serviceDetailType",
+            "description": "Whether to apply this field to all clients or a single client when bulk creating",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ServiceDetailType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "size",
             "description": "Size of the input element",
             "args": [],
@@ -17133,6 +17145,29 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "ServiceDetailType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "BULK",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "ServiceInput",
         "description": "HUD Service Input",
@@ -20298,6 +20333,18 @@
           {
             "name": "id",
             "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "linkId",
+            "description": "Link ID of form item if this error is linked to a specific item",
             "args": [],
             "type": {
               "kind": "SCALAR",

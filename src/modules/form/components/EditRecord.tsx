@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import {
+  debugFormValues,
   getInitialValues,
   getItemMap,
   LocalConstants,
@@ -19,7 +20,10 @@ import DynamicForm, {
   DynamicFormOnSubmit,
   Props as DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
-import { createInitialValuesFromRecord } from '@/modules/form/util/recordFormUtil';
+import {
+  createInitialValuesFromRecord,
+  transformSubmitValues,
+} from '@/modules/form/util/recordFormUtil';
 import {
   FormDefinitionJson,
   ItemType,
@@ -126,8 +130,18 @@ const EditRecord = <
   }, [record, definition, itemMap, localConstants]);
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (_values, hudValues, confirmed = false) => {
+    (event, values, confirmed = false) => {
       if (!definition) return;
+      if (debugFormValues(event, values, definition)) return;
+
+      const hudValues = transformSubmitValues({
+        definition,
+        values,
+        autofillNotCollected: true,
+        autofillNulls: true,
+        keyByFieldName: true,
+      });
+
       console.log('Submitting form values:', hudValues);
       const input = {
         input: { ...hudValues, ...inputVariables },

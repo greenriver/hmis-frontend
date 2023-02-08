@@ -171,7 +171,6 @@ const AssessmentForm = ({
           pickListRelationId={enrollment?.project?.id}
           loading={mutationLoading}
           errors={errors}
-          excludeDisabledItemsOnSubmit
           showSavePrompt
         />
       </Grid>

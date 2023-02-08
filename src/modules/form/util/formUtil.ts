@@ -4,7 +4,7 @@ import { isNil } from 'lodash-es';
 import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
 
-import { gqlValueToFormValue } from './recordFormUtil';
+import { gqlValueToFormValue, transformSubmitValues } from './recordFormUtil';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -21,6 +21,7 @@ import {
   NoYesReasonsForMissingData,
   PickListOption,
   RelationshipToHoH,
+  ServiceDetailType,
   ValueBound,
 } from '@/types/gqlTypes';
 
@@ -452,7 +453,6 @@ export const getInitialValues = (
         values[item.linkId] = getOptionValue(initial.valueCode, item);
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
-        console.log(varName);
         if (localConstants && varName in localConstants) {
           const value = localConstants[varName];
           values[item.linkId] = gqlValueToFormValue(value, item) || value;
@@ -626,10 +626,42 @@ export const applyDataCollectedAbout = (
     }
   });
 
-export const debugFormValues = (values: FormValues, hudValues: FormValues) => {
+export const debugFormValues = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  values: FormValues,
+  definition: FormDefinitionJson
+) => {
+  if (import.meta.env.MODE === 'production') return false;
+  if (!event.ctrlKey && !event.metaKey) return false;
+
   console.log('%c FORM STATE:', 'color: #BB7AFF');
   console.log(values);
+  const hudValues = transformSubmitValues({
+    definition,
+    values,
+    autofillNotCollected: true,
+    autofillNulls: true,
+    keyByFieldName: true,
+  });
   window.debug = { hudValues };
-  console.log('%c HUD VALUES:', 'color: #BB7AFF');
+  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
   console.log(hudValues);
+
+  return true;
+};
+
+/**
+ * Extracts target-only fields from the form definition
+ * @param definition The form definition to pull items from
+ * @returns The items that are target-only
+ */
+export const extractClientItemsFromDefinition = (
+  definition: FormDefinitionJson
+) => {
+  const itemMap = getItemMap(definition, false); // flattened map { linkId => item }
+  const targetItems = Object.values(itemMap).filter(
+    ({ serviceDetailType }) => serviceDetailType === ServiceDetailType.Client
+  );
+
+  return targetItems;
 };

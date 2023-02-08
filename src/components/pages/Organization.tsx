@@ -124,7 +124,7 @@ const Organization = () => {
         id='deleteOrgConfirmation'
         open={open}
         title='Delete organization'
-        onConfirm={deleteOrganization}
+        onConfirm={() => deleteOrganization()}
         onCancel={() => setOpen(false)}
         loading={deleteLoading}
       >

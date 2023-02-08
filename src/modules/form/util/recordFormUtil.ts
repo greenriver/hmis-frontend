@@ -88,18 +88,16 @@ type TransformSubmitValuesParams = {
   definition: FormDefinitionJson;
   /** form state (from DynamicForm) to transform */
   values: FormValues;
+  /** ONLY transform the assessment date field */
+  assessmentDateOnly?: boolean;
+  /** whether to fill unanswered boolean questions `false` */
+  autofillBooleans?: boolean;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
   autofillNotCollected?: boolean;
   /** whether to fill unanswered questions with `null` */
   autofillNulls?: boolean;
-  /** whether to fill unanswered boolean questions `false` */
-  autofillBooleans?: boolean;
-  /** ONLY transform the assessment date field */
-  assessmentDateOnly?: boolean;
   /** key results field name (instead of link ID) */
   keyByFieldName?: boolean;
-  /** link ids to exclude from the result */
-  excludeLinkIds?: string[];
 };
 
 /**
@@ -111,12 +109,11 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values,
-  keyByFieldName = false,
+  assessmentDateOnly = false,
+  autofillBooleans = false,
   autofillNotCollected = false,
   autofillNulls = false,
-  autofillBooleans = false,
-  assessmentDateOnly = false,
-  excludeLinkIds = [],
+  keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
@@ -133,7 +130,6 @@ export const transformSubmitValues = ({
       }
       if (!item.fieldName) return;
       if (assessmentDateOnly && !item.assessmentDate) return;
-      if (excludeLinkIds.includes(item.linkId)) return;
 
       // Build key for result map
       let key = keyByFieldName ? item.fieldName : item.linkId;

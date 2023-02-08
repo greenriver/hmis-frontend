@@ -10,7 +10,7 @@ interface Props extends DialogProps {
   loading: boolean;
   children: React.ReactNode;
   confirmText?: string;
-  onConfirm: () => void;
+  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
 }
 

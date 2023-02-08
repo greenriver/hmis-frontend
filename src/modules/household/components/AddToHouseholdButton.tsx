@@ -79,7 +79,7 @@ const AddToHouseholdButton = ({
 
   return (
     <LoadingButton
-      disabled={added}
+      disabled={added || loading}
       color={color}
       fullWidth
       size='small'

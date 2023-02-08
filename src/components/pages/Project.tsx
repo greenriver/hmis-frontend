@@ -165,6 +165,20 @@ const Project = () => {
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>
             <Stack spacing={2}>
+              <Typography variant='h6'>Client Related Actions</Typography>
+              <ButtonLink
+                data-testid='recordServicesButton'
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
+              >
+                Record Services
+              </ButtonLink>
+            </Stack>
+          </Paper>
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Stack spacing={2}>
               <Typography variant='h6'>Add to Project</Typography>
               <ButtonLink
                 data-testid='addFunderButton'
@@ -235,7 +249,7 @@ const Project = () => {
         id='deleteProjectConfirmation'
         open={open}
         title='Delete project'
-        onConfirm={deleteProject}
+        onConfirm={() => deleteProject()}
         onCancel={() => setOpen(false)}
         loading={deleteLoading}
       >

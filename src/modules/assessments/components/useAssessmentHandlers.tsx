@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
-import { FormValues } from '@/modules/form/util/formUtil';
+import { debugFormValues, FormValues } from '@/modules/form/util/formUtil';
 import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
@@ -99,8 +99,17 @@ export function useAssessmentHandlers({
   });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (values, hudValues, confirmed = false) => {
+    (event, values, confirmed = false) => {
       if (!definition) return;
+      if (debugFormValues(event, values, definition.definition)) return;
+
+      const hudValues = transformSubmitValues({
+        definition: definition.definition,
+        values,
+        autofillNotCollected: true,
+        autofillNulls: true,
+      });
+
       const input = {
         assessmentId,
         enrollmentId,

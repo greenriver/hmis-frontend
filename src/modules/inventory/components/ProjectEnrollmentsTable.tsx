@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import ClientName from '@/components/elements/ClientName';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -16,7 +16,7 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
+const baseColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
   {
     header: 'Client',
     render: (e) => <ClientName client={e.client} />,
@@ -36,7 +36,15 @@ const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
   },
 ];
 
-const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
+const ProjectEnrollmentsTable = ({
+  projectId,
+  additionalColumns,
+  noLinks = false,
+}: {
+  projectId: string;
+  additionalColumns?: typeof baseColumns;
+  noLinks?: boolean;
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
@@ -48,6 +56,11 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
         enrollmentId: en.id,
       }),
     []
+  );
+
+  const columns = useMemo(
+    () => [...baseColumns, ...(additionalColumns || [])],
+    [additionalColumns]
   );
 
   return (
@@ -69,7 +82,7 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
       queryVariables={{ id: projectId, clientSearchTerm: debouncedSearch }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns}
-      rowLinkTo={rowLinkTo}
+      rowLinkTo={noLinks ? undefined : rowLinkTo}
       noData='No clients.'
       pagePath='project.enrollments'
     />

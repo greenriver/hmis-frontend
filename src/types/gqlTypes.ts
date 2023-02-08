@@ -1227,6 +1227,8 @@ export type FormItem = {
   repeats?: Maybe<Scalars['Boolean']>;
   /** Whether the item must be included in data results */
   required?: Maybe<Scalars['Boolean']>;
+  /** Whether to apply this field to all clients or a single client when bulk creating */
+  serviceDetailType?: Maybe<ServiceDetailType>;
   /** Size of the input element */
   size?: Maybe<InputSize>;
   /** Primary text for the item */
@@ -2705,6 +2707,11 @@ export type Service = {
   user?: Maybe<User>;
 };
 
+export enum ServiceDetailType {
+  Bulk = 'BULK',
+  Client = 'CLIENT',
+}
+
 /** HUD Service Input */
 export type ServiceInput = {
   FAAmount?: InputMaybe<Scalars['Float']>;
@@ -3305,6 +3312,8 @@ export type ValidationError = {
   attribute: Scalars['String'];
   fullMessage: Scalars['String'];
   id?: Maybe<Scalars['String']>;
+  /** Link ID of form item if this error is linked to a specific item */
+  linkId?: Maybe<Scalars['String']>;
   message: Scalars['String'];
   readableAttribute?: Maybe<Scalars['String']>;
   severity: ValidationSeverity;
@@ -3429,6 +3438,7 @@ export type ItemFieldsFragment = {
   fieldName?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
+  serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
   prefill?: boolean | null;
@@ -3517,6 +3527,7 @@ export type FormDefinitionWithJsonFragment = {
       fieldName?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
+      serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
       prefill?: boolean | null;
@@ -3539,6 +3550,7 @@ export type FormDefinitionWithJsonFragment = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill?: boolean | null;
@@ -3561,6 +3573,7 @@ export type FormDefinitionWithJsonFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill?: boolean | null;
@@ -3583,6 +3596,7 @@ export type FormDefinitionWithJsonFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill?: boolean | null;
@@ -3605,6 +3619,7 @@ export type FormDefinitionWithJsonFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -3982,6 +3997,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill?: boolean | null;
@@ -4004,6 +4020,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill?: boolean | null;
@@ -4026,6 +4043,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -4048,6 +4066,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -4070,6 +4089,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill?: boolean | null;
@@ -4460,6 +4480,7 @@ export type GetAssessmentQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill?: boolean | null;
@@ -4482,6 +4503,7 @@ export type GetAssessmentQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -4504,6 +4526,7 @@ export type GetAssessmentQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -4526,6 +4549,7 @@ export type GetAssessmentQuery = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill?: boolean | null;
@@ -4548,6 +4572,7 @@ export type GetAssessmentQuery = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill?: boolean | null;
@@ -4941,6 +4966,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill?: boolean | null;
@@ -4963,6 +4989,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill?: boolean | null;
@@ -4985,6 +5012,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill?: boolean | null;
@@ -5007,6 +5035,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -5029,6 +5058,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -5351,6 +5381,7 @@ export type GetFormDefinitionQuery = {
         fieldName?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
         prefill?: boolean | null;
@@ -5373,6 +5404,7 @@ export type GetFormDefinitionQuery = {
           fieldName?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
           prefill?: boolean | null;
@@ -5395,6 +5427,7 @@ export type GetFormDefinitionQuery = {
             fieldName?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
             prefill?: boolean | null;
@@ -5417,6 +5450,7 @@ export type GetFormDefinitionQuery = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -5439,6 +5473,7 @@ export type GetFormDefinitionQuery = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -5781,6 +5816,7 @@ export type SaveAssessmentMutation = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -5803,6 +5839,7 @@ export type SaveAssessmentMutation = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -5825,6 +5862,7 @@ export type SaveAssessmentMutation = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill?: boolean | null;
@@ -5847,6 +5885,7 @@ export type SaveAssessmentMutation = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill?: boolean | null;
@@ -5869,6 +5908,7 @@ export type SaveAssessmentMutation = {
                       fieldName?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
+                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
                       prefill?: boolean | null;
@@ -6225,6 +6265,7 @@ export type SubmitAssessmentMutation = {
               fieldName?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
               prefill?: boolean | null;
@@ -6247,6 +6288,7 @@ export type SubmitAssessmentMutation = {
                 fieldName?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
                 prefill?: boolean | null;
@@ -6269,6 +6311,7 @@ export type SubmitAssessmentMutation = {
                   fieldName?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
                   prefill?: boolean | null;
@@ -6291,6 +6334,7 @@ export type SubmitAssessmentMutation = {
                     fieldName?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
+                    serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
                     assessmentDate?: boolean | null;
                     prefill?: boolean | null;
@@ -6313,6 +6357,7 @@ export type SubmitAssessmentMutation = {
                       fieldName?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
+                      serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
                       assessmentDate?: boolean | null;
                       prefill?: boolean | null;
@@ -9773,6 +9818,7 @@ export const ItemFieldsFragmentDoc = gql`
     fieldName
     recordType
     pickListReference
+    serviceDetailType
     size
     assessmentDate
     prefill
