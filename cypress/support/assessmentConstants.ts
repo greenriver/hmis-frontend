@@ -107,7 +107,7 @@ export const EmptyDisabilityGroup = {
 export const EmptyProjectCoc = {
   cocCode: null,
   geocode: null,
-  geographyType: 'UNKNOWN_DATA_NOT_COLLECTED',
+  geographyType: 'DATA_NOT_COLLECTED',
   address1: null,
   address2: null,
   city: null,
