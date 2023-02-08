@@ -49,6 +49,7 @@ export interface DynamicFieldProps {
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
   pickListRelationId?: string;
+  noLabel?: boolean;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -91,13 +92,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   errors,
   inputProps,
   pickListRelationId,
+  noLabel = false,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
   const onChangeValue = (val: any) => itemChanged(item.linkId, val);
   const onChangeEventValue = (_: any, val: any) =>
     itemChanged(item.linkId, val);
-  const label = getLabel(item, horizontal);
+  const label = noLabel ? null : getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = undefined;
   let width;

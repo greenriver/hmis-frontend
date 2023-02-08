@@ -589,6 +589,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  ServiceDetailType: { BULK: 'BULK', CLIENT: 'CLIENT' },
   ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
   ServiceSubTypeProvided: {
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
