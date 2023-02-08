@@ -1878,6 +1878,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "projectTypes",
                 "description": null,
                 "type": {
@@ -14440,6 +14452,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
                   "ofType": null
                 },
                 "defaultValue": null,

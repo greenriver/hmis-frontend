@@ -19,6 +19,7 @@ query GetProject($id: ID!) {
 query GetProjectEnrollments(
   $id: ID!
   $clientSearchTerm: String
+  $openOnDate: ISO8601Date
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -29,6 +30,7 @@ query GetProjectEnrollments(
       offset: $offset
       sortOrder: MOST_RECENT
       includeInProgress: true
+      openOnDate: $openOnDate
       clientSearchTerm: $clientSearchTerm
     ) {
       offset
