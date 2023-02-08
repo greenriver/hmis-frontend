@@ -4,8 +4,8 @@ import { HmisEnums } from './gqlEnums';
 import { Scalars } from './gqlTypes';
 
 export interface GqlSchemaType {
-  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM' | 'UNION';
-  name: keyof Scalars | keyof typeof HmisEnums | 'OmnisearchResult' | null;
+  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM';
+  name: keyof Scalars | keyof typeof HmisEnums | null;
   ofType: GqlSchemaType | null;
 }
 
@@ -2194,7 +2194,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'attribute',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
         name: 'fullMessage',
@@ -2212,10 +2216,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
-      },
-      {
-        name: 'options',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
       {
         name: 'readableAttribute',

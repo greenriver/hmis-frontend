@@ -3302,11 +3302,10 @@ export type User = {
 
 export type ValidationError = {
   __typename?: 'ValidationError';
-  attribute?: Maybe<Scalars['String']>;
+  attribute: Scalars['String'];
   fullMessage: Scalars['String'];
   id?: Maybe<Scalars['String']>;
   message: Scalars['String'];
-  options?: Maybe<Scalars['JsonObject']>;
   readableAttribute?: Maybe<Scalars['String']>;
   severity: ValidationSeverity;
   type: ValidationType;
@@ -6164,7 +6163,7 @@ export type SaveAssessmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -6608,7 +6607,7 @@ export type SubmitAssessmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -6690,7 +6689,7 @@ export type GetAssessmentsForPopulationQuery = {
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
-  attribute?: string | null;
+  attribute: string;
   readableAttribute?: string | null;
   message: string;
   fullMessage: string;
@@ -7391,7 +7390,7 @@ export type CreateClientMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7443,7 +7442,7 @@ export type UpdateClientMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7476,7 +7475,7 @@ export type UpdateClientImageMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7508,7 +7507,7 @@ export type DeleteClientImageMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7547,7 +7546,7 @@ export type CreateEnrollmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7613,7 +7612,7 @@ export type UpdateEnrollmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7679,7 +7678,7 @@ export type SetHoHMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7718,7 +7717,7 @@ export type DeleteEnrollmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7784,7 +7783,7 @@ export type AddHouseholdMembersMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7844,7 +7843,7 @@ export type AddServiceToEnrollmentMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7881,7 +7880,7 @@ export type UpdateServiceMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -7918,7 +7917,7 @@ export type DeleteServiceMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -8705,7 +8704,7 @@ export type DeleteProjectMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -8871,7 +8870,7 @@ export type DeleteOrganizationMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -8958,7 +8957,7 @@ export type CreateProjectMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9002,7 +9001,7 @@ export type UpdateProjectMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9032,7 +9031,7 @@ export type CreateOrganizationMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9062,7 +9061,7 @@ export type UpdateOrganizationMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9201,7 +9200,7 @@ export type CreateInventoryMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9238,7 +9237,7 @@ export type UpdateInventoryMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9261,7 +9260,7 @@ export type DeleteInventoryMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9295,7 +9294,7 @@ export type CreateFunderMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9329,7 +9328,7 @@ export type UpdateFunderMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9352,7 +9351,7 @@ export type DeleteFunderMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9389,7 +9388,7 @@ export type CreateProjectCocMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9426,7 +9425,7 @@ export type UpdateProjectCocMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9449,7 +9448,7 @@ export type DeleteProjectCocMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9486,7 +9485,7 @@ export type CreateBedsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9523,7 +9522,7 @@ export type CreateUnitsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9560,7 +9559,7 @@ export type DeleteUnitsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9597,7 +9596,7 @@ export type DeleteBedsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9627,7 +9626,7 @@ export type UpdateUnitsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
@@ -9659,7 +9658,7 @@ export type UpdateBedsMutation = {
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
-      attribute?: string | null;
+      attribute: string;
       readableAttribute?: string | null;
       message: string;
       fullMessage: string;
