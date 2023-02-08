@@ -30,7 +30,7 @@ export const ValidationWarningDisplay = ({
       )}
       {grouped.other && (
         <>
-          <Typography fontWeight={600}>Other warnings:</Typography>
+          <Typography fontWeight={600}>Warnings:</Typography>
           <Box component='ul' sx={{ mt: 1, mb: 0, pl: 3 }}>
             {grouped.other.map((e) => (
               <li key={e.fullMessage}>

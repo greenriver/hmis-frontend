@@ -153,7 +153,7 @@ const DynamicForm: React.FC<Props> = ({
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
-          confirmText='Submit Assessment'
+          confirmText={submitButtonText || 'Confirm'}
           sx={{
             '.MuiDialog-paper': {
               minWidth: '400px',
