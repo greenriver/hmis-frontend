@@ -86,6 +86,15 @@ const DynamicForm: React.FC<Props> = ({
     [onSubmit, getCleanedValues]
   );
 
+  const handleConfirm = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const valuesToSubmit = getCleanedValues();
+      onSubmit(event, valuesToSubmit, true);
+    },
+    [onSubmit, getCleanedValues]
+  );
+
   const handleSaveDraft = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.preventDefault();
@@ -141,7 +150,7 @@ const DynamicForm: React.FC<Props> = ({
           id='confirmSubmit'
           open
           title='Ignore Warnings?'
-          onConfirm={handleSubmit}
+          onConfirm={handleConfirm}
           onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
           confirmText='Submit Assessment'

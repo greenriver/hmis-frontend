@@ -3,6 +3,7 @@
 import {
   AlphaIncomeSources,
   EmptyDisabilityGroup,
+  EmptyIncomeSources,
   EmptyInsurance,
   EmptyNonCashBenefits,
   EmptyPriorLivingSituation,
@@ -43,6 +44,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItems([breakPermanent, breakLast]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
     'Enrollment.losUnderThreshold': false,
@@ -54,6 +56,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItems([breakPermanent, breakLast]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'ONE_YEAR_OR_LONGER',
     'Enrollment.losUnderThreshold': false,
@@ -71,6 +74,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItem(breakPermanent).should('exist');
   cy.displayItems([breakInstitutional, breakLast]).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
     'Enrollment.losUnderThreshold': false,
@@ -114,6 +118,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
+    ...EmptyPriorLivingSituation,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     'Enrollment.losUnderThreshold': true,
@@ -141,11 +146,6 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   // Disabling should remove values
   cy.getById('3.917.C').find('button[value="false"]').click();
   cy.getByIds(threeFourFive).should('not.exist');
-  cy.expectHudValuesToNotHaveKeys([
-    'Enrollment.dateToStreetEssh',
-    'Enrollment.timesHomelessPastThreeYears',
-    'Enrollment.monthsHomelessPastThreeYears',
-  ]);
 
   // Re-enabling should add back old values (make previousStreetEssh null)
   cy.getById('3.917.C').find('button[value="false"]').click();
@@ -244,15 +244,9 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
   cy.expectHudValuesSectionToDeepEqual({
     ...EmptyInsurance,
     ...EmptyNonCashBenefits,
+    ...EmptyIncomeSources,
     'IncomeBenefit.incomeFromAnySource': 'NO',
   });
-  cy.expectHudValuesToNotHaveKeys([
-    'IncomeBenefit.earned',
-    'IncomeBenefit.earnedAmount',
-    'IncomeBenefit.otherIncomeSource',
-    'IncomeBenefit.otherIncomeAmount',
-    'IncomeBenefit.otherIncomeSourceIdentify',
-  ]);
 
   // When re-enabled, old income values should be added back
   cy.checkOption(fromAnySource, 'YES');
@@ -316,17 +310,9 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
   cy.getById(inputGroup).should('not.exist');
 
   cy.expectHudValuesToInclude({
+    ...EmptyNonCashBenefits,
     'IncomeBenefit.benefitsFromAnySource': 'NO',
   });
-  cy.expectHudValuesToNotHaveKeys([
-    'IncomeBenefit.snap',
-    'IncomeBenefit.wic',
-    'IncomeBenefit.tanfChildCare',
-    'IncomeBenefit.tanfTransportation',
-    'IncomeBenefit.otherTanf',
-    'IncomeBenefit.otherBenefitsSource',
-    'IncomeBenefit.otherBenefitsSourceIdentify',
-  ]);
 
   // When re-enabled, old income values should be added back
   cy.checkOption(fromAnySource, 'YES');
@@ -401,21 +387,9 @@ Cypress.Commands.add('assertHealthInsurance', () => {
   cy.getById(inputGroup).should('not.exist');
 
   cy.expectHudValuesToInclude({
+    ...EmptyInsurance,
     'IncomeBenefit.insuranceFromAnySource': 'NO',
   });
-  cy.expectHudValuesToNotHaveKeys([
-    'IncomeBenefit.medicaid',
-    'IncomeBenefit.medicare',
-    'IncomeBenefit.schip',
-    'IncomeBenefit.vaMedicalServices',
-    'IncomeBenefit.employerProvided',
-    'IncomeBenefit.cobra',
-    'IncomeBenefit.privatePay',
-    'IncomeBenefit.stateHealthIns',
-    'IncomeBenefit.indianHealthServices',
-    'IncomeBenefit.otherInsurance',
-    'IncomeBenefit.otherInsuranceIdentify',
-  ]);
 
   // When re-enabled, old income values should be added back
   cy.checkOption(fromAnySource, 'YES');
@@ -603,6 +577,8 @@ Cypress.Commands.add('assertHealthAndDV', () => {
 
   cy.expectHudValuesSectionToDeepEqual({
     'HealthAndDv.domesticViolenceVictim': 'DATA_NOT_COLLECTED',
+    'HealthAndDv.whenOccurred': 'DATA_NOT_COLLECTED',
+    'HealthAndDv.currentlyFleeing': 'DATA_NOT_COLLECTED',
   });
   // Fill out
   cy.checkOption('4.11.2', 'YES');
@@ -621,13 +597,12 @@ Cypress.Commands.add('assertHealthAndDV', () => {
     .find('input')
     .should('be.disabled')
     .should('not.have.value');
+
   cy.expectHudValuesSectionToDeepEqual({
     'HealthAndDv.domesticViolenceVictim': 'CLIENT_REFUSED',
+    'HealthAndDv.whenOccurred': 'DATA_NOT_COLLECTED',
+    'HealthAndDv.currentlyFleeing': 'DATA_NOT_COLLECTED',
   });
-  cy.expectHudValuesToNotHaveKeys([
-    'HealthAndDv.whenOccurred',
-    'HealthAndDv.currentlyFleeing',
-  ]);
 
   // Re-enabling should add back old saved values
   cy.checkOption('4.11.2', 'YES');

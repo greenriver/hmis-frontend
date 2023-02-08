@@ -46,6 +46,7 @@ export const EmptyIncomeSources = {
   'IncomeBenefit.alimony': null,
   'IncomeBenefit.alimonyAmount': null,
   'IncomeBenefit.otherIncomeSource': null,
+  'IncomeBenefit.otherIncomeSourceIdentify': null,
   'IncomeBenefit.otherIncomeAmount': null,
 };
 
@@ -57,6 +58,7 @@ export const EmptyNonCashBenefits = {
   'IncomeBenefit.tanfTransportation': null,
   'IncomeBenefit.otherTanf': null,
   'IncomeBenefit.otherBenefitsSource': null,
+  'IncomeBenefit.otherBenefitsSourceIdentify': null,
 };
 
 export const EmptyInsurance = {
@@ -71,6 +73,7 @@ export const EmptyInsurance = {
   'IncomeBenefit.stateHealthIns': null,
   'IncomeBenefit.indianHealthServices': null,
   'IncomeBenefit.otherInsurance': null,
+  'IncomeBenefit.otherInsuranceIdentify': null,
 };
 
 export const EmptyPriorLivingSituation = {
@@ -85,12 +88,20 @@ export const EmptyPriorLivingSituation = {
 
 export const EmptyDisabilityGroup = {
   'DisabilityGroup.physicalDisability': 'DATA_NOT_COLLECTED',
+  'DisabilityGroup.physicalDisabilityIndefiniteAndImpairs':
+    'DATA_NOT_COLLECTED',
   'DisabilityGroup.developmentalDisability': 'DATA_NOT_COLLECTED',
   'DisabilityGroup.chronicHealthCondition': 'DATA_NOT_COLLECTED',
+  'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs':
+    'DATA_NOT_COLLECTED',
   'DisabilityGroup.hivAids': 'DATA_NOT_COLLECTED',
   'DisabilityGroup.mentalHealthDisorder': 'DATA_NOT_COLLECTED',
+  'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs':
+    'DATA_NOT_COLLECTED',
   'DisabilityGroup.substanceUseDisorder': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.disablingCondition': 'DATA_NOT_COLLECTED',
+  'DisabilityGroup.substanceUseDisorderIndefiniteAndImpairs':
+    'DATA_NOT_COLLECTED',
+  'DisabilityGroup.disablingCondition': 'NO',
 };
 
 export const EmptyProjectCoc = {
