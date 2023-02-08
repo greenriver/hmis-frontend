@@ -238,7 +238,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
             inputWidth={width}
-            disableArrowKeys
+            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
           />
         </InputContainer>
