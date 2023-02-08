@@ -438,7 +438,13 @@ export const getInitialValues = (
       if (Array.isArray(item.item)) {
         recursiveFillInValues(item.item, values);
       }
-      if (!item.initial) return;
+      if (!item.initial) {
+        // Make sure all HUD fields are present in values to begin
+        if (item.fieldName && behavior !== InitialBehavior.Overwrite)
+          values[item.linkId] = null;
+
+        return;
+      }
 
       // TODO handle multiple initials for multi-select questions
       const initial = item.initial[0];

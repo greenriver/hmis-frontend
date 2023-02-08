@@ -84,20 +84,25 @@ const AssessmentForm = ({
     };
 
     const source = sourceAssessment || assessment;
-    let init;
-    if (!source) {
-      // Set initial values based solely on FormDefinition
-      init = getInitialValues(definition.definition, localConstants);
-    } else {
-      // Set initial values from source and add any overrides from FormDefinition
-      init = cloneDeep(source.assessmentDetail?.values || {});
-      const initials = getInitialValues(
+
+    // Set initial values based solely on FormDefinition
+    const init = getInitialValues(definition.definition, localConstants);
+    if (source) {
+      // Overlay initial values from source Assessment
+      const initialFromSourceAssessment = cloneDeep(
+        source.assessmentDetail?.values || {}
+      );
+      assign(init, initialFromSourceAssessment);
+
+      // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
+      const initialsToOverwrite = getInitialValues(
         definition.definition,
         localConstants,
         InitialBehavior.Overwrite
       );
-      assign(init, initials);
+      assign(init, initialsToOverwrite);
     }
+
     console.debug(
       'Initial Form State',
       init,
