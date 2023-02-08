@@ -75,7 +75,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-const MAX_INPUT_WIDTH = 400;
+const MAX_INPUT_WIDTH = 380;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
@@ -238,6 +238,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
             inputWidth={width}
+            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
           />
         </InputContainer>
@@ -331,15 +332,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             checkbox
             {...commonInputProps}
           />
-          // <ToggleButtonGroupInput
-          //   value={selectedVal}
-          //   onChange={onChangeEventValue}
-          //   id={item.linkId}
-          //   name={item.linkId}
-          //   horizontal={horizontal}
-          //   options={options || []}
-          //   {...commonInputProps}
-          // />
         );
       } else {
         inputComponent = (
@@ -356,10 +348,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               horizontal,
               sx: {
                 width,
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                // cant allow label to extend, because it messes up click target for closing dropdwon
+                maxWidth: MAX_INPUT_WIDTH,
                 '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
               },
             }}
+            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
             {...commonInputProps}
           />
         );

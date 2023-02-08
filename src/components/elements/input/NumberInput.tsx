@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
 import { isFinite, isNil } from 'lodash-es';
-import { useState } from 'react';
+import { KeyboardEventHandler, useCallback, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -9,11 +9,12 @@ const NumberInput = ({
   min = 0,
   max,
   InputProps,
-  currency,
+  currency = false,
+  disableArrowKeys = false,
   value,
   error,
   ...props
-}: TextInputProps & { currency?: boolean }) => {
+}: TextInputProps & { currency?: boolean; disableArrowKeys?: boolean }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const currencyInputProps = currency
@@ -54,6 +55,13 @@ const NumberInput = ({
     }
   };
 
+  // Prevent form submission on Enter. Enter should toggle the state.
+  const onKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback((e) => {
+    if (e.key.match(/(ArrowDown|ArrowUp)/)) {
+      e.preventDefault();
+    }
+  }, []);
+
   return (
     <TextInput
       type='number'
@@ -62,6 +70,7 @@ const NumberInput = ({
         pattern: '[0-9]*',
         min,
         max,
+        onKeyDown: disableArrowKeys ? onKeyDown : undefined,
         ...inputProps,
       }}
       InputProps={{ ...currencyInputProps, ...InputProps }}
