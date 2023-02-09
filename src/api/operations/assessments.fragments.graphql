@@ -73,6 +73,7 @@ fragment ItemFields on FormItem {
     valueCode
     valueBoolean
     valueNumber
+    sumQuestions
     autofillBehavior
     autofillWhen {
       ...EnableWhenFields

@@ -1,5 +1,4 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
-import { isFinite, pick, reduce } from 'lodash-es';
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { maxWidthAtNestingLevel } from '../DynamicField';
@@ -13,8 +12,6 @@ const InputGroup = ({
   values,
   renderChildItem,
   nestingLevel,
-  itemChanged,
-  severalItemsChanged,
 }: GroupItemComponentProps) => {
   const [childItems, summaryItem] = useMemo(() => {
     const childs: FormItem[] = (item.item || []).filter((i) => !i.hidden);
@@ -34,42 +31,9 @@ const InputGroup = ({
     [childItemType]
   );
 
-  // Sum of child numeric inputs (if applicable)
-  const itemChangedOverride = useCallback(
-    (linkId: string, value: any) => {
-      if (!summaryItem || !isNumeric) return itemChanged(linkId, value);
-      const valuesCopy = JSON.parse(JSON.stringify(values));
-      valuesCopy[linkId] = value;
-      const relevant = pick(
-        valuesCopy,
-        childItems.map((i) => i.linkId)
-      );
-      const sum = reduce(
-        relevant,
-        (sum, value) => {
-          const val = parseFloat(value);
-          return isFinite(val) ? sum + val : sum;
-        },
-        0
-      );
-      severalItemsChanged({ [summaryItem.linkId]: sum, [linkId]: value });
-    },
-    [
-      values,
-      childItems,
-      itemChanged,
-      severalItemsChanged,
-      isNumeric,
-      summaryItem,
-    ]
-  );
-
   const childProps = useMemo(
-    () => ({
-      horizontal: isNumeric ? true : undefined,
-      itemChanged: itemChangedOverride,
-    }),
-    [isNumeric, itemChangedOverride]
+    () => ({ horizontal: isNumeric ? true : undefined }),
+    [isNumeric]
   );
 
   const childRenderFunc = useCallback(
