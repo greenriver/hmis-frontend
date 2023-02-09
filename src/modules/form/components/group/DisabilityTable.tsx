@@ -38,7 +38,7 @@ const DisabilityTable = ({
         item.item.map((rowItem, index) => {
           if (!rowItem.item || rowItem.type !== ItemType.Group) {
             console.warn(
-              'Incorrectly formed JSON for InputTable. Children must be groups.'
+              'Incorrectly formed JSON for DisabilityTable. Children must be groups.'
             );
             return null;
           }
