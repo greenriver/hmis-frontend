@@ -1,3 +1,4 @@
+import { formatISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 
 import ClientName from '@/components/elements/ClientName';
@@ -6,7 +7,10 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import {
+  formatDateForDisplay,
+  parseAndFormatDateRange,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -32,18 +36,20 @@ const baseColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
   },
   {
     header: 'Household Size',
-    render: (e) => e.householdSize,
+    render: 'householdSize',
   },
 ];
 
 const ProjectEnrollmentsTable = ({
   projectId,
-  additionalColumns,
-  noLinks = false,
+  columns,
+  openOnDate,
+  linkRowToEnrollment = true,
 }: {
   projectId: string;
-  additionalColumns?: typeof baseColumns;
-  noLinks?: boolean;
+  columns?: typeof baseColumns;
+  linkRowToEnrollment?: boolean;
+  openOnDate?: Date;
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -58,9 +64,12 @@ const ProjectEnrollmentsTable = ({
     []
   );
 
-  const columns = useMemo(
-    () => [...baseColumns, ...(additionalColumns || [])],
-    [additionalColumns]
+  const openOnDateString = useMemo(
+    () =>
+      openOnDate
+        ? formatISO(openOnDate, { representation: 'date' })
+        : undefined,
+    [openOnDate]
   );
 
   return (
@@ -79,11 +88,19 @@ const ProjectEnrollmentsTable = ({
           inputWidth='200px'
         />
       }
-      queryVariables={{ id: projectId, clientSearchTerm: debouncedSearch }}
+      queryVariables={{
+        id: projectId,
+        clientSearchTerm: debouncedSearch,
+        openOnDate: openOnDateString,
+      }}
       queryDocument={GetProjectEnrollmentsDocument}
-      columns={columns}
-      rowLinkTo={noLinks ? undefined : rowLinkTo}
-      noData='No clients.'
+      columns={columns || baseColumns}
+      rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
+      noData={
+        openOnDate
+          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
+          : 'No clients.'
+      }
       pagePath='project.enrollments'
     />
   );

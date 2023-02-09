@@ -1,5 +1,5 @@
 import { getYear, isValid, max, min } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { isNil, sum } from 'lodash-es';
 
 import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
@@ -8,6 +8,7 @@ import { gqlValueToFormValue, transformSubmitValues } from './recordFormUtil';
 
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  AutofillValue,
   BoundType,
   DataCollectedAbout,
   EnableBehavior,
@@ -311,6 +312,28 @@ export const shouldEnableItem = (
   }
 };
 
+export const getAutofillComparisonValue = (
+  av: AutofillValue,
+  values: FormValues,
+  targetItem: FormItem
+) => {
+  // Perform summation if applicable
+  if (av.sumQuestions && av.sumQuestions.length > 0) {
+    const numbers = av.sumQuestions
+      .map((linkId) => values[linkId])
+      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .filter((n) => !isNil(n));
+    return sum(numbers);
+  }
+
+  // Choose first present value from Boolean, Number, and Code attributes
+  return [
+    av.valueBoolean,
+    av.valueNumber,
+    getOptionValue(av.valueCode, targetItem),
+  ].filter((e) => !isNil(e))[0];
+};
+
 /**
  * Autofill values based on changed item.
  * If there are multiple autofill rules, the first matching one is used
@@ -330,9 +353,12 @@ export const autofillValues = (
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
     // Evaluate all enableWhen conditions
-    const booleans = (av.autofillWhen || []).map((en) =>
+    const booleans = av.autofillWhen.map((en) =>
       evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
     );
+
+    // If there were no conditions specify, it should always be autofilled
+    if (booleans.length === 0) booleans.push(true);
 
     const shouldAutofillValue =
       av.autofillBehavior === EnableBehavior.Any
@@ -341,11 +367,7 @@ export const autofillValues = (
 
     if (!shouldAutofillValue) return false;
 
-    const newValue = [
-      av.valueBoolean,
-      av.valueNumber,
-      getOptionValue(av.valueCode, item),
-    ].filter((e) => !isNil(e))[0];
+    const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
       // console.log(
@@ -515,15 +537,27 @@ export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
 
-    item.autofillValues.forEach((v) => {
-      (v.autofillWhen || []).forEach((en) => {
-        if (!deps[en.question]) deps[en.question] = [];
-        deps[en.question].push(item.linkId);
-        if (en.compareQuestion) {
-          if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
-          deps[en.compareQuestion].push(item.linkId);
-        }
-      });
+    // A change in "id" may cause "item.linkId" to autofill
+    function addDependency(id: string) {
+      if (!deps[id]) deps[id] = [];
+      if (deps[id].indexOf(item.linkId) === -1) deps[id].push(item.linkId);
+    }
+
+    item.autofillValues.forEach((av) => {
+      // If this item sums other items using sumQuestions, add those dependencies
+      if (av.sumQuestions) {
+        av.sumQuestions.forEach((summedLinkId) => {
+          addDependency(summedLinkId);
+        });
+      }
+
+      // If this autofill is conditional on other items, add those dependencies
+      if (av.autofillWhen) {
+        av.autofillWhen.forEach((en) => {
+          addDependency(en.question);
+          if (en.compareQuestion) addDependency(en.compareQuestion);
+        });
+      }
     });
   });
   return deps;

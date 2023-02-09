@@ -1052,6 +1052,26 @@
             "deprecationReason": null
           },
           {
+            "name": "sumQuestions",
+            "description": "Link IDs of numeric questions to sum up and set as the value if condition is met",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "valueBoolean",
             "description": "Value to autofill if condition is met",
             "args": [],
@@ -1082,18 +1102,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "valueQuestion",
-            "description": "Link ID of question to autofill the value from if condition is med",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -1871,6 +1879,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -14440,6 +14460,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
                   "ofType": null
                 },
                 "defaultValue": null,

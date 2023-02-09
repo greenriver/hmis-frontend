@@ -171,14 +171,14 @@ export type AutofillValue = {
   __typename?: 'AutofillValue';
   autofillBehavior: EnableBehavior;
   autofillWhen: Array<EnableWhen>;
+  /** Link IDs of numeric questions to sum up and set as the value if condition is met */
+  sumQuestions?: Maybe<Array<Scalars['String']>>;
   /** Value to autofill if condition is met */
   valueBoolean?: Maybe<Scalars['Boolean']>;
   /** Value to autofill if condition is met */
   valueCode?: Maybe<Scalars['String']>;
   /** Value to autofill if condition is met */
   valueNumber?: Maybe<Scalars['Int']>;
-  /** Link ID of question to autofill the value from if condition is med */
-  valueQuestion?: Maybe<Scalars['String']>;
 };
 
 /** 2.07.6 */
@@ -304,6 +304,7 @@ export type ClientEnrollmentsArgs = {
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
@@ -2263,6 +2264,7 @@ export type ProjectEnrollmentsArgs = {
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -3487,6 +3489,7 @@ export type ItemFieldsFragment = {
     valueCode?: string | null;
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
+    sumQuestions?: Array<string> | null;
     autofillBehavior: EnableBehavior;
     autofillWhen: Array<{
       __typename?: 'EnableWhen';
@@ -3668,6 +3671,7 @@ export type FormDefinitionWithJsonFragment = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -3724,6 +3728,7 @@ export type FormDefinitionWithJsonFragment = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -3780,6 +3785,7 @@ export type FormDefinitionWithJsonFragment = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -3836,6 +3842,7 @@ export type FormDefinitionWithJsonFragment = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -3892,6 +3899,7 @@ export type FormDefinitionWithJsonFragment = {
         valueCode?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
+        sumQuestions?: Array<string> | null;
         autofillBehavior: EnableBehavior;
         autofillWhen: Array<{
           __typename?: 'EnableWhen';
@@ -4138,6 +4146,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -4194,6 +4203,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -4250,6 +4260,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -4306,6 +4317,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -4362,6 +4374,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -4621,6 +4634,7 @@ export type GetAssessmentQuery = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -4677,6 +4691,7 @@ export type GetAssessmentQuery = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -4733,6 +4748,7 @@ export type GetAssessmentQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -4789,6 +4805,7 @@ export type GetAssessmentQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -4845,6 +4862,7 @@ export type GetAssessmentQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -5107,6 +5125,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -5163,6 +5182,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -5219,6 +5239,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -5275,6 +5296,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -5331,6 +5353,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -5522,6 +5545,7 @@ export type GetFormDefinitionQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -5578,6 +5602,7 @@ export type GetFormDefinitionQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -5634,6 +5659,7 @@ export type GetFormDefinitionQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -5690,6 +5716,7 @@ export type GetFormDefinitionQuery = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -5746,6 +5773,7 @@ export type GetFormDefinitionQuery = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -5957,6 +5985,7 @@ export type SaveAssessmentMutation = {
                         valueCode?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
+                        sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
@@ -6013,6 +6042,7 @@ export type SaveAssessmentMutation = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -6069,6 +6099,7 @@ export type SaveAssessmentMutation = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -6125,6 +6156,7 @@ export type SaveAssessmentMutation = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -6181,6 +6213,7 @@ export type SaveAssessmentMutation = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -6406,6 +6439,7 @@ export type SubmitAssessmentMutation = {
                         valueCode?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
+                        sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
@@ -6462,6 +6496,7 @@ export type SubmitAssessmentMutation = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -6518,6 +6553,7 @@ export type SubmitAssessmentMutation = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -6574,6 +6610,7 @@ export type SubmitAssessmentMutation = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -6630,6 +6667,7 @@ export type SubmitAssessmentMutation = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -8693,6 +8731,7 @@ export type GetProjectQuery = {
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   clientSearchTerm?: InputMaybe<Scalars['String']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -9850,6 +9889,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueCode
       valueBoolean
       valueNumber
+      sumQuestions
       autofillBehavior
       autofillWhen {
         ...EnableWhenFields
@@ -13080,6 +13120,7 @@ export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
     $clientSearchTerm: String
+    $openOnDate: ISO8601Date
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -13090,6 +13131,7 @@ export const GetProjectEnrollmentsDocument = gql`
         offset: $offset
         sortOrder: MOST_RECENT
         includeInProgress: true
+        openOnDate: $openOnDate
         clientSearchTerm: $clientSearchTerm
       ) {
         offset
@@ -13123,6 +13165,7 @@ export const GetProjectEnrollmentsDocument = gql`
  *   variables: {
  *      id: // value for 'id'
  *      clientSearchTerm: // value for 'clientSearchTerm'
+ *      openOnDate: // value for 'openOnDate'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
