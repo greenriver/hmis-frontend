@@ -1,11 +1,6 @@
 import CheckIcon from '@mui/icons-material/Check';
-import {
-  Button,
-  CircularProgress,
-  Stack,
-  Typography,
-  Box,
-} from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
 
@@ -104,7 +99,7 @@ const BulkAddServices = () => {
                     header: '',
                     render: (enrollment: EnrollmentFieldsFragment) => (
                       <Box sx={{ textAlign: 'right' }}>
-                        <Button
+                        <LoadingButton
                           color='secondary'
                           onClick={() => {
                             onSelect(enrollment);
@@ -117,11 +112,12 @@ const BulkAddServices = () => {
                             loadingEnrollmentIds.includes(enrollment.id) ||
                             enrollmentsAdded.includes(enrollment.id)
                           }
-                          startIcon={
+                          loading={
                             mutationLoading &&
-                            loadingEnrollmentIds.includes(enrollment.id) ? (
-                              <CircularProgress color='inherit' size={15} />
-                            ) : enrollmentsAdded.includes(enrollment.id) ? (
+                            loadingEnrollmentIds.includes(enrollment.id)
+                          }
+                          startIcon={
+                            enrollmentsAdded.includes(enrollment.id) ? (
                               <CheckIcon />
                             ) : undefined
                           }
@@ -129,7 +125,7 @@ const BulkAddServices = () => {
                           {enrollmentsAdded.includes(enrollment.id)
                             ? 'Assigned'
                             : 'Assign'}
-                        </Button>
+                        </LoadingButton>
                       </Box>
                     ),
                   },

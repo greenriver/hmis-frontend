@@ -97,7 +97,6 @@ const BulkAdd = <
       definition,
       bulk: true,
     });
-  console.log(values);
 
   const targetItems = useMemo(
     () => allTargetItems.filter(shouldShowItem),
@@ -119,6 +118,7 @@ const BulkAdd = <
       autofillNotCollected: true,
       autofillNulls: true,
       autofillBooleans: false,
+      keyByFieldName: true,
     });
     const input = getInputFromTarget(inputValues, target);
 
