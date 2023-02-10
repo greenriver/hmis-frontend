@@ -1,5 +1,4 @@
 import { ApolloProvider } from '@apollo/client';
-import { ThemeProvider } from '@mui/material/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
@@ -11,7 +10,7 @@ import apolloClient from './apolloClient';
 
 import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
-import theme from '@/config/theme';
+import MergedThemeProvider from '@/config/MergedThemeProvider';
 import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 
 type AppProviderProps = {
@@ -22,7 +21,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
       <Sentry.ErrorBoundary fallback={fullPageErrorFallback}>
-        <ThemeProvider theme={theme}>
+        <MergedThemeProvider>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ApolloProvider client={apolloClient}>
               <BrowserRouter>
@@ -30,7 +29,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
               </BrowserRouter>
             </ApolloProvider>
           </LocalizationProvider>
-        </ThemeProvider>
+        </MergedThemeProvider>
       </Sentry.ErrorBoundary>
     </React.Suspense>
   );

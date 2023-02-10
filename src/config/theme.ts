@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material';
+import { createTheme, ThemeOptions } from '@mui/material/styles';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -27,7 +27,7 @@ declare module '@mui/material/styles' {
 }
 
 // Dynamic installation-specific theming
-const theme = createTheme({
+export const baseThemeDef: ThemeOptions = {
   // For some reason this declaration has to be included here rather than below to take effect
   typography: {
     fontFamily: '"Open Sans", sans-serif',
@@ -50,9 +50,11 @@ const theme = createTheme({
       dark: '#c9c9c9',
     },
   },
-});
+};
 
-export default createTheme(theme, {
+export const baseTheme = createTheme(baseThemeDef);
+
+export const fullThemeDef: ThemeOptions = {
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
@@ -105,7 +107,7 @@ export default createTheme(theme, {
     },
     MuiTableCell: {
       styleOverrides: {
-        sizeMedium: theme.unstable_sx({
+        sizeMedium: baseTheme.unstable_sx({
           py: '8px',
         }),
       },
@@ -127,7 +129,7 @@ export default createTheme(theme, {
         variant: 'body2',
       },
       styleOverrides: {
-        root: theme.unstable_sx({
+        root: baseTheme.unstable_sx({
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
@@ -249,4 +251,8 @@ export default createTheme(theme, {
       },
     },
   },
-});
+};
+
+export const fullTheme = createTheme(baseTheme, fullThemeDef);
+
+export default fullTheme;
