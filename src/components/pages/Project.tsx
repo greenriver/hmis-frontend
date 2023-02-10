@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
   Button,
@@ -182,30 +183,27 @@ const Project = () => {
               <Typography variant='h6'>Add to Project</Typography>
               <ButtonLink
                 data-testid='addFunderButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Funding Source
+                Add Funding Source
               </ButtonLink>
               <ButtonLink
                 data-testid='addProjectCocButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_COC, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Project CoC
+                Add Project CoC
               </ButtonLink>
               <ButtonLink
                 data-testid='addInventoryButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Inventory
+                Add Inventory
               </ButtonLink>
             </Stack>
           </Paper>

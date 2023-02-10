@@ -62,9 +62,7 @@ const HouseholdActionButtons = ({
   return (
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
       <ButtonLink
-        variant='outlined'
-        color='secondary'
-        startIcon={<PeopleIcon fontSize='small' />}
+        Icon={PeopleIcon}
         to={buildPath(DashboardRoutes.EDIT_HOUSEHOLD)}
       >
         Manage Household
@@ -73,9 +71,8 @@ const HouseholdActionButtons = ({
         <ButtonTooltipContainer title={intakeReason} placement='bottom'>
           <ButtonLink
             disabled={!canIntake}
-            variant='outlined'
             color='error'
-            startIcon={<PostAddIcon fontSize='small' />}
+            icon={PostAddIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_INTAKE)}
           >
             Finish Intake
@@ -86,9 +83,7 @@ const HouseholdActionButtons = ({
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
           <ButtonLink
             disabled={!canExit}
-            variant='outlined'
-            color='secondary'
-            startIcon={<ExitToAppIcon fontSize='small' />}
+            icon={ExitToAppIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
           >
             Exit Household
