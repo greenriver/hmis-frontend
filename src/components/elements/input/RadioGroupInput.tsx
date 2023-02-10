@@ -18,7 +18,7 @@ import { PickListOption } from '@/types/gqlTypes';
 
 type Option = PickListOption;
 
-interface Props extends Omit<RadioGroupProps, 'onChange'> {
+export interface Props extends Omit<RadioGroupProps, 'onChange'> {
   name?: string;
   options: Option[];
   onChange: (value: Option | null | undefined) => void;
@@ -63,6 +63,7 @@ const RadioGroupInput = ({
   onChange,
   value,
   error,
+  warnIfEmptyTreatment,
   row,
   sx,
   clearable,
@@ -130,6 +131,12 @@ const RadioGroupInput = ({
               'label:first-of-type': { pt: 1 },
               // 'label:last-child': { pb: 1 },
               'label .MuiRadio-root': { p: 1 },
+            }),
+            ...(warnIfEmptyTreatment && {
+              svg: {
+                backgroundColor: 'alerts.lightWarningBackground',
+                borderRadius: 1,
+              },
             }),
             ...sx,
           }}

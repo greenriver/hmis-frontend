@@ -1,4 +1,5 @@
 import {
+  lighten,
   Table,
   TableBody,
   TableCell,
@@ -25,9 +26,9 @@ const DisabilityTable = ({
     </TableHead>
     <TableBody
       sx={{
-        // Highlight last row. TODO: move to form definition
+        // Highlight last row
         '.MuiTableRow-root:last-child': {
-          backgroundColor: '#ffffe6',
+          backgroundColor: (theme) => lighten(theme.palette.info.light, 0.9),
           td: {
             py: 2,
           },

@@ -177,6 +177,7 @@ const AssessmentForm = ({
           loading={mutationLoading}
           errors={errors}
           showSavePrompt
+          warnIfEmpty
         />
       </Grid>
 

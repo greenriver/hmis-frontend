@@ -35,6 +35,7 @@ fragment ItemFields on FormItem {
   briefText
   helperText
   required
+  warnIfEmpty
   hidden
   readOnly
   repeats

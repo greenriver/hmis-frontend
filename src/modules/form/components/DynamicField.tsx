@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
-import { isPickListOption } from '../util/formUtil';
+import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -18,7 +18,7 @@ import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
-import YesNoInput from '@/components/elements/input/YesNoInput';
+import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
@@ -34,6 +34,7 @@ export interface DynamicInputCommonProps {
   disabled?: boolean;
   label?: ReactNode;
   error?: boolean;
+  warnIfEmptyTreatment?: boolean;
   helperText?: ReactNode;
   min?: any;
   max?: any;
@@ -51,6 +52,7 @@ export interface DynamicFieldProps {
   horizontal?: boolean;
   pickListRelationId?: string;
   noLabel?: boolean;
+  warnIfEmpty?: boolean;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -94,6 +96,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   inputProps,
   pickListRelationId,
   noLabel = false,
+  warnIfEmpty = false,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -126,6 +129,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: item.linkId,
+    warnIfEmptyTreatment:
+      warnIfEmpty &&
+      !!item.warnIfEmpty &&
+      !disabled &&
+      !hasMeaningfulValue(value),
     ...inputProps,
   };
 
@@ -181,12 +189,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       }
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <YesNoInput
+          <YesNoRadio
             value={value}
-            onChange={onChangeEventValue}
-            nullable={!item.required}
-            horizontal={horizontal}
-            // includeNullOption
+            onChange={onChangeValue}
             {...commonInputProps}
           />
         </InputContainer>

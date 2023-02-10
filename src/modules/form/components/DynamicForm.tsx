@@ -37,6 +37,7 @@ export interface Props
   showSavePrompt?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
+  warnIfEmpty?: boolean;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -52,6 +53,7 @@ const DynamicForm: React.FC<Props> = ({
   errors: validations,
   showSavePrompt = false,
   horizontal = false,
+  warnIfEmpty = false,
   pickListRelationId,
 }) => {
   const navigate = useNavigate();
@@ -139,6 +141,7 @@ const DynamicForm: React.FC<Props> = ({
           warnings,
           horizontal,
           pickListRelationId,
+          warnIfEmpty,
         })}
       </Grid>
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>

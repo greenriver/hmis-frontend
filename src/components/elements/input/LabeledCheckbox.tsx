@@ -63,9 +63,9 @@ const LabeledCheckbox = ({
           labelPlacement={horizontal ? 'start' : 'end'}
           label={label}
           sx={{
-            color: error ? (theme) => theme.palette.error.main : undefined,
+            color: error ? 'error.main' : undefined,
             '.MuiCheckbox-root': {
-              color: error ? (theme) => theme.palette.error.main : undefined,
+              color: error ? 'error.main' : undefined,
             },
             ...labelSx,
           }}

@@ -27,6 +27,7 @@ export interface Props {
   errors?: ValidationError[];
   warnings?: ValidationError[];
   horizontal?: boolean;
+  warnIfEmpty?: boolean;
   bulk?: boolean;
   pickListRelationId?: string;
   values: FormValues;
@@ -71,6 +72,7 @@ const DynamicFormFields: React.FC<Props> = ({
   autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
+  warnIfEmpty = false,
   pickListRelationId,
   values,
   setValues,
@@ -216,6 +218,7 @@ const DynamicFormFields: React.FC<Props> = ({
         errors={getFieldErrors(item)}
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
+        warnIfEmpty={warnIfEmpty}
         {...props}
         inputProps={{
           ...props?.inputProps,

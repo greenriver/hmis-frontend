@@ -74,6 +74,15 @@ export function areEqualValues(
   return value1 === value2;
 }
 
+export const hasMeaningfulValue = (
+  value: string | object | null | undefined
+): boolean => {
+  if (Array.isArray(value) && value.length == 0) return false;
+  if (isNil(value)) return false;
+  if (value === '') return false;
+  return true;
+};
+
 const localResolvePickList = (
   pickListReference: string,
   includeDataNotCollected = false
