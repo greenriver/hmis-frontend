@@ -145,6 +145,13 @@ export default createTheme(theme, {
         }),
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        sizeSmall: {
+          fontSize: '0.875rem',
+        },
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
