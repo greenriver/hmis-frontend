@@ -131,8 +131,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     id: item.linkId,
     warnIfEmptyTreatment:
       warnIfEmpty &&
-      !!item.warnIfEmpty &&
+      (!!item.warnIfEmpty || !!item.required) &&
       !disabled &&
+      !inputProps?.disabled &&
       !hasMeaningfulValue(value),
     ...inputProps,
   };

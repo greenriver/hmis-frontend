@@ -57,7 +57,7 @@ const theme = createTheme({
       main: '#c9c9c9',
     },
     alerts: {
-      lightWarningBackground: '#ffffe6',
+      lightWarningBackground: '#FFF9EB',
     },
   },
 });
