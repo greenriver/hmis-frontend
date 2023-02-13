@@ -2,9 +2,9 @@ import { useCallback, useState, useEffect, useRef } from 'react';
 
 let counter = 0;
 
-const useLocalStorage = <T>(key: string, initialValue: T) => {
+const useLocalStorage = <T>(key: string, initialValue?: T) => {
   const idRef = useRef<string>(String((counter += 1)));
-  const [storedValue, setStoredValue] = useState<T>(() => {
+  const [storedValue, setStoredValue] = useState<T | undefined>(() => {
     try {
       const item = localStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialValue;

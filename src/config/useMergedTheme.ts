@@ -1,9 +1,7 @@
-import { createTheme, Theme, ThemeOptions } from '@mui/material';
-// This is what MUI uses internally to merge the themes in createTheme
-import deepmerge from '@mui/utils/deepmerge';
+import { Theme, ThemeOptions } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import { baseThemeDef, fullTheme, fullThemeDef } from './theme';
+import defaultTheme, { createFullTheme } from './theme';
 import { fetchTheme } from './utils';
 
 import useLocalStorage from '@/hooks/useLocalStorage';
@@ -12,7 +10,7 @@ const useMergedTheme = (remoteThemeId?: string) => {
   const [remoteThemeOptions, setRemoteThemeOptions] = useLocalStorage<
     ThemeOptions | undefined
   >('remoteTheme', undefined);
-  const [mergedTheme, setMergedTheme] = useState<Theme>(fullTheme);
+  const [mergedTheme, setMergedTheme] = useState<Theme>(defaultTheme);
 
   useEffect(() => {
     if (!remoteThemeId) return;
@@ -22,21 +20,12 @@ const useMergedTheme = (remoteThemeId?: string) => {
   }, [remoteThemeId, setRemoteThemeOptions]);
 
   useEffect(() => {
-    let newTheme = fullTheme;
-
     try {
-      const merged = createTheme(
-        deepmerge(
-          deepmerge(baseThemeDef, fullThemeDef),
-          remoteThemeOptions || {}
-        )
-      );
-      newTheme = merged;
+      const newTheme = createFullTheme(remoteThemeOptions);
+      setMergedTheme(newTheme);
     } catch (err) {
       console.error('Error merging themes', err);
     }
-
-    setMergedTheme(newTheme);
   }, [remoteThemeOptions]);
 
   return mergedTheme;

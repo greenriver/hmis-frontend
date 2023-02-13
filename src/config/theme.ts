@@ -1,9 +1,11 @@
+import { Theme } from '@mui/material';
 import {
   createTheme,
   ThemeOptions,
   PaletteColor,
   SimplePaletteColorOptions,
 } from '@mui/material/styles';
+import { deepmerge } from '@mui/utils';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -33,9 +35,8 @@ declare module '@mui/material/styles' {
   }
 }
 
-// Dynamic installation-specific theming
+// Default base theme, to be merged with overlays
 export const baseThemeDef: ThemeOptions = {
-  // For some reason this declaration has to be included here rather than below to take effect
   typography: {
     fontFamily: '"Open Sans", sans-serif',
   },
@@ -63,9 +64,9 @@ export const baseThemeDef: ThemeOptions = {
   },
 };
 
-export const baseTheme = createTheme(baseThemeDef);
-
-export const fullThemeDef = {
+// Create theme options to use for composition
+// See: https://mui.com/material-ui/customization/theming/#createtheme-options-args-theme
+const createThemeOptions = (theme: Theme) => ({
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
@@ -118,7 +119,7 @@ export const fullThemeDef = {
     },
     MuiTableCell: {
       styleOverrides: {
-        sizeMedium: baseTheme.unstable_sx({
+        sizeMedium: theme.unstable_sx({
           py: '8px',
         }),
       },
@@ -126,7 +127,7 @@ export const fullThemeDef = {
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          backgroundColor: 'white',
+          backgroundColor: theme.palette.background.paper,
         },
       },
     },
@@ -140,7 +141,7 @@ export const fullThemeDef = {
         variant: 'body2',
       },
       styleOverrides: {
-        root: baseTheme.unstable_sx({
+        root: theme.unstable_sx({
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
@@ -240,7 +241,7 @@ export const fullThemeDef = {
       styleOverrides: {
         outlined: {
           fontWeight: 600,
-          backgroundColor: 'white',
+          backgroundColor: theme.palette.background.paper,
           // borderWidth: '2px',
           // lineHeight: 'initial',
           // '&:hover': {
@@ -274,8 +275,14 @@ export const fullThemeDef = {
       },
     },
   },
+});
+
+export const createFullTheme = (options?: ThemeOptions) => {
+  // Create theb ase theme, merged with any overlays from the backend
+  const theme = createTheme(deepmerge(baseThemeDef, options || {}));
+  // Create the full theme with composition
+  return createTheme(theme, createThemeOptions(theme));
 };
 
-export const fullTheme = createTheme(baseTheme, fullThemeDef);
-
-export default fullTheme;
+// Export default theme with no overlay options
+export default createFullTheme();

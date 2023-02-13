@@ -7,10 +7,8 @@ import { fetchThemes } from './utils';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [remoteThemeId, setRemoteThemeId] = useLocalStorage<string>(
-    'remoteThemeId',
-    import.meta.env.PUBLIC_DEFAULT_THEME
-  );
+  const [remoteThemeId, setRemoteThemeId] =
+    useLocalStorage<string>('remoteThemeId');
   const theme = useMergedTheme(remoteThemeId);
 
   useEffect(() => {
