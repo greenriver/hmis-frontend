@@ -129,14 +129,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
     id: item.linkId,
-    warnIfEmptyTreatment:
-      warnIfEmpty &&
-      (!!item.warnIfEmpty || !!item.required) &&
-      !disabled &&
-      !inputProps?.disabled &&
-      !hasMeaningfulValue(value),
     ...inputProps,
   };
+  commonInputProps.warnIfEmptyTreatment =
+    warnIfEmpty &&
+    (!!item.warnIfEmpty || !!item.required) &&
+    !commonInputProps.disabled &&
+    !commonInputProps.error &&
+    !hasMeaningfulValue(value);
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,

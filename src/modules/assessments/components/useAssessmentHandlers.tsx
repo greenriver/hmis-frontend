@@ -34,23 +34,23 @@ export function useAssessmentHandlers({
 }: Args) {
   const formDefinitionId = definition.id;
 
-  const [errors, setErrors] = useState<ValidationError[] | undefined>();
+  const [errors, setErrors] = useState<ValidationError[]>([]);
 
   const navigate = useNavigate();
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
-      let errors;
+      let errs;
       if (data.hasOwnProperty('saveAssessment')) {
-        errors = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
+        errs = (data as SaveAssessmentMutation).saveAssessment?.errors || [];
       } else {
-        errors =
+        errs =
           (data as SubmitAssessmentMutation).submitAssessment?.errors || [];
       }
 
-      if (errors.length > 0) {
+      if (errs.length > 0) {
         window.scrollTo(0, 0);
-        setErrors(errors);
+        setErrors(errs);
         return;
       }
 
