@@ -88,12 +88,16 @@ type TransformSubmitValuesParams = {
   definition: FormDefinitionJson;
   /** form state (from DynamicForm) to transform */
   values: FormValues;
+  /** ONLY transform the assessment date field */
+  assessmentDateOnly?: boolean;
+  /** whether to fill unanswered boolean questions `false` */
+  autofillBooleans?: boolean;
   /** whether to fill unanswered questions with Data Not Collected option (if present) */
   autofillNotCollected?: boolean;
   /** whether to fill unanswered questions with `null` */
   autofillNulls?: boolean;
-  /** whether to fill unanswered boolean questions `false` */
-  autofillBooleans?: boolean;
+  /** key results field name (instead of link ID) */
+  keyByFieldName?: boolean;
 };
 
 /**
@@ -105,9 +109,11 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values,
+  assessmentDateOnly = false,
+  autofillBooleans = false,
   autofillNotCollected = false,
   autofillNulls = false,
-  autofillBooleans = false,
+  keyByFieldName = false,
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
@@ -122,10 +128,13 @@ export const transformSubmitValues = ({
           : currentRecord;
         rescursiveFillMap(item.item, result, recordName);
       }
+      if (!item.fieldName) return;
+      if (assessmentDateOnly && !item.assessmentDate) return;
 
-      let key = item.fieldName;
-      if (!key) return;
-      if (currentRecord) key = `${currentRecord}.${key}`; // Enrollment.livingSituation, for example
+      // Build key for result map
+      let key = keyByFieldName ? item.fieldName : item.linkId;
+      // Prefix key like "Enrollment.livingSituation"
+      if (keyByFieldName && currentRecord) key = `${currentRecord}.${key}`;
 
       let value;
       if (item.linkId in values) {
@@ -169,8 +178,7 @@ export const gqlValueToFormValue = (
 
   switch (item.type) {
     case ItemType.Date:
-      return parseHmisDateString(value);
-
+      return typeof value === 'string' ? parseHmisDateString(value) : value;
     case ItemType.Choice:
     case ItemType.OpenChoice:
       if (Array.isArray(value)) {

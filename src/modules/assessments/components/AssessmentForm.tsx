@@ -1,14 +1,11 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
+import { assign, cloneDeep } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import {
-  alertErrorFallback,
-  ApolloErrorAlert,
-} from '@/components/elements/ErrorFallback';
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -23,6 +20,7 @@ import {
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
+  InitialBehavior,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -74,7 +72,6 @@ const AssessmentForm = ({
     assessmentId: assessment?.id,
     navigateOnComplete: !embeddedInWorkflow,
   });
-
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
@@ -87,15 +84,25 @@ const AssessmentForm = ({
     };
 
     const source = sourceAssessment || assessment;
-    let init;
-    if (!source) {
-      init = getInitialValues(definition.definition, localConstants);
-    } else {
-      const values = source.assessmentDetail?.values;
-      // FIXME make consistent
-      init = typeof values === 'string' ? JSON.parse(values) : values;
-      // Should we merge with initial values here?
+
+    // Set initial values based solely on FormDefinition
+    const init = getInitialValues(definition.definition, localConstants);
+    if (source) {
+      // Overlay initial values from source Assessment
+      const initialFromSourceAssessment = cloneDeep(
+        source.assessmentDetail?.values || {}
+      );
+      assign(init, initialFromSourceAssessment);
+
+      // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
+      const initialsToOverwrite = getInitialValues(
+        definition.definition,
+        localConstants,
+        InitialBehavior.Overwrite
+      );
+      assign(init, initialsToOverwrite);
     }
+
     console.debug(
       'Initial Form State',
       init,
@@ -170,6 +177,9 @@ const AssessmentForm = ({
           loading={mutationLoading}
           errors={errors}
           showSavePrompt
+          // Only show "warn if empty" treatments if this is an existing assessment,
+          // OR if the user has attempted to submit this (new) assessment
+          warnIfEmpty={!!assessment || errors.length > 0}
         />
       </Grid>
 
@@ -196,12 +206,4 @@ const AssessmentForm = ({
   );
 };
 
-const WrappedAssessment = (props: Props) => (
-  <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
-      <AssessmentForm {...props} />
-    </Sentry.ErrorBoundary>
-  </Box>
-);
-
-export default WrappedAssessment;
+export default AssessmentForm;

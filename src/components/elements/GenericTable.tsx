@@ -132,10 +132,7 @@ const GenericTable = <T extends { id: string }>({
     <TableHead sx={{ '.MuiTableCell-head': { verticalAlign: 'bottom' } }}>
       {renderVerticalHeaderCell && (
         <TableRow>
-          <TableCell
-            key='empty'
-            sx={{ backgroundColor: (theme) => theme.palette.background.paper }}
-          />
+          <TableCell key='empty' sx={{ backgroundColor: 'background.paper' }} />
           {rows.map((row, idx) => (
             <TableCell key={row.id} sx={verticalCellSx(idx)}>
               {renderVerticalHeaderCell(row)}

@@ -98,6 +98,21 @@ export type AssessmentDetail = {
   values?: Maybe<Scalars['JsonObject']>;
 };
 
+export type AssessmentInput = {
+  /** Required if updating an existing assessment */
+  assessmentId?: InputMaybe<Scalars['ID']>;
+  /** Whether warnings have been confirmed */
+  confirmed?: InputMaybe<Scalars['Boolean']>;
+  /** Required if saving a new assessment */
+  enrollmentId?: InputMaybe<Scalars['ID']>;
+  /** Required if saving a new assessment */
+  formDefinitionId?: InputMaybe<Scalars['ID']>;
+  /** Transformed HUD values as JSON */
+  hudValues?: InputMaybe<Scalars['JsonObject']>;
+  /** Raw form state as JSON */
+  values?: InputMaybe<Scalars['JsonObject']>;
+};
+
 /** 4.19.4 */
 export enum AssessmentLevel {
   /** (1) Crisis Needs Assessment */
@@ -125,6 +140,7 @@ export enum AssessmentRole {
 /** HUD Assessment Sorting Options */
 export enum AssessmentSortOption {
   AssessmentDate = 'ASSESSMENT_DATE',
+  DateUpdated = 'DATE_UPDATED',
 }
 
 /** 4.19.3 */
@@ -155,11 +171,13 @@ export type AutofillValue = {
   __typename?: 'AutofillValue';
   autofillBehavior: EnableBehavior;
   autofillWhen: Array<EnableWhen>;
-  /** If question is boolean type, autofill value */
+  /** Link IDs of numeric questions to sum up and set as the value if condition is met */
+  sumQuestions?: Maybe<Array<Scalars['String']>>;
+  /** Value to autofill if condition is met */
   valueBoolean?: Maybe<Scalars['Boolean']>;
-  /** If question is choice type, autofill value */
+  /** Value to autofill if condition is met */
   valueCode?: Maybe<Scalars['String']>;
-  /** If question is numeric, autofill value */
+  /** Value to autofill if condition is met */
   valueNumber?: Maybe<Scalars['Int']>;
 };
 
@@ -286,6 +304,7 @@ export type ClientEnrollmentsArgs = {
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
@@ -387,14 +406,14 @@ export enum Component {
   AlertWarning = 'ALERT_WARNING',
   /** Render a boolean input item as a checkbox */
   Checkbox = 'CHECKBOX',
+  /** Specialized component for rendering disabilities in a table */
+  DisabilityTable = 'DISABILITY_TABLE',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
   /** Render contents in an info box */
   InfoGroup = 'INFO_GROUP',
   /** Render a group that contains children of the same type (e.g. all booleans) */
   InputGroup = 'INPUT_GROUP',
-  /** Render inputs as a table. Each nested group is rendered as a row. */
-  InputTable = 'INPUT_TABLE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -837,8 +856,10 @@ export type DisabilityGroup = {
   chronicHealthCondition?: Maybe<NoYesReasonsForMissingData>;
   chronicHealthConditionIndefiniteAndImpairs?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
+  dateCreated?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated?: Maybe<Scalars['ISO8601DateTime']>;
   developmentalDisability?: Maybe<NoYesReasonsForMissingData>;
-  /** Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group. */
+  /** Current disabling condition on the linked Enrollment. It may not match up with the disabilities specified in this group. */
   disablingCondition: NoYesReasonsForMissingData;
   enrollment: Enrollment;
   hivAids?: Maybe<NoYesReasonsForMissingData>;
@@ -1148,8 +1169,14 @@ export type FormDefinitionJson = {
 /** A question or group of questions */
 export type FormItem = {
   __typename?: 'FormItem';
+  /**
+   * Whether this item corresponds to the assessment date. Must be used with DATE
+   * type. Should be used no more than once per form
+   */
+  assessmentDate?: Maybe<Scalars['Boolean']>;
   /** Value(s) to autofill based on conditional logic */
   autofillValues?: Maybe<Array<AutofillValue>>;
+  /** Bounds applied to the input value */
   bounds?: Maybe<Array<ValueBound>>;
   /** Label to use for placeholder and population table */
   briefText?: Maybe<Scalars['String']>;
@@ -1163,7 +1190,7 @@ export type FormItem = {
   enableWhen?: Maybe<Array<EnableWhen>>;
   /**
    * Name of the field on the record (or on the query input type). Used for record
-   * creation/update forms and for assessment population.
+   * creation/update forms, for assessment population, and for assessment extraction.
    */
   fieldName?: Maybe<Scalars['String']>;
   /** Include this item only for the listed funders */
@@ -1182,6 +1209,11 @@ export type FormItem = {
   pickListOptions?: Maybe<Array<PickListOption>>;
   /** Reference to value set of possible answer options */
   pickListReference?: Maybe<Scalars['String']>;
+  /**
+   * Whether to allow pre-filling section from recent records. Should only be
+   * enabled in conjunction with record_type and for top-level group items.
+   */
+  prefill?: Maybe<Scalars['Boolean']>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
   /** Exclude this item for the listed project types */
@@ -1190,7 +1222,7 @@ export type FormItem = {
   projectTypesIncluded?: Maybe<Array<ProjectType>>;
   /** Whether human editing is allowed */
   readOnly?: Maybe<Scalars['Boolean']>;
-  /** Record type to use for population */
+  /** Record type to use for population and extraction */
   recordType?: Maybe<RelatedRecordType>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
   repeats?: Maybe<Scalars['Boolean']>;
@@ -1203,6 +1235,8 @@ export type FormItem = {
   /** Primary text for the item */
   text?: Maybe<Scalars['String']>;
   type: ItemType;
+  /** Whether to show a warning if this question is unanswered */
+  warnIfEmpty?: Maybe<Scalars['Boolean']>;
 };
 
 export type Funder = {
@@ -1354,33 +1388,33 @@ export enum FundingSource {
 /** HUD Gender (1.7) */
 export enum Gender {
   /** (8) Client doesn't know */
-  GenderClientDoesnTKnow = 'GENDER_CLIENT_DOESN_T_KNOW',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
   /** (9) Client refused */
-  GenderClientRefused = 'GENDER_CLIENT_REFUSED',
+  ClientRefused = 'CLIENT_REFUSED',
   /** (99) Data not collected */
-  GenderDataNotCollected = 'GENDER_DATA_NOT_COLLECTED',
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** (0) Female */
-  GenderFemale = 'GENDER_FEMALE',
+  Female = 'FEMALE',
   /** (1) Male */
-  GenderMale = 'GENDER_MALE',
+  Male = 'MALE',
   /** (4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender) */
-  GenderNoSingleGender = 'GENDER_NO_SINGLE_GENDER',
+  NoSingleGender = 'NO_SINGLE_GENDER',
   /** (6) Questioning */
-  GenderQuestioning = 'GENDER_QUESTIONING',
+  Questioning = 'QUESTIONING',
   /** (5) Transgender */
-  GenderTransgender = 'GENDER_TRANSGENDER',
+  Transgender = 'TRANSGENDER',
 }
 
 /** 2.03.4 */
 export enum GeographyType {
+  /** (99) Unknown / data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (3) Rural */
   Rural = 'RURAL',
   /** (2) Suburban */
   Suburban = 'SUBURBAN',
-  /** (99) Unknown / data not collected */
-  UnknownDataNotCollected = 'UNKNOWN_DATA_NOT_COLLECTED',
   /** (1) Urban */
   Urban = 'URBAN',
 }
@@ -1588,16 +1622,24 @@ export type IncomeBenefitsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+export enum InitialBehavior {
+  /** When loading the form, only set the specified initial value if there is no existing value. */
+  IfEmpty = 'IF_EMPTY',
+  /** When loading the form, always overwrite the existing value with specified initial value. */
+  Overwrite = 'OVERWRITE',
+}
+
 /** Initial value when item is first rendered */
 export type InitialValue = {
   __typename?: 'InitialValue';
-  /** If question is boolean type, initial value */
+  initialBehavior: InitialBehavior;
+  /** Boolean to set as initial value */
   valueBoolean?: Maybe<Scalars['Boolean']>;
-  /** If question is choice type, initial value */
+  /** Code to set as initial value */
   valueCode?: Maybe<Scalars['String']>;
   /** Name of local variable to use as initial value if present. Variable type should match item type. */
   valueLocalConstant?: Maybe<Scalars['String']>;
-  /** If question is numeric, initial value */
+  /** Number to set as initial value */
   valueNumber?: Maybe<Scalars['Int']>;
 };
 
@@ -2222,6 +2264,7 @@ export type ProjectEnrollmentsArgs = {
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -2464,21 +2507,21 @@ export type QueryServiceArgs = {
 /** HUD Race (1.7) */
 export enum Race {
   /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
-  RaceAmIndAkNative = 'RACE_AM_IND_AK_NATIVE',
+  AmIndAkNative = 'AM_IND_AK_NATIVE',
   /** (Asian) Asian or Asian American */
-  RaceAsian = 'RACE_ASIAN',
+  Asian = 'ASIAN',
   /** (BlackAfAmerican) Black, African American, or African */
-  RaceBlackAfAmerican = 'RACE_BLACK_AF_AMERICAN',
-  /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
-  RaceNativeHiPacific = 'RACE_NATIVE_HI_PACIFIC',
-  /** (99) Data not collected */
-  RaceNotCollected = 'RACE_NOT_COLLECTED',
-  /** (9) Client refused */
-  RaceRefused = 'RACE_REFUSED',
+  BlackAfAmerican = 'BLACK_AF_AMERICAN',
   /** (8) Client doesn't know */
-  RaceUnknown = 'RACE_UNKNOWN',
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (NativeHIPacific) Native Hawaiian or Pacific Islander */
+  NativeHiPacific = 'NATIVE_HI_PACIFIC',
   /** (White) White */
-  RaceWhite = 'RACE_WHITE',
+  White = 'WHITE',
 }
 
 /** 4.04.A */
@@ -2633,18 +2676,9 @@ export enum SsnDataQuality {
 
 /** Autogenerated input type of SaveAssessment */
 export type SaveAssessmentInput = {
-  /** Date with format yyyy-mm-dd */
-  assessmentDate?: InputMaybe<Scalars['String']>;
-  /** Required if updating an existing assessment */
-  assessmentId?: InputMaybe<Scalars['ID']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** Required if saving a new assessment */
-  enrollmentId?: InputMaybe<Scalars['ID']>;
-  /** Required if saving a new assessment */
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
-  /** Form state as JSON */
-  values: Scalars['JsonObject'];
+  input: AssessmentInput;
 };
 
 /** Autogenerated return type of SaveAssessment */
@@ -2986,20 +3020,9 @@ export type SetHoHForEnrollmentPayload = {
 
 /** Autogenerated input type of SubmitAssessment */
 export type SubmitAssessmentInput = {
-  /** Date with format yyyy-mm-dd */
-  assessmentDate?: InputMaybe<Scalars['String']>;
-  /** Required if updating an existing assessment */
-  assessmentId?: InputMaybe<Scalars['ID']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
-  /** Required if saving a new assessment */
-  enrollmentId?: InputMaybe<Scalars['ID']>;
-  /** Required if saving a new assessment */
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
-  /** Transformed HUD values as JSON */
-  hudValues?: InputMaybe<Scalars['JsonObject']>;
-  /** Form state as JSON */
-  values: Scalars['JsonObject'];
+  input: AssessmentInput;
 };
 
 /** Autogenerated return type of SubmitAssessment */
@@ -3288,19 +3311,41 @@ export type User = {
 
 export type ValidationError = {
   __typename?: 'ValidationError';
-  attribute?: Maybe<Scalars['String']>;
-  fullMessage?: Maybe<Scalars['String']>;
+  attribute: Scalars['String'];
+  fullMessage: Scalars['String'];
   id?: Maybe<Scalars['String']>;
+  /** Link ID of form item if this error is linked to a specific item */
+  linkId?: Maybe<Scalars['String']>;
   message: Scalars['String'];
-  options?: Maybe<Scalars['JsonObject']>;
-  type: Scalars['String'];
+  readableAttribute?: Maybe<Scalars['String']>;
+  severity: ValidationSeverity;
+  type: ValidationType;
 };
 
-/** Bound for the response value. The bound may or may not be dependent on another questions answer. */
+export enum ValidationSeverity {
+  Error = 'error',
+  Warning = 'warning',
+}
+
+export enum ValidationType {
+  DataNotCollected = 'data_not_collected',
+  Information = 'information',
+  Invalid = 'invalid',
+  NotFound = 'not_found',
+  OutOfRange = 'out_of_range',
+  Required = 'required',
+  ServerError = 'server_error',
+}
+
+/** Bound applied to the response value. The bound may or may not be dependent on another questions answer. */
 export type ValueBound = {
   __typename?: 'ValueBound';
-  /** Link ID of dependent question, if bound value should be equal to the questions answer */
+  /** Unique identifier for this bound */
+  id?: Maybe<Scalars['String']>;
+  /** Link ID of dependent question, if this items value should be compared to another items value */
   question?: Maybe<Scalars['String']>;
+  /** Severity of bound. If error, user will be unable to submit a value that does not meet this condition. */
+  severity: ValidationSeverity;
   type: BoundType;
   valueDate?: Maybe<Scalars['ISO8601Date']>;
   valueNumber?: Maybe<Scalars['Int']>;
@@ -3389,6 +3434,7 @@ export type ItemFieldsFragment = {
   briefText?: string | null;
   helperText?: string | null;
   required?: boolean | null;
+  warnIfEmpty?: boolean | null;
   hidden?: boolean | null;
   readOnly?: boolean | null;
   repeats?: boolean | null;
@@ -3397,11 +3443,15 @@ export type ItemFieldsFragment = {
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
+  assessmentDate?: boolean | null;
+  prefill?: boolean | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
   bounds?: Array<{
     __typename?: 'ValueBound';
+    id?: string | null;
+    severity: ValidationSeverity;
     type: BoundType;
     question?: string | null;
     valueNumber?: number | null;
@@ -3422,6 +3472,7 @@ export type ItemFieldsFragment = {
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     valueLocalConstant?: string | null;
+    initialBehavior: InitialBehavior;
   }> | null;
   enableWhen?: Array<{
     __typename?: 'EnableWhen';
@@ -3439,6 +3490,7 @@ export type ItemFieldsFragment = {
     valueCode?: string | null;
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
+    sumQuestions?: Array<string> | null;
     autofillBehavior: EnableBehavior;
     autofillWhen: Array<{
       __typename?: 'EnableWhen';
@@ -3473,6 +3525,7 @@ export type FormDefinitionWithJsonFragment = {
       briefText?: string | null;
       helperText?: string | null;
       required?: boolean | null;
+      warnIfEmpty?: boolean | null;
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
@@ -3481,6 +3534,8 @@ export type FormDefinitionWithJsonFragment = {
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
+      assessmentDate?: boolean | null;
+      prefill?: boolean | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -3494,6 +3549,7 @@ export type FormDefinitionWithJsonFragment = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -3502,6 +3558,8 @@ export type FormDefinitionWithJsonFragment = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -3515,6 +3573,7 @@ export type FormDefinitionWithJsonFragment = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -3523,6 +3582,8 @@ export type FormDefinitionWithJsonFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3536,6 +3597,7 @@ export type FormDefinitionWithJsonFragment = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -3544,6 +3606,8 @@ export type FormDefinitionWithJsonFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3557,6 +3621,7 @@ export type FormDefinitionWithJsonFragment = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -3565,11 +3630,15 @@ export type FormDefinitionWithJsonFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -3590,6 +3659,7 @@ export type FormDefinitionWithJsonFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -3607,6 +3677,7 @@ export type FormDefinitionWithJsonFragment = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -3623,6 +3694,8 @@ export type FormDefinitionWithJsonFragment = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
               valueNumber?: number | null;
@@ -3643,6 +3716,7 @@ export type FormDefinitionWithJsonFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -3660,6 +3734,7 @@ export type FormDefinitionWithJsonFragment = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -3676,6 +3751,8 @@ export type FormDefinitionWithJsonFragment = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
+            id?: string | null;
+            severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
             valueNumber?: number | null;
@@ -3696,6 +3773,7 @@ export type FormDefinitionWithJsonFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -3713,6 +3791,7 @@ export type FormDefinitionWithJsonFragment = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -3729,6 +3808,8 @@ export type FormDefinitionWithJsonFragment = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
+          id?: string | null;
+          severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
           valueNumber?: number | null;
@@ -3749,6 +3830,7 @@ export type FormDefinitionWithJsonFragment = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -3766,6 +3848,7 @@ export type FormDefinitionWithJsonFragment = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -3782,6 +3865,8 @@ export type FormDefinitionWithJsonFragment = {
       }> | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
+        id?: string | null;
+        severity: ValidationSeverity;
         type: BoundType;
         question?: string | null;
         valueNumber?: number | null;
@@ -3802,6 +3887,7 @@ export type FormDefinitionWithJsonFragment = {
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         valueLocalConstant?: string | null;
+        initialBehavior: InitialBehavior;
       }> | null;
       enableWhen?: Array<{
         __typename?: 'EnableWhen';
@@ -3819,6 +3905,7 @@ export type FormDefinitionWithJsonFragment = {
         valueCode?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
+        sumQuestions?: Array<string> | null;
         autofillBehavior: EnableBehavior;
         autofillWhen: Array<{
           __typename?: 'EnableWhen';
@@ -3918,6 +4005,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -3926,6 +4014,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -3939,6 +4029,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -3947,6 +4038,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -3960,6 +4053,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -3968,6 +4062,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -3981,6 +4077,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -3989,6 +4086,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4002,6 +4101,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -4010,11 +4110,15 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
+                    id?: string | null;
+                    severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
                     valueNumber?: number | null;
@@ -4035,6 +4139,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -4052,6 +4157,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -4068,6 +4174,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -4088,6 +4196,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -4105,6 +4214,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -4121,6 +4231,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -4141,6 +4253,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -4158,6 +4271,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -4174,6 +4288,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
               valueNumber?: number | null;
@@ -4194,6 +4310,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -4211,6 +4328,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -4227,6 +4345,8 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
+            id?: string | null;
+            severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
             valueNumber?: number | null;
@@ -4247,6 +4367,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -4264,6 +4385,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -4376,6 +4498,7 @@ export type GetAssessmentQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -4384,6 +4507,8 @@ export type GetAssessmentQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4397,6 +4522,7 @@ export type GetAssessmentQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -4405,6 +4531,8 @@ export type GetAssessmentQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4418,6 +4546,7 @@ export type GetAssessmentQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -4426,6 +4555,8 @@ export type GetAssessmentQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -4439,6 +4570,7 @@ export type GetAssessmentQuery = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -4447,6 +4579,8 @@ export type GetAssessmentQuery = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -4460,6 +4594,7 @@ export type GetAssessmentQuery = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -4468,11 +4603,15 @@ export type GetAssessmentQuery = {
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
+                    assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
+                      id?: string | null;
+                      severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
                       valueNumber?: number | null;
@@ -4493,6 +4632,7 @@ export type GetAssessmentQuery = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -4510,6 +4650,7 @@ export type GetAssessmentQuery = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -4526,6 +4667,8 @@ export type GetAssessmentQuery = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
+                    id?: string | null;
+                    severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
                     valueNumber?: number | null;
@@ -4546,6 +4689,7 @@ export type GetAssessmentQuery = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -4563,6 +4707,7 @@ export type GetAssessmentQuery = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -4579,6 +4724,8 @@ export type GetAssessmentQuery = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -4599,6 +4746,7 @@ export type GetAssessmentQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -4616,6 +4764,7 @@ export type GetAssessmentQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -4632,6 +4781,8 @@ export type GetAssessmentQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -4652,6 +4803,7 @@ export type GetAssessmentQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -4669,6 +4821,7 @@ export type GetAssessmentQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -4685,6 +4838,8 @@ export type GetAssessmentQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
               valueNumber?: number | null;
@@ -4705,6 +4860,7 @@ export type GetAssessmentQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -4722,6 +4878,7 @@ export type GetAssessmentQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -4837,6 +4994,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -4845,6 +5003,8 @@ export type GetFormDefinitionByIdentifierQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -4858,6 +5018,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -4866,6 +5027,8 @@ export type GetFormDefinitionByIdentifierQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -4879,6 +5042,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -4887,6 +5051,8 @@ export type GetFormDefinitionByIdentifierQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -4900,6 +5066,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -4908,6 +5075,8 @@ export type GetFormDefinitionByIdentifierQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -4921,6 +5090,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -4929,11 +5099,15 @@ export type GetFormDefinitionByIdentifierQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -4954,6 +5128,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -4971,6 +5146,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -4987,6 +5163,8 @@ export type GetFormDefinitionByIdentifierQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -5007,6 +5185,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -5024,6 +5203,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -5040,6 +5220,8 @@ export type GetFormDefinitionByIdentifierQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
               valueNumber?: number | null;
@@ -5060,6 +5242,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -5077,6 +5260,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -5093,6 +5277,8 @@ export type GetFormDefinitionByIdentifierQuery = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
+            id?: string | null;
+            severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
             valueNumber?: number | null;
@@ -5113,6 +5299,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -5130,6 +5317,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -5146,6 +5334,8 @@ export type GetFormDefinitionByIdentifierQuery = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
+          id?: string | null;
+          severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
           valueNumber?: number | null;
@@ -5166,6 +5356,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -5183,6 +5374,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -5227,6 +5419,7 @@ export type GetFormDefinitionQuery = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -5235,6 +5428,8 @@ export type GetFormDefinitionQuery = {
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill?: boolean | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -5248,6 +5443,7 @@ export type GetFormDefinitionQuery = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -5256,6 +5452,8 @@ export type GetFormDefinitionQuery = {
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -5269,6 +5467,7 @@ export type GetFormDefinitionQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -5277,6 +5476,8 @@ export type GetFormDefinitionQuery = {
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -5290,6 +5491,7 @@ export type GetFormDefinitionQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -5298,6 +5500,8 @@ export type GetFormDefinitionQuery = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5311,6 +5515,7 @@ export type GetFormDefinitionQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -5319,11 +5524,15 @@ export type GetFormDefinitionQuery = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -5344,6 +5553,7 @@ export type GetFormDefinitionQuery = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -5361,6 +5571,7 @@ export type GetFormDefinitionQuery = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -5377,6 +5588,8 @@ export type GetFormDefinitionQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -5397,6 +5610,7 @@ export type GetFormDefinitionQuery = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -5414,6 +5628,7 @@ export type GetFormDefinitionQuery = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -5430,6 +5645,8 @@ export type GetFormDefinitionQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
               valueNumber?: number | null;
@@ -5450,6 +5667,7 @@ export type GetFormDefinitionQuery = {
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
             }> | null;
             enableWhen?: Array<{
               __typename?: 'EnableWhen';
@@ -5467,6 +5685,7 @@ export type GetFormDefinitionQuery = {
               valueCode?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
@@ -5483,6 +5702,8 @@ export type GetFormDefinitionQuery = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
+            id?: string | null;
+            severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
             valueNumber?: number | null;
@@ -5503,6 +5724,7 @@ export type GetFormDefinitionQuery = {
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
           }> | null;
           enableWhen?: Array<{
             __typename?: 'EnableWhen';
@@ -5520,6 +5742,7 @@ export type GetFormDefinitionQuery = {
             valueCode?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
@@ -5536,6 +5759,8 @@ export type GetFormDefinitionQuery = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
+          id?: string | null;
+          severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
           valueNumber?: number | null;
@@ -5556,6 +5781,7 @@ export type GetFormDefinitionQuery = {
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
         }> | null;
         enableWhen?: Array<{
           __typename?: 'EnableWhen';
@@ -5573,6 +5799,7 @@ export type GetFormDefinitionQuery = {
           valueCode?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
@@ -5592,11 +5819,7 @@ export type GetFormDefinitionQuery = {
 };
 
 export type SaveAssessmentMutationVariables = Exact<{
-  assessmentId?: InputMaybe<Scalars['ID']>;
-  enrollmentId?: InputMaybe<Scalars['ID']>;
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
-  values: Scalars['JsonObject'];
-  assessmentDate?: InputMaybe<Scalars['String']>;
+  input: SaveAssessmentInput;
 }>;
 
 export type SaveAssessmentMutation = {
@@ -5641,6 +5864,7 @@ export type SaveAssessmentMutation = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -5649,6 +5873,8 @@ export type SaveAssessmentMutation = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5662,6 +5888,7 @@ export type SaveAssessmentMutation = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -5670,6 +5897,8 @@ export type SaveAssessmentMutation = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5683,6 +5912,7 @@ export type SaveAssessmentMutation = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -5691,6 +5921,8 @@ export type SaveAssessmentMutation = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -5704,6 +5936,7 @@ export type SaveAssessmentMutation = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -5712,6 +5945,8 @@ export type SaveAssessmentMutation = {
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
+                    assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -5725,6 +5960,7 @@ export type SaveAssessmentMutation = {
                       briefText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
+                      warnIfEmpty?: boolean | null;
                       hidden?: boolean | null;
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
@@ -5733,11 +5969,15 @@ export type SaveAssessmentMutation = {
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
+                      assessmentDate?: boolean | null;
+                      prefill?: boolean | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
                       bounds?: Array<{
                         __typename?: 'ValueBound';
+                        id?: string | null;
+                        severity: ValidationSeverity;
                         type: BoundType;
                         question?: string | null;
                         valueNumber?: number | null;
@@ -5758,6 +5998,7 @@ export type SaveAssessmentMutation = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         valueLocalConstant?: string | null;
+                        initialBehavior: InitialBehavior;
                       }> | null;
                       enableWhen?: Array<{
                         __typename?: 'EnableWhen';
@@ -5775,6 +6016,7 @@ export type SaveAssessmentMutation = {
                         valueCode?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
+                        sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
@@ -5791,6 +6033,8 @@ export type SaveAssessmentMutation = {
                     }> | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
+                      id?: string | null;
+                      severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
                       valueNumber?: number | null;
@@ -5811,6 +6055,7 @@ export type SaveAssessmentMutation = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -5828,6 +6073,7 @@ export type SaveAssessmentMutation = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -5844,6 +6090,8 @@ export type SaveAssessmentMutation = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
+                    id?: string | null;
+                    severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
                     valueNumber?: number | null;
@@ -5864,6 +6112,7 @@ export type SaveAssessmentMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -5881,6 +6130,7 @@ export type SaveAssessmentMutation = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -5897,6 +6147,8 @@ export type SaveAssessmentMutation = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -5917,6 +6169,7 @@ export type SaveAssessmentMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -5934,6 +6187,7 @@ export type SaveAssessmentMutation = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -5950,6 +6204,8 @@ export type SaveAssessmentMutation = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -5970,6 +6226,7 @@ export type SaveAssessmentMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -5987,6 +6244,7 @@ export type SaveAssessmentMutation = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -6008,22 +6266,19 @@ export type SaveAssessmentMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
 };
 
 export type SubmitAssessmentMutationVariables = Exact<{
-  assessmentId?: InputMaybe<Scalars['ID']>;
-  enrollmentId?: InputMaybe<Scalars['ID']>;
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
-  values: Scalars['JsonObject'];
-  hudValues?: InputMaybe<Scalars['JsonObject']>;
-  assessmentDate?: InputMaybe<Scalars['String']>;
+  input: SubmitAssessmentInput;
 }>;
 
 export type SubmitAssessmentMutation = {
@@ -6068,6 +6323,7 @@ export type SubmitAssessmentMutation = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -6076,6 +6332,8 @@ export type SubmitAssessmentMutation = {
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -6089,6 +6347,7 @@ export type SubmitAssessmentMutation = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -6097,6 +6356,8 @@ export type SubmitAssessmentMutation = {
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -6110,6 +6371,7 @@ export type SubmitAssessmentMutation = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -6118,6 +6380,8 @@ export type SubmitAssessmentMutation = {
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: boolean | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
@@ -6131,6 +6395,7 @@ export type SubmitAssessmentMutation = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -6139,6 +6404,8 @@ export type SubmitAssessmentMutation = {
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
                     size?: InputSize | null;
+                    assessmentDate?: boolean | null;
+                    prefill?: boolean | null;
                     dataCollectedAbout?: DataCollectedAbout | null;
                     disabledDisplay?: DisabledDisplay | null;
                     enableBehavior?: EnableBehavior | null;
@@ -6152,6 +6419,7 @@ export type SubmitAssessmentMutation = {
                       briefText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
+                      warnIfEmpty?: boolean | null;
                       hidden?: boolean | null;
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
@@ -6160,11 +6428,15 @@ export type SubmitAssessmentMutation = {
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
                       size?: InputSize | null;
+                      assessmentDate?: boolean | null;
+                      prefill?: boolean | null;
                       dataCollectedAbout?: DataCollectedAbout | null;
                       disabledDisplay?: DisabledDisplay | null;
                       enableBehavior?: EnableBehavior | null;
                       bounds?: Array<{
                         __typename?: 'ValueBound';
+                        id?: string | null;
+                        severity: ValidationSeverity;
                         type: BoundType;
                         question?: string | null;
                         valueNumber?: number | null;
@@ -6185,6 +6457,7 @@ export type SubmitAssessmentMutation = {
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         valueLocalConstant?: string | null;
+                        initialBehavior: InitialBehavior;
                       }> | null;
                       enableWhen?: Array<{
                         __typename?: 'EnableWhen';
@@ -6202,6 +6475,7 @@ export type SubmitAssessmentMutation = {
                         valueCode?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
+                        sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
@@ -6218,6 +6492,8 @@ export type SubmitAssessmentMutation = {
                     }> | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
+                      id?: string | null;
+                      severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
                       valueNumber?: number | null;
@@ -6238,6 +6514,7 @@ export type SubmitAssessmentMutation = {
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       valueLocalConstant?: string | null;
+                      initialBehavior: InitialBehavior;
                     }> | null;
                     enableWhen?: Array<{
                       __typename?: 'EnableWhen';
@@ -6255,6 +6532,7 @@ export type SubmitAssessmentMutation = {
                       valueCode?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
+                      sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
@@ -6271,6 +6549,8 @@ export type SubmitAssessmentMutation = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
+                    id?: string | null;
+                    severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
                     valueNumber?: number | null;
@@ -6291,6 +6571,7 @@ export type SubmitAssessmentMutation = {
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
                   }> | null;
                   enableWhen?: Array<{
                     __typename?: 'EnableWhen';
@@ -6308,6 +6589,7 @@ export type SubmitAssessmentMutation = {
                     valueCode?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
@@ -6324,6 +6606,8 @@ export type SubmitAssessmentMutation = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
                   valueNumber?: number | null;
@@ -6344,6 +6628,7 @@ export type SubmitAssessmentMutation = {
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
                 }> | null;
                 enableWhen?: Array<{
                   __typename?: 'EnableWhen';
@@ -6361,6 +6646,7 @@ export type SubmitAssessmentMutation = {
                   valueCode?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
@@ -6377,6 +6663,8 @@ export type SubmitAssessmentMutation = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
                 valueNumber?: number | null;
@@ -6397,6 +6685,7 @@ export type SubmitAssessmentMutation = {
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
               }> | null;
               enableWhen?: Array<{
                 __typename?: 'EnableWhen';
@@ -6414,6 +6703,7 @@ export type SubmitAssessmentMutation = {
                 valueCode?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
@@ -6435,10 +6725,12 @@ export type SubmitAssessmentMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -6515,10 +6807,12 @@ export type GetAssessmentsForPopulationQuery = {
 
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
-  type: string;
-  attribute?: string | null;
+  type: ValidationType;
+  attribute: string;
+  readableAttribute?: string | null;
   message: string;
-  fullMessage?: string | null;
+  fullMessage: string;
+  severity: ValidationSeverity;
   id?: string | null;
 };
 
@@ -6681,6 +6975,10 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   dateToStreetEssh?: string | null;
   timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
   monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  intakeAssessment?: {
+    __typename?: 'Assessment';
+    user?: { __typename?: 'User'; name: string } | null;
+  } | null;
   project: {
     __typename?: 'Project';
     id: string;
@@ -6872,6 +7170,8 @@ export type DisabilityGroupFieldsFragment = {
   physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
   substanceUseDisorder?: DisabilityResponse | null;
   substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -7151,6 +7451,10 @@ export type GetRecentEnrollmentsQuery = {
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        intakeAssessment?: {
+          __typename?: 'Assessment';
+          user?: { __typename?: 'User'; name: string } | null;
+        } | null;
         project: {
           __typename?: 'Project';
           id: string;
@@ -7204,10 +7508,12 @@ export type CreateClientMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7254,10 +7560,12 @@ export type UpdateClientMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7285,10 +7593,12 @@ export type UpdateClientImageMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7315,10 +7625,12 @@ export type DeleteClientImageMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7352,10 +7664,12 @@ export type CreateEnrollmentMutation = {
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7416,10 +7730,12 @@ export type UpdateEnrollmentMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7480,10 +7796,12 @@ export type SetHoHMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7517,10 +7835,12 @@ export type DeleteEnrollmentMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7581,10 +7901,12 @@ export type AddHouseholdMembersMutation = {
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7639,10 +7961,12 @@ export type AddServiceToEnrollmentMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7674,10 +7998,12 @@ export type UpdateServiceMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -7709,10 +8035,12 @@ export type DeleteServiceMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8057,6 +8385,8 @@ export type GetRecentDisabilitiesQuery = {
       physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       substanceUseDisorder?: DisabilityResponse | null;
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -8437,6 +8767,7 @@ export type GetProjectQuery = {
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   clientSearchTerm?: InputMaybe<Scalars['String']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -8492,10 +8823,12 @@ export type DeleteProjectMutation = {
     project?: { __typename?: 'Project'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8656,10 +8989,12 @@ export type DeleteOrganizationMutation = {
     organization?: { __typename?: 'Organization'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8741,10 +9076,12 @@ export type CreateProjectMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8783,10 +9120,12 @@ export type UpdateProjectMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8811,10 +9150,12 @@ export type CreateOrganizationMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8839,10 +9180,12 @@ export type UpdateOrganizationMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -8976,10 +9319,12 @@ export type CreateInventoryMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9011,10 +9356,12 @@ export type UpdateInventoryMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9032,10 +9379,12 @@ export type DeleteInventoryMutation = {
     inventory?: { __typename?: 'Inventory'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9064,10 +9413,12 @@ export type CreateFunderMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9096,10 +9447,12 @@ export type UpdateFunderMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9117,10 +9470,12 @@ export type DeleteFunderMutation = {
     funder?: { __typename?: 'Funder'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9152,10 +9507,12 @@ export type CreateProjectCocMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9187,10 +9544,12 @@ export type UpdateProjectCocMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9208,10 +9567,12 @@ export type DeleteProjectCocMutation = {
     projectCoc?: { __typename?: 'ProjectCoc'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9243,10 +9604,12 @@ export type CreateBedsMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9278,10 +9641,12 @@ export type CreateUnitsMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9313,10 +9678,12 @@ export type DeleteUnitsMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9348,10 +9715,12 @@ export type DeleteBedsMutation = {
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9376,10 +9745,12 @@ export type UpdateUnitsMutation = {
     }>;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9406,10 +9777,12 @@ export type UpdateBedsMutation = {
     }>;
     errors: Array<{
       __typename?: 'ValidationError';
-      type: string;
-      attribute?: string | null;
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
       message: string;
-      fullMessage?: string | null;
+      fullMessage: string;
+      severity: ValidationSeverity;
       id?: string | null;
     }>;
   } | null;
@@ -9514,6 +9887,7 @@ export const ItemFieldsFragmentDoc = gql`
     briefText
     helperText
     required
+    warnIfEmpty
     hidden
     readOnly
     repeats
@@ -9522,7 +9896,11 @@ export const ItemFieldsFragmentDoc = gql`
     pickListReference
     serviceDetailType
     size
+    assessmentDate
+    prefill
     bounds {
+      id
+      severity
       type
       question
       valueNumber
@@ -9536,6 +9914,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueBoolean
       valueNumber
       valueLocalConstant
+      initialBehavior
     }
     dataCollectedAbout
     disabledDisplay
@@ -9547,6 +9926,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueCode
       valueBoolean
       valueNumber
+      sumQuestions
       autofillBehavior
       autofillWhen {
         ...EnableWhenFields
@@ -9637,8 +10017,10 @@ export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
     attribute
+    readableAttribute
     message
     fullMessage
+    severity
     id
   }
 `;
@@ -9759,6 +10141,11 @@ export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
     dateToStreetEssh
     timesHomelessPastThreeYears
     monthsHomelessPastThreeYears
+    intakeAssessment {
+      user {
+        name
+      }
+    }
     project {
       id
       projectName
@@ -9934,6 +10321,8 @@ export const DisabilityGroupFieldsFragmentDoc = gql`
     physicalDisabilityIndefiniteAndImpairs
     substanceUseDisorder
     substanceUseDisorderIndefiniteAndImpairs
+    dateCreated
+    dateUpdated
   }
   ${UserFieldsFragmentDoc}
 `;
@@ -10431,22 +10820,8 @@ export type GetFormDefinitionQueryResult = Apollo.QueryResult<
   GetFormDefinitionQueryVariables
 >;
 export const SaveAssessmentDocument = gql`
-  mutation SaveAssessment(
-    $assessmentId: ID
-    $enrollmentId: ID
-    $formDefinitionId: ID
-    $values: JsonObject!
-    $assessmentDate: String
-  ) {
-    saveAssessment(
-      input: {
-        assessmentId: $assessmentId
-        enrollmentId: $enrollmentId
-        formDefinitionId: $formDefinitionId
-        assessmentDate: $assessmentDate
-        values: $values
-      }
-    ) {
+  mutation SaveAssessment($input: SaveAssessmentInput!) {
+    saveAssessment(input: $input) {
       assessment {
         ...AssessmentWithDefinitionAndValues
       }
@@ -10476,11 +10851,7 @@ export type SaveAssessmentMutationFn = Apollo.MutationFunction<
  * @example
  * const [saveAssessmentMutation, { data, loading, error }] = useSaveAssessmentMutation({
  *   variables: {
- *      assessmentId: // value for 'assessmentId'
- *      enrollmentId: // value for 'enrollmentId'
- *      formDefinitionId: // value for 'formDefinitionId'
- *      values: // value for 'values'
- *      assessmentDate: // value for 'assessmentDate'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -10506,24 +10877,8 @@ export type SaveAssessmentMutationOptions = Apollo.BaseMutationOptions<
   SaveAssessmentMutationVariables
 >;
 export const SubmitAssessmentDocument = gql`
-  mutation SubmitAssessment(
-    $assessmentId: ID
-    $enrollmentId: ID
-    $formDefinitionId: ID
-    $values: JsonObject!
-    $hudValues: JsonObject
-    $assessmentDate: String
-  ) {
-    submitAssessment(
-      input: {
-        assessmentId: $assessmentId
-        enrollmentId: $enrollmentId
-        formDefinitionId: $formDefinitionId
-        assessmentDate: $assessmentDate
-        values: $values
-        hudValues: $hudValues
-      }
-    ) {
+  mutation SubmitAssessment($input: SubmitAssessmentInput!) {
+    submitAssessment(input: $input) {
       assessment {
         ...AssessmentWithDefinitionAndValues
       }
@@ -10553,12 +10908,7 @@ export type SubmitAssessmentMutationFn = Apollo.MutationFunction<
  * @example
  * const [submitAssessmentMutation, { data, loading, error }] = useSubmitAssessmentMutation({
  *   variables: {
- *      assessmentId: // value for 'assessmentId'
- *      enrollmentId: // value for 'enrollmentId'
- *      formDefinitionId: // value for 'formDefinitionId'
- *      values: // value for 'values'
- *      hudValues: // value for 'hudValues'
- *      assessmentDate: // value for 'assessmentDate'
+ *      input: // value for 'input'
  *   },
  * });
  */
@@ -12807,6 +13157,7 @@ export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
     $clientSearchTerm: String
+    $openOnDate: ISO8601Date
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -12817,6 +13168,7 @@ export const GetProjectEnrollmentsDocument = gql`
         offset: $offset
         sortOrder: MOST_RECENT
         includeInProgress: true
+        openOnDate: $openOnDate
         clientSearchTerm: $clientSearchTerm
       ) {
         offset
@@ -12850,6 +13202,7 @@ export const GetProjectEnrollmentsDocument = gql`
  *   variables: {
  *      id: // value for 'id'
  *      clientSearchTerm: // value for 'clientSearchTerm'
+ *      openOnDate: // value for 'openOnDate'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

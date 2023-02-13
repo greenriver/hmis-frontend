@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
-import { isPickListOption } from '../util/formUtil';
+import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -18,9 +18,9 @@ import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
-import YesNoInput from '@/components/elements/input/YesNoInput';
+import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
-import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
+import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   Component,
   FormItem,
@@ -34,9 +34,11 @@ export interface DynamicInputCommonProps {
   disabled?: boolean;
   label?: ReactNode;
   error?: boolean;
+  warnIfEmptyTreatment?: boolean;
   helperText?: ReactNode;
   min?: any;
   max?: any;
+  placeholder?: string;
 }
 
 export interface DynamicFieldProps {
@@ -50,6 +52,7 @@ export interface DynamicFieldProps {
   horizontal?: boolean;
   pickListRelationId?: string;
   noLabel?: boolean;
+  warnIfEmpty?: boolean;
 }
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
@@ -93,6 +96,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   inputProps,
   pickListRelationId,
   noLabel = false,
+  warnIfEmpty = false,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -127,6 +131,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     id: item.linkId,
     ...inputProps,
   };
+  commonInputProps.warnIfEmptyTreatment =
+    warnIfEmpty &&
+    (!!item.warnIfEmpty || !!item.required) &&
+    !commonInputProps.disabled &&
+    !commonInputProps.error &&
+    !hasMeaningfulValue(value);
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,
@@ -180,12 +190,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       }
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <YesNoInput
+          <YesNoRadio
             value={value}
-            onChange={onChangeEventValue}
-            nullable={!item.required}
-            horizontal={horizontal}
-            // includeNullOption
+            onChange={onChangeValue}
             {...commonInputProps}
           />
         </InputContainer>
@@ -244,16 +251,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         </InputContainer>
       );
     case ItemType.Date:
-      // case ItemType.Dob:
       const datePickerProps = {};
+      const dateValue =
+        value && typeof value === 'string' ? parseHmisDateString(value) : value;
       // item.type === ItemType.Dob
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={value || null}
+            value={dateValue || null}
             onChange={onChangeValue}
             textInputProps={{
               id: item.linkId,

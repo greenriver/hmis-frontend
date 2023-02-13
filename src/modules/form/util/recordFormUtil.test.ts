@@ -98,6 +98,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({
@@ -124,6 +125,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition: clone,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({
@@ -162,6 +164,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition: def,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({
@@ -176,6 +179,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toEqual({ choiceField: ['OPT_1', 'OPT_2'] });
@@ -194,6 +198,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({});
@@ -208,6 +213,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({ strField: null });
@@ -221,6 +227,7 @@ describe('transformSubmitValues', () => {
     const result = transformSubmitValues({
       definition,
       values,
+      keyByFieldName: true,
     });
 
     expect(result).toStrictEqual({});
@@ -236,6 +243,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillNotCollected: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({ choiceField: 'DATA_NOT_COLLECTED' });
@@ -248,6 +256,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillNotCollected: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({ choiceField: 'DATA_NOT_COLLECTED' });
@@ -260,6 +269,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillNotCollected: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({ choiceField: 'DATA_NOT_COLLECTED' });
@@ -272,6 +282,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillNulls: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({
@@ -299,6 +310,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillNulls: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({
@@ -320,6 +332,7 @@ describe('transformSubmitValues', () => {
           values,
           autofillNulls: true,
           autofillBooleans: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({
@@ -338,6 +351,7 @@ describe('transformSubmitValues', () => {
           definition,
           values,
           autofillBooleans: true,
+          keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({

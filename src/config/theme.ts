@@ -1,4 +1,9 @@
-import { createTheme, ThemeOptions } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeOptions,
+  PaletteColor,
+  SimplePaletteColorOptions,
+} from '@mui/material/styles';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -19,10 +24,12 @@ declare module '@mui/material/styles' {
   // }
 
   interface Palette {
-    borders: Record<string, string>;
+    borders: PaletteColor;
+    alerts: Record<string, string>;
   }
   interface PaletteOptions {
-    borders: Record<'light' | 'dark', string>;
+    borders: SimplePaletteColorOptions;
+    alerts: { lightWarningBackground?: string };
   }
 }
 
@@ -48,13 +55,17 @@ export const baseThemeDef: ThemeOptions = {
     borders: {
       light: '#E5E5E5',
       dark: '#c9c9c9',
+      main: '#c9c9c9',
+    },
+    alerts: {
+      lightWarningBackground: '#FFF9EB',
     },
   },
 };
 
 export const baseTheme = createTheme(baseThemeDef);
 
-export const fullThemeDef: ThemeOptions = {
+export const fullThemeDef = {
   typography: {
     h1: {
       fontFamily: "'Montserrat', sans-serif",
@@ -137,6 +148,13 @@ export const fullThemeDef: ThemeOptions = {
         }),
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        sizeSmall: {
+          fontSize: '0.875rem',
+        },
+      },
+    },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
@@ -198,6 +216,11 @@ export const fullThemeDef: ThemeOptions = {
             outlineOffset: '-1px',
           },
         },
+      },
+    },
+    MuiLoadingButton: {
+      defaultProps: {
+        variant: 'contained',
       },
     },
     MuiButton: {

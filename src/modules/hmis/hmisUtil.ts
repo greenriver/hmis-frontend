@@ -3,7 +3,10 @@ import {
   differenceInYears,
   format,
   formatDistanceToNowStrict,
+  isFuture,
+  isToday,
   isValid,
+  isYesterday,
   parseISO,
 } from 'date-fns';
 import { isNil, sortBy, startCase } from 'lodash-es';
@@ -33,16 +36,12 @@ export const MISSING_DATA_KEYS = [
   'DATA_NOT_COLLECTED',
   'CLIENT_REFUSED',
   'CLIENT_DOESN_T_KNOW',
-  'GENDER_CLIENT_DOESN_T_KNOW',
-  'GENDER_CLIENT_REFUSED',
-  'RACE_UNKNOWN',
-  'RACE_REFUSED',
-  'RACE_NOT_COLLECTED',
 ];
 
 export const INVALID_ENUM = 'INVALID';
 
 const DATE_DISPLAY_FORMAT = 'MM/dd/yyyy';
+const DATETIME_DISPLAY_FORMAT = 'MM/dd/yyyy hh:mm a';
 const HMIS_DATE_FORMAT = 'yyyy-MM-dd';
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -66,6 +65,17 @@ export const formatDateForDisplay = (date: Date) => {
   } catch (RangeError) {
     console.error(
       `Failed to format date '${date.toString()}' as ${DATE_DISPLAY_FORMAT}`
+    );
+    return null;
+  }
+};
+
+export const formatDateTimeForDisplay = (date: Date) => {
+  try {
+    return format(date, DATETIME_DISPLAY_FORMAT);
+  } catch (RangeError) {
+    console.error(
+      `Failed to format date '${date.toString()}' as ${DATETIME_DISPLAY_FORMAT}`
     );
     return null;
   }
@@ -121,11 +131,21 @@ export const parseAndFormatDateTime = (dateString: string): string => {
   if (!dateString) return dateString;
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
-  return formatDateForDisplay(parsed) || dateString;
+  return formatDateTimeForDisplay(parsed) || dateString;
+};
+
+export const formatRelativeDateTime = (date: Date): string => {
+  const distance = formatDistanceToNowStrict(date);
+  if (isFuture(date)) {
+    return `In ${distance}`;
+  }
+  return `${distance} ago`;
 };
 
 export const formatRelativeDate = (date: Date): string => {
-  return `${formatDistanceToNowStrict(date)} ago`;
+  if (isToday(date)) return 'Today';
+  if (isYesterday(date)) return 'Yesterday';
+  return formatRelativeDateTime(date);
 };
 
 export const formatCurrency = (number?: number | null) => {
