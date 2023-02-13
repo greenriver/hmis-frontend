@@ -4,7 +4,6 @@ import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
 
-import ClientName from '../elements/ClientName';
 import { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 
@@ -12,44 +11,24 @@ import { InactiveChip } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
+import ProjectEnrollmentsTable, {
+  ENROLLMENT_COLUMNS,
+} from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
-import { DashboardRoutes } from '@/routes/routes';
 import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
   AddServiceToEnrollmentMutationVariables,
   EnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 const tableColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
-  {
-    header: 'Client',
-    render: (e) => (
-      <ClientName
-        client={e.client}
-        routerLinkProps={{
-          to: generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-            clientId: e.client.id,
-            enrollmentId: e.id,
-          }),
-          target: '_blank',
-        }}
-      />
-    ),
-    linkTreatment: true,
-  },
-  {
-    header: 'Enrollment Period',
-    render: (e) => parseAndFormatDateRange(e.entryDate, e.exitDate),
-  },
-  {
-    header: 'Household Size',
-    render: 'householdSize',
-  },
+  ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
+  ENROLLMENT_COLUMNS.clientId,
+  ENROLLMENT_COLUMNS.householdId,
+  ENROLLMENT_COLUMNS.dobAge,
+  ENROLLMENT_COLUMNS.enrollmentPeriod,
 ];
 
 const BulkAddServices = () => {

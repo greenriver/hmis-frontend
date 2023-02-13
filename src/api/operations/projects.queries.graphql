@@ -41,6 +41,7 @@ query GetProjectEnrollments(
         client {
           id
           ...ClientName
+          ...ClientIdentificationFields
         }
       }
     }
