@@ -1,7 +1,7 @@
 import { Grid, SxProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { ValidationError } from '@/types/gqlTypes';
+import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
 const InputContainer = ({
   sx,
@@ -17,16 +17,18 @@ const InputContainer = ({
   <Grid item sx={{ ...sx }} data-testid='formField'>
     {children}
     {errors &&
-      errors.map(({ message, fullMessage }) => (
-        <Typography
-          variant='body2'
-          color='error'
-          key={fullMessage || message}
-          sx={{ mt: 0.5, float: horizontal ? 'right' : undefined }}
-        >
-          {fullMessage || message}
-        </Typography>
-      ))}
+      errors
+        .filter(({ type }) => type !== ValidationType.Required)
+        .map(({ message, fullMessage }) => (
+          <Typography
+            variant='body2'
+            color='error'
+            key={fullMessage || message}
+            sx={{ mt: 0.5, float: horizontal ? 'right' : undefined }}
+          >
+            {fullMessage || message}
+          </Typography>
+        ))}
   </Grid>
 );
 

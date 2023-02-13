@@ -261,7 +261,6 @@ const ClientSearch: React.FC<Props> = ({
                 <ClientCard
                   key={client.id}
                   client={client}
-                  showLinkToRecord
                   // TODO re-enable when we have data for it
                   // showNotices
                   // linkTargetBlank

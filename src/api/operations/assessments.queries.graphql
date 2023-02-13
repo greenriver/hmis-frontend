@@ -51,22 +51,8 @@ query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
   }
 }
 
-mutation SaveAssessment(
-  $assessmentId: ID
-  $enrollmentId: ID
-  $formDefinitionId: ID
-  $values: JsonObject!
-  $assessmentDate: String
-) {
-  saveAssessment(
-    input: {
-      assessmentId: $assessmentId
-      enrollmentId: $enrollmentId
-      formDefinitionId: $formDefinitionId
-      assessmentDate: $assessmentDate
-      values: $values
-    }
-  ) {
+mutation SaveAssessment($input: SaveAssessmentInput!) {
+  saveAssessment(input: $input) {
     assessment {
       ...AssessmentWithDefinitionAndValues
     }
@@ -76,24 +62,8 @@ mutation SaveAssessment(
   }
 }
 
-mutation SubmitAssessment(
-  $assessmentId: ID
-  $enrollmentId: ID
-  $formDefinitionId: ID
-  $values: JsonObject!
-  $hudValues: JsonObject
-  $assessmentDate: String
-) {
-  submitAssessment(
-    input: {
-      assessmentId: $assessmentId
-      enrollmentId: $enrollmentId
-      formDefinitionId: $formDefinitionId
-      assessmentDate: $assessmentDate
-      values: $values
-      hudValues: $hudValues
-    }
-  ) {
+mutation SubmitAssessment($input: SubmitAssessmentInput!) {
+  submitAssessment(input: $input) {
     assessment {
       ...AssessmentWithDefinitionAndValues
     }

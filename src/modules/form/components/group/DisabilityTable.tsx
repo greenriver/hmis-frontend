@@ -1,4 +1,5 @@
 import {
+  lighten,
   Table,
   TableBody,
   TableCell,
@@ -11,11 +12,13 @@ import { GroupItemComponentProps } from '../DynamicGroup';
 
 import { ItemType } from '@/types/gqlTypes';
 
-const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
+const DisabilityTable = ({
+  item,
+  renderChildItem,
+}: GroupItemComponentProps) => (
   <Table sx={{ border: (theme) => `1px solid ${theme.palette.grey[200]}` }}>
     <TableHead>
       <TableRow>
-        {/* TODO: move table headers into the form definition */}
         <TableCell></TableCell>
         <TableCell>Status</TableCell>
         <TableCell>Disabling Condition</TableCell>
@@ -23,9 +26,9 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
     </TableHead>
     <TableBody
       sx={{
-        // Highlight last row. TODO: move to form definition
+        // Highlight last row
         '.MuiTableRow-root:last-child': {
-          backgroundColor: '#ffffe6',
+          backgroundColor: (theme) => lighten(theme.palette.info.light, 0.9),
           td: {
             py: 2,
           },
@@ -36,7 +39,7 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
         item.item.map((rowItem, index) => {
           if (!rowItem.item || rowItem.type !== ItemType.Group) {
             console.warn(
-              'Incorrectly formed JSON for InputTable. Children must be groups.'
+              'Incorrectly formed JSON for DisabilityTable. Children must be groups.'
             );
             return null;
           }
@@ -67,9 +70,10 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
                   {renderChildItem(cellItem, {
                     inputProps: {
                       label: null,
-                      ...(idx === 0
-                        ? { placeholder: 'Select status...' }
-                        : undefined),
+                      placeholder:
+                        idx === 0
+                          ? 'Select status...'
+                          : 'Select disabling condition...',
                     },
                   })}
                 </TableCell>
@@ -81,4 +85,4 @@ const InputTable = ({ item, renderChildItem }: GroupItemComponentProps) => (
   </Table>
 );
 
-export default InputTable;
+export default DisabilityTable;

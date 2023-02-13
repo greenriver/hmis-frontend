@@ -3,7 +3,6 @@ import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   DataCollectionStage,
   DisabilityGroupFieldsFragment,
-  EnrollmentFieldsFragment,
   EnrollmentFieldsFromAssessmentFragment,
   GetClientAssessmentsQuery,
   HealthAndDvFieldsFragment,
@@ -40,7 +39,7 @@ export const isTypicalRelatedRecord = (
 
 export const isEnrollment = (
   r: RelatedRecord
-): r is EnrollmentFieldsFragment => {
+): r is EnrollmentFieldsFromAssessmentFragment => {
   return r.__typename == 'Enrollment';
 };
 
@@ -86,8 +85,17 @@ export const typicalRecordPickerColumns = [
 export const enrollmentColumns = [
   {
     header: COLLECTION_DATE,
-    render: (record: RelatedRecord) =>
-      isEnrollment(record) && parseAndFormatDate(record.entryDate),
+    render: (record: RelatedRecord) => {
+      if (!isEnrollment(record)) return null; //make TS happy
+
+      return [
+        parseAndFormatDate(record.entryDate),
+        // all the Enrollment data elements are collected at Project Start, so take the user name from the intake assessment if it exists
+        record.intakeAssessment?.user?.name,
+      ]
+        .filter((s) => !!s)
+        .join(' by ');
+    },
   },
   {
     header: COLLECTION_STAGE,

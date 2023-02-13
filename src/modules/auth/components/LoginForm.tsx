@@ -1,4 +1,5 @@
-import { Alert, Box, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Alert, Box } from '@mui/material';
 import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
 
 import { isHmisResponseError } from '../api/sessions';
@@ -68,16 +69,16 @@ const LoginForm = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <Button
+      <LoadingButton
         type='submit'
         variant='contained'
         color='primary'
         fullWidth
         sx={{ mt: 3, mb: 2 }}
-        disabled={loading}
+        loading={loading}
       >
         Sign In
-      </Button>
+      </LoadingButton>
       {error && <Alert severity='error'>{errorMessage(error)}</Alert>}
     </Box>
   );

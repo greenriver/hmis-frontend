@@ -25,5 +25,9 @@ export default {
 const Template: ComponentStory<typeof DynamicForm> = (args) => (
   <DynamicForm {...args} onSubmit={(values) => console.log(values)} />
 );
+
 export const Default = Template.bind({});
 Default.args = { definition: formDefinition };
+
+export const WithWarnIfEmpty = Template.bind({});
+WithWarnIfEmpty.args = { definition: formDefinition, warnIfEmpty: true };

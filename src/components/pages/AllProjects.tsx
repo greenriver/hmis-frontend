@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 
 import ButtonLink from '../elements/ButtonLink';
@@ -32,12 +33,11 @@ const AllProjects = () => {
               <Typography variant='h6'>Actions</Typography>
               <ButtonLink
                 data-testid='addOrganizationButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.CREATE_ORGANIZATION)}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Organization
+                Add Organization
               </ButtonLink>
             </Stack>
           </Paper>

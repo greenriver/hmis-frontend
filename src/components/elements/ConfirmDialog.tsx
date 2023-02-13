@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import Button from '@mui/material/Button';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -6,11 +7,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import * as React from 'react';
 
 interface Props extends DialogProps {
-  title: string;
-  open: boolean;
   loading: boolean;
   children: React.ReactNode;
-  onConfirm: () => void;
+  confirmText?: string;
+  onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
 }
 
@@ -19,12 +19,12 @@ const ConfirmationDialog = ({
   onCancel,
   title,
   children,
-  open,
   loading,
+  confirmText,
   ...other
 }: Props) => {
   return (
-    <Dialog open={open} keepMounted={false} {...other}>
+    <Dialog keepMounted={false} {...other}>
       <DialogTitle>{title}</DialogTitle>
       <DialogContent sx={{}}>{children}</DialogContent>
       <DialogActions sx={{ px: 4, pb: 2, justifyContent: 'center' }}>
@@ -35,13 +35,14 @@ const ConfirmationDialog = ({
         >
           Cancel
         </Button>
-        <Button
+        <LoadingButton
           onClick={onConfirm}
-          disabled={loading}
+          type='submit'
+          loading={loading}
           data-testid='confirmDialogAction'
         >
-          {loading ? 'Loading...' : 'Confirm'}
-        </Button>
+          {confirmText || 'Confirm'}
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

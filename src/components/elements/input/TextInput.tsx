@@ -70,6 +70,9 @@ const TextInput = ({
           'label + &': {
             mt: 0.5,
           },
+          backgroundColor: props.warnIfEmptyTreatment
+            ? 'alerts.lightWarningBackground'
+            : undefined,
           width,
           minWidth: width,
           boxShadow: highlight

@@ -1,16 +1,16 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
-import { Alert, CircularProgress, Paper } from '@mui/material';
+import { Alert, Paper } from '@mui/material';
 import { Stack } from '@mui/system';
 import { isEmpty } from 'lodash-es';
 import { ReactNode, useMemo, useState } from 'react';
 
+import Loading from '@/components/elements/Loading';
 import DynamicField, {
   DynamicFieldProps,
 } from '@/modules/form/components/DynamicField';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import {
   buildCommonInputProps,
-  CONFIRM_ERROR_TYPE,
   extractClientItemsFromDefinition,
   FormValues,
   LocalConstants,
@@ -21,11 +21,13 @@ import {
   FormItem,
   useGetFormDefinitionByIdentifierQuery,
   ValidationError,
+  ValidationSeverity,
 } from '@/types/gqlTypes';
 
 export interface RenderListOptions<TargetType> {
   onSelect: (target: TargetType) => void;
   mutationLoading?: boolean;
+  values?: FormValues;
 }
 
 export interface Props<TargetType, Query, QueryVariables> {
@@ -116,6 +118,7 @@ const BulkAdd = <
       autofillNotCollected: true,
       autofillNulls: true,
       autofillBooleans: false,
+      keyByFieldName: true,
     });
     const input = getInputFromTarget(inputValues, target);
 
@@ -125,9 +128,11 @@ const BulkAdd = <
         const errors = getErrors(data) || [];
 
         if (errors.length > 0) {
-          const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
+          const warnings = errors.filter(
+            (e) => e.severity === ValidationSeverity.Warning
+          );
           const validationErrors = errors.filter(
-            (e) => e.type !== CONFIRM_ERROR_TYPE
+            (e) => e.severity !== ValidationSeverity.Warning
           );
           if (validationErrors.length > 0) window.scrollTo(0, 0);
           setWarnings(warnings);
@@ -195,7 +200,11 @@ const BulkAdd = <
                 />
               ),
             })),
-            { onSelect: handleSelect, mutationLoading }
+            {
+              onSelect: handleSelect,
+              mutationLoading,
+              values,
+            }
           )}
       </Paper>
     </Stack>
@@ -213,13 +222,14 @@ const BulkAddWrapper = <
 ) => {
   const { definitionIdentifier } = props;
 
-  const { data } = useGetFormDefinitionByIdentifierQuery({
+  const { data, loading } = useGetFormDefinitionByIdentifierQuery({
     variables: { identifier: definitionIdentifier },
   });
 
   const definition = data?.formDefinition?.definition;
 
-  if (!definition) return <CircularProgress />;
+  if (loading) return <Loading />;
+  if (!definition) throw Error('Definition not found');
 
   return <BulkAdd {...props} definition={definition} />;
 };

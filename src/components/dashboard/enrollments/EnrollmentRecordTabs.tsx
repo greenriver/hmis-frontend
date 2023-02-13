@@ -79,7 +79,7 @@ const EnrollmentRecordTabs = ({
         <TabPanel
           value={label}
           key={key}
-          sx={{ pt: 1, pb: 1, px: 0, mx: 0, h5: { ml: 3 } }}
+          sx={{ pt: 1, pb: 0, mb: 0, px: 0, mx: 0, h5: { ml: 3 } }}
           data-testid={`panel-${key}`}
         >
           {label === currentTab && Component && (

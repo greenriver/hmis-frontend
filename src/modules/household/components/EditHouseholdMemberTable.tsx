@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -245,14 +246,14 @@ const EditHouseholdMemberTable = ({
             )}
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button
+            <LoadingButton
               variant='outlined'
               color='secondary'
               onClick={onChangeHoH}
-              disabled={loading || confirmedHoH}
+              loading={loading || confirmedHoH}
             >
-              {loading || confirmedHoH ? 'Updating...' : 'Confirm'}
-            </Button>
+              Confirm
+            </LoadingButton>
             <Button onClick={() => setProposedHoH(null)} variant='gray'>
               Cancel
             </Button>

@@ -1,4 +1,4 @@
-import { Alert, Box, Grid, Stack, Typography } from '@mui/material';
+import { Alert, AlertTitle, Box, Grid } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,13 +6,22 @@ import { useNavigate } from 'react-router-dom';
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
 import { FormValues } from '../util/formUtil';
-import { transformSubmitValues } from '../util/recordFormUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
+import ValidationErrorDisplay, {
+  ValidationWarningDisplay,
+} from './ValidationErrorDisplay';
 
 import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
+
+export type DynamicFormOnSubmit = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  values: FormValues,
+  confirmed?: boolean
+) => void;
 
 export interface Props
   extends Omit<
@@ -20,15 +29,15 @@ export interface Props
     'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
   > {
   definition: FormDefinitionJson;
-  onSubmit: (values: FormValues, confirmed?: boolean) => void;
+  onSubmit: DynamicFormOnSubmit;
   onSaveDraft?: (values: FormValues) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
-  warnings?: ValidationError[];
   showSavePrompt?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
+  warnIfEmpty?: boolean;
 }
 
 const DynamicForm: React.FC<Props> = ({
@@ -41,21 +50,22 @@ const DynamicForm: React.FC<Props> = ({
   discardButtonText,
   loading,
   initialValues = {},
-  errors = [],
-  warnings = [],
+  errors: validations,
   showSavePrompt = false,
   horizontal = false,
+  warnIfEmpty = false,
   pickListRelationId,
 }) => {
   const navigate = useNavigate();
-  const { renderFields, values, getCleanedValues } = useDynamicFormFields({
+  const { renderFields, getCleanedValues } = useDynamicFormFields({
     definition,
     initialValues,
   });
+  const { errors, warnings } = useValidations(validations);
 
   const [promptSave, setPromptSave] = useState<boolean | undefined>();
+  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
-  const [dialogDismissed, setDialogDismissed] = useState<boolean>(false);
   const saveButtonsRef = React.createRef<HTMLDivElement>();
   const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
@@ -64,35 +74,27 @@ const DynamicForm: React.FC<Props> = ({
     setPromptSave(!isSaveButtonVisible);
   }, [isSaveButtonVisible, promptSave]);
 
-  const handleSubmit = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      event.preventDefault();
-      setDialogDismissed(false);
-      const valuesToSubmit = getCleanedValues();
+  useEffect(() => {
+    // if we have warnings and no errors, show dialog. otherwise hide it.
+    setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
+  }, [errors, warnings]);
 
-      // FOR DEBUGGING: if ctrl-click, just log values and don't submit anything
-      if (
-        import.meta.env.MODE !== 'production' &&
-        (event.ctrlKey || event.metaKey)
-      ) {
-        console.log('%c CURRENT FORM STATE:', 'color: #BB7AFF');
-        console.log(valuesToSubmit);
-        const hudValues = transformSubmitValues({
-          definition,
-          values: valuesToSubmit,
-        });
-        window.debug = { hudValues };
-        console.log(JSON.stringify(hudValues, null, 2));
-      } else {
-        onSubmit(valuesToSubmit);
-      }
+  const handleSubmit = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const valuesToSubmit = getCleanedValues();
+      onSubmit(event, valuesToSubmit, false);
     },
-    [onSubmit, definition, getCleanedValues]
+    [onSubmit, getCleanedValues]
   );
 
   const handleConfirm = useCallback(
-    () => onSubmit(values, true),
-    [values, onSubmit]
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      event.preventDefault();
+      const valuesToSubmit = getCleanedValues();
+      onSubmit(event, valuesToSubmit, true);
+    },
+    [onSubmit, getCleanedValues]
   );
 
   const handleSaveDraft = useCallback(
@@ -113,7 +115,7 @@ const DynamicForm: React.FC<Props> = ({
       submitButtonText={submitButtonText}
       saveDraftButtonText={saveDraftButtonText}
       discardButtonText={discardButtonText}
-      disabled={!!loading || (warnings.length > 0 && !dialogDismissed)}
+      disabled={!!loading || showConfirmDialog}
       loading={loading}
     />
   );
@@ -126,13 +128,9 @@ const DynamicForm: React.FC<Props> = ({
       <Grid container direction='column' spacing={2}>
         {errors.length > 0 && (
           <Grid item>
-            <Alert severity='error' sx={{ mb: 1 }}>
-              Please fix outstanding errors:
-              <Box component='ul' sx={{ pl: 2 }} data-testid='formErrorAlert'>
-                {errors.map(({ message, fullMessage }) => (
-                  <li key={fullMessage || message}>{fullMessage || message}</li>
-                ))}
-              </Box>
+            <Alert severity='error' sx={{ mb: 1 }} data-testid='formErrorAlert'>
+              <AlertTitle>Please fix outstanding errors</AlertTitle>
+              <ValidationErrorDisplay errors={errors} />
             </Alert>
           </Grid>
         )}
@@ -143,26 +141,39 @@ const DynamicForm: React.FC<Props> = ({
           warnings,
           horizontal,
           pickListRelationId,
+          warnIfEmpty,
         })}
       </Grid>
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
         {saveButtons}
       </Box>
 
-      {warnings.length > 0 && !dialogDismissed && (
+      {showConfirmDialog && (
         <ConfirmationDialog
           id='confirmSubmit'
           open
-          title='Confirm Change'
+          title='Ignore Warnings?'
           onConfirm={handleConfirm}
-          onCancel={() => setDialogDismissed(true)}
+          onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
+          confirmText={submitButtonText || 'Confirm'}
+          sx={{
+            '.MuiDialog-paper': {
+              minWidth: '400px',
+              // backgroundColor: (theme) =>
+              //   lighten(theme.palette.warning.light, 0.85),
+            },
+            '.MuiDialogTitle-root': {
+              textTransform: 'unset',
+              color: 'text.primary',
+              fontSize: 18,
+              fontWeight: 800,
+            },
+          }}
         >
-          <Stack>
-            {warnings?.map((e) => (
-              <Typography key={e.fullMessage}>{e.fullMessage}</Typography>
-            ))}
-          </Stack>
+          {warnings.length > 0 && (
+            <ValidationWarningDisplay warnings={warnings} />
+          )}
         </ConfirmationDialog>
       )}
 

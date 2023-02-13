@@ -2,10 +2,10 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { DynamicFieldProps } from './DynamicField';
+import DisabilityTable from './group/DisabilityTable';
 import FormCard from './group/FormCard';
 import HorizontalGroup from './group/HorizontalGroup';
 import InputGroup from './group/InputGroup';
-import InputTable from './group/InputTable';
 import QuestionGroup from './group/QuestionGroup';
 
 import { Component, FormItem } from '@/types/gqlTypes';
@@ -46,8 +46,8 @@ const DynamicGroup = (props: GroupItemComponentProps) => {
         );
       }
       return <InputGroup key={props.item.linkId} {...props} />;
-    case Component.InputTable:
-      return <InputTable key={props.item.linkId} {...props} />;
+    case Component.DisabilityTable:
+      return <DisabilityTable key={props.item.linkId} {...props} />;
     case Component.HorizontalGroup:
       return <HorizontalGroup key={props.item.linkId} {...props} />;
     case Component.InfoGroup:

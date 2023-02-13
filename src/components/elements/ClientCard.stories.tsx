@@ -42,9 +42,8 @@ WithFewerDetails.args = {
   hideImage: true,
 };
 
-export const WithLinkAndNotices = Template.bind({});
-WithLinkAndNotices.args = {
+export const WithNotices = Template.bind({});
+WithNotices.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,
   showNotices: true,
-  showLinkToRecord: true,
 };

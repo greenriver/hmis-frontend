@@ -51,10 +51,11 @@ const FormSelect = <Multiple extends boolean | undefined>({
   error,
   placeholder,
   helperText,
+  warnIfEmptyTreatment,
   ...props
 }: GenericSelectProps<Option, Multiple, false> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
-  // console.log(props.placeholder);
+
   return (
     <GenericSelect
       getOptionLabel={(option) => optionLabel(option)}
@@ -73,6 +74,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
         placeholder,
         error,
         helperText,
+        warnIfEmptyTreatment,
       }}
     />
   );

@@ -1,11 +1,14 @@
 import { getYear, isValid, max, min } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { isNil, sum } from 'lodash-es';
 
 import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
 import { DynamicInputCommonProps } from '../components/DynamicField';
 
+import { gqlValueToFormValue, transformSubmitValues } from './recordFormUtil';
+
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  AutofillValue,
   BoundType,
   DataCollectedAbout,
   EnableBehavior,
@@ -14,6 +17,7 @@ import {
   FormDefinitionJson,
   FormDefinitionWithJsonFragment,
   FormItem,
+  InitialBehavior,
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
@@ -26,7 +30,6 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-export const CONFIRM_ERROR_TYPE = 'confirm_warning';
 export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
@@ -70,6 +73,15 @@ export function areEqualValues(
   }
   return value1 === value2;
 }
+
+export const hasMeaningfulValue = (
+  value: string | object | null | undefined
+): boolean => {
+  if (Array.isArray(value) && value.length == 0) return false;
+  if (isNil(value)) return false;
+  if (value === '') return false;
+  return true;
+};
 
 const localResolvePickList = (
   pickListReference: string,
@@ -309,6 +321,28 @@ export const shouldEnableItem = (
   }
 };
 
+export const getAutofillComparisonValue = (
+  av: AutofillValue,
+  values: FormValues,
+  targetItem: FormItem
+) => {
+  // Perform summation if applicable
+  if (av.sumQuestions && av.sumQuestions.length > 0) {
+    const numbers = av.sumQuestions
+      .map((linkId) => values[linkId])
+      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .filter((n) => !isNil(n));
+    return sum(numbers);
+  }
+
+  // Choose first present value from Boolean, Number, and Code attributes
+  return [
+    av.valueBoolean,
+    av.valueNumber,
+    getOptionValue(av.valueCode, targetItem),
+  ].filter((e) => !isNil(e))[0];
+};
+
 /**
  * Autofill values based on changed item.
  * If there are multiple autofill rules, the first matching one is used
@@ -328,9 +362,12 @@ export const autofillValues = (
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
     // Evaluate all enableWhen conditions
-    const booleans = (av.autofillWhen || []).map((en) =>
+    const booleans = av.autofillWhen.map((en) =>
       evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
     );
+
+    // If there were no conditions specify, it should always be autofilled
+    if (booleans.length === 0) booleans.push(true);
 
     const shouldAutofillValue =
       av.autofillBehavior === EnableBehavior.Any
@@ -339,11 +376,7 @@ export const autofillValues = (
 
     if (!shouldAutofillValue) return false;
 
-    const newValue = [
-      av.valueBoolean,
-      av.valueNumber,
-      getOptionValue(av.valueCode, item),
-    ].filter((e) => !isNil(e))[0];
+    const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
       // console.log(
@@ -422,7 +455,8 @@ export const buildCommonInputProps = (
  */
 export const getInitialValues = (
   definition: FormDefinitionJson,
-  localConstants?: LocalConstants
+  localConstants?: LocalConstants,
+  behavior?: InitialBehavior
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -435,10 +469,19 @@ export const getInitialValues = (
       if (Array.isArray(item.item)) {
         recursiveFillInValues(item.item, values);
       }
-      if (!item.initial) return;
+      if (!item.initial) {
+        // Make sure all HUD fields are present in values to begin
+        if (item.fieldName && behavior !== InitialBehavior.Overwrite)
+          values[item.linkId] = null;
+
+        return;
+      }
 
       // TODO handle multiple initials for multi-select questions
       const initial = item.initial[0];
+
+      if (behavior && initial.initialBehavior !== behavior) return;
+
       if (!isNil(initial.valueBoolean)) {
         values[item.linkId] = initial.valueBoolean;
       } else if (!isNil(initial.valueNumber)) {
@@ -448,7 +491,8 @@ export const getInitialValues = (
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
-          values[item.linkId] = localConstants[varName];
+          const value = localConstants[varName];
+          values[item.linkId] = gqlValueToFormValue(value, item) || value;
         }
       }
     });
@@ -502,15 +546,27 @@ export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
 
-    item.autofillValues.forEach((v) => {
-      (v.autofillWhen || []).forEach((en) => {
-        if (!deps[en.question]) deps[en.question] = [];
-        deps[en.question].push(item.linkId);
-        if (en.compareQuestion) {
-          if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
-          deps[en.compareQuestion].push(item.linkId);
-        }
-      });
+    // A change in "id" may cause "item.linkId" to autofill
+    function addDependency(id: string) {
+      if (!deps[id]) deps[id] = [];
+      if (deps[id].indexOf(item.linkId) === -1) deps[id].push(item.linkId);
+    }
+
+    item.autofillValues.forEach((av) => {
+      // If this item sums other items using sumQuestions, add those dependencies
+      if (av.sumQuestions) {
+        av.sumQuestions.forEach((summedLinkId) => {
+          addDependency(summedLinkId);
+        });
+      }
+
+      // If this autofill is conditional on other items, add those dependencies
+      if (av.autofillWhen) {
+        av.autofillWhen.forEach((en) => {
+          addDependency(en.question);
+          if (en.compareQuestion) addDependency(en.compareQuestion);
+        });
+      }
     });
   });
   return deps;
@@ -595,9 +651,8 @@ export const applyDataCollectedAbout = (
   items: FormDefinitionWithJsonFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) => {
-  // const clone = { ...definition };
-  return items.filter((item) => {
+) =>
+  items.filter((item) => {
     if (!item.dataCollectedAbout) return true;
     switch (item.dataCollectedAbout) {
       case DataCollectedAbout.AllClients:
@@ -619,8 +674,29 @@ export const applyDataCollectedAbout = (
         return true;
     }
   });
-  // clone.item = items;
-  // return clone;
+
+export const debugFormValues = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  values: FormValues,
+  definition: FormDefinitionJson
+) => {
+  if (import.meta.env.MODE === 'production') return false;
+  if (!event.ctrlKey && !event.metaKey) return false;
+
+  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  console.log(values);
+  const hudValues = transformSubmitValues({
+    definition,
+    values,
+    autofillNotCollected: true,
+    autofillNulls: true,
+    keyByFieldName: true,
+  });
+  window.debug = { hudValues };
+  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  console.log(hudValues);
+
+  return true;
 };
 
 /**
