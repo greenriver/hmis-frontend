@@ -3434,6 +3434,7 @@ export type ItemFieldsFragment = {
   briefText?: string | null;
   helperText?: string | null;
   required?: boolean | null;
+  warnIfEmpty?: boolean | null;
   hidden?: boolean | null;
   readOnly?: boolean | null;
   repeats?: boolean | null;
@@ -3524,6 +3525,7 @@ export type FormDefinitionWithJsonFragment = {
       briefText?: string | null;
       helperText?: string | null;
       required?: boolean | null;
+      warnIfEmpty?: boolean | null;
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
@@ -3547,6 +3549,7 @@ export type FormDefinitionWithJsonFragment = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -3570,6 +3573,7 @@ export type FormDefinitionWithJsonFragment = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -3593,6 +3597,7 @@ export type FormDefinitionWithJsonFragment = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -3616,6 +3621,7 @@ export type FormDefinitionWithJsonFragment = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -3999,6 +4005,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -4022,6 +4029,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -4045,6 +4053,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -4068,6 +4077,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -4091,6 +4101,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -4487,6 +4498,7 @@ export type GetAssessmentQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -4510,6 +4522,7 @@ export type GetAssessmentQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -4533,6 +4546,7 @@ export type GetAssessmentQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -4556,6 +4570,7 @@ export type GetAssessmentQuery = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -4579,6 +4594,7 @@ export type GetAssessmentQuery = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -4978,6 +4994,7 @@ export type GetFormDefinitionByIdentifierQuery = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -5001,6 +5018,7 @@ export type GetFormDefinitionByIdentifierQuery = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -5024,6 +5042,7 @@ export type GetFormDefinitionByIdentifierQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -5047,6 +5066,7 @@ export type GetFormDefinitionByIdentifierQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -5070,6 +5090,7 @@ export type GetFormDefinitionByIdentifierQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -5398,6 +5419,7 @@ export type GetFormDefinitionQuery = {
         briefText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
+        warnIfEmpty?: boolean | null;
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
@@ -5421,6 +5443,7 @@ export type GetFormDefinitionQuery = {
           briefText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
+          warnIfEmpty?: boolean | null;
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
@@ -5444,6 +5467,7 @@ export type GetFormDefinitionQuery = {
             briefText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
+            warnIfEmpty?: boolean | null;
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
@@ -5467,6 +5491,7 @@ export type GetFormDefinitionQuery = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -5490,6 +5515,7 @@ export type GetFormDefinitionQuery = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -5838,6 +5864,7 @@ export type SaveAssessmentMutation = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -5861,6 +5888,7 @@ export type SaveAssessmentMutation = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -5884,6 +5912,7 @@ export type SaveAssessmentMutation = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -5907,6 +5936,7 @@ export type SaveAssessmentMutation = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -5930,6 +5960,7 @@ export type SaveAssessmentMutation = {
                       briefText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
+                      warnIfEmpty?: boolean | null;
                       hidden?: boolean | null;
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
@@ -6292,6 +6323,7 @@ export type SubmitAssessmentMutation = {
               briefText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
+              warnIfEmpty?: boolean | null;
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
@@ -6315,6 +6347,7 @@ export type SubmitAssessmentMutation = {
                 briefText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
+                warnIfEmpty?: boolean | null;
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
@@ -6338,6 +6371,7 @@ export type SubmitAssessmentMutation = {
                   briefText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
@@ -6361,6 +6395,7 @@ export type SubmitAssessmentMutation = {
                     briefText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
+                    warnIfEmpty?: boolean | null;
                     hidden?: boolean | null;
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
@@ -6384,6 +6419,7 @@ export type SubmitAssessmentMutation = {
                       briefText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
+                      warnIfEmpty?: boolean | null;
                       hidden?: boolean | null;
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
@@ -9851,6 +9887,7 @@ export const ItemFieldsFragmentDoc = gql`
     briefText
     helperText
     required
+    warnIfEmpty
     hidden
     readOnly
     repeats

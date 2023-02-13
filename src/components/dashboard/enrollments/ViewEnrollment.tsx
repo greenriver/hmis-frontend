@@ -59,48 +59,36 @@ const ViewEnrollment = () => {
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>
               <ButtonLink
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
                   assessmentRole: AssessmentRole.Update.toLowerCase(),
                 })}
-                startIcon={<LibraryAddIcon fontSize='small' />}
+                Icon={LibraryAddIcon}
+                leftAlign
               >
                 New Assessment
               </ButtonLink>
               <ButtonLink
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
-                startIcon={<LibraryAddIcon fontSize='small' />}
                 to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
                   clientId,
                   enrollmentId,
                 })}
+                Icon={LibraryAddIcon}
+                leftAlign
               >
                 Add Service
               </ButtonLink>
-              <ButtonLink
-                variant='outlined'
-                color='secondary'
-                to=''
-                startIcon={<LibraryAddIcon fontSize='small' />}
-                sx={{ pl: 3, justifyContent: 'left' }}
-              >
+              <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
                 Add Event
               </ButtonLink>
               <ButtonLink
-                variant='outlined'
-                color='secondary'
                 fullWidth
-                startIcon={<OpenInNewIcon fontSize='small' />}
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.PROJECT, {
                   projectId: enrollment.project.id,
                 })}
+                Icon={OpenInNewIcon}
+                leftAlign
               >
                 Open Project
               </ButtonLink>

@@ -1,7 +1,8 @@
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Alert,
   Box,
-  Button,
   Card,
   Grid,
   Skeleton,
@@ -17,6 +18,7 @@ import RouterLink from './RouterLink';
 
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   clientNameWithoutPreferred,
   enrollmentName,
@@ -28,41 +30,27 @@ import {
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+const MAX_RECENT_ENROLLMENTS = 5;
+
 const RecentEnrollments = ({
-  clientId,
+  recentEnrollments,
   linkTargetBlank,
 }: {
-  clientId: string;
+  recentEnrollments?: NonNullable<
+    GetClientEnrollmentsQuery['client']
+  >['enrollments']['nodes'];
   linkTargetBlank?: boolean;
 }) => {
-  const {
-    data: { client } = {},
-    loading,
-    error,
-  } = useGetClientEnrollmentsQuery({
-    variables: { id: clientId },
-  });
-
-  const recentEnrollments = useMemo(
-    () =>
-      client
-        ? client.enrollments.nodes.filter((enrollment) =>
-            isRecentEnrollment(enrollment)
-          )
-        : undefined,
-    [client]
-  );
-
-  if (error) throw error;
-  if (loading || !client)
-    return <Skeleton variant='rectangular' width={230} height={150} />;
-
-  if (recentEnrollments && recentEnrollments.length === 0)
+  if (
+    !recentEnrollments ||
+    (recentEnrollments && recentEnrollments.length === 0)
+  )
     return <Typography>None.</Typography>;
 
   return (
@@ -70,11 +58,11 @@ const RecentEnrollments = ({
       {recentEnrollments &&
         recentEnrollments.map((enrollment) => (
           <Fragment key={enrollment.id}>
-            <Grid item xs={6}>
+            <Grid item xs={6} lg={4}>
               <RouterLink
                 aria-label={enrollmentName(enrollment)}
                 to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                  clientId: client.id,
+                  clientId: enrollment.client.id,
                   enrollmentId: enrollment.id,
                 })}
                 target={linkTargetBlank ? '_blank' : undefined}
@@ -100,7 +88,6 @@ const RecentEnrollments = ({
 interface Props {
   client: ClientFieldsFragment;
   showNotices?: boolean;
-  showLinkToRecord?: boolean;
   showEditLink?: boolean;
   linkTargetBlank?: boolean;
   hideImage?: boolean;
@@ -110,7 +97,6 @@ const ClientCard: React.FC<Props> = ({
   client,
   showNotices = false,
   showEditLink = false,
-  showLinkToRecord = false,
   linkTargetBlank = false,
   hideImage = false,
 }) => {
@@ -121,6 +107,35 @@ const ClientCard: React.FC<Props> = ({
     variables: { id: client.id },
     skip: hideImage,
   });
+
+  const { data, loading: enrollmentsLoading } = useGetClientEnrollmentsQuery({
+    variables: { id: client.id },
+  });
+
+  const recentEnrollments = useMemo(
+    () =>
+      data?.client
+        ? data.client.enrollments.nodes
+            .filter((enrollment) => isRecentEnrollment(enrollment))
+            .slice(0, MAX_RECENT_ENROLLMENTS)
+        : undefined,
+    [data]
+  );
+
+  if (imageLoading || enrollmentsLoading) {
+    return (
+      <Skeleton
+        variant='rectangular'
+        sx={{
+          height: 180,
+          width: '100%',
+          mb: 3,
+          borderRadius: 1,
+        }}
+      />
+    );
+  }
+
   const primaryName =
     client.preferredName || clientNameWithoutPreferred(client);
   const secondaryName = client.preferredName
@@ -142,33 +157,29 @@ const ClientCard: React.FC<Props> = ({
         </Grid>
       )}
       <Grid container sx={{ p: 1 }}>
-        <Grid item xs={5}>
+        <Grid item xs={5} lg={4}>
           <Stack spacing={1}>
-            <Stack direction='row' spacing={1}>
-              <Typography variant='h5'>{primaryName}</Typography>
-              {!isEmpty(client.pronouns) && (
-                <Typography variant='h5' color='text.secondary'>
-                  ({pronouns(client)})
+            <RouterLink
+              plain
+              to={generateSafePath(DashboardRoutes.PROFILE, {
+                clientId: client.id,
+              })}
+            >
+              <Stack direction='row' spacing={1}>
+                <Typography variant='h5' fontWeight={600}>
+                  {primaryName}
                 </Typography>
+                {!isEmpty(client.pronouns) && (
+                  <Typography variant='h5' color='text.secondary'>
+                    ({pronouns(client)})
+                  </Typography>
+                )}
+              </Stack>
+            </RouterLink>
+            <Stack spacing={3} direction='row'>
+              {!hideImage && clientImageData?.image && (
+                <ClientCardImageElement size={150} client={clientImageData} />
               )}
-            </Stack>
-            <Stack spacing={1} direction='row'>
-              {hideImage ? null : imageLoading ? (
-                <Skeleton
-                  variant='rectangular'
-                  sx={{
-                    height: 150,
-                    width: 150,
-                    mr: 1,
-                  }}
-                />
-              ) : (
-                <ClientCardImageElement
-                  size={150}
-                  client={clientImageData || undefined}
-                />
-              )}
-
               <Stack spacing={0.5} sx={{ pr: 1 }}>
                 {secondaryName && (
                   <Typography
@@ -179,12 +190,14 @@ const ClientCard: React.FC<Props> = ({
                     {secondaryName}
                   </Typography>
                 )}
-                <Typography variant='body2' sx={{ wordBreak: 'break-all' }}>
-                  ID {client.personalId}
-                </Typography>
+                <IdDisplay
+                  id={client.id}
+                  color='text.primary'
+                  withoutEmphasis
+                />
                 <ClientDobAge client={client} />
                 <ClientSsn client={client} />
-                {showLinkToRecord && (
+                {/* {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink
                       data-testid='goToProfileButton'
@@ -198,7 +211,7 @@ const ClientCard: React.FC<Props> = ({
                       Go to Profile
                     </ButtonLink>
                   </Box>
-                )}
+                )} */}
                 {showEditLink && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink
@@ -223,12 +236,12 @@ const ClientCard: React.FC<Props> = ({
             </Typography>
           </Stack>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={5} lg={6}>
           <Typography variant='h6' sx={{ mb: 1 }}>
             Recent Enrollments
           </Typography>
           <RecentEnrollments
-            clientId={client.id}
+            recentEnrollments={recentEnrollments}
             linkTargetBlank={linkTargetBlank}
           />
         </Grid>
@@ -238,17 +251,28 @@ const ClientCard: React.FC<Props> = ({
           </Typography>
           <Stack spacing={1}>
             <ButtonLink
+              data-testid='goToProfileButton'
+              to={generateSafePath(DashboardRoutes.PROFILE, {
+                clientId: client.id,
+              })}
+              target={linkTargetBlank ? '_blank' : undefined}
+              Icon={OpenInNewIcon}
+              leftAlign
+            >
+              Client Profile
+            </ButtonLink>
+            <ButtonLink
               fullWidth
-              variant='outlined'
-              color='secondary'
               data-testid='enrollButton'
               to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
                 clientId: client.id,
               })}
+              Icon={LibraryAddIcon}
+              leftAlign
             >
               Enroll
             </ButtonLink>
-            <Button fullWidth variant='outlined' color='error'>
+            {/* <Button fullWidth variant='outlined' color='error'>
               Exit
             </Button>
             <Button variant='outlined' color='secondary'>
@@ -256,7 +280,7 @@ const ClientCard: React.FC<Props> = ({
             </Button>
             <Button variant='outlined' color='secondary'>
               Add Service
-            </Button>
+            </Button> */}
           </Stack>
         </Grid>
       </Grid>

@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -84,12 +85,11 @@ const Organization = () => {
               <Typography variant='h6'>Add to Organization</Typography>
               <ButtonLink
                 data-testid='addProjectButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.CREATE_PROJECT, { organizationId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Project
+                Add Project
               </ButtonLink>
             </Stack>
           </Paper>

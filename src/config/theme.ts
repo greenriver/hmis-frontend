@@ -1,4 +1,8 @@
-import { createTheme } from '@mui/material';
+import {
+  createTheme,
+  PaletteColor,
+  SimplePaletteColorOptions,
+} from '@mui/material';
 
 // to have typed safe, Button need to provide extra type that can be augmented
 declare module '@mui/material/Button' {
@@ -19,10 +23,12 @@ declare module '@mui/material/styles' {
   // }
 
   interface Palette {
-    borders: Record<string, string>;
+    borders: PaletteColor;
+    alerts: Record<string, string>;
   }
   interface PaletteOptions {
-    borders: Record<'light' | 'dark', string>;
+    borders: SimplePaletteColorOptions;
+    alerts: { lightWarningBackground?: string };
   }
 }
 
@@ -48,6 +54,10 @@ const theme = createTheme({
     borders: {
       light: '#E5E5E5',
       dark: '#c9c9c9',
+      main: '#c9c9c9',
+    },
+    alerts: {
+      lightWarningBackground: '#FFF9EB',
     },
   },
 });
@@ -133,6 +143,13 @@ export default createTheme(theme, {
             outlineOffset: '4px',
           },
         }),
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        sizeSmall: {
+          fontSize: '0.875rem',
+        },
       },
     },
     MuiTextField: {

@@ -177,6 +177,9 @@ const AssessmentForm = ({
           loading={mutationLoading}
           errors={errors}
           showSavePrompt
+          // Only show "warn if empty" treatments if this is an existing assessment,
+          // OR if the user has attempted to submit this (new) assessment
+          warnIfEmpty={!!assessment || errors.length > 0}
         />
       </Grid>
 
