@@ -30,6 +30,7 @@ import {
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
 } from '@/types/gqlTypes';
@@ -38,35 +39,18 @@ import generateSafePath from '@/utils/generateSafePath';
 const MAX_RECENT_ENROLLMENTS = 5;
 
 const RecentEnrollments = ({
-  clientId,
+  recentEnrollments,
   linkTargetBlank,
 }: {
-  clientId: string;
+  recentEnrollments?: NonNullable<
+    GetClientEnrollmentsQuery['client']
+  >['enrollments']['nodes'];
   linkTargetBlank?: boolean;
 }) => {
-  const {
-    data: { client } = {},
-    loading,
-    error,
-  } = useGetClientEnrollmentsQuery({
-    variables: { id: clientId },
-  });
-
-  const recentEnrollments = useMemo(
-    () =>
-      client
-        ? client.enrollments.nodes
-            .filter((enrollment) => isRecentEnrollment(enrollment))
-            .slice(0, MAX_RECENT_ENROLLMENTS)
-        : undefined,
-    [client]
-  );
-
-  if (error) throw error;
-  if (loading || !client)
-    return <Skeleton variant='rectangular' width={230} height={150} />;
-
-  if (recentEnrollments && recentEnrollments.length === 0)
+  if (
+    !recentEnrollments ||
+    (recentEnrollments && recentEnrollments.length === 0)
+  )
     return <Typography>None.</Typography>;
 
   return (
@@ -74,11 +58,11 @@ const RecentEnrollments = ({
       {recentEnrollments &&
         recentEnrollments.map((enrollment) => (
           <Fragment key={enrollment.id}>
-            <Grid item xs={6}>
+            <Grid item xs={6} lg={4}>
               <RouterLink
                 aria-label={enrollmentName(enrollment)}
                 to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-                  clientId: client.id,
+                  clientId: enrollment.client.id,
                   enrollmentId: enrollment.id,
                 })}
                 target={linkTargetBlank ? '_blank' : undefined}
@@ -123,7 +107,22 @@ const ClientCard: React.FC<Props> = ({
     variables: { id: client.id },
     skip: hideImage,
   });
-  if (imageLoading) {
+
+  const { data, loading: enrollmentsLoading } = useGetClientEnrollmentsQuery({
+    variables: { id: client.id },
+  });
+
+  const recentEnrollments = useMemo(
+    () =>
+      data?.client
+        ? data.client.enrollments.nodes
+            .filter((enrollment) => isRecentEnrollment(enrollment))
+            .slice(0, MAX_RECENT_ENROLLMENTS)
+        : undefined,
+    [data]
+  );
+
+  if (imageLoading || enrollmentsLoading) {
     return (
       <Skeleton
         variant='rectangular'
@@ -158,7 +157,7 @@ const ClientCard: React.FC<Props> = ({
         </Grid>
       )}
       <Grid container sx={{ p: 1 }}>
-        <Grid item xs={5}>
+        <Grid item xs={5} lg={4}>
           <Stack spacing={1}>
             <RouterLink
               plain
@@ -167,7 +166,9 @@ const ClientCard: React.FC<Props> = ({
               })}
             >
               <Stack direction='row' spacing={1}>
-                <Typography variant='h5'>{primaryName}</Typography>
+                <Typography variant='h5' fontWeight={600}>
+                  {primaryName}
+                </Typography>
                 {!isEmpty(client.pronouns) && (
                   <Typography variant='h5' color='text.secondary'>
                     ({pronouns(client)})
@@ -235,12 +236,12 @@ const ClientCard: React.FC<Props> = ({
             </Typography>
           </Stack>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={5} lg={6}>
           <Typography variant='h6' sx={{ mb: 1 }}>
             Recent Enrollments
           </Typography>
           <RecentEnrollments
-            clientId={client.id}
+            recentEnrollments={recentEnrollments}
             linkTargetBlank={linkTargetBlank}
           />
         </Grid>
