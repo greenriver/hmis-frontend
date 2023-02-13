@@ -113,7 +113,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   });
 
   // Set previousStreetEssh to false, causing break to appear
-  cy.getById('3.917.C').find('button[value="false"]').click();
+  cy.checkOption('3.917.C', 'false');
   cy.displayItem(breakLast).should('exist');
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
@@ -126,7 +126,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   });
 
   // Set previousStreetEssh to true, causing break to disappear
-  cy.getById('3.917.C').find('button[value="true"]').click();
+  cy.checkOption('3.917.C', 'true');
   cy.displayItems([breakInstitutional, breakPermanent, breakLast]).should(
     'not.exist'
   );
@@ -144,11 +144,11 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
 
   // Disabling should remove values
-  cy.getById('3.917.C').find('button[value="false"]').click();
+  cy.checkOption('3.917.C', 'false');
   cy.getByIds(threeFourFive).should('not.exist');
 
   // Re-enabling should add back old values (make previousStreetEssh null)
-  cy.getById('3.917.C').find('button[value="false"]').click();
+  cy.checkOption('3.917.C', 'false'); // un-check
   cy.expectHudValuesSectionToDeepEqual({
     ...expectedHudValues,
     'Enrollment.previousStreetEssh': null,
