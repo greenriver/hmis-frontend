@@ -8798,6 +8798,8 @@ export type GetProjectEnrollmentsQuery = {
           preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
+          dob?: string | null;
+          ssn?: string | null;
         };
         project: {
           __typename?: 'Project';
@@ -13179,6 +13181,7 @@ export const GetProjectEnrollmentsDocument = gql`
           client {
             id
             ...ClientName
+            ...ClientIdentificationFields
           }
         }
       }
@@ -13186,6 +13189,7 @@ export const GetProjectEnrollmentsDocument = gql`
   }
   ${EnrollmentFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
 `;
 
 /**

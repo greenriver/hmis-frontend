@@ -5,8 +5,8 @@ import {
 } from '@apollo/client';
 import { Box, Stack, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
-import { get, startCase } from 'lodash-es';
-import { useMemo, useState, ReactNode, useEffect } from 'react';
+import { get, isEqual, startCase } from 'lodash-es';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
 
@@ -16,6 +16,7 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import usePrevious from '@/hooks/usePrevious';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
@@ -73,6 +74,7 @@ const GenericTableWithData = <
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const [hasRefetched, setHasRefetched] = useState(false);
+  const previousQueryVariables = usePrevious(queryVariables);
 
   const { data, loading, error, networkStatus } = useQuery<
     Query,
@@ -93,6 +95,12 @@ const GenericTableWithData = <
     // See for statuses 2/3/4:  https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L12-L28
     if ([2, 3, 4].includes(networkStatus)) setHasRefetched(true);
   }, [networkStatus]);
+
+  useEffect(() => {
+    if (!isEqual(previousQueryVariables, queryVariables)) {
+      setPage(0);
+    }
+  }, [previousQueryVariables, queryVariables]);
 
   if (error) throw error;
 
