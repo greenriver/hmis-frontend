@@ -7,7 +7,14 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import { memo, ReactNode, useCallback, useEffect, useState } from 'react';
+import {
+  memo,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useState,
+  useMemo,
+} from 'react';
 import { useLocation } from 'react-router-dom';
 
 import IndividualAssessment from '../IndividualAssessment';

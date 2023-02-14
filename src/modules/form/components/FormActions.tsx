@@ -71,6 +71,7 @@ const FormActions = ({
 
             return (
               <LoadingButton
+                key={label}
                 type={isSubmit ? 'submit' : undefined}
                 disabled={disabled}
                 onClick={getClickHandler(action, onSuccess)}
