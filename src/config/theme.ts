@@ -59,7 +59,7 @@ export const baseThemeDef: ThemeOptions = {
       main: '#c9c9c9',
     },
     alerts: {
-      lightWarningBackground: '#FFF9EB',
+      lightWarningBackground: '#fffde0',
     },
   },
 };
