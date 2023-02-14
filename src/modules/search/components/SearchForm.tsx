@@ -97,6 +97,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       const variables = transformSubmitValues({
         definition,
         values,
+        keyByFieldName: true,
       });
       const input = {
         ...variables,
@@ -142,7 +143,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         <Grid
           item
           gap={2}
-          alignItems='end'
+          alignItems='start'
           sx={{ mb: 2, display: 'flex' }}
           xs={12}
           sm={12}
@@ -189,7 +190,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
             <Button
               variant='outlined'
               type='submit'
-              sx={{ py: 0.8, maxWidth: '150px' }}
+              sx={{ mt: 3, py: 0.8, maxWidth: '150px' }}
               fullWidth
             >
               Search

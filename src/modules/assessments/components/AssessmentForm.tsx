@@ -1,4 +1,5 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import { assign, cloneDeep } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -15,12 +16,14 @@ import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import { getInitialValues } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
+  InitialBehavior,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -75,7 +78,6 @@ const AssessmentForm = ({
     assessmentId: assessment?.id,
     onSuccess,
   });
-
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
@@ -88,22 +90,32 @@ const AssessmentForm = ({
     };
 
     const source = sourceAssessment || assessment;
-    let init;
-    if (!source) {
-      init = getInitialValues(definition.definition, localConstants);
-    } else {
-      const values = source.assessmentDetail?.values;
-      // FIXME make consistent
-      init = typeof values === 'string' ? JSON.parse(values) : values;
-      // Should we merge with initial values here?
+
+    // Set initial values based solely on FormDefinition
+    const init = getInitialValues(definition.definition, localConstants);
+    if (source) {
+      // Overlay initial values from source Assessment
+      const initialFromSourceAssessment = cloneDeep(
+        source.assessmentDetail?.values || {}
+      );
+      assign(init, initialFromSourceAssessment);
+
+      // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
+      const initialsToOverwrite = getInitialValues(
+        definition.definition,
+        localConstants,
+        InitialBehavior.Overwrite
+      );
+      assign(init, initialsToOverwrite);
     }
-    // console.debug(
-    //   enrollment.id,
-    //   'Initial Form State',
-    //   init,
-    //   'from source:',
-    //   source?.id || 'none'
-    // );
+
+    console.debug(
+      'Initial Form State',
+      init,
+      'from source:',
+      source?.id || 'none'
+    );
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
     return init;
@@ -151,10 +163,10 @@ const AssessmentForm = ({
               </Button>
             </ButtonTooltipContainer>
           )}
-          {import.meta.env.MODE === 'development' && (
-            <Typography variant='body2' color='text.secondary' sx={{ my: 2 }}>
-              <b>Assessment ID:</b> {assessment?.id || 'N/A'}
-            </Typography>
+          {import.meta.env.MODE === 'development' && assessment && (
+            <Box sx={{ py: 2, px: 1 }}>
+              <IdDisplay prefix='Assessment' id={assessment.id} />
+            </Box>
           )}
         </Box>
       </Grid>
@@ -178,6 +190,9 @@ const AssessmentForm = ({
           errors={errors}
           showSavePrompt
           FormActionProps={FormActionProps}
+          // Only show "warn if empty" treatments if this is an existing assessment,
+          // OR if the user has attempted to submit this (new) assessment
+          warnIfEmpty={!!assessment || errors.length > 0}
         />
       </Grid>
 

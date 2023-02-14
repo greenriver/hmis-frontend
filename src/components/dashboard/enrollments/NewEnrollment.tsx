@@ -1,4 +1,5 @@
-import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router-dom';
@@ -88,6 +89,8 @@ const NewEnrollment = () => {
   }
   if (error) throw error;
 
+  if (recentHouseholdMembersLoading) return <Loading />;
+
   const numMembers = Object.keys(members).length;
 
   return (
@@ -128,11 +131,13 @@ const NewEnrollment = () => {
                   setEntryDate(value);
                   setDateError(false);
                 }}
+                textInputProps={{
+                  id: 'entry-date',
+                }}
               />
             </Stack>
           </Paper>
 
-          {recentHouseholdMembersLoading && <Loading />}
           {recentMembers && recentMembers.length > 1 && (
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography variant='h5' sx={{ mb: 2 }}>
@@ -148,20 +153,18 @@ const NewEnrollment = () => {
           )}
 
           <Grid item xs={4}>
-            <Button
+            <LoadingButton
               data-testid='createEnrollmentButton'
-              disabled={loading}
+              loading={loading}
               onClick={onSubmit}
               fullWidth
             >
-              {loading
-                ? 'Submitting...'
-                : numMembers > 1
+              {numMembers > 1
                 ? `Enroll ${clientBriefName(client)} and ${
                     numMembers - 1
                   } other${numMembers > 2 ? 's' : ''}`
                 : `Enroll ${clientBriefName(client)}`}
-            </Button>
+            </LoadingButton>
             {(projectError || dateError) && (
               <Typography variant='body2' color='error' sx={{ mt: 1 }}>
                 {projectError && dateError

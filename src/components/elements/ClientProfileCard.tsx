@@ -114,7 +114,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                       values={client.gender}
                       enumMap={{
                         ...HmisEnums.Gender,
-                        [Gender.GenderNoSingleGender]: 'Non-Binary',
+                        [Gender.NoSingleGender]: 'Non-Binary',
                       }}
                     />
                   ),

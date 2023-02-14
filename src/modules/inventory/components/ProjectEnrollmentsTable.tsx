@@ -1,4 +1,6 @@
-import { useCallback } from 'react';
+import { Stack, Tooltip, Typography } from '@mui/material';
+import { formatISO } from 'date-fns';
+import { useCallback, useMemo } from 'react';
 
 import ClientName from '@/components/elements/ClientName';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -6,7 +8,12 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import {
+  formatDateForDisplay,
+  parseAndFormatDateRange,
+} from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -16,27 +23,86 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const columns: ColumnDef<EnrollmentFieldsFragment>[] = [
-  {
+export const ENROLLMENT_COLUMNS: {
+  [key: string]: ColumnDef<EnrollmentFieldsFragment>;
+} = {
+  clientName: {
     header: 'Client',
     render: (e) => <ClientName client={e.client} />,
     linkTreatment: true,
   },
-  {
+  clientNameLinkedToEnrollment: {
+    header: 'Client',
+    render: (e) => (
+      <ClientName
+        client={e.client}
+        routerLinkProps={{
+          to: generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+            clientId: e.client.id,
+            enrollmentId: e.id,
+          }),
+          target: '_blank',
+        }}
+      />
+    ),
+    linkTreatment: true,
+  },
+  enrollmentStatus: {
     header: 'Status',
     render: (e) => <EnrollmentStatus enrollment={e} />,
   },
-  {
+  enrollmentPeriod: {
     header: 'Enrollment Period',
     render: (e) => parseAndFormatDateRange(e.entryDate, e.exitDate),
   },
-  {
-    header: 'Household Size',
-    render: (e) => e.householdSize,
+  householdId: {
+    header: 'Household ID',
+    render: (e) => (
+      <Stack direction='row' alignItems='baseline'>
+        <Tooltip
+          title={`${e.householdSize} member${e.householdSize !== 1 ? 's' : ''}`}
+          arrow
+        >
+          <Typography variant='body2'>
+            {`${e.household.id.slice(0, 6).toUpperCase()} (${e.householdSize})`}
+          </Typography>
+        </Tooltip>
+        {e.householdSize > 1 && (
+          <HohIndicator relationshipToHoh={e.relationshipToHoH} />
+        )}
+      </Stack>
+    ),
   },
+  dobAge: {
+    header: 'DOB / Age',
+    key: 'dob',
+    render: (e) => <ClientDobAge client={e.client} />,
+  },
+  clientId: {
+    header: 'Client ID',
+    key: 'id',
+    render: (e) => e.client.id,
+  },
+};
+
+const defaultColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
+  ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
+  ENROLLMENT_COLUMNS.enrollmentStatus,
+  ENROLLMENT_COLUMNS.enrollmentPeriod,
+  ENROLLMENT_COLUMNS.householdId,
 ];
 
-const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
+const ProjectEnrollmentsTable = ({
+  projectId,
+  columns,
+  openOnDate,
+  linkRowToEnrollment = false,
+}: {
+  projectId: string;
+  columns?: typeof defaultColumns;
+  linkRowToEnrollment?: boolean;
+  openOnDate?: Date;
+}) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
   >(undefined);
@@ -48,6 +114,14 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
         enrollmentId: en.id,
       }),
     []
+  );
+
+  const openOnDateString = useMemo(
+    () =>
+      openOnDate
+        ? formatISO(openOnDate, { representation: 'date' })
+        : undefined,
+    [openOnDate]
   );
 
   return (
@@ -66,11 +140,19 @@ const ProjectEnrollmentsTable = ({ projectId }: { projectId: string }) => {
           inputWidth='200px'
         />
       }
-      queryVariables={{ id: projectId, clientSearchTerm: debouncedSearch }}
+      queryVariables={{
+        id: projectId,
+        clientSearchTerm: debouncedSearch,
+        openOnDate: openOnDateString,
+      }}
       queryDocument={GetProjectEnrollmentsDocument}
-      columns={columns}
-      rowLinkTo={rowLinkTo}
-      noData='No clients.'
+      columns={columns || defaultColumns}
+      rowLinkTo={linkRowToEnrollment ? rowLinkTo : undefined}
+      noData={
+        openOnDate
+          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
+          : 'No clients.'
+      }
       pagePath='project.enrollments'
     />
   );

@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
   Button,
@@ -142,7 +143,7 @@ const Project = () => {
               sx={{ mb: 2 }}
             >
               <Typography variant='h5'>Project Details</Typography>
-              <IdDisplay id={project.id} />
+              <IdDisplay prefix='Project' id={project.id} />
             </Stack>
             <ProjectDetails project={project} />
           </Paper>
@@ -165,33 +166,44 @@ const Project = () => {
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>
             <Stack spacing={2}>
+              <Typography variant='h6'>Client Related Actions</Typography>
+              <ButtonLink
+                data-testid='recordServicesButton'
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
+              >
+                Record Services
+              </ButtonLink>
+            </Stack>
+          </Paper>
+          <Paper sx={{ p: 2, mb: 3 }}>
+            <Stack spacing={2}>
               <Typography variant='h6'>Add to Project</Typography>
               <ButtonLink
                 data-testid='addFunderButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Funding Source
+                Add Funding Source
               </ButtonLink>
               <ButtonLink
                 data-testid='addProjectCocButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_COC, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Project CoC
+                Add Project CoC
               </ButtonLink>
               <ButtonLink
                 data-testid='addInventoryButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
                 to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
+                Icon={AddIcon}
+                leftAlign
               >
-                + Add Inventory
+                Add Inventory
               </ButtonLink>
             </Stack>
           </Paper>
@@ -235,7 +247,7 @@ const Project = () => {
         id='deleteProjectConfirmation'
         open={open}
         title='Delete project'
-        onConfirm={deleteProject}
+        onConfirm={() => deleteProject()}
         onCancel={() => setOpen(false)}
         loading={deleteLoading}
       >

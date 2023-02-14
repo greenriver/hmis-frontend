@@ -1,3 +1,4 @@
+import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -13,7 +14,6 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 
 import EntryDateInput from './EntryDateInput';
-import HohIndicatorTableCell from './HohIndicatorTableCell';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
@@ -21,6 +21,7 @@ import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
@@ -142,7 +143,7 @@ const EditHouseholdMemberTable = ({
         key: 'indicator',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <HohIndicatorTableCell householdClient={hc} />
+          <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
         ),
       },
       {
@@ -245,14 +246,14 @@ const EditHouseholdMemberTable = ({
             )}
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button
+            <LoadingButton
               variant='outlined'
               color='secondary'
               onClick={onChangeHoH}
-              disabled={loading || confirmedHoH}
+              loading={loading || confirmedHoH}
             >
-              {loading || confirmedHoH ? 'Updating...' : 'Confirm'}
-            </Button>
+              Confirm
+            </LoadingButton>
             <Button onClick={() => setProposedHoH(null)} variant='gray'>
               Cancel
             </Button>

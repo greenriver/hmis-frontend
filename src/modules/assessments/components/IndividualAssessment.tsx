@@ -15,7 +15,7 @@ import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
@@ -107,10 +107,7 @@ const IndividualAssessment = ({
     const currentRoute = assessment
       ? DashboardRoutes.VIEW_ASSESSMENT
       : DashboardRoutes.NEW_ASSESSMENT;
-    const breadCrumbTitle = `${assessmentTitle} ${
-      informationDate ? `for ${parseAndFormatDate(informationDate)}` : ''
-    }`;
-    overrideBreadcrumbTitles({ [currentRoute]: breadCrumbTitle });
+    overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
   }, [
     embeddedInWorkflow,
     assessmentTitle,
@@ -133,7 +130,7 @@ const IndividualAssessment = ({
         <Stack direction='row'>
           <Typography variant='h4' sx={{ mt: 1, mb: 3, fontWeight: 400 }}>
             <b>{assessmentTitle}</b>
-            {informationDate && ` ${parseAndFormatDate(informationDate)}`}
+            {/* {informationDate && ` ${parseAndFormatDate(informationDate)}`} */}
             {embeddedInWorkflow && clientName && ` for ${clientName}`}
           </Typography>
         </Stack>

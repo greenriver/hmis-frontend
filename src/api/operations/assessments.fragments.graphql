@@ -35,14 +35,20 @@ fragment ItemFields on FormItem {
   briefText
   helperText
   required
+  warnIfEmpty
   hidden
   readOnly
   repeats
   fieldName
   recordType
   pickListReference
+  serviceDetailType
   size
+  assessmentDate
+  prefill
   bounds {
+    id
+    severity
     type
     question
     valueNumber
@@ -56,6 +62,7 @@ fragment ItemFields on FormItem {
     valueBoolean
     valueNumber
     valueLocalConstant
+    initialBehavior
   }
   dataCollectedAbout
   disabledDisplay
@@ -67,6 +74,7 @@ fragment ItemFields on FormItem {
     valueCode
     valueBoolean
     valueNumber
+    sumQuestions
     autofillBehavior
     autofillWhen {
       ...EnableWhenFields

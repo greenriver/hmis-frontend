@@ -8,6 +8,8 @@ import React, { ReactNode } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
+import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
+
 export interface GenericSelectProps<
   T,
   Multiple extends boolean | undefined,
@@ -31,16 +33,11 @@ const GenericSelect = <
   options,
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
-  const hasValue = (value: string | object | null | undefined) => {
-    if (Array.isArray(value) && value.length == 0) return false;
-    return value !== null && typeof value !== 'undefined';
-  };
-
   const { placeholder, ...inputProps } = textInputProps || {};
 
   // Show a loading indicator if we have a value but the picklist is still loading
   const startAdornment =
-    rest.loading && hasValue(value) ? (
+    rest.loading && hasMeaningfulValue(value) ? (
       <InputAdornment position='start' sx={{ pl: 1 }}>
         <CircularProgress size={15} color='inherit' />
       </InputAdornment>
@@ -71,7 +68,7 @@ const GenericSelect = <
           }}
           disabled={rest.disabled}
           // Only render placeholder if no values are selected
-          placeholder={hasValue(value) ? undefined : placeholder}
+          placeholder={hasMeaningfulValue(value) ? undefined : placeholder}
           label={label}
         />
       )}

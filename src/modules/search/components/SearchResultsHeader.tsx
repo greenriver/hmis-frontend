@@ -1,3 +1,4 @@
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import {
@@ -106,19 +107,18 @@ const SearchResultsHeader = ({
       </Grid>
       <Grid item>
         <Card sx={{ pl: 2, py: 1.5, pr: 1, mt: 1 }}>
-          <Stack direction='row' spacing={2} sx={{ alignItems: 'center' }}>
-            <Typography variant='body2'>
+          <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
+            <Typography variant='body1'>
               {t<string>('clientSearch.addClientPrompt')}
             </Typography>
             <ButtonLink
               data-testid='addClientButton'
-              variant='outlined'
-              color='secondary'
               to={Routes.CREATE_CLIENT}
               target='_blank'
               sx={{ px: 3 }}
+              Icon={LibraryAddIcon}
             >
-              + Add Client
+              Add Client
             </ButtonLink>
           </Stack>
         </Card>

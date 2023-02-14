@@ -16,7 +16,10 @@ export const HmisEnums = {
     RECORD: 'Form for creating or editing resources directly',
     UPDATE: 'UPDATE',
   },
-  AssessmentSortOption: { ASSESSMENT_DATE: 'ASSESSMENT_DATE' },
+  AssessmentSortOption: {
+    ASSESSMENT_DATE: 'ASSESSMENT_DATE',
+    DATE_UPDATED: 'DATE_UPDATED',
+  },
   AssessmentType: {
     INVALID: 'Invalid Value',
     PHONE: 'Phone',
@@ -50,12 +53,12 @@ export const HmisEnums = {
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    DISABILITY_TABLE:
+      'Specialized component for rendering disabilities in a table',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
-    INPUT_TABLE:
-      'Render inputs as a table. Each nested group is rendered as a row.',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
@@ -260,22 +263,22 @@ export const HmisEnums = {
     N_A: 'N/A',
   },
   Gender: {
-    GENDER_FEMALE: 'Female',
-    GENDER_MALE: 'Male',
-    GENDER_NO_SINGLE_GENDER:
+    FEMALE: 'Female',
+    MALE: 'Male',
+    NO_SINGLE_GENDER:
       'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
-    GENDER_TRANSGENDER: 'Transgender',
-    GENDER_QUESTIONING: 'Questioning',
-    GENDER_CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    GENDER_CLIENT_REFUSED: 'Client refused',
-    GENDER_DATA_NOT_COLLECTED: 'Data not collected',
+    TRANSGENDER: 'Transgender',
+    QUESTIONING: 'Questioning',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   GeographyType: {
     INVALID: 'Invalid Value',
     URBAN: 'Urban',
     SUBURBAN: 'Suburban',
     RURAL: 'Rural',
-    UNKNOWN_DATA_NOT_COLLECTED: 'Unknown / data not collected',
+    DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
     INVALID: 'Invalid Value',
@@ -307,6 +310,12 @@ export const HmisEnums = {
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
+  },
+  InitialBehavior: {
+    IF_EMPTY:
+      'When loading the form, only set the specified initial value if there is no existing value.',
+    OVERWRITE:
+      'When loading the form, always overwrite the existing value with specified initial value.',
   },
   InputSize: {
     LARGE: 'LARGE',
@@ -502,14 +511,14 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   Race: {
-    RACE_AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
-    RACE_ASIAN: 'Asian or Asian American',
-    RACE_BLACK_AF_AMERICAN: 'Black, African American, or African',
-    RACE_NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
-    RACE_WHITE: 'White',
-    RACE_UNKNOWN: "Client doesn't know",
-    RACE_REFUSED: 'Client refused',
-    RACE_NOT_COLLECTED: 'Data not collected',
+    AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
+    ASIAN: 'Asian or Asian American',
+    BLACK_AF_AMERICAN: 'Black, African American, or African',
+    NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
+    WHITE: 'White',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   ReasonNotInsured: {
     INVALID: 'Invalid Value',
@@ -521,6 +530,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  RecentItemType: { Client: 'Client', Project: 'Project' },
   RecordType: {
     INVALID: 'Invalid Value',
     CONTACT_12: 'Contact 12',
@@ -535,7 +545,7 @@ export const HmisEnums = {
     RHY_REFERRAL: 'RHY referral',
     BED_NIGHT: 'Bed night',
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH voucher tracking',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED: 'C2 Moving On Assistance Provided',
+    MOVING_ON_ASSISTANCE: 'Moving On Assistance',
   },
   ReferralResult: {
     INVALID: 'Invalid Value',
@@ -588,6 +598,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  ServiceDetailType: { BULK: 'BULK', CLIENT: 'CLIENT' },
   ServiceSortOption: { DATE_PROVIDED: 'DATE_PROVIDED' },
   ServiceSubTypeProvided: {
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS__CHILD_CARE:
@@ -650,57 +661,57 @@ export const HmisEnums = {
   },
   ServiceTypeProvided: {
     INVALID: 'Invalid Value',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
-      'Subsidized housing application assistance',
     HOPWA_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
     HOPWA_SERVICE__ADULT_DAY_CARE_AND_PERSONAL_ASSISTANCE:
       'Adult day care and personal assistance',
     HUD_VASH_OTH_VOUCHER_TRACKING__REFERRAL_PACKAGE_FORWARDED_TO_PHA:
       'Referral package forwarded to PHA',
+    MOVING_ON_ASSISTANCE__SUBSIDIZED_HOUSING_APPLICATION_ASSISTANCE:
+      'Subsidized housing application assistance',
     PATH_REFERRAL__COMMUNITY_MENTAL_HEALTH: 'Community mental health',
     PATH_SERVICE__RE_ENGAGEMENT: 'Re-engagement',
     SSVF_FINANCIAL_ASSISTANCE__RENTAL_ASSISTANCE: 'Rental assistance',
     SSVF_SERVICE__OUTREACH_SERVICES: 'Outreach services',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
-      'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     HOPWA_FINANCIAL_ASSISTANCE__SECURITY_DEPOSITS: 'Security deposits',
     HOPWA_SERVICE__CASE_MANAGEMENT: 'Case management',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_DENIED_BY_PHA:
       'Voucher denied by PHA',
+    MOVING_ON_ASSISTANCE__FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_SECURITY_DEPOSIT_MOVING_EXPENSES:
+      'Financial assistance for Moving On (e.g., security deposit, moving expenses)',
     PATH_REFERRAL__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     PATH_SERVICE__SCREENING: 'Screening',
     RHY_SERVICE_CONNECTIONS__COMMUNITY_SERVICE_SERVICE_LEARNING_CSL:
       'Community service/service learning (CSL)',
     SSVF_FINANCIAL_ASSISTANCE__SECURITY_DEPOSIT: 'Security deposit',
     SSVF_SERVICE__CASE_MANAGEMENT_SERVICES: 'Case management services',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
-      'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     HOPWA_FINANCIAL_ASSISTANCE__UTILITY_DEPOSITS: 'Utility deposits',
     HOPWA_SERVICE__CHILD_CARE: 'Child care',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_ISSUED_BY_PHA:
       'Voucher issued by PHA',
+    MOVING_ON_ASSISTANCE__NON_FINANCIAL_ASSISTANCE_FOR_MOVING_ON_E_G_HOUSING_NAVIGATION_TRANSITION_SUPPORT:
+      'Non-financial assistance for Moving On (e.g., housing navigation, transition support)',
     PATH_REFERRAL__PRIMARY_HEALTH_DENTAL_CARE: 'Primary health/dental care',
     PATH_SERVICE__HABILITATION_REHABILITATION: 'Habilitation/rehabilitation',
     SSVF_FINANCIAL_ASSISTANCE__UTILITY_DEPOSIT: 'Utility deposit',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_VA_BENEFITS:
       'Assistance obtaining VA benefits',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__HOUSING_REFERRAL_PLACEMENT:
-      'Housing referral/placement',
     HOPWA_FINANCIAL_ASSISTANCE__UTILITY_PAYMENTS: 'Utility payments',
     HOPWA_SERVICE__CRIMINAL_JUSTICE_LEGAL_SERVICES:
       'Criminal justice/legal services',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_REVOKED_OR_EXPIRED:
       'Voucher revoked or expired',
+    MOVING_ON_ASSISTANCE__HOUSING_REFERRAL_PLACEMENT:
+      'Housing referral/placement',
     PATH_REFERRAL__JOB_TRAINING: 'Job training',
     PATH_SERVICE__COMMUNITY_MENTAL_HEALTH: 'Community mental health',
     SSVF_FINANCIAL_ASSISTANCE__UTILITY_FEE_PAYMENT_ASSISTANCE:
       'Utility fee payment assistance',
     SSVF_SERVICE__ASSISTANCE_OBTAINING_COORDINATING_OTHER_PUBLIC_BENEFITS:
       'Assistance obtaining/coordinating other public benefits',
-    C2_MOVING_ON_ASSISTANCE_PROVIDED__OTHER: 'Other',
     HOPWA_SERVICE__EDUCATION: 'Education',
     HUD_VASH_OTH_VOUCHER_TRACKING__VOUCHER_IN_USE_VETERAN_MOVED_INTO_HOUSING:
       'Voucher in use - veteran moved into housing',
+    MOVING_ON_ASSISTANCE__OTHER: 'Other',
     PATH_REFERRAL__EDUCATIONAL_SERVICES: 'Educational services',
     PATH_SERVICE__SUBSTANCE_USE_TREATMENT: 'Substance use treatment',
     RHY_SERVICE_CONNECTIONS__EDUCATION: 'Education',
@@ -808,6 +819,16 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
+  },
+  ValidationSeverity: { error: 'error', warning: 'warning' },
+  ValidationType: {
+    data_not_collected: 'data_not_collected',
+    information: 'information',
+    invalid: 'invalid',
+    not_found: 'not_found',
+    out_of_range: 'out_of_range',
+    required: 'required',
+    server_error: 'server_error',
   },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',

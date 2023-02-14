@@ -1,15 +1,15 @@
 import { Typography } from '@mui/material';
 
-import {
-  HouseholdClientFieldsFragment,
-  RelationshipToHoH,
-} from '@/types/gqlTypes';
+import { RelationshipToHoH } from '@/types/gqlTypes';
 
-const HohIndicatorTableCell = ({
-  householdClient,
+const HohIndicator = ({
+  relationshipToHoh,
 }: {
-  householdClient: HouseholdClientFieldsFragment;
+  relationshipToHoh: RelationshipToHoH;
 }) => {
+  if (relationshipToHoh !== RelationshipToHoH.SelfHeadOfHousehold) {
+    return null;
+  }
   return (
     // <Tooltip title='Head of Household' arrow>
     <Typography
@@ -22,11 +22,10 @@ const HohIndicatorTableCell = ({
         fontSize: '.75rem',
       }}
     >
-      {householdClient.relationshipToHoH ===
-        RelationshipToHoH.SelfHeadOfHousehold && 'HoH'}
+      HoH
     </Typography>
     // </Tooltip>
   );
 };
 
-export default HohIndicatorTableCell;
+export default HohIndicator;

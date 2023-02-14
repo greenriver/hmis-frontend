@@ -36,7 +36,6 @@ const FormActions = ({
       <Stack direction='row' spacing={2}>
         <LoadingButton
           data-testid='submitFormButton'
-          variant='contained'
           type='submit'
           disabled={disabled}
           onClick={onSubmit}
@@ -48,7 +47,6 @@ const FormActions = ({
         {onSaveDraft && (
           <LoadingButton
             data-testid='saveFormButton'
-            variant='outlined'
             type='submit'
             disabled={disabled}
             onClick={onSaveDraft}

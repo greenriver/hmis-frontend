@@ -19,16 +19,6 @@ query SearchClients(
   }
 }
 
-query OmniSearchClients($input: ClientSearchInput!) {
-  clientSearch(input: $input, limit: 5) {
-    limit
-    nodesCount
-    nodes {
-      ...ClientOmniSearchFields
-    }
-  }
-}
-
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields
@@ -225,6 +215,18 @@ mutation AddServiceToEnrollment($input: CreateServiceInput!) {
 
 mutation UpdateService($input: UpdateServiceInput!) {
   updateService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteService($input: DeleteServiceInput!) {
+  deleteService(input: $input) {
     clientMutationId
     service {
       ...ServiceFields

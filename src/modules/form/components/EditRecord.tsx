@@ -3,7 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import {
-  CONFIRM_ERROR_TYPE,
+  debugFormValues,
   getInitialValues,
   getItemMap,
   LocalConstants,
@@ -18,6 +18,7 @@ import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
+  DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
 import {
   createInitialValuesFromRecord,
@@ -75,7 +76,6 @@ const EditRecord = <
   ...props
 }: Props<RecordType, Query, QueryVariables>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
 
   const {
     data,
@@ -100,17 +100,10 @@ const EditRecord = <
     useMutation<Query, QueryVariables>(queryDocument, {
       onCompleted: (data) => {
         const errors = getErrors(data) || [];
-
+        window.scrollTo(0, 0);
         if (errors.length > 0) {
-          const warnings = errors.filter((e) => e.type === CONFIRM_ERROR_TYPE);
-          const validationErrors = errors.filter(
-            (e) => e.type !== CONFIRM_ERROR_TYPE
-          );
-          if (validationErrors.length > 0) window.scrollTo(0, 0);
-          setWarnings(warnings);
-          setErrors(validationErrors);
+          setErrors(errors);
         } else {
-          window.scrollTo(0, 0);
           onCompleted(data);
         }
       },
@@ -136,26 +129,26 @@ const EditRecord = <
     return values;
   }, [record, definition, itemMap, localConstants]);
 
-  const submitHandler = useCallback(
-    (values: Record<string, any>, confirmed = false) => {
+  const submitHandler: DynamicFormOnSubmit = useCallback(
+    (event, values, confirmed = false) => {
       if (!definition) return;
-      // Transform values into client input query variables
-      const inputValues = transformSubmitValues({
+      if (debugFormValues(event, values, definition)) return;
+
+      const hudValues = transformSubmitValues({
         definition,
         values,
         autofillNotCollected: true,
         autofillNulls: true,
-        autofillBooleans: false,
+        keyByFieldName: true,
       });
-      console.log('Submitted form values:', inputValues);
 
+      console.log('Submitting form values:', hudValues);
       const input = {
-        input: { ...inputValues, ...inputVariables },
+        input: { ...hudValues, ...inputVariables },
         id: record?.id,
         confirmed: confirmable ? confirmed : undefined,
       };
 
-      setWarnings([]);
       setErrors([]);
       void mutateFunction({ variables: { input } as QueryVariables });
     },
@@ -192,7 +185,6 @@ const EditRecord = <
         initialValues={initialValues}
         loading={saveLoading}
         errors={errors}
-        warnings={warnings}
         {...props}
         FormActionProps={{
           submitButtonText: 'Save Changes',
