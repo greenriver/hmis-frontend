@@ -45,7 +45,7 @@ const AssessmentForm = ({
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
-  onSuccess,
+  onSuccess, // remove
   FormActionProps,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
@@ -76,7 +76,6 @@ const AssessmentForm = ({
     definition,
     enrollmentId: enrollment.id,
     assessmentId: assessment?.id,
-    onSuccess,
   });
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
@@ -190,6 +189,7 @@ const AssessmentForm = ({
           errors={errors}
           showSavePrompt
           FormActionProps={FormActionProps}
+          onSuccess={onSuccess} //remove
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment
           warnIfEmpty={!!assessment || errors.length > 0}

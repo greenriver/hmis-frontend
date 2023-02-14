@@ -86,9 +86,37 @@ const HouseholdAssessmentTabPanel = memo(
     client,
     relationshipToHoH,
     assessmentRole,
-    onSuccess,
-  }: HouseholdAssessmentTabPanelProps) => {
+  }: // onSuccess,
+  HouseholdAssessmentTabPanelProps) => {
     console.debug('Rendering assessment panel for', clientName);
+
+    const FormActionProps = useMemo(() => {
+      return {
+        // TODO gig update all the handlers
+        config: [
+          {
+            label: 'Ready to Exit',
+            action: 'SAVE',
+            // When read, checkmark and disabled
+            // buttonProps: { variant: 'outlined' },
+            onSuccess: () => console.log('marking as ready for exit'),
+          },
+          {
+            label: 'Previous',
+            action: 'SAVE',
+            buttonProps: { variant: 'outlined' },
+            onSuccess: () => console.log('going to previous'),
+          },
+          {
+            label: 'Next',
+            action: 'SAVE',
+            buttonProps: { variant: 'outlined' },
+            onSuccess: () => console.log('going to next'),
+          },
+        ],
+      };
+    }, []);
+
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -103,7 +131,7 @@ const HouseholdAssessmentTabPanel = memo(
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
           assessmentRole={assessmentRole}
-          onSuccess={onSuccess}
+          FormActionProps={FormActionProps}
         />
       </AlwaysMountedTabPanel>
     );
@@ -172,6 +200,14 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
     window.scrollTo(0, 0);
     router.navigate(`#${newValue}`, { replace: true });
   };
+
+  // const navigateToNext = useCallback(() => {
+  //   console.log('next', currentTab, tabs);
+  // }, [currentTab, tabs]);
+
+  // const navigateToPrevious = useCallback(() => {
+  //   console.log('previous', currentTab, tabs);
+  // }, [currentTab, tabs]);
 
   if (loading && networkStatus === 1) return <Loading />;
   if (error) throw error;

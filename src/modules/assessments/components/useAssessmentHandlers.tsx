@@ -24,7 +24,7 @@ export function useAssessmentHandlers({
   definition,
   enrollmentId,
   assessmentId,
-  onSuccess,
+  onSuccess, // TODO move into button config
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -108,7 +108,7 @@ export function useAssessmentHandlers({
   );
 
   const saveDraftHandler = useCallback(
-    (values: FormValues) => {
+    (values: FormValues, onSuccessCallback: VoidFunction) => {
       if (!definition) return;
       const hudValues = transformSubmitValues({
         definition: definition.definition,
@@ -124,7 +124,15 @@ export function useAssessmentHandlers({
         hudValues,
       };
       console.debug('Saving', input);
-      void saveAssessmentMutation({ variables: { input: { input } } });
+      void saveAssessmentMutation({
+        variables: { input: { input } },
+        onCompleted: (data) => {
+          onCompleted(data);
+          if (data.saveAssessment?.assessment && onSuccessCallback) {
+            onSuccessCallback();
+          }
+        },
+      });
     },
     [
       saveAssessmentMutation,
@@ -132,6 +140,7 @@ export function useAssessmentHandlers({
       definition,
       formDefinitionId,
       enrollmentId,
+      onCompleted,
     ]
   );
 

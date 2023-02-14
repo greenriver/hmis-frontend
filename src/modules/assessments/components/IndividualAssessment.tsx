@@ -14,6 +14,7 @@ import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import { DynamicFormProps } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
@@ -32,6 +33,7 @@ interface Props {
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
   onSuccess?: VoidFunction;
+  FormActionProps?: DynamicFormProps['FormActionProps'];
 }
 
 const assessmentPrefix = (role: AssessmentRole) => {
@@ -74,7 +76,8 @@ const IndividualAssessment = ({
   clientName,
   client,
   relationshipToHoH,
-  onSuccess,
+  onSuccess, // remove
+  FormActionProps,
 }: Props) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
@@ -149,7 +152,8 @@ const IndividualAssessment = ({
           enrollment={enrollment}
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
-          onSuccess={onSuccess}
+          onSuccess={onSuccess} // remove
+          FormActionProps={FormActionProps}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>

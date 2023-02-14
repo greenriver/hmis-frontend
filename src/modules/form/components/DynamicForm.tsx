@@ -29,7 +29,7 @@ export interface DynamicFormProps
   > {
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
-  onSaveDraft?: (values: FormValues) => void;
+  onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
@@ -97,11 +97,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   );
 
   const handleSaveDraft = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      event.preventDefault();
+    (onSuccess?: VoidFunction) => {
       if (!onSaveDraft) return;
-
-      onSaveDraft(getCleanedValues());
+      onSaveDraft(getCleanedValues(), onSuccess);
     },
     [onSaveDraft, getCleanedValues]
   );

@@ -78,7 +78,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-const MAX_INPUT_WIDTH = 380;
+const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
