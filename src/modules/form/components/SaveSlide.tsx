@@ -16,7 +16,7 @@ const SaveSlide = ({ children, ...props }: Props) => (
         backgroundColor: 'rgba(255, 255, 255, 0.9)',
         py: 1,
         px: 2,
-        pointerEvents: 'auto', // disallow clicking "through" the banner
+        zIndex: (theme) => theme.zIndex.drawer,
       }}
     >
       <Box sx={{ width: '100%' }}>{children}</Box>
