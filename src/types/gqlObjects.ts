@@ -195,6 +195,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'sumQuestions',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          },
+        },
+      },
+      {
         name: 'valueBoolean',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
@@ -575,6 +587,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'dateCreated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
         name: 'developmentalDisability',
         type: {
           kind: 'ENUM',
@@ -953,6 +973,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'FormItem',
     fields: [
       {
+        name: 'assessmentDate',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'briefText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -1009,6 +1033,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'prefill',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'prefix',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
@@ -1052,6 +1080,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'required',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
+      {
+        name: 'serviceDetailType',
+        type: { kind: 'ENUM', name: 'ServiceDetailType', ofType: null },
+      },
       { name: 'size', type: { kind: 'ENUM', name: 'InputSize', ofType: null } },
       { name: 'text', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
@@ -1061,6 +1093,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'ENUM', name: 'ItemType', ofType: null },
         },
+      },
+      {
+        name: 'warnIfEmpty',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
     ],
   },
@@ -1619,6 +1655,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'InitialValue',
     fields: [
       {
+        name: 'initialBehavior',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'InitialBehavior', ofType: null },
+        },
+      },
+      {
         name: 'valueBoolean',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
@@ -2162,13 +2206,25 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'attribute',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       {
         name: 'fullMessage',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
       { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'linkId',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
       {
         name: 'message',
         type: {
@@ -2178,15 +2234,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'options',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        name: 'readableAttribute',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'severity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ValidationSeverity', ofType: null },
+        },
       },
       {
         name: 'type',
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+          ofType: { kind: 'ENUM', name: 'ValidationType', ofType: null },
         },
       },
     ],
@@ -2194,9 +2258,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ValueBound',
     fields: [
+      { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'question',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'severity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ValidationSeverity', ofType: null },
+        },
       },
       {
         name: 'type',
