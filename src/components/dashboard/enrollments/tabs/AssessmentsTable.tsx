@@ -121,6 +121,7 @@ const AssessmentsTable = ({
         : columns),
       {
         header: '',
+        width: '1%',
         render: (record) => (
           <Stack
             direction='row'
