@@ -16499,7 +16499,7 @@
         "enumValues": [
           {
             "name": "BED_NIGHT",
-            "description": "(200) Bed night",
+            "description": "(200) Bed Night",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16517,19 +16517,19 @@
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE",
-            "description": "(151) HOPWA financial assistance",
+            "description": "(151) HOPWA Financial Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE",
-            "description": "(143) HOPWA service",
+            "description": "(143) HOPWA Service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING",
-            "description": "(210) HUD-VASH OTH voucher tracking",
+            "description": "(210) HUD-VASH OTH Voucher Tracking",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16547,37 +16547,37 @@
           },
           {
             "name": "PATH_REFERRAL",
-            "description": "(161) PATH referral",
+            "description": "(161) PATH Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE",
-            "description": "(141) PATH service",
+            "description": "(141) PATH Service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_REFERRAL",
-            "description": "(162) RHY referral",
+            "description": "(162) RHY Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS",
-            "description": "(142) RHY service connections",
+            "description": "(142) RHY Service Connections",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE",
-            "description": "(152) SSVF financial assistance",
+            "description": "(152) SSVF Financial Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE",
-            "description": "(144) SSVF service",
+            "description": "(144) SSVF Service",
             "isDeprecated": false,
             "deprecationReason": null
           }

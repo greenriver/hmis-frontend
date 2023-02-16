@@ -2552,33 +2552,33 @@ export enum RecentItemType {
 
 /** 1.4 */
 export enum RecordType {
-  /** (200) Bed night */
+  /** (200) Bed Night */
   BedNight = 'BED_NIGHT',
   /** (12) Contact 12 */
   Contact_12 = 'CONTACT_12',
   /** (13) Contact 13 */
   Contact_13 = 'CONTACT_13',
-  /** (151) HOPWA financial assistance */
+  /** (151) HOPWA Financial Assistance */
   HopwaFinancialAssistance = 'HOPWA_FINANCIAL_ASSISTANCE',
-  /** (143) HOPWA service */
+  /** (143) HOPWA Service */
   HopwaService = 'HOPWA_SERVICE',
-  /** (210) HUD-VASH OTH voucher tracking */
+  /** (210) HUD-VASH OTH Voucher Tracking */
   HudVashOthVoucherTracking = 'HUD_VASH_OTH_VOUCHER_TRACKING',
   /** Invalid Value */
   Invalid = 'INVALID',
   /** (300) Moving On Assistance */
   MovingOnAssistance = 'MOVING_ON_ASSISTANCE',
-  /** (161) PATH referral */
+  /** (161) PATH Referral */
   PathReferral = 'PATH_REFERRAL',
-  /** (141) PATH service */
+  /** (141) PATH Service */
   PathService = 'PATH_SERVICE',
-  /** (162) RHY referral */
+  /** (162) RHY Referral */
   RhyReferral = 'RHY_REFERRAL',
-  /** (142) RHY service connections */
+  /** (142) RHY Service Connections */
   RhyServiceConnections = 'RHY_SERVICE_CONNECTIONS',
-  /** (152) SSVF financial assistance */
+  /** (152) SSVF Financial Assistance */
   SsvfFinancialAssistance = 'SSVF_FINANCIAL_ASSISTANCE',
-  /** (144) SSVF service */
+  /** (144) SSVF Service */
   SsvfService = 'SSVF_SERVICE',
 }
 
