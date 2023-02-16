@@ -1,7 +1,9 @@
+import { Button, Stack, Typography } from '@mui/material';
 import { startCase } from 'lodash-es';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
+import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
@@ -9,6 +11,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -18,6 +21,7 @@ import {
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
   ProjectType,
+  useDeleteAssessmentMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -79,6 +83,8 @@ const AssessmentsTable = ({
   enrollmentId: string;
   enrollment: EnrollmentFieldsFragment;
 }) => {
+  const [recordToDelete, setRecordToDelete] =
+    useState<AssessmentFieldsFragment | null>(null);
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
       generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
@@ -88,28 +94,94 @@ const AssessmentsTable = ({
       }),
     [clientId, enrollmentId]
   );
+
+  const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
+    useDeleteAssessmentMutation({
+      onCompleted: (res) => {
+        const id = res.deleteAssessment?.assessment?.id;
+        if (id) {
+          setRecordToDelete(null);
+          // Force re-fetch table
+          cache.evict({
+            id: `Assessment:${id}`,
+          });
+        }
+      },
+    });
+  const handleDelete = useCallback(() => {
+    if (!recordToDelete) return;
+    deleteRecord({ variables: { id: recordToDelete.id } });
+  }, [recordToDelete, deleteRecord]);
+  if (deleteError) console.error(deleteError);
+
   const tableColumns = useMemo(
-    () =>
-      enrollment.project.projectType === ProjectType.Ce
+    () => [
+      ...(enrollment.project.projectType === ProjectType.Ce
         ? [...columns, ...ceColumns]
-        : columns,
+        : columns),
+      {
+        header: '',
+        width: '1%',
+        render: (record) => (
+          <Stack
+            direction='row'
+            spacing={1}
+            justifyContent='flex-end'
+            flexGrow={1}
+          >
+            <Button
+              data-testid='deleteService'
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setRecordToDelete(record);
+              }}
+              size='small'
+              variant='outlined'
+              color='error'
+            >
+              Delete
+            </Button>
+          </Stack>
+        ),
+      },
+    ],
     [enrollment]
   );
 
   return (
-    <GenericTableWithData<
-      GetEnrollmentAssessmentsQuery,
-      GetEnrollmentAssessmentsQueryVariables,
-      AssessmentFieldsFragment
-    >
-      queryVariables={{ id: enrollmentId }}
-      queryDocument={GetEnrollmentAssessmentsDocument}
-      rowLinkTo={rowLinkTo}
-      columns={tableColumns}
-      pagePath='enrollment.assessments'
-      noData='No assessments.'
-      headerCellSx={() => ({ color: 'text.secondary' })}
-    />
+    <>
+      <GenericTableWithData<
+        GetEnrollmentAssessmentsQuery,
+        GetEnrollmentAssessmentsQueryVariables,
+        AssessmentFieldsFragment
+      >
+        queryVariables={{ id: enrollmentId }}
+        queryDocument={GetEnrollmentAssessmentsDocument}
+        rowLinkTo={rowLinkTo}
+        columns={tableColumns}
+        pagePath='enrollment.assessments'
+        noData='No assessments.'
+        headerCellSx={() => ({ color: 'text.secondary' })}
+      />
+      <ConfirmationDialog
+        id='deleteAssessment'
+        open={!!recordToDelete}
+        title='Delete Assessment'
+        onConfirm={handleDelete}
+        onCancel={() => setRecordToDelete(null)}
+        loading={deleteLoading}
+      >
+        {recordToDelete && (
+          <>
+            <Typography>
+              Are you sure you want to delete this assessment?
+            </Typography>
+            <Typography>This action cannot be undone.</Typography>
+          </>
+        )}
+      </ConfirmationDialog>
+    </>
   );
 };
 
