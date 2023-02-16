@@ -22,6 +22,7 @@ import TabLabel from './TabLabel';
 import Loading from '@/components/elements/Loading';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import useHasRefetched from '@/hooks/useHasRefetched';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
@@ -164,9 +165,11 @@ const HouseholdAssessmentTabPanel = memo(
           },
           onSuccess: () => {
             if (!previousTab) return;
-            updateTabStatus(AssessmentStatus.Started, id);
+            if (!hasBeenSubmitted) {
+              updateTabStatus(AssessmentStatus.Started, id);
+              refetch();
+            }
             navigateToTab(previousTab);
-            refetch();
           },
         });
 
@@ -182,9 +185,11 @@ const HouseholdAssessmentTabPanel = memo(
           },
           onSuccess: () => {
             if (!nextTab) return;
-            updateTabStatus(AssessmentStatus.Started, id);
+            if (!hasBeenSubmitted) {
+              updateTabStatus(AssessmentStatus.Started, id);
+              refetch();
+            }
             navigateToTab(nextTab);
-            refetch();
           },
         });
 
@@ -235,11 +240,7 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
 
   const [tabs, setTabs] = useState<TabDefinition[]>([]);
 
-  // const [hasRefetched, setHasRefetched] = useState(false);
-  // useEffect(() => {
-  //   // See for statuses 2/3/4:  https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L12-L28
-  //   if ([2, 3, 4].includes(networkStatus)) setHasRefetched(true);
-  // }, [networkStatus]);
+  const hasRefetched = useHasRefetched(networkStatus);
 
   useEffect(() => {
     setTabs((oldTabs) => {
@@ -289,12 +290,14 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
   const { hash } = useLocation();
 
   useEffect(() => {
+    if (hasRefetched) return;
+
     const hashNum = hash ? parseInt(hash.replace('#', '')) : -1;
     const currentHash = isFinite(hashNum) && hashNum >= 0 ? hashNum : undefined;
     if (currentHash && currentHash <= tabs.length) {
       setCurrentTab(String(currentHash));
     }
-  }, [hash, tabs]);
+  }, [hasRefetched, hash, tabs.length]);
 
   const { pathname } = useLocation();
 
