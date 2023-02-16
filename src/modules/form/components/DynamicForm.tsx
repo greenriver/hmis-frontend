@@ -19,7 +19,8 @@ import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
 export type DynamicFormOnSubmit = (
   event: React.MouseEvent<HTMLButtonElement>,
   values: FormValues,
-  confirmed?: boolean
+  confirmed?: boolean,
+  onSuccess?: VoidFunction
 ) => void;
 
 export interface DynamicFormProps
@@ -34,9 +35,11 @@ export interface DynamicFormProps
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
+  showSavePromptInitial?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
   warnIfEmpty?: boolean;
+  locked?: boolean;
   FormActionProps?: Omit<
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
@@ -48,11 +51,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   onSubmit,
   onSaveDraft,
   loading,
+
   initialValues = {},
   errors: validations,
   showSavePrompt = false,
+  showSavePromptInitial,
   horizontal = false,
   warnIfEmpty = false,
+  locked = false,
   pickListRelationId,
   FormActionProps = {},
 }) => {
@@ -62,7 +68,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   });
   const { errors, warnings } = useValidations(validations);
 
-  const [promptSave, setPromptSave] = useState<boolean | undefined>();
+  const [promptSave, setPromptSave] = useState<boolean | undefined>(
+    showSavePromptInitial
+  );
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
   const saveButtonsRef = React.createRef<HTMLDivElement>();
@@ -79,10 +87,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   }, [errors, warnings]);
 
   const handleSubmit = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
+    (onSuccess?: VoidFunction) => {
       const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, false);
+      onSubmit(event, valuesToSubmit, false, onSuccess);
     },
     [onSubmit, getCleanedValues]
   );
@@ -90,10 +97,15 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   const handleConfirm = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
+      // Hacky why to pull the appropriate onSuccess callback from FormActionProps
+      const onSuccess = (FormActionProps.config || []).find(
+        (b) => b.action === 'SUBMIT'
+      )?.onSuccess;
+
       const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, true);
+      onSubmit(event, valuesToSubmit, true, onSuccess);
     },
-    [onSubmit, getCleanedValues]
+    [onSubmit, getCleanedValues, FormActionProps]
   );
 
   const handleSaveDraft = useCallback(
@@ -108,10 +120,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     <FormActions
       onSubmit={handleSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      // onDiscard={onDiscard || (() => navigate(-1))}
-      // submitButtonText={submitButtonText}
-      // saveDraftButtonText={saveDraftButtonText}
-      // discardButtonText={discardButtonText}
       disabled={!!loading || showConfirmDialog}
       loading={loading}
       {...FormActionProps}
@@ -140,6 +148,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           horizontal,
           pickListRelationId,
           warnIfEmpty,
+          locked,
         })}
       </Grid>
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>

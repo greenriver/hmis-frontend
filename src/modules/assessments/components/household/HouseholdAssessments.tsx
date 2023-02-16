@@ -1,3 +1,6 @@
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import CheckIcon from '@mui/icons-material/Check';
 import {
   Alert,
   AppBar,
@@ -7,14 +10,8 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import {
-  memo,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState,
-  useMemo,
-} from 'react';
+import { findIndex } from 'lodash-es';
+import { memo, ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import IndividualAssessment from '../IndividualAssessment';
@@ -30,6 +27,7 @@ import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
+  AssessmentFieldsFragment,
   AssessmentRole,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
@@ -57,9 +55,20 @@ const tabPanelA11yProps = (key: string) => {
   };
 };
 
-export type AssessmentStatus = 'not-started' | 'started' | 'submitted';
+export enum AssessmentStatus {
+  NotStarted,
+  Started,
+  ReadyToSubmit,
+  Submitted,
+  Warning,
+  Error,
+}
 
-type TabDefinition = {
+type LocalTabState = {
+  status: AssessmentStatus;
+};
+
+export type TabDefinition = {
   id: string;
   clientName: string;
   client: ClientNameDobVeteranFields;
@@ -68,12 +77,16 @@ type TabDefinition = {
   assessmentInProgress?: boolean;
   isHoh: boolean;
   relationshipToHoH: RelationshipToHoH;
-};
+} & LocalTabState;
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;
   assessmentRole: AssessmentRole.Intake | AssessmentRole.Exit;
-  onSuccess: VoidFunction;
+  refetch: () => Promise<any>;
+  nextTab?: string;
+  previousTab?: string;
+  navigateToTab: (t: string) => void;
+  updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
 }
 
 // const shallowCompareIgnoreFunctions = (obj1, obj2) =>
@@ -93,36 +106,100 @@ const HouseholdAssessmentTabPanel = memo(
     client,
     relationshipToHoH,
     assessmentRole,
-  }: // onSuccess,
-  HouseholdAssessmentTabPanelProps) => {
+    nextTab,
+    previousTab,
+    navigateToTab,
+    refetch,
+    updateTabStatus,
+    status,
+  }: HouseholdAssessmentTabPanelProps) => {
     console.debug('Rendering assessment panel for', clientName);
+    const readyToSubmit = status === AssessmentStatus.ReadyToSubmit;
 
-    const FormActionProps = useMemo(() => {
-      return {
-        // TODO gig update all the handlers
-        config: [
-          {
-            label: 'Ready to Exit',
-            action: 'SAVE',
-            // When read, checkmark and disabled
-            // buttonProps: { variant: 'outlined' },
-            onSuccess: () => console.log('marking as ready for exit'),
+    const getFormActionProps = useCallback(
+      (assessment: AssessmentFieldsFragment) => {
+        const hasBeenSubmitted = assessment && !assessment.inProgress;
+
+        const config = [];
+        config.push({
+          id: 'readyToSubmit',
+          label: hasBeenSubmitted ? 'Submitted' : 'Ready to Submit',
+          action: 'SAVE',
+          buttonProps: {
+            variant: 'contained',
+            disabled: hasBeenSubmitted || readyToSubmit,
+            startIcon:
+              hasBeenSubmitted || readyToSubmit ? (
+                <CheckIcon fontSize='small' />
+              ) : null,
           },
-          {
-            label: 'Previous',
+          onSuccess: () => {
+            updateTabStatus(AssessmentStatus.ReadyToSubmit, id);
+            refetch();
+          },
+        });
+
+        if (!hasBeenSubmitted) {
+          config.push({
+            id: 'save',
+            label: 'Save',
             action: 'SAVE',
             buttonProps: { variant: 'outlined' },
-            onSuccess: () => console.log('going to previous'),
+            onSuccess: () => {
+              updateTabStatus(AssessmentStatus.Started, id);
+              refetch();
+            },
+          });
+        }
+
+        config.push({
+          id: 'prev',
+          label: hasBeenSubmitted ? 'Previous' : 'Save & Previous',
+          action: hasBeenSubmitted ? 'NAVIGATE' : 'SAVE',
+          rightAlign: true,
+          buttonProps: {
+            disabled: !previousTab,
+            variant: 'outlined',
+            startIcon: <ArrowBackIcon fontSize='small' />,
           },
-          {
-            label: 'Next',
-            action: 'SAVE',
-            buttonProps: { variant: 'outlined' },
-            onSuccess: () => console.log('going to next'),
+          onSuccess: () => {
+            if (!previousTab) return;
+            updateTabStatus(AssessmentStatus.Started, id);
+            navigateToTab(previousTab);
+            refetch();
           },
-        ],
-      };
-    }, []);
+        });
+
+        config.push({
+          id: 'next',
+          label: hasBeenSubmitted ? 'Next' : 'Save & Next',
+          action: hasBeenSubmitted ? 'NAVIGATE' : 'SAVE',
+          rightAlign: true,
+          buttonProps: {
+            disabled: !nextTab,
+            variant: 'outlined',
+            endIcon: <ArrowForwardIcon fontSize='small' />,
+          },
+          onSuccess: () => {
+            if (!nextTab) return;
+            updateTabStatus(AssessmentStatus.Started, id);
+            navigateToTab(nextTab);
+            refetch();
+          },
+        });
+
+        return { config };
+      },
+      [
+        navigateToTab,
+        previousTab,
+        nextTab,
+        refetch,
+        readyToSubmit,
+        updateTabStatus,
+        id,
+      ]
+    );
 
     return (
       <AlwaysMountedTabPanel
@@ -138,7 +215,8 @@ const HouseholdAssessmentTabPanel = memo(
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
           assessmentRole={assessmentRole}
-          FormActionProps={FormActionProps}
+          getFormActionProps={getFormActionProps}
+          lockIfSubmitted
         />
       </AlwaysMountedTabPanel>
     );
@@ -164,27 +242,48 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
   // }, [networkStatus]);
 
   useEffect(() => {
-    const newTabs: TabDefinition[] = householdMembers.map((hc, index) => ({
-      clientName: clientBriefName(hc.client),
-      id: (index + 1).toString(),
-      isHoh: hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
-      enrollmentId: hc.enrollment.id,
-      assessmentId:
-        type === 'ENTRY'
-          ? hc.enrollment.intakeAssessment?.id
-          : hc.enrollment.exitAssessment?.id,
-      assessmentInProgress:
-        type === 'ENTRY'
-          ? !!hc.enrollment.intakeAssessment?.inProgress
-          : !!hc.enrollment.exitAssessment?.inProgress,
-      client: {
-        dob: hc.client.dob,
-        veteranStatus: hc.client.veteranStatus,
-      },
-      relationshipToHoH: hc.relationshipToHoH,
-    }));
+    setTabs((oldTabs) => {
+      const newTabs: TabDefinition[] = householdMembers.map(
+        ({ client, enrollment, relationshipToHoH }, index) => {
+          const assessmentId =
+            type === 'ENTRY'
+              ? enrollment.intakeAssessment?.id
+              : enrollment.exitAssessment?.id;
+          const assessmentInProgress =
+            type === 'ENTRY'
+              ? !!enrollment.intakeAssessment?.inProgress
+              : !!enrollment.exitAssessment?.inProgress;
 
-    setTabs(newTabs);
+          const tabData: TabDefinition = {
+            clientName: clientBriefName(client),
+            id: (index + 1).toString(),
+            isHoh: relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
+            enrollmentId: enrollment.id,
+            assessmentId,
+            assessmentInProgress,
+            client: {
+              dob: client.dob,
+              veteranStatus: client.veteranStatus,
+            },
+            relationshipToHoH,
+            status:
+              assessmentId && !assessmentInProgress
+                ? AssessmentStatus.Submitted
+                : assessmentId
+                ? AssessmentStatus.Started
+                : AssessmentStatus.NotStarted,
+          };
+
+          // If membership hasn't changed, make sure we keep the "local" state parts if present
+          if (oldTabs.length === householdMembers.length && oldTabs[index]) {
+            tabData.status = oldTabs[index].status;
+          }
+
+          return tabData;
+        }
+      );
+      return newTabs;
+    });
   }, [householdMembers, type]);
 
   const { hash } = useLocation();
@@ -197,24 +296,32 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
     }
   }, [hash, tabs]);
 
-  const onSuccess = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
-  const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
-    event.preventDefault();
+  const navigateToTab = useCallback((newValue: string) => {
     setCurrentTab(newValue);
     window.scrollTo(0, 0);
     router.navigate(`#${newValue}`, { replace: true });
-  };
+  }, []);
 
-  // const navigateToNext = useCallback(() => {
-  //   console.log('next', currentTab, tabs);
-  // }, [currentTab, tabs]);
+  const handleChangeTab = useCallback(
+    (event: React.SyntheticEvent, newValue: string) => {
+      event.preventDefault();
+      navigateToTab(newValue);
+    },
+    [navigateToTab]
+  );
 
-  // const navigateToPrevious = useCallback(() => {
-  //   console.log('previous', currentTab, tabs);
-  // }, [currentTab, tabs]);
+  const updateTabStatus = useCallback(
+    (status: AssessmentStatus, id: string) => {
+      setTabs((oldTabs) => {
+        const cloned = [...oldTabs];
+        const idx = findIndex(cloned, { id });
+        if (idx === -1) return oldTabs; // bad state
+        cloned[idx] = { ...cloned[idx], status };
+        return cloned;
+      });
+    },
+    []
+  );
 
   if (loading && networkStatus === 1) return <Loading />;
   if (error) throw error;
@@ -275,16 +382,10 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
                 <Tab
                   value={definition.id}
                   key={definition.id}
-                  label={
-                    <TabLabel
-                      name={definition.clientName}
-                      isHoh={definition.isHoh}
-                      assessmentId={definition.assessmentId}
-                      assessmentInProgress={definition.assessmentInProgress}
-                    />
-                  }
+                  label={<TabLabel definition={definition} />}
                   {...tabA11yProps(definition.id)}
                   sx={{
+                    minWidth: '180px',
                     justifyContent: 'end',
                     fontWeight: 800,
                     pb: 1,
@@ -298,14 +399,18 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
       </AppBar>
       <Grid container spacing={4} sx={{ py: 2 }}>
         <Grid item xs={12}>
-          {tabs.map((tabDefinition) => (
+          {tabs.map((tabDefinition, index) => (
             <HouseholdAssessmentTabPanel
               key={tabDefinition.id}
               active={tabDefinition.id === currentTab}
-              onSuccess={onSuccess}
+              refetch={refetch}
+              navigateToTab={navigateToTab}
+              nextTab={tabs[index + 1]?.id}
+              previousTab={tabs[index - 1]?.id}
               assessmentRole={
                 type === 'ENTRY' ? AssessmentRole.Intake : AssessmentRole.Exit
               }
+              updateTabStatus={updateTabStatus}
               {...tabDefinition}
             />
           ))}

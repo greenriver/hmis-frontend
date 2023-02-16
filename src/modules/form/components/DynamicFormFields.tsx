@@ -28,6 +28,7 @@ export interface Props {
   warnings?: ValidationError[];
   horizontal?: boolean;
   warnIfEmpty?: boolean;
+  locked?: boolean;
   bulk?: boolean;
   pickListRelationId?: string;
   values: FormValues;
@@ -73,6 +74,7 @@ const DynamicFormFields: React.FC<Props> = ({
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
   warnIfEmpty = false,
+  locked = false,
   pickListRelationId,
   values,
   setValues,
@@ -223,7 +225,7 @@ const DynamicFormFields: React.FC<Props> = ({
         inputProps={{
           ...props?.inputProps,
           ...buildCommonInputProps(item, values),
-          disabled: isDisabled || undefined,
+          disabled: isDisabled || locked || undefined,
         }}
       />
     );

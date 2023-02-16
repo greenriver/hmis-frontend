@@ -19,12 +19,13 @@ import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentFieldsFragment,
   AssessmentRole,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
-interface Props {
+export interface IndividualAssessmentProps {
   enrollmentId: string;
   assessmentId?: string;
   assessmentRole?: AssessmentRole;
@@ -32,8 +33,10 @@ interface Props {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
-  onSuccess?: VoidFunction;
-  FormActionProps?: DynamicFormProps['FormActionProps'];
+  lockIfSubmitted?: boolean;
+  getFormActionProps?: (
+    assessment?: AssessmentFieldsFragment
+  ) => DynamicFormProps['FormActionProps'];
 }
 
 const assessmentPrefix = (role: AssessmentRole) => {
@@ -76,9 +79,9 @@ const IndividualAssessment = ({
   clientName,
   client,
   relationshipToHoH,
-  onSuccess, // remove
-  FormActionProps,
-}: Props) => {
+  lockIfSubmitted,
+  getFormActionProps,
+}: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
@@ -102,6 +105,12 @@ const IndividualAssessment = ({
   const informationDate = useMemo(
     () => assessmentDate(assessmentRole, enrollment),
     [enrollment, assessmentRole]
+  );
+
+  const FormActionProps = useMemo(
+    () =>
+      !dataLoading && getFormActionProps ? getFormActionProps(assessment) : {},
+    [getFormActionProps, dataLoading, assessment]
   );
 
   useEffect(() => {
@@ -152,8 +161,8 @@ const IndividualAssessment = ({
           enrollment={enrollment}
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
-          onSuccess={onSuccess} // remove
           FormActionProps={FormActionProps}
+          locked={lockIfSubmitted && assessment && !assessment.inProgress}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>

@@ -17,14 +17,12 @@ type Args = {
   definition: FormDefinition;
   enrollmentId: string;
   assessmentId?: string;
-  onSuccess?: VoidFunction;
 };
 
 export function useAssessmentHandlers({
   definition,
   enrollmentId,
   assessmentId,
-  onSuccess, // TODO move into button config
 }: Args) {
   const formDefinitionId = definition.id;
 
@@ -46,37 +44,21 @@ export function useAssessmentHandlers({
         return;
       }
       setErrors([]);
-
-      if (onSuccess) onSuccess();
-
-      // Save/Submit was successful.
-      // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
-      // if (!assessmentId) {
-      //   cache.evict({
-      //     id: `Enrollment:${enrollmentId}`,
-      //     fieldName: 'assessments',
-      //   });
-      // }
     },
-    [setErrors, onSuccess]
+    [setErrors]
   );
 
+  const onError = useCallback(() => window.scrollTo(0, 0), []);
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
-    useSaveAssessmentMutation({
-      onCompleted,
-      onError: () => window.scrollTo(0, 0),
-    });
+    useSaveAssessmentMutation({ onError });
 
   const [
     submitAssessmentMutation,
     { loading: submitLoading, error: submitError },
-  ] = useSubmitAssessmentMutation({
-    onCompleted,
-    onError: () => window.scrollTo(0, 0),
-  });
+  ] = useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false) => {
+    (event, values, confirmed = false, onSuccessCallback = null) => {
       if (!definition) return;
       if (debugFormValues(event, values, definition.definition)) return;
 
@@ -96,7 +78,15 @@ export function useAssessmentHandlers({
         confirmed,
       };
       console.debug('Submitting', input, confirmed);
-      void submitAssessmentMutation({ variables: { input: { input } } });
+      void submitAssessmentMutation({
+        variables: { input: { input } },
+        onCompleted: (data) => {
+          onCompleted(data);
+          if (data.submitAssessment?.assessment && onSuccessCallback) {
+            onSuccessCallback();
+          }
+        },
+      });
     },
     [
       submitAssessmentMutation,
@@ -104,6 +94,7 @@ export function useAssessmentHandlers({
       definition,
       formDefinitionId,
       enrollmentId,
+      onCompleted,
     ]
   );
 

@@ -1,13 +1,15 @@
 import { LoadingButton, LoadingButtonProps } from '@mui/lab';
-import { Button, Stack } from '@mui/material';
-import { MouseEventHandler, useCallback } from 'react';
+import { Stack } from '@mui/material';
+import { findIndex } from 'lodash-es';
+import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 
 type ButtonConfig = {
+  id: string;
   label: string;
-  action: 'SAVE' | 'SUBMIT' | 'VALIDATE' | 'DISCARD';
+  action: 'SAVE' | 'SUBMIT' | 'VALIDATE' | 'DISCARD' | 'NAVIGATE';
   onSuccess: VoidFunction;
   rightAlignt?: boolean;
   buttonProps?: Omit<LoadingButtonProps, 'onClick'>;
@@ -15,11 +17,10 @@ type ButtonConfig = {
 
 export interface FormActionProps {
   config?: ButtonConfig[];
-  onSubmit: MouseEventHandler;
+  onSubmit: (onSuccess?: VoidFunction) => void;
   onSaveDraft?: (onSuccess?: VoidFunction) => void;
   onDiscard?: MouseEventHandler | string;
   submitButtonText?: string;
-  saveDraftButtonText?: string;
   discardButtonText?: string;
   loading?: boolean;
   disabled?: boolean;
@@ -30,16 +31,48 @@ const FormActions = ({
   onSubmit,
   onSaveDraft,
   onDiscard,
-  submitButtonText = 'Submit',
-  saveDraftButtonText = 'Save and Finish Later',
-  discardButtonText = 'Discard',
+  submitButtonText,
+  discardButtonText,
   disabled,
   loading,
 }: FormActionProps) => {
   const navigate = useNavigate();
 
+  const [leftConfig, rightConfig] = useMemo(() => {
+    if (config) {
+      // If any buttons are marked "rightAlign", split up the config array
+      const idx = findIndex(config, { rightAlign: true });
+      if (idx === -1) return [config, []];
+
+      const left = config.slice(0, idx);
+      const right = config.slice(idx);
+      return [left, right];
+    }
+
+    // Default button configuration
+    return [
+      [
+        {
+          key: 'submit',
+          label: submitButtonText || 'Save Changes',
+          action: 'SUBMIT',
+          buttonProps: { variant: 'contained' },
+        },
+        {
+          key: 'discard',
+          label: discardButtonText || 'Discard',
+          action: 'DISCARD',
+          buttonProps: { variant: 'gray' },
+        },
+      ],
+      [],
+    ];
+  }, [config, submitButtonText, discardButtonText]);
+
+  const [lastClicked, setLastClicked] = useState();
+
   const getClickHandler = useCallback(
-    (action: ButtonConfig['action'], onSuccess?: VoidFunction) => {
+    ({ action, onSuccess, id }: ButtonConfig) => {
       if (action === 'DISCARD') {
         return (onDiscard as MouseEventHandler) || (() => navigate(-1));
       }
@@ -47,94 +80,70 @@ const FormActions = ({
         if (!onSaveDraft) return;
         return (e: React.MouseEvent<HTMLElement>) => {
           e.preventDefault();
+          setLastClicked(id);
           onSaveDraft(onSuccess);
         };
       }
       if (action === 'SUBMIT') {
-        // if (!onSubmit) return;
-        return onSubmit;
+        if (!onSubmit) return;
+        return (e: React.MouseEvent<HTMLElement>) => {
+          e.preventDefault();
+          setLastClicked(id);
+          onSubmit(onSuccess);
+        };
+      }
+
+      if (action === 'NAVIGATE') {
+        return onSuccess;
       }
     },
     [onDiscard, onSaveDraft, onSubmit, navigate]
   );
 
-  if (config)
+  const renderButton = (buttonConfig: ButtonConfig) => {
+    const { id, label, action, buttonProps } = buttonConfig;
+    const isSubmit = action === 'SAVE' || action === 'SUBMIT';
+
+    if (action === 'DISCARD' && onDiscard && typeof onDiscard === 'string') {
+      // Special case for onDiscard that is a link
+      return (
+        <ButtonLink
+          data-testid={`formButton-${id}`}
+          key={id}
+          to={onDiscard}
+          disabled={disabled || loading}
+          {...buttonProps}
+        >
+          {label}
+        </ButtonLink>
+      );
+    }
+
     return (
-      <Stack
-        direction='row'
-        spacing={2}
-        justifyContent={onSaveDraft ? 'space-between' : undefined}
+      <LoadingButton
+        key={id}
+        data-testid={`formButton-${id}`}
+        type={isSubmit ? 'submit' : undefined}
+        disabled={disabled || loading}
+        onClick={getClickHandler(buttonConfig)}
+        loading={loading && lastClicked === id}
+        {...buttonProps}
       >
-        <Stack direction='row' spacing={2}>
-          {config.map(({ label, action, onSuccess, buttonProps }) => {
-            const isSubmit = action === 'SAVE' || action === 'SUBMIT';
-
-            return (
-              <LoadingButton
-                key={label}
-                type={isSubmit ? 'submit' : undefined}
-                disabled={disabled}
-                onClick={getClickHandler(action, onSuccess)}
-                loading={loading}
-                {...buttonProps}
-              >
-                {label}
-              </LoadingButton>
-            );
-          })}
-        </Stack>
-      </Stack>
+        {label}
+      </LoadingButton>
     );
-
+  };
   return (
     <Stack
       direction='row'
       spacing={2}
-      justifyContent={onSaveDraft ? 'space-between' : undefined}
+      justifyContent={rightConfig.length > 0 ? 'space-between' : undefined}
     >
-      <Stack direction='row' spacing={2}>
-        <LoadingButton
-          data-testid='submitFormButton'
-          type='submit'
-          disabled={disabled}
-          onClick={onSubmit}
-          sx={{ opacity: 1 }}
-          loading={loading}
-        >
-          {submitButtonText}
-        </LoadingButton>
-        {onSaveDraft && (
-          <LoadingButton
-            data-testid='saveFormButton'
-            type='submit'
-            disabled={disabled}
-            onClick={handleSaveDraft}
-            sx={{ backgroundColor: 'white' }}
-            loading={loading}
-          >
-            {saveDraftButtonText}
-          </LoadingButton>
-        )}
-      </Stack>
-      {onDiscard && typeof onDiscard === 'string' ? (
-        <ButtonLink
-          data-testid='discardFormButton'
-          variant='gray'
-          to={onDiscard}
-          disabled={disabled || loading}
-        >
-          {discardButtonText}
-        </ButtonLink>
-      ) : (
-        <Button
-          data-testid='discardFormButton'
-          variant='gray'
-          onClick={(onDiscard as MouseEventHandler) || (() => navigate(-1))}
-          disabled={disabled || loading}
-        >
-          {discardButtonText}
-        </Button>
-      )}
+      {[leftConfig, rightConfig].map((configs) => (
+        <Stack direction='row' spacing={2} sx={{ backgroundColor: 'white' }}>
+          {configs.map((c) => renderButton(c))}
+        </Stack>
+      ))}
     </Stack>
   );
 };

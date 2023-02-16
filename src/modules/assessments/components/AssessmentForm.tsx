@@ -1,4 +1,13 @@
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import LockIcon from '@mui/icons-material/Lock';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+} from '@mui/material';
 import { assign, cloneDeep } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
@@ -35,9 +44,10 @@ interface Props {
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
-  onSuccess?: VoidFunction;
   FormActionProps?: DynamicFormProps['FormActionProps'];
+  locked?: boolean;
 }
+
 const AssessmentForm = ({
   assessment,
   assessmentRole,
@@ -45,8 +55,8 @@ const AssessmentForm = ({
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
-  onSuccess, // remove
   FormActionProps,
+  locked = false,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
@@ -108,12 +118,12 @@ const AssessmentForm = ({
       assign(init, initialsToOverwrite);
     }
 
-    console.debug(
-      'Initial Form State',
-      init,
-      'from source:',
-      source?.id || 'none'
-    );
+    // console.debug(
+    //   'Initial Form State',
+    //   init,
+    //   'from source:',
+    //   source?.id || 'none'
+    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
@@ -175,6 +185,13 @@ const AssessmentForm = ({
             <ApolloErrorAlert error={apolloError} />
           </Box>
         )}
+        {locked && (
+          <Box sx={{ mb: 3 }}>
+            <Alert severity='info' icon={<LockIcon />}>
+              <AlertTitle>This assessment has been submitted.</AlertTitle>
+            </Alert>
+          </Box>
+        )}
         <DynamicForm
           // Remount component if a source assessment has been selected
           key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
@@ -187,9 +204,10 @@ const AssessmentForm = ({
           pickListRelationId={enrollment?.project?.id}
           loading={mutationLoading}
           errors={errors}
+          locked={locked}
           showSavePrompt
+          showSavePromptInitial={embeddedInWorkflow ? true : undefined}
           FormActionProps={FormActionProps}
-          onSuccess={onSuccess} //remove
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment
           warnIfEmpty={!!assessment || errors.length > 0}

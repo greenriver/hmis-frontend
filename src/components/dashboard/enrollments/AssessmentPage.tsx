@@ -21,7 +21,17 @@ const AssessmentPage = () => {
     };
   const navigate = useNavigate();
 
-  // TODO test make sure this works
+  const navigateToEnrollment = useCallback(
+    () =>
+      navigate(
+        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          enrollmentId,
+          clientId,
+        })
+      ),
+    [navigate, enrollmentId, clientId]
+  );
+
   const onSuccess = useCallback(() => {
     // If we created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
     if (!assessmentId) {
@@ -30,13 +40,8 @@ const AssessmentPage = () => {
         fieldName: 'assessments',
       });
     }
-    navigate(
-      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-        enrollmentId,
-        clientId,
-      })
-    );
-  }, [enrollmentId, clientId, navigate, assessmentId]);
+    navigateToEnrollment();
+  }, [navigateToEnrollment, enrollmentId, assessmentId]);
 
   if (!enrollment) return <Loading />;
 
@@ -47,7 +52,35 @@ const AssessmentPage = () => {
       assessmentRole={assessmentRole}
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}
-      onSuccess={onSuccess}
+      getFormActionProps={(assessment) => ({
+        onDiscard: navigateToEnrollment,
+        config: [
+          {
+            id: 'submit',
+            label: 'Submit',
+            action: 'SUBMIT',
+            buttonProps: { variant: 'contained' },
+            onSuccess,
+          },
+          ...(assessment && !assessment.inProgress
+            ? []
+            : [
+                {
+                  id: 'saveDraft',
+                  label: 'Save and finish later',
+                  action: 'SAVE',
+                  buttonProps: { variant: 'outlined' },
+                  onSuccess,
+                },
+              ]),
+          {
+            id: 'discard',
+            label: assessmentId ? 'Cancel' : 'Discard',
+            action: 'DISCARD',
+            buttonProps: { variant: 'gray' },
+          },
+        ],
+      })}
     />
   );
 };
