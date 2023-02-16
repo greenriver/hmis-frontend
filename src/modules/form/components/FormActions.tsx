@@ -161,6 +161,7 @@ const FormActions = ({
         verb,
       ];
     }
+    return [];
   }, [lastSaved, lastSubmitted]);
 
   return (

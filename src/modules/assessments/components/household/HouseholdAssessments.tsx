@@ -296,11 +296,16 @@ const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
     }
   }, [hash, tabs]);
 
-  const navigateToTab = useCallback((newValue: string) => {
-    setCurrentTab(newValue);
-    window.scrollTo(0, 0);
-    router.navigate(`#${newValue}`, { replace: true });
-  }, []);
+  const { pathname } = useLocation();
+
+  const navigateToTab = useCallback(
+    (newValue: string) => {
+      setCurrentTab(newValue);
+      window.scrollTo(0, 0);
+      router.navigate(`${pathname}#${newValue}`, { replace: true });
+    },
+    [pathname]
+  );
 
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {

@@ -38,6 +38,7 @@ const TextInput = ({
   highlight,
   inputWidth,
   sx,
+  warnIfEmptyTreatment,
   ...props
 }: TextInputProps) => {
   const htmlId = useId();
@@ -70,7 +71,7 @@ const TextInput = ({
           'label + &': {
             mt: 0.5,
           },
-          backgroundColor: props.warnIfEmptyTreatment
+          backgroundColor: warnIfEmptyTreatment
             ? 'alerts.lightWarningBackground'
             : undefined,
           width,
