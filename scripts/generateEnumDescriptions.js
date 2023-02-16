@@ -197,8 +197,8 @@ import { HmisEnums } from './gqlEnums';
 import { Scalars } from './gqlTypes';
 
 export interface GqlSchemaType {
-  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM';
-  name: keyof Scalars | keyof typeof HmisEnums | null;
+  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'OBJECT' | 'ENUM' | 'UNION';
+  name: keyof Scalars | keyof typeof HmisEnums | 'OmnisearchResult' | null;
   ofType: GqlSchemaType | null;
 }
 
