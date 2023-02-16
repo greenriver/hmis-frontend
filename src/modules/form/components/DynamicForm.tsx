@@ -51,7 +51,6 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   onSubmit,
   onSaveDraft,
   loading,
-
   initialValues = {},
   errors: validations,
   showSavePrompt = false,

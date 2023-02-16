@@ -1,10 +1,15 @@
 import { LoadingButton, LoadingButtonProps } from '@mui/lab';
-import { Stack } from '@mui/material';
+import { Stack, Typography, Tooltip } from '@mui/material';
 import { findIndex } from 'lodash-es';
 import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import {
+  formatDateTimeForDisplay,
+  parseHmisDateString,
+  formatRelativeDateTime,
+} from '@/modules/hmis/hmisUtil';
 
 type ButtonConfig = {
   id: string;
@@ -24,6 +29,8 @@ export interface FormActionProps {
   discardButtonText?: string;
   loading?: boolean;
   disabled?: boolean;
+  lastSaved?: string;
+  lastSubmitted?: string;
 }
 
 const FormActions = ({
@@ -35,6 +42,8 @@ const FormActions = ({
   discardButtonText,
   disabled,
   loading,
+  lastSaved,
+  lastSubmitted,
 }: FormActionProps) => {
   const navigate = useNavigate();
 
@@ -133,17 +142,60 @@ const FormActions = ({
       </LoadingButton>
     );
   };
+
+  const [lastUpdated, lastUpdatedRelative, lastUpdatedVerb] = useMemo(() => {
+    let date;
+    let verb;
+    if (lastSubmitted) {
+      date = parseHmisDateString(lastSubmitted);
+      verb = 'submitted';
+    } else if (lastSaved) {
+      date = parseHmisDateString(lastSaved);
+      verb = 'saved';
+    }
+
+    if (date) {
+      return [
+        formatDateTimeForDisplay(date),
+        formatRelativeDateTime(date),
+        verb,
+      ];
+    }
+  }, [lastSaved, lastSubmitted]);
+
   return (
     <Stack
       direction='row'
       spacing={2}
-      justifyContent={rightConfig.length > 0 ? 'space-between' : undefined}
+      justifyContent={
+        rightConfig.length > 0 || lastUpdated ? 'space-between' : undefined
+      }
     >
-      {[leftConfig, rightConfig].map((configs) => (
+      <Stack direction='row' spacing={2} sx={{ backgroundColor: 'white' }}>
+        {leftConfig.map((c) => renderButton(c))}
+      </Stack>
+      {lastUpdated && lastUpdatedRelative && lastUpdatedVerb && (
+        <Tooltip title={<Typography>{lastUpdated}</Typography>} arrow>
+          <Typography
+            alignSelf='center'
+            color='text.secondary'
+            sx={{
+              backgroundColor: 'white',
+              px: 2,
+              py: 1,
+              borderRadius: 1,
+              fontStyle: 'italic',
+            }}
+          >
+            Last {lastUpdatedVerb} {lastUpdatedRelative}
+          </Typography>
+        </Tooltip>
+      )}
+      {rightConfig && rightConfig.length > 0 && (
         <Stack direction='row' spacing={2} sx={{ backgroundColor: 'white' }}>
-          {configs.map((c) => renderButton(c))}
+          {rightConfig.map((c) => renderButton(c))}
         </Stack>
-      ))}
+      )}
     </Stack>
   );
 };

@@ -109,7 +109,19 @@ const IndividualAssessment = ({
 
   const FormActionProps = useMemo(
     () =>
-      !dataLoading && getFormActionProps ? getFormActionProps(assessment) : {},
+      !dataLoading && getFormActionProps
+        ? {
+            lastSaved:
+              assessment && assessment.inProgress
+                ? assessment.dateUpdated
+                : undefined,
+            lastSubmitted:
+              assessment && !assessment.inProgress
+                ? assessment.dateUpdated
+                : undefined,
+            ...getFormActionProps(assessment),
+          }
+        : {},
     [getFormActionProps, dataLoading, assessment]
   );
 
