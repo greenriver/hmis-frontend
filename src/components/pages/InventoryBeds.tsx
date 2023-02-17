@@ -23,8 +23,10 @@ import BedsTable from '@/modules/bedUnitManagement/components/BedsTable';
 import UnitsTable from '@/modules/bedUnitManagement/components/UnitsTable';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
-import { FormValues } from '@/modules/form/util/formUtil';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import {
+  FormValues,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';

@@ -1,6 +1,6 @@
 import { Typography, createFilterOptions } from '@mui/material';
 
-import { DynamicInputCommonProps } from './DynamicField';
+import { DynamicInputCommonProps } from '../types';
 
 import GenericSelect, {
   GenericSelectProps,

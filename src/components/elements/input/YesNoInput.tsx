@@ -13,7 +13,7 @@ import { useCallback, useId } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
 interface Props extends ToggleButtonGroupProps {
   nullable?: boolean; // whether you can click again to remove the selection

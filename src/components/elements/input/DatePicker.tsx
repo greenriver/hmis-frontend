@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 import { isDate, isValidDate } from '@/modules/form/util/formUtil';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 

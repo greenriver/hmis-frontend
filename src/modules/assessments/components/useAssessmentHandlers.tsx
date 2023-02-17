@@ -3,8 +3,11 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
-import { debugFormValues, FormValues } from '@/modules/form/util/formUtil';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import {
+  debugFormValues,
+  FormValues,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
