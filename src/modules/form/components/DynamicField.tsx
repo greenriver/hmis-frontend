@@ -1,8 +1,9 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 import { usePickList } from '../hooks/usePickList';
+import { DynamicInputCommonProps } from '../types';
 import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
@@ -28,18 +29,6 @@ import {
   ItemType,
   ValidationError,
 } from '@/types/gqlTypes';
-
-export interface DynamicInputCommonProps {
-  id?: string;
-  disabled?: boolean;
-  label?: ReactNode;
-  error?: boolean;
-  warnIfEmptyTreatment?: boolean;
-  helperText?: ReactNode;
-  min?: any;
-  max?: any;
-  placeholder?: string;
-}
 
 export interface DynamicFieldProps {
   item: FormItem;

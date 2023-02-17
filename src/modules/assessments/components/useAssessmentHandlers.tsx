@@ -2,8 +2,11 @@ import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
-import { debugFormValues, FormValues } from '@/modules/form/util/formUtil';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import {
+  debugFormValues,
+  FormValues,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import {
   FormDefinition,
   SaveAssessmentMutation,
@@ -58,7 +61,7 @@ export function useAssessmentHandlers({
   ] = useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false, onSuccessCallback = null) => {
+    (event, values, confirmed = false, onSuccessCallback = undefined) => {
       if (!definition) return;
       if (debugFormValues(event, values, definition.definition)) return;
 

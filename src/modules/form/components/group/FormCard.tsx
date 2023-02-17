@@ -5,8 +5,8 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   getAllChildLinkIds,
   getPopulatableChildren,
+  gqlValueToFormValue,
 } from '../../util/formUtil';
-import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import {
   isTypicalRelatedRecord,
   RelatedRecord,

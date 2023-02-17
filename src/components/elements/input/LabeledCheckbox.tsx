@@ -10,7 +10,7 @@ import { KeyboardEventHandler, SyntheticEvent, useCallback } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
 export interface Props
   extends Omit<FormControlLabelProps, 'control' | 'label'> {

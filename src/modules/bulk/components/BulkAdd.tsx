@@ -14,8 +14,8 @@ import {
   extractClientItemsFromDefinition,
   FormValues,
   LocalConstants,
+  transformSubmitValues,
 } from '@/modules/form/util/formUtil';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
 import {
   FormDefinitionJson,
   FormItem,

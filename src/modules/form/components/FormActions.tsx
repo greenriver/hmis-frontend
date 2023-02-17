@@ -22,7 +22,10 @@ type ButtonConfig = {
 
 export interface FormActionProps {
   config?: ButtonConfig[];
-  onSubmit: (onSuccess?: VoidFunction) => void;
+  onSubmit: (
+    e: React.MouseEvent<HTMLButtonElement>,
+    onSuccess?: VoidFunction
+  ) => void;
   onSaveDraft?: (onSuccess?: VoidFunction) => void;
   onDiscard?: MouseEventHandler | string;
   submitButtonText?: string;
@@ -98,7 +101,7 @@ const FormActions = ({
         return (e: React.MouseEvent<HTMLElement>) => {
           e.preventDefault();
           setLastClicked(id);
-          onSubmit(onSuccess);
+          onSubmit(e, onSuccess);
         };
       }
 

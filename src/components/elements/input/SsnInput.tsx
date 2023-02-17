@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput from '../MultiFieldInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
 type SsnInputProps = {
   onChange?: (value: string | null) => any;

@@ -12,7 +12,7 @@ import {
 import { isNil } from 'lodash-es';
 import { KeyboardEventHandler, useCallback, useId } from 'react';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
 import { PickListOption } from '@/types/gqlTypes';
 

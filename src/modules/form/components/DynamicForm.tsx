@@ -86,7 +86,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   }, [errors, warnings]);
 
   const handleSubmit = useCallback(
-    (onSuccess?: VoidFunction) => {
+    (event: React.MouseEvent<HTMLButtonElement>, onSuccess?: VoidFunction) => {
       const valuesToSubmit = getCleanedValues();
       onSubmit(event, valuesToSubmit, false, onSuccess);
     },
