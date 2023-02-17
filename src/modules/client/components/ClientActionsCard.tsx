@@ -1,7 +1,6 @@
 import { Button, Card, Grid, Typography } from '@mui/material';
 
-import ButtonLink from './ButtonLink';
-
+import ButtonLink from '@/components/elements/ButtonLink';
 import { DashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';

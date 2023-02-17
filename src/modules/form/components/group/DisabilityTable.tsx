@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import { GroupItemComponentProps } from '../DynamicGroup';
+import { GroupItemComponentProps } from '../../types';
 
 import { ItemType } from '@/types/gqlTypes';
 

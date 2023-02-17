@@ -1,9 +1,9 @@
 import { Alert, AlertProps, AlertTitle, Box, Grid } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 
-import ClientActionsCard from '@/components/elements/ClientActionsCard';
-import ClientEnrollmentCard from '@/components/elements/ClientEnrollmentCard';
-import ClientProfileCard from '@/components/elements/ClientProfileCard';
+import ClientActionsCard from '@/modules/client/components/ClientActionsCard';
+import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
+import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props {

@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import ClientName from '@/components/elements/ClientName';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
+import ClientName from '@/modules/client/components/ClientName';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 

@@ -5,10 +5,9 @@ import { isEmpty } from 'lodash-es';
 import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
-import DynamicField, {
-  DynamicFieldProps,
-} from '@/modules/form/components/DynamicField';
+import DynamicField from '@/modules/form/components/DynamicField';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
+import { DynamicFieldProps } from '@/modules/form/types';
 import {
   buildCommonInputProps,
   extractClientItemsFromDefinition,

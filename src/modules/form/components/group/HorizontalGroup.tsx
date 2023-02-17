@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@mui/material';
 
-import { GroupItemComponentProps } from '../DynamicGroup';
+import { GroupItemComponentProps } from '../../types';
 
 const HorizontalGroup = ({
   item,

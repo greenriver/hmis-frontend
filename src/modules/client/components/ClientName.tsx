@@ -1,8 +1,7 @@
 import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import { forwardRef } from 'react';
 
-import RouterLink, { RouterLinkProps } from './RouterLink';
-
+import RouterLink, { RouterLinkProps } from '@/components/elements/RouterLink';
 import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';

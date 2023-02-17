@@ -5,8 +5,6 @@ import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
-import ClientCard from '@/components/elements/ClientCard';
-import ClientName from '@/components/elements/ClientName';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
@@ -16,6 +14,8 @@ import Pagination, {
   PaginationSummary,
 } from '@/components/elements/Pagination';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import ClientCard from '@/modules/client/components/ClientCard';
+import ClientName from '@/modules/client/components/ClientName';
 import { SearchFormDefinition } from '@/modules/form/data';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';

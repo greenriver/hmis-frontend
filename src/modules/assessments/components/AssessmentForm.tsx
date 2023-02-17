@@ -6,8 +6,10 @@ import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
-import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import {
+  STICKY_BAR_HEIGHT,
+  CONTEXT_HEADER_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';

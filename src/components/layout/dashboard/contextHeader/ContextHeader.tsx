@@ -3,7 +3,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Box, Button } from '@mui/material';
 import React, { ReactNode } from 'react';
 
-import { STICKY_BAR_HEIGHT } from '../../MainLayout';
+import {
+  STICKY_BAR_HEIGHT,
+  CONTEXT_HEADER_HEIGHT,
+} from '../../layoutConstants';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -16,8 +19,6 @@ interface Props {
   children?: ReactNode;
   focusMode?: string;
 }
-
-export const CONTEXT_HEADER_HEIGHT = 48;
 
 const ContextHeader: React.FC<Props> = ({
   children,

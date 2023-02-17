@@ -17,9 +17,9 @@ import EntryDateInput from './EntryDateInput';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
-import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
+import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';

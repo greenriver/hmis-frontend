@@ -17,8 +17,8 @@ import { flatten, isEmpty } from 'lodash-es';
 import React, { useMemo, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import ClientName from '@/components/elements/ClientName';
 import TextInput from '@/components/elements/input/TextInput';
+import ClientName from '@/modules/client/components/ClientName';
 import { Routes } from '@/routes/routes';
 import {
   AddRecentItemMutationVariables,

@@ -3,14 +3,16 @@ import * as Sentry from '@sentry/react';
 import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
-import { HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT } from './HouseholdAssessments';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import { useEnrollment } from '@/components/dashboard/enrollments/useEnrollment';
 import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
-import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';

@@ -16,9 +16,9 @@ import {
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
-import Uploader from '../upload/UploaderBase';
+import { ClientCardImageElement } from './ClientProfileCard';
 
-import { ClientCardImageElement } from '@/modules/client/components/ClientProfileCard';
+import Uploader from '@/components/elements/upload/UploaderBase';
 import {
   useDeleteClientImageMutation,
   useGetClientImageQuery,
