@@ -51,6 +51,7 @@ jobs:
         yarn storybook --smoke-test
 
     - name: Start mock server
+      if: ${{ false }}
       run: |
         cd serverMock
         yarn install
