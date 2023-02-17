@@ -12,7 +12,7 @@ import { useCallback, useId } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 import { PickListOption } from '@/types/gqlTypes';
 
 type Option = PickListOption;

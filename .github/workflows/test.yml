@@ -42,6 +42,10 @@ jobs:
       run: |
         yarn test
 
+    - name: Check for circular dependencies
+      run: |
+        yarn madge --circular --extensions ts ./
+
     - name: Storybook smoke test
       run: |
         yarn storybook --smoke-test

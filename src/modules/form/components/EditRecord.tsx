@@ -23,7 +23,7 @@ import DynamicForm, {
 import {
   createInitialValuesFromRecord,
   transformSubmitValues,
-} from '@/modules/form/util/recordFormUtil';
+} from '@/modules/form/util/formUtil';
 import {
   FormDefinitionJson,
   ItemType,
