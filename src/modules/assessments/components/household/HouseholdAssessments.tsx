@@ -12,8 +12,14 @@ import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import HouseholdAssessmentTabPanel from './HouseholdAssessmentTabPanel';
-import TabLabel from './TabLabel';
-import { AssessmentStatus, TabDefinition } from './types';
+import HouseholdSummaryTabPanel from './HouseholdSummaryTabPanel';
+import TabLabel, { SummaryTabLabel } from './TabLabel';
+import {
+  AssessmentStatus,
+  SUMMARY_TAB_ID,
+  tabA11yProps,
+  TabDefinition,
+} from './util';
 
 import Loading from '@/components/elements/Loading';
 import {
@@ -30,13 +36,6 @@ import {
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
-
-const tabA11yProps = (key: string) => {
-  return {
-    id: `tab-${key}`,
-    'aria-controls': `tabpanel-${key}`,
-  };
-};
 
 interface HouseholdAssessmentsProps {
   enrollment: EnrollmentFieldsFragment;
@@ -153,6 +152,17 @@ const HouseholdAssessments = ({
   if (loading && networkStatus === 1) return <Loading />;
   if (error) throw error;
 
+  const tabSx = {
+    minWidth: '180px',
+    justifyContent: 'end',
+    fontWeight: 800,
+    pb: 1,
+    px: 4,
+  };
+
+  const assessmentRole =
+    type === 'ENTRY' ? AssessmentRole.Intake : AssessmentRole.Exit;
+
   return (
     <>
       <AppBar
@@ -210,16 +220,19 @@ const HouseholdAssessments = ({
                   value={definition.id}
                   key={definition.id}
                   label={<TabLabel definition={definition} />}
+                  sx={tabSx}
                   {...tabA11yProps(definition.id)}
-                  sx={{
-                    minWidth: '180px',
-                    justifyContent: 'end',
-                    fontWeight: 800,
-                    pb: 1,
-                    px: 4,
-                  }}
                 />
               ))}
+              {tabs.length > 0 && (
+                <Tab
+                  value={SUMMARY_TAB_ID}
+                  key={SUMMARY_TAB_ID}
+                  label={<SummaryTabLabel />}
+                  sx={{ ...tabSx, justifyContent: 'center' }}
+                  {...tabA11yProps(SUMMARY_TAB_ID)}
+                />
+              )}
             </Tabs>
           </Grid>
         </Grid>
@@ -234,18 +247,25 @@ const HouseholdAssessments = ({
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id}
               previousTab={tabs[index - 1]?.id}
-              assessmentRole={
-                type === 'ENTRY' ? AssessmentRole.Intake : AssessmentRole.Exit
-              }
+              assessmentRole={assessmentRole}
               updateTabStatus={updateTabStatus}
               {...tabDefinition}
             />
           ))}
-          {tabs.length === 0 && (
+          {tabs.length === 0 ? (
             <Alert severity='info'>
               No household members can be{' '}
               {type === 'ENTRY' ? 'entered' : 'exited'} at this time
             </Alert>
+          ) : (
+            <HouseholdSummaryTabPanel
+              key={SUMMARY_TAB_ID}
+              id={SUMMARY_TAB_ID}
+              tabs={tabs}
+              active={SUMMARY_TAB_ID === currentTab}
+              assessmentRole={assessmentRole}
+              projectName={enrollmentName(enrollment)}
+            />
           )}
         </Grid>
       </Grid>

@@ -6,16 +6,9 @@ import { memo, useCallback } from 'react';
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import { AssessmentStatus, TabDefinition } from './types';
+import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
 import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
-
-const tabPanelA11yProps = (key: string) => {
-  return {
-    id: `tabpanel-${key}`,
-    'aria-labelledby': `tab-${key}`,
-  };
-};
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;

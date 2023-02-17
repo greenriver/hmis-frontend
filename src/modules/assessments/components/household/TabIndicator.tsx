@@ -6,7 +6,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import PendingIcon from '@mui/icons-material/Pending';
 import { Box, Stack, Typography } from '@mui/material';
 
-import { AssessmentStatus } from './types';
+import { AssessmentStatus, labelForStatus } from './util';
 
 const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
   let Icon;
@@ -20,35 +20,29 @@ const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
     | 'disabled'
     | undefined;
 
-  let text;
+  const text = labelForStatus(status);
   switch (status) {
     case AssessmentStatus.NotStarted:
       Icon = CancelIcon;
-      text = 'Not Started';
       break;
     case AssessmentStatus.Started:
       Icon = PendingIcon;
-      text = 'In Progress';
       color = 'warning';
       break;
     case AssessmentStatus.ReadyToSubmit:
       Icon = CheckCircleIcon;
-      text = 'Ready to Submit';
       color = 'success';
       break;
     case AssessmentStatus.Submitted:
       Icon = LockIcon;
-      text = 'Submitted';
       color = 'disabled';
       break;
     case AssessmentStatus.Warning:
       Icon = ErrorOutlineIcon;
-      text = 'Warning';
       color = 'warning';
       break;
     case AssessmentStatus.Error:
       Icon = ErrorIcon;
-      text = 'Error';
       color = 'error';
       break;
   }

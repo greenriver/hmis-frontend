@@ -3,6 +3,8 @@ import * as Sentry from '@sentry/react';
 import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
+import { assessmentDate, assessmentPrefix } from '../util';
+
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import { useEnrollment } from '@/components/dashboard/enrollments/useEnrollment';
@@ -23,7 +25,6 @@ import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   AssessmentRole,
-  EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -40,32 +41,6 @@ export interface IndividualAssessmentProps {
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
 }
-
-const assessmentPrefix = (role: AssessmentRole) => {
-  switch (role) {
-    case AssessmentRole.Intake:
-      return 'Entry to';
-    case AssessmentRole.Exit:
-      return 'Exit from';
-    default:
-      return;
-  }
-};
-
-const assessmentDate = (
-  role?: AssessmentRole,
-  enrollment?: EnrollmentFieldsFragment
-) => {
-  if (!enrollment || !role) return;
-  switch (role) {
-    case AssessmentRole.Intake:
-      return enrollment.entryDate;
-    case AssessmentRole.Exit:
-      return enrollment.exitDate;
-    default:
-      return;
-  }
-};
 
 /**
  * Renders a single assessment form for an individual, including form stepper nav.
