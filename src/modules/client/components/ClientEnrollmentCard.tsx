@@ -2,9 +2,8 @@ import { Box, Card, CircularProgress, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useMemo } from 'react';
 
-import EnrollmentStatus from './EnrollmentStatus';
-import GenericTable from './GenericTable';
-
+import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
+import GenericTable from '@/components/elements/GenericTable';
 import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {

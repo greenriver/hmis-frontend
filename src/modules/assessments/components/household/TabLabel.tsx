@@ -1,7 +1,7 @@
 import { Stack, Typography } from '@mui/material';
 
-import { TabDefinition } from './HouseholdAssessments';
 import TabIndicator from './TabIndicator';
+import { TabDefinition } from './types';
 
 const TabLabel = ({
   definition: { clientName, isHoh, status },

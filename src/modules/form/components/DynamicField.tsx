@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es';
 import React from 'react';
 
 import { usePickList } from '../hooks/usePickList';
-import { DynamicInputCommonProps } from '../types';
+import { DynamicFieldProps, DynamicInputCommonProps } from '../types';
 import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
@@ -22,27 +22,7 @@ import TextInput from '@/components/elements/input/TextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import {
-  Component,
-  FormItem,
-  InputSize,
-  ItemType,
-  ValidationError,
-} from '@/types/gqlTypes';
-
-export interface DynamicFieldProps {
-  item: FormItem;
-  itemChanged: (linkId: string, value: any) => void;
-  nestingLevel: number;
-  value: any;
-  disabled?: boolean;
-  errors?: ValidationError[];
-  inputProps?: DynamicInputCommonProps;
-  horizontal?: boolean;
-  pickListRelationId?: string;
-  noLabel?: boolean;
-  warnIfEmpty?: boolean;
-}
+import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
   if (!item.prefix && !item.text) return null;

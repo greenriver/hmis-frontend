@@ -13,12 +13,15 @@ import { useLocation } from 'react-router-dom';
 
 import HouseholdAssessmentTabPanel from './HouseholdAssessmentTabPanel';
 import TabLabel from './TabLabel';
+import { AssessmentStatus, TabDefinition } from './types';
 
 import Loading from '@/components/elements/Loading';
-import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import useHasRefetched from '@/hooks/useHasRefetched';
-import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
 import { router } from '@/routes/router';
@@ -28,14 +31,6 @@ import {
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
-interface Props {
-  enrollment: EnrollmentFieldsFragment;
-  type: 'ENTRY' | 'EXIT';
-  title: ReactNode;
-}
-
-export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 72;
-
 const tabA11yProps = (key: string) => {
   return {
     id: `tab-${key}`,
@@ -43,31 +38,17 @@ const tabA11yProps = (key: string) => {
   };
 };
 
-export enum AssessmentStatus {
-  NotStarted,
-  Started,
-  ReadyToSubmit,
-  Submitted,
-  Warning,
-  Error,
+interface HouseholdAssessmentsProps {
+  enrollment: EnrollmentFieldsFragment;
+  type: 'ENTRY' | 'EXIT';
+  title: ReactNode;
 }
 
-type LocalTabState = {
-  status: AssessmentStatus;
-};
-
-export type TabDefinition = {
-  id: string;
-  clientName: string;
-  client: ClientNameDobVeteranFields;
-  enrollmentId: string;
-  assessmentId?: string;
-  assessmentInProgress?: boolean;
-  isHoh: boolean;
-  relationshipToHoH: RelationshipToHoH;
-} & LocalTabState;
-
-const HouseholdAssessments = ({ type, title, enrollment }: Props) => {
+const HouseholdAssessments = ({
+  type,
+  title,
+  enrollment,
+}: HouseholdAssessmentsProps) => {
   const [householdMembers, { loading, error, refetch, networkStatus }] =
     useHouseholdMembers(
       enrollment.id

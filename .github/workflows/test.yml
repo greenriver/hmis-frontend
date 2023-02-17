@@ -44,13 +44,14 @@ jobs:
 
     - name: Check for circular dependencies
       run: |
-        yarn madge --circular --extensions ts ./
+        yarn madge --circular --extensions ts --ts-config tsconfig.json ./src/**/*
 
     - name: Storybook smoke test
       run: |
         yarn storybook --smoke-test
 
     - name: Start mock server
+      if: ${{ false }}
       run: |
         cd serverMock
         yarn install

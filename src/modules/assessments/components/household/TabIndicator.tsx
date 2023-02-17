@@ -6,7 +6,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import PendingIcon from '@mui/icons-material/Pending';
 import { Box, Stack, Typography } from '@mui/material';
 
-import { AssessmentStatus } from './HouseholdAssessments';
+import { AssessmentStatus } from './types';
 
 const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
   let Icon;

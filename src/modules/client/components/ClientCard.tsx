@@ -12,10 +12,10 @@ import {
 import { isEmpty } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
-import ButtonLink from './ButtonLink';
 import { ClientCardImageElement } from './ClientProfileCard';
-import RouterLink from './RouterLink';
 
+import ButtonLink from '@/components/elements/ButtonLink';
+import RouterLink from '@/components/elements/RouterLink';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';

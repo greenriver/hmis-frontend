@@ -6,7 +6,7 @@ import { memo, useCallback } from 'react';
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import { AssessmentStatus, TabDefinition } from './HouseholdAssessments';
+import { AssessmentStatus, TabDefinition } from './types';
 
 import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
 

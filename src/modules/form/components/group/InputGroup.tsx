@@ -1,8 +1,8 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode, useCallback, useMemo } from 'react';
 
+import { GroupItemComponentProps } from '../../types';
 import { maxWidthAtNestingLevel } from '../DynamicField';
-import { GroupItemComponentProps } from '../DynamicGroup';
 
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';

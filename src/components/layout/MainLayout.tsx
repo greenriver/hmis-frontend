@@ -4,8 +4,13 @@ import * as React from 'react';
 import ButtonLink from '../elements/ButtonLink';
 import RouterLink from '../elements/RouterLink';
 
+import {
+  APP_BAR_HEIGHT,
+  OP_LINK_BAR_HEIGHT,
+  SHOW_OP_LINK_BAR,
+} from './layoutConstants';
 import UserMenu from './UserMenu';
-import WarehouseLinkBar, { warehouseLinkBarHeight } from './WarehouseLinkBar';
+import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
@@ -15,16 +20,6 @@ interface Props {
   children: React.ReactNode;
 }
 
-const showWarehouseLinkBar =
-  import.meta.env.MODE === 'staging' &&
-  import.meta.env.PUBLIC_WAREHOUSE_URL &&
-  import.meta.env.PUBLIC_CAS_URL;
-
-const appBarHeight = 64;
-export const STICKY_BAR_HEIGHT = showWarehouseLinkBar
-  ? appBarHeight + warehouseLinkBarHeight
-  : appBarHeight;
-
 const MainLayout: React.FC<Props> = ({ children }) => {
   const { user, loading } = useAuth();
 
@@ -32,15 +27,15 @@ const MainLayout: React.FC<Props> = ({ children }) => {
 
   return (
     <React.Fragment>
-      {showWarehouseLinkBar && <WarehouseLinkBar />}
+      {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
       <AppBar
         position='sticky'
         color='default'
         elevation={0}
         sx={{
-          height: appBarHeight,
+          height: APP_BAR_HEIGHT,
           borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
-          top: showWarehouseLinkBar ? warehouseLinkBarHeight : 0,
+          top: SHOW_OP_LINK_BAR ? OP_LINK_BAR_HEIGHT : 0,
         }}
       >
         {/* fixme: make responsive */}

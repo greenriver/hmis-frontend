@@ -2,11 +2,11 @@ import { Stack, Tooltip, Typography } from '@mui/material';
 import { formatISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 
-import ClientName from '@/components/elements/ClientName';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
 import useDebouncedState from '@/hooks/useDebouncedState';
+import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';

@@ -183,6 +183,7 @@ const FormActions = ({
           <Typography
             alignSelf='center'
             color='text.secondary'
+            variant='body2'
             sx={{
               backgroundColor: 'white',
               px: 2,

@@ -2,6 +2,7 @@ import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
+import { GroupItemComponentProps } from '../../types';
 import {
   getAllChildLinkIds,
   getPopulatableChildren,
@@ -11,7 +12,6 @@ import {
   isTypicalRelatedRecord,
   RelatedRecord,
 } from '../../util/recordPickerUtil';
-import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
   tableComponentForType,
 } from '../RecordPickerDialog';
