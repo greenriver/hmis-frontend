@@ -1,7 +1,7 @@
 import { Grid, Paper, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 import FormStepper from '@/modules/form/components/FormStepper';
 import { FormItem } from '@/types/gqlTypes';
 

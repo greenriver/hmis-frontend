@@ -6,10 +6,10 @@ import HouseholdActionButtons from './HouseholdActionButtons';
 import HouseholdMemberActionButton from './HouseholdMemberActionButton';
 import { useHouseholdMembers } from './useHouseholdMembers';
 
-import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
+import ClientName from '@/modules/client/components/ClientName';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';

@@ -14,8 +14,11 @@ import { useLocation } from 'react-router-dom';
 import IndividualAssessment from './IndividualAssessment';
 
 import Loading from '@/components/elements/Loading';
-import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
@@ -30,8 +33,6 @@ interface Props {
   type: 'ENTRY' | 'EXIT';
   title: ReactNode;
 }
-
-export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 72;
 
 type MemberTabDefinition = {
   name?: string;

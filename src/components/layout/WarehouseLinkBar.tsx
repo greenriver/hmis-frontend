@@ -5,9 +5,10 @@ import { AppBar, Button, Toolbar } from '@mui/material';
 
 import ButtonLink from '../elements/ButtonLink';
 
-export const warehouseLinkBarHeight = 40;
+import { OP_LINK_BAR_HEIGHT } from './layoutConstants';
+
 const linkStyles = {
-  height: warehouseLinkBarHeight,
+  height: OP_LINK_BAR_HEIGHT,
   color: 'white',
   borderRadius: 0,
   py: 0,
@@ -23,7 +24,7 @@ const WarehouseLinkBar = () => {
       elevation={0}
       sx={{
         backgroundColor: (theme) => theme.palette.grey[900],
-        height: warehouseLinkBarHeight,
+        height: OP_LINK_BAR_HEIGHT,
         border: 'none',
       }}
     >

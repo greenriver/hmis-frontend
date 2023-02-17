@@ -1,6 +1,7 @@
 import { pull } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
+import { OverrideableDynamicFieldProps } from '../types';
 import {
   autofillValues,
   buildCommonInputProps,
@@ -11,7 +12,7 @@ import {
 } from '../util/formUtil';
 
 import DynamicField from './DynamicField';
-import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
+import DynamicGroup from './DynamicGroup';
 
 import {
   DisabledDisplay,

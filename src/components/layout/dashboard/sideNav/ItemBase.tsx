@@ -2,7 +2,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Box, Collapse, IconButton, lighten, Link } from '@mui/material';
 import React, { useCallback, useEffect, useId, useRef, useState } from 'react';
 
-import { NavItem } from './SideNavMenu';
+import { NavItem } from './types';
 import { useItemSelectionStatus } from './useItemSelectionStatus';
 
 import RouterLink from '@/components/elements/RouterLink';

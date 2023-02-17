@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 
-import { CONTEXT_HEADER_HEIGHT } from './ContextHeader';
+import { CONTEXT_HEADER_HEIGHT } from '../../layoutConstants';
+
 import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';

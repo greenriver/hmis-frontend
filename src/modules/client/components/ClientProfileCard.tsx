@@ -13,12 +13,11 @@ import {
 } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
-import ButtonLink from './ButtonLink';
-import ClientImageUploadDialog from './input/ClientImageUploadDialog';
-import NotSpecified from './NotSpecified';
-import SimpleAccordion from './SimpleAccordion';
-import SimpleTable from './SimpleTable';
-
+import ButtonLink from '@/components/elements/ButtonLink';
+import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
+import NotSpecified from '@/components/elements/NotSpecified';
+import SimpleAccordion from '@/components/elements/SimpleAccordion';
+import SimpleTable from '@/components/elements/SimpleTable';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';

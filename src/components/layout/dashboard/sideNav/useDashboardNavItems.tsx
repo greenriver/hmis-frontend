@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { NavItem } from './SideNavMenu';
+import { NavItem } from './types';
 
 import { DashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';

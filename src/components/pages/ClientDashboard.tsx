@@ -2,15 +2,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
-import ClientCardMini from '../elements/ClientCardMini';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
-import SideNavMenu, { NavItem } from '../layout/dashboard/sideNav/SideNavMenu';
+import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
+import { NavItem } from '../layout/dashboard/sideNav/types';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
+import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientFieldsFragment,

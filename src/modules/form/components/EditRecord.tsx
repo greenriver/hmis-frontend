@@ -14,7 +14,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormOnSubmit,
