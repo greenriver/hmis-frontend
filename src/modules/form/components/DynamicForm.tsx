@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
+import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
@@ -98,7 +99,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       event.preventDefault();
       // Hacky why to pull the appropriate onSuccess callback from FormActionProps
       const onSuccess = (FormActionProps.config || []).find(
-        (b) => b.action === 'SUBMIT'
+        (b) => b.action === FormActionTypes.Submit
       )?.onSuccess;
 
       const valuesToSubmit = getCleanedValues();

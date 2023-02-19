@@ -1,10 +1,12 @@
-import { LoadingButton, LoadingButtonProps } from '@mui/lab';
 import { Stack, Typography, Tooltip } from '@mui/material';
 import { findIndex } from 'lodash-es';
 import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { FormActionTypes } from '../types';
+
 import ButtonLink from '@/components/elements/ButtonLink';
+import LoadingButton from '@/components/elements/LoadingButton';
 import {
   formatDateTimeForDisplay,
   parseHmisDateString,
@@ -14,10 +16,10 @@ import {
 type ButtonConfig = {
   id: string;
   label: string;
-  action: 'SAVE' | 'SUBMIT' | 'VALIDATE' | 'DISCARD' | 'NAVIGATE';
-  onSuccess: VoidFunction;
-  rightAlignt?: boolean;
-  buttonProps?: Omit<LoadingButtonProps, 'onClick'>;
+  action: FormActionTypes;
+  onSuccess?: VoidFunction;
+  rightAlign?: boolean;
+  buttonProps?: any; //Omit<LoadingButtonProps, 'onClick'>;
 };
 
 export interface FormActionProps {
@@ -65,47 +67,47 @@ const FormActions = ({
     return [
       [
         {
-          key: 'submit',
+          id: 'submit',
           label: submitButtonText || 'Save Changes',
-          action: 'SUBMIT',
+          action: FormActionTypes.Submit,
           buttonProps: { variant: 'contained' },
         },
         {
-          key: 'discard',
+          id: 'discard',
           label: discardButtonText || 'Discard',
-          action: 'DISCARD',
+          action: FormActionTypes.Discard,
           buttonProps: { variant: 'gray' },
         },
-      ],
+      ] as ButtonConfig[],
       [],
     ];
   }, [config, submitButtonText, discardButtonText]);
 
-  const [lastClicked, setLastClicked] = useState();
+  const [lastClicked, setLastClicked] = useState<string>();
 
   const getClickHandler = useCallback(
     ({ action, onSuccess, id }: ButtonConfig) => {
-      if (action === 'DISCARD') {
+      if (action === FormActionTypes.Discard) {
         return (onDiscard as MouseEventHandler) || (() => navigate(-1));
       }
-      if (action === 'SAVE') {
+      if (action === FormActionTypes.Save) {
         if (!onSaveDraft) return;
-        return (e: React.MouseEvent<HTMLElement>) => {
+        return (e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
           setLastClicked(id);
           onSaveDraft(onSuccess);
         };
       }
-      if (action === 'SUBMIT') {
+      if (action === FormActionTypes.Submit) {
         if (!onSubmit) return;
-        return (e: React.MouseEvent<HTMLElement>) => {
+        return (e: React.MouseEvent<HTMLButtonElement>) => {
           e.preventDefault();
           setLastClicked(id);
           onSubmit(e, onSuccess);
         };
       }
 
-      if (action === 'NAVIGATE') {
+      if (action === FormActionTypes.Navigate) {
         return onSuccess;
       }
     },
@@ -114,9 +116,14 @@ const FormActions = ({
 
   const renderButton = (buttonConfig: ButtonConfig) => {
     const { id, label, action, buttonProps } = buttonConfig;
-    const isSubmit = action === 'SAVE' || action === 'SUBMIT';
+    const isSubmit =
+      action === FormActionTypes.Save || action === FormActionTypes.Submit;
 
-    if (action === 'DISCARD' && onDiscard && typeof onDiscard === 'string') {
+    if (
+      action === FormActionTypes.Discard &&
+      onDiscard &&
+      typeof onDiscard === 'string'
+    ) {
       // Special case for onDiscard that is a link
       return (
         <ButtonLink

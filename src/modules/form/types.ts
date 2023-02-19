@@ -50,3 +50,11 @@ export interface GroupItemComponentProps {
   itemChanged: (linkId: string, value: any) => void;
   severalItemsChanged: (values: Record<string, any>) => void;
 }
+
+export enum FormActionTypes {
+  Save,
+  Submit,
+  Validate,
+  Discard,
+  Navigate,
+}

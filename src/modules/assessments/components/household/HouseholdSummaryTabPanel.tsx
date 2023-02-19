@@ -130,11 +130,7 @@ const HouseholdSummaryTabPanel = memo(
             </Typography>
 
             <Paper sx={{ p: 2 }}>
-              <SummaryTable
-                tabs={tabs}
-                role={assessmentRole}
-                projectName={projectName}
-              />
+              <SummaryTable tabs={tabs} role={assessmentRole} />
             </Paper>
           </Grid>
         </Grid>

@@ -8,6 +8,7 @@ import IndividualAssessment from '../IndividualAssessment';
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
+import { FormActionTypes } from '@/modules/form/types';
 import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
@@ -42,14 +43,14 @@ const HouseholdAssessmentTabPanel = memo(
     const readyToSubmit = status === AssessmentStatus.ReadyToSubmit;
 
     const getFormActionProps = useCallback(
-      (assessment: AssessmentFieldsFragment) => {
+      (assessment?: AssessmentFieldsFragment) => {
         const hasBeenSubmitted = assessment && !assessment.inProgress;
 
         const config = [];
         config.push({
           id: 'readyToSubmit',
           label: hasBeenSubmitted ? 'Submitted' : 'Ready to Submit',
-          action: 'SAVE',
+          action: FormActionTypes.Save,
           buttonProps: {
             variant: 'contained',
             disabled: hasBeenSubmitted || readyToSubmit,
@@ -68,7 +69,7 @@ const HouseholdAssessmentTabPanel = memo(
           config.push({
             id: 'save',
             label: 'Save',
-            action: 'SAVE',
+            action: FormActionTypes.Save,
             buttonProps: { variant: 'outlined' },
             onSuccess: () => {
               updateTabStatus(AssessmentStatus.Started, id);
@@ -80,7 +81,9 @@ const HouseholdAssessmentTabPanel = memo(
         config.push({
           id: 'prev',
           label: hasBeenSubmitted ? 'Previous' : 'Save & Previous',
-          action: hasBeenSubmitted ? 'NAVIGATE' : 'SAVE',
+          action: hasBeenSubmitted
+            ? FormActionTypes.Navigate
+            : FormActionTypes.Save,
           rightAlign: true,
           buttonProps: {
             disabled: !previousTab,
@@ -100,7 +103,9 @@ const HouseholdAssessmentTabPanel = memo(
         config.push({
           id: 'next',
           label: hasBeenSubmitted ? 'Next' : 'Save & Next',
-          action: hasBeenSubmitted ? 'NAVIGATE' : 'SAVE',
+          action: hasBeenSubmitted
+            ? FormActionTypes.Navigate
+            : FormActionTypes.Save,
           rightAlign: true,
           buttonProps: {
             disabled: !nextTab,

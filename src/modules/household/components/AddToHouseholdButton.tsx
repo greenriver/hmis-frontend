@@ -1,7 +1,8 @@
-import { LoadingButton } from '@mui/lab';
 import { format } from 'date-fns';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import LoadingButton from '@/components/elements/LoadingButton';
+import usePrevious from '@/hooks/usePrevious';
 import {
   RelationshipToHoH,
   useAddHouseholdMembersMutation,
@@ -14,14 +15,6 @@ interface Props {
   onSuccess: () => void;
   relationshipToHoH?: RelationshipToHoH | null;
   startDate?: Date | null;
-}
-
-function usePrevious(value: any) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
 }
 
 const AddToHouseholdButton = ({

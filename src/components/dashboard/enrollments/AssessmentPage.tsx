@@ -5,6 +5,7 @@ import Loading from '@/components/elements/Loading';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
+import { FormActionTypes } from '@/modules/form/types';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import { AssessmentRole } from '@/types/gqlTypes';
@@ -58,7 +59,7 @@ const AssessmentPage = () => {
           {
             id: 'submit',
             label: 'Submit',
-            action: 'SUBMIT',
+            action: FormActionTypes.Submit,
             buttonProps: { variant: 'contained' },
             onSuccess,
           },
@@ -68,7 +69,7 @@ const AssessmentPage = () => {
                 {
                   id: 'saveDraft',
                   label: 'Save and finish later',
-                  action: 'SAVE',
+                  action: FormActionTypes.Save,
                   buttonProps: { variant: 'outlined' },
                   onSuccess,
                 },
@@ -76,7 +77,7 @@ const AssessmentPage = () => {
           {
             id: 'discard',
             label: assessmentId ? 'Cancel' : 'Discard',
-            action: 'DISCARD',
+            action: FormActionTypes.Discard,
             buttonProps: { variant: 'gray' },
           },
         ],

@@ -1,4 +1,3 @@
-import { LoadingButton } from '@mui/lab';
 import {
   Box,
   Button,
@@ -18,6 +17,7 @@ import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/GenericTable';
+import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
