@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 
 import { FormItem, ValidationError } from '@/types/gqlTypes';
 
+export const HIDDEN_VALUE = '_HIDDEN';
+
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
 // Props to DynamicField. Need to put here to avoid circular deps.

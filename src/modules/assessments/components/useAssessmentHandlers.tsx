@@ -9,6 +9,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   FormDefinition,
+  FormDefinitionJson,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
   useSaveAssessmentMutation,
@@ -21,6 +22,23 @@ type Args = {
   enrollmentId: string;
   assessmentId?: string;
 };
+
+export const createValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) => transformSubmitValues({ definition, values });
+
+export const createHudValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) =>
+  transformSubmitValues({
+    definition,
+    values,
+    // autofillNulls: true,
+    keyByFieldName: true,
+    autofillHidden: true,
+  });
 
 export function useAssessmentHandlers({
   definition,
@@ -63,21 +81,23 @@ export function useAssessmentHandlers({
   const submitHandler: DynamicFormOnSubmit = useCallback(
     (event, values, confirmed = false, onSuccessCallback = undefined) => {
       if (!definition) return;
-      if (debugFormValues(event, values, definition.definition)) return;
-
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-        autofillNotCollected: true,
-        autofillNulls: true,
-      });
+      if (
+        debugFormValues(
+          event,
+          values,
+          definition.definition,
+          createValuesForSubmit,
+          createHudValuesForSubmit
+        )
+      )
+        return;
 
       const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values,
-        hudValues,
+        values: createValuesForSubmit(values, definition.definition),
+        hudValues: createHudValuesForSubmit(values, definition.definition),
         confirmed,
       };
       console.debug('Submitting', input, confirmed);
@@ -104,18 +124,13 @@ export function useAssessmentHandlers({
   const saveDraftHandler = useCallback(
     (values: FormValues, onSuccessCallback: VoidFunction) => {
       if (!definition) return;
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-        assessmentDateOnly: true,
-        autofillNulls: true,
-      });
+
       const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values,
-        hudValues,
+        values: createValuesForSubmit(values, definition.definition),
+        hudValues: createHudValuesForSubmit(values, definition.definition),
       };
       console.debug('Saving', input);
       void saveAssessmentMutation({

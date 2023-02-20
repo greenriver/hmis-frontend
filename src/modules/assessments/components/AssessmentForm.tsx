@@ -8,7 +8,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { assign, cloneDeep } from 'lodash-es';
+import { assign } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -16,8 +16,8 @@ import { useAssessmentHandlers } from './useAssessmentHandlers';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import {
-  STICKY_BAR_HEIGHT,
   CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
@@ -25,7 +25,10 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
-import { getInitialValues } from '@/modules/form/util/formUtil';
+import {
+  createInitialValuesFromSavedValues,
+  getInitialValues,
+} from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
@@ -105,11 +108,15 @@ const AssessmentForm = ({
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
-      // Overlay initial values from source Assessment
-      const initialFromSourceAssessment = cloneDeep(
-        source.assessmentDetail?.values || {}
-      );
-      assign(init, initialFromSourceAssessment);
+      const sourceValues = source.assessmentDetail?.values;
+      if (sourceValues) {
+        // Overlay initial values from source Assessment
+        const initialFromSourceAssessment = createInitialValuesFromSavedValues(
+          definition.definition,
+          sourceValues
+        );
+        assign(init, initialFromSourceAssessment);
+      }
 
       // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
       const initialsToOverwrite = getInitialValues(

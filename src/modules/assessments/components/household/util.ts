@@ -21,6 +21,7 @@ export type TabDefinition = {
   enrollmentId: string;
   assessmentId?: string;
   assessmentInProgress?: boolean;
+  assessmentDate?: string;
   isHoh: boolean;
   relationshipToHoH: RelationshipToHoH;
 } & LocalTabState;

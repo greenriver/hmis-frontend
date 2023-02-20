@@ -1,5 +1,12 @@
-import { Grid, Paper, Typography } from '@mui/material';
-import { memo } from 'react';
+import {
+  Checkbox,
+  CheckboxProps,
+  Grid,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { fromPairs, pickBy } from 'lodash-es';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import { assessmentPrefix } from '../../util';
 
@@ -11,15 +18,26 @@ import {
   tabPanelA11yProps,
 } from './util';
 
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import LoadingButton from '@/components/elements/LoadingButton';
 import SimpleTable from '@/components/elements/SimpleTable';
-import { AssessmentRole } from '@/types/gqlTypes';
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  AssessmentRole,
+  useSubmitHouseholdAssessmentsMutation,
+} from '@/types/gqlTypes';
 
 const SummaryTable = ({
   tabs,
   role,
+  checked,
+  onClickCheckbox,
 }: {
   tabs: TabDefinition[];
   role: AssessmentRole.Intake | AssessmentRole.Exit;
+  checked: Record<string, boolean>;
+  onClickCheckbox: (assessmentId?: string) => CheckboxProps['onChange'];
 }) => {
   return (
     <SimpleTable
@@ -31,13 +49,51 @@ const SummaryTable = ({
           px: 1,
           '&:first-of-type': {
             pl: 0,
+            width: '1px',
             // maxWidth: '100px',
             // whiteSpace: 'nowrap',
             verticalAlign: 'baseline',
           },
+          '&:nth-of-type(2)': {
+            pl: 0,
+            width: '1px',
+            verticalAlign: 'baseline',
+          },
+          '&:nth-of-type(3)': {
+            maxWidth: '300px',
+          },
         },
       }}
       columns={[
+        {
+          name: 'hoh',
+          label: <></>,
+          render: (row) => (
+            <HohIndicator relationshipToHoh={row.relationshipToHoH} />
+          ),
+        },
+        {
+          name: 'submit',
+          label: <></>,
+          render: (row) => {
+            const disabledReason = !row.assessmentId
+              ? 'Not started'
+              : row.status === AssessmentStatus.Submitted
+              ? 'Already submitted'
+              : undefined;
+            return (
+              <ButtonTooltipContainer title={disabledReason}>
+                <Checkbox
+                  checked={!!row.assessmentId && checked[row.assessmentId]}
+                  indeterminate={!!disabledReason}
+                  disabled={!!disabledReason}
+                  onChange={onClickCheckbox(row.assessmentId)}
+                  aria-label={`Submit assessment for ${row.clientName} `}
+                />
+              </ButtonTooltipContainer>
+            );
+          },
+        },
         {
           name: 'Client',
           label: <Typography fontWeight={600}>Client</Typography>,
@@ -56,7 +112,10 @@ const SummaryTable = ({
               color={
                 row.status === AssessmentStatus.ReadyToSubmit
                   ? (theme) => theme.palette.success.main
-                  : 'text.secondary'
+                  : 'text.primary'
+              }
+              fontWeight={
+                row.status === AssessmentStatus.ReadyToSubmit ? 600 : 400
               }
             >
               {labelForStatus(row.status)}
@@ -71,14 +130,10 @@ const SummaryTable = ({
             </Typography>
           ),
           render: (row) => (
-            <Typography
-              color={
-                row.status === AssessmentStatus.ReadyToSubmit
-                  ? (theme) => theme.palette.success.main
-                  : 'text.secondary'
-              }
-            >
-              To do
+            <Typography>
+              {row.assessmentDate
+                ? parseAndFormatDate(row.assessmentDate)
+                : 'Not Specified'}
             </Typography>
           ),
         },
@@ -112,6 +167,48 @@ const HouseholdSummaryTabPanel = memo(
   }: HouseholdSummaryTabPanelProps) => {
     console.debug('Rendering summary panel');
 
+    const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
+      fromPairs(
+        tabs
+          .filter((t) => !!t.assessmentId)
+          .map((t) => [
+            t.assessmentId,
+            t.status === AssessmentStatus.ReadyToSubmit,
+          ])
+      )
+    );
+
+    const onClickCheckbox: (
+      assessmentId?: string
+    ) => CheckboxProps['onChange'] = useCallback(
+      (assessmentId) => (_event, checked) => {
+        if (!assessmentId) return;
+        setCheckedState((old) => {
+          const copy = { ...old };
+          copy[assessmentId] = checked;
+          return copy;
+        });
+      },
+      []
+    );
+
+    const [submitMutation, { loading, error }] =
+      useSubmitHouseholdAssessmentsMutation();
+
+    const assessmentsToSubmit = useMemo(
+      () => Object.keys(pickBy(checkedState)),
+      [checkedState]
+    );
+    const onSubmit = useCallback(() => {
+      console.log('submitting', assessmentsToSubmit);
+      submitMutation({
+        variables: {
+          input: { assessmentIds: assessmentsToSubmit, confirmed: false },
+        },
+      });
+    }, [submitMutation, assessmentsToSubmit]);
+
+    if (error) throw error; // fixme
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -124,14 +221,30 @@ const HouseholdSummaryTabPanel = memo(
           alignItems='center'
           sx={{ py: 2 }}
         >
-          <Grid item xs={12} md={10} lg={10}>
+          <Grid item xs={12} md={10} lg={8}>
             <Typography variant='h4' sx={{ mb: 3 }}>
               Complete {assessmentPrefix(assessmentRole)} {projectName}
             </Typography>
 
             <Paper sx={{ p: 2 }}>
-              <SummaryTable tabs={tabs} role={assessmentRole} />
+              <SummaryTable
+                tabs={tabs}
+                role={assessmentRole}
+                checked={checkedState}
+                onClickCheckbox={onClickCheckbox}
+              />
             </Paper>
+          </Grid>
+          <Grid item xs={12} md={10} lg={8} sx={{ py: 3 }}>
+            <LoadingButton
+              loading={loading}
+              onClick={onSubmit}
+              disabled={assessmentsToSubmit.length === 0}
+            >
+              Submit{' '}
+              {assessmentsToSubmit.length > 0 ? assessmentsToSubmit.length : ''}{' '}
+              assessments
+            </LoadingButton>
           </Grid>
         </Grid>
       </AlwaysMountedTabPanel>

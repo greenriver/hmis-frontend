@@ -72,6 +72,10 @@ const HouseholdAssessments = ({
             type === 'ENTRY'
               ? !!enrollment.intakeAssessment?.inProgress
               : !!enrollment.exitAssessment?.inProgress;
+          const assessmentDate =
+            type === 'ENTRY'
+              ? enrollment.intakeAssessment?.assessmentDate
+              : enrollment.exitAssessment?.assessmentDate;
 
           const tabData: TabDefinition = {
             clientName: clientBriefName(client),
@@ -85,6 +89,7 @@ const HouseholdAssessments = ({
               veteranStatus: client.veteranStatus,
             },
             relationshipToHoH,
+            assessmentDate,
             status:
               assessmentId && !assessmentInProgress
                 ? AssessmentStatus.Submitted
