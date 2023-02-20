@@ -73,6 +73,18 @@ mutation SubmitAssessment($input: SubmitAssessmentInput!) {
   }
 }
 
+mutation SubmitHouseholdAssessments($input: SubmitHouseholdAssessmentsInput!) {
+  submitHouseholdAssessments(input: $input) {
+    assessments {
+      id
+      inProgress
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetAssessmentsForPopulation(
   $id: ID!
   $limit: Int = 10
