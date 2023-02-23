@@ -95,7 +95,7 @@ const SummaryTable = ({
               <ButtonTooltipContainer title={disabledReason}>
                 <Checkbox
                   checked={!!(row.assessmentId && checked[row.assessmentId])}
-                  indeterminate={!!disabledReason}
+                  indeterminate={row.status === AssessmentStatus.Submitted}
                   disabled={!!disabledReason}
                   onChange={onClickCheckbox(row.assessmentId)}
                   aria-label={`Submit assessment for ${row.clientName} `}
@@ -143,7 +143,7 @@ const SummaryTable = ({
             <Typography>
               {row.assessmentDate
                 ? parseAndFormatDate(row.assessmentDate)
-                : 'Not Specified'}
+                : null}
             </Typography>
           ),
         },
