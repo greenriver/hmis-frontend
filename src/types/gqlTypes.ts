@@ -3366,6 +3366,7 @@ export type ValidationError = {
   readableAttribute?: Maybe<Scalars['String']>;
   /** ID of the AR record this error pertains to */
   recordId?: Maybe<Scalars['ID']>;
+  section?: Maybe<Scalars['String']>;
   severity: ValidationSeverity;
   type: ValidationType;
 };
@@ -6323,6 +6324,7 @@ export type SaveAssessmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6784,6 +6786,7 @@ export type SubmitAssessmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6812,6 +6815,7 @@ export type SubmitHouseholdAssessmentsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6934,6 +6938,7 @@ export type DeleteAssessmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6949,6 +6954,7 @@ export type ValidationErrorFieldsFragment = {
   id?: string | null;
   recordId?: string | null;
   linkId?: string | null;
+  section?: string | null;
 };
 
 export type ClientNameFragment = {
@@ -7662,6 +7668,7 @@ export type CreateClientMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7716,6 +7723,7 @@ export type UpdateClientMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7751,6 +7759,7 @@ export type UpdateClientImageMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7785,6 +7794,7 @@ export type DeleteClientImageMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7826,6 +7836,7 @@ export type CreateEnrollmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7894,6 +7905,7 @@ export type UpdateEnrollmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7962,6 +7974,7 @@ export type SetHoHMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8003,6 +8016,7 @@ export type DeleteEnrollmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8071,6 +8085,7 @@ export type AddHouseholdMembersMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8133,6 +8148,7 @@ export type AddServiceToEnrollmentMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8172,6 +8188,7 @@ export type UpdateServiceMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8211,6 +8228,7 @@ export type DeleteServiceMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9013,6 +9031,7 @@ export type DeleteProjectMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9181,6 +9200,7 @@ export type DeleteOrganizationMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9270,6 +9290,7 @@ export type CreateProjectMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9316,6 +9337,7 @@ export type UpdateProjectMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9348,6 +9370,7 @@ export type CreateOrganizationMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9380,6 +9403,7 @@ export type UpdateOrganizationMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9521,6 +9545,7 @@ export type CreateInventoryMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9560,6 +9585,7 @@ export type UpdateInventoryMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9585,6 +9611,7 @@ export type DeleteInventoryMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9621,6 +9648,7 @@ export type CreateFunderMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9657,6 +9685,7 @@ export type UpdateFunderMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9682,6 +9711,7 @@ export type DeleteFunderMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9721,6 +9751,7 @@ export type CreateProjectCocMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9760,6 +9791,7 @@ export type UpdateProjectCocMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9785,6 +9817,7 @@ export type DeleteProjectCocMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9824,6 +9857,7 @@ export type CreateBedsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9863,6 +9897,7 @@ export type CreateUnitsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9902,6 +9937,7 @@ export type DeleteUnitsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9941,6 +9977,7 @@ export type DeleteBedsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9973,6 +10010,7 @@ export type UpdateUnitsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -10007,6 +10045,7 @@ export type UpdateBedsMutation = {
       id?: string | null;
       recordId?: string | null;
       linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -10247,6 +10286,7 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     id
     recordId
     linkId
+    section
   }
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`

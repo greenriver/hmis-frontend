@@ -8,6 +8,7 @@ fragment ValidationErrorFields on ValidationError {
   id
   recordId
   linkId
+  section
 }
 
 fragment ClientName on Client {

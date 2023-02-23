@@ -33,7 +33,8 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
+export const isDataNotCollected = (s?: string) =>
+  s && s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
@@ -129,7 +130,8 @@ export const getOptionValue = (
   item: FormItem
 ) => {
   if (!value) return null;
-  if (value && isDataNotCollected(value)) {
+  if (isPickListOption(value)) return value;
+  if (isDataNotCollected(value)) {
     return null;
   }
   if (item.pickListReference) {
@@ -577,7 +579,9 @@ export const getInitialValues = (
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
           const value = localConstants[varName];
-          values[item.linkId] = gqlValueToFormValue(value, item) || value;
+          if (!isNil(value)) {
+            values[item.linkId] = gqlValueToFormValue(value, item) || value;
+          }
         }
       }
     });

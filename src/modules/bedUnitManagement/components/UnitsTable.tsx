@@ -7,7 +7,7 @@ import {
   evictUnitsQuery,
 } from '../bedUnitUtil';
 
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import LoadingButton from '@/components/elements/LoadingButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';

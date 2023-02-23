@@ -114,11 +114,16 @@ const HouseholdAssessments = ({
 
   useEffect(() => {
     if (hasRefetched) return;
+    const hashString = hash.replace('#', '');
+    const hashNum = hashString ? parseInt(hashString) : -1;
+    const isValid =
+      hashString === 'summary' ||
+      (isFinite(hashNum) && hashNum >= 0 && hashNum <= tabs.length);
 
-    const hashNum = hash ? parseInt(hash.replace('#', '')) : -1;
-    const currentHash = isFinite(hashNum) && hashNum >= 0 ? hashNum : undefined;
-    if (currentHash && currentHash <= tabs.length) {
-      setCurrentTab(String(currentHash));
+    if (isValid) {
+      setCurrentTab(hashString);
+    } else {
+      setCurrentTab('1');
     }
   }, [hasRefetched, hash, tabs.length]);
 
@@ -270,6 +275,7 @@ const HouseholdAssessments = ({
               active={SUMMARY_TAB_ID === currentTab}
               assessmentRole={assessmentRole}
               projectName={enrollmentName(enrollment)}
+              refetch={refetch}
             />
           )}
         </Grid>

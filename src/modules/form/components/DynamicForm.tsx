@@ -8,12 +8,10 @@ import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
+import FormWarningDialog from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
-import ValidationErrorDisplay, {
-  ValidationWarningDisplay,
-} from './ValidationErrorDisplay';
+import ValidationErrorDisplay from './ValidationErrorDisplay';
 
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
 
@@ -156,32 +154,14 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       </Box>
 
       {showConfirmDialog && (
-        <ConfirmationDialog
-          id='confirmSubmit'
+        <FormWarningDialog
           open
-          title='Ignore Warnings?'
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
           confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-          sx={{
-            '.MuiDialog-paper': {
-              minWidth: '400px',
-              // backgroundColor: (theme) =>
-              //   lighten(theme.palette.warning.light, 0.85),
-            },
-            '.MuiDialogTitle-root': {
-              textTransform: 'unset',
-              color: 'text.primary',
-              fontSize: 18,
-              fontWeight: 800,
-            },
-          }}
-        >
-          {warnings.length > 0 && (
-            <ValidationWarningDisplay warnings={warnings} />
-          )}
-        </ConfirmationDialog>
+          warnings={warnings}
+        />
       )}
 
       {showSavePrompt && !isSaveButtonVisible && (

@@ -7,7 +7,7 @@ import * as React from 'react';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 
-interface Props extends DialogProps {
+export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
   children: React.ReactNode;
   confirmText?: string;
@@ -23,7 +23,7 @@ const ConfirmationDialog = ({
   loading,
   confirmText,
   ...other
-}: Props) => {
+}: ConfirmationDialogProps) => {
   return (
     <Dialog keepMounted={false} {...other}>
       <DialogTitle>{title}</DialogTitle>

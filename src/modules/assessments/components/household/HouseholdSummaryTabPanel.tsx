@@ -1,12 +1,16 @@
 import {
+  Alert,
+  AlertTitle,
+  Box,
   Checkbox,
   CheckboxProps,
   Grid,
   Paper,
   Typography,
 } from '@mui/material';
-import { fromPairs, pickBy } from 'lodash-es';
-import { memo, useCallback, useMemo, useState } from 'react';
+import { fromPairs, keyBy, mapValues, pickBy } from 'lodash-es';
+import pluralize from 'pluralize';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { assessmentPrefix } from '../../util';
 
@@ -19,13 +23,19 @@ import {
 } from './util';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import LoadingButton from '@/components/elements/LoadingButton';
 import SimpleTable from '@/components/elements/SimpleTable';
+import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
+import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   AssessmentRole,
+  SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
+  ValidationError,
+  ValidationSeverity,
 } from '@/types/gqlTypes';
 
 const SummaryTable = ({
@@ -149,12 +159,14 @@ interface HouseholdSummaryTabPanelProps {
   tabs: TabDefinition[];
   id: string;
   projectName: string;
-  // refetch: () => Promise<any>;
-  // nextTab?: string;
-  // previousTab?: string;
-  // navigateToTab: (t: string) => void;
-  // updateTabStatus: (status: AssessmentStatus, tabId: string) => void;
+  refetch: () => Promise<any>;
 }
+
+type ErrorState = {
+  warnings: ValidationError[];
+  errors: ValidationError[];
+};
+const emptyErrorState: ErrorState = { warnings: [], errors: [] };
 
 // Memoized to only re-render when props change (shallow compare)
 const HouseholdSummaryTabPanel = memo(
@@ -164,6 +176,7 @@ const HouseholdSummaryTabPanel = memo(
     id,
     tabs,
     projectName,
+    refetch,
   }: HouseholdSummaryTabPanelProps) => {
     console.debug('Rendering summary panel');
 
@@ -192,23 +205,70 @@ const HouseholdSummaryTabPanel = memo(
       []
     );
 
-    const [submitMutation, { loading, error }] =
-      useSubmitHouseholdAssessmentsMutation();
+    const [{ warnings, errors }, setErrors] =
+      useState<ErrorState>(emptyErrorState);
+    const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
+
+    const [submitMutation, { loading, error: apolloError }] =
+      useSubmitHouseholdAssessmentsMutation({
+        onError: () => setErrors(emptyErrorState),
+      });
 
     const assessmentsToSubmit = useMemo(
       () => Object.keys(pickBy(checkedState)),
       [checkedState]
     );
+
+    useEffect(() => {
+      setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
+    }, [errors, warnings]);
+
+    const onCompleted = useCallback(
+      ({ submitHouseholdAssessments }: SubmitHouseholdAssessmentsMutation) => {
+        console.log('oncompleted', submitHouseholdAssessments);
+        if (!submitHouseholdAssessments) return;
+        if (submitHouseholdAssessments.errors.length > 0) {
+          setErrors({
+            warnings: submitHouseholdAssessments.errors.filter(
+              (e) => e.severity === ValidationSeverity.Warning
+            ),
+            errors: submitHouseholdAssessments.errors.filter(
+              (e) => e.severity === ValidationSeverity.Error
+            ),
+          });
+        } else if (submitHouseholdAssessments.assessments) {
+          setErrors(emptyErrorState);
+          refetch();
+        }
+      },
+      [refetch]
+    );
+
     const onSubmit = useCallback(() => {
       console.log('submitting', assessmentsToSubmit);
       submitMutation({
         variables: {
           input: { assessmentIds: assessmentsToSubmit, confirmed: false },
         },
+        onCompleted,
       });
-    }, [submitMutation, assessmentsToSubmit]);
+    }, [submitMutation, onCompleted, assessmentsToSubmit]);
 
-    if (error) throw error; // fixme
+    const onConfirm = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        submitMutation({
+          variables: {
+            input: { assessmentIds: assessmentsToSubmit, confirmed: true },
+          },
+          onCompleted,
+        });
+      },
+      [submitMutation, onCompleted, assessmentsToSubmit]
+    );
+
+    if (apolloError) console.error(apolloError);
+
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -225,7 +285,23 @@ const HouseholdSummaryTabPanel = memo(
             <Typography variant='h4' sx={{ mb: 3 }}>
               Complete {assessmentPrefix(assessmentRole)} {projectName}
             </Typography>
-
+            {apolloError && (
+              <Box sx={{ mb: 3 }}>
+                <ApolloErrorAlert error={apolloError} />
+              </Box>
+            )}
+            {errors.length > 0 && (
+              <Grid item>
+                <Alert
+                  severity='error'
+                  sx={{ mb: 3 }}
+                  data-testid='formErrorAlert'
+                >
+                  <AlertTitle>Failed to submit</AlertTitle>
+                  <ValidationErrorDisplay errors={errors} />
+                </Alert>
+              </Grid>
+            )}
             <Paper sx={{ p: 2 }}>
               <SummaryTable
                 tabs={tabs}
@@ -242,11 +318,24 @@ const HouseholdSummaryTabPanel = memo(
               disabled={assessmentsToSubmit.length === 0}
             >
               Submit{' '}
-              {assessmentsToSubmit.length > 0 ? assessmentsToSubmit.length : ''}{' '}
-              assessments
+              {pluralize(
+                'assessment',
+                assessmentsToSubmit.length,
+                assessmentsToSubmit.length > 0
+              )}
             </LoadingButton>
           </Grid>
         </Grid>
+        {showConfirmDialog && (
+          <FormWarningDialog
+            open
+            onConfirm={onConfirm}
+            onCancel={() => setShowConfirmDialog(false)}
+            loading={loading || false}
+            warnings={warnings}
+            sectionLabels={mapValues(keyBy(tabs, 'assessmentId'), 'clientName')}
+          />
+        )}
       </AlwaysMountedTabPanel>
     );
   }

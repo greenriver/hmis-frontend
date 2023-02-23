@@ -2239,6 +2239,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       { name: 'recordId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
+        name: 'section',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'severity',
         type: {
           kind: 'NON_NULL',
