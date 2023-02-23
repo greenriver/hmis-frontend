@@ -229,7 +229,9 @@ const HouseholdAssessments = ({
                 <Tab
                   value={definition.id}
                   key={definition.id}
-                  label={<TabLabel definition={definition} />}
+                  label={
+                    <TabLabel definition={definition} role={assessmentRole} />
+                  }
                   sx={tabSx}
                   {...tabA11yProps(definition.id)}
                 />

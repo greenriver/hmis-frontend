@@ -51,6 +51,7 @@ export interface GroupItemComponentProps {
   values: Record<string, any>;
   itemChanged: (linkId: string, value: any) => void;
   severalItemsChanged: (values: Record<string, any>) => void;
+  visible?: boolean;
 }
 
 export enum FormActionTypes {

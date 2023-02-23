@@ -8,7 +8,15 @@ import { Box, Stack, Typography } from '@mui/material';
 
 import { AssessmentStatus, labelForStatus } from './util';
 
-const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
+import { AssessmentRole } from '@/types/gqlTypes';
+
+const TabIndicator = ({
+  status,
+  role,
+}: {
+  status: AssessmentStatus;
+  role: AssessmentRole.Intake | AssessmentRole.Exit;
+}) => {
   let Icon;
   let color:
     | 'primary'
@@ -20,7 +28,7 @@ const TabIndicator = ({ status }: { status: AssessmentStatus }) => {
     | 'disabled'
     | undefined;
 
-  const text = labelForStatus(status);
+  const text = labelForStatus(status, role);
   switch (status) {
     case AssessmentStatus.NotStarted:
       Icon = CancelIcon;

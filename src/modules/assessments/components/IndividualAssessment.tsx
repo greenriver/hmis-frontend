@@ -37,6 +37,7 @@ export interface IndividualAssessmentProps {
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
   lockIfSubmitted?: boolean;
+  visible?: boolean;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
@@ -58,6 +59,7 @@ const IndividualAssessment = ({
   relationshipToHoH,
   lockIfSubmitted,
   getFormActionProps,
+  visible,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
@@ -152,6 +154,7 @@ const IndividualAssessment = ({
           embeddedInWorkflow={embeddedInWorkflow}
           FormActionProps={FormActionProps}
           locked={lockIfSubmitted && assessment && !assessment.inProgress}
+          visible={visible}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>

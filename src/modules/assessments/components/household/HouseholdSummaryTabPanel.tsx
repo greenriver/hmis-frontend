@@ -128,7 +128,7 @@ const SummaryTable = ({
                 row.status === AssessmentStatus.ReadyToSubmit ? 600 : 400
               }
             >
-              {labelForStatus(row.status)}
+              {labelForStatus(row.status, role)}
             </Typography>
           ),
         },

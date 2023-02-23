@@ -31,6 +31,7 @@ export interface Props {
   warnIfEmpty?: boolean;
   locked?: boolean;
   bulk?: boolean;
+  visible?: boolean;
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
@@ -76,6 +77,7 @@ const DynamicFormFields: React.FC<Props> = ({
   horizontal = false,
   warnIfEmpty = false,
   locked = false,
+  visible = true,
   pickListRelationId,
   values,
   setValues,
@@ -207,6 +209,7 @@ const DynamicFormFields: React.FC<Props> = ({
           values={values}
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
+          visible={visible}
         />
       );
     }

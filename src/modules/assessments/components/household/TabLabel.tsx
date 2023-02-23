@@ -4,17 +4,21 @@ import { Stack, Typography } from '@mui/material';
 import TabIndicator from './TabIndicator';
 import { TabDefinition } from './util';
 
+import { AssessmentRole } from '@/types/gqlTypes';
+
 const TabLabel = ({
   definition: { clientName, isHoh, status },
+  role,
 }: {
   definition: TabDefinition;
+  role: AssessmentRole.Intake | AssessmentRole.Exit;
 }) => {
   return (
     <Stack gap={1}>
       <Typography variant='inherit'>
         {isHoh ? `(HoH) ${clientName}` : clientName}
       </Typography>
-      <TabIndicator status={status} />
+      <TabIndicator status={status} role={role} />
     </Stack>
   );
 };

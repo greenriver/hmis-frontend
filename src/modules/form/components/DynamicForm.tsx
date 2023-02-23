@@ -39,6 +39,7 @@ export interface DynamicFormProps
   pickListRelationId?: string;
   warnIfEmpty?: boolean;
   locked?: boolean;
+  visible?: boolean;
   FormActionProps?: Omit<
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
@@ -57,6 +58,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   horizontal = false,
   warnIfEmpty = false,
   locked = false,
+  visible = true,
   pickListRelationId,
   FormActionProps = {},
 }) => {
@@ -147,6 +149,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           pickListRelationId,
           warnIfEmpty,
           locked,
+          visible,
         })}
       </Grid>
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>

@@ -15,6 +15,7 @@ import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
+import RouterLink from '@/components/elements/RouterLink';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -31,6 +32,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
@@ -39,6 +41,7 @@ import {
   FormDefinition,
   InitialBehavior,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
@@ -51,6 +54,7 @@ interface Props {
   embeddedInWorkflow?: boolean;
   FormActionProps?: DynamicFormProps['FormActionProps'];
   locked?: boolean;
+  visible?: boolean;
 }
 
 const AssessmentForm = ({
@@ -62,6 +66,7 @@ const AssessmentForm = ({
   embeddedInWorkflow,
   FormActionProps,
   locked = false,
+  visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
@@ -194,10 +199,25 @@ const AssessmentForm = ({
             <ApolloErrorAlert error={apolloError} />
           </Box>
         )}
-        {locked && (
+        {locked && assessment && (
           <Box sx={{ mb: 3 }}>
             <Alert severity='info' icon={<LockIcon />}>
               <AlertTitle>This assessment has been submitted.</AlertTitle>
+              {embeddedInWorkflow && (
+                <Box>
+                  <RouterLink
+                    to={generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
+                      clientId: enrollment.client.id,
+                      enrollmentId: enrollment.id,
+                      assessmentId: assessment.id,
+                    })}
+                    target='_blank'
+                  >
+                    Open in client context
+                  </RouterLink>{' '}
+                  to make changes to this assessment.
+                </Box>
+              )}
             </Alert>
           </Box>
         )}
@@ -214,6 +234,7 @@ const AssessmentForm = ({
           loading={mutationLoading}
           errors={errors}
           locked={locked}
+          visible={visible}
           showSavePrompt
           showSavePromptInitial={embeddedInWorkflow ? true : undefined}
           FormActionProps={FormActionProps}

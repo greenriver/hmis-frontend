@@ -6,7 +6,12 @@ import { memo, useCallback } from 'react';
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
+import {
+  AssessmentStatus,
+  labelForStatus,
+  TabDefinition,
+  tabPanelA11yProps,
+} from './util';
 
 import { FormActionTypes } from '@/modules/form/types';
 import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
@@ -49,7 +54,9 @@ const HouseholdAssessmentTabPanel = memo(
         const config = [];
         config.push({
           id: 'readyToSubmit',
-          label: hasBeenSubmitted ? 'Submitted' : 'Ready to Submit',
+          label: hasBeenSubmitted
+            ? labelForStatus(AssessmentStatus.Submitted, assessmentRole)
+            : labelForStatus(AssessmentStatus.ReadyToSubmit, assessmentRole),
           action: FormActionTypes.Save,
           buttonProps: {
             variant: 'contained',
@@ -132,6 +139,7 @@ const HouseholdAssessmentTabPanel = memo(
         readyToSubmit,
         updateTabStatus,
         id,
+        assessmentRole,
       ]
     );
 
@@ -150,6 +158,7 @@ const HouseholdAssessmentTabPanel = memo(
           assessmentId={assessmentId}
           assessmentRole={assessmentRole}
           getFormActionProps={getFormActionProps}
+          visible={active}
           lockIfSubmitted
         />
       </AlwaysMountedTabPanel>

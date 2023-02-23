@@ -1,5 +1,5 @@
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { RelationshipToHoH } from '@/types/gqlTypes';
+import { AssessmentRole, RelationshipToHoH } from '@/types/gqlTypes';
 
 export enum AssessmentStatus {
   NotStarted,
@@ -41,7 +41,20 @@ export const tabPanelA11yProps = (key: string) => {
   };
 };
 
-export const labelForStatus = (status: AssessmentStatus) => {
+const submittedText = {
+  [AssessmentRole.Intake]: 'Submitted',
+  [AssessmentRole.Exit]: 'Exited',
+};
+
+const readyToSubmitText = {
+  [AssessmentRole.Intake]: 'Ready to Submit',
+  [AssessmentRole.Exit]: 'Ready to Exit',
+};
+
+export const labelForStatus = (
+  status: AssessmentStatus,
+  role: AssessmentRole.Intake | AssessmentRole.Exit
+) => {
   switch (status) {
     case AssessmentStatus.NotStarted:
       return 'Not Started';
@@ -49,10 +62,10 @@ export const labelForStatus = (status: AssessmentStatus) => {
       return 'In Progress';
 
     case AssessmentStatus.ReadyToSubmit:
-      return 'Ready to Submit';
+      return readyToSubmitText[role];
 
     case AssessmentStatus.Submitted:
-      return 'Submitted';
+      return submittedText[role];
 
     case AssessmentStatus.Warning:
       return 'Warning';
