@@ -77,6 +77,8 @@ const HouseholdAssessments = ({
               ? enrollment.intakeAssessment?.assessmentDate
               : enrollment.exitAssessment?.assessmentDate;
 
+          const isSubmitted = assessmentId && !assessmentInProgress;
+
           const tabData: TabDefinition = {
             clientName: clientBriefName(client),
             id: (index + 1).toString(),
@@ -90,16 +92,19 @@ const HouseholdAssessments = ({
             },
             relationshipToHoH,
             assessmentDate,
-            status:
-              assessmentId && !assessmentInProgress
-                ? AssessmentStatus.Submitted
-                : assessmentId
-                ? AssessmentStatus.Started
-                : AssessmentStatus.NotStarted,
+            status: isSubmitted
+              ? AssessmentStatus.Submitted
+              : assessmentId
+              ? AssessmentStatus.Started
+              : AssessmentStatus.NotStarted,
           };
 
           // If membership hasn't changed, make sure we keep the "local" state parts if present
-          if (oldTabs.length === householdMembers.length && oldTabs[index]) {
+          if (
+            oldTabs.length === householdMembers.length &&
+            oldTabs[index] &&
+            !isSubmitted
+          ) {
             tabData.status = oldTabs[index].status;
           }
 

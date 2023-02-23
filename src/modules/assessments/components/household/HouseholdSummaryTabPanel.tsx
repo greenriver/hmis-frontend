@@ -94,7 +94,7 @@ const SummaryTable = ({
             return (
               <ButtonTooltipContainer title={disabledReason}>
                 <Checkbox
-                  checked={!!row.assessmentId && checked[row.assessmentId]}
+                  checked={!!(row.assessmentId && checked[row.assessmentId])}
                   indeterminate={!!disabledReason}
                   disabled={!!disabledReason}
                   onChange={onClickCheckbox(row.assessmentId)}
@@ -191,6 +191,10 @@ const HouseholdSummaryTabPanel = memo(
       )
     );
 
+    useEffect(() => {
+      if (!active) setCheckedState({});
+    }, [active]);
+
     const onClickCheckbox: (
       assessmentId?: string
     ) => CheckboxProps['onChange'] = useCallback(
@@ -225,7 +229,6 @@ const HouseholdSummaryTabPanel = memo(
 
     const onCompleted = useCallback(
       ({ submitHouseholdAssessments }: SubmitHouseholdAssessmentsMutation) => {
-        console.log('oncompleted', submitHouseholdAssessments);
         if (!submitHouseholdAssessments) return;
         if (submitHouseholdAssessments.errors.length > 0) {
           setErrors({
@@ -238,6 +241,7 @@ const HouseholdSummaryTabPanel = memo(
           });
         } else if (submitHouseholdAssessments.assessments) {
           setErrors(emptyErrorState);
+          setCheckedState({});
           refetch();
         }
       },
@@ -245,7 +249,6 @@ const HouseholdSummaryTabPanel = memo(
     );
 
     const onSubmit = useCallback(() => {
-      console.log('submitting', assessmentsToSubmit);
       submitMutation({
         variables: {
           input: { assessmentIds: assessmentsToSubmit, confirmed: false },
@@ -266,8 +269,6 @@ const HouseholdSummaryTabPanel = memo(
       },
       [submitMutation, onCompleted, assessmentsToSubmit]
     );
-
-    if (apolloError) console.error(apolloError);
 
     return (
       <AlwaysMountedTabPanel
