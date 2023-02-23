@@ -1,3 +1,5 @@
+export const HIDDEN = '_HIDDEN';
+
 export const AlphaIncomeSources = [
   'A',
   'B',
@@ -16,7 +18,7 @@ export const AlphaIncomeSources = [
 ];
 
 export const EmptyIncomeSources = {
-  'IncomeBenefit.incomeFromAnySource': 'DATA_NOT_COLLECTED',
+  'IncomeBenefit.incomeFromAnySource': null,
   'IncomeBenefit.earned': null,
   'IncomeBenefit.earnedAmount': null,
   'IncomeBenefit.unemployment': null,
@@ -46,23 +48,23 @@ export const EmptyIncomeSources = {
   'IncomeBenefit.alimony': null,
   'IncomeBenefit.alimonyAmount': null,
   'IncomeBenefit.otherIncomeSource': null,
-  'IncomeBenefit.otherIncomeSourceIdentify': null,
+  'IncomeBenefit.otherIncomeSourceIdentify': HIDDEN,
   'IncomeBenefit.otherIncomeAmount': null,
 };
 
 export const EmptyNonCashBenefits = {
-  'IncomeBenefit.benefitsFromAnySource': 'DATA_NOT_COLLECTED',
+  'IncomeBenefit.benefitsFromAnySource': null,
   'IncomeBenefit.snap': null,
   'IncomeBenefit.wic': null,
   'IncomeBenefit.tanfChildCare': null,
   'IncomeBenefit.tanfTransportation': null,
   'IncomeBenefit.otherTanf': null,
   'IncomeBenefit.otherBenefitsSource': null,
-  'IncomeBenefit.otherBenefitsSourceIdentify': null,
+  'IncomeBenefit.otherBenefitsSourceIdentify': HIDDEN,
 };
 
 export const EmptyInsurance = {
-  'IncomeBenefit.insuranceFromAnySource': 'DATA_NOT_COLLECTED',
+  'IncomeBenefit.insuranceFromAnySource': null,
   'IncomeBenefit.medicaid': null,
   'IncomeBenefit.medicare': null,
   'IncomeBenefit.schip': null,
@@ -73,34 +75,30 @@ export const EmptyInsurance = {
   'IncomeBenefit.stateHealthIns': null,
   'IncomeBenefit.indianHealthServices': null,
   'IncomeBenefit.otherInsurance': null,
-  'IncomeBenefit.otherInsuranceIdentify': null,
+  'IncomeBenefit.otherInsuranceIdentify': HIDDEN,
 };
 
 export const EmptyPriorLivingSituation = {
   'Enrollment.livingSituation': null,
-  'Enrollment.lengthOfStay': 'DATA_NOT_COLLECTED',
+  'Enrollment.lengthOfStay': null,
   'Enrollment.losUnderThreshold': null,
   'Enrollment.previousStreetEssh': null,
   'Enrollment.dateToStreetEssh': null,
-  'Enrollment.timesHomelessPastThreeYears': 'DATA_NOT_COLLECTED',
-  'Enrollment.monthsHomelessPastThreeYears': 'DATA_NOT_COLLECTED',
+  'Enrollment.timesHomelessPastThreeYears': null,
+  'Enrollment.monthsHomelessPastThreeYears': null,
 };
 
 export const EmptyDisabilityGroup = {
-  'DisabilityGroup.physicalDisability': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.physicalDisabilityIndefiniteAndImpairs':
-    'DATA_NOT_COLLECTED',
-  'DisabilityGroup.developmentalDisability': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.chronicHealthCondition': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs':
-    'DATA_NOT_COLLECTED',
-  'DisabilityGroup.hivAids': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.mentalHealthDisorder': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs':
-    'DATA_NOT_COLLECTED',
-  'DisabilityGroup.substanceUseDisorder': 'DATA_NOT_COLLECTED',
-  'DisabilityGroup.substanceUseDisorderIndefiniteAndImpairs':
-    'DATA_NOT_COLLECTED',
+  'DisabilityGroup.physicalDisability': null,
+  'DisabilityGroup.physicalDisabilityIndefiniteAndImpairs': HIDDEN,
+  'DisabilityGroup.developmentalDisability': null,
+  'DisabilityGroup.chronicHealthCondition': null,
+  'DisabilityGroup.chronicHealthConditionIndefiniteAndImpairs': HIDDEN,
+  'DisabilityGroup.hivAids': null,
+  'DisabilityGroup.mentalHealthDisorder': null,
+  'DisabilityGroup.mentalHealthDisorderIndefiniteAndImpairs': HIDDEN,
+  'DisabilityGroup.substanceUseDisorder': null,
+  'DisabilityGroup.substanceUseDisorderIndefiniteAndImpairs': HIDDEN,
   'DisabilityGroup.disablingCondition': 'NO',
 };
 
