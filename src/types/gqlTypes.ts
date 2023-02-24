@@ -2257,6 +2257,7 @@ export type Project = {
   __typename?: 'Project';
   HMISParticipatingProject?: Maybe<Scalars['Boolean']>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
+  access: ProjectAccess;
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<Scalars['Boolean']>;
@@ -2304,6 +2305,12 @@ export type ProjectInventoriesArgs = {
 export type ProjectProjectCocsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type ProjectAccess = {
+  __typename?: 'ProjectAccess';
+  canDeleteProject: Scalars['Boolean'];
+  canEditProjectDetails: Scalars['Boolean'];
 };
 
 export type ProjectCoc = {
@@ -8680,6 +8687,16 @@ export type ProjectOmniSearchFieldsFragment = {
   projectType?: ProjectType | null;
 };
 
+export type ProjectPermissionsFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  access: {
+    __typename?: 'ProjectAccess';
+    canDeleteProject: boolean;
+    canEditProjectDetails: boolean;
+  };
+};
+
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
@@ -8832,6 +8849,23 @@ export type GetProjectQuery = {
       __typename?: 'Organization';
       id: string;
       organizationName: string;
+    };
+  } | null;
+};
+
+export type GetProjectPermissionsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectPermissionsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    access: {
+      __typename?: 'ProjectAccess';
+      canDeleteProject: boolean;
+      canEditProjectDetails: boolean;
     };
   } | null;
 };
@@ -10451,6 +10485,15 @@ export const ProjectOmniSearchFieldsFragmentDoc = gql`
     id
     projectName
     projectType
+  }
+`;
+export const ProjectPermissionsFieldsFragmentDoc = gql`
+  fragment ProjectPermissionsFields on Project {
+    id
+    access {
+      canDeleteProject
+      canEditProjectDetails
+    }
   }
 `;
 export const OrganizationFieldsFragmentDoc = gql`
@@ -13284,6 +13327,65 @@ export type GetProjectLazyQueryHookResult = ReturnType<
 export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
+>;
+export const GetProjectPermissionsDocument = gql`
+  query GetProjectPermissions($id: ID!) {
+    project(id: $id) {
+      ...ProjectPermissionsFields
+    }
+  }
+  ${ProjectPermissionsFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >(GetProjectPermissionsDocument, options);
+}
+export function useGetProjectPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >(GetProjectPermissionsDocument, options);
+}
+export type GetProjectPermissionsQueryHookResult = ReturnType<
+  typeof useGetProjectPermissionsQuery
+>;
+export type GetProjectPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectPermissionsLazyQuery
+>;
+export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
+  GetProjectPermissionsQuery,
+  GetProjectPermissionsQueryVariables
 >;
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(

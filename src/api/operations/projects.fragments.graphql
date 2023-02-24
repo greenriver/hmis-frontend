@@ -14,6 +14,14 @@ fragment ProjectOmniSearchFields on Project {
   projectType
 }
 
+fragment ProjectPermissionsFields on Project {
+  id
+  access {
+    canDeleteProject
+    canEditProjectDetails
+  }
+}
+
 fragment OrganizationFields on Organization {
   id
   organizationName

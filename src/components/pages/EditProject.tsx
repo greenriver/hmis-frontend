@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { InactiveChip } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -23,6 +25,9 @@ const EditProject = () => {
   const navigate = useNavigate();
 
   const [crumbs, loading, project] = useProjectCrumbs('Edit Project');
+  const canEdit = useHasProjectPermissions(project?.id || '', [
+    'canEditProjectDetails',
+  ]);
 
   const onCompleted = useCallback(
     (data: UpdateProjectMutation) => {
@@ -44,6 +49,7 @@ const EditProject = () => {
 
   if (loading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
+  if (!canEdit) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

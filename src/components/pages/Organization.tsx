@@ -72,6 +72,7 @@ const Organization = () => {
           )}
         </Grid>
         <Grid item xs>
+          {organization?.contactInformation}
           <Paper sx={{ p: 2, mb: 2 }}>
             {organization?.contactInformation && (
               <Stack spacing={1} sx={{ mb: 4 }}>
