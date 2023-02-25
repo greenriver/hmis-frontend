@@ -86,7 +86,7 @@ const HouseholdActionButtons = ({
             icon={ExitToAppIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
           >
-            Exit Household
+            Household Exit
           </ButtonLink>
         </ButtonTooltipContainer>
       )}
