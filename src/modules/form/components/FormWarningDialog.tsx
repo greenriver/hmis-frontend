@@ -10,14 +10,17 @@ import ConfirmationDialog, {
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import { ValidationError } from '@/types/gqlTypes';
 
+export interface FormWarningDialogProps
+  extends Omit<ConfirmationDialogProps, 'children'> {
+  warnings: ValidationError[];
+  sectionLabels?: { [recordId: string]: string };
+}
+
 const FormWarningDialog = ({
   warnings,
   sectionLabels,
   ...props
-}: Omit<ConfirmationDialogProps, 'children'> & {
-  warnings: ValidationError[];
-  sectionLabels?: { [recordId: string]: string };
-}) => {
+}: FormWarningDialogProps) => {
   if (warnings.length === 0) return null;
 
   // Group warnings by record
@@ -72,18 +75,13 @@ const FormWarningDialog = ({
     <ConfirmationDialog
       id='confirmSubmit'
       title='Ignore Warnings'
-      maxWidth='md'
+      maxWidth='sm'
       fullWidth
       {...props}
-      sx={{
-        '.MuiDialogTitle-root': {
-          textTransform: 'unset',
-          color: 'text.primary',
-          fontSize: 18,
-          fontWeight: 800,
-        },
-      }}
     >
+      <Typography sx={{ mb: 3 }} variant='body2'>
+        Please confirm the following warnings.
+      </Typography>
       {contents}
     </ConfirmationDialog>
   );

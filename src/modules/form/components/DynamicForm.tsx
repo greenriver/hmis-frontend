@@ -8,7 +8,7 @@ import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
-import FormWarningDialog from './FormWarningDialog';
+import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
 import ValidationErrorDisplay from './ValidationErrorDisplay';
 
@@ -44,6 +44,10 @@ export interface DynamicFormProps
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
   >;
+  FormWarningDialogProps?: Omit<
+    FormWarningDialogProps,
+    'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
+  >;
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
@@ -61,6 +65,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   visible = true,
   pickListRelationId,
   FormActionProps = {},
+  FormWarningDialogProps = {},
 }) => {
   const { renderFields, getCleanedValues } = useDynamicFormFields({
     definition,
@@ -164,6 +169,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           loading={loading || false}
           confirmText={FormActionProps?.submitButtonText || 'Confirm'}
           warnings={warnings}
+          {...FormWarningDialogProps}
         />
       )}
 

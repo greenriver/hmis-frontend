@@ -190,6 +190,10 @@ const EditRecord = <
           submitButtonText: 'Save Changes',
           ...props.FormActionProps,
         }}
+        FormWarningDialogProps={{
+          confirmText: 'Confirm Change',
+          ...props.FormWarningDialogProps,
+        }}
       />
       {mutationError && (
         <Box sx={{ mt: 3 }}>
