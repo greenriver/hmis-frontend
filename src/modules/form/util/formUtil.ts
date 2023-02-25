@@ -749,10 +749,11 @@ export const applyDataCollectedAbout = (
       case DataCollectedAbout.Hoh:
         return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
       case DataCollectedAbout.HohAndAdults:
+        const clientAge = age(client);
         return (
           relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
           isNil(client.dob) ||
-          age(client) >= 18
+          (clientAge && clientAge >= 18)
         );
       case DataCollectedAbout.VeteranHoh:
         return (
