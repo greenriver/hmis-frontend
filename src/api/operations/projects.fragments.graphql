@@ -17,7 +17,13 @@ fragment ProjectOmniSearchFields on Project {
 fragment ProjectPermissionsFields on Project {
   id
   access {
+    canViewDob
+    canViewFullSsn
     canDeleteProject
+    canViewPartialSsn
+    canEditEnrollments
+    canViewEnrollments
+    canDeleteEnrollments
     canEditProjectDetails
   }
 }

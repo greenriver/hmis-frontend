@@ -8740,7 +8740,13 @@ export type ProjectPermissionsFieldsFragment = {
   id: string;
   access: {
     __typename?: 'ProjectAccess';
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
     canDeleteProject: boolean;
+    canViewPartialSsn: boolean;
+    canEditEnrollments: boolean;
+    canViewEnrollments: boolean;
+    canDeleteEnrollments: boolean;
     canEditProjectDetails: boolean;
   };
 };
@@ -8912,7 +8918,13 @@ export type GetProjectPermissionsQuery = {
     id: string;
     access: {
       __typename?: 'ProjectAccess';
+      canViewDob: boolean;
+      canViewFullSsn: boolean;
       canDeleteProject: boolean;
+      canViewPartialSsn: boolean;
+      canEditEnrollments: boolean;
+      canViewEnrollments: boolean;
+      canDeleteEnrollments: boolean;
       canEditProjectDetails: boolean;
     };
   } | null;
@@ -10539,7 +10551,13 @@ export const ProjectPermissionsFieldsFragmentDoc = gql`
   fragment ProjectPermissionsFields on Project {
     id
     access {
+      canViewDob
+      canViewFullSsn
       canDeleteProject
+      canViewPartialSsn
+      canEditEnrollments
+      canViewEnrollments
+      canDeleteEnrollments
       canEditProjectDetails
     }
   }
