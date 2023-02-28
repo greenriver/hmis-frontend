@@ -32,7 +32,10 @@ import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import {
+  ProjectPermissionsFilter,
+  RootPermissionsFilter,
+} from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -160,9 +163,11 @@ const Project = () => {
               es={project.projectType === ProjectType.Es}
             />
           </TitleCard>
-          <TitleCard data-testid='clientsCard' title='Enrollments'>
-            <ProjectEnrollmentsTable projectId={projectId} />
-          </TitleCard>
+          <RootPermissionsFilter permissions='canViewClients'>
+            <TitleCard data-testid='clientsCard' title='Enrollments'>
+              <ProjectEnrollmentsTable projectId={projectId} />
+            </TitleCard>
+          </RootPermissionsFilter>
         </Grid>
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 3 }}>

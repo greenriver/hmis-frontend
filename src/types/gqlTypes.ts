@@ -2327,7 +2327,7 @@ export type ProjectAccess = {
   canEditEnrollments: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
-  canViewEnrollments: Scalars['Boolean'];
+  canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
 };
@@ -2554,8 +2554,20 @@ export type QueryServiceArgs = {
 
 export type QueryAccess = {
   __typename?: 'QueryAccess';
+  canAdministerHmis: Scalars['Boolean'];
+  canDeleteAssignedProjectData: Scalars['Boolean'];
+  canDeleteEnrollments: Scalars['Boolean'];
+  canDeleteOrganization: Scalars['Boolean'];
+  canDeleteProject: Scalars['Boolean'];
   canEditClients: Scalars['Boolean'];
+  canEditEnrollments: Scalars['Boolean'];
+  canEditOrganization: Scalars['Boolean'];
+  canEditProjectDetails: Scalars['Boolean'];
   canViewClients: Scalars['Boolean'];
+  canViewDob: Scalars['Boolean'];
+  canViewEnrollmentDetails: Scalars['Boolean'];
+  canViewFullSsn: Scalars['Boolean'];
+  canViewPartialSsn: Scalars['Boolean'];
 };
 
 /** HUD Race (1.7) */
@@ -8716,6 +8728,47 @@ export type ClearRecentItemsMutation = {
   } | null;
 };
 
+export type RootPermissionsFragmentFragment = {
+  __typename?: 'QueryAccess';
+  canAdministerHmis: boolean;
+  canEditClients: boolean;
+  canViewClients: boolean;
+  canEditOrganization: boolean;
+  canDeleteOrganization: boolean;
+  canViewDob: boolean;
+  canViewFullSsn: boolean;
+  canDeleteProject: boolean;
+  canDeleteAssignedProjectData: boolean;
+  canViewPartialSsn: boolean;
+  canEditEnrollments: boolean;
+  canViewEnrollmentDetails: boolean;
+  canDeleteEnrollments: boolean;
+  canEditProjectDetails: boolean;
+};
+
+export type GetRootPermissionsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetRootPermissionsQuery = {
+  __typename?: 'Query';
+  access: {
+    __typename?: 'QueryAccess';
+    canAdministerHmis: boolean;
+    canEditClients: boolean;
+    canViewClients: boolean;
+    canEditOrganization: boolean;
+    canDeleteOrganization: boolean;
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
+    canDeleteProject: boolean;
+    canDeleteAssignedProjectData: boolean;
+    canViewPartialSsn: boolean;
+    canEditEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+    canDeleteEnrollments: boolean;
+    canEditProjectDetails: boolean;
+  };
+};
+
 export type ProjectFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -8745,7 +8798,7 @@ export type ProjectPermissionsFieldsFragment = {
     canDeleteProject: boolean;
     canViewPartialSsn: boolean;
     canEditEnrollments: boolean;
-    canViewEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
     canEditProjectDetails: boolean;
   };
@@ -8923,7 +8976,7 @@ export type GetProjectPermissionsQuery = {
       canDeleteProject: boolean;
       canViewPartialSsn: boolean;
       canEditEnrollments: boolean;
-      canViewEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
       canDeleteEnrollments: boolean;
       canEditProjectDetails: boolean;
     };
@@ -10529,6 +10582,24 @@ export const HealthAndDvFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const RootPermissionsFragmentFragmentDoc = gql`
+  fragment RootPermissionsFragment on QueryAccess {
+    canAdministerHmis
+    canEditClients
+    canViewClients
+    canEditOrganization
+    canDeleteOrganization
+    canViewDob
+    canViewFullSsn
+    canDeleteProject
+    canDeleteAssignedProjectData
+    canViewPartialSsn
+    canEditEnrollments
+    canViewEnrollmentDetails
+    canDeleteEnrollments
+    canEditProjectDetails
+  }
+`;
 export const ProjectFieldsFragmentDoc = gql`
   fragment ProjectFields on Project {
     id
@@ -10556,7 +10627,7 @@ export const ProjectPermissionsFieldsFragmentDoc = gql`
       canDeleteProject
       canViewPartialSsn
       canEditEnrollments
-      canViewEnrollments
+      canViewEnrollmentDetails
       canDeleteEnrollments
       canEditProjectDetails
     }
@@ -13272,6 +13343,64 @@ export type ClearRecentItemsMutationResult =
 export type ClearRecentItemsMutationOptions = Apollo.BaseMutationOptions<
   ClearRecentItemsMutation,
   ClearRecentItemsMutationVariables
+>;
+export const GetRootPermissionsDocument = gql`
+  query GetRootPermissions {
+    access {
+      ...RootPermissionsFragment
+    }
+  }
+  ${RootPermissionsFragmentFragmentDoc}
+`;
+
+/**
+ * __useGetRootPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetRootPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetRootPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetRootPermissionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetRootPermissionsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetRootPermissionsQuery,
+    GetRootPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetRootPermissionsQuery,
+    GetRootPermissionsQueryVariables
+  >(GetRootPermissionsDocument, options);
+}
+export function useGetRootPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetRootPermissionsQuery,
+    GetRootPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetRootPermissionsQuery,
+    GetRootPermissionsQueryVariables
+  >(GetRootPermissionsDocument, options);
+}
+export type GetRootPermissionsQueryHookResult = ReturnType<
+  typeof useGetRootPermissionsQuery
+>;
+export type GetRootPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetRootPermissionsLazyQuery
+>;
+export type GetRootPermissionsQueryResult = Apollo.QueryResult<
+  GetRootPermissionsQuery,
+  GetRootPermissionsQueryVariables
 >;
 export const GetAllOrganizationsDocument = gql`
   query GetAllOrganizations {

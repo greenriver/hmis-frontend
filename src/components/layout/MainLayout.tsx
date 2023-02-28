@@ -14,8 +14,10 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import OmniSearch from '@/modules/search/components/OmniSearch';
 import { Routes } from '@/routes/routes';
+
 interface Props {
   children: React.ReactNode;
 }
@@ -59,14 +61,16 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               )}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
-          <ButtonLink
-            variant='text'
-            to='/'
-            color='secondary'
-            data-testid='navToClients'
-          >
-            Clients
-          </ButtonLink>
+          <RootPermissionsFilter permissions={'canViewClients'}>
+            <ButtonLink
+              variant='text'
+              to='/'
+              color='secondary'
+              data-testid='navToClients'
+            >
+              Clients
+            </ButtonLink>
+          </RootPermissionsFilter>
           <ButtonLink
             variant='text'
             to={Routes.ALL_PROJECTS}

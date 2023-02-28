@@ -22,7 +22,7 @@ fragment ProjectPermissionsFields on Project {
     canDeleteProject
     canViewPartialSsn
     canEditEnrollments
-    canViewEnrollments
+    canViewEnrollmentDetails
     canDeleteEnrollments
     canEditProjectDetails
   }
