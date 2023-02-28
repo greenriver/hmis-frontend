@@ -56,7 +56,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<FunderFieldsFragment | null>(
     null
   );
-  const canEditProject = useHasProjectPermissions(projectId, [
+  const [canEditProject] = useHasProjectPermissions(projectId, [
     'canEditProjectDetails',
   ]);
 

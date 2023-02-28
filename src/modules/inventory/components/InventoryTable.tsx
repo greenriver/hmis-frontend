@@ -59,7 +59,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
     null
   );
-  const canEditProject = useHasProjectPermissions(projectId, [
+  const [canEditProject] = useHasProjectPermissions(projectId, [
     'canEditProjectDetails',
   ]);
 

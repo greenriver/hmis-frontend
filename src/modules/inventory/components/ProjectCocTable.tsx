@@ -57,7 +57,7 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<ProjectCocFieldsFragment | null>(
     null
   );
-  const canEditProject = useHasProjectPermissions(projectId, [
+  const [canEditProject] = useHasProjectPermissions(projectId, [
     'canEditProjectDetails',
   ]);
 

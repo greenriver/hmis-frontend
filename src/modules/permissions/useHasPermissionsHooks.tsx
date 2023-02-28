@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import {
   Maybe,
   ProjectAccess,
@@ -39,8 +41,14 @@ export const useHasProjectPermissions = (
   permissions: ProjectPermissions[],
   mode?: PermissionsMode
 ) => {
-  const projectPermissions = useGetProjectPermissionsQuery({
+  const projectData = useGetProjectPermissionsQuery({
     variables: { id },
-  })?.data?.project?.access;
-  return useHasPermissions(projectPermissions, permissions, mode);
+  });
+  const result = useHasPermissions(
+    projectData?.data?.project?.access,
+    permissions,
+    mode
+  );
+
+  return useMemo(() => [result, projectData] as const, [result, projectData]);
 };
