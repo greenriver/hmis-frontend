@@ -1855,6 +1855,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'OrganizationAccess',
+    fields: [
+      {
+        name: 'canDeleteOrganization',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditOrganization',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'PickListOption',
     fields: [
       {
@@ -1989,6 +2010,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
+        name: 'canDeleteEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteProject',
         type: {
           kind: 'NON_NULL',
@@ -1997,7 +2026,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canEditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canEditProjectDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewDob',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewFullSsn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewPartialSsn',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2068,6 +2137,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       { name: 'state', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'zip', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'QueryAccess',
+    fields: [
+      {
+        name: 'canEditClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -2256,6 +2346,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'readableAttribute',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'recordId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'section',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
