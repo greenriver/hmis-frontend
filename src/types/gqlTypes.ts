@@ -6349,6 +6349,9 @@ export type SaveAssessmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6808,6 +6811,38 @@ export type SubmitAssessmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+    }>;
+  } | null;
+};
+
+export type SubmitHouseholdAssessmentsMutationVariables = Exact<{
+  input: SubmitHouseholdAssessmentsInput;
+}>;
+
+export type SubmitHouseholdAssessmentsMutation = {
+  __typename?: 'Mutation';
+  submitHouseholdAssessments?: {
+    __typename?: 'SubmitHouseholdAssessmentsPayload';
+    assessments?: Array<{
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6928,6 +6963,9 @@ export type DeleteAssessmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -6941,6 +6979,9 @@ export type ValidationErrorFieldsFragment = {
   fullMessage: string;
   severity: ValidationSeverity;
   id?: string | null;
+  recordId?: string | null;
+  linkId?: string | null;
+  section?: string | null;
 };
 
 export type ClientNameFragment = {
@@ -7056,8 +7097,18 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
-    intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
-    exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+    intakeAssessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+      assessmentDate: string;
+    } | null;
+    exitAssessment?: {
+      __typename?: 'Assessment';
+      id: string;
+      inProgress: boolean;
+      assessmentDate: string;
+    } | null;
   };
   client: {
     __typename?: 'Client';
@@ -7642,6 +7693,9 @@ export type CreateClientMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7694,6 +7748,9 @@ export type UpdateClientMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7727,6 +7784,9 @@ export type UpdateClientImageMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7759,6 +7819,9 @@ export type DeleteClientImageMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7798,6 +7861,9 @@ export type CreateEnrollmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7864,6 +7930,9 @@ export type UpdateEnrollmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7930,6 +7999,9 @@ export type SetHoHMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -7969,6 +8041,9 @@ export type DeleteEnrollmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8035,6 +8110,9 @@ export type AddHouseholdMembersMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8095,6 +8173,9 @@ export type AddServiceToEnrollmentMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8132,6 +8213,9 @@ export type UpdateServiceMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8169,6 +8253,9 @@ export type DeleteServiceMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -8225,8 +8312,18 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
-          intakeAssessment?: { __typename?: 'Assessment'; id: string } | null;
-          exitAssessment?: { __typename?: 'Assessment'; id: string } | null;
+          intakeAssessment?: {
+            __typename?: 'Assessment';
+            id: string;
+            inProgress: boolean;
+            assessmentDate: string;
+          } | null;
+          exitAssessment?: {
+            __typename?: 'Assessment';
+            id: string;
+            inProgress: boolean;
+            assessmentDate: string;
+          } | null;
         };
         client: {
           __typename?: 'Client';
@@ -8998,6 +9095,9 @@ export type DeleteProjectMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9164,6 +9264,9 @@ export type DeleteOrganizationMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9251,6 +9354,9 @@ export type CreateProjectMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9295,6 +9401,9 @@ export type UpdateProjectMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9325,6 +9434,9 @@ export type CreateOrganizationMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9355,6 +9467,9 @@ export type UpdateOrganizationMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9494,6 +9609,9 @@ export type CreateInventoryMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9531,6 +9649,9 @@ export type UpdateInventoryMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9554,6 +9675,9 @@ export type DeleteInventoryMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9588,6 +9712,9 @@ export type CreateFunderMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9622,6 +9749,9 @@ export type UpdateFunderMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9645,6 +9775,9 @@ export type DeleteFunderMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9682,6 +9815,9 @@ export type CreateProjectCocMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9719,6 +9855,9 @@ export type UpdateProjectCocMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9742,6 +9881,9 @@ export type DeleteProjectCocMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9779,6 +9921,9 @@ export type CreateBedsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9816,6 +9961,9 @@ export type CreateUnitsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9853,6 +10001,9 @@ export type DeleteUnitsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9890,6 +10041,9 @@ export type DeleteBedsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9920,6 +10074,9 @@ export type UpdateUnitsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -9952,6 +10109,9 @@ export type UpdateBedsMutation = {
       fullMessage: string;
       severity: ValidationSeverity;
       id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
     }>;
   } | null;
 };
@@ -10190,6 +10350,9 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     fullMessage
     severity
     id
+    recordId
+    linkId
+    section
   }
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
@@ -10290,9 +10453,13 @@ export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
       inProgress
       intakeAssessment {
         id
+        inProgress
+        assessmentDate
       }
       exitAssessment {
         id
+        inProgress
+        assessmentDate
       }
     }
   }
@@ -11116,6 +11283,66 @@ export type SubmitAssessmentMutationOptions = Apollo.BaseMutationOptions<
   SubmitAssessmentMutation,
   SubmitAssessmentMutationVariables
 >;
+export const SubmitHouseholdAssessmentsDocument = gql`
+  mutation SubmitHouseholdAssessments(
+    $input: SubmitHouseholdAssessmentsInput!
+  ) {
+    submitHouseholdAssessments(input: $input) {
+      assessments {
+        id
+        inProgress
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type SubmitHouseholdAssessmentsMutationFn = Apollo.MutationFunction<
+  SubmitHouseholdAssessmentsMutation,
+  SubmitHouseholdAssessmentsMutationVariables
+>;
+
+/**
+ * __useSubmitHouseholdAssessmentsMutation__
+ *
+ * To run a mutation, you first call `useSubmitHouseholdAssessmentsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitHouseholdAssessmentsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitHouseholdAssessmentsMutation, { data, loading, error }] = useSubmitHouseholdAssessmentsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSubmitHouseholdAssessmentsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubmitHouseholdAssessmentsMutation,
+    SubmitHouseholdAssessmentsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SubmitHouseholdAssessmentsMutation,
+    SubmitHouseholdAssessmentsMutationVariables
+  >(SubmitHouseholdAssessmentsDocument, options);
+}
+export type SubmitHouseholdAssessmentsMutationHookResult = ReturnType<
+  typeof useSubmitHouseholdAssessmentsMutation
+>;
+export type SubmitHouseholdAssessmentsMutationResult =
+  Apollo.MutationResult<SubmitHouseholdAssessmentsMutation>;
+export type SubmitHouseholdAssessmentsMutationOptions =
+  Apollo.BaseMutationOptions<
+    SubmitHouseholdAssessmentsMutation,
+    SubmitHouseholdAssessmentsMutationVariables
+  >;
 export const GetAssessmentsForPopulationDocument = gql`
   query GetAssessmentsForPopulation(
     $id: ID!

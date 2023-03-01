@@ -3,6 +3,8 @@ import * as Sentry from '@sentry/react';
 import { useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
+import { assessmentDate, assessmentPrefix } from '../util';
+
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import { useEnrollment } from '@/components/dashboard/enrollments/useEnrollment';
@@ -16,16 +18,17 @@ import {
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import { DynamicFormProps } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentFieldsFragment,
   AssessmentRole,
-  EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
-interface Props {
+export interface IndividualAssessmentProps {
   enrollmentId: string;
   assessmentId?: string;
   assessmentRole?: AssessmentRole;
@@ -33,33 +36,12 @@ interface Props {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
+  lockIfSubmitted?: boolean;
+  visible?: boolean;
+  getFormActionProps?: (
+    assessment?: AssessmentFieldsFragment
+  ) => DynamicFormProps['FormActionProps'];
 }
-
-const assessmentPrefix = (role: AssessmentRole) => {
-  switch (role) {
-    case AssessmentRole.Intake:
-      return 'Entry to';
-    case AssessmentRole.Exit:
-      return 'Exit from';
-    default:
-      return;
-  }
-};
-
-const assessmentDate = (
-  role?: AssessmentRole,
-  enrollment?: EnrollmentFieldsFragment
-) => {
-  if (!enrollment || !role) return;
-  switch (role) {
-    case AssessmentRole.Intake:
-      return enrollment.entryDate;
-    case AssessmentRole.Exit:
-      return enrollment.exitDate;
-    default:
-      return;
-  }
-};
 
 /**
  * Renders a single assessment form for an individual, including form stepper nav.
@@ -75,7 +57,10 @@ const IndividualAssessment = ({
   clientName,
   client,
   relationshipToHoH,
-}: Props) => {
+  lockIfSubmitted,
+  getFormActionProps,
+  visible,
+}: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
@@ -99,6 +84,24 @@ const IndividualAssessment = ({
   const informationDate = useMemo(
     () => assessmentDate(assessmentRole, enrollment),
     [enrollment, assessmentRole]
+  );
+
+  const FormActionProps = useMemo(
+    () =>
+      !dataLoading && getFormActionProps
+        ? {
+            lastSaved:
+              assessment && assessment.inProgress
+                ? assessment.dateUpdated
+                : undefined,
+            lastSubmitted:
+              assessment && !assessment.inProgress
+                ? assessment.dateUpdated
+                : undefined,
+            ...getFormActionProps(assessment),
+          }
+        : {},
+    [getFormActionProps, dataLoading, assessment]
   );
 
   useEffect(() => {
@@ -142,12 +145,16 @@ const IndividualAssessment = ({
       )}
       {definition && (
         <AssessmentForm
+          key={assessment?.id}
           assessmentRole={assessmentRole}
           definition={definition}
           assessment={assessment}
           enrollment={enrollment}
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
+          FormActionProps={FormActionProps}
+          locked={lockIfSubmitted && assessment && !assessment.inProgress}
+          visible={visible}
           navigationTitle={
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>
@@ -171,7 +178,7 @@ const IndividualAssessment = ({
   );
 };
 
-const WrappedAssessment = (props: Props) => (
+const WrappedAssessment = (props: IndividualAssessmentProps) => (
   <Box>
     <Sentry.ErrorBoundary fallback={alertErrorFallback}>
       <IndividualAssessment {...props} />

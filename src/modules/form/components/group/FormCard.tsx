@@ -22,7 +22,8 @@ const FormCard = ({
   item,
   severalItemsChanged,
   renderChildItem,
-}: GroupItemComponentProps) => {
+  anchor,
+}: GroupItemComponentProps & { anchor?: string }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
 
@@ -34,7 +35,11 @@ const FormCard = ({
 
   const onClear = useCallback(() => {
     const linkIds = getAllChildLinkIds(item);
-    const updatedValues = zipObject(linkIds, []);
+    const updatedValues = zipObject(
+      linkIds,
+      new Array(linkIds.length).fill(null)
+    );
+
     severalItemsChanged(updatedValues);
     setSourceRecord(undefined);
   }, [item, severalItemsChanged]);
@@ -58,7 +63,7 @@ const FormCard = ({
   );
 
   return (
-    <Grid id={item.linkId} item>
+    <Grid id={anchor} item>
       <Paper
         sx={{
           py: 3,

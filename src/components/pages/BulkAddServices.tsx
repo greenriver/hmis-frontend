@@ -1,5 +1,4 @@
 import CheckIcon from '@mui/icons-material/Check';
-import { LoadingButton } from '@mui/lab';
 import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
@@ -9,6 +8,7 @@ import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
 import ProjectEnrollmentsTable, {

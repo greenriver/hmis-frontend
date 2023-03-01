@@ -191,7 +191,7 @@ export const dob = (client: { dob?: string | null }) => {
 };
 
 export const age = (client: { dob?: string | null }) => {
-  if (!client.dob) return '';
+  if (!client.dob) return null;
   const date = parseISO(client.dob);
   return differenceInYears(new Date(), date);
 };

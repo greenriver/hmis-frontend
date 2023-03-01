@@ -3,7 +3,7 @@ import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,

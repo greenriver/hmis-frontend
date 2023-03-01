@@ -1,4 +1,3 @@
-import { LoadingButton } from '@mui/lab';
 import { useMemo } from 'react';
 
 import {
@@ -8,6 +7,7 @@ import {
 } from '../bedUnitUtil';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
+import LoadingButton from '@/components/elements/LoadingButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import LiveSelect from '@/modules/dataFetching/components/LiveSelect';
 import LiveTextInput from '@/modules/dataFetching/components/LiveTextInput';

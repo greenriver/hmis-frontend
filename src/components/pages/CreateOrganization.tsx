@@ -54,7 +54,7 @@ const CreateOrganization = () => {
         getErrors={(data: CreateOrganizationMutation) =>
           data?.createOrganization?.errors
         }
-        submitButtonText='Create Organization'
+        FormActionProps={{ submitButtonText: 'Create Organization' }}
         title={
           <>
             <Typography variant='h3'>Create a new organization</Typography>

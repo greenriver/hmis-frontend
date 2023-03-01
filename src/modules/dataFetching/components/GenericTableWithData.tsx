@@ -16,6 +16,7 @@ import GenericTable, {
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
@@ -73,7 +74,6 @@ const GenericTableWithData = <
 }: Props<Query, QueryVariables, RowDataType>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
-  const [hasRefetched, setHasRefetched] = useState(false);
   const previousQueryVariables = usePrevious(queryVariables);
 
   const { data, loading, error, networkStatus } = useQuery<
@@ -91,10 +91,7 @@ const GenericTableWithData = <
     fetchPolicy,
   });
 
-  useEffect(() => {
-    // See for statuses 2/3/4:  https://github.com/apollographql/apollo-client/blob/d96f4578f89b933c281bb775a39503f6cdb59ee8/src/core/networkStatus.ts#L12-L28
-    if ([2, 3, 4].includes(networkStatus)) setHasRefetched(true);
-  }, [networkStatus]);
+  const hasRefetched = useHasRefetched(networkStatus);
 
   useEffect(() => {
     if (!isEqual(previousQueryVariables, queryVariables)) {

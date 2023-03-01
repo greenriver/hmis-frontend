@@ -1,7 +1,7 @@
 import { getYear, isValid, max, min } from 'date-fns';
 import { compact, isNil, sum } from 'lodash-es';
 
-import { DynamicInputCommonProps } from '../types';
+import { DynamicInputCommonProps, HIDDEN_VALUE } from '../types';
 
 import {
   age,
@@ -33,7 +33,8 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
+export const isDataNotCollected = (s?: string) =>
+  s && s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
@@ -129,7 +130,8 @@ export const getOptionValue = (
   item: FormItem
 ) => {
   if (!value) return null;
-  if (value && isDataNotCollected(value)) {
+  if (isPickListOption(value)) return value;
+  if (isDataNotCollected(value)) {
     return null;
   }
   if (item.pickListReference) {
@@ -577,7 +579,9 @@ export const getInitialValues = (
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
           const value = localConstants[varName];
-          values[item.linkId] = gqlValueToFormValue(value, item) || value;
+          if (!isNil(value)) {
+            values[item.linkId] = gqlValueToFormValue(value, item) || value;
+          }
         }
       }
     });
@@ -745,10 +749,11 @@ export const applyDataCollectedAbout = (
       case DataCollectedAbout.Hoh:
         return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
       case DataCollectedAbout.HohAndAdults:
+        const clientAge = age(client);
         return (
           relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
           isNil(client.dob) ||
-          age(client) >= 18
+          (clientAge && clientAge >= 18)
         );
       case DataCollectedAbout.VeteranHoh:
         return (
@@ -798,6 +803,8 @@ type TransformSubmitValuesParams = {
   autofillNulls?: boolean;
   /** key results field name (instead of link ID) */
   keyByFieldName?: boolean;
+  /** set value to HIDDEN if link id is not present in values */
+  autofillHidden?: boolean;
 };
 
 /**
@@ -814,6 +821,7 @@ export const transformSubmitValues = ({
   autofillNotCollected = false,
   autofillNulls = false,
   keyByFieldName = false,
+  autofillHidden = false,
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
@@ -840,6 +848,9 @@ export const transformSubmitValues = ({
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
         value = formValueToGqlValue(values[item.linkId], item);
+      } else if (autofillHidden) {
+        result[key] = HIDDEN_VALUE;
+        return;
       }
 
       if (typeof value !== 'undefined') {
@@ -900,23 +911,62 @@ export const createInitialValuesFromRecord = (
   return initialValues;
 };
 
+/**
+ * Create initial form values based on saved assessment values.
+ *
+ * @param itemMap Map of linkId -> Item
+ * @param values  Vaved value state
+ *
+ * @returns initial form state, ready to pass to DynamicForm as initialValues
+ */
+export const createInitialValuesFromSavedValues = (
+  definition: FormDefinitionJson,
+  values: FormValues
+): FormValues => {
+  const itemMap = getItemMap(definition, false);
+  const initialValues: FormValues = {};
+  Object.values(itemMap).forEach((item) => {
+    if (!values.hasOwnProperty(item.linkId)) return;
+    initialValues[item.linkId] = gqlValueToFormValue(values[item.linkId], item);
+  });
+  return initialValues;
+};
+
 export const debugFormValues = (
   event: React.MouseEvent<HTMLButtonElement>,
   values: FormValues,
-  definition: FormDefinitionJson
+  definition: FormDefinitionJson,
+  transformValuesFn?: (
+    values: FormValues,
+    definition: FormDefinitionJson
+  ) => FormValues,
+  transformHudValuesFn?: (
+    values: FormValues,
+    definition: FormDefinitionJson
+  ) => FormValues
 ) => {
   if (import.meta.env.MODE === 'production') return false;
   if (!event.ctrlKey && !event.metaKey) return false;
 
   console.log('%c FORM STATE:', 'color: #BB7AFF');
-  console.log(values);
-  const hudValues = transformSubmitValues({
+  if (transformValuesFn) {
+    console.log(transformValuesFn(values, definition));
+  } else {
+    console.log(values);
+  }
+
+  let hudValues = transformSubmitValues({
     definition,
     values,
     autofillNotCollected: true,
     autofillNulls: true,
     keyByFieldName: true,
   });
+
+  if (transformHudValuesFn) {
+    hudValues = transformHudValuesFn(values, definition);
+  }
+
   window.debug = { hudValues };
   console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
   console.log(hudValues);

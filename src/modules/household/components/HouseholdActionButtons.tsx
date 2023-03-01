@@ -75,7 +75,7 @@ const HouseholdActionButtons = ({
             icon={PostAddIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_INTAKE)}
           >
-            Finish Intake
+            Household Intake
           </ButtonLink>
         </ButtonTooltipContainer>
       )}
@@ -86,7 +86,7 @@ const HouseholdActionButtons = ({
             icon={ExitToAppIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
           >
-            Exit Household
+            Household Exit
           </ButtonLink>
         </ButtonTooltipContainer>
       )}

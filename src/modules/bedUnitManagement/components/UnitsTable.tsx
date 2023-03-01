@@ -1,4 +1,3 @@
-import { LoadingButton } from '@mui/lab';
 import { Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -8,8 +7,9 @@ import {
   evictUnitsQuery,
 } from '../bedUnitUtil';
 
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import LoadingButton from '@/components/elements/LoadingButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import LiveTextInput from '@/modules/dataFetching/components/LiveTextInput';
 import {
