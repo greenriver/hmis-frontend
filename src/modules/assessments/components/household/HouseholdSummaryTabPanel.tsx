@@ -239,6 +239,7 @@ const HouseholdSummaryTabPanel = memo(
               (e) => e.severity === ValidationSeverity.Error
             ),
           });
+          window.scrollTo(0, 0);
         } else if (submitHouseholdAssessments.assessments) {
           setErrors(emptyErrorState);
           setCheckedState({});
