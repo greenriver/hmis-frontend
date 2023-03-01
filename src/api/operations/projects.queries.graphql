@@ -16,6 +16,12 @@ query GetProject($id: ID!) {
   }
 }
 
+query GetProjectPermissions($id: ID!) {
+  project(id: $id) {
+    ...ProjectPermissionsFields
+  }
+}
+
 query GetProjectEnrollments(
   $id: ID!
   $clientSearchTerm: String
