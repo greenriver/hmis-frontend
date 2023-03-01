@@ -2160,6 +2160,7 @@ export type OmnisearchResult = Client | Project;
 /** HUD Organization */
 export type Organization = {
   __typename?: 'Organization';
+  access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -2178,6 +2179,12 @@ export type OrganizationProjectsArgs = {
   projectTypes?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
+};
+
+export type OrganizationAccess = {
+  __typename?: 'OrganizationAccess';
+  canDeleteOrganization: Scalars['Boolean'];
+  canEditOrganization: Scalars['Boolean'];
 };
 
 /** HMIS Organization input */
@@ -2263,6 +2270,7 @@ export type Project = {
   __typename?: 'Project';
   HMISParticipatingProject?: Maybe<Scalars['Boolean']>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
+  access: ProjectAccess;
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<Scalars['Boolean']>;
@@ -2310,6 +2318,18 @@ export type ProjectInventoriesArgs = {
 export type ProjectProjectCocsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type ProjectAccess = {
+  __typename?: 'ProjectAccess';
+  canDeleteEnrollments: Scalars['Boolean'];
+  canDeleteProject: Scalars['Boolean'];
+  canEditEnrollments: Scalars['Boolean'];
+  canEditProjectDetails: Scalars['Boolean'];
+  canViewDob: Scalars['Boolean'];
+  canViewEnrollments: Scalars['Boolean'];
+  canViewFullSsn: Scalars['Boolean'];
+  canViewPartialSsn: Scalars['Boolean'];
 };
 
 export type ProjectCoc = {
@@ -2420,6 +2440,7 @@ export type ProjectsPaginated = {
 
 export type Query = {
   __typename?: 'Query';
+  access: QueryAccess;
   /** Assessment lookup */
   assessment?: Maybe<Assessment>;
   /** Client lookup */
@@ -2529,6 +2550,12 @@ export type QueryProjectsArgs = {
 
 export type QueryServiceArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryAccess = {
+  __typename?: 'QueryAccess';
+  canEditClients: Scalars['Boolean'];
+  canViewClients: Scalars['Boolean'];
 };
 
 /** HUD Race (1.7) */
@@ -8805,6 +8832,22 @@ export type ProjectOmniSearchFieldsFragment = {
   projectType?: ProjectType | null;
 };
 
+export type ProjectPermissionsFieldsFragment = {
+  __typename?: 'Project';
+  id: string;
+  access: {
+    __typename?: 'ProjectAccess';
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
+    canDeleteProject: boolean;
+    canViewPartialSsn: boolean;
+    canEditEnrollments: boolean;
+    canViewEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditProjectDetails: boolean;
+  };
+};
+
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
@@ -8957,6 +9000,29 @@ export type GetProjectQuery = {
       __typename?: 'Organization';
       id: string;
       organizationName: string;
+    };
+  } | null;
+};
+
+export type GetProjectPermissionsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectPermissionsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    access: {
+      __typename?: 'ProjectAccess';
+      canViewDob: boolean;
+      canViewFullSsn: boolean;
+      canDeleteProject: boolean;
+      canViewPartialSsn: boolean;
+      canEditEnrollments: boolean;
+      canViewEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canEditProjectDetails: boolean;
     };
   } | null;
 };
@@ -10646,6 +10712,21 @@ export const ProjectOmniSearchFieldsFragmentDoc = gql`
     id
     projectName
     projectType
+  }
+`;
+export const ProjectPermissionsFieldsFragmentDoc = gql`
+  fragment ProjectPermissionsFields on Project {
+    id
+    access {
+      canViewDob
+      canViewFullSsn
+      canDeleteProject
+      canViewPartialSsn
+      canEditEnrollments
+      canViewEnrollments
+      canDeleteEnrollments
+      canEditProjectDetails
+    }
   }
 `;
 export const OrganizationFieldsFragmentDoc = gql`
@@ -13539,6 +13620,65 @@ export type GetProjectLazyQueryHookResult = ReturnType<
 export type GetProjectQueryResult = Apollo.QueryResult<
   GetProjectQuery,
   GetProjectQueryVariables
+>;
+export const GetProjectPermissionsDocument = gql`
+  query GetProjectPermissions($id: ID!) {
+    project(id: $id) {
+      ...ProjectPermissionsFields
+    }
+  }
+  ${ProjectPermissionsFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >(GetProjectPermissionsDocument, options);
+}
+export function useGetProjectPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectPermissionsQuery,
+    GetProjectPermissionsQueryVariables
+  >(GetProjectPermissionsDocument, options);
+}
+export type GetProjectPermissionsQueryHookResult = ReturnType<
+  typeof useGetProjectPermissionsQuery
+>;
+export type GetProjectPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectPermissionsLazyQuery
+>;
+export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
+  GetProjectPermissionsQuery,
+  GetProjectPermissionsQueryVariables
 >;
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(

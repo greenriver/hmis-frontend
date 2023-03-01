@@ -32,6 +32,7 @@ import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -178,35 +179,40 @@ const Project = () => {
               </ButtonLink>
             </Stack>
           </Paper>
-          <Paper sx={{ p: 2, mb: 3 }}>
-            <Stack spacing={2}>
-              <Typography variant='h6'>Add to Project</Typography>
-              <ButtonLink
-                data-testid='addFunderButton'
-                to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Funding Source
-              </ButtonLink>
-              <ButtonLink
-                data-testid='addProjectCocButton'
-                to={generateSafePath(Routes.NEW_COC, { projectId })}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Project CoC
-              </ButtonLink>
-              <ButtonLink
-                data-testid='addInventoryButton'
-                to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Inventory
-              </ButtonLink>
-            </Stack>
-          </Paper>
+          <ProjectPermissionsFilter
+            id={projectId}
+            permissions='canEditProjectDetails'
+          >
+            <Paper sx={{ p: 2, mb: 3 }}>
+              <Stack spacing={2}>
+                <Typography variant='h6'>Add to Project</Typography>
+                <ButtonLink
+                  data-testid='addFunderButton'
+                  to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
+                  Icon={AddIcon}
+                  leftAlign
+                >
+                  Add Funding Source
+                </ButtonLink>
+                <ButtonLink
+                  data-testid='addProjectCocButton'
+                  to={generateSafePath(Routes.NEW_COC, { projectId })}
+                  Icon={AddIcon}
+                  leftAlign
+                >
+                  Add Project CoC
+                </ButtonLink>
+                <ButtonLink
+                  data-testid='addInventoryButton'
+                  to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
+                  Icon={AddIcon}
+                  leftAlign
+                >
+                  Add Inventory
+                </ButtonLink>
+              </Stack>
+            </Paper>
+          </ProjectPermissionsFilter>
           {project.contactInformation && (
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
@@ -217,46 +223,66 @@ const Project = () => {
               </Stack>
             </Paper>
           )}
-          <Paper sx={{ p: 2 }}>
-            <Stack>
-              <ButtonLink
-                data-testid='updateProjectButton'
-                variant='text'
-                color='secondary'
-                to={generateSafePath(Routes.EDIT_PROJECT, {
-                  projectId,
-                })}
-                sx={{ justifyContent: 'left' }}
-              >
-                Edit Project
-              </ButtonLink>
-              <Button
-                data-testid='deleteProjectButton'
-                color='error'
-                variant='text'
-                onClick={() => setOpen(true)}
-                sx={{ justifyContent: 'left' }}
-              >
-                Delete Project
-              </Button>
-            </Stack>
-          </Paper>
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions={['canDeleteProject', 'canEditProjectDetails']}
+          >
+            <Paper sx={{ p: 2 }}>
+              <Stack>
+                <ProjectPermissionsFilter
+                  id={project.id}
+                  permissions={'canEditProjectDetails'}
+                >
+                  <ButtonLink
+                    data-testid='updateProjectButton'
+                    variant='text'
+                    color='secondary'
+                    to={generateSafePath(Routes.EDIT_PROJECT, {
+                      projectId,
+                    })}
+                    sx={{ justifyContent: 'left' }}
+                  >
+                    Edit Project
+                  </ButtonLink>
+                </ProjectPermissionsFilter>
+                <ProjectPermissionsFilter
+                  id={project.id}
+                  permissions={'canDeleteProject'}
+                >
+                  <Button
+                    data-testid='deleteProjectButton'
+                    color='error'
+                    variant='text'
+                    onClick={() => setOpen(true)}
+                    sx={{ justifyContent: 'left' }}
+                  >
+                    Delete Project
+                  </Button>
+                </ProjectPermissionsFilter>
+              </Stack>
+            </Paper>
+          </ProjectPermissionsFilter>
         </Grid>
       </Grid>
-      <ConfirmationDialog
-        id='deleteProjectConfirmation'
-        open={open}
-        title='Delete project'
-        onConfirm={() => deleteProject()}
-        onCancel={() => setOpen(false)}
-        loading={deleteLoading}
+      <ProjectPermissionsFilter
+        id={project.id}
+        permissions={'canDeleteProject'}
       >
-        <Typography>
-          Are you sure you want to delete project{' '}
-          <strong>{project.projectName}</strong>?
-        </Typography>
-        <Typography>This action cannot be undone.</Typography>
-      </ConfirmationDialog>
+        <ConfirmationDialog
+          id='deleteProjectConfirmation'
+          open={open}
+          title='Delete project'
+          onConfirm={() => deleteProject()}
+          onCancel={() => setOpen(false)}
+          loading={deleteLoading}
+        >
+          <Typography>
+            Are you sure you want to delete project{' '}
+            <strong>{project.projectName}</strong>?
+          </Typography>
+          <Typography>This action cannot be undone.</Typography>
+        </ConfirmationDialog>
+      </ProjectPermissionsFilter>
     </ProjectLayout>
   );
 };

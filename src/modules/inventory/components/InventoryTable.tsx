@@ -10,6 +10,8 @@ import GenericTableWithData, {
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -57,6 +59,9 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
     null
   );
+  const [canEditProject] = useHasProjectPermissions(projectId, [
+    'canEditProjectDetails',
+  ]);
 
   const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
     useDeleteInventoryMutation({
@@ -91,46 +96,50 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         header: 'Beds',
         render: 'beds.nodesCount' as keyof InventoryFieldsFragment,
       },
-      {
-        key: 'actions',
-        width: '1%',
-        render: (record: InventoryFieldsFragment) => (
-          <Stack direction='row' spacing={1}>
-            <ButtonLink
-              to={generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
-                projectId,
-                inventoryId: record.id,
-              })}
-              size='small'
-              variant='outlined'
-            >
-              Beds
-            </ButtonLink>
-            <ButtonLink
-              data-testid='updateButton'
-              to={generateSafePath(Routes.EDIT_INVENTORY, {
-                projectId,
-                inventoryId: record.id,
-              })}
-              size='small'
-              variant='outlined'
-            >
-              Edit
-            </ButtonLink>
-            <Button
-              data-testid='deleteButton'
-              onClick={() => setDelete(record)}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
+      ...(canEditProject
+        ? [
+            {
+              key: 'actions',
+              width: '1%',
+              render: (record: InventoryFieldsFragment) => (
+                <Stack direction='row' spacing={1}>
+                  <ButtonLink
+                    to={generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
+                      projectId,
+                      inventoryId: record.id,
+                    })}
+                    size='small'
+                    variant='outlined'
+                  >
+                    Beds
+                  </ButtonLink>
+                  <ButtonLink
+                    data-testid='updateButton'
+                    to={generateSafePath(Routes.EDIT_INVENTORY, {
+                      projectId,
+                      inventoryId: record.id,
+                    })}
+                    size='small'
+                    variant='outlined'
+                  >
+                    Edit
+                  </ButtonLink>
+                  <Button
+                    data-testid='deleteButton'
+                    onClick={() => setDelete(record)}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : []),
     ];
-  }, [projectId, es]);
+  }, [projectId, es, canEditProject]);
 
   return (
     <>
@@ -142,23 +151,28 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
         noData='No inventory.'
         {...props}
       />
-      <ConfirmationDialog
-        id='deleteProjectCoc'
-        open={!!recordToDelete}
-        title='Delete Project CoC record'
-        onConfirm={handleDelete}
-        onCancel={() => setDelete(null)}
-        loading={deleteLoading}
+      <ProjectPermissionsFilter
+        id={projectId}
+        permissions='canEditProjectDetails'
       >
-        {recordToDelete && (
-          <>
-            <Typography>
-              Are you sure you want to delete inventory record?
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
-      </ConfirmationDialog>
+        <ConfirmationDialog
+          id='deleteProjectCoc'
+          open={!!recordToDelete}
+          title='Delete Project CoC record'
+          onConfirm={handleDelete}
+          onCancel={() => setDelete(null)}
+          loading={deleteLoading}
+        >
+          {recordToDelete && (
+            <>
+              <Typography>
+                Are you sure you want to delete inventory record?
+              </Typography>
+              <Typography>This action cannot be undone.</Typography>
+            </>
+          )}
+        </ConfirmationDialog>
+      </ProjectPermissionsFilter>
     </>
   );
 };
