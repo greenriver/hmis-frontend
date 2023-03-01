@@ -160,25 +160,35 @@ const Project = () => {
               es={project.projectType === ProjectType.Es}
             />
           </TitleCard>
-          <TitleCard data-testid='clientsCard' title='Enrollments'>
-            <ProjectEnrollmentsTable projectId={projectId} />
-          </TitleCard>
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions='canViewEnrollmentDetails'
+          >
+            <TitleCard data-testid='clientsCard' title='Enrollments'>
+              <ProjectEnrollmentsTable projectId={projectId} />
+            </TitleCard>
+          </ProjectPermissionsFilter>
         </Grid>
         <Grid item xs>
-          <Paper sx={{ p: 2, mb: 3 }}>
-            <Stack spacing={2}>
-              <Typography variant='h6'>Client Related Actions</Typography>
-              <ButtonLink
-                data-testid='recordServicesButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
-                to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
-              >
-                Record Services
-              </ButtonLink>
-            </Stack>
-          </Paper>
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions='canEditEnrollments'
+          >
+            <Paper sx={{ p: 2, mb: 3 }}>
+              <Stack spacing={2}>
+                <Typography variant='h6'>Client Related Actions</Typography>
+                <ButtonLink
+                  data-testid='recordServicesButton'
+                  variant='outlined'
+                  color='secondary'
+                  sx={{ pl: 3, justifyContent: 'left' }}
+                  to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
+                >
+                  Record Services
+                </ButtonLink>
+              </Stack>
+            </Paper>
+          </ProjectPermissionsFilter>
           <ProjectPermissionsFilter
             id={projectId}
             permissions='canEditProjectDetails'

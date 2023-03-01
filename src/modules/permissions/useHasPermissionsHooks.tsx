@@ -3,7 +3,9 @@ import { useMemo } from 'react';
 import {
   Maybe,
   ProjectAccess,
+  QueryAccess,
   useGetProjectPermissionsQuery,
+  useGetRootPermissionsQuery,
 } from '@/types/gqlTypes';
 
 export interface PermissionsObject {
@@ -51,4 +53,15 @@ export const useHasProjectPermissions = (
   );
 
   return useMemo(() => [result, projectData] as const, [result, projectData]);
+};
+
+export type RootPermissions = keyof Omit<QueryAccess, '__typename'>;
+export const useHasRootPermissions = (
+  permissions: RootPermissions[],
+  mode?: PermissionsMode
+) => {
+  const data = useGetRootPermissionsQuery();
+  const result = useHasPermissions(data?.data?.access, permissions, mode);
+
+  return useMemo(() => [result, data] as const, [result, data]);
 };

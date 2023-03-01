@@ -21,6 +21,7 @@ import NotFound from '@/components/pages/404';
 import AllProjects from '@/components/pages/AllProjects';
 import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
+import ClientRoute from '@/components/pages/ClientRoute';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
@@ -35,6 +36,7 @@ import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 
 const App = () => {
   return (
@@ -124,17 +126,35 @@ export const protectedRoutes = [
       },
       {
         path: Routes.ADD_SERVICES,
-        element: <AddServices />,
+        element: (
+          <RootPermissionsFilter permissions='canEditEnrollments'>
+            <AddServices />
+          </RootPermissionsFilter>
+        ),
       },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
         path: Routes.CLIENT_DASHBOARD,
-        element: <ClientDashboard />,
+        element: (
+          <ClientRoute view>
+            <ClientDashboard />
+          </ClientRoute>
+        ),
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
-          { path: DashboardRoutes.EDIT, element: <EditClient /> },
+          {
+            path: DashboardRoutes.EDIT,
+            element: (
+              <RootPermissionsFilter
+                permissions='canEditClients'
+                otherwise={<Navigate to='profile' replace />}
+              >
+                <EditClient />
+              </RootPermissionsFilter>
+            ),
+          },
           {
             path: DashboardRoutes.NEW_ENROLLMENT,
             element: <NewEnrollment />,

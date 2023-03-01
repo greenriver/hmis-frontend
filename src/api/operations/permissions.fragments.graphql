@@ -1,0 +1,16 @@
+fragment RootPermissionsFragment on QueryAccess {
+  canAdministerHmis
+  canEditClients
+  canViewClients
+  canEditOrganization
+  canDeleteOrganization
+  canViewDob
+  canViewFullSsn
+  canDeleteProject
+  canDeleteAssignedProjectData
+  canViewPartialSsn
+  canEditEnrollments
+  canViewEnrollmentDetails
+  canDeleteEnrollments
+  canEditProjectDetails
+}

@@ -26,6 +26,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -361,18 +362,20 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                 }}
               />
               <Box sx={{ flexGrow: 1 }}>
-                <ButtonLink
-                  data-testid='editClientButton'
-                  startIcon={<EditIcon />}
-                  variant='outlined'
-                  fullWidth
-                  sx={{ mt: 2, mb: 1 }}
-                  to={generateSafePath(DashboardRoutes.EDIT, {
-                    clientId: client.id,
-                  })}
-                >
-                  Edit Client Details
-                </ButtonLink>
+                <RootPermissionsFilter permissions='canEditClients'>
+                  <ButtonLink
+                    data-testid='editClientButton'
+                    startIcon={<EditIcon />}
+                    variant='outlined'
+                    fullWidth
+                    sx={{ mt: 2, mb: 1 }}
+                    to={generateSafePath(DashboardRoutes.EDIT, {
+                      clientId: client.id,
+                    })}
+                  >
+                    Edit Client Details
+                  </ButtonLink>
+                </RootPermissionsFilter>
 
                 <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
                   Last Updated on {lastUpdated(client, true)}
