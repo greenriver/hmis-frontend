@@ -6,6 +6,9 @@ fragment ValidationErrorFields on ValidationError {
   fullMessage
   severity
   id
+  recordId
+  linkId
+  section
 }
 
 fragment ClientName on Client {
@@ -90,9 +93,13 @@ fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
     inProgress
     intakeAssessment {
       id
+      inProgress
+      assessmentDate
     }
     exitAssessment {
       id
+      inProgress
+      assessmentDate
     }
   }
 }

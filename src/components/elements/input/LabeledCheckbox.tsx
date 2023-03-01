@@ -24,6 +24,7 @@ const LabeledCheckbox = ({
   onChange,
   helperText,
   horizontal = false,
+  warnIfEmptyTreatment: _ignored,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal

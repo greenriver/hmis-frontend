@@ -91,14 +91,14 @@ Cypress.Commands.add('displayItems', (linkIds) => {
 });
 
 Cypress.Commands.add('expectHudValuesToInclude', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(win.debug.hudValues).to.include(values);
   });
 });
 
 Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(
       Object.fromEntries(
@@ -113,14 +113,14 @@ Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
 });
 
 Cypress.Commands.add('expectHudValuesToDeepEqual', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(win.debug.hudValues).to.deep.equal(values);
   });
 });
 
 // Cypress.Commands.add('expectHudValuesToNotHaveKeys', (keys) => {
-//   cy.testId('submitFormButton').first().click({ ctrlKey: true });
+//   cy.testId('formButton-submit').first().click({ ctrlKey: true });
 //   cy.window().then((win) => {
 //     expect(win.debug.hudValues).not.to.have.keys(keys);
 //   });

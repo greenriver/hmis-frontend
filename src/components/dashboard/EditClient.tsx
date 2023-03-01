@@ -45,7 +45,6 @@ const Profile = () => {
       queryDocument={UpdateClientDocument}
       onCompleted={onCompleted}
       getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
-      submitButtonText='Save Changes'
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
         <>

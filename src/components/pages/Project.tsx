@@ -14,7 +14,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
-import ConfirmationDialog from '../elements/ConfirmDialog';
+import ConfirmationDialog from '../elements/ConfirmationDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';

@@ -1,69 +1,81 @@
 import { Alert, AlertTitle, Box, Grid } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
+import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
+import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
-import ValidationErrorDisplay, {
-  ValidationWarningDisplay,
-} from './ValidationErrorDisplay';
+import ValidationErrorDisplay from './ValidationErrorDisplay';
 
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
 import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
 
 export type DynamicFormOnSubmit = (
   event: React.MouseEvent<HTMLButtonElement>,
   values: FormValues,
-  confirmed?: boolean
+  confirmed?: boolean,
+  onSuccess?: VoidFunction
 ) => void;
 
-export interface Props
+export interface DynamicFormProps
   extends Omit<
     FormActionProps,
     'disabled' | 'loading' | 'onSubmit' | 'onSaveDraft'
   > {
   definition: FormDefinitionJson;
   onSubmit: DynamicFormOnSubmit;
-  onSaveDraft?: (values: FormValues) => void;
+  onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
+  showSavePromptInitial?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
   warnIfEmpty?: boolean;
+  locked?: boolean;
+  visible?: boolean;
+  FormActionProps?: Omit<
+    FormActionProps,
+    'loading' | 'onSubmit' | 'onSaveDraft'
+  >;
+  FormWarningDialogProps?: Omit<
+    FormWarningDialogProps,
+    'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
+  >;
 }
 
-const DynamicForm: React.FC<Props> = ({
+const DynamicForm: React.FC<DynamicFormProps> = ({
   definition,
   onSubmit,
   onSaveDraft,
-  onDiscard,
-  submitButtonText,
-  saveDraftButtonText,
-  discardButtonText,
   loading,
   initialValues = {},
   errors: validations,
   showSavePrompt = false,
+  showSavePromptInitial,
   horizontal = false,
   warnIfEmpty = false,
+  locked = false,
+  visible = true,
   pickListRelationId,
+  FormActionProps = {},
+  FormWarningDialogProps = {},
 }) => {
-  const navigate = useNavigate();
   const { renderFields, getCleanedValues } = useDynamicFormFields({
     definition,
     initialValues,
   });
   const { errors, warnings } = useValidations(validations);
 
-  const [promptSave, setPromptSave] = useState<boolean | undefined>();
+  const [promptSave, setPromptSave] = useState<boolean | undefined>(
+    showSavePromptInitial
+  );
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
   const saveButtonsRef = React.createRef<HTMLDivElement>();
@@ -80,10 +92,9 @@ const DynamicForm: React.FC<Props> = ({
   }, [errors, warnings]);
 
   const handleSubmit = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
+    (event: React.MouseEvent<HTMLButtonElement>, onSuccess?: VoidFunction) => {
       const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, false);
+      onSubmit(event, valuesToSubmit, false, onSuccess);
     },
     [onSubmit, getCleanedValues]
   );
@@ -91,18 +102,21 @@ const DynamicForm: React.FC<Props> = ({
   const handleConfirm = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       event.preventDefault();
+      // Hacky why to pull the appropriate onSuccess callback from FormActionProps
+      const onSuccess = (FormActionProps.config || []).find(
+        (b) => b.action === FormActionTypes.Submit
+      )?.onSuccess;
+
       const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, true);
+      onSubmit(event, valuesToSubmit, true, onSuccess);
     },
-    [onSubmit, getCleanedValues]
+    [onSubmit, getCleanedValues, FormActionProps]
   );
 
   const handleSaveDraft = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
-      event.preventDefault();
+    (onSuccess?: VoidFunction) => {
       if (!onSaveDraft) return;
-
-      onSaveDraft(getCleanedValues());
+      onSaveDraft(getCleanedValues(), onSuccess);
     },
     [onSaveDraft, getCleanedValues]
   );
@@ -111,12 +125,9 @@ const DynamicForm: React.FC<Props> = ({
     <FormActions
       onSubmit={handleSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      onDiscard={onDiscard || (() => navigate(-1))}
-      submitButtonText={submitButtonText}
-      saveDraftButtonText={saveDraftButtonText}
-      discardButtonText={discardButtonText}
       disabled={!!loading || showConfirmDialog}
       loading={loading}
+      {...FormActionProps}
     />
   );
 
@@ -142,6 +153,8 @@ const DynamicForm: React.FC<Props> = ({
           horizontal,
           pickListRelationId,
           warnIfEmpty,
+          locked,
+          visible,
         })}
       </Grid>
       <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
@@ -149,32 +162,15 @@ const DynamicForm: React.FC<Props> = ({
       </Box>
 
       {showConfirmDialog && (
-        <ConfirmationDialog
-          id='confirmSubmit'
+        <FormWarningDialog
           open
-          title='Ignore Warnings?'
           onConfirm={handleConfirm}
           onCancel={() => setShowConfirmDialog(false)}
           loading={loading || false}
-          confirmText={submitButtonText || 'Confirm'}
-          sx={{
-            '.MuiDialog-paper': {
-              minWidth: '400px',
-              // backgroundColor: (theme) =>
-              //   lighten(theme.palette.warning.light, 0.85),
-            },
-            '.MuiDialogTitle-root': {
-              textTransform: 'unset',
-              color: 'text.primary',
-              fontSize: 18,
-              fontWeight: 800,
-            },
-          }}
-        >
-          {warnings.length > 0 && (
-            <ValidationWarningDisplay warnings={warnings} />
-          )}
-        </ConfirmationDialog>
+          confirmText={FormActionProps?.submitButtonText || 'Confirm'}
+          warnings={warnings}
+          {...FormWarningDialogProps}
+        />
       )}
 
       {showSavePrompt && !isSaveButtonVisible && (

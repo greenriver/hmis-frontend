@@ -1,7 +1,7 @@
 import { Button, Stack, Typography } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

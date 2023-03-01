@@ -102,7 +102,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: CreateInventoryMutation) =>
             data?.createInventory?.errors
           }
-          submitButtonText='Create Inventory'
+          FormActionProps={{ submitButtonText: 'Create Inventory' }}
           localConstants={localConstants}
           pickListRelationId={projectId}
           {...common}
@@ -119,7 +119,6 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: UpdateInventoryMutation) =>
             data?.updateInventory?.errors
           }
-          submitButtonText='Update Inventory'
           localConstants={localConstants}
           pickListRelationId={projectId}
           {...common}

@@ -13,7 +13,13 @@ import { Component } from '@/types/gqlTypes';
 const DynamicGroup = (props: GroupItemComponentProps) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
-    return <FormCard key={props.item.linkId} {...props} />;
+    return (
+      <FormCard
+        key={props.item.linkId}
+        anchor={props.visible ? props.item.linkId : undefined}
+        {...props}
+      />
+    );
   }
 
   switch (props.item.component) {

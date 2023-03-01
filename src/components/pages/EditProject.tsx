@@ -58,8 +58,11 @@ const EditProject = () => {
         onCompleted={onCompleted}
         getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
         confirmable
-        submitButtonText='Save Changes'
-        onDiscard={generateSafePath(Routes.PROJECT, { projectId: project?.id })}
+        FormActionProps={{
+          onDiscard: generateSafePath(Routes.PROJECT, {
+            projectId: project?.id,
+          }),
+        }}
         title={
           <>
             <Stack direction={'row'} spacing={2} sx={{ pb: 4 }}>

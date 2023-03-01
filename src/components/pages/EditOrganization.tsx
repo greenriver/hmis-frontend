@@ -51,7 +51,6 @@ const EditOrganization = () => {
           getErrors={(data: UpdateOrganizationMutation) =>
             data?.updateOrganization?.errors
           }
-          submitButtonText='Save Organization'
           title={<Typography variant='h3'>Edit {organizationName}</Typography>}
         />
       )}

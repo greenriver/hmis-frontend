@@ -3,7 +3,7 @@ import { startCase } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

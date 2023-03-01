@@ -51,7 +51,7 @@ const CreateProject = () => {
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}
         getErrors={(data: CreateProjectMutation) => data?.createProject?.errors}
-        submitButtonText='Create Project'
+        FormActionProps={{ submitButtonText: 'Create Project' }}
         title={
           <Typography variant='h3' sx={{ pt: 0, mt: 0, pb: 4 }}>
             Add a new Project to {organizationName}

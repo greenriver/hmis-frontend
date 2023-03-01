@@ -1,6 +1,5 @@
 import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
 import {
@@ -8,38 +7,47 @@ import {
   FormValues,
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
-import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
 import {
   FormDefinition,
+  FormDefinitionJson,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
   useSaveAssessmentMutation,
   useSubmitAssessmentMutation,
   ValidationError,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 type Args = {
   definition: FormDefinition;
-  clientId: string;
   enrollmentId: string;
   assessmentId?: string;
-  navigateOnComplete?: boolean;
 };
+
+export const createValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) => transformSubmitValues({ definition, values });
+
+export const createHudValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) =>
+  transformSubmitValues({
+    definition,
+    values,
+    // autofillNulls: true,
+    keyByFieldName: true,
+    autofillHidden: true,
+  });
 
 export function useAssessmentHandlers({
   definition,
-  clientId,
   enrollmentId,
   assessmentId,
-  navigateOnComplete,
 }: Args) {
   const formDefinitionId = definition.id;
 
   const [errors, setErrors] = useState<ValidationError[]>([]);
-
-  const navigate = useNavigate();
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
@@ -56,73 +64,52 @@ export function useAssessmentHandlers({
         setErrors(errs);
         return;
       }
-
       setErrors([]);
-
-      // Save/Submit was successful.
-      // If we created a NEW assessment, clear assessment queries from cache so the table reloads.
-      if (!assessmentId) {
-        cache.evict({
-          id: `Enrollment:${enrollmentId}`,
-          fieldName: 'assessments',
-        });
-      }
-
-      if (navigateOnComplete) {
-        navigate(
-          generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-            enrollmentId,
-            clientId,
-          })
-        );
-      }
     },
-    [
-      enrollmentId,
-      clientId,
-      setErrors,
-      assessmentId,
-      navigate,
-      navigateOnComplete,
-    ]
+    [setErrors]
   );
 
+  const onError = useCallback(() => window.scrollTo(0, 0), []);
   const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
-    useSaveAssessmentMutation({
-      onCompleted,
-      onError: () => window.scrollTo(0, 0),
-    });
+    useSaveAssessmentMutation({ onError });
 
   const [
     submitAssessmentMutation,
     { loading: submitLoading, error: submitError },
-  ] = useSubmitAssessmentMutation({
-    onCompleted,
-    onError: () => window.scrollTo(0, 0),
-  });
+  ] = useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false) => {
+    (event, values, confirmed = false, onSuccessCallback = undefined) => {
       if (!definition) return;
-      if (debugFormValues(event, values, definition.definition)) return;
-
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-        autofillNotCollected: true,
-        autofillNulls: true,
-      });
+      if (
+        debugFormValues(
+          event,
+          values,
+          definition.definition,
+          createValuesForSubmit,
+          createHudValuesForSubmit
+        )
+      )
+        return;
 
       const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values,
-        hudValues,
+        values: createValuesForSubmit(values, definition.definition),
+        hudValues: createHudValuesForSubmit(values, definition.definition),
         confirmed,
       };
       console.debug('Submitting', input, confirmed);
-      void submitAssessmentMutation({ variables: { input: { input } } });
+      void submitAssessmentMutation({
+        variables: { input: { input } },
+        onCompleted: (data) => {
+          onCompleted(data);
+          if (data.submitAssessment?.assessment && onSuccessCallback) {
+            onSuccessCallback();
+          }
+        },
+      });
     },
     [
       submitAssessmentMutation,
@@ -130,27 +117,31 @@ export function useAssessmentHandlers({
       definition,
       formDefinitionId,
       enrollmentId,
+      onCompleted,
     ]
   );
 
   const saveDraftHandler = useCallback(
-    (values: FormValues) => {
+    (values: FormValues, onSuccessCallback: VoidFunction) => {
       if (!definition) return;
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-        assessmentDateOnly: true,
-        autofillNulls: true,
-      });
+
       const input = {
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values,
-        hudValues,
+        values: createValuesForSubmit(values, definition.definition),
+        hudValues: createHudValuesForSubmit(values, definition.definition),
       };
       console.debug('Saving', input);
-      void saveAssessmentMutation({ variables: { input: { input } } });
+      void saveAssessmentMutation({
+        variables: { input: { input } },
+        onCompleted: (data) => {
+          onCompleted(data);
+          if (data.saveAssessment?.assessment && onSuccessCallback) {
+            onSuccessCallback();
+          }
+        },
+      });
     },
     [
       saveAssessmentMutation,
@@ -158,6 +149,7 @@ export function useAssessmentHandlers({
       definition,
       formDefinitionId,
       enrollmentId,
+      onCompleted,
     ]
   );
 

@@ -1,4 +1,3 @@
-import { LoadingButton } from '@mui/lab';
 import { Alert, Box } from '@mui/material';
 import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
 
@@ -7,6 +6,7 @@ import { isHmisResponseError } from '../api/sessions';
 import OneTimePassword from './OneTimePassword';
 
 import TextInput from '@/components/elements/input/TextInput';
+import LoadingButton from '@/components/elements/LoadingButton';
 import useAuth from '@/modules/auth/hooks/useAuth';
 
 const errorMessage = (error: Error) => {
