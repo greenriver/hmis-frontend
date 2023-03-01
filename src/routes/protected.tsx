@@ -126,7 +126,11 @@ export const protectedRoutes = [
       },
       {
         path: Routes.ADD_SERVICES,
-        element: <AddServices />,
+        element: (
+          <RootPermissionsFilter permissions='canEditEnrollments'>
+            <AddServices />
+          </RootPermissionsFilter>
+        ),
       },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
