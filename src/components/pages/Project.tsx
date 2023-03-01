@@ -32,10 +32,7 @@ import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
-import {
-  ProjectPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -163,14 +160,20 @@ const Project = () => {
               es={project.projectType === ProjectType.Es}
             />
           </TitleCard>
-          <RootPermissionsFilter permissions='canViewClients'>
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions='canViewEnrollmentDetails'
+          >
             <TitleCard data-testid='clientsCard' title='Enrollments'>
               <ProjectEnrollmentsTable projectId={projectId} />
             </TitleCard>
-          </RootPermissionsFilter>
+          </ProjectPermissionsFilter>
         </Grid>
         <Grid item xs>
-          <RootPermissionsFilter permissions='canEditEnrollments'>
+          <ProjectPermissionsFilter
+            id={project.id}
+            permissions='canEditEnrollments'
+          >
             <Paper sx={{ p: 2, mb: 3 }}>
               <Stack spacing={2}>
                 <Typography variant='h6'>Client Related Actions</Typography>
@@ -185,7 +188,7 @@ const Project = () => {
                 </ButtonLink>
               </Stack>
             </Paper>
-          </RootPermissionsFilter>
+          </ProjectPermissionsFilter>
           <ProjectPermissionsFilter
             id={projectId}
             permissions='canEditProjectDetails'
