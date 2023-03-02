@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 
 import {
   AssessmentRole,
+  DataCollectionStage,
   useGetEnrollmentAssessmentsQuery,
 } from '@/types/gqlTypes';
 
@@ -28,13 +29,13 @@ export function useRecentAssessments(enrollmentId: string) {
     if (!data) return [];
     const assessments = data.enrollment?.assessments?.nodes || [];
     const intake = assessments.find(
-      (a) => a.assessmentDetail?.role === AssessmentRole.Intake
+      (a) => a.dataCollectionStage === DataCollectionStage.ProjectEntry
     );
     const exit = assessments.find(
-      (a) => a.assessmentDetail?.role === AssessmentRole.Exit
+      (a) => a.dataCollectionStage === DataCollectionStage.ProjectExit
     );
     const annual = assessments.find(
-      (a) => a.assessmentDetail?.role === AssessmentRole.Annual
+      (a) => a.dataCollectionStage === DataCollectionStage.AnnualAssessment
     );
     return [intake, exit, annual];
   }, [data]);

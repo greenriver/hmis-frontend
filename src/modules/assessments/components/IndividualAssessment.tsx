@@ -139,9 +139,7 @@ const IndividualAssessment = ({
         </Stack>
       )}
       {!definition && (
-        <MissingDefinitionAlert
-          hasAssessmentDetail={!!assessment?.assessmentDetail}
-        />
+        <MissingDefinitionAlert hasCustomForm={!!assessment?.customForm} />
       )}
       {definition && (
         <AssessmentForm

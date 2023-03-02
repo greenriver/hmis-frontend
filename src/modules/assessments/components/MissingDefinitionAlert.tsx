@@ -1,20 +1,20 @@
 import { Alert, Stack, Typography } from '@mui/material';
 
 const MissingDefinitionAlert = ({
-  hasAssessmentDetail,
+  hasCustomForm,
 }: {
-  hasAssessmentDetail: boolean;
+  hasCustomForm: boolean;
 }) => (
   <Alert severity='error'>
     <Stack direction={'row'} spacing={0.5}>
-      {!hasAssessmentDetail && (
+      {!hasCustomForm && (
         <span>
           Unable to load this assessment because it was generated in another
           system.
         </span>
       )}
-      {hasAssessmentDetail && <span>Unable to load form. </span>}
-      {import.meta.env.MODE === 'development' && hasAssessmentDetail && (
+      {hasCustomForm && <span>Unable to load form. </span>}
+      {import.meta.env.MODE === 'development' && hasCustomForm && (
         <>
           <span>Did you run</span>
           <Typography variant='body2' sx={{ fontFamily: 'Monospace' }}>

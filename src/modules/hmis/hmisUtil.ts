@@ -270,8 +270,22 @@ export const enrollmentName = (
   return `${projectName} (${projectType})`;
 };
 
+const dataCollectionStageDisplay = {
+  INVALID: null,
+  PROJECT_ENTRY: 'Intake',
+  UPDATE: 'Update',
+  PROJECT_EXIT: 'Exit',
+  ANNUAL_ASSESSMENT: 'Annual',
+  POST_EXIT: 'Post-exit',
+};
 export const assessmentRoleDisplay = (assessment: AssessmentFieldsFragment) => {
-  return startCase(assessment.assessmentDetail?.role?.toLowerCase());
+  if (!assessment.dataCollectionStage) return null;
+
+  if (!(assessment.dataCollectionStage in dataCollectionStageDisplay)) {
+    return null;
+  }
+
+  return dataCollectionStageDisplay[assessment.dataCollectionStage];
 };
 
 export const assessmentDescription = (
@@ -279,9 +293,11 @@ export const assessmentDescription = (
     NonNullable<GetClientAssessmentsQuery['client']>['assessments']
   >['nodes'][0]
 ) => {
-  return `${assessmentRoleDisplay(assessment)} assessment at ${enrollmentName(
-    assessment.enrollment
-  )} on ${parseAndFormatDate(assessment.assessmentDate) || 'unknown date'}`;
+  const prefix = assessmentRoleDisplay(assessment);
+  const name = prefix ? `${prefix} assessment` : 'Assessment';
+  return `${name} at ${enrollmentName(assessment.enrollment)} on ${
+    parseAndFormatDate(assessment.assessmentDate) || 'unknown date'
+  }`;
 };
 
 export const eventReferralResult = (e: EventFieldsFragment) => {

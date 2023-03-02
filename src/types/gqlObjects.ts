@@ -89,20 +89,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'assessmentLevel',
-        type: { kind: 'ENUM', name: 'AssessmentLevel', ofType: null },
-      },
-      {
-        name: 'assessmentLocation',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'assessmentType',
-        type: { kind: 'ENUM', name: 'AssessmentType', ofType: null },
+        name: 'dataCollectionStage',
+        type: { kind: 'ENUM', name: 'DataCollectionStage', ofType: null },
       },
       {
         name: 'dateCreated',
@@ -139,47 +127,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
-      },
-      {
-        name: 'prioritizationStatus',
-        type: { kind: 'ENUM', name: 'PrioritizationStatus', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'AssessmentDetail',
-    fields: [
-      {
-        name: 'dataCollectionStage',
-        type: { kind: 'ENUM', name: 'DataCollectionStage', ofType: null },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'role',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
-        },
-      },
-      {
-        name: 'status',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'values',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },
@@ -255,6 +202,67 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'CeAssessment',
+    fields: [
+      {
+        name: 'assessmentDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'assessmentLevel',
+        type: { kind: 'ENUM', name: 'AssessmentLevel', ofType: null },
+      },
+      {
+        name: 'assessmentLocation',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'assessmentType',
+        type: { kind: 'ENUM', name: 'AssessmentType', ofType: null },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'prioritizationStatus',
+        type: { kind: 'ENUM', name: 'PrioritizationStatus', ofType: null },
       },
     ],
   },
@@ -442,6 +450,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'CustomForm',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'values',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },

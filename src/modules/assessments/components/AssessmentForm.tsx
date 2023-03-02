@@ -113,7 +113,7 @@ const AssessmentForm = ({
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
-      const sourceValues = source.assessmentDetail?.values;
+      const sourceValues = source.customForm?.values;
       if (sourceValues) {
         // Overlay initial values from source Assessment
         const initialFromSourceAssessment = createInitialValuesFromSavedValues(

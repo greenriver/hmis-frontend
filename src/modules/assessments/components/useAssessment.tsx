@@ -58,7 +58,7 @@ export function useAssessment({
   const definition = useMemo(() => {
     const formDef =
       formDefinitionData?.getFormDefinition ||
-      assessmentData?.assessment?.assessmentDetail?.definition;
+      assessmentData?.assessment?.customForm?.definition;
     if (!formDef) return;
     const mutable = { ...formDef, definition: { ...formDef.definition } };
     mutable.definition.item = applyDataCollectedAbout(
@@ -71,7 +71,8 @@ export function useAssessment({
 
   const [assessmentRole, assessmentTitle] = useMemo(() => {
     const arole =
-      assessmentData?.assessment?.assessmentDetail?.role || assessmentRoleParam;
+      assessmentData?.assessment?.customForm?.definition?.role ||
+      assessmentRoleParam;
     return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
   }, [assessmentData, assessmentRoleParam]);
 

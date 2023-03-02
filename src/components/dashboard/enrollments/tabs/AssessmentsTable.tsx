@@ -6,44 +6,41 @@ import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
-  ProjectType,
   useDeleteAssessmentMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
-  {
-    header: 'CE Type',
-    render: (a) => (
-      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
-    ),
-    linkTreatment: true,
-  },
-  {
-    header: 'Level',
-    render: (a) => (
-      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
-    ),
-  },
-  {
-    header: 'Location',
-    render: (e) => e.assessmentLocation,
-  },
-];
+// const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
+//   {
+//     header: 'CE Type',
+//     render: (a) => (
+//       <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
+//     ),
+//     linkTreatment: true,
+//   },
+//   {
+//     header: 'Level',
+//     render: (a) => (
+//       <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+//     ),
+//   },
+//   {
+//     header: 'Location',
+//     render: (e) => e.assessmentLocation,
+//   },
+// ];
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
@@ -56,7 +53,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
     header: 'Type',
     width: '10%',
     render: (assessment) =>
-      startCase(assessment.assessmentDetail?.role?.toLowerCase()),
+      startCase(assessment.customForm?.definition?.role?.toLowerCase()),
   },
   {
     header: 'Status',
@@ -77,7 +74,6 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
 const AssessmentsTable = ({
   clientId,
   enrollmentId,
-  enrollment,
 }: {
   clientId: string;
   enrollmentId: string;
@@ -116,9 +112,7 @@ const AssessmentsTable = ({
 
   const tableColumns = useMemo(
     () => [
-      ...(enrollment.project.projectType === ProjectType.Ce
-        ? [...columns, ...ceColumns]
-        : columns),
+      ...columns,
       {
         header: '',
         width: '1%',
@@ -146,7 +140,7 @@ const AssessmentsTable = ({
         ),
       },
     ],
-    [enrollment]
+    []
   );
 
   return (

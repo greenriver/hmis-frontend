@@ -69,7 +69,7 @@ const mocks = {
     dob: faker.date.birthdate().toISOString().substring(0, 10),
   }),
   ClientsPaginated: () => page,
-  AssessmentDetail: () => ({
+  CustomForm: () => ({
     definition: {
       definition: baseAssessment,
     },
