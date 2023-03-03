@@ -605,65 +605,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "AssessmentRole",
-        "description": "Assessment Role",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "ANNUAL",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM",
-            "description": "Custom HMIS Assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "EXIT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INTAKE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "POST_EXIT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RECORD",
-            "description": "Form for creating or editing resources directly",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UPDATE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "AssessmentSortOption",
         "description": "HUD Assessment Sorting Options",
         "fields": null,
@@ -1833,7 +1774,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "AssessmentRole",
+                      "name": "FormRole",
                       "ofType": null
                     }
                   }
@@ -6719,7 +6660,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "AssessmentRole",
+                      "name": "FormRole",
                       "ofType": null
                     }
                   }
@@ -8089,7 +8030,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "AssessmentRole",
+                "name": "FormRole",
                 "ofType": null
               }
             },
@@ -8630,6 +8571,101 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "FormRole",
+        "description": "Form Role",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ANNUAL",
+            "description": "(ANNUAL) Annual Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE",
+            "description": "(CE) Coordinated Entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT",
+            "description": "(CLIENT) Client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CUSTOM",
+            "description": "(CUSTOM) Custom Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXIT",
+            "description": "(EXIT) Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FUNDER",
+            "description": "(FUNDER) Funder",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTAKE",
+            "description": "(INTAKE) Intake Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVENTORY",
+            "description": "(INVENTORY) Inventory",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORGANIZATION",
+            "description": "(ORGANIZATION) Organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POST_EXIT",
+            "description": "(POST_EXIT) Post-Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT",
+            "description": "(PROJECT) Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT_COC",
+            "description": "(PROJECT_COC) Project CoC",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": "(SERVICE) Service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UPDATE",
+            "description": "(UPDATE) Update Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -16573,35 +16609,6 @@
             "deprecationReason": null
           },
           {
-            "name": "formDefinition",
-            "description": "Form definition lookup by identifier",
-            "args": [
-              {
-                "name": "identifier",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormDefinition",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "funder",
             "description": "Funder lookup",
             "args": [
@@ -16632,33 +16639,41 @@
           },
           {
             "name": "getFormDefinition",
-            "description": "Get form definition for enrollment & assessment role",
+            "description": "Get most relevant/recent form definition for the specified Role and project (optionally)",
             "args": [
               {
-                "name": "assessmentRole",
+                "name": "enrollmentId",
                 "description": null,
                 "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "AssessmentRole",
-                    "ofType": null
-                  }
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
               },
               {
-                "name": "enrollmentId",
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "role",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
+                    "kind": "ENUM",
+                    "name": "FormRole",
                     "ofType": null
                   }
                 },

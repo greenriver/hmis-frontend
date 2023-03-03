@@ -18,7 +18,8 @@ import {
 import {
   FormDefinitionJson,
   FormItem,
-  useGetFormDefinitionByIdentifierQuery,
+  FormRole,
+  useGetFormDefinitionQuery,
   ValidationError,
   ValidationSeverity,
 } from '@/types/gqlTypes';
@@ -216,16 +217,16 @@ const BulkAddWrapper = <
   QueryVariables extends { input: unknown }
 >(
   props: Omit<Props<TargetType, Query, QueryVariables>, 'definition'> & {
-    definitionIdentifier: string;
+    formRole: FormRole;
   }
 ) => {
-  const { definitionIdentifier } = props;
+  const { formRole } = props;
 
-  const { data, loading } = useGetFormDefinitionByIdentifierQuery({
-    variables: { identifier: definitionIdentifier },
+  const { data, loading } = useGetFormDefinitionQuery({
+    variables: { role: formRole },
   });
 
-  const definition = data?.formDefinition?.definition;
+  const definition = data?.getFormDefinition?.definition;
 
   if (loading) return <Loading />;
   if (!definition) throw Error('Definition not found');

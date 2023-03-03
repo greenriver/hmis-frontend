@@ -8,17 +8,17 @@ import IndividualAssessment from '@/modules/assessments/components/IndividualAss
 import { FormActionTypes } from '@/modules/form/types';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import { AssessmentRole } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const AssessmentPage = () => {
   const { client, enrollment } = useOutletContext<DashboardContext>();
-  const { clientId, enrollmentId, assessmentId, assessmentRole } =
+  const { clientId, enrollmentId, assessmentId, formRole } =
     useSafeParams() as {
       clientId: string;
       enrollmentId: string;
       assessmentId?: string; // If editing, we have the assessment ID.
-      assessmentRole?: AssessmentRole; // If create new, we have the role.
+      formRole?: FormRole; // If create new, we have the role.
     };
   const navigate = useNavigate();
 
@@ -50,7 +50,7 @@ const AssessmentPage = () => {
     <IndividualAssessment
       enrollmentId={enrollmentId}
       assessmentId={assessmentId}
-      assessmentRole={assessmentRole}
+      formRole={formRole}
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}
       getFormActionProps={(assessment) => ({

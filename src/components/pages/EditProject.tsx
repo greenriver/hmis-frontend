@@ -12,6 +12,7 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
+  FormRole,
   ProjectAllFieldsFragment,
   UpdateProjectDocument,
   UpdateProjectMutation,
@@ -52,7 +53,7 @@ const EditProject = () => {
         UpdateProjectMutation,
         UpdateProjectMutationVariables
       >
-        definitionIdentifier='project'
+        formRole={FormRole.Project}
         record={project}
         queryDocument={UpdateProjectDocument}
         onCompleted={onCompleted}

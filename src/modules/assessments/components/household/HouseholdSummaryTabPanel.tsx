@@ -31,7 +31,7 @@ import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDis
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
-  AssessmentRole,
+  FormRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
   ValidationError,
@@ -45,7 +45,7 @@ const SummaryTable = ({
   onClickCheckbox,
 }: {
   tabs: TabDefinition[];
-  role: AssessmentRole.Intake | AssessmentRole.Exit;
+  role: FormRole.Intake | FormRole.Exit;
   checked: Record<string, boolean>;
   onClickCheckbox: (assessmentId?: string) => CheckboxProps['onChange'];
 }) => {
@@ -113,8 +113,7 @@ const SummaryTable = ({
           name: 'Assessment Status',
           label: (
             <Typography fontWeight={600}>
-              {role === AssessmentRole.Exit ? 'Exit' : 'Intake'} Assessment
-              Status
+              {role === FormRole.Exit ? 'Exit' : 'Intake'} Assessment Status
             </Typography>
           ),
           render: (row) => (
@@ -136,7 +135,7 @@ const SummaryTable = ({
           name: 'date',
           label: (
             <Typography fontWeight={600}>
-              {role === AssessmentRole.Exit ? 'Exit' : 'Entry'} Date
+              {role === FormRole.Exit ? 'Exit' : 'Entry'} Date
             </Typography>
           ),
           render: (row) => (
@@ -155,7 +154,7 @@ const SummaryTable = ({
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
-  assessmentRole: AssessmentRole.Intake | AssessmentRole.Exit;
+  formRole: FormRole.Intake | FormRole.Exit;
   tabs: TabDefinition[];
   id: string;
   projectName: string;
@@ -171,7 +170,7 @@ const emptyErrorState: ErrorState = { warnings: [], errors: [] };
 // Memoized to only re-render when props change (shallow compare)
 const HouseholdSummaryTabPanel = memo(
   ({
-    assessmentRole,
+    formRole,
     active,
     id,
     tabs,
@@ -285,7 +284,7 @@ const HouseholdSummaryTabPanel = memo(
         >
           <Grid item xs={12} md={10} lg={8}>
             <Typography variant='h4' sx={{ mb: 3 }}>
-              Complete {assessmentPrefix(assessmentRole)} {projectName}
+              Complete {assessmentPrefix(formRole)} {projectName}
             </Typography>
             {apolloError && (
               <Box sx={{ mb: 3 }}>
@@ -307,7 +306,7 @@ const HouseholdSummaryTabPanel = memo(
             <Paper sx={{ p: 2 }}>
               <SummaryTable
                 tabs={tabs}
-                role={assessmentRole}
+                role={formRole}
                 checked={checkedState}
                 onClickCheckbox={onClickCheckbox}
               />

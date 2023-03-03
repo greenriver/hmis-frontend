@@ -4,7 +4,7 @@ import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
-  AssessmentRole,
+  FormRole,
   HouseholdClientFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -44,11 +44,11 @@ const HouseholdMemberActionButton = ({
     [clientId, enrollmentId]
   );
   const pathToNewAssessment = useCallback(
-    (role: AssessmentRole) =>
+    (role: FormRole) =>
       generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
-        assessmentRole: role.toLowerCase(),
+        formRole: role.toLowerCase(),
       }),
     [clientId, enrollmentId]
   );
@@ -59,7 +59,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='beginIntake'
-        to={pathToNewAssessment(AssessmentRole.Intake)}
+        to={pathToNewAssessment(FormRole.Intake)}
         {...buttonProps}
         {...props}
       >
@@ -111,7 +111,7 @@ const HouseholdMemberActionButton = ({
     return (
       <ButtonLink
         data-testid='beginExit'
-        to={pathToNewAssessment(AssessmentRole.Exit)}
+        to={pathToNewAssessment(FormRole.Exit)}
         {...buttonProps}
         color='primary'
         {...props}

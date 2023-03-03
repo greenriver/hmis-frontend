@@ -278,7 +278,7 @@ const dataCollectionStageDisplay = {
   ANNUAL_ASSESSMENT: 'Annual',
   POST_EXIT: 'Post-exit',
 };
-export const assessmentRoleDisplay = (assessment: AssessmentFieldsFragment) => {
+export const formRoleDisplay = (assessment: AssessmentFieldsFragment) => {
   if (!assessment.dataCollectionStage) return null;
 
   if (!(assessment.dataCollectionStage in dataCollectionStageDisplay)) {
@@ -293,7 +293,7 @@ export const assessmentDescription = (
     NonNullable<GetClientAssessmentsQuery['client']>['assessments']
   >['nodes'][0]
 ) => {
-  const prefix = assessmentRoleDisplay(assessment);
+  const prefix = formRoleDisplay(assessment);
   const name = prefix ? `${prefix} assessment` : 'Assessment';
   return `${name} at ${enrollmentName(assessment.enrollment)} on ${
     parseAndFormatDate(assessment.assessmentDate) || 'unknown date'

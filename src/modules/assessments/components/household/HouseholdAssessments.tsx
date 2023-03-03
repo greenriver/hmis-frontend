@@ -32,7 +32,7 @@ import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
-  AssessmentRole,
+  FormRole,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -175,8 +175,7 @@ const HouseholdAssessments = ({
     px: 4,
   };
 
-  const assessmentRole =
-    type === 'ENTRY' ? AssessmentRole.Intake : AssessmentRole.Exit;
+  const formRole = type === 'ENTRY' ? FormRole.Intake : FormRole.Exit;
 
   return (
     <>
@@ -234,9 +233,7 @@ const HouseholdAssessments = ({
                 <Tab
                   value={definition.id}
                   key={definition.id}
-                  label={
-                    <TabLabel definition={definition} role={assessmentRole} />
-                  }
+                  label={<TabLabel definition={definition} role={formRole} />}
                   sx={tabSx}
                   {...tabA11yProps(definition.id)}
                 />
@@ -264,7 +261,7 @@ const HouseholdAssessments = ({
               navigateToTab={navigateToTab}
               nextTab={tabs[index + 1]?.id}
               previousTab={tabs[index - 1]?.id}
-              assessmentRole={assessmentRole}
+              formRole={formRole}
               updateTabStatus={updateTabStatus}
               {...tabDefinition}
             />
@@ -280,7 +277,7 @@ const HouseholdAssessments = ({
               id={SUMMARY_TAB_ID}
               tabs={tabs}
               active={SUMMARY_TAB_ID === currentTab}
-              assessmentRole={assessmentRole}
+              formRole={formRole}
               projectName={enrollmentName(enrollment)}
               refetch={refetch}
             />

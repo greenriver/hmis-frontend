@@ -9,6 +9,7 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
+  FormRole,
   OrganizationAllFieldsFragment,
   UpdateOrganizationDocument,
   UpdateOrganizationMutation,
@@ -44,7 +45,7 @@ const EditOrganization = () => {
           UpdateOrganizationMutation,
           UpdateOrganizationMutationVariables
         >
-          definitionIdentifier='organization'
+          formRole={FormRole.Organization}
           record={organization}
           queryDocument={UpdateOrganizationDocument}
           onCompleted={onCompleted}

@@ -17,6 +17,7 @@ import {
   CreateFunderDocument,
   CreateFunderMutation,
   CreateFunderMutationVariables,
+  FormRole,
   FunderFieldsFragment,
   UpdateFunderDocument,
   UpdateFunderMutation,
@@ -63,7 +64,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   if (error) throw error;
 
   const common = {
-    definitionIdentifier: 'funder',
+    formRole: FormRole.Funder,
     title: (
       <Stack direction={'row'} spacing={2}>
         <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>

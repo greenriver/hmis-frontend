@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import {
-  AssessmentRole,
+  FormRole,
   DataCollectionStage,
   useGetEnrollmentAssessmentsQuery,
 } from '@/types/gqlTypes';
@@ -13,11 +13,7 @@ export function useRecentAssessments(enrollmentId: string) {
   const { data, loading, error } = useGetEnrollmentAssessmentsQuery({
     variables: {
       id: enrollmentId,
-      roles: [
-        AssessmentRole.Intake,
-        AssessmentRole.Exit,
-        AssessmentRole.Annual,
-      ],
+      roles: [FormRole.Intake, FormRole.Exit, FormRole.Annual],
       limit: 50,
     },
     fetchPolicy: 'cache-and-network',

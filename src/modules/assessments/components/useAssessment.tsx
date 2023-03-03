@@ -6,7 +6,7 @@ import {
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
 import {
-  AssessmentRole,
+  FormRole,
   AssessmentWithDefinitionAndValuesFragment,
   FormDefinition,
   RelationshipToHoH,
@@ -21,7 +21,7 @@ type Args = {
   // If editing, we have the assessment ID.
   assessmentId?: string;
   // If create new, we have the role.
-  assessmentRoleParam?: AssessmentRole;
+  formRoleParam?: FormRole;
 };
 
 export function useAssessment({
@@ -29,7 +29,7 @@ export function useAssessment({
   relationshipToHoH,
   client,
   assessmentId,
-  assessmentRoleParam,
+  formRoleParam,
 }: Args) {
   const {
     data: formDefinitionData,
@@ -38,10 +38,10 @@ export function useAssessment({
   } = useGetFormDefinitionQuery({
     variables: {
       enrollmentId,
-      assessmentRole: assessmentRoleParam as AssessmentRole,
+      role: formRoleParam as FormRole,
     },
     // skip if editing an existing assessment
-    skip: !assessmentRoleParam,
+    skip: !formRoleParam,
   });
 
   const {
@@ -69,25 +69,24 @@ export function useAssessment({
     return mutable;
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
-  const [assessmentRole, assessmentTitle] = useMemo(() => {
+  const [formRole, assessmentTitle] = useMemo(() => {
     const arole =
-      assessmentData?.assessment?.customForm?.definition?.role ||
-      assessmentRoleParam;
+      assessmentData?.assessment?.customForm?.definition?.role || formRoleParam;
     return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
-  }, [assessmentData, assessmentRoleParam]);
+  }, [assessmentData, formRoleParam]);
 
   if (formDefinitionError) throw formDefinitionError;
   if (assessmentError) throw assessmentError;
 
   return {
     assessmentTitle,
-    assessmentRole,
+    formRole,
     definition,
     assessment: assessmentData?.assessment,
     loading: formDefinitionLoading || assessmentLoading,
   } as {
     assessmentTitle: string;
-    assessmentRole?: AssessmentRole;
+    formRole?: FormRole;
     definition?: FormDefinition;
     assessment?: AssessmentWithDefinitionAndValuesFragment;
     loading: boolean;

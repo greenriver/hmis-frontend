@@ -14,7 +14,7 @@ query GetEnrollmentAssessments(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $roles: [AssessmentRole!]
+  $roles: [FormRole!]
   $inProgress: Boolean
 ) {
   enrollment(id: $id) {
@@ -36,16 +36,11 @@ query GetEnrollmentAssessments(
   }
 }
 
-query GetFormDefinitionByIdentifier($identifier: String!) {
-  formDefinition(identifier: $identifier) {
-    ...FormDefinitionWithJson
-  }
-}
-
-query GetFormDefinition($enrollmentId: ID!, $assessmentRole: AssessmentRole!) {
+query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
   getFormDefinition(
+    role: $role
     enrollmentId: $enrollmentId
-    assessmentRole: $assessmentRole
+    projectId: $projectId
   ) {
     ...FormDefinitionWithJson
   }
@@ -89,7 +84,7 @@ query GetAssessmentsForPopulation(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $roles: [AssessmentRole!]
+  $roles: [FormRole!]
   $inProgress: Boolean
 ) {
   client(id: $id) {

@@ -972,7 +972,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+          ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
         },
       },
       {

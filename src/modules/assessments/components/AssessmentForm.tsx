@@ -34,7 +34,7 @@ import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { DashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentRole,
+  FormRole,
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
@@ -46,7 +46,7 @@ import generateSafePath from '@/utils/generateSafePath';
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   // assessmentTitle: string;
-  assessmentRole?: AssessmentRole;
+  formRole?: FormRole;
   definition: FormDefinition;
   assessment?: AssessmentWithDefinitionAndValuesFragment;
   top?: number;
@@ -59,7 +59,7 @@ interface Props {
 
 const AssessmentForm = ({
   assessment,
-  assessmentRole,
+  formRole,
   definition,
   navigationTitle,
   enrollment,
@@ -250,7 +250,7 @@ const AssessmentForm = ({
           id='assessmentPickerDialog'
           recordType='Assessment'
           open={dialogOpen}
-          role={assessmentRole}
+          role={formRole}
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={

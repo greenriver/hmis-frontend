@@ -24,14 +24,14 @@ import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
-  AssessmentRole,
+  FormRole,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
 export interface IndividualAssessmentProps {
   enrollmentId: string;
   assessmentId?: string;
-  assessmentRole?: AssessmentRole;
+  formRole?: FormRole;
   embeddedInWorkflow?: boolean;
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
@@ -47,12 +47,12 @@ export interface IndividualAssessmentProps {
  * Renders a single assessment form for an individual, including form stepper nav.
  *
  * If assessmentId is provided, we're editing an existing assessment.
- * If assessmentRole is provided, we're creating a new assessment.
+ * If formRole is provided, we're creating a new assessment.
  */
 const IndividualAssessment = ({
   enrollmentId,
   assessmentId,
-  assessmentRole: assessmentRoleParam,
+  formRole: formRoleParam,
   embeddedInWorkflow = false,
   clientName,
   client,
@@ -72,18 +72,18 @@ const IndividualAssessment = ({
     assessment,
     loading: dataLoading,
     assessmentTitle,
-    assessmentRole,
+    formRole,
   } = useAssessment({
     enrollmentId,
     assessmentId,
-    assessmentRoleParam,
+    formRoleParam,
     client,
     relationshipToHoH,
   });
 
   const informationDate = useMemo(
-    () => assessmentDate(assessmentRole, enrollment),
-    [enrollment, assessmentRole]
+    () => assessmentDate(formRole, enrollment),
+    [enrollment, formRole]
   );
 
   const FormActionProps = useMemo(
@@ -144,7 +144,7 @@ const IndividualAssessment = ({
       {definition && (
         <AssessmentForm
           key={assessment?.id}
-          assessmentRole={assessmentRole}
+          formRole={formRole}
           definition={definition}
           assessment={assessment}
           enrollment={enrollment}
@@ -157,10 +157,9 @@ const IndividualAssessment = ({
             embeddedInWorkflow ? (
               <Stack sx={{ mb: 3 }} gap={1}>
                 <Typography variant='h5'>{clientName}</Typography>
-                {assessmentRole && assessmentPrefix(assessmentRole) && (
+                {formRole && assessmentPrefix(formRole) && (
                   <Typography variant='body2'>
-                    {assessmentPrefix(assessmentRole)}{' '}
-                    {enrollmentName(enrollment)}
+                    {assessmentPrefix(formRole)} {enrollmentName(enrollment)}
                   </Typography>
                 )}
               </Stack>

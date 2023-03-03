@@ -14,11 +14,11 @@ import {
 } from './util';
 
 import { FormActionTypes } from '@/modules/form/types';
-import { AssessmentFieldsFragment, AssessmentRole } from '@/types/gqlTypes';
+import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;
-  assessmentRole: AssessmentRole.Intake | AssessmentRole.Exit;
+  formRole: FormRole.Intake | FormRole.Exit;
   refetch: () => Promise<any>;
   nextTab?: string;
   previousTab?: string;
@@ -36,7 +36,7 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentId,
     client,
     relationshipToHoH,
-    assessmentRole,
+    formRole,
     nextTab,
     previousTab,
     navigateToTab,
@@ -55,8 +55,8 @@ const HouseholdAssessmentTabPanel = memo(
         config.push({
           id: 'readyToSubmit',
           label: hasBeenSubmitted
-            ? labelForStatus(AssessmentStatus.Submitted, assessmentRole)
-            : labelForStatus(AssessmentStatus.ReadyToSubmit, assessmentRole),
+            ? labelForStatus(AssessmentStatus.Submitted, formRole)
+            : labelForStatus(AssessmentStatus.ReadyToSubmit, formRole),
           action: FormActionTypes.Save,
           buttonProps: {
             variant: 'contained',
@@ -139,7 +139,7 @@ const HouseholdAssessmentTabPanel = memo(
         readyToSubmit,
         updateTabStatus,
         id,
-        assessmentRole,
+        formRole,
       ]
     );
 
@@ -156,7 +156,7 @@ const HouseholdAssessmentTabPanel = memo(
           embeddedInWorkflow
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
-          assessmentRole={assessmentRole}
+          formRole={formRole}
           getFormActionProps={getFormActionProps}
           visible={active}
           lockIfSubmitted
