@@ -831,6 +831,7 @@ export const HmisEnums = {
     data_not_collected: 'data_not_collected',
     information: 'information',
     invalid: 'invalid',
+    not_allowed: 'not_allowed',
     not_found: 'not_found',
     out_of_range: 'out_of_range',
     required: 'required',

@@ -3462,6 +3462,7 @@ export enum ValidationType {
   DataNotCollected = 'data_not_collected',
   Information = 'information',
   Invalid = 'invalid',
+  NotAllowed = 'not_allowed',
   NotFound = 'not_found',
   OutOfRange = 'out_of_range',
   Required = 'required',
