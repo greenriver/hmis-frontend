@@ -125,8 +125,8 @@ export const assessmentColumns = [
     render: (record: RelatedRecord) =>
       isAssessment(record) &&
       [
-        record.assessmentDetail?.dataCollectionStage
-          ? dataCollectionVerb[record.assessmentDetail.dataCollectionStage]
+        record.dataCollectionStage
+          ? dataCollectionVerb[record.dataCollectionStage]
           : undefined,
         enrollmentName(record.enrollment, true),
       ]

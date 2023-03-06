@@ -16,6 +16,7 @@ import {
   CreateProjectCocDocument,
   CreateProjectCocMutation,
   CreateProjectCocMutationVariables,
+  FormRole,
   ProjectCocFieldsFragment,
   UpdateProjectCocDocument,
   UpdateProjectCocMutation,
@@ -51,7 +52,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   if (!crumbs || !project) throw Error('Project not found');
 
   const common = {
-    definitionIdentifier: 'project_coc',
+    formRole: FormRole.ProjectCoc,
     title: (
       <Stack direction={'row'} spacing={2}>
         <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>

@@ -8,14 +8,14 @@ import { Box, Stack, Typography } from '@mui/material';
 
 import { AssessmentStatus, labelForStatus } from './util';
 
-import { AssessmentRole } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 const TabIndicator = ({
   status,
   role,
 }: {
   status: AssessmentStatus;
-  role: AssessmentRole.Intake | AssessmentRole.Exit;
+  role: FormRole.Intake | FormRole.Exit;
 }) => {
   let Icon;
   let color:

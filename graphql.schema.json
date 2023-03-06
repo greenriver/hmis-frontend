@@ -323,7 +323,7 @@
       {
         "kind": "OBJECT",
         "name": "Assessment",
-        "description": "HUD Assessment",
+        "description": "Custom Assessment",
         "fields": [
           {
             "name": "assessmentDate",
@@ -342,58 +342,6 @@
             "deprecationReason": null
           },
           {
-            "name": "assessmentDetail",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "AssessmentDetail",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentLevel",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AssessmentLevel",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentLocation",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "AssessmentType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "client",
             "description": null,
             "args": [],
@@ -405,6 +353,30 @@
                 "name": "Client",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customForm",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CustomForm",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dataCollectionStage",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "DataCollectionStage",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -502,139 +474,12 @@
             "deprecationReason": null
           },
           {
-            "name": "prioritizationStatus",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "PrioritizationStatus",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "user",
             "description": null,
             "args": [],
             "type": {
               "kind": "OBJECT",
               "name": "User",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "AssessmentDetail",
-        "description": "AssessmentDetail",
-        "fields": [
-          {
-            "name": "assessment",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Assessment",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "dataCollectionStage",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "DataCollectionStage",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "definition",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "FormDefinition",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "id",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "role",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "ENUM",
-                "name": "AssessmentRole",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "status",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "values",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
               "ofType": null
             },
             "isDeprecated": false,
@@ -752,65 +597,6 @@
           {
             "name": "INVALID",
             "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "AssessmentRole",
-        "description": "Assessment Role",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "ANNUAL",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CUSTOM",
-            "description": "Custom HMIS Assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "EXIT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INTAKE",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "POST_EXIT",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RECORD",
-            "description": "Form for creating or editing resources directly",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UPDATE",
-            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -1596,6 +1382,320 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "CeAssessment",
+        "description": "HUD Coordinated Entry Assessment",
+        "fields": [
+          {
+            "name": "assessmentDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601Date",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentLevel",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AssessmentLevel",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentLocation",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "assessmentType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "AssessmentType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "client",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateDeleted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "prioritizationStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "PrioritizationStatus",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "user",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "User",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CeAssessmentsPaginated",
+        "description": null,
+        "fields": [
+          {
+            "name": "hasMoreAfter",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasMoreBefore",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "limit",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodes",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CeAssessment",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "nodesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "pagesCount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "ClearRecentItemsInput",
         "description": "Autogenerated input type of ClearRecentItems",
@@ -1674,7 +1774,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "AssessmentRole",
+                      "name": "FormRole",
                       "ofType": null
                     }
                   }
@@ -4068,6 +4168,77 @@
             "type": {
               "kind": "OBJECT",
               "name": "Inventory",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "CustomForm",
+        "description": "CustomForm",
+        "fields": [
+          {
+            "name": "assessment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Assessment",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definition",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "FormDefinition",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "values",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6489,7 +6660,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "ENUM",
-                      "name": "AssessmentRole",
+                      "name": "FormRole",
                       "ofType": null
                     }
                   }
@@ -6517,6 +6688,59 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "AssessmentsPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ceAssessments",
+            "description": null,
+            "args": [
+              {
+                "name": "limit",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "offset",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "sortOrder",
+                "description": null,
+                "type": {
+                  "kind": "ENUM",
+                  "name": "AssessmentSortOption",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "CeAssessmentsPaginated",
                 "ofType": null
               }
             },
@@ -7806,7 +8030,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "AssessmentRole",
+                "name": "FormRole",
                 "ofType": null
               }
             },
@@ -8347,6 +8571,101 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "FormRole",
+        "description": "Form Role",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ANNUAL",
+            "description": "(ANNUAL) Annual Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE",
+            "description": "(CE) Coordinated Entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT",
+            "description": "(CLIENT) Client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CUSTOM",
+            "description": "(CUSTOM) Custom Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXIT",
+            "description": "(EXIT) Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FUNDER",
+            "description": "(FUNDER) Funder",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTAKE",
+            "description": "(INTAKE) Intake Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVENTORY",
+            "description": "(INVENTORY) Inventory",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ORGANIZATION",
+            "description": "(ORGANIZATION) Organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POST_EXIT",
+            "description": "(POST_EXIT) Post-Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT",
+            "description": "(PROJECT) Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT_COC",
+            "description": "(PROJECT_COC) Project CoC",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SERVICE",
+            "description": "(SERVICE) Service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UPDATE",
+            "description": "(UPDATE) Update Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -16290,35 +16609,6 @@
             "deprecationReason": null
           },
           {
-            "name": "formDefinition",
-            "description": "Form definition lookup by identifier",
-            "args": [
-              {
-                "name": "identifier",
-                "description": null,
-                "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "SCALAR",
-                    "name": "String",
-                    "ofType": null
-                  }
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              }
-            ],
-            "type": {
-              "kind": "OBJECT",
-              "name": "FormDefinition",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "funder",
             "description": "Funder lookup",
             "args": [
@@ -16349,33 +16639,41 @@
           },
           {
             "name": "getFormDefinition",
-            "description": "Get form definition for enrollment & assessment role",
+            "description": "Get most relevant/recent form definition for the specified Role and project (optionally)",
             "args": [
               {
-                "name": "assessmentRole",
+                "name": "enrollmentId",
                 "description": null,
                 "type": {
-                  "kind": "NON_NULL",
-                  "name": null,
-                  "ofType": {
-                    "kind": "ENUM",
-                    "name": "AssessmentRole",
-                    "ofType": null
-                  }
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
                 "deprecationReason": null
               },
               {
-                "name": "enrollmentId",
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "role",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
-                    "kind": "SCALAR",
-                    "name": "ID",
+                    "kind": "ENUM",
+                    "name": "FormRole",
                     "ofType": null
                   }
                 },
@@ -21268,6 +21566,12 @@
           },
           {
             "name": "invalid",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not_allowed",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null

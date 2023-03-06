@@ -21,6 +21,7 @@ import {
   AddServiceToEnrollmentMutation,
   AddServiceToEnrollmentMutationVariables,
   EnrollmentFieldsFragment,
+  FormRole,
 } from '@/types/gqlTypes';
 
 const tableColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
@@ -113,7 +114,7 @@ const BulkAddServices = () => {
             )}
           </>
         )}
-        definitionIdentifier='service'
+        formRole={FormRole.Service}
         getInputFromTarget={(formData, enrollment) => ({
           input: {
             input: { ...formData, enrollmentId: enrollment.id },

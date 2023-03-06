@@ -1,10 +1,10 @@
-import { AssessmentRole, EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import { FormRole, EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
-export const assessmentPrefix = (role: AssessmentRole) => {
+export const assessmentPrefix = (role: FormRole) => {
   switch (role) {
-    case AssessmentRole.Intake:
+    case FormRole.Intake:
       return 'Entry to';
-    case AssessmentRole.Exit:
+    case FormRole.Exit:
       return 'Exit from';
     default:
       return;
@@ -12,14 +12,14 @@ export const assessmentPrefix = (role: AssessmentRole) => {
 };
 
 export const assessmentDate = (
-  role?: AssessmentRole,
+  role?: FormRole,
   enrollment?: EnrollmentFieldsFragment
 ) => {
   if (!enrollment || !role) return;
   switch (role) {
-    case AssessmentRole.Intake:
+    case FormRole.Intake:
       return enrollment.entryDate;
-    case AssessmentRole.Exit:
+    case FormRole.Exit:
       return enrollment.exitDate;
     default:
       return;

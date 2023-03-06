@@ -10,6 +10,7 @@ import {
   CreateOrganizationDocument,
   CreateOrganizationMutation,
   CreateOrganizationMutationVariables,
+  FormRole,
   OrganizationAllFieldsFragment,
   PickListType,
 } from '@/types/gqlTypes';
@@ -48,7 +49,7 @@ const CreateOrganization = () => {
         CreateOrganizationMutation,
         CreateOrganizationMutationVariables
       >
-        definitionIdentifier='organization'
+        formRole={FormRole.Organization}
         queryDocument={CreateOrganizationDocument}
         onCompleted={onCompleted}
         getErrors={(data: CreateOrganizationMutation) =>

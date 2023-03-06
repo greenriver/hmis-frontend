@@ -12,6 +12,7 @@ import {
   CreateProjectDocument,
   CreateProjectMutation,
   CreateProjectMutationVariables,
+  FormRole,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -46,7 +47,7 @@ const CreateProject = () => {
         CreateProjectMutation,
         CreateProjectMutationVariables
       >
-        definitionIdentifier='project'
+        formRole={FormRole.Project}
         queryDocument={CreateProjectDocument}
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}

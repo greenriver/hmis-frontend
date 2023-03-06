@@ -12,6 +12,7 @@ import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
   AddServiceToEnrollmentMutationVariables,
+  FormRole,
   ServiceFieldsFragment,
   UpdateServiceDocument,
   UpdateServiceMutation,
@@ -53,7 +54,7 @@ const Service = ({ create = false }: { create?: boolean }) => {
   if (!create && !loading && !data?.service) throw Error('Service not found');
 
   const common = {
-    definitionIdentifier: 'service',
+    formRole: FormRole.Service,
     title: (
       <Stack direction={'row'} spacing={2}>
         <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>

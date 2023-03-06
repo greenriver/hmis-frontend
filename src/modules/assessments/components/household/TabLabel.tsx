@@ -4,14 +4,14 @@ import { Stack, Typography } from '@mui/material';
 import TabIndicator from './TabIndicator';
 import { TabDefinition } from './util';
 
-import { AssessmentRole } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 const TabLabel = ({
   definition: { clientName, isHoh, status },
   role,
 }: {
   definition: TabDefinition;
-  role: AssessmentRole.Intake | AssessmentRole.Exit;
+  role: FormRole.Intake | FormRole.Exit;
 }) => {
   return (
     <Stack gap={1}>

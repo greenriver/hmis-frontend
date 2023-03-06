@@ -27,7 +27,7 @@ import RelativeDate from '@/components/elements/RelativeDate';
 import { useDashboardClient } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
-import { AssessmentRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
+import { FormRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
@@ -36,7 +36,7 @@ interface Props extends Omit<DialogProps, 'children'> {
   description?: ReactNode;
   onSelected: (record: RelatedRecord) => void;
   onCancel: () => void;
-  role?: AssessmentRole;
+  role?: FormRole;
 }
 
 export const tableComponentForType = (

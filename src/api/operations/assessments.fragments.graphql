@@ -105,11 +105,8 @@ fragment FormDefinitionWithJson on FormDefinition {
   }
 }
 
-fragment AssessmentDetailFields on AssessmentDetail {
+fragment CustomFormFields on CustomForm {
   id
-  dataCollectionStage
-  role
-  status
 }
 
 fragment UserFields on User {
@@ -122,18 +119,15 @@ fragment AssessmentFields on Assessment {
   id
   inProgress
   assessmentDate
-  assessmentLevel
-  assessmentLocation
-  assessmentType
-  prioritizationStatus
+  dataCollectionStage
   dateCreated
   dateUpdated
   dateDeleted
   user {
     ...UserFields
   }
-  assessmentDetail {
-    ...AssessmentDetailFields
+  customForm {
+    ...CustomFormFields
     definition {
       ...FormDefinitionFields
     }
@@ -143,8 +137,8 @@ fragment AssessmentFields on Assessment {
 # contains big JSON definition & form values
 fragment AssessmentWithDefinitionAndValues on Assessment {
   ...AssessmentFields
-  assessmentDetail {
-    ...AssessmentDetailFields
+  customForm {
+    ...CustomFormFields
     values
     definition {
       ...FormDefinitionWithJson
@@ -155,8 +149,8 @@ fragment AssessmentWithDefinitionAndValues on Assessment {
 # contains form values
 fragment AssessmentWithValues on Assessment {
   ...AssessmentFields
-  assessmentDetail {
-    ...AssessmentDetailFields
+  customForm {
+    ...CustomFormFields
     values
   }
   enrollment {

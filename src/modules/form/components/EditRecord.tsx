@@ -17,8 +17,8 @@ import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
-  DynamicFormProps,
   DynamicFormOnSubmit,
+  DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
 import {
   createInitialValuesFromRecord,
@@ -26,8 +26,9 @@ import {
 } from '@/modules/form/util/formUtil';
 import {
   FormDefinitionJson,
+  FormRole,
   ItemType,
-  useGetFormDefinitionByIdentifierQuery,
+  useGetFormDefinitionQuery,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -41,7 +42,7 @@ export interface Props<RecordType, Query, QueryVariables>
     | 'onSubmit'
     | 'definition'
   > {
-  definitionIdentifier: string;
+  formRole: FormRole;
   record?: RecordType;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   inputVariables?: Record<string, any>;
@@ -62,7 +63,7 @@ const EditRecord = <
   Query extends Record<string, string | Record<string, unknown> | null>,
   QueryVariables extends { input: unknown }
 >({
-  definitionIdentifier,
+  formRole,
   record,
   queryDocument,
   getErrors,
@@ -81,14 +82,14 @@ const EditRecord = <
     data,
     loading: definitionLoading,
     error: definitionError,
-  } = useGetFormDefinitionByIdentifierQuery({
-    variables: { identifier: definitionIdentifier },
+  } = useGetFormDefinitionQuery({
+    variables: { role: formRole },
   });
 
   useScrollToHash(definitionLoading, top);
 
   const definition: FormDefinitionJson | undefined = useMemo(
-    () => data?.formDefinition?.definition,
+    () => data?.getFormDefinition?.definition,
     [data]
   );
   const itemMap = useMemo(

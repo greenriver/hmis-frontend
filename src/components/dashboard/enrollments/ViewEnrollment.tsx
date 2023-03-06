@@ -12,7 +12,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { DashboardRoutes, Routes } from '@/routes/routes';
-import { AssessmentRole } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ViewEnrollment = () => {
@@ -62,7 +62,7 @@ const ViewEnrollment = () => {
                 to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
                   clientId,
                   enrollmentId,
-                  assessmentRole: AssessmentRole.Update.toLowerCase(),
+                  formRole: FormRole.Update.toLowerCase(),
                 })}
                 Icon={LibraryAddIcon}
                 leftAlign

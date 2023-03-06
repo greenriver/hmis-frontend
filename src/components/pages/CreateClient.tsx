@@ -11,6 +11,7 @@ import {
   CreateClientDocument,
   CreateClientMutation,
   CreateClientMutationVariables,
+  FormRole,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -44,7 +45,7 @@ const CreateClient: React.FC = () => {
         CreateClientMutation,
         CreateClientMutationVariables
       >
-        definitionIdentifier='client'
+        formRole={FormRole.Client}
         queryDocument={CreateClientDocument}
         onCompleted={onCompleted}
         getErrors={(data: CreateClientMutation) => data?.createClient?.errors}

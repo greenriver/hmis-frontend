@@ -12,6 +12,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  FormRole,
   UpdateClientDocument,
   UpdateClientMutation,
   UpdateClientMutationVariables,
@@ -37,7 +38,7 @@ const Profile = () => {
       UpdateClientMutation,
       UpdateClientMutationVariables
     >
-      definitionIdentifier='client'
+      formRole={FormRole.Client}
       record={client}
       localConstants={{
         clientId: client.id,

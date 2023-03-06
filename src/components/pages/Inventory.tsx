@@ -17,6 +17,7 @@ import {
   CreateInventoryDocument,
   CreateInventoryMutation,
   CreateInventoryMutationVariables,
+  FormRole,
   InventoryFieldsFragment,
   UpdateInventoryDocument,
   UpdateInventoryMutation,
@@ -77,7 +78,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   if (error) throw error;
 
   const common = {
-    definitionIdentifier: 'inventory',
+    formRole: FormRole.Inventory,
     projectId,
     title: (
       <Stack direction={'row'} spacing={2}>

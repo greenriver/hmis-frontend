@@ -28,7 +28,7 @@ const subRoutes = {
   EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
   HOUSEHOLD_EXIT: 'enrollments/:enrollmentId/household-exit',
   HOUSEHOLD_INTAKE: 'enrollments/:enrollmentId/household-intake',
-  NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentRole/new',
+  NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/new',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
   EDIT_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId/edit',
   NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
