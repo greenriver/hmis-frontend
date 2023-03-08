@@ -2,10 +2,12 @@ import { Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 import ClickToShow from '@/components/elements/ClickToShow';
+import NotSpecified from '@/components/elements/NotSpecified';
 import { maskSSN } from '@/modules/hmis/hmisUtil';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
-interface Props extends TypographyProps {
+export interface Props extends TypographyProps {
   client: ClientIdentificationFieldsFragment;
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
@@ -23,6 +25,30 @@ const ClientSsn = ({ client, noValue, lastFour, variant = 'body2' }: Props) => {
     <ClickToShow text='Reveal SSN' variant={variant}>
       <Typography variant={variant}>{masked}</Typography>
     </ClickToShow>
+  );
+};
+
+export const ClientSafeSsn: React.FC<Props> = (props) => {
+  const { client } = props;
+
+  const [canViewFullSsn] = useHasClientPermissions(client.id, [
+    'canViewFullSsn',
+  ]);
+  const [canViewPartialSsn] = useHasClientPermissions(client.id, [
+    'canViewPartialSsn',
+  ]);
+
+  const canSeeSsn = canViewFullSsn || canViewPartialSsn;
+
+  if (!canSeeSsn) return null;
+
+  return (
+    <ClientSsn
+      noValue={<NotSpecified />}
+      lastFour={!canViewFullSsn && canViewPartialSsn}
+      {...props}
+      client={client}
+    />
   );
 };
 

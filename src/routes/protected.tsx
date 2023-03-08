@@ -32,6 +32,7 @@ import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
+import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
@@ -67,7 +68,14 @@ export const protectedRoutes = [
       },
       { path: Routes.CREATE_PROJECT, element: <CreateProject /> },
       { path: Routes.ORGANIZATION, element: <Organization /> },
-      { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
+      {
+        path: Routes.EDIT_ORGANIZATION,
+        element: (
+          <OrganizationEditRoute>
+            <EditOrganization />
+          </OrganizationEditRoute>
+        ),
+      },
       {
         path: Routes.NEW_INVENTORY,
         element: (
@@ -132,8 +140,22 @@ export const protectedRoutes = [
           </RootPermissionsFilter>
         ),
       },
-      { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
-      { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
+      {
+        path: Routes.CREATE_ORGANIZATION,
+        element: (
+          <RootPermissionsFilter permissions='canEditOrganization'>
+            <CreateOrganization />
+          </RootPermissionsFilter>
+        ),
+      },
+      {
+        path: Routes.CREATE_CLIENT,
+        element: (
+          <ClientRoute edit>
+            <CreateClient />
+          </ClientRoute>
+        ),
+      },
       {
         path: Routes.CLIENT_DASHBOARD,
         element: (

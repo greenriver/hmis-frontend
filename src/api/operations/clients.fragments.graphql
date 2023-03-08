@@ -19,6 +19,17 @@ fragment ClientName on Client {
   nameSuffix
 }
 
+fragment ClientPermissions on Client {
+  access {
+    canViewDob
+    canViewFullSsn
+    canViewPartialSsn
+    canEditEnrollments
+    canDeleteEnrollments
+    canViewEnrollmentDetails
+  }
+}
+
 fragment ClientImage on Client {
   id
   image {
@@ -29,6 +40,7 @@ fragment ClientImage on Client {
 fragment ClientIdentificationFields on Client {
   id
   dob
+  age
   ssn
 }
 
@@ -62,6 +74,7 @@ fragment ClientImageFields on ClientImage {
 fragment ClientOmniSearchFields on Client {
   id
   dob
+  age
   gender
   personalId
   ...ClientName

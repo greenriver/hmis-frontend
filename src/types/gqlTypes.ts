@@ -253,6 +253,8 @@ export type ClearRecentItemsInput = {
 /** HUD Client */
 export type Client = {
   __typename?: 'Client';
+  access: ClientAccess;
+  age?: Maybe<Scalars['Int']>;
   assessments: AssessmentsPaginated;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -318,6 +320,16 @@ export type ClientHealthAndDvsArgs = {
 export type ClientIncomeBenefitsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+};
+
+export type ClientAccess = {
+  __typename?: 'ClientAccess';
+  canDeleteEnrollments: Scalars['Boolean'];
+  canEditEnrollments: Scalars['Boolean'];
+  canViewDob: Scalars['Boolean'];
+  canViewEnrollmentDetails: Scalars['Boolean'];
+  canViewFullSsn: Scalars['Boolean'];
+  canViewPartialSsn: Scalars['Boolean'];
 };
 
 /** Client Image */
@@ -6569,6 +6581,19 @@ export type ClientNameFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientPermissionsFragment = {
+  __typename?: 'Client';
+  access: {
+    __typename?: 'ClientAccess';
+    canViewDob: boolean;
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+  };
+};
+
 export type ClientImageFragment = {
   __typename?: 'Client';
   id: string;
@@ -6584,6 +6609,7 @@ export type ClientIdentificationFieldsFragment = {
   __typename?: 'Client';
   id: string;
   dob?: string | null;
+  age?: number | null;
   ssn?: string | null;
 };
 
@@ -6603,6 +6629,7 @@ export type ClientFieldsFragment = {
   dateUpdated: string;
   id: string;
   dob?: string | null;
+  age?: number | null;
   ssn?: string | null;
   firstName?: string | null;
   middleName?: string | null;
@@ -6629,6 +6656,7 @@ export type ClientOmniSearchFieldsFragment = {
   __typename?: 'Client';
   id: string;
   dob?: string | null;
+  age?: number | null;
   gender: Array<Gender>;
   personalId: string;
   firstName?: string | null;
@@ -6652,6 +6680,7 @@ export type HouseholdClientFieldsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
+    age?: number | null;
     ssn?: string | null;
   };
   enrollment: {
@@ -6696,6 +6725,7 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
+    age?: number | null;
     ssn?: string | null;
   };
 };
@@ -6767,6 +6797,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         lastName?: string | null;
         nameSuffix?: string | null;
         dob?: string | null;
+        age?: number | null;
         ssn?: string | null;
       };
       enrollment: {
@@ -7002,6 +7033,7 @@ export type SearchClientsQuery = {
       dateUpdated: string;
       id: string;
       dob?: string | null;
+      age?: number | null;
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
@@ -7041,6 +7073,7 @@ export type GetClientQuery = {
     dateUpdated: string;
     id: string;
     dob?: string | null;
+    age?: number | null;
     ssn?: string | null;
     firstName?: string | null;
     middleName?: string | null;
@@ -7054,6 +7087,26 @@ export type GetClientQuery = {
       contentType: string;
       base64: string;
     } | null;
+  } | null;
+};
+
+export type GetClientPermissionsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetClientPermissionsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    access: {
+      __typename?: 'ClientAccess';
+      canViewDob: boolean;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+    };
   } | null;
 };
 
@@ -7240,6 +7293,7 @@ export type CreateClientMutation = {
       dateUpdated: string;
       id: string;
       dob?: string | null;
+      age?: number | null;
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
@@ -7295,6 +7349,7 @@ export type UpdateClientMutation = {
       dateUpdated: string;
       id: string;
       dob?: string | null;
+      age?: number | null;
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
@@ -7472,6 +7527,7 @@ export type UpdateEnrollmentMutation = {
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
+            age?: number | null;
             ssn?: string | null;
           };
           enrollment: {
@@ -7541,6 +7597,7 @@ export type SetHoHMutation = {
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
+            age?: number | null;
             ssn?: string | null;
           };
           enrollment: {
@@ -7652,6 +7709,7 @@ export type AddHouseholdMembersMutation = {
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
+            age?: number | null;
             ssn?: string | null;
           };
           enrollment: {
@@ -7905,6 +7963,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
+          age?: number | null;
           ssn?: string | null;
         };
       }>;
@@ -8026,6 +8085,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               dateUpdated: string;
               id: string;
               dob?: string | null;
+              age?: number | null;
               ssn?: string | null;
               firstName?: string | null;
               middleName?: string | null;
@@ -8260,6 +8320,7 @@ export type OmniSearchClientsQuery = {
       __typename?: 'Client';
       id: string;
       dob?: string | null;
+      age?: number | null;
       gender: Array<Gender>;
       personalId: string;
       firstName?: string | null;
@@ -8302,6 +8363,7 @@ export type GetRecentItemsQuery = {
           __typename?: 'Client';
           id: string;
           dob?: string | null;
+          age?: number | null;
           gender: Array<Gender>;
           personalId: string;
           firstName?: string | null;
@@ -8335,6 +8397,7 @@ export type AddRecentItemMutation = {
           __typename?: 'Client';
           id: string;
           dob?: string | null;
+          age?: number | null;
           gender: Array<Gender>;
           personalId: string;
           firstName?: string | null;
@@ -8365,6 +8428,7 @@ export type ClearRecentItemsMutation = {
           __typename?: 'Client';
           id: string;
           dob?: string | null;
+          age?: number | null;
           gender: Array<Gender>;
           personalId: string;
           firstName?: string | null;
@@ -8481,6 +8545,16 @@ export type OrganizationAllFieldsFragment = {
   victimServiceProvider?: boolean | null;
 };
 
+export type OrganizationPermissionsFieldsFragment = {
+  __typename?: 'Organization';
+  id: string;
+  access: {
+    __typename?: 'OrganizationAccess';
+    canEditOrganization: boolean;
+    canDeleteOrganization: boolean;
+  };
+};
+
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
@@ -8585,6 +8659,23 @@ export type GetAllOrganizationsQuery = {
   };
 };
 
+export type GetOrganizationPermissionsQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetOrganizationPermissionsQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    access: {
+      __typename?: 'OrganizationAccess';
+      canEditOrganization: boolean;
+      canDeleteOrganization: boolean;
+    };
+  } | null;
+};
+
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -8673,6 +8764,7 @@ export type GetProjectEnrollmentsQuery = {
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
+          age?: number | null;
           ssn?: string | null;
         };
         project: {
@@ -9960,10 +10052,23 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     section
   }
 `;
+export const ClientPermissionsFragmentDoc = gql`
+  fragment ClientPermissions on Client {
+    access {
+      canViewDob
+      canViewFullSsn
+      canViewPartialSsn
+      canEditEnrollments
+      canDeleteEnrollments
+      canViewEnrollmentDetails
+    }
+  }
+`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
     dob
+    age
     ssn
   }
 `;
@@ -10022,6 +10127,7 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
     id
     dob
+    age
     gender
     personalId
     ...ClientName
@@ -10372,6 +10478,15 @@ export const OrganizationAllFieldsFragmentDoc = gql`
   }
   ${OrganizationFieldsFragmentDoc}
   ${OrganizationDetailFieldsFragmentDoc}
+`;
+export const OrganizationPermissionsFieldsFragmentDoc = gql`
+  fragment OrganizationPermissionsFields on Organization {
+    id
+    access {
+      canEditOrganization
+      canDeleteOrganization
+    }
+  }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
@@ -11177,6 +11292,65 @@ export type GetClientLazyQueryHookResult = ReturnType<
 export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
+>;
+export const GetClientPermissionsDocument = gql`
+  query GetClientPermissions($id: ID!) {
+    client(id: $id) {
+      ...ClientPermissions
+    }
+  }
+  ${ClientPermissionsFragmentDoc}
+`;
+
+/**
+ * __useGetClientPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetClientPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientPermissionsQuery,
+    GetClientPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientPermissionsQuery,
+    GetClientPermissionsQueryVariables
+  >(GetClientPermissionsDocument, options);
+}
+export function useGetClientPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientPermissionsQuery,
+    GetClientPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientPermissionsQuery,
+    GetClientPermissionsQueryVariables
+  >(GetClientPermissionsDocument, options);
+}
+export type GetClientPermissionsQueryHookResult = ReturnType<
+  typeof useGetClientPermissionsQuery
+>;
+export type GetClientPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetClientPermissionsLazyQuery
+>;
+export type GetClientPermissionsQueryResult = Apollo.QueryResult<
+  GetClientPermissionsQuery,
+  GetClientPermissionsQueryVariables
 >;
 export const GetClientImageDocument = gql`
   query GetClientImage($id: ID!) {
@@ -13184,6 +13358,65 @@ export type GetAllOrganizationsLazyQueryHookResult = ReturnType<
 export type GetAllOrganizationsQueryResult = Apollo.QueryResult<
   GetAllOrganizationsQuery,
   GetAllOrganizationsQueryVariables
+>;
+export const GetOrganizationPermissionsDocument = gql`
+  query GetOrganizationPermissions($id: ID!) {
+    organization(id: $id) {
+      ...OrganizationPermissionsFields
+    }
+  }
+  ${OrganizationPermissionsFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationPermissionsQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationPermissionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationPermissionsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOrganizationPermissionsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOrganizationPermissionsQuery,
+    GetOrganizationPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOrganizationPermissionsQuery,
+    GetOrganizationPermissionsQueryVariables
+  >(GetOrganizationPermissionsDocument, options);
+}
+export function useGetOrganizationPermissionsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationPermissionsQuery,
+    GetOrganizationPermissionsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationPermissionsQuery,
+    GetOrganizationPermissionsQueryVariables
+  >(GetOrganizationPermissionsDocument, options);
+}
+export type GetOrganizationPermissionsQueryHookResult = ReturnType<
+  typeof useGetOrganizationPermissionsQuery
+>;
+export type GetOrganizationPermissionsLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationPermissionsLazyQuery
+>;
+export type GetOrganizationPermissionsQueryResult = Apollo.QueryResult<
+  GetOrganizationPermissionsQuery,
+  GetOrganizationPermissionsQueryVariables
 >;
 export const GetProjectDocument = gql`
   query GetProject($id: ID!) {

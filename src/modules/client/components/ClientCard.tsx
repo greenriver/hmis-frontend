@@ -16,8 +16,8 @@ import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import RouterLink from '@/components/elements/RouterLink';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import { ClientSafeDobAge } from '@/modules/hmis/components/ClientDobAge';
+import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   clientNameWithoutPreferred,
@@ -27,6 +27,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -195,8 +196,25 @@ const ClientCard: React.FC<Props> = ({
                   color='text.primary'
                   withoutEmphasis
                 />
-                <ClientDobAge client={client} />
-                <ClientSsn client={client} />
+                <Typography
+                  variant='body2'
+                  component={Box}
+                  sx={{ display: 'flex', gap: 0.5 }}
+                >
+                  Age: <ClientSafeDobAge client={client} />
+                </Typography>
+                <ClientPermissionsFilter
+                  id={client.id}
+                  permissions={['canViewFullSsn', 'canViewPartialSsn']}
+                >
+                  <Typography
+                    variant='body2'
+                    component={Box}
+                    sx={{ display: 'flex', gap: 0.5 }}
+                  >
+                    SSN: <ClientSafeSsn client={client} />
+                  </Typography>
+                </ClientPermissionsFilter>
                 {/* {showLinkToRecord && (
                   <Box sx={{ pt: 1 }}>
                     <ButtonLink
