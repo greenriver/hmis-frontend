@@ -310,6 +310,9 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
 };
 
 export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
+  // TODO figure out display for services
+  if (!e.typeProvided || !e.recordType) return ['Custom service'];
+
   let typeProvided: string | null =
     HmisEnums.ServiceTypeProvided[e.typeProvided];
 
