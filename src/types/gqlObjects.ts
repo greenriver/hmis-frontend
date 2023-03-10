@@ -847,7 +847,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'losUnderThreshold',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'monthsHomelessPastThreeYears',
@@ -859,7 +859,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'previousStreetEssh',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'relationshipToHoH',
@@ -932,11 +932,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'probSolDivRrResult',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'referralCaseManageAfter',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'referralResult',
@@ -1354,7 +1354,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'alimony',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'alimonyAmount',
@@ -1370,7 +1370,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'childSupport',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'childSupportAmount',
@@ -1378,7 +1378,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'cobra',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'connectionWithSoar',
@@ -1418,7 +1418,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'earned',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'earnedAmount',
@@ -1426,9 +1426,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'employerProvided',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
-      { name: 'ga', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'ga',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'gaAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
@@ -1459,7 +1462,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'indianHealthServices',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'informationDate',
@@ -1479,11 +1482,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'medicaid',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'medicare',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'noAdapReason',
@@ -1535,7 +1538,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'otherBenefitsSource',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'otherBenefitsSourceIdentify',
@@ -1547,7 +1550,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'otherIncomeSource',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'otherIncomeSourceIdentify',
@@ -1555,7 +1558,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'otherInsurance',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'otherInsuranceIdentify',
@@ -1563,11 +1566,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'otherTanf',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'pension',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'pensionAmount',
@@ -1575,7 +1578,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'privateDisability',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'privateDisabilityAmount',
@@ -1583,7 +1586,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'privatePay',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'ryanWhiteMedDent',
@@ -1595,43 +1598,55 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'schip',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
-      { name: 'snap', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'snap',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'socSecRetirement',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'socSecRetirementAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
-      { name: 'ssdi', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'ssdi',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'ssdiAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
-      { name: 'ssi', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'ssi',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'ssiAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
         name: 'stateHealthIns',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
-      { name: 'tanf', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'tanf',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'tanfAmount',
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
         name: 'tanfChildCare',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'tanfTransportation',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'totalMonthlyIncome',
@@ -1639,7 +1654,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'unemployment',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'unemploymentAmount',
@@ -1647,7 +1662,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'vaDisabilityNonService',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'vaDisabilityNonServiceAmount',
@@ -1655,7 +1670,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'vaDisabilityService',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'vaDisabilityServiceAmount',
@@ -1663,12 +1678,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'vaMedicalServices',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
-      { name: 'wic', type: { kind: 'SCALAR', name: 'Boolean', ofType: null } },
+      {
+        name: 'wic',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
       {
         name: 'workersComp',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'workersCompAmount',
@@ -1875,7 +1893,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'victimServiceProvider',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+        },
       },
     ],
   },
@@ -1935,7 +1957,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     fields: [
       {
         name: 'HMISParticipatingProject',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'HOPWAMedAssistedLivingFac',
@@ -1955,7 +1977,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'continuumProject',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'dateCreated',
@@ -2019,7 +2041,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'residentialAffiliation',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
         name: 'targetPopulation',

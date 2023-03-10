@@ -1015,9 +1015,9 @@ export type Enrollment = {
   intakeAssessment?: Maybe<Assessment>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
-  losUnderThreshold?: Maybe<Scalars['Boolean']>;
+  losUnderThreshold?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
-  previousStreetEssh?: Maybe<Scalars['Boolean']>;
+  previousStreetEssh?: Maybe<NoYesMissing>;
   project: Project;
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
@@ -1108,8 +1108,8 @@ export type Event = {
   eventDate: Scalars['ISO8601DateTime'];
   id: Scalars['ID'];
   locationCrisisOrPhHousing?: Maybe<Scalars['String']>;
-  probSolDivRrResult?: Maybe<Scalars['Boolean']>;
-  referralCaseManageAfter?: Maybe<Scalars['Boolean']>;
+  probSolDivRrResult?: Maybe<NoYesMissing>;
+  referralCaseManageAfter?: Maybe<NoYesMissing>;
   referralResult?: Maybe<ReferralResult>;
   resultDate?: Maybe<Scalars['ISO8601DateTime']>;
   user?: Maybe<User>;
@@ -1621,32 +1621,32 @@ export enum HousingType {
 export type IncomeBenefit = {
   __typename?: 'IncomeBenefit';
   adap?: Maybe<NoYesReasonsForMissingData>;
-  alimony?: Maybe<Scalars['Boolean']>;
+  alimony?: Maybe<NoYesMissing>;
   alimonyAmount?: Maybe<Scalars['Float']>;
   benefitsFromAnySource?: Maybe<NoYesReasonsForMissingData>;
-  childSupport?: Maybe<Scalars['Boolean']>;
+  childSupport?: Maybe<NoYesMissing>;
   childSupportAmount?: Maybe<Scalars['Float']>;
   client: Client;
-  cobra?: Maybe<Scalars['Boolean']>;
+  cobra?: Maybe<NoYesMissing>;
   connectionWithSoar?: Maybe<NoYesReasonsForMissingData>;
   dataCollectionStage: DataCollectionStage;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
-  earned?: Maybe<Scalars['Boolean']>;
+  earned?: Maybe<NoYesMissing>;
   earnedAmount?: Maybe<Scalars['Float']>;
-  employerProvided?: Maybe<Scalars['Boolean']>;
+  employerProvided?: Maybe<NoYesMissing>;
   enrollment: Enrollment;
-  ga?: Maybe<Scalars['Boolean']>;
+  ga?: Maybe<NoYesMissing>;
   gaAmount?: Maybe<Scalars['Float']>;
   hivaidsAssistance?: Maybe<NoYesReasonsForMissingData>;
   id: Scalars['ID'];
   incomeFromAnySource?: Maybe<NoYesReasonsForMissingData>;
-  indianHealthServices?: Maybe<Scalars['Boolean']>;
+  indianHealthServices?: Maybe<NoYesMissing>;
   informationDate: Scalars['ISO8601Date'];
   insuranceFromAnySource?: Maybe<NoYesReasonsForMissingData>;
-  medicaid?: Maybe<Scalars['Boolean']>;
-  medicare?: Maybe<Scalars['Boolean']>;
+  medicaid?: Maybe<NoYesMissing>;
+  medicare?: Maybe<NoYesMissing>;
   noAdapReason?: Maybe<NoAssistanceReason>;
   noCobraReason?: Maybe<ReasonNotInsured>;
   noEmployerProvidedReason?: Maybe<ReasonNotInsured>;
@@ -1659,44 +1659,44 @@ export type IncomeBenefit = {
   noSchipReason?: Maybe<ReasonNotInsured>;
   noStateHealthInsReason?: Maybe<ReasonNotInsured>;
   noVaMedReason?: Maybe<ReasonNotInsured>;
-  otherBenefitsSource?: Maybe<Scalars['Boolean']>;
+  otherBenefitsSource?: Maybe<NoYesMissing>;
   otherBenefitsSourceIdentify?: Maybe<Scalars['String']>;
   otherIncomeAmount?: Maybe<Scalars['Float']>;
-  otherIncomeSource?: Maybe<Scalars['Boolean']>;
+  otherIncomeSource?: Maybe<NoYesMissing>;
   otherIncomeSourceIdentify?: Maybe<Scalars['String']>;
-  otherInsurance?: Maybe<Scalars['Boolean']>;
+  otherInsurance?: Maybe<NoYesMissing>;
   otherInsuranceIdentify?: Maybe<Scalars['String']>;
-  otherTanf?: Maybe<Scalars['Boolean']>;
-  pension?: Maybe<Scalars['Boolean']>;
+  otherTanf?: Maybe<NoYesMissing>;
+  pension?: Maybe<NoYesMissing>;
   pensionAmount?: Maybe<Scalars['Float']>;
-  privateDisability?: Maybe<Scalars['Boolean']>;
+  privateDisability?: Maybe<NoYesMissing>;
   privateDisabilityAmount?: Maybe<Scalars['Float']>;
-  privatePay?: Maybe<Scalars['Boolean']>;
+  privatePay?: Maybe<NoYesMissing>;
   ryanWhiteMedDent?: Maybe<NoYesReasonsForMissingData>;
-  schip?: Maybe<Scalars['Boolean']>;
-  snap?: Maybe<Scalars['Boolean']>;
-  socSecRetirement?: Maybe<Scalars['Boolean']>;
+  schip?: Maybe<NoYesMissing>;
+  snap?: Maybe<NoYesMissing>;
+  socSecRetirement?: Maybe<NoYesMissing>;
   socSecRetirementAmount?: Maybe<Scalars['Float']>;
-  ssdi?: Maybe<Scalars['Boolean']>;
+  ssdi?: Maybe<NoYesMissing>;
   ssdiAmount?: Maybe<Scalars['Float']>;
-  ssi?: Maybe<Scalars['Boolean']>;
+  ssi?: Maybe<NoYesMissing>;
   ssiAmount?: Maybe<Scalars['Float']>;
-  stateHealthIns?: Maybe<Scalars['Boolean']>;
-  tanf?: Maybe<Scalars['Boolean']>;
+  stateHealthIns?: Maybe<NoYesMissing>;
+  tanf?: Maybe<NoYesMissing>;
   tanfAmount?: Maybe<Scalars['Float']>;
-  tanfChildCare?: Maybe<Scalars['Boolean']>;
-  tanfTransportation?: Maybe<Scalars['Boolean']>;
+  tanfChildCare?: Maybe<NoYesMissing>;
+  tanfTransportation?: Maybe<NoYesMissing>;
   totalMonthlyIncome?: Maybe<Scalars['String']>;
-  unemployment?: Maybe<Scalars['Boolean']>;
+  unemployment?: Maybe<NoYesMissing>;
   unemploymentAmount?: Maybe<Scalars['Float']>;
   user?: Maybe<User>;
-  vaDisabilityNonService?: Maybe<Scalars['Boolean']>;
+  vaDisabilityNonService?: Maybe<NoYesMissing>;
   vaDisabilityNonServiceAmount?: Maybe<Scalars['Float']>;
-  vaDisabilityService?: Maybe<Scalars['Boolean']>;
+  vaDisabilityService?: Maybe<NoYesMissing>;
   vaDisabilityServiceAmount?: Maybe<Scalars['Float']>;
-  vaMedicalServices?: Maybe<Scalars['Boolean']>;
-  wic?: Maybe<Scalars['Boolean']>;
-  workersComp?: Maybe<Scalars['Boolean']>;
+  vaMedicalServices?: Maybe<NoYesMissing>;
+  wic?: Maybe<NoYesMissing>;
+  workersComp?: Maybe<NoYesMissing>;
   workersCompAmount?: Maybe<Scalars['Float']>;
 };
 
@@ -2217,6 +2217,18 @@ export enum NoAssistanceReason {
   Invalid = 'INVALID',
 }
 
+/** 1.7 */
+export enum NoYesMissing {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (0) No */
+  No = 'NO',
+  /** (1) Yes */
+  Yes = 'YES',
+}
+
 /** 1.8 */
 export enum NoYesReasonsForMissingData {
   /** (8) Client doesn't know */
@@ -2236,7 +2248,6 @@ export enum NoYesReasonsForMissingData {
 /** Results from client/project omnisearch */
 export type OmnisearchResult = Client | Project;
 
-/** HUD Organization */
 export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
@@ -2248,10 +2259,9 @@ export type Organization = {
   id: Scalars['ID'];
   organizationName: Scalars['String'];
   projects: ProjectsPaginated;
-  victimServiceProvider?: Maybe<Scalars['Boolean']>;
+  victimServiceProvider: NoYesMissing;
 };
 
-/** HUD Organization */
 export type OrganizationProjectsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2347,12 +2357,12 @@ export enum PrioritizationStatus {
 
 export type Project = {
   __typename?: 'Project';
-  HMISParticipatingProject?: Maybe<Scalars['Boolean']>;
+  HMISParticipatingProject?: Maybe<NoYesMissing>;
   HOPWAMedAssistedLivingFac?: Maybe<HopwaMedAssistedLivingFac>;
   access: ProjectAccess;
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
-  continuumProject?: Maybe<Scalars['Boolean']>;
+  continuumProject?: Maybe<NoYesMissing>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2368,7 +2378,7 @@ export type Project = {
   projectCocs: ProjectCocsPaginated;
   projectName: Scalars['String'];
   projectType?: Maybe<ProjectType>;
-  residentialAffiliation?: Maybe<Scalars['Boolean']>;
+  residentialAffiliation?: Maybe<NoYesMissing>;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
 };
@@ -6677,22 +6687,22 @@ export type SubmitFormMutation = {
           organizationName: string;
           description?: string | null;
           contactInformation?: string | null;
-          victimServiceProvider?: boolean | null;
+          victimServiceProvider: NoYesMissing;
         }
       | {
           __typename?: 'Project';
           id: string;
           projectName: string;
           projectType?: ProjectType | null;
-          HMISParticipatingProject?: boolean | null;
+          HMISParticipatingProject?: NoYesMissing | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
           contactInformation?: string | null;
-          continuumProject?: boolean | null;
+          continuumProject?: NoYesMissing | null;
           description?: string | null;
           housingType?: HousingType | null;
           operatingEndDate?: string | null;
           operatingStartDate: string;
-          residentialAffiliation?: boolean | null;
+          residentialAffiliation?: NoYesMissing | null;
           targetPopulation?: TargetPopulation | null;
           trackingMethod?: TrackingMethod | null;
           organization: {
@@ -6927,7 +6937,7 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   exitDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
-  previousStreetEssh?: boolean | null;
+  previousStreetEssh?: NoYesMissing | null;
   dateToStreetEssh?: string | null;
   timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
   monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
@@ -6995,8 +7005,8 @@ export type EventFieldsFragment = {
   event: EventType;
   eventDate: string;
   locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: boolean | null;
-  referralCaseManageAfter?: boolean | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
   referralResult?: ReferralResult | null;
   resultDate?: string | null;
   dateCreated: string;
@@ -7023,30 +7033,30 @@ export type ServiceFieldsFragment = {
 export type IncomeBenefitFieldsFragment = {
   __typename: 'IncomeBenefit';
   adap?: NoYesReasonsForMissingData | null;
-  alimony?: boolean | null;
+  alimony?: NoYesMissing | null;
   alimonyAmount?: number | null;
   benefitsFromAnySource?: NoYesReasonsForMissingData | null;
-  childSupport?: boolean | null;
+  childSupport?: NoYesMissing | null;
   childSupportAmount?: number | null;
-  cobra?: boolean | null;
+  cobra?: NoYesMissing | null;
   connectionWithSoar?: NoYesReasonsForMissingData | null;
   dataCollectionStage: DataCollectionStage;
   dateCreated: string;
   dateDeleted?: string | null;
   dateUpdated: string;
-  earned?: boolean | null;
+  earned?: NoYesMissing | null;
   earnedAmount?: number | null;
-  employerProvided?: boolean | null;
-  ga?: boolean | null;
+  employerProvided?: NoYesMissing | null;
+  ga?: NoYesMissing | null;
   gaAmount?: number | null;
   hivaidsAssistance?: NoYesReasonsForMissingData | null;
   id: string;
   incomeFromAnySource?: NoYesReasonsForMissingData | null;
-  indianHealthServices?: boolean | null;
+  indianHealthServices?: NoYesMissing | null;
   informationDate: string;
   insuranceFromAnySource?: NoYesReasonsForMissingData | null;
-  medicaid?: boolean | null;
-  medicare?: boolean | null;
+  medicaid?: NoYesMissing | null;
+  medicare?: NoYesMissing | null;
   noAdapReason?: NoAssistanceReason | null;
   noCobraReason?: ReasonNotInsured | null;
   noEmployerProvidedReason?: ReasonNotInsured | null;
@@ -7059,43 +7069,43 @@ export type IncomeBenefitFieldsFragment = {
   noSchipReason?: ReasonNotInsured | null;
   noStateHealthInsReason?: ReasonNotInsured | null;
   noVaMedReason?: ReasonNotInsured | null;
-  otherBenefitsSource?: boolean | null;
+  otherBenefitsSource?: NoYesMissing | null;
   otherBenefitsSourceIdentify?: string | null;
   otherIncomeAmount?: number | null;
-  otherIncomeSource?: boolean | null;
+  otherIncomeSource?: NoYesMissing | null;
   otherIncomeSourceIdentify?: string | null;
-  otherInsurance?: boolean | null;
+  otherInsurance?: NoYesMissing | null;
   otherInsuranceIdentify?: string | null;
-  otherTanf?: boolean | null;
-  pension?: boolean | null;
+  otherTanf?: NoYesMissing | null;
+  pension?: NoYesMissing | null;
   pensionAmount?: number | null;
-  privateDisability?: boolean | null;
+  privateDisability?: NoYesMissing | null;
   privateDisabilityAmount?: number | null;
-  privatePay?: boolean | null;
+  privatePay?: NoYesMissing | null;
   ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
-  schip?: boolean | null;
-  snap?: boolean | null;
-  socSecRetirement?: boolean | null;
+  schip?: NoYesMissing | null;
+  snap?: NoYesMissing | null;
+  socSecRetirement?: NoYesMissing | null;
   socSecRetirementAmount?: number | null;
-  ssdi?: boolean | null;
+  ssdi?: NoYesMissing | null;
   ssdiAmount?: number | null;
-  ssi?: boolean | null;
+  ssi?: NoYesMissing | null;
   ssiAmount?: number | null;
-  stateHealthIns?: boolean | null;
-  tanf?: boolean | null;
+  stateHealthIns?: NoYesMissing | null;
+  tanf?: NoYesMissing | null;
   tanfAmount?: number | null;
-  tanfChildCare?: boolean | null;
-  tanfTransportation?: boolean | null;
+  tanfChildCare?: NoYesMissing | null;
+  tanfTransportation?: NoYesMissing | null;
   totalMonthlyIncome?: string | null;
-  unemployment?: boolean | null;
+  unemployment?: NoYesMissing | null;
   unemploymentAmount?: number | null;
-  vaDisabilityNonService?: boolean | null;
+  vaDisabilityNonService?: NoYesMissing | null;
   vaDisabilityNonServiceAmount?: number | null;
-  vaDisabilityService?: boolean | null;
+  vaDisabilityService?: NoYesMissing | null;
   vaDisabilityServiceAmount?: number | null;
-  vaMedicalServices?: boolean | null;
-  wic?: boolean | null;
-  workersComp?: boolean | null;
+  vaMedicalServices?: NoYesMissing | null;
+  wic?: NoYesMissing | null;
+  workersComp?: NoYesMissing | null;
   workersCompAmount?: number | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
   enrollment: {
@@ -7397,7 +7407,7 @@ export type GetRecentEnrollmentsQuery = {
         exitDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
-        previousStreetEssh?: boolean | null;
+        previousStreetEssh?: NoYesMissing | null;
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
@@ -7993,8 +8003,8 @@ export type GetEnrollmentEventsQuery = {
         event: EventType;
         eventDate: string;
         locationCrisisOrPhHousing?: string | null;
-        probSolDivRrResult?: boolean | null;
-        referralCaseManageAfter?: boolean | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
         referralResult?: ReferralResult | null;
         resultDate?: string | null;
         dateCreated: string;
@@ -8116,30 +8126,30 @@ export type GetRecentIncomeBenefitsQuery = {
       nodes: Array<{
         __typename: 'IncomeBenefit';
         adap?: NoYesReasonsForMissingData | null;
-        alimony?: boolean | null;
+        alimony?: NoYesMissing | null;
         alimonyAmount?: number | null;
         benefitsFromAnySource?: NoYesReasonsForMissingData | null;
-        childSupport?: boolean | null;
+        childSupport?: NoYesMissing | null;
         childSupportAmount?: number | null;
-        cobra?: boolean | null;
+        cobra?: NoYesMissing | null;
         connectionWithSoar?: NoYesReasonsForMissingData | null;
         dataCollectionStage: DataCollectionStage;
         dateCreated: string;
         dateDeleted?: string | null;
         dateUpdated: string;
-        earned?: boolean | null;
+        earned?: NoYesMissing | null;
         earnedAmount?: number | null;
-        employerProvided?: boolean | null;
-        ga?: boolean | null;
+        employerProvided?: NoYesMissing | null;
+        ga?: NoYesMissing | null;
         gaAmount?: number | null;
         hivaidsAssistance?: NoYesReasonsForMissingData | null;
         id: string;
         incomeFromAnySource?: NoYesReasonsForMissingData | null;
-        indianHealthServices?: boolean | null;
+        indianHealthServices?: NoYesMissing | null;
         informationDate: string;
         insuranceFromAnySource?: NoYesReasonsForMissingData | null;
-        medicaid?: boolean | null;
-        medicare?: boolean | null;
+        medicaid?: NoYesMissing | null;
+        medicare?: NoYesMissing | null;
         noAdapReason?: NoAssistanceReason | null;
         noCobraReason?: ReasonNotInsured | null;
         noEmployerProvidedReason?: ReasonNotInsured | null;
@@ -8152,43 +8162,43 @@ export type GetRecentIncomeBenefitsQuery = {
         noSchipReason?: ReasonNotInsured | null;
         noStateHealthInsReason?: ReasonNotInsured | null;
         noVaMedReason?: ReasonNotInsured | null;
-        otherBenefitsSource?: boolean | null;
+        otherBenefitsSource?: NoYesMissing | null;
         otherBenefitsSourceIdentify?: string | null;
         otherIncomeAmount?: number | null;
-        otherIncomeSource?: boolean | null;
+        otherIncomeSource?: NoYesMissing | null;
         otherIncomeSourceIdentify?: string | null;
-        otherInsurance?: boolean | null;
+        otherInsurance?: NoYesMissing | null;
         otherInsuranceIdentify?: string | null;
-        otherTanf?: boolean | null;
-        pension?: boolean | null;
+        otherTanf?: NoYesMissing | null;
+        pension?: NoYesMissing | null;
         pensionAmount?: number | null;
-        privateDisability?: boolean | null;
+        privateDisability?: NoYesMissing | null;
         privateDisabilityAmount?: number | null;
-        privatePay?: boolean | null;
+        privatePay?: NoYesMissing | null;
         ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
-        schip?: boolean | null;
-        snap?: boolean | null;
-        socSecRetirement?: boolean | null;
+        schip?: NoYesMissing | null;
+        snap?: NoYesMissing | null;
+        socSecRetirement?: NoYesMissing | null;
         socSecRetirementAmount?: number | null;
-        ssdi?: boolean | null;
+        ssdi?: NoYesMissing | null;
         ssdiAmount?: number | null;
-        ssi?: boolean | null;
+        ssi?: NoYesMissing | null;
         ssiAmount?: number | null;
-        stateHealthIns?: boolean | null;
-        tanf?: boolean | null;
+        stateHealthIns?: NoYesMissing | null;
+        tanf?: NoYesMissing | null;
         tanfAmount?: number | null;
-        tanfChildCare?: boolean | null;
-        tanfTransportation?: boolean | null;
+        tanfChildCare?: NoYesMissing | null;
+        tanfTransportation?: NoYesMissing | null;
         totalMonthlyIncome?: string | null;
-        unemployment?: boolean | null;
+        unemployment?: NoYesMissing | null;
         unemploymentAmount?: number | null;
-        vaDisabilityNonService?: boolean | null;
+        vaDisabilityNonService?: NoYesMissing | null;
         vaDisabilityNonServiceAmount?: number | null;
-        vaDisabilityService?: boolean | null;
+        vaDisabilityService?: NoYesMissing | null;
         vaDisabilityServiceAmount?: number | null;
-        vaMedicalServices?: boolean | null;
-        wic?: boolean | null;
-        workersComp?: boolean | null;
+        vaMedicalServices?: NoYesMissing | null;
+        wic?: NoYesMissing | null;
+        workersComp?: NoYesMissing | null;
         workersCompAmount?: number | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
         enrollment: {
@@ -8521,7 +8531,7 @@ export type OrganizationDetailFieldsFragment = {
   __typename?: 'Organization';
   description?: string | null;
   contactInformation?: string | null;
-  victimServiceProvider?: boolean | null;
+  victimServiceProvider: NoYesMissing;
 };
 
 export type OrganizationAllFieldsFragment = {
@@ -8530,7 +8540,7 @@ export type OrganizationAllFieldsFragment = {
   organizationName: string;
   description?: string | null;
   contactInformation?: string | null;
-  victimServiceProvider?: boolean | null;
+  victimServiceProvider: NoYesMissing;
 };
 
 export type ProjectAllFieldsFragment = {
@@ -8538,15 +8548,15 @@ export type ProjectAllFieldsFragment = {
   id: string;
   projectName: string;
   projectType?: ProjectType | null;
-  HMISParticipatingProject?: boolean | null;
+  HMISParticipatingProject?: NoYesMissing | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
   contactInformation?: string | null;
-  continuumProject?: boolean | null;
+  continuumProject?: NoYesMissing | null;
   description?: string | null;
   housingType?: HousingType | null;
   operatingEndDate?: string | null;
   operatingStartDate: string;
-  residentialAffiliation?: boolean | null;
+  residentialAffiliation?: NoYesMissing | null;
   targetPopulation?: TargetPopulation | null;
   trackingMethod?: TrackingMethod | null;
   organization: {
@@ -8648,15 +8658,15 @@ export type GetProjectQuery = {
     id: string;
     projectName: string;
     projectType?: ProjectType | null;
-    HMISParticipatingProject?: boolean | null;
+    HMISParticipatingProject?: NoYesMissing | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
     contactInformation?: string | null;
-    continuumProject?: boolean | null;
+    continuumProject?: NoYesMissing | null;
     description?: string | null;
     housingType?: HousingType | null;
     operatingEndDate?: string | null;
     operatingStartDate: string;
-    residentialAffiliation?: boolean | null;
+    residentialAffiliation?: NoYesMissing | null;
     targetPopulation?: TargetPopulation | null;
     trackingMethod?: TrackingMethod | null;
     organization: {
@@ -8904,7 +8914,7 @@ export type GetOrganizationQuery = {
     organizationName: string;
     description?: string | null;
     contactInformation?: string | null;
-    victimServiceProvider?: boolean | null;
+    victimServiceProvider: NoYesMissing;
   } | null;
 };
 
@@ -8956,15 +8966,15 @@ export type GetOrganizationWithPaginatedProjectsQuery = {
         id: string;
         projectName: string;
         projectType?: ProjectType | null;
-        HMISParticipatingProject?: boolean | null;
+        HMISParticipatingProject?: NoYesMissing | null;
         HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
         contactInformation?: string | null;
-        continuumProject?: boolean | null;
+        continuumProject?: NoYesMissing | null;
         description?: string | null;
         housingType?: HousingType | null;
         operatingEndDate?: string | null;
         operatingStartDate: string;
-        residentialAffiliation?: boolean | null;
+        residentialAffiliation?: NoYesMissing | null;
         targetPopulation?: TargetPopulation | null;
         trackingMethod?: TrackingMethod | null;
         organization: {

@@ -7118,8 +7118,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7142,8 +7142,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7684,8 +7684,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7696,8 +7696,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10497,8 +10497,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10533,8 +10533,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10573,8 +10573,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10657,8 +10657,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10681,8 +10681,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10709,8 +10709,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10773,8 +10773,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10813,8 +10813,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10825,8 +10825,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10981,8 +10981,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11017,8 +11017,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11041,8 +11041,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11065,8 +11065,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11077,8 +11077,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11101,8 +11101,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11125,8 +11125,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11149,8 +11149,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11161,8 +11161,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11173,8 +11173,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11197,8 +11197,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11221,8 +11221,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11245,8 +11245,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11257,8 +11257,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11281,8 +11281,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11293,8 +11293,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11317,8 +11317,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11353,8 +11353,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11377,8 +11377,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11401,8 +11401,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11413,8 +11413,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -11425,8 +11425,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -14302,6 +14302,41 @@
       },
       {
         "kind": "ENUM",
+        "name": "NoYesMissing",
+        "description": "1.7",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NO",
+            "description": "(0) No",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "YES",
+            "description": "(1) Yes",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "NoYesReasonsForMissingData",
         "description": "1.8",
         "fields": null,
@@ -14371,7 +14406,7 @@
       {
         "kind": "OBJECT",
         "name": "Organization",
-        "description": "HUD Organization",
+        "description": null,
         "fields": [
           {
             "name": "access",
@@ -14579,9 +14614,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "NoYesMissing",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -15098,8 +15137,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -15166,8 +15205,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -15570,8 +15609,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
