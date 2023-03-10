@@ -2334,11 +2334,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'recordType',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'RecordType', ofType: null },
-        },
+        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
       },
       {
         name: 'referralOutcome',
@@ -2350,11 +2346,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'typeProvided',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
-        },
+        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
       },
     ],
   },
