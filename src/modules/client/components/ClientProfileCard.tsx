@@ -18,7 +18,7 @@ import ClientImageUploadDialog from '@/components/elements/input/ClientImageUplo
 import NotSpecified from '@/components/elements/NotSpecified';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
-import { ClientSafeDobAge } from '@/modules/hmis/components/ClientDobAge';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
@@ -360,10 +360,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     ? { Pronouns: pronouns(client) }
                     : undefined),
                   Age: (
-                    <ClientSafeDobAge
-                      client={client}
-                      noValue={<NotSpecified />}
-                    />
+                    <ClientDobAge client={client} noValue={<NotSpecified />} />
                   ),
                   ...(canViewSsn
                     ? {

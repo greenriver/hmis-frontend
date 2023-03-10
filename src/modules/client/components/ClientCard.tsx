@@ -16,7 +16,7 @@ import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import RouterLink from '@/components/elements/RouterLink';
-import { ClientSafeDobAge } from '@/modules/hmis/components/ClientDobAge';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
@@ -201,7 +201,7 @@ const ClientCard: React.FC<Props> = ({
                   component={Box}
                   sx={{ display: 'flex', gap: 0.5 }}
                 >
-                  Age: <ClientSafeDobAge client={client} />
+                  Age: <ClientDobAge client={client} />
                 </Typography>
                 <ClientPermissionsFilter
                   id={client.id}

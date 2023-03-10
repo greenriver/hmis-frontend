@@ -1,4 +1,3 @@
-import { compact } from 'lodash-es';
 import { Navigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
@@ -24,7 +23,6 @@ const EnrollmentsRoute: React.FC<
 > = ({
   clientIdParam = 'clientId',
   enrollmentIdParam = 'enrollmentId',
-  view = false,
   edit = false,
   redirectRoute,
   getRouteParams = (x) => x,
@@ -33,13 +31,9 @@ const EnrollmentsRoute: React.FC<
   const { [clientIdParam]: clientId, [enrollmentIdParam]: enrollmentId } =
     useSafeParams();
 
-  const [allowed, { loading, data }] = useHasClientPermissions(
-    clientId || '',
-    compact([
-      view ? 'canViewEnrollmentDetails' : null,
-      edit ? 'canEditEnrollments' : null,
-    ])
-  );
+  const [allowed, { loading, data }] = useHasClientPermissions(clientId || '', [
+    edit ? 'canEditEnrollments' : 'canViewEnrollmentDetails',
+  ]);
 
   if (loading) return <Loading />;
   if (!data) {
