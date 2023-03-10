@@ -46,7 +46,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         label: 'Continuum Project',
         value: (
           <YesNoDisplay
-            booleanValue={project.continuumProject}
+            enumValue={project.continuumProject}
             fallback={notSpecified}
           />
         ),
@@ -66,7 +66,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
               label: 'Residential Affiliation',
               value: (
                 <YesNoDisplay
-                  booleanValue={project.residentialAffiliation}
+                  enumValue={project.residentialAffiliation}
                   fallback={notSpecified}
                 />
               ),
@@ -90,7 +90,7 @@ const ProjectDetails = ({ project }: { project: ProjectAllFieldsFragment }) => {
         label: 'HMIS Participating Project',
         value: (
           <YesNoDisplay
-            booleanValue={project.HMISParticipatingProject}
+            enumValue={project.HMISParticipatingProject}
             fallback={notSpecified}
           />
         ),

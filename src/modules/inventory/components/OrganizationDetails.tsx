@@ -2,6 +2,8 @@ import { Grid } from '@mui/material';
 
 import DetailGrid from '@/components/elements/DetailGrid';
 import MultilineTypography from '@/components/elements/MultilineTypography';
+import NotSpecified from '@/components/elements/NotSpecified';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { OrganizationDetailFieldsFragment } from '@/types/gqlTypes';
 
 const OrganizationDetails = ({
@@ -22,7 +24,12 @@ const OrganizationDetails = ({
         data={[
           {
             label: 'Victim Service Provider',
-            value: organization?.victimServiceProvider ? 'Yes' : 'No',
+            value: (
+              <YesNoDisplay
+                enumValue={organization?.victimServiceProvider}
+                fallback={<NotSpecified />}
+              />
+            ),
           },
         ]}
       />
