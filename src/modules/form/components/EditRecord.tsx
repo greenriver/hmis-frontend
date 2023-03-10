@@ -1,4 +1,3 @@
-import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
@@ -25,14 +24,16 @@ import {
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {
-  FormDefinitionJson,
+  FormInput,
   FormRole,
   ItemType,
+  SubmitFormMutation,
   useGetFormDefinitionQuery,
+  useSubmitFormMutation,
   ValidationError,
 } from '@/types/gqlTypes';
 
-export interface Props<RecordType, Query, QueryVariables>
+export interface Props<RecordType>
   extends Omit<
     DynamicFormProps,
     | 'initialValues'
@@ -44,38 +45,35 @@ export interface Props<RecordType, Query, QueryVariables>
   > {
   formRole: FormRole;
   record?: RecordType;
-  queryDocument: TypedDocumentNode<Query, QueryVariables>;
-  inputVariables?: Record<string, any>;
+  inputVariables?: Omit<
+    FormInput,
+    'confirmed' | 'formDefinitionId' | 'values' | 'hudValues' | 'recordId'
+  >;
   localConstants?: LocalConstants;
-  onCompleted: (data: Query) => void;
-  getErrors: (data: Query) => ValidationError[] | undefined;
-  confirmable?: boolean; // whether mutation supports `confirmed` for warning confirmation on submit
+  onCompleted: (data: RecordType) => void;
   title: ReactNode;
   navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
   top?: number;
 }
 
+type AllowedTypes = NonNullable<
+  NonNullable<SubmitFormMutation['submitForm']>['record']
+>;
+
 /**
- * Renders a form for creating or updating a record of type RecordType.
+ * Renders a form for creating or updating a record
  */
-const EditRecord = <
-  RecordType extends { id: string },
-  Query extends Record<string, string | Record<string, unknown> | null>,
-  QueryVariables extends { input: unknown }
->({
+const EditRecord = <RecordType extends AllowedTypes>({
   formRole,
   record,
-  queryDocument,
-  getErrors,
   onCompleted,
   title,
   navigationProps,
-  confirmable = false,
   inputVariables = {},
   localConstants = {},
   top = STICKY_BAR_HEIGHT,
   ...props
-}: Props<RecordType, Query, QueryVariables>) => {
+}: Props<RecordType>) => {
   const [errors, setErrors] = useState<ValidationError[] | undefined>();
 
   const {
@@ -88,24 +86,22 @@ const EditRecord = <
 
   useScrollToHash(definitionLoading, top);
 
-  const definition: FormDefinitionJson | undefined = useMemo(
-    () => data?.getFormDefinition?.definition,
-    [data]
-  );
+  const definition = useMemo(() => data?.getFormDefinition, [data]);
   const itemMap = useMemo(
-    () => (definition ? getItemMap(definition, false) : undefined),
+    () => (definition ? getItemMap(definition.definition, false) : undefined),
     [definition]
   );
 
-  const [mutateFunction, { loading: saveLoading, error: mutationError }] =
-    useMutation<Query, QueryVariables>(queryDocument, {
+  const [submitForm, { loading: saveLoading, error: mutationError }] =
+    useSubmitFormMutation({
       onCompleted: (data) => {
-        const errors = getErrors(data) || [];
+        const errors = data.submitForm?.errors || [];
         window.scrollTo(0, 0);
         if (errors.length > 0) {
           setErrors(errors);
         } else {
-          onCompleted(data);
+          const record = data.submitForm?.record || undefined;
+          if (record) onCompleted(record as RecordType);
         }
       },
     });
@@ -113,7 +109,7 @@ const EditRecord = <
   const initialValues = useMemo(() => {
     if (!itemMap || !definition) return {};
     const initialValuesFromDefinition = getInitialValues(
-      definition,
+      definition.definition,
       localConstants
     );
     if (!record) return initialValuesFromDefinition;
@@ -133,10 +129,10 @@ const EditRecord = <
   const submitHandler: DynamicFormOnSubmit = useCallback(
     (event, values, confirmed = false) => {
       if (!definition) return;
-      if (debugFormValues(event, values, definition)) return;
+      if (debugFormValues(event, values, definition.definition)) return;
 
       const hudValues = transformSubmitValues({
-        definition,
+        definition: definition.definition,
         values,
         autofillNotCollected: true,
         autofillNulls: true,
@@ -145,22 +141,25 @@ const EditRecord = <
 
       console.log('Submitting form values:', hudValues);
       const input = {
-        input: { ...hudValues, ...inputVariables },
-        id: record?.id,
-        confirmed: confirmable ? confirmed : undefined,
+        formDefinitionId: definition.id,
+        values,
+        hudValues,
+        recordId: record?.id,
+        confirmed,
+        ...inputVariables,
       };
 
       setErrors([]);
-      void mutateFunction({ variables: { input } as QueryVariables });
+      void submitForm({ variables: { input: { input } } });
     },
-    [definition, inputVariables, mutateFunction, record, confirmable]
+    [definition, inputVariables, submitForm, record]
   );
 
   // Top-level items for the left nav (of >=3 groups)
   const leftNavItems = useMemo(() => {
     if (!definition || !itemMap) return false;
 
-    let topLevelItems = definition.item.filter(
+    let topLevelItems = definition.definition.item.filter(
       (i) => i.type === ItemType.Group && !i.hidden
     );
 
@@ -181,7 +180,7 @@ const EditRecord = <
   const form = (
     <>
       <DynamicForm
-        definition={definition}
+        definition={definition.definition}
         onSubmit={submitHandler}
         initialValues={initialValues}
         loading={saveLoading}
