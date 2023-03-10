@@ -11,6 +11,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes, Routes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -58,30 +59,35 @@ const ViewEnrollment = () => {
           <Paper sx={{ p: 2 }}>
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>
-              <ButtonLink
-                to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
-                  clientId,
-                  enrollmentId,
-                  formRole: FormRole.Update.toLowerCase(),
-                })}
-                Icon={LibraryAddIcon}
-                leftAlign
+              <ClientPermissionsFilter
+                id={clientId}
+                permissions={['canEditEnrollments']}
               >
-                New Assessment
-              </ButtonLink>
-              <ButtonLink
-                to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
-                  clientId,
-                  enrollmentId,
-                })}
-                Icon={LibraryAddIcon}
-                leftAlign
-              >
-                Add Service
-              </ButtonLink>
-              <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
-                Add Event
-              </ButtonLink>
+                <ButtonLink
+                  to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
+                    clientId,
+                    enrollmentId,
+                    formRole: FormRole.Update.toLowerCase(),
+                  })}
+                  Icon={LibraryAddIcon}
+                  leftAlign
+                >
+                  New Assessment
+                </ButtonLink>
+                <ButtonLink
+                  to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
+                    clientId,
+                    enrollmentId,
+                  })}
+                  Icon={LibraryAddIcon}
+                  leftAlign
+                >
+                  Add Service
+                </ButtonLink>
+                <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
+                  Add Event
+                </ButtonLink>
+              </ClientPermissionsFilter>
               <ButtonLink
                 fullWidth
                 to={generateSafePath(Routes.PROJECT, {

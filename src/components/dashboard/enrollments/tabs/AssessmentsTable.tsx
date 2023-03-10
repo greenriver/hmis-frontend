@@ -10,6 +10,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -110,37 +111,44 @@ const AssessmentsTable = ({
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
+  const [canEditEnrollments] = useHasClientPermissions(clientId, [
+    'canEditEnrollments',
+  ]);
+
   const tableColumns = useMemo(
-    () => [
-      ...columns,
-      {
-        header: '',
-        width: '1%',
-        render: (record) => (
-          <Stack
-            direction='row'
-            spacing={1}
-            justifyContent='flex-end'
-            flexGrow={1}
-          >
-            <Button
-              data-testid='deleteService'
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setRecordToDelete(record);
-              }}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
-    ],
-    []
+    () =>
+      canEditEnrollments
+        ? [
+            ...columns,
+            {
+              header: '',
+              width: '1%',
+              render: (record) => (
+                <Stack
+                  direction='row'
+                  spacing={1}
+                  justifyContent='flex-end'
+                  flexGrow={1}
+                >
+                  <Button
+                    data-testid='deleteService'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setRecordToDelete(record);
+                    }}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : columns,
+    [canEditEnrollments]
   );
 
   return (
