@@ -932,6 +932,23 @@ export const createInitialValuesFromSavedValues = (
   return initialValues;
 };
 
+export const createValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) => transformSubmitValues({ definition, values });
+
+export const createHudValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) =>
+  transformSubmitValues({
+    definition,
+    values,
+    // autofillNulls: true,
+    keyByFieldName: true,
+    autofillHidden: true,
+  });
+
 export const debugFormValues = (
   event: React.MouseEvent<HTMLButtonElement>,
   values: FormValues,

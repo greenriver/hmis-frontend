@@ -2,6 +2,8 @@ import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import {
+  createHudValuesForSubmit,
+  createValuesForSubmit,
   debugFormValues,
   getInitialValues,
   getItemMap,
@@ -19,10 +21,7 @@ import DynamicForm, {
   DynamicFormOnSubmit,
   DynamicFormProps,
 } from '@/modules/form/components/DynamicForm';
-import {
-  createInitialValuesFromRecord,
-  transformSubmitValues,
-} from '@/modules/form/util/formUtil';
+import { createInitialValuesFromRecord } from '@/modules/form/util/formUtil';
 import {
   FormInput,
   FormRole,
@@ -129,21 +128,21 @@ const EditRecord = <RecordType extends AllowedTypes>({
   const submitHandler: DynamicFormOnSubmit = useCallback(
     (event, values, confirmed = false) => {
       if (!definition) return;
-      if (debugFormValues(event, values, definition.definition)) return;
+      if (
+        debugFormValues(
+          event,
+          values,
+          definition.definition,
+          createValuesForSubmit,
+          createHudValuesForSubmit
+        )
+      )
+        return;
 
-      const hudValues = transformSubmitValues({
-        definition: definition.definition,
-        values,
-        autofillNotCollected: true,
-        autofillNulls: true,
-        keyByFieldName: true,
-      });
-
-      console.log('Submitting form values:', hudValues);
       const input = {
         formDefinitionId: definition.id,
-        values,
-        hudValues,
+        values: createValuesForSubmit(values, definition.definition),
+        hudValues: createHudValuesForSubmit(values, definition.definition),
         recordId: record?.id,
         confirmed,
         ...inputVariables,
