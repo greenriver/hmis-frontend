@@ -6604,6 +6604,150 @@ export type DeleteAssessmentMutation = {
   } | null;
 };
 
+export type SubmitFormMutationVariables = Exact<{
+  input: SubmitFormInput;
+}>;
+
+export type SubmitFormMutation = {
+  __typename?: 'Mutation';
+  submitForm?: {
+    __typename?: 'SubmitFormPayload';
+    clientMutationId?: string | null;
+    record?:
+      | {
+          __typename?: 'Client';
+          dobDataQuality: DobDataQuality;
+          ethnicity: Ethnicity;
+          gender: Array<Gender>;
+          pronouns: Array<string>;
+          nameDataQuality: NameDataQuality;
+          personalId: string;
+          race: Array<Race>;
+          ssnDataQuality: SsnDataQuality;
+          veteranStatus: NoYesReasonsForMissingData;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          id: string;
+          dob?: string | null;
+          ssn?: string | null;
+          firstName?: string | null;
+          middleName?: string | null;
+          preferredName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+          image?: {
+            __typename?: 'ClientImage';
+            id: string;
+            contentType: string;
+            base64: string;
+          } | null;
+        }
+      | {
+          __typename?: 'Funder';
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          endDate?: string | null;
+          funder: FundingSource;
+          grantId: string;
+          id: string;
+          otherFunder?: string | null;
+          startDate: string;
+        }
+      | {
+          __typename?: 'Inventory';
+          availability?: Availability | null;
+          cocCode: string;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          esBedType?: BedType | null;
+          householdType: HouseholdType;
+          id: string;
+          inventoryEndDate?: string | null;
+          inventoryStartDate: string;
+          beds: { __typename?: 'BedsPaginated'; nodesCount: number };
+          units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+        }
+      | {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+          description?: string | null;
+          contactInformation?: string | null;
+          victimServiceProvider?: boolean | null;
+        }
+      | {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
+          HMISParticipatingProject?: boolean | null;
+          HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
+          contactInformation?: string | null;
+          continuumProject?: boolean | null;
+          description?: string | null;
+          housingType?: HousingType | null;
+          operatingEndDate?: string | null;
+          operatingStartDate: string;
+          residentialAffiliation?: boolean | null;
+          targetPopulation?: TargetPopulation | null;
+          trackingMethod?: TrackingMethod | null;
+          organization: {
+            __typename?: 'Organization';
+            id: string;
+            organizationName: string;
+          };
+        }
+      | {
+          __typename?: 'ProjectCoc';
+          address1?: string | null;
+          address2?: string | null;
+          city?: string | null;
+          cocCode: string;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          geocode: string;
+          geographyType?: GeographyType | null;
+          id: string;
+          state?: string | null;
+          zip?: string | null;
+        }
+      | {
+          __typename?: 'Service';
+          id: string;
+          dateProvided: string;
+          movingOnOtherType?: string | null;
+          recordType?: RecordType | null;
+          referralOutcome?: PathReferralOutcome | null;
+          subTypeProvided?: ServiceSubTypeProvided | null;
+          typeProvided?: ServiceTypeProvided | null;
+          otherTypeProvided?: string | null;
+          FAAmount?: number | null;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+        }
+      | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+    }>;
+  } | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -11104,6 +11248,90 @@ export type DeleteAssessmentMutationResult =
 export type DeleteAssessmentMutationOptions = Apollo.BaseMutationOptions<
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables
+>;
+export const SubmitFormDocument = gql`
+  mutation SubmitForm($input: SubmitFormInput!) {
+    submitForm(input: $input) {
+      clientMutationId
+      record {
+        ... on Client {
+          ...ClientFields
+        }
+        ... on Organization {
+          ...OrganizationAllFields
+        }
+        ... on Project {
+          ...ProjectAllFields
+        }
+        ... on Funder {
+          ...FunderFields
+        }
+        ... on ProjectCoc {
+          ...ProjectCocFields
+        }
+        ... on Inventory {
+          ...InventoryFields
+        }
+        ... on Service {
+          ...ServiceFields
+        }
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+  ${OrganizationAllFieldsFragmentDoc}
+  ${ProjectAllFieldsFragmentDoc}
+  ${FunderFieldsFragmentDoc}
+  ${ProjectCocFieldsFragmentDoc}
+  ${InventoryFieldsFragmentDoc}
+  ${ServiceFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type SubmitFormMutationFn = Apollo.MutationFunction<
+  SubmitFormMutation,
+  SubmitFormMutationVariables
+>;
+
+/**
+ * __useSubmitFormMutation__
+ *
+ * To run a mutation, you first call `useSubmitFormMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSubmitFormMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [submitFormMutation, { data, loading, error }] = useSubmitFormMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSubmitFormMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SubmitFormMutation,
+    SubmitFormMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SubmitFormMutation, SubmitFormMutationVariables>(
+    SubmitFormDocument,
+    options
+  );
+}
+export type SubmitFormMutationHookResult = ReturnType<
+  typeof useSubmitFormMutation
+>;
+export type SubmitFormMutationResult =
+  Apollo.MutationResult<SubmitFormMutation>;
+export type SubmitFormMutationOptions = Apollo.BaseMutationOptions<
+  SubmitFormMutation,
+  SubmitFormMutationVariables
 >;
 export const SearchClientsDocument = gql`
   query SearchClients(
