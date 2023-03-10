@@ -28,7 +28,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('name').safeType('X Test Organization');
   cy.getById('description').type('Description{enter}line two{enter}line three');
   cy.getById('contact').type('Contact{enter}line two{enter}line three');
-  cy.choose('victimServiceProvider', NoYesMissing.No);
+  cy.checkOption('victimServiceProvider', NoYesMissing.No);
   cy.testId('formButton-submit').click();
   cy.testId('organizationDetailsCard').contains('line two');
 
