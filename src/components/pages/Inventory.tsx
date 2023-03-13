@@ -58,9 +58,11 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
-      // inventoryId: inventoryId,
+      inventoryId,
+      bedInventory: data?.inventory?.bedInventory || 0,
+      unitInventory: data?.inventory?.unitInventory || 0,
     };
-  }, [project]);
+  }, [project, inventoryId, data]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
@@ -75,10 +77,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
         }
         onCompleted={onCompleted}
         formRole={FormRole.Inventory}
-        inputVariables={{
-          projectId,
-          //unitInventory: 0, bedInventory: 0
-        }}
+        inputVariables={{ projectId }}
         record={data?.inventory || undefined}
         title={<ProjectFormTitle title={title} project={project} />}
         localConstants={localConstants}

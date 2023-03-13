@@ -6,7 +6,11 @@
 
 Cypress.session.clearAllSavedSessions();
 
-import { EmptyProject, EmptyProjectCoc } from 'support/assessmentConstants';
+import {
+  EmptyProject,
+  EmptyProjectCoc,
+  HIDDEN,
+} from 'support/assessmentConstants';
 
 import {
   FundingSource,
@@ -106,15 +110,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Edit project, assert details updated
   cy.testId('updateProjectButton').click();
-  // Form values should have nulls filled in
-  cy.expectHudValuesToDeepEqual({
-    ...expectedFormValues,
-    housingType: null,
-    targetPopulation: 'NOT_APPLICABLE',
-    HOPWAMedAssistedLivingFac: null,
-    continuumProject: null,
-    HMISParticipatingProject: null,
-  });
+  // Form values should be the same
+  cy.expectHudValuesToDeepEqual(expectedFormValues);
 
   const newProjectName = 'X Renamed Project';
   cy.inputId('2.02.2').clear().safeType(newProjectName);
@@ -148,7 +145,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('other').should('exist');
 
   cy.testId('formButton-submit').click();
-  cy.testId('formErrorAlert').contains('Other funder').should('exist');
+  cy.testId('formErrorAlert').contains('Other Funder').should('exist');
 
   cy.inputId('other').safeType('other funder details');
 
@@ -199,7 +196,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     endDate: '2025-01-01',
     funder: 'HUD_ESG_CV',
     grantId: 'ABC123',
-    otherFunder: null,
+    otherFunder: HIDDEN,
     startDate: '2022-01-01',
   });
   cy.testId('formButton-submit').click();
@@ -221,7 +218,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.checkOption('es-bed-type', 'VOUCHER');
   cy.inputId('2.07.1').safeType('01/01/2022');
   cy.testId('formButton-submit').click();
-  cy.testId('formErrorAlert').contains('CoC code').should('exist');
+  cy.testId('formErrorAlert').contains('CoC Code').should('exist');
   cy.testId('formButton-discard').click();
 
   /*** Project CoC ***/

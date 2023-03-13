@@ -105,7 +105,7 @@ export const EmptyDisabilityGroup = {
 export const EmptyProjectCoc = {
   cocCode: null,
   geocode: null,
-  geographyType: 'DATA_NOT_COLLECTED',
+  geographyType: null,
   address1: null,
   address2: null,
   city: null,
@@ -123,7 +123,7 @@ export const EmptyProject = {
   trackingMethod: HIDDEN,
   residentialAffiliation: HIDDEN,
   housingType: null,
-  targetPopulation: 'NOT_APPLICABLE',
+  targetPopulation: null,
   HOPWAMedAssistedLivingFac: null,
   continuumProject: null,
   HMISParticipatingProject: null,
