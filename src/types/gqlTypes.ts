@@ -6669,6 +6669,11 @@ export type ClientIdentificationFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
+  access: {
+    __typename?: 'ClientAccess';
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+  };
 };
 
 export type ClientFieldsFragment = {
@@ -6695,6 +6700,11 @@ export type ClientFieldsFragment = {
   lastName?: string | null;
   nameSuffix?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'ClientAccess';
+    canViewFullSsn: boolean;
+    canViewPartialSsn: boolean;
+  };
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6740,6 +6750,11 @@ export type HouseholdClientFieldsFragment = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
   };
   enrollment: {
     __typename?: 'Enrollment';
@@ -6785,6 +6800,11 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
   };
 };
 
@@ -6857,6 +6877,11 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         dob?: string | null;
         age?: number | null;
         ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+        };
       };
       enrollment: {
         __typename?: 'Enrollment';
@@ -7099,6 +7124,11 @@ export type SearchClientsQuery = {
       lastName?: string | null;
       nameSuffix?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7139,6 +7169,11 @@ export type GetClientQuery = {
     lastName?: string | null;
     nameSuffix?: string | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
+    access: {
+      __typename?: 'ClientAccess';
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
+    };
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -7359,6 +7394,11 @@ export type CreateClientMutation = {
       lastName?: string | null;
       nameSuffix?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7415,6 +7455,11 @@ export type UpdateClientMutation = {
       lastName?: string | null;
       nameSuffix?: string | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7587,6 +7632,11 @@ export type UpdateEnrollmentMutation = {
             dob?: string | null;
             age?: number | null;
             ssn?: string | null;
+            access: {
+              __typename?: 'ClientAccess';
+              canViewFullSsn: boolean;
+              canViewPartialSsn: boolean;
+            };
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -7657,6 +7707,11 @@ export type SetHoHMutation = {
             dob?: string | null;
             age?: number | null;
             ssn?: string | null;
+            access: {
+              __typename?: 'ClientAccess';
+              canViewFullSsn: boolean;
+              canViewPartialSsn: boolean;
+            };
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -7769,6 +7824,11 @@ export type AddHouseholdMembersMutation = {
             dob?: string | null;
             age?: number | null;
             ssn?: string | null;
+            access: {
+              __typename?: 'ClientAccess';
+              canViewFullSsn: boolean;
+              canViewPartialSsn: boolean;
+            };
           };
           enrollment: {
             __typename?: 'Enrollment';
@@ -8023,6 +8083,11 @@ export type GetEnrollmentWithHouseholdQuery = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          access: {
+            __typename?: 'ClientAccess';
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+          };
         };
       }>;
     };
@@ -8151,6 +8216,11 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               lastName?: string | null;
               nameSuffix?: string | null;
               user?: { __typename: 'User'; id: string; name: string } | null;
+              access: {
+                __typename?: 'ClientAccess';
+                canViewFullSsn: boolean;
+                canViewPartialSsn: boolean;
+              };
               image?: {
                 __typename?: 'ClientImage';
                 id: string;
@@ -8824,6 +8894,11 @@ export type GetProjectEnrollmentsQuery = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          access: {
+            __typename?: 'ClientAccess';
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+          };
         };
         project: {
           __typename?: 'Project';
@@ -10128,6 +10203,10 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     dob
     age
     ssn
+    access {
+      canViewFullSsn
+      canViewPartialSsn
+    }
   }
 `;
 export const ClientNameFragmentDoc = gql`

@@ -42,6 +42,10 @@ fragment ClientIdentificationFields on Client {
   dob
   age
   ssn
+  access {
+    canViewFullSsn
+    canViewPartialSsn
+  }
 }
 
 fragment ClientFields on Client {

@@ -4,7 +4,6 @@ import { ReactNode } from 'react';
 import ClickToShow from '@/components/elements/ClickToShow';
 import NotSpecified from '@/components/elements/NotSpecified';
 import { maskSSN } from '@/modules/hmis/hmisUtil';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props extends TypographyProps {
@@ -28,19 +27,9 @@ const ClientSsn = ({ client, noValue, lastFour, variant = 'body2' }: Props) => {
   );
 };
 
-export const ClientSafeSsn: React.FC<Props> = (props) => {
-  const { client } = props;
-
-  const [canViewFullSsn] = useHasClientPermissions(client.id, [
-    'canViewFullSsn',
-  ]);
-  const [canViewPartialSsn] = useHasClientPermissions(client.id, [
-    'canViewPartialSsn',
-  ]);
-
-  const canSeeSsn = canViewFullSsn || canViewPartialSsn;
-
-  if (!canSeeSsn) return null;
+export const ClientSafeSsn: React.FC<Props> = ({ client, ...props }) => {
+  const { canViewFullSsn, canViewPartialSsn } = client.access;
+  if (!canViewFullSsn && !canViewPartialSsn) return null;
 
   return (
     <ClientSsn
