@@ -162,7 +162,8 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.getByIds(threeFourFive).should('not.exist');
 
   // Re-enabling should add back old values (make previousStreetEssh null)
-  cy.checkOption('3.917.C', 'NO'); // un-check
+  cy.uncheckOption('3.917.C', 'NO'); // un-check
+  cy.getChecked('3.917.C').should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
     ...expectedHudValues,
     'Enrollment.previousStreetEssh': null,
@@ -217,35 +218,35 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
     ...EmptyInsurance,
     ...EmptyNonCashBenefits,
     'IncomeBenefit.incomeFromAnySource': 'YES',
-    'IncomeBenefit.earned': true,
+    'IncomeBenefit.earned': 'YES',
     'IncomeBenefit.earnedAmount': incomePerSource,
-    'IncomeBenefit.unemployment': true,
+    'IncomeBenefit.unemployment': 'YES',
     'IncomeBenefit.unemploymentAmount': incomePerSource,
-    'IncomeBenefit.ssi': true,
+    'IncomeBenefit.ssi': 'YES',
     'IncomeBenefit.ssiAmount': incomePerSource,
-    'IncomeBenefit.ssdi': true,
+    'IncomeBenefit.ssdi': 'YES',
     'IncomeBenefit.ssdiAmount': incomePerSource,
-    'IncomeBenefit.vaDisabilityService': true,
+    'IncomeBenefit.vaDisabilityService': 'YES',
     'IncomeBenefit.vaDisabilityServiceAmount': incomePerSource,
-    'IncomeBenefit.vaDisabilityNonService': true,
+    'IncomeBenefit.vaDisabilityNonService': 'YES',
     'IncomeBenefit.vaDisabilityNonServiceAmount': incomePerSource,
-    'IncomeBenefit.privateDisability': true,
+    'IncomeBenefit.privateDisability': 'YES',
     'IncomeBenefit.privateDisabilityAmount': incomePerSource,
-    'IncomeBenefit.workersComp': true,
+    'IncomeBenefit.workersComp': 'YES',
     'IncomeBenefit.workersCompAmount': incomePerSource,
-    'IncomeBenefit.tanf': true,
+    'IncomeBenefit.tanf': 'YES',
     'IncomeBenefit.tanfAmount': incomePerSource,
-    'IncomeBenefit.ga': true,
+    'IncomeBenefit.ga': 'YES',
     'IncomeBenefit.gaAmount': incomePerSource,
-    'IncomeBenefit.socSecRetirement': true,
+    'IncomeBenefit.socSecRetirement': 'YES',
     'IncomeBenefit.socSecRetirementAmount': incomePerSource,
-    'IncomeBenefit.pension': true,
+    'IncomeBenefit.pension': 'YES',
     'IncomeBenefit.pensionAmount': incomePerSource,
-    'IncomeBenefit.childSupport': true,
+    'IncomeBenefit.childSupport': 'YES',
     'IncomeBenefit.childSupportAmount': incomePerSource,
-    'IncomeBenefit.alimony': true,
+    'IncomeBenefit.alimony': 'YES',
     'IncomeBenefit.alimonyAmount': incomePerSource,
-    'IncomeBenefit.otherIncomeSource': true,
+    'IncomeBenefit.otherIncomeSource': 'YES',
     'IncomeBenefit.otherIncomeAmount': incomePerSource,
     'IncomeBenefit.otherIncomeSourceIdentify': 'other description',
   };
@@ -309,12 +310,12 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
 
   const expectedHudValues = {
     'IncomeBenefit.benefitsFromAnySource': 'YES',
-    'IncomeBenefit.snap': true,
-    'IncomeBenefit.wic': true,
-    'IncomeBenefit.tanfChildCare': true,
-    'IncomeBenefit.tanfTransportation': true,
-    'IncomeBenefit.otherTanf': true,
-    'IncomeBenefit.otherBenefitsSource': true,
+    'IncomeBenefit.snap': 'YES',
+    'IncomeBenefit.wic': 'YES',
+    'IncomeBenefit.tanfChildCare': 'YES',
+    'IncomeBenefit.tanfTransportation': 'YES',
+    'IncomeBenefit.otherTanf': 'YES',
+    'IncomeBenefit.otherBenefitsSource': 'YES',
     'IncomeBenefit.otherBenefitsSourceIdentify': 'other description',
   };
   cy.expectHudValuesToInclude(expectedHudValues);
@@ -336,7 +337,7 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
   cy.getById(`4.03.4`).find('input').uncheck();
   cy.expectHudValuesToInclude({
     ...expectedHudValues,
-    'IncomeBenefit.wic': false,
+    'IncomeBenefit.wic': 'NO',
   });
 });
 
@@ -382,16 +383,16 @@ Cypress.Commands.add('assertHealthInsurance', () => {
 
   const expectedHudValues = {
     'IncomeBenefit.insuranceFromAnySource': 'YES',
-    'IncomeBenefit.medicaid': true,
-    'IncomeBenefit.medicare': true,
-    'IncomeBenefit.schip': true,
-    'IncomeBenefit.vaMedicalServices': true,
-    'IncomeBenefit.employerProvided': true,
-    'IncomeBenefit.cobra': true,
-    'IncomeBenefit.privatePay': true,
-    'IncomeBenefit.stateHealthIns': true,
-    'IncomeBenefit.indianHealthServices': true,
-    'IncomeBenefit.otherInsurance': true,
+    'IncomeBenefit.medicaid': 'YES',
+    'IncomeBenefit.medicare': 'YES',
+    'IncomeBenefit.schip': 'YES',
+    'IncomeBenefit.vaMedicalServices': 'YES',
+    'IncomeBenefit.employerProvided': 'YES',
+    'IncomeBenefit.cobra': 'YES',
+    'IncomeBenefit.privatePay': 'YES',
+    'IncomeBenefit.stateHealthIns': 'YES',
+    'IncomeBenefit.indianHealthServices': 'YES',
+    'IncomeBenefit.otherInsurance': 'YES',
     'IncomeBenefit.otherInsuranceIdentify': 'other description',
   };
   cy.expectHudValuesToInclude(expectedHudValues);
@@ -413,7 +414,7 @@ Cypress.Commands.add('assertHealthInsurance', () => {
   cy.getById(`4.04.4`).find('input').uncheck();
   cy.expectHudValuesToInclude({
     ...expectedHudValues,
-    'IncomeBenefit.medicare': false,
+    'IncomeBenefit.medicare': 'NO',
   });
 });
 
