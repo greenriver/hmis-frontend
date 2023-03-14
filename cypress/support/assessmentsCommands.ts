@@ -56,7 +56,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   // Institutional 1+ year (break)
@@ -70,7 +70,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'ONE_YEAR_OR_LONGER',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   // Reset
@@ -90,7 +90,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   cy.choose('3.917.2', 'ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH');
@@ -118,7 +118,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     // its not a break (it IS under the treshold)
-    'Enrollment.losUnderThreshold': true,
+    'Enrollment.losUnderThreshold': 'YES',
     // previously filled in dependent fields are present
     'Enrollment.dateToStreetEssh': '2022-01-01',
     'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
@@ -135,8 +135,8 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     ...hiddenThreeFourFive,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
-    'Enrollment.losUnderThreshold': true,
-    'Enrollment.previousStreetEssh': false,
+    'Enrollment.losUnderThreshold': 'YES',
+    'Enrollment.previousStreetEssh': 'NO',
   });
 
   // Set previousStreetEssh to true, causing break to disappear
@@ -149,8 +149,8 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   const expectedHudValues = {
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
-    'Enrollment.losUnderThreshold': true,
-    'Enrollment.previousStreetEssh': true,
+    'Enrollment.losUnderThreshold': 'YES',
+    'Enrollment.previousStreetEssh': 'YES',
     'Enrollment.dateToStreetEssh': '2022-01-01',
     'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
     'Enrollment.monthsHomelessPastThreeYears': 'NUM_4',

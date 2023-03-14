@@ -457,7 +457,7 @@ export const buildCommonInputProps = (
 };
 
 /**
- * Trasnform GraphQL value shape into form value shape
+ * Transform GraphQL value shape into form value shape
  *
  * @param value GraphQL value (eg "ES" or "2020-01-01")
  * @param item Form item
@@ -526,7 +526,10 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     } else if (value) {
       return (value as { id: string }).id;
     }
-  } else if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+  } else if (
+    [ItemType.Choice, ItemType.OpenChoice].includes(item.type) ||
+    item.pickListReference
+  ) {
     if (Array.isArray(value)) {
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
