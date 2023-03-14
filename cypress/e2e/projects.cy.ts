@@ -307,6 +307,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     esBedType: 'VOUCHER',
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
+    bedInventory: 0,
+    unitInventory: 0,
   });
 
   // Submit (create Inventory)
