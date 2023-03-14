@@ -105,11 +105,11 @@ const getDifference = (a, b) => {
   const keys = sortedUniq([...Object.keys(a), ...Object.keys(b)]);
   const result = {};
   keys.forEach((k) => {
-    if (a[k] !== b[k]) result[k] = a[k];
+    if (a[k] !== b[k]) {
+      console.log(k, 'expected', b[k], 'got', a[k]);
+      result[k] = a[k];
+    }
   });
-  if (Object.keys(result).length > 0) {
-    console.log('Actual', a, 'Expected', b, 'Difference', result);
-  }
   return result;
 };
 

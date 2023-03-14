@@ -342,11 +342,9 @@ export const getAutofillComparisonValue = (
   }
 
   // Choose first present value from Boolean, Number, and Code attributes
-  return [
-    av.valueBoolean,
-    av.valueNumber,
-    getOptionValue(av.valueCode, targetItem),
-  ].filter((e) => !isNil(e))[0];
+  if (!isNil(av.valueBoolean)) return av.valueBoolean;
+  if (!isNil(av.valueNumber)) return av.valueNumber;
+  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
 };
 
 /**
