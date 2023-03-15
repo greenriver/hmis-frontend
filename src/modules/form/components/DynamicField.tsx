@@ -294,6 +294,24 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         );
       } else if (
+        item.component === Component.Checkbox &&
+        item.pickListReference === 'NoYesMissing'
+      ) {
+        inputComponent = (
+          <LabeledCheckbox
+            checked={value?.code === 'YES'}
+            onChange={(e) => {
+              const checked = (e.target as HTMLInputElement).checked;
+              itemChanged(
+                item.linkId,
+                checked ? { code: 'YES' } : { code: 'NO' }
+              );
+            }}
+            horizontal={horizontal}
+            {...commonInputProps}
+          />
+        );
+      } else if (
         item.component === Component.RadioButtons ||
         item.component === Component.RadioButtonsVertical ||
         (isLocalPickList && options && options.length > 0 && options.length < 4)

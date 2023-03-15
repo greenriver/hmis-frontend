@@ -11,13 +11,7 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import {
-  FormRole,
-  ProjectAllFieldsFragment,
-  UpdateProjectDocument,
-  UpdateProjectMutation,
-  UpdateProjectMutationVariables,
-} from '@/types/gqlTypes';
+import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditProject = () => {
@@ -26,19 +20,16 @@ const EditProject = () => {
   const [crumbs, loading, project] = useProjectCrumbs('Edit Project');
 
   const onCompleted = useCallback(
-    (data: UpdateProjectMutation) => {
-      const updatedProject = data?.updateProject?.project;
-      if (updatedProject) {
-        const id = updatedProject.id;
-        // Force refresh inventory and funder if this project was just
-        // closed, since those can be closed as a side effect.
-        if (updatedProject?.operatingEndDate && !project?.operatingEndDate) {
-          cache.evict({ id: `Project:${id}`, fieldName: 'funders' });
-          cache.evict({ id: `Project:${id}`, fieldName: 'inventories' });
-        }
-
-        navigate(generateSafePath(Routes.PROJECT, { projectId: id }));
+    (updatedProject: ProjectAllFieldsFragment) => {
+      const id = updatedProject.id;
+      // Force refresh inventory and funder if this project was just
+      // closed, since those can be closed as a side effect.
+      if (updatedProject.operatingEndDate && !project?.operatingEndDate) {
+        cache.evict({ id: `Project:${id}`, fieldName: 'funders' });
+        cache.evict({ id: `Project:${id}`, fieldName: 'inventories' });
       }
+
+      navigate(generateSafePath(Routes.PROJECT, { projectId: id }));
     },
     [navigate, project]
   );
@@ -48,17 +39,10 @@ const EditProject = () => {
 
   return (
     <ProjectLayout crumbs={crumbs}>
-      <EditRecord<
-        ProjectAllFieldsFragment,
-        UpdateProjectMutation,
-        UpdateProjectMutationVariables
-      >
+      <EditRecord<ProjectAllFieldsFragment>
         formRole={FormRole.Project}
         record={project}
-        queryDocument={UpdateProjectDocument}
         onCompleted={onCompleted}
-        getErrors={(data: UpdateProjectMutation) => data?.updateProject?.errors}
-        confirmable
         FormActionProps={{
           onDiscard: generateSafePath(Routes.PROJECT, {
             projectId: project?.id,

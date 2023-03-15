@@ -155,54 +155,6 @@ query GetOrganizationWithPaginatedProjects(
   }
 }
 
-mutation CreateProject($input: CreateProjectInput!) {
-  createProject(input: $input) {
-    clientMutationId
-    project {
-      ...ProjectAllFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateProject($input: UpdateProjectInput!) {
-  updateProject(input: $input) {
-    clientMutationId
-    project {
-      ...ProjectAllFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateOrganization($input: CreateOrganizationInput!) {
-  createOrganization(input: $input) {
-    clientMutationId
-    organization {
-      ...OrganizationAllFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateOrganization($input: UpdateOrganizationInput!) {
-  updateOrganization(input: $input) {
-    clientMutationId
-    organization {
-      ...OrganizationAllFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
@@ -245,30 +197,6 @@ query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-mutation CreateInventory($input: CreateInventoryInput!) {
-  createInventory(input: $input) {
-    clientMutationId
-    inventory {
-      ...InventoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateInventory($input: UpdateInventoryInput!) {
-  updateInventory(input: $input) {
-    clientMutationId
-    inventory {
-      ...InventoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteInventory($input: DeleteInventoryInput!) {
   deleteInventory(input: $input) {
     clientMutationId
@@ -281,59 +209,11 @@ mutation DeleteInventory($input: DeleteInventoryInput!) {
   }
 }
 
-mutation CreateFunder($input: CreateFunderInput!) {
-  createFunder(input: $input) {
-    clientMutationId
-    funder {
-      ...FunderFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateFunder($input: UpdateFunderInput!) {
-  updateFunder(input: $input) {
-    clientMutationId
-    funder {
-      ...FunderFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteFunder($input: DeleteFunderInput!) {
   deleteFunder(input: $input) {
     clientMutationId
     funder {
       id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateProjectCoc($input: CreateProjectCocInput!) {
-  createProjectCoc(input: $input) {
-    clientMutationId
-    projectCoc {
-      ...ProjectCocFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateProjectCoc($input: UpdateProjectCocInput!) {
-  updateProjectCoc(input: $input) {
-    clientMutationId
-    projectCoc {
-      ...ProjectCocFields
     }
     errors {
       ...ValidationErrorFields

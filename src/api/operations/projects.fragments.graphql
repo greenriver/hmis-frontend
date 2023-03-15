@@ -66,7 +66,7 @@ fragment ProjectAllFields on Project {
 
 fragment InventoryFields on Inventory {
   availability
-  # bedInventory
+  bedInventory
   # chBedInventory
   # chVetBedInventory
   # chYouthBedInventory
@@ -86,7 +86,7 @@ fragment InventoryFields on Inventory {
     nodesCount
   }
   # otherBedInventory
-  # unitInventory
+  unitInventory
   # vetBedInventory
   # youthBedInventory
   # youthVetBedInventory

@@ -87,30 +87,6 @@ query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-mutation CreateClient($input: CreateClientInput!) {
-  createClient(input: $input) {
-    clientMutationId
-    client {
-      ...ClientFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateClient($input: UpdateClientInput!) {
-  updateClient(input: $input) {
-    clientMutationId
-    client {
-      ...ClientFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
   updateClientImage(input: { clientId: $clientId, imageBlobId: $imageBlobId }) {
     clientMutationId
@@ -203,18 +179,6 @@ query GetService($id: ID!) {
 
 mutation AddServiceToEnrollment($input: CreateServiceInput!) {
   createService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateService($input: UpdateServiceInput!) {
-  updateService(input: $input) {
     clientMutationId
     service {
       ...ServiceFields
