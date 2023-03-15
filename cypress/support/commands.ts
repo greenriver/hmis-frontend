@@ -1,6 +1,8 @@
 /* global JQuery */
 /// <reference types="cypress" />
 
+import { sortedUniq } from 'lodash-es';
+
 Cypress.Commands.add('testId', (id, pseudo) => {
   return cy.get(`[data-testid="${id}"]${pseudo || ''}`);
 });
@@ -68,10 +70,10 @@ Cypress.Commands.add('safeType', { prevSubject: true }, (subject, str) => {
 });
 
 Cypress.Commands.add('checkOption', (id, optionCode) => {
-  cy.get(`[id="${id}"] input[value="${optionCode}"]`).check();
+  cy.get(`[id="${id}"] input[value="${optionCode}"]`).click();
 });
 Cypress.Commands.add('uncheckOption', (id, optionCode) => {
-  cy.get(`[id="${id}"] input[value="${optionCode}"]`).uncheck({ force: true });
+  cy.get(`[id="${id}"] input[value="${optionCode}"]`).click({ force: true });
 });
 
 Cypress.Commands.add('getChecked', (id, value) => {
@@ -97,25 +99,42 @@ Cypress.Commands.add('expectHudValuesToInclude', (values) => {
   });
 });
 
+// Get different between two objects to make debugging easier, so you can see what
+// is different between the objects. The actual value can be found on `window.debug`
+const getDifference = (a, b) => {
+  const keys = sortedUniq([...Object.keys(a), ...Object.keys(b)]);
+  const result = {};
+  keys.forEach((k) => {
+    if (a[k] !== b[k]) {
+      console.log(k, 'expected', b[k], 'got', a[k]);
+      result[k] = a[k];
+    }
+  });
+  return result;
+};
+
 Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
   cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(
-      Object.fromEntries(
-        Object.entries(win.debug.hudValues).filter(
-          ([key]) =>
-            key.includes(`${Object.keys(values)[0].split('.')[0]}.`) &&
-            key !== 'Enrollment.entryDate'
-        )
+      getDifference(
+        Object.fromEntries(
+          Object.entries(win.debug.hudValues).filter(
+            ([key]) =>
+              key.includes(`${Object.keys(values)[0].split('.')[0]}.`) &&
+              key !== 'Enrollment.entryDate'
+          )
+        ),
+        values
       )
-    ).to.deep.equal(values);
+    ).to.deep.equal({});
   });
 });
 
 Cypress.Commands.add('expectHudValuesToDeepEqual', (values) => {
   cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
-    expect(win.debug.hudValues).to.deep.equal(values);
+    expect(getDifference(win.debug.hudValues, values)).to.deep.equal({});
   });
 });
 

@@ -9,14 +9,8 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
-  AddServiceToEnrollmentDocument,
-  AddServiceToEnrollmentMutation,
-  AddServiceToEnrollmentMutationVariables,
   FormRole,
   ServiceFieldsFragment,
-  UpdateServiceDocument,
-  UpdateServiceMutation,
-  UpdateServiceMutationVariables,
   useGetServiceQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -53,49 +47,21 @@ const Service = ({ create = false }: { create?: boolean }) => {
   if (error) throw error;
   if (!create && !loading && !data?.service) throw Error('Service not found');
 
-  const common = {
-    formRole: FormRole.Service,
-    title: (
-      <Stack direction={'row'} spacing={2}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-      </Stack>
-    ),
-  };
   return (
-    <>
-      {create ? (
-        <EditRecord<
-          ServiceFieldsFragment,
-          AddServiceToEnrollmentMutation,
-          AddServiceToEnrollmentMutationVariables
-        >
-          inputVariables={{ enrollmentId }}
-          queryDocument={AddServiceToEnrollmentDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: AddServiceToEnrollmentMutation) =>
-            data?.createService?.errors
-          }
-          FormActionProps={{ submitButtonText: 'Add Service' }}
-          {...common}
-        />
-      ) : (
-        <EditRecord<
-          ServiceFieldsFragment,
-          UpdateServiceMutation,
-          UpdateServiceMutationVariables
-        >
-          record={data?.service || undefined}
-          queryDocument={UpdateServiceDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: UpdateServiceMutation) =>
-            data?.updateService?.errors
-          }
-          {...common}
-        />
-      )}
-    </>
+    <EditRecord<ServiceFieldsFragment>
+      formRole={FormRole.Service}
+      inputVariables={{ enrollmentId }}
+      onCompleted={onCompleted}
+      record={data?.service || undefined}
+      FormActionProps={create ? { submitButtonText: 'Add Service' } : undefined}
+      title={
+        <Stack direction={'row'} spacing={2}>
+          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+            {title}
+          </Typography>
+        </Stack>
+      }
+    />
   );
 };
 export default Service;

@@ -6,13 +6,7 @@ import Breadcrumbs from '../elements/Breadcrumbs';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
-import {
-  ClientFieldsFragment,
-  CreateClientDocument,
-  CreateClientMutation,
-  CreateClientMutationVariables,
-  FormRole,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const CreateClient: React.FC = () => {
@@ -20,11 +14,10 @@ const CreateClient: React.FC = () => {
 
   // const { pathname, state } = useLocation();
   const onCompleted = useCallback(
-    (data: CreateClientMutation) => {
-      const id = data?.createClient?.client?.id;
-      if (id) {
-        navigate(generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
-      }
+    (data: ClientFieldsFragment) => {
+      navigate(
+        generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: data.id })
+      );
     },
     [navigate]
   );
@@ -40,15 +33,9 @@ const CreateClient: React.FC = () => {
 
   return (
     <Container maxWidth='lg' sx={{ pt: 3, pb: 20 }}>
-      <EditRecord<
-        ClientFieldsFragment,
-        CreateClientMutation,
-        CreateClientMutationVariables
-      >
+      <EditRecord<ClientFieldsFragment>
         formRole={FormRole.Client}
-        queryDocument={CreateClientDocument}
         onCompleted={onCompleted}
-        getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
         FormActionProps={{ submitButtonText: 'Create Client' }}
         title={
           <>

@@ -117,3 +117,35 @@ mutation DeleteAssessment($id: ID!) {
     }
   }
 }
+
+mutation SubmitForm($input: SubmitFormInput!) {
+  submitForm(input: $input) {
+    clientMutationId
+    record {
+      ... on Client {
+        ...ClientFields
+      }
+      ... on Organization {
+        ...OrganizationAllFields
+      }
+      ... on Project {
+        ...ProjectAllFields
+      }
+      ... on Funder {
+        ...FunderFields
+      }
+      ... on ProjectCoc {
+        ...ProjectCocFields
+      }
+      ... on Inventory {
+        ...InventoryFields
+      }
+      ... on Service {
+        ...ServiceFields
+      }
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

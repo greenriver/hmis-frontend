@@ -342,11 +342,9 @@ export const getAutofillComparisonValue = (
   }
 
   // Choose first present value from Boolean, Number, and Code attributes
-  return [
-    av.valueBoolean,
-    av.valueNumber,
-    getOptionValue(av.valueCode, targetItem),
-  ].filter((e) => !isNil(e))[0];
+  if (!isNil(av.valueBoolean)) return av.valueBoolean;
+  if (!isNil(av.valueNumber)) return av.valueNumber;
+  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
 };
 
 /**
@@ -457,7 +455,7 @@ export const buildCommonInputProps = (
 };
 
 /**
- * Trasnform GraphQL value shape into form value shape
+ * Transform GraphQL value shape into form value shape
  *
  * @param value GraphQL value (eg "ES" or "2020-01-01")
  * @param item Form item
@@ -526,7 +524,10 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     } else if (value) {
       return (value as { id: string }).id;
     }
-  } else if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+  } else if (
+    [ItemType.Choice, ItemType.OpenChoice].includes(item.type) ||
+    item.pickListReference
+  ) {
     if (Array.isArray(value)) {
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
@@ -931,6 +932,23 @@ export const createInitialValuesFromSavedValues = (
   });
   return initialValues;
 };
+
+export const createValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) => transformSubmitValues({ definition, values });
+
+export const createHudValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) =>
+  transformSubmitValues({
+    definition,
+    values,
+    // autofillNulls: true,
+    keyByFieldName: true,
+    autofillHidden: true,
+  });
 
 export const debugFormValues = (
   event: React.MouseEvent<HTMLButtonElement>,

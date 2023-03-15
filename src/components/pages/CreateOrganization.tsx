@@ -7,9 +7,6 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
 import {
-  CreateOrganizationDocument,
-  CreateOrganizationMutation,
-  CreateOrganizationMutationVariables,
   FormRole,
   OrganizationAllFieldsFragment,
   PickListType,
@@ -29,13 +26,12 @@ const CreateOrganization = () => {
   ];
 
   const onCompleted = useCallback(
-    (data: CreateOrganizationMutation) => {
-      const id = data?.createOrganization?.organization?.id;
-      if (id) {
-        evictPickList(PickListType.Project);
-        evictQuery('organizations');
-        navigate(generateSafePath(Routes.ORGANIZATION, { organizationId: id }));
-      }
+    (data: OrganizationAllFieldsFragment) => {
+      evictPickList(PickListType.Project);
+      evictQuery('organizations');
+      navigate(
+        generateSafePath(Routes.ORGANIZATION, { organizationId: data.id })
+      );
     },
     [navigate]
   );
@@ -44,17 +40,9 @@ const CreateOrganization = () => {
 
   return (
     <ProjectLayout crumbs={crumbs}>
-      <EditRecord<
-        OrganizationAllFieldsFragment,
-        CreateOrganizationMutation,
-        CreateOrganizationMutationVariables
-      >
+      <EditRecord<OrganizationAllFieldsFragment>
         formRole={FormRole.Organization}
-        queryDocument={CreateOrganizationDocument}
         onCompleted={onCompleted}
-        getErrors={(data: CreateOrganizationMutation) =>
-          data?.createOrganization?.errors
-        }
         FormActionProps={{ submitButtonText: 'Create Organization' }}
         title={
           <>
