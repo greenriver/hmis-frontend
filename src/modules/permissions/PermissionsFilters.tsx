@@ -5,8 +5,12 @@ import { useHasPermissions } from './useHasPermissionsHooks';
 import {
   ProjectAccess,
   QueryAccess,
+  OrganizationAccess,
   useGetProjectPermissionsQuery,
   useGetRootPermissionsQuery,
+  useGetOrganizationPermissionsQuery,
+  useGetClientPermissionsQuery,
+  ClientAccess,
 } from '@/types/gqlTypes';
 
 export type EntityPermissionsFilterProps<T> = {
@@ -45,6 +49,38 @@ export const ProjectPermissionsFilter: React.FC<
     variables: { id },
   });
   const access = data?.project?.access;
+
+  return <PermissionsFilter object={access} loading={loading} {...props} />;
+};
+
+export type OrganizationPermissionsFilterProps<T> = Omit<
+  EntityPermissionsFilterProps<T>,
+  'object' | 'loading'
+> & { id: string };
+
+export const OrganizationPermissionsFilter: React.FC<
+  OrganizationPermissionsFilterProps<OrganizationAccess>
+> = ({ id, ...props }) => {
+  const { data, loading } = useGetOrganizationPermissionsQuery({
+    variables: { id },
+  });
+  const access = data?.organization?.access;
+
+  return <PermissionsFilter object={access} loading={loading} {...props} />;
+};
+
+export type ClientPermissionsFilterProps<T> = Omit<
+  EntityPermissionsFilterProps<T>,
+  'object' | 'loading'
+> & { id: string };
+
+export const ClientPermissionsFilter: React.FC<
+  ClientPermissionsFilterProps<ClientAccess>
+> = ({ id, ...props }) => {
+  const { data, loading } = useGetClientPermissionsQuery({
+    variables: { id },
+  });
+  const access = data?.client?.access;
 
   return <PermissionsFilter object={access} loading={loading} {...props} />;
 };

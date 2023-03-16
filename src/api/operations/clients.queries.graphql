@@ -25,6 +25,12 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientPermissions($id: ID!) {
+  client(id: $id) {
+    ...ClientPermissions
+  }
+}
+
 query GetClientImage($id: ID!) {
   client(id: $id) {
     ...ClientImage

@@ -28,10 +28,12 @@ import CreateProject from '@/components/pages/CreateProject';
 import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
+import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
+import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
@@ -65,9 +67,23 @@ export const protectedRoutes = [
           </ProjectEditRoute>
         ),
       },
-      { path: Routes.CREATE_PROJECT, element: <CreateProject /> },
+      {
+        path: Routes.CREATE_PROJECT,
+        element: (
+          <RootPermissionsFilter permissions={['canEditProjectDetails']}>
+            <CreateProject />
+          </RootPermissionsFilter>
+        ),
+      },
       { path: Routes.ORGANIZATION, element: <Organization /> },
-      { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
+      {
+        path: Routes.EDIT_ORGANIZATION,
+        element: (
+          <OrganizationEditRoute>
+            <EditOrganization />
+          </OrganizationEditRoute>
+        ),
+      },
       {
         path: Routes.NEW_INVENTORY,
         element: (
@@ -127,13 +143,30 @@ export const protectedRoutes = [
       {
         path: Routes.ADD_SERVICES,
         element: (
-          <RootPermissionsFilter permissions='canEditEnrollments'>
+          <ProjectEditRoute
+            permissions={['canEditEnrollments']}
+            redirectRoute={Routes.PROJECT}
+          >
             <AddServices />
+          </ProjectEditRoute>
+        ),
+      },
+      {
+        path: Routes.CREATE_ORGANIZATION,
+        element: (
+          <RootPermissionsFilter permissions='canEditOrganization'>
+            <CreateOrganization />
           </RootPermissionsFilter>
         ),
       },
-      { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
-      { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
+      {
+        path: Routes.CREATE_CLIENT,
+        element: (
+          <ClientRoute edit>
+            <CreateClient />
+          </ClientRoute>
+        ),
+      },
       {
         path: Routes.CLIENT_DASHBOARD,
         element: (
@@ -143,7 +176,14 @@ export const protectedRoutes = [
         ),
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
-          { path: DashboardRoutes.PROFILE, element: <Profile /> },
+          {
+            path: DashboardRoutes.PROFILE,
+            element: (
+              <ClientRoute view>
+                <Profile />
+              </ClientRoute>
+            ),
+          },
           {
             path: DashboardRoutes.EDIT,
             element: (
@@ -157,50 +197,125 @@ export const protectedRoutes = [
           },
           {
             path: DashboardRoutes.NEW_ENROLLMENT,
-            element: <NewEnrollment />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.ALL_ENROLLMENTS}
+              >
+                <NewEnrollment />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.VIEW_ENROLLMENT,
-            element: <ViewEnrollment />,
+            element: (
+              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+                <ViewEnrollment />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.EDIT_HOUSEHOLD,
-            element: <EditHousehold />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <EditHousehold />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.HOUSEHOLD_EXIT,
-            element: <HouseholdExit />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <HouseholdExit />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.HOUSEHOLD_INTAKE,
-            element: <HouseholdIntake />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <HouseholdIntake />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.NEW_ASSESSMENT,
-            element: <AssessmentPage />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <AssessmentPage />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.VIEW_ASSESSMENT,
-            element: <AssessmentPage />,
+            element: (
+              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+                <AssessmentPage />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.EDIT_ASSESSMENT,
-            element: <AssessmentPage />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <AssessmentPage />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.NEW_SERVICE,
-            element: <Service create />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <Service create />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.EDIT_SERVICE,
-            element: <Service />,
+            element: (
+              <EnrollmentsRoute
+                edit
+                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+              >
+                <Service />
+              </EnrollmentsRoute>
+            ),
           },
           {
             path: DashboardRoutes.ALL_ENROLLMENTS,
-            element: <AllEnrollments />,
+            element: (
+              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+                <AllEnrollments />
+              </EnrollmentsRoute>
+            ),
           },
           { path: DashboardRoutes.HISTORY, element: null },
-          { path: DashboardRoutes.ASSESSMENTS, element: <AllAssessments /> },
+          {
+            path: DashboardRoutes.ASSESSMENTS,
+            element: (
+              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+                <AllAssessments />
+              </EnrollmentsRoute>
+            ),
+          },
           { path: DashboardRoutes.NOTES, element: null },
           { path: DashboardRoutes.FILES, element: null },
           { path: DashboardRoutes.CONTACT, element: null },

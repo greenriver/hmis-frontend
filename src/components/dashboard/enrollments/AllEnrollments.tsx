@@ -12,6 +12,7 @@ import {
   enrollmentName,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -70,14 +71,19 @@ const AllEnrollments = () => {
         sx={{ mb: 2, pr: 1, alignItems: 'center' }}
       >
         <Typography variant='h4'>All Enrollments</Typography>
-        <ButtonLink
-          to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
-            clientId,
-          })}
-          Icon={AddIcon}
+        <ClientPermissionsFilter
+          id={clientId}
+          permissions={['canEditEnrollments']}
         >
-          Add Enrollment
-        </ButtonLink>
+          <ButtonLink
+            to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+              clientId,
+            })}
+            Icon={AddIcon}
+          >
+            Add Enrollment
+          </ButtonLink>
+        </ClientPermissionsFilter>
       </Stack>
       <Paper>
         <GenericTableWithData<

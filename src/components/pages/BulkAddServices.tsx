@@ -13,6 +13,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
 import ProjectEnrollmentsTable, {
   ENROLLMENT_COLUMNS,
+  EnrollmentFields,
 } from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
@@ -20,11 +21,10 @@ import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
   AddServiceToEnrollmentMutationVariables,
-  EnrollmentFieldsFragment,
   FormRole,
 } from '@/types/gqlTypes';
 
-const tableColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
+const tableColumns: ColumnDef<EnrollmentFields>[] = [
   ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
   ENROLLMENT_COLUMNS.clientId,
   ENROLLMENT_COLUMNS.householdId,
@@ -49,7 +49,7 @@ const BulkAddServices = () => {
   return (
     <ProjectLayout crumbs={crumbs}>
       <BulkAdd<
-        EnrollmentFieldsFragment,
+        EnrollmentFields,
         AddServiceToEnrollmentMutation,
         AddServiceToEnrollmentMutationVariables
       >
@@ -70,14 +70,14 @@ const BulkAddServices = () => {
                   ...tableColumns,
                   ...items.map((item) => ({
                     header: item.label,
-                    render: (enrollment: EnrollmentFieldsFragment) =>
+                    render: (enrollment: EnrollmentFields) =>
                       item.getNode(enrollment, {
                         disabled: enrollmentsAdded.includes(enrollment.id),
                       }),
                   })),
                   {
                     header: '',
-                    render: (enrollment: EnrollmentFieldsFragment) => (
+                    render: (enrollment: EnrollmentFields) => (
                       <Box sx={{ textAlign: 'right' }}>
                         <LoadingButton
                           color='secondary'

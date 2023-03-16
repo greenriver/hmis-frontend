@@ -10,6 +10,12 @@ query GetAllOrganizations {
   }
 }
 
+query GetOrganizationPermissions($id: ID!) {
+  organization(id: $id) {
+    ...OrganizationPermissionsFields
+  }
+}
+
 query GetProject($id: ID!) {
   project(id: $id) {
     ...ProjectAllFields

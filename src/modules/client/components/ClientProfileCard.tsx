@@ -19,7 +19,7 @@ import NotSpecified from '@/components/elements/NotSpecified';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import ClientSsn from '@/modules/hmis/components/ClientSsn';
+import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameWithoutPreferred,
@@ -27,6 +27,7 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -305,6 +306,11 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
     ? clientNameWithoutPreferred(client)
     : null;
 
+  const [canViewSsn] = useHasRootPermissions([
+    'canViewFullSsn',
+    'canViewPartialSsn',
+  ]);
+
   return (
     <>
       <Card
@@ -356,9 +362,11 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   Age: (
                     <ClientDobAge client={client} noValue={<NotSpecified />} />
                   ),
-                  Social: (
-                    <ClientSsn client={client} noValue={<NotSpecified />} />
-                  ),
+                  ...(canViewSsn
+                    ? {
+                        Social: <ClientSafeSsn client={client} />,
+                      }
+                    : {}),
                 }}
               />
               <Box sx={{ flexGrow: 1 }}>

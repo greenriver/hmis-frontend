@@ -1,8 +1,9 @@
 import { Stack, Typography, TypographyProps } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import ClickToShow from '@/components/elements/ClickToShow';
-import { age, dob } from '@/modules/hmis/hmisUtil';
+import { dob } from '@/modules/hmis/hmisUtil';
 import { ClientIdentificationFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -18,19 +19,25 @@ const ClientDobAge = ({
   reveal,
   variant = 'body2',
 }: Props) => {
-  if (!client.dob) return <>{noValue}</> || null;
+  if (isNil(client.dob) && isNil(client.age)) return <>{noValue}</> || null;
 
   const dobComponent = <Typography variant={variant}>{dob(client)}</Typography>;
+  const onlyAge = isNil(client.dob) && !isNil(client.age);
+
   return (
     <Stack direction='row' gap={0.5}>
-      {reveal ? (
-        dobComponent
-      ) : (
-        <ClickToShow text='Reveal DOB' variant={variant}>
-          {dobComponent}
-        </ClickToShow>
-      )}
-      <Typography variant={variant}>({age(client)})</Typography>
+      {client.dob &&
+        !onlyAge &&
+        (reveal ? (
+          dobComponent
+        ) : (
+          <ClickToShow text='Reveal DOB' variant={variant}>
+            {dobComponent}
+          </ClickToShow>
+        ))}
+      <Typography variant={variant}>
+        {onlyAge ? client.age : <>({client.age})</>}
+      </Typography>
     </Stack>
   );
 };

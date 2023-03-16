@@ -13,6 +13,7 @@ import ClientName from '@/modules/client/components/ClientName';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -111,15 +112,20 @@ const HouseholdMemberTable = ({
         key: 'actions',
         render: (hc: HouseholdClientFieldsFragment) =>
           hc.client.id === clientId ? (
-            <HouseholdMemberActionButton
-              size='small'
-              variant='outlined'
-              fullWidth
-              enrollmentId={hc.enrollment.id}
-              clientId={hc.client.id}
-              enrollment={hc.enrollment}
-              {...assessments}
-            />
+            <ClientPermissionsFilter
+              id={clientId}
+              permissions={['canEditEnrollments']}
+            >
+              <HouseholdMemberActionButton
+                size='small'
+                variant='outlined'
+                fullWidth
+                enrollmentId={hc.enrollment.id}
+                clientId={hc.client.id}
+                enrollment={hc.enrollment}
+                {...assessments}
+              />
+            </ClientPermissionsFilter>
           ) : null,
       },
     ];
@@ -145,13 +151,18 @@ const HouseholdMemberTable = ({
           },
         })}
       />
-      <Box sx={{ px: 3 }}>
-        <HouseholdActionButtons
-          householdMembers={householdMembers}
-          clientId={clientId}
-          enrollmentId={enrollmentId}
-        />
-      </Box>
+      <ClientPermissionsFilter
+        id={clientId}
+        permissions={['canEditEnrollments']}
+      >
+        <Box sx={{ px: 3 }}>
+          <HouseholdActionButtons
+            householdMembers={householdMembers}
+            clientId={clientId}
+            enrollmentId={enrollmentId}
+          />
+        </Box>
+      </ClientPermissionsFilter>
     </>
   );
 };
