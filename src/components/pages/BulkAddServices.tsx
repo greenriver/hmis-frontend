@@ -116,6 +116,7 @@ const BulkAddServices = () => {
         )}
         formRole={FormRole.Service}
         getInputFromTarget={(formData, enrollment) => ({
+          // We should be hitting `SubmitForm` and constructing `SubmitFormValues` here
           input: {
             input: { ...formData, enrollmentId: enrollment.id },
           },

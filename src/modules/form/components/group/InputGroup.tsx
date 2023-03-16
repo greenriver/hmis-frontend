@@ -130,4 +130,6 @@ const InputGroup = ({
   );
 };
 
+InputGroup.displayName = 'InputGroup';
+
 export default InputGroup;

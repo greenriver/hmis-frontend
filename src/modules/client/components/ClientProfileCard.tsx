@@ -181,26 +181,25 @@ export const ClientCardImageElement = ({
         ...props.sx,
       }}
       component={src ? 'img' : undefined}
-      children={
-        src ? undefined : (
-          <Typography
-            sx={{
-              color: (theme) => theme.palette.text.disabled,
-              borderBottom: 0,
-              display: 'flex',
-              flexGrow: 1,
-              height: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-            variant='body2'
-            component='span'
-          >
-            No Client Photo
-          </Typography>
-        )
-      }
-    />
+    >
+      {src ? undefined : (
+        <Typography
+          sx={{
+            color: (theme) => theme.palette.text.disabled,
+            borderBottom: 0,
+            display: 'flex',
+            flexGrow: 1,
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          variant='body2'
+          component='span'
+        >
+          No Client Photo
+        </Typography>
+      )}
+    </Box>
   );
 };
 
