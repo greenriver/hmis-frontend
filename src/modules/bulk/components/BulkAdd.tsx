@@ -6,6 +6,7 @@ import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import DynamicField from '@/modules/form/components/DynamicField';
+import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import { DynamicFieldProps } from '@/modules/form/types';
 import {
@@ -109,6 +110,7 @@ const BulkAdd = <
   >(mutationDocument);
 
   const handleSelect: RenderListOptions<TargetType>['onSelect'] = (target) => {
+    // TODO: update this to just call `SubmitForm`
     const inputValues = transformSubmitValues({
       definition,
       values: {
@@ -151,22 +153,17 @@ const BulkAdd = <
   return (
     <Stack gap={2}>
       {title}
-      {renderFields({
-        // errors,
-        // warnings,
-      })}
-      {!isEmpty(errors) &&
-        errors?.map((e, i) => (
-          <Alert key={i} severity='error'>
-            {e.fullMessage}
-          </Alert>
-        ))}
-      {!isEmpty(warnings) &&
-        warnings?.map((e, i) => (
-          <Alert key={i} severity='warning'>
-            {e.fullMessage}
-          </Alert>
-        ))}
+      {renderFields({})}
+      {errors && !isEmpty(errors) && (
+        <Alert key='errors' severity='error' sx={{ mb: 2 }}>
+          <ValidationErrorDisplay errors={errors} />
+        </Alert>
+      )}
+      {warnings && !isEmpty(warnings) && (
+        <Alert key='warnings' severity='warning'>
+          <ValidationErrorDisplay errors={warnings} />
+        </Alert>
+      )}
       <Paper
         sx={{
           py: 3,

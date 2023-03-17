@@ -342,4 +342,6 @@ const HouseholdSummaryTabPanel = memo(
   }
 );
 
+HouseholdSummaryTabPanel.displayName = 'HouseholdSummaryTabPanel';
+
 export default HouseholdSummaryTabPanel;

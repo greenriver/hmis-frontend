@@ -166,4 +166,6 @@ const HouseholdAssessmentTabPanel = memo(
   }
 );
 
+HouseholdAssessmentTabPanel.displayName = 'HouseholdAssessmentTabPanel';
+
 export default HouseholdAssessmentTabPanel;

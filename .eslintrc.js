@@ -1,3 +1,4 @@
+// To see all enabled rules, run `yarn eslint --print-config .eslintrc.js`
 module.exports = {
   env: {
     browser: true,
@@ -6,7 +7,7 @@ module.exports = {
   extends: [
     'airbnb/hooks',
     'plugin:import/recommended',
-    'plugin:jsx-a11y/recommended',
+    'plugin:jsx-a11y/strict',
     'plugin:react-hooks/recommended',
     'prettier',
     'plugin:storybook/recommended',
@@ -94,11 +95,19 @@ module.exports = {
           order: 'asc',
           caseInsensitive: true,
         },
+        warnOnUnassignedImports: false,
       },
     ],
+    'import/no-duplicates': 'error',
     'import/default': 'off',
     'import/no-named-as-default-member': 'off',
     'import/no-named-as-default': 'off',
+    'jsx-a11y/anchor-ambiguous-text': 'error',
+    'react/button-has-type': 'error',
+    'react/no-array-index-key': 'error',
+    'react/display-name': 'off',
+    'react/no-children-prop': 'error',
+    'react/no-danger-with-children': 'error',
   },
   ignorePatterns: [
     'jest.config.ts',

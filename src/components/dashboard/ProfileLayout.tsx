@@ -8,10 +8,11 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props {
   client: ClientFieldsFragment;
-  notices?: ({ content: React.ReactNode; title?: React.ReactNode } & Omit<
-    AlertProps,
-    'children'
-  >)[];
+  notices?: ({
+    id: string;
+    content: React.ReactNode;
+    title?: React.ReactNode;
+  } & Omit<AlertProps, 'children'>)[];
 }
 
 const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
@@ -21,9 +22,9 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
         {!isEmpty(notices) && (
           <Grid item xs={12}>
             <Grid container spacing={2} justifyContent='space-between'>
-              {notices.map(({ content, title, ...props }, i) => (
+              {notices.map(({ content, title, id, ...props }) => (
                 <Grid item xs={12}>
-                  <Alert variant='filled' {...props} key={i}>
+                  <Alert variant='filled' {...props} key={id}>
                     {title && <AlertTitle>{title}</AlertTitle>}
                     {content}
                   </Alert>

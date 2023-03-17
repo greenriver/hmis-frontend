@@ -45,6 +45,7 @@ const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
     render: (e) => (
       <Stack>
         {serviceDetails(e).map((s, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Typography key={i} variant='body2'>
             {s}
           </Typography>
