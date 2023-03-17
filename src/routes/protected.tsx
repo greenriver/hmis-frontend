@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { DashboardRoutes, Routes } from './routes';
 
+import AllFiles from '@/components/dashboard/AllFIles';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
@@ -29,6 +30,7 @@ import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
+import File from '@/components/pages/File';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
@@ -317,7 +319,9 @@ export const protectedRoutes = [
             ),
           },
           { path: DashboardRoutes.NOTES, element: null },
-          { path: DashboardRoutes.FILES, element: null },
+          { path: DashboardRoutes.FILES, element: <AllFiles /> },
+          { path: DashboardRoutes.NEW_FILE, element: <File create /> },
+          { path: DashboardRoutes.EDIT_FILE, element: <File /> },
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },

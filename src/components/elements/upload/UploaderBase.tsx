@@ -11,9 +11,10 @@ import {
   LinearProgress,
   SvgIconProps,
 } from '@mui/material';
-import { first } from 'lodash-es';
-import React, { useCallback, useState } from 'react';
+import { compact, first, flatten, isEmpty, sortBy, uniq } from 'lodash-es';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
+  Accept,
   DropzoneInputProps,
   DropzoneRootProps,
   useDropzone,
@@ -27,6 +28,9 @@ export type UploaderProps = {
   onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
   onClear?: (upload?: DirectUpload, file?: File) => any;
   file?: File;
+  accept?: Accept;
+  image?: boolean;
+  maxSize?: number;
   children?: React.ReactNode | ((args: ChildrenArgs) => React.ReactElement);
 };
 
@@ -40,10 +44,12 @@ export type ChildrenArgs = {
   selectFile?: VoidFunction;
   rootProps?: DropzoneRootProps;
   inputProps?: DropzoneInputProps;
+  accept?: Accept;
+  maxSize: number;
 };
 
-const MAX_BYTES = 3000000;
-const ACCEPTED_FILE_TYPES = ['.png', '.jpg', '.jpeg'];
+const DEFUALT_MAX_BYTES = 3000000;
+const IMAGE_FILE_TYPES = ['.png', '.jpg', '.jpeg', '.gif'];
 
 const FilePreviewIcon: React.FC<{
   IconComponent: React.ComponentType<SvgIconProps>;
@@ -64,6 +70,22 @@ const FilePreviewIcon: React.FC<{
   </Box>
 );
 
+const getFileTypesFromAccept = (accept: Accept) => {
+  let arr = sortBy(
+    compact(uniq(flatten(Object.values(accept)))).map((e) =>
+      e.toUpperCase().replace(/\.(.*)/, '$1')
+    )
+  );
+
+  if (arr.length === 2) arr = [arr.join(' or ')];
+  if (arr.length > 2) arr = [...arr.slice(0, -2), arr.slice(-2).join(' or ')];
+
+  return arr.join(', ');
+};
+
+const getReadableSize = (maxSize: number) =>
+  `${(maxSize / 1000000).toFixed(1)}MB`;
+
 const defaultChildren: NonNullable<UploaderProps['children']> = ({
   file,
   loading,
@@ -74,6 +96,8 @@ const defaultChildren: NonNullable<UploaderProps['children']> = ({
   selectFile = () => {},
   rootProps = {},
   inputProps = {},
+  accept,
+  maxSize,
 }) => (
   <Box
     sx={({ palette, shape }) => ({
@@ -110,7 +134,8 @@ const defaultChildren: NonNullable<UploaderProps['children']> = ({
               or drag and drop
             </Typography>
             <Typography variant='body2' color='GrayText' sx={{ mt: 1 }}>
-              SVG, PNG, JPG or GIF (max. 3MB)
+              {accept ? getFileTypesFromAccept(accept) : 'Any file type'} (max.{' '}
+              {getReadableSize(maxSize)})
             </Typography>
           </>
         )}
@@ -176,6 +201,9 @@ const Uploader: React.FC<UploaderProps> = ({
   onUpload,
   onClear = () => {},
   file: fileProp,
+  image: isImage = false,
+  accept: acceptProp,
+  maxSize = DEFUALT_MAX_BYTES,
 }) => {
   const [currentFile, setCurrentFile] = useState<File>();
   const [currentUpload, setCurrentUpload] = useState<DirectUpload>();
@@ -204,28 +232,39 @@ const Uploader: React.FC<UploaderProps> = ({
     [uploadFile, onUpload]
   );
 
+  const accept = useMemo(() => {
+    const base: Accept = {
+      ...(isImage ? { 'image/*': IMAGE_FILE_TYPES } : {}),
+      ...acceptProp,
+    };
+
+    return isEmpty(base) ? undefined : base;
+  }, [isImage, acceptProp]);
+
   const { getRootProps, isDragActive, getInputProps, open } = useDropzone({
     onDropAccepted: uploadAndCreate,
     multiple: false,
-    accept: {
-      'image/*': ACCEPTED_FILE_TYPES,
-    },
-    maxSize: MAX_BYTES,
+    accept,
+    maxSize,
     noClick: true,
     onDrop: (acceptedFiles, fileRejections) => {
       fileRejections.forEach((file) => {
         file.errors.forEach((err) => {
           if (err.code === 'file-too-large') {
             setError(
-              `Image is too large. File size must be under ${
-                MAX_BYTES / 1000000
-              } MB.`
+              `Image is too large. File size must be under ${getReadableSize(
+                maxSize
+              )}`
             );
           } else if (err.code === 'file-invalid-type') {
             setError(
-              `Unsupported file type. Supported file types are: ${ACCEPTED_FILE_TYPES.join(
-                ', '
-              )}`
+              `Unsupported file type. ${
+                accept
+                  ? `Supported file types are: ${getFileTypesFromAccept(
+                      accept
+                    )}`
+                  : ''
+              }`
             );
           } else {
             setError(`Error: ${err.message || err.code}`);
@@ -253,6 +292,8 @@ const Uploader: React.FC<UploaderProps> = ({
     selectFile: open,
     rootProps: getRootProps(),
     inputProps: getInputProps(),
+    accept,
+    maxSize,
   });
 };
 

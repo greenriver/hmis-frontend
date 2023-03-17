@@ -358,3 +358,20 @@ fragment HealthAndDvFields on HealthAndDv {
   }
   whenOccurred
 }
+
+fragment FileFields on File {
+  confidential
+  contentType
+  createdAt
+  effectiveDate
+  expirationDate
+  id
+  name
+  updatedAt
+  url
+  tags
+  updatedBy {
+    id
+    name
+  }
+}

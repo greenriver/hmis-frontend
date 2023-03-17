@@ -309,3 +309,23 @@ query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     }
   }
 }
+
+query GetFile($id: ID!) {
+  file(id: $id) {
+    ...FileFields
+  }
+}
+
+query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    files(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FileFields
+      }
+    }
+  }
+}
