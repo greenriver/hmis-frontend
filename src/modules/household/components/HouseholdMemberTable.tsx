@@ -2,16 +2,16 @@
 import { Box, Typography } from '@mui/material';
 import { useMemo } from 'react';
 
-import HohIndicatorTableCell from './HohIndicatorTableCell';
 import HouseholdActionButtons from './HouseholdActionButtons';
 import HouseholdMemberActionButton from './HouseholdMemberActionButton';
 import { useHouseholdMembers } from './useHouseholdMembers';
 
-import ClientName from '@/components/elements/ClientName';
 import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
 import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
+import ClientName from '@/modules/client/components/ClientName';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -44,7 +44,7 @@ const HouseholdMemberTable = ({
         key: 'indicator',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <HohIndicatorTableCell householdClient={hc} />
+          <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
         ),
       },
       {

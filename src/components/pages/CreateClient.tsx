@@ -48,7 +48,7 @@ const CreateClient: React.FC = () => {
         queryDocument={CreateClientDocument}
         onCompleted={onCompleted}
         getErrors={(data: CreateClientMutation) => data?.createClient?.errors}
-        submitButtonText='Create Client'
+        FormActionProps={{ submitButtonText: 'Create Client' }}
         title={
           <>
             <Box sx={{ mb: 2 }}>

@@ -17,9 +17,11 @@ import Profile from '@/components/dashboard/Profile';
 import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
+import NotFound from '@/components/pages/404';
 import AllProjects from '@/components/pages/AllProjects';
 import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
+import ClientRoute from '@/components/pages/ClientRoute';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
@@ -32,7 +34,9 @@ import InventoryBeds from '@/components/pages/InventoryBeds';
 import Organization from '@/components/pages/Organization';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
+import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 
 const App = () => {
   return (
@@ -53,42 +57,104 @@ export const protectedRoutes = [
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
       { path: Routes.PROJECT, element: <Project /> },
-      { path: Routes.EDIT_PROJECT, element: <EditProject /> },
+      {
+        path: Routes.EDIT_PROJECT,
+        element: (
+          <ProjectEditRoute>
+            <EditProject />
+          </ProjectEditRoute>
+        ),
+      },
       { path: Routes.CREATE_PROJECT, element: <CreateProject /> },
       { path: Routes.ORGANIZATION, element: <Organization /> },
       { path: Routes.EDIT_ORGANIZATION, element: <EditOrganization /> },
-      { path: Routes.NEW_INVENTORY, element: <Inventory create /> },
-      { path: Routes.EDIT_INVENTORY, element: <Inventory /> },
-      { path: Routes.MANAGE_INVENTORY_BEDS, element: <InventoryBeds /> },
+      {
+        path: Routes.NEW_INVENTORY,
+        element: (
+          <ProjectEditRoute>
+            <Inventory create />
+          </ProjectEditRoute>
+        ),
+      },
+      {
+        path: Routes.EDIT_INVENTORY,
+        element: (
+          <ProjectEditRoute>
+            <Inventory />
+          </ProjectEditRoute>
+        ),
+      },
+      {
+        path: Routes.MANAGE_INVENTORY_BEDS,
+        element: (
+          <ProjectEditRoute>
+            <InventoryBeds />
+          </ProjectEditRoute>
+        ),
+      },
       {
         path: Routes.NEW_FUNDER,
-        element: <Funder create={true} />,
+        element: (
+          <ProjectEditRoute>
+            <Funder create={true} />
+          </ProjectEditRoute>
+        ),
       },
       {
         path: Routes.EDIT_FUNDER,
-        element: <Funder />,
+        element: (
+          <ProjectEditRoute>
+            <Funder />
+          </ProjectEditRoute>
+        ),
       },
       {
         path: Routes.NEW_COC,
-        element: <ProjectCoc create />,
+        element: (
+          <ProjectEditRoute>
+            <ProjectCoc create />
+          </ProjectEditRoute>
+        ),
       },
       {
         path: Routes.EDIT_COC,
-        element: <ProjectCoc />,
+        element: (
+          <ProjectEditRoute>
+            <ProjectCoc />
+          </ProjectEditRoute>
+        ),
       },
       {
         path: Routes.ADD_SERVICES,
-        element: <AddServices />,
+        element: (
+          <RootPermissionsFilter permissions='canEditEnrollments'>
+            <AddServices />
+          </RootPermissionsFilter>
+        ),
       },
       { path: Routes.CREATE_ORGANIZATION, element: <CreateOrganization /> },
       { path: Routes.CREATE_CLIENT, element: <CreateClient /> },
       {
         path: Routes.CLIENT_DASHBOARD,
-        element: <ClientDashboard />,
+        element: (
+          <ClientRoute view>
+            <ClientDashboard />
+          </ClientRoute>
+        ),
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
           { path: DashboardRoutes.PROFILE, element: <Profile /> },
-          { path: DashboardRoutes.EDIT, element: <EditClient /> },
+          {
+            path: DashboardRoutes.EDIT,
+            element: (
+              <RootPermissionsFilter
+                permissions='canEditClients'
+                otherwise={<Navigate to='profile' replace />}
+              >
+                <EditClient />
+              </RootPermissionsFilter>
+            ),
+          },
           {
             path: DashboardRoutes.NEW_ENROLLMENT,
             element: <NewEnrollment />,
@@ -144,7 +210,7 @@ export const protectedRoutes = [
         ],
       },
       { path: '/', element: <Dashboard /> },
-      { path: '*', element: <Navigate to='.' /> },
+      { path: '*', element: <NotFound /> },
     ],
   },
 ];

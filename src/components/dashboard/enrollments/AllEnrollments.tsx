@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Paper, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 
@@ -70,13 +71,12 @@ const AllEnrollments = () => {
       >
         <Typography variant='h4'>All Enrollments</Typography>
         <ButtonLink
-          variant='outlined'
-          color='secondary'
           to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
             clientId,
           })}
+          Icon={AddIcon}
         >
-          + Add Enrollment
+          Add Enrollment
         </ButtonLink>
       </Stack>
       <Paper>

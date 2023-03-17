@@ -1,29 +1,47 @@
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
+import LockIcon from '@mui/icons-material/Lock';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+} from '@mui/material';
+import { assign } from 'lodash-es';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
+import RouterLink from '@/components/elements/RouterLink';
 import {
-  alertErrorFallback,
-  ApolloErrorAlert,
-} from '@/components/elements/ErrorFallback';
-import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/dashboard/contextHeader/ContextHeader';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/MainLayout';
+  CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
-import DynamicForm from '@/modules/form/components/DynamicForm';
+import DynamicForm, {
+  DynamicFormProps,
+} from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
-import { getInitialValues } from '@/modules/form/util/formUtil';
+import {
+  createInitialValuesFromSavedValues,
+  getInitialValues,
+} from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
+  InitialBehavior,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
@@ -34,7 +52,11 @@ interface Props {
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
+  FormActionProps?: DynamicFormProps['FormActionProps'];
+  locked?: boolean;
+  visible?: boolean;
 }
+
 const AssessmentForm = ({
   assessment,
   assessmentRole,
@@ -42,6 +64,9 @@ const AssessmentForm = ({
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
+  FormActionProps,
+  locked = false,
+  visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
@@ -69,12 +94,9 @@ const AssessmentForm = ({
     apolloError,
   } = useAssessmentHandlers({
     definition,
-    clientId: enrollment.client.id,
     enrollmentId: enrollment.id,
     assessmentId: assessment?.id,
-    navigateOnComplete: !embeddedInWorkflow,
   });
-
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
@@ -87,21 +109,36 @@ const AssessmentForm = ({
     };
 
     const source = sourceAssessment || assessment;
-    let init;
-    if (!source) {
-      init = getInitialValues(definition.definition, localConstants);
-    } else {
-      const values = source.assessmentDetail?.values;
-      // FIXME make consistent
-      init = typeof values === 'string' ? JSON.parse(values) : values;
-      // Should we merge with initial values here?
+
+    // Set initial values based solely on FormDefinition
+    const init = getInitialValues(definition.definition, localConstants);
+    if (source) {
+      const sourceValues = source.assessmentDetail?.values;
+      if (sourceValues) {
+        // Overlay initial values from source Assessment
+        const initialFromSourceAssessment = createInitialValuesFromSavedValues(
+          definition.definition,
+          sourceValues
+        );
+        assign(init, initialFromSourceAssessment);
+      }
+
+      // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
+      const initialsToOverwrite = getInitialValues(
+        definition.definition,
+        localConstants,
+        InitialBehavior.Overwrite
+      );
+      assign(init, initialsToOverwrite);
     }
-    console.debug(
-      'Initial Form State',
-      init,
-      'from source:',
-      source?.id || 'none'
-    );
+
+    // console.debug(
+    //   'Initial Form State',
+    //   init,
+    //   'from source:',
+    //   source?.id || 'none'
+    // );
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
     return init;
@@ -149,6 +186,11 @@ const AssessmentForm = ({
               </Button>
             </ButtonTooltipContainer>
           )}
+          {import.meta.env.MODE === 'development' && assessment && (
+            <Box sx={{ py: 2, px: 1 }}>
+              <IdDisplay prefix='Assessment' id={assessment.id} />
+            </Box>
+          )}
         </Box>
       </Grid>
       <Grid item xs={9} sx={{ pt: '0 !important' }}>
@@ -157,9 +199,31 @@ const AssessmentForm = ({
             <ApolloErrorAlert error={apolloError} />
           </Box>
         )}
+        {locked && assessment && (
+          <Box sx={{ mb: 3 }}>
+            <Alert severity='info' icon={<LockIcon />}>
+              <AlertTitle>This assessment has been submitted.</AlertTitle>
+              {embeddedInWorkflow && (
+                <Box>
+                  <RouterLink
+                    to={generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
+                      clientId: enrollment.client.id,
+                      enrollmentId: enrollment.id,
+                      assessmentId: assessment.id,
+                    })}
+                    target='_blank'
+                  >
+                    Open in client context
+                  </RouterLink>{' '}
+                  to make changes to this assessment.
+                </Box>
+              )}
+            </Alert>
+          </Box>
+        )}
         <DynamicForm
           // Remount component if a source assessment has been selected
-          key={`${sourceAssessment?.id}-${reloadInitialValues}`}
+          key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
           definition={definition.definition}
           onSubmit={submitHandler}
           onSaveDraft={
@@ -169,7 +233,14 @@ const AssessmentForm = ({
           pickListRelationId={enrollment?.project?.id}
           loading={mutationLoading}
           errors={errors}
+          locked={locked}
+          visible={visible}
           showSavePrompt
+          showSavePromptInitial={embeddedInWorkflow ? true : undefined}
+          FormActionProps={FormActionProps}
+          // Only show "warn if empty" treatments if this is an existing assessment,
+          // OR if the user has attempted to submit this (new) assessment
+          warnIfEmpty={!!assessment || errors.length > 0}
         />
       </Grid>
 
@@ -196,12 +267,4 @@ const AssessmentForm = ({
   );
 };
 
-const WrappedAssessment = (props: Props) => (
-  <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
-      <AssessmentForm {...props} />
-    </Sentry.ErrorBoundary>
-  </Box>
-);
-
-export default WrappedAssessment;
+export default AssessmentForm;

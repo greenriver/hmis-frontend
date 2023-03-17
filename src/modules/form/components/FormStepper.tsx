@@ -20,14 +20,15 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
         .filter((i) => !i.hidden)
         .map((i) => ({
           label: i.text,
-          linkId: i.linkId,
+          anchor: i.linkId,
+          testId: `formNavTo-${i.linkId}`,
         })),
     [items]
   );
 
   const handleClick = useCallback(
-    (linkId: string) => {
-      const element = document.getElementById(linkId);
+    (anchor: string) => {
+      const element = document.getElementById(anchor);
       scrollToElement(element, scrollOffset);
     },
     [scrollOffset]
@@ -36,7 +37,7 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
   return (
     <Stepper activeStep={0} orientation='vertical' nonLinear>
       {steps.map((step) => (
-        <Step key={step.linkId}>
+        <Step key={step.anchor}>
           <StepLabel
             StepIconComponent={RadioButtonUncheckedIcon}
             StepIconProps={{
@@ -49,15 +50,15 @@ const FormStepper = ({ items, useUrlHash = true, scrollOffset }: Props) => {
           >
             {useUrlHash ? (
               <RouterLink
-                to={`${pathname}#${step.linkId}`}
-                data-testid={`formNavTo-${step.linkId}`}
+                to={`${pathname}#${step.anchor}`}
+                data-testid={step.testId}
               >
                 {step.label}
               </RouterLink>
             ) : (
               <StepButton
-                data-testid={`formNavTo-${step.linkId}`}
-                onClick={() => handleClick(step.linkId)}
+                data-testid={step.testId}
+                onClick={() => handleClick(step.anchor)}
                 sx={{
                   '.MuiStepLabel-root': { py: 0 },
                   '.MuiStepLabel-iconContainer': { display: 'none' },

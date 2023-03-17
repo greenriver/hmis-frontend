@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useId } from 'react';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
 interface Props extends Partial<Omit<TextFieldProps, 'error' | 'variant'>> {
   name?: string;
@@ -38,6 +38,7 @@ const TextInput = ({
   highlight,
   inputWidth,
   sx,
+  warnIfEmptyTreatment,
   ...props
 }: TextInputProps) => {
   const htmlId = useId();
@@ -70,6 +71,9 @@ const TextInput = ({
           'label + &': {
             mt: 0.5,
           },
+          backgroundColor: warnIfEmptyTreatment
+            ? 'alerts.lightWarningBackground'
+            : undefined,
           width,
           minWidth: width,
           boxShadow: highlight

@@ -2,12 +2,11 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Box, Button, Drawer, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { STICKY_BAR_HEIGHT } from '../MainLayout';
-
-import { CONTEXT_HEADER_HEIGHT } from './contextHeader/ContextHeader';
-import { DESKTOP_NAV_SIDEBAR_WIDTH } from './DashboardContentContainer';
-
-const SITE_HEADER_HEIGHT = STICKY_BAR_HEIGHT;
+import {
+  CONTEXT_HEADER_HEIGHT,
+  DESKTOP_NAV_SIDEBAR_WIDTH,
+  STICKY_BAR_HEIGHT,
+} from '../layoutConstants';
 
 interface Props {
   children: ReactNode;
@@ -56,7 +55,7 @@ const DashboardContentNav: React.FC<Props> = ({
 }) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
-  const headerHeight = `${SITE_HEADER_HEIGHT}px`;
+  const headerHeight = `${STICKY_BAR_HEIGHT}px`;
   const height = `calc(100vh - ${headerHeight})`;
   return (
     <Box
@@ -90,7 +89,7 @@ const DashboardContentNav: React.FC<Props> = ({
           overflow: 'hidden',
           transition: 'transform .25s ease-in-out',
           zIndex: theme.zIndex.modal - 1,
-          maxHeight: `calc(100vh - ${SITE_HEADER_HEIGHT}px)`,
+          maxHeight: `calc(100vh - ${STICKY_BAR_HEIGHT}px)`,
           flex: desktopNavIsOpen ? 1 : 0,
           '& > .MuiPaper-root': {
             flex: 1,

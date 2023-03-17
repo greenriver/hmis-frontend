@@ -16,7 +16,10 @@ export const HmisEnums = {
     RECORD: 'Form for creating or editing resources directly',
     UPDATE: 'UPDATE',
   },
-  AssessmentSortOption: { ASSESSMENT_DATE: 'ASSESSMENT_DATE' },
+  AssessmentSortOption: {
+    ASSESSMENT_DATE: 'ASSESSMENT_DATE',
+    DATE_UPDATED: 'DATE_UPDATED',
+  },
   AssessmentType: {
     INVALID: 'Invalid Value',
     PHONE: 'Phone',
@@ -50,12 +53,12 @@ export const HmisEnums = {
     ALERT_SUCCESS: 'Display text as a success alert',
     ALERT_WARNING: 'Display text as a warning alert',
     CHECKBOX: 'Render a boolean input item as a checkbox',
+    DISABILITY_TABLE:
+      'Specialized component for rendering disabilities in a table',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
-    INPUT_TABLE:
-      'Render inputs as a table. Each nested group is rendered as a row.',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
@@ -260,22 +263,22 @@ export const HmisEnums = {
     N_A: 'N/A',
   },
   Gender: {
-    GENDER_FEMALE: 'Female',
-    GENDER_MALE: 'Male',
-    GENDER_NO_SINGLE_GENDER:
+    FEMALE: 'Female',
+    MALE: 'Male',
+    NO_SINGLE_GENDER:
       'A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)',
-    GENDER_TRANSGENDER: 'Transgender',
-    GENDER_QUESTIONING: 'Questioning',
-    GENDER_CLIENT_DOESN_T_KNOW: "Client doesn't know",
-    GENDER_CLIENT_REFUSED: 'Client refused',
-    GENDER_DATA_NOT_COLLECTED: 'Data not collected',
+    TRANSGENDER: 'Transgender',
+    QUESTIONING: 'Questioning',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   GeographyType: {
     INVALID: 'Invalid Value',
     URBAN: 'Urban',
     SUBURBAN: 'Suburban',
     RURAL: 'Rural',
-    UNKNOWN_DATA_NOT_COLLECTED: 'Unknown / data not collected',
+    DATA_NOT_COLLECTED: 'Unknown / data not collected',
   },
   HOPWAMedAssistedLivingFac: {
     INVALID: 'Invalid Value',
@@ -307,6 +310,12 @@ export const HmisEnums = {
     SITE_BASED_CLUSTERED_MULTIPLE_SITES:
       'Site-based - clustered / multiple sites',
     TENANT_BASED_SCATTERED_SITE: 'Tenant-based - scattered site',
+  },
+  InitialBehavior: {
+    IF_EMPTY:
+      'When loading the form, only set the specified initial value if there is no existing value.',
+    OVERWRITE:
+      'When loading the form, always overwrite the existing value with specified initial value.',
   },
   InputSize: {
     LARGE: 'LARGE',
@@ -502,14 +511,14 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   Race: {
-    RACE_AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
-    RACE_ASIAN: 'Asian or Asian American',
-    RACE_BLACK_AF_AMERICAN: 'Black, African American, or African',
-    RACE_NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
-    RACE_WHITE: 'White',
-    RACE_UNKNOWN: "Client doesn't know",
-    RACE_REFUSED: 'Client refused',
-    RACE_NOT_COLLECTED: 'Data not collected',
+    AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
+    ASIAN: 'Asian or Asian American',
+    BLACK_AF_AMERICAN: 'Black, African American, or African',
+    NATIVE_HI_PACIFIC: 'Native Hawaiian or Pacific Islander',
+    WHITE: 'White',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   ReasonNotInsured: {
     INVALID: 'Invalid Value',
@@ -526,16 +535,16 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     CONTACT_12: 'Contact 12',
     CONTACT_13: 'Contact 13',
-    PATH_SERVICE: 'PATH service',
-    RHY_SERVICE_CONNECTIONS: 'RHY service connections',
-    HOPWA_SERVICE: 'HOPWA service',
-    SSVF_SERVICE: 'SSVF service',
-    HOPWA_FINANCIAL_ASSISTANCE: 'HOPWA financial assistance',
-    SSVF_FINANCIAL_ASSISTANCE: 'SSVF financial assistance',
-    PATH_REFERRAL: 'PATH referral',
-    RHY_REFERRAL: 'RHY referral',
-    BED_NIGHT: 'Bed night',
-    HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH voucher tracking',
+    PATH_SERVICE: 'PATH Service',
+    RHY_SERVICE_CONNECTIONS: 'RHY Service Connections',
+    HOPWA_SERVICE: 'HOPWA Service',
+    SSVF_SERVICE: 'SSVF Service',
+    HOPWA_FINANCIAL_ASSISTANCE: 'HOPWA Financial Assistance',
+    SSVF_FINANCIAL_ASSISTANCE: 'SSVF Financial Assistance',
+    PATH_REFERRAL: 'PATH Referral',
+    RHY_REFERRAL: 'RHY Referral',
+    BED_NIGHT: 'Bed Night',
+    HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
   },
   ReferralResult: {
@@ -810,6 +819,16 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
+  },
+  ValidationSeverity: { error: 'error', warning: 'warning' },
+  ValidationType: {
+    data_not_collected: 'data_not_collected',
+    information: 'information',
+    invalid: 'invalid',
+    not_found: 'not_found',
+    out_of_range: 'out_of_range',
+    required: 'required',
+    server_error: 'server_error',
   },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',

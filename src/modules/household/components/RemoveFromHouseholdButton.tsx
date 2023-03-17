@@ -1,7 +1,7 @@
-import { LoadingButton } from '@mui/lab';
 import { useMemo, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import LoadingButton from '@/components/elements/LoadingButton';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
@@ -59,7 +59,6 @@ const RemoveFromHouseholdButton = ({
     <ButtonTooltipContainer title={disabledReason} placement='top'>
       <LoadingButton
         loading={loading}
-        loadingIndicator='Removing..'
         fullWidth
         variant='outlined'
         color='error'

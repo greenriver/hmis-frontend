@@ -2,6 +2,8 @@ import { Box, Paper } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { ReactNode } from 'react';
 
+import { DESKTOP_NAV_SIDEBAR_WIDTH } from '../layoutConstants';
+
 import ContextHeader from './contextHeader/ContextHeader';
 import DashboardContentNav from './DashboardContentNav';
 
@@ -21,8 +23,6 @@ interface Props {
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
 }
-
-export const DESKTOP_NAV_SIDEBAR_WIDTH = 300;
 
 const DashboardContentContainer: React.FC<Props> = ({
   children,

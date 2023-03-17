@@ -1,9 +1,10 @@
 import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-import React, { ReactNode } from 'react';
+import React from 'react';
 
 import { usePickList } from '../hooks/usePickList';
-import { isPickListOption } from '../util/formUtil';
+import { DynamicFieldProps, DynamicInputCommonProps } from '../types';
+import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -18,39 +19,10 @@ import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
-import YesNoInput from '@/components/elements/input/YesNoInput';
+import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
-import { INVALID_ENUM } from '@/modules/hmis/hmisUtil';
-import {
-  Component,
-  FormItem,
-  InputSize,
-  ItemType,
-  ValidationError,
-} from '@/types/gqlTypes';
-
-export interface DynamicInputCommonProps {
-  id?: string;
-  disabled?: boolean;
-  label?: ReactNode;
-  error?: boolean;
-  helperText?: ReactNode;
-  min?: any;
-  max?: any;
-}
-
-export interface DynamicFieldProps {
-  item: FormItem;
-  itemChanged: (linkId: string, value: any) => void;
-  nestingLevel: number;
-  value: any;
-  disabled?: boolean;
-  errors?: ValidationError[];
-  inputProps?: DynamicInputCommonProps;
-  horizontal?: boolean;
-  pickListRelationId?: string;
-  noLabel?: boolean;
-}
+import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
+import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
   if (!item.prefix && !item.text) return null;
@@ -75,7 +47,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-const MAX_INPUT_WIDTH = 400;
+const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
@@ -93,6 +65,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   inputProps,
   pickListRelationId,
   noLabel = false,
+  warnIfEmpty = false,
 }) => {
   const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     itemChanged(item.linkId, e.target.value);
@@ -127,6 +100,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     id: item.linkId,
     ...inputProps,
   };
+  commonInputProps.warnIfEmptyTreatment =
+    warnIfEmpty &&
+    (!!item.warnIfEmpty || !!item.required) &&
+    !commonInputProps.disabled &&
+    !commonInputProps.error &&
+    !hasMeaningfulValue(value);
 
   const [options, pickListLoading, isLocalPickList] = usePickList(
     item,
@@ -180,12 +159,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       }
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <YesNoInput
+          <YesNoRadio
             value={value}
-            onChange={onChangeEventValue}
-            nullable={!item.required}
-            horizontal={horizontal}
-            // includeNullOption
+            onChange={onChangeValue}
             {...commonInputProps}
           />
         </InputContainer>
@@ -238,21 +214,22 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             horizontal={horizontal}
             currency={item.type === ItemType.Currency}
             inputWidth={width}
+            disableArrowKeys={item.type === ItemType.Currency}
             {...commonInputProps}
           />
         </InputContainer>
       );
     case ItemType.Date:
-      // case ItemType.Dob:
       const datePickerProps = {};
+      const dateValue =
+        value && typeof value === 'string' ? parseHmisDateString(value) : value;
       // item.type === ItemType.Dob
       //   ? { openTo: 'year' as CalendarPickerView, disableFuture: true }
       //   : {};
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <DatePicker
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={value || null}
+            value={dateValue || null}
             onChange={onChangeValue}
             textInputProps={{
               id: item.linkId,
@@ -331,15 +308,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             checkbox
             {...commonInputProps}
           />
-          // <ToggleButtonGroupInput
-          //   value={selectedVal}
-          //   onChange={onChangeEventValue}
-          //   id={item.linkId}
-          //   name={item.linkId}
-          //   horizontal={horizontal}
-          //   options={options || []}
-          //   {...commonInputProps}
-          // />
         );
       } else {
         inputComponent = (
@@ -356,10 +324,12 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
               horizontal,
               sx: {
                 width,
-                maxWidth: MAX_INPUT_AND_LABEL_WIDTH,
+                // cant allow label to extend, because it messes up click target for closing dropdwon
+                maxWidth: MAX_INPUT_WIDTH,
                 '.MuiInputBase-root': { maxWidth: MAX_INPUT_WIDTH },
               },
             }}
+            sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
             {...commonInputProps}
           />
         );

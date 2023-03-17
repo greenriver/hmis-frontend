@@ -1,3 +1,4 @@
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
 import {
@@ -14,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import ButtonLink from '@/components/elements/ButtonLink';
 import GenericSelect from '@/components/elements/input/GenericSelect';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ClientSortOption } from '@/types/gqlTypes';
@@ -104,25 +106,26 @@ const SearchResultsHeader = ({
           value={sortOrder}
         />
       </Grid>
-      <Grid item>
-        <Card sx={{ pl: 2, py: 1.5, pr: 1, mt: 1 }}>
-          <Stack direction='row' spacing={2} sx={{ alignItems: 'center' }}>
-            <Typography variant='body2'>
-              {t<string>('clientSearch.addClientPrompt')}
-            </Typography>
-            <ButtonLink
-              data-testid='addClientButton'
-              variant='outlined'
-              color='secondary'
-              to={Routes.CREATE_CLIENT}
-              target='_blank'
-              sx={{ px: 3 }}
-            >
-              + Add Client
-            </ButtonLink>
-          </Stack>
-        </Card>
-      </Grid>
+      <RootPermissionsFilter permissions='canEditClients'>
+        <Grid item>
+          <Card sx={{ pl: 2, py: 1.5, pr: 1, mt: 1 }}>
+            <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
+              <Typography variant='body1'>
+                {t<string>('clientSearch.addClientPrompt')}
+              </Typography>
+              <ButtonLink
+                data-testid='addClientButton'
+                to={Routes.CREATE_CLIENT}
+                target='_blank'
+                sx={{ px: 3 }}
+                Icon={LibraryAddIcon}
+              >
+                Add Client
+              </ButtonLink>
+            </Stack>
+          </Card>
+        </Grid>
+      </RootPermissionsFilter>
     </Grid>
   );
 };

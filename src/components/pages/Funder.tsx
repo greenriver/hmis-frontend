@@ -85,7 +85,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
           queryDocument={CreateFunderDocument}
           onCompleted={onCompleted}
           getErrors={(data: CreateFunderMutation) => data?.createFunder?.errors}
-          submitButtonText='Create Funder'
+          FormActionProps={{ submitButtonText: 'Create Funder' }}
           localConstants={localConstants}
           {...common}
         />
@@ -99,7 +99,6 @@ const Funder = ({ create = false }: { create?: boolean }) => {
           queryDocument={UpdateFunderDocument}
           onCompleted={onCompleted}
           getErrors={(data: UpdateFunderMutation) => data?.updateFunder?.errors}
-          submitButtonText='Save Changes'
           localConstants={localConstants}
           {...common}
         />

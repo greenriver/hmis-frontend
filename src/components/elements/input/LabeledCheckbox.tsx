@@ -10,7 +10,7 @@ import { KeyboardEventHandler, SyntheticEvent, useCallback } from 'react';
 
 import { horizontalInputSx } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 
 export interface Props
   extends Omit<FormControlLabelProps, 'control' | 'label'> {
@@ -24,6 +24,7 @@ const LabeledCheckbox = ({
   onChange,
   helperText,
   horizontal = false,
+  warnIfEmptyTreatment: _ignored,
   ...props
 }: Props & DynamicInputCommonProps) => {
   const labelSx = horizontal
@@ -63,9 +64,9 @@ const LabeledCheckbox = ({
           labelPlacement={horizontal ? 'start' : 'end'}
           label={label}
           sx={{
-            color: error ? (theme) => theme.palette.error.main : undefined,
+            color: error ? 'error.main' : undefined,
             '.MuiCheckbox-root': {
-              color: error ? (theme) => theme.palette.error.main : undefined,
+              color: error ? 'error.main' : undefined,
             },
             ...labelSx,
           }}

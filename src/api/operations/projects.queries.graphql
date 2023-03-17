@@ -16,9 +16,16 @@ query GetProject($id: ID!) {
   }
 }
 
+query GetProjectPermissions($id: ID!) {
+  project(id: $id) {
+    ...ProjectPermissionsFields
+  }
+}
+
 query GetProjectEnrollments(
   $id: ID!
   $clientSearchTerm: String
+  $openOnDate: ISO8601Date
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -29,6 +36,7 @@ query GetProjectEnrollments(
       offset: $offset
       sortOrder: MOST_RECENT
       includeInProgress: true
+      openOnDate: $openOnDate
       clientSearchTerm: $clientSearchTerm
     ) {
       offset
@@ -39,6 +47,7 @@ query GetProjectEnrollments(
         client {
           id
           ...ClientName
+          ...ClientIdentificationFields
         }
       }
     }

@@ -18,7 +18,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 type FormValues = {
@@ -97,6 +97,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       const variables = transformSubmitValues({
         definition,
         values,
+        keyByFieldName: true,
       });
       const input = {
         ...variables,

@@ -1,11 +1,5 @@
 import CheckIcon from '@mui/icons-material/Check';
-import {
-  Button,
-  CircularProgress,
-  Stack,
-  Typography,
-  Box,
-} from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
 
@@ -14,9 +8,12 @@ import Loading from '../elements/Loading';
 
 import { InactiveChip } from './Project';
 
+import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
-import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
+import ProjectEnrollmentsTable, {
+  ENROLLMENT_COLUMNS,
+} from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
@@ -25,6 +22,14 @@ import {
   AddServiceToEnrollmentMutationVariables,
   EnrollmentFieldsFragment,
 } from '@/types/gqlTypes';
+
+const tableColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
+  ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
+  ENROLLMENT_COLUMNS.clientId,
+  ENROLLMENT_COLUMNS.householdId,
+  ENROLLMENT_COLUMNS.dobAge,
+  ENROLLMENT_COLUMNS.enrollmentPeriod,
+];
 
 const BulkAddServices = () => {
   const { projectId } = useSafeParams() as {
@@ -48,56 +53,65 @@ const BulkAddServices = () => {
         AddServiceToEnrollmentMutationVariables
       >
         mutationDocument={AddServiceToEnrollmentDocument}
-        renderList={(items, { onSelect, mutationLoading }) => (
-          <ProjectEnrollmentsTable
-            noLinks
-            projectId={projectId}
-            additionalColumns={[
-              ...items.map(
-                (item) =>
-                  ({
+        renderList={(items, { onSelect, mutationLoading, values }) => (
+          <>
+            {(!values?.dateProvided || !values?.typeProvided) && (
+              <Typography>
+                Select a service type and service date to begin.
+              </Typography>
+            )}
+            {values?.dateProvided && values?.typeProvided && (
+              <ProjectEnrollmentsTable
+                projectId={projectId}
+                openOnDate={values.dateProvided}
+                linkRowToEnrollment={false}
+                columns={[
+                  ...tableColumns,
+                  ...items.map((item) => ({
                     header: item.label,
-                    render: (enrollment) =>
+                    render: (enrollment: EnrollmentFieldsFragment) =>
                       item.getNode(enrollment, {
                         disabled: enrollmentsAdded.includes(enrollment.id),
                       }),
-                  } as ColumnDef<EnrollmentFieldsFragment>)
-              ),
-              {
-                header: '',
-                render: (enrollment) => (
-                  <Box sx={{ textAlign: 'right' }}>
-                    <Button
-                      color='secondary'
-                      onClick={() => {
-                        onSelect(enrollment);
-                        setLoadingEnrollmentIds((ids) => [
-                          ...ids,
-                          enrollment.id,
-                        ]);
-                      }}
-                      disabled={
-                        loadingEnrollmentIds.includes(enrollment.id) ||
-                        enrollmentsAdded.includes(enrollment.id)
-                      }
-                      startIcon={
-                        mutationLoading &&
-                        loadingEnrollmentIds.includes(enrollment.id) ? (
-                          <CircularProgress color='inherit' size={15} />
-                        ) : enrollmentsAdded.includes(enrollment.id) ? (
-                          <CheckIcon />
-                        ) : undefined
-                      }
-                    >
-                      {enrollmentsAdded.includes(enrollment.id)
-                        ? 'Assigned'
-                        : 'Assign'}
-                    </Button>
-                  </Box>
-                ),
-              },
-            ]}
-          />
+                  })),
+                  {
+                    header: '',
+                    render: (enrollment: EnrollmentFieldsFragment) => (
+                      <Box sx={{ textAlign: 'right' }}>
+                        <LoadingButton
+                          color='secondary'
+                          onClick={() => {
+                            onSelect(enrollment);
+                            setLoadingEnrollmentIds((ids) => [
+                              ...ids,
+                              enrollment.id,
+                            ]);
+                          }}
+                          disabled={
+                            loadingEnrollmentIds.includes(enrollment.id) ||
+                            enrollmentsAdded.includes(enrollment.id)
+                          }
+                          loading={
+                            mutationLoading &&
+                            loadingEnrollmentIds.includes(enrollment.id)
+                          }
+                          startIcon={
+                            enrollmentsAdded.includes(enrollment.id) ? (
+                              <CheckIcon />
+                            ) : undefined
+                          }
+                        >
+                          {enrollmentsAdded.includes(enrollment.id)
+                            ? 'Assigned'
+                            : 'Assign'}
+                        </LoadingButton>
+                      </Box>
+                    ),
+                  },
+                ]}
+              />
+            )}
+          </>
         )}
         definitionIdentifier='service'
         getInputFromTarget={(formData, enrollment) => ({

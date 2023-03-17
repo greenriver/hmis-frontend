@@ -255,18 +255,6 @@ query GetEnrollmentWithHousehold($id: ID!) {
   }
 }
 
-# query GetEnrollmentWithHouseholdAssessments($id: ID!) {
-#   enrollment(id: $id) {
-#     ...EnrollmentFields
-#     household {
-#       id
-#       householdClients {
-#         ...HouseholdClientFieldsWithAssessments
-#       }
-#     }
-#   }
-# }
-
 query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   enrollment(id: $id) {
     id

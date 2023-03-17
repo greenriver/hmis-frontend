@@ -76,7 +76,7 @@ const Service = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: AddServiceToEnrollmentMutation) =>
             data?.createService?.errors
           }
-          submitButtonText='Add Service'
+          FormActionProps={{ submitButtonText: 'Add Service' }}
           {...common}
         />
       ) : (
@@ -91,7 +91,6 @@ const Service = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: UpdateServiceMutation) =>
             data?.updateService?.errors
           }
-          submitButtonText='Save Changes'
           {...common}
         />
       )}

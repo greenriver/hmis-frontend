@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
-import { DynamicInputCommonProps } from '@/modules/form/components/DynamicField';
+import { DynamicInputCommonProps } from '@/modules/form/types';
 import { isDate, isValidDate } from '@/modules/form/util/formUtil';
 import { formatDateForDisplay } from '@/modules/hmis/hmisUtil';
 
@@ -29,6 +29,7 @@ const DatePicker = ({
   max,
   value,
   helperText,
+  warnIfEmptyTreatment,
   ...props
 }: Props) => {
   const defaultOpenMonth = useMemo(() => {
@@ -75,6 +76,7 @@ const DatePicker = ({
           {...textInputProps}
           {...params}
           error={error || !!errorMessage}
+          warnIfEmptyTreatment={warnIfEmptyTreatment}
           // If there is a server error, show that instead of the local message
           helperText={error ? undefined : errorMessage || helperText}
           FormHelperTextProps={{

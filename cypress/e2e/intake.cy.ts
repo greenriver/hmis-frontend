@@ -21,6 +21,7 @@ it(
     // Set up new client, enroll, and begin intake
     cy.createClient('Cy First', 'Cy Last');
     cy.testId('enrollButton').click();
+    // Select project
     cy.testId('projectSelect').click();
     cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
       'not.exist'
@@ -30,7 +31,9 @@ it(
       .first()
       .as('firstProject');
     cy.get('@firstProject').click();
-
+    // Set entry date
+    cy.inputId('entry-date').clear();
+    cy.inputId('entry-date').type('01012020');
     cy.testId('createEnrollmentButton').first().click();
     cy.testId('beginIntake').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
@@ -57,11 +60,11 @@ it(
     cy.assertHealthAndDV();
 
     // Deep-equal compare when closing and re-opening WIP saved assessment
-    cy.testId('submitFormButton').first().click({ ctrlKey: true });
+    cy.testId('formButton-submit').first().click({ ctrlKey: true });
     cy.window().then((win) => {
       const hudValues = win.debug.hudValues;
       // Save assessment
-      cy.testId('saveFormButton').first().click();
+      cy.testId('formButton-saveDraft').first().click();
       // Re-open assessment and assert that hudValues match previous
       cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
@@ -70,7 +73,7 @@ it(
     // Make a change and save
     const incomeFromAnySource = '4.02.2';
     cy.checkOption(incomeFromAnySource, 'NO');
-    cy.testId('saveFormButton').first().click();
+    cy.testId('formButton-saveDraft').first().click();
 
     // Re-open and ensure change was persisted
     // cy.testId('panel-assessments').find('table').find('a').first().click();
@@ -81,18 +84,20 @@ it(
 
     // Make a change and submit
     cy.checkOption(incomeFromAnySource, 'CLIENT_REFUSED');
-    cy.testId('submitFormButton').first().click();
+    cy.testId('formButton-submit').first().click();
+    cy.testId('confirmDialogAction').click();
 
     // Re-open and make sure CLIENT_REFUSED saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
-    cy.testId('saveFormButton').should('not.exist');
+    cy.testId('formButton-saveDraft').should('not.exist');
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'CLIENT_REFUSED',
     });
 
     // Change to YES and submit
     cy.checkOption(incomeFromAnySource, 'YES');
-    cy.testId('submitFormButton').first().click();
+    cy.testId('formButton-submit').first().click();
+    cy.testId('confirmDialogAction').click();
 
     // Re-open and make sure YES saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
@@ -101,11 +106,12 @@ it(
     });
 
     // Deep-equal compare when closing and re-opening submitted assessment
-    cy.testId('submitFormButton').first().click({ ctrlKey: true });
+    cy.testId('formButton-submit').first().click({ ctrlKey: true });
     cy.window().then((win) => {
       const hudValues = win.debug.hudValues;
       // Submit assessment
-      cy.testId('submitFormButton').first().click();
+      cy.testId('formButton-submit').first().click();
+      cy.testId('confirmDialogAction').click();
       // Re-open assessment and assert that hudValues match previous
       cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);

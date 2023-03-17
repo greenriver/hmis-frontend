@@ -4,11 +4,13 @@ import { isNil } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
@@ -55,6 +57,9 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<ProjectCocFieldsFragment | null>(
     null
   );
+  const [canEditProject] = useHasProjectPermissions(projectId, [
+    'canEditProjectDetails',
+  ]);
 
   const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
     useDeleteProjectCocMutation({
@@ -77,36 +82,40 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
   const tableColumns = useMemo(() => {
     return [
       ...columns,
-      {
-        key: 'actions',
-        width: '1%',
-        render: (record: ProjectCocFieldsFragment) => (
-          <Stack direction='row' spacing={1}>
-            <ButtonLink
-              data-testid='updateButton'
-              to={generateSafePath(Routes.EDIT_COC, {
-                projectId,
-                cocId: record.id,
-              })}
-              size='small'
-              variant='outlined'
-            >
-              Edit
-            </ButtonLink>
-            <Button
-              data-testid='deleteButton'
-              onClick={() => setDelete(record)}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
+      ...(canEditProject
+        ? [
+            {
+              key: 'actions',
+              width: '1%',
+              render: (record: ProjectCocFieldsFragment) => (
+                <Stack direction='row' spacing={1}>
+                  <ButtonLink
+                    data-testid='updateButton'
+                    to={generateSafePath(Routes.EDIT_COC, {
+                      projectId,
+                      cocId: record.id,
+                    })}
+                    size='small'
+                    variant='outlined'
+                  >
+                    Edit
+                  </ButtonLink>
+                  <Button
+                    data-testid='deleteButton'
+                    onClick={() => setDelete(record)}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : []),
     ];
-  }, [projectId]);
+  }, [projectId, canEditProject]);
 
   return (
     <>
@@ -118,24 +127,29 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
         noData='No Project CoC records.'
         {...props}
       />
-      <ConfirmationDialog
-        id='deleteProjectCoc'
-        open={!!recordToDelete}
-        title='Delete Project CoC record'
-        onConfirm={handleDelete}
-        onCancel={() => setDelete(null)}
-        loading={deleteLoading}
+      <ProjectPermissionsFilter
+        id={projectId}
+        permissions='canEditProjectDetails'
       >
-        {recordToDelete && (
-          <>
-            <Typography>
-              Are you sure you want to delete Project CoC record for{' '}
-              <strong>{recordToDelete.cocCode}</strong>?
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
-      </ConfirmationDialog>
+        <ConfirmationDialog
+          id='deleteProjectCoc'
+          open={!!recordToDelete}
+          title='Delete Project CoC record'
+          onConfirm={handleDelete}
+          onCancel={() => setDelete(null)}
+          loading={deleteLoading}
+        >
+          {recordToDelete && (
+            <>
+              <Typography>
+                Are you sure you want to delete Project CoC record for{' '}
+                <strong>{recordToDelete.cocCode}</strong>?
+              </Typography>
+              <Typography>This action cannot be undone.</Typography>
+            </>
+          )}
+        </ConfirmationDialog>
+      </ProjectPermissionsFilter>
     </>
   );
 };

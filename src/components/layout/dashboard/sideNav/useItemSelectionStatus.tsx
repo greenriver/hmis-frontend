@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { NavItem } from './SideNavMenu';
+import { NavItem } from './types';
 
 export type Options = {
   item: NavItem;

@@ -1,10 +1,10 @@
 import { pull } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
+import { OverrideableDynamicFieldProps } from '../types';
 import {
   autofillValues,
   buildCommonInputProps,
-  CONFIRM_ERROR_TYPE,
   FormValues,
   ItemMap,
   LinkIdMap,
@@ -12,7 +12,7 @@ import {
 } from '../util/formUtil';
 
 import DynamicField from './DynamicField';
-import DynamicGroup, { OverrideableDynamicFieldProps } from './DynamicGroup';
+import DynamicGroup from './DynamicGroup';
 
 import {
   DisabledDisplay,
@@ -28,7 +28,10 @@ export interface Props {
   errors?: ValidationError[];
   warnings?: ValidationError[];
   horizontal?: boolean;
+  warnIfEmpty?: boolean;
+  locked?: boolean;
   bulk?: boolean;
+  visible?: boolean;
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
@@ -72,6 +75,9 @@ const DynamicFormFields: React.FC<Props> = ({
   autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
   enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
+  warnIfEmpty = false,
+  locked = false,
+  visible = true,
   pickListRelationId,
   values,
   setValues,
@@ -170,11 +176,9 @@ const DynamicFormFields: React.FC<Props> = ({
   // Get errors for a particular field
   const getFieldErrors = useCallback(
     (item: FormItem) => {
-      if (!errors) return undefined;
-      if (!item.fieldName) return undefined;
-      const attribute = item.fieldName;
+      if (!errors || !item.fieldName) return undefined;
       return errors.filter(
-        (e) => e.attribute === attribute && e.type !== CONFIRM_ERROR_TYPE
+        (e) => e.attribute === item.fieldName || e.linkId === item.linkId
       );
     },
     [errors]
@@ -205,6 +209,7 @@ const DynamicFormFields: React.FC<Props> = ({
           values={values}
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
+          visible={visible}
         />
       );
     }
@@ -219,11 +224,12 @@ const DynamicFormFields: React.FC<Props> = ({
         errors={getFieldErrors(item)}
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
+        warnIfEmpty={warnIfEmpty}
         {...props}
         inputProps={{
           ...props?.inputProps,
           ...buildCommonInputProps(item, values),
-          disabled: isDisabled || undefined,
+          disabled: isDisabled || locked || undefined,
         }}
       />
     );

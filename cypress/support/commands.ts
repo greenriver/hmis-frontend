@@ -91,19 +91,21 @@ Cypress.Commands.add('displayItems', (linkIds) => {
 });
 
 Cypress.Commands.add('expectHudValuesToInclude', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(win.debug.hudValues).to.include(values);
   });
 });
 
 Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(
       Object.fromEntries(
-        Object.entries(win.debug.hudValues).filter(([key]) =>
-          key.includes(`${Object.keys(values)[0].split('.')[0]}.`)
+        Object.entries(win.debug.hudValues).filter(
+          ([key]) =>
+            key.includes(`${Object.keys(values)[0].split('.')[0]}.`) &&
+            key !== 'Enrollment.entryDate'
         )
       )
     ).to.deep.equal(values);
@@ -111,18 +113,18 @@ Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
 });
 
 Cypress.Commands.add('expectHudValuesToDeepEqual', (values) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
+  cy.testId('formButton-submit').first().click({ ctrlKey: true });
   cy.window().then((win) => {
     expect(win.debug.hudValues).to.deep.equal(values);
   });
 });
 
-Cypress.Commands.add('expectHudValuesToNotHaveKeys', (keys) => {
-  cy.testId('submitFormButton').first().click({ ctrlKey: true });
-  cy.window().then((win) => {
-    expect(win.debug.hudValues).not.to.have.keys(keys);
-  });
-});
+// Cypress.Commands.add('expectHudValuesToNotHaveKeys', (keys) => {
+//   cy.testId('formButton-submit').first().click({ ctrlKey: true });
+//   cy.window().then((win) => {
+//     expect(win.debug.hudValues).not.to.have.keys(keys);
+//   });
+// });
 
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
@@ -158,7 +160,7 @@ declare global {
       expectHudValuesToInclude(values: Record<string, any>): null;
       expectHudValuesToDeepEqual(values: Record<string, any>): null;
       expectHudValuesSectionToDeepEqual(values: Record<string, any>): null;
-      expectHudValuesToNotHaveKeys(keys: string[]): null;
+      // expectHudValuesToNotHaveKeys(keys: string[]): null;
 
       // Assessment section assertions
       assertPriorLivingSituation(): null;

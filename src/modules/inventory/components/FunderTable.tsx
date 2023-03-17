@@ -3,13 +3,15 @@ import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ConfirmationDialog from '@/components/elements/ConfirmDialog';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -54,6 +56,9 @@ const FunderTable = ({ projectId, ...props }: Props) => {
   const [recordToDelete, setDelete] = useState<FunderFieldsFragment | null>(
     null
   );
+  const [canEditProject] = useHasProjectPermissions(projectId, [
+    'canEditProjectDetails',
+  ]);
 
   const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
     useDeleteFunderMutation({
@@ -76,36 +81,40 @@ const FunderTable = ({ projectId, ...props }: Props) => {
   const tableColumns = useMemo(() => {
     return [
       ...columns,
-      {
-        key: 'actions',
-        width: '1%',
-        render: (record: FunderFieldsFragment) => (
-          <Stack direction='row' spacing={1}>
-            <ButtonLink
-              data-testid='updateButton'
-              to={generateSafePath(Routes.EDIT_FUNDER, {
-                projectId,
-                funderId: record.id,
-              })}
-              size='small'
-              variant='outlined'
-            >
-              Edit
-            </ButtonLink>
-            <Button
-              data-testid='deleteButton'
-              onClick={() => setDelete(record)}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
+      ...(canEditProject
+        ? [
+            {
+              key: 'actions',
+              width: '1%',
+              render: (record: FunderFieldsFragment) => (
+                <Stack direction='row' spacing={1}>
+                  <ButtonLink
+                    data-testid='updateButton'
+                    to={generateSafePath(Routes.EDIT_FUNDER, {
+                      projectId,
+                      funderId: record.id,
+                    })}
+                    size='small'
+                    variant='outlined'
+                  >
+                    Edit
+                  </ButtonLink>
+                  <Button
+                    data-testid='deleteButton'
+                    onClick={() => setDelete(record)}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : []),
     ];
-  }, [projectId]);
+  }, [projectId, canEditProject]);
 
   return (
     <>
@@ -117,28 +126,33 @@ const FunderTable = ({ projectId, ...props }: Props) => {
         noData='No funding sources.'
         {...props}
       />
-      <ConfirmationDialog
-        id='deleteProjectCoc'
-        open={!!recordToDelete}
-        title='Delete Project CoC record'
-        onConfirm={handleDelete}
-        onCancel={() => setDelete(null)}
-        loading={deleteLoading}
+      <ProjectPermissionsFilter
+        id={projectId}
+        permissions='canEditProjectDetails'
       >
-        {recordToDelete && (
-          <>
-            <Typography>
-              Are you sure you want to delete funding source record for{' '}
-              <strong>
-                {HmisEnums.FundingSource[recordToDelete.funder] ||
-                  recordToDelete.funder}
-              </strong>
-              ?
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
-      </ConfirmationDialog>
+        <ConfirmationDialog
+          id='deleteProjectCoc'
+          open={!!recordToDelete}
+          title='Delete Project CoC record'
+          onConfirm={handleDelete}
+          onCancel={() => setDelete(null)}
+          loading={deleteLoading}
+        >
+          {recordToDelete && (
+            <>
+              <Typography>
+                Are you sure you want to delete funding source record for{' '}
+                <strong>
+                  {HmisEnums.FundingSource[recordToDelete.funder] ||
+                    recordToDelete.funder}
+                </strong>
+                ?
+              </Typography>
+              <Typography>This action cannot be undone.</Typography>
+            </>
+          )}
+        </ConfirmationDialog>
+      </ProjectPermissionsFilter>
     </>
   );
 };

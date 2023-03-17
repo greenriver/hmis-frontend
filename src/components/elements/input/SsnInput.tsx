@@ -6,11 +6,14 @@ import { useMemo } from 'react';
 import LabelWithContent from '../LabelWithContent';
 import MultiFieldInput from '../MultiFieldInput';
 
+import { DynamicInputCommonProps } from '@/modules/form/types';
+
 type SsnInputProps = {
   onChange?: (value: string | null) => any;
   onlylast4?: boolean;
   value?: string | null;
-} & Omit<TextFieldProps, 'onChange' | 'value'>;
+} & Omit<TextFieldProps, 'onChange' | 'value'> &
+  DynamicInputCommonProps;
 
 const SsnInput = ({
   inputProps,
@@ -20,6 +23,7 @@ const SsnInput = ({
   onChange,
   helperText,
   onlylast4 = false,
+  warnIfEmptyTreatment,
   ...props
 }: SsnInputProps) => {
   const baseInputProps: TextFieldProps = {
@@ -127,6 +131,13 @@ const SsnInput = ({
               ...input.inputProps?.inputProps,
               size: input.chars,
               ref,
+            }}
+            InputProps={{
+              sx: {
+                backgroundColor: warnIfEmptyTreatment
+                  ? 'alerts.lightWarningBackground'
+                  : undefined,
+              },
             }}
             onChange={(e) => handlers.handleChange(e.target.value)}
             value={value}

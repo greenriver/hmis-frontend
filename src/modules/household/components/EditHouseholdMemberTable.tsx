@@ -1,26 +1,22 @@
 import {
   Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   FormControlLabel,
   Radio,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
 import EntryDateInput from './EntryDateInput';
-import HohIndicatorTableCell from './HohIndicatorTableCell';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
-import ClientName from '@/components/elements/ClientName';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
+import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdClientFieldsFragment,
@@ -142,7 +138,7 @@ const EditHouseholdMemberTable = ({
         key: 'indicator',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <HohIndicatorTableCell householdClient={hc} />
+          <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
         ),
       },
       {
@@ -228,36 +224,30 @@ const EditHouseholdMemberTable = ({
   return (
     <>
       {proposedHoH && !error && (
-        <Dialog open>
-          <DialogTitle variant='h5'>Change Head of Household</DialogTitle>
-          <DialogContent>
+        <ConfirmationDialog
+          open
+          title='Change Head of Household'
+          confirmText='Confirm Change'
+          onConfirm={onChangeHoH}
+          onCancel={() => setProposedHoH(null)}
+          loading={loading || confirmedHoH}
+          color='error'
+        >
+          <>
             {proposedHoH && hoh && (
-              <DialogContentText>
+              <Typography>
                 You are changing the head of household from{' '}
                 <b>{clientBriefName(hoh)}</b> to{' '}
                 <b>{clientBriefName(proposedHoH)}</b>
-              </DialogContentText>
+              </Typography>
             )}
             {proposedHoH && !hoh && (
-              <DialogContentText>
+              <Typography>
                 Set <b>{clientBriefName(proposedHoH)}</b> as Head of Household.
-              </DialogContentText>
+              </Typography>
             )}
-          </DialogContent>
-          <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
-            <Button
-              variant='outlined'
-              color='secondary'
-              onClick={onChangeHoH}
-              disabled={loading || confirmedHoH}
-            >
-              {loading || confirmedHoH ? 'Updating...' : 'Confirm'}
-            </Button>
-            <Button onClick={() => setProposedHoH(null)} variant='gray'>
-              Cancel
-            </Button>
-          </DialogActions>
-        </Dialog>
+          </>
+        </ConfirmationDialog>
       )}
 
       <GenericTable<HouseholdClientFieldsFragment>

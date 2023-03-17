@@ -647,6 +647,89 @@
         "possibleTypes": null
       },
       {
+        "kind": "INPUT_OBJECT",
+        "name": "AssessmentInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "assessmentId",
+            "description": "Required if updating an existing assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "confirmed",
+            "description": "Whether warnings have been confirmed",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollmentId",
+            "description": "Required if saving a new assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formDefinitionId",
+            "description": "Required if saving a new assessment",
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hudValues",
+            "description": "Transformed HUD values as JSON",
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "values",
+            "description": "Raw form state as JSON",
+            "type": {
+              "kind": "SCALAR",
+              "name": "JsonObject",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "AssessmentLevel",
         "description": "4.19.4",
@@ -744,6 +827,12 @@
         "enumValues": [
           {
             "name": "ASSESSMENT_DATE",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATE_UPDATED",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -963,8 +1052,28 @@
             "deprecationReason": null
           },
           {
+            "name": "sumQuestions",
+            "description": "Link IDs of numeric questions to sum up and set as the value if condition is met",
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "valueBoolean",
-            "description": "If question is boolean type, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -976,7 +1085,7 @@
           },
           {
             "name": "valueCode",
-            "description": "If question is choice type, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -988,7 +1097,7 @@
           },
           {
             "name": "valueNumber",
-            "description": "If question is numeric, autofill value",
+            "description": "Value to autofill if condition is met",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -1770,6 +1879,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2835,6 +2956,12 @@
             "deprecationReason": null
           },
           {
+            "name": "DISABILITY_TABLE",
+            "description": "Specialized component for rendering disabilities in a table",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "HORIZONTAL_GROUP",
             "description": "Render a group of inputs horizontally",
             "isDeprecated": false,
@@ -2849,12 +2976,6 @@
           {
             "name": "INPUT_GROUP",
             "description": "Render a group that contains children of the same type (e.g. all booleans)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INPUT_TABLE",
-            "description": "Render inputs as a table. Each nested group is rendered as a row.",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4103,6 +4224,104 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "DeleteAssessmentInput",
+        "description": "Autogenerated input type of DeleteAssessment",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "DeleteAssessmentPayload",
+        "description": "Autogenerated return type of DeleteAssessment",
+        "fields": [
+          {
+            "name": "assessment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Assessment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -5667,6 +5886,30 @@
             "deprecationReason": null
           },
           {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "developmentalDisability",
             "description": null,
             "args": [],
@@ -5680,7 +5923,7 @@
           },
           {
             "name": "disablingCondition",
-            "description": "Current disabling conditionn on the linked Enrollment. It may not match up with the disabilities specified in this group.",
+            "description": "Current disabling condition on the linked Enrollment. It may not match up with the disabilities specified in this group.",
             "args": [],
             "type": {
               "kind": "NON_NULL",
@@ -7649,6 +7892,18 @@
         "description": "A question or group of questions",
         "fields": [
           {
+            "name": "assessmentDate",
+            "description": "Whether this item corresponds to the assessment date. Must be used with DATE\ntype. Should be used no more than once per form",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autofillValues",
             "description": "Value(s) to autofill based on conditional logic",
             "args": [],
@@ -7670,7 +7925,7 @@
           },
           {
             "name": "bounds",
-            "description": null,
+            "description": "Bounds applied to the input value",
             "args": [],
             "type": {
               "kind": "LIST",
@@ -7770,7 +8025,7 @@
           },
           {
             "name": "fieldName",
-            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms and for assessment population.",
+            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms, for assessment population, and for assessment extraction.",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -7913,6 +8168,18 @@
             "deprecationReason": null
           },
           {
+            "name": "prefill",
+            "description": "Whether to allow pre-filling section from recent records. Should only be\nenabled in conjunction with record_type and for top-level group items.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "prefix",
             "description": "Prefix for the item label",
             "args": [],
@@ -7978,7 +8245,7 @@
           },
           {
             "name": "recordType",
-            "description": "Record type to use for population",
+            "description": "Record type to use for population and extraction",
             "args": [],
             "type": {
               "kind": "ENUM",
@@ -8060,6 +8327,18 @@
                 "name": "ItemType",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "warnIfEmpty",
+            "description": "Whether to show a warning if this question is unanswered",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8802,49 +9081,49 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "GENDER_CLIENT_DOESN_T_KNOW",
+            "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_CLIENT_REFUSED",
+            "name": "CLIENT_REFUSED",
             "description": "(9) Client refused",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_DATA_NOT_COLLECTED",
+            "name": "DATA_NOT_COLLECTED",
             "description": "(99) Data not collected",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_FEMALE",
+            "name": "FEMALE",
             "description": "(0) Female",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_MALE",
+            "name": "MALE",
             "description": "(1) Male",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_NO_SINGLE_GENDER",
+            "name": "NO_SINGLE_GENDER",
             "description": "(4) A gender other than singularly female or male (e.g., non-binary, genderfluid, agender, culturally specific gender)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_QUESTIONING",
+            "name": "QUESTIONING",
             "description": "(6) Questioning",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "GENDER_TRANSGENDER",
+            "name": "TRANSGENDER",
             "description": "(5) Transgender",
             "isDeprecated": false,
             "deprecationReason": null
@@ -8861,6 +9140,12 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Unknown / data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "INVALID",
             "description": "Invalid Value",
             "isDeprecated": false,
@@ -8875,12 +9160,6 @@
           {
             "name": "SUBURBAN",
             "description": "(2) Suburban",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNKNOWN_DATA_NOT_COLLECTED",
-            "description": "(99) Unknown / data not collected",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -10748,13 +11027,52 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "InitialBehavior",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "IF_EMPTY",
+            "description": "When loading the form, only set the specified initial value if there is no existing value.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OVERWRITE",
+            "description": "When loading the form, always overwrite the existing value with specified initial value.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "InitialValue",
         "description": "Initial value when item is first rendered",
         "fields": [
           {
+            "name": "initialBehavior",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "InitialBehavior",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "valueBoolean",
-            "description": "If question is boolean type, initial value",
+            "description": "Boolean to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -10766,7 +11084,7 @@
           },
           {
             "name": "valueCode",
-            "description": "If question is choice type, initial value",
+            "description": "Code to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -10790,7 +11108,7 @@
           },
           {
             "name": "valueNumber",
-            "description": "If question is numeric, initial value",
+            "description": "Number to set as initial value",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -12533,6 +12851,35 @@
             "deprecationReason": null
           },
           {
+            "name": "deleteAssessment",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": "Parameters for DeleteAssessment",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "DeleteAssessmentInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "DeleteAssessmentPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "deleteBeds",
             "description": null,
             "args": [
@@ -12904,6 +13251,35 @@
             "type": {
               "kind": "OBJECT",
               "name": "SubmitAssessmentPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "submitHouseholdAssessments",
+            "description": "Submit multiple assessments in a household",
+            "args": [
+              {
+                "name": "input",
+                "description": "Parameters for SubmitHouseholdAssessments",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "SubmitHouseholdAssessmentsInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "SubmitHouseholdAssessmentsPayload",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13414,6 +13790,22 @@
         "description": "HUD Organization",
         "fields": [
           {
+            "name": "access",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "OrganizationAccess",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "contactInformation",
             "description": null,
             "args": [],
@@ -13606,6 +13998,49 @@
               "kind": "SCALAR",
               "name": "Boolean",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "OrganizationAccess",
+        "description": null,
+        "fields": [
+          {
+            "name": "canDeleteOrganization",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditOrganization",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -14099,6 +14534,22 @@
             "deprecationReason": null
           },
           {
+            "name": "access",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ProjectAccess",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "active",
             "description": null,
             "args": [],
@@ -14240,6 +14691,18 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "openOnDate",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ISO8601Date",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -14550,6 +15013,145 @@
               "kind": "ENUM",
               "name": "TrackingMethod",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "ProjectAccess",
+        "description": null,
+        "fields": [
+          {
+            "name": "canDeleteEnrollments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canDeleteProject",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditEnrollments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditProjectDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewDob",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewEnrollmentDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewFullSsn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewPartialSsn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -15435,6 +16037,22 @@
         "description": null,
         "fields": [
           {
+            "name": "access",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "QueryAccess",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "assessment",
             "description": "Assessment lookup",
             "args": [
@@ -16117,6 +16735,241 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "QueryAccess",
+        "description": null,
+        "fields": [
+          {
+            "name": "canAdministerHmis",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canDeleteAssignedProjectData",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canDeleteEnrollments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canDeleteOrganization",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canDeleteProject",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditClients",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditEnrollments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditOrganization",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canEditProjectDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewClients",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewDob",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewEnrollmentDetails",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewFullSsn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "canViewPartialSsn",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "Race",
         "description": "HUD Race (1.7)",
@@ -16125,49 +16978,49 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "RACE_AM_IND_AK_NATIVE",
+            "name": "AM_IND_AK_NATIVE",
             "description": "(AmIndAKNative) American Indian, Alaska Native, or Indigenous",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_ASIAN",
+            "name": "ASIAN",
             "description": "(Asian) Asian or Asian American",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_BLACK_AF_AMERICAN",
+            "name": "BLACK_AF_AMERICAN",
             "description": "(BlackAfAmerican) Black, African American, or African",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_NATIVE_HI_PACIFIC",
-            "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_NOT_COLLECTED",
-            "description": "(99) Data not collected",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_REFUSED",
-            "description": "(9) Client refused",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RACE_UNKNOWN",
+            "name": "CLIENT_DOESN_T_KNOW",
             "description": "(8) Client doesn't know",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RACE_WHITE",
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NATIVE_HI_PACIFIC",
+            "description": "(NativeHIPacific) Native Hawaiian or Pacific Islander",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WHITE",
             "description": "(White) White",
             "isDeprecated": false,
             "deprecationReason": null
@@ -16267,7 +17120,7 @@
         "enumValues": [
           {
             "name": "BED_NIGHT",
-            "description": "(200) Bed night",
+            "description": "(200) Bed Night",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16285,19 +17138,19 @@
           },
           {
             "name": "HOPWA_FINANCIAL_ASSISTANCE",
-            "description": "(151) HOPWA financial assistance",
+            "description": "(151) HOPWA Financial Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HOPWA_SERVICE",
-            "description": "(143) HOPWA service",
+            "description": "(143) HOPWA Service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "HUD_VASH_OTH_VOUCHER_TRACKING",
-            "description": "(210) HUD-VASH OTH voucher tracking",
+            "description": "(210) HUD-VASH OTH Voucher Tracking",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -16315,37 +17168,37 @@
           },
           {
             "name": "PATH_REFERRAL",
-            "description": "(161) PATH referral",
+            "description": "(161) PATH Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "PATH_SERVICE",
-            "description": "(141) PATH service",
+            "description": "(141) PATH Service",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_REFERRAL",
-            "description": "(162) RHY referral",
+            "description": "(162) RHY Referral",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "RHY_SERVICE_CONNECTIONS",
-            "description": "(142) RHY service connections",
+            "description": "(142) RHY Service Connections",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_FINANCIAL_ASSISTANCE",
-            "description": "(152) SSVF financial assistance",
+            "description": "(152) SSVF Financial Assistance",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SSVF_SERVICE",
-            "description": "(144) SSVF service",
+            "description": "(144) SSVF Service",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -16630,30 +17483,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "assessmentDate",
-            "description": "Date with format yyyy-mm-dd",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentId",
-            "description": "Required if updating an existing assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "clientMutationId",
             "description": "A unique identifier for the client performing the mutation.",
             "type": {
@@ -16666,38 +17495,14 @@
             "deprecationReason": null
           },
           {
-            "name": "enrollmentId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "formDefinitionId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "values",
-            "description": "Form state as JSON",
+            "name": "input",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "JsonObject",
+                "kind": "INPUT_OBJECT",
+                "name": "AssessmentInput",
                 "ofType": null
               }
             },
@@ -18185,30 +18990,6 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "assessmentDate",
-            "description": "Date with format yyyy-mm-dd",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "assessmentId",
-            "description": "Required if updating an existing assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "clientMutationId",
             "description": "A unique identifier for the client performing the mutation.",
             "type": {
@@ -18221,50 +19002,14 @@
             "deprecationReason": null
           },
           {
-            "name": "enrollmentId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "formDefinitionId",
-            "description": "Required if saving a new assessment",
-            "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "hudValues",
-            "description": "Transformed HUD values as JSON",
-            "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "values",
-            "description": "Form state as JSON",
+            "name": "input",
+            "description": null,
             "type": {
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "JsonObject",
+                "kind": "INPUT_OBJECT",
+                "name": "AssessmentInput",
                 "ofType": null
               }
             },
@@ -18290,6 +19035,132 @@
               "kind": "OBJECT",
               "name": "Assessment",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "SubmitHouseholdAssessmentsInput",
+        "description": "Autogenerated input type of SubmitHouseholdAssessments",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "assessmentIds",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "confirmed",
+            "description": "Whether warnings have been confirmed",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "SubmitHouseholdAssessmentsPayload",
+        "description": "Autogenerated return type of SubmitHouseholdAssessments",
+        "fields": [
+          {
+            "name": "assessments",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Assessment",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20211,9 +21082,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20221,6 +21096,22 @@
           {
             "name": "fullMessage",
             "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "id",
+            "description": "Unique ID for this error",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -20231,8 +21122,8 @@
             "deprecationReason": null
           },
           {
-            "name": "id",
-            "description": null,
+            "name": "linkId",
+            "description": "Link ID of form item if this error is linked to a specific item",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -20259,13 +21150,53 @@
             "deprecationReason": null
           },
           {
-            "name": "options",
+            "name": "readableAttribute",
             "description": null,
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "JsonObject",
+              "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recordId",
+            "description": "ID of the AR record this error pertains to",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "section",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "severity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ValidationSeverity",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20278,8 +21209,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "ValidationType",
                 "ofType": null
               }
             },
@@ -20293,18 +21224,122 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "ValidationSeverity",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "error",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "warning",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ValidationType",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "data_not_collected",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "information",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "invalid",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "not_found",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "out_of_range",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "required",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "server_error",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "ValueBound",
-        "description": "Bound for the response value. The bound may or may not be dependent on another questions answer.",
+        "description": "Bound applied to the response value. The bound may or may not be dependent on another questions answer.",
         "fields": [
           {
-            "name": "question",
-            "description": "Link ID of dependent question, if bound value should be equal to the questions answer",
+            "name": "id",
+            "description": "Unique identifier for this bound",
             "args": [],
             "type": {
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "question",
+            "description": "Link ID of dependent question, if this items value should be compared to another items value",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "severity",
+            "description": "Severity of bound. If error, user will be unable to submit a value that does not meet this condition.",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ValidationSeverity",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null

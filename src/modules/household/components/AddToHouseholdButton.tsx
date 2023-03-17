@@ -1,7 +1,8 @@
-import { Button } from '@mui/material';
 import { format } from 'date-fns';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import LoadingButton from '@/components/elements/LoadingButton';
+import usePrevious from '@/hooks/usePrevious';
 import {
   RelationshipToHoH,
   useAddHouseholdMembersMutation,
@@ -14,14 +15,6 @@ interface Props {
   onSuccess: () => void;
   relationshipToHoH?: RelationshipToHoH | null;
   startDate?: Date | null;
-}
-
-function usePrevious(value: any) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-  return ref.current;
 }
 
 const AddToHouseholdButton = ({
@@ -51,7 +44,6 @@ const AddToHouseholdButton = ({
 
   let text = 'Add to Enrollment';
   let color: 'secondary' | 'error' = 'secondary';
-  if (loading) text = 'Adding...';
   if (added) text = 'Added';
   if (error) {
     text = 'Error';
@@ -79,16 +71,17 @@ const AddToHouseholdButton = ({
   );
 
   return (
-    <Button
+    <LoadingButton
       disabled={added || loading}
       color={color}
       fullWidth
       size='small'
       onClick={onClick}
       sx={{ maxWidth: '180px' }}
+      loading={loading}
     >
       {text}
-    </Button>
+    </LoadingButton>
   );
 };
 

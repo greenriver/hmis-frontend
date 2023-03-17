@@ -1,17 +1,17 @@
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { zipObject } from 'lodash-es';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
+import { GroupItemComponentProps } from '../../types';
 import {
   getAllChildLinkIds,
   getPopulatableChildren,
+  gqlValueToFormValue,
 } from '../../util/formUtil';
-import { gqlValueToFormValue } from '../../util/recordFormUtil';
 import {
   isTypicalRelatedRecord,
   RelatedRecord,
 } from '../../util/recordPickerUtil';
-import { GroupItemComponentProps } from '../DynamicGroup';
 import RecordPickerDialog, {
   tableComponentForType,
 } from '../RecordPickerDialog';
@@ -22,13 +22,24 @@ const FormCard = ({
   item,
   severalItemsChanged,
   renderChildItem,
-}: GroupItemComponentProps) => {
+  anchor,
+}: GroupItemComponentProps & { anchor?: string }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
 
+  const fillable = useMemo(
+    () =>
+      item.recordType && item.prefill && tableComponentForType(item.recordType),
+    [item]
+  );
+
   const onClear = useCallback(() => {
     const linkIds = getAllChildLinkIds(item);
-    const updatedValues = zipObject(linkIds, []);
+    const updatedValues = zipObject(
+      linkIds,
+      new Array(linkIds.length).fill(null)
+    );
+
     severalItemsChanged(updatedValues);
     setSourceRecord(undefined);
   }, [item, severalItemsChanged]);
@@ -52,7 +63,7 @@ const FormCard = ({
   );
 
   return (
-    <Grid id={item.linkId} item>
+    <Grid id={anchor} item>
       <Paper
         sx={{
           py: 3,
@@ -65,7 +76,7 @@ const FormCard = ({
             <Typography variant='h5' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
-            {item.recordType && tableComponentForType(item.recordType) && (
+            {fillable && (
               <Stack direction='row' spacing={1}>
                 <Button
                   variant='outlined'
@@ -113,7 +124,7 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {item.recordType && tableComponentForType(item.recordType) && (
+        {fillable && item.recordType && (
           <RecordPickerDialog
             id={`recordPickerDialog-${item.linkId}`}
             item={item}

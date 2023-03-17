@@ -1,9 +1,14 @@
 fragment ValidationErrorFields on ValidationError {
   type
   attribute
+  readableAttribute
   message
   fullMessage
+  severity
   id
+  recordId
+  linkId
+  section
 }
 
 fragment ClientName on Client {
@@ -88,9 +93,13 @@ fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
     inProgress
     intakeAssessment {
       id
+      inProgress
+      assessmentDate
     }
     exitAssessment {
       id
+      inProgress
+      assessmentDate
     }
   }
 }
@@ -125,6 +134,11 @@ fragment EnrollmentFieldsFromAssessment on Enrollment {
   dateToStreetEssh
   timesHomelessPastThreeYears
   monthsHomelessPastThreeYears
+  intakeAssessment {
+    user {
+      name
+    }
+  }
   project {
     id
     projectName
@@ -291,6 +305,8 @@ fragment DisabilityGroupFields on DisabilityGroup {
   physicalDisabilityIndefiniteAndImpairs
   substanceUseDisorder
   substanceUseDisorderIndefiniteAndImpairs
+  dateCreated
+  dateUpdated
 }
 
 fragment HealthAndDvFields on HealthAndDv {

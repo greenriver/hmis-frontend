@@ -23,8 +23,10 @@ import BedsTable from '@/modules/bedUnitManagement/components/BedsTable';
 import UnitsTable from '@/modules/bedUnitManagement/components/UnitsTable';
 import DynamicForm from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
-import { FormValues } from '@/modules/form/util/formUtil';
-import { transformSubmitValues } from '@/modules/form/util/recordFormUtil';
+import {
+  FormValues,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -34,6 +36,7 @@ import {
   useCreateBedsMutation,
   useCreateUnitsMutation,
   useGetInventoryQuery,
+  ValidationError,
 } from '@/types/gqlTypes';
 
 const InventoryBeds = () => {
@@ -45,23 +48,36 @@ const InventoryBeds = () => {
   const title = 'Beds and Units';
   const [crumbs, crumbsLoading, project] = useProjectCrumbs();
   const [dialogOpen, setDialogOpen] = useState<'BEDS' | 'UNITS' | null>(null);
+  const [errors, setErrors] = useState<ValidationError[]>([]);
   const { data, loading, error } = useGetInventoryQuery({
     variables: { id: inventoryId },
   });
+  const closeDialog = useCallback(() => {
+    setDialogOpen(null);
+    setErrors([]);
+  }, []);
 
   const [createBeds, { loading: createBedsLoading }] = useCreateBedsMutation({
-    onCompleted: () => {
-      evictBedsQuery(inventoryId);
-      evictUnitsQuery(inventoryId);
-      setDialogOpen(null);
+    onCompleted: (data) => {
+      if (data.createBeds?.errors?.length) {
+        setErrors(data.createBeds?.errors);
+      } else {
+        evictBedsQuery(inventoryId);
+        evictUnitsQuery(inventoryId);
+        closeDialog();
+      }
     },
   });
   const [createUnits, { loading: createUnitsLoading }] = useCreateUnitsMutation(
     {
-      onCompleted: () => {
-        // evictBedsQuery(inventoryId);
-        evictUnitsQuery(inventoryId);
-        setDialogOpen(null);
+      onCompleted: (data) => {
+        if (data.createUnits?.errors?.length) {
+          setErrors(data.createUnits?.errors);
+        } else {
+          // evictBedsQuery(inventoryId);
+          evictUnitsQuery(inventoryId);
+          closeDialog();
+        }
       },
     }
   );
@@ -71,6 +87,7 @@ const InventoryBeds = () => {
       const input = transformSubmitValues({
         definition: BedsDefinition,
         values,
+        keyByFieldName: true,
       });
       input.inventoryId = inventoryId;
       createBeds({ variables: { input: { input } as CreateBedsInput } });
@@ -83,9 +100,11 @@ const InventoryBeds = () => {
       const input = transformSubmitValues({
         definition: UnitsDefinition,
         values,
+        keyByFieldName: true,
       });
       input.inventoryId = inventoryId;
       if (!input.prefix) input.prefix = 'Unit';
+      console.log('submitting', input);
       createUnits({ variables: { input: { input } as CreateUnitsInput } });
     },
     [createUnits, inventoryId]
@@ -156,7 +175,7 @@ const InventoryBeds = () => {
           </Paper>
         </Grid>
       </Grid>
-      <Dialog open={!!dialogOpen} fullWidth onClose={() => setDialogOpen(null)}>
+      <Dialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
         <DialogTitle
           typography='h5'
           sx={{ textTransform: 'none', mb: 2 }}
@@ -168,22 +187,28 @@ const InventoryBeds = () => {
           {dialogOpen === 'UNITS' && (
             <DynamicForm
               definition={UnitsDefinition}
-              submitButtonText='Create Units'
-              discardButtonText='Cancel'
-              onDiscard={() => setDialogOpen(null)}
+              FormActionProps={{
+                submitButtonText: 'Create Units',
+                discardButtonText: 'Cancel',
+                onDiscard: closeDialog,
+              }}
               onSubmit={handleCreateUnits}
               loading={createUnitsLoading}
+              errors={errors}
             />
           )}
           {dialogOpen === 'BEDS' && (
             <DynamicForm
               definition={BedsDefinition}
-              submitButtonText='Create Beds'
-              discardButtonText='Cancel'
-              onDiscard={() => setDialogOpen(null)}
+              FormActionProps={{
+                submitButtonText: 'Create Beds',
+                discardButtonText: 'Cancel',
+                onDiscard: closeDialog,
+              }}
               onSubmit={handleCreateBeds}
               pickListRelationId={inventoryId}
               loading={createBedsLoading}
+              errors={errors}
             />
           )}
         </DialogContent>

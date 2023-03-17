@@ -1,11 +1,17 @@
 import { getYear, isValid, max, min } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { compact, isNil, sum } from 'lodash-es';
 
-import { age, INVALID_ENUM, parseHmisDateString } from '../../hmis/hmisUtil';
-import { DynamicInputCommonProps } from '../components/DynamicField';
+import { DynamicInputCommonProps, HIDDEN_VALUE } from '../types';
 
+import {
+  age,
+  formatDateForGql,
+  INVALID_ENUM,
+  parseHmisDateString,
+} from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  AutofillValue,
   BoundType,
   DataCollectedAbout,
   EnableBehavior,
@@ -14,6 +20,7 @@ import {
   FormDefinitionJson,
   FormDefinitionWithJsonFragment,
   FormItem,
+  InitialBehavior,
   ItemType,
   NoYesReasonsForMissingData,
   PickListOption,
@@ -26,8 +33,8 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
-export const CONFIRM_ERROR_TYPE = 'confirm_warning';
-export const isDataNotCollected = (s: string) => s.endsWith('_NOT_COLLECTED');
+export const isDataNotCollected = (s?: string) =>
+  s && s.endsWith('_NOT_COLLECTED');
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
@@ -70,6 +77,15 @@ export function areEqualValues(
   }
   return value1 === value2;
 }
+
+export const hasMeaningfulValue = (
+  value: string | object | null | undefined
+): boolean => {
+  if (Array.isArray(value) && value.length == 0) return false;
+  if (isNil(value)) return false;
+  if (value === '') return false;
+  return true;
+};
 
 const localResolvePickList = (
   pickListReference: string,
@@ -114,7 +130,8 @@ export const getOptionValue = (
   item: FormItem
 ) => {
   if (!value) return null;
-  if (value && isDataNotCollected(value)) {
+  if (isPickListOption(value)) return value;
+  if (isDataNotCollected(value)) {
     return null;
   }
   if (item.pickListReference) {
@@ -167,6 +184,7 @@ export const getItemMap = (
 /**
  * Recursively find a question item by linkId
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const findItem = (
   items: FormItem[] | null | undefined,
   linkId: string
@@ -309,6 +327,28 @@ export const shouldEnableItem = (
   }
 };
 
+export const getAutofillComparisonValue = (
+  av: AutofillValue,
+  values: FormValues,
+  targetItem: FormItem
+) => {
+  // Perform summation if applicable
+  if (av.sumQuestions && av.sumQuestions.length > 0) {
+    const numbers = av.sumQuestions
+      .map((linkId) => values[linkId])
+      .map((n) => (Number.isNaN(Number(n)) ? undefined : Number(n)))
+      .filter((n) => !isNil(n));
+    return sum(numbers);
+  }
+
+  // Choose first present value from Boolean, Number, and Code attributes
+  return [
+    av.valueBoolean,
+    av.valueNumber,
+    getOptionValue(av.valueCode, targetItem),
+  ].filter((e) => !isNil(e))[0];
+};
+
 /**
  * Autofill values based on changed item.
  * If there are multiple autofill rules, the first matching one is used
@@ -328,9 +368,12 @@ export const autofillValues = (
   // use `some` to stop iterating when true is returned
   return item.autofillValues.some((av) => {
     // Evaluate all enableWhen conditions
-    const booleans = (av.autofillWhen || []).map((en) =>
+    const booleans = av.autofillWhen.map((en) =>
       evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
     );
+
+    // If there were no conditions specify, it should always be autofilled
+    if (booleans.length === 0) booleans.push(true);
 
     const shouldAutofillValue =
       av.autofillBehavior === EnableBehavior.Any
@@ -339,11 +382,7 @@ export const autofillValues = (
 
     if (!shouldAutofillValue) return false;
 
-    const newValue = [
-      av.valueBoolean,
-      av.valueNumber,
-      getOptionValue(av.valueCode, item),
-    ].filter((e) => !isNil(e))[0];
+    const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
       // console.log(
@@ -418,11 +457,93 @@ export const buildCommonInputProps = (
 };
 
 /**
+ * Trasnform GraphQL value shape into form value shape
+ *
+ * @param value GraphQL value (eg "ES" or "2020-01-01")
+ * @param item Form item
+ * @returns value (eg {code: "ES", label: '..' } or Date object)
+ */
+export const gqlValueToFormValue = (
+  value: any | null | undefined,
+  item: FormItem
+) => {
+  if (isNil(value)) return value;
+
+  switch (item.type) {
+    case ItemType.Date:
+      return typeof value === 'string' ? parseHmisDateString(value) : value;
+    case ItemType.Choice:
+    case ItemType.OpenChoice:
+      if (Array.isArray(value)) {
+        // DNC gets filtered out here
+        return compact(value.map((v) => getOptionValue(v, item)));
+      }
+      return getOptionValue(value, item);
+
+    default:
+      // Set the property directly as the initial form value
+      return value;
+  }
+};
+
+/**
+ * Transform form value shape into GraphQL value shape.
+ * For example, a selected option '{ code: 'ES' }'
+ * is converted to enum 'ES'.
+ *
+ * @param value value from the form state
+ * @param item corresponding FormDefinition item
+ * @returns transformed value
+ */
+export const formValueToGqlValue = (value: any, item: FormItem): any => {
+  if (isNil(value)) return value;
+  if (value === '') return undefined;
+
+  if (item.type === ItemType.Date) {
+    // Try to make sure we have a date object
+    let date = value;
+    if (typeof date === 'string') {
+      date = parseHmisDateString(value);
+    }
+    if (date instanceof Date) return formatDateForGql(date) || undefined;
+    // If this isn't parseable/formattable into a date, return undefined
+    return undefined;
+  }
+
+  if ([ItemType.Integer, ItemType.Currency].includes(item.type)) {
+    const num = Number(value);
+    return Number.isNaN(num) ? undefined : num;
+  }
+
+  if (
+    item.type === ItemType.Choice &&
+    item.pickListReference &&
+    ['projects', 'organizations'].includes(item.pickListReference)
+  ) {
+    // Special case for project/org selectors which key on ID
+    if (Array.isArray(value)) {
+      return value.map((option: { id: string }) => option.id);
+    } else if (value) {
+      return (value as { id: string }).id;
+    }
+  } else if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+    if (Array.isArray(value)) {
+      return value.map((option: PickListOption) => option.code);
+    } else if (value) {
+      return (value as PickListOption).code;
+    }
+  }
+
+  return value;
+};
+
+/**
  * Create initial form state based on initial values specified in the form definition
  */
 export const getInitialValues = (
   definition: FormDefinitionJson,
-  localConstants?: LocalConstants
+  localConstants?: LocalConstants,
+  behavior?: InitialBehavior
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
@@ -435,10 +556,19 @@ export const getInitialValues = (
       if (Array.isArray(item.item)) {
         recursiveFillInValues(item.item, values);
       }
-      if (!item.initial) return;
+      if (!item.initial) {
+        // Make sure all HUD fields are present in values to begin
+        if (item.fieldName && behavior !== InitialBehavior.Overwrite)
+          values[item.linkId] = null;
+
+        return;
+      }
 
       // TODO handle multiple initials for multi-select questions
       const initial = item.initial[0];
+
+      if (behavior && initial.initialBehavior !== behavior) return;
+
       if (!isNil(initial.valueBoolean)) {
         values[item.linkId] = initial.valueBoolean;
       } else if (!isNil(initial.valueNumber)) {
@@ -448,7 +578,10 @@ export const getInitialValues = (
       } else if (initial.valueLocalConstant) {
         const varName = initial.valueLocalConstant.replace(/^\$/, '');
         if (localConstants && varName in localConstants) {
-          values[item.linkId] = localConstants[varName];
+          const value = localConstants[varName];
+          if (!isNil(value)) {
+            values[item.linkId] = gqlValueToFormValue(value, item) || value;
+          }
         }
       }
     });
@@ -502,15 +635,27 @@ export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
 
-    item.autofillValues.forEach((v) => {
-      (v.autofillWhen || []).forEach((en) => {
-        if (!deps[en.question]) deps[en.question] = [];
-        deps[en.question].push(item.linkId);
-        if (en.compareQuestion) {
-          if (!deps[en.compareQuestion]) deps[en.compareQuestion] = [];
-          deps[en.compareQuestion].push(item.linkId);
-        }
-      });
+    // A change in "id" may cause "item.linkId" to autofill
+    function addDependency(id: string) {
+      if (!deps[id]) deps[id] = [];
+      if (deps[id].indexOf(item.linkId) === -1) deps[id].push(item.linkId);
+    }
+
+    item.autofillValues.forEach((av) => {
+      // If this item sums other items using sumQuestions, add those dependencies
+      if (av.sumQuestions) {
+        av.sumQuestions.forEach((summedLinkId) => {
+          addDependency(summedLinkId);
+        });
+      }
+
+      // If this autofill is conditional on other items, add those dependencies
+      if (av.autofillWhen) {
+        av.autofillWhen.forEach((en) => {
+          addDependency(en.question);
+          if (en.compareQuestion) addDependency(en.compareQuestion);
+        });
+      }
     });
   });
   return deps;
@@ -595,9 +740,8 @@ export const applyDataCollectedAbout = (
   items: FormDefinitionWithJsonFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) => {
-  // const clone = { ...definition };
-  return items.filter((item) => {
+) =>
+  items.filter((item) => {
     if (!item.dataCollectedAbout) return true;
     switch (item.dataCollectedAbout) {
       case DataCollectedAbout.AllClients:
@@ -605,10 +749,11 @@ export const applyDataCollectedAbout = (
       case DataCollectedAbout.Hoh:
         return relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold;
       case DataCollectedAbout.HohAndAdults:
+        const clientAge = age(client);
         return (
           relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
           isNil(client.dob) ||
-          age(client) >= 18
+          (clientAge && clientAge >= 18)
         );
       case DataCollectedAbout.VeteranHoh:
         return (
@@ -619,9 +764,6 @@ export const applyDataCollectedAbout = (
         return true;
     }
   });
-  // clone.item = items;
-  // return clone;
-};
 
 /**
  * Extracts target-only fields from the form definition
@@ -637,4 +779,197 @@ export const extractClientItemsFromDefinition = (
   );
 
   return targetItems;
+};
+
+const findDataNotCollectedCode = (item: FormItem): string | undefined => {
+  const options = resolveOptionList(item, true) || [];
+
+  return options.find(
+    (opt) => isDataNotCollected(opt.code) || opt.code === 'NOT_APPLICABLE'
+  )?.code;
+};
+
+type TransformSubmitValuesParams = {
+  definition: FormDefinitionJson;
+  /** form state (from DynamicForm) to transform */
+  values: FormValues;
+  /** ONLY transform the assessment date field */
+  assessmentDateOnly?: boolean;
+  /** whether to fill unanswered boolean questions `false` */
+  autofillBooleans?: boolean;
+  /** whether to fill unanswered questions with Data Not Collected option (if present) */
+  autofillNotCollected?: boolean;
+  /** whether to fill unanswered questions with `null` */
+  autofillNulls?: boolean;
+  /** key results field name (instead of link ID) */
+  keyByFieldName?: boolean;
+  /** set value to HIDDEN if link id is not present in values */
+  autofillHidden?: boolean;
+};
+
+/**
+ * Given the form state of a completed form, transform it into
+ * query variables for a mutation. This is used for dynamic forms that
+ * edit one record directly, like the Client, Project, and Organization edit screens.
+ * It's also used when submitting an assessment, to generate `hudValues`
+ */
+export const transformSubmitValues = ({
+  definition,
+  values,
+  assessmentDateOnly = false,
+  autofillBooleans = false,
+  autofillNotCollected = false,
+  autofillNulls = false,
+  keyByFieldName = false,
+  autofillHidden = false,
+}: TransformSubmitValuesParams) => {
+  // Recursive helper for traversing the FormDefinition
+  function rescursiveFillMap(
+    items: FormItem[],
+    result: Record<string, any>,
+    currentRecord?: string
+  ) {
+    items.forEach((item: FormItem) => {
+      if (Array.isArray(item.item)) {
+        const recordName = item.recordType
+          ? HmisEnums.RelatedRecordType[item.recordType]
+          : currentRecord;
+        rescursiveFillMap(item.item, result, recordName);
+      }
+      if (!item.fieldName) return;
+      if (assessmentDateOnly && !item.assessmentDate) return;
+
+      // Build key for result map
+      let key = keyByFieldName ? item.fieldName : item.linkId;
+      // Prefix key like "Enrollment.livingSituation"
+      if (keyByFieldName && currentRecord) key = `${currentRecord}.${key}`;
+
+      let value;
+      if (item.linkId in values) {
+        // Transform into gql value, for example Date -> YYYY-MM-DD string
+        value = formValueToGqlValue(values[item.linkId], item);
+      } else if (autofillHidden) {
+        result[key] = HIDDEN_VALUE;
+        return;
+      }
+
+      if (typeof value !== 'undefined') {
+        result[key] = value;
+      }
+
+      if (autofillNotCollected && isNil(value)) {
+        // If we don't have a value, fill in Not Collected code if present
+        const notCollectedCode = findDataNotCollectedCode(item);
+        if (notCollectedCode) result[key] = notCollectedCode;
+      }
+      if (autofillNulls && isNil(result[key])) {
+        result[key] = null;
+      }
+      if (
+        autofillBooleans &&
+        isNil(result[key]) &&
+        item.type === ItemType.Boolean
+      ) {
+        result[key] = false;
+      }
+    });
+  }
+
+  const result: Record<string, any> = {};
+  rescursiveFillMap(definition.item, result);
+  return result;
+};
+
+/**
+ * Create initial form values based on a record.
+ * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
+ *
+ * @param itemMap Map of linkId -> Item
+ * @param record  GQL HMIS record, like Project or Organization
+ *
+ * @returns initial form state, ready to pass to DynamicForm as initialValues
+ */
+export const createInitialValuesFromRecord = (
+  itemMap: Record<string, FormItem>,
+  record: any
+): Record<string, any> => {
+  const initialValues: Record<string, any> = {};
+
+  Object.values(itemMap).forEach((item) => {
+    // Skip: this question doesn't map to a field
+    if (!item.fieldName) return;
+
+    // Skip: the record doesn't have a value for this property
+    if (!record.hasOwnProperty(item.fieldName)) return;
+
+    initialValues[item.linkId] = gqlValueToFormValue(
+      record[item.fieldName],
+      item
+    );
+  });
+
+  return initialValues;
+};
+
+/**
+ * Create initial form values based on saved assessment values.
+ *
+ * @param itemMap Map of linkId -> Item
+ * @param values  Vaved value state
+ *
+ * @returns initial form state, ready to pass to DynamicForm as initialValues
+ */
+export const createInitialValuesFromSavedValues = (
+  definition: FormDefinitionJson,
+  values: FormValues
+): FormValues => {
+  const itemMap = getItemMap(definition, false);
+  const initialValues: FormValues = {};
+  Object.values(itemMap).forEach((item) => {
+    if (!values.hasOwnProperty(item.linkId)) return;
+    initialValues[item.linkId] = gqlValueToFormValue(values[item.linkId], item);
+  });
+  return initialValues;
+};
+
+export const debugFormValues = (
+  event: React.MouseEvent<HTMLButtonElement>,
+  values: FormValues,
+  definition: FormDefinitionJson,
+  transformValuesFn?: (
+    values: FormValues,
+    definition: FormDefinitionJson
+  ) => FormValues,
+  transformHudValuesFn?: (
+    values: FormValues,
+    definition: FormDefinitionJson
+  ) => FormValues
+) => {
+  if (import.meta.env.MODE === 'production') return false;
+  if (!event.ctrlKey && !event.metaKey) return false;
+
+  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  if (transformValuesFn) {
+    console.log(transformValuesFn(values, definition));
+  } else {
+    console.log(values);
+  }
+
+  let hudValues = transformSubmitValues({
+    definition,
+    values,
+    autofillNotCollected: true,
+    autofillNulls: true,
+    keyByFieldName: true,
+  });
+
+  if (transformHudValuesFn) {
+    hudValues = transformHudValuesFn(values, definition);
+  }
+
+  window.debug = { hudValues };
+  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  console.log(hudValues);
+
+  return true;
 };

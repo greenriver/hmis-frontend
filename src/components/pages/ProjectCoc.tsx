@@ -75,7 +75,7 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
           getErrors={(data: CreateProjectCocMutation) =>
             data?.createProjectCoc?.errors
           }
-          submitButtonText='Create Project CoC'
+          FormActionProps={{ submitButtonText: 'Project CoC' }}
           {...common}
         />
       ) : (
@@ -87,7 +87,6 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
           record={data?.projectCoc || undefined}
           queryDocument={UpdateProjectCocDocument}
           onCompleted={onCompleted}
-          submitButtonText='Save Changes'
           getErrors={(data: UpdateProjectCocMutation) =>
             data?.updateProjectCoc?.errors
           }

@@ -1,6 +1,8 @@
+import { parseISO } from 'date-fns';
+
 import { getInitialValues } from './formUtil';
 
-import { ItemType } from '@/types/gqlTypes';
+import { InitialBehavior, ItemType } from '@/types/gqlTypes';
 
 describe('getInitialValues', () => {
   it('fills booleans', () => {
@@ -10,6 +12,7 @@ describe('getInitialValues', () => {
         type: ItemType.Boolean,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueBoolean: true,
           },
         ],
@@ -19,6 +22,7 @@ describe('getInitialValues', () => {
         type: ItemType.Boolean,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueBoolean: false,
           },
         ],
@@ -34,6 +38,7 @@ describe('getInitialValues', () => {
         type: ItemType.Integer,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueNumber: 0,
           },
         ],
@@ -43,6 +48,7 @@ describe('getInitialValues', () => {
         type: ItemType.Currency,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueNumber: 2.4,
           },
         ],
@@ -58,6 +64,7 @@ describe('getInitialValues', () => {
         type: ItemType.Date,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueLocalConstant: '$projectEndDate',
           },
         ],
@@ -67,14 +74,15 @@ describe('getInitialValues', () => {
         type: ItemType.Date,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueLocalConstant: '$unrecognized',
           },
         ],
       },
     ];
-    const locals = { projectEndDate: new Date() };
+    const locals = { projectEndDate: '2020-04-30' };
     expect(getInitialValues({ item }, locals)).toMatchObject({
-      '1': locals.projectEndDate,
+      '1': parseISO(locals.projectEndDate),
     });
   });
 
@@ -85,6 +93,7 @@ describe('getInitialValues', () => {
         type: ItemType.Boolean,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueLocalConstant: '$bool',
           },
         ],
@@ -94,6 +103,7 @@ describe('getInitialValues', () => {
         type: ItemType.Integer,
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueLocalConstant: '$zero',
           },
         ],
@@ -114,6 +124,7 @@ describe('getInitialValues', () => {
         pickListReference: 'NoYesReasonsForMissingData',
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueCode: 'YES',
           },
         ],
@@ -124,6 +135,7 @@ describe('getInitialValues', () => {
         pickListReference: 'NoYesReasonsForMissingData',
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueCode: 'DATA_NOT_COLLECTED',
           },
         ],
@@ -134,6 +146,7 @@ describe('getInitialValues', () => {
         pickListReference: 'UNRESOLVABLE',
         initial: [
           {
+            initialBehavior: InitialBehavior.IfEmpty,
             valueCode: 'FOO',
           },
         ],

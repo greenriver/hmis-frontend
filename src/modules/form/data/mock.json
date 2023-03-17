@@ -9,6 +9,7 @@
         {
           "type": "STRING",
           "required": true,
+          "warnIfEmpty": true,
           "linkId": "string-1",
           "text": "String",
           "helperText": "This is helper text"
@@ -16,6 +17,7 @@
         {
           "type": "INTEGER",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "int-1",
           "text": "Integer (max = 5)",
           "bounds": [{ "type": "MAX", "valueNumber": 5 }],
@@ -24,6 +26,7 @@
         {
           "type": "CURRENCY",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "curr-1",
           "text": "Currency (max = 100)",
           "bounds": [{ "type": "MAX", "valueNumber": 100 }],
@@ -32,6 +35,7 @@
         {
           "type": "BOOLEAN",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "boolean-1",
           "text": "Boolean",
           "helperText": "This is helper text"
@@ -39,6 +43,7 @@
         {
           "type": "DATE",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "date-1",
           "text": "Date",
           "helperText": "This is helper text"
@@ -46,6 +51,7 @@
         {
           "type": "STRING",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "ssn",
           "text": "SSN",
           "component": "SSN",
@@ -54,12 +60,14 @@
         {
           "type": "TEXT",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "text-1",
           "text": "Text Field",
           "helperText": "This is helper text"
         },
         {
           "type": "CHOICE",
+          "warnIfEmpty": true,
           "linkId": "choice-2",
           "text": "Choice Option",
           "pickListReference": "NoYesReasonsForMissingData",
@@ -67,6 +75,7 @@
         },
         {
           "type": "CHOICE",
+          "warnIfEmpty": true,
           "repeats": true,
           "linkId": "multi-choice",
           "text": "Multi Select",
@@ -75,6 +84,7 @@
         },
         {
           "type": "OPEN_CHOICE",
+          "warnIfEmpty": true,
           "link_id": "multi-open",
           "text": "Multi Open Choice",
           "helperText": "You can type anything into this box",
@@ -93,6 +103,7 @@
         },
         {
           "type": "CHOICE",
+          "warnIfEmpty": true,
           "component": "RADIO_BUTTONS",
           "linkId": "radio-1",
           "text": "Choice Option as Radio",
@@ -101,6 +112,7 @@
         },
         {
           "type": "CHOICE",
+          "warnIfEmpty": true,
           "component": "RADIO_BUTTONS_VERTICAL",
           "linkId": "vertical-radio-1",
           "text": "Choice Option as Vertical Radio",
@@ -109,12 +121,14 @@
         },
         {
           "type": "DISPLAY",
+
           "linkId": "alert-example",
           "component": "ALERT_INFO",
           "text": "This is a display item <b>in an alert box</b>"
         },
         {
           "type": "DISPLAY",
+
           "linkId": "display-example",
           "text": "This is a display item <b>with HTML</b><ul><li>List item!</li></ul>End of display item."
         }
@@ -127,6 +141,7 @@
       "item": [
         {
           "type": "CHOICE",
+          "warnIfEmpty": true,
           "linkId": "choice-1",
           "text": "Choice with dependencies",
           "briefText": "something",
@@ -135,7 +150,9 @@
         },
         {
           "type": "STRING",
+
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "string-4",
           "text": "Details (depends on previous)",
           "helperText": "This is helper text",
@@ -159,7 +176,7 @@
         {
           "type": "GROUP",
           "linkId": "disability-table",
-          "component": "INPUT_TABLE",
+          "component": "DISABILITY_TABLE",
           "item": [
             {
               "type": "GROUP",
@@ -168,6 +185,7 @@
               "item": [
                 {
                   "type": "CHOICE",
+                  "warnIfEmpty": true,
                   "linkId": "4.05.2",
                   "text": "Physical Disability",
                   "fieldName": "physicalDisability",
@@ -175,6 +193,7 @@
                 },
                 {
                   "type": "CHOICE",
+                  "warnIfEmpty": true,
                   "linkId": "4.05.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
@@ -190,6 +209,7 @@
               "item": [
                 {
                   "type": "CHOICE",
+                  "warnIfEmpty": true,
                   "linkId": "4.06.2",
                   "text": "Developmental Disability",
                   "fieldName": "developmentalDisability",
@@ -209,6 +229,7 @@
               "item": [
                 {
                   "type": "CHOICE",
+                  "warnIfEmpty": true,
                   "linkId": "4.07.2",
                   "text": "Chronic Health Condition",
                   "fieldName": "chronicHealthCondition",
@@ -216,6 +237,7 @@
                 },
                 {
                   "type": "CHOICE",
+                  "warnIfEmpty": true,
                   "linkId": "4.07.A",
                   "text": "Is this a disabling condition?",
                   "briefText": "Disabling Condition",
@@ -248,17 +270,20 @@
             {
               "type": "CURRENCY",
               "linkId": "n1",
-              "text": "Question 1"
+              "text": "Question 1",
+              "warnIfEmpty": true
             },
             {
               "type": "CURRENCY",
               "linkId": "n2",
+              "warnIfEmpty": true,
               "text": "Question 2"
             },
             {
               "type": "CURRENCY",
               "linkId": "n3",
               "text": "Question 3",
+              "warnIfEmpty": true,
               "helperText": "This is helper text"
             }
           ]
@@ -279,17 +304,20 @@
               "type": "BOOLEAN",
               "component": "CHECKBOX",
               "linkId": "c1",
+              "warnIfEmpty": true,
               "text": "Question 1"
             },
             {
               "type": "BOOLEAN",
               "component": "CHECKBOX",
               "linkId": "c2",
+              "warnIfEmpty": true,
               "text": "Question 2"
             },
             {
               "type": "BOOLEAN",
               "component": "CHECKBOX",
+              "warnIfEmpty": true,
               "linkId": "c3",
               "text": "Question 3",
               "helperText": "This is helper text"
@@ -301,12 +329,14 @@
     {
       "type": "GROUP",
       "required": false,
+      "warnIfEmpty": true,
       "linkId": "image",
       "text": "Image",
       "item": [
         {
           "type": "IMAGE",
           "required": false,
+          "warnIfEmpty": true,
           "linkId": "image_blob_id",
           "text": "Image"
         },
@@ -314,6 +344,7 @@
           "type": "DISPLAY",
           "linkId": "image-alert",
           "required": false,
+          "warnIfEmpty": true,
           "text": "You must use the image from the uploader story to test this uploader component",
           "component": "ALERT_INFO"
         }
