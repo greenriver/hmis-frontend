@@ -35,9 +35,8 @@ export const createHudValuesForSubmit = (
   transformSubmitValues({
     definition,
     values,
-    // autofillNulls: true,
     keyByFieldName: true,
-    autofillHidden: true,
+    includeMissingKeys: 'AS_HIDDEN',
   });
 
 export function useAssessmentHandlers({

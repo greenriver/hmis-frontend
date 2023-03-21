@@ -1,3 +1,4 @@
+import { startOfYesterday, format } from 'date-fns';
 // This only works when running against the real backend.
 // Must set the following env vars with real username/pw from local environment:
 
@@ -33,7 +34,8 @@ it(
     cy.get('@firstProject').click();
     // Set entry date
     cy.inputId('entry-date').clear();
-    cy.inputId('entry-date').type('01012020');
+    const yesterday = format(startOfYesterday(), 'MMddyyyy');
+    cy.inputId('entry-date').type(yesterday);
     cy.testId('createEnrollmentButton').first().click();
     cy.testId('beginIntake').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');

@@ -13,6 +13,7 @@ import InputContainer from './InputContainer';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
@@ -298,15 +299,9 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         item.pickListReference === 'NoYesMissing'
       ) {
         inputComponent = (
-          <LabeledCheckbox
-            checked={value?.code === 'YES'}
-            onChange={(e) => {
-              const checked = (e.target as HTMLInputElement).checked;
-              itemChanged(
-                item.linkId,
-                checked ? { code: 'YES' } : { code: 'NO' }
-              );
-            }}
+          <NoYesMissingCheckbox
+            value={selectedVal}
+            onChange={onChangeValue}
             horizontal={horizontal}
             {...commonInputProps}
           />

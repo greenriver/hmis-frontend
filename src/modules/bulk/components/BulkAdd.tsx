@@ -118,8 +118,7 @@ const BulkAdd = <
         ...targetValues[getKeyForTarget(target)],
       },
       autofillNotCollected: true,
-      autofillNulls: true,
-      autofillBooleans: false,
+      includeMissingKeys: 'AS_NULL',
       keyByFieldName: true,
     });
     const input = getInputFromTarget(inputValues, target);

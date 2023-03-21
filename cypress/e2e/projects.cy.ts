@@ -38,9 +38,11 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Update organization
   cy.testId('updateOrganizationButton').click();
-  cy.getById('description').clear().safeType('Updated description');
+  cy.getById('description').clear();
+  cy.getById('contact').clear().safeType('123');
   cy.testId('formButton-submit').click();
-  cy.testId('organizationDetailsCard').contains('Updated description');
+  cy.testId('organizationDetailsCard').should('not.exist');
+  cy.testId('contactInfo').contains('123');
 
   /*** Project ***/
 

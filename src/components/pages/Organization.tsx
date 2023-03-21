@@ -75,7 +75,7 @@ const Organization = () => {
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 2 }}>
             {organization?.contactInformation && (
-              <Stack spacing={1} sx={{ mb: 4 }}>
+              <Stack spacing={1} sx={{ mb: 4 }} data-testid='contactInfo'>
                 <Typography variant='h6'>Contact</Typography>
                 <MultilineTypography variant='body2'>
                   {organization?.contactInformation}

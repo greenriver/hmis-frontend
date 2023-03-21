@@ -5,14 +5,15 @@ import { ItemType } from '@/types/gqlTypes';
 describe('formValueToGqlValue', () => {
   it('transform value into string', () => {
     const item = { linkId: 'abc', type: ItemType.String };
-    expect(formValueToGqlValue('', item)).toBe(undefined);
+    expect(formValueToGqlValue('', item)).toBe(null);
     expect(formValueToGqlValue('value', item)).toBe('value');
   });
 
-  it('leaves nulls and undefined as-is', () => {
+  it('transforms undefined/empty to null', () => {
     const item = { linkId: 'abc', type: ItemType.String };
     expect(formValueToGqlValue(null, item)).toBe(null);
-    expect(formValueToGqlValue(undefined, item)).toBe(undefined);
+    expect(formValueToGqlValue(undefined, item)).toBe(null);
+    expect(formValueToGqlValue('', item)).toBe(null);
   });
 
   it('transforms value into date string', () => {
@@ -24,7 +25,7 @@ describe('formValueToGqlValue', () => {
     );
     expect(formValueToGqlValue('not-a-valid-date', item)).toBe(undefined);
     expect(formValueToGqlValue(new Date('invalid'), item)).toBe(undefined);
-    expect(formValueToGqlValue('', item)).toBe(undefined);
+    expect(formValueToGqlValue('', item)).toBe(null);
   });
 
   it('transforms value into integer', () => {
