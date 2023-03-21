@@ -67,7 +67,7 @@ export const ENROLLMENT_COLUMNS: {
           arrow
         >
           <Typography variant='body2'>
-            {`${e.household.id.slice(0, 6).toUpperCase()} (${e.householdSize})`}
+            {`${e.household.shortId} (${e.householdSize})`}
           </Typography>
         </Tooltip>
         {e.householdSize > 1 && (
@@ -145,7 +145,7 @@ const ProjectEnrollmentsTable = ({
       }
       queryVariables={{
         id: projectId,
-        clientSearchTerm: debouncedSearch,
+        searchTerm: debouncedSearch,
         openOnDate: openOnDateString,
       }}
       queryDocument={GetProjectEnrollmentsDocument}
