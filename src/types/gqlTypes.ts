@@ -1131,6 +1131,7 @@ export type File = {
   createdAt: Scalars['ISO8601DateTime'];
   effectiveDate?: Maybe<Scalars['ISO8601Date']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']>;
+  fileBlobId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
   tags: Array<Scalars['String']>;
@@ -6420,6 +6421,7 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
+          fileBlobId: string;
           updatedAt: string;
           url: string;
           tags: Array<string>;
@@ -7010,6 +7012,7 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
+  fileBlobId: string;
   updatedAt: string;
   url: string;
   tags: Array<string>;
@@ -8217,6 +8220,7 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
+    fileBlobId: string;
     updatedAt: string;
     url: string;
     tags: Array<string>;
@@ -8249,6 +8253,7 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
+        fileBlobId: string;
         updatedAt: string;
         url: string;
         tags: Array<string>;
@@ -9997,6 +10002,7 @@ export const FileFieldsFragmentDoc = gql`
     expirationDate
     id
     name
+    fileBlobId
     updatedAt
     url
     tags

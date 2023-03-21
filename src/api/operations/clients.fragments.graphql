@@ -367,6 +367,7 @@ fragment FileFields on File {
   expirationDate
   id
   name
+  fileBlobId
   updatedAt
   url
   tags
