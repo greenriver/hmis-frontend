@@ -218,6 +218,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
     ...EnrollmentFields
     household {
       id
+      shortId
       householdClients {
         ...HouseholdClientFieldsWithAssessments
       }
@@ -266,6 +267,7 @@ query GetClientHouseholdMemberCandidates(
       nodesCount
       nodes {
         household {
+          id
           householdClients {
             client {
               ...ClientFields
