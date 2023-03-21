@@ -8324,6 +8324,7 @@ export type RootPermissionsFragmentFragment = {
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
   canEditProjectDetails: boolean;
+  canManageClientFiles: boolean;
 };
 
 export type GetRootPermissionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -8346,6 +8347,7 @@ export type GetRootPermissionsQuery = {
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
     canEditProjectDetails: boolean;
+    canManageClientFiles: boolean;
   };
 };
 
@@ -9915,6 +9917,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canViewEnrollmentDetails
     canDeleteEnrollments
     canEditProjectDetails
+    canManageClientFiles
   }
 `;
 export const ProjectFieldsFragmentDoc = gql`
