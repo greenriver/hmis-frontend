@@ -30,7 +30,7 @@ query GetProjectPermissions($id: ID!) {
 
 query GetProjectEnrollments(
   $id: ID!
-  $clientSearchTerm: String
+  $searchTerm: String
   $openOnDate: ISO8601Date
   $limit: Int = 10
   $offset: Int = 0
@@ -43,7 +43,7 @@ query GetProjectEnrollments(
       sortOrder: MOST_RECENT
       includeInProgress: true
       openOnDate: $openOnDate
-      clientSearchTerm: $clientSearchTerm
+      searchTerm: $searchTerm
     ) {
       offset
       limit

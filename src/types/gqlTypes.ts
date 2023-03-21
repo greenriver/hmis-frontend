@@ -1533,6 +1533,7 @@ export type Household = {
   __typename?: 'Household';
   householdClients: Array<HouseholdClient>;
   id: Scalars['ID'];
+  shortId: Scalars['ID'];
 };
 
 /** HUD Client within a Household */
@@ -2253,11 +2254,11 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  clientSearchTerm?: InputMaybe<Scalars['String']>;
   includeInProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -4365,7 +4366,7 @@ export type AssessmentWithValuesFragment = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string };
+    household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
@@ -6295,7 +6296,7 @@ export type GetAssessmentsForPopulationQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string };
+          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -6710,7 +6711,7 @@ export type EnrollmentFieldsFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  household: { __typename?: 'Household'; id: string };
+  household: { __typename?: 'Household'; id: string; shortId: string };
   client: { __typename?: 'Client'; id: string };
 };
 
@@ -6749,6 +6750,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   household: {
     __typename?: 'Household';
     id: string;
+    shortId: string;
     householdClients: Array<{
       __typename?: 'HouseholdClient';
       id: string;
@@ -7139,7 +7141,7 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string };
+        household: { __typename?: 'Household'; id: string; shortId: string };
         client: { __typename?: 'Client'; id: string };
       }>;
     };
@@ -7185,7 +7187,7 @@ export type GetClientAssessmentsQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string };
+          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
@@ -7343,7 +7345,7 @@ export type CreateEnrollmentMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      household: { __typename?: 'Household'; id: string };
+      household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
     }> | null;
     errors: Array<{
@@ -7382,6 +7384,7 @@ export type UpdateEnrollmentMutation = {
       household: {
         __typename?: 'Household';
         id: string;
+        shortId: string;
         householdClients: Array<{
           __typename?: 'HouseholdClient';
           id: string;
@@ -7457,6 +7460,7 @@ export type SetHoHMutation = {
       household: {
         __typename?: 'Household';
         id: string;
+        shortId: string;
         householdClients: Array<{
           __typename?: 'HouseholdClient';
           id: string;
@@ -7535,7 +7539,7 @@ export type DeleteEnrollmentMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      household: { __typename?: 'Household'; id: string };
+      household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
     } | null;
     errors: Array<{
@@ -7574,6 +7578,7 @@ export type AddHouseholdMembersMutation = {
       household: {
         __typename?: 'Household';
         id: string;
+        shortId: string;
         householdClients: Array<{
           __typename?: 'HouseholdClient';
           id: string;
@@ -7752,7 +7757,7 @@ export type GetEnrollmentQuery = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string };
+    household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
   } | null;
 };
@@ -7774,6 +7779,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     household: {
       __typename?: 'Household';
       id: string;
+      shortId: string;
       householdClients: Array<{
         __typename?: 'HouseholdClient';
         id: string;
@@ -7916,6 +7922,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
         __typename?: 'Enrollment';
         household: {
           __typename?: 'Household';
+          id: string;
           householdClients: Array<{
             __typename?: 'HouseholdClient';
             client: {
@@ -8589,7 +8596,7 @@ export type GetProjectPermissionsQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
-  clientSearchTerm?: InputMaybe<Scalars['String']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -8636,7 +8643,7 @@ export type GetProjectEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string };
+        household: { __typename?: 'Household'; id: string; shortId: string };
       }>;
     };
   } | null;
@@ -9496,6 +9503,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     relationshipToHoH
     household {
       id
+      shortId
     }
     householdSize
     client {
@@ -9693,6 +9701,7 @@ export const EnrollmentWithHouseholdFragmentFragmentDoc = gql`
     ...EnrollmentFields
     household {
       id
+      shortId
       householdClients {
         ...HouseholdClientFields
       }
@@ -11849,6 +11858,7 @@ export const GetEnrollmentWithHouseholdDocument = gql`
       ...EnrollmentFields
       household {
         id
+        shortId
         householdClients {
           ...HouseholdClientFieldsWithAssessments
         }
@@ -12061,6 +12071,7 @@ export const GetClientHouseholdMemberCandidatesDocument = gql`
         nodesCount
         nodes {
           household {
+            id
             householdClients {
               client {
                 ...ClientFields
@@ -12935,7 +12946,7 @@ export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
-    $clientSearchTerm: String
+    $searchTerm: String
     $openOnDate: ISO8601Date
     $limit: Int = 10
     $offset: Int = 0
@@ -12948,7 +12959,7 @@ export const GetProjectEnrollmentsDocument = gql`
         sortOrder: MOST_RECENT
         includeInProgress: true
         openOnDate: $openOnDate
-        clientSearchTerm: $clientSearchTerm
+        searchTerm: $searchTerm
       ) {
         offset
         limit
@@ -12982,7 +12993,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      clientSearchTerm: // value for 'clientSearchTerm'
+ *      searchTerm: // value for 'searchTerm'
  *      openOnDate: // value for 'openOnDate'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
