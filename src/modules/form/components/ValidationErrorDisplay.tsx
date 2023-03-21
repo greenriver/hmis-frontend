@@ -67,7 +67,14 @@ export const ValidationWarningDisplay = ({
   );
 
   return (
-    <Stack gap={2}>
+    <Stack gap={4}>
+      {grouped.other && (
+        <ErrorSection
+          header={<Typography fontWeight={600}>Warnings</Typography>}
+        >
+          <ErrorList errors={grouped.other} />
+        </ErrorSection>
+      )}
       {grouped.dnc && (
         <ErrorSection
           header={
@@ -91,13 +98,6 @@ export const ValidationWarningDisplay = ({
               )
             )}
           </Stack>
-        </ErrorSection>
-      )}
-      {grouped.other && (
-        <ErrorSection
-          header={<Typography fontWeight={600}>Warnings</Typography>}
-        >
-          <ErrorList errors={grouped.other} />
         </ErrorSection>
       )}
     </Stack>
