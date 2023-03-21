@@ -975,7 +975,7 @@ export const debugFormValues = (
     definition,
     values,
     autofillNotCollected: true,
-    autofillNulls: true,
+    includeMissingKeys: 'AS_NULL',
     keyByFieldName: true,
   });
 
