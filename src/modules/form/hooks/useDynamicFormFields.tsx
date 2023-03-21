@@ -34,6 +34,7 @@ const useDynamicFormFields = ({
     Object.assign({}, initialValues)
   );
 
+  // Get form state, with "hidden" fields (and their children) removed
   const getCleanedValues = useCallback(() => {
     if (!definition) return values;
     const excluded = addDescendants(disabledLinkIds, definition);
