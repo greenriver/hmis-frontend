@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash-es';
 import ClientActionsCard from '@/modules/client/components/ClientActionsCard';
 import ClientEnrollmentCard from '@/modules/client/components/ClientEnrollmentCard';
 import ClientProfileCard from '@/modules/client/components/ClientProfileCard';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export interface Props {
@@ -38,7 +39,12 @@ const ProfileLayout: React.FC<Props> = ({ client, notices = [] }) => {
         </Grid>
         <Grid item md={12} lg={6}>
           <ClientActionsCard client={client} />
-          <ClientEnrollmentCard client={client} />
+          <ClientPermissionsFilter
+            permissions={['canViewEnrollmentDetails']}
+            id={client.id}
+          >
+            <ClientEnrollmentCard client={client} />
+          </ClientPermissionsFilter>
         </Grid>
       </Grid>
     </Box>

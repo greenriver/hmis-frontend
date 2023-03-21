@@ -254,15 +254,20 @@ const ClientCard: React.FC<Props> = ({
             </Typography>
           </Stack>
         </Grid>
-        <Grid item xs={5} lg={6}>
-          <Typography variant='h6' sx={{ mb: 1 }}>
-            Recent Enrollments
-          </Typography>
-          <RecentEnrollments
-            recentEnrollments={recentEnrollments}
-            linkTargetBlank={linkTargetBlank}
-          />
-        </Grid>
+        <ClientPermissionsFilter
+          permissions={['canViewEnrollmentDetails']}
+          id={client.id}
+        >
+          <Grid item xs={5} lg={6}>
+            <Typography variant='h6' sx={{ mb: 1 }}>
+              Recent Enrollments
+            </Typography>
+            <RecentEnrollments
+              recentEnrollments={recentEnrollments}
+              linkTargetBlank={linkTargetBlank}
+            />
+          </Grid>
+        </ClientPermissionsFilter>
         <Grid item xs={2}>
           <Typography variant='h6' sx={{ mb: 1 }}>
             Actions
