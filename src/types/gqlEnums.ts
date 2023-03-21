@@ -174,6 +174,10 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  FileSortOption: {
+    DATE_CREATED: 'DATE_CREATED',
+    DATE_UPDATED: 'DATE_UPDATED',
+  },
   FormRole: {
     ANNUAL: 'Annual Assessment',
     CE: 'Coordinated Entry',
@@ -482,6 +486,7 @@ export const HmisEnums = {
     UNKNOWN: 'Unknown',
   },
   PickListType: {
+    AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_UNITS: 'AVAILABLE_UNITS',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
