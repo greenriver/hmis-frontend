@@ -25,6 +25,7 @@ const FormCard = ({
   renderChildItem,
   anchor,
   values,
+  locked,
 }: GroupItemComponentProps & { anchor?: string }) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
@@ -94,6 +95,7 @@ const FormCard = ({
                   variant='outlined'
                   size='small'
                   sx={{ height: 'fit-content' }}
+                  disabled={locked}
                 >
                   Fill Section
                 </Button>
@@ -104,7 +106,7 @@ const FormCard = ({
                   sx={{ height: 'fit-content' }}
                   onClick={() => setClearDialogOpen(true)}
                   data-testid='clearButton'
-                  disabled={!hasAnyChildValues}
+                  disabled={!hasAnyChildValues || locked}
                 >
                   Clear Section
                 </Button>

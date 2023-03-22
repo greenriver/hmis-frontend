@@ -123,7 +123,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     <FormActions
       onSubmit={handleSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      disabled={!!loading || showConfirmDialog}
+      disabled={locked || !!loading || showConfirmDialog}
       loading={loading}
       {...FormActionProps}
     />
