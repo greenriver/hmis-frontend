@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -7,10 +7,10 @@ import useElementInView from '../hooks/useElementInView';
 import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
+import ErrorAlert from './ErrorAlert';
 import FormActions, { FormActionProps } from './FormActions';
 import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
-import ValidationErrorDisplay from './ValidationErrorDisplay';
 
 import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
@@ -139,10 +139,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       <Grid container direction='column' spacing={2}>
         {errors.length > 0 && (
           <Grid item>
-            <Alert severity='error' sx={{ mb: 1 }} data-testid='formErrorAlert'>
-              <AlertTitle>Please fix outstanding errors</AlertTitle>
-              <ValidationErrorDisplay errors={errors} />
-            </Alert>
+            <ErrorAlert errors={errors} />
           </Grid>
         )}
         {renderFields({

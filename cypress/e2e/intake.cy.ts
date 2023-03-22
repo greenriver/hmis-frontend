@@ -98,6 +98,7 @@ it(
 
     // Change to YES and submit
     cy.checkOption(incomeFromAnySource, 'YES');
+    cy.inputId('4.02.A').type('200');
     cy.testId('formButton-submit').first().click();
     cy.testId('confirmDialogAction').click();
 
@@ -105,6 +106,8 @@ it(
     cy.testId('panel-assessments').find('table').find('a').first().click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'YES',
+      'IncomeBenefit.earned': 'YES',
+      'IncomeBenefit.earnedAmount': 200,
     });
 
     // Deep-equal compare when closing and re-opening submitted assessment
