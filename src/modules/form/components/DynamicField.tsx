@@ -373,6 +373,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <Uploader
+            id={item.linkId}
             image
             onUpload={async (upload, file) => {
               console.log({ upload, file });
@@ -384,7 +385,10 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.File:
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-          <Uploader onUpload={async (upload) => onChangeValue(upload.blobId)} />
+          <Uploader
+            id={item.linkId}
+            onUpload={async (upload) => onChangeValue(upload.blobId)}
+          />
         </InputContainer>
       );
     default:

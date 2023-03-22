@@ -25,6 +25,7 @@ import useDirectUpload from './useDirectUpload';
 import { DirectUpload } from '@/types/gqlTypes';
 
 export type UploaderProps = {
+  id: string;
   onUpload: (upload: DirectUpload, file: File) => any | Promise<any>;
   onClear?: (upload?: DirectUpload, file?: File) => any;
   file?: File;
@@ -35,6 +36,7 @@ export type UploaderProps = {
 };
 
 export type ChildrenArgs = {
+  id: string;
   file?: File;
   loading?: boolean;
   error?: string | undefined;
@@ -87,6 +89,7 @@ const getReadableSize = (maxSize: number) =>
   `${(maxSize / 1000000).toFixed(1)}MB`;
 
 const defaultChildren: NonNullable<UploaderProps['children']> = ({
+  id,
   file,
   loading,
   error,
@@ -111,6 +114,7 @@ const defaultChildren: NonNullable<UploaderProps['children']> = ({
       overflow: 'hidden',
     })}
     {...rootProps}
+    id={id}
   >
     <input {...inputProps} />
     <Grid
@@ -198,6 +202,7 @@ const defaultChildren: NonNullable<UploaderProps['children']> = ({
 );
 
 const Uploader: React.FC<UploaderProps> = ({
+  id,
   onUpload,
   onClear = () => {},
   file: fileProp,
@@ -283,6 +288,7 @@ const Uploader: React.FC<UploaderProps> = ({
   }, [currentUpload, currentFile, onClear]);
 
   return defaultChildren({
+    id,
     file,
     loading,
     error,

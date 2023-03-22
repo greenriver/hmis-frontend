@@ -85,7 +85,13 @@ const AllFiles = () => {
                 const item = pickListData.pickList.find(
                   (type) => type.code == tag
                 );
-                return <Chip label={item?.label || tag} size='small' />;
+                return (
+                  <Chip
+                    label={item?.label || tag}
+                    id={`tag-${item?.code || tag}`}
+                    size='small'
+                  />
+                );
               })}
             </Box>
           ) : null,
@@ -176,6 +182,7 @@ const AllFiles = () => {
             to={generateSafePath(DashboardRoutes.NEW_FILE, {
               clientId,
             })}
+            id='add-client-file'
             Icon={AddIcon}
           >
             Add File
