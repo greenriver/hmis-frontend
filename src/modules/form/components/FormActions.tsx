@@ -1,5 +1,5 @@
-import { Stack, Typography, Tooltip } from '@mui/material';
-import { findIndex } from 'lodash-es';
+import { Stack } from '@mui/material';
+import { findIndex, findLastIndex } from 'lodash-es';
 import { MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,18 +7,14 @@ import { FormActionTypes } from '../types';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import LoadingButton from '@/components/elements/LoadingButton';
-import {
-  formatDateTimeForDisplay,
-  parseHmisDateString,
-  formatRelativeDateTime,
-} from '@/modules/hmis/hmisUtil';
+import AssessmentLastUpdated from '@/modules/hmis/components/AssessmentLastUpdated';
 
 type ButtonConfig = {
   id: string;
   label: string;
   action: FormActionTypes;
   onSuccess?: VoidFunction;
-  rightAlign?: boolean;
+  centerAlign?: boolean;
   buttonProps?: any; //Omit<LoadingButtonProps, 'onClick'>;
 };
 
@@ -52,15 +48,16 @@ const FormActions = ({
 }: FormActionProps) => {
   const navigate = useNavigate();
 
-  const [leftConfig, rightConfig] = useMemo(() => {
+  const [leftConfig, centerConfig, rightConfig] = useMemo(() => {
     if (config) {
-      // If any buttons are marked "rightAlign", split up the config array
-      const idx = findIndex(config, { rightAlign: true });
-      if (idx === -1) return [config, []];
+      const centerFrom = findIndex(config, { centerAlign: true });
+      const centerTo = findLastIndex(config, { centerAlign: true });
+      if (centerFrom === -1) return [config, [], []];
 
-      const left = config.slice(0, idx);
-      const right = config.slice(idx);
-      return [left, right];
+      const left = config.slice(0, centerFrom);
+      const center = config.slice(centerFrom, centerTo + 1);
+      const right = config.slice(centerTo + 1);
+      return [left, center, right];
     }
 
     // Default button configuration
@@ -79,6 +76,7 @@ const FormActions = ({
           buttonProps: { variant: 'gray' },
         },
       ] as ButtonConfig[],
+      [],
       [],
     ];
   }, [config, submitButtonText, discardButtonText]);
@@ -153,58 +151,37 @@ const FormActions = ({
     );
   };
 
-  const [lastUpdated, lastUpdatedRelative, lastUpdatedVerb] = useMemo(() => {
-    let date;
-    let verb;
-    if (lastSubmitted) {
-      date = parseHmisDateString(lastSubmitted);
-      verb = 'submitted';
-    } else if (lastSaved) {
-      date = parseHmisDateString(lastSaved);
-      verb = 'saved';
-    }
-
-    if (date) {
-      return [
-        formatDateTimeForDisplay(date),
-        formatRelativeDateTime(date),
-        verb,
-      ];
-    }
-    return [];
-  }, [lastSaved, lastSubmitted]);
-
+  console.log(lastSaved, lastSubmitted);
   return (
-    <Stack
-      direction='row'
-      spacing={2}
-      justifyContent={
-        rightConfig.length > 0 || lastUpdated ? 'space-between' : undefined
-      }
-    >
-      <Stack direction='row' spacing={2} sx={{ backgroundColor: 'white' }}>
+    <Stack direction='row' spacing={2} justifyContent={'space-between'}>
+      <Stack direction='row' spacing={2}>
         {leftConfig.map((c) => renderButton(c))}
       </Stack>
-      {lastUpdated && lastUpdatedRelative && lastUpdatedVerb && (
-        <Tooltip title={<Typography>{lastUpdated}</Typography>} arrow>
-          <Typography
-            alignSelf='center'
-            color='text.secondary'
-            variant='body2'
+      {centerConfig.length === 0 && (
+        <AssessmentLastUpdated
+          lastSaved={lastSaved}
+          lastSubmitted={lastSubmitted}
+        />
+      )}
+
+      {centerConfig && centerConfig.length > 0 && (
+        <Stack alignItems={'center'}>
+          <Stack direction='row' spacing={2}>
+            {centerConfig.map((c) => renderButton(c))}
+          </Stack>
+          <AssessmentLastUpdated
+            lastSaved={lastSaved}
+            lastSubmitted={lastSubmitted}
             sx={{
-              backgroundColor: 'white',
-              px: 2,
-              py: 1,
-              borderRadius: 1,
-              fontStyle: 'italic',
+              fontSize: 12,
+              pb: 0,
+              mb: -1,
             }}
-          >
-            Last {lastUpdatedVerb} {lastUpdatedRelative}
-          </Typography>
-        </Tooltip>
+          />
+        </Stack>
       )}
       {rightConfig && rightConfig.length > 0 && (
-        <Stack direction='row' spacing={2} sx={{ backgroundColor: 'white' }}>
+        <Stack direction='row' spacing={2}>
           {rightConfig.map((c) => renderButton(c))}
         </Stack>
       )}

@@ -30,6 +30,7 @@ import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
 import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   FormRole,
   SubmitHouseholdAssessmentsMutation,
@@ -243,9 +244,22 @@ const HouseholdSummaryTabPanel = memo(
           setErrors(emptyErrorState);
           setCheckedState({});
           refetch();
+
+          tabs.forEach(({ clientId, enrollmentId }) => {
+            // Make it so the "Assessments" table on the Enrollment page gets refetched next time
+            cache.evict({
+              id: `Enrollment:${enrollmentId}`,
+              fieldName: 'assessments',
+            });
+            // Make it so the "Assessments" table on the Client page gets refetched next time
+            cache.evict({
+              id: `Client:${clientId}`,
+              fieldName: 'assessments',
+            });
+          });
         }
       },
-      [refetch]
+      [refetch, tabs]
     );
 
     const onSubmit = useCallback(() => {

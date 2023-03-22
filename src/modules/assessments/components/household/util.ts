@@ -18,6 +18,7 @@ export type TabDefinition = {
   id: string;
   clientName: string;
   client: ClientNameDobVeteranFields;
+  clientId: string;
   enrollmentId: string;
   assessmentId?: string;
   assessmentInProgress?: boolean;
