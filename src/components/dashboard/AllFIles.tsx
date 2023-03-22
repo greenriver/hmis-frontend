@@ -1,18 +1,11 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import {
-  Box,
-  Button,
-  Chip,
-  CircularProgress,
-  Link,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { uniq } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { compact } from 'lodash-es';
+import { useMemo, useState } from 'react';
+
+import FileDialog from './files/FileModal';
+import useFileActions from './files/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -26,49 +19,34 @@ import {
   GetClientFilesQuery,
   GetClientFilesQueryVariables,
   PickListType,
-  useDeleteClientFileMutation,
-  useGetClientFilesQuery,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const AllFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
-  const [deletingIds, setDeletingIds] = useState<string[]>([]);
+  const [viewingFile, setViewingFile] = useState<
+    FileFieldsFragment | undefined
+  >();
+
+  const { getActionsForFile, deleteFileDialog } = useFileActions({
+    onDeleteFile: () => setViewingFile(undefined),
+  });
 
   const [canEdit] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
     'canManageOwnClientFiles',
   ]);
-  const [canEditAny] = useHasClientPermissions(clientId, [
-    'canManageAnyClientFiles',
-  ]);
   const { data: pickListData } = useGetPickListQuery({
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
-  const { refetch } = useGetClientFilesQuery({ variables: { id: clientId } });
-
-  const [deleteFile] = useDeleteClientFileMutation();
-
-  const handleDeleteFile = useCallback(
-    (fileId: string) =>
-      deleteFile({
-        variables: { input: { fileId } },
-      }).finally(() => {
-        // * Using refetch here instead of eviction because it prevents a table load after delete and makes it easier to set deleting ids correctly
-        refetch().then(() =>
-          setDeletingIds((ids) => ids.filter((id) => id !== fileId))
-        );
-      }),
-    [deleteFile, refetch]
-  );
 
   const columns: ColumnDef<FileFieldsFragment>[] = useMemo(() => {
     return [
       {
         header: 'Name',
         render: (file) => (
-          <Link component='button' onClick={() => alert('OPEN MODAL')}>
+          <Link component='button' onClick={() => setViewingFile(file)}>
             {file.name}
           </Link>
         ),
@@ -106,74 +84,31 @@ const AllFiles = () => {
             {
               header: 'Actions',
               width: '1%',
-              render: (file) => (
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='flex-end'
-                  flexGrow={1}
-                >
-                  {file.url && (
-                    <Button
-                      data-testid='downloadFile'
-                      component='a'
-                      href={file.url}
-                      target='_blank'
-                      size='small'
-                      variant='outlined'
-                    >
-                      Download
-                    </Button>
-                  )}
-                  {(canEditAny || file.ownFile) && (
-                    <>
-                      <Button
-                        data-testid='editFile'
-                        size='small'
-                        variant='outlined'
-                        color='secondary'
-                        component={ReactRouterLink}
-                        to={generateSafePath(DashboardRoutes.EDIT_FILE, {
-                          clientId,
-                          fileId: file.id,
-                        })}
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        data-testid='deleteFile'
-                        disabled={deletingIds.includes(file.id)}
-                        onClick={() => {
-                          setDeletingIds((ids) => uniq([...ids, file.id]));
-                          handleDeleteFile(file.id);
-                        }}
-                        size='small'
-                        variant='outlined'
-                        endIcon={
-                          deletingIds.includes(file.id) && (
-                            <CircularProgress size={15} color='inherit' />
-                          )
-                        }
-                        color='error'
-                      >
-                        {deletingIds.includes(file.id) ? 'Deleting' : 'Delete'}
-                      </Button>
-                    </>
-                  )}
-                </Stack>
-              ),
+              render: (file) => {
+                const { editButton, deleteButton } = getActionsForFile(file);
+                return (
+                  <Stack
+                    direction='row'
+                    spacing={1}
+                    justifyContent='flex-end'
+                    flexGrow={1}
+                  >
+                    {editButton}
+                    {deleteButton}
+                  </Stack>
+                );
+              },
             },
           ]
         : []) as typeof columns),
     ];
-  }, [
-    canEdit,
-    canEditAny,
-    pickListData,
-    handleDeleteFile,
-    deletingIds,
-    clientId,
-  ]);
+  }, [canEdit, pickListData, getActionsForFile]);
+
+  const viewingFileActions = useMemo(() => {
+    if (!viewingFile) return [];
+    const actions = getActionsForFile(viewingFile);
+    return compact(Object.values(actions));
+  }, [viewingFile, getActionsForFile]);
 
   return (
     <>
@@ -211,6 +146,15 @@ const AllFiles = () => {
           // fetchPolicy='cache-and-network'
         />
       </Paper>
+      {viewingFile && (
+        <FileDialog
+          open={!!viewingFile}
+          onClose={() => setViewingFile(undefined)}
+          file={viewingFile}
+          actions={<>{viewingFileActions}</>}
+        />
+      )}
+      {deleteFileDialog}
     </>
   );
 };
