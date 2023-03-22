@@ -8,10 +8,16 @@ import {
   DialogTitle,
   Divider,
   IconButton,
+  Pagination,
   Stack,
   Typography,
 } from '@mui/material';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.js?url';
 import React, { useMemo, useState } from 'react';
+import { pdfjs } from 'react-pdf';
+import { Document, Page } from 'react-pdf/dist/esm/entry.vite';
+
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 import { FileFieldsFragment } from '@/types/gqlTypes';
 
@@ -20,24 +26,26 @@ export type FileDialogProps = {
   actions?: React.ReactNode;
 } & DialogProps;
 
+const LoadingPreview: React.FC = () => (
+  <Stack
+    gap={3}
+    my={3}
+    alignItems='center'
+    sx={(theme) => ({ color: theme.palette.text.secondary })}
+  >
+    <CircularProgress size={60} color='inherit' />
+    <Typography color='inherit' fontSize='1.5rem'>
+      Loading Preview
+    </Typography>
+  </Stack>
+);
+
 const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   return (
     <>
-      {!loaded && (
-        <Stack
-          gap={3}
-          my={3}
-          alignItems='center'
-          sx={(theme) => ({ color: theme.palette.text.secondary })}
-        >
-          <CircularProgress size={60} color='inherit' />
-          <Typography color='inherit' fontSize='1.5rem'>
-            Loading Preview
-          </Typography>
-        </Stack>
-      )}
+      {!loaded && <LoadingPreview />}
       <Box
         sx={(theme) => ({
           boxShadow: theme.shadows[1],
@@ -53,12 +61,53 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   );
 };
 
+const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
+  const [pageNumber, setPageNumber] = useState<number>(1);
+  const [numPages, setNumPages] = useState<number | undefined>(undefined);
+  return (
+    <Box>
+      {numPages && numPages > 1 && (
+        <Stack
+          direction='row'
+          mb={1}
+          justifyContent='space-between'
+          alignItems='center'
+        >
+          <Typography>
+            Page {pageNumber} of {numPages}
+          </Typography>
+          <Pagination
+            page={pageNumber}
+            count={numPages}
+            onChange={(e, page) => setPageNumber(page)}
+          />
+        </Stack>
+      )}
+      <Document
+        file={{
+          url: file.url,
+        }}
+        onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+        loading={<LoadingPreview />}
+      >
+        <Page
+          pageNumber={pageNumber}
+          renderTextLayer={false}
+          renderAnnotationLayer={false}
+        />
+      </Document>
+    </Box>
+  );
+};
+
 const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
   const { onClose } = props;
 
   const previewContent = useMemo(() => {
     if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)) {
       return <ImagePreview file={file} />;
+    } else if (file.contentType === 'application/pdf') {
+      return <PdfPreview file={file} />;
     } else {
       return (
         <Box
