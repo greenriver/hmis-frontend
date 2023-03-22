@@ -236,7 +236,7 @@ const AssessmentForm = ({
           locked={locked}
           visible={visible}
           showSavePrompt
-          showSavePromptInitial={embeddedInWorkflow ? true : undefined}
+          alwaysShowSaveSlide={!!embeddedInWorkflow}
           FormActionProps={FormActionProps}
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment

@@ -34,7 +34,7 @@ export interface DynamicFormProps
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
-  showSavePromptInitial?: boolean;
+  alwaysShowSaveSlide?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
   warnIfEmpty?: boolean;
@@ -58,7 +58,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   initialValues = {},
   errors: validations,
   showSavePrompt = false,
-  showSavePromptInitial,
+  alwaysShowSaveSlide = false,
   horizontal = false,
   warnIfEmpty = false,
   locked = false,
@@ -73,9 +73,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   });
   const { errors, warnings } = useValidations(validations);
 
-  const [promptSave, setPromptSave] = useState<boolean | undefined>(
-    showSavePromptInitial
-  );
+  const [promptSave, setPromptSave] = useState<boolean | undefined>();
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
   const saveButtonsRef = React.createRef<HTMLDivElement>();
@@ -154,9 +152,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           visible,
         })}
       </Grid>
-      <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-        {saveButtons}
-      </Box>
+      {!alwaysShowSaveSlide && (
+        <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
+          {saveButtons}
+        </Box>
+      )}
 
       {showConfirmDialog && (
         <FormWarningDialog
@@ -170,9 +170,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         />
       )}
 
-      {showSavePrompt && !isSaveButtonVisible && (
+      {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
         <SaveSlide
-          in={promptSave && !isSaveButtonVisible}
+          in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
           appear
           timeout={300}
           direction='up'

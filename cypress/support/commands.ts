@@ -76,6 +76,11 @@ Cypress.Commands.add('uncheckOption', (id, optionCode) => {
   cy.get(`[id="${id}"] input[value="${optionCode}"]`).click({ force: true });
 });
 
+Cypress.Commands.add('clearFormSection', (id) => {
+  cy.getById(id).findTestId('clearButton').click();
+  cy.testId('confirmDialogAction').click();
+});
+
 Cypress.Commands.add('getChecked', (id, value) => {
   cy.get(
     `[id="${id}"] [data-checked="true"] ${
@@ -164,6 +169,7 @@ declare global {
       // Form actions
       checkOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
       uncheckOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
+      clearFormSection(id: string): Chainable<JQuery<Element>>;
 
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
