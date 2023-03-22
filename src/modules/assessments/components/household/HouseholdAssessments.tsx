@@ -215,7 +215,7 @@ const HouseholdAssessments = ({
             xs={2}
             sx={{
               height: '100%',
-              boxShadow: '0 0 15px rgb(0 0 0 / 75%)',
+              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
               clipPath: 'inset(0px -15px 0px 0px)',
               py: 1,
             }}
@@ -260,7 +260,7 @@ const HouseholdAssessments = ({
             xs={2}
             sx={{
               height: '100%',
-              boxShadow: '0 0 15px rgb(0 0 0 / 75%)',
+              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
               clipPath: 'inset(0px 0px 0px -15px)',
               pl: 3,
             }}

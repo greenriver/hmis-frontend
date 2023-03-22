@@ -17,7 +17,7 @@ const SaveSlide = ({ children, ...props }: Props) => (
         py: 2,
         px: 2,
         zIndex: (theme) => theme.zIndex.drawer,
-        boxShadow: '0 0 10px rgb(0 0 0 / 75%)',
+        boxShadow: '0 0 10px rgb(0 0 0 / 25%)',
         clipPath: 'inset(-10px -1px 0px -1px)',
       }}
     >
