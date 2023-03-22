@@ -20,6 +20,7 @@ fragment ClientName on Client {
 }
 
 fragment ClientPermissions on Client {
+  id
   access {
     canViewDob
     canViewFullSsn

@@ -6567,6 +6567,7 @@ export type ClientNameFragment = {
 
 export type ClientPermissionsFragment = {
   __typename?: 'Client';
+  id: string;
   access: {
     __typename?: 'ClientAccess';
     canViewDob: boolean;
@@ -7138,6 +7139,7 @@ export type GetClientPermissionsQuery = {
   __typename?: 'Query';
   client?: {
     __typename?: 'Client';
+    id: string;
     access: {
       __typename?: 'ClientAccess';
       canViewDob: boolean;
@@ -9705,6 +9707,7 @@ export const ValidationErrorFieldsFragmentDoc = gql`
 `;
 export const ClientPermissionsFragmentDoc = gql`
   fragment ClientPermissions on Client {
+    id
     access {
       canViewDob
       canViewFullSsn

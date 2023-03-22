@@ -6,7 +6,7 @@ import Loading from '../elements/Loading';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-// import { cache } from '@/providers/apolloClient';
+import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
@@ -21,19 +21,19 @@ const File = ({ create = false }: { create?: boolean }) => {
     fileId: string;
     clientId: string;
   };
-  const title = create ? `Add File` : `Edit File`;
+  const title = create ? `Upload File` : `Edit File`;
 
   const onCompleted = useCallback(() => {
     // Force refresh table if we just created a new record
-    // if (create) {
-    //   cache.evict({ id: `Enrollment:${enrollmentId}`, fieldName: 'services' });
-    // }
+    if (create) {
+      cache.evict({ id: `Client:${clientId}`, fieldName: 'files' });
+    }
     navigate(
       generateSafePath(DashboardRoutes.FILES, {
         clientId,
       })
     );
-  }, [navigate, clientId]);
+  }, [navigate, clientId, create]);
 
   const { data, loading, error } = useGetFileQuery({
     variables: { id: fileId },
@@ -52,7 +52,7 @@ const File = ({ create = false }: { create?: boolean }) => {
       record={data?.file || undefined}
       localConstants={{ fileId: data?.file?.id }}
       inputVariables={{ clientId }}
-      FormActionProps={create ? { submitButtonText: 'Add File' } : undefined}
+      FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}
       pickListRelationId={clientId}
       title={
         <Stack direction={'row'} spacing={2}>

@@ -1,9 +1,10 @@
-import AddIcon from '@mui/icons-material/Add';
+import UploadIcon from '@mui/icons-material/Upload';
 import {
   Box,
   Button,
   Chip,
   CircularProgress,
+  Link,
   Paper,
   Stack,
   Typography,
@@ -11,6 +12,7 @@ import {
 import { format } from 'date-fns';
 import { uniq } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -53,6 +55,7 @@ const AllFiles = () => {
       deleteFile({
         variables: { input: { fileId } },
       }).finally(() => {
+        // * Using refetch here instead of eviction because it prevents a table load after delete and makes it easier to set deleting ids correctly
         refetch().then(() =>
           setDeletingIds((ids) => ids.filter((id) => id !== fileId))
         );
@@ -60,20 +63,15 @@ const AllFiles = () => {
     [deleteFile, refetch]
   );
 
-  const rowLinkTo = useCallback(
-    (file: FileFieldsFragment) =>
-      generateSafePath(DashboardRoutes.EDIT_FILE, {
-        clientId,
-        fileId: file.id,
-      }),
-    [clientId]
-  );
-
   const columns: ColumnDef<FileFieldsFragment>[] = useMemo(() => {
     return [
       {
         header: 'Name',
-        render: (file) => file.name,
+        render: (file) => (
+          <Link component='button' onClick={() => alert('OPEN MODAL')}>
+            {file.name}
+          </Link>
+        ),
         linkTreatment: true,
       },
       {
@@ -119,7 +117,6 @@ const AllFiles = () => {
                     <Button
                       data-testid='downloadFile'
                       component='a'
-                      onClick={(e) => e.stopPropagation()}
                       href={file.url}
                       target='_blank'
                       size='small'
@@ -135,15 +132,18 @@ const AllFiles = () => {
                         size='small'
                         variant='outlined'
                         color='secondary'
+                        component={ReactRouterLink}
+                        to={generateSafePath(DashboardRoutes.EDIT_FILE, {
+                          clientId,
+                          fileId: file.id,
+                        })}
                       >
                         Edit
                       </Button>
                       <Button
                         data-testid='deleteFile'
                         disabled={deletingIds.includes(file.id)}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          e.preventDefault();
+                        onClick={() => {
                           setDeletingIds((ids) => uniq([...ids, file.id]));
                           handleDeleteFile(file.id);
                         }}
@@ -166,7 +166,14 @@ const AllFiles = () => {
           ]
         : []) as typeof columns),
     ];
-  }, [canEdit, canEditAny, pickListData, handleDeleteFile, deletingIds]);
+  }, [
+    canEdit,
+    canEditAny,
+    pickListData,
+    handleDeleteFile,
+    deletingIds,
+    clientId,
+  ]);
 
   return (
     <>
@@ -183,9 +190,10 @@ const AllFiles = () => {
               clientId,
             })}
             id='add-client-file'
-            Icon={AddIcon}
+            Icon={UploadIcon}
+            size='large'
           >
-            Add File
+            Upload File
           </ButtonLink>
         )}
       </Stack>
@@ -197,10 +205,10 @@ const AllFiles = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
-          rowLinkTo={canEdit ? rowLinkTo : undefined}
+          // rowLinkTo={canEdit ? rowLinkTo : undefined}
           columns={columns}
           pagePath='client.files'
-          fetchPolicy='cache-and-network'
+          // fetchPolicy='cache-and-network'
         />
       </Paper>
     </>

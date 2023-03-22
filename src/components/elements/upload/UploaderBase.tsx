@@ -110,7 +110,7 @@ const defaultChildren: NonNullable<UploaderProps['children']> = ({
       border: `1px dashed ${palette.divider}`,
       backgroundColor: dragging
         ? alpha(palette.primary.light, 0.12)
-        : 'transparent',
+        : palette.background.paper,
       overflow: 'hidden',
     })}
     {...rootProps}

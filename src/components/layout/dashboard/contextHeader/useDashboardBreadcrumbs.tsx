@@ -90,7 +90,7 @@ export const useDashboardBreadcrumbs = (
         parent: DashboardRoutes.PROFILE,
       },
       [DashboardRoutes.NEW_FILE]: {
-        title: 'New File',
+        title: 'Upload',
         parent: DashboardRoutes.FILES,
       },
       [DashboardRoutes.EDIT_FILE]: {

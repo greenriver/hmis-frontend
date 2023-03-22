@@ -45,7 +45,7 @@ it(
 
     // Edit file
     cy.get('@fileRow').contains('example.json').click();
-    cy.contains('Attachment').should('not.exist');
+    cy.get('#fileBlobId').should('not.exist');
     cy.choose('tags', '2', 'secondTag');
     cy.get('body').type('{esc}');
     cy.get('button[type="submit"]').click();
