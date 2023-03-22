@@ -10,6 +10,10 @@ export const useDashboardNavItems = (clientId?: string) => {
   const [canViewEnrollments] = useHasClientPermissions(clientId || '', [
     'canViewEnrollmentDetails',
   ]);
+  const [canViewFiles] = useHasClientPermissions(clientId || '', [
+    'canViewAnyConfidentialClientFiles',
+    'canViewAnyNonconfidentialClientFiles',
+  ]);
   const navItems: NavItem[] = useMemo(() => {
     if (!clientId) return [];
     const params = { clientId };
@@ -64,11 +68,15 @@ export const useDashboardNavItems = (clientId?: string) => {
             title: 'Notes',
             path: generateSafePath(DashboardRoutes.NOTES, params),
           },
-          {
-            id: 'files',
-            title: 'Files',
-            path: generateSafePath(DashboardRoutes.FILES, params),
-          },
+          ...(canViewFiles
+            ? [
+                {
+                  id: 'files',
+                  title: 'Files',
+                  path: generateSafePath(DashboardRoutes.FILES, params),
+                },
+              ]
+            : []),
           // {
           //   title: 'Contact',
           //   path: DashboardRoutes.CONTACT,
@@ -109,7 +117,7 @@ export const useDashboardNavItems = (clientId?: string) => {
         ],
       },
     ];
-  }, [clientId, canViewEnrollments]);
+  }, [clientId, canViewEnrollments, canViewFiles]);
 
   return navItems;
 };

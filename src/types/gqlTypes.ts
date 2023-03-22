@@ -345,6 +345,10 @@ export type ClientAccess = {
   __typename?: 'ClientAccess';
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
+  canManageAnyClientFiles: Scalars['Boolean'];
+  canManageOwnClientFiles: Scalars['Boolean'];
+  canViewAnyConfidentialClientFiles: Scalars['Boolean'];
+  canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
@@ -1134,6 +1138,7 @@ export type File = {
   fileBlobId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  ownFile: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
   updatedBy: User;
@@ -2500,7 +2505,10 @@ export type QueryAccess = {
   canEditEnrollments: Scalars['Boolean'];
   canEditOrganization: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
-  canManageClientFiles: Scalars['Boolean'];
+  canManageAnyClientFiles: Scalars['Boolean'];
+  canManageOwnClientFiles: Scalars['Boolean'];
+  canViewAnyConfidentialClientFiles: Scalars['Boolean'];
+  canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
   canViewClients: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
@@ -6425,6 +6433,7 @@ export type SubmitFormMutation = {
           updatedAt: string;
           url: string;
           tags: Array<string>;
+          ownFile: boolean;
           updatedBy: { __typename?: 'User'; id: string; name: string };
         }
       | {
@@ -6566,6 +6575,10 @@ export type ClientPermissionsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
   };
 };
 
@@ -7016,6 +7029,7 @@ export type FileFieldsFragment = {
   updatedAt: string;
   url: string;
   tags: Array<string>;
+  ownFile: boolean;
   updatedBy: { __typename?: 'User'; id: string; name: string };
 };
 
@@ -7132,6 +7146,10 @@ export type GetClientPermissionsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
     };
   } | null;
 };
@@ -8224,6 +8242,7 @@ export type GetFileQuery = {
     updatedAt: string;
     url: string;
     tags: Array<string>;
+    ownFile: boolean;
     updatedBy: { __typename?: 'User'; id: string; name: string };
   } | null;
 };
@@ -8257,6 +8276,7 @@ export type GetClientFilesQuery = {
         updatedAt: string;
         url: string;
         tags: Array<string>;
+        ownFile: boolean;
         updatedBy: { __typename?: 'User'; id: string; name: string };
       }>;
     };
@@ -8420,6 +8440,10 @@ export type RootPermissionsFragmentFragment = {
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
   canEditProjectDetails: boolean;
+  canManageAnyClientFiles: boolean;
+  canManageOwnClientFiles: boolean;
+  canViewAnyConfidentialClientFiles: boolean;
+  canViewAnyNonconfidentialClientFiles: boolean;
 };
 
 export type GetRootPermissionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -8442,6 +8466,10 @@ export type GetRootPermissionsQuery = {
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
     canEditProjectDetails: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
   };
 };
 
@@ -9643,6 +9671,10 @@ export const ClientPermissionsFragmentDoc = gql`
       canEditEnrollments
       canDeleteEnrollments
       canViewEnrollmentDetails
+      canManageAnyClientFiles
+      canManageOwnClientFiles
+      canViewAnyConfidentialClientFiles
+      canViewAnyNonconfidentialClientFiles
     }
   }
 `;
@@ -10006,6 +10038,7 @@ export const FileFieldsFragmentDoc = gql`
     updatedAt
     url
     tags
+    ownFile
     updatedBy {
       id
       name
@@ -10028,6 +10061,10 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canViewEnrollmentDetails
     canDeleteEnrollments
     canEditProjectDetails
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
   }
 `;
 export const ProjectFieldsFragmentDoc = gql`

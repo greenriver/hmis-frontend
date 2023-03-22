@@ -27,6 +27,10 @@ fragment ClientPermissions on Client {
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
   }
 }
 
@@ -371,6 +375,7 @@ fragment FileFields on File {
   updatedAt
   url
   tags
+  ownFile
   updatedBy {
     id
     name
