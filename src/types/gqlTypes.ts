@@ -7617,6 +7617,47 @@ export type DeleteEnrollmentMutation = {
   } | null;
 };
 
+export type DeleteClientFileMutationVariables = Exact<{
+  input: DeleteClientFileInput;
+}>;
+
+export type DeleteClientFileMutation = {
+  __typename?: 'Mutation';
+  deleteClientFile?: {
+    __typename?: 'DeleteClientFilePayload';
+    clientMutationId?: string | null;
+    file?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType: string;
+      createdAt: string;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      fileBlobId: string;
+      updatedAt: string;
+      url: string;
+      tags: Array<string>;
+      ownFile: boolean;
+      updatedBy: { __typename?: 'User'; id: string; name: string };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+    }>;
+  } | null;
+};
+
 export type AddHouseholdMembersMutationVariables = Exact<{
   input: AddHouseholdMembersToEnrollmentInput;
 }>;
@@ -11712,6 +11753,64 @@ export type DeleteEnrollmentMutationResult =
 export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
   DeleteEnrollmentMutation,
   DeleteEnrollmentMutationVariables
+>;
+export const DeleteClientFileDocument = gql`
+  mutation DeleteClientFile($input: DeleteClientFileInput!) {
+    deleteClientFile(input: $input) {
+      clientMutationId
+      file {
+        ...FileFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${FileFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteClientFileMutationFn = Apollo.MutationFunction<
+  DeleteClientFileMutation,
+  DeleteClientFileMutationVariables
+>;
+
+/**
+ * __useDeleteClientFileMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientFileMutation, { data, loading, error }] = useDeleteClientFileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteClientFileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteClientFileMutation,
+    DeleteClientFileMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteClientFileMutation,
+    DeleteClientFileMutationVariables
+  >(DeleteClientFileDocument, options);
+}
+export type DeleteClientFileMutationHookResult = ReturnType<
+  typeof useDeleteClientFileMutation
+>;
+export type DeleteClientFileMutationResult =
+  Apollo.MutationResult<DeleteClientFileMutation>;
+export type DeleteClientFileMutationOptions = Apollo.BaseMutationOptions<
+  DeleteClientFileMutation,
+  DeleteClientFileMutationVariables
 >;
 export const AddHouseholdMembersDocument = gql`
   mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {

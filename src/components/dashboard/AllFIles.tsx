@@ -1,7 +1,16 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, Chip, Paper, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Chip,
+  CircularProgress,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { format } from 'date-fns';
-import { useCallback, useMemo } from 'react';
+import { uniq } from 'lodash-es';
+import { useCallback, useMemo, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -15,12 +24,15 @@ import {
   GetClientFilesQuery,
   GetClientFilesQueryVariables,
   PickListType,
+  useDeleteClientFileMutation,
+  useGetClientFilesQuery,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const AllFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
+  const [deletingIds, setDeletingIds] = useState<string[]>([]);
 
   const [canEdit] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
@@ -32,6 +44,21 @@ const AllFiles = () => {
   const { data: pickListData } = useGetPickListQuery({
     variables: { pickListType: PickListType.AvailableFileTypes },
   });
+  const { refetch } = useGetClientFilesQuery({ variables: { id: clientId } });
+
+  const [deleteFile] = useDeleteClientFileMutation();
+
+  const handleDeleteFile = useCallback(
+    (fileId: string) =>
+      deleteFile({
+        variables: { input: { fileId } },
+      }).finally(() => {
+        refetch().then(() =>
+          setDeletingIds((ids) => ids.filter((id) => id !== fileId))
+        );
+      }),
+    [deleteFile, refetch]
+  );
 
   const rowLinkTo = useCallback(
     (file: FileFieldsFragment) =>
@@ -107,15 +134,23 @@ const AllFiles = () => {
                       </Button>
                       <Button
                         data-testid='deleteFile'
+                        disabled={deletingIds.includes(file.id)}
                         onClick={(e) => {
                           e.stopPropagation();
                           e.preventDefault();
+                          setDeletingIds((ids) => uniq([...ids, file.id]));
+                          handleDeleteFile(file.id);
                         }}
                         size='small'
                         variant='outlined'
+                        endIcon={
+                          deletingIds.includes(file.id) && (
+                            <CircularProgress size={15} color='inherit' />
+                          )
+                        }
                         color='error'
                       >
-                        Delete
+                        {deletingIds.includes(file.id) ? 'Deleting' : 'Delete'}
                       </Button>
                     </>
                   )}
@@ -125,7 +160,7 @@ const AllFiles = () => {
           ]
         : []) as typeof columns),
     ];
-  }, [canEdit, canEditAny, pickListData]);
+  }, [canEdit, canEditAny, pickListData, handleDeleteFile, deletingIds]);
 
   return (
     <>

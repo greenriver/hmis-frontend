@@ -165,6 +165,18 @@ mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   }
 }
 
+mutation DeleteClientFile($input: DeleteClientFileInput!) {
+  deleteClientFile(input: $input) {
+    clientMutationId
+    file {
+      ...FileFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
   addHouseholdMembersToEnrollment(input: $input) {
     clientMutationId
