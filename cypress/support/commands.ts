@@ -52,6 +52,13 @@ Cypress.Commands.add('inputId', (id) => {
   cy.get(`input[id="${id}"]`);
 });
 
+Cypress.Commands.add('confirmDialog', () => {
+  cy.testId('confirmDialogAction').click();
+});
+Cypress.Commands.add('cancelDialog', () => {
+  cy.testId('cancelDialogAction').click();
+});
+
 Cypress.Commands.add('choose', (id, optionCode) => {
   cy.inputId(id).click({ force: true });
   cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
@@ -78,7 +85,7 @@ Cypress.Commands.add('uncheckOption', (id, optionCode) => {
 
 Cypress.Commands.add('clearFormSection', (id) => {
   cy.getById(id).findTestId('clearButton').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 });
 
 Cypress.Commands.add('getChecked', (id, value) => {
@@ -165,6 +172,8 @@ declare global {
         firstName: string,
         lastName: string
       ): Chainable<JQuery<Element>>;
+      confirmDialog(): Chainable<JQuery<Element>>;
+      cancelDialog(): Chainable<JQuery<Element>>;
 
       // Form actions
       checkOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
