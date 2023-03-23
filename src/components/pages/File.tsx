@@ -41,7 +41,6 @@ const File = ({ create = false }: { create?: boolean }) => {
   });
 
   if (loading) return <Loading />;
-  // if (crumbsLoading) return <Loading />
   if (error) throw error;
   if (!create && !loading && !data?.file) throw Error('File not found');
 
