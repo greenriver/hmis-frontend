@@ -4,7 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { DashboardRoutes, Routes } from './routes';
 
-import AllFiles from '@/components/dashboard/AllFIles';
+import AllFiles from '@/components/dashboard/AllFiles';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
