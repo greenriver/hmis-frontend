@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import { useEnrollment } from '../dashboard/enrollments/useEnrollment';
+import { useEnrollment } from '../../modules/dataFetching/hooks/useEnrollment';
 import Loading from '../elements/Loading';
 import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';

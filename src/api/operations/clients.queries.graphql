@@ -25,6 +25,13 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientName($id: ID!) {
+  client(id: $id) {
+    id
+    ...ClientName
+  }
+}
+
 query GetClientPermissions($id: ID!) {
   client(id: $id) {
     ...ClientPermissions

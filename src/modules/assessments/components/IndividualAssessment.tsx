@@ -7,7 +7,6 @@ import { assessmentDate, assessmentPrefix } from '../util';
 
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
-import { useEnrollment } from '@/components/dashboard/enrollments/useEnrollment';
 import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import {
@@ -18,6 +17,7 @@ import {
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
 import { DynamicFormProps } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
