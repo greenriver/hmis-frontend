@@ -25,7 +25,7 @@ it(
     cy.get('#side-nav-files').click();
     cy.get('#add-client-file').click();
     cy.choose('tags', '1', 'firstTag');
-    cy.get('body').type('{esc}');
+    cy.exitModal();
     cy.inputId('effectiveDate').clear().type('01012020');
     cy.inputId('expirationDate').clear().type('01012020');
     cy.checkOption('confidential', 'true');
@@ -39,15 +39,24 @@ it(
     // Ensure file exists
     cy.get('table tbody').find('tr').first().as('fileRow');
     cy.get('@fileRow').contains('example.json').should('exist');
-    cy.get('@fileRow').contains('Download').should('exist');
     cy.get('@fileRow').contains('Edit').should('exist');
     cy.get('@fileRow').contains('Delete').should('exist');
 
-    // Edit file
+    // Check file modal
     cy.get('@fileRow').contains('example.json').click();
+    cy.get('.MuiDialog-container').as('dialog').should('exist');
+    cy.get('@dialog').contains('Download').should('exist');
+    cy.get('@dialog').contains('Edit').should('exist');
+    cy.get('@dialog').contains('Delete').should('exist');
+    cy.get('@dialog').contains('No Preview Available').should('exist');
+    cy.get('@dialog').get('a').contains('download the file').should('exist');
+    cy.exitModal();
+
+    // Edit file
+    cy.get('@fileRow').contains('Edit').click();
     cy.get('#fileBlobId').should('not.exist');
     cy.choose('tags', '2', 'secondTag');
-    cy.get('body').type('{esc}');
+    cy.exitModal();
     cy.get('button[type="submit"]').click();
 
     // Check the edit
@@ -57,7 +66,10 @@ it(
 
     // Delete the file
     cy.get('@fileRow').contains('Delete').click();
-    cy.get('@fileRow').contains('Deleting').should('not.exist');
-    cy.get('table tbody').contains('example.json').should('not.exist');
+    cy.get('.MuiDialog-container').as('deleteDialog');
+    cy.get('@deleteDialog').contains('Delete File').should('exist');
+    cy.get('@deleteDialog').contains('Confirm').click();
+    cy.get('table tbody').should('not.exist');
+    cy.get('body').contains('None found').should('exist');
   }
 );

@@ -120,9 +120,9 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
   const deleteFileDialog = useMemo(
     () => (
       <ConfirmationDialog
-        id='deleteAssessment'
+        id='deleteFile'
         open={!!fileToDelete}
-        title='Delete Assessment'
+        title='Delete File'
         onConfirm={() => fileToDelete && handleDeleteFile(fileToDelete.id)}
         onCancel={() => setFileToDelete(undefined)}
         loading={deleting}

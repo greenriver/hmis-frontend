@@ -52,6 +52,10 @@ Cypress.Commands.add('inputId', (id) => {
   cy.get(`input[id="${id}"]`);
 });
 
+Cypress.Commands.add('exitModal', () => {
+  cy.get('body').type('{esc}');
+});
+
 Cypress.Commands.add('choose', (id, optionCode, optionName = 'option') => {
   cy.inputId(id).click({ force: true });
   cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
@@ -164,6 +168,7 @@ declare global {
         firstName: string,
         lastName: string
       ): Chainable<JQuery<Element>>;
+      exitModal(): Chainable<JQuery<Element>>;
 
       // Form actions
       checkOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
