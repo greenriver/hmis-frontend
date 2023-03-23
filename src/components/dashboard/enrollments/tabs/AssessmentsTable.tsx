@@ -131,7 +131,7 @@ const AssessmentsTable = ({
                   flexGrow={1}
                 >
                   <Button
-                    data-testid='deleteService'
+                    data-testid='deleteAssessment'
                     onClick={(e) => {
                       e.stopPropagation();
                       e.preventDefault();

@@ -206,10 +206,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete funder, assert table updated
   cy.testId('funderCard').findTestId('deleteButton').first().click();
-  cy.testId('cancelDialogAction').click();
+  cy.cancelDialog();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 2);
   cy.testId('funderCard').findTestId('deleteButton').first().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
 
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
@@ -279,7 +279,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete the second ProjectCoC
   cy.testId('projectCocCard').findTestId('deleteButton').first().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
 
   /*** Inventory ***/
@@ -359,19 +359,19 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete an Inventory record
   cy.testId('inventoryCard').findTestId('deleteButton').last().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
   cy.testId('updateProjectButton').click();
   cy.inputId('2.02.4').clear().safeType('01/31/2022');
   cy.testId('formButton-submit').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 
   /*** Delete project and organization ***/
   cy.testId('deleteProjectButton').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 
   cy.testId('deleteOrganizationButton').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 });

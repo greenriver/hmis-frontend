@@ -87,7 +87,7 @@ it(
     // Make a change and submit
     cy.checkOption(incomeFromAnySource, 'CLIENT_REFUSED');
     cy.testId('formButton-submit').first().click();
-    cy.testId('confirmDialogAction').click();
+    cy.confirmDialog();
 
     // Re-open and make sure CLIENT_REFUSED saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
@@ -100,7 +100,7 @@ it(
     cy.checkOption(incomeFromAnySource, 'YES');
     cy.inputId('4.02.A').type('200');
     cy.testId('formButton-submit').first().click();
-    cy.testId('confirmDialogAction').click();
+    cy.confirmDialog();
 
     // Re-open and make sure YES saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
@@ -116,10 +116,16 @@ it(
       const hudValues = win.debug.hudValues;
       // Submit assessment
       cy.testId('formButton-submit').first().click();
-      cy.testId('confirmDialogAction').click();
+      cy.confirmDialog();
       // Re-open assessment and assert that hudValues match previous
       cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
     });
+    cy.testId('formButton-discard').first().click();
+
+    // Delete assessment
+    cy.testId('deleteAssessment').first().click();
+    cy.confirmDialog();
+    cy.testId('deleteAssessment').should('not.exist');
   }
 );
