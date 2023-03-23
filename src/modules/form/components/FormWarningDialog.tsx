@@ -27,45 +27,43 @@ const FormWarningDialog = ({
   const warningsByRecordId = groupBy(warnings, 'recordId');
 
   let contents;
-  if (sectionLabels && Object.keys(warningsByRecordId).length > 1) {
+  if (sectionLabels) {
     contents = (
-      <>
-        <SimpleAccordion
-          renderHeader={(header) => header}
-          renderContent={(content) => content}
-          AccordionProps={{ defaultExpanded: true }}
-          AccordionDetailsProps={{ sx: { px: 0, pb: 0 } }}
-          items={Object.keys(warningsByRecordId).map((id) => {
-            return {
-              key: sectionLabels[id] || 'other',
-              header: (
-                <Stack
-                  direction='row'
-                  gap={1}
-                  justifyContent='space-between'
-                  width='99%'
-                >
-                  <Typography fontWeight={800}>
-                    {sectionLabels[id] || 'Other Warnings'}
-                  </Typography>
-                  <Chip
-                    label={pluralize(
-                      'warning',
-                      warningsByRecordId[id].length,
-                      true
-                    )}
-                    variant='outlined'
-                    size='small'
-                  />
-                </Stack>
-              ),
-              content: (
-                <ValidationWarningDisplay warnings={warningsByRecordId[id]} />
-              ),
-            };
-          })}
-        />
-      </>
+      <SimpleAccordion
+        renderHeader={(header) => header}
+        renderContent={(content) => content}
+        AccordionProps={{ defaultExpanded: true }}
+        AccordionDetailsProps={{ sx: { px: 0, pb: 0 } }}
+        items={Object.keys(warningsByRecordId).map((id) => {
+          return {
+            key: sectionLabels[id] || 'other',
+            header: (
+              <Stack
+                direction='row'
+                gap={1}
+                justifyContent='space-between'
+                width='99%'
+              >
+                <Typography fontWeight={800}>
+                  {sectionLabels[id] || 'Other Warnings'}
+                </Typography>
+                <Chip
+                  label={pluralize(
+                    'warning',
+                    warningsByRecordId[id].length,
+                    true
+                  )}
+                  variant='outlined'
+                  size='small'
+                />
+              </Stack>
+            ),
+            content: (
+              <ValidationWarningDisplay warnings={warningsByRecordId[id]} />
+            ),
+          };
+        })}
+      />
     );
   } else {
     contents = <ValidationWarningDisplay warnings={warnings} />;

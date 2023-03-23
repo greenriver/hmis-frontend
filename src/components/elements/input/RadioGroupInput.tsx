@@ -81,6 +81,8 @@ const RadioGroupInput = ({
       option: string
     ) => {
       event.preventDefault();
+      if (props.disabled) return;
+
       if (isNil(option)) {
         onChange(option);
       } else if (clearable && option === value?.code) {
@@ -89,7 +91,7 @@ const RadioGroupInput = ({
         onChange(options.find((o) => o.code === option));
       }
     },
-    [onChange, options, value, clearable]
+    [onChange, options, value, clearable, props.disabled]
   );
 
   // Prevent form submission on Enter. Enter should toggle the state.
@@ -112,6 +114,7 @@ const RadioGroupInput = ({
         <FormLabel
           id={htmlId}
           error={error}
+          disabled={props.disabled}
           sx={{
             color: props.disabled ? 'text.disabled' : 'text.primary',
             '&.Mui-focused': {
@@ -151,6 +154,7 @@ const RadioGroupInput = ({
               onClick={(e) => onClickOption(e, code)}
               control={
                 <ControlComponent
+                  disabled={props.disabled}
                   onKeyDown={onKeyDown}
                   data-checked={value?.code === code ? true : false}
                 />

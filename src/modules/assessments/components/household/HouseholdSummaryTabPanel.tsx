@@ -2,7 +2,6 @@ import {
   Alert,
   AlertTitle,
   Box,
-  Checkbox,
   CheckboxProps,
   Grid,
   Paper,
@@ -10,20 +9,26 @@ import {
 } from '@mui/material';
 import { fromPairs, isNil, keyBy, mapValues, pickBy } from 'lodash-es';
 import pluralize from 'pluralize';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  memo,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
+import HouseholdSummaryTable from './HouseholdSummaryTable';
 import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import LoadingButton from '@/components/elements/LoadingButton';
 import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
 import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   FormRole,
@@ -33,119 +38,6 @@ import {
   ValidationSeverity,
 } from '@/types/gqlTypes';
 
-const SummaryTable = ({
-  tabs,
-  role,
-  checked,
-  onClickCheckbox,
-}: {
-  tabs: TabDefinition[];
-  role: FormRole.Intake | FormRole.Exit;
-  checked: Record<string, boolean>;
-  onClickCheckbox: (...assessmentIds: string[]) => CheckboxProps['onChange'];
-}) => {
-  const columns: ColumnDef<TabDefinition>[] = useMemo(() => {
-    const submittable = tabs
-      .filter((tab) => tab.assessmentId && tab.assessmentInProgress)
-      .map(({ assessmentId }) => assessmentId) as string[];
-
-    return [
-      {
-        key: 'checkbox',
-        textAlign: 'center',
-        header: (
-          <>
-            <Checkbox
-              // checked={!!(row.assessmentId && checked[row.assessmentId])}
-              disabled={submittable.length === 0}
-              onChange={(...args) => {
-                const func = onClickCheckbox(...submittable);
-                if (func) func(...args);
-              }}
-              aria-label={`Select All`}
-            />
-          </>
-        ),
-        width: '10%',
-        render: (row) => {
-          const disabledReason = !row.assessmentId
-            ? 'Not started'
-            : row.status === AssessmentStatus.Submitted
-            ? 'Submitted'
-            : undefined;
-          if (disabledReason) {
-            return (
-              <Typography
-                variant='caption'
-                color={'text.secondary'}
-                fontStyle='italic'
-                sx={{ pl: 2, whiteSpace: 'no-wrap' }}
-              >
-                {disabledReason}
-              </Typography>
-            );
-          }
-
-          return (
-            // <ButtonTooltipContainer title={disabledReason}>
-            <Checkbox
-              checked={!!(row.assessmentId && checked[row.assessmentId])}
-              indeterminate={row.status === AssessmentStatus.Submitted}
-              disabled={!!disabledReason}
-              onChange={
-                row.assessmentId ? onClickCheckbox(row.assessmentId) : undefined
-              }
-              aria-label={`Submit assessment for ${row.clientName} `}
-            />
-            // </ButtonTooltipContainer>
-          );
-        },
-      },
-      {
-        header: '',
-        key: 'hoh-indicator',
-        width: '5%',
-        render: ({ relationshipToHoH }) => (
-          <HohIndicator relationshipToHoh={relationshipToHoH} />
-        ),
-      },
-      {
-        header: 'Name',
-        key: 'name',
-        width: '20%',
-        render: ({ clientName }) => <Typography>{clientName}</Typography>,
-      },
-      {
-        header: `${role === FormRole.Exit ? 'Exit' : 'Entry'} Status`,
-        key: 'status',
-        width: '20%',
-        render: () => <Typography>TODO</Typography>,
-      },
-      {
-        header: `${role === FormRole.Exit ? 'Exit' : 'Entry'} Date`,
-        key: 'date',
-        width: '10%',
-        render: (row) => (
-          <Typography>
-            {/* // FIXME this should be the actual entry/exit date if no assmt */}
-            {row.assessmentDate ? parseAndFormatDate(row.assessmentDate) : null}
-          </Typography>
-        ),
-      },
-    ];
-  }, [checked, onClickCheckbox, role, tabs]);
-  return (
-    <GenericTable<TabDefinition>
-      rows={tabs}
-      columns={columns}
-      rowSx={() => ({
-        // HoH indicator column
-        'td:nth-of-type(1)': { px: 0 },
-      })}
-    />
-  );
-};
-
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
   formRole: FormRole.Intake | FormRole.Exit;
@@ -153,6 +45,7 @@ interface HouseholdSummaryTabPanelProps {
   id: string;
   projectName: string;
   refetch: () => Promise<any>;
+  setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
 }
 
 type ErrorState = {
@@ -170,6 +63,7 @@ const HouseholdSummaryTabPanel = memo(
     tabs,
     projectName,
     refetch,
+    setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
     console.debug('Rendering summary panel');
 
@@ -317,11 +211,12 @@ const HouseholdSummaryTabPanel = memo(
               Select Household Members for Submission
             </Typography>
             <Paper sx={{ mt: 2 }}>
-              <SummaryTable
+              <HouseholdSummaryTable
                 tabs={tabs}
                 role={formRole}
                 checked={checkedState}
                 onClickCheckbox={onClickCheckbox}
+                setCurrentTab={setCurrentTab}
               />
               <Box sx={{ px: 2, py: 3 }}>
                 <LoadingButton
@@ -332,11 +227,7 @@ const HouseholdSummaryTabPanel = memo(
                   {`Submit (${assessmentsToSubmit.length}) ${
                     formRole === FormRole.Intake ? 'Intake' : 'Exit'
                   }`}{' '}
-                  {pluralize(
-                    'Assessment',
-                    assessmentsToSubmit.length,
-                    assessmentsToSubmit.length > 0
-                  )}
+                  {pluralize('Assessment', assessmentsToSubmit.length)}
                 </LoadingButton>
               </Box>
             </Paper>

@@ -75,6 +75,10 @@ const HouseholdAssessments = ({
               ? enrollment.intakeAssessment?.assessmentDate
               : enrollment.exitAssessment?.assessmentDate;
 
+          // Whether the actual Entry/Exit has been completed (notwithstanding assessment status)
+          const entryOrExitCompleted =
+            type === 'ENTRY' ? !enrollment.inProgress : !!enrollment.exitDate;
+
           const isSubmitted = assessmentId && !assessmentInProgress;
 
           const tabData: TabDefinition = {
@@ -82,8 +86,13 @@ const HouseholdAssessments = ({
             id: (index + 1).toString(),
             isHoh: relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
             enrollmentId: enrollment.id,
+            entryDate: enrollment.entryDate,
+            exitDate: enrollment.exitDate || undefined,
+            enrollmentInProgress: enrollment.inProgress,
+            entryOrExitCompleted,
             assessmentId,
             assessmentInProgress,
+            assessmentSubmitted: !!assessmentId && !assessmentInProgress,
             clientId: client.id,
             client: {
               dob: client.dob,
@@ -320,6 +329,7 @@ const HouseholdAssessments = ({
               formRole={formRole}
               projectName={enrollmentName(enrollment)}
               refetch={refetch}
+              setCurrentTab={setCurrentTab}
             />
           )}
         </Grid>
