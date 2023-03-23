@@ -52,7 +52,7 @@ const TabIndicator = ({
       break;
   }
 
-  return <Icon fontSize='medium' color={color || 'inherit'} />;
+  return <Icon fontSize='small' color={color || 'inherit'} />;
   // return (
   //   <Stack direction='row' alignItems='center' alignSelf='center' gap={0.8}>
   //     <Box component='span' sx={{ fontSize: 16, display: 'flex' }}>

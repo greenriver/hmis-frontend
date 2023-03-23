@@ -7071,6 +7071,23 @@ export type GetClientQuery = {
   } | null;
 };
 
+export type GetClientNameQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetClientNameQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    preferredName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  } | null;
+};
+
 export type GetClientPermissionsQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -10873,6 +10890,66 @@ export type GetClientLazyQueryHookResult = ReturnType<
 export type GetClientQueryResult = Apollo.QueryResult<
   GetClientQuery,
   GetClientQueryVariables
+>;
+export const GetClientNameDocument = gql`
+  query GetClientName($id: ID!) {
+    client(id: $id) {
+      id
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
+`;
+
+/**
+ * __useGetClientNameQuery__
+ *
+ * To run a query within a React component, call `useGetClientNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientNameQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetClientNameQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientNameQuery,
+    GetClientNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClientNameQuery, GetClientNameQueryVariables>(
+    GetClientNameDocument,
+    options
+  );
+}
+export function useGetClientNameLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientNameQuery,
+    GetClientNameQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClientNameQuery, GetClientNameQueryVariables>(
+    GetClientNameDocument,
+    options
+  );
+}
+export type GetClientNameQueryHookResult = ReturnType<
+  typeof useGetClientNameQuery
+>;
+export type GetClientNameLazyQueryHookResult = ReturnType<
+  typeof useGetClientNameLazyQuery
+>;
+export type GetClientNameQueryResult = Apollo.QueryResult<
+  GetClientNameQuery,
+  GetClientNameQueryVariables
 >;
 export const GetClientPermissionsDocument = gql`
   query GetClientPermissions($id: ID!) {

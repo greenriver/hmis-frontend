@@ -151,7 +151,6 @@ const FormActions = ({
     );
   };
 
-  console.log(lastSaved, lastSubmitted);
   return (
     <Stack direction='row' spacing={2} justifyContent={'space-between'}>
       <Stack direction='row' spacing={2}>
