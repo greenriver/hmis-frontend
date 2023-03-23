@@ -154,6 +154,7 @@ const HouseholdAssessments = ({
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       event.preventDefault();
+      console.log('CHANGING TAB TO ', newValue);
       navigateToTab(newValue);
     },
     [navigateToTab]
@@ -308,7 +309,7 @@ const HouseholdAssessments = ({
               active={tabDefinition.id === currentTab}
               refetch={refetch}
               navigateToTab={navigateToTab}
-              nextTab={tabs[index + 1]?.id}
+              nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
               previousTab={tabs[index - 1]?.id}
               formRole={formRole}
               updateTabStatus={updateTabStatus}

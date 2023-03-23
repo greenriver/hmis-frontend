@@ -1,12 +1,14 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useEffect, useRef } from 'react';
 
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
+import usePrevious from '@/hooks/usePrevious';
+import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
 import { FormActionTypes } from '@/modules/form/types';
 import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
@@ -36,15 +38,39 @@ const HouseholdAssessmentTabPanel = memo(
     navigateToTab,
     refetch,
     updateTabStatus,
+    assessmentSubmitted,
   }: HouseholdAssessmentTabPanelProps) => {
-    console.debug('Rendering assessment panel for', clientName);
+    // console.debug('Rendering assessment panel for', clientName);
+
+    const wasActive = usePrevious(active);
+    const formRef = useRef<DynamicFormRef>(null);
+
+    // If we navigated AWAY from this tab, do a background save on the form.
+    useEffect(() => {
+      if (!formRef.current) return;
+      if (wasActive && !active) {
+        if (assessmentSubmitted) {
+          // TODO: do we want to auto-submit?
+          console.log(`Not doing anything for ${clientName}, no auto-submit`);
+          return;
+        }
+
+        console.debug(`Saving ${clientName}...`);
+        formRef.current.SaveIfDirty(() => {
+          // TODO: Update tab status to 'error' if error?
+          console.debug(`Saved ${clientName}!`);
+          if (!assessmentId) {
+            // This was a NEW assessment; we need to re-fetch to get it
+            updateTabStatus(AssessmentStatus.Started, id);
+            refetch();
+          }
+        });
+      }
+    });
 
     const getFormActionProps = useCallback(
       (assessment?: AssessmentFieldsFragment) => {
-        const hasBeenSubmitted = assessment && !assessment.inProgress;
-
         const config = [];
-
         const nextPreviousProps = {
           variant: 'text',
           sx: { height: '50px', alignSelf: 'center' },
@@ -52,26 +78,19 @@ const HouseholdAssessmentTabPanel = memo(
 
         config.push({
           id: 'prev',
-          label: hasBeenSubmitted ? 'Previous' : 'Save & Previous',
-          action: hasBeenSubmitted
-            ? FormActionTypes.Navigate
-            : FormActionTypes.Save,
+          label: 'Previous',
+          action: FormActionTypes.Navigate,
           buttonProps: {
             disabled: !previousTab,
             startIcon: <ArrowBackIcon fontSize='small' />,
             ...nextPreviousProps,
           },
           onSuccess: () => {
-            if (!previousTab) return;
-            if (!hasBeenSubmitted) {
-              updateTabStatus(AssessmentStatus.Started, id);
-              refetch();
-            }
-            navigateToTab(previousTab);
+            if (previousTab) navigateToTab(previousTab);
           },
         });
 
-        if (hasBeenSubmitted) {
+        if (assessment && !assessment.inProgress) {
           config.push({
             id: 'submit',
             label: 'Save & Submit',
@@ -91,7 +110,7 @@ const HouseholdAssessmentTabPanel = memo(
             action: FormActionTypes.Save,
             buttonProps: { variant: 'contained', size: 'large' },
             onSuccess: () => {
-              updateTabStatus(AssessmentStatus.Started, id);
+              if (!assessment) updateTabStatus(AssessmentStatus.Started, id);
               refetch();
             },
           });
@@ -99,22 +118,15 @@ const HouseholdAssessmentTabPanel = memo(
 
         config.push({
           id: 'next',
-          label: hasBeenSubmitted ? 'Next' : 'Save & Next',
-          action: hasBeenSubmitted
-            ? FormActionTypes.Navigate
-            : FormActionTypes.Save,
+          label: 'Next',
+          action: FormActionTypes.Navigate,
           buttonProps: {
             disabled: !nextTab,
             endIcon: <ArrowForwardIcon fontSize='small' />,
             ...nextPreviousProps,
           },
           onSuccess: () => {
-            if (!nextTab) return;
-            if (!hasBeenSubmitted) {
-              updateTabStatus(AssessmentStatus.Started, id);
-              refetch();
-            }
-            navigateToTab(nextTab);
+            if (nextTab) navigateToTab(nextTab);
           },
         });
 
@@ -140,6 +152,7 @@ const HouseholdAssessmentTabPanel = memo(
           getFormActionProps={getFormActionProps}
           visible={active}
           lockIfSubmitted
+          formRef={formRef}
         />
       </AlwaysMountedTabPanel>
     );

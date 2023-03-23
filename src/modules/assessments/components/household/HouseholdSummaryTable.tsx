@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction, useMemo } from 'react';
 import { AssessmentStatus, TabDefinition } from './util';
 
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
-import RouterLink from '@/components/elements/RouterLink';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { FormRole } from '@/types/gqlTypes';
@@ -128,33 +127,24 @@ const HouseholdSummaryTable = ({
             );
           }
 
-          let assessmentStatus;
-
-          let linkTo = false;
+          // No assessment has been started yet
           if (!row.assessmentId) {
-            // No assessment has been started yet
-            assessmentStatus = NOT_STARTED;
+            return (
+              <Link onClick={() => setCurrentTab(row.id)}>
+                <Typography>{NOT_STARTED}</Typography>
+              </Link>
+            );
+          }
 
-            linkTo = true;
-          } else if (row.assessmentSubmitted) {
-            // Assessment has been submitted
-            // (bad state if assessment is submitted but enrollment is not entered/exited)
+          let assessmentStatus;
+          if (row.assessmentSubmitted) {
+            // Assessment has been submitted (bad state, entry/exit should be completed if this is the case)
             assessmentStatus = 'Assessment submitted';
           } else {
             // Assessment is in-progress
             assessmentStatus = 'Assessment saved';
           }
-          return (
-            <>
-              {linkTo ? (
-                <RouterLink to={`#${row.id}`}>
-                  <Typography>{assessmentStatus}</Typography>
-                </RouterLink>
-              ) : (
-                <Typography>{assessmentStatus}</Typography>
-              )}
-            </>
-          );
+          return <Typography>{assessmentStatus}</Typography>;
         },
       },
       {

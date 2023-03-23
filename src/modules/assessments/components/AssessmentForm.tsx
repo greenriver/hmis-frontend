@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
 
 import LockedAssessmentAlert from './LockedAssessmentAlert';
 import { useAssessmentHandlers } from './useAssessmentHandlers';
@@ -14,6 +14,7 @@ import {
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
+  DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
@@ -44,6 +45,7 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   locked?: boolean;
   visible?: boolean;
+  formRef?: Ref<DynamicFormRef>;
 }
 
 const AssessmentForm = ({
@@ -54,6 +56,7 @@ const AssessmentForm = ({
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
+  formRef,
   locked: lockedInitial,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
@@ -201,6 +204,7 @@ const AssessmentForm = ({
           // Remount component if a source assessment has been selected
           key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
           definition={definition.definition}
+          ref={formRef}
           onSubmit={submitHandler}
           onSaveDraft={
             assessment && !assessment.inProgress ? undefined : saveDraftHandler
