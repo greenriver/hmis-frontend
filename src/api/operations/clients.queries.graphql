@@ -25,6 +25,13 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientName($id: ID!) {
+  client(id: $id) {
+    id
+    ...ClientName
+  }
+}
+
 query GetClientPermissions($id: ID!) {
   client(id: $id) {
     ...ClientPermissions
@@ -230,6 +237,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
     ...EnrollmentFields
     household {
       id
+      shortId
       householdClients {
         ...HouseholdClientFieldsWithAssessments
       }
@@ -278,6 +286,7 @@ query GetClientHouseholdMemberCandidates(
       nodesCount
       nodes {
         household {
+          id
           householdClients {
             client {
               ...ClientFields

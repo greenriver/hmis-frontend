@@ -14,19 +14,29 @@ const TabLabel = ({
   role: FormRole.Intake | FormRole.Exit;
 }) => {
   return (
-    <Stack gap={1}>
+    <Stack gap={1} direction='row' display='flex' alignItems='center'>
+      <TabIndicator status={status} role={role} />
       <Typography variant='inherit'>
         {isHoh ? `(HoH) ${clientName}` : clientName}
       </Typography>
-      <TabIndicator status={status} role={role} />
     </Stack>
   );
 };
-
-export const SummaryTabLabel = () => (
+// add back household button even when all entered
+export const SummaryTabLabel = ({
+  role,
+}: {
+  role: FormRole.Intake | FormRole.Exit;
+}) => (
   <Stack gap={0.8} direction='row'>
     <ReceiptIcon fontSize='small' />
-    <Typography variant='inherit'>Summary</Typography>
+    <Typography variant='inherit'>
+      {role === FormRole.Intake
+        ? 'Complete Entry'
+        : role === FormRole.Exit
+        ? 'Complete Exit'
+        : 'Submit Assessments'}
+    </Typography>
   </Stack>
 );
 

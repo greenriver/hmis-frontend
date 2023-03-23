@@ -22,4 +22,4 @@ export const STICKY_BAR_HEIGHT = SHOW_OP_LINK_BAR
 export const DESKTOP_NAV_SIDEBAR_WIDTH = 300;
 
 // height of sticky header on household assessment view
-export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 72;
+export const HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT = 78;

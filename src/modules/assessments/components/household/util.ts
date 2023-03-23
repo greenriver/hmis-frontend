@@ -18,9 +18,15 @@ export type TabDefinition = {
   id: string;
   clientName: string;
   client: ClientNameDobVeteranFields;
+  clientId: string;
   enrollmentId: string;
+  entryOrExitCompleted: boolean;
+  entryDate: string;
+  exitDate?: string;
+  enrollmentInProgress: boolean;
   assessmentId?: string;
   assessmentInProgress?: boolean;
+  assessmentSubmitted: boolean;
   assessmentDate?: string;
   isHoh: boolean;
   relationshipToHoH: RelationshipToHoH;

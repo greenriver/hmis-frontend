@@ -445,7 +445,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Developmental
@@ -460,7 +460,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Chronic
@@ -480,7 +480,7 @@ Cypress.Commands.add('assertDisability', () => {
     'DisabilityGroup.disablingCondition': 'YES',
   });
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // HIV/AIDS
@@ -495,7 +495,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Mental Health
@@ -517,7 +517,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Substance Use
@@ -538,7 +538,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Test overriding system-generated NO with YES

@@ -52,6 +52,13 @@ Cypress.Commands.add('inputId', (id) => {
   cy.get(`input[id="${id}"]`);
 });
 
+Cypress.Commands.add('confirmDialog', () => {
+  cy.testId('confirmDialogAction').click();
+});
+Cypress.Commands.add('cancelDialog', () => {
+  cy.testId('cancelDialogAction').click();
+});
+
 Cypress.Commands.add('exitModal', () => {
   cy.get('body').type('{esc}');
 });
@@ -78,6 +85,11 @@ Cypress.Commands.add('checkOption', (id, optionCode) => {
 });
 Cypress.Commands.add('uncheckOption', (id, optionCode) => {
   cy.get(`[id="${id}"] input[value="${optionCode}"]`).click({ force: true });
+});
+
+Cypress.Commands.add('clearFormSection', (id) => {
+  cy.getById(id).findTestId('clearButton').click();
+  cy.confirmDialog();
 });
 
 Cypress.Commands.add('getChecked', (id, value) => {
@@ -169,10 +181,13 @@ declare global {
         lastName: string
       ): Chainable<JQuery<Element>>;
       exitModal(): Chainable<JQuery<Element>>;
+      confirmDialog(): Chainable<JQuery<Element>>;
+      cancelDialog(): Chainable<JQuery<Element>>;
 
       // Form actions
       checkOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
       uncheckOption(id: string, optionCode: string): Chainable<JQuery<Element>>;
+      clearFormSection(id: string): Chainable<JQuery<Element>>;
 
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;

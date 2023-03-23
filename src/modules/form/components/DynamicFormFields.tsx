@@ -210,6 +210,7 @@ const DynamicFormFields: React.FC<Props> = ({
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
           visible={visible}
+          locked={locked}
         />
       );
     }

@@ -1,17 +1,11 @@
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import CheckIcon from '@mui/icons-material/Check';
 import { memo, useCallback } from 'react';
 
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import {
-  AssessmentStatus,
-  labelForStatus,
-  TabDefinition,
-  tabPanelA11yProps,
-} from './util';
+import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
 import { FormActionTypes } from '@/modules/form/types';
 import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
@@ -42,48 +36,19 @@ const HouseholdAssessmentTabPanel = memo(
     navigateToTab,
     refetch,
     updateTabStatus,
-    status,
   }: HouseholdAssessmentTabPanelProps) => {
     console.debug('Rendering assessment panel for', clientName);
-    const readyToSubmit = status === AssessmentStatus.ReadyToSubmit;
 
     const getFormActionProps = useCallback(
       (assessment?: AssessmentFieldsFragment) => {
         const hasBeenSubmitted = assessment && !assessment.inProgress;
 
         const config = [];
-        config.push({
-          id: 'readyToSubmit',
-          label: hasBeenSubmitted
-            ? labelForStatus(AssessmentStatus.Submitted, formRole)
-            : labelForStatus(AssessmentStatus.ReadyToSubmit, formRole),
-          action: FormActionTypes.Save,
-          buttonProps: {
-            variant: 'contained',
-            disabled: hasBeenSubmitted || readyToSubmit,
-            startIcon:
-              hasBeenSubmitted || readyToSubmit ? (
-                <CheckIcon fontSize='small' />
-              ) : null,
-          },
-          onSuccess: () => {
-            updateTabStatus(AssessmentStatus.ReadyToSubmit, id);
-            refetch();
-          },
-        });
 
-        if (!hasBeenSubmitted) {
-          config.push({
-            id: 'save',
-            label: 'Save',
-            action: FormActionTypes.Save,
-            buttonProps: { variant: 'outlined' },
-            onSuccess: () => {
-              updateTabStatus(AssessmentStatus.Started, id);
-              refetch();
-            },
-          });
-        }
+        const nextPreviousProps = {
+          variant: 'text',
+          sx: { height: '50px', alignSelf: 'center' },
+        };
 
         config.push({
           id: 'prev',
@@ -91,11 +56,10 @@ const HouseholdAssessmentTabPanel = memo(
           action: hasBeenSubmitted
             ? FormActionTypes.Navigate
             : FormActionTypes.Save,
-          rightAlign: true,
           buttonProps: {
             disabled: !previousTab,
-            variant: 'outlined',
             startIcon: <ArrowBackIcon fontSize='small' />,
+            ...nextPreviousProps,
           },
           onSuccess: () => {
             if (!previousTab) return;
@@ -107,17 +71,42 @@ const HouseholdAssessmentTabPanel = memo(
           },
         });
 
+        if (hasBeenSubmitted) {
+          config.push({
+            id: 'submit',
+            label: 'Save & Submit',
+            centerAlign: true,
+            action: FormActionTypes.Submit,
+            buttonProps: { variant: 'outlined' },
+            onSuccess: () => {
+              updateTabStatus(AssessmentStatus.Submitted, id);
+              refetch();
+            },
+          });
+        } else {
+          config.push({
+            id: 'save',
+            label: 'Save Assessment',
+            centerAlign: true,
+            action: FormActionTypes.Save,
+            buttonProps: { variant: 'contained', size: 'large' },
+            onSuccess: () => {
+              updateTabStatus(AssessmentStatus.Started, id);
+              refetch();
+            },
+          });
+        }
+
         config.push({
           id: 'next',
           label: hasBeenSubmitted ? 'Next' : 'Save & Next',
           action: hasBeenSubmitted
             ? FormActionTypes.Navigate
             : FormActionTypes.Save,
-          rightAlign: true,
           buttonProps: {
             disabled: !nextTab,
-            variant: 'outlined',
             endIcon: <ArrowForwardIcon fontSize='small' />,
+            ...nextPreviousProps,
           },
           onSuccess: () => {
             if (!nextTab) return;
@@ -131,16 +120,7 @@ const HouseholdAssessmentTabPanel = memo(
 
         return { config };
       },
-      [
-        navigateToTab,
-        previousTab,
-        nextTab,
-        refetch,
-        readyToSubmit,
-        updateTabStatus,
-        id,
-        formRole,
-      ]
+      [navigateToTab, previousTab, nextTab, refetch, updateTabStatus, id]
     );
 
     return (

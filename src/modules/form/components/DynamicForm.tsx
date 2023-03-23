@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback, useEffect, useState } from 'react';
 
@@ -7,10 +7,10 @@ import useElementInView from '../hooks/useElementInView';
 import { FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
+import ErrorAlert from './ErrorAlert';
 import FormActions, { FormActionProps } from './FormActions';
 import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
-import ValidationErrorDisplay from './ValidationErrorDisplay';
 
 import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
@@ -34,7 +34,7 @@ export interface DynamicFormProps
   initialValues?: Record<string, any>;
   errors?: ValidationError[];
   showSavePrompt?: boolean;
-  showSavePromptInitial?: boolean;
+  alwaysShowSaveSlide?: boolean;
   horizontal?: boolean;
   pickListRelationId?: string;
   warnIfEmpty?: boolean;
@@ -58,7 +58,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   initialValues = {},
   errors: validations,
   showSavePrompt = false,
-  showSavePromptInitial,
+  alwaysShowSaveSlide = false,
   horizontal = false,
   warnIfEmpty = false,
   locked = false,
@@ -73,9 +73,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
   });
   const { errors, warnings } = useValidations(validations);
 
-  const [promptSave, setPromptSave] = useState<boolean | undefined>(
-    showSavePromptInitial
-  );
+  const [promptSave, setPromptSave] = useState<boolean | undefined>();
   const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
   const saveButtonsRef = React.createRef<HTMLDivElement>();
@@ -125,7 +123,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     <FormActions
       onSubmit={handleSubmit}
       onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      disabled={!!loading || showConfirmDialog}
+      disabled={locked || !!loading || showConfirmDialog}
       loading={loading}
       {...FormActionProps}
     />
@@ -139,10 +137,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
       <Grid container direction='column' spacing={2}>
         {errors.length > 0 && (
           <Grid item>
-            <Alert severity='error' sx={{ mb: 1 }} data-testid='formErrorAlert'>
-              <AlertTitle>Please fix outstanding errors</AlertTitle>
-              <ValidationErrorDisplay errors={errors} />
-            </Alert>
+            <ErrorAlert errors={errors} />
           </Grid>
         )}
         {renderFields({
@@ -157,9 +152,11 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
           visible,
         })}
       </Grid>
-      <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-        {saveButtons}
-      </Box>
+      {!alwaysShowSaveSlide && (
+        <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
+          {saveButtons}
+        </Box>
+      )}
 
       {showConfirmDialog && (
         <FormWarningDialog
@@ -173,9 +170,9 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
         />
       )}
 
-      {showSavePrompt && !isSaveButtonVisible && (
+      {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
         <SaveSlide
-          in={promptSave && !isSaveButtonVisible}
+          in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
           appear
           timeout={300}
           direction='up'

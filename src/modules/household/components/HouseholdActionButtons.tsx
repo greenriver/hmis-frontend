@@ -24,12 +24,13 @@ const HouseholdActionButtons = ({
   enrollmentId,
   clientId,
 }: Props) => {
+  // TODO: should make exit red if there are exits in progress
   const [canExit, exitReason] = useMemo(() => {
     // Single-member household
     if (householdMembers.length < 2) return [false];
     // All members have exited
     if (!householdMembers.find((c) => !c.enrollment.exitDate)) {
-      return [false];
+      return [true];
     }
     // Some members have incomplete enrollments
     if (householdMembers.find((c) => c.enrollment.inProgress)) {
@@ -38,7 +39,7 @@ const HouseholdActionButtons = ({
     return [true];
   }, [householdMembers]);
 
-  const [canIntake, intakeReason] = useMemo(() => {
+  const [canIntake, intakeReason, intakeColor] = useMemo(() => {
     // Single-member household
     if (householdMembers.length < 2) return [false];
     const numIncomplete = householdMembers.filter(
@@ -46,12 +47,12 @@ const HouseholdActionButtons = ({
     ).length;
     // All members have completed intake
     if (numIncomplete === 0) {
-      return [false];
+      return [true, null, 'secondary'];
     }
 
     let message = `${numIncomplete} members have incomplete intakes.`;
     if (numIncomplete === 1) message = `1 member has an incomplete intake.`;
-    return [true, message];
+    return [true, message, 'error'];
   }, [householdMembers]);
 
   const buildPath = useCallback(
@@ -71,11 +72,11 @@ const HouseholdActionButtons = ({
         <ButtonTooltipContainer title={intakeReason} placement='bottom'>
           <ButtonLink
             disabled={!canIntake}
-            color='error'
+            color={intakeColor}
             icon={PostAddIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_INTAKE)}
           >
-            Household Intake
+            Household Intakes
           </ButtonLink>
         </ButtonTooltipContainer>
       )}
@@ -86,7 +87,7 @@ const HouseholdActionButtons = ({
             icon={ExitToAppIcon}
             to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
           >
-            Household Exit
+            Household Exits
           </ButtonLink>
         </ButtonTooltipContainer>
       )}

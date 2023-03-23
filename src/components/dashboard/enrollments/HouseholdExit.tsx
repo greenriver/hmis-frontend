@@ -15,7 +15,7 @@ const HouseholdExit = () => {
       enrollment={enrollment}
       title={
         <Typography variant='body1' fontWeight={600}>
-          Exit Household from Enrollment
+          Household Exit
         </Typography>
       }
     />

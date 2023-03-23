@@ -1,3 +1,4 @@
+import { startOfYesterday, format } from 'date-fns';
 // This only works when running against the real backend.
 // Must set the following env vars with real username/pw from local environment:
 
@@ -33,7 +34,8 @@ it(
     cy.get('@firstProject').click();
     // Set entry date
     cy.inputId('entry-date').clear();
-    cy.inputId('entry-date').type('01012020');
+    const yesterday = format(startOfYesterday(), 'MMddyyyy');
+    cy.inputId('entry-date').type(yesterday);
     cy.testId('createEnrollmentButton').first().click();
     cy.testId('beginIntake').click();
     // cy.visit('/client/8042/enrollments/10099/assessments/intake/new');
@@ -85,7 +87,7 @@ it(
     // Make a change and submit
     cy.checkOption(incomeFromAnySource, 'CLIENT_REFUSED');
     cy.testId('formButton-submit').first().click();
-    cy.testId('confirmDialogAction').click();
+    cy.confirmDialog();
 
     // Re-open and make sure CLIENT_REFUSED saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
@@ -96,13 +98,16 @@ it(
 
     // Change to YES and submit
     cy.checkOption(incomeFromAnySource, 'YES');
+    cy.inputId('4.02.A').type('200');
     cy.testId('formButton-submit').first().click();
-    cy.testId('confirmDialogAction').click();
+    cy.confirmDialog();
 
     // Re-open and make sure YES saved
     cy.testId('panel-assessments').find('table').find('a').first().click();
     cy.expectHudValuesToInclude({
       'IncomeBenefit.incomeFromAnySource': 'YES',
+      'IncomeBenefit.earned': 'YES',
+      'IncomeBenefit.earnedAmount': 200,
     });
 
     // Deep-equal compare when closing and re-opening submitted assessment
@@ -111,10 +116,16 @@ it(
       const hudValues = win.debug.hudValues;
       // Submit assessment
       cy.testId('formButton-submit').first().click();
-      cy.testId('confirmDialogAction').click();
+      cy.confirmDialog();
       // Re-open assessment and assert that hudValues match previous
       cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
     });
+    cy.testId('formButton-discard').first().click();
+
+    // Delete assessment
+    cy.testId('deleteAssessment').first().click();
+    cy.confirmDialog();
+    cy.testId('deleteAssessment').should('not.exist');
   }
 );

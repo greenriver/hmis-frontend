@@ -48,6 +48,7 @@ export interface ColumnDef<T> {
   dontLink?: boolean;
   // aria label, for use with linkTreatment
   ariaLabel?: (row: T) => string;
+  textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
 }
 export interface Props<T> {
   rows: T[];
@@ -149,7 +150,10 @@ const GenericTable = <T extends { id: string }>({
             <HeaderCell
               columnDef={def}
               key={key(def) || i}
-              sx={headerCellSx ? headerCellSx(def) : undefined}
+              sx={{
+                ...(headerCellSx ? headerCellSx(def) : undefined),
+                textAlign: def.textAlign,
+              }}
             />
           ))}
         </TableRow>
@@ -207,6 +211,7 @@ const GenericTable = <T extends { id: string }>({
                     linkTreatment,
                     ariaLabel,
                     dontLink = false,
+                    textAlign,
                   } = def;
                   const isFirstLinkWithTreatment =
                     columns.findIndex((c) => c.linkTreatment) === index;
@@ -218,6 +223,7 @@ const GenericTable = <T extends { id: string }>({
                         width,
                         minWidth,
                         ...(isLinked ? { p: 0 } : undefined),
+                        textAlign,
                       }}
                     >
                       {isLinked ? (

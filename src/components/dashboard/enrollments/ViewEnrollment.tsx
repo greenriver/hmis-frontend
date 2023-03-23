@@ -27,9 +27,8 @@ const ViewEnrollment = () => {
 
   return (
     <>
-      <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 2 }}>
+      <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 3 }}>
         <Typography variant='h4'>{enrollmentName(enrollment)}</Typography>
-        <IdDisplay prefix='Enrollment' id={enrollment.id} />
       </Stack>
       <Grid container spacing={4}>
         <Grid item xs={9}>
@@ -56,7 +55,7 @@ const ViewEnrollment = () => {
           </Stack>
         </Grid>
         <Grid item xs>
-          <Paper sx={{ p: 2 }}>
+          <Paper sx={{ p: 2, mb: 2 }}>
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>
               <ClientPermissionsFilter
@@ -100,19 +99,20 @@ const ViewEnrollment = () => {
               </ButtonLink>
             </Stack>
           </Paper>
-          {/* <Box sx={{ mt: 3 }} key='projectLink'>
-            <ButtonLink
-              variant='outlined'
-              color='secondary'
-              fullWidth
-              endIcon={<OpenInNewIcon fontSize='small' />}
-              to={generateSafePath(Routes.PROJECT, {
-                projectId: enrollment.project.id,
-              })}
-            >
-              Open Project
-            </ButtonLink>
-          </Box> */}
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Stack gap={1}>
+              <IdDisplay
+                prefix='Enrollment'
+                color='text.secondary'
+                id={enrollment.id}
+              />
+              <IdDisplay
+                prefix='Household'
+                color='text.secondary'
+                id={enrollment.household.shortId}
+              />
+            </Stack>
+          </Paper>
         </Grid>
       </Grid>
     </>

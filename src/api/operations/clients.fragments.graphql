@@ -139,6 +139,7 @@ fragment EnrollmentFields on Enrollment {
   relationshipToHoH
   household {
     id
+    shortId
   }
   householdSize
   client {
@@ -175,6 +176,7 @@ fragment EnrollmentWithHouseholdFragment on Enrollment {
   ...EnrollmentFields
   household {
     id
+    shortId
     householdClients {
       ...HouseholdClientFields
     }
