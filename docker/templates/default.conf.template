@@ -35,6 +35,18 @@ server {
 
     }
 
+    location /rails {
+      # proxy destination
+      proxy_pass https://${HMIS_BACKEND};
+
+      # include default proxy headers
+      include /etc/nginx/conf.d/proxy_headers.conf;
+
+      # add location specific headers
+      proxy_set_header Host ${HMIS_BACKEND};
+
+    }
+
     #error_page  404              /404.html;
 
     # redirect server error pages to the static page /50x.html

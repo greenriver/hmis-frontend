@@ -88,7 +88,18 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
           url: file.url,
         }}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-        loading={<LoadingPreview />}
+        loading={
+          <Box
+            bgcolor='grey.100'
+            width={612}
+            height={792}
+            display='flex'
+            justifyContent='center'
+            alignItems='center'
+          >
+            <LoadingPreview />
+          </Box>
+        }
       >
         <Page
           pageNumber={pageNumber}
