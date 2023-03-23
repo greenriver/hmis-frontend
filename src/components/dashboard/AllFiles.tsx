@@ -124,7 +124,7 @@ const AllFiles = () => {
             to={generateSafePath(DashboardRoutes.NEW_FILE, {
               clientId,
             })}
-            id='add-client-file'
+            data-testid='addClientFileButton'
             Icon={UploadIcon}
             size='large'
           >
