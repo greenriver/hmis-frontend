@@ -100,9 +100,7 @@ const DynamicForm = forwardRef(
       () => ({
         SaveIfDirty: (onSuccessCallback) => {
           if (!onSaveDraft) return;
-          if (!dirty) console.log('> NO CHANGE, IGNORING');
           if (dirty) {
-            console.log('Saving');
             onSaveDraft(getCleanedValues(), () => {
               setDirty(false);
               onSuccessCallback();

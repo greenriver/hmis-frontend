@@ -51,7 +51,7 @@ const HouseholdAssessmentTabPanel = memo(
       if (wasActive && !active) {
         if (assessmentSubmitted) {
           // TODO: do we want to auto-submit?
-          console.log(`Not doing anything for ${clientName}, no auto-submit`);
+          console.log(`Ignoring ${clientName}, no auto-submit`);
           return;
         }
 

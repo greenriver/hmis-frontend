@@ -75,7 +75,6 @@ const ClientDashboard: React.FC = () => {
     setMobileNavState(false);
   }, []);
   const handleOpenMobileMenu = useCallback(() => {
-    console.log('handleOpenMobileMenu');
     setMobileNavState(true);
   }, []);
   const handleCloseDesktopMenu = useCallback(() => {
