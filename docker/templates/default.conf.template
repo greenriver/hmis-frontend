@@ -4,7 +4,11 @@ server {
 
     server_tokens off;
 
-    #access_log  /var/log/nginx/host.access.log  main;
+    location /nginx_status {
+        stub_status;
+        allow 127.0.0.1;	# Only allow requests from localhost
+        deny all;		      # Deny all others
+    }
 
     location / {
         root   /usr/share/nginx/html;
@@ -20,7 +24,6 @@ server {
         add_header X-XSS-Protection "1; mode=block" always;
         add_header X-Content-Type-Options "nosniff" always;
         add_header Feature-Policy "geolocation 'none'; midi 'none'; notifications 'none'; push 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; vibrate 'none'; fullscreen 'none'; payment 'none'; usb 'none';";
-
     }
 
     location /hmis {
@@ -32,7 +35,6 @@ server {
 
       # add location specific headers
       proxy_set_header Host ${HMIS_BACKEND};
-
     }
 
     #error_page  404              /404.html;
@@ -42,7 +44,5 @@ server {
     error_page   500 502 503 504  /50x.html;
     location = /50x.html {
         root   /usr/share/nginx/html;
-
-
     }
 }
