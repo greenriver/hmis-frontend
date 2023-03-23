@@ -32,10 +32,9 @@ server {
 
       # add location specific headers
       proxy_set_header Host ${HMIS_BACKEND};
-
     }
 
-    location /rails {
+    location /rails/active_storage {
       # proxy destination
       proxy_pass https://${HMIS_BACKEND};
 
@@ -44,7 +43,6 @@ server {
 
       # add location specific headers
       proxy_set_header Host ${HMIS_BACKEND};
-
     }
 
     #error_page  404              /404.html;

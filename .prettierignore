@@ -4,6 +4,6 @@
 yarn.lock
 build
 dist
-Dockerfile
+docker
 serverMock/forms
 README.md
