@@ -23,7 +23,7 @@ it(
 
     // Got to files tab and create new file
     cy.get('#side-nav-files').click();
-    cy.get('#add-client-file').click();
+    cy.testId('addClientFileButton').click();
     cy.choose('tags', '1', 'firstTag');
     cy.exitModal();
     cy.inputId('effectiveDate').clear().type('01012020');
