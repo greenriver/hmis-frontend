@@ -25,6 +25,19 @@ query GetClient($id: ID!) {
   }
 }
 
+query GetClientName($id: ID!) {
+  client(id: $id) {
+    id
+    ...ClientName
+  }
+}
+
+query GetClientPermissions($id: ID!) {
+  client(id: $id) {
+    ...ClientPermissions
+  }
+}
+
 query GetClientImage($id: ID!) {
   client(id: $id) {
     ...ClientImage
@@ -83,30 +96,6 @@ query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodes {
         ...EnrollmentFieldsFromAssessment
       }
-    }
-  }
-}
-
-mutation CreateClient($input: CreateClientInput!) {
-  createClient(input: $input) {
-    clientMutationId
-    client {
-      ...ClientFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateClient($input: UpdateClientInput!) {
-  updateClient(input: $input) {
-    clientMutationId
-    client {
-      ...ClientFields
-    }
-    errors {
-      ...ValidationErrorFields
     }
   }
 }
@@ -213,18 +202,6 @@ mutation AddServiceToEnrollment($input: CreateServiceInput!) {
   }
 }
 
-mutation UpdateService($input: UpdateServiceInput!) {
-  updateService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteService($input: DeleteServiceInput!) {
   deleteService(input: $input) {
     clientMutationId
@@ -248,6 +225,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
     ...EnrollmentFields
     household {
       id
+      shortId
       householdClients {
         ...HouseholdClientFieldsWithAssessments
       }
@@ -296,6 +274,7 @@ query GetClientHouseholdMemberCandidates(
       nodesCount
       nodes {
         household {
+          id
           householdClients {
             client {
               ...ClientFields

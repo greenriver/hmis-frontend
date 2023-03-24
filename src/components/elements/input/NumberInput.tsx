@@ -1,6 +1,11 @@
 import { Box } from '@mui/system';
 import { isFinite, isNil } from 'lodash-es';
-import { KeyboardEventHandler, useCallback, useState } from 'react';
+import {
+  KeyboardEventHandler,
+  useCallback,
+  useState,
+  WheelEventHandler,
+} from 'react';
 
 import TextInput, { TextInputProps } from './TextInput';
 
@@ -62,6 +67,21 @@ const NumberInput = ({
     }
   }, []);
 
+  const preventValueChangeOnScroll: WheelEventHandler<HTMLDivElement> =
+    useCallback((e) => {
+      // Prevent the input value change
+      (e.target as HTMLInputElement).blur();
+
+      // Prevent the page/container scrolling
+      e.stopPropagation();
+
+      // Refocus immediately, on the next tick (after the current
+      // function is done)
+      setTimeout(() => {
+        (e.target as HTMLInputElement).focus();
+      }, 0);
+    }, []);
+
   return (
     <TextInput
       type='number'
@@ -73,6 +93,7 @@ const NumberInput = ({
         onKeyDown: disableArrowKeys ? onKeyDown : undefined,
         ...inputProps,
       }}
+      onWheel={preventValueChangeOnScroll}
       InputProps={{ ...currencyInputProps, ...InputProps }}
       onBlur={handleBlur}
       value={value}

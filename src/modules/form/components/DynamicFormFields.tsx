@@ -81,7 +81,7 @@ const DynamicFormFields: React.FC<Props> = ({
   pickListRelationId,
   values,
   setValues,
-  itemChanged: itemsChangedProp,
+  itemChanged: itemChangedProp,
   severalItemsChanged: severalItemsChangedProp,
   disabledLinkIds,
   setDisabledLinkIds,
@@ -136,7 +136,7 @@ const DynamicFormFields: React.FC<Props> = ({
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
-      if (itemsChangedProp) itemsChangedProp(linkId, value);
+      if (itemChangedProp) itemChangedProp(linkId, value);
       setValues((currentValues) => {
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -149,7 +149,7 @@ const DynamicFormFields: React.FC<Props> = ({
         return newValues;
       });
     },
-    [updateAutofillValues, updateDisabledLinkIds, setValues, itemsChangedProp]
+    [updateAutofillValues, updateDisabledLinkIds, setValues, itemChangedProp]
   );
 
   const severalItemsChanged = useCallback(
@@ -210,6 +210,7 @@ const DynamicFormFields: React.FC<Props> = ({
           itemChanged={itemChanged}
           severalItemsChanged={severalItemsChanged}
           visible={visible}
+          locked={locked}
         />
       );
     }

@@ -6,6 +6,7 @@ import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import DynamicField from '@/modules/form/components/DynamicField';
+import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import { DynamicFieldProps } from '@/modules/form/types';
 import {
@@ -18,7 +19,8 @@ import {
 import {
   FormDefinitionJson,
   FormItem,
-  useGetFormDefinitionByIdentifierQuery,
+  FormRole,
+  useGetFormDefinitionQuery,
   ValidationError,
   ValidationSeverity,
 } from '@/types/gqlTypes';
@@ -108,6 +110,7 @@ const BulkAdd = <
   >(mutationDocument);
 
   const handleSelect: RenderListOptions<TargetType>['onSelect'] = (target) => {
+    // TODO: update this to just call `SubmitForm`
     const inputValues = transformSubmitValues({
       definition,
       values: {
@@ -115,8 +118,7 @@ const BulkAdd = <
         ...targetValues[getKeyForTarget(target)],
       },
       autofillNotCollected: true,
-      autofillNulls: true,
-      autofillBooleans: false,
+      includeMissingKeys: 'AS_NULL',
       keyByFieldName: true,
     });
     const input = getInputFromTarget(inputValues, target);
@@ -150,22 +152,17 @@ const BulkAdd = <
   return (
     <Stack gap={2}>
       {title}
-      {renderFields({
-        // errors,
-        // warnings,
-      })}
-      {!isEmpty(errors) &&
-        errors?.map((e, i) => (
-          <Alert key={i} severity='error'>
-            {e.fullMessage}
-          </Alert>
-        ))}
-      {!isEmpty(warnings) &&
-        warnings?.map((e, i) => (
-          <Alert key={i} severity='warning'>
-            {e.fullMessage}
-          </Alert>
-        ))}
+      {renderFields({})}
+      {errors && !isEmpty(errors) && (
+        <Alert key='errors' severity='error' sx={{ mb: 2 }}>
+          <ValidationErrorDisplay errors={errors} />
+        </Alert>
+      )}
+      {warnings && !isEmpty(warnings) && (
+        <Alert key='warnings' severity='warning'>
+          <ValidationErrorDisplay errors={warnings} />
+        </Alert>
+      )}
       <Paper
         sx={{
           py: 3,
@@ -216,16 +213,16 @@ const BulkAddWrapper = <
   QueryVariables extends { input: unknown }
 >(
   props: Omit<Props<TargetType, Query, QueryVariables>, 'definition'> & {
-    definitionIdentifier: string;
+    formRole: FormRole;
   }
 ) => {
-  const { definitionIdentifier } = props;
+  const { formRole } = props;
 
-  const { data, loading } = useGetFormDefinitionByIdentifierQuery({
-    variables: { identifier: definitionIdentifier },
+  const { data, loading } = useGetFormDefinitionQuery({
+    variables: { role: formRole },
   });
 
-  const definition = data?.formDefinition?.definition;
+  const definition = data?.getFormDefinition?.definition;
 
   if (loading) return <Loading />;
   if (!definition) throw Error('Definition not found');

@@ -1,10 +1,9 @@
-import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
-import { InactiveChip } from './Project';
+import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -13,13 +12,8 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
-  CreateProjectCocDocument,
-  CreateProjectCocMutation,
-  CreateProjectCocMutationVariables,
+  FormRole,
   ProjectCocFieldsFragment,
-  UpdateProjectCocDocument,
-  UpdateProjectCocMutation,
-  UpdateProjectCocMutationVariables,
   useGetProjectCocQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -50,49 +44,18 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   if (error) throw error;
   if (!crumbs || !project) throw Error('Project not found');
 
-  const common = {
-    definitionIdentifier: 'project_coc',
-    title: (
-      <Stack direction={'row'} spacing={2}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-        <InactiveChip project={project} />
-      </Stack>
-    ),
-  };
   return (
     <ProjectLayout crumbs={crumbs}>
-      {create ? (
-        <EditRecord<
-          ProjectCocFieldsFragment,
-          CreateProjectCocMutation,
-          CreateProjectCocMutationVariables
-        >
-          inputVariables={{ projectId }}
-          queryDocument={CreateProjectCocDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: CreateProjectCocMutation) =>
-            data?.createProjectCoc?.errors
-          }
-          FormActionProps={{ submitButtonText: 'Project CoC' }}
-          {...common}
-        />
-      ) : (
-        <EditRecord<
-          ProjectCocFieldsFragment,
-          UpdateProjectCocMutation,
-          UpdateProjectCocMutationVariables
-        >
-          record={data?.projectCoc || undefined}
-          queryDocument={UpdateProjectCocDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: UpdateProjectCocMutation) =>
-            data?.updateProjectCoc?.errors
-          }
-          {...common}
-        />
-      )}
+      <EditRecord<ProjectCocFieldsFragment>
+        FormActionProps={
+          create ? { submitButtonText: 'Create Project CoC' } : undefined
+        }
+        onCompleted={onCompleted}
+        formRole={FormRole.ProjectCoc}
+        inputVariables={{ projectId }}
+        record={data?.projectCoc || undefined}
+        title={<ProjectFormTitle title={title} project={project} />}
+      />
     </ProjectLayout>
   );
 };

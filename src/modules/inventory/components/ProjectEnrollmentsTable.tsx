@@ -16,15 +16,18 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
 import {
-  EnrollmentFieldsFragment,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+export type EnrollmentFields = NonNullable<
+  GetProjectEnrollmentsQuery['project']
+>['enrollments']['nodes'][number];
+
 export const ENROLLMENT_COLUMNS: {
-  [key: string]: ColumnDef<EnrollmentFieldsFragment>;
+  [key: string]: ColumnDef<EnrollmentFields>;
 } = {
   clientName: {
     header: 'Client',
@@ -64,7 +67,7 @@ export const ENROLLMENT_COLUMNS: {
           arrow
         >
           <Typography variant='body2'>
-            {`${e.household.id.slice(0, 6).toUpperCase()} (${e.householdSize})`}
+            {`${e.household.shortId} (${e.householdSize})`}
           </Typography>
         </Tooltip>
         {e.householdSize > 1 && (
@@ -85,7 +88,7 @@ export const ENROLLMENT_COLUMNS: {
   },
 };
 
-const defaultColumns: ColumnDef<EnrollmentFieldsFragment>[] = [
+const defaultColumns: ColumnDef<EnrollmentFields>[] = [
   ENROLLMENT_COLUMNS.clientNameLinkedToEnrollment,
   ENROLLMENT_COLUMNS.enrollmentStatus,
   ENROLLMENT_COLUMNS.enrollmentPeriod,
@@ -108,7 +111,7 @@ const ProjectEnrollmentsTable = ({
   >(undefined);
 
   const rowLinkTo = useCallback(
-    (en: EnrollmentFieldsFragment) =>
+    (en: EnrollmentFields) =>
       generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
         clientId: en.client.id,
         enrollmentId: en.id,
@@ -128,7 +131,7 @@ const ProjectEnrollmentsTable = ({
     <GenericTableWithData<
       GetProjectEnrollmentsQuery,
       GetProjectEnrollmentsQueryVariables,
-      EnrollmentFieldsFragment
+      EnrollmentFields
     >
       header={
         <TextInput
@@ -142,7 +145,7 @@ const ProjectEnrollmentsTable = ({
       }
       queryVariables={{
         id: projectId,
-        clientSearchTerm: debouncedSearch,
+        searchTerm: debouncedSearch,
         openOnDate: openOnDateString,
       }}
       queryDocument={GetProjectEnrollmentsDocument}

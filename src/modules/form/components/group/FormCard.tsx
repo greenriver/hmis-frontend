@@ -1,5 +1,5 @@
 import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { zipObject } from 'lodash-es';
+import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
@@ -16,6 +16,7 @@ import RecordPickerDialog, {
   tableComponentForType,
 } from '../RecordPickerDialog';
 
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 const FormCard = ({
@@ -23,8 +24,11 @@ const FormCard = ({
   severalItemsChanged,
   renderChildItem,
   anchor,
+  values,
+  locked,
 }: GroupItemComponentProps & { anchor?: string }) => {
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [fillDialogOpen, setFillDialogOpen] = useState(false);
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
 
   const fillable = useMemo(
@@ -33,21 +37,29 @@ const FormCard = ({
     [item]
   );
 
+  const childLinkIds = useMemo(() => getAllChildLinkIds(item), [item]);
+  const hasAnyChildValues = useMemo(
+    () =>
+      !!Object.keys(values).find(
+        (linkId) => includes(childLinkIds, linkId) && !isNil(values[linkId])
+      ),
+    [childLinkIds, values]
+  );
   const onClear = useCallback(() => {
-    const linkIds = getAllChildLinkIds(item);
     const updatedValues = zipObject(
-      linkIds,
-      new Array(linkIds.length).fill(null)
+      childLinkIds,
+      new Array(childLinkIds.length).fill(null)
     );
 
     severalItemsChanged(updatedValues);
     setSourceRecord(undefined);
-  }, [item, severalItemsChanged]);
+    setClearDialogOpen(false);
+  }, [severalItemsChanged, childLinkIds]);
 
   const onSelectAutofillRecord = useCallback(
     (record: RelatedRecord) => {
       setSourceRecord(record);
-      setDialogOpen(false);
+      setFillDialogOpen(false);
 
       const newFormValues: Record<string, any> = {};
       getPopulatableChildren(item).forEach((i) => {
@@ -59,7 +71,7 @@ const FormCard = ({
 
       severalItemsChanged(newFormValues);
     },
-    [setDialogOpen, severalItemsChanged, item]
+    [setFillDialogOpen, severalItemsChanged, item]
   );
 
   return (
@@ -77,23 +89,26 @@ const FormCard = ({
               {item.text}
             </Typography>
             {fillable && (
-              <Stack direction='row' spacing={1}>
+              <Stack direction='row' spacing={2}>
                 <Button
+                  onClick={() => setFillDialogOpen(true)}
                   variant='outlined'
                   size='small'
                   sx={{ height: 'fit-content' }}
-                  onClick={onClear}
-                  data-testid='clearButton'
+                  disabled={locked}
                 >
-                  CLEAR
+                  Fill Section
                 </Button>
                 <Button
-                  onClick={() => setDialogOpen(true)}
                   variant='outlined'
                   size='small'
+                  color='error'
                   sx={{ height: 'fit-content' }}
+                  onClick={() => setClearDialogOpen(true)}
+                  data-testid='clearButton'
+                  disabled={!hasAnyChildValues || locked}
                 >
-                  FILL SECTION
+                  Clear Section
                 </Button>
               </Stack>
             )}
@@ -125,14 +140,29 @@ const FormCard = ({
 
         {/* Dialog for selecting autofill record */}
         {fillable && item.recordType && (
-          <RecordPickerDialog
-            id={`recordPickerDialog-${item.linkId}`}
-            item={item}
-            recordType={item.recordType}
-            open={dialogOpen}
-            onSelected={onSelectAutofillRecord}
-            onCancel={() => setDialogOpen(false)}
-          />
+          <>
+            <RecordPickerDialog
+              id={`recordPickerDialog-${item.linkId}`}
+              item={item}
+              recordType={item.recordType}
+              open={fillDialogOpen}
+              onSelected={onSelectAutofillRecord}
+              onCancel={() => setFillDialogOpen(false)}
+            />
+            <ConfirmationDialog
+              id='clearSection'
+              open={clearDialogOpen}
+              title='Clear Section'
+              onConfirm={onClear}
+              onCancel={() => setClearDialogOpen(false)}
+              loading={false}
+            >
+              <Typography>
+                This will clear all the content in the <b>{item.text}</b>{' '}
+                section.
+              </Typography>
+            </ConfirmationDialog>
+          </>
         )}
       </Paper>
     </Grid>

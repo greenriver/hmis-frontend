@@ -1,10 +1,9 @@
-import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
-import { InactiveChip } from './Project';
+import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -14,13 +13,8 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
-  CreateInventoryDocument,
-  CreateInventoryMutation,
-  CreateInventoryMutationVariables,
+  FormRole,
   InventoryFieldsFragment,
-  UpdateInventoryDocument,
-  UpdateInventoryMutation,
-  UpdateInventoryMutationVariables,
   useGetInventoryQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -40,22 +34,19 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   });
 
   const onCompleted = useCallback(
-    (data: CreateInventoryMutation) => {
+    (data: InventoryFieldsFragment) => {
       if (create) {
         cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
-        const id = data?.createInventory?.inventory?.id;
-        if (id) {
-          navigate(
-            generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
-              projectId,
-              inventoryId: id,
-            })
-          );
-          return;
-        }
-      }
 
-      navigate(generateSafePath(Routes.PROJECT, { projectId }));
+        navigate(
+          generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
+            projectId,
+            inventoryId: data.id,
+          })
+        );
+      } else {
+        navigate(generateSafePath(Routes.PROJECT, { projectId }));
+      }
     },
     [navigate, projectId, create]
   );
@@ -67,63 +58,31 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     return {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
-      // inventoryId: inventoryId,
+      inventoryId,
+      bedInventory: data?.inventory?.bedInventory || 0,
+      unitInventory: data?.inventory?.unitInventory || 0,
     };
-  }, [project]);
+  }, [project, inventoryId, data]);
 
   if (loading || crumbsLoading) return <Loading />;
   if (!crumbs || !project) throw Error('Project not found');
   if (!create && !data?.inventory) throw Error('Inventory not found');
   if (error) throw error;
 
-  const common = {
-    definitionIdentifier: 'inventory',
-    projectId,
-    title: (
-      <Stack direction={'row'} spacing={2}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-        <InactiveChip project={project} />
-      </Stack>
-    ),
-  };
   return (
     <ProjectLayout crumbs={crumbs}>
-      {create ? (
-        <EditRecord<
-          InventoryFieldsFragment,
-          CreateInventoryMutation,
-          CreateInventoryMutationVariables
-        >
-          inputVariables={{ projectId, unitInventory: 0, bedInventory: 0 }}
-          queryDocument={CreateInventoryDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: CreateInventoryMutation) =>
-            data?.createInventory?.errors
-          }
-          FormActionProps={{ submitButtonText: 'Create Inventory' }}
-          localConstants={localConstants}
-          pickListRelationId={projectId}
-          {...common}
-        />
-      ) : (
-        <EditRecord<
-          InventoryFieldsFragment,
-          UpdateInventoryMutation,
-          UpdateInventoryMutationVariables
-        >
-          record={data?.inventory || undefined}
-          queryDocument={UpdateInventoryDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: UpdateInventoryMutation) =>
-            data?.updateInventory?.errors
-          }
-          localConstants={localConstants}
-          pickListRelationId={projectId}
-          {...common}
-        />
-      )}
+      <EditRecord<InventoryFieldsFragment>
+        FormActionProps={
+          create ? { submitButtonText: 'Create Inventory' } : undefined
+        }
+        onCompleted={onCompleted}
+        formRole={FormRole.Inventory}
+        inputVariables={{ projectId }}
+        record={data?.inventory || undefined}
+        title={<ProjectFormTitle title={title} project={project} />}
+        localConstants={localConstants}
+        pickListRelationId={projectId}
+      />
     </ProjectLayout>
   );
 };

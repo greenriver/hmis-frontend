@@ -18,6 +18,7 @@ import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
+import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
@@ -211,11 +212,16 @@ const EditHouseholdMemberTable = ({
         key: 'action',
         width: '1%',
         render: (hc: HouseholdClientFieldsFragment) => (
-          <RemoveFromHouseholdButton
-            clientId={clientId}
-            householdClient={hc}
-            onSuccess={refetch}
-          />
+          <ClientPermissionsFilter
+            id={hc.client.id}
+            permissions={['canDeleteEnrollments']}
+          >
+            <RemoveFromHouseholdButton
+              clientId={clientId}
+              householdClient={hc}
+              onSuccess={refetch}
+            />
+          </ClientPermissionsFilter>
         ),
       },
     ];

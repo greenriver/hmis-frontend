@@ -95,6 +95,21 @@ export const InactiveChip = ({
   );
 };
 
+export const ProjectFormTitle = ({
+  title,
+  project,
+}: {
+  title: string;
+  project: ProjectAllFieldsFragment;
+}) => (
+  <Stack direction={'row'} spacing={2}>
+    <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+      {title}
+    </Typography>
+    <InactiveChip project={project} />
+  </Stack>
+);
+
 const Project = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;

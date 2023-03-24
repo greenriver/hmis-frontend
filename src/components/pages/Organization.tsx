@@ -14,6 +14,7 @@ import OrganizationDetails from '@/modules/inventory/components/OrganizationDeta
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
@@ -74,7 +75,7 @@ const Organization = () => {
         <Grid item xs>
           <Paper sx={{ p: 2, mb: 2 }}>
             {organization?.contactInformation && (
-              <Stack spacing={1} sx={{ mb: 4 }}>
+              <Stack spacing={1} sx={{ mb: 4 }} data-testid='contactInfo'>
                 <Typography variant='h6'>Contact</Typography>
                 <MultilineTypography variant='body2'>
                   {organization?.contactInformation}
@@ -94,30 +95,45 @@ const Organization = () => {
             </Stack>
           </Paper>
 
-          <Paper sx={{ p: 2 }}>
-            <Stack>
-              <ButtonLink
-                data-testid='updateOrganizationButton'
-                variant='text'
-                color='secondary'
-                to={generateSafePath(Routes.EDIT_ORGANIZATION, {
-                  organizationId,
-                })}
-                sx={{ justifyContent: 'left' }}
-              >
-                Edit Organization
-              </ButtonLink>
-              <Button
-                data-testid='deleteOrganizationButton'
-                color='error'
-                variant='text'
-                onClick={() => setOpen(true)}
-                sx={{ justifyContent: 'left' }}
-              >
-                Delete Organization
-              </Button>
-            </Stack>
-          </Paper>
+          <OrganizationPermissionsFilter
+            id={organizationId}
+            permissions={['canDeleteOrganization', 'canEditOrganization']}
+          >
+            <Paper sx={{ p: 2 }}>
+              <Stack>
+                <OrganizationPermissionsFilter
+                  id={organizationId}
+                  permissions={['canEditOrganization']}
+                >
+                  <ButtonLink
+                    data-testid='updateOrganizationButton'
+                    variant='text'
+                    color='secondary'
+                    to={generateSafePath(Routes.EDIT_ORGANIZATION, {
+                      organizationId,
+                    })}
+                    sx={{ justifyContent: 'left' }}
+                  >
+                    Edit Organization
+                  </ButtonLink>
+                </OrganizationPermissionsFilter>
+                <OrganizationPermissionsFilter
+                  id={organizationId}
+                  permissions={['canDeleteOrganization']}
+                >
+                  <Button
+                    data-testid='deleteOrganizationButton'
+                    color='error'
+                    variant='text'
+                    onClick={() => setOpen(true)}
+                    sx={{ justifyContent: 'left' }}
+                  >
+                    Delete Organization
+                  </Button>
+                </OrganizationPermissionsFilter>
+              </Stack>
+            </Paper>
+          </OrganizationPermissionsFilter>
         </Grid>
       </Grid>
       <ConfirmationDialog

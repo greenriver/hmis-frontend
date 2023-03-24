@@ -6,3 +6,4 @@ build
 dist
 Dockerfile
 serverMock/forms
+README.md

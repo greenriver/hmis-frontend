@@ -63,7 +63,7 @@ const AddToHouseholdButton = ({
                   relationshipToHoH || RelationshipToHoH.DataNotCollected,
               },
             ],
-            startDate: format(startDate || new Date(), 'yyyy-MM-dd'),
+            entryDate: format(startDate || new Date(), 'yyyy-MM-dd'),
           },
         },
       }),

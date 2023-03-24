@@ -6,6 +6,7 @@ import Loading from '../elements/Loading';
 
 import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTable';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import { useGetAllOrganizationsQuery } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -27,21 +28,23 @@ const AllProjects = () => {
             <GroupedProjectTable organizations={data?.organizations?.nodes} />
           )}
         </Grid>
-        <Grid item xs>
-          <Paper sx={{ p: 2, mb: 3 }}>
-            <Stack spacing={2}>
-              <Typography variant='h6'>Actions</Typography>
-              <ButtonLink
-                data-testid='addOrganizationButton'
-                to={generateSafePath(Routes.CREATE_ORGANIZATION)}
-                Icon={AddIcon}
-                leftAlign
-              >
-                Add Organization
-              </ButtonLink>
-            </Stack>
-          </Paper>
-        </Grid>
+        <RootPermissionsFilter permissions={['canEditOrganization']}>
+          <Grid item xs>
+            <Paper sx={{ p: 2, mb: 3 }}>
+              <Stack spacing={2}>
+                <Typography variant='h6'>Actions</Typography>
+                <ButtonLink
+                  data-testid='addOrganizationButton'
+                  to={generateSafePath(Routes.CREATE_ORGANIZATION)}
+                  Icon={AddIcon}
+                  leftAlign
+                >
+                  Add Organization
+                </ButtonLink>
+              </Stack>
+            </Paper>
+          </Grid>
+        </RootPermissionsFilter>
       </Grid>
     </ProjectLayout>
   );

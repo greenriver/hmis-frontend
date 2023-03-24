@@ -1,5 +1,5 @@
 import { getYear, isValid, max, min } from 'date-fns';
-import { compact, isNil, sum } from 'lodash-es';
+import { compact, isNil, isUndefined, sum } from 'lodash-es';
 
 import { DynamicInputCommonProps, HIDDEN_VALUE } from '../types';
 
@@ -342,11 +342,9 @@ export const getAutofillComparisonValue = (
   }
 
   // Choose first present value from Boolean, Number, and Code attributes
-  return [
-    av.valueBoolean,
-    av.valueNumber,
-    getOptionValue(av.valueCode, targetItem),
-  ].filter((e) => !isNil(e))[0];
+  if (!isNil(av.valueBoolean)) return av.valueBoolean;
+  if (!isNil(av.valueNumber)) return av.valueNumber;
+  if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
 };
 
 /**
@@ -457,7 +455,7 @@ export const buildCommonInputProps = (
 };
 
 /**
- * Trasnform GraphQL value shape into form value shape
+ * Transform GraphQL value shape into form value shape
  *
  * @param value GraphQL value (eg "ES" or "2020-01-01")
  * @param item Form item
@@ -494,10 +492,16 @@ export const gqlValueToFormValue = (
  * @param value value from the form state
  * @param item corresponding FormDefinition item
  * @returns transformed value
+ *
+ * Should only return UNDEFINED if the value is somehow invalid (to ignore it).
+ * If the value is "empty," return NULL to nullify it.
  */
-export const formValueToGqlValue = (value: any, item: FormItem): any => {
-  if (isNil(value)) return value;
-  if (value === '') return undefined;
+export const formValueToGqlValue = (
+  value: any,
+  item: FormItem
+): number | string | string[] | null | undefined => {
+  if (isNil(value)) return null;
+  if (value === '') return null;
 
   if (item.type === ItemType.Date) {
     // Try to make sure we have a date object
@@ -506,7 +510,7 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
       date = parseHmisDateString(value);
     }
     if (date instanceof Date) return formatDateForGql(date) || undefined;
-    // If this isn't parseable/formattable into a date, return undefined
+    // This isn't parseable/formattable into a date, return undefined to ignore it
     return undefined;
   }
 
@@ -526,7 +530,10 @@ export const formValueToGqlValue = (value: any, item: FormItem): any => {
     } else if (value) {
       return (value as { id: string }).id;
     }
-  } else if ([ItemType.Choice, ItemType.OpenChoice].includes(item.type)) {
+  } else if (
+    [ItemType.Choice, ItemType.OpenChoice].includes(item.type) ||
+    item.pickListReference
+  ) {
     if (Array.isArray(value)) {
       return value.map((option: PickListOption) => option.code);
     } else if (value) {
@@ -793,18 +800,14 @@ type TransformSubmitValuesParams = {
   definition: FormDefinitionJson;
   /** form state (from DynamicForm) to transform */
   values: FormValues;
-  /** ONLY transform the assessment date field */
-  assessmentDateOnly?: boolean;
-  /** whether to fill unanswered boolean questions `false` */
+  /** set value to `null` or `_HIDDEN` if link id is not present in values */
+  includeMissingKeys?: 'AS_NULL' | 'AS_HIDDEN';
+  /** whether to fill unanswered/null boolean questions `false` */
   autofillBooleans?: boolean;
-  /** whether to fill unanswered questions with Data Not Collected option (if present) */
+  /** whether to fill unanswered/null questions with Data Not Collected option (if present) */
   autofillNotCollected?: boolean;
-  /** whether to fill unanswered questions with `null` */
-  autofillNulls?: boolean;
   /** key results field name (instead of link ID) */
   keyByFieldName?: boolean;
-  /** set value to HIDDEN if link id is not present in values */
-  autofillHidden?: boolean;
 };
 
 /**
@@ -816,12 +819,10 @@ type TransformSubmitValuesParams = {
 export const transformSubmitValues = ({
   definition,
   values,
-  assessmentDateOnly = false,
+  includeMissingKeys,
   autofillBooleans = false,
   autofillNotCollected = false,
-  autofillNulls = false,
   keyByFieldName = false,
-  autofillHidden = false,
 }: TransformSubmitValuesParams) => {
   // Recursive helper for traversing the FormDefinition
   function rescursiveFillMap(
@@ -837,34 +838,33 @@ export const transformSubmitValues = ({
         rescursiveFillMap(item.item, result, recordName);
       }
       if (!item.fieldName) return;
-      if (assessmentDateOnly && !item.assessmentDate) return;
 
       // Build key for result map
       let key = keyByFieldName ? item.fieldName : item.linkId;
       // Prefix key like "Enrollment.livingSituation"
       if (keyByFieldName && currentRecord) key = `${currentRecord}.${key}`;
 
-      let value;
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string
-        value = formValueToGqlValue(values[item.linkId], item);
-      } else if (autofillHidden) {
+        const transformedValue = formValueToGqlValue(values[item.linkId], item);
+        // Undefined indicates invalid value, so we ignore it
+        if (!isUndefined(transformedValue)) result[key] = transformedValue;
+      } else if (includeMissingKeys === 'AS_HIDDEN') {
+        // Option: set missing fields to '_HIDDEN'
         result[key] = HIDDEN_VALUE;
         return;
+      } else if (includeMissingKeys === 'AS_NULL') {
+        // Option: set missing fields to null
+        result[key] = null;
       }
 
-      if (typeof value !== 'undefined') {
-        result[key] = value;
-      }
-
-      if (autofillNotCollected && isNil(value)) {
-        // If we don't have a value, fill in Not Collected code if present
+      // Option: set null/undefined to DATA_NOT_COLLECTED
+      if (autofillNotCollected && isNil(result[key])) {
         const notCollectedCode = findDataNotCollectedCode(item);
         if (notCollectedCode) result[key] = notCollectedCode;
       }
-      if (autofillNulls && isNil(result[key])) {
-        result[key] = null;
-      }
+
+      // Option: set null/undefined boolean fields to false
       if (
         autofillBooleans &&
         isNil(result[key]) &&
@@ -932,6 +932,22 @@ export const createInitialValuesFromSavedValues = (
   return initialValues;
 };
 
+export const createValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) => transformSubmitValues({ definition, values });
+
+export const createHudValuesForSubmit = (
+  values: FormValues,
+  definition: FormDefinitionJson
+) =>
+  transformSubmitValues({
+    definition,
+    values,
+    keyByFieldName: true,
+    includeMissingKeys: 'AS_HIDDEN',
+  });
+
 export const debugFormValues = (
   event: React.MouseEvent<HTMLButtonElement>,
   values: FormValues,
@@ -959,7 +975,7 @@ export const debugFormValues = (
     definition,
     values,
     autofillNotCollected: true,
-    autofillNulls: true,
+    includeMissingKeys: 'AS_NULL',
     keyByFieldName: true,
   });
 

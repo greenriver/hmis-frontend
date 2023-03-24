@@ -1,21 +1,18 @@
-import CancelIcon from '@mui/icons-material/Cancel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ErrorIcon from '@mui/icons-material/Error';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LockIcon from '@mui/icons-material/Lock';
-import PendingIcon from '@mui/icons-material/Pending';
-import { Box, Stack, Typography } from '@mui/material';
 
-import { AssessmentStatus, labelForStatus } from './util';
+import { AssessmentStatus } from './util';
 
-import { AssessmentRole } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 const TabIndicator = ({
   status,
-  role,
 }: {
   status: AssessmentStatus;
-  role: AssessmentRole.Intake | AssessmentRole.Exit;
+  role: FormRole.Intake | FormRole.Exit;
 }) => {
   let Icon;
   let color:
@@ -28,17 +25,17 @@ const TabIndicator = ({
     | 'disabled'
     | undefined;
 
-  const text = labelForStatus(status, role);
+  // const text = labelForStatus(status, role);
   switch (status) {
     case AssessmentStatus.NotStarted:
-      Icon = CancelIcon;
+      Icon = HighlightOffIcon;
       break;
     case AssessmentStatus.Started:
-      Icon = PendingIcon;
-      color = 'warning';
+      Icon = CheckCircleOutlineIcon;
+      // color = 'warning';
       break;
     case AssessmentStatus.ReadyToSubmit:
-      Icon = CheckCircleIcon;
+      Icon = CheckCircleOutlineIcon;
       color = 'success';
       break;
     case AssessmentStatus.Submitted:
@@ -55,24 +52,25 @@ const TabIndicator = ({
       break;
   }
 
-  return (
-    <Stack direction='row' alignItems='center' alignSelf='center' gap={0.8}>
-      <Box component='span' sx={{ fontSize: 16, display: 'flex' }}>
-        <Icon fontSize='inherit' color={color || 'inherit'} />
-      </Box>
-      <Typography
-        variant='subtitle2'
-        fontSize={'.8rem'}
-        // color='text.primary'
-        // color={(theme) =>
-        //   color ? darken(theme.palette[color].main, 0.3) : 'text.primary'
-        // }
-        sx={{ fontWeight: 600 }}
-      >
-        {text}
-      </Typography>
-    </Stack>
-  );
+  return <Icon fontSize='small' color={color || 'inherit'} />;
+  // return (
+  //   <Stack direction='row' alignItems='center' alignSelf='center' gap={0.8}>
+  //     <Box component='span' sx={{ fontSize: 16, display: 'flex' }}>
+  //       <Icon fontSize='inherit' color={color || 'inherit'} />
+  //     </Box>
+  //     <Typography
+  //       variant='subtitle2'
+  //       fontSize={'.8rem'}
+  //       // color='text.primary'
+  //       // color={(theme) =>
+  //       //   color ? darken(theme.palette[color].main, 0.3) : 'text.primary'
+  //       // }
+  //       sx={{ fontWeight: 600 }}
+  //     >
+  //       {text}
+  //     </Typography>
+  //   </Stack>
+  // );
 };
 
 export default TabIndicator;

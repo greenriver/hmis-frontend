@@ -5,7 +5,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { isIdParam } from '@/utils/generateSafePath';
 
 const enumParams: Record<string, string[]> = {
-  assessmentRole: Object.keys(HmisEnums.AssessmentRole),
+  formRole: Object.keys(HmisEnums.FormRole),
 };
 
 const useSafeParams = (...args: Parameters<typeof useParams>) => {
@@ -27,7 +27,7 @@ const useSafeParams = (...args: Parameters<typeof useParams>) => {
   }
 
   // checkAgainstEnums(...)
-  // if (params.assessmentRole) {
+  // if (params.formRole) {
 
   // }
 

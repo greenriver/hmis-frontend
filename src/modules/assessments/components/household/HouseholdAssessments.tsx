@@ -13,6 +13,7 @@ import { useLocation } from 'react-router-dom';
 
 import HouseholdAssessmentTabPanel from './HouseholdAssessmentTabPanel';
 import HouseholdSummaryTabPanel from './HouseholdSummaryTabPanel';
+import LabeledTabGroup from './LabeledTabGroup';
 import TabLabel, { SummaryTabLabel } from './TabLabel';
 import {
   AssessmentStatus,
@@ -32,8 +33,8 @@ import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
-  AssessmentRole,
   EnrollmentFieldsFragment,
+  FormRole,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 
@@ -49,10 +50,7 @@ const HouseholdAssessments = ({
   enrollment,
 }: HouseholdAssessmentsProps) => {
   const [householdMembers, { loading, error, refetch, networkStatus }] =
-    useHouseholdMembers(
-      enrollment.id
-      // type === 'ENTRY' ? 'INCOMPLETE_ENTRY' : 'INCOMPLETE_EXIT'
-    );
+    useHouseholdMembers(enrollment.id);
 
   const [currentTab, setCurrentTab] = useState<string | undefined>('1');
 
@@ -77,6 +75,10 @@ const HouseholdAssessments = ({
               ? enrollment.intakeAssessment?.assessmentDate
               : enrollment.exitAssessment?.assessmentDate;
 
+          // Whether the actual Entry/Exit has been completed (notwithstanding assessment status)
+          const entryOrExitCompleted =
+            type === 'ENTRY' ? !enrollment.inProgress : !!enrollment.exitDate;
+
           const isSubmitted = assessmentId && !assessmentInProgress;
 
           const tabData: TabDefinition = {
@@ -84,8 +86,14 @@ const HouseholdAssessments = ({
             id: (index + 1).toString(),
             isHoh: relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold,
             enrollmentId: enrollment.id,
+            entryDate: enrollment.entryDate,
+            exitDate: enrollment.exitDate || undefined,
+            enrollmentInProgress: enrollment.inProgress,
+            entryOrExitCompleted,
             assessmentId,
             assessmentInProgress,
+            assessmentSubmitted: !!assessmentId && !assessmentInProgress,
+            clientId: client.id,
             client: {
               dob: client.dob,
               veteranStatus: client.veteranStatus,
@@ -146,6 +154,7 @@ const HouseholdAssessments = ({
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       event.preventDefault();
+      console.log('CHANGING TAB TO ', newValue);
       navigateToTab(newValue);
     },
     [navigateToTab]
@@ -167,16 +176,24 @@ const HouseholdAssessments = ({
   if (loading && networkStatus === 1) return <Loading />;
   if (error) throw error;
 
+  const tabsSx = {
+    '&.MuiTabs-root': { height: '70%' },
+    '.MuiTabs-flexContainer': { height: '70%' },
+    '.MuiTabScrollButton-root': {
+      alignItems: 'end',
+      pb: 2,
+    },
+  };
+
   const tabSx = {
-    minWidth: '180px',
+    minWidth: '140px',
     justifyContent: 'end',
     fontWeight: 800,
     pb: 1,
     px: 4,
   };
 
-  const assessmentRole =
-    type === 'ENTRY' ? AssessmentRole.Intake : AssessmentRole.Exit;
+  const formRole = type === 'ENTRY' ? FormRole.Intake : FormRole.Exit;
 
   return (
     <>
@@ -203,7 +220,16 @@ const HouseholdAssessments = ({
         }}
       >
         <Grid container sx={{ height: '100%', alignItems: 'center' }}>
-          <Grid item xs={3}>
+          <Grid
+            item
+            xs={2}
+            sx={{
+              height: '100%',
+              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
+              clipPath: 'inset(0px -15px 0px 0px)',
+              py: 1,
+            }}
+          >
             <Stack gap={0.2}>
               {title}
               {enrollment && (
@@ -213,44 +239,65 @@ const HouseholdAssessments = ({
               )}
             </Stack>
           </Grid>
-          <Grid item xs={1} sm={0.1}></Grid>
-          <Grid item xs={8} sx={{ height: '100%' }}>
-            <Tabs
-              value={currentTab}
-              onChange={handleChangeTab}
-              aria-label='household member tabs'
-              variant='scrollable'
-              scrollButtons='auto'
-              sx={{
-                '&.MuiTabs-root': { height: '100%' },
-                '.MuiTabs-flexContainer': { height: '100%' },
-                '.MuiTabScrollButton-root': {
-                  alignItems: 'end',
-                  pb: 2,
-                },
-              }}
+          {/* <Grid item xs={1} sm={0.1}></Grid> */}
+          <Grid item xs={8} sx={{ height: '100%', pr: 6 }}>
+            <LabeledTabGroup
+              label='Step 1 - Perform Assessments'
+              labelSx={{ pl: 4 }}
             >
-              {tabs.map((definition) => (
-                <Tab
-                  value={definition.id}
-                  key={definition.id}
-                  label={
-                    <TabLabel definition={definition} role={assessmentRole} />
-                  }
-                  sx={tabSx}
-                  {...tabA11yProps(definition.id)}
-                />
-              ))}
-              {tabs.length > 0 && (
+              <Tabs
+                value={currentTab === SUMMARY_TAB_ID ? false : currentTab}
+                onChange={handleChangeTab}
+                aria-label='household member tabs'
+                variant='scrollable'
+                scrollButtons='auto'
+                sx={tabsSx}
+              >
+                {tabs.map((definition) => (
+                  <Tab
+                    value={definition.id}
+                    key={definition.id}
+                    label={<TabLabel definition={definition} role={formRole} />}
+                    sx={tabSx}
+                    {...tabA11yProps(definition.id)}
+                  />
+                ))}
+              </Tabs>
+            </LabeledTabGroup>
+          </Grid>
+          <Grid
+            item
+            xs={2}
+            sx={{
+              height: '100%',
+              boxShadow: '0 0 15px rgb(0 0 0 / 25%)',
+              clipPath: 'inset(0px 0px 0px -15px)',
+              pl: 3,
+            }}
+          >
+            <LabeledTabGroup label='Step 2 - Review and Submit'>
+              <Tabs
+                value={currentTab === SUMMARY_TAB_ID ? currentTab : false}
+                onChange={handleChangeTab}
+                aria-label='review and submit tab'
+                scrollButtons={false}
+                sx={tabsSx}
+              >
                 <Tab
                   value={SUMMARY_TAB_ID}
                   key={SUMMARY_TAB_ID}
-                  label={<SummaryTabLabel />}
-                  sx={{ ...tabSx, justifyContent: 'center' }}
+                  label={<SummaryTabLabel role={formRole} />}
+                  sx={{
+                    ...tabSx,
+                    // justifyContent: 'left',
+                    pl: 0,
+                    alignItems: 'flex-start',
+                  }}
+                  onClick={() => setCurrentTab('summary')}
                   {...tabA11yProps(SUMMARY_TAB_ID)}
                 />
-              )}
-            </Tabs>
+              </Tabs>
+            </LabeledTabGroup>
           </Grid>
         </Grid>
       </AppBar>
@@ -262,9 +309,9 @@ const HouseholdAssessments = ({
               active={tabDefinition.id === currentTab}
               refetch={refetch}
               navigateToTab={navigateToTab}
-              nextTab={tabs[index + 1]?.id}
+              nextTab={tabs[index + 1]?.id || SUMMARY_TAB_ID}
               previousTab={tabs[index - 1]?.id}
-              assessmentRole={assessmentRole}
+              formRole={formRole}
               updateTabStatus={updateTabStatus}
               {...tabDefinition}
             />
@@ -280,9 +327,10 @@ const HouseholdAssessments = ({
               id={SUMMARY_TAB_ID}
               tabs={tabs}
               active={SUMMARY_TAB_ID === currentTab}
-              assessmentRole={assessmentRole}
+              formRole={formRole}
               projectName={enrollmentName(enrollment)}
               refetch={refetch}
+              setCurrentTab={setCurrentTab}
             />
           )}
         </Grid>

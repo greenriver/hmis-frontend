@@ -8,12 +8,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import {
-  OrganizationAllFieldsFragment,
-  UpdateOrganizationDocument,
-  UpdateOrganizationMutation,
-  UpdateOrganizationMutationVariables,
-} from '@/types/gqlTypes';
+import { FormRole, OrganizationAllFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditOrganization = () => {
@@ -23,11 +18,10 @@ const EditOrganization = () => {
     useOrganizationCrumbs('Edit Organization');
 
   const onCompleted = useCallback(
-    (data: UpdateOrganizationMutation) => {
-      const id = data?.updateOrganization?.organization?.id;
-      if (id) {
-        navigate(generateSafePath(Routes.ORGANIZATION, { organizationId: id }));
-      }
+    (data: OrganizationAllFieldsFragment) => {
+      navigate(
+        generateSafePath(Routes.ORGANIZATION, { organizationId: data.id })
+      );
     },
     [navigate]
   );
@@ -39,18 +33,10 @@ const EditOrganization = () => {
     <ProjectLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
-        <EditRecord<
-          OrganizationAllFieldsFragment,
-          UpdateOrganizationMutation,
-          UpdateOrganizationMutationVariables
-        >
-          definitionIdentifier='organization'
+        <EditRecord<OrganizationAllFieldsFragment>
+          formRole={FormRole.Organization}
           record={organization}
-          queryDocument={UpdateOrganizationDocument}
           onCompleted={onCompleted}
-          getErrors={(data: UpdateOrganizationMutation) =>
-            data?.updateOrganization?.errors
-          }
           title={<Typography variant='h3'>Edit {organizationName}</Typography>}
         />
       )}

@@ -3,48 +3,36 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  STICKY_BAR_HEIGHT,
   CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
 } from '../layout/layoutConstants';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
-import {
-  ClientFieldsFragment,
-  UpdateClientDocument,
-  UpdateClientMutation,
-  UpdateClientMutationVariables,
-} from '@/types/gqlTypes';
+import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Profile = () => {
   const { client } = useDashboardClient();
   const navigate = useNavigate();
   const onCompleted = useCallback(
-    (data: UpdateClientMutation) => {
-      const id = data?.updateClient?.client?.id;
-      if (id) {
-        navigate(generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: id }));
-      }
+    (data: ClientFieldsFragment) => {
+      navigate(
+        generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: data.id })
+      );
     },
     [navigate]
   );
 
   return (
-    <EditRecord<
-      ClientFieldsFragment,
-      UpdateClientMutation,
-      UpdateClientMutationVariables
-    >
-      definitionIdentifier='client'
+    <EditRecord<ClientFieldsFragment>
+      formRole={FormRole.Client}
       record={client}
       localConstants={{
         clientId: client.id,
       }}
-      queryDocument={UpdateClientDocument}
       onCompleted={onCompleted}
-      getErrors={(data: UpdateClientMutation) => data?.updateClient?.errors}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
         <>

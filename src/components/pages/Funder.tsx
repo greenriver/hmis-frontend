@@ -1,10 +1,9 @@
-import { Stack, Typography } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
-import { InactiveChip } from './Project';
+import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -14,13 +13,8 @@ import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumb
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
-  CreateFunderDocument,
-  CreateFunderMutation,
-  CreateFunderMutationVariables,
+  FormRole,
   FunderFieldsFragment,
-  UpdateFunderDocument,
-  UpdateFunderMutation,
-  UpdateFunderMutationVariables,
   useGetFunderQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -62,47 +56,19 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   if (!create && !data?.funder) throw Error('Funder not found');
   if (error) throw error;
 
-  const common = {
-    definitionIdentifier: 'funder',
-    title: (
-      <Stack direction={'row'} spacing={2}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-        <InactiveChip project={project} />
-      </Stack>
-    ),
-  };
   return (
     <ProjectLayout crumbs={crumbs}>
-      {create ? (
-        <EditRecord<
-          FunderFieldsFragment,
-          CreateFunderMutation,
-          CreateFunderMutationVariables
-        >
-          inputVariables={{ projectId }}
-          queryDocument={CreateFunderDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: CreateFunderMutation) => data?.createFunder?.errors}
-          FormActionProps={{ submitButtonText: 'Create Funder' }}
-          localConstants={localConstants}
-          {...common}
-        />
-      ) : (
-        <EditRecord<
-          FunderFieldsFragment,
-          UpdateFunderMutation,
-          UpdateFunderMutationVariables
-        >
-          record={data?.funder || undefined}
-          queryDocument={UpdateFunderDocument}
-          onCompleted={onCompleted}
-          getErrors={(data: UpdateFunderMutation) => data?.updateFunder?.errors}
-          localConstants={localConstants}
-          {...common}
-        />
-      )}
+      <EditRecord<FunderFieldsFragment>
+        FormActionProps={
+          create ? { submitButtonText: 'Create Funder' } : undefined
+        }
+        onCompleted={onCompleted}
+        localConstants={localConstants}
+        formRole={FormRole.Funder}
+        inputVariables={{ projectId }}
+        record={data?.funder || undefined}
+        title={<ProjectFormTitle title={title} project={project} />}
+      />
     </ProjectLayout>
   );
 };

@@ -2,164 +2,50 @@ import {
   Alert,
   AlertTitle,
   Box,
-  Checkbox,
   CheckboxProps,
   Grid,
   Paper,
   Typography,
 } from '@mui/material';
-import { fromPairs, keyBy, mapValues, pickBy } from 'lodash-es';
+import { fromPairs, isNil, keyBy, mapValues, pickBy } from 'lodash-es';
 import pluralize from 'pluralize';
-import { memo, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  memo,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { assessmentPrefix } from '../../util';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import {
-  AssessmentStatus,
-  labelForStatus,
-  TabDefinition,
-  tabPanelA11yProps,
-} from './util';
+import HouseholdSummaryTable from './HouseholdSummaryTable';
+import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
-import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import LoadingButton from '@/components/elements/LoadingButton';
-import SimpleTable from '@/components/elements/SimpleTable';
 import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
 import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import {
-  AssessmentRole,
+  FormRole,
   SubmitHouseholdAssessmentsMutation,
   useSubmitHouseholdAssessmentsMutation,
   ValidationError,
   ValidationSeverity,
 } from '@/types/gqlTypes';
 
-const SummaryTable = ({
-  tabs,
-  role,
-  checked,
-  onClickCheckbox,
-}: {
-  tabs: TabDefinition[];
-  role: AssessmentRole.Intake | AssessmentRole.Exit;
-  checked: Record<string, boolean>;
-  onClickCheckbox: (assessmentId?: string) => CheckboxProps['onChange'];
-}) => {
-  return (
-    <SimpleTable
-      headers
-      TableCellProps={{
-        sx: {
-          borderBottom: 0,
-          py: 0.5,
-          px: 1,
-          '&:first-of-type': {
-            pl: 0,
-            width: '1px',
-            // maxWidth: '100px',
-            // whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
-          },
-          '&:nth-of-type(2)': {
-            pl: 0,
-            width: '1px',
-            verticalAlign: 'baseline',
-          },
-          '&:nth-of-type(3)': {
-            maxWidth: '300px',
-          },
-        },
-      }}
-      columns={[
-        {
-          name: 'hoh',
-          label: <></>,
-          render: (row) => (
-            <HohIndicator relationshipToHoh={row.relationshipToHoH} />
-          ),
-        },
-        {
-          name: 'submit',
-          label: <></>,
-          render: (row) => {
-            const disabledReason = !row.assessmentId
-              ? 'Not started'
-              : row.status === AssessmentStatus.Submitted
-              ? 'Already submitted'
-              : undefined;
-            return (
-              <ButtonTooltipContainer title={disabledReason}>
-                <Checkbox
-                  checked={!!(row.assessmentId && checked[row.assessmentId])}
-                  indeterminate={row.status === AssessmentStatus.Submitted}
-                  disabled={!!disabledReason}
-                  onChange={onClickCheckbox(row.assessmentId)}
-                  aria-label={`Submit assessment for ${row.clientName} `}
-                />
-              </ButtonTooltipContainer>
-            );
-          },
-        },
-        {
-          name: 'Client',
-          label: <Typography fontWeight={600}>Client</Typography>,
-          render: (row) => <Typography>{row.clientName}</Typography>,
-        },
-        {
-          name: 'Assessment Status',
-          label: (
-            <Typography fontWeight={600}>
-              {role === AssessmentRole.Exit ? 'Exit' : 'Intake'} Assessment
-              Status
-            </Typography>
-          ),
-          render: (row) => (
-            <Typography
-              color={
-                row.status === AssessmentStatus.ReadyToSubmit
-                  ? (theme) => theme.palette.success.main
-                  : 'text.primary'
-              }
-              fontWeight={
-                row.status === AssessmentStatus.ReadyToSubmit ? 600 : 400
-              }
-            >
-              {labelForStatus(row.status, role)}
-            </Typography>
-          ),
-        },
-        {
-          name: 'date',
-          label: (
-            <Typography fontWeight={600}>
-              {role === AssessmentRole.Exit ? 'Exit' : 'Entry'} Date
-            </Typography>
-          ),
-          render: (row) => (
-            <Typography>
-              {row.assessmentDate
-                ? parseAndFormatDate(row.assessmentDate)
-                : null}
-            </Typography>
-          ),
-        },
-      ]}
-      rows={tabs}
-    />
-  );
-};
-
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
-  assessmentRole: AssessmentRole.Intake | AssessmentRole.Exit;
+  formRole: FormRole.Intake | FormRole.Exit;
   tabs: TabDefinition[];
   id: string;
   projectName: string;
   refetch: () => Promise<any>;
+  setCurrentTab: Dispatch<SetStateAction<string | undefined>>;
 }
 
 type ErrorState = {
@@ -171,12 +57,13 @@ const emptyErrorState: ErrorState = { warnings: [], errors: [] };
 // Memoized to only re-render when props change (shallow compare)
 const HouseholdSummaryTabPanel = memo(
   ({
-    assessmentRole,
+    formRole,
     active,
     id,
     tabs,
     projectName,
     refetch,
+    setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
     console.debug('Rendering summary panel');
 
@@ -196,16 +83,19 @@ const HouseholdSummaryTabPanel = memo(
     }, [active]);
 
     const onClickCheckbox: (
-      assessmentId?: string
+      ...assessmentIds: string[]
     ) => CheckboxProps['onChange'] = useCallback(
-      (assessmentId) => (_event, checked) => {
-        if (!assessmentId) return;
-        setCheckedState((old) => {
-          const copy = { ...old };
-          copy[assessmentId] = checked;
-          return copy;
-        });
-      },
+      (...assessmentIds: string[]) =>
+        (_event, checked) => {
+          if (!assessmentIds.length) return;
+          setCheckedState((old) => {
+            const copy = { ...old };
+            assessmentIds.forEach((id) => {
+              if (!isNil(id)) copy[id] = checked;
+            });
+            return copy;
+          });
+        },
       []
     );
 
@@ -244,9 +134,22 @@ const HouseholdSummaryTabPanel = memo(
           setErrors(emptyErrorState);
           setCheckedState({});
           refetch();
+
+          tabs.forEach(({ clientId, enrollmentId }) => {
+            // Make it so the "Assessments" table on the Enrollment page gets refetched next time
+            cache.evict({
+              id: `Enrollment:${enrollmentId}`,
+              fieldName: 'assessments',
+            });
+            // Make it so the "Assessments" table on the Client page gets refetched next time
+            cache.evict({
+              id: `Client:${clientId}`,
+              fieldName: 'assessments',
+            });
+          });
         }
       },
-      [refetch]
+      [refetch, tabs]
     );
 
     const onSubmit = useCallback(() => {
@@ -285,7 +188,7 @@ const HouseholdSummaryTabPanel = memo(
         >
           <Grid item xs={12} md={10} lg={8}>
             <Typography variant='h4' sx={{ mb: 3 }}>
-              Complete {assessmentPrefix(assessmentRole)} {projectName}
+              Complete {assessmentPrefix(formRole)} {projectName}
             </Typography>
             {apolloError && (
               <Box sx={{ mb: 3 }}>
@@ -304,28 +207,30 @@ const HouseholdSummaryTabPanel = memo(
                 </Alert>
               </Grid>
             )}
-            <Paper sx={{ p: 2 }}>
-              <SummaryTable
+            <Typography fontWeight={600} variant='body2'>
+              Select Household Members for Submission
+            </Typography>
+            <Paper sx={{ mt: 2 }}>
+              <HouseholdSummaryTable
                 tabs={tabs}
-                role={assessmentRole}
+                role={formRole}
                 checked={checkedState}
                 onClickCheckbox={onClickCheckbox}
+                setCurrentTab={setCurrentTab}
               />
+              <Box sx={{ px: 2, py: 3 }}>
+                <LoadingButton
+                  loading={loading}
+                  onClick={onSubmit}
+                  disabled={assessmentsToSubmit.length === 0}
+                >
+                  {`Submit (${assessmentsToSubmit.length}) ${
+                    formRole === FormRole.Intake ? 'Intake' : 'Exit'
+                  }`}{' '}
+                  {pluralize('Assessment', assessmentsToSubmit.length)}
+                </LoadingButton>
+              </Box>
             </Paper>
-          </Grid>
-          <Grid item xs={12} md={10} lg={8} sx={{ py: 3 }}>
-            <LoadingButton
-              loading={loading}
-              onClick={onSubmit}
-              disabled={assessmentsToSubmit.length === 0}
-            >
-              Submit{' '}
-              {pluralize(
-                'assessment',
-                assessmentsToSubmit.length,
-                assessmentsToSubmit.length > 0
-              )}
-            </LoadingButton>
           </Grid>
         </Grid>
         {showConfirmDialog && (
@@ -342,5 +247,7 @@ const HouseholdSummaryTabPanel = memo(
     );
   }
 );
+
+HouseholdSummaryTabPanel.displayName = 'HouseholdSummaryTabPanel';
 
 export default HouseholdSummaryTabPanel;

@@ -10,6 +10,7 @@ import ProjectSelect, {
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
+import ErrorAlert from '@/modules/form/components/ErrorAlert';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
@@ -58,6 +59,10 @@ const NewEnrollment = () => {
                 clientId,
               });
           navigate(path);
+        } else if (data?.createEnrollment?.errors) {
+          const errors = data?.createEnrollment?.errors || [];
+          setDateError(!!errors.find((e) => e.attribute === 'entryDate'));
+          setProjectError(!!errors.find((e) => e.attribute === 'project'));
         }
       },
     });
@@ -70,12 +75,11 @@ const NewEnrollment = () => {
     }
     const values: CreateEnrollmentInput = {
       projectId: project.code,
-      startDate: format(entryDate, 'yyyy-MM-dd'),
+      entryDate: format(entryDate, 'yyyy-MM-dd'),
       householdMembers: Object.entries(members).map(([id, relation]) => ({
         id,
         relationshipToHoH: relation || RelationshipToHoH.DataNotCollected,
       })),
-      inProgress: true,
     };
     console.log('CreateEnrollment', values);
     void mutateFunction({
@@ -83,12 +87,7 @@ const NewEnrollment = () => {
     });
   }, [entryDate, members, project, mutateFunction]);
 
-  // TODO render validations
-  if (data?.createEnrollment?.errors) {
-    console.error('errors', data?.createEnrollment?.errors);
-  }
   if (error) throw error;
-
   if (recentHouseholdMembersLoading) return <Loading />;
 
   const numMembers = Object.keys(members).length;
@@ -103,7 +102,7 @@ const NewEnrollment = () => {
               {` for ${clientBriefName(client)}`}
             </Box>
           </Typography>
-
+          <ErrorAlert errors={data?.createEnrollment?.errors || []} />
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant='h5' sx={{ mb: 2 }}>
               Enrollment Details

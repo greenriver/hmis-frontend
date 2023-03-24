@@ -1,3 +1,7 @@
+import { mapValues } from 'lodash-es';
+
+import { HIDDEN_VALUE } from '../types';
+
 import { transformSubmitValues } from './formUtil';
 
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
@@ -30,6 +34,26 @@ const definition: FormDefinitionJson = {
   ],
 };
 
+const completeNullResultByField = {
+  boolField: null,
+  strField: null,
+  dateField: null,
+  numField: null,
+  numField2: null,
+  choiceField: null,
+  textField: null,
+};
+
+const completeNullResultById = {
+  '1.1': null,
+  '1.2': null,
+  '1.3': null,
+  '1.4': null,
+  '1.5': null,
+  '1.6': null,
+  '1.7': null,
+};
+
 describe('transformSubmitValues', () => {
   it('transforms all value types', () => {
     const dateString = '2022-01-01';
@@ -56,6 +80,7 @@ describe('transformSubmitValues', () => {
       numField: 12,
       numField2: 1.5,
       choiceField: 'YES',
+      textField: null,
     });
   });
 
@@ -79,6 +104,7 @@ describe('transformSubmitValues', () => {
     expect(result).toStrictEqual({
       'Exit.boolField': true,
       'Exit.strField': 'foo',
+      'Exit.dateField': null,
       'Exit.numField': 12,
       'Exit.choiceField': 'YES',
       'Exit.textField': null,
@@ -133,7 +159,7 @@ describe('transformSubmitValues', () => {
     expect(result).toEqual({ choiceField: ['OPT_1', 'OPT_2'] });
   });
 
-  it('ignores empty strings', () => {
+  it('nullifies empty strings', () => {
     const values = {
       '1.1': '',
       '1.2': '',
@@ -143,28 +169,20 @@ describe('transformSubmitValues', () => {
       '1.6': '',
       '1.7': '',
     };
-    const result = transformSubmitValues({
-      definition,
-      values,
-      keyByFieldName: true,
-    });
+    const result = transformSubmitValues({ definition, values });
 
-    expect(result).toStrictEqual({});
+    expect(result).toStrictEqual(mapValues(values, () => null));
   });
 
-  it('keeps nulls', () => {
+  it('nullifies empty responses', () => {
     const values = {
       '1.1': '',
       '1.2': null,
       '1.3': undefined,
     };
-    const result = transformSubmitValues({
-      definition,
-      values,
-      keyByFieldName: true,
-    });
+    const result = transformSubmitValues({ definition, values });
 
-    expect(result).toStrictEqual({ strField: null });
+    expect(result).toStrictEqual(mapValues(values, () => null));
   });
 
   it('ignores NaNs for numeric types', () => {
@@ -179,6 +197,20 @@ describe('transformSubmitValues', () => {
     });
 
     expect(result).toStrictEqual({});
+  });
+
+  it('replaces empty strings and undefined with nulls', () => {
+    const values = {
+      '1.1': '',
+      '1.2': '',
+      '1.3': '',
+      '1.4': undefined,
+      '1.5': undefined,
+      '1.6': undefined,
+      '1.7': undefined,
+    };
+    const result = transformSubmitValues({ definition, values });
+    expect(result).toStrictEqual(completeNullResultById);
   });
 
   describe('transformation options', () => {
@@ -223,74 +255,49 @@ describe('transformSubmitValues', () => {
         expect(result).toStrictEqual({ choiceField: 'DATA_NOT_COLLECTED' });
       });
     });
-    describe('autofillNulls', () => {
-      it('replaces empty responses with nulls', () => {
+    describe('includeMissingKeys', () => {
+      it('sets missing responses to null', () => {
         const values = {};
         const result = transformSubmitValues({
           definition,
           values,
-          autofillNulls: true,
+          includeMissingKeys: 'AS_NULL',
           keyByFieldName: true,
         });
 
-        expect(result).toStrictEqual({
-          boolField: null,
-          strField: null,
-          dateField: null,
-          numField: null,
-          numField2: null,
-          choiceField: null,
-          textField: null,
-        });
+        expect(result).toStrictEqual(completeNullResultByField);
       });
 
-      it('replaces empty strings with nulls', () => {
-        const values = {
-          '1.1': '',
-          '1.2': '',
-          '1.3': '',
-          '1.4': '',
-          '1.5': '',
-          '1.6': '',
-          '1.7': '',
-        };
+      it('works alongside autofillNotCollected', () => {
+        const values = {};
         const result = transformSubmitValues({
           definition,
           values,
-          autofillNulls: true,
+          includeMissingKeys: 'AS_NULL',
+          autofillNotCollected: true,
           keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({
-          boolField: null,
-          strField: null,
-          dateField: null,
-          numField: null,
-          numField2: null,
-          choiceField: null,
-          textField: null,
+          ...completeNullResultByField,
+          choiceField: 'DATA_NOT_COLLECTED',
         });
       });
     });
-    describe('autofillBooleans', () => {
+    describe('includeMissingKeys as nulls', () => {
       it('replaces empty boolean responses with false', () => {
         const values = {};
         const result = transformSubmitValues({
           definition,
           values,
-          autofillNulls: true,
+          includeMissingKeys: 'AS_NULL',
           autofillBooleans: true,
           keyByFieldName: true,
         });
 
         expect(result).toStrictEqual({
+          ...completeNullResultByField,
           boolField: false,
-          strField: null,
-          dateField: null,
-          numField: null,
-          numField2: null,
-          choiceField: null,
-          textField: null,
         });
       });
       it('preserves filled booleans', () => {
@@ -304,6 +311,55 @@ describe('transformSubmitValues', () => {
 
         expect(result).toStrictEqual({
           boolField: true,
+        });
+      });
+    });
+    describe('includeMissingKeys as hidden', () => {
+      it('marks missing fields as HIDDEN', () => {
+        const values = {};
+        const result = transformSubmitValues({
+          definition,
+          values,
+          includeMissingKeys: 'AS_HIDDEN',
+        });
+
+        expect(result).toStrictEqual(
+          mapValues(completeNullResultById, () => HIDDEN_VALUE)
+        );
+      });
+
+      it('marks missing fields as HIDDEN (keyed by fieldname)', () => {
+        const values = {};
+        const result = transformSubmitValues({
+          definition,
+          values,
+          includeMissingKeys: 'AS_HIDDEN',
+          keyByFieldName: true,
+        });
+
+        expect(result).toStrictEqual(
+          mapValues(completeNullResultByField, () => HIDDEN_VALUE)
+        );
+      });
+
+      it('does not mark empty fields as HIDDEN', () => {
+        const values = {
+          '1.1': null,
+          '1.2': '',
+          '1.3': undefined,
+          '1.4': undefined,
+          '1.5': null,
+        };
+        const result = transformSubmitValues({
+          definition,
+          values,
+          includeMissingKeys: 'AS_HIDDEN',
+        });
+
+        expect(result).toStrictEqual({
+          ...completeNullResultById,
+          '1.6': HIDDEN_VALUE,
+          '1.7': HIDDEN_VALUE,
         });
       });
     });

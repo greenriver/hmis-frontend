@@ -6,44 +6,42 @@ import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
   GetEnrollmentAssessmentsDocument,
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables,
-  ProjectType,
   useDeleteAssessmentMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
-  {
-    header: 'CE Type',
-    render: (a) => (
-      <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
-    ),
-    linkTreatment: true,
-  },
-  {
-    header: 'Level',
-    render: (a) => (
-      <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
-    ),
-  },
-  {
-    header: 'Location',
-    render: (e) => e.assessmentLocation,
-  },
-];
+// const ceColumns: ColumnDef<AssessmentFieldsFragment>[] = [
+//   {
+//     header: 'CE Type',
+//     render: (a) => (
+//       <HmisEnum value={a.assessmentType} enumMap={HmisEnums.AssessmentType} />
+//     ),
+//     linkTreatment: true,
+//   },
+//   {
+//     header: 'Level',
+//     render: (a) => (
+//       <HmisEnum value={a.assessmentLevel} enumMap={HmisEnums.AssessmentLevel} />
+//     ),
+//   },
+//   {
+//     header: 'Location',
+//     render: (e) => e.assessmentLocation,
+//   },
+// ];
 
 const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
@@ -56,7 +54,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
     header: 'Type',
     width: '10%',
     render: (assessment) =>
-      startCase(assessment.assessmentDetail?.role?.toLowerCase()),
+      startCase(assessment.customForm?.definition?.role?.toLowerCase()),
   },
   {
     header: 'Status',
@@ -77,7 +75,6 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
 const AssessmentsTable = ({
   clientId,
   enrollmentId,
-  enrollment,
 }: {
   clientId: string;
   enrollmentId: string;
@@ -114,39 +111,44 @@ const AssessmentsTable = ({
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
+  const [canEditEnrollments] = useHasClientPermissions(clientId, [
+    'canEditEnrollments',
+  ]);
+
   const tableColumns = useMemo(
-    () => [
-      ...(enrollment.project.projectType === ProjectType.Ce
-        ? [...columns, ...ceColumns]
-        : columns),
-      {
-        header: '',
-        width: '1%',
-        render: (record) => (
-          <Stack
-            direction='row'
-            spacing={1}
-            justifyContent='flex-end'
-            flexGrow={1}
-          >
-            <Button
-              data-testid='deleteService'
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setRecordToDelete(record);
-              }}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
-    ],
-    [enrollment]
+    () =>
+      canEditEnrollments
+        ? [
+            ...columns,
+            {
+              header: '',
+              width: '1%',
+              render: (record) => (
+                <Stack
+                  direction='row'
+                  spacing={1}
+                  justifyContent='flex-end'
+                  flexGrow={1}
+                >
+                  <Button
+                    data-testid='deleteAssessment'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setRecordToDelete(record);
+                    }}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : columns,
+    [canEditEnrollments]
   );
 
   return (

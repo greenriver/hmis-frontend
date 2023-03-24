@@ -6,9 +6,17 @@
 
 Cypress.session.clearAllSavedSessions();
 
-import { EmptyProject, EmptyProjectCoc } from 'support/assessmentConstants';
+import {
+  EmptyProject,
+  EmptyProjectCoc,
+  HIDDEN,
+} from 'support/assessmentConstants';
 
-import { FundingSource, ProjectType } from '../../src/types/gqlTypes';
+import {
+  FundingSource,
+  NoYesMissing,
+  ProjectType,
+} from '../../src/types/gqlTypes';
 
 beforeEach(() => {
   cy.login(Cypress.env('EMAIL'), Cypress.env('PASSWORD'));
@@ -24,15 +32,17 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('name').safeType('X Test Organization');
   cy.getById('description').type('Description{enter}line two{enter}line three');
   cy.getById('contact').type('Contact{enter}line two{enter}line three');
-  cy.checkOption('victimServiceProvider', 'false');
+  cy.checkOption('victimServiceProvider', NoYesMissing.No);
   cy.testId('formButton-submit').click();
   cy.testId('organizationDetailsCard').contains('line two');
 
   // Update organization
   cy.testId('updateOrganizationButton').click();
-  cy.getById('description').clear().safeType('Updated description');
+  cy.getById('description').clear();
+  cy.getById('contact').clear().safeType('123');
   cy.testId('formButton-submit').click();
-  cy.testId('organizationDetailsCard').contains('Updated description');
+  cy.testId('organizationDetailsCard').should('not.exist');
+  cy.testId('contactInfo').contains('123');
 
   /*** Project ***/
 
@@ -102,15 +112,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Edit project, assert details updated
   cy.testId('updateProjectButton').click();
-  // Form values should have nulls filled in
-  cy.expectHudValuesToDeepEqual({
-    ...expectedFormValues,
-    housingType: null,
-    targetPopulation: 'NOT_APPLICABLE',
-    HOPWAMedAssistedLivingFac: null,
-    continuumProject: null,
-    HMISParticipatingProject: null,
-  });
+  // Form values should be the same
+  cy.expectHudValuesToDeepEqual(expectedFormValues);
 
   const newProjectName = 'X Renamed Project';
   cy.inputId('2.02.2').clear().safeType(newProjectName);
@@ -144,7 +147,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('other').should('exist');
 
   cy.testId('formButton-submit').click();
-  cy.testId('formErrorAlert').contains('Other funder').should('exist');
+  cy.testId('formErrorAlert').contains('Other Funder').should('exist');
 
   cy.inputId('other').safeType('other funder details');
 
@@ -195,7 +198,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     endDate: '2025-01-01',
     funder: 'HUD_ESG_CV',
     grantId: 'ABC123',
-    otherFunder: null,
+    otherFunder: HIDDEN,
     startDate: '2022-01-01',
   });
   cy.testId('formButton-submit').click();
@@ -203,10 +206,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete funder, assert table updated
   cy.testId('funderCard').findTestId('deleteButton').first().click();
-  cy.testId('cancelDialogAction').click();
+  cy.cancelDialog();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 2);
   cy.testId('funderCard').findTestId('deleteButton').first().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
 
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
@@ -217,7 +220,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.checkOption('es-bed-type', 'VOUCHER');
   cy.inputId('2.07.1').safeType('01/01/2022');
   cy.testId('formButton-submit').click();
-  cy.testId('formErrorAlert').contains('CoC code').should('exist');
+  cy.testId('formErrorAlert').contains('CoC Code').should('exist');
   cy.testId('formButton-discard').click();
 
   /*** Project CoC ***/
@@ -276,7 +279,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete the second ProjectCoC
   cy.testId('projectCocCard').findTestId('deleteButton').first().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
 
   /*** Inventory ***/
@@ -306,6 +309,8 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     esBedType: 'VOUCHER',
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
+    bedInventory: 0,
+    unitInventory: 0,
   });
 
   // Submit (create Inventory)
@@ -354,19 +359,19 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Delete an Inventory record
   cy.testId('inventoryCard').findTestId('deleteButton').last().click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
   cy.testId('updateProjectButton').click();
   cy.inputId('2.02.4').clear().safeType('01/31/2022');
   cy.testId('formButton-submit').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 
   /*** Delete project and organization ***/
   cy.testId('deleteProjectButton').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 
   cy.testId('deleteOrganizationButton').click();
-  cy.testId('confirmDialogAction').click();
+  cy.confirmDialog();
 });

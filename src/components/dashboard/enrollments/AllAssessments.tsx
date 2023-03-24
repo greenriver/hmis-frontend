@@ -7,7 +7,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   assessmentDescription,
-  assessmentRoleDisplay,
+  formRoleDisplay,
   enrollmentName,
   parseAndFormatDate,
   parseAndFormatDateRange,
@@ -33,7 +33,7 @@ const columns: ColumnDef<AssessmentType>[] = [
   {
     header: 'Type',
     width: '15%',
-    render: (assessment) => `${assessmentRoleDisplay(assessment)} Assessment`,
+    render: (assessment) => `${formRoleDisplay(assessment)} Assessment`,
     linkTreatment: true,
     ariaLabel: (row) => assessmentDescription(row),
   },

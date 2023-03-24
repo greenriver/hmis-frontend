@@ -121,10 +121,12 @@ export function AuthProvider({
           logout();
         }
       })
-      .catch((err) => {
-        console.log(err);
-        console.log('Invalid session, logging out');
-        logout();
+      .catch((statusCode) => {
+        // Only logout if it was an auth failure. We shouldn't log out on 504.
+        if (statusCode === 401) {
+          console.log('Invalid session, logging out');
+          logout();
+        }
       });
   }, 30 * 1000); // 30 seconds
 

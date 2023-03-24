@@ -6,12 +6,17 @@ import React, { ReactElement } from 'react';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   DisabilityResponse,
+  NoYesMissing,
   NoYesReasonsForMissingData,
 } from '@/types/gqlTypes';
 
 interface Props extends TypographyProps {
   booleanValue?: boolean | null;
-  enumValue?: NoYesReasonsForMissingData | DisabilityResponse;
+  enumValue?:
+    | NoYesMissing
+    | NoYesReasonsForMissingData
+    | DisabilityResponse
+    | null;
   fallback?: ReactElement;
 }
 

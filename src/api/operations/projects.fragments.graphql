@@ -43,6 +43,14 @@ fragment OrganizationAllFields on Organization {
   ...OrganizationDetailFields
 }
 
+fragment OrganizationPermissionsFields on Organization {
+  id
+  access {
+    canEditOrganization
+    canDeleteOrganization
+  }
+}
+
 fragment ProjectAllFields on Project {
   id
   projectName
@@ -66,7 +74,7 @@ fragment ProjectAllFields on Project {
 
 fragment InventoryFields on Inventory {
   availability
-  # bedInventory
+  bedInventory
   # chBedInventory
   # chVetBedInventory
   # chYouthBedInventory
@@ -86,7 +94,7 @@ fragment InventoryFields on Inventory {
     nodesCount
   }
   # otherBedInventory
-  # unitInventory
+  unitInventory
   # vetBedInventory
   # youthBedInventory
   # youthVetBedInventory

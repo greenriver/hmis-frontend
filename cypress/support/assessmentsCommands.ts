@@ -56,7 +56,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'NUM_90_DAYS_OR_MORE_BUT_LESS_THAN_ONE_YEAR',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   // Institutional 1+ year (break)
@@ -70,7 +70,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'FOSTER_CARE_HOME_OR_FOSTER_CARE_GROUP_HOME',
     'Enrollment.lengthOfStay': 'ONE_YEAR_OR_LONGER',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   // Reset
@@ -90,7 +90,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.previousStreetEssh': HIDDEN,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'ONE_MONTH_OR_MORE_BUT_LESS_THAN_90_DAYS',
-    'Enrollment.losUnderThreshold': false,
+    'Enrollment.losUnderThreshold': 'NO',
   });
 
   cy.choose('3.917.2', 'ONE_WEEK_OR_MORE_BUT_LESS_THAN_ONE_MONTH');
@@ -118,7 +118,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
     // its not a break (it IS under the treshold)
-    'Enrollment.losUnderThreshold': true,
+    'Enrollment.losUnderThreshold': 'YES',
     // previously filled in dependent fields are present
     'Enrollment.dateToStreetEssh': '2022-01-01',
     'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
@@ -126,7 +126,7 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   });
 
   // Set previousStreetEssh to false, causing break to appear
-  cy.checkOption('3.917.C', 'false');
+  cy.checkOption('3.917.C', 'NO');
   cy.displayItem(breakLast).should('exist');
   cy.displayItems([breakInstitutional, breakPermanent]).should('not.exist');
   cy.getByIds(threeFourFive).should('not.exist');
@@ -135,12 +135,12 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
     ...hiddenThreeFourFive,
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
-    'Enrollment.losUnderThreshold': true,
-    'Enrollment.previousStreetEssh': false,
+    'Enrollment.losUnderThreshold': 'YES',
+    'Enrollment.previousStreetEssh': 'NO',
   });
 
   // Set previousStreetEssh to true, causing break to disappear
-  cy.checkOption('3.917.C', 'true');
+  cy.checkOption('3.917.C', 'YES');
   cy.displayItems([breakInstitutional, breakPermanent, breakLast]).should(
     'not.exist'
   );
@@ -149,8 +149,8 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   const expectedHudValues = {
     'Enrollment.livingSituation': 'HOST_HOME_NON_CRISIS',
     'Enrollment.lengthOfStay': 'TWO_TO_SIX_NIGHTS',
-    'Enrollment.losUnderThreshold': true,
-    'Enrollment.previousStreetEssh': true,
+    'Enrollment.losUnderThreshold': 'YES',
+    'Enrollment.previousStreetEssh': 'YES',
     'Enrollment.dateToStreetEssh': '2022-01-01',
     'Enrollment.timesHomelessPastThreeYears': 'ONE_TIME',
     'Enrollment.monthsHomelessPastThreeYears': 'NUM_4',
@@ -158,11 +158,12 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
   cy.expectHudValuesSectionToDeepEqual(expectedHudValues);
 
   // Disabling should remove values
-  cy.checkOption('3.917.C', 'false');
+  cy.checkOption('3.917.C', 'NO');
   cy.getByIds(threeFourFive).should('not.exist');
 
   // Re-enabling should add back old values (make previousStreetEssh null)
-  cy.checkOption('3.917.C', 'false'); // un-check
+  cy.uncheckOption('3.917.C', 'NO'); // un-check
+  cy.getChecked('3.917.C').should('not.exist');
   cy.expectHudValuesSectionToDeepEqual({
     ...expectedHudValues,
     'Enrollment.previousStreetEssh': null,
@@ -217,35 +218,35 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
     ...EmptyInsurance,
     ...EmptyNonCashBenefits,
     'IncomeBenefit.incomeFromAnySource': 'YES',
-    'IncomeBenefit.earned': true,
+    'IncomeBenefit.earned': 'YES',
     'IncomeBenefit.earnedAmount': incomePerSource,
-    'IncomeBenefit.unemployment': true,
+    'IncomeBenefit.unemployment': 'YES',
     'IncomeBenefit.unemploymentAmount': incomePerSource,
-    'IncomeBenefit.ssi': true,
+    'IncomeBenefit.ssi': 'YES',
     'IncomeBenefit.ssiAmount': incomePerSource,
-    'IncomeBenefit.ssdi': true,
+    'IncomeBenefit.ssdi': 'YES',
     'IncomeBenefit.ssdiAmount': incomePerSource,
-    'IncomeBenefit.vaDisabilityService': true,
+    'IncomeBenefit.vaDisabilityService': 'YES',
     'IncomeBenefit.vaDisabilityServiceAmount': incomePerSource,
-    'IncomeBenefit.vaDisabilityNonService': true,
+    'IncomeBenefit.vaDisabilityNonService': 'YES',
     'IncomeBenefit.vaDisabilityNonServiceAmount': incomePerSource,
-    'IncomeBenefit.privateDisability': true,
+    'IncomeBenefit.privateDisability': 'YES',
     'IncomeBenefit.privateDisabilityAmount': incomePerSource,
-    'IncomeBenefit.workersComp': true,
+    'IncomeBenefit.workersComp': 'YES',
     'IncomeBenefit.workersCompAmount': incomePerSource,
-    'IncomeBenefit.tanf': true,
+    'IncomeBenefit.tanf': 'YES',
     'IncomeBenefit.tanfAmount': incomePerSource,
-    'IncomeBenefit.ga': true,
+    'IncomeBenefit.ga': 'YES',
     'IncomeBenefit.gaAmount': incomePerSource,
-    'IncomeBenefit.socSecRetirement': true,
+    'IncomeBenefit.socSecRetirement': 'YES',
     'IncomeBenefit.socSecRetirementAmount': incomePerSource,
-    'IncomeBenefit.pension': true,
+    'IncomeBenefit.pension': 'YES',
     'IncomeBenefit.pensionAmount': incomePerSource,
-    'IncomeBenefit.childSupport': true,
+    'IncomeBenefit.childSupport': 'YES',
     'IncomeBenefit.childSupportAmount': incomePerSource,
-    'IncomeBenefit.alimony': true,
+    'IncomeBenefit.alimony': 'YES',
     'IncomeBenefit.alimonyAmount': incomePerSource,
-    'IncomeBenefit.otherIncomeSource': true,
+    'IncomeBenefit.otherIncomeSource': 'YES',
     'IncomeBenefit.otherIncomeAmount': incomePerSource,
     'IncomeBenefit.otherIncomeSourceIdentify': 'other description',
   };
@@ -309,12 +310,12 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
 
   const expectedHudValues = {
     'IncomeBenefit.benefitsFromAnySource': 'YES',
-    'IncomeBenefit.snap': true,
-    'IncomeBenefit.wic': true,
-    'IncomeBenefit.tanfChildCare': true,
-    'IncomeBenefit.tanfTransportation': true,
-    'IncomeBenefit.otherTanf': true,
-    'IncomeBenefit.otherBenefitsSource': true,
+    'IncomeBenefit.snap': 'YES',
+    'IncomeBenefit.wic': 'YES',
+    'IncomeBenefit.tanfChildCare': 'YES',
+    'IncomeBenefit.tanfTransportation': 'YES',
+    'IncomeBenefit.otherTanf': 'YES',
+    'IncomeBenefit.otherBenefitsSource': 'YES',
     'IncomeBenefit.otherBenefitsSourceIdentify': 'other description',
   };
   cy.expectHudValuesToInclude(expectedHudValues);
@@ -336,7 +337,7 @@ Cypress.Commands.add('assertNonCashBenefits', () => {
   cy.getById(`4.03.4`).find('input').uncheck();
   cy.expectHudValuesToInclude({
     ...expectedHudValues,
-    'IncomeBenefit.wic': false,
+    'IncomeBenefit.wic': 'NO',
   });
 });
 
@@ -382,16 +383,16 @@ Cypress.Commands.add('assertHealthInsurance', () => {
 
   const expectedHudValues = {
     'IncomeBenefit.insuranceFromAnySource': 'YES',
-    'IncomeBenefit.medicaid': true,
-    'IncomeBenefit.medicare': true,
-    'IncomeBenefit.schip': true,
-    'IncomeBenefit.vaMedicalServices': true,
-    'IncomeBenefit.employerProvided': true,
-    'IncomeBenefit.cobra': true,
-    'IncomeBenefit.privatePay': true,
-    'IncomeBenefit.stateHealthIns': true,
-    'IncomeBenefit.indianHealthServices': true,
-    'IncomeBenefit.otherInsurance': true,
+    'IncomeBenefit.medicaid': 'YES',
+    'IncomeBenefit.medicare': 'YES',
+    'IncomeBenefit.schip': 'YES',
+    'IncomeBenefit.vaMedicalServices': 'YES',
+    'IncomeBenefit.employerProvided': 'YES',
+    'IncomeBenefit.cobra': 'YES',
+    'IncomeBenefit.privatePay': 'YES',
+    'IncomeBenefit.stateHealthIns': 'YES',
+    'IncomeBenefit.indianHealthServices': 'YES',
+    'IncomeBenefit.otherInsurance': 'YES',
     'IncomeBenefit.otherInsuranceIdentify': 'other description',
   };
   cy.expectHudValuesToInclude(expectedHudValues);
@@ -413,7 +414,7 @@ Cypress.Commands.add('assertHealthInsurance', () => {
   cy.getById(`4.04.4`).find('input').uncheck();
   cy.expectHudValuesToInclude({
     ...expectedHudValues,
-    'IncomeBenefit.medicare': false,
+    'IncomeBenefit.medicare': 'NO',
   });
 });
 
@@ -444,7 +445,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Developmental
@@ -459,7 +460,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Chronic
@@ -479,7 +480,7 @@ Cypress.Commands.add('assertDisability', () => {
     'DisabilityGroup.disablingCondition': 'YES',
   });
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // HIV/AIDS
@@ -494,7 +495,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Mental Health
@@ -516,7 +517,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Substance Use
@@ -537,7 +538,7 @@ Cypress.Commands.add('assertDisability', () => {
   });
 
   // Clear
-  cy.getById('disability').findTestId('clearButton').click();
+  cy.clearFormSection('disability');
   cy.getById(overallCondition).should('not.have.value');
 
   // Test overriding system-generated NO with YES

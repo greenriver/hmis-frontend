@@ -83,4 +83,6 @@ const ClientName = forwardRef<Props, any>(
   }
 );
 
+ClientName.displayName = 'ClientName';
+
 export default ClientName;

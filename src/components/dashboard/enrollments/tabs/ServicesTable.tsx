@@ -6,6 +6,7 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -44,6 +45,7 @@ const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
     render: (e) => (
       <Stack>
         {serviceDetails(e).map((s, i) => (
+          // eslint-disable-next-line react/no-array-index-key
           <Typography key={i} variant='body2'>
             {s}
           </Typography>
@@ -86,31 +88,38 @@ const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
+  const [canEditEnrollments] = useHasClientPermissions(clientId, [
+    'canEditEnrollments',
+  ]);
+
   const columns = useMemo(
-    () => [
-      ...baseColumns,
-      {
-        header: '',
-        render: (record) => (
-          <Stack direction='row' spacing={1}>
-            <Button
-              data-testid='deleteService'
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                setRecordToDelete(record);
-              }}
-              size='small'
-              variant='outlined'
-              color='error'
-            >
-              Delete
-            </Button>
-          </Stack>
-        ),
-      },
-    ],
-    []
+    () =>
+      canEditEnrollments
+        ? [
+            ...baseColumns,
+            {
+              header: '',
+              render: (record) => (
+                <Stack direction='row' spacing={1}>
+                  <Button
+                    data-testid='deleteService'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setRecordToDelete(record);
+                    }}
+                    size='small'
+                    variant='outlined'
+                    color='error'
+                  >
+                    Delete
+                  </Button>
+                </Stack>
+              ),
+            },
+          ]
+        : baseColumns,
+    [canEditEnrollments]
   );
 
   return (

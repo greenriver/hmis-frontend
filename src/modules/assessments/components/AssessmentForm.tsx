@@ -1,21 +1,12 @@
-import LockIcon from '@mui/icons-material/Lock';
-import {
-  Alert,
-  AlertTitle,
-  Box,
-  Button,
-  Grid,
-  Paper,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
 
+import LockedAssessmentAlert from './LockedAssessmentAlert';
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
-import RouterLink from '@/components/elements/RouterLink';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -23,6 +14,7 @@ import {
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
+  DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
@@ -32,21 +24,19 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { DashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentRole,
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
+  FormRole,
   InitialBehavior,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
   // assessmentTitle: string;
-  assessmentRole?: AssessmentRole;
+  formRole?: FormRole;
   definition: FormDefinition;
   assessment?: AssessmentWithDefinitionAndValuesFragment;
   top?: number;
@@ -55,22 +45,27 @@ interface Props {
   FormActionProps?: DynamicFormProps['FormActionProps'];
   locked?: boolean;
   visible?: boolean;
+  formRef?: Ref<DynamicFormRef>;
 }
 
 const AssessmentForm = ({
   assessment,
-  assessmentRole,
+  formRole,
   definition,
   navigationTitle,
   enrollment,
   embeddedInWorkflow,
   FormActionProps,
-  locked = false,
+  formRef,
+  locked: lockedInitial,
   visible = true,
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
 }: Props) => {
   // Whether record picker dialog is open for autofill
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  // Whether assessment is locked
+  const [locked, setLocked] = useState(lockedInitial || false);
 
   // Most recently selected "source" assesment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
@@ -113,7 +108,7 @@ const AssessmentForm = ({
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
-      const sourceValues = source.assessmentDetail?.values;
+      const sourceValues = source.customForm?.values;
       if (sourceValues) {
         // Overlay initial values from source Assessment
         const initialFromSourceAssessment = createInitialValuesFromSavedValues(
@@ -200,31 +195,16 @@ const AssessmentForm = ({
           </Box>
         )}
         {locked && assessment && (
-          <Box sx={{ mb: 3 }}>
-            <Alert severity='info' icon={<LockIcon />}>
-              <AlertTitle>This assessment has been submitted.</AlertTitle>
-              {embeddedInWorkflow && (
-                <Box>
-                  <RouterLink
-                    to={generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
-                      clientId: enrollment.client.id,
-                      enrollmentId: enrollment.id,
-                      assessmentId: assessment.id,
-                    })}
-                    target='_blank'
-                  >
-                    Open in client context
-                  </RouterLink>{' '}
-                  to make changes to this assessment.
-                </Box>
-              )}
-            </Alert>
-          </Box>
+          <LockedAssessmentAlert
+            allowUnlock={embeddedInWorkflow}
+            onUnlock={() => setLocked(false)}
+          />
         )}
         <DynamicForm
           // Remount component if a source assessment has been selected
           key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
           definition={definition.definition}
+          ref={formRef}
           onSubmit={submitHandler}
           onSaveDraft={
             assessment && !assessment.inProgress ? undefined : saveDraftHandler
@@ -236,7 +216,7 @@ const AssessmentForm = ({
           locked={locked}
           visible={visible}
           showSavePrompt
-          showSavePromptInitial={embeddedInWorkflow ? true : undefined}
+          alwaysShowSaveSlide={!!embeddedInWorkflow}
           FormActionProps={FormActionProps}
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment
@@ -250,7 +230,7 @@ const AssessmentForm = ({
           id='assessmentPickerDialog'
           recordType='Assessment'
           open={dialogOpen}
-          role={assessmentRole}
+          role={formRole}
           onSelected={onSelectAutofillRecord}
           onCancel={() => setDialogOpen(false)}
           description={

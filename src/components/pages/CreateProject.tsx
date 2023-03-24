@@ -8,12 +8,7 @@ import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import {
-  CreateProjectDocument,
-  CreateProjectMutation,
-  CreateProjectMutationVariables,
-  ProjectAllFieldsFragment,
-} from '@/types/gqlTypes';
+import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const CreateProject = () => {
@@ -24,15 +19,14 @@ const CreateProject = () => {
   const { crumbs, organizationName } = useOrganizationCrumbs('Add Project');
 
   const onCompleted = useCallback(
-    (data: CreateProjectMutation) => {
-      const id = data?.createProject?.project?.id;
-      if (id) {
-        cache.evict({
-          id: `Organization:${organizationId}`,
-          fieldName: 'projects',
-        });
-        navigate(generateSafePath(Routes.PROJECT, { projectId: id }));
-      }
+    (createdProject: ProjectAllFieldsFragment) => {
+      cache.evict({
+        id: `Organization:${organizationId}`,
+        fieldName: 'projects',
+      });
+      navigate(
+        generateSafePath(Routes.PROJECT, { projectId: createdProject.id })
+      );
     },
     [navigate, organizationId]
   );
@@ -41,16 +35,10 @@ const CreateProject = () => {
 
   return (
     <ProjectLayout crumbs={crumbs}>
-      <EditRecord<
-        ProjectAllFieldsFragment,
-        CreateProjectMutation,
-        CreateProjectMutationVariables
-      >
-        definitionIdentifier='project'
-        queryDocument={CreateProjectDocument}
+      <EditRecord<ProjectAllFieldsFragment>
+        formRole={FormRole.Project}
         onCompleted={onCompleted}
         inputVariables={{ organizationId }}
-        getErrors={(data: CreateProjectMutation) => data?.createProject?.errors}
         FormActionProps={{ submitButtonText: 'Create Project' }}
         title={
           <Typography variant='h3' sx={{ pt: 0, mt: 0, pb: 4 }}>

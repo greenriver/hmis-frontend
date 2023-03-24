@@ -21,12 +21,11 @@ import {
 } from '@/modules/bedUnitManagement/bedUnitUtil';
 import BedsTable from '@/modules/bedUnitManagement/components/BedsTable';
 import UnitsTable from '@/modules/bedUnitManagement/components/UnitsTable';
-import DynamicForm from '@/modules/form/components/DynamicForm';
+import DynamicForm, {
+  DynamicFormOnSubmit,
+} from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
-import {
-  FormValues,
-  transformSubmitValues,
-} from '@/modules/form/util/formUtil';
+import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { Routes } from '@/routes/routes';
@@ -82,8 +81,8 @@ const InventoryBeds = () => {
     }
   );
 
-  const handleCreateBeds = useCallback(
-    (values: FormValues) => {
+  const handleCreateBeds: DynamicFormOnSubmit = useCallback(
+    (_event, values) => {
       const input = transformSubmitValues({
         definition: BedsDefinition,
         values,
@@ -95,8 +94,8 @@ const InventoryBeds = () => {
     [createBeds, inventoryId]
   );
 
-  const handleCreateUnits = useCallback(
-    (values: FormValues) => {
+  const handleCreateUnits: DynamicFormOnSubmit = useCallback(
+    (_event, values) => {
       const input = transformSubmitValues({
         definition: UnitsDefinition,
         values,

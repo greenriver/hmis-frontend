@@ -13,6 +13,7 @@ import InputContainer from './InputContainer';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
+import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
 import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
 import ProjectSelect from '@/components/elements/input/ProjectSelect';
@@ -291,6 +292,18 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             disabled={disabled}
+          />
+        );
+      } else if (
+        item.component === Component.Checkbox &&
+        item.pickListReference === 'NoYesMissing'
+      ) {
+        inputComponent = (
+          <NoYesMissingCheckbox
+            value={selectedVal}
+            onChange={onChangeValue}
+            horizontal={horizontal}
+            {...commonInputProps}
           />
         );
       } else if (

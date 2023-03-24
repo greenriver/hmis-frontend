@@ -4,13 +4,15 @@ import { AppBar, Box, Button } from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import {
-  STICKY_BAR_HEIGHT,
   CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
 } from '../../layoutConstants';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useClientName } from '@/modules/dataFetching/hooks/useClientName';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
@@ -28,6 +30,7 @@ const ContextHeader: React.FC<Props> = ({
 }) => {
   const isMobile = useIsMobile();
   const params = useSafeParams();
+  const { client } = useClientName(params.clientId);
 
   return (
     <AppBar
@@ -55,8 +58,9 @@ const ContextHeader: React.FC<Props> = ({
             variant='transparent'
             startIcon={<ArrowBackIcon fontSize='small' />}
             sx={{ height: '32px', fontWeight: 600, ml: 2 }}
+            data-testid='headerBackButton'
           >
-            Back
+            {`Back ${client ? 'to ' + clientBriefName(client) : ''}`}
           </ButtonLink>
         </Box>
       ) : (

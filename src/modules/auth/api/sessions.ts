@@ -64,10 +64,10 @@ export async function fetchCurrentUser(): Promise<HmisUser> {
       'X-CSRF-Token': getCsrfToken(),
     },
   });
-  if (response.status !== 200) {
-    return response.json().then(throwMaybeHmisError);
-  } else {
+  if (response.status == 200) {
     return response.json() as Promise<HmisUser>;
+  } else {
+    return Promise.reject(response.status);
   }
 }
 

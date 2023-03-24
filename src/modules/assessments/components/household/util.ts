@@ -1,5 +1,5 @@
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { AssessmentRole, RelationshipToHoH } from '@/types/gqlTypes';
+import { FormRole, RelationshipToHoH } from '@/types/gqlTypes';
 
 export enum AssessmentStatus {
   NotStarted,
@@ -18,9 +18,15 @@ export type TabDefinition = {
   id: string;
   clientName: string;
   client: ClientNameDobVeteranFields;
+  clientId: string;
   enrollmentId: string;
+  entryOrExitCompleted: boolean;
+  entryDate: string;
+  exitDate?: string;
+  enrollmentInProgress: boolean;
   assessmentId?: string;
   assessmentInProgress?: boolean;
+  assessmentSubmitted: boolean;
   assessmentDate?: string;
   isHoh: boolean;
   relationshipToHoH: RelationshipToHoH;
@@ -42,18 +48,18 @@ export const tabPanelA11yProps = (key: string) => {
 };
 
 const submittedText = {
-  [AssessmentRole.Intake]: 'Submitted',
-  [AssessmentRole.Exit]: 'Exited',
+  [FormRole.Intake]: 'Submitted',
+  [FormRole.Exit]: 'Exited',
 };
 
 const readyToSubmitText = {
-  [AssessmentRole.Intake]: 'Ready to Submit',
-  [AssessmentRole.Exit]: 'Ready to Exit',
+  [FormRole.Intake]: 'Ready to Submit',
+  [FormRole.Exit]: 'Ready to Exit',
 };
 
 export const labelForStatus = (
   status: AssessmentStatus,
-  role: AssessmentRole.Intake | AssessmentRole.Exit
+  role: FormRole.Intake | FormRole.Exit
 ) => {
   switch (status) {
     case AssessmentStatus.NotStarted:

@@ -47,9 +47,9 @@ export const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
           {import.meta.env.MODE === 'development' &&
             (
               (e as GraphQLError & { backtrace: string[] })?.backtrace || []
-            ).map((line, index) => (
+            ).map((line) => (
               <Typography
-                key={index}
+                key={line}
                 variant='caption'
                 sx={{ fontFamily: 'Monospace', display: 'block' }}
               >

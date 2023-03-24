@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { FormItem, ValidationError } from '@/types/gqlTypes';
 
+// BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
 export const HIDDEN_VALUE = '_HIDDEN';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
@@ -52,6 +53,7 @@ export interface GroupItemComponentProps {
   itemChanged: (linkId: string, value: any) => void;
   severalItemsChanged: (values: Record<string, any>) => void;
   visible?: boolean;
+  locked?: boolean;
 }
 
 export enum FormActionTypes {
