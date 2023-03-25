@@ -9,6 +9,8 @@ import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';
 
+import NotFound from './404';
+
 import useSafeParams from '@/hooks/useSafeParams';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -28,9 +30,6 @@ const Organization = () => {
   const { crumbs, loading, organization, organizationName } =
     useOrganizationCrumbs();
 
-  if (!loading && (!crumbs || !organization))
-    throw Error('Organization not found');
-
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
@@ -43,6 +42,9 @@ const Organization = () => {
       },
     });
 
+  if (!loading && (!crumbs || !organization)) {
+    return <NotFound />;
+  }
   if (deleteError) console.error(deleteError);
 
   const hasDetails = organization && organization?.description;

@@ -16,6 +16,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormOnSubmit,
@@ -174,7 +175,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
 
   if (definitionLoading) return <Loading />;
   if (definitionError) console.error(definitionError);
-  if (!definition) throw Error('Definition not found');
+  if (!definition) return <NotFound />;
 
   const form = (
     <>

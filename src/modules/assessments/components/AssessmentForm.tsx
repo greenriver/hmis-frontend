@@ -11,6 +11,7 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import DynamicForm, {
   DynamicFormProps,
@@ -149,7 +150,7 @@ const AssessmentForm = ({
   useScrollToHash(!enrollment || mutationLoading, top);
 
   // if (dataLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
+  if (!enrollment) return <NotFound />;
 
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>

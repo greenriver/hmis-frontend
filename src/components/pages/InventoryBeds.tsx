@@ -12,6 +12,7 @@ import { useCallback, useState } from 'react';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { InactiveChip } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
@@ -110,8 +111,8 @@ const InventoryBeds = () => {
   );
 
   if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
-  if (!data?.inventory) throw Error('Inventory not found');
+  if (!crumbs || !project) return <NotFound />;
+  if (!data?.inventory) return <NotFound />;
   if (error) throw error;
 
   return (

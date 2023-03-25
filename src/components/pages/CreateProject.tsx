@@ -2,6 +2,8 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import NotFound from './404';
+
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -31,7 +33,7 @@ const CreateProject = () => {
     [navigate, organizationId]
   );
 
-  if (!crumbs) throw Error('Organization not found');
+  if (!crumbs) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

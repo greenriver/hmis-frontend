@@ -32,7 +32,6 @@ export function useOrganizationCrumbs(current?: string) {
   } = useGetOrganizationQuery({ variables: { id: organizationId } });
 
   if (error) throw error;
-  if (!loading && !organization) throw Error('Organization not found');
 
   const organizationName =
     organizationNameFragment?.organizationName ||
@@ -51,7 +50,7 @@ export function useOrganizationCrumbs(current?: string) {
   return { crumbs, loading, organization, organizationName } as {
     crumbs: { label: string; to: string }[] | undefined;
     loading: boolean;
-    organization: GetOrganizationQuery['organization'] | undefined;
-    organizationName: string | undefined;
+    organization?: GetOrganizationQuery['organization'];
+    organizationName?: string;
   };
 }
