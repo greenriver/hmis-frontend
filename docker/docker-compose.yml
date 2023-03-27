@@ -1,0 +1,43 @@
+# Add/update your .envrc or source .envrc.sample
+# Run `docker compose up` in this directory to test a build
+# Wait until you see SUCCESS in the output
+
+version: '3.7'
+
+services:
+  hmis-frontend:
+    image: hmis-frontend:0.6
+    stdin_open: true
+    tty: true
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      # target: builder
+      args:
+        # I recommend installing https://direnv.net/ and copying .envrc.sample to
+        # .envrc in this directory
+        NODE_VERSION: ${NODE_VERSION}
+        GITHASH: 12345
+        USERID: ${USERID:-10000}
+        GROUPID: ${GROUPID:-10001}
+    ports: ["8080"]
+    environment:
+      NGINX_HOST: hmis-frontend.127.0.0.1.nip.io
+      NGINX_PORT: '8080'
+      HMIS_BACKEND: qa-hmis-warehouse.openpath.host
+    tmpfs:
+      - /tmp
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # locally, you can do this:
+  # wget --quiet -O - http://$(docker compose port hmis-frontend 8080) | grep assets
+  test:
+    image: busybox:latest
+    command: sh -c "wget --quiet -O - http://hmis-frontend:8080 | grep assets && echo SUCCESS"
+    depends_on:
+      hmis-frontend:
+        condition: service_healthy

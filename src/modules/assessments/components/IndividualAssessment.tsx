@@ -1,9 +1,9 @@
 import { Box, Stack, Typography } from '@mui/material';
 import * as Sentry from '@sentry/react';
-import { useEffect, useMemo } from 'react';
+import { Ref, useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
-import { assessmentDate, assessmentPrefix } from '../util';
+import { assessmentDate } from '../util';
 
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
@@ -14,14 +14,18 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
-import { DynamicFormProps } from '@/modules/form/components/DynamicForm';
+import {
+  DynamicFormProps,
+  DynamicFormRef,
+} from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import { DashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   FormRole,
@@ -41,6 +45,7 @@ export interface IndividualAssessmentProps {
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
   ) => DynamicFormProps['FormActionProps'];
+  formRef?: Ref<DynamicFormRef>;
 }
 
 /**
@@ -60,6 +65,7 @@ const IndividualAssessment = ({
   lockIfSubmitted,
   getFormActionProps,
   visible,
+  formRef,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
 
@@ -125,7 +131,7 @@ const IndividualAssessment = ({
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
   if (dataLoading || enrollmentLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
+  if (!enrollment) return <NotFound />;
 
   return (
     <>
@@ -153,19 +159,22 @@ const IndividualAssessment = ({
           FormActionProps={FormActionProps}
           locked={lockIfSubmitted && assessment && !assessment.inProgress}
           visible={visible}
+          formRef={formRef}
           navigationTitle={
             embeddedInWorkflow ? (
-              <Stack sx={{ mb: 3 }} gap={1}>
-                <Typography variant='h5'>{clientName}</Typography>
-                {formRole && assessmentPrefix(formRole) && (
-                  <Typography variant='body2'>
-                    {assessmentPrefix(formRole)} {enrollmentName(enrollment)}
+              <Stack sx={{ mb: 2 }} gap={1}>
+                <Typography variant='body1' fontWeight={600}>
+                  {clientName}
+                </Typography>
+                {formRole && (
+                  <Typography variant='h6'>
+                    {HmisEnums.FormRole[formRole]}
                   </Typography>
                 )}
               </Stack>
             ) : (
               <Typography variant='h6' sx={{ mb: 2 }}>
-                Form Navigation
+                {formRole ? HmisEnums.FormRole[formRole] : 'Form Navigation'}
               </Typography>
             )
           }

@@ -11,6 +11,11 @@ on:
       - "*"
       - "**/*"
 
+# You can kill currently running builds on the branch this way
+#concurrency:
+#  group: ${{ github.ref }}-ci
+#  cancel-in-progress: true
+
 jobs:
   build:
     name: Build
@@ -26,14 +31,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3.0.2
+        uses: actions/checkout@v3.4.0
 
       - name: Setup buildx
         uses: docker/setup-buildx-action@v2
 
       - name: Configure AWS credentials
         if: github.event_name != 'pull_request'
-        uses: aws-actions/configure-aws-credentials@v1.6.1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ secrets.AWS_ROLE }}
@@ -48,9 +53,9 @@ jobs:
           export GITHASH="${SHA::9}"
           export IMAGE_TAG="githash-${GITHASH}"
 
-          echo "::set-output name=node_version::$NODE_VERSION"
-          echo "::set-output name=git_hash::$GITHASH"
-          echo "::set-output name=image_tag::$IMAGE_TAG"
+          echo "node_version=$NODE_VERSION" >> $GITHUB_OUTPUT
+          echo "git_hash=$GITHASH" >> $GITHUB_OUTPUT
+          echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
       # Build and scan on PRs
       - name: Build container image for PR
@@ -82,7 +87,6 @@ jobs:
       - name: Login to Amazon ECR
         if: github.event_name != 'pull_request'
         uses: aws-actions/amazon-ecr-login@v1
-
 
       - name: Build container image
         if: github.event_name != 'pull_request'

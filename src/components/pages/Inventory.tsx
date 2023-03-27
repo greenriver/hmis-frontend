@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
@@ -65,8 +66,8 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   }, [project, inventoryId, data]);
 
   if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
-  if (!create && !data?.inventory) throw Error('Inventory not found');
+  if (!crumbs || !project) return <NotFound />;
+  if (!create && !data?.inventory) return <NotFound />;
   if (error) throw error;
 
   return (

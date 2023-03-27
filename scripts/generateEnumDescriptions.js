@@ -13,7 +13,7 @@ let output = `${generatedFiledHeader}\nexport const HmisEnums = {`;
 // const DESCRIPTION_DELIM = ' – ';
 
 const CODE_PATTERN_NUMERIC = /^\(([0-9]*)\) /;
-const CODE_PATTERN = /^\(([a-zA-Z0-9]*)\) /;
+const CODE_PATTERN = /^\(([a-zA-Z0-9_]*)\) /;
 
 const ALPHABETICAL = ['FundingSource', 'ServiceSubTypeProvided'];
 

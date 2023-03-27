@@ -1,6 +1,13 @@
 import { Box, Grid } from '@mui/material';
 import { isNil } from 'lodash-es';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  forwardRef,
+  Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useState,
+} from 'react';
 
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
@@ -49,139 +56,173 @@ export interface DynamicFormProps
     'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
 }
+export interface DynamicFormRef {
+  SaveIfDirty: (callback: VoidFunction) => void;
+}
 
-const DynamicForm: React.FC<DynamicFormProps> = ({
-  definition,
-  onSubmit,
-  onSaveDraft,
-  loading,
-  initialValues = {},
-  errors: validations,
-  showSavePrompt = false,
-  alwaysShowSaveSlide = false,
-  horizontal = false,
-  warnIfEmpty = false,
-  locked = false,
-  visible = true,
-  pickListRelationId,
-  FormActionProps = {},
-  FormWarningDialogProps = {},
-}) => {
-  const { renderFields, getCleanedValues } = useDynamicFormFields({
-    definition,
-    initialValues,
-  });
-  const { errors, warnings } = useValidations(validations);
+const DynamicForm = forwardRef(
+  (
+    {
+      definition,
+      onSubmit,
+      onSaveDraft,
+      loading,
+      initialValues = {},
+      errors: validations,
+      showSavePrompt = false,
+      alwaysShowSaveSlide = false,
+      horizontal = false,
+      warnIfEmpty = false,
+      locked = false,
+      visible = true,
+      pickListRelationId,
+      FormActionProps = {},
+      FormWarningDialogProps = {},
+    }: DynamicFormProps,
+    ref: Ref<DynamicFormRef>
+  ) => {
+    const { renderFields, getCleanedValues } = useDynamicFormFields({
+      definition,
+      initialValues,
+    });
+    const { errors, warnings } = useValidations(validations);
 
-  const [promptSave, setPromptSave] = useState<boolean | undefined>();
-  const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
+    const [dirty, setDirty] = useState(false);
 
-  const saveButtonsRef = React.createRef<HTMLDivElement>();
-  const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
+    const [promptSave, setPromptSave] = useState<boolean | undefined>();
+    const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isNil(promptSave)) return;
-    setPromptSave(!isSaveButtonVisible);
-  }, [isSaveButtonVisible, promptSave]);
+    const saveButtonsRef = React.createRef<HTMLDivElement>();
+    const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
-  useEffect(() => {
-    // if we have warnings and no errors, show dialog. otherwise hide it.
-    setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
-  }, [errors, warnings]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        SaveIfDirty: (onSuccessCallback) => {
+          if (!onSaveDraft) return;
+          if (dirty) {
+            onSaveDraft(getCleanedValues(), () => {
+              setDirty(false);
+              onSuccessCallback();
+            });
+          }
+        },
+      }),
+      [dirty, getCleanedValues, onSaveDraft]
+    );
 
-  const handleSubmit = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>, onSuccess?: VoidFunction) => {
-      const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, false, onSuccess);
-    },
-    [onSubmit, getCleanedValues]
-  );
+    useEffect(() => {
+      if (isNil(promptSave)) return;
+      setPromptSave(!isSaveButtonVisible);
+    }, [isSaveButtonVisible, promptSave]);
 
-  const handleConfirm = useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      // Hacky why to pull the appropriate onSuccess callback from FormActionProps
-      const onSuccess = (FormActionProps.config || []).find(
-        (b) => b.action === FormActionTypes.Submit
-      )?.onSuccess;
+    useEffect(() => {
+      // if we have warnings and no errors, show dialog. otherwise hide it.
+      setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
+    }, [errors, warnings]);
 
-      const valuesToSubmit = getCleanedValues();
-      onSubmit(event, valuesToSubmit, true, onSuccess);
-    },
-    [onSubmit, getCleanedValues, FormActionProps]
-  );
+    const handleSubmit = useCallback(
+      (
+        event: React.MouseEvent<HTMLButtonElement>,
+        onSuccess?: VoidFunction
+      ) => {
+        const valuesToSubmit = getCleanedValues();
+        onSubmit(event, valuesToSubmit, false, onSuccess);
+      },
+      [onSubmit, getCleanedValues]
+    );
 
-  const handleSaveDraft = useCallback(
-    (onSuccess?: VoidFunction) => {
-      if (!onSaveDraft) return;
-      onSaveDraft(getCleanedValues(), onSuccess);
-    },
-    [onSaveDraft, getCleanedValues]
-  );
+    const handleConfirm = useCallback(
+      (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        // Hacky why to pull the appropriate onSuccess callback from FormActionProps
+        const onSuccess = (FormActionProps.config || []).find(
+          (b) => b.action === FormActionTypes.Submit
+        )?.onSuccess;
 
-  const saveButtons = (
-    <FormActions
-      onSubmit={handleSubmit}
-      onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-      disabled={locked || !!loading || showConfirmDialog}
-      loading={loading}
-      {...FormActionProps}
-    />
-  );
+        const valuesToSubmit = getCleanedValues();
+        onSubmit(event, valuesToSubmit, true, onSuccess);
+      },
+      [onSubmit, getCleanedValues, FormActionProps]
+    );
 
-  return (
-    <Box
-      component='form'
-      onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
-    >
-      <Grid container direction='column' spacing={2}>
-        {errors.length > 0 && (
-          <Grid item>
-            <ErrorAlert errors={errors} />
-          </Grid>
+    const handleSaveDraft = useCallback(
+      (onSuccess?: VoidFunction) => {
+        if (!onSaveDraft) return;
+        onSaveDraft(getCleanedValues(), onSuccess);
+      },
+      [onSaveDraft, getCleanedValues]
+    );
+
+    const handleChangeCallback = useCallback(() => {
+      setPromptSave(true);
+      setDirty(true);
+    }, []);
+
+    const saveButtons = (
+      <FormActions
+        onSubmit={handleSubmit}
+        onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
+        disabled={locked || !!loading || showConfirmDialog}
+        loading={loading}
+        {...FormActionProps}
+      />
+    );
+
+    return (
+      <Box
+        component='form'
+        onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
+      >
+        <Grid container direction='column' spacing={2}>
+          {errors.length > 0 && (
+            <Grid item>
+              <ErrorAlert errors={errors} />
+            </Grid>
+          )}
+          {renderFields({
+            itemChanged: handleChangeCallback,
+            severalItemsChanged: handleChangeCallback,
+            errors,
+            warnings,
+            horizontal,
+            pickListRelationId,
+            warnIfEmpty,
+            locked,
+            visible,
+          })}
+        </Grid>
+        {!alwaysShowSaveSlide && (
+          <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
+            {saveButtons}
+          </Box>
         )}
-        {renderFields({
-          itemChanged: () => setPromptSave(true),
-          severalItemsChanged: () => setPromptSave(true),
-          errors,
-          warnings,
-          horizontal,
-          pickListRelationId,
-          warnIfEmpty,
-          locked,
-          visible,
-        })}
-      </Grid>
-      {!alwaysShowSaveSlide && (
-        <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
-          {saveButtons}
-        </Box>
-      )}
 
-      {showConfirmDialog && (
-        <FormWarningDialog
-          open
-          onConfirm={handleConfirm}
-          onCancel={() => setShowConfirmDialog(false)}
-          loading={loading || false}
-          confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-          warnings={warnings}
-          {...FormWarningDialogProps}
-        />
-      )}
+        {showConfirmDialog && (
+          <FormWarningDialog
+            open
+            onConfirm={handleConfirm}
+            onCancel={() => setShowConfirmDialog(false)}
+            loading={loading || false}
+            confirmText={FormActionProps?.submitButtonText || 'Confirm'}
+            warnings={warnings}
+            {...FormWarningDialogProps}
+          />
+        )}
 
-      {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
-        <SaveSlide
-          in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
-          appear
-          timeout={300}
-          direction='up'
-        >
-          {saveButtons}
-        </SaveSlide>
-      )}
-    </Box>
-  );
-};
+        {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
+          <SaveSlide
+            in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}
+            appear
+            timeout={300}
+            direction='up'
+          >
+            {saveButtons}
+          </SaveSlide>
+        )}
+      </Box>
+    );
+  }
+);
 
 export default DynamicForm;
