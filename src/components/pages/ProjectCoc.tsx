@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
@@ -41,8 +42,8 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
   });
 
   if (loading || crumbsLoading) return <Loading />;
+  if (!crumbs || !project) return <NotFound />;
   if (error) throw error;
-  if (!crumbs || !project) throw Error('Project not found');
 
   return (
     <ProjectLayout crumbs={crumbs}>
