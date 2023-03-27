@@ -46,7 +46,11 @@ const AllFiles = () => {
       {
         header: 'Name',
         render: (file) => (
-          <Link component='button' onClick={() => setViewingFile(file)}>
+          <Link
+            component='button'
+            onClick={() => setViewingFile(file)}
+            align='left'
+          >
             {file.name}
           </Link>
         ),
@@ -63,6 +67,7 @@ const AllFiles = () => {
                 );
                 return (
                   <Chip
+                    key={item?.code || tag}
                     label={item?.label || tag}
                     id={`tag-${item?.code || tag}`}
                     size='small'

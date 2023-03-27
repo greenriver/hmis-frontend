@@ -1,9 +1,10 @@
-import { Button, CircularProgress, Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { uniq } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
@@ -60,6 +61,7 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
     (file: FileFieldsFragment) => {
       const downloadButton = (
         <Button
+          key='download'
           data-testid='downloadFile'
           component='a'
           href={file.url}
@@ -73,6 +75,7 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
 
       const editButton = (
         <Button
+          key='edit'
           data-testid='editFile'
           size='small'
           variant='outlined'
@@ -88,7 +91,8 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
       );
 
       const deleteButton = (
-        <Button
+        <LoadingButton
+          key='delete'
           data-testid='deleteFile'
           disabled={deletingIds.includes(file.id)}
           onClick={() => {
@@ -96,15 +100,11 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
           }}
           size='small'
           variant='outlined'
-          endIcon={
-            deletingIds.includes(file.id) && (
-              <CircularProgress size={15} color='inherit' />
-            )
-          }
+          loading={deletingIds.includes(file.id)}
           color='error'
         >
           {deletingIds.includes(file.id) ? 'Deleting' : 'Delete'}
-        </Button>
+        </LoadingButton>
       );
 
       return {

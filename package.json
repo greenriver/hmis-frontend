@@ -26,6 +26,7 @@
       "eslint --fix --ignore-path .gitignore"
     ],
     "*": [
+      "eslint --fix --ignore-path .gitignore",
       "prettier --write"
     ]
   },
@@ -82,6 +83,7 @@
     "jest-environment-jsdom": "^28.1.0",
     "lodash-es": "^4.17.21",
     "material-ui-popup-state": "^5.0.4",
+    "pdfjs-dist": "^2.16.105",
     "pluralize": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
