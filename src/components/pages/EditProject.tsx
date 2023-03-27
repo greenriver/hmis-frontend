@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { InactiveChip } from './Project';
 
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -35,7 +36,7 @@ const EditProject = () => {
   );
 
   if (loading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
+  if (!crumbs || !project) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

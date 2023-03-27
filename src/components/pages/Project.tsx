@@ -19,6 +19,8 @@ import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';
 
+import NotFound from './404';
+
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
@@ -142,7 +144,7 @@ const Project = () => {
 
   if (loading) return <Loading />;
   if (deleteError) console.error(deleteError);
-  if (!crumbs || !project) throw Error('Project not found');
+  if (!crumbs || !project) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

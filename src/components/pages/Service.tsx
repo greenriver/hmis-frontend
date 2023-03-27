@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
+
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
@@ -45,7 +47,7 @@ const Service = ({ create = false }: { create?: boolean }) => {
   if (loading) return <Loading />;
   // if (crumbsLoading) return <Loading />
   if (error) throw error;
-  if (!create && !loading && !data?.service) throw Error('Service not found');
+  if (!create && !loading && !data?.service) return <NotFound />;
 
   return (
     <EditRecord<ServiceFieldsFragment>

@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash-es';
 import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
+import NotFound from '@/components/pages/404';
 import DynamicField from '@/modules/form/components/DynamicField';
 import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
@@ -225,7 +226,7 @@ const BulkAddWrapper = <
   const definition = data?.getFormDefinition?.definition;
 
   if (loading) return <Loading />;
-  if (!definition) throw Error('Definition not found');
+  if (!definition) return <NotFound />;
 
   return <BulkAdd {...props} definition={definition} />;
 };

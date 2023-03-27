@@ -6,6 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -23,7 +24,7 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
-  if (!enrollment) throw Error('Enrollment not found');
+  if (!enrollment) return <NotFound />;
 
   return (
     <>

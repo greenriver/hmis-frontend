@@ -14,6 +14,7 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
@@ -130,7 +131,7 @@ const IndividualAssessment = ({
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
   if (dataLoading || enrollmentLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
+  if (!enrollment) return <NotFound />;
 
   return (
     <>

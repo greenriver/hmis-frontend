@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
+
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
@@ -27,7 +29,7 @@ const EditOrganization = () => {
   );
 
   if (loading) return <Loading />;
-  if (!crumbs || !organization) throw Error('Organization not found');
+  if (!crumbs || !organization) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>
