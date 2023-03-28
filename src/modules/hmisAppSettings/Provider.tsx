@@ -11,14 +11,14 @@ interface Props {
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [fetched, setFetched] = useState<HmisAppSettings>();
+  const [error, setError] = useState<Error>();
   useEffect(() => {
     const controller = new AbortController();
-    fetchHmisAppSettings().then(setFetched);
+    fetchHmisAppSettings().then(setFetched).catch(setError);
     return () => controller.abort();
   }, []);
-  if (!fetched) {
-    return <Loading />;
-  }
+  if (error) throw error;
+  if (!fetched) return <Loading />;
   return (
     <HmisAppSettingsContext.Provider value={fetched}>
       {children}
