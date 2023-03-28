@@ -4,9 +4,10 @@ import { useState } from 'react';
 import OktaLoginForm from './OktaLoginForm';
 
 import LoginForm from '@/modules/auth/components/LoginForm';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
 
-const oktaPath = import.meta.env.PUBLIC_OKTA_SSO_PATH;
 const Login: React.FC = () => {
+  const { oktaPath } = useHmisAppSettings();
   const [showPwLogin, setShowPwLogin] = useState(!oktaPath);
   return (
     <Container component='main' maxWidth='xs'>
