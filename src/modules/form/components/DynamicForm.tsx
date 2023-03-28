@@ -60,7 +60,7 @@ export interface DynamicFormProps
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
-  SubmitIfDirty: (callback: VoidFunction) => void;
+  SubmitIfDirty: (ignoreWarnings: boolean, callback: VoidFunction) => void;
 }
 
 const DynamicForm = forwardRef(
@@ -102,17 +102,17 @@ const DynamicForm = forwardRef(
       ref,
       () => ({
         SaveIfDirty: (onSuccessCallback) => {
-          if (!onSaveDraft || !dirty) return;
+          if (!onSaveDraft || !dirty || locked) return;
           onSaveDraft(getCleanedValues(), () => {
             setDirty(false);
             onSuccessCallback();
           });
         },
-        SubmitIfDirty: (onSuccessCallback) => {
-          if (!onSubmit || !dirty) return;
+        SubmitIfDirty: (ignoreWarnings: boolean, onSuccessCallback) => {
+          if (!onSubmit || !dirty || locked) return;
           onSubmit({
             values: getCleanedValues(),
-            confirmed: false,
+            confirmed: ignoreWarnings,
             onSuccess: () => {
               setDirty(false);
               onSuccessCallback();
@@ -120,7 +120,7 @@ const DynamicForm = forwardRef(
           });
         },
       }),
-      [dirty, getCleanedValues, onSaveDraft, onSubmit]
+      [dirty, getCleanedValues, onSaveDraft, onSubmit, locked]
     );
 
     useEffect(() => {
