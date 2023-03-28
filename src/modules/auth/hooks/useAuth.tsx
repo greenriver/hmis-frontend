@@ -100,6 +100,7 @@ export function AuthProvider({
           // get a new CSRF token
           return sessionsApi.fetchCurrentUser();
         })
+        .catch(() => {}) // Ignore 401 and other errors
         .finally(() => {
           setUser(undefined);
           setLoading(false);
@@ -160,7 +161,7 @@ export function AuthProvider({
       // if the user session has already expired.
       .fetchCurrentUser()
       .then((user) => setUser(user))
-      .catch(() => {})
+      .catch(() => {}) // Ignore 401 and other errors
       .finally(() => setLoadingInitial(false));
   }, []);
 
