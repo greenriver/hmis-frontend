@@ -169,6 +169,19 @@ const HouseholdSummaryTable = ({
           return <Typography>{parseAndFormatDate(dateString)}</Typography>;
         },
       },
+      // TODO pull out Destination from WIP assmt
+      // ...(role === FormRole.Exit
+      //   ? [
+      //       {
+      //         header: `Destination`,
+      //         key: 'destination',
+      //         width: '10%',
+      //         render: (row) => {
+      //           return 'destination';
+      //         },
+      //       },
+      //     ]
+      //   : []),
     ];
   }, [checked, onClickCheckbox, role, tabs, setCurrentTab]);
 

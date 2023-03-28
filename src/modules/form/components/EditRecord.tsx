@@ -127,9 +127,10 @@ const EditRecord = <RecordType extends AllowedTypes>({
   }, [record, definition, itemMap, localConstants]);
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false) => {
+    ({ event, values, confirmed = false }) => {
       if (!definition) return;
       if (
+        event &&
         debugFormValues(
           event,
           values,

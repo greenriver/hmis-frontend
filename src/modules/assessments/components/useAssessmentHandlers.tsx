@@ -78,9 +78,10 @@ export function useAssessmentHandlers({
   ] = useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false, onSuccessCallback = undefined) => {
+    ({ event, values, confirmed = false, onSuccess }) => {
       if (!definition) return;
       if (
+        event &&
         debugFormValues(
           event,
           values,
@@ -104,8 +105,8 @@ export function useAssessmentHandlers({
         variables: { input: { input } },
         onCompleted: (data) => {
           onCompleted(data);
-          if (data.submitAssessment?.assessment && onSuccessCallback) {
-            onSuccessCallback();
+          if (data.submitAssessment?.assessment && onSuccess) {
+            onSuccess();
           }
         },
       });

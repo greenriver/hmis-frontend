@@ -83,7 +83,7 @@ const InventoryBeds = () => {
   );
 
   const handleCreateBeds: DynamicFormOnSubmit = useCallback(
-    (_event, values) => {
+    ({ values }) => {
       const input = transformSubmitValues({
         definition: BedsDefinition,
         values,
@@ -96,7 +96,7 @@ const InventoryBeds = () => {
   );
 
   const handleCreateUnits: DynamicFormOnSubmit = useCallback(
-    (_event, values) => {
+    ({ values }) => {
       const input = transformSubmitValues({
         definition: UnitsDefinition,
         values,

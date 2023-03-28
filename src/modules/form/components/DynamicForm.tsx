@@ -22,12 +22,14 @@ import SaveSlide from './SaveSlide';
 import { useValidations } from '@/modules/assessments/components/useValidations';
 import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
 
-export type DynamicFormOnSubmit = (
-  event: React.MouseEvent<HTMLButtonElement>,
-  values: FormValues,
-  confirmed?: boolean,
-  onSuccess?: VoidFunction
-) => void;
+interface DynamicFormSubmitInput {
+  values: FormValues;
+  confirmed?: boolean;
+  event?: React.MouseEvent<HTMLButtonElement>;
+  onSuccess?: VoidFunction;
+}
+
+export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
 
 export interface DynamicFormProps
   extends Omit<
@@ -58,6 +60,7 @@ export interface DynamicFormProps
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
+  SubmitIfDirty: (callback: VoidFunction) => void;
 }
 
 const DynamicForm = forwardRef(
@@ -99,16 +102,25 @@ const DynamicForm = forwardRef(
       ref,
       () => ({
         SaveIfDirty: (onSuccessCallback) => {
-          if (!onSaveDraft) return;
-          if (dirty) {
-            onSaveDraft(getCleanedValues(), () => {
+          if (!onSaveDraft || !dirty) return;
+          onSaveDraft(getCleanedValues(), () => {
+            setDirty(false);
+            onSuccessCallback();
+          });
+        },
+        SubmitIfDirty: (onSuccessCallback) => {
+          if (!onSubmit || !dirty) return;
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: false,
+            onSuccess: () => {
               setDirty(false);
               onSuccessCallback();
-            });
-          }
+            },
+          });
         },
       }),
-      [dirty, getCleanedValues, onSaveDraft]
+      [dirty, getCleanedValues, onSaveDraft, onSubmit]
     );
 
     useEffect(() => {
@@ -126,8 +138,12 @@ const DynamicForm = forwardRef(
         event: React.MouseEvent<HTMLButtonElement>,
         onSuccess?: VoidFunction
       ) => {
-        const valuesToSubmit = getCleanedValues();
-        onSubmit(event, valuesToSubmit, false, onSuccess);
+        onSubmit({
+          values: getCleanedValues(),
+          confirmed: false,
+          event,
+          onSuccess,
+        });
       },
       [onSubmit, getCleanedValues]
     );
@@ -140,8 +156,12 @@ const DynamicForm = forwardRef(
           (b) => b.action === FormActionTypes.Submit
         )?.onSuccess;
 
-        const valuesToSubmit = getCleanedValues();
-        onSubmit(event, valuesToSubmit, true, onSuccess);
+        onSubmit({
+          values: getCleanedValues(),
+          confirmed: true,
+          event,
+          onSuccess,
+        });
       },
       [onSubmit, getCleanedValues, FormActionProps]
     );
