@@ -243,7 +243,7 @@ const EditHouseholdMemberTable = ({
         ),
       },
     ];
-  }, [clientId, hoh, refetch, setHighlight, highlight]);
+  }, [clientId, hoh, refetch, setHighlight, highlight, allInProgress]);
 
   return (
     <>
