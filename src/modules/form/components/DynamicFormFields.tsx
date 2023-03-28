@@ -136,7 +136,7 @@ const DynamicFormFields: React.FC<Props> = ({
 
   const itemChanged = useCallback(
     (linkId: string, value: any) => {
-      if (itemChangedProp) itemChangedProp(linkId, value);
+      if (itemChangedProp) itemChangedProp(linkId, value); // Pass whther it was system or not
       setValues((currentValues) => {
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment

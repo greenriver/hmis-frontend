@@ -176,7 +176,7 @@ const DynamicForm = forwardRef(
 
     const handleChangeCallback = useCallback(() => {
       setPromptSave(true);
-      setDirty(true);
+      setDirty(true); // FIXME
     }, []);
 
     const saveButtons = (
