@@ -96,6 +96,7 @@ const AllEnrollments = () => {
           rowLinkTo={rowLinkTo}
           columns={columns}
           pagePath='client.enrollments'
+          fetchPolicy='cache-and-network'
         />
       </Paper>
     </>

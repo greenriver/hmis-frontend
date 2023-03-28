@@ -145,10 +145,8 @@ const AllFiles = () => {
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientFilesDocument}
-          // rowLinkTo={canEdit ? rowLinkTo : undefined}
           columns={columns}
           pagePath='client.files'
-          // fetchPolicy='cache-and-network'
         />
       </Paper>
       {viewingFile && (
