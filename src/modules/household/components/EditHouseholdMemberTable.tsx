@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 
-import EntryDateInput from './EntryDateInput';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
 import ClientName from '@/modules/client/components/ClientName';
@@ -132,6 +132,11 @@ const EditHouseholdMemberTable = ({
     [setHoHMutate, proposedHoH, householdId]
   );
 
+  const allInProgress = useMemo(
+    () => !currentMembers.find((hc) => !hc.enrollment.inProgress),
+    [currentMembers]
+  );
+
   const columns = useMemo(() => {
     return [
       {
@@ -156,19 +161,25 @@ const EditHouseholdMemberTable = ({
         ),
       },
       {
+        header: 'Enrollment Period',
+        key: 'status',
         width: '20%',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <EnrollmentStatus
+            enrollment={hc.enrollment}
+            activeColor='text.primary'
+            closedColor='text.primary'
+            hideIcon
+            withActiveRange
+          />
+        ),
+      },
+      {
+        width: '15%',
         header: 'DOB / Age',
         key: 'dob',
         render: (hc: HouseholdClientFieldsFragment) => (
           <ClientDobAge client={hc.client} reveal />
-        ),
-      },
-      {
-        header: <Box sx={{ pl: 4 }}>Entry Date</Box>,
-        key: 'entry',
-        width: '20%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <EntryDateInput enrollment={hc.enrollment} />
         ),
       },
       {
@@ -186,6 +197,13 @@ const EditHouseholdMemberTable = ({
             componentsProps={{ typography: { variant: 'body2' } }}
             label='HoH'
             labelPlacement='end'
+            disabled={
+              // Can't set exited member to HoH
+              !!hc.enrollment.exitDate ||
+              // Can't set WIP member to HoH (unless ALL members are WIP)
+              (hc.enrollment.inProgress && !allInProgress)
+              // TODO: Can't set child to HoH?
+            }
             onChange={() => {
               setProposedHoH(hc.client);
             }}

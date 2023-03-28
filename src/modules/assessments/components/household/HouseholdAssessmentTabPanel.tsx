@@ -50,21 +50,23 @@ const HouseholdAssessmentTabPanel = memo(
       if (!formRef.current) return;
       if (wasActive && !active) {
         if (assessmentSubmitted) {
-          // TODO: do we want to auto-submit?
-          console.log(`Ignoring ${clientName}, no auto-submit`);
-          return;
+          console.debug(`Submitting ${clientName}...`);
+          formRef.current.SubmitIfDirty(true, () => {
+            // TODO: Update tab status to 'error' if error?
+            console.debug(`Submitted ${clientName}!`);
+          });
+        } else {
+          console.debug(`Saving ${clientName}...`);
+          formRef.current.SaveIfDirty(() => {
+            // TODO: Update tab status to 'error' if error?
+            console.debug(`Saved ${clientName}!`);
+            if (!assessmentId) {
+              // This was a NEW assessment; we need to re-fetch to get it
+              updateTabStatus(AssessmentStatus.Started, id);
+              refetch();
+            }
+          });
         }
-
-        console.debug(`Saving ${clientName}...`);
-        formRef.current.SaveIfDirty(() => {
-          // TODO: Update tab status to 'error' if error?
-          console.debug(`Saved ${clientName}!`);
-          if (!assessmentId) {
-            // This was a NEW assessment; we need to re-fetch to get it
-            updateTabStatus(AssessmentStatus.Started, id);
-            refetch();
-          }
-        });
       }
     });
 

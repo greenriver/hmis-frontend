@@ -237,8 +237,18 @@ export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
     ? client.pronouns.join(', ')
     : null;
 
-export const entryExitRange = (enrollment: EnrollmentFieldsFragment) => {
-  return parseAndFormatDateRange(enrollment.entryDate, enrollment.exitDate);
+export const entryExitRange = (
+  enrollment:
+    | EnrollmentFieldsFragment
+    | HouseholdClientFieldsFragment['enrollment'],
+  endPlaceholder?: string
+) => {
+  return parseAndFormatDateRange(
+    enrollment.entryDate,
+    enrollment.exitDate,
+    undefined,
+    endPlaceholder
+  );
 };
 
 // Open, or closed within the last X days
