@@ -51,7 +51,7 @@ const HouseholdAssessmentTabPanel = memo(
       if (wasActive && !active) {
         if (assessmentSubmitted) {
           console.debug(`Submitting ${clientName}...`);
-          formRef.current.SubmitIfDirty(() => {
+          formRef.current.SubmitIfDirty(true, () => {
             // TODO: Update tab status to 'error' if error?
             console.debug(`Submitted ${clientName}!`);
           });
