@@ -7,11 +7,11 @@ import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   FileFieldsFragment,
   useDeleteClientFileMutation,
-  useGetClientFilesQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -34,7 +34,6 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
   const [canEditAny] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
   ]);
-  const { refetch } = useGetClientFilesQuery({ variables: { id: clientId } });
 
   const [deleteFile] = useDeleteClientFileMutation();
 
@@ -45,16 +44,16 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
       return deleteFile({
         variables: { input: { fileId } },
       }).finally(() => {
-        // * Using refetch here instead of eviction because it prevents a table load after delete and makes it easier to set deleting ids correctly
-        refetch().then(() => {
-          setDeletingIds((ids) => ids.filter((id) => id !== fileId));
-          setFileToDelete(undefined);
-          setDeleting(false);
-          onDeleteFile(fileId);
+        cache.evict({
+          id: `File:${fileId}`,
         });
+        setDeletingIds((ids) => ids.filter((id) => id !== fileId));
+        setFileToDelete(undefined);
+        setDeleting(false);
+        onDeleteFile(fileId);
       });
     },
-    [deleteFile, refetch, onDeleteFile]
+    [deleteFile, onDeleteFile]
   );
 
   const getActionsForFile = useCallback(
