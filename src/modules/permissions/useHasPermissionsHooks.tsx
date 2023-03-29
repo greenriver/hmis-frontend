@@ -101,6 +101,17 @@ export const useHasClientPermissions = (
   return useMemo(() => [result, clientData] as const, [result, clientData]);
 };
 
+export const useClientPermissions = (id: string) => {
+  const clientData = useGetClientPermissionsQuery({
+    variables: { id },
+  });
+
+  return useMemo(
+    () => [clientData?.data?.client?.access, clientData] as const,
+    [clientData]
+  );
+};
+
 export type RootPermissions = keyof Omit<QueryAccess, '__typename'>;
 export const useHasRootPermissions = (
   permissions: RootPermissions[],

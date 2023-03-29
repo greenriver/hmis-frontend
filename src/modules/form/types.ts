@@ -1,5 +1,7 @@
 import { ReactNode } from 'react';
 
+import { FormValues } from './util/formUtil';
+
 import { FormItem, ValidationError } from '@/types/gqlTypes';
 
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
@@ -7,10 +9,26 @@ export const HIDDEN_VALUE = '_HIDDEN';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
+export enum ChangeType {
+  User,
+  System,
+}
+
+export type ItemChangedFn = (input: {
+  linkId: string;
+  value: any;
+  type: ChangeType;
+}) => void;
+
+export type SeveralItemsChangedFn = (input: {
+  values: FormValues;
+  type: ChangeType;
+}) => void;
+
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
-  itemChanged: (linkId: string, value: any) => void;
+  itemChanged: ItemChangedFn;
   nestingLevel: number;
   value: any;
   disabled?: boolean;
@@ -50,8 +68,8 @@ export interface GroupItemComponentProps {
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
   values: Record<string, any>;
-  itemChanged: (linkId: string, value: any) => void;
-  severalItemsChanged: (values: Record<string, any>) => void;
+  itemChanged: ItemChangedFn;
+  severalItemsChanged: SeveralItemsChangedFn;
   visible?: boolean;
   locked?: boolean;
 }

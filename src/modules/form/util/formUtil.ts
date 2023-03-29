@@ -68,6 +68,17 @@ export function isPickListOption(
   );
 }
 
+export function isPickListOptionArray(
+  value: any | null | undefined
+): value is PickListOption[] {
+  return (
+    !isNil(value) &&
+    Array.isArray(value) &&
+    value.length > 0 &&
+    isPickListOption(value[0])
+  );
+}
+
 export function areEqualValues(
   value1: any | null | undefined,
   value2: any | null | undefined

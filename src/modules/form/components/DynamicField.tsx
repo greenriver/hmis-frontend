@@ -1,10 +1,18 @@
 import { Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
-import React from 'react';
+import { intersectionBy, isNil } from 'lodash-es';
+import React, { useCallback } from 'react';
 
 import { usePickList } from '../hooks/usePickList';
-import { DynamicFieldProps, DynamicInputCommonProps } from '../types';
-import { hasMeaningfulValue, isPickListOption } from '../util/formUtil';
+import {
+  ChangeType,
+  DynamicFieldProps,
+  DynamicInputCommonProps,
+} from '../types';
+import {
+  hasMeaningfulValue,
+  isPickListOption,
+  isPickListOptionArray,
+} from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -15,8 +23,6 @@ import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
 import NoYesMissingCheckbox from '@/components/elements/input/NoYesMissingCheckbox';
 import NumberInput from '@/components/elements/input/NumberInput';
-import OrganizationSelect from '@/components/elements/input/OrganizationSelect';
-import ProjectSelect from '@/components/elements/input/ProjectSelect';
 import RadioGroupInput from '@/components/elements/input/RadioGroupInput';
 import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
@@ -68,11 +74,22 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   noLabel = false,
   warnIfEmpty = false,
 }) => {
-  const onChangeEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
-    itemChanged(item.linkId, e.target.value);
-  const onChangeValue = (val: any) => itemChanged(item.linkId, val);
-  const onChangeEventValue = (_: any, val: any) =>
-    itemChanged(item.linkId, val);
+  const { linkId } = item;
+  const onChangeEvent = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) =>
+      itemChanged({ linkId, value: e.target.value, type: ChangeType.User }),
+    [linkId, itemChanged]
+  );
+  const onChangeValue = useCallback(
+    (value: any) => itemChanged({ linkId, value, type: ChangeType.User }),
+    [linkId, itemChanged]
+  );
+  const onChangeEventValue = useCallback(
+    (_: any, value: any) =>
+      itemChanged({ linkId, value, type: ChangeType.User }),
+    [linkId, itemChanged]
+  );
+
   const label = noLabel ? null : getLabel(item, horizontal);
   let maxWidth = maxWidthAtNestingLevel(nestingLevel);
   const minWidth = undefined;
@@ -98,7 +115,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     label,
     error: !!(errors && errors.length > 0) || isInvalidEnumValue,
     helperText: item.helperText,
-    id: item.linkId,
+    id: linkId,
     ...inputProps,
   };
   commonInputProps.warnIfEmptyTreatment =
@@ -112,24 +129,38 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     item,
     pickListRelationId,
     {
-      fetchPolicy: 'network-only', // Always fetch, because ProjectCoC records may have changed
+      fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
       onCompleted: (data) => {
         if (!data?.pickList) return;
 
-        if (value) {
-          const fullOption = data.pickList.find((o) => o.code === value.code);
-          if (fullOption) {
-            // Update the value so that it shows the complete label
-            itemChanged(item.linkId, fullOption);
-          } else {
-            console.warn(
-              `Selected value '${value.code}' is not present in option list '${item.pickListReference}'`
-            );
+        // If there is no value, look for InitialSelected value and set it
+        if (!value || (Array.isArray(value) && value.length === 0)) {
+          const initial = item.repeats
+            ? data.pickList.filter((o) => o.initialSelected)
+            : data.pickList.find((o) => o.initialSelected);
+          if (initial) {
+            itemChanged({ linkId, value: initial, type: ChangeType.System });
           }
+          return;
+        }
+
+        // Try to find the "full" option (including label) for this value from the pick list
+        let fullOption;
+        if (isPickListOption(value)) {
+          fullOption = data.pickList.find((o) => o.code === value.code);
+        } else if (isPickListOptionArray(value)) {
+          fullOption = intersectionBy(data.pickList, value, 'code');
+        }
+
+        if (fullOption) {
+          // Update the value so that it shows the complete label
+          itemChanged({ linkId, value: fullOption, type: ChangeType.System });
         } else {
-          // Set initial value if applicable
-          const initial = data.pickList.find((o) => o.initialSelected);
-          if (initial) itemChanged(item.linkId, initial);
+          console.warn(
+            `Selected value '${JSON.stringify(
+              value
+            )}' is not present in option list '${item.pickListReference}'`
+          );
         }
       },
     }
@@ -150,7 +181,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             <LabeledCheckbox
               checked={!!value}
               onChange={(e) =>
-                itemChanged(item.linkId, (e.target as HTMLInputElement).checked)
+                itemChanged({
+                  linkId,
+                  value: (e.target as HTMLInputElement).checked,
+                  type: ChangeType.User,
+                })
               }
               horizontal={horizontal}
               {...commonInputProps}
@@ -173,8 +208,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         return (
           <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
             <SsnInput
-              id={item.linkId}
-              name={item.linkId}
+              id={linkId}
+              name={linkId}
               value={value || ''}
               onChange={onChangeValue}
               sx={{
@@ -233,7 +268,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
             value={dateValue || null}
             onChange={onChangeValue}
             textInputProps={{
-              id: item.linkId,
+              id: linkId,
               horizontal,
               sx: { width },
             }}
@@ -267,40 +302,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         </InputContainer>
       );
     case ItemType.Choice:
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      let selectedVal = value ? value : item.repeats ? [] : null;
-
-      // for auto-populated choice fields with remotely fetched picklists
-      if (options && isPickListOption(selectedVal) && !selectedVal.label) {
-        const found = options.find((o) => o.code === selectedVal.code);
-        if (found) selectedVal = found;
-      }
+      const currentValue = value ? value : item.repeats ? [] : null;
 
       let inputComponent;
       if (
-        item.pickListReference &&
-        ['projects', 'organizations'].includes(item.pickListReference)
-      ) {
-        const SelectComponent =
-          item.pickListReference === 'projects'
-            ? ProjectSelect
-            : OrganizationSelect;
-        inputComponent = (
-          <SelectComponent
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={selectedVal}
-            onChange={onChangeEventValue}
-            multiple={!!item.repeats}
-            disabled={disabled}
-          />
-        );
-      } else if (
         item.component === Component.Checkbox &&
         item.pickListReference === 'NoYesMissing'
       ) {
         inputComponent = (
           <NoYesMissingCheckbox
-            value={selectedVal}
+            value={currentValue}
             onChange={onChangeValue}
             horizontal={horizontal}
             {...commonInputProps}
@@ -313,7 +324,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       ) {
         inputComponent = (
           <RadioGroupInput
-            value={selectedVal}
+            value={currentValue}
             onChange={onChangeValue}
             options={options || []}
             row={item.component !== Component.RadioButtonsVertical}
@@ -326,14 +337,14 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         inputComponent = (
           <FormSelect
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            value={selectedVal}
+            value={currentValue}
             options={options || []}
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
             loading={pickListLoading}
             placeholder={placeholder}
             textInputProps={{
-              name: item.linkId,
+              name: linkId,
               horizontal,
               sx: {
                 width,
@@ -357,10 +368,18 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <Uploader
-            onUpload={async (upload, file) => {
-              console.log({ upload, file });
-              onChangeValue(upload.blobId);
-            }}
+            id={linkId}
+            image
+            onUpload={async (upload) => onChangeValue(upload.blobId)}
+          />
+        </InputContainer>
+      );
+    case ItemType.File:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <Uploader
+            id={linkId}
+            onUpload={async (upload) => onChangeValue(upload.blobId)}
           />
         </InputContainer>
       );

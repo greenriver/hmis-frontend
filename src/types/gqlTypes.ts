@@ -344,6 +344,10 @@ export type ClientAccess = {
   __typename?: 'ClientAccess';
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
+  canManageAnyClientFiles: Scalars['Boolean'];
+  canManageOwnClientFiles: Scalars['Boolean'];
+  canViewAnyConfidentialClientFiles: Scalars['Boolean'];
+  canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
@@ -1144,10 +1148,16 @@ export type File = {
   contentType: Scalars['String'];
   createdAt: Scalars['ISO8601DateTime'];
   effectiveDate?: Maybe<Scalars['ISO8601Date']>;
+  enrollment?: Maybe<Enrollment>;
+  enrollmentId?: Maybe<Scalars['ID']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']>;
+  fileBlobId: Scalars['ID'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  ownFile: Scalars['Boolean'];
+  tags: Array<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
+  updatedBy: User;
   url: Scalars['String'];
 };
 
@@ -1186,6 +1196,7 @@ export type FormDefinitionJson = {
 };
 
 export type FormInput = {
+  clientId?: InputMaybe<Scalars['ID']>;
   confirmed?: InputMaybe<Scalars['Boolean']>;
   enrollmentId?: InputMaybe<Scalars['ID']>;
   formDefinitionId: Scalars['ID'];
@@ -1281,6 +1292,8 @@ export enum FormRole {
   Custom = 'CUSTOM',
   /** (EXIT) Exit Assessment */
   Exit = 'EXIT',
+  /** (FILE) File */
+  File = 'FILE',
   /** (FUNDER) Funder */
   Funder = 'FUNDER',
   /** (INTAKE) Intake Assessment */
@@ -1783,6 +1796,7 @@ export enum ItemType {
   Currency = 'CURRENCY',
   Date = 'DATE',
   Display = 'DISPLAY',
+  File = 'FILE',
   Group = 'GROUP',
   Image = 'IMAGE',
   Integer = 'INTEGER',
@@ -2214,6 +2228,7 @@ export type PickListOption = {
 export enum PickListType {
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableUnits = 'AVAILABLE_UNITS',
+  ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Destination = 'DESTINATION',
@@ -2396,6 +2411,7 @@ export type Query = {
   currentUser?: Maybe<ApplicationUser>;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  file?: Maybe<File>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
@@ -2439,6 +2455,10 @@ export type QueryClientSearchArgs = {
 };
 
 export type QueryEnrollmentArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryFileArgs = {
   id: Scalars['ID'];
 };
 
@@ -2502,7 +2522,10 @@ export type QueryAccess = {
   canEditEnrollments: Scalars['Boolean'];
   canEditOrganization: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
-  canManageClientFiles: Scalars['Boolean'];
+  canManageAnyClientFiles: Scalars['Boolean'];
+  canManageOwnClientFiles: Scalars['Boolean'];
+  canViewAnyConfidentialClientFiles: Scalars['Boolean'];
+  canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
   canViewClients: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
@@ -3060,6 +3083,7 @@ export type SubmitFormPayload = {
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
   | Client
+  | File
   | Funder
   | Inventory
   | Organization
@@ -6414,6 +6438,24 @@ export type SubmitFormMutation = {
           } | null;
         }
       | {
+          __typename?: 'File';
+          confidential?: boolean | null;
+          contentType: string;
+          createdAt: string;
+          effectiveDate?: string | null;
+          expirationDate?: string | null;
+          id: string;
+          name: string;
+          fileBlobId: string;
+          updatedAt: string;
+          url: string;
+          tags: Array<string>;
+          ownFile: boolean;
+          enrollmentId?: string | null;
+          enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          updatedBy: { __typename?: 'User'; id: string; name: string };
+        }
+      | {
           __typename?: 'Funder';
           dateCreated: string;
           dateDeleted?: string | null;
@@ -6553,6 +6595,10 @@ export type ClientPermissionsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
   };
 };
 
@@ -6991,6 +7037,25 @@ export type HealthAndDvFieldsFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
+export type FileFieldsFragment = {
+  __typename?: 'File';
+  confidential?: boolean | null;
+  contentType: string;
+  createdAt: string;
+  effectiveDate?: string | null;
+  expirationDate?: string | null;
+  id: string;
+  name: string;
+  fileBlobId: string;
+  updatedAt: string;
+  url: string;
+  tags: Array<string>;
+  ownFile: boolean;
+  enrollmentId?: string | null;
+  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  updatedBy: { __typename?: 'User'; id: string; name: string };
+};
+
 export type SearchClientsQueryVariables = Exact<{
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']>;
@@ -7122,6 +7187,10 @@ export type GetClientPermissionsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
     };
   } | null;
 };
@@ -7574,6 +7643,49 @@ export type DeleteEnrollmentMutation = {
       };
       household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+    }>;
+  } | null;
+};
+
+export type DeleteClientFileMutationVariables = Exact<{
+  input: DeleteClientFileInput;
+}>;
+
+export type DeleteClientFileMutation = {
+  __typename?: 'Mutation';
+  deleteClientFile?: {
+    __typename?: 'DeleteClientFilePayload';
+    clientMutationId?: string | null;
+    file?: {
+      __typename?: 'File';
+      confidential?: boolean | null;
+      contentType: string;
+      createdAt: string;
+      effectiveDate?: string | null;
+      expirationDate?: string | null;
+      id: string;
+      name: string;
+      fileBlobId: string;
+      updatedAt: string;
+      url: string;
+      tags: Array<string>;
+      ownFile: boolean;
+      enrollmentId?: string | null;
+      enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      updatedBy: { __typename?: 'User'; id: string; name: string };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8200,6 +8312,70 @@ export type GetRecentHealthAndDvsQuery = {
   } | null;
 };
 
+export type GetFileQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetFileQuery = {
+  __typename?: 'Query';
+  file?: {
+    __typename?: 'File';
+    confidential?: boolean | null;
+    contentType: string;
+    createdAt: string;
+    effectiveDate?: string | null;
+    expirationDate?: string | null;
+    id: string;
+    name: string;
+    fileBlobId: string;
+    updatedAt: string;
+    url: string;
+    tags: Array<string>;
+    ownFile: boolean;
+    enrollmentId?: string | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    updatedBy: { __typename?: 'User'; id: string; name: string };
+  } | null;
+};
+
+export type GetClientFilesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientFilesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    files: {
+      __typename?: 'FilesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'File';
+        confidential?: boolean | null;
+        contentType: string;
+        createdAt: string;
+        effectiveDate?: string | null;
+        expirationDate?: string | null;
+        id: string;
+        name: string;
+        fileBlobId: string;
+        updatedAt: string;
+        url: string;
+        tags: Array<string>;
+        ownFile: boolean;
+        enrollmentId?: string | null;
+        enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        updatedBy: { __typename?: 'User'; id: string; name: string };
+      }>;
+    };
+  } | null;
+};
+
 export type OmniSearchClientsQueryVariables = Exact<{
   textSearch: Scalars['String'];
 }>;
@@ -8357,7 +8533,10 @@ export type RootPermissionsFragmentFragment = {
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
   canEditProjectDetails: boolean;
-  canManageClientFiles: boolean;
+  canManageAnyClientFiles: boolean;
+  canManageOwnClientFiles: boolean;
+  canViewAnyConfidentialClientFiles: boolean;
+  canViewAnyNonconfidentialClientFiles: boolean;
 };
 
 export type GetRootPermissionsQueryVariables = Exact<{ [key: string]: never }>;
@@ -8380,7 +8559,10 @@ export type GetRootPermissionsQuery = {
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
     canEditProjectDetails: boolean;
-    canManageClientFiles: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
   };
 };
 
@@ -9584,6 +9766,10 @@ export const ClientPermissionsFragmentDoc = gql`
       canEditEnrollments
       canDeleteEnrollments
       canViewEnrollmentDetails
+      canManageAnyClientFiles
+      canManageOwnClientFiles
+      canViewAnyConfidentialClientFiles
+      canViewAnyNonconfidentialClientFiles
     }
   }
 `;
@@ -9935,6 +10121,30 @@ export const HealthAndDvFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
+export const FileFieldsFragmentDoc = gql`
+  fragment FileFields on File {
+    confidential
+    contentType
+    createdAt
+    effectiveDate
+    expirationDate
+    id
+    name
+    fileBlobId
+    updatedAt
+    url
+    tags
+    ownFile
+    enrollmentId
+    enrollment {
+      id
+    }
+    updatedBy {
+      id
+      name
+    }
+  }
+`;
 export const RootPermissionsFragmentFragmentDoc = gql`
   fragment RootPermissionsFragment on QueryAccess {
     canAdministerHmis
@@ -9951,7 +10161,10 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canViewEnrollmentDetails
     canDeleteEnrollments
     canEditProjectDetails
-    canManageClientFiles
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
   }
 `;
 export const ProjectFieldsFragmentDoc = gql`
@@ -10719,6 +10932,9 @@ export const SubmitFormDocument = gql`
         ... on Service {
           ...ServiceFields
         }
+        ... on File {
+          ...FileFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -10732,6 +10948,7 @@ export const SubmitFormDocument = gql`
   ${ProjectCocFieldsFragmentDoc}
   ${InventoryFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
+  ${FileFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<
@@ -11656,6 +11873,64 @@ export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
   DeleteEnrollmentMutation,
   DeleteEnrollmentMutationVariables
 >;
+export const DeleteClientFileDocument = gql`
+  mutation DeleteClientFile($input: DeleteClientFileInput!) {
+    deleteClientFile(input: $input) {
+      clientMutationId
+      file {
+        ...FileFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${FileFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteClientFileMutationFn = Apollo.MutationFunction<
+  DeleteClientFileMutation,
+  DeleteClientFileMutationVariables
+>;
+
+/**
+ * __useDeleteClientFileMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientFileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientFileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientFileMutation, { data, loading, error }] = useDeleteClientFileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteClientFileMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteClientFileMutation,
+    DeleteClientFileMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteClientFileMutation,
+    DeleteClientFileMutationVariables
+  >(DeleteClientFileDocument, options);
+}
+export type DeleteClientFileMutationHookResult = ReturnType<
+  typeof useDeleteClientFileMutation
+>;
+export type DeleteClientFileMutationResult =
+  Apollo.MutationResult<DeleteClientFileMutation>;
+export type DeleteClientFileMutationOptions = Apollo.BaseMutationOptions<
+  DeleteClientFileMutation,
+  DeleteClientFileMutationVariables
+>;
 export const AddHouseholdMembersDocument = gql`
   mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
     addHouseholdMembersToEnrollment(input: $input) {
@@ -12426,6 +12701,124 @@ export type GetRecentHealthAndDvsLazyQueryHookResult = ReturnType<
 export type GetRecentHealthAndDvsQueryResult = Apollo.QueryResult<
   GetRecentHealthAndDvsQuery,
   GetRecentHealthAndDvsQueryVariables
+>;
+export const GetFileDocument = gql`
+  query GetFile($id: ID!) {
+    file(id: $id) {
+      ...FileFields
+    }
+  }
+  ${FileFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetFileQuery__
+ *
+ * To run a query within a React component, call `useGetFileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFileQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFileQuery(
+  baseOptions: Apollo.QueryHookOptions<GetFileQuery, GetFileQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetFileQuery, GetFileQueryVariables>(
+    GetFileDocument,
+    options
+  );
+}
+export function useGetFileLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetFileQuery, GetFileQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetFileQuery, GetFileQueryVariables>(
+    GetFileDocument,
+    options
+  );
+}
+export type GetFileQueryHookResult = ReturnType<typeof useGetFileQuery>;
+export type GetFileLazyQueryHookResult = ReturnType<typeof useGetFileLazyQuery>;
+export type GetFileQueryResult = Apollo.QueryResult<
+  GetFileQuery,
+  GetFileQueryVariables
+>;
+export const GetClientFilesDocument = gql`
+  query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      files(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...FileFields
+        }
+      }
+    }
+  }
+  ${FileFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientFilesQuery__
+ *
+ * To run a query within a React component, call `useGetClientFilesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientFilesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientFilesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetClientFilesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientFilesQuery,
+    GetClientFilesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetClientFilesQuery, GetClientFilesQueryVariables>(
+    GetClientFilesDocument,
+    options
+  );
+}
+export function useGetClientFilesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientFilesQuery,
+    GetClientFilesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetClientFilesQuery, GetClientFilesQueryVariables>(
+    GetClientFilesDocument,
+    options
+  );
+}
+export type GetClientFilesQueryHookResult = ReturnType<
+  typeof useGetClientFilesQuery
+>;
+export type GetClientFilesLazyQueryHookResult = ReturnType<
+  typeof useGetClientFilesLazyQuery
+>;
+export type GetClientFilesQueryResult = Apollo.QueryResult<
+  GetClientFilesQuery,
+  GetClientFilesQueryVariables
 >;
 export const OmniSearchClientsDocument = gql`
   query OmniSearchClients($textSearch: String!) {

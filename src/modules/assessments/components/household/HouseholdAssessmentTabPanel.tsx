@@ -50,13 +50,11 @@ const HouseholdAssessmentTabPanel = memo(
       if (!formRef.current) return;
       if (wasActive && !active) {
         if (assessmentSubmitted) {
-          console.debug(`Submitting ${clientName}...`);
           formRef.current.SubmitIfDirty(true, () => {
             // TODO: Update tab status to 'error' if error?
             console.debug(`Submitted ${clientName}!`);
           });
         } else {
-          console.debug(`Saving ${clientName}...`);
           formRef.current.SaveIfDirty(() => {
             // TODO: Update tab status to 'error' if error?
             console.debug(`Saved ${clientName}!`);
