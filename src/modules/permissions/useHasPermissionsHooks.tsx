@@ -91,6 +91,7 @@ export const useHasClientPermissions = (
 ) => {
   const clientData = useGetClientPermissionsQuery({
     variables: { id },
+    skip: !id,
   });
   const result = useHasPermissions(
     clientData?.data?.client?.access,
@@ -104,6 +105,7 @@ export const useHasClientPermissions = (
 export const useClientPermissions = (id: string) => {
   const clientData = useGetClientPermissionsQuery({
     variables: { id },
+    skip: !id,
   });
 
   return useMemo(
