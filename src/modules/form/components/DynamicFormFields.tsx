@@ -1,7 +1,11 @@
 import { pull } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
-import { OverrideableDynamicFieldProps } from '../types';
+import {
+  ItemChangedFn,
+  OverrideableDynamicFieldProps,
+  SeveralItemsChangedFn,
+} from '../types';
 import {
   autofillValues,
   buildCommonInputProps,
@@ -35,8 +39,8 @@ export interface Props {
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
-  itemChanged?: (linkId: string, value: any) => void;
-  severalItemsChanged?: (values: Record<string, any>) => void;
+  itemChanged?: ItemChangedFn;
+  severalItemsChanged?: SeveralItemsChangedFn;
   itemMap: ItemMap;
   autofillDependencyMap: LinkIdMap;
   enabledDependencyMap: LinkIdMap;
@@ -134,9 +138,11 @@ const DynamicFormFields: React.FC<Props> = ({
     [itemMap, enabledDependencyMap, setDisabledLinkIds]
   );
 
-  const itemChanged = useCallback(
-    (linkId: string, value: any) => {
-      if (itemChangedProp) itemChangedProp(linkId, value);
+  const itemChanged: ItemChangedFn = useCallback(
+    (input) => {
+      if (itemChangedProp) itemChangedProp(input);
+
+      const { linkId, value } = input;
       setValues((currentValues) => {
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -152,15 +158,15 @@ const DynamicFormFields: React.FC<Props> = ({
     [updateAutofillValues, updateDisabledLinkIds, setValues, itemChangedProp]
   );
 
-  const severalItemsChanged = useCallback(
-    (values: Record<string, any>) => {
-      if (severalItemsChangedProp) severalItemsChangedProp(values);
+  const severalItemsChanged: SeveralItemsChangedFn = useCallback(
+    (input) => {
+      if (severalItemsChangedProp) severalItemsChangedProp(input);
       setValues((currentValues) => {
-        const newValues = { ...currentValues, ...values };
+        const newValues = { ...currentValues, ...input.values };
         // Updates dependent autofill questions (modifies newValues in-place)
-        updateAutofillValues(Object.keys(values), newValues);
+        updateAutofillValues(Object.keys(input.values), newValues);
         // Update list of disabled linkIds based on new values
-        updateDisabledLinkIds(Object.keys(values), newValues);
+        updateDisabledLinkIds(Object.keys(input.values), newValues);
         // console.debug('DynamicForm', newValues);
         return newValues;
       });

@@ -943,6 +943,7 @@ export type Enrollment = {
   project: Project;
   relationshipToHoH: RelationshipToHoH;
   services: ServicesPaginated;
+  status: EnrollmentStatus;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
   user?: Maybe<User>;
 };
@@ -996,6 +997,22 @@ export type EnrollmentHouseholdMemberInput = {
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
   MostRecent = 'MOST_RECENT',
+}
+
+/** Status of this enrollment */
+export enum EnrollmentStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Household Entry Incomplete */
+  AnyEntryIncomplete = 'ANY_ENTRY_INCOMPLETE',
+  /** Household Exit Incomplete */
+  AnyExitIncomplete = 'ANY_EXIT_INCOMPLETE',
+  /** Exited */
+  Exited = 'EXITED',
+  /** Entry Incomplete */
+  OwnEntryIncomplete = 'OWN_ENTRY_INCOMPLETE',
+  /** Exit Incomplete */
+  OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
 
 export type EnrollmentsPaginated = {

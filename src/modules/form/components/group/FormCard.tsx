@@ -2,7 +2,7 @@ import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
-import { GroupItemComponentProps } from '../../types';
+import { ChangeType, GroupItemComponentProps } from '../../types';
 import {
   getAllChildLinkIds,
   getPopulatableChildren,
@@ -51,7 +51,7 @@ const FormCard = ({
       new Array(childLinkIds.length).fill(null)
     );
 
-    severalItemsChanged(updatedValues);
+    severalItemsChanged({ values: updatedValues, type: ChangeType.User });
     setSourceRecord(undefined);
     setClearDialogOpen(false);
   }, [severalItemsChanged, childLinkIds]);
@@ -69,7 +69,7 @@ const FormCard = ({
         newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
       });
 
-      severalItemsChanged(newFormValues);
+      severalItemsChanged({ values: newFormValues, type: ChangeType.User });
     },
     [setFillDialogOpen, severalItemsChanged, item]
   );
