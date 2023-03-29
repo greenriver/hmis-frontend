@@ -8,7 +8,7 @@ import {
 } from '../hmisUtil';
 
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
-import { isHmisEnum } from '@/modules/form/util/formUtil';
+import { isHmisEnum } from '@/modules/form/types';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlSchemaType } from '@/types/gqlObjects';

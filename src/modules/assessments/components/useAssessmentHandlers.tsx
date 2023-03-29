@@ -2,9 +2,9 @@ import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
 
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
+import { FormValues } from '@/modules/form/types';
 import {
   debugFormValues,
-  FormValues,
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {

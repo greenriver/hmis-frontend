@@ -9,12 +9,14 @@ import NotFound from '@/components/pages/404';
 import DynamicField from '@/modules/form/components/DynamicField';
 import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
-import { DynamicFieldProps } from '@/modules/form/types';
+import {
+  DynamicFieldProps,
+  FormValues,
+  LocalConstants,
+} from '@/modules/form/types';
 import {
   buildCommonInputProps,
   extractClientItemsFromDefinition,
-  FormValues,
-  LocalConstants,
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {

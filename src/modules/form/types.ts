@@ -1,9 +1,13 @@
+import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
-import { FormValues } from './util/formUtil';
-
-import { FormItem, ValidationError } from '@/types/gqlTypes';
-
+import { HmisEnums } from '@/types/gqlEnums';
+import {
+  FormItem,
+  ItemType,
+  PickListOption,
+  ValidationError,
+} from '@/types/gqlTypes';
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
 export const HIDDEN_VALUE = '_HIDDEN';
 
@@ -80,4 +84,49 @@ export enum FormActionTypes {
   Validate,
   Discard,
   Navigate,
+}
+
+export type FormValues = Record<string, any | null | undefined>;
+export type ItemMap = Record<string, FormItem>;
+export type LinkIdMap = Record<string, string[]>;
+export type LocalConstants = Record<string, any>;
+
+export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
+  return k in HmisEnums;
+};
+
+export const isQuestionItem = (item: FormItem): boolean =>
+  ![ItemType.Display, ItemType.Group].includes(item.type);
+
+export function isDate(value: any | null | undefined): value is Date {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof value.getMonth === 'function'
+  );
+}
+
+export function isPickListOption(
+  value: any | null | undefined
+): value is PickListOption {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    !!value.code
+  );
+}
+
+export function isPickListOptionArray(
+  value: any | null | undefined
+): value is PickListOption[] {
+  return (
+    !isNil(value) &&
+    Array.isArray(value) &&
+    value.length > 0 &&
+    isPickListOption(value[0])
+  );
 }

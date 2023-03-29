@@ -1,7 +1,17 @@
-import { getYear, isValid, max, min } from 'date-fns';
+import { getYear, isDate, isValid, max, min } from 'date-fns';
 import { compact, isNil, isUndefined, sum } from 'lodash-es';
 
-import { DynamicInputCommonProps, HIDDEN_VALUE } from '../types';
+import {
+  DynamicInputCommonProps,
+  FormValues,
+  HIDDEN_VALUE,
+  isHmisEnum,
+  isPickListOption,
+  isQuestionItem,
+  ItemMap,
+  LinkIdMap,
+  LocalConstants,
+} from '../types';
 
 import {
   age,
@@ -29,55 +39,11 @@ import {
   ValueBound,
 } from '@/types/gqlTypes';
 
-export type FormValues = Record<string, any | null | undefined>;
-export type ItemMap = Record<string, FormItem>;
-export type LinkIdMap = Record<string, string[]>;
-export type LocalConstants = Record<string, any>;
 export const isDataNotCollected = (s?: string) =>
   s && s.endsWith('_NOT_COLLECTED');
 
-export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
-  return k in HmisEnums;
-};
-
-export const isQuestionItem = (item: FormItem): boolean =>
-  ![ItemType.Display, ItemType.Group].includes(item.type);
-
-export function isDate(value: any | null | undefined): value is Date {
-  return (
-    !isNil(value) &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    typeof value.getMonth === 'function'
-  );
-}
-
 export const isValidDate = (value: Date, maxYear = 1900) =>
   isDate(value) && isValid(value) && getYear(value) > maxYear;
-
-export function isPickListOption(
-  value: any | null | undefined
-): value is PickListOption {
-  return (
-    !isNil(value) &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    !!value.code
-  );
-}
-
-export function isPickListOptionArray(
-  value: any | null | undefined
-): value is PickListOption[] {
-  return (
-    !isNil(value) &&
-    Array.isArray(value) &&
-    value.length > 0 &&
-    isPickListOption(value[0])
-  );
-}
 
 export function areEqualValues(
   value1: any | null | undefined,
@@ -753,14 +719,16 @@ export type ClientNameDobVeteranFields = {
 /**
  * Apply "data collected about" filters.
  * Returns a modified copy of the definition.
+ * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
   items: FormDefinitionWithJsonFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) =>
-  items.filter((item) => {
+) => {
+  function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
+
     switch (item.dataCollectedAbout) {
       case DataCollectedAbout.AllClients:
         return true;
@@ -781,7 +749,19 @@ export const applyDataCollectedAbout = (
       default:
         return true;
     }
-  });
+  }
+
+  return items
+    .map((item) => {
+      if (!item.item) return item;
+      const { item: childItems, ...rest } = item;
+      return {
+        item: childItems.filter((child) => isApplicable(child)),
+        ...rest,
+      };
+    })
+    .filter((item) => isApplicable(item));
+};
 
 /**
  * Extracts target-only fields from the form definition
