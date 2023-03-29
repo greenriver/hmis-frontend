@@ -10,12 +10,22 @@ import { useDashboardClient } from '../pages/ClientDashboard';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
-import { ClientFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  ClientFieldsFragment,
+  FormRole,
+  useGetClientPermissionsQuery,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Profile = () => {
   const { client } = useDashboardClient();
   const navigate = useNavigate();
+  const { data } = useGetClientPermissionsQuery({
+    variables: { id: client.id },
+  });
+
+  const { canViewDob, canViewFullSsn } = data?.client?.access || {};
+
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
       navigate(
@@ -31,6 +41,8 @@ const Profile = () => {
       record={client}
       localConstants={{
         clientId: client.id,
+        canViewFullSsn,
+        canViewDob,
       }}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}

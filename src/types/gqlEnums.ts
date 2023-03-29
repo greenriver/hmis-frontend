@@ -115,6 +115,14 @@ export const HmisEnums = {
     NOT_EQUAL: 'NOT_EQUAL',
   },
   EnrollmentSortOption: { MOST_RECENT: 'MOST_RECENT' },
+  EnrollmentStatus: {
+    ACTIVE: 'Active',
+    ANY_ENTRY_INCOMPLETE: 'Household Entry Incomplete',
+    ANY_EXIT_INCOMPLETE: 'Household Exit Incomplete',
+    EXITED: 'Exited',
+    OWN_ENTRY_INCOMPLETE: 'Entry Incomplete',
+    OWN_EXIT_INCOMPLETE: 'Exit Incomplete',
+  },
   Ethnicity: {
     INVALID: 'Invalid Value',
     NON_HISPANIC_NON_LATIN_A_O_X: 'Non-Hispanic/Non-Latin(a)(o)(x)',
