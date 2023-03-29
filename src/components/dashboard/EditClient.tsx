@@ -20,7 +20,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const Profile = () => {
   const { client } = useDashboardClient();
   const navigate = useNavigate();
-  const { data } = useGetClientPermissionsQuery({
+  const { data, loading } = useGetClientPermissionsQuery({
     variables: { id: client.id },
   });
 
@@ -34,6 +34,8 @@ const Profile = () => {
     },
     [navigate]
   );
+
+  if (loading) return null;
 
   return (
     <EditRecord<ClientFieldsFragment>
