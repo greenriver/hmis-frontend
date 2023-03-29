@@ -63,6 +63,20 @@ query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    auditHistory(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientAuditEventFields
+      }
+    }
+  }
+}
+
 query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id

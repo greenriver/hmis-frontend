@@ -16,6 +16,7 @@ export const HmisEnums = {
     VIRTUAL: 'Virtual',
     IN_PERSON: 'In Person',
   },
+  AuditEventType: { create: 'create', destroy: 'destroy', update: 'update' },
   Availability: {
     INVALID: 'Invalid Value',
     YEAR_ROUND: 'Year-round',

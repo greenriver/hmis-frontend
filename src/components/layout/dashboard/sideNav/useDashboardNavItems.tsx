@@ -100,7 +100,7 @@ export const useDashboardNavItems = (clientId?: string) => {
           {
             id: 'audit',
             title: 'Audit History',
-            path: DashboardRoutes.HISTORY,
+            path: generateSafePath(DashboardRoutes.HISTORY, params),
           },
           ...(clientId && import.meta.env.PUBLIC_WAREHOUSE_URL
             ? [

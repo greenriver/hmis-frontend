@@ -14,6 +14,7 @@ import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
+import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
 import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
@@ -324,7 +325,10 @@ export const protectedRoutes = [
               </EnrollmentsRoute>
             ),
           },
-          { path: DashboardRoutes.HISTORY, element: null },
+          {
+            path: DashboardRoutes.HISTORY,
+            element: <History />,
+          },
           {
             path: DashboardRoutes.ASSESSMENTS,
             element: (

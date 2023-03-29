@@ -136,6 +136,12 @@ export type AssessmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+export enum AuditEventType {
+  Create = 'create',
+  Destroy = 'destroy',
+  Update = 'update',
+}
+
 /** Value to autofill based on conditional logic */
 export type AutofillValue = {
   __typename?: 'AutofillValue';
@@ -255,6 +261,7 @@ export type Client = {
   access: ClientAccess;
   age?: Maybe<Scalars['Int']>;
   assessments: AssessmentsPaginated;
+  auditHistory: ClientAuditEventsPaginated;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -293,6 +300,12 @@ export type ClientAssessmentsArgs = {
   offset?: InputMaybe<Scalars['Int']>;
   roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
+};
+
+/** HUD Client */
+export type ClientAuditHistoryArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 /** HUD Client */
@@ -352,6 +365,27 @@ export type ClientAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
+};
+
+export type ClientAuditEvent = {
+  __typename?: 'ClientAuditEvent';
+  createdAt: Scalars['ISO8601DateTime'];
+  event: AuditEventType;
+  id: Scalars['ID'];
+  item: Client;
+  objectChanges?: Maybe<Scalars['JsonObject']>;
+  user?: Maybe<User>;
+};
+
+export type ClientAuditEventsPaginated = {
+  __typename?: 'ClientAuditEventsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<ClientAuditEvent>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
 };
 
 /** Client Image */
@@ -7056,6 +7090,16 @@ export type FileFieldsFragment = {
   updatedBy: { __typename?: 'User'; id: string; name: string };
 };
 
+export type ClientAuditEventFieldsFragment = {
+  __typename?: 'ClientAuditEvent';
+  id: string;
+  createdAt: string;
+  event: AuditEventType;
+  objectChanges?: any | null;
+  item: { __typename?: 'Client'; id: string };
+  user?: { __typename?: 'User'; id: string; name: string } | null;
+};
+
 export type SearchClientsQueryVariables = Exact<{
   input: ClientSearchInput;
   limit?: InputMaybe<Scalars['Int']>;
@@ -7245,6 +7289,35 @@ export type GetClientEnrollmentsQuery = {
         };
         household: { __typename?: 'Household'; id: string; shortId: string };
         client: { __typename?: 'Client'; id: string };
+      }>;
+    };
+  } | null;
+};
+
+export type GetClientAuditEventsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetClientAuditEventsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    auditHistory: {
+      __typename?: 'ClientAuditEventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ClientAuditEvent';
+        id: string;
+        createdAt: string;
+        event: AuditEventType;
+        objectChanges?: any | null;
+        item: { __typename?: 'Client'; id: string };
+        user?: { __typename?: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -10145,6 +10218,21 @@ export const FileFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientAuditEventFieldsFragmentDoc = gql`
+  fragment ClientAuditEventFields on ClientAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    item {
+      id
+    }
+    user {
+      id
+      name
+    }
+  }
+`;
 export const RootPermissionsFragmentFragmentDoc = gql`
   fragment RootPermissionsFragment on QueryAccess {
     canAdministerHmis
@@ -11376,6 +11464,75 @@ export type GetClientEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetClientEnrollmentsQueryResult = Apollo.QueryResult<
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables
+>;
+export const GetClientAuditEventsDocument = gql`
+  query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    client(id: $id) {
+      id
+      auditHistory(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ClientAuditEventFields
+        }
+      }
+    }
+  }
+  ${ClientAuditEventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientAuditEventsQuery__
+ *
+ * To run a query within a React component, call `useGetClientAuditEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientAuditEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientAuditEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetClientAuditEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >(GetClientAuditEventsDocument, options);
+}
+export function useGetClientAuditEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientAuditEventsQuery,
+    GetClientAuditEventsQueryVariables
+  >(GetClientAuditEventsDocument, options);
+}
+export type GetClientAuditEventsQueryHookResult = ReturnType<
+  typeof useGetClientAuditEventsQuery
+>;
+export type GetClientAuditEventsLazyQueryHookResult = ReturnType<
+  typeof useGetClientAuditEventsLazyQuery
+>;
+export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
+  GetClientAuditEventsQuery,
+  GetClientAuditEventsQueryVariables
 >;
 export const GetClientAssessmentsDocument = gql`
   query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {

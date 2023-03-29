@@ -388,3 +388,17 @@ fragment FileFields on File {
     name
   }
 }
+
+fragment ClientAuditEventFields on ClientAuditEvent {
+  id
+  createdAt
+  event
+  objectChanges
+  item {
+    id
+  }
+  user {
+    id
+    name
+  }
+}
