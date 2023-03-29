@@ -11,8 +11,7 @@ import React, {
 
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
-import { ChangeType, FormActionTypes } from '../types';
-import { FormValues } from '../util/formUtil';
+import { FormValues, ChangeType, FormActionTypes } from '../types';
 
 import ErrorAlert from './ErrorAlert';
 import FormActions, { FormActionProps } from './FormActions';

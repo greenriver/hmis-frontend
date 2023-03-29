@@ -5,13 +5,13 @@ import {
   ItemChangedFn,
   OverrideableDynamicFieldProps,
   SeveralItemsChangedFn,
+  FormValues,
+  ItemMap,
+  LinkIdMap,
 } from '../types';
 import {
   autofillValues,
   buildCommonInputProps,
-  FormValues,
-  ItemMap,
-  LinkIdMap,
   shouldEnableItem,
   transformSubmitValues,
 } from '../util/formUtil';
