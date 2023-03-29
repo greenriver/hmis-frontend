@@ -285,12 +285,14 @@ query GetClientHouseholdMemberCandidates(
       limit
       nodesCount
       nodes {
+        project {
+          id
+          projectName
+        }
         household {
           id
           householdClients {
-            client {
-              ...ClientFields
-            }
+            ...HouseholdClientFields
           }
         }
       }
