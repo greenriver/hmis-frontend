@@ -181,7 +181,7 @@ const BulkAdd = <
                   nestingLevel={0}
                   key={item.linkId}
                   item={item}
-                  itemChanged={(linkId, value) =>
+                  itemChanged={({ linkId, value }) =>
                     setTargetValues({
                       ...targetValues,
                       [getKeyForTarget(target)]: { [linkId]: value },

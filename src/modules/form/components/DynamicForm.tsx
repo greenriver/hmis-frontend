@@ -11,7 +11,7 @@ import React, {
 
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
-import { FormActionTypes } from '../types';
+import { ChangeType, FormActionTypes } from '../types';
 import { FormValues } from '../util/formUtil';
 
 import ErrorAlert from './ErrorAlert';
@@ -174,10 +174,15 @@ const DynamicForm = forwardRef(
       [onSaveDraft, getCleanedValues]
     );
 
-    const handleChangeCallback = useCallback(() => {
-      setPromptSave(true);
-      setDirty(true); // FIXME
-    }, []);
+    const handleChangeCallback = useCallback(
+      ({ type }: { type: ChangeType }) => {
+        if (type === ChangeType.User) {
+          setPromptSave(true);
+          setDirty(true);
+        }
+      },
+      []
+    );
 
     const saveButtons = (
       <FormActions
