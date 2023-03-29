@@ -4,6 +4,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { DashboardRoutes, Routes } from './routes';
 
+import AllFiles from '@/components/dashboard/AllFiles';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
@@ -29,6 +30,8 @@ import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
+import File from '@/components/pages/File';
+import FileEditRoute from '@/components/pages/FileEditRoute';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
@@ -38,7 +41,12 @@ import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import useSafeParams from '@/hooks/useSafeParams';
+import {
+  ClientPermissionsFilter,
+  RootPermissionsFilter,
+} from '@/modules/permissions/PermissionsFilters';
+import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
   return (
@@ -50,6 +58,15 @@ const App = () => {
       </Suspense>
     </MainLayout>
   );
+};
+
+const ParamsWrapper = <T extends { [x: string]: string } = any>({
+  children,
+}: {
+  children: (params: T) => JSX.Element;
+}): JSX.Element => {
+  const params = useSafeParams() as T;
+  return children(params);
 };
 
 export const protectedRoutes = [
@@ -317,7 +334,48 @@ export const protectedRoutes = [
             ),
           },
           { path: DashboardRoutes.NOTES, element: null },
-          { path: DashboardRoutes.FILES, element: null },
+          {
+            path: DashboardRoutes.FILES,
+            element: (
+              <ParamsWrapper<{ clientId: string }>>
+                {({ clientId }) => (
+                  <ClientPermissionsFilter
+                    id={clientId}
+                    permissions={[
+                      'canViewAnyConfidentialClientFiles',
+                      'canViewAnyNonconfidentialClientFiles',
+                    ]}
+                    otherwise={
+                      <Navigate
+                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                          clientId,
+                        })}
+                        replace
+                      />
+                    }
+                  >
+                    <AllFiles />
+                  </ClientPermissionsFilter>
+                )}
+              </ParamsWrapper>
+            ),
+          },
+          {
+            path: DashboardRoutes.NEW_FILE,
+            element: (
+              <FileEditRoute create>
+                <File create />
+              </FileEditRoute>
+            ),
+          },
+          {
+            path: DashboardRoutes.EDIT_FILE,
+            element: (
+              <FileEditRoute>
+                <File />
+              </FileEditRoute>
+            ),
+          },
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },

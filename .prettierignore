@@ -4,6 +4,7 @@
 yarn.lock
 build
 dist
+docker
 Dockerfile
 docker-compose.yml
 serverMock/forms

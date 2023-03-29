@@ -28,6 +28,10 @@ fragment ClientPermissions on Client {
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
   }
 }
 
@@ -360,4 +364,27 @@ fragment HealthAndDvFields on HealthAndDv {
     ...UserFields
   }
   whenOccurred
+}
+
+fragment FileFields on File {
+  confidential
+  contentType
+  createdAt
+  effectiveDate
+  expirationDate
+  id
+  name
+  fileBlobId
+  updatedAt
+  url
+  tags
+  ownFile
+  enrollmentId
+  enrollment {
+    id
+  }
+  updatedBy {
+    id
+    name
+  }
 }

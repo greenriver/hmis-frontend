@@ -38,6 +38,8 @@ const subRoutes = {
   ASSESSMENTS: 'assessments',
   NOTES: 'notes',
   FILES: 'files',
+  NEW_FILE: 'files/new',
+  EDIT_FILE: 'files/:fileId/edit',
   CONTACT: 'contact',
   LOCATIONS: 'locations',
   REFERRALS: 'referrals',
