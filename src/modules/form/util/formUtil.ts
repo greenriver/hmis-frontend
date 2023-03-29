@@ -753,14 +753,16 @@ export type ClientNameDobVeteranFields = {
 /**
  * Apply "data collected about" filters.
  * Returns a modified copy of the definition.
+ * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
   items: FormDefinitionWithJsonFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
-) =>
-  items.filter((item) => {
+) => {
+  function isApplicable(item: FormItem) {
     if (!item.dataCollectedAbout) return true;
+
     switch (item.dataCollectedAbout) {
       case DataCollectedAbout.AllClients:
         return true;
@@ -781,7 +783,19 @@ export const applyDataCollectedAbout = (
       default:
         return true;
     }
-  });
+  }
+
+  return items
+    .map((item) => {
+      if (!item.item) return item;
+      const { item: childItems, ...rest } = item;
+      return {
+        item: childItems.filter((child) => isApplicable(child)),
+        ...rest,
+      };
+    })
+    .filter((item) => isApplicable(item));
+};
 
 /**
  * Extracts target-only fields from the form definition
