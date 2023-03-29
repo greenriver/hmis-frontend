@@ -64,6 +64,9 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
 const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [numPages, setNumPages] = useState<number | undefined>(undefined);
+
+  const fileProp = useMemo(() => ({ url: file?.url }), [file?.url]);
+
   return (
     <Box>
       {numPages && numPages > 1 && (
@@ -84,9 +87,7 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
         </Stack>
       )}
       <Document
-        file={{
-          url: file.url,
-        }}
+        file={fileProp}
         onLoadSuccess={({ numPages }) => setNumPages(numPages)}
         loading={
           <Box
