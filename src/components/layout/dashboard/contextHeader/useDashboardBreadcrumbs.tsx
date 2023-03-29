@@ -89,6 +89,14 @@ export const useDashboardBreadcrumbs = (
         title: 'Files',
         parent: DashboardRoutes.PROFILE,
       },
+      [DashboardRoutes.NEW_FILE]: {
+        title: 'Upload',
+        parent: DashboardRoutes.FILES,
+      },
+      [DashboardRoutes.EDIT_FILE]: {
+        title: 'Edit File',
+        parent: DashboardRoutes.FILES,
+      },
     }),
     [context]
   );

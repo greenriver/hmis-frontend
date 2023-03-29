@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { compact, isNil } from 'lodash-es';
 import React from 'react';
 
 import { usePickList } from '../hooks/usePickList';
@@ -271,9 +271,20 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       let selectedVal = value ? value : item.repeats ? [] : null;
 
       // for auto-populated choice fields with remotely fetched picklists
-      if (options && isPickListOption(selectedVal) && !selectedVal.label) {
-        const found = options.find((o) => o.code === selectedVal.code);
-        if (found) selectedVal = found;
+      if (options) {
+        if (item.repeats) {
+          selectedVal = compact(
+            selectedVal.map((val: any) => {
+              if (pickListLoading) return val;
+              if (isPickListOption(val))
+                return options.find((o) => o.code === val.code);
+              return val;
+            })
+          );
+        } else if (isPickListOption(selectedVal) && !selectedVal.label) {
+          const found = options.find((o) => o.code === selectedVal.code);
+          if (found) selectedVal = found;
+        }
       }
 
       let inputComponent;
@@ -357,10 +368,21 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       return (
         <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
           <Uploader
+            id={item.linkId}
+            image
             onUpload={async (upload, file) => {
               console.log({ upload, file });
               onChangeValue(upload.blobId);
             }}
+          />
+        </InputContainer>
+      );
+    case ItemType.File:
+      return (
+        <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
+          <Uploader
+            id={item.linkId}
+            onUpload={async (upload) => onChangeValue(upload.blobId)}
           />
         </InputContainer>
       );

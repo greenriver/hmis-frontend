@@ -13,5 +13,8 @@ fragment RootPermissionsFragment on QueryAccess {
   canViewEnrollmentDetails
   canDeleteEnrollments
   canEditProjectDetails
-  canManageClientFiles
+  canManageAnyClientFiles
+  canManageOwnClientFiles
+  canViewAnyConfidentialClientFiles
+  canViewAnyNonconfidentialClientFiles
 }
