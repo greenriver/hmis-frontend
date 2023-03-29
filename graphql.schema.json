@@ -6847,6 +6847,22 @@
             "deprecationReason": null
           },
           {
+            "name": "status",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "EnrollmentStatus",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "timesHomelessPastThreeYears",
             "description": null,
             "args": [],
@@ -6930,6 +6946,53 @@
           {
             "name": "MOST_RECENT",
             "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "EnrollmentStatus",
+        "description": "Status of this enrollment",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ACTIVE",
+            "description": "Active",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ANY_ENTRY_INCOMPLETE",
+            "description": "Household Entry Incomplete",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ANY_EXIT_INCOMPLETE",
+            "description": "Household Exit Incomplete",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXITED",
+            "description": "Exited",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWN_ENTRY_INCOMPLETE",
+            "description": "Entry Incomplete",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OWN_EXIT_INCOMPLETE",
+            "description": "Exit Incomplete",
             "isDeprecated": false,
             "deprecationReason": null
           }
