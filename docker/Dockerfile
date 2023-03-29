@@ -14,6 +14,9 @@ ENV INLINE_RUNTIME_CHUNK=false
 # Env vars prefixed with PUBLIC_ are made available to the app at build time
 ENV PUBLIC_GIT_COMMIT_HASH ${GITHASH}
 
+# Use this for faster iterations on nginx config
+# RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html
+
 RUN corepack enable \
  && yarn install --offline \
  && yarn format:check \
