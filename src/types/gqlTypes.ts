@@ -354,6 +354,7 @@ export type ClientAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 /** Client Image */
@@ -2181,6 +2182,7 @@ export type OrganizationAccess = {
   __typename?: 'OrganizationAccess';
   canDeleteOrganization: Scalars['Boolean'];
   canEditOrganization: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 /** HUD Organization Sorting Options */
@@ -2320,6 +2322,7 @@ export type ProjectAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 export type ProjectCoc = {
@@ -2533,6 +2536,7 @@ export type QueryAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 /** HUD Race (1.7) */
@@ -6431,6 +6435,7 @@ export type SubmitFormMutation = {
           user?: { __typename: 'User'; id: string; name: string } | null;
           access: {
             __typename?: 'ClientAccess';
+            id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
           };
@@ -6593,6 +6598,7 @@ export type ClientPermissionsFragment = {
   id: string;
   access: {
     __typename?: 'ClientAccess';
+    id: string;
     canViewDob: boolean;
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
@@ -6625,6 +6631,7 @@ export type ClientIdentificationFieldsFragment = {
   ssn?: string | null;
   access: {
     __typename?: 'ClientAccess';
+    id: string;
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
   };
@@ -6656,6 +6663,7 @@ export type ClientFieldsFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
     __typename?: 'ClientAccess';
+    id: string;
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
   };
@@ -6706,6 +6714,7 @@ export type HouseholdClientFieldsFragment = {
     ssn?: string | null;
     access: {
       __typename?: 'ClientAccess';
+      id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
     };
@@ -6756,6 +6765,7 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     ssn?: string | null;
     access: {
       __typename?: 'ClientAccess';
+      id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
     };
@@ -6834,6 +6844,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         ssn?: string | null;
         access: {
           __typename?: 'ClientAccess';
+          id: string;
           canViewFullSsn: boolean;
           canViewPartialSsn: boolean;
         };
@@ -7100,6 +7111,7 @@ export type SearchClientsQuery = {
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
+        id: string;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
       };
@@ -7145,6 +7157,7 @@ export type GetClientQuery = {
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
       __typename?: 'ClientAccess';
+      id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
     };
@@ -7185,6 +7198,7 @@ export type GetClientPermissionsQuery = {
     id: string;
     access: {
       __typename?: 'ClientAccess';
+      id: string;
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
@@ -7509,6 +7523,7 @@ export type UpdateEnrollmentMutation = {
             ssn?: string | null;
             access: {
               __typename?: 'ClientAccess';
+              id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
             };
@@ -7585,6 +7600,7 @@ export type SetHoHMutation = {
             ssn?: string | null;
             access: {
               __typename?: 'ClientAccess';
+              id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
             };
@@ -7746,6 +7762,7 @@ export type AddHouseholdMembersMutation = {
             ssn?: string | null;
             access: {
               __typename?: 'ClientAccess';
+              id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
             };
@@ -7966,6 +7983,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           ssn?: string | null;
           access: {
             __typename?: 'ClientAccess';
+            id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
           };
@@ -8091,6 +8109,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               ssn?: string | null;
               access: {
                 __typename?: 'ClientAccess';
+                id: string;
                 canViewFullSsn: boolean;
                 canViewPartialSsn: boolean;
               };
@@ -8515,6 +8534,7 @@ export type ClearRecentItemsMutation = {
 
 export type RootPermissionsFragmentFragment = {
   __typename?: 'QueryAccess';
+  id: string;
   canAdministerHmis: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
@@ -8541,6 +8561,7 @@ export type GetRootPermissionsQuery = {
   __typename?: 'Query';
   access: {
     __typename?: 'QueryAccess';
+    id: string;
     canAdministerHmis: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
@@ -8586,6 +8607,7 @@ export type ProjectPermissionsFieldsFragment = {
   id: string;
   access: {
     __typename?: 'ProjectAccess';
+    id: string;
     canViewDob: boolean;
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
@@ -8624,6 +8646,7 @@ export type OrganizationPermissionsFieldsFragment = {
   id: string;
   access: {
     __typename?: 'OrganizationAccess';
+    id: string;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
   };
@@ -8746,6 +8769,7 @@ export type GetOrganizationPermissionsQuery = {
     id: string;
     access: {
       __typename?: 'OrganizationAccess';
+      id: string;
       canEditOrganization: boolean;
       canDeleteOrganization: boolean;
     };
@@ -8793,6 +8817,7 @@ export type GetProjectPermissionsQuery = {
     id: string;
     access: {
       __typename?: 'ProjectAccess';
+      id: string;
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canDeleteProject: boolean;
@@ -8844,6 +8869,7 @@ export type GetProjectEnrollmentsQuery = {
           ssn?: string | null;
           access: {
             __typename?: 'ClientAccess';
+            id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
           };
@@ -9756,6 +9782,7 @@ export const ClientPermissionsFragmentDoc = gql`
   fragment ClientPermissions on Client {
     id
     access {
+      id
       canViewDob
       canViewFullSsn
       canViewPartialSsn
@@ -9776,6 +9803,7 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     age
     ssn
     access {
+      id
       canViewFullSsn
       canViewPartialSsn
     }
@@ -10143,6 +10171,7 @@ export const FileFieldsFragmentDoc = gql`
 `;
 export const RootPermissionsFragmentFragmentDoc = gql`
   fragment RootPermissionsFragment on QueryAccess {
+    id
     canAdministerHmis
     canEditClients
     canViewClients
@@ -10185,6 +10214,7 @@ export const ProjectPermissionsFieldsFragmentDoc = gql`
   fragment ProjectPermissionsFields on Project {
     id
     access {
+      id
       canViewDob
       canViewFullSsn
       canDeleteProject
@@ -10221,6 +10251,7 @@ export const OrganizationPermissionsFieldsFragmentDoc = gql`
   fragment OrganizationPermissionsFields on Organization {
     id
     access {
+      id
       canEditOrganization
       canDeleteOrganization
     }

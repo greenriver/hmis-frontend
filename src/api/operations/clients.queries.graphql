@@ -34,7 +34,6 @@ query GetClientName($id: ID!) {
 
 query GetClientPermissions($id: ID!) {
   client(id: $id) {
-    id
     ...ClientPermissions
   }
 }
