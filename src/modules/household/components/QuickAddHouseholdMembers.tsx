@@ -7,11 +7,14 @@ import {
 } from '@mui/material';
 import { SyntheticEvent, useState } from 'react';
 
+import { RecentHouseholdMember } from '../types';
+
 import AssociatedHouseholdMembers from './AssociatedHouseholdMembers';
 import RelationshipToHohSelect from './RelationshipToHohSelect';
 
+import { ColumnDef } from '@/components/elements/GenericTable';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { ClientFieldsFragment, RelationshipToHoH } from '@/types/gqlTypes';
+import { RelationshipToHoH } from '@/types/gqlTypes';
 
 const IncludeMemberSwitch = ({
   checked,
@@ -41,7 +44,7 @@ const QuickAddHouseholdMembers = ({
   setMembers,
 }: {
   clientId: string;
-  recentMembers: ClientFieldsFragment[];
+  recentMembers: RecentHouseholdMember[];
   members: Record<string, RelationshipToHoH | null>;
   setMembers: React.Dispatch<
     React.SetStateAction<Record<string, RelationshipToHoH | null>>
@@ -49,31 +52,33 @@ const QuickAddHouseholdMembers = ({
 }) => {
   const [highlight, setHighlight] = useState<string[]>([]);
   const onToggleMemberForClient =
-    (client: ClientFieldsFragment) => (_: SyntheticEvent, checked: boolean) => {
+    (memberClientId: string) => (_: SyntheticEvent, checked: boolean) => {
       setMembers((current) => {
         const copy = { ...current };
         if (!checked) {
-          if (copy[client.id] === RelationshipToHoH.SelfHeadOfHousehold) {
+          if (copy[memberClientId] === RelationshipToHoH.SelfHeadOfHousehold) {
             copy[clientId] = RelationshipToHoH.SelfHeadOfHousehold;
           }
-          delete copy[client.id];
+          delete copy[memberClientId];
         } else {
-          copy[client.id] = null;
+          copy[memberClientId] = null;
         }
         return copy;
       });
       if (!checked) {
         // if unchecked, they shouldnt be highlighted again when rechecked
-        setHighlight((members) => members.filter((id) => id !== client.id));
+        setHighlight((members) =>
+          members.filter((id) => id !== memberClientId)
+        );
       }
     };
 
-  const columns = [
+  const columns: ColumnDef<RecentHouseholdMember>[] = [
     {
       header: '',
       key: 'HoH',
       width: '1%',
-      render: (client: ClientFieldsFragment) => (
+      render: ({ client }) => (
         <FormControlLabel
           disabled={!(client.id in members)}
           checked={members[client.id] === RelationshipToHoH.SelfHeadOfHousehold}
@@ -101,7 +106,7 @@ const QuickAddHouseholdMembers = ({
       header: 'Relationship to HoH',
       key: 'relationship',
       width: '120px',
-      render: (client: ClientFieldsFragment) => (
+      render: ({ client }) => (
         <RelationshipToHohSelect
           disabled={!(client.id in members)}
           value={members[client.id] || null}
@@ -130,11 +135,11 @@ const QuickAddHouseholdMembers = ({
       key: 'add',
       width: '15%',
       minWidth: '180px',
-      render: (client: ClientFieldsFragment) =>
+      render: ({ client }) =>
         client.id !== clientId && (
           <IncludeMemberSwitch
             checked={client.id in members}
-            onChange={onToggleMemberForClient(client)}
+            onChange={onToggleMemberForClient(client.id)}
           />
         ),
     },
@@ -145,7 +150,7 @@ const QuickAddHouseholdMembers = ({
       <Stack spacing={1}>
         <Typography variant='body2'>
           Use the toggles to enroll previously associated clients in the same
-          household as <b>{clientBriefName(recentMembers[0])}</b>.
+          household as <b>{clientBriefName(recentMembers[0].client)}</b>.
         </Typography>
         <Typography variant='body2'>
           Additional household members can be added at a later step.
@@ -153,10 +158,10 @@ const QuickAddHouseholdMembers = ({
       </Stack>
       <AssociatedHouseholdMembers
         recentMembers={recentMembers}
-        rowSx={(client) => ({
-          backgroundColor: !(client.id in members) ? '#f8f8f8' : undefined,
+        rowSx={(hc) => ({
+          backgroundColor: !(hc.client.id in members) ? '#f8f8f8' : undefined,
           borderLeft:
-            client.id === clientId
+            hc.client.id === clientId
               ? (theme) => `3px solid ${theme.palette.secondary.main}`
               : undefined,
         })}
