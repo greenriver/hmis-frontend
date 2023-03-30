@@ -1,8 +1,11 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import { Paper, Stack, Tooltip, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import HmisField from '@/modules/hmis/components/HmisField';
 import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
   GetClientAuditEventsDocument,
@@ -13,6 +16,37 @@ import {
 type AssessmentType = NonNullable<
   NonNullable<GetClientAuditEventsQuery['client']>['auditHistory']
 >['nodes'][0];
+
+const nullText = (
+  <Typography
+    component='span'
+    variant='inherit'
+    sx={(theme) => ({ color: theme.palette.text.disabled })}
+  >
+    null
+  </Typography>
+);
+const changedText = (
+  <Typography
+    component='span'
+    variant='inherit'
+    display='inline-flex'
+    alignItems='center'
+  >
+    changed&#160;
+    <Tooltip title='Value changed but is not viewable'>
+      <HelpOutlineIcon fontSize='inherit' />
+    </Tooltip>
+  </Typography>
+);
+
+type ChangesType = {
+  [key: string]: {
+    fieldName: string;
+    displayName: string;
+    values: [any, any] | 'changed';
+  };
+};
 
 const columns: ColumnDef<AssessmentType>[] = [
   {
@@ -30,8 +64,34 @@ const columns: ColumnDef<AssessmentType>[] = [
   },
   {
     header: 'changes',
-    width: '100%',
-    render: (e) => JSON.stringify(e.objectChanges),
+    render: (e) => {
+      return Object.entries(e.objectChanges as ChangesType).map(
+        ([key, { fieldName, displayName, values = [] }]) => {
+          if (values === 'changed')
+            return (
+              <Typography variant='body2'>
+                {displayName}: {changedText}
+              </Typography>
+            );
+
+          const [from, to] = values.map((val) =>
+            isNil(val) ? null : (
+              <HmisField
+                key={key}
+                record={{ ...e.objectChanges, [fieldName]: val }}
+                fieldName={fieldName}
+                recordType='Client'
+              />
+            )
+          );
+          return (
+            <Typography variant='body2' display='flex' gap={0.5}>
+              {displayName}: {from || nullText} &rarr; {to || nullText}
+            </Typography>
+          );
+        }
+      );
+    },
   },
 ];
 

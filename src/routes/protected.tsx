@@ -327,7 +327,14 @@ export const protectedRoutes = [
           },
           {
             path: DashboardRoutes.HISTORY,
-            element: <History />,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAuditClients'
+                otherwise={<Navigate to='profile' replace />}
+              >
+                <History />
+              </RootPermissionsFilter>
+            ),
           },
           {
             path: DashboardRoutes.ASSESSMENTS,

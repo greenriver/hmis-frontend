@@ -2548,6 +2548,7 @@ export type QueryServiceArgs = {
 export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean'];
+  canAuditClients: Scalars['Boolean'];
   canDeleteAssignedProjectData: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canDeleteOrganization: Scalars['Boolean'];
@@ -8595,6 +8596,7 @@ export type RootPermissionsFragmentFragment = {
   canAdministerHmis: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
+  canAuditClients: boolean;
   canEditOrganization: boolean;
   canDeleteOrganization: boolean;
   canViewDob: boolean;
@@ -8621,6 +8623,7 @@ export type GetRootPermissionsQuery = {
     canAdministerHmis: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
+    canAuditClients: boolean;
     canEditOrganization: boolean;
     canDeleteOrganization: boolean;
     canViewDob: boolean;
@@ -10238,6 +10241,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canAdministerHmis
     canEditClients
     canViewClients
+    canAuditClients
     canEditOrganization
     canDeleteOrganization
     canViewDob
