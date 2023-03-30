@@ -19,7 +19,7 @@ import {
   emptyErrorState,
   ErrorState,
   partitionValidations,
-} from '@/modules/errors/types';
+} from '@/modules/errors/util';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';

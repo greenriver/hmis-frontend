@@ -13,28 +13,31 @@ export const isServerError = (
   return !!(err && err instanceof Error && err.hasOwnProperty('result'));
 };
 
+/*** Error State helpers for storing all relevant error state  */
 export type ErrorState = {
   apolloError?: ApolloError;
   errors: ValidationError[];
   warnings: ValidationError[];
 };
 
-export const hasAnyValue = (state: ErrorState) =>
-  state.apolloError || state.errors.length > 0 || state.warnings.length > 0;
+export const hasAnyValue = (state: ErrorState): boolean =>
+  !!state.apolloError || state.errors.length > 0 || state.warnings.length > 0;
 
-export const hasErrors = (state: ErrorState) =>
-  state.apolloError || state.errors.length > 0;
+export const hasErrors = (state: ErrorState): boolean =>
+  !!state.apolloError || state.errors.length > 0;
 
-export const hasOnlyWarnings = (state: ErrorState) =>
+export const hasOnlyWarnings = (state: ErrorState): boolean =>
   !state.apolloError && state.errors.length == 0 && state.warnings.length > 0;
 
-export const emptyErrorState = {
+export const emptyErrorState: ErrorState = {
   apolloError: undefined,
   errors: [],
   warnings: [],
 };
 
-export const partitionValidations = (validations: ValidationError[]) => {
+export const partitionValidations = (
+  validations: ValidationError[]
+): ErrorState => {
   const split = partition(validations, { severity: ValidationSeverity.Error });
   return {
     errors: split[0],

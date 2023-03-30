@@ -19,7 +19,7 @@ import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { ErrorState, hasErrors, hasOnlyWarnings } from '@/modules/errors/types';
+import { ErrorState, hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {

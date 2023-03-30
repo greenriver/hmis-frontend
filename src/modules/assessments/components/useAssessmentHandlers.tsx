@@ -5,7 +5,7 @@ import {
   emptyErrorState,
   ErrorState,
   partitionValidations,
-} from '@/modules/errors/types';
+} from '@/modules/errors/util';
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
 import { FormValues } from '@/modules/form/types';
 import {

@@ -2,7 +2,7 @@ import { ApolloError } from '@apollo/client';
 import { Typography } from '@mui/material';
 import { GraphQLError } from 'graphql';
 
-import { isServerError } from '../types';
+import { isServerError } from '../util';
 
 const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
   let graphQLErrors = error.graphQLErrors;

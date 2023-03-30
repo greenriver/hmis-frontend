@@ -21,7 +21,7 @@ import {
   emptyErrorState,
   ErrorState,
   partitionValidations,
-} from '@/modules/errors/types';
+} from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
   DynamicFormProps,

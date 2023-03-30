@@ -3,7 +3,7 @@ import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import DynamicForm from './DynamicForm';
 
-import { emptyErrorState } from '@/modules/errors/types';
+import { emptyErrorState } from '@/modules/errors/util';
 import formData from '@/modules/form/data/mock.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 

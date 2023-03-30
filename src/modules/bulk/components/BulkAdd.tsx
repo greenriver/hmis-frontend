@@ -13,7 +13,7 @@ import {
   ErrorState,
   hasAnyValue,
   partitionValidations,
-} from '@/modules/errors/types';
+} from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import {
