@@ -68,6 +68,14 @@ Preview production build
 yarn build && yarn preview
 ```
 
+### Updating Codegen
+
+Use the `graphql:codegen` script to update generated types.
+
+```sh
+SCHEMA_PATH=<path to schema.graphql> yarn graphql:codegen
+```
+
 ### Cypress tests
 
 #### Cypress E2E Tests
