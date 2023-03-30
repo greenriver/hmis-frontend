@@ -43,7 +43,6 @@ rails driver:hmis:seed_definitions
 This must be run once to populate the database, and re-run any time the
 form definitions are changed.
 
-
 #### Custom Services Seed
 
 Run this to setup custom services:
@@ -61,4 +60,3 @@ rails driver:hmis:dump_graphql_schema
 ```
 
 To pick up the schema changes on the frontend, follow [this step](https://github.com/greenriver/hmis-frontend/commit/015176f04ce93c6a54dce4842acccf43d3879968).
-
