@@ -12,6 +12,7 @@ import {
 } from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/404';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
@@ -210,7 +211,7 @@ const AssessmentForm = ({
           FormActionProps={FormActionProps}
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment
-          warnIfEmpty={!!assessment || errors.warnings.length > 0}
+          warnIfEmpty={!!assessment || hasAnyValue(errors)}
         />
       </Grid>
 
