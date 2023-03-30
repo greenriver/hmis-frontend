@@ -53,14 +53,6 @@ export default defineConfig(({ command, mode }) => {
               console.debug('Starting proxy with options:', options);
             },
           },
-          '/users/auth/okta': {
-            target: env.HMIS_SERVER_URL || 'https://hmis-warehouse.dev.test',
-            changeOrigin: true,
-            secure: false,
-            configure: (proxy, options) => {
-              console.debug('Starting proxy with options:', options);
-            },
-          },
         },
       },
     }),
