@@ -558,6 +558,18 @@
             "deprecationReason": null
           },
           {
+            "name": "validateOnly",
+            "description": "Validate assessment but don't submit it",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "values",
             "description": "Raw form state as JSON",
             "type": {
@@ -19400,6 +19412,18 @@
           {
             "name": "confirmed",
             "description": "Whether warnings have been confirmed",
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "validateOnly",
+            "description": "Validate assessments but don't submit them",
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",

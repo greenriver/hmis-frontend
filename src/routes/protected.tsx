@@ -16,7 +16,6 @@ import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
-import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import NotFound from '@/components/pages/404';
@@ -43,6 +42,7 @@ import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
+import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
