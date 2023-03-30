@@ -25,11 +25,11 @@ import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import HouseholdSummaryTable from './HouseholdSummaryTable';
 import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
-import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import LoadingButton from '@/components/elements/LoadingButton';
 import RouterLink from '@/components/elements/RouterLink';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
-import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -228,7 +228,7 @@ const HouseholdSummaryTabPanel = memo(
                   data-testid='formErrorAlert'
                 >
                   <AlertTitle>Failed to submit</AlertTitle>
-                  <ValidationErrorDisplay errors={errors} />
+                  <ValidationErrorList errors={errors} />
                 </Alert>
               </Grid>
             )}

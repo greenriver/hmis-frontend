@@ -1,13 +1,20 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
-import { Alert, Paper } from '@mui/material';
+import { Paper } from '@mui/material';
 import { Stack } from '@mui/system';
-import { isEmpty } from 'lodash-es';
 import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/404';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import WarningAlert from '@/modules/errors/components/WarningAlert';
+import {
+  emptyErrorState,
+  ErrorState,
+  hasAnyValue,
+  partitionValidations,
+} from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
-import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import {
   DynamicFieldProps,
@@ -25,7 +32,6 @@ import {
   FormRole,
   useGetFormDefinitionQuery,
   ValidationError,
-  ValidationSeverity,
 } from '@/types/gqlTypes';
 
 export interface RenderListOptions<TargetType> {
@@ -84,8 +90,7 @@ const BulkAdd = <
     getKeyForTarget,
     title,
   } = props;
-  const [errors, setErrors] = useState<ValidationError[] | undefined>();
-  const [warnings, setWarnings] = useState<ValidationError[] | undefined>();
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const [targetValues, setTargetValues] = useState<Record<string, FormValues>>(
     {}
@@ -132,23 +137,16 @@ const BulkAdd = <
         const errors = getErrors(data) || [];
 
         if (errors.length > 0) {
-          const warnings = errors.filter(
-            (e) => e.severity === ValidationSeverity.Warning
-          );
-          const validationErrors = errors.filter(
-            (e) => e.severity !== ValidationSeverity.Warning
-          );
-          if (validationErrors.length > 0) window.scrollTo(0, 0);
-          setWarnings(warnings);
-          setErrors(validationErrors);
-          if (onError) onError(target, validationErrors);
+          window.scrollTo(0, 0);
+          setErrors(partitionValidations(errors));
+          if (onError) onError(target, errors);
         } else {
           if (onSuccess) onSuccess(target, data);
-          setWarnings([]);
-          setErrors([]);
+          setErrors(emptyErrorState);
         }
         if (onCompleted) onCompleted(target, data);
       },
+      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
     });
   };
 
@@ -156,15 +154,12 @@ const BulkAdd = <
     <Stack gap={2}>
       {title}
       {renderFields({})}
-      {errors && !isEmpty(errors) && (
-        <Alert key='errors' severity='error' sx={{ mb: 2 }}>
-          <ValidationErrorDisplay errors={errors} />
-        </Alert>
-      )}
-      {warnings && !isEmpty(warnings) && (
-        <Alert key='warnings' severity='warning'>
-          <ValidationErrorDisplay errors={warnings} />
-        </Alert>
+      {errors && hasAnyValue(errors) && (
+        <Stack gap={1} sx={{ mt: 4 }}>
+          <ApolloErrorAlert error={errors.apolloError} />
+          <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+          <WarningAlert key='warnings' warnings={errors.warnings} />
+        </Stack>
       )}
       <Paper
         sx={{

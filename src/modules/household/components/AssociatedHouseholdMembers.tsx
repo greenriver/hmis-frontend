@@ -1,34 +1,53 @@
 import { useMemo } from 'react';
 
+import { getClientIdentification, RecentHouseholdMember } from '../types';
+
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
-import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
-export const householdMemberColumns: ColumnDef<ClientFieldsFragment>[] = [
+export const householdMemberColumns: ColumnDef<
+  ClientFieldsFragment | RecentHouseholdMember
+>[] = [
   {
     header: 'Name',
     width: '20%',
     key: 'name',
     render: (client) => (
       <ClientName
-        client={client}
+        client={getClientIdentification(client)}
         routerLinkProps={{ target: '_blank' }}
         linkToProfile
       />
     ),
   },
-  { ...CLIENT_COLUMNS.ssn, width: '15%' },
-  { ...CLIENT_COLUMNS.dobAge, width: '15%' },
+  {
+    header: 'SSN',
+    key: 'ssn',
+    width: '15%',
+    render: (client) => (
+      <ClientSsn client={getClientIdentification(client)} lastFour />
+    ),
+  },
+  {
+    header: 'DOB / Age',
+    width: '10%',
+    key: 'dob',
+    render: (client) => (
+      <ClientDobAge client={getClientIdentification(client)} reveal />
+    ),
+  },
 ];
 
 interface Props
-  extends Omit<GenericTableProps<ClientFieldsFragment>, 'rows' | 'columns'> {
-  recentMembers: ClientFieldsFragment[];
-  additionalColumns?: ColumnDef<ClientFieldsFragment>[];
+  extends Omit<GenericTableProps<RecentHouseholdMember>, 'rows' | 'columns'> {
+  recentMembers: RecentHouseholdMember[];
+  additionalColumns?: ColumnDef<RecentHouseholdMember>[];
   hideHeaders?: boolean;
 }
 const AssociatedHouseholdMembers = ({
@@ -37,7 +56,7 @@ const AssociatedHouseholdMembers = ({
   hideHeaders,
   ...props
 }: Props) => {
-  const columns: ColumnDef<ClientFieldsFragment>[] = useMemo(() => {
+  const columns: ColumnDef<RecentHouseholdMember>[] = useMemo(() => {
     return [
       ...householdMemberColumns.map((c) =>
         hideHeaders ? { ...c, header: '' } : c
@@ -48,7 +67,7 @@ const AssociatedHouseholdMembers = ({
 
   if (recentMembers.length === 0) return null;
   return (
-    <GenericTable<ClientFieldsFragment>
+    <GenericTable<RecentHouseholdMember>
       rows={recentMembers || []}
       columns={columns}
       {...props}

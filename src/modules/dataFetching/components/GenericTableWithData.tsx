@@ -10,7 +10,6 @@ import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
 
-import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
@@ -18,6 +17,7 @@ import GenericTable, {
 import Loading from '@/components/elements/Loading';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
+import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 

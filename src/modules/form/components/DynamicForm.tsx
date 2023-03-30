@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
   forwardRef,
@@ -9,17 +9,18 @@ import React, {
   useState,
 } from 'react';
 
+import ErrorAlert from '../../errors/components/ErrorAlert';
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
-import { FormValues, ChangeType, FormActionTypes } from '../types';
+import { ChangeType, FormActionTypes, FormValues } from '../types';
 
-import ErrorAlert from './ErrorAlert';
 import FormActions, { FormActionProps } from './FormActions';
 import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
 
-import { useValidations } from '@/modules/assessments/components/useValidations';
-import { FormDefinitionJson, ValidationError } from '@/types/gqlTypes';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import { ErrorState, hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
+import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
   values: FormValues;
@@ -40,7 +41,7 @@ export interface DynamicFormProps
   onSaveDraft?: (values: FormValues, onSuccess?: VoidFunction) => void;
   loading?: boolean;
   initialValues?: Record<string, any>;
-  errors?: ValidationError[];
+  errors: ErrorState;
   showSavePrompt?: boolean;
   alwaysShowSaveSlide?: boolean;
   horizontal?: boolean;
@@ -70,7 +71,7 @@ const DynamicForm = forwardRef(
       onSaveDraft,
       loading,
       initialValues = {},
-      errors: validations,
+      errors: errorState,
       showSavePrompt = false,
       alwaysShowSaveSlide = false,
       horizontal = false,
@@ -87,8 +88,6 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
     });
-    const { errors, warnings } = useValidations(validations);
-
     const [dirty, setDirty] = useState(false);
 
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
@@ -129,8 +128,8 @@ const DynamicForm = forwardRef(
 
     useEffect(() => {
       // if we have warnings and no errors, show dialog. otherwise hide it.
-      setShowConfirmDialog(warnings.length > 0 && errors.length === 0);
-    }, [errors, warnings]);
+      setShowConfirmDialog(!!(errorState && hasOnlyWarnings(errorState)));
+    }, [errorState]);
 
     const handleSubmit = useCallback(
       (
@@ -199,16 +198,19 @@ const DynamicForm = forwardRef(
         onSubmit={(e: React.FormEvent<HTMLDivElement>) => e.preventDefault()}
       >
         <Grid container direction='column' spacing={2}>
-          {errors.length > 0 && (
+          {hasErrors(errorState) && (
             <Grid item>
-              <ErrorAlert errors={errors} />
+              <Stack gap={2}>
+                <ApolloErrorAlert error={errorState.apolloError} />
+                <ErrorAlert errors={errorState.errors} />
+              </Stack>
             </Grid>
           )}
           {renderFields({
             itemChanged: handleChangeCallback,
             severalItemsChanged: handleChangeCallback,
-            errors,
-            warnings,
+            errors: errorState.errors,
+            warnings: errorState.warnings,
             horizontal,
             pickListRelationId,
             warnIfEmpty,
@@ -229,7 +231,7 @@ const DynamicForm = forwardRef(
             onCancel={() => setShowConfirmDialog(false)}
             loading={loading || false}
             confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-            warnings={warnings}
+            warnings={errorState.warnings}
             {...FormWarningDialogProps}
           />
         )}

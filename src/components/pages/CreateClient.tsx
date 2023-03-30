@@ -37,6 +37,12 @@ const CreateClient: React.FC = () => {
         formRole={FormRole.Client}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Client' }}
+        localConstants={{
+          // For Client creation, allow the user to input SSN and DOB
+          // even if they don't have read-access to those fields
+          canViewFullSsn: true,
+          canViewDob: true,
+        }}
         title={
           <>
             <Box sx={{ mb: 2 }}>

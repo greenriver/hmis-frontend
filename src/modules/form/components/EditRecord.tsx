@@ -13,11 +13,15 @@ import {
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
-import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/404';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
   DynamicFormProps,
@@ -30,7 +34,6 @@ import {
   SubmitFormMutation,
   useGetFormDefinitionQuery,
   useSubmitFormMutation,
-  ValidationError,
 } from '@/types/gqlTypes';
 
 export interface Props<RecordType>
@@ -74,7 +77,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   top = STICKY_BAR_HEIGHT,
   ...props
 }: Props<RecordType>) => {
-  const [errors, setErrors] = useState<ValidationError[] | undefined>();
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const {
     data,
@@ -92,19 +95,19 @@ const EditRecord = <RecordType extends AllowedTypes>({
     [definition]
   );
 
-  const [submitForm, { loading: saveLoading, error: mutationError }] =
-    useSubmitFormMutation({
-      onCompleted: (data) => {
-        const errors = data.submitForm?.errors || [];
-        window.scrollTo(0, 0);
-        if (errors.length > 0) {
-          setErrors(errors);
-        } else {
-          const record = data.submitForm?.record || undefined;
-          if (record) onCompleted(record as RecordType);
-        }
-      },
-    });
+  const [submitForm, { loading: saveLoading }] = useSubmitFormMutation({
+    onCompleted: (data) => {
+      const errors = data.submitForm?.errors || [];
+      window.scrollTo(0, 0);
+      if (errors.length > 0) {
+        setErrors(partitionValidations(errors));
+      } else {
+        const record = data.submitForm?.record || undefined;
+        if (record) onCompleted(record as RecordType);
+      }
+    },
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+  });
 
   const initialValues = useMemo(() => {
     if (!itemMap || !definition) return {};
@@ -150,7 +153,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
         ...inputVariables,
       };
 
-      setErrors([]);
+      setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });
     },
     [definition, inputVariables, submitForm, record]
@@ -196,11 +199,6 @@ const EditRecord = <RecordType extends AllowedTypes>({
           ...props.FormWarningDialogProps,
         }}
       />
-      {mutationError && (
-        <Box sx={{ mt: 3 }}>
-          <ApolloErrorAlert error={mutationError} />
-        </Box>
-      )}
     </>
   );
 

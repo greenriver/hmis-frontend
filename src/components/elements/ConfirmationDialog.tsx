@@ -9,6 +9,10 @@ import { Stack } from '@mui/system';
 import * as React from 'react';
 
 import LoadingButton from '@/components/elements/LoadingButton';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import WarningAlert from '@/modules/errors/components/WarningAlert';
+import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
@@ -17,6 +21,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
   color?: ButtonProps['color'];
+  errors?: ErrorState;
 }
 
 const ConfirmationDialog = ({
@@ -27,6 +32,7 @@ const ConfirmationDialog = ({
   loading,
   confirmText = 'Confirm',
   color,
+  errors,
   ...other
 }: ConfirmationDialogProps) => {
   return (
@@ -44,7 +50,17 @@ const ConfirmationDialog = ({
       >
         {title}
       </DialogTitle>
-      <DialogContent sx={{ pb: 3 }}>{children}</DialogContent>
+      <DialogContent sx={{ pb: 3 }}>
+        {children}
+        {errors && hasAnyValue(errors) && (
+          <Stack gap={1} sx={{ mt: 4 }}>
+            <ApolloErrorAlert error={errors.apolloError} />
+            <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+            <WarningAlert key='warnings' warnings={errors.warnings} />
+          </Stack>
+        )}
+      </DialogContent>
+
       <DialogActions
         sx={{
           px: 4,
