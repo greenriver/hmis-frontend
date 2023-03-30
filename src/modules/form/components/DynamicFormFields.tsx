@@ -1,18 +1,19 @@
-import { pull } from 'lodash-es';
+import { pick, pull } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
 import {
   ItemChangedFn,
   OverrideableDynamicFieldProps,
   SeveralItemsChangedFn,
+  FormValues,
+  ItemMap,
+  LinkIdMap,
 } from '../types';
 import {
   autofillValues,
   buildCommonInputProps,
-  FormValues,
-  ItemMap,
-  LinkIdMap,
   shouldEnableItem,
+  transformSubmitValues,
 } from '../util/formUtil';
 
 import DynamicField from './DynamicField';
@@ -217,6 +218,22 @@ const DynamicFormFields: React.FC<Props> = ({
           severalItemsChanged={severalItemsChanged}
           visible={visible}
           locked={locked}
+          debug={
+            import.meta.env.MODE === 'development'
+              ? (keys?: string[]) => {
+                  const sectionValues = keys ? pick(values, keys) : values;
+                  const valuesByKey = transformSubmitValues({
+                    definition,
+                    values: sectionValues,
+                    keyByFieldName: true,
+                  });
+                  console.group(item.text || item.linkId);
+                  console.log(sectionValues);
+                  console.log(valuesByKey);
+                  console.groupEnd();
+                }
+              : undefined
+          }
         />
       );
     }

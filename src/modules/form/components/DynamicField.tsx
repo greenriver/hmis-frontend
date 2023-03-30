@@ -7,12 +7,10 @@ import {
   ChangeType,
   DynamicFieldProps,
   DynamicInputCommonProps,
-} from '../types';
-import {
-  hasMeaningfulValue,
   isPickListOption,
   isPickListOptionArray,
-} from '../util/formUtil';
+} from '../types';
+import { hasMeaningfulValue } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -134,7 +132,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         if (!data?.pickList) return;
 
         // If there is no value, look for InitialSelected value and set it
-        if (!value || (Array.isArray(value) && value.length === 0)) {
+        if (!hasMeaningfulValue(value)) {
           const initial = item.repeats
             ? data.pickList.filter((o) => o.initialSelected)
             : data.pickList.find((o) => o.initialSelected);

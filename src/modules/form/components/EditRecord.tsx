@@ -1,13 +1,13 @@
 import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import { LocalConstants } from '../types';
 import {
   createHudValuesForSubmit,
   createValuesForSubmit,
   debugFormValues,
   getInitialValues,
   getItemMap,
-  LocalConstants,
   shouldEnableItem,
 } from '../util/formUtil';
 

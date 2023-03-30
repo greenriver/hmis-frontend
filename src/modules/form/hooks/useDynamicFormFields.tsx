@@ -5,7 +5,8 @@ import DynamicFormFields, {
   isShown,
   Props as DynamicFormFieldsProps,
 } from '../components/DynamicFormFields';
-import { addDescendants, FormValues } from '../util/formUtil';
+import { FormValues } from '../types';
+import { addDescendants } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 

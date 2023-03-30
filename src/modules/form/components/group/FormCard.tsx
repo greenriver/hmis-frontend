@@ -1,4 +1,11 @@
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Button,
+  ButtonProps,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { includes, isNil, zipObject } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -26,7 +33,11 @@ const FormCard = ({
   anchor,
   values,
   locked,
-}: GroupItemComponentProps & { anchor?: string }) => {
+  debug,
+}: GroupItemComponentProps & {
+  anchor?: string;
+  debug?: (ids?: string[]) => void;
+}) => {
   const [fillDialogOpen, setFillDialogOpen] = useState(false);
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
@@ -74,6 +85,11 @@ const FormCard = ({
     [setFillDialogOpen, severalItemsChanged, item]
   );
 
+  const buttonProps: ButtonProps = {
+    variant: 'outlined',
+    size: 'small',
+    sx: { height: 'fit-content' },
+  };
   return (
     <Grid id={anchor} item>
       <Paper
@@ -88,30 +104,35 @@ const FormCard = ({
             <Typography variant='h5' sx={{ mb: 2 }}>
               {item.text}
             </Typography>
-            {fillable && (
-              <Stack direction='row' spacing={2}>
-                <Button
-                  onClick={() => setFillDialogOpen(true)}
-                  variant='outlined'
-                  size='small'
-                  sx={{ height: 'fit-content' }}
-                  disabled={locked}
-                >
-                  Fill Section
+
+            <Stack direction='row' spacing={2}>
+              {debug && import.meta.env.MODE === 'development' && (
+                <Button {...buttonProps} onClick={() => debug(childLinkIds)}>
+                  Debug
                 </Button>
-                <Button
-                  variant='outlined'
-                  size='small'
-                  color='error'
-                  sx={{ height: 'fit-content' }}
-                  onClick={() => setClearDialogOpen(true)}
-                  data-testid='clearButton'
-                  disabled={!hasAnyChildValues || locked}
-                >
-                  Clear Section
-                </Button>
-              </Stack>
-            )}
+              )}
+              {fillable && (
+                <>
+                  <Button
+                    data-testid='fillSectionButton'
+                    onClick={() => setFillDialogOpen(true)}
+                    disabled={locked}
+                    {...buttonProps}
+                  >
+                    Fill Section
+                  </Button>
+                  <Button
+                    data-testid='clearButton'
+                    color='error'
+                    onClick={() => setClearDialogOpen(true)}
+                    disabled={!hasAnyChildValues || locked}
+                    {...buttonProps}
+                  >
+                    Clear Section
+                  </Button>
+                </>
+              )}
+            </Stack>
           </Stack>
         )}
 
