@@ -6,7 +6,6 @@ import LockedAssessmentAlert from './LockedAssessmentAlert';
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
@@ -82,17 +81,12 @@ const AssessmentForm = ({
     setReloadInitialValues((old) => !old);
   }, []);
 
-  const {
-    submitHandler,
-    saveDraftHandler,
-    mutationLoading,
-    errors,
-    apolloError,
-  } = useAssessmentHandlers({
-    definition,
-    enrollmentId: enrollment.id,
-    assessmentId: assessment?.id,
-  });
+  const { submitHandler, saveDraftHandler, mutationLoading, errors } =
+    useAssessmentHandlers({
+      definition,
+      enrollmentId: enrollment.id,
+      assessmentId: assessment?.id,
+    });
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
@@ -190,11 +184,6 @@ const AssessmentForm = ({
         </Box>
       </Grid>
       <Grid item xs={9} sx={{ pt: '0 !important' }}>
-        {apolloError && (
-          <Box sx={{ mb: 3 }}>
-            <ApolloErrorAlert error={apolloError} />
-          </Box>
-        )}
         {locked && assessment && (
           <LockedAssessmentAlert
             allowUnlock={embeddedInWorkflow}
@@ -221,7 +210,7 @@ const AssessmentForm = ({
           FormActionProps={FormActionProps}
           // Only show "warn if empty" treatments if this is an existing assessment,
           // OR if the user has attempted to submit this (new) assessment
-          warnIfEmpty={!!assessment || errors.length > 0}
+          warnIfEmpty={!!assessment || errors.warnings.length > 0}
         />
       </Grid>
 

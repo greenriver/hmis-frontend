@@ -1,8 +1,9 @@
 import { Box } from '@mui/material';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
 
 import DynamicForm from './DynamicForm';
 
+import { emptyErrorState } from '@/modules/errors/types';
 import formData from '@/modules/form/data/mock.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -27,7 +28,11 @@ const Template: ComponentStory<typeof DynamicForm> = (args) => (
 );
 
 export const Default = Template.bind({});
-Default.args = { definition: formDefinition };
+Default.args = { definition: formDefinition, errors: emptyErrorState };
 
 export const WithWarnIfEmpty = Template.bind({});
-WithWarnIfEmpty.args = { definition: formDefinition, warnIfEmpty: true };
+WithWarnIfEmpty.args = {
+  definition: formDefinition,
+  warnIfEmpty: true,
+  errors: emptyErrorState,
+};

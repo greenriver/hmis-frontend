@@ -1,5 +1,5 @@
 import { Box, lighten, Stack, Typography } from '@mui/material';
-import { groupBy } from 'lodash-es';
+import { groupBy, reject } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
@@ -57,10 +57,13 @@ const ErrorSection = ({
 );
 
 export const ValidationWarningDisplay = ({
-  warnings,
+  warnings: validations,
 }: {
   warnings: ValidationError[];
 }) => {
+  const warnings = reject(validations, ['severity', 'error']);
+  if (warnings.length === 0) return null;
+
   // Split into 2 groups (dnc vs other)
   const grouped = groupBy(warnings, (e) =>
     e.type === ValidationType.DataNotCollected ? 'dnc' : 'other'

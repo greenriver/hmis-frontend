@@ -1,7 +1,8 @@
-import { ApolloError, ServerError, ServerParseError } from '@apollo/client';
-import { Box, Typography, Button, Alert, AlertTitle } from '@mui/material';
+import { ApolloError, isApolloError } from '@apollo/client';
+import { Alert, AlertTitle, Box, Button, Typography } from '@mui/material';
 import { FallbackRender } from '@sentry/react';
-import { GraphQLError } from 'graphql';
+
+import ApolloErrorTrace from './ApolloErrorTrace';
 
 const ErrorFallback = () => (
   <Box
@@ -15,58 +16,6 @@ const ErrorFallback = () => (
   >
     <Typography variant='h4'>Something went wrong.</Typography>
   </Box>
-);
-
-const isApolloError = (err: Error | ApolloError): err is ApolloError => {
-  return !!(err instanceof Error && err.hasOwnProperty('graphQLErrors'));
-};
-
-const isServerError = (
-  err: Error | ServerParseError | ServerError | null
-): err is ServerError => {
-  return !!(err && err instanceof Error && err.hasOwnProperty('result'));
-};
-
-export const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
-  let graphQLErrors = error.graphQLErrors;
-  if (graphQLErrors.length < 1 && isServerError(error.networkError)) {
-    graphQLErrors = error.networkError?.result?.errors || [];
-  }
-
-  return (
-    <>
-      {graphQLErrors.map((e) => (
-        <>
-          <Typography
-            key={e.message}
-            variant='body2'
-            sx={{ fontFamily: 'Monospace', my: 2 }}
-          >
-            {e.message}
-          </Typography>
-          {import.meta.env.MODE === 'development' &&
-            (
-              (e as GraphQLError & { backtrace: string[] })?.backtrace || []
-            ).map((line) => (
-              <Typography
-                key={line}
-                variant='caption'
-                sx={{ fontFamily: 'Monospace', display: 'block' }}
-              >
-                {line}
-              </Typography>
-            ))}
-        </>
-      ))}
-    </>
-  );
-};
-
-export const ApolloErrorAlert = ({ error }: { error?: ApolloError }) => (
-  <Alert severity='error'>
-    <AlertTitle>An error occurred.</AlertTitle>
-    {error && <ApolloErrorTrace error={error} />}
-  </Alert>
 );
 
 export const alertErrorFallback: FallbackRender = ({

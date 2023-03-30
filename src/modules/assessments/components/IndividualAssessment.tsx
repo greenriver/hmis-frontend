@@ -7,7 +7,6 @@ import { assessmentDate } from '../util';
 
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
-import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
@@ -19,6 +18,7 @@ import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
+import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import {
   DynamicFormProps,
   DynamicFormRef,

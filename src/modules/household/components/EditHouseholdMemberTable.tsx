@@ -15,6 +15,11 @@ import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
 import ClientName from '@/modules/client/components/ClientName';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/types';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
@@ -42,6 +47,7 @@ const EditHouseholdMemberTable = ({
 }: Props) => {
   const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
   const [confirmedHoH, setConfirmedHoH] = useState(false);
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
   const [hoh, setHoH] = useState<MaybeClient>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
@@ -53,35 +59,35 @@ const EditHouseholdMemberTable = ({
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
 
-  const [setHoHMutate, { data, loading, error }] = useSetHoHMutation({
+  const [setHoHMutate, { loading }] = useSetHoHMutation({
     onCompleted: (data) => {
-      // highlight relationship field for non-HOH members
-      const members =
-        data.setHoHForEnrollment?.enrollment?.household.householdClients
-          .filter(
-            (hc) =>
-              hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
-          )
-          .map((hc) => hc.client.id);
-      setHighlight(members || []);
-      // refetch, so that all relationships-to-HoH to reload
-      refetch();
+      if (!data.setHoHForEnrollment) return;
+
+      if (data.setHoHForEnrollment.enrollment) {
+        // highlight relationship field for non-HOH members
+        const members =
+          data.setHoHForEnrollment?.enrollment?.household.householdClients
+            .filter(
+              (hc) =>
+                hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
+            )
+            .map((hc) => hc.client.id);
+        setHighlight(members || []);
+        setProposedHoH(null);
+        setConfirmedHoH(false);
+        // refetch, so that all relationships-to-HoH to reload
+        refetch();
+      } else if (data.setHoHForEnrollment.errors.length > 0) {
+        const errors = data.setHoHForEnrollment.errors;
+        setErrors(partitionValidations(errors));
+        setConfirmedHoH(false);
+      }
+    },
+    onError: (apolloError) => {
+      setConfirmedHoH(false);
+      setErrors({ ...emptyErrorState, apolloError });
     },
   });
-
-  // If there was an error changing HoH, close the dialog.
-  // FIXME: get the apollo client to recognize this error, and show it to the user
-  useEffect(() => {
-    const gqlErrors = data?.setHoHForEnrollment?.errors || [];
-    if (gqlErrors.length > 0 || error) {
-      console.error(
-        'Error setting HoH',
-        data?.setHoHForEnrollment?.errors || error
-      );
-      setProposedHoH(null);
-      setConfirmedHoH(false);
-    }
-  }, [data, error]);
 
   // If member list has changed, update HoH and clear proposed-HoH status
   useEffect(() => {
@@ -247,14 +253,18 @@ const EditHouseholdMemberTable = ({
 
   return (
     <>
-      {proposedHoH && !error && (
+      {proposedHoH && (
         <ConfirmationDialog
           open
           title='Change Head of Household'
           confirmText='Confirm Change'
           onConfirm={onChangeHoH}
-          onCancel={() => setProposedHoH(null)}
+          onCancel={() => {
+            setProposedHoH(null);
+            setErrors(emptyErrorState);
+          }}
           loading={loading || confirmedHoH}
+          errors={errors}
           color='error'
         >
           <>
