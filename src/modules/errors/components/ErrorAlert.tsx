@@ -1,7 +1,7 @@
 import { Alert, AlertTitle } from '@mui/material';
 import { reject } from 'lodash-es';
 
-import ValidationErrorDisplay from './ValidationErrorDisplay';
+import ValidationErrorList from './ValidationErrorList';
 
 import { ValidationError } from '@/types/gqlTypes';
 
@@ -22,7 +22,7 @@ const ErrorAlert = ({
       <AlertTitle>
         {fixable ? FIXABLE_ERROR_HEADING : UNKNOWN_ERROR_HEADING}
       </AlertTitle>
-      <ValidationErrorDisplay errors={errors} />
+      <ValidationErrorList errors={errors} />
     </Alert>
   );
 };

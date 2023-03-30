@@ -4,7 +4,32 @@ import { ReactNode } from 'react';
 
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
-const ErrorList = ({
+const WarningSection = ({
+  header,
+  children,
+}: {
+  header: ReactNode;
+  children: ReactNode;
+}) => (
+  <Box
+    sx={{
+      backgroundColor: lighten('#FFF9EB', 0.5),
+    }}
+  >
+    <Box
+      sx={{
+        px: 2,
+        py: 2,
+        backgroundColor: '#FFF9EB',
+      }}
+    >
+      {header}
+    </Box>
+    <Box sx={{ px: 2, py: 2 }}>{children}</Box>
+  </Box>
+);
+
+const WarningList = ({
   title,
   errors,
   attributeOnly = false,
@@ -31,32 +56,7 @@ const ErrorList = ({
   </Box>
 );
 
-const ErrorSection = ({
-  header,
-  children,
-}: {
-  header: ReactNode;
-  children: ReactNode;
-}) => (
-  <Box
-    sx={{
-      backgroundColor: lighten('#FFF9EB', 0.5),
-    }}
-  >
-    <Box
-      sx={{
-        px: 2,
-        py: 2,
-        backgroundColor: '#FFF9EB',
-      }}
-    >
-      {header}
-    </Box>
-    <Box sx={{ px: 2, py: 2 }}>{children}</Box>
-  </Box>
-);
-
-export const ValidationWarningDisplay = ({
+const WarningAlert = ({
   warnings: validations,
 }: {
   warnings: ValidationError[];
@@ -72,14 +72,14 @@ export const ValidationWarningDisplay = ({
   return (
     <Stack gap={4}>
       {grouped.other && (
-        <ErrorSection
+        <WarningSection
           header={<Typography fontWeight={600}>Warnings</Typography>}
         >
-          <ErrorList errors={grouped.other} />
-        </ErrorSection>
+          <WarningList errors={grouped.other} />
+        </WarningSection>
       )}
       {grouped.dnc && (
-        <ErrorSection
+        <WarningSection
           header={
             <Typography fontWeight={600}>
               {grouped.dnc.length} field
@@ -92,7 +92,7 @@ export const ValidationWarningDisplay = ({
             {/* group DNC warnings by form section */}
             {Object.entries(groupBy(grouped.dnc, 'section')).map(
               ([title, errors]) => (
-                <ErrorList
+                <WarningList
                   key={title}
                   title={title}
                   errors={errors}
@@ -101,49 +101,10 @@ export const ValidationWarningDisplay = ({
               )
             )}
           </Stack>
-        </ErrorSection>
+        </WarningSection>
       )}
     </Stack>
   );
 };
 
-const ValidationErrorDisplay = ({ errors }: { errors: ValidationError[] }) => {
-  const grouped = groupBy(errors, (e) =>
-    e.type === ValidationType.Required ? 'required' : 'other'
-  );
-
-  if (grouped.other?.length === 1 && !grouped.required) {
-    return (
-      <Box sx={{ mt: 1 }}>
-        <Typography variant='inherit'>
-          {grouped.other[0].fullMessage}
-        </Typography>
-      </Box>
-    );
-  }
-
-  return (
-    <Box component='ul' sx={{ mt: 1, mb: 2, pl: 2.5 }}>
-      {grouped.required && (
-        <li>
-          <Typography variant='inherit'>
-            Missing Required Fields:{' '}
-            <b>
-              {grouped.required
-                .map((e) => e.readableAttribute || e.attribute)
-                .join(', ')}
-            </b>
-          </Typography>
-        </li>
-      )}
-      {grouped.other &&
-        grouped.other.map((e) => (
-          <li>
-            <Typography variant='inherit'>{e.fullMessage}</Typography>
-          </li>
-        ))}
-    </Box>
-  );
-};
-
-export default ValidationErrorDisplay;
+export default WarningAlert;

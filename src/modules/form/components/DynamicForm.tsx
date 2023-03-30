@@ -9,11 +9,11 @@ import React, {
   useState,
 } from 'react';
 
+import ErrorAlert from '../../errors/components/ErrorAlert';
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
-import ErrorAlert from './ErrorAlert';
 import FormActions, { FormActionProps } from './FormActions';
 import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';

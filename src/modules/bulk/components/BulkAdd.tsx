@@ -6,6 +6,8 @@ import { ReactNode, useMemo, useState } from 'react';
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/404';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import WarningAlert from '@/modules/errors/components/WarningAlert';
 import {
   emptyErrorState,
   ErrorState,
@@ -13,8 +15,6 @@ import {
   partitionValidations,
 } from '@/modules/errors/types';
 import DynamicField from '@/modules/form/components/DynamicField';
-import ErrorAlert from '@/modules/form/components/ErrorAlert';
-import { ValidationWarningDisplay } from '@/modules/form/components/ValidationErrorDisplay';
 import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
 import {
   DynamicFieldProps,
@@ -158,7 +158,7 @@ const BulkAdd = <
         <Stack gap={1} sx={{ mt: 4 }}>
           <ApolloErrorAlert error={errors.apolloError} />
           <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
-          <ValidationWarningDisplay key='warnings' warnings={errors.warnings} />
+          <WarningAlert key='warnings' warnings={errors.warnings} />
         </Stack>
       )}
       <Paper

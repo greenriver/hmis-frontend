@@ -10,9 +10,9 @@ import * as React from 'react';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import WarningAlert from '@/modules/errors/components/WarningAlert';
 import { ErrorState, hasAnyValue } from '@/modules/errors/types';
-import ErrorAlert from '@/modules/form/components/ErrorAlert';
-import { ValidationWarningDisplay } from '@/modules/form/components/ValidationErrorDisplay';
 
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
@@ -56,10 +56,7 @@ const ConfirmationDialog = ({
           <Stack gap={1} sx={{ mt: 4 }}>
             <ApolloErrorAlert error={errors.apolloError} />
             <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
-            <ValidationWarningDisplay
-              key='warnings'
-              warnings={errors.warnings}
-            />
+            <WarningAlert key='warnings' warnings={errors.warnings} />
           </Stack>
         )}
       </DialogContent>
