@@ -2,12 +2,11 @@ import { Chip, Stack, Typography } from '@mui/material';
 import { groupBy } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { ValidationWarningDisplay } from './ValidationErrorDisplay';
-
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
+import WarningAlert from '@/modules/errors/components/WarningAlert';
 import { ValidationError } from '@/types/gqlTypes';
 
 export interface FormWarningDialogProps
@@ -58,15 +57,13 @@ const FormWarningDialog = ({
                 />
               </Stack>
             ),
-            content: (
-              <ValidationWarningDisplay warnings={warningsByRecordId[id]} />
-            ),
+            content: <WarningAlert warnings={warningsByRecordId[id]} />,
           };
         })}
       />
     );
   } else {
-    contents = <ValidationWarningDisplay warnings={warnings} />;
+    contents = <WarningAlert warnings={warnings} />;
   }
 
   return (

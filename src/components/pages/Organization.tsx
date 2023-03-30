@@ -77,34 +77,33 @@ const Organization = () => {
           )}
         </Grid>
         <Grid item xs>
-          {canCreateProject ||
-            (organization?.contactInformation && (
-              <Paper sx={{ p: 2, mb: 2 }}>
-                {organization?.contactInformation && (
-                  <Stack spacing={1} sx={{ mb: 4 }} data-testid='contactInfo'>
-                    <Typography variant='h6'>Contact</Typography>
-                    <MultilineTypography variant='body2'>
-                      {organization?.contactInformation}
-                    </MultilineTypography>
-                  </Stack>
-                )}
-                {canCreateProject && (
-                  <Stack spacing={1}>
-                    <Typography variant='h6'>Add to Organization</Typography>
-                    <ButtonLink
-                      data-testid='addProjectButton'
-                      to={generateSafePath(Routes.CREATE_PROJECT, {
-                        organizationId,
-                      })}
-                      Icon={AddIcon}
-                      leftAlign
-                    >
-                      Add Project
-                    </ButtonLink>
-                  </Stack>
-                )}
-              </Paper>
-            ))}
+          {(canCreateProject || !!organization?.contactInformation) && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              {organization?.contactInformation && (
+                <Stack spacing={1} sx={{ mb: 4 }} data-testid='contactInfo'>
+                  <Typography variant='h6'>Contact</Typography>
+                  <MultilineTypography variant='body2'>
+                    {organization?.contactInformation}
+                  </MultilineTypography>
+                </Stack>
+              )}
+              {canCreateProject && (
+                <Stack spacing={1}>
+                  <Typography variant='h6'>Add to Organization</Typography>
+                  <ButtonLink
+                    data-testid='addProjectButton'
+                    to={generateSafePath(Routes.CREATE_PROJECT, {
+                      organizationId,
+                    })}
+                    Icon={AddIcon}
+                    leftAlign
+                  >
+                    Add Project
+                  </ButtonLink>
+                </Stack>
+              )}
+            </Paper>
+          )}
           <OrganizationPermissionsFilter
             id={organizationId}
             permissions={['canDeleteOrganization', 'canEditOrganization']}

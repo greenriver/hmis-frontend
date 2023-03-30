@@ -22,6 +22,11 @@ import {
 } from '@/modules/bedUnitManagement/bedUnitUtil';
 import BedsTable from '@/modules/bedUnitManagement/components/BedsTable';
 import UnitsTable from '@/modules/bedUnitManagement/components/UnitsTable';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
@@ -36,7 +41,6 @@ import {
   useCreateBedsMutation,
   useCreateUnitsMutation,
   useGetInventoryQuery,
-  ValidationError,
 } from '@/types/gqlTypes';
 
 const InventoryBeds = () => {
@@ -48,37 +52,39 @@ const InventoryBeds = () => {
   const title = 'Beds and Units';
   const [crumbs, crumbsLoading, project] = useProjectCrumbs();
   const [dialogOpen, setDialogOpen] = useState<'BEDS' | 'UNITS' | null>(null);
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
   const { data, loading, error } = useGetInventoryQuery({
     variables: { id: inventoryId },
   });
   const closeDialog = useCallback(() => {
     setDialogOpen(null);
-    setErrors([]);
+    setErrors(emptyErrorState);
   }, []);
 
   const [createBeds, { loading: createBedsLoading }] = useCreateBedsMutation({
     onCompleted: (data) => {
       if (data.createBeds?.errors?.length) {
-        setErrors(data.createBeds?.errors);
+        setErrors(partitionValidations(data.createBeds?.errors));
       } else {
         evictBedsQuery(inventoryId);
         evictUnitsQuery(inventoryId);
         closeDialog();
       }
     },
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
   const [createUnits, { loading: createUnitsLoading }] = useCreateUnitsMutation(
     {
       onCompleted: (data) => {
         if (data.createUnits?.errors?.length) {
-          setErrors(data.createUnits?.errors);
+          setErrors(partitionValidations(data.createUnits?.errors));
         } else {
           // evictBedsQuery(inventoryId);
           evictUnitsQuery(inventoryId);
           closeDialog();
         }
       },
+      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
     }
   );
 

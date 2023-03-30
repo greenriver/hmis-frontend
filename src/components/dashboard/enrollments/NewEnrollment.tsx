@@ -11,7 +11,7 @@ import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
 import NotFound from '@/components/pages/404';
 import useSafeParams from '@/hooks/useSafeParams';
-import ErrorAlert from '@/modules/form/components/ErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
