@@ -22,6 +22,7 @@ fragment ClientName on Client {
 fragment ClientPermissions on Client {
   id
   access {
+    id
     canViewDob
     canViewFullSsn
     canViewPartialSsn
@@ -48,6 +49,7 @@ fragment ClientIdentificationFields on Client {
   age
   ssn
   access {
+    id
     canViewFullSsn
     canViewPartialSsn
   }

@@ -28,6 +28,7 @@ export const RITA_ACKROYD = {
   dob: '1980-03-20',
   nameSuffix: null,
   access: {
+    id: '9999:1',
     canViewDob: true,
     canViewFullSsn: true,
     canViewPartialSsn: true,

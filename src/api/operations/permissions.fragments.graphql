@@ -1,4 +1,5 @@
 fragment RootPermissionsFragment on QueryAccess {
+  id
   canAdministerHmis
   canEditClients
   canViewClients
