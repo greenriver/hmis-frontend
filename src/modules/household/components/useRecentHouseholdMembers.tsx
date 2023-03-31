@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 
-import {
-  ClientFieldsFragment,
-  useGetClientHouseholdMemberCandidatesQuery,
-} from '@/types/gqlTypes';
+import { RecentHouseholdMember } from '../types';
+
+import { useGetClientHouseholdMemberCandidatesQuery } from '@/types/gqlTypes';
 
 /**
  * Get a unique list of recent household members for this client
@@ -22,15 +21,15 @@ export function useRecentHouseholdMembers(
 
   const members = useMemo(() => {
     if (!client) return;
-    const members: Record<string, ClientFieldsFragment> = {};
+    const members: Record<string, RecentHouseholdMember> = {};
     let sourceClient;
     client.enrollments.nodes.forEach((en) => {
-      en.household.householdClients.forEach(({ client }) => {
-        if (client.id in members) return;
-        if (client.id === clientId) {
-          sourceClient = client;
+      en.household.householdClients.forEach((hc) => {
+        if (hc.client.id in members) return;
+        if (hc.client.id === clientId) {
+          sourceClient = { ...hc, projectName: en.project.projectName };
         } else {
-          members[client.id] = client;
+          members[client.id] = { ...hc, projectName: en.project.projectName };
         }
       });
     });
@@ -42,7 +41,7 @@ export function useRecentHouseholdMembers(
   if (error) throw error;
 
   return [members, loading] as [
-    members: ClientFieldsFragment[] | undefined,
+    members: RecentHouseholdMember[] | undefined,
     loading: boolean
   ];
 }

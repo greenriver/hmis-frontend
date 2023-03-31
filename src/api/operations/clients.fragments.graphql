@@ -22,12 +22,17 @@ fragment ClientName on Client {
 fragment ClientPermissions on Client {
   id
   access {
+    id
     canViewDob
     canViewFullSsn
     canViewPartialSsn
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
   }
 }
 
@@ -44,6 +49,7 @@ fragment ClientIdentificationFields on Client {
   age
   ssn
   access {
+    id
     canViewFullSsn
     canViewPartialSsn
   }
@@ -360,4 +366,27 @@ fragment HealthAndDvFields on HealthAndDv {
     ...UserFields
   }
   whenOccurred
+}
+
+fragment FileFields on File {
+  confidential
+  contentType
+  createdAt
+  effectiveDate
+  expirationDate
+  id
+  name
+  fileBlobId
+  updatedAt
+  url
+  tags
+  ownFile
+  enrollmentId
+  enrollment {
+    id
+  }
+  updatedBy {
+    id
+    name
+  }
 }

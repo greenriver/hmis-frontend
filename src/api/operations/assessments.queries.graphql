@@ -143,6 +143,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on Service {
         ...ServiceFields
       }
+      ... on File {
+        ...FileFields
+      }
     }
     errors {
       ...ValidationErrorFields

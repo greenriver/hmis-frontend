@@ -115,6 +115,14 @@ export const HmisEnums = {
     NOT_EQUAL: 'NOT_EQUAL',
   },
   EnrollmentSortOption: { MOST_RECENT: 'MOST_RECENT' },
+  EnrollmentStatus: {
+    ACTIVE: 'Active',
+    ANY_ENTRY_INCOMPLETE: 'Household Entry Incomplete',
+    ANY_EXIT_INCOMPLETE: 'Household Exit Incomplete',
+    EXITED: 'Exited',
+    OWN_ENTRY_INCOMPLETE: 'Entry Incomplete',
+    OWN_EXIT_INCOMPLETE: 'Exit Incomplete',
+  },
   Ethnicity: {
     INVALID: 'Invalid Value',
     NON_HISPANIC_NON_LATIN_A_O_X: 'Non-Hispanic/Non-Latin(a)(o)(x)',
@@ -184,6 +192,7 @@ export const HmisEnums = {
     CLIENT: 'Client',
     CUSTOM: 'Custom Assessment',
     EXIT: 'Exit Assessment',
+    FILE: 'File',
     FUNDER: 'Funder',
     INTAKE: 'Intake Assessment',
     INVENTORY: 'Inventory',
@@ -349,6 +358,7 @@ export const HmisEnums = {
     CURRENCY: 'CURRENCY',
     DATE: 'DATE',
     DISPLAY: 'DISPLAY',
+    FILE: 'FILE',
     GROUP: 'GROUP',
     IMAGE: 'IMAGE',
     INTEGER: 'INTEGER',
@@ -488,6 +498,7 @@ export const HmisEnums = {
   PickListType: {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_UNITS: 'AVAILABLE_UNITS',
+    CLIENT_ENROLLMENTS: 'CLIENT_ENROLLMENTS',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DESTINATION: 'DESTINATION',

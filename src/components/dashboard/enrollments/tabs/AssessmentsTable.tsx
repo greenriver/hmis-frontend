@@ -84,7 +84,7 @@ const AssessmentsTable = ({
     useState<AssessmentFieldsFragment | null>(null);
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: assessment.id,

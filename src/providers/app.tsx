@@ -8,10 +8,10 @@ import { BrowserRouter } from 'react-router-dom';
 
 import apolloClient from './apolloClient';
 
-import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MergedThemeProvider from '@/config/MergedThemeProvider';
 import { AuthProvider } from '@/modules/auth/hooks/useAuth';
+import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import { HmisAppSettingsProvider } from '@/modules/hmisAppSettings/Provider';
 
 type AppProviderProps = {

@@ -53,6 +53,9 @@ jobs:
           export GITHASH="${SHA::9}"
           export IMAGE_TAG="githash-${GITHASH}"
 
+          echo "## Git Hash" >> $GITHUB_STEP_SUMMARY
+          echo $IMAGE_TAG >> $GITHUB_STEP_SUMMARY
+
           echo "node_version=$NODE_VERSION" >> $GITHUB_OUTPUT
           echo "git_hash=$GITHASH" >> $GITHUB_OUTPUT
           echo "image_tag=$IMAGE_TAG" >> $GITHUB_OUTPUT

@@ -79,6 +79,7 @@ export const ClientPermissionsFilter: React.FC<
 > = ({ id, ...props }) => {
   const { data, loading } = useGetClientPermissionsQuery({
     variables: { id },
+    skip: !id,
   });
   const access = data?.client?.access;
 

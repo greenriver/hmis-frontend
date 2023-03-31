@@ -6,7 +6,7 @@ version: '3.7'
 
 services:
   hmis-frontend:
-    image: hmis-frontend:0.6
+    image: hmis-frontend:${TAG:-0.7}
     stdin_open: true
     tty: true
     build:

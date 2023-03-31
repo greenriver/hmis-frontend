@@ -25,11 +25,13 @@ import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
 import HouseholdSummaryTable from './HouseholdSummaryTable';
 import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
 
-import { ApolloErrorAlert } from '@/components/elements/ErrorFallback';
 import LoadingButton from '@/components/elements/LoadingButton';
+import RouterLink from '@/components/elements/RouterLink';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
 import FormWarningDialog from '@/modules/form/components/FormWarningDialog';
-import ValidationErrorDisplay from '@/modules/form/components/ValidationErrorDisplay';
 import { cache } from '@/providers/apolloClient';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   SubmitHouseholdAssessmentsMutation,
@@ -37,6 +39,7 @@ import {
   ValidationError,
   ValidationSeverity,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface HouseholdSummaryTabPanelProps {
   active: boolean;
@@ -174,6 +177,11 @@ const HouseholdSummaryTabPanel = memo(
       [submitMutation, onCompleted, assessmentsToSubmit]
     );
 
+    const [hohClientId, hohEnrollmentId] = useMemo(() => {
+      const tab = tabs.find(({ isHoh }) => isHoh);
+      return [tab?.clientId, tab?.enrollmentId];
+    }, [tabs]);
+
     return (
       <AlwaysMountedTabPanel
         active={active}
@@ -190,6 +198,23 @@ const HouseholdSummaryTabPanel = memo(
             <Typography variant='h4' sx={{ mb: 3 }}>
               Complete {assessmentPrefix(formRole)} {projectName}
             </Typography>
+            {formRole === FormRole.Exit && hohEnrollmentId && hohClientId && (
+              <Typography sx={{ mb: 3 }}>
+                Select members to exit. The Head of Household cannot be exited
+                before other members. In order to exit the HoH, you must either
+                exit all members or{' '}
+                <RouterLink
+                  to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+                    clientId: hohClientId,
+                    enrollmentId: hohEnrollmentId,
+                  })}
+                  variant='body1'
+                >
+                  designate a new HoH
+                </RouterLink>
+                .
+              </Typography>
+            )}
             {apolloError && (
               <Box sx={{ mb: 3 }}>
                 <ApolloErrorAlert error={apolloError} />
@@ -203,7 +228,7 @@ const HouseholdSummaryTabPanel = memo(
                   data-testid='formErrorAlert'
                 >
                   <AlertTitle>Failed to submit</AlertTitle>
-                  <ValidationErrorDisplay errors={errors} />
+                  <ValidationErrorList errors={errors} />
                 </Alert>
               </Grid>
             )}

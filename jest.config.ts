@@ -5,6 +5,7 @@ export default {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)$':
       '<rootDir>/src/test/__mocks__/fileTransformer.js',
     '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
+    '\\.worker.js.*': '<rootDir>/src/test/__mocks__/workerMock.js',
     // replace lodash-es with the commonjs version during testing runtime
     '^lodash-es$': 'lodash',
   },

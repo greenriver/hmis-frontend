@@ -122,6 +122,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
         queryVariables={{ id: projectId }}
         queryDocument={GetProjectFundersDocument}
         columns={tableColumns}
+        recordType='Funder'
         pagePath='project.funders'
         noData='No funding sources.'
         {...props}
