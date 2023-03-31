@@ -8,11 +8,12 @@ import AllFiles from '@/components/dashboard/AllFiles';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import AssessmentPage from '@/components/dashboard/enrollments/AssessmentPage';
+import EditAssessmentPage from '@/components/dashboard/enrollments/EditAssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
+import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
 import Loading from '@/components/elements/Loading';
@@ -271,7 +272,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <AssessmentPage />
+                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -279,7 +280,7 @@ export const protectedRoutes = [
             path: DashboardRoutes.VIEW_ASSESSMENT,
             element: (
               <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
-                <AssessmentPage />
+                <ViewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -290,7 +291,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <AssessmentPage />
+                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },

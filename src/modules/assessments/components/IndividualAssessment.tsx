@@ -114,7 +114,7 @@ const IndividualAssessment = ({
     if (!assessmentTitle || embeddedInWorkflow) return;
     // Override breadcrumb to include the assessment type and information date
     const currentRoute = assessment
-      ? DashboardRoutes.VIEW_ASSESSMENT
+      ? DashboardRoutes.EDIT_ASSESSMENT
       : DashboardRoutes.NEW_ASSESSMENT;
     overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
   }, [
