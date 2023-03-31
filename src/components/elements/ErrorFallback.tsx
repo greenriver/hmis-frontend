@@ -92,6 +92,7 @@ export const alertErrorFallback: FallbackRender = ({
             componentStack &&
             componentStack.split('\n').map((s) => (
               <Typography
+                key={s}
                 variant='caption'
                 sx={{ fontFamily: 'Monospace' }}
                 display='block'
