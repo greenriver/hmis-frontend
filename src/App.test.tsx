@@ -5,6 +5,7 @@ import App from './App';
 import { fetchCurrentUser } from './modules/auth/api/sessions';
 
 jest.mock('./modules/auth/api/sessions');
+jest.mock('./modules/hmisAppSettings/api');
 
 const fetchCurrentUserMock = fetchCurrentUser as jest.MockedFunction<
   typeof fetchCurrentUser
