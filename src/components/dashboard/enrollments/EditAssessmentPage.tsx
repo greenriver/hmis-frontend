@@ -11,7 +11,7 @@ import { DashboardRoutes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const AssessmentPage = () => {
+const EditAssessmentPage = () => {
   const { client, enrollment } = useOutletContext<DashboardContext>();
   const { clientId, enrollmentId, assessmentId, formRole } =
     useSafeParams() as {
@@ -86,4 +86,4 @@ const AssessmentPage = () => {
   );
 };
 
-export default AssessmentPage;
+export default EditAssessmentPage;
