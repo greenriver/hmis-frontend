@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 
 import { NavItem } from './types';
 
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import {
+  useHasClientPermissions,
+  useHasRootPermissions,
+} from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -14,6 +17,7 @@ export const useDashboardNavItems = (clientId?: string) => {
     'canViewAnyConfidentialClientFiles',
     'canViewAnyNonconfidentialClientFiles',
   ]);
+  const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
     if (!clientId) return [];
     const params = { clientId };
@@ -97,11 +101,15 @@ export const useDashboardNavItems = (clientId?: string) => {
         title: 'Administrative',
         type: 'category',
         items: [
-          {
-            id: 'audit',
-            title: 'Audit History',
-            path: DashboardRoutes.HISTORY,
-          },
+          ...(canAuditClients
+            ? [
+                {
+                  id: 'audit',
+                  title: 'Audit History',
+                  path: generateSafePath(DashboardRoutes.HISTORY, params),
+                },
+              ]
+            : []),
           ...(clientId && import.meta.env.PUBLIC_WAREHOUSE_URL
             ? [
                 {
@@ -117,7 +125,7 @@ export const useDashboardNavItems = (clientId?: string) => {
         ],
       },
     ];
-  }, [clientId, canViewEnrollments, canViewFiles]);
+  }, [clientId, canViewEnrollments, canViewFiles, canAuditClients]);
 
   return navItems;
 };

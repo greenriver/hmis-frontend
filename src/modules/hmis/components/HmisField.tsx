@@ -9,7 +9,7 @@ import {
 
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import { isHmisEnum } from '@/modules/form/types';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlSchemaType } from '@/types/gqlObjects';
 
@@ -43,7 +43,11 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
     ) {
       return <YesNoDisplay enumValue={value} />;
     }
-    return <HmisEnum value={value} enumMap={enumMap} />;
+    return Array.isArray(value) ? (
+      <MultiHmisEnum values={value} enumMap={enumMap} />
+    ) : (
+      <HmisEnum value={value} enumMap={enumMap} />
+    );
   }
   switch (type) {
     case 'Boolean':
@@ -73,6 +77,7 @@ const HmisField = ({ record, recordType, fieldName }: Props) => {
   if (!type) return defaultDisplay;
 
   return <>{getPrimitiveDisplay(value, type)}</>;
+  // return <>{JSON.stringify(value)}</>;
 };
 
 export const renderHmisField =
