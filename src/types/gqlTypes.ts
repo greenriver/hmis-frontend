@@ -1195,8 +1195,8 @@ export type File = {
   ownFile: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
-  updatedBy: ApplicationUser;
-  uploadedBy: ApplicationUser;
+  updatedBy?: Maybe<ApplicationUser>;
+  uploadedBy?: Maybe<ApplicationUser>;
   url: Scalars['String'];
 };
 
@@ -6499,11 +6499,11 @@ export type SubmitFormMutation = {
           ownFile: boolean;
           enrollmentId?: string | null;
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-          updatedBy: {
+          updatedBy?: {
             __typename?: 'ApplicationUser';
             id: string;
             name: string;
-          };
+          } | null;
         }
       | {
           __typename?: 'Funder';
@@ -7109,7 +7109,11 @@ export type FileFieldsFragment = {
   ownFile: boolean;
   enrollmentId?: string | null;
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-  updatedBy: { __typename?: 'ApplicationUser'; id: string; name: string };
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
 };
 
 export type ClientAuditEventFieldsFragment = {
@@ -7789,7 +7793,11 @@ export type DeleteClientFileMutation = {
       ownFile: boolean;
       enrollmentId?: string | null;
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-      updatedBy: { __typename?: 'ApplicationUser'; id: string; name: string };
+      updatedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8433,7 +8441,11 @@ export type GetFileQuery = {
     ownFile: boolean;
     enrollmentId?: string | null;
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-    updatedBy: { __typename?: 'ApplicationUser'; id: string; name: string };
+    updatedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
   } | null;
 };
 
@@ -8469,7 +8481,11 @@ export type GetClientFilesQuery = {
         ownFile: boolean;
         enrollmentId?: string | null;
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-        updatedBy: { __typename?: 'ApplicationUser'; id: string; name: string };
+        updatedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;
