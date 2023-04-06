@@ -7960,7 +7960,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "User",
+                "name": "ApplicationUser",
                 "ofType": null
               }
             },
