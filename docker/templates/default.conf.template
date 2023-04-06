@@ -6,8 +6,8 @@ server {
 
     location /nginx_status {
         stub_status;
-        allow 127.0.0.1;	# Only allow requests from localhost
-        deny all;		      # Deny all others
+        allow 127.0.0.1;  # Only allow requests from localhost
+        deny all;          # Deny all others
     }
 
     location / {
@@ -19,7 +19,7 @@ server {
         # use INLINE_RUNTIME_CHECK=false yarn build and nonce / hash to apply a CSP
         #add_header Content-Security-Policy "default-src 'none'; script-src 'self'; connect-src 'self'; img-src 'self'; font-src fonts.gstatic.com; style-src 'self' fonts.googleapis.com;" always;
 
-        add_header Referrer-Policy "no-referrer";
+        add_header Referrer-Policy "strict-origin-when-cross-origin";
         add_header X-Frame-Options "SAMEORIGIN" always;
         add_header X-XSS-Protection "1; mode=block" always;
         add_header X-Content-Type-Options "nosniff" always;
