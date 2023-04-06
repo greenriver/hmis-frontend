@@ -376,8 +376,9 @@ export type ClientAuditEvent = {
   event: AuditEventType;
   id: Scalars['ID'];
   item: Client;
+  /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']>;
-  user?: Maybe<User>;
+  user?: Maybe<ApplicationUser>;
 };
 
 export type ClientAuditEventsPaginated = {
@@ -1195,6 +1196,7 @@ export type File = {
   tags: Array<Scalars['String']>;
   updatedAt: Scalars['ISO8601DateTime'];
   updatedBy: ApplicationUser;
+  uploadedBy: ApplicationUser;
   url: Scalars['String'];
 };
 
@@ -7117,7 +7119,7 @@ export type ClientAuditEventFieldsFragment = {
   event: AuditEventType;
   objectChanges?: any | null;
   item: { __typename?: 'Client'; id: string };
-  user?: { __typename?: 'User'; id: string; name: string } | null;
+  user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
 
 export type SearchClientsQueryVariables = Exact<{
@@ -7340,7 +7342,11 @@ export type GetClientAuditEventsQuery = {
         event: AuditEventType;
         objectChanges?: any | null;
         item: { __typename?: 'Client'; id: string };
-        user?: { __typename?: 'User'; id: string; name: string } | null;
+        user?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
       }>;
     };
   } | null;

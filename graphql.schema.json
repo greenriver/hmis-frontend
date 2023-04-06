@@ -2904,7 +2904,7 @@
           },
           {
             "name": "objectChanges",
-            "description": null,
+            "description": "Format is { field: { fieldName: \"GQL field name\", displayName: \"Human readable name\", values: [old, new] } }",
             "args": [],
             "type": {
               "kind": "SCALAR",
@@ -2920,7 +2920,7 @@
             "args": [],
             "type": {
               "kind": "OBJECT",
-              "name": "User",
+              "name": "ApplicationUser",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8253,6 +8253,22 @@
           },
           {
             "name": "updatedBy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ApplicationUser",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "uploadedBy",
             "description": null,
             "args": [],
             "type": {
