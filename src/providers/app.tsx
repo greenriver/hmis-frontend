@@ -12,6 +12,7 @@ import Loading from '@/components/elements/Loading';
 import MergedThemeProvider from '@/config/MergedThemeProvider';
 import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import { HmisAppSettingsProvider } from '@/modules/hmisAppSettings/Provider';
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -25,7 +26,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <ApolloProvider client={apolloClient}>
               <BrowserRouter>
-                <AuthProvider>{children}</AuthProvider>
+                <HmisAppSettingsProvider>
+                  <AuthProvider>{children}</AuthProvider>
+                </HmisAppSettingsProvider>
               </BrowserRouter>
             </ApolloProvider>
           </LocalizationProvider>

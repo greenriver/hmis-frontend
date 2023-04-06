@@ -15,6 +15,7 @@ import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake'
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
+import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -325,7 +326,17 @@ export const protectedRoutes = [
               </EnrollmentsRoute>
             ),
           },
-          { path: DashboardRoutes.HISTORY, element: null },
+          {
+            path: DashboardRoutes.HISTORY,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAuditClients'
+                otherwise={<Navigate to='profile' replace />}
+              >
+                <History />
+              </RootPermissionsFilter>
+            ),
+          },
           {
             path: DashboardRoutes.ASSESSMENTS,
             element: (
