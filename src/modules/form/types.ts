@@ -44,6 +44,17 @@ export interface DynamicFieldProps {
   warnIfEmpty?: boolean;
 }
 
+export interface DynamicViewFieldProps {
+  item: FormItem;
+  nestingLevel: number;
+  value: any;
+  disabled?: boolean;
+  inputProps?: DynamicInputCommonProps;
+  horizontal?: boolean;
+  pickListRelationId?: string;
+  noLabel?: boolean;
+}
+
 // Props accepted by all input components
 export interface DynamicInputCommonProps {
   id?: string;
@@ -74,6 +85,19 @@ export interface GroupItemComponentProps {
   values: Record<string, any>;
   itemChanged: ItemChangedFn;
   severalItemsChanged: SeveralItemsChangedFn;
+  visible?: boolean;
+  locked?: boolean;
+}
+
+export interface ViewGroupItemComponentProps {
+  item: FormItem;
+  nestingLevel: number;
+  renderChildItem: (
+    item: FormItem,
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
+  ) => ReactNode;
+  values: Record<string, any>;
   visible?: boolean;
   locked?: boolean;
 }
