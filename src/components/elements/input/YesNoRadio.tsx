@@ -7,8 +7,8 @@ import RadioGroupInput, {
 
 import { PickListOption } from '@/types/gqlTypes';
 
-const TRUE_OPT = { code: 'true', label: 'Yes' };
-const FALSE_OPT = { code: 'false', label: 'No' };
+export const TRUE_OPT = { code: 'true', label: 'Yes' };
+export const FALSE_OPT = { code: 'false', label: 'No' };
 
 type Props = { onChange: (val: boolean | null) => void } & Omit<
   RadioGroupInputProps,

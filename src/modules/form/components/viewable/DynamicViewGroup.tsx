@@ -10,17 +10,15 @@ import FormCard from './group/ViewCard';
 
 // import { Component } from '@/types/gqlTypes';
 
-const DynamicGroup = ({
-  debug,
-  ...props
-}: ViewGroupItemComponentProps & { debug?: (ids?: string[]) => void }) => {
+const DynamicGroup = (props: ViewGroupItemComponentProps) => {
+  // TODO: ADD MORE GROUPS!
+
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
       <FormCard
         key={props.item.linkId}
         anchor={props.visible ? props.item.linkId : undefined}
-        debug={debug}
         {...props}
       />
     );
@@ -30,10 +28,9 @@ const DynamicGroup = ({
     <FormCard
       key={props.item.linkId}
       anchor={props.visible ? props.item.linkId : undefined}
-      debug={debug}
       {...props}
     />
-  )
+  );
 
   // switch (props.item.component) {
   //   case Component.InputGroup:

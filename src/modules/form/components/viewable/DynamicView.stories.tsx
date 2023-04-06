@@ -27,4 +27,50 @@ const Template: ComponentStory<typeof DynamicForm> = (args) => (
 );
 
 export const Default = Template.bind({});
-Default.args = { definition: formDefinition };
+Default.args = {
+  definition: formDefinition,
+  values: {
+    'string-1': 'test',
+    'int-1': '3',
+    'curr-1': '10',
+    'boolean-1': true,
+    'date-1': '2023-04-06T04:00:00.000Z',
+    ssn: '123456789',
+    'text-1':
+      'Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test Test ',
+    'choice-2': {
+      code: 'CLIENT_REFUSED',
+      label: 'Client refused',
+    },
+    'multi-choice': [
+      {
+        code: 'CLIENT_REFUSED',
+        label: 'Client refused',
+      },
+      {
+        code: 'CLIENT_DOESN_T_KNOW',
+        label: "Client doesn't know",
+      },
+    ],
+    undefined: [
+      {
+        code: 'they/them',
+      },
+      {
+        customOptionLabel: 'Add "other"',
+        code: 'other',
+      },
+    ],
+    'radio-1': {
+      code: 'CLIENT_DOESN_T_KNOW',
+      label: "Client doesn't know",
+    },
+    'vertical-radio-1': {
+      code: 'YES',
+      label: 'Yes',
+    },
+  },
+};
+
+export const Empty = Template.bind({});
+Empty.args = { definition: formDefinition };

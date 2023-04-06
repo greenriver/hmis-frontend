@@ -48,8 +48,6 @@ export interface DynamicViewFieldProps {
   item: FormItem;
   nestingLevel: number;
   value: any;
-  disabled?: boolean;
-  inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
   pickListRelationId?: string;
   noLabel?: boolean;
@@ -66,6 +64,12 @@ export interface DynamicInputCommonProps {
   min?: any;
   max?: any;
   placeholder?: string;
+}
+
+export interface DynamicViewItemCommonProps {
+  id?: string;
+  label?: ReactNode;
+  children?: ReactNode;
 }
 
 export type OverrideableDynamicFieldProps = Optional<

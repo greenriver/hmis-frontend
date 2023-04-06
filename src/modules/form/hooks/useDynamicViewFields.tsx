@@ -17,7 +17,7 @@ const useDynamicViewFields = ({
   bulk,
 }: {
   definition: FormDefinitionJson;
-  values?: Record<string, any>;
+  values: Record<string, any>;
   bulk?: boolean;
 }) => {
   const {

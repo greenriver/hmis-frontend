@@ -1,4 +1,3 @@
-import { pick } from 'lodash-es';
 import React, { ReactNode } from 'react';
 
 import {
@@ -7,10 +6,6 @@ import {
   ItemMap,
   LinkIdMap,
 } from '../../types';
-import {
-  buildCommonInputProps,
-  transformSubmitValues,
-} from '../../util/formUtil';
 
 import DynamicField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
@@ -61,13 +56,12 @@ export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
   return true;
 };
 
-const DynamicFormFields: React.FC<Props> = ({
+const DynamicViewFields: React.FC<Props> = ({
   definition,
-  errors = [],
   bulk,
-  itemMap,
-  autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
-  enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
+  // itemMap,
+  // autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
+  // enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
   pickListRelationId,
   values,
@@ -96,22 +90,6 @@ const DynamicFormFields: React.FC<Props> = ({
             renderItem(item, nestingLevel + 1, props, fn)
           }
           values={values}
-          debug={
-            import.meta.env.MODE === 'development'
-              ? (keys?: string[]) => {
-                  const sectionValues = keys ? pick(values, keys) : values;
-                  const valuesByKey = transformSubmitValues({
-                    definition,
-                    values: sectionValues,
-                    keyByFieldName: true,
-                  });
-                  console.group(item.text || item.linkId);
-                  console.log(sectionValues);
-                  console.log(valuesByKey);
-                  console.groupEnd();
-                }
-              : undefined
-          }
         />
       );
     }
@@ -125,11 +103,6 @@ const DynamicFormFields: React.FC<Props> = ({
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
         {...props}
-        inputProps={{
-          ...props?.inputProps,
-          ...buildCommonInputProps(item, values),
-          disabled: isDisabled || undefined,
-        }}
       />
     );
     if (renderFn) {
@@ -141,4 +114,4 @@ const DynamicFormFields: React.FC<Props> = ({
   return <>{definition.item.map((item) => renderItem(item, 0))}</>;
 };
 
-export default DynamicFormFields;
+export default DynamicViewFields;
