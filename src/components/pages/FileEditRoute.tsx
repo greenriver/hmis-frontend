@@ -37,7 +37,7 @@ const FileEditRoute: React.FC<
     return <NotFound />;
   }
   if (!canEdit) return <NotFound />;
-  if (!canEditAny && !file.data?.file?.ownFile) return <NotFound />;
+  if (!create && !canEditAny && !file.data?.file?.ownFile) return <NotFound />;
 
   return <>{children}</>;
 };
