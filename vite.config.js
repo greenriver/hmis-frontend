@@ -60,7 +60,7 @@ export default defineConfig(({ command, mode }) => {
         https: true,
         proxy: {
           '/hmis': warehouseProxyServer,
-          '/assets': warehouseProxyServer,
+          '/assets/theme': warehouseProxyServer,
         },
       },
     }),

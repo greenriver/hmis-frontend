@@ -48,7 +48,7 @@ server {
       proxy_set_header Host ${HMIS_BACKEND};
     }
 
-    location /assets {
+    location /assets/theme {
       # proxy destination
       proxy_pass https://${HMIS_BACKEND};
 
