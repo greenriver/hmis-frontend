@@ -1,7 +1,7 @@
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { isNil } from 'lodash-es';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import { usePickList } from '../../hooks/usePickList';
 import { DynamicViewFieldProps } from '../../types';
@@ -60,30 +60,38 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     </Box>
   );
 
+  const commonProps = useMemo(
+    () => ({
+      label,
+      value,
+      horizontal,
+    }),
+    [label, value, horizontal]
+  );
+
   switch (item.type) {
     case ItemType.Display:
       return <DynamicDisplay item={item} />;
     case ItemType.Boolean:
       return (
         <TextContent
-          label={label}
+          {...commonProps}
           value={
             [TRUE_OPT, FALSE_OPT].find((o) => o.code === String(value))
-              ?.label || <NotCollectedText />
+              ?.label || <NotCollectedText variant='body2' />
           }
           hasValue={(val) => !isNil(val)}
         />
       );
     case ItemType.String:
     case ItemType.Text:
-      return <TextContent label={label} value={value} />;
+      return <TextContent {...commonProps} />;
     case ItemType.Integer:
-      return <TextContent label={label} value={value} />;
+      return <TextContent {...commonProps} />;
     case ItemType.Currency:
       return (
         <TextContent
-          label={label}
-          value={value}
+          {...commonProps}
           hasValue={(val) => !isNil(val)}
           renderValue={(val) => `$${val}`}
         />
@@ -91,16 +99,18 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.Date:
       return (
         <TextContent
-          label={label}
-          value={value}
+          {...commonProps}
           renderValue={(val) => {
-            if (val instanceof Date) return format(val, 'M/d/yyyy');
+            let formatted;
+            if (val instanceof Date) formatted = format(val, 'M/d/yyyy');
             if (typeof val === 'string') {
               const parsed = parseHmisDateString(val);
-              if (parsed) return format(parsed, 'M/d/yyyy');
+              if (parsed) formatted = format(parsed, 'M/d/yyyy');
             }
+            if (formatted)
+              return <Typography variant='body2'>{formatted}</Typography>;
             return (
-              <Typography color='textSecondary'>
+              <Typography color='textSecondary' variant='body2'>
                 Invalid Date: {String(val)}
               </Typography>
             );
@@ -110,13 +120,12 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.OpenChoice:
       return (
         <TextContent
-          label={label}
-          value={value}
+          {...commonProps}
           hasValue={(val) => hasMeaningfulValue(val)}
           renderValue={(val) => {
             if (pickListLoading) return <Skeleton>{val}</Skeleton>;
             return (
-              <Typography>
+              <Typography variant='body2'>
                 {ensureArray(value)
                   .map((val) => val.code)
                   .join(', ')}
@@ -128,14 +137,13 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
     case ItemType.Choice:
       return (
         <TextContent
-          label={label}
-          value={value}
+          {...commonProps}
           hasValue={(val) => hasMeaningfulValue(val)}
           renderValue={(val) => {
             if (pickListLoading) return <Skeleton>{val}</Skeleton>;
 
             return (
-              <Typography>
+              <Typography variant='body2'>
                 {ensureArray(value)
                   .map((val) => val.label)
                   .join(', ')}

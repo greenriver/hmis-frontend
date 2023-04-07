@@ -4,7 +4,7 @@ import useDynamicViewFields from '../../hooks/useDynamicViewFields';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
-export interface DynamicFormProps {
+export interface DynamicViewProps {
   definition: FormDefinitionJson;
   loading?: boolean;
   values?: Record<string, any>;
@@ -12,15 +12,13 @@ export interface DynamicFormProps {
   pickListRelationId?: string;
 }
 
-const DynamicForm = (
-  {
-    definition,
-    // loading,
-    values = {},
-    horizontal = false,
-    pickListRelationId,
-  }: DynamicFormProps,
-): JSX.Element => {
+const DynamicView = ({
+  definition,
+  // loading,
+  values = {},
+  horizontal = false,
+  pickListRelationId,
+}: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicViewFields({
     definition,
     values,
@@ -38,4 +36,4 @@ const DynamicForm = (
   );
 };
 
-export default DynamicForm;
+export default DynamicView;

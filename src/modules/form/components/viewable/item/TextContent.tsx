@@ -8,6 +8,7 @@ import LabelWithContent from '@/components/elements/LabelWithContent';
 export interface TextContentProps<T extends ReactNode> {
   label: ReactNode;
   value: T;
+  horizontal?: boolean;
   hasValue?: (value: T) => boolean;
   renderValue?: (value: T) => ReactNode;
 }
@@ -15,19 +16,21 @@ export interface TextContentProps<T extends ReactNode> {
 const TextContent = <T extends ReactNode>({
   label,
   value,
+  horizontal = false,
   hasValue = (x) => !!x,
   renderValue = (x) => x,
 }: TextContentProps<T>): JSX.Element => {
+  console.log({ value });
   return (
-    <LabelWithContent label={label}>
+    <LabelWithContent label={label} horizontal={horizontal}>
       {hasValue(value) ? (
         typeof value === 'string' ? (
-          <Typography>{renderValue(value)}</Typography>
+          <Typography variant='body2'>{renderValue(value)}</Typography>
         ) : (
           renderValue(value)
         )
       ) : (
-        <NotCollectedText />
+        <NotCollectedText variant='body2' />
       )}
     </LabelWithContent>
   );

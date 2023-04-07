@@ -1,3 +1,4 @@
+import { SxProps } from '@mui/system';
 import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
@@ -91,6 +92,8 @@ export interface GroupItemComponentProps {
   severalItemsChanged: SeveralItemsChangedFn;
   visible?: boolean;
   locked?: boolean;
+  viewOnly?: boolean;
+  rowSx?: SxProps;
 }
 
 export interface ViewGroupItemComponentProps {

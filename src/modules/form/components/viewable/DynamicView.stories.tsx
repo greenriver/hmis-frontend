@@ -1,7 +1,10 @@
-import { Box } from '@mui/material';
+import { Box, FormControlLabel, Switch } from '@mui/material';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
+import useState from 'storybook-addon-state';
 
-import DynamicForm from './DynamicView';
+import DynamicForm from '../DynamicForm';
+
+import DynamicView from './DynamicView';
 
 import formData from '@/modules/form/data/mock.json';
 import { FormDefinitionJson } from '@/types/gqlTypes';
@@ -11,8 +14,7 @@ const formDefinition: FormDefinitionJson = JSON.parse(JSON.stringify(formData));
 
 export default {
   title: 'DynamicView',
-  component: DynamicForm,
-  argTypes: { label: { control: 'text' } },
+  component: DynamicView,
   decorators: [
     (Story) => (
       <Box sx={{ width: 800 }}>
@@ -20,10 +22,10 @@ export default {
       </Box>
     ),
   ],
-} as ComponentMeta<typeof DynamicForm>;
+} as ComponentMeta<typeof DynamicView>;
 
-const Template: ComponentStory<typeof DynamicForm> = (args) => (
-  <DynamicForm {...args} />
+const Template: ComponentStory<typeof DynamicView> = (args) => (
+  <DynamicView {...args} />
 );
 
 export const Default = Template.bind({});
@@ -69,8 +71,86 @@ Default.args = {
       code: 'YES',
       label: 'Yes',
     },
+    'choice-1': {
+      code: 'YES',
+      label: 'Yes',
+    },
+    'string-4': 'Something',
+    '4.05.2': {
+      code: 'YES',
+      label: 'Yes',
+    },
+    '4.05.A': {
+      code: 'NO',
+      label: 'No',
+    },
+    '4.06.2': {
+      code: 'CLIENT_REFUSED',
+      label: 'Client refused',
+    },
+    '4.07.2': {
+      code: 'CLIENT_DOESN_T_KNOW',
+      label: "Client doesn't know",
+    },
+    '4.07.A': {
+      code: 'YES',
+      label: 'Yes',
+    },
+    n1: '1',
+    n2: '11',
+    n3: '111',
+    c1: true,
+    c3: true,
   },
 };
 
 export const Empty = Template.bind({});
 Empty.args = { definition: formDefinition };
+
+const InteractiveTemplate: ComponentStory<typeof DynamicView> = (args) => {
+  const [values, setValues] = useState('formValues', {});
+  const [editable, setEditable] = useState('editable', {});
+
+  const component = editable ? (
+    <DynamicForm
+      {...args}
+      errors={{ errors: [], warnings: [] }}
+      initialValues={values}
+      onSubmit={({ values }) => setValues(values)}
+    />
+  ) : (
+    <DynamicView {...args} values={values} />
+  );
+
+  console.log({ values });
+
+  return (
+    <Box>
+      <Box
+        borderBottom={1}
+        borderColor='grey.300'
+        sx={(theme) => ({
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          p: 1,
+          zIndex: 1000,
+          backgroundColor: theme.palette.grey[100],
+          boxShadow: theme.shadows[2],
+        })}
+      >
+        <FormControlLabel
+          control={
+            <Switch checked={!!editable} onChange={(e, v) => setEditable(v)} />
+          }
+          label={`Switch to ${editable ? 'viewable' : 'editable'}`}
+        />
+      </Box>
+      <Box pt='60px'>{component}</Box>
+    </Box>
+  );
+};
+
+export const Interactive = InteractiveTemplate.bind({});
+Interactive.args = { definition: formDefinition };
