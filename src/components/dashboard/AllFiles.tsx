@@ -1,7 +1,6 @@
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { compact } from 'lodash-es';
 import { useMemo, useState } from 'react';
 
 import FileDialog from './files/FileModal';
@@ -11,7 +10,10 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import {
+  useClientPermissions,
+  useHasClientPermissions,
+} from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   FileFieldsFragment,
@@ -23,15 +25,41 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+const FileActions: React.FC<{
+  clientId: string;
+  file: FileFieldsFragment;
+  onDone?: (file: FileFieldsFragment) => any;
+  noDownload?: boolean;
+}> = ({ clientId, file, onDone = () => {}, noDownload }) => {
+  const { getActionsForFile, deleteFileDialog } = useFileActions({
+    onDeleteFile: () => onDone(file),
+  });
+
+  const [perms] = useClientPermissions(clientId);
+  const { canManageOwnClientFiles, canManageAnyClientFiles } = perms || {};
+  const canManage =
+    canManageAnyClientFiles || (canManageOwnClientFiles && file.ownFile);
+
+  const { editButton, deleteButton, downloadButton } = getActionsForFile(file);
+  return (
+    <>
+      {!noDownload && downloadButton}
+      {canManage && (
+        <>
+          {editButton}
+          {deleteButton}
+          {deleteFileDialog}
+        </>
+      )}
+    </>
+  );
+};
+
 const AllFiles = () => {
   const { clientId } = useSafeParams() as { clientId: string };
   const [viewingFile, setViewingFile] = useState<
     FileFieldsFragment | undefined
   >();
-
-  const { getActionsForFile, deleteFileDialog } = useFileActions({
-    onDeleteFile: () => setViewingFile(undefined),
-  });
 
   const [canEdit] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
@@ -89,31 +117,26 @@ const AllFiles = () => {
             {
               header: 'Actions',
               width: '1%',
-              render: (file) => {
-                const { editButton, deleteButton } = getActionsForFile(file);
-                return (
-                  <Stack
-                    direction='row'
-                    spacing={1}
-                    justifyContent='flex-end'
-                    flexGrow={1}
-                  >
-                    {editButton}
-                    {deleteButton}
-                  </Stack>
-                );
-              },
+              render: (file) => (
+                <Stack
+                  direction='row'
+                  spacing={1}
+                  justifyContent='flex-end'
+                  flexGrow={1}
+                >
+                  <FileActions
+                    clientId={clientId}
+                    file={file}
+                    onDone={() => setViewingFile(undefined)}
+                    noDownload
+                  />
+                </Stack>
+              ),
             },
           ]
         : []) as typeof columns),
     ];
-  }, [canEdit, pickListData, getActionsForFile]);
-
-  const viewingFileActions = useMemo(() => {
-    if (!viewingFile) return [];
-    const actions = getActionsForFile(viewingFile);
-    return compact(Object.values(actions));
-  }, [viewingFile, getActionsForFile]);
+  }, [canEdit, pickListData, clientId]);
 
   return (
     <>
@@ -154,10 +177,15 @@ const AllFiles = () => {
           open={!!viewingFile}
           onClose={() => setViewingFile(undefined)}
           file={viewingFile}
-          actions={<>{viewingFileActions}</>}
+          actions={
+            <FileActions
+              clientId={clientId}
+              file={viewingFile}
+              onDone={() => setViewingFile(undefined)}
+            />
+          }
         />
       )}
-      {deleteFileDialog}
     </>
   );
 };
