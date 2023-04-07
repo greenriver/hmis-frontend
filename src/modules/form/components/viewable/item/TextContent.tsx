@@ -20,7 +20,6 @@ const TextContent = <T extends ReactNode>({
   hasValue = (x) => !!x,
   renderValue = (x) => x,
 }: TextContentProps<T>): JSX.Element => {
-  console.log({ value });
   return (
     <LabelWithContent label={label} horizontal={horizontal}>
       {hasValue(value) ? (

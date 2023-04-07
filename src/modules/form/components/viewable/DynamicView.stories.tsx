@@ -101,6 +101,8 @@ Default.args = {
     n3: '111',
     c1: true,
     c3: true,
+    image_blob_id: '9999',
+    file_id: '9999',
   },
 };
 
@@ -121,8 +123,6 @@ const InteractiveTemplate: ComponentStory<typeof DynamicView> = (args) => {
   ) : (
     <DynamicView {...args} values={values} />
   );
-
-  console.log({ values });
 
   return (
     <Box>

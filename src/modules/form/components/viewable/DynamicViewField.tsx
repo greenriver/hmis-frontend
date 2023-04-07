@@ -8,6 +8,8 @@ import { DynamicViewFieldProps } from '../../types';
 import { hasMeaningfulValue } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
+import File from './item/File';
+import Image from './item/Image';
 import NotCollectedText from './item/NotCollectedText';
 import TextContent from './item/TextContent';
 
@@ -152,17 +154,10 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           }}
         />
       );
-    // case ItemType.Image:
-    //   return (
-    //     <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-    //       <Uploader
-    //         id={linkId}
-    //         image
-    //         onUpload={async (upload) => onChangeValue(upload.blobId)}
-    //       />
-    //     </InputContainer>
-    //   );
-    // case ItemType.File:
+    case ItemType.Image:
+      return <Image id={value} />;
+    case ItemType.File:
+      return <File id={value} />;
     //   return (
     //     <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
     //       <Uploader

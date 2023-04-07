@@ -349,6 +349,30 @@
           "component": "ALERT_INFO"
         }
       ]
+    },
+    {
+      "type": "GROUP",
+      "required": false,
+      "warnIfEmpty": true,
+      "linkId": "file",
+      "text": "File",
+      "item": [
+        {
+          "type": "FILE",
+          "required": false,
+          "warnIfEmpty": true,
+          "linkId": "file_id",
+          "text": "File"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "file-alert",
+          "required": false,
+          "warnIfEmpty": true,
+          "text": "Don't upload anything here",
+          "component": "ALERT_INFO"
+        }
+      ]
     }
   ]
 }
