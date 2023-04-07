@@ -44,7 +44,7 @@ const ClientDashboard: React.FC = () => {
     params.enrollmentId
   );
 
-  const navItems: NavItem[] = useDashboardNavItems(client?.id);
+  const navItems: NavItem[] = useDashboardNavItems(client || undefined);
 
   const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);

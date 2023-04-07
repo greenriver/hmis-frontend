@@ -2,10 +2,7 @@
 export const OP_LINK_BAR_HEIGHT = 40;
 
 // whether to show bar linking to warehouse and cas
-export const SHOW_OP_LINK_BAR =
-  import.meta.env.MODE === 'staging' &&
-  import.meta.env.PUBLIC_WAREHOUSE_URL &&
-  import.meta.env.PUBLIC_CAS_URL;
+export const SHOW_OP_LINK_BAR = import.meta.env.MODE === 'staging';
 
 // height of main app bar
 export const APP_BAR_HEIGHT = 64;
