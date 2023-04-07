@@ -71,6 +71,7 @@ fragment ClientFields on Client {
   dateUpdated
   ...ClientName
   ...ClientImage
+  warehouseUrl
   user {
     ...UserFields
   }

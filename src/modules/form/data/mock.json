@@ -150,7 +150,6 @@
         },
         {
           "type": "STRING",
-
           "required": false,
           "warnIfEmpty": true,
           "linkId": "string-4",

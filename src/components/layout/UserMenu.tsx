@@ -17,15 +17,16 @@ import {
 import React, { useCallback } from 'react';
 
 import useAuth from '@/modules/auth/hooks/useAuth';
-import getManageAccountLink from '@/modules/auth/utils/getManageAccountLink';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
 
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const { logout, user } = useAuth();
   const logoutUser = useCallback(() => logout(true), [logout]);
+  const { manageAccountUrl } = useHmisAppSettings();
 
   if (!user) return null;
-  const manageAccountLink = getManageAccountLink();
+
   return (
     <>
       <Button
@@ -47,8 +48,8 @@ const UserMenu: React.FC = () => {
         }}
         {...bindMenu(popupState)}
       >
-        {manageAccountLink && (
-          <MenuItem component={Link} href={manageAccountLink} target='_blank'>
+        {manageAccountUrl && (
+          <MenuItem component={Link} href={manageAccountUrl} target='_blank'>
             <ListItemIcon>
               <OpenInNewIcon fontSize='small' />
             </ListItemIcon>

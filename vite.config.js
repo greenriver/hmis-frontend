@@ -13,6 +13,18 @@ const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const warehouseProxyServer = {
+    target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
+    changeOrigin: true, // sets Host header
+    headers: {
+      Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
+    },
+    secure: false,
+    configure: (proxy, options) => {
+      console.debug('Starting proxy with options:', options);
+    },
+  };
+
   return {
     envPrefix: 'PUBLIC_',
     resolve: {
@@ -47,17 +59,8 @@ export default defineConfig(({ command, mode }) => {
         host: env.HMIS_HOST || 'hmis.dev.test',
         https: true,
         proxy: {
-          '/hmis': {
-            target: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
-            changeOrigin: true, // sets Host header
-            headers: {
-              Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
-            },
-            secure: false,
-            configure: (proxy, options) => {
-              console.debug('Starting proxy with options:', options);
-            },
-          },
+          '/hmis': warehouseProxyServer,
+          '/assets/theme': warehouseProxyServer,
         },
       },
     }),

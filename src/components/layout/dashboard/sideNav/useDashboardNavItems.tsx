@@ -7,20 +7,21 @@ import {
   useHasRootPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
+import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-export const useDashboardNavItems = (clientId?: string) => {
-  const [canViewEnrollments] = useHasClientPermissions(clientId || '', [
+export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
+  const [canViewEnrollments] = useHasClientPermissions(client?.id || '', [
     'canViewEnrollmentDetails',
   ]);
-  const [canViewFiles] = useHasClientPermissions(clientId || '', [
+  const [canViewFiles] = useHasClientPermissions(client?.id || '', [
     'canViewAnyConfidentialClientFiles',
     'canViewAnyNonconfidentialClientFiles',
   ]);
   const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
-    if (!clientId) return [];
-    const params = { clientId };
+    if (!client) return [];
+    const params = { clientId: client.id };
     return [
       {
         id: 'client-nav',
@@ -110,22 +111,17 @@ export const useDashboardNavItems = (clientId?: string) => {
                 },
               ]
             : []),
-          ...(clientId && import.meta.env.PUBLIC_WAREHOUSE_URL
-            ? [
-                {
-                  id: 'warehouse-link',
-                  title: 'View in Warehouse',
-                  path: undefined,
-                  href: `${
-                    import.meta.env.PUBLIC_WAREHOUSE_URL
-                  }clients/${clientId}/from_source`,
-                },
-              ]
-            : []),
+
+          {
+            id: 'warehouse-link',
+            title: 'View in Warehouse',
+            path: undefined,
+            href: client.warehouseUrl,
+          },
         ],
       },
     ];
-  }, [clientId, canViewEnrollments, canViewFiles, canAuditClients]);
+  }, [client, canViewEnrollments, canViewFiles, canAuditClients]);
 
   return navItems;
 };

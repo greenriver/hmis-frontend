@@ -29,7 +29,9 @@ const OktaLoginForm: React.FC<Props> = ({ path }) => {
         value='hmis_user'
         autoComplete='off'
       />
-      <Button type='submit'>Sign In with Okta</Button>
+      <Button type='submit' fullWidth>
+        Sign In with Okta
+      </Button>
     </form>
   );
 };
