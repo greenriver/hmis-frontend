@@ -72,6 +72,45 @@ export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
   return true;
 };
 
+// Exporting because we need this for the DynamicView items too
+export const setDisabledLinkIdsBase = (
+  changedLinkIds: string[],
+  localValues: any,
+  callback: React.Dispatch<React.SetStateAction<string[]>>,
+  {
+    enabledDependencyMap,
+    itemMap,
+  }: {
+    enabledDependencyMap: LinkIdMap;
+    itemMap: ItemMap;
+  }
+) => {
+  // If none of these are dependencies, return immediately
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
+
+  callback((oldList) => {
+    const newList = [...oldList];
+    changedLinkIds.forEach((changedLinkId) => {
+      if (!enabledDependencyMap[changedLinkId]) return;
+
+      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+        const enabled = shouldEnableItem(
+          itemMap[dependentLinkId],
+          localValues,
+          itemMap
+        );
+        if (enabled && newList.includes(dependentLinkId)) {
+          pull(newList, dependentLinkId);
+        } else if (!enabled && !newList.includes(dependentLinkId)) {
+          newList.push(dependentLinkId);
+        }
+      });
+    });
+
+    return newList;
+  });
+};
+
 const DynamicFormFields: React.FC<Props> = ({
   definition,
   errors = [],
@@ -111,29 +150,9 @@ const DynamicFormFields: React.FC<Props> = ({
    */
   const updateDisabledLinkIds = useCallback(
     (changedLinkIds: string[], localValues: any) => {
-      // If none of these are dependencies, return immediately
-      if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
-
-      setDisabledLinkIds((oldList) => {
-        const newList = [...oldList];
-        changedLinkIds.forEach((changedLinkId) => {
-          if (!enabledDependencyMap[changedLinkId]) return;
-
-          enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-            const enabled = shouldEnableItem(
-              itemMap[dependentLinkId],
-              localValues,
-              itemMap
-            );
-            if (enabled && newList.includes(dependentLinkId)) {
-              pull(newList, dependentLinkId);
-            } else if (!enabled && !newList.includes(dependentLinkId)) {
-              newList.push(dependentLinkId);
-            }
-          });
-        });
-
-        return newList;
+      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
+        enabledDependencyMap,
+        itemMap,
       });
     },
     [itemMap, enabledDependencyMap, setDisabledLinkIds]

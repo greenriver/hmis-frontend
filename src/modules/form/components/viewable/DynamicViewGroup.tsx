@@ -30,21 +30,12 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
         <InputGroup
           key={props.item.linkId}
           {...props}
-          itemChanged={() => {}}
-          severalItemsChanged={() => {}}
           viewOnly
           rowSx={{ pt: 1, pb: 1, pl: 1, pr: 1 }}
         />
       );
     case Component.DisabilityTable:
-      return (
-        <DisabilityTable
-          key={props.item.linkId}
-          {...props}
-          itemChanged={() => {}}
-          severalItemsChanged={() => {}}
-        />
-      );
+      return <DisabilityTable key={props.item.linkId} {...props} />;
     //   case Component.HorizontalGroup:
     //     return <HorizontalGroup key={props.item.linkId} {...props} />;
     //   case Component.InfoGroup:

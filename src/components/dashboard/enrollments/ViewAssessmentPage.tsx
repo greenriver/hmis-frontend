@@ -5,6 +5,8 @@ import { useOutletContext } from 'react-router-dom';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import { createInitialValuesFromSavedValues } from '@/modules/form/util/formUtil';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
 // PLACEHOLDER: implement read-only view of assessments
@@ -30,7 +32,20 @@ const ViewAssessmentPage = () => {
     assessmentId,
   });
 
-  return <Typography>{assessmentTitle}</Typography>;
+  if (!definition || !assessment) return <Typography>NOOOOO</Typography>;
+
+  const values = createInitialValuesFromSavedValues(
+    definition.definition,
+    assessment.customForm?.values
+  );
+
+  return (
+    <DynamicView
+      values={values}
+      definition={definition.definition}
+      pickListRelationId={enrollment?.project?.id}
+    />
+  );
 };
 
 export default ViewAssessmentPage;

@@ -1,5 +1,5 @@
-import { omit } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { isEqual, omit } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicViewFields, {
   isShown,
@@ -9,17 +9,25 @@ import { addDescendants } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 
+import usePrevious from '@/hooks/usePrevious';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
 const useDynamicViewFields = ({
   definition,
-  values,
+  values: baseValues,
   bulk,
 }: {
   definition: FormDefinitionJson;
   values: Record<string, any>;
   bulk?: boolean;
 }) => {
+  const [values, setValues] = useState<typeof baseValues>(baseValues);
+  const prevBaseValues = usePrevious(baseValues);
+
+  useEffect(() => {
+    if (!isEqual(baseValues, prevBaseValues)) setValues(baseValues);
+  }, [baseValues, prevBaseValues]);
+
   const {
     itemMap,
     autofillDependencyMap,
@@ -54,6 +62,7 @@ const useDynamicViewFields = ({
         | 'disabledLinkIds'
         | 'setDisabledLinkIds'
         | 'values'
+        | 'setValues'
         | 'bulk'
       >
     ) => (
@@ -66,6 +75,7 @@ const useDynamicViewFields = ({
           enabledDependencyMap,
           disabledLinkIds,
           setDisabledLinkIds,
+          setValues,
           values,
           bulk,
         }}
@@ -86,6 +96,7 @@ const useDynamicViewFields = ({
     () => ({
       renderFields,
       values,
+      setValues,
       getCleanedValues,
       shouldShowItem,
     }),

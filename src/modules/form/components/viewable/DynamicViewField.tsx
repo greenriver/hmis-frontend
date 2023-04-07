@@ -1,10 +1,14 @@
 import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
-import { isNil } from 'lodash-es';
+import { intersectionBy, isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
 
 import { usePickList } from '../../hooks/usePickList';
-import { DynamicViewFieldProps } from '../../types';
+import {
+  DynamicViewFieldProps,
+  isPickListOption,
+  isPickListOptionArray,
+} from '../../types';
 import { hasMeaningfulValue } from '../../util/formUtil';
 import DynamicDisplay from '../DynamicDisplay';
 
@@ -42,11 +46,35 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   horizontal = false,
   pickListRelationId,
   noLabel = false,
+  adjustValue = () => {},
 }) => {
   const label = noLabel ? null : getLabel(item, horizontal);
 
-  const [, pickListLoading] = usePickList(item, pickListRelationId, {
+  const [options, pickListLoading] = usePickList(item, pickListRelationId, {
     fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
+    onCompleted: (data) => {
+      if (!data?.pickList) return;
+      if (!hasMeaningfulValue(value)) return;
+
+      // Try to find the "full" option (including label) for this value from the pick list
+      let fullOption;
+      if (isPickListOption(value)) {
+        fullOption = data.pickList.find((o) => o.code === value.code);
+      } else if (isPickListOptionArray(value)) {
+        fullOption = intersectionBy(data.pickList, value, 'code');
+      }
+
+      if (fullOption) {
+        // Update the value so that it shows the complete label
+        adjustValue({ linkId: item.linkId, value: fullOption });
+      } else {
+        console.warn(
+          `Selected value '${JSON.stringify(
+            value
+          )}' is not present in option list '${item.pickListReference}'`
+        );
+      }
+    },
   });
 
   const fallback = (
@@ -141,13 +169,21 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         <TextContent
           {...commonProps}
           hasValue={(val) => hasMeaningfulValue(val)}
-          renderValue={(val) => {
-            if (pickListLoading) return <Skeleton>{val}</Skeleton>;
+          renderValue={(value) => {
+            if (pickListLoading) return <Skeleton />;
 
             return (
               <Typography variant='body2'>
                 {ensureArray(value)
-                  .map((val) => val.label)
+                  .map((val) => {
+                    let label = val.label;
+                    if (options)
+                      label =
+                        options?.find((opt) => opt.code === val.code)?.label ||
+                        label;
+                    if (!label) label = val.code;
+                    return label;
+                  })
                   .join(', ')}
               </Typography>
             );

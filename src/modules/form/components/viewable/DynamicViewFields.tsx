@@ -1,13 +1,15 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 
 import {
   OverrideableDynamicFieldProps,
   FormValues,
   ItemMap,
   LinkIdMap,
+  AdjustValueFn,
 } from '../../types';
+import { setDisabledLinkIdsBase } from '../DynamicFormFields';
 
-import DynamicField from './DynamicViewField';
+import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
 
 import {
@@ -27,10 +29,12 @@ export interface Props {
   bulk?: boolean;
   pickListRelationId?: string;
   values: FormValues;
+  setValues: React.Dispatch<React.SetStateAction<FormValues>>;
   itemMap: ItemMap;
   autofillDependencyMap: LinkIdMap;
   enabledDependencyMap: LinkIdMap;
   disabledLinkIds: string[];
+  setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const isEnabled = (
@@ -42,7 +46,6 @@ export const isEnabled = (
     // This is a group. Only show it if some children are enabled.
     return item.item.some((i) => isEnabled(i, disabledLinkIds));
   }
-  // console.log({disabledLinkIds})
   return !disabledLinkIds.includes(item.linkId);
 };
 
@@ -59,14 +62,40 @@ export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
 const DynamicViewFields: React.FC<Props> = ({
   definition,
   bulk,
-  // itemMap,
+  itemMap,
   // autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
-  // enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
+  enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
   pickListRelationId,
   values,
+  setValues,
   disabledLinkIds,
+  setDisabledLinkIds,
 }) => {
+  const updateDisabledLinkIds = useCallback(
+    (changedLinkIds: string[], localValues: any) => {
+      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
+        enabledDependencyMap,
+        itemMap,
+      });
+    },
+    [itemMap, enabledDependencyMap, setDisabledLinkIds]
+  );
+
+  const adjustValue: AdjustValueFn = useCallback(
+    (input) => {
+      const { linkId, value } = input;
+      setValues((currentValues) => {
+        const newValues = { ...currentValues };
+        newValues[linkId] = value;
+        updateDisabledLinkIds([linkId], newValues);
+
+        return newValues;
+      });
+    },
+    [updateDisabledLinkIds, setValues]
+  );
+
   // Recursively render an item
   const renderItem = (
     item: FormItem,
@@ -95,13 +124,14 @@ const DynamicViewFields: React.FC<Props> = ({
     }
 
     const itemComponent = (
-      <DynamicField
+      <DynamicViewField
         key={item.linkId}
         item={item}
         value={isDisabled ? undefined : values[item.linkId]}
         nestingLevel={nestingLevel}
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
+        adjustValue={adjustValue}
         {...props}
       />
     );

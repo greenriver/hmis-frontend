@@ -30,6 +30,8 @@ export type SeveralItemsChangedFn = (input: {
   type: ChangeType;
 }) => void;
 
+export type AdjustValueFn = (input: { linkId: string; value: any }) => void;
+
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
@@ -52,6 +54,7 @@ export interface DynamicViewFieldProps {
   horizontal?: boolean;
   pickListRelationId?: string;
   noLabel?: boolean;
+  adjustValue?: AdjustValueFn;
 }
 
 // Props accepted by all input components
@@ -88,8 +91,8 @@ export interface GroupItemComponentProps {
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
   values: Record<string, any>;
-  itemChanged: ItemChangedFn;
-  severalItemsChanged: SeveralItemsChangedFn;
+  itemChanged?: ItemChangedFn;
+  severalItemsChanged?: SeveralItemsChangedFn;
   visible?: boolean;
   locked?: boolean;
   viewOnly?: boolean;
