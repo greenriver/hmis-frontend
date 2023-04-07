@@ -6,7 +6,7 @@ export interface NotCollectedTextProps extends TypographyProps {
 }
 
 const NotCollectedText = ({
-  children = 'Not Collected',
+  children = 'Not Provided',
   ...props
 }: NotCollectedTextProps): JSX.Element => {
   return (

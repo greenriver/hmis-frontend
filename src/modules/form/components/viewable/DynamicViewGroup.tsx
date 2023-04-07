@@ -3,7 +3,7 @@ import DisabilityTable from '../group/DisabilityTable';
 // import DisabilityTable from './group/DisabilityTable';
 import InputGroup from '../group/InputGroup';
 
-import FormCard from './group/ViewCard';
+import ViewCard from './group/ViewCard';
 // import HorizontalGroup from './group/HorizontalGroup';
 
 // import QuestionGroup from './group/QuestionGroup';
@@ -16,7 +16,7 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
   // Always render top-level groups as cards
   if (props.nestingLevel === 0 && !props.item.component) {
     return (
-      <FormCard
+      <ViewCard
         key={props.item.linkId}
         anchor={props.visible ? props.item.linkId : undefined}
         {...props}
@@ -67,7 +67,7 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
     //     );
     default:
       return (
-        <FormCard
+        <ViewCard
           key={props.item.linkId}
           anchor={props.visible ? props.item.linkId : undefined}
           {...props}
