@@ -137,8 +137,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
               const parsed = parseHmisDateString(val);
               if (parsed) formatted = format(parsed, 'M/d/yyyy');
             }
-            if (formatted)
-              return <Typography variant='body2'>{formatted}</Typography>;
+            if (formatted) return formatted;
             return (
               <Typography color='textSecondary' variant='body2'>
                 Invalid Date: {String(val)}

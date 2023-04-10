@@ -103,6 +103,10 @@ Default.args = {
     c3: true,
     image_blob_id: '9999',
     file_id: '9999',
+    'first-name': 'John',
+    'middle-name': 'Q',
+    'last-name': 'Public',
+    'name-suffix': 'Jr.',
   },
 };
 

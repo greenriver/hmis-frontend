@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import NotCollectedText from './NotCollectedText';
 
@@ -20,17 +20,20 @@ const TextContent = <T extends ReactNode>({
   hasValue = (x) => !!x,
   renderValue = (x) => x,
 }: TextContentProps<T>): JSX.Element => {
+  const displayValue = useMemo(() => {
+    if (hasValue(value)) {
+      const renderedValue = renderValue(value);
+      if (typeof renderedValue === 'string')
+        return <Typography variant='body2'>{renderedValue}</Typography>;
+      return renderedValue;
+    } else {
+      return <NotCollectedText variant='body2' />;
+    }
+  }, [hasValue, renderValue, value]);
+
   return (
     <LabelWithContent label={label} horizontal={horizontal}>
-      {hasValue(value) ? (
-        typeof value === 'string' ? (
-          <Typography variant='body2'>{renderValue(value)}</Typography>
-        ) : (
-          renderValue(value)
-        )
-      ) : (
-        <NotCollectedText variant='body2' />
-      )}
+      {displayValue}
     </LabelWithContent>
   );
 };

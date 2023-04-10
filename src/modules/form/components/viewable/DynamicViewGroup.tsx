@@ -1,10 +1,10 @@
 import { ViewGroupItemComponentProps } from '../../types';
 import DisabilityTable from '../group/DisabilityTable';
 // import DisabilityTable from './group/DisabilityTable';
+import HorizontalGroup from '../group/HorizontalGroup';
 import InputGroup from '../group/InputGroup';
 
 import ViewCard from './group/ViewCard';
-// import HorizontalGroup from './group/HorizontalGroup';
 
 // import QuestionGroup from './group/QuestionGroup';
 
@@ -36,8 +36,8 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
       );
     case Component.DisabilityTable:
       return <DisabilityTable key={props.item.linkId} {...props} />;
-    //   case Component.HorizontalGroup:
-    //     return <HorizontalGroup key={props.item.linkId} {...props} />;
+    case Component.HorizontalGroup:
+      return <HorizontalGroup key={props.item.linkId} {...props} />;
     //   case Component.InfoGroup:
     //     return (
     //       <Box
