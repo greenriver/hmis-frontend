@@ -49,13 +49,20 @@
           "helperText": "This is helper text"
         },
         {
-          "type": "STRING",
-          "required": false,
-          "warnIfEmpty": true,
-          "linkId": "ssn",
-          "text": "SSN",
-          "component": "SSN",
-          "helperText": "This is helper text"
+          "type": "GROUP",
+          "component": "INFO_GROUP",
+          "linkId": "ssn-group",
+          "item": [
+            {
+              "type": "STRING",
+              "required": false,
+              "warnIfEmpty": true,
+              "linkId": "ssn",
+              "text": "SSN",
+              "component": "SSN",
+              "helperText": "This is helper text"
+            }
+          ]
         },
         {
           "type": "TEXT",
