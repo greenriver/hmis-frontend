@@ -9,8 +9,10 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
+import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentTitle from '@/modules/assessments/components/AssessmentTitle';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import FormStepper from '@/modules/form/components/FormStepper';
@@ -48,14 +50,15 @@ const ViewAssessmentPage = ({
     assessmentId,
   });
 
-  if (!definition || !assessment) return <Typography>NOOOOO</Typography>;
+  useScrollToHash(!assessment || dataLoading, top);
+
+  if (dataLoading) return <Loading />;
+  if (!definition || !assessment) return <NotFound />;
 
   const values = createInitialValuesFromSavedValues(
     definition.definition,
     assessment.customForm?.values
   );
-
-  if (dataLoading) return <Loading />;
 
   return (
     <>

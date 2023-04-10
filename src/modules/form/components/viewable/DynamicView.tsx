@@ -10,6 +10,7 @@ export interface DynamicViewProps {
   values?: Record<string, any>;
   horizontal?: boolean;
   pickListRelationId?: string;
+  visible?: boolean;
 }
 
 const DynamicView = ({
@@ -17,6 +18,7 @@ const DynamicView = ({
   // loading,
   values = {},
   horizontal = false,
+  visible = true,
   pickListRelationId,
 }: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicViewFields({
@@ -30,6 +32,7 @@ const DynamicView = ({
         {renderFields({
           horizontal,
           pickListRelationId,
+          visible,
         })}
       </Grid>
     </Box>

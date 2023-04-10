@@ -27,6 +27,7 @@ export interface Props {
   warnings?: ValidationError[];
   horizontal?: boolean;
   bulk?: boolean;
+  visible?: boolean;
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
@@ -71,6 +72,7 @@ const DynamicViewFields: React.FC<Props> = ({
   setValues,
   disabledLinkIds,
   setDisabledLinkIds,
+  ...fieldsProps
 }) => {
   const updateDisabledLinkIds = useCallback(
     (changedLinkIds: string[], localValues: any) => {
@@ -119,6 +121,7 @@ const DynamicViewFields: React.FC<Props> = ({
             renderItem(item, nestingLevel + 1, props, fn)
           }
           values={values}
+          {...fieldsProps}
         />
       );
     }
