@@ -1,4 +1,4 @@
-import { Box, Skeleton, Stack, Typography } from '@mui/material';
+import { Skeleton, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { intersectionBy, isNil } from 'lodash-es';
 import React, { useMemo } from 'react';
@@ -76,19 +76,6 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       }
     },
   });
-
-  const fallback = (
-    <Box>
-      <Typography
-        color='white'
-        sx={{
-          textShadow: '1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;',
-        }}
-      >
-        {item.type}
-      </Typography>
-    </Box>
-  );
 
   const commonProps = useMemo(
     () => ({
@@ -193,18 +180,9 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       return <Image id={value} />;
     case ItemType.File:
       return <File id={value} />;
-    //   return (
-    //     <InputContainer sx={{ maxWidth, minWidth }} {...commonContainerProps}>
-    //       <Uploader
-    //         id={linkId}
-    //         onUpload={async (upload) => onChangeValue(upload.blobId)}
-    //       />
-    //     </InputContainer>
-    //   );
     default:
       console.warn('Unrecognized item type:', item.type);
-      // return <></>;
-      return fallback;
+      return <></>;
   }
 };
 
