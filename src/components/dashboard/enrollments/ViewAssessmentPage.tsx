@@ -19,6 +19,7 @@ import FormStepper from '@/modules/form/components/FormStepper';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { createInitialValuesFromSavedValues } from '@/modules/form/util/formUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
@@ -35,6 +36,8 @@ const ViewAssessmentPage = ({
     enrollmentId: string;
     assessmentId: string;
   };
+
+  const canEdit = useHasClientPermissions(clientId, ['canEditEnrollments']);
 
   const {
     definition,
@@ -68,19 +71,21 @@ const ViewAssessmentPage = ({
             assessmentTitle={assessmentTitle}
             actions={
               <>
-                <Button
-                  color='secondary'
-                  variant='outlined'
-                  startIcon={<EditIcon />}
-                  component={ReactRouterLink}
-                  to={generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
-                    enrollmentId,
-                    assessmentId,
-                    clientId,
-                  })}
-                >
-                  Edit
-                </Button>
+                {canEdit && (
+                  <Button
+                    color='secondary'
+                    variant='outlined'
+                    startIcon={<EditIcon />}
+                    component={ReactRouterLink}
+                    to={generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
+                      enrollmentId,
+                      assessmentId,
+                      clientId,
+                    })}
+                  >
+                    Edit
+                  </Button>
+                )}
               </>
             }
           />
