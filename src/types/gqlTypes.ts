@@ -6636,6 +6636,21 @@ export type ClientNameFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientAccessFieldsFragment = {
+  __typename?: 'ClientAccess';
+  id: string;
+  canViewDob: boolean;
+  canViewFullSsn: boolean;
+  canViewPartialSsn: boolean;
+  canEditEnrollments: boolean;
+  canDeleteEnrollments: boolean;
+  canViewEnrollmentDetails: boolean;
+  canManageAnyClientFiles: boolean;
+  canManageOwnClientFiles: boolean;
+  canViewAnyConfidentialClientFiles: boolean;
+  canViewAnyNonconfidentialClientFiles: boolean;
+};
+
 export type ClientPermissionsFragment = {
   __typename?: 'Client';
   id: string;
@@ -6761,6 +6776,14 @@ export type HouseholdClientFieldsFragment = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewDob: boolean;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
     };
   };
   enrollment: {
@@ -6812,6 +6835,14 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewDob: boolean;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
     };
   };
 };
@@ -6891,6 +6922,14 @@ export type EnrollmentWithHouseholdFragmentFragment = {
           id: string;
           canViewFullSsn: boolean;
           canViewPartialSsn: boolean;
+          canViewDob: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
         };
       };
       enrollment: {
@@ -7220,6 +7259,14 @@ export type GetClientQuery = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewDob: boolean;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+      canViewEnrollmentDetails: boolean;
+      canManageAnyClientFiles: boolean;
+      canManageOwnClientFiles: boolean;
+      canViewAnyConfidentialClientFiles: boolean;
+      canViewAnyNonconfidentialClientFiles: boolean;
     };
     image?: {
       __typename?: 'ClientImage';
@@ -7619,6 +7666,14 @@ export type UpdateEnrollmentMutation = {
               id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
+              canViewDob: boolean;
+              canEditEnrollments: boolean;
+              canDeleteEnrollments: boolean;
+              canViewEnrollmentDetails: boolean;
+              canManageAnyClientFiles: boolean;
+              canManageOwnClientFiles: boolean;
+              canViewAnyConfidentialClientFiles: boolean;
+              canViewAnyNonconfidentialClientFiles: boolean;
             };
           };
           enrollment: {
@@ -7696,6 +7751,14 @@ export type SetHoHMutation = {
               id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
+              canViewDob: boolean;
+              canEditEnrollments: boolean;
+              canDeleteEnrollments: boolean;
+              canViewEnrollmentDetails: boolean;
+              canManageAnyClientFiles: boolean;
+              canManageOwnClientFiles: boolean;
+              canViewAnyConfidentialClientFiles: boolean;
+              canViewAnyNonconfidentialClientFiles: boolean;
             };
           };
           enrollment: {
@@ -7862,6 +7925,14 @@ export type AddHouseholdMembersMutation = {
               id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
+              canViewDob: boolean;
+              canEditEnrollments: boolean;
+              canDeleteEnrollments: boolean;
+              canViewEnrollmentDetails: boolean;
+              canManageAnyClientFiles: boolean;
+              canManageOwnClientFiles: boolean;
+              canViewAnyConfidentialClientFiles: boolean;
+              canViewAnyNonconfidentialClientFiles: boolean;
             };
           };
           enrollment: {
@@ -8083,6 +8154,14 @@ export type GetEnrollmentWithHouseholdQuery = {
             id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
+            canViewDob: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
           };
         };
       }>;
@@ -8209,6 +8288,14 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 id: string;
                 canViewFullSsn: boolean;
                 canViewPartialSsn: boolean;
+                canViewDob: boolean;
+                canEditEnrollments: boolean;
+                canDeleteEnrollments: boolean;
+                canViewEnrollmentDetails: boolean;
+                canManageAnyClientFiles: boolean;
+                canManageOwnClientFiles: boolean;
+                canViewAnyConfidentialClientFiles: boolean;
+                canViewAnyNonconfidentialClientFiles: boolean;
               };
             };
             enrollment: {
@@ -9885,24 +9972,6 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     section
   }
 `;
-export const ClientPermissionsFragmentDoc = gql`
-  fragment ClientPermissions on Client {
-    id
-    access {
-      id
-      canViewDob
-      canViewFullSsn
-      canViewPartialSsn
-      canEditEnrollments
-      canDeleteEnrollments
-      canViewEnrollmentDetails
-      canManageAnyClientFiles
-      canManageOwnClientFiles
-      canViewAnyConfidentialClientFiles
-      canViewAnyNonconfidentialClientFiles
-    }
-  }
-`;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
     id
@@ -9979,6 +10048,30 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ClientAccessFieldsFragmentDoc = gql`
+  fragment ClientAccessFields on ClientAccess {
+    id
+    canViewDob
+    canViewFullSsn
+    canViewPartialSsn
+    canEditEnrollments
+    canDeleteEnrollments
+    canViewEnrollmentDetails
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
+  }
+`;
+export const ClientPermissionsFragmentDoc = gql`
+  fragment ClientPermissions on Client {
+    id
+    access {
+      ...ClientAccessFields
+    }
+  }
+  ${ClientAccessFieldsFragmentDoc}
+`;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
     id
@@ -9987,6 +10080,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       id
       ...ClientName
       ...ClientIdentificationFields
+      ...ClientPermissions
       veteranStatus
     }
     enrollment {
@@ -9998,6 +10092,7 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientPermissionsFragmentDoc}
 `;
 export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
   fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
@@ -11226,9 +11321,11 @@ export const GetClientDocument = gql`
   query GetClient($id: ID!) {
     client(id: $id) {
       ...ClientFields
+      ...ClientPermissions
     }
   }
   ${ClientFieldsFragmentDoc}
+  ${ClientPermissionsFragmentDoc}
 `;
 
 /**

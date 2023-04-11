@@ -22,6 +22,8 @@ query SearchClients(
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields
+    # Load client permissions so that they are in the cache for subsequent requests
+    ...ClientPermissions
   }
 }
 

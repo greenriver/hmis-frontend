@@ -19,20 +19,24 @@ fragment ClientName on Client {
   nameSuffix
 }
 
+fragment ClientAccessFields on ClientAccess {
+  id
+  canViewDob
+  canViewFullSsn
+  canViewPartialSsn
+  canEditEnrollments
+  canDeleteEnrollments
+  canViewEnrollmentDetails
+  canManageAnyClientFiles
+  canManageOwnClientFiles
+  canViewAnyConfidentialClientFiles
+  canViewAnyNonconfidentialClientFiles
+}
+
 fragment ClientPermissions on Client {
   id
   access {
-    id
-    canViewDob
-    canViewFullSsn
-    canViewPartialSsn
-    canEditEnrollments
-    canDeleteEnrollments
-    canViewEnrollmentDetails
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canViewAnyConfidentialClientFiles
-    canViewAnyNonconfidentialClientFiles
+    ...ClientAccessFields
   }
 }
 
@@ -99,6 +103,7 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
+    ...ClientPermissions
     veteranStatus
   }
   enrollment {
