@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useHasPermissions } from './useHasPermissionsHooks';
 
+import apolloClient from '@/providers/apolloClient';
 import {
   ProjectAccess,
   QueryAccess,
@@ -11,6 +12,7 @@ import {
   useGetOrganizationPermissionsQuery,
   useGetClientPermissionsQuery,
   ClientAccess,
+  ClientAccessFieldsFragmentDoc,
 } from '@/types/gqlTypes';
 
 export type EntityPermissionsFilterProps<T> = {
@@ -77,11 +79,21 @@ export type ClientPermissionsFilterProps<T> = Omit<
 export const ClientPermissionsFilter: React.FC<
   ClientPermissionsFilterProps<ClientAccess>
 > = ({ id, ...props }) => {
-  const { data, loading } = useGetClientPermissionsQuery({
+  // read ClientAccess from cache if we have it
+  const access = id
+    ? apolloClient.readFragment({
+        id: `ClientAccess:${id}`,
+        fragment: ClientAccessFieldsFragmentDoc,
+        fragmentName: 'ClientAccessFields',
+      })
+    : undefined;
+
+  // otherwise query for it
+  const { loading, error } = useGetClientPermissionsQuery({
     variables: { id },
-    skip: !id,
+    skip: !!access || !id,
   });
-  const access = data?.client?.access;
+  if (error) throw error;
 
   return <PermissionsFilter object={access} loading={loading} {...props} />;
 };
