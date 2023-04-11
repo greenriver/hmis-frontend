@@ -37,7 +37,9 @@ const ViewAssessmentPage = ({
     assessmentId: string;
   };
 
-  const canEdit = useHasClientPermissions(clientId, ['canEditEnrollments']);
+  const canEdit = useHasClientPermissions(clientId, [
+    'canViewEnrollmentDetails',
+  ]);
 
   const {
     definition,

@@ -54,7 +54,7 @@ Default.args = {
         label: "Client doesn't know",
       },
     ],
-    undefined: [
+    'multi-open': [
       {
         code: 'they/them',
       },

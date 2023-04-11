@@ -4,6 +4,7 @@ import { ReactNode, useMemo } from 'react';
 import NotCollectedText from './NotCollectedText';
 
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 
 export interface TextContentProps<T extends ReactNode> {
   label: ReactNode;
@@ -17,11 +18,10 @@ const TextContent = <T extends ReactNode>({
   label,
   value,
   horizontal = false,
-  hasValue = (x) => !!x,
   renderValue = (x) => x,
 }: TextContentProps<T>): JSX.Element => {
   const displayValue = useMemo(() => {
-    if (hasValue(value)) {
+    if (hasMeaningfulValue(value)) {
       const renderedValue = renderValue(value);
       if (typeof renderedValue === 'string')
         return <Typography variant='body2'>{renderedValue}</Typography>;
@@ -29,7 +29,7 @@ const TextContent = <T extends ReactNode>({
     } else {
       return <NotCollectedText variant='body2' />;
     }
-  }, [hasValue, renderValue, value]);
+  }, [renderValue, value]);
 
   return (
     <LabelWithContent label={label} horizontal={horizontal}>

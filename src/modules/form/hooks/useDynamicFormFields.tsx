@@ -2,11 +2,10 @@ import { omit } from 'lodash-es';
 import { useCallback, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
-  isShown,
   Props as DynamicFormFieldsProps,
 } from '../components/DynamicFormFields';
 import { FormValues } from '../types';
-import { addDescendants } from '../util/formUtil';
+import { addDescendants, isShown } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 

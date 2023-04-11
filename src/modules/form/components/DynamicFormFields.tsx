@@ -12,6 +12,7 @@ import {
 import {
   autofillValues,
   buildCommonInputProps,
+  isEnabled,
   shouldEnableItem,
   transformSubmitValues,
 } from '../util/formUtil';
@@ -48,29 +49,6 @@ export interface Props {
   disabledLinkIds: string[];
   setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
-
-export const isEnabled = (
-  item: FormItem,
-  disabledLinkIds: string[] = []
-): boolean => {
-  if (item.hidden) return false;
-  if (!item.enableWhen && item.item) {
-    // This is a group. Only show it if some children are enabled.
-    return item.item.some((i) => isEnabled(i, disabledLinkIds));
-  }
-  // console.log({disabledLinkIds})
-  return !disabledLinkIds.includes(item.linkId);
-};
-
-export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
-  if (
-    !isEnabled(item, disabledLinkIds) &&
-    item.disabledDisplay !== DisabledDisplay.Protected
-  )
-    return false;
-
-  return true;
-};
 
 // Exporting because we need this for the DynamicView items too
 export const setDisabledLinkIdsBase = (

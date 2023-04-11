@@ -2,10 +2,9 @@ import { isEqual, omit } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicViewFields, {
-  isShown,
   Props as DynamicViewFieldsProps,
 } from '../components/viewable/DynamicViewFields';
-import { addDescendants } from '../util/formUtil';
+import { addDescendants, isShown } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 

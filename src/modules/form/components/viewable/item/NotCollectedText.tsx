@@ -10,15 +10,7 @@ const NotCollectedText = ({
   ...props
 }: NotCollectedTextProps): JSX.Element => {
   return (
-    <Typography
-      {...props}
-      sx={({ palette }) =>
-        Object.assign({
-          color: palette.text.disabled,
-          ...(props.sx ? props.sx : {}),
-        })
-      }
-    >
+    <Typography color='text.disabled' {...props}>
       {children}
     </Typography>
   );
