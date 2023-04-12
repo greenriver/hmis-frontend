@@ -34,7 +34,7 @@ const subRoutes = {
   NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
   EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
   ALL_ENROLLMENTS: 'enrollments',
-  HISTORY: 'history',
+  AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
   NOTES: 'notes',
   FILES: 'files',
