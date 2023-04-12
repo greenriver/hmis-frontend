@@ -356,6 +356,7 @@ export const protectedRoutes = [
                     permissions={[
                       'canViewAnyConfidentialClientFiles',
                       'canViewAnyNonconfidentialClientFiles',
+                      'canManageOwnClientFiles',
                     ]}
                     otherwise={
                       <Navigate
