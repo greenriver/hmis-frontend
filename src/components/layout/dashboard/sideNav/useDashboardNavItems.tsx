@@ -17,6 +17,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
   const [canViewFiles] = useHasClientPermissions(client?.id || '', [
     'canViewAnyConfidentialClientFiles',
     'canViewAnyNonconfidentialClientFiles',
+    'canManageOwnClientFiles',
   ]);
   const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
