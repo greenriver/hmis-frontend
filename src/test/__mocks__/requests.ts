@@ -1,3 +1,4 @@
+import MOCK_IMAGE from '@/components/elements/upload/MOCK_IMAGE';
 import {
   GetClientDocument,
   SearchClientsDocument,
@@ -15,6 +16,7 @@ import {
   NoYesReasonsForMissingData,
   CreateDirectUploadMutationDocument,
   GetClientImageDocument,
+  GetFileDocument,
 } from '@/types/gqlTypes';
 
 export const RITA_ACKROYD = {
@@ -269,8 +271,7 @@ const clientImageLookupMock = {
           __typename: 'ClientImage',
           id: 1,
           contentType: 'image/jpeg',
-          base64:
-            'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII',
+          base64: MOCK_IMAGE,
         },
       },
     },
@@ -392,6 +393,40 @@ const createDirectUploadMock = {
   },
 };
 
+const getFileMock = {
+  request: {
+    query: GetFileDocument,
+    variables: {
+      id: '9999',
+    },
+  },
+  result: {
+    data: {
+      file: {
+        __typename: 'File',
+        confidential: false,
+        contentType: 'image/jpeg',
+        createdAt: '2023-04-06T12:03:06-04:00',
+        effectiveDate: null,
+        expirationDate: null,
+        id: '9999',
+        name: 'image.jpeg',
+        fileBlobId: '150',
+        updatedAt: '2023-04-06T12:07:51-04:00',
+        url: MOCK_IMAGE,
+        tags: ['15'],
+        ownFile: false,
+        enrollmentId: null,
+        enrollment: null,
+        updatedBy: {
+          id: '1',
+          name: 'Some User',
+        },
+      },
+    },
+  },
+};
+
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
@@ -408,6 +443,7 @@ const mocks: any[] = [
   clientWithoutEnrollmentsMock,
   enrollmentWithHoHMock,
   createDirectUploadMock,
+  getFileMock,
 ];
 
 export default mocks;

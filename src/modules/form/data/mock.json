@@ -49,13 +49,20 @@
           "helperText": "This is helper text"
         },
         {
-          "type": "STRING",
-          "required": false,
-          "warnIfEmpty": true,
-          "linkId": "ssn",
-          "text": "SSN",
-          "component": "SSN",
-          "helperText": "This is helper text"
+          "type": "GROUP",
+          "component": "INFO_GROUP",
+          "linkId": "ssn-group",
+          "item": [
+            {
+              "type": "STRING",
+              "required": false,
+              "warnIfEmpty": true,
+              "linkId": "ssn",
+              "text": "SSN",
+              "component": "SSN",
+              "helperText": "This is helper text"
+            }
+          ]
         },
         {
           "type": "TEXT",
@@ -85,7 +92,7 @@
         {
           "type": "OPEN_CHOICE",
           "warnIfEmpty": true,
-          "link_id": "multi-open",
+          "linkId": "multi-open",
           "text": "Multi Open Choice",
           "helperText": "You can type anything into this box",
           "repeats": true,
@@ -131,6 +138,49 @@
 
           "linkId": "display-example",
           "text": "This is a display item <b>with HTML</b><ul><li>List item!</li></ul>End of display item."
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "linkId": "horizontal-group",
+      "text": "Horizontal Group",
+      "item": [
+        {
+          "type": "GROUP",
+          "linkId": "name-group",
+          "component": "HORIZONTAL_GROUP",
+          "item": [
+            {
+              "type": "STRING",
+              "required": false,
+              "linkId": "first-name",
+              "text": "First Name",
+              "field_name": "firstName"
+            },
+            {
+              "type": "STRING",
+              "required": false,
+              "linkId": "middle-name",
+              "text": "Middle Name",
+              "field_name": "middleName"
+            },
+            {
+              "type": "STRING",
+              "required": false,
+              "linkId": "last-name",
+              "text": "Last Name",
+              "field_name": "lastName"
+            },
+            {
+              "type": "STRING",
+              "required": false,
+              "linkId": "name-suffix",
+              "text": "Suffix",
+              "field_name": "nameSuffix",
+              "size": "XSMALL"
+            }
+          ]
         }
       ]
     },
@@ -345,6 +395,30 @@
           "required": false,
           "warnIfEmpty": true,
           "text": "You must use the image from the uploader story to test this uploader component",
+          "component": "ALERT_INFO"
+        }
+      ]
+    },
+    {
+      "type": "GROUP",
+      "required": false,
+      "warnIfEmpty": true,
+      "linkId": "file",
+      "text": "File",
+      "item": [
+        {
+          "type": "FILE",
+          "required": false,
+          "warnIfEmpty": true,
+          "linkId": "file_id",
+          "text": "File"
+        },
+        {
+          "type": "DISPLAY",
+          "linkId": "file-alert",
+          "required": false,
+          "warnIfEmpty": true,
+          "text": "Don't upload anything here",
           "component": "ALERT_INFO"
         }
       ]

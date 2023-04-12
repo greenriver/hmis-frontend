@@ -28,7 +28,7 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 
 const FormCard = ({
   item,
-  severalItemsChanged,
+  severalItemsChanged = () => {},
   renderChildItem,
   anchor,
   values,

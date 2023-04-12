@@ -1,3 +1,4 @@
+import { SxProps } from '@mui/system';
 import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
@@ -29,6 +30,8 @@ export type SeveralItemsChangedFn = (input: {
   type: ChangeType;
 }) => void;
 
+export type AdjustValueFn = (input: { linkId: string; value: any }) => void;
+
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
@@ -44,6 +47,16 @@ export interface DynamicFieldProps {
   warnIfEmpty?: boolean;
 }
 
+export interface DynamicViewFieldProps {
+  item: FormItem;
+  nestingLevel: number;
+  value: any;
+  horizontal?: boolean;
+  pickListRelationId?: string;
+  noLabel?: boolean;
+  adjustValue?: AdjustValueFn;
+}
+
 // Props accepted by all input components
 export interface DynamicInputCommonProps {
   id?: string;
@@ -55,6 +68,12 @@ export interface DynamicInputCommonProps {
   min?: any;
   max?: any;
   placeholder?: string;
+}
+
+export interface DynamicViewItemCommonProps {
+  id?: string;
+  label?: ReactNode;
+  children?: ReactNode;
 }
 
 export type OverrideableDynamicFieldProps = Optional<
@@ -72,8 +91,23 @@ export interface GroupItemComponentProps {
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
   values: Record<string, any>;
-  itemChanged: ItemChangedFn;
-  severalItemsChanged: SeveralItemsChangedFn;
+  itemChanged?: ItemChangedFn;
+  severalItemsChanged?: SeveralItemsChangedFn;
+  visible?: boolean;
+  locked?: boolean;
+  viewOnly?: boolean;
+  rowSx?: SxProps;
+}
+
+export interface ViewGroupItemComponentProps {
+  item: FormItem;
+  nestingLevel: number;
+  renderChildItem: (
+    item: FormItem,
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
+  ) => ReactNode;
+  values: Record<string, any>;
   visible?: boolean;
   locked?: boolean;
 }

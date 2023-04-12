@@ -12,6 +12,7 @@ import {
 import {
   autofillValues,
   buildCommonInputProps,
+  isEnabled,
   shouldEnableItem,
   transformSubmitValues,
 } from '../util/formUtil';
@@ -49,27 +50,43 @@ export interface Props {
   setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const isEnabled = (
-  item: FormItem,
-  disabledLinkIds: string[] = []
-): boolean => {
-  if (item.hidden) return false;
-  if (!item.enableWhen && item.item) {
-    // This is a group. Only show it if some children are enabled.
-    return item.item.some((i) => isEnabled(i, disabledLinkIds));
+// Exporting because we need this for the DynamicView items too
+export const setDisabledLinkIdsBase = (
+  changedLinkIds: string[],
+  localValues: any,
+  callback: React.Dispatch<React.SetStateAction<string[]>>,
+  {
+    enabledDependencyMap,
+    itemMap,
+  }: {
+    enabledDependencyMap: LinkIdMap;
+    itemMap: ItemMap;
   }
-  // console.log({disabledLinkIds})
-  return !disabledLinkIds.includes(item.linkId);
-};
+) => {
+  // If none of these are dependencies, return immediately
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
 
-export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
-  if (
-    !isEnabled(item, disabledLinkIds) &&
-    item.disabledDisplay !== DisabledDisplay.Protected
-  )
-    return false;
+  callback((oldList) => {
+    const newList = [...oldList];
+    changedLinkIds.forEach((changedLinkId) => {
+      if (!enabledDependencyMap[changedLinkId]) return;
 
-  return true;
+      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+        const enabled = shouldEnableItem(
+          itemMap[dependentLinkId],
+          localValues,
+          itemMap
+        );
+        if (enabled && newList.includes(dependentLinkId)) {
+          pull(newList, dependentLinkId);
+        } else if (!enabled && !newList.includes(dependentLinkId)) {
+          newList.push(dependentLinkId);
+        }
+      });
+    });
+
+    return newList;
+  });
 };
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -111,29 +128,9 @@ const DynamicFormFields: React.FC<Props> = ({
    */
   const updateDisabledLinkIds = useCallback(
     (changedLinkIds: string[], localValues: any) => {
-      // If none of these are dependencies, return immediately
-      if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
-
-      setDisabledLinkIds((oldList) => {
-        const newList = [...oldList];
-        changedLinkIds.forEach((changedLinkId) => {
-          if (!enabledDependencyMap[changedLinkId]) return;
-
-          enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-            const enabled = shouldEnableItem(
-              itemMap[dependentLinkId],
-              localValues,
-              itemMap
-            );
-            if (enabled && newList.includes(dependentLinkId)) {
-              pull(newList, dependentLinkId);
-            } else if (!enabled && !newList.includes(dependentLinkId)) {
-              newList.push(dependentLinkId);
-            }
-          });
-        });
-
-        return newList;
+      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
+        enabledDependencyMap,
+        itemMap,
       });
     },
     [itemMap, enabledDependencyMap, setDisabledLinkIds]

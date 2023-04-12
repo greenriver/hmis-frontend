@@ -5,6 +5,7 @@ import { useOutletContext } from 'react-router-dom';
 
 import { assessmentDate } from '../util';
 
+import AssessmentTitle from './AssessmentTitle';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
 import Loading from '@/components/elements/Loading';
@@ -136,13 +137,10 @@ const IndividualAssessment = ({
   return (
     <>
       {!embeddedInWorkflow && (
-        <Stack direction='row'>
-          <Typography variant='h4' sx={{ mt: 1, mb: 3, fontWeight: 400 }}>
-            <b>{assessmentTitle}</b>
-            {/* {informationDate && ` ${parseAndFormatDate(informationDate)}`} */}
-            {embeddedInWorkflow && clientName && ` for ${clientName}`}
-          </Typography>
-        </Stack>
+        <AssessmentTitle
+          assessmentTitle={assessmentTitle}
+          clientName={clientName || undefined}
+        />
       )}
       {!definition && (
         <MissingDefinitionAlert hasCustomForm={!!assessment?.customForm} />

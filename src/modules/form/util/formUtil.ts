@@ -24,6 +24,7 @@ import {
   AutofillValue,
   BoundType,
   DataCollectedAbout,
+  DisabledDisplay,
   EnableBehavior,
   EnableOperator,
   EnableWhen,
@@ -55,9 +56,7 @@ export function areEqualValues(
   return value1 === value2;
 }
 
-export const hasMeaningfulValue = (
-  value: string | object | null | undefined
-): boolean => {
+export const hasMeaningfulValue = (value: any): boolean => {
   if (Array.isArray(value) && value.length == 0) return false;
   if (isNil(value)) return false;
   if (value === '') return false;
@@ -82,6 +81,28 @@ const localResolvePickList = (
   }
 
   return null;
+};
+
+export const isEnabled = (
+  item: FormItem,
+  disabledLinkIds: string[] = []
+): boolean => {
+  if (item.hidden) return false;
+  if (!item.enableWhen && item.item) {
+    // This is a group. Only show it if some children are enabled.
+    return item.item.some((i) => isEnabled(i, disabledLinkIds));
+  }
+  return !disabledLinkIds.includes(item.linkId);
+};
+
+export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
+  if (
+    !isEnabled(item, disabledLinkIds) &&
+    item.disabledDisplay !== DisabledDisplay.Protected
+  )
+    return false;
+
+  return true;
 };
 
 export const resolveOptionList = (

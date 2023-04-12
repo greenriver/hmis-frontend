@@ -1,37 +1,41 @@
-import { omit } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { isEqual, omit } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import DynamicFormFields, {
-  Props as DynamicFormFieldsProps,
-} from '../components/DynamicFormFields';
-import { FormValues } from '../types';
+import DynamicViewFields, {
+  Props as DynamicViewFieldsProps,
+} from '../components/viewable/DynamicViewFields';
 import { addDescendants, isShown } from '../util/formUtil';
 
 import useComputedData from './useComputedData';
 
+import usePrevious from '@/hooks/usePrevious';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
-const useDynamicFormFields = ({
+const useDynamicViewFields = ({
   definition,
-  initialValues,
+  values: baseValues,
   bulk,
 }: {
   definition: FormDefinitionJson;
-  initialValues?: Record<string, any>;
+  values: Record<string, any>;
   bulk?: boolean;
 }) => {
+  const [values, setValues] = useState<typeof baseValues>(baseValues);
+  const prevBaseValues = usePrevious(baseValues);
+
+  useEffect(() => {
+    if (!isEqual(baseValues, prevBaseValues)) setValues(baseValues);
+  }, [baseValues, prevBaseValues]);
+
   const {
     itemMap,
     autofillDependencyMap,
     enabledDependencyMap,
     initiallyDisabledLinkIds = [],
-  } = useComputedData({ definition, initialValues });
+  } = useComputedData({ definition, initialValues: values });
 
   const [disabledLinkIds, setDisabledLinkIds] = useState(
     initiallyDisabledLinkIds
-  );
-  const [values, setValues] = useState<FormValues>(
-    Object.assign({}, initialValues)
   );
 
   // Get form state, with "hidden" fields (and their children) removed
@@ -49,7 +53,7 @@ const useDynamicFormFields = ({
   const renderFields = useCallback(
     (
       props: Omit<
-        DynamicFormFieldsProps,
+        DynamicViewFieldsProps,
         | 'definition'
         | 'itemMap'
         | 'autofillDependencyMap'
@@ -61,7 +65,7 @@ const useDynamicFormFields = ({
         | 'bulk'
       >
     ) => (
-      <DynamicFormFields
+      <DynamicViewFields
         {...props}
         {...{
           definition,
@@ -70,8 +74,8 @@ const useDynamicFormFields = ({
           enabledDependencyMap,
           disabledLinkIds,
           setDisabledLinkIds,
-          values,
           setValues,
+          values,
           bulk,
         }}
       />
@@ -91,6 +95,7 @@ const useDynamicFormFields = ({
     () => ({
       renderFields,
       values,
+      setValues,
       getCleanedValues,
       shouldShowItem,
     }),
@@ -98,4 +103,4 @@ const useDynamicFormFields = ({
   );
 };
 
-export default useDynamicFormFields;
+export default useDynamicViewFields;

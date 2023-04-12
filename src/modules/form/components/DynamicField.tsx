@@ -1,14 +1,12 @@
 import { Stack, Typography } from '@mui/material';
-import { intersectionBy, isNil } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
-import { usePickList } from '../hooks/usePickList';
+import { getValueFromPickListData, usePickList } from '../hooks/usePickList';
 import {
   ChangeType,
   DynamicFieldProps,
   DynamicInputCommonProps,
-  isPickListOption,
-  isPickListOptionArray,
 } from '../types';
 import { hasMeaningfulValue } from '../util/formUtil';
 
@@ -129,37 +127,13 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     {
       fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
       onCompleted: (data) => {
-        if (!data?.pickList) return;
-
-        // If there is no value, look for InitialSelected value and set it
-        if (!hasMeaningfulValue(value)) {
-          const initial = item.repeats
-            ? data.pickList.filter((o) => o.initialSelected)
-            : data.pickList.find((o) => o.initialSelected);
-          if (initial) {
-            itemChanged({ linkId, value: initial, type: ChangeType.System });
-          }
-          return;
-        }
-
-        // Try to find the "full" option (including label) for this value from the pick list
-        let fullOption;
-        if (isPickListOption(value)) {
-          fullOption = data.pickList.find((o) => o.code === value.code);
-        } else if (isPickListOptionArray(value)) {
-          fullOption = intersectionBy(data.pickList, value, 'code');
-        }
-
-        if (fullOption) {
-          // Update the value so that it shows the complete label
-          itemChanged({ linkId, value: fullOption, type: ChangeType.System });
-        } else {
-          console.warn(
-            `Selected value '${JSON.stringify(
-              value
-            )}' is not present in option list '${item.pickListReference}'`
-          );
-        }
+        const newValue = getValueFromPickListData({
+          item,
+          value,
+          linkId: item.linkId,
+          data,
+        });
+        if (newValue) itemChanged(newValue);
       },
     }
   );

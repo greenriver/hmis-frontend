@@ -12,6 +12,8 @@ const InputGroup = ({
   values,
   renderChildItem,
   nestingLevel,
+  viewOnly = false,
+  rowSx,
 }: GroupItemComponentProps) => {
   const [childItems, summaryItem] = useMemo(() => {
     const childs: FormItem[] = (item.item || []).filter((i) => !i.hidden);
@@ -32,8 +34,8 @@ const InputGroup = ({
   );
 
   const childProps = useMemo(
-    () => ({ horizontal: isNumeric ? true : undefined }),
-    [isNumeric]
+    () => ({ horizontal: isNumeric || viewOnly ? true : undefined }),
+    [isNumeric, viewOnly]
   );
 
   const childRenderFunc = useCallback(
@@ -55,15 +57,19 @@ const InputGroup = ({
                   },
                 }
               : undefined),
+            ...rowSx,
           }}
         >
           {children}
         </Box>
       ),
-    []
+    [rowSx]
   );
 
   const wrappedChildren = useMemo(() => {
+    const maxWidth = isNumeric
+      ? maxWidthAtNestingLevel(nestingLevel + 1)
+      : undefined;
     return (
       <Grid
         container
@@ -74,9 +80,7 @@ const InputGroup = ({
           '& .MuiGrid-item': { pt: 0, maxWidth: '100%' },
           mt: 0,
           border: (theme) => `1px solid ${theme.palette.grey[200]}`,
-          maxWidth: isNumeric
-            ? maxWidthAtNestingLevel(nestingLevel + 1)
-            : undefined,
+          maxWidth: viewOnly ? undefined : maxWidth,
         }}
       >
         {renderChildItem &&
@@ -98,8 +102,11 @@ const InputGroup = ({
     isNumeric,
     childItems,
     childProps,
+    viewOnly,
     childRenderFunc,
   ]);
+
+  const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1);
 
   return (
     <Box id={item.linkId}>
@@ -115,7 +122,8 @@ const InputGroup = ({
             pt: 2,
             mt: 1,
             borderTop: (theme) => `1px solid ${theme.palette.grey[500]}`,
-            maxWidth: maxWidthAtNestingLevel(nestingLevel + 1),
+            maxWidth: viewOnly ? undefined : maxWidth,
+            ...rowSx,
           }}
         >
           <Typography>{summaryItem.text || 'Total'}</Typography>

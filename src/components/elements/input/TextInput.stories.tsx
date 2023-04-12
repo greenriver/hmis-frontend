@@ -6,7 +6,7 @@ import TextInput from './TextInput';
 export default {
   title: 'TextInput',
   component: TextInput,
-  argTypes: { label: { control: 'text' } },
+  argTypes: { label: { control: 'text' }, horizontal: { control: 'boolean' } },
   decorators: [
     (Story) => (
       <Box sx={{ width: 400 }}>

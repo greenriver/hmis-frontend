@@ -1,5 +1,6 @@
 import {
   Box,
+  InputLabel,
   InputLabelProps,
   InputProps,
   SelectProps,
@@ -115,7 +116,16 @@ const TextInput = ({
         }}
         justifyContent='space-between'
       >
-        <Box sx={{ flexBasis: '80%' }}>{label}</Box>
+        <Box sx={{ flexBasis: '80%' }}>
+          <InputLabel
+            sx={(theme) => ({
+              color: theme.palette.text.primary,
+              fontSize: theme.typography.body2,
+            })}
+          >
+            {label}
+          </InputLabel>
+        </Box>
         <Box sx={{ justifyContent: 'flex-end', pt: 0.5 }}>{textField}</Box>
       </Stack>
     );
