@@ -5,6 +5,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 import { DashboardRoutes, Routes } from './routes';
 
 import AllFiles from '@/components/dashboard/AllFiles';
+import AuditHistory from '@/components/dashboard/AuditHistory';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
@@ -15,7 +16,6 @@ import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake'
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
-import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -327,13 +327,13 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.HISTORY,
+            path: DashboardRoutes.AUDIT_HISTORY,
             element: (
               <RootPermissionsFilter
                 permissions='canAuditClients'
                 otherwise={<Navigate to='profile' replace />}
               >
-                <History />
+                <AuditHistory />
               </RootPermissionsFilter>
             ),
           },

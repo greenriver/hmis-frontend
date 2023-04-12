@@ -107,7 +107,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                 {
                   id: 'audit',
                   title: 'Audit History',
-                  path: generateSafePath(DashboardRoutes.HISTORY, params),
+                  path: generateSafePath(DashboardRoutes.AUDIT_HISTORY, params),
                 },
               ]
             : []),
