@@ -2783,6 +2783,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'data',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
+      {
         name: 'fullMessage',
         type: {
           kind: 'NON_NULL',
