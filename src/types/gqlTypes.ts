@@ -501,6 +501,7 @@ export type CreateDirectUploadInput = {
 export type CreateEnrollmentInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  confirmed?: InputMaybe<Scalars['Boolean']>;
   entryDate: Scalars['ISO8601Date'];
   householdMembers: Array<EnrollmentHouseholdMemberInput>;
   projectId: Scalars['ID'];

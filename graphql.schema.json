@@ -3714,6 +3714,18 @@
             "deprecationReason": null
           },
           {
+            "name": "confirmed",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "entryDate",
             "description": null,
             "type": {

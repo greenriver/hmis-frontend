@@ -34,7 +34,7 @@ const ValidationErrorList = ({ errors }: { errors: ValidationError[] }) => {
       )}
       {grouped.other &&
         grouped.other.map((e) => (
-          <li>
+          <li key={e.fullMessage}>
             <Typography variant='inherit'>{e.fullMessage}</Typography>
           </li>
         ))}
