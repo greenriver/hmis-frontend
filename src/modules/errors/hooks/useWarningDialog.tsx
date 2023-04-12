@@ -26,13 +26,14 @@ export function useWarningDialog({ errorState, onConfirm, loading }: Args) {
         FormWarningDialogProps,
         'open' | 'onCancel' | 'onConfirm' | 'loading' | 'warnings'
       >
-    > = () => (
+    > = (props) => (
       <FormWarningDialog
         open={showDialog}
         onConfirm={onConfirm}
         onCancel={() => setShowDialog(false)}
         warnings={errorState.warnings}
         loading={loading || false}
+        {...props}
       />
     );
     return DialogComponent;
