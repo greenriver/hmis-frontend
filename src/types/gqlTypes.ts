@@ -2558,6 +2558,7 @@ export type QueryAccess = {
   canAdministerHmis: Scalars['Boolean'];
   canAuditClients: Scalars['Boolean'];
   canDeleteAssignedProjectData: Scalars['Boolean'];
+  canDeleteClients: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canDeleteOrganization: Scalars['Boolean'];
   canDeleteProject: Scalars['Boolean'];
