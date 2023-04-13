@@ -17,6 +17,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
   const [canViewFiles] = useHasClientPermissions(client?.id || '', [
     'canViewAnyConfidentialClientFiles',
     'canViewAnyNonconfidentialClientFiles',
+    'canManageOwnClientFiles',
   ]);
   const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
@@ -107,7 +108,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                 {
                   id: 'audit',
                   title: 'Audit History',
-                  path: generateSafePath(DashboardRoutes.HISTORY, params),
+                  path: generateSafePath(DashboardRoutes.AUDIT_HISTORY, params),
                 },
               ]
             : []),

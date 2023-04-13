@@ -840,21 +840,22 @@ export const transformSubmitValues = ({
   function rescursiveFillMap(
     items: FormItem[],
     result: Record<string, any>,
-    currentRecord?: string
+    parentRecordType?: string
   ) {
     items.forEach((item: FormItem) => {
+      const recordType = item.recordType
+        ? HmisEnums.RelatedRecordType[item.recordType]
+        : parentRecordType;
+
       if (Array.isArray(item.item)) {
-        const recordName = item.recordType
-          ? HmisEnums.RelatedRecordType[item.recordType]
-          : currentRecord;
-        rescursiveFillMap(item.item, result, recordName);
+        rescursiveFillMap(item.item, result, recordType);
       }
       if (!item.fieldName) return;
 
       // Build key for result map
       let key = keyByFieldName ? item.fieldName : item.linkId;
       // Prefix key like "Enrollment.livingSituation"
-      if (keyByFieldName && currentRecord) key = `${currentRecord}.${key}`;
+      if (keyByFieldName && recordType) key = `${recordType}.${key}`;
 
       if (item.linkId in values) {
         // Transform into gql value, for example Date -> YYYY-MM-DD string

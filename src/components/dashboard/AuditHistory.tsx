@@ -1,6 +1,8 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { capitalize, isNil } from 'lodash-es';
+
+import SimpleTable from '../elements/SimpleTable';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -18,11 +20,7 @@ type AssessmentType = NonNullable<
 >['nodes'][0];
 
 const nullText = (
-  <Typography
-    component='span'
-    variant='inherit'
-    sx={(theme) => ({ color: theme.palette.text.disabled })}
-  >
+  <Typography component='span' variant='inherit' color='text.secondary'>
     null
   </Typography>
 );
@@ -51,51 +49,79 @@ type ChangesType = {
 const columns: ColumnDef<AssessmentType>[] = [
   {
     header: 'Date',
+    width: '20%',
     render: (e) =>
       e.createdAt && formatDateTimeForDisplay(new Date(e.createdAt)),
   },
   {
     header: 'User',
+    width: '15%',
     render: (e) => e.user?.name,
   },
   {
     header: 'Action',
-    render: (e) => e.event,
+    width: '10%',
+    render: (e) => capitalize(e.event),
   },
   {
-    header: 'changes',
+    header: 'Changes',
     render: (e) => {
-      return Object.entries(e.objectChanges as ChangesType).map(
-        ([key, { fieldName, displayName, values = [] }]) => {
-          if (values === 'changed')
-            return (
-              <Typography variant='body2'>
-                {displayName}: {changedText}
-              </Typography>
-            );
+      return (
+        <SimpleTable
+          TableCellProps={{
+            sx: { py: 0.5, borderColor: (theme) => theme.palette.grey[200] },
+          }}
+          TableBodyProps={{
+            sx: {
+              '.MuiTableRow-root:last-child .MuiTableCell-root': {
+                border: 'none',
+              },
+            },
+          }}
+          TableRowProps={{
+            sx: { '.MuiTableCell-root:first-child': { width: '180px' } },
+          }}
+          rows={Object.values(e.objectChanges as ChangesType).map((r) => ({
+            ...r,
+            id: r.fieldName,
+          }))}
+          columns={[
+            { name: 'field', render: (row) => row.displayName },
+            {
+              name: 'changes',
+              render: ({ values, fieldName, displayName }) => {
+                if (values === 'changed')
+                  return (
+                    <Typography variant='body2'>
+                      {displayName}: {changedText}
+                    </Typography>
+                  );
 
-          const [from, to] = values.map((val) =>
-            isNil(val) ? null : (
-              <HmisField
-                key={key}
-                record={{ ...e.objectChanges, [fieldName]: val }}
-                fieldName={fieldName}
-                recordType='Client'
-              />
-            )
-          );
-          return (
-            <Typography variant='body2' display='flex' gap={0.5}>
-              {displayName}: {from || nullText} &rarr; {to || nullText}
-            </Typography>
-          );
-        }
+                const [from, to] = values.map((val) =>
+                  isNil(val) ? null : (
+                    <HmisField
+                      key={fieldName}
+                      record={{ ...e.objectChanges, [fieldName]: val }}
+                      fieldName={fieldName}
+                      recordType='Client'
+                    />
+                  )
+                );
+                return (
+                  <Typography variant='body2' display='flex' gap={0.5}>
+                    {from || nullText} &rarr; {to || nullText}
+                  </Typography>
+                );
+              },
+            },
+          ]}
+        />
       );
     },
   },
 ];
 
-const History = () => {
+const AuditHistory = () => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   return (
@@ -126,4 +152,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default AuditHistory;
