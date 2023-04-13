@@ -157,7 +157,7 @@ const BulkAdd = <
       {errors && hasAnyValue(errors) && (
         <Stack gap={1} sx={{ mt: 4 }}>
           <ApolloErrorAlert error={errors.apolloError} />
-          <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+          <ErrorAlert key='errors' errors={errors.errors} />
           <WarningAlert key='warnings' warnings={errors.warnings} />
         </Stack>
       )}

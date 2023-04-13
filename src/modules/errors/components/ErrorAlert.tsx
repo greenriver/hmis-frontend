@@ -1,16 +1,15 @@
 import { Alert, AlertProps, AlertTitle } from '@mui/material';
 import { reject } from 'lodash-es';
 
+import { FIXABLE_ERROR_HEADING, UNKNOWN_ERROR_HEADING } from '../util';
+
 import ValidationErrorList from './ValidationErrorList';
 
 import { ValidationError } from '@/types/gqlTypes';
 
-const FIXABLE_ERROR_HEADING = 'Please fix outstanding errors';
-const UNKNOWN_ERROR_HEADING = 'An error occurred';
-
 const ErrorAlert = ({
   errors,
-  fixable = true,
+  fixable = false,
   AlertProps = {},
 }: {
   errors: ValidationError[];

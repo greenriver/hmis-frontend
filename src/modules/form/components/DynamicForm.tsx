@@ -10,9 +10,7 @@ import React, {
 } from 'react';
 
 import ErrorAlert from '../../errors/components/ErrorAlert';
-import WarningDialog, {
-  WarningDialogProps,
-} from '../../errors/components/WarningDialog';
+import { ValidationDialogProps } from '../../errors/components/ValidationDialog';
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
@@ -21,7 +19,7 @@ import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import { ErrorState, hasErrors } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
@@ -56,9 +54,9 @@ export interface DynamicFormProps
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
   >;
-  WarningDialogProps?: Omit<
-    WarningDialogProps,
-    'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
+  ValidationDialogProps?: Omit<
+    ValidationDialogProps,
+    'errorState' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
 }
 export interface DynamicFormRef {
@@ -83,7 +81,7 @@ const DynamicForm = forwardRef(
       visible = true,
       pickListRelationId,
       FormActionProps = {},
-      WarningDialogProps = {},
+      ValidationDialogProps = {},
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -161,11 +159,8 @@ const DynamicForm = forwardRef(
       [onSubmit, getCleanedValues, FormActionProps]
     );
 
-    const { showWarningDialog, warningDialogProps } = useWarningDialog({
-      errorState,
-      onConfirm: handleConfirm,
-      loading,
-    });
+    const { renderValidationDialog, validationDialogVisible } =
+      useValidationDialog({ errorState });
     const handleSaveDraft = useCallback(
       (onSuccess?: VoidFunction) => {
         if (!onSaveDraft) return;
@@ -188,7 +183,7 @@ const DynamicForm = forwardRef(
       <FormActions
         onSubmit={handleSubmit}
         onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-        disabled={locked || !!loading || showWarningDialog}
+        disabled={locked || !!loading || validationDialogVisible}
         loading={loading}
         {...FormActionProps}
       />
@@ -204,7 +199,7 @@ const DynamicForm = forwardRef(
             <Grid item>
               <Stack gap={2}>
                 <ApolloErrorAlert error={errorState.apolloError} />
-                <ErrorAlert errors={errorState.errors} />
+                <ErrorAlert errors={errorState.errors} fixable />
               </Stack>
             </Grid>
           )}
@@ -225,15 +220,12 @@ const DynamicForm = forwardRef(
             {saveButtons}
           </Box>
         )}
-
-        {showWarningDialog && (
-          <WarningDialog
-            confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-            {...WarningDialogProps}
-            {...warningDialogProps}
-          />
-        )}
-
+        {renderValidationDialog({
+          onConfirm: handleConfirm,
+          loading: loading || false,
+          confirmText: FormActionProps?.submitButtonText || 'Confirm',
+          ...ValidationDialogProps,
+        })}
         {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
           <SaveSlide
             in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}

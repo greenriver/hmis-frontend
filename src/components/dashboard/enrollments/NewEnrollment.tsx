@@ -13,8 +13,7 @@ import NotFound from '@/components/pages/404';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
-import WarningDialog from '@/modules/errors/components/WarningDialog';
-import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   emptyErrorState,
   ErrorState,
@@ -97,11 +96,7 @@ const NewEnrollment = () => {
     [entryDate, members, project, mutateFunction]
   );
 
-  const { showWarningDialog, warningDialogProps } = useWarningDialog({
-    errorState,
-    onConfirm: () => handleSubmit(true),
-    loading,
-  });
+  const { renderValidationDialog } = useValidationDialog({ errorState });
 
   if (!client) return <NotFound />;
   if (recentHouseholdMembersLoading) return <Loading />;
@@ -191,7 +186,10 @@ const NewEnrollment = () => {
         </Grid>
         <Grid item xs></Grid>
       </Grid>
-      {showWarningDialog && <WarningDialog {...warningDialogProps} />}
+      {renderValidationDialog({
+        onConfirm: () => handleSubmit(true),
+        loading,
+      })}
     </>
   );
 };

@@ -22,6 +22,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   onCancel: () => void;
   color?: ButtonProps['color'];
   errors?: ErrorState;
+  hideCancelButton?: boolean;
 }
 
 const ConfirmationDialog = ({
@@ -33,6 +34,7 @@ const ConfirmationDialog = ({
   confirmText = 'Confirm',
   color,
   errors,
+  hideCancelButton,
   ...other
 }: ConfirmationDialogProps) => {
   return (
@@ -55,7 +57,7 @@ const ConfirmationDialog = ({
         {errors && hasAnyValue(errors) && (
           <Stack gap={1} sx={{ mt: 4 }}>
             <ApolloErrorAlert error={errors.apolloError} />
-            <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+            <ErrorAlert key='errors' errors={errors.errors} />
             <WarningAlert key='warnings' warnings={errors.warnings} />
           </Stack>
         )}
@@ -72,13 +74,15 @@ const ConfirmationDialog = ({
         }}
       >
         <Stack gap={3} direction='row'>
-          <Button
-            onClick={onCancel}
-            variant='gray'
-            data-testid='cancelDialogAction'
-          >
-            Cancel
-          </Button>
+          {!hideCancelButton && (
+            <Button
+              onClick={onCancel}
+              variant='gray'
+              data-testid='cancelDialogAction'
+            >
+              Cancel
+            </Button>
+          )}
           <LoadingButton
             onClick={onConfirm}
             type='submit'
