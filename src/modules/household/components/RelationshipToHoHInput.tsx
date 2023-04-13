@@ -8,7 +8,7 @@ import RelationshipToHohSelect, {
 import InputIndicatorContainer from '@/components/elements/input/InputIndicatorContainer';
 import {
   RelationshipToHoH,
-  useUpdateEnrollmentMutation,
+  useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props
@@ -27,8 +27,8 @@ const RelationshipToHoHInput = ({
     relationshipToHoH
   );
   const [completed, setCompleted] = useState(false);
-  const [updateEnrollment, { loading, error: updateError }] =
-    useUpdateEnrollmentMutation({
+  const [updateRelationship, { loading, error: updateError }] =
+    useUpdateRelationshipToHoHMutation({
       onCompleted: () => {
         setCompleted(true);
       },
@@ -43,18 +43,19 @@ const RelationshipToHoHInput = ({
     () => (_: any, selected: Option | null) => {
       setCompleted(false);
       setRelationship(selected ? selected.value : null);
-      void updateEnrollment({
+      void updateRelationship({
         variables: {
           input: {
-            id: enrollmentId,
+            enrollmentId,
             relationshipToHoH: selected
               ? selected.value
               : RelationshipToHoH.DataNotCollected,
+            confirmed: true, // we don't support displaying warnings in this view, so ignore them
           },
         },
       });
     },
-    [enrollmentId, updateEnrollment, setRelationship]
+    [enrollmentId, updateRelationship, setRelationship]
   );
 
   return (

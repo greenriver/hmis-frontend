@@ -27,31 +27,28 @@ import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilter
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
-  useSetHoHMutation,
+  useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   currentMembers: HouseholdClientFieldsFragment[];
   clientId: string;
-  householdId: string;
   refetch: any;
 }
-
-type MaybeClient = HouseholdClientFieldsFragment['client'] | null;
 
 const EditHouseholdMemberTable = ({
   currentMembers,
   clientId,
-  householdId,
   refetch,
 }: Props) => {
-  const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
+  const [proposedHoH, setProposedHoH] =
+    useState<HouseholdClientFieldsFragment | null>(null);
   const [confirmedHoH, setConfirmedHoH] = useState(false);
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
-  const [hoh, setHoH] = useState<MaybeClient>(
+  const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    )?.client || null
+    ) || null
   );
   const previousMembers =
     usePrevious<HouseholdClientFieldsFragment[]>(currentMembers);
@@ -59,14 +56,14 @@ const EditHouseholdMemberTable = ({
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
 
-  const [setHoHMutate, { loading }] = useSetHoHMutation({
+  const [setHoHMutate, { loading }] = useUpdateRelationshipToHoHMutation({
     onCompleted: (data) => {
-      if (!data.setHoHForEnrollment) return;
+      if (!data.updateRelationshipToHoH) return;
 
-      if (data.setHoHForEnrollment.enrollment) {
+      if (data.updateRelationshipToHoH.enrollment) {
         // highlight relationship field for non-HOH members
         const members =
-          data.setHoHForEnrollment?.enrollment?.household.householdClients
+          data.updateRelationshipToHoH?.enrollment?.household.householdClients
             .filter(
               (hc) =>
                 hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
@@ -77,8 +74,8 @@ const EditHouseholdMemberTable = ({
         setConfirmedHoH(false);
         // refetch, so that all relationships-to-HoH to reload
         refetch();
-      } else if (data.setHoHForEnrollment.errors.length > 0) {
-        const errors = data.setHoHForEnrollment.errors;
+      } else if (data.updateRelationshipToHoH.errors.length > 0) {
+        const errors = data.updateRelationshipToHoH.errors;
         setErrors(partitionValidations(errors));
         setConfirmedHoH(false);
       }
@@ -94,7 +91,7 @@ const EditHouseholdMemberTable = ({
     const actualHoH =
       currentMembers.find(
         (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      )?.client || null;
+      ) || null;
 
     setHoH(actualHoH);
     setProposedHoH((prev) => {
@@ -123,19 +120,21 @@ const EditHouseholdMemberTable = ({
   }, [previousMembers, currentMembers]);
 
   const onChangeHoH = useMemo(
-    () => () => {
-      if (!proposedHoH) return;
-      setConfirmedHoH(true);
-      setHoHMutate({
-        variables: {
-          input: {
-            clientId: proposedHoH.id,
-            householdId,
+    () =>
+      (confirmed = false) => {
+        if (!proposedHoH) return;
+        setConfirmedHoH(true);
+        setHoHMutate({
+          variables: {
+            input: {
+              enrollmentId: proposedHoH.enrollment.id,
+              relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
+              confirmed,
+            },
           },
-        },
-      });
-    },
-    [setHoHMutate, proposedHoH, householdId]
+        });
+      },
+    [setHoHMutate, proposedHoH]
   );
 
   const allInProgress = useMemo(
@@ -211,7 +210,7 @@ const EditHouseholdMemberTable = ({
               // TODO: Can't set child to HoH?
             }
             onChange={() => {
-              setProposedHoH(hc.client);
+              setProposedHoH(hc);
             }}
           />
         ),
@@ -258,7 +257,8 @@ const EditHouseholdMemberTable = ({
           open
           title='Change Head of Household'
           confirmText='Confirm Change'
-          onConfirm={onChangeHoH}
+          // TODO: support confirmation warnings
+          onConfirm={() => onChangeHoH(true)}
           onCancel={() => {
             setProposedHoH(null);
             setErrors(emptyErrorState);
@@ -271,13 +271,14 @@ const EditHouseholdMemberTable = ({
             {proposedHoH && hoh && (
               <Typography>
                 You are changing the head of household from{' '}
-                <b>{clientBriefName(hoh)}</b> to{' '}
-                <b>{clientBriefName(proposedHoH)}</b>
+                <b>{clientBriefName(hoh.client)}</b> to{' '}
+                <b>{clientBriefName(proposedHoH.client)}</b>
               </Typography>
             )}
             {proposedHoH && !hoh && (
               <Typography>
-                Set <b>{clientBriefName(proposedHoH)}</b> as Head of Household.
+                Set <b>{clientBriefName(proposedHoH.client)}</b> as Head of
+                Household.
               </Typography>
             )}
           </>
