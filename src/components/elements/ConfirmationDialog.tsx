@@ -17,7 +17,7 @@ import { ErrorState, hasAnyValue } from '@/modules/errors/util';
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
   children: React.ReactNode;
-  confirmText?: string;
+  confirmText?: React.ReactNode;
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
   color?: ButtonProps['color'];

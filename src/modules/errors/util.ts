@@ -20,6 +20,11 @@ export type ErrorState = {
   warnings: ValidationError[];
 };
 
+export type ErrorRenderFn = (
+  e: ValidationError,
+  args?: { attributeOnly?: boolean }
+) => React.ReactNode;
+
 export const hasAnyValue = (state: ErrorState): boolean =>
   !!state.apolloError || state.errors.length > 0 || state.warnings.length > 0;
 

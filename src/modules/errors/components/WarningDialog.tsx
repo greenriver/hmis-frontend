@@ -1,6 +1,9 @@
 import { Chip, Stack, Typography } from '@mui/material';
 import { groupBy } from 'lodash-es';
 import pluralize from 'pluralize';
+import { ReactNode } from 'react';
+
+import { ErrorRenderFn } from '../util';
 
 import ConfirmationDialog, {
   ConfirmationDialogProps,
@@ -13,6 +16,8 @@ export interface WarningDialogProps
   extends Omit<ConfirmationDialogProps, 'children'> {
   warnings: ValidationError[];
   sectionLabels?: { [recordId: string]: string };
+  renderError?: ErrorRenderFn;
+  confirmText?: ReactNode;
 }
 
 /**
@@ -21,6 +26,7 @@ export interface WarningDialogProps
 const WarningDialog = ({
   warnings,
   sectionLabels,
+  renderError,
   ...props
 }: WarningDialogProps) => {
   if (warnings.length === 0) return null;
@@ -60,13 +66,18 @@ const WarningDialog = ({
                 />
               </Stack>
             ),
-            content: <WarningAlert warnings={warningsByRecordId[id]} />,
+            content: (
+              <WarningAlert
+                warnings={warningsByRecordId[id]}
+                renderError={renderError}
+              />
+            ),
           };
         })}
       />
     );
   } else {
-    contents = <WarningAlert warnings={warnings} />;
+    contents = <WarningAlert warnings={warnings} renderError={renderError} />;
   }
 
   return (

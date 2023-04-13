@@ -1,4 +1,5 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
+import { isEmpty } from 'lodash-es';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +9,9 @@ import {
 } from '../layout/layoutConstants';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
+import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import EditRecord from '@/modules/form/components/EditRecord';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -49,11 +52,29 @@ const Profile = () => {
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
-        <>
-          <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
+        <Stack direction='row' justifyContent='space-between'>
+          <Typography variant='h3' sx={{ pt: 0, pb: 4 }} flexGrow={1}>
             Edit Client Details
           </Typography>
-        </>
+          {client.id && (
+            <div>
+              <RootPermissionsFilter permissions='canDeleteClients'>
+                <DeleteClientButton
+                  clientId={client.id}
+                  variant='text'
+                  onCompleted={(data) => {
+                    if (
+                      isEmpty(data.deleteClient?.errors) &&
+                      data.deleteClient?.client
+                    ) {
+                      navigate(generateSafePath(Routes.CLIENT_SEARCH));
+                    }
+                  }}
+                />
+              </RootPermissionsFilter>
+            </div>
+          )}
+        </Stack>
       }
     />
   );
