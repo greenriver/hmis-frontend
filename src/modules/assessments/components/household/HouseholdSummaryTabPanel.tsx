@@ -193,7 +193,7 @@ const HouseholdSummaryTabPanel = memo(
                   })}
                   variant='body1'
                 >
-                  designate a new HoH
+                  change the Head of Household
                 </RouterLink>
                 .
               </Typography>

@@ -21,7 +21,8 @@ import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { ErrorState, hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
+import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
+import { ErrorState, hasErrors } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -93,7 +94,6 @@ const DynamicForm = forwardRef(
     const [dirty, setDirty] = useState(false);
 
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
-    const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -128,11 +128,6 @@ const DynamicForm = forwardRef(
       setPromptSave(!isSaveButtonVisible);
     }, [isSaveButtonVisible, promptSave]);
 
-    useEffect(() => {
-      // if we have warnings and no errors, show dialog. otherwise hide it.
-      setShowConfirmDialog(!!(errorState && hasOnlyWarnings(errorState)));
-    }, [errorState]);
-
     const handleSubmit = useCallback(
       (
         event: React.MouseEvent<HTMLButtonElement>,
@@ -166,6 +161,11 @@ const DynamicForm = forwardRef(
       [onSubmit, getCleanedValues, FormActionProps]
     );
 
+    const { showWarningDialog, warningDialogProps } = useWarningDialog({
+      errorState,
+      onConfirm: handleConfirm,
+      loading,
+    });
     const handleSaveDraft = useCallback(
       (onSuccess?: VoidFunction) => {
         if (!onSaveDraft) return;
@@ -188,7 +188,7 @@ const DynamicForm = forwardRef(
       <FormActions
         onSubmit={handleSubmit}
         onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-        disabled={locked || !!loading || showConfirmDialog}
+        disabled={locked || !!loading || showWarningDialog}
         loading={loading}
         {...FormActionProps}
       />
@@ -226,15 +226,11 @@ const DynamicForm = forwardRef(
           </Box>
         )}
 
-        {showConfirmDialog && (
+        {showWarningDialog && (
           <WarningDialog
-            open
-            onConfirm={handleConfirm}
-            onCancel={() => setShowConfirmDialog(false)}
-            loading={loading || false}
             confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-            warnings={errorState.warnings}
             {...WarningDialogProps}
+            {...warningDialogProps}
           />
         )}
 

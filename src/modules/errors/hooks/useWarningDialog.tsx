@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { WarningDialogProps } from '@/modules/errors/components/WarningDialog';
-import { ErrorState } from '@/modules/errors/util';
+import { ErrorState, hasOnlyWarnings } from '@/modules/errors/util';
 
 interface Args {
   errorState: ErrorState;
@@ -17,9 +17,7 @@ export function useWarningDialog({ errorState, onConfirm, loading }: Args) {
 
   useEffect(() => {
     // Show dialog if there are warnings but no errors
-    setShowDialog(
-      errorState.warnings.length > 0 && errorState.errors.length === 0
-    );
+    setShowDialog(!!(errorState && hasOnlyWarnings(errorState)));
   }, [errorState]);
 
   const warningDialogProps: WarningDialogProps = useMemo(
