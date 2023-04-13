@@ -1,12 +1,18 @@
 import { ApolloError } from '@apollo/client';
-import { Alert, AlertTitle } from '@mui/material';
+import { Alert, AlertTitle, AlertProps } from '@mui/material';
 
 import ApolloErrorTrace from './ApolloErrorTrace';
 
-const ApolloErrorAlert = ({ error }: { error?: ApolloError }) => {
+const ApolloErrorAlert = ({
+  error,
+  AlertProps = {},
+}: {
+  error?: ApolloError;
+  AlertProps?: AlertProps;
+}) => {
   if (!error) return null;
   return (
-    <Alert severity='error'>
+    <Alert severity='error' {...AlertProps}>
       <AlertTitle>An error occurred.</AlertTitle>
       <ApolloErrorTrace error={error} />
     </Alert>

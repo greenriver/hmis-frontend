@@ -194,9 +194,9 @@ const EditRecord = <RecordType extends AllowedTypes>({
           submitButtonText: 'Save Changes',
           ...props.FormActionProps,
         }}
-        FormWarningDialogProps={{
+        WarningDialogProps={{
           confirmText: 'Confirm Change',
-          ...props.FormWarningDialogProps,
+          ...props.WarningDialogProps,
         }}
       />
     </>

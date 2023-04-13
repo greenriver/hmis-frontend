@@ -9,17 +9,20 @@ import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
 import { ValidationError } from '@/types/gqlTypes';
 
-export interface FormWarningDialogProps
+export interface WarningDialogProps
   extends Omit<ConfirmationDialogProps, 'children'> {
   warnings: ValidationError[];
   sectionLabels?: { [recordId: string]: string };
 }
 
-const FormWarningDialog = ({
+/**
+ * Dialog for confirming ValidationError warnings
+ */
+const WarningDialog = ({
   warnings,
   sectionLabels,
   ...props
-}: FormWarningDialogProps) => {
+}: WarningDialogProps) => {
   if (warnings.length === 0) return null;
 
   // Group warnings by record
@@ -81,4 +84,4 @@ const FormWarningDialog = ({
     </ConfirmationDialog>
   );
 };
-export default FormWarningDialog;
+export default WarningDialog;
