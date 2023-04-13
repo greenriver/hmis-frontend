@@ -212,6 +212,18 @@ mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
   }
 }
 
+mutation DeleteClient($input: DeleteClientInput!) {
+  deleteClient(input: $input) {
+    clientMutationId
+    client {
+      ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetService($id: ID!) {
   service(id: $id) {
     ...ServiceFields

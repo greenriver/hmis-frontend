@@ -8007,6 +8007,70 @@ export type AddHouseholdMembersMutation = {
   } | null;
 };
 
+export type DeleteClientMutationVariables = Exact<{
+  input: DeleteClientInput;
+}>;
+
+export type DeleteClientMutation = {
+  __typename?: 'Mutation';
+  deleteClient?: {
+    __typename?: 'DeleteClientPayload';
+    clientMutationId?: string | null;
+    client?: {
+      __typename?: 'Client';
+      dobDataQuality: DobDataQuality;
+      ethnicity: Ethnicity;
+      gender: Array<Gender>;
+      pronouns: Array<string>;
+      nameDataQuality: NameDataQuality;
+      personalId: string;
+      race: Array<Race>;
+      ssnDataQuality: SsnDataQuality;
+      veteranStatus: NoYesReasonsForMissingData;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      warehouseUrl: string;
+      id: string;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      firstName?: string | null;
+      middleName?: string | null;
+      preferredName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
+      image?: {
+        __typename?: 'ClientImage';
+        id: string;
+        contentType: string;
+        base64: string;
+      } | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type GetServiceQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -12361,6 +12425,64 @@ export type AddHouseholdMembersMutationResult =
 export type AddHouseholdMembersMutationOptions = Apollo.BaseMutationOptions<
   AddHouseholdMembersMutation,
   AddHouseholdMembersMutationVariables
+>;
+export const DeleteClientDocument = gql`
+  mutation DeleteClient($input: DeleteClientInput!) {
+    deleteClient(input: $input) {
+      clientMutationId
+      client {
+        ...ClientFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ClientFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteClientMutationFn = Apollo.MutationFunction<
+  DeleteClientMutation,
+  DeleteClientMutationVariables
+>;
+
+/**
+ * __useDeleteClientMutation__
+ *
+ * To run a mutation, you first call `useDeleteClientMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteClientMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteClientMutation, { data, loading, error }] = useDeleteClientMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteClientMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteClientMutation,
+    DeleteClientMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteClientMutation,
+    DeleteClientMutationVariables
+  >(DeleteClientDocument, options);
+}
+export type DeleteClientMutationHookResult = ReturnType<
+  typeof useDeleteClientMutation
+>;
+export type DeleteClientMutationResult =
+  Apollo.MutationResult<DeleteClientMutation>;
+export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<
+  DeleteClientMutation,
+  DeleteClientMutationVariables
 >;
 export const GetServiceDocument = gql`
   query GetService($id: ID!) {
