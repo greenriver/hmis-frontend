@@ -20190,7 +20190,7 @@
           },
           {
             "name": "confirmed",
-            "description": null,
+            "description": "Whether user has confirmed the action",
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",

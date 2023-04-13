@@ -3247,6 +3247,7 @@ export type UpdateClientImagePayload = {
 export type UpdateRelationshipToHoHInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']>;
+  /** Whether user has confirmed the action */
   confirmed?: InputMaybe<Scalars['Boolean']>;
   enrollmentId: Scalars['ID'];
   relationshipToHoH: RelationshipToHoH;
