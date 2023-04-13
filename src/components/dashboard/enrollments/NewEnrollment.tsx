@@ -13,6 +13,7 @@ import NotFound from '@/components/pages/404';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import WarningDialog from '@/modules/errors/components/WarningDialog';
 import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
 import {
   emptyErrorState,
@@ -90,13 +91,13 @@ const NewEnrollment = () => {
         })),
         confirmed,
       };
-      console.log('CreateEnrollment', input);
+      console.log('CreateEnrollment with input:', input);
       void mutateFunction({ variables: { input } });
     },
     [entryDate, members, project, mutateFunction]
   );
 
-  const { WarningDialog } = useWarningDialog({
+  const { showWarningDialog, warningDialogProps } = useWarningDialog({
     errorState,
     onConfirm: () => handleSubmit(true),
     loading,
@@ -190,7 +191,7 @@ const NewEnrollment = () => {
         </Grid>
         <Grid item xs></Grid>
       </Grid>
-      <WarningDialog />
+      {showWarningDialog && <WarningDialog {...warningDialogProps} />}
     </>
   );
 };

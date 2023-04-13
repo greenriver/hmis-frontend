@@ -10,12 +10,14 @@ import React, {
 } from 'react';
 
 import ErrorAlert from '../../errors/components/ErrorAlert';
+import WarningDialog, {
+  WarningDialogProps,
+} from '../../errors/components/WarningDialog';
 import useDynamicFormFields from '../hooks/useDynamicFormFields';
 import useElementInView from '../hooks/useElementInView';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
-import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -53,8 +55,8 @@ export interface DynamicFormProps
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
   >;
-  FormWarningDialogProps?: Omit<
-    FormWarningDialogProps,
+  WarningDialogProps?: Omit<
+    WarningDialogProps,
     'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
 }
@@ -80,7 +82,7 @@ const DynamicForm = forwardRef(
       visible = true,
       pickListRelationId,
       FormActionProps = {},
-      FormWarningDialogProps = {},
+      WarningDialogProps = {},
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -225,14 +227,14 @@ const DynamicForm = forwardRef(
         )}
 
         {showConfirmDialog && (
-          <FormWarningDialog
+          <WarningDialog
             open
             onConfirm={handleConfirm}
             onCancel={() => setShowConfirmDialog(false)}
             loading={loading || false}
             confirmText={FormActionProps?.submitButtonText || 'Confirm'}
             warnings={errorState.warnings}
-            {...FormWarningDialogProps}
+            {...WarningDialogProps}
           />
         )}
 

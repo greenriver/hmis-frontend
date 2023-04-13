@@ -29,6 +29,7 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import RouterLink from '@/components/elements/RouterLink';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
+import WarningDialog from '@/modules/errors/components/WarningDialog';
 import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
 import {
   emptyErrorState,
@@ -153,7 +154,7 @@ const HouseholdSummaryTabPanel = memo(
       [submitMutation, onCompleted, assessmentsToSubmit]
     );
 
-    const { WarningDialog } = useWarningDialog({
+    const { showWarningDialog, warningDialogProps } = useWarningDialog({
       errorState,
       onConfirm: () => handleSubmit(true),
       loading,
@@ -240,10 +241,12 @@ const HouseholdSummaryTabPanel = memo(
             </Paper>
           </Grid>
         </Grid>
-
-        <WarningDialog
-          sectionLabels={mapValues(keyBy(tabs, 'assessmentId'), 'clientName')}
-        />
+        {showWarningDialog && (
+          <WarningDialog
+            {...warningDialogProps}
+            sectionLabels={mapValues(keyBy(tabs, 'assessmentId'), 'clientName')}
+          />
+        )}
       </AlwaysMountedTabPanel>
     );
   }

@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { WarningDialogProps } from '@/modules/errors/components/WarningDialog';
 import { ErrorState } from '@/modules/errors/util';
-import FormWarningDialog, {
-  FormWarningDialogProps,
-} from '@/modules/form/components/FormWarningDialog';
 
 interface Args {
   errorState: ErrorState;
-  onConfirm: FormWarningDialogProps['onConfirm'];
+  onConfirm: WarningDialogProps['onConfirm'];
   loading?: boolean;
 }
+
+/**
+ * Hook for using the WarningDialog component
+ */
 export function useWarningDialog({ errorState, onConfirm, loading }: Args) {
   const [showDialog, setShowDialog] = useState<boolean>(false);
 
@@ -20,26 +22,19 @@ export function useWarningDialog({ errorState, onConfirm, loading }: Args) {
     );
   }, [errorState]);
 
-  const WarningDialog = useMemo(() => {
-    const DialogComponent: React.FC<
-      Omit<
-        FormWarningDialogProps,
-        'open' | 'onCancel' | 'onConfirm' | 'loading' | 'warnings'
-      >
-    > = (props) => (
-      <FormWarningDialog
-        open={showDialog}
-        onConfirm={onConfirm}
-        onCancel={() => setShowDialog(false)}
-        warnings={errorState.warnings}
-        loading={loading || false}
-        {...props}
-      />
-    );
-    return DialogComponent;
-  }, [onConfirm, errorState, showDialog, loading]);
+  const warningDialogProps: WarningDialogProps = useMemo(
+    () => ({
+      open: true,
+      onConfirm,
+      onCancel: () => setShowDialog(false),
+      warnings: errorState.warnings,
+      loading: loading || false,
+    }),
+    [onConfirm, errorState, loading]
+  );
 
   return {
-    WarningDialog,
+    warningDialogProps,
+    showWarningDialog: showDialog,
   };
 }
