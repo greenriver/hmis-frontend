@@ -1,6 +1,7 @@
 import dns from 'dns';
 import { resolve } from 'path';
 
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
@@ -25,6 +26,14 @@ export default defineConfig(({ command, mode }) => {
     },
   };
 
+  const sentryConfigured = !!(
+    env.SENTRY_ORG &&
+    env.SENTRY_PROJECT &&
+    env.SENTRY_AUTH_TOKEN
+  );
+  console.log('sentry project', env.SENTRY_PROJECT);
+  console.log('sentryConfigured', sentryConfigured);
+
   return {
     envPrefix: 'PUBLIC_',
     resolve: {
@@ -32,7 +41,30 @@ export default defineConfig(({ command, mode }) => {
         '@': resolve(__dirname, './src'),
       },
     },
-    plugins: [react(), mkcert()],
+    plugins: [
+      react(),
+      mkcert(),
+      ...(sentryConfigured
+        ? [
+            sentryVitePlugin({
+              include: '.',
+              ignore: [
+                'node_modules',
+                'vite.config.ts',
+                'cypress',
+                'serverMock',
+                'yarn',
+              ],
+              org: env.SENTRY_ORG,
+              project: env.SENTRY_PROJECT,
+              authToken: env.SENTRY_AUTH_TOKEN,
+              setCommits: {
+                auto: true,
+              },
+            }),
+          ]
+        : []),
+    ],
     define: {
       __APP_ENV__: env.APP_ENV,
     },
