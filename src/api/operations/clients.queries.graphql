@@ -152,20 +152,8 @@ mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   }
 }
 
-mutation UpdateEnrollment($input: UpdateEnrollmentInput!) {
-  updateEnrollment(input: $input) {
-    clientMutationId
-    enrollment {
-      ...EnrollmentWithHouseholdFragment
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation SetHoH($input: SetHoHForEnrollmentInput!) {
-  setHoHForEnrollment(input: $input) {
+mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
+  updateRelationshipToHoH(input: $input) {
     clientMutationId
     enrollment {
       ...EnrollmentWithHouseholdFragment

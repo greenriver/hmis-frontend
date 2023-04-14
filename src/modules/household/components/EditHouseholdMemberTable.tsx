@@ -1,20 +1,20 @@
 import {
   Box,
+  CircularProgress,
   FormControlLabel,
   Radio,
   Tooltip,
-  Typography,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import GenericTable from '@/components/elements/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
 import ClientName from '@/modules/client/components/ClientName';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   emptyErrorState,
   ErrorState,
@@ -22,36 +22,31 @@ import {
 } from '@/modules/errors/util';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
   RelationshipToHoH,
-  useSetHoHMutation,
+  useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   currentMembers: HouseholdClientFieldsFragment[];
   clientId: string;
-  householdId: string;
   refetch: any;
 }
-
-type MaybeClient = HouseholdClientFieldsFragment['client'] | null;
 
 const EditHouseholdMemberTable = ({
   currentMembers,
   clientId,
-  householdId,
   refetch,
 }: Props) => {
-  const [proposedHoH, setProposedHoH] = useState<MaybeClient>(null);
-  const [confirmedHoH, setConfirmedHoH] = useState(false);
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
-  const [hoh, setHoH] = useState<MaybeClient>(
+  const [proposedHoH, setProposedHoH] =
+    useState<HouseholdClientFieldsFragment | null>(null);
+  const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
+  const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-    )?.client || null
+    ) || null
   );
   const previousMembers =
     usePrevious<HouseholdClientFieldsFragment[]>(currentMembers);
@@ -59,14 +54,14 @@ const EditHouseholdMemberTable = ({
   // client to highlight for relationship input
   const [highlight, setHighlight] = useState<string[]>([]);
 
-  const [setHoHMutate, { loading }] = useSetHoHMutation({
+  const [setHoHMutate, { loading }] = useUpdateRelationshipToHoHMutation({
     onCompleted: (data) => {
-      if (!data.setHoHForEnrollment) return;
+      if (!data.updateRelationshipToHoH) return;
 
-      if (data.setHoHForEnrollment.enrollment) {
+      if (data.updateRelationshipToHoH.enrollment) {
         // highlight relationship field for non-HOH members
         const members =
-          data.setHoHForEnrollment?.enrollment?.household.householdClients
+          data.updateRelationshipToHoH?.enrollment?.household.householdClients
             .filter(
               (hc) =>
                 hc.relationshipToHoH !== RelationshipToHoH.SelfHeadOfHousehold
@@ -74,19 +69,15 @@ const EditHouseholdMemberTable = ({
             .map((hc) => hc.client.id);
         setHighlight(members || []);
         setProposedHoH(null);
-        setConfirmedHoH(false);
+        setErrors(emptyErrorState);
         // refetch, so that all relationships-to-HoH to reload
         refetch();
-      } else if (data.setHoHForEnrollment.errors.length > 0) {
-        const errors = data.setHoHForEnrollment.errors;
+      } else if (data.updateRelationshipToHoH.errors.length > 0) {
+        const errors = data.updateRelationshipToHoH.errors;
         setErrors(partitionValidations(errors));
-        setConfirmedHoH(false);
       }
     },
-    onError: (apolloError) => {
-      setConfirmedHoH(false);
-      setErrors({ ...emptyErrorState, apolloError });
-    },
+    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
 
   // If member list has changed, update HoH and clear proposed-HoH status
@@ -94,13 +85,11 @@ const EditHouseholdMemberTable = ({
     const actualHoH =
       currentMembers.find(
         (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      )?.client || null;
+      ) || null;
 
     setHoH(actualHoH);
     setProposedHoH((prev) => {
       if (prev && prev === actualHoH) {
-        // HoH change has completed successfully
-        setConfirmedHoH(false);
         return null;
       }
       return prev;
@@ -122,27 +111,28 @@ const EditHouseholdMemberTable = ({
     }
   }, [previousMembers, currentMembers]);
 
-  const onChangeHoH = useMemo(
-    () => () => {
-      if (!proposedHoH) return;
-      setConfirmedHoH(true);
+  const onChangeHoH = useCallback(
+    (hc: HouseholdClientFieldsFragment, confirmed = false) => {
+      setProposedHoH(hc);
       setHoHMutate({
         variables: {
           input: {
-            clientId: proposedHoH.id,
-            householdId,
+            enrollmentId: hc.enrollment.id,
+            relationshipToHoH: RelationshipToHoH.SelfHeadOfHousehold,
+            confirmed,
           },
         },
       });
     },
-    [setHoHMutate, proposedHoH, householdId]
+    [setHoHMutate]
   );
 
-  const allInProgress = useMemo(
-    () => !currentMembers.find((hc) => !hc.enrollment.inProgress),
-    [currentMembers]
-  );
+  const { renderValidationDialog } = useValidationDialog({
+    errorState,
+    includeErrors: true,
+  });
 
+  console.log(':CCc', errorState);
   const columns = useMemo(() => {
     return [
       {
@@ -196,25 +186,29 @@ const EditHouseholdMemberTable = ({
         ),
         key: 'HoH',
         width: '1%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <FormControlLabel
-            checked={hc.client.id === hoh?.id}
-            control={<Radio />}
-            componentsProps={{ typography: { variant: 'body2' } }}
-            label='HoH'
-            labelPlacement='end'
-            disabled={
-              // Can't set exited member to HoH
-              !!hc.enrollment.exitDate ||
-              // Can't set WIP member to HoH (unless ALL members are WIP)
-              (hc.enrollment.inProgress && !allInProgress)
-              // TODO: Can't set child to HoH?
-            }
-            onChange={() => {
-              setProposedHoH(hc.client);
-            }}
-          />
-        ),
+        render: (hc: HouseholdClientFieldsFragment) => {
+          return (
+            <FormControlLabel
+              checked={hc.client.id === hoh?.client?.id}
+              control={
+                loading && proposedHoH === hc ? (
+                  <Box display='flex' alignItems='center' sx={{ pl: 1, pr: 2 }}>
+                    <CircularProgress size={20} />
+                  </Box>
+                ) : (
+                  <Radio />
+                )
+              }
+              componentsProps={{ typography: { variant: 'body2' } }}
+              label='HoH'
+              labelPlacement='end'
+              disabled={loading}
+              onChange={() => {
+                onChangeHoH(hc, false);
+              }}
+            />
+          );
+        },
       },
       {
         header: <Box sx={{ pl: 4 }}>Relationship to HoH</Box>,
@@ -249,41 +243,19 @@ const EditHouseholdMemberTable = ({
         ),
       },
     ];
-  }, [clientId, hoh, refetch, setHighlight, highlight, allInProgress]);
+  }, [
+    clientId,
+    hoh,
+    refetch,
+    onChangeHoH,
+    setHighlight,
+    loading,
+    proposedHoH,
+    highlight,
+  ]);
 
   return (
     <>
-      {proposedHoH && (
-        <ConfirmationDialog
-          open
-          title='Change Head of Household'
-          confirmText='Confirm Change'
-          onConfirm={onChangeHoH}
-          onCancel={() => {
-            setProposedHoH(null);
-            setErrors(emptyErrorState);
-          }}
-          loading={loading || confirmedHoH}
-          errors={errors}
-          color='error'
-        >
-          <>
-            {proposedHoH && hoh && (
-              <Typography>
-                You are changing the head of household from{' '}
-                <b>{clientBriefName(hoh)}</b> to{' '}
-                <b>{clientBriefName(proposedHoH)}</b>
-              </Typography>
-            )}
-            {proposedHoH && !hoh && (
-              <Typography>
-                Set <b>{clientBriefName(proposedHoH)}</b> as Head of Household.
-              </Typography>
-            )}
-          </>
-        </ConfirmationDialog>
-      )}
-
       <GenericTable<HouseholdClientFieldsFragment>
         rows={currentMembers}
         columns={columns}
@@ -292,6 +264,15 @@ const EditHouseholdMemberTable = ({
           'td:nth-of-type(1)': { px: 0 },
         })}
       />
+      {renderValidationDialog({
+        title: 'Change Head of Household',
+        onConfirm: () => proposedHoH && onChangeHoH(proposedHoH, true),
+        onCancel: () => {
+          setProposedHoH(null);
+          setErrors(emptyErrorState);
+        },
+        loading,
+      })}
     </>
   );
 };
