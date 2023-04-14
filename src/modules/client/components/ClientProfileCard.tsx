@@ -14,8 +14,6 @@ import {
 } from '@mui/material';
 import { useCallback, useRef, useState } from 'react';
 
-import DeleteClientButton from './DeleteClientButton';
-
 import ButtonLink from '@/components/elements/ButtonLink';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotSpecified from '@/components/elements/NotSpecified';
@@ -384,9 +382,6 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   >
                     Edit Client Details
                   </ButtonLink>
-                </RootPermissionsFilter>
-                <RootPermissionsFilter permissions='canDeleteClients'>
-                  <DeleteClientButton clientId={client.id} />
                 </RootPermissionsFilter>
                 <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
                   Last Updated on {lastUpdated(client, true)}

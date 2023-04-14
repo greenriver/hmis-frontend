@@ -12,6 +12,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { cache } from '@/providers/apolloClient';
 import { DashboardRoutes } from '@/routes/routes';
 import {
   DeleteClientMutation,
@@ -55,6 +56,9 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
             setErrors(partitionValidations(errors));
           } else {
             setErrors(emptyErrorState);
+            cache.evict({
+              id: `Client:${clientId}`,
+            });
           }
           if (onCompleted) onCompleted(data);
           setDeleting(false);
