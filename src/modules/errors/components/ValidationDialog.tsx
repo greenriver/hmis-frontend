@@ -91,7 +91,6 @@ const ValidationDialog = ({
     );
   }
 
-  console.log(apolloError);
   return (
     <ConfirmationDialog
       id='confirmSubmit'
@@ -99,7 +98,6 @@ const ValidationDialog = ({
       maxWidth='sm'
       fullWidth
       {...props}
-      // TODO: disable confirmation button if there are ERRORs.
       onConfirm={hasErrors ? props.onCancel : props.onConfirm}
       confirmText={hasErrors ? 'Close' : props.confirmText}
       hideCancelButton={hasErrors}
