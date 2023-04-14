@@ -10,6 +10,7 @@ interface Props {
   children: ReactNode;
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
+  // TODO: use browser storage, don't need to fetch on each page load
   const [fetched, setFetched] = useState<HmisAppSettings>();
   const [error, setError] = useState<Error>();
   useEffect(() => {
