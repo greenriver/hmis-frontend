@@ -43,6 +43,7 @@ import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
+import useAuth from '@/modules/auth/hooks/useAuth';
 import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import {
   ClientPermissionsFilter,
@@ -51,15 +52,27 @@ import {
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
+  const { user } = useAuth();
+
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <Sentry.ErrorBoundary fallback={fullPageErrorFallback}>
+        <Sentry.ErrorBoundary
+          fallback={fullPageErrorFallback}
+          beforeCapture={(scope) => {
+            scope.setUser({ email: user?.email, username: user?.name });
+          }}
+        >
           <Outlet />
         </Sentry.ErrorBoundary>
       </Suspense>
     </MainLayout>
   );
+};
+
+const InternalError: React.FC = () => {
+  // eslint-disable-next-line @typescript-eslint/no-throw-literal
+  throw 'This is a test error';
 };
 
 const ParamsWrapper = <T extends { [x: string]: string } = any>({
@@ -394,6 +407,11 @@ export const protectedRoutes = [
           { path: DashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
+      },
+      // Route for testing sentry errors
+      {
+        path: '/internal-error',
+        element: <InternalError />,
       },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <NotFound /> },

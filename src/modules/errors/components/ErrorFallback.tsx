@@ -39,9 +39,10 @@ export const alertErrorFallback: FallbackRender = ({
           </Typography>
           {import.meta.env.MODE === 'development' &&
             componentStack &&
-            componentStack.split('\n').map((s) => (
+            componentStack.split('\n').map((s, i) => (
               <Typography
-                key={s}
+                // eslint-disable-next-line react/no-array-index-key
+                key={i}
                 variant='caption'
                 sx={{ fontFamily: 'Monospace' }}
                 display='block'

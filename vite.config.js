@@ -1,6 +1,7 @@
 import dns from 'dns';
 import { resolve } from 'path';
 
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
@@ -9,6 +10,22 @@ import mkcert from 'vite-plugin-mkcert';
 dns.setDefaultResultOrder('ipv4first');
 
 const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
+
+// https://github.com/vitejs/vite/issues/2433#issuecomment-1487472995
+function sourcemapExclude(opts) {
+  return {
+    name: 'sourcemap-exclude',
+    transform(code, id) {
+      if (opts?.excludeNodeModules && id.includes('node_modules')) {
+        return {
+          code,
+          // https://github.com/rollup/rollup/blob/master/docs/plugin-development/index.md#source-code-transformations
+          map: { mappings: '' },
+        };
+      }
+    },
+  };
+}
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
@@ -25,6 +42,14 @@ export default defineConfig(({ command, mode }) => {
     },
   };
 
+  const sentryConfigured = !!(
+    env.SENTRY_ORG &&
+    env.SENTRY_PROJECT &&
+    env.SENTRY_AUTH_TOKEN
+  );
+  console.log(sentryConfigured);
+  console.log(env.FULL_GITHASH);
+
   return {
     envPrefix: 'PUBLIC_',
     resolve: {
@@ -32,7 +57,29 @@ export default defineConfig(({ command, mode }) => {
         '@': resolve(__dirname, './src'),
       },
     },
-    plugins: [react(), mkcert()],
+    plugins: [
+      react(),
+      mkcert(),
+      sourcemapExclude({ excludeNodeModules: true }),
+      ...(sentryConfigured
+        ? [
+            sentryVitePlugin({
+              include: 'dist/assets/',
+              urlPrefix: '~/assets/',
+              org: env.SENTRY_ORG,
+              project: env.SENTRY_PROJECT,
+              authToken: env.SENTRY_AUTH_TOKEN,
+              release: env.PUBLIC_GIT_COMMIT_HASH,
+              setCommits: {
+                repo: 'greenriver/hmis-frontend',
+                commit: env.FULL_GITHASH,
+              },
+              telemetry: false,
+              debug: false,
+            }),
+          ]
+        : []),
+    ],
     define: {
       __APP_ENV__: env.APP_ENV,
     },
@@ -46,6 +93,7 @@ export default defineConfig(({ command, mode }) => {
           // visualizer({ filename: 'bundle_analysis.html' })
         ],
       },
+      sourcemap: true,
     },
     ...(command !== 'build' && {
       preview: {
