@@ -45,21 +45,18 @@ export default defineConfig(({ command, mode }) => {
       ...(sentryConfigured
         ? [
             sentryVitePlugin({
-              include: './dist',
-              ignore: ['node_modules'],
-              // urlPrefix: '~/assets/',
+              sourceMaps: {
+                assets: './dist/**',
+              },
               org: env.SENTRY_ORG,
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
+              release: env.PUBLIC_GIT_COMMIT_HASH,
               setCommits: {
                 auto: true,
               },
-              // sourceMaps: {
-              //   assets: './dist/**',
-              // },
-              release: env.PUBLIC_GIT_COMMIT_HASH,
-              // ignoreFile: '.gitignore',
-              debug: true,
+              telemetry: false,
+              // debug: true,
             }),
           ]
         : []),
@@ -76,13 +73,6 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
           // visualizer({ filename: 'bundle_analysis.html' })
         ],
-        // output: {
-        //   sourcemapIgnoreList: (relativeSourcePath, sourcemapPath) => {
-        //     // will ignore-list all files with node_modules in their paths
-        //     return relativeSourcePath.includes('node_modules');
-        //   },
-        //   sourcemap: true,
-        // }
       },
       sourcemap: true,
     },
