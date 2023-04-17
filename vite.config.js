@@ -47,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
             sentryVitePlugin({
               include: './dist',
               ignore: ['node_modules'],
-              urlPrefix: '~/assets/',
+              // urlPrefix: '~/assets/',
               org: env.SENTRY_ORG,
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
@@ -76,6 +76,13 @@ export default defineConfig(({ command, mode }) => {
         plugins: [
           // visualizer({ filename: 'bundle_analysis.html' })
         ],
+        // output: {
+        //   sourcemapIgnoreList: (relativeSourcePath, sourcemapPath) => {
+        //     // will ignore-list all files with node_modules in their paths
+        //     return relativeSourcePath.includes('node_modules');
+        //   },
+        //   sourcemap: true,
+        // }
       },
       sourcemap: true,
     },
