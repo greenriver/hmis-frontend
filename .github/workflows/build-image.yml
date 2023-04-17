@@ -73,6 +73,7 @@ jobs:
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
             GITHASH=${{ steps.env.outputs.git_hash }}
+            FULL_GITHASH=${{ github.sha }}
             SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Run vulnerability scan for PR

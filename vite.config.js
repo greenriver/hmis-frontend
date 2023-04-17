@@ -31,6 +31,8 @@ export default defineConfig(({ command, mode }) => {
     env.SENTRY_PROJECT &&
     env.SENTRY_AUTH_TOKEN
   );
+  console.log(sentryConfigured);
+  console.log(env.FULL_GITHASH);
 
   return {
     envPrefix: 'PUBLIC_',
@@ -53,8 +55,8 @@ export default defineConfig(({ command, mode }) => {
               authToken: env.SENTRY_AUTH_TOKEN,
               release: env.PUBLIC_GIT_COMMIT_HASH,
               setCommits: {
-                repo: 'hmis-frontend',
-                commit: env.PUBLIC_GIT_COMMIT_HASH,
+                repo: 'greenriver/hmis-frontend',
+                commit: env.FULL_GITHASH,
               },
               telemetry: false,
               // debug: true,
