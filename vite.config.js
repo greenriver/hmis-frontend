@@ -76,7 +76,7 @@ export default defineConfig(({ command, mode }) => {
                 commit: env.FULL_GITHASH,
               },
               telemetry: false,
-              // debug: true,
+              debug: true,
             }),
           ]
         : []),

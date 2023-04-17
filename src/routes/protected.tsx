@@ -54,7 +54,12 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <Sentry.ErrorBoundary fallback={fullPageErrorFallback}>
+        <Sentry.ErrorBoundary
+          fallback={fullPageErrorFallback}
+          // beforeCapture={(scope) => {
+          //   scope.setUser();
+          // }}
+        >
           <Outlet />
         </Sentry.ErrorBoundary>
       </Suspense>
@@ -394,6 +399,14 @@ export const protectedRoutes = [
           { path: DashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
+      },
+      // Route for testing sentry errors
+      {
+        path: '/internal-error',
+        element: () => {
+          // eslint-disable-next-line @typescript-eslint/no-throw-literal
+          throw 'This is a test error';
+        },
       },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <NotFound /> },
