@@ -64,9 +64,8 @@ export default defineConfig(({ command, mode }) => {
       ...(sentryConfigured
         ? [
             sentryVitePlugin({
-              sourceMaps: {
-                assets: './dist/**',
-              },
+              include: 'dist/assets/',
+              urlPrefix: '~/assets/',
               org: env.SENTRY_ORG,
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
@@ -76,7 +75,7 @@ export default defineConfig(({ command, mode }) => {
                 commit: env.FULL_GITHASH,
               },
               telemetry: false,
-              debug: true,
+              debug: false,
             }),
           ]
         : []),
