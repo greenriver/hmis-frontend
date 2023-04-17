@@ -11,6 +11,22 @@ dns.setDefaultResultOrder('ipv4first');
 
 const DEFAULT_WAREHOUSE_SERVER = 'https://hmis-warehouse.dev.test';
 
+// https://github.com/vitejs/vite/issues/2433#issuecomment-1487472995
+function sourcemapExclude(opts) {
+  return {
+    name: 'sourcemap-exclude',
+    transform(code, id) {
+      if (opts?.excludeNodeModules && id.includes('node_modules')) {
+        return {
+          code,
+          // https://github.com/rollup/rollup/blob/master/docs/plugin-development/index.md#source-code-transformations
+          map: { mappings: '' },
+        };
+      }
+    },
+  };
+}
+
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
@@ -44,6 +60,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       react(),
       mkcert(),
+      sourcemapExclude({ excludeNodeModules: true }),
       ...(sentryConfigured
         ? [
             sentryVitePlugin({
