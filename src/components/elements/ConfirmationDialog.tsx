@@ -12,7 +12,7 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
-import { ErrorState, hasAnyValue } from '@/modules/errors/util';
+import { ErrorRenderFn, ErrorState, hasAnyValue } from '@/modules/errors/util';
 
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
@@ -22,6 +22,8 @@ export interface ConfirmationDialogProps extends DialogProps {
   onCancel: () => void;
   color?: ButtonProps['color'];
   errors?: ErrorState;
+  hideCancelButton?: boolean;
+  renderError?: ErrorRenderFn;
 }
 
 const ConfirmationDialog = ({
@@ -33,6 +35,8 @@ const ConfirmationDialog = ({
   confirmText = 'Confirm',
   color,
   errors,
+  hideCancelButton,
+  renderError,
   ...other
 }: ConfirmationDialogProps) => {
   return (
@@ -55,7 +59,7 @@ const ConfirmationDialog = ({
         {errors && hasAnyValue(errors) && (
           <Stack gap={1} sx={{ mt: 4 }}>
             <ApolloErrorAlert error={errors.apolloError} />
-            <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+            <ErrorAlert key='errors' errors={errors.errors} />
             <WarningAlert key='warnings' warnings={errors.warnings} />
           </Stack>
         )}
@@ -72,13 +76,15 @@ const ConfirmationDialog = ({
         }}
       >
         <Stack gap={3} direction='row'>
-          <Button
-            onClick={onCancel}
-            variant='gray'
-            data-testid='cancelDialogAction'
-          >
-            Cancel
-          </Button>
+          {!hideCancelButton && (
+            <Button
+              onClick={onCancel}
+              variant='gray'
+              data-testid='cancelDialogAction'
+            >
+              Cancel
+            </Button>
+          )}
           <LoadingButton
             onClick={onConfirm}
             type='submit'

@@ -29,8 +29,7 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import RouterLink from '@/components/elements/RouterLink';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ValidationErrorList from '@/modules/errors/components/ValidationErrorList';
-import WarningDialog from '@/modules/errors/components/WarningDialog';
-import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   emptyErrorState,
   ErrorState,
@@ -154,11 +153,7 @@ const HouseholdSummaryTabPanel = memo(
       [submitMutation, onCompleted, assessmentsToSubmit]
     );
 
-    const { showWarningDialog, warningDialogProps } = useWarningDialog({
-      errorState,
-      onConfirm: () => handleSubmit(true),
-      loading,
-    });
+    const { renderValidationDialog } = useValidationDialog({ errorState });
 
     const [hohClientId, hohEnrollmentId] = useMemo(() => {
       const tab = tabs.find(({ isHoh }) => isHoh);
@@ -241,12 +236,11 @@ const HouseholdSummaryTabPanel = memo(
             </Paper>
           </Grid>
         </Grid>
-        {showWarningDialog && (
-          <WarningDialog
-            {...warningDialogProps}
-            sectionLabels={mapValues(keyBy(tabs, 'assessmentId'), 'clientName')}
-          />
-        )}
+        {renderValidationDialog({
+          onConfirm: () => handleSubmit(true),
+          loading,
+          sectionLabels: mapValues(keyBy(tabs, 'assessmentId'), 'clientName'),
+        })}
       </AlwaysMountedTabPanel>
     );
   }

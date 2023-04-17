@@ -4,8 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { defaultRenderError } from '@/modules/errors/components/WarningAlert';
-import WarningDialog from '@/modules/errors/components/WarningDialog';
-import { useWarningDialog } from '@/modules/errors/hooks/useWarningDialog';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   ErrorState,
   emptyErrorState,
@@ -70,10 +69,8 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
     [deleteClient, clientId, onSuccess]
   );
 
-  const { showWarningDialog, warningDialogProps } = useWarningDialog({
+  const { renderValidationDialog } = useValidationDialog({
     errorState: errors,
-    onConfirm: () => handleDelete(true),
-    loading,
   });
 
   return (
@@ -104,51 +101,50 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
           </>
         )}
       </ConfirmationDialog>
-      {showWarningDialog && (
-        <WarningDialog
-          {...warningDialogProps}
-          confirmText='Delete client anyway'
-          renderError={(error, ...args) => {
-            if (!error.data) return defaultRenderError(error, ...args);
+      {renderValidationDialog({
+        confirmText: 'Delete client anyway',
+        onConfirm: () => handleDelete(true),
+        loading,
+        renderError: (error, ...args) => {
+          if (!error.data) return defaultRenderError(error, ...args);
 
-            const { text, enrollments = [] } =
-              error.data as DeleteClientWarningData;
+          const { text, enrollments = [] } =
+            error.data as DeleteClientWarningData;
 
-            return (
-              <li key={error.fullMessage}>
+          return (
+            <li key={error.fullMessage}>
+              <Typography variant='body2' gutterBottom>
+                {error.fullMessage}
+              </Typography>
+              {text && (
                 <Typography variant='body2' gutterBottom>
-                  {error.fullMessage}
+                  {error.data?.text}
                 </Typography>
-                {text && (
-                  <Typography variant='body2' gutterBottom>
-                    {error.data?.text}
-                  </Typography>
-                )}
-                <ul>
-                  {enrollments?.map((enrollment) => (
-                    <li key={enrollment.id}>
-                      <Link
-                        component={RouterLink}
-                        to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
-                          clientId: clientId,
-                          enrollmentId: enrollment.id,
-                        })}
-                      >
-                        {enrollment.name} (
-                        {parseAndFormatDateRange(
-                          enrollment.entryDate,
-                          enrollment.exitDate
-                        )}
-                        )
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            );
-          }}
-        />
-      )}
+              )}
+              <ul>
+                {enrollments?.map((enrollment) => (
+                  <li key={enrollment.id}>
+                    <Link
+                      component={RouterLink}
+                      to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+                        clientId: clientId,
+                        enrollmentId: enrollment.id,
+                      })}
+                    >
+                      {enrollment.name} (
+                      {parseAndFormatDateRange(
+                        enrollment.entryDate,
+                        enrollment.exitDate
+                      )}
+                      )
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </li>
+          );
+        },
+      })}
     </>
   );
 };
