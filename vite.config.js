@@ -31,8 +31,6 @@ export default defineConfig(({ command, mode }) => {
     env.SENTRY_PROJECT &&
     env.SENTRY_AUTH_TOKEN
   );
-  console.log('sentry project', env.SENTRY_PROJECT);
-  console.log('sentryConfigured', sentryConfigured);
 
   return {
     envPrefix: 'PUBLIC_',
@@ -58,6 +56,15 @@ export default defineConfig(({ command, mode }) => {
               org: env.SENTRY_ORG,
               project: env.SENTRY_PROJECT,
               authToken: env.SENTRY_AUTH_TOKEN,
+              setCommits: {
+                auto: true,
+              },
+              sourceMaps: {
+                assets: 'dist/assets',
+              },
+              release: env.PUBLIC_GIT_COMMIT_HASH,
+              ignoreFile: '.gitignore',
+              debug: true,
               setCommits: {
                 auto: true,
               },
