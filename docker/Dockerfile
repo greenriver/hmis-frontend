@@ -28,7 +28,7 @@ RUN corepack enable \
  && yarn format:check \
  && yarn lint:check \
  && yarn test \
- && yarn build:staging
+ && yarn build
 
 #####################################################################
 # nginx container
