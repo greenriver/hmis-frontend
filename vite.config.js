@@ -53,7 +53,8 @@ export default defineConfig(({ command, mode }) => {
               authToken: env.SENTRY_AUTH_TOKEN,
               release: env.PUBLIC_GIT_COMMIT_HASH,
               setCommits: {
-                auto: true,
+                repo: 'hmis-frontend',
+                commit: env.PUBLIC_GIT_COMMIT_HASH,
               },
               telemetry: false,
               // debug: true,
