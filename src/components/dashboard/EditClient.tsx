@@ -1,5 +1,4 @@
 import { Stack, Typography } from '@mui/material';
-import { isEmpty } from 'lodash-es';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -56,24 +55,17 @@ const Profile = () => {
           <Typography variant='h3' sx={{ pt: 0, pb: 4 }} flexGrow={1}>
             Edit Client Details
           </Typography>
-          {client.id && (
-            <div>
-              <RootPermissionsFilter permissions='canDeleteClients'>
-                <DeleteClientButton
-                  clientId={client.id}
-                  variant='text'
-                  onCompleted={(data) => {
-                    if (
-                      isEmpty(data.deleteClient?.errors) &&
-                      data.deleteClient?.client
-                    ) {
-                      navigate(generateSafePath(Routes.CLIENT_SEARCH));
-                    }
-                  }}
-                />
-              </RootPermissionsFilter>
-            </div>
-          )}
+          <div>
+            <RootPermissionsFilter permissions='canDeleteClients'>
+              <DeleteClientButton
+                clientId={client.id}
+                variant='text'
+                onSuccess={() =>
+                  navigate(generateSafePath(Routes.CLIENT_SEARCH))
+                }
+              />
+            </RootPermissionsFilter>
+          </div>
         </Stack>
       }
     />

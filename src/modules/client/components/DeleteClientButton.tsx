@@ -1,5 +1,5 @@
 import { Button, ButtonProps, Link, Typography } from '@mui/material';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
@@ -22,7 +22,7 @@ import generateSafePath from '@/utils/generateSafePath';
 
 export interface DeleteClientButtonProps extends ButtonProps {
   clientId: string;
-  onCompleted?: (data: DeleteClientMutation) => any;
+  onSuccess?: (data: DeleteClientMutation) => any;
 }
 
 interface DeleteClientWarningData {
@@ -38,7 +38,7 @@ interface DeleteClientWarningData {
 
 const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
   clientId,
-  onCompleted,
+  onSuccess,
   ...props
 }) => {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
@@ -59,15 +59,15 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
             cache.evict({
               id: `Client:${clientId}`,
             });
+            if (onSuccess) onSuccess(data);
           }
-          if (onCompleted) onCompleted(data);
           setDeleting(false);
         },
         onError: (apolloError) =>
           setErrors({ ...emptyErrorState, apolloError }),
       });
     },
-    [deleteClient, clientId, onCompleted]
+    [deleteClient, clientId, onSuccess]
   );
 
   const { showWarningDialog, warningDialogProps } = useWarningDialog({
@@ -75,13 +75,6 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
     onConfirm: () => handleDelete(true),
     loading,
   });
-
-  const warningDialogConfirmText = useMemo(
-    () =>
-      errors.warnings.find((err) => err.data?.confirmText)?.data?.confirmText ||
-      'Confirm',
-    [errors.warnings]
-  );
 
   return (
     <>
@@ -114,7 +107,7 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
       {showWarningDialog && (
         <WarningDialog
           {...warningDialogProps}
-          confirmText={warningDialogConfirmText}
+          confirmText='Delete client anyway'
           renderError={(error, ...args) => {
             if (!error.data) return defaultRenderError(error, ...args);
 
