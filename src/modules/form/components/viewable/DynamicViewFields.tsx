@@ -1,14 +1,12 @@
-import React, { ReactNode, useCallback } from 'react';
+import React, { ReactNode } from 'react';
 
 import {
-  OverrideableDynamicFieldProps,
   FormValues,
+  ItemChangedFn,
   ItemMap,
-  LinkIdMap,
-  AdjustValueFn,
+  OverrideableDynamicFieldProps,
 } from '../../types';
 import { isEnabled } from '../../util/formUtil';
-import { setDisabledLinkIdsBase } from '../DynamicFormFields';
 
 import DynamicViewField from './DynamicViewField';
 import DynamicViewGroup from './DynamicViewGroup';
@@ -31,52 +29,22 @@ export interface Props {
   visible?: boolean;
   pickListRelationId?: string;
   values: FormValues;
-  setValues: React.Dispatch<React.SetStateAction<FormValues>>;
+  itemChanged: ItemChangedFn;
   itemMap: ItemMap;
-  autofillDependencyMap: LinkIdMap;
-  enabledDependencyMap: LinkIdMap;
   disabledLinkIds: string[];
-  setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const DynamicViewFields: React.FC<Props> = ({
   definition,
   bulk,
   itemMap,
-  // autofillDependencyMap, // { linkId => array of Link IDs that depend on it for autofill }
-  enabledDependencyMap, // { linkId => array of Link IDs that depend on it for enabled status }
   horizontal = false,
   pickListRelationId,
   values,
-  setValues,
   disabledLinkIds,
-  setDisabledLinkIds,
+  itemChanged,
   ...fieldsProps
 }) => {
-  const updateDisabledLinkIds = useCallback(
-    (changedLinkIds: string[], localValues: any) => {
-      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
-        enabledDependencyMap,
-        itemMap,
-      });
-    },
-    [itemMap, enabledDependencyMap, setDisabledLinkIds]
-  );
-
-  const adjustValue: AdjustValueFn = useCallback(
-    (input) => {
-      const { linkId, value } = input;
-      setValues((currentValues) => {
-        const newValues = { ...currentValues };
-        newValues[linkId] = value;
-        updateDisabledLinkIds([linkId], newValues);
-
-        return newValues;
-      });
-    },
-    [updateDisabledLinkIds, setValues]
-  );
-
   // Recursively render an item
   const renderItem = (
     item: FormItem,
@@ -113,7 +81,8 @@ const DynamicViewFields: React.FC<Props> = ({
         nestingLevel={nestingLevel}
         horizontal={horizontal}
         pickListRelationId={pickListRelationId}
-        adjustValue={adjustValue}
+        // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+        adjustValue={itemChanged}
         {...props}
       />
     );

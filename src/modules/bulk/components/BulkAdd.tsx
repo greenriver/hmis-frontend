@@ -15,7 +15,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
-import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
+import useDynamicFields from '@/modules/form/hooks/useDynamicFields';
 import {
   DynamicFieldProps,
   FormValues,
@@ -102,7 +102,7 @@ const BulkAdd = <
   );
 
   const { renderFields, values, shouldShowItem, getCleanedValues } =
-    useDynamicFormFields({
+    useDynamicFields({
       definition,
       bulk: true,
     });

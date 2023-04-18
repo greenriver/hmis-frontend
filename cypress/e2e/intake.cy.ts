@@ -1,4 +1,9 @@
 import { startOfYesterday, format } from 'date-fns';
+import { AlphaIncomeSources } from 'support/assessmentConstants';
+import {
+  incomePerSource,
+  incomeSourcesGroup,
+} from 'support/assessmentsCommands';
 // This only works when running against the real backend.
 // Must set the following env vars with real username/pw from local environment:
 
@@ -70,6 +75,12 @@ it(
       // Re-open assessment and assert that hudValues match previous
       cy.testId('panel-assessments').find('table').find('a').first().click();
       cy.expectHudValuesToDeepEqual(hudValues);
+
+      // Ensure total income is calculated on page load
+      cy.getById(incomeSourcesGroup)
+        .findTestId('inputSum')
+        .contains(incomePerSource * (AlphaIncomeSources.length + 1))
+        .should('exist');
     });
 
     // Make a change and save

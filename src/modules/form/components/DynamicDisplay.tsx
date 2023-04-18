@@ -1,5 +1,6 @@
 import { Alert, AlertColor, Typography } from '@mui/material';
 import DOMPurify from 'dompurify';
+import { isNil } from 'lodash-es';
 import { useMemo } from 'react';
 
 import { Component, FormItem } from '@/types/gqlTypes';
@@ -7,6 +8,7 @@ import { Component, FormItem } from '@/types/gqlTypes';
 interface Props {
   item: FormItem;
   maxWidth?: number;
+  viewOnly?: boolean;
 }
 
 const SeverityMap: Record<string, AlertColor> = {
@@ -16,11 +18,14 @@ const SeverityMap: Record<string, AlertColor> = {
   [Component.AlertWarning]: 'warning',
 };
 
-const DynamicDisplay = ({ item, maxWidth }: Props) => {
-  const html = useMemo(
-    () => (item.text ? { __html: DOMPurify.sanitize(item.text) } : undefined),
-    [item]
-  );
+const DynamicDisplay = ({ item, maxWidth, viewOnly = false }: Props) => {
+  const html = useMemo(() => {
+    let stringValue = item.text;
+    if (viewOnly && !isNil(item.readonlyText)) stringValue = item.readonlyText;
+    if (isNil(stringValue)) return undefined;
+
+    return { __html: DOMPurify.sanitize(stringValue) };
+  }, [item, viewOnly]);
 
   if (!html) return null;
 

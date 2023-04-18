@@ -72,7 +72,7 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
 
   switch (item.type) {
     case ItemType.Display:
-      return <DynamicDisplay item={item} />;
+      return <DynamicDisplay item={item} viewOnly />;
     case ItemType.Boolean:
       return (
         <TextContent

@@ -867,6 +867,18 @@
             "deprecationReason": null
           },
           {
+            "name": "autofillReadonly",
+            "description": "Whether to perform autofill when displaying a read-only view (defaults to false)",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "autofillWhen",
             "description": null,
             "args": [],
@@ -3546,6 +3558,12 @@
           {
             "name": "INPUT_GROUP",
             "description": "Render a group that contains children of the same type (e.g. all booleans)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MCI",
+            "description": "MCI linking component",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -9228,6 +9246,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "readonlyText",
+            "description": "Text to use for the item when displayed in read-only view",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,

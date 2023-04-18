@@ -142,6 +142,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'autofillReadonly',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'sumQuestions',
         type: {
           kind: 'LIST',
@@ -1336,6 +1340,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'readOnly',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'readonlyText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'recordType',

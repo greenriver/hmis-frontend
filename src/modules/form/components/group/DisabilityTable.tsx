@@ -12,6 +12,12 @@ import { GroupItemComponentProps } from '../../types';
 
 import { ItemType } from '@/types/gqlTypes';
 
+/**
+ * TODO:
+ * - For overall disabling condition, disallow overriding a system-generated YES with a NO
+ * - Maybe move autofill logic to the frontend?
+ * - Ensure Disabling Condition is handled correctly on autofill
+ */
 const DisabilityTable = ({
   item,
   renderChildItem,

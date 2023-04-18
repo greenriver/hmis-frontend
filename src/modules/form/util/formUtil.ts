@@ -1,5 +1,5 @@
 import { getYear, isDate, isValid, max, min } from 'date-fns';
-import { compact, isNil, isUndefined, sum } from 'lodash-es';
+import { compact, isNil, isUndefined, pull, sum } from 'lodash-es';
 
 import {
   DynamicInputCommonProps,
@@ -39,6 +39,9 @@ import {
   ServiceDetailType,
   ValueBound,
 } from '@/types/gqlTypes';
+
+export const maxWidthAtNestingLevel = (nestingLevel: number) =>
+  600 - nestingLevel * 26;
 
 export const isDataNotCollected = (s?: string) =>
   s && s.endsWith('_NOT_COLLECTED');
@@ -635,7 +638,10 @@ export const getAllChildLinkIds = (item: FormItem): string[] => {
 /**
  * Map { linkId => array of Link IDs that depend on it for autofill }
  */
-export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
+export const buildAutofillDependencyMap = (
+  itemMap: ItemMap,
+  viewOnly = false
+): LinkIdMap => {
   const deps: LinkIdMap = {};
   Object.values(itemMap).forEach((item) => {
     if (!item.autofillValues) return;
@@ -647,6 +653,8 @@ export const buildAutofillDependencyMap = (itemMap: ItemMap): LinkIdMap => {
     }
 
     item.autofillValues.forEach((av) => {
+      if (viewOnly && !av.autofillReadonly) return;
+
       // If this item sums other items using sumQuestions, add those dependencies
       if (av.sumQuestions) {
         av.sumQuestions.forEach((summedLinkId) => {
@@ -1001,4 +1009,42 @@ export const debugFormValues = (
   console.log(hudValues);
 
   return true;
+};
+
+export const setDisabledLinkIdsBase = (
+  changedLinkIds: string[],
+  localValues: any,
+  callback: React.Dispatch<React.SetStateAction<string[]>>,
+  {
+    enabledDependencyMap,
+    itemMap,
+  }: {
+    enabledDependencyMap: LinkIdMap;
+    itemMap: ItemMap;
+  }
+) => {
+  // If none of these are dependencies, return immediately
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
+
+  callback((oldList) => {
+    const newList = [...oldList];
+    changedLinkIds.forEach((changedLinkId) => {
+      if (!enabledDependencyMap[changedLinkId]) return;
+
+      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+        const enabled = shouldEnableItem(
+          itemMap[dependentLinkId],
+          localValues,
+          itemMap
+        );
+        if (enabled && newList.includes(dependentLinkId)) {
+          pull(newList, dependentLinkId);
+        } else if (!enabled && !newList.includes(dependentLinkId)) {
+          newList.push(dependentLinkId);
+        }
+      });
+    });
+
+    return newList;
+  });
 };
