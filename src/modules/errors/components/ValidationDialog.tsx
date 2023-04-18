@@ -9,9 +9,6 @@ import {
   UNKNOWN_ERROR_HEADING,
 } from '../util';
 
-import ApolloErrorAlert from './ApolloErrorAlert';
-import ErrorAlert from './ErrorAlert';
-
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
@@ -91,7 +88,7 @@ const ValidationDialog = ({
   ...props
 }: ValidationDialogProps) => {
   if (!hasAnyValue(errorState)) return null;
-  const { apolloError, errors, warnings } = errorState;
+  const { errors, warnings } = errorState;
 
   const hasErrors = errors.length > 0;
 
@@ -114,13 +111,11 @@ const ValidationDialog = ({
       title={warningContent ? 'Ignore Warnings' : UNKNOWN_ERROR_HEADING}
       maxWidth='sm'
       fullWidth
+      // we want to handle warning rendering here, so don't pass it
+      errorState={hasErrors ? errorState : undefined}
+      renderError={renderError}
       {...props}
-      onConfirm={hasErrors ? props.onCancel : props.onConfirm}
-      confirmText={hasErrors ? 'Close' : props.confirmText}
-      hideCancelButton={hasErrors}
     >
-      <ApolloErrorAlert error={apolloError} />
-      {hasErrors && <ErrorAlert errors={errors} renderError={renderError} />}
       {warningContent && (
         <>
           <Typography sx={{ mb: 3 }} variant='body2'>

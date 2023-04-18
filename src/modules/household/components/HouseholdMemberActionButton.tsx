@@ -36,7 +36,7 @@ const HouseholdMemberActionButton = ({
 }: Props) => {
   const pathToAssessment = useCallback(
     (id: string) =>
-      generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: id,

@@ -61,10 +61,6 @@ export const useDashboardBreadcrumbs = (
         title: 'Assessment',
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EDIT_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
-      },
       [DashboardRoutes.NEW_SERVICE]: {
         title: 'Add Service',
         parent: DashboardRoutes.VIEW_ENROLLMENT,

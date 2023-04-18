@@ -1,8 +1,12 @@
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import { Box, Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import { assign } from 'lodash-es';
 import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import LockedAssessmentAlert from './LockedAssessmentAlert';
+import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
+import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
+import WipAssessmentAlert from './alerts/WipAssessmentAlert';
+import DeleteAssessmentButton from './DeleteAssessmentButton';
 import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
@@ -19,12 +23,15 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
+import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import {
   createInitialValuesFromSavedValues,
   getInitialValues,
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
@@ -33,6 +40,7 @@ import {
   FormRole,
   InitialBehavior,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   enrollment: EnrollmentFieldsFragment;
@@ -142,7 +150,23 @@ const AssessmentForm = ({
     reloadInitialValues,
   ]);
 
+  const navigate = useNavigate();
+  const navigateToEnrollment = useMemo(
+    () => () =>
+      navigate(
+        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          clientId: enrollment.client.id,
+          enrollmentId: enrollment.id,
+        })
+      ),
+    [enrollment, navigate]
+  );
+
   useScrollToHash(!enrollment || mutationLoading, top);
+
+  const [canEdit] = useHasClientPermissions(enrollment.client.id, [
+    'canViewEnrollmentDetails',
+  ]);
 
   // if (dataLoading) return <Loading />;
   if (!enrollment) return <NotFound />;
@@ -164,55 +188,77 @@ const AssessmentForm = ({
               useUrlHash={!embeddedInWorkflow}
             />
           </Paper>
-
-          {!assessment && (
-            <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-              <Button
-                variant='outlined'
-                onClick={() => setDialogOpen(true)}
-                sx={{ height: 'fit-content', mt: 3 }}
-                fullWidth
-              >
-                Autofill Assessment
-              </Button>
-            </ButtonTooltipContainer>
-          )}
-          {import.meta.env.MODE === 'development' && assessment && (
-            <Box sx={{ py: 2, px: 1 }}>
+          <Stack gap={2} sx={{ mt: 2 }}>
+            {!assessment && (
+              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
+                <Button
+                  variant='outlined'
+                  onClick={() => setDialogOpen(true)}
+                  sx={{ height: 'fit-content' }}
+                  fullWidth
+                >
+                  Autofill Assessment
+                </Button>
+              </ButtonTooltipContainer>
+            )}
+            {assessment && (
+              <DeleteAssessmentButton
+                assessment={assessment}
+                clientId={enrollment.client.id}
+                onSuccess={navigateToEnrollment}
+              />
+            )}
+            {import.meta.env.MODE === 'development' && assessment && (
               <IdDisplay prefix='Assessment' id={assessment.id} />
-            </Box>
-          )}
+            )}
+          </Stack>
         </Box>
       </Grid>
       <Grid item xs={9} sx={{ pt: '0 !important' }}>
-        {locked && assessment && (
+        {assessment && !assessment.inProgress && locked && (
           <LockedAssessmentAlert
-            allowUnlock={embeddedInWorkflow}
+            allowUnlock={canEdit}
             onUnlock={() => setLocked(false)}
           />
         )}
-        <DynamicForm
-          // Remount component if a source assessment has been selected
-          key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
-          definition={definition.definition}
-          ref={formRef}
-          onSubmit={submitHandler}
-          onSaveDraft={
-            assessment && !assessment.inProgress ? undefined : saveDraftHandler
-          }
-          initialValues={initialValues || undefined}
-          pickListRelationId={enrollment?.project?.id}
-          loading={mutationLoading}
-          errors={errors}
-          locked={locked}
-          visible={visible}
-          showSavePrompt
-          alwaysShowSaveSlide={!!embeddedInWorkflow}
-          FormActionProps={FormActionProps}
-          // Only show "warn if empty" treatments if this is an existing assessment,
-          // OR if the user has attempted to submit this (new) assessment
-          warnIfEmpty={!!assessment || hasAnyValue(errors)}
-        />
+        {assessment && assessment.inProgress && <WipAssessmentAlert />}
+        {embeddedInWorkflow && !assessment && <UnsavedAssessmentAlert />}
+        {locked && assessment ? (
+          <DynamicView
+            // dont use `initialValues` because we don't want the OVERWRITE fields
+            values={createInitialValuesFromSavedValues(
+              definition.definition,
+              assessment.customForm?.values
+            )}
+            definition={definition.definition}
+            pickListRelationId={enrollment.project.id}
+          />
+        ) : (
+          <DynamicForm
+            // Remount component if a source assessment has been selected
+            key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
+            definition={definition.definition}
+            ref={formRef}
+            onSubmit={submitHandler}
+            onSaveDraft={
+              assessment && !assessment.inProgress
+                ? undefined
+                : saveDraftHandler
+            }
+            initialValues={initialValues || undefined}
+            pickListRelationId={enrollment?.project?.id}
+            loading={mutationLoading}
+            errors={errors}
+            locked={locked}
+            visible={visible}
+            showSavePrompt
+            alwaysShowSaveSlide={!!embeddedInWorkflow}
+            FormActionProps={FormActionProps}
+            // Only show "warn if empty" treatments if this is an existing assessment,
+            // OR if the user has attempted to submit this (new) assessment
+            warnIfEmpty={!!assessment || hasAnyValue(errors)}
+          />
+        )}
       </Grid>
 
       {/* Dialog for selecting autofill record */}

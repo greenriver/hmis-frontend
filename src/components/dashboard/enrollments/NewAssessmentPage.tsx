@@ -11,15 +11,13 @@ import { DashboardRoutes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const EditAssessmentPage = () => {
+const NewAssessmentPage = () => {
   const { client, enrollment } = useOutletContext<DashboardContext>();
-  const { clientId, enrollmentId, assessmentId, formRole } =
-    useSafeParams() as {
-      clientId: string;
-      enrollmentId: string;
-      assessmentId?: string; // If editing, we have the assessment ID.
-      formRole?: FormRole; // If create new, we have the role.
-    };
+  const { clientId, enrollmentId, formRole } = useSafeParams() as {
+    clientId: string;
+    enrollmentId: string;
+    formRole: FormRole; // If create new, we have the role.
+  };
   const navigate = useNavigate();
 
   const navigateToEnrollment = useCallback(
@@ -34,22 +32,19 @@ const EditAssessmentPage = () => {
   );
 
   const onSuccess = useCallback(() => {
-    // If we created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-    if (!assessmentId) {
-      cache.evict({
-        id: `Enrollment:${enrollmentId}`,
-        fieldName: 'assessments',
-      });
-    }
+    // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
+    cache.evict({
+      id: `Enrollment:${enrollmentId}`,
+      fieldName: 'assessments',
+    });
     navigateToEnrollment();
-  }, [navigateToEnrollment, enrollmentId, assessmentId]);
+  }, [navigateToEnrollment, enrollmentId]);
 
   if (!enrollment) return <Loading />;
 
   return (
     <IndividualAssessment
       enrollmentId={enrollmentId}
-      assessmentId={assessmentId}
       formRole={formRole}
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}
@@ -76,7 +71,7 @@ const EditAssessmentPage = () => {
               ]),
           {
             id: 'discard',
-            label: assessmentId ? 'Cancel' : 'Discard',
+            label: 'Cancel',
             action: FormActionTypes.Discard,
             buttonProps: { variant: 'gray' },
           },
@@ -86,4 +81,4 @@ const EditAssessmentPage = () => {
   );
 };
 
-export default EditAssessmentPage;
+export default NewAssessmentPage;

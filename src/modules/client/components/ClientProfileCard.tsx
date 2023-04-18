@@ -364,7 +364,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ),
                   ...(canViewSsn
                     ? {
-                        Social: <ClientSafeSsn client={client} />,
+                        SSN: <ClientSafeSsn client={client} />,
                       }
                     : {}),
                 }}
