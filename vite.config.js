@@ -1,7 +1,6 @@
 import dns from 'dns';
 import { resolve } from 'path';
 
-import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
 // import { visualizer } from 'rollup-plugin-visualizer';
 import { defineConfig, loadEnv } from 'vite';
@@ -19,7 +18,6 @@ function sourcemapExclude(opts) {
       if (opts?.excludeNodeModules && id.includes('node_modules')) {
         return {
           code,
-          // https://github.com/rollup/rollup/blob/master/docs/plugin-development/index.md#source-code-transformations
           map: { mappings: '' },
         };
       }
@@ -37,18 +35,7 @@ export default defineConfig(({ command, mode }) => {
       Origin: env.HMIS_SERVER_URL || DEFAULT_WAREHOUSE_SERVER,
     },
     secure: false,
-    configure: (proxy, options) => {
-      console.debug('Starting proxy with options:', options);
-    },
   };
-
-  const sentryConfigured = !!(
-    env.SENTRY_ORG &&
-    env.SENTRY_PROJECT &&
-    env.SENTRY_AUTH_TOKEN
-  );
-  console.log(sentryConfigured);
-  console.log(env.FULL_GITHASH);
 
   return {
     envPrefix: 'PUBLIC_',
@@ -61,7 +48,9 @@ export default defineConfig(({ command, mode }) => {
       react(),
       mkcert(),
       sourcemapExclude({ excludeNodeModules: true }),
-      ...(sentryConfigured
+      // Note: leaving source map upload disabled, because source maps are public.
+      /*
+      ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
         ? [
             sentryVitePlugin({
               include: 'dist/assets/',
@@ -79,6 +68,7 @@ export default defineConfig(({ command, mode }) => {
             }),
           ]
         : []),
+        */
     ],
     define: {
       __APP_ENV__: env.APP_ENV,

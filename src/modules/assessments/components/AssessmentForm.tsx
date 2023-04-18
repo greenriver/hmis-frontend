@@ -10,7 +10,7 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/404';
+import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {

@@ -1,6 +1,6 @@
 import Loading from '../elements/Loading';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import { useHasOrganizationPermissions } from '@/modules/permissions/useHasPermissionsHooks';

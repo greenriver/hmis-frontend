@@ -19,6 +19,7 @@ ENV FULL_GITHASH ${FULL_GITHASH}
 ENV SENTRY_AUTH_TOKEN ${SENTRY_AUTH_TOKEN}
 ENV SENTRY_ORG 'green-river'
 ENV SENTRY_PROJECT 'hmis-frontend'
+ENV NODE_OPTIONS '--max-old-space-size=32768'
 
 # Use this for faster iterations on nginx config
 # RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html

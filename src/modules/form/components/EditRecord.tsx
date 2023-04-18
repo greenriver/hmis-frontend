@@ -15,7 +15,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/404';
+import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import {
   emptyErrorState,

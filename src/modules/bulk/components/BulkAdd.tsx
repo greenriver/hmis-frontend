@@ -4,7 +4,7 @@ import { Stack } from '@mui/system';
 import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/404';
+import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';

@@ -9,7 +9,7 @@ import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '../layout/dashboard/sideNav/types';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';

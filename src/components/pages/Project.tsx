@@ -19,7 +19,7 @@ import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';

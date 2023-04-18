@@ -6,5 +6,6 @@ declare global {
 
     setTheme: any;
     getThemes: any;
+    gitCommitHash?: string;
   }
 }

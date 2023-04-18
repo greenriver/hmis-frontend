@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 import { InactiveChip } from './Project';
 
 import LoadingButton from '@/components/elements/LoadingButton';

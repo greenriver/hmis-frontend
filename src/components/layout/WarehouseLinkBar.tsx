@@ -7,7 +7,7 @@ import ButtonLink from '../elements/ButtonLink';
 
 import { OP_LINK_BAR_HEIGHT } from './layoutConstants';
 
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const linkStyles = {
   height: OP_LINK_BAR_HEIGHT,

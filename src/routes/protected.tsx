@@ -19,7 +19,6 @@ import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/dashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
-import NotFound from '@/components/pages/404';
 import AllProjects from '@/components/pages/AllProjects';
 import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
@@ -36,6 +35,7 @@ import FileEditRoute from '@/components/pages/FileEditRoute';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
+import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
@@ -71,8 +71,7 @@ const App = () => {
 };
 
 const InternalError: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
-  throw 'This is a test error';
+  throw new Error('This is a test error');
 };
 
 const ParamsWrapper = <T extends { [x: string]: string } = any>({
