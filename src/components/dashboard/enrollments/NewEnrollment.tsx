@@ -9,8 +9,9 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
+import NotFound from '@/components/pages/404';
 import useSafeParams from '@/hooks/useSafeParams';
-import ErrorAlert from '@/modules/form/components/ErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
@@ -41,7 +42,6 @@ const NewEnrollment = () => {
     useRecentHouseholdMembers(clientId, true);
 
   const { client } = useOutletContext<{ client: Client | null }>();
-  if (!client) throw Error('Missing client');
 
   const [mutateFunction, { data, loading, error }] =
     useCreateEnrollmentMutation({
@@ -88,6 +88,7 @@ const NewEnrollment = () => {
   }, [entryDate, members, project, mutateFunction]);
 
   if (error) throw error;
+  if (!client) return <NotFound />;
   if (recentHouseholdMembersLoading) return <Loading />;
 
   const numMembers = Object.keys(members).length;

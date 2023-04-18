@@ -8,8 +8,8 @@ import {
 } from '../hmisUtil';
 
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
-import { isHmisEnum } from '@/modules/form/util/formUtil';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { isHmisEnum } from '@/modules/form/types';
+import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlSchemaType } from '@/types/gqlObjects';
 
@@ -34,10 +34,20 @@ const getPrimitiveDisplay = (value: any, type: GqlSchemaType['name']) => {
   if (!type) return value;
   if (isHmisEnum(type)) {
     const enumMap = HmisEnums[type];
-    if (['NoYesReasonsForMissingData', 'DisabilityResponse'].includes(type)) {
+    if (
+      [
+        'NoYesMissing',
+        'NoYesReasonsForMissingData',
+        'DisabilityResponse',
+      ].includes(type)
+    ) {
       return <YesNoDisplay enumValue={value} />;
     }
-    return <HmisEnum value={value} enumMap={enumMap} />;
+    return Array.isArray(value) ? (
+      <MultiHmisEnum values={value} enumMap={enumMap} />
+    ) : (
+      <HmisEnum value={value} enumMap={enumMap} />
+    );
   }
   switch (type) {
     case 'Boolean':
@@ -67,6 +77,7 @@ const HmisField = ({ record, recordType, fieldName }: Props) => {
   if (!type) return defaultDisplay;
 
   return <>{getPrimitiveDisplay(value, type)}</>;
+  // return <>{JSON.stringify(value)}</>;
 };
 
 export const renderHmisField =

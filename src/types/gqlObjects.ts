@@ -423,6 +423,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
+      {
+        name: 'warehouseUrl',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -438,6 +446,38 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageAnyClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageOwnClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyConfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyNonconfidentialClientFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -475,6 +515,47 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ClientAuditEvent',
+    fields: [
+      {
+        name: 'createdAt',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'event',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AuditEventType', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'objectChanges',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },
@@ -924,6 +1005,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'status',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'EnrollmentStatus', ofType: null },
+        },
+      },
+      {
         name: 'timesHomelessPastThreeYears',
         type: {
           kind: 'ENUM',
@@ -1030,8 +1119,20 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'expirationDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'fileBlobId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'id',
@@ -1047,6 +1148,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'ownFile',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'tags',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+            },
+          },
         },
       },
       {
@@ -2047,6 +2172,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
       },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -2247,6 +2380,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
       },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
     ],
   },
   {
@@ -2325,6 +2466,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canAuditClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteAssignedProjectData',
         type: {
           kind: 'NON_NULL',
@@ -2389,7 +2538,31 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canManageClientFiles',
+        name: 'canManageAnyClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canManageOwnClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyConfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewAnyNonconfidentialClientFiles',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2434,6 +2607,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
     ],

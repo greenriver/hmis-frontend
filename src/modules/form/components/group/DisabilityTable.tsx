@@ -68,6 +68,7 @@ const DisabilityTable = ({
                   }}
                 >
                   {renderChildItem(cellItem, {
+                    noLabel: true,
                     inputProps: {
                       label: null,
                       placeholder:

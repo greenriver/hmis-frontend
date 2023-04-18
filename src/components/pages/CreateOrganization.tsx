@@ -2,6 +2,8 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import NotFound from './404';
+
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
@@ -36,7 +38,7 @@ const CreateOrganization = () => {
     [navigate]
   );
 
-  if (!crumbs) throw Error('Organization not found');
+  if (!crumbs) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

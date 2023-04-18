@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { ProjectFormTitle } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';
@@ -52,8 +53,8 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   }, [project]);
 
   if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
-  if (!create && !data?.funder) throw Error('Funder not found');
+  if (!crumbs || !project) return <NotFound />;
+  if (!create && !data?.funder) return <NotFound />;
   if (error) throw error;
 
   return (

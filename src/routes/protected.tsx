@@ -4,17 +4,19 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import { DashboardRoutes, Routes } from './routes';
 
+import AllFiles from '@/components/dashboard/AllFiles';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import AssessmentPage from '@/components/dashboard/enrollments/AssessmentPage';
+import EditAssessmentPage from '@/components/dashboard/enrollments/EditAssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
+import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
+import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
-import { fullPageErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import NotFound from '@/components/pages/404';
@@ -29,6 +31,8 @@ import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
 import EditProject from '@/components/pages/EditProject';
 import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
+import File from '@/components/pages/File';
+import FileEditRoute from '@/components/pages/FileEditRoute';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
@@ -38,7 +42,13 @@ import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import useSafeParams from '@/hooks/useSafeParams';
+import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import {
+  ClientPermissionsFilter,
+  RootPermissionsFilter,
+} from '@/modules/permissions/PermissionsFilters';
+import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
   return (
@@ -50,6 +60,15 @@ const App = () => {
       </Suspense>
     </MainLayout>
   );
+};
+
+const ParamsWrapper = <T extends { [x: string]: string } = any>({
+  children,
+}: {
+  children: (params: T) => JSX.Element;
+}): JSX.Element => {
+  const params = useSafeParams() as T;
+  return children(params);
 };
 
 export const protectedRoutes = [
@@ -254,7 +273,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <AssessmentPage />
+                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -262,7 +281,7 @@ export const protectedRoutes = [
             path: DashboardRoutes.VIEW_ASSESSMENT,
             element: (
               <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
-                <AssessmentPage />
+                <ViewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -273,7 +292,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <AssessmentPage />
+                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -307,7 +326,17 @@ export const protectedRoutes = [
               </EnrollmentsRoute>
             ),
           },
-          { path: DashboardRoutes.HISTORY, element: null },
+          {
+            path: DashboardRoutes.HISTORY,
+            element: (
+              <RootPermissionsFilter
+                permissions='canAuditClients'
+                otherwise={<Navigate to='profile' replace />}
+              >
+                <History />
+              </RootPermissionsFilter>
+            ),
+          },
           {
             path: DashboardRoutes.ASSESSMENTS,
             element: (
@@ -317,7 +346,48 @@ export const protectedRoutes = [
             ),
           },
           { path: DashboardRoutes.NOTES, element: null },
-          { path: DashboardRoutes.FILES, element: null },
+          {
+            path: DashboardRoutes.FILES,
+            element: (
+              <ParamsWrapper<{ clientId: string }>>
+                {({ clientId }) => (
+                  <ClientPermissionsFilter
+                    id={clientId}
+                    permissions={[
+                      'canViewAnyConfidentialClientFiles',
+                      'canViewAnyNonconfidentialClientFiles',
+                    ]}
+                    otherwise={
+                      <Navigate
+                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                          clientId,
+                        })}
+                        replace
+                      />
+                    }
+                  >
+                    <AllFiles />
+                  </ClientPermissionsFilter>
+                )}
+              </ParamsWrapper>
+            ),
+          },
+          {
+            path: DashboardRoutes.NEW_FILE,
+            element: (
+              <FileEditRoute create>
+                <File create />
+              </FileEditRoute>
+            ),
+          },
+          {
+            path: DashboardRoutes.EDIT_FILE,
+            element: (
+              <FileEditRoute>
+                <File />
+              </FileEditRoute>
+            ),
+          },
           { path: DashboardRoutes.CONTACT, element: null },
           { path: DashboardRoutes.LOCATIONS, element: null },
           { path: DashboardRoutes.REFERRALS, element: null },

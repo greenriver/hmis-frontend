@@ -1,10 +1,15 @@
 import { ApolloError } from '@apollo/client';
 import { useCallback, useState } from 'react';
 
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import { DynamicFormOnSubmit } from '@/modules/form/components/DynamicForm';
+import { FormValues } from '@/modules/form/types';
 import {
   debugFormValues,
-  FormValues,
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {
@@ -14,7 +19,6 @@ import {
   SubmitAssessmentMutation,
   useSaveAssessmentMutation,
   useSubmitAssessmentMutation,
-  ValidationError,
 } from '@/types/gqlTypes';
 
 type Args = {
@@ -46,7 +50,7 @@ export function useAssessmentHandlers({
 }: Args) {
   const formDefinitionId = definition.id;
 
-  const [errors, setErrors] = useState<ValidationError[]>([]);
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const onCompleted = useCallback(
     (data: SubmitAssessmentMutation | SaveAssessmentMutation) => {
@@ -60,27 +64,30 @@ export function useAssessmentHandlers({
 
       if (errs.length > 0) {
         window.scrollTo(0, 0);
-        setErrors(errs);
+        setErrors(partitionValidations(errs));
         return;
       }
-      setErrors([]);
+      setErrors(emptyErrorState);
     },
     [setErrors]
   );
 
-  const onError = useCallback(() => window.scrollTo(0, 0), []);
-  const [saveAssessmentMutation, { loading: saveLoading, error: saveError }] =
+  const onError = useCallback((apolloError: ApolloError) => {
+    window.scrollTo(0, 0);
+    setErrors({ ...emptyErrorState, apolloError });
+  }, []);
+
+  const [saveAssessmentMutation, { loading: saveLoading }] =
     useSaveAssessmentMutation({ onError });
 
-  const [
-    submitAssessmentMutation,
-    { loading: submitLoading, error: submitError },
-  ] = useSubmitAssessmentMutation({ onError });
+  const [submitAssessmentMutation, { loading: submitLoading }] =
+    useSubmitAssessmentMutation({ onError });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
-    (event, values, confirmed = false, onSuccessCallback = undefined) => {
+    ({ event, values, confirmed = false, onSuccess }) => {
       if (!definition) return;
       if (
+        event &&
         debugFormValues(
           event,
           values,
@@ -104,8 +111,8 @@ export function useAssessmentHandlers({
         variables: { input: { input } },
         onCompleted: (data) => {
           onCompleted(data);
-          if (data.submitAssessment?.assessment && onSuccessCallback) {
-            onSuccessCallback();
+          if (data.submitAssessment?.assessment && onSuccess) {
+            onSuccess();
           }
         },
       });
@@ -157,12 +164,10 @@ export function useAssessmentHandlers({
     saveDraftHandler,
     mutationLoading: saveLoading || submitLoading,
     errors,
-    apolloError: saveError || submitError,
   } as {
     submitHandler: DynamicFormOnSubmit;
     saveDraftHandler: (values: FormValues) => void;
     mutationLoading: boolean;
-    errors: ValidationError[];
-    apolloError?: ApolloError;
+    errors: ErrorState;
   };
 }

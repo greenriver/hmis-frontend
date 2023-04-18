@@ -5,6 +5,7 @@ import {
   BoxProps,
   useTheme,
   Typography,
+  Stack,
 } from '@mui/material';
 import React, { useRef } from 'react';
 
@@ -15,6 +16,7 @@ export type LabelWithContentProps = {
   children?: React.ReactNode;
   renderChildren?: (label: HTMLLabelElement | null) => React.ReactNode;
   helperText?: React.ReactNode;
+  horizontal?: boolean;
 } & BoxProps;
 
 const LabelWithContent = ({
@@ -24,24 +26,29 @@ const LabelWithContent = ({
   renderChildren,
   LabelProps = {},
   helperText,
+  horizontal = false,
   ...props
 }: LabelWithContentProps): JSX.Element => {
   const theme = useTheme();
   const labelRef = useRef<HTMLLabelElement | null>(null);
-  return (
-    <Box {...props}>
-      <InputLabel
-        ref={labelRef}
-        {...LabelProps}
-        id={labelId}
-        sx={{
-          color: theme.palette.text.primary,
-          fontSize: theme.typography.body2,
-          ...LabelProps?.sx,
-        }}
-      >
-        {label}
-      </InputLabel>
+
+  const labelContent = (
+    <InputLabel
+      ref={labelRef}
+      {...LabelProps}
+      id={labelId}
+      sx={{
+        color: theme.palette.text.primary,
+        fontSize: theme.typography.body2,
+        ...LabelProps?.sx,
+      }}
+    >
+      {label}
+    </InputLabel>
+  );
+
+  const inputContent = (
+    <>
       <Box sx={{ marginTop: 0.5 }}>
         {renderChildren ? renderChildren(labelRef.current) : children}
       </Box>
@@ -53,6 +60,26 @@ const LabelWithContent = ({
         >
           {helperText}
         </Typography>
+      )}
+    </>
+  );
+
+  return (
+    <Box {...props}>
+      {horizontal ? (
+        <Stack
+          direction='row'
+          justifyContent='space-between'
+          alignItems='center'
+        >
+          {labelContent}
+          <Box>{inputContent}</Box>
+        </Stack>
+      ) : (
+        <>
+          {labelContent}
+          {inputContent}
+        </>
       )}
     </Box>
   );

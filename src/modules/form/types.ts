@@ -1,16 +1,41 @@
+import { SxProps } from '@mui/system';
+import { isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
-import { FormItem, ValidationError } from '@/types/gqlTypes';
-
+import { HmisEnums } from '@/types/gqlEnums';
+import {
+  FormItem,
+  ItemType,
+  PickListOption,
+  ValidationError,
+} from '@/types/gqlTypes';
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
 export const HIDDEN_VALUE = '_HIDDEN';
 
 type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
 
+export enum ChangeType {
+  User,
+  System,
+}
+
+export type ItemChangedFn = (input: {
+  linkId: string;
+  value: any;
+  type: ChangeType;
+}) => void;
+
+export type SeveralItemsChangedFn = (input: {
+  values: FormValues;
+  type: ChangeType;
+}) => void;
+
+export type AdjustValueFn = (input: { linkId: string; value: any }) => void;
+
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
-  itemChanged: (linkId: string, value: any) => void;
+  itemChanged: ItemChangedFn;
   nestingLevel: number;
   value: any;
   disabled?: boolean;
@@ -20,6 +45,16 @@ export interface DynamicFieldProps {
   pickListRelationId?: string;
   noLabel?: boolean;
   warnIfEmpty?: boolean;
+}
+
+export interface DynamicViewFieldProps {
+  item: FormItem;
+  nestingLevel: number;
+  value: any;
+  horizontal?: boolean;
+  pickListRelationId?: string;
+  noLabel?: boolean;
+  adjustValue?: AdjustValueFn;
 }
 
 // Props accepted by all input components
@@ -33,6 +68,12 @@ export interface DynamicInputCommonProps {
   min?: any;
   max?: any;
   placeholder?: string;
+}
+
+export interface DynamicViewItemCommonProps {
+  id?: string;
+  label?: ReactNode;
+  children?: ReactNode;
 }
 
 export type OverrideableDynamicFieldProps = Optional<
@@ -50,8 +91,23 @@ export interface GroupItemComponentProps {
     renderFn?: (children: ReactNode) => ReactNode
   ) => ReactNode;
   values: Record<string, any>;
-  itemChanged: (linkId: string, value: any) => void;
-  severalItemsChanged: (values: Record<string, any>) => void;
+  itemChanged?: ItemChangedFn;
+  severalItemsChanged?: SeveralItemsChangedFn;
+  visible?: boolean;
+  locked?: boolean;
+  viewOnly?: boolean;
+  rowSx?: SxProps;
+}
+
+export interface ViewGroupItemComponentProps {
+  item: FormItem;
+  nestingLevel: number;
+  renderChildItem: (
+    item: FormItem,
+    props?: OverrideableDynamicFieldProps,
+    renderFn?: (children: ReactNode) => ReactNode
+  ) => ReactNode;
+  values: Record<string, any>;
   visible?: boolean;
   locked?: boolean;
 }
@@ -62,4 +118,49 @@ export enum FormActionTypes {
   Validate,
   Discard,
   Navigate,
+}
+
+export type FormValues = Record<string, any | null | undefined>;
+export type ItemMap = Record<string, FormItem>;
+export type LinkIdMap = Record<string, string[]>;
+export type LocalConstants = Record<string, any>;
+
+export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
+  return k in HmisEnums;
+};
+
+export const isQuestionItem = (item: FormItem): boolean =>
+  ![ItemType.Display, ItemType.Group].includes(item.type);
+
+export function isDate(value: any | null | undefined): value is Date {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    typeof value.getMonth === 'function'
+  );
+}
+
+export function isPickListOption(
+  value: any | null | undefined
+): value is PickListOption {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    !!value.code
+  );
+}
+
+export function isPickListOptionArray(
+  value: any | null | undefined
+): value is PickListOption[] {
+  return (
+    !isNil(value) &&
+    Array.isArray(value) &&
+    value.length > 0 &&
+    isPickListOption(value[0])
+  );
 }

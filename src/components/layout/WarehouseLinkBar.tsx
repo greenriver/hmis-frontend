@@ -7,6 +7,8 @@ import ButtonLink from '../elements/ButtonLink';
 
 import { OP_LINK_BAR_HEIGHT } from './layoutConstants';
 
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+
 const linkStyles = {
   height: OP_LINK_BAR_HEIGHT,
   color: 'white',
@@ -17,6 +19,9 @@ const linkStyles = {
 };
 
 const WarehouseLinkBar = () => {
+  const { warehouseUrl, casUrl } = useHmisAppSettings();
+  if (!warehouseUrl && !casUrl) return null;
+
   return (
     <AppBar
       position='sticky'
@@ -36,10 +41,10 @@ const WarehouseLinkBar = () => {
           pr: '10px !important',
         }}
       >
-        {import.meta.env.PUBLIC_WAREHOUSE_URL && (
+        {warehouseUrl && (
           <Button
             variant='text'
-            href={import.meta.env.PUBLIC_WAREHOUSE_URL}
+            href={warehouseUrl}
             target='_blank'
             startIcon={<StorageIcon />}
             sx={linkStyles}
@@ -47,10 +52,10 @@ const WarehouseLinkBar = () => {
             Warehouse
           </Button>
         )}
-        {import.meta.env.PUBLIC_CAS_URL && (
+        {casUrl && (
           <Button
             variant='text'
-            href={import.meta.env.PUBLIC_CAS_URL}
+            href={casUrl}
             target='_blank'
             startIcon={<HomeIcon />}
             sx={linkStyles}

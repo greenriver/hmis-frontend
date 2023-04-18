@@ -1,14 +1,20 @@
-import { pull } from 'lodash-es';
+import { pick, pull } from 'lodash-es';
 import React, { ReactNode, useCallback } from 'react';
 
-import { OverrideableDynamicFieldProps } from '../types';
 import {
-  autofillValues,
-  buildCommonInputProps,
+  ItemChangedFn,
+  OverrideableDynamicFieldProps,
+  SeveralItemsChangedFn,
   FormValues,
   ItemMap,
   LinkIdMap,
+} from '../types';
+import {
+  autofillValues,
+  buildCommonInputProps,
+  isEnabled,
   shouldEnableItem,
+  transformSubmitValues,
 } from '../util/formUtil';
 
 import DynamicField from './DynamicField';
@@ -35,8 +41,8 @@ export interface Props {
   pickListRelationId?: string;
   values: FormValues;
   setValues: React.Dispatch<React.SetStateAction<FormValues>>;
-  itemChanged?: (linkId: string, value: any) => void;
-  severalItemsChanged?: (values: Record<string, any>) => void;
+  itemChanged?: ItemChangedFn;
+  severalItemsChanged?: SeveralItemsChangedFn;
   itemMap: ItemMap;
   autofillDependencyMap: LinkIdMap;
   enabledDependencyMap: LinkIdMap;
@@ -44,27 +50,43 @@ export interface Props {
   setDisabledLinkIds: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const isEnabled = (
-  item: FormItem,
-  disabledLinkIds: string[] = []
-): boolean => {
-  if (item.hidden) return false;
-  if (!item.enableWhen && item.item) {
-    // This is a group. Only show it if some children are enabled.
-    return item.item.some((i) => isEnabled(i, disabledLinkIds));
+// Exporting because we need this for the DynamicView items too
+export const setDisabledLinkIdsBase = (
+  changedLinkIds: string[],
+  localValues: any,
+  callback: React.Dispatch<React.SetStateAction<string[]>>,
+  {
+    enabledDependencyMap,
+    itemMap,
+  }: {
+    enabledDependencyMap: LinkIdMap;
+    itemMap: ItemMap;
   }
-  // console.log({disabledLinkIds})
-  return !disabledLinkIds.includes(item.linkId);
-};
+) => {
+  // If none of these are dependencies, return immediately
+  if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
 
-export const isShown = (item: FormItem, disabledLinkIds: string[] = []) => {
-  if (
-    !isEnabled(item, disabledLinkIds) &&
-    item.disabledDisplay !== DisabledDisplay.Protected
-  )
-    return false;
+  callback((oldList) => {
+    const newList = [...oldList];
+    changedLinkIds.forEach((changedLinkId) => {
+      if (!enabledDependencyMap[changedLinkId]) return;
 
-  return true;
+      enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
+        const enabled = shouldEnableItem(
+          itemMap[dependentLinkId],
+          localValues,
+          itemMap
+        );
+        if (enabled && newList.includes(dependentLinkId)) {
+          pull(newList, dependentLinkId);
+        } else if (!enabled && !newList.includes(dependentLinkId)) {
+          newList.push(dependentLinkId);
+        }
+      });
+    });
+
+    return newList;
+  });
 };
 
 const DynamicFormFields: React.FC<Props> = ({
@@ -106,37 +128,19 @@ const DynamicFormFields: React.FC<Props> = ({
    */
   const updateDisabledLinkIds = useCallback(
     (changedLinkIds: string[], localValues: any) => {
-      // If none of these are dependencies, return immediately
-      if (!changedLinkIds.find((id) => !!enabledDependencyMap[id])) return;
-
-      setDisabledLinkIds((oldList) => {
-        const newList = [...oldList];
-        changedLinkIds.forEach((changedLinkId) => {
-          if (!enabledDependencyMap[changedLinkId]) return;
-
-          enabledDependencyMap[changedLinkId].forEach((dependentLinkId) => {
-            const enabled = shouldEnableItem(
-              itemMap[dependentLinkId],
-              localValues,
-              itemMap
-            );
-            if (enabled && newList.includes(dependentLinkId)) {
-              pull(newList, dependentLinkId);
-            } else if (!enabled && !newList.includes(dependentLinkId)) {
-              newList.push(dependentLinkId);
-            }
-          });
-        });
-
-        return newList;
+      setDisabledLinkIdsBase(changedLinkIds, localValues, setDisabledLinkIds, {
+        enabledDependencyMap,
+        itemMap,
       });
     },
     [itemMap, enabledDependencyMap, setDisabledLinkIds]
   );
 
-  const itemChanged = useCallback(
-    (linkId: string, value: any) => {
-      if (itemChangedProp) itemChangedProp(linkId, value);
+  const itemChanged: ItemChangedFn = useCallback(
+    (input) => {
+      if (itemChangedProp) itemChangedProp(input);
+
+      const { linkId, value } = input;
       setValues((currentValues) => {
         const newValues = { ...currentValues };
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -152,15 +156,15 @@ const DynamicFormFields: React.FC<Props> = ({
     [updateAutofillValues, updateDisabledLinkIds, setValues, itemChangedProp]
   );
 
-  const severalItemsChanged = useCallback(
-    (values: Record<string, any>) => {
-      if (severalItemsChangedProp) severalItemsChangedProp(values);
+  const severalItemsChanged: SeveralItemsChangedFn = useCallback(
+    (input) => {
+      if (severalItemsChangedProp) severalItemsChangedProp(input);
       setValues((currentValues) => {
-        const newValues = { ...currentValues, ...values };
+        const newValues = { ...currentValues, ...input.values };
         // Updates dependent autofill questions (modifies newValues in-place)
-        updateAutofillValues(Object.keys(values), newValues);
+        updateAutofillValues(Object.keys(input.values), newValues);
         // Update list of disabled linkIds based on new values
-        updateDisabledLinkIds(Object.keys(values), newValues);
+        updateDisabledLinkIds(Object.keys(input.values), newValues);
         // console.debug('DynamicForm', newValues);
         return newValues;
       });
@@ -211,6 +215,22 @@ const DynamicFormFields: React.FC<Props> = ({
           severalItemsChanged={severalItemsChanged}
           visible={visible}
           locked={locked}
+          debug={
+            import.meta.env.MODE === 'development'
+              ? (keys?: string[]) => {
+                  const sectionValues = keys ? pick(values, keys) : values;
+                  const valuesByKey = transformSubmitValues({
+                    definition,
+                    values: sectionValues,
+                    keyByFieldName: true,
+                  });
+                  console.group(item.text || item.linkId);
+                  console.log(sectionValues);
+                  console.log(valuesByKey);
+                  console.groupEnd();
+                }
+              : undefined
+          }
         />
       );
     }

@@ -5,19 +5,21 @@ import { useOutletContext } from 'react-router-dom';
 
 import { assessmentDate } from '../util';
 
+import AssessmentTitle from './AssessmentTitle';
 import MissingDefinitionAlert from './MissingDefinitionAlert';
 
-import { alertErrorFallback } from '@/components/elements/ErrorFallback';
 import Loading from '@/components/elements/Loading';
 import {
   CONTEXT_HEADER_HEIGHT,
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
+import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import {
   DynamicFormProps,
   DynamicFormRef,
@@ -113,7 +115,7 @@ const IndividualAssessment = ({
     if (!assessmentTitle || embeddedInWorkflow) return;
     // Override breadcrumb to include the assessment type and information date
     const currentRoute = assessment
-      ? DashboardRoutes.VIEW_ASSESSMENT
+      ? DashboardRoutes.EDIT_ASSESSMENT
       : DashboardRoutes.NEW_ASSESSMENT;
     overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
   }, [
@@ -130,18 +132,15 @@ const IndividualAssessment = ({
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
   if (dataLoading || enrollmentLoading) return <Loading />;
-  if (!enrollment) throw Error('Enrollment not found');
+  if (!enrollment) return <NotFound />;
 
   return (
     <>
       {!embeddedInWorkflow && (
-        <Stack direction='row'>
-          <Typography variant='h4' sx={{ mt: 1, mb: 3, fontWeight: 400 }}>
-            <b>{assessmentTitle}</b>
-            {/* {informationDate && ` ${parseAndFormatDate(informationDate)}`} */}
-            {embeddedInWorkflow && clientName && ` for ${clientName}`}
-          </Typography>
-        </Stack>
+        <AssessmentTitle
+          assessmentTitle={assessmentTitle}
+          clientName={clientName || undefined}
+        />
       )}
       {!definition && (
         <MissingDefinitionAlert hasCustomForm={!!assessment?.customForm} />

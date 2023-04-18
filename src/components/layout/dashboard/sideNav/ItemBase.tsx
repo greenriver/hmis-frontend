@@ -96,6 +96,7 @@ const ItemBase = ({
           >
             {item.href ? (
               <Link
+                id={`side-nav-${item.id}`}
                 variant='body1'
                 href={item.href || '#'}
                 aria-label={item.title as string}
@@ -106,6 +107,7 @@ const ItemBase = ({
               </Link>
             ) : item.path ? (
               <RouterLink
+                id={`side-nav-${item.id}`}
                 aria-label={item.title}
                 // class='Mui-focusVisible'
                 variant='body1'

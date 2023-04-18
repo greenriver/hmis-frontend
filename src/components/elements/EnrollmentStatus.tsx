@@ -3,17 +3,38 @@ import HistoryIcon from '@mui/icons-material/History';
 import TimerIcon from '@mui/icons-material/Timer';
 import { Stack, Typography } from '@mui/material';
 
-import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import { entryExitRange } from '@/modules/hmis/hmisUtil';
+import {
+  EnrollmentFieldsFragment,
+  HouseholdClientFieldsFragment,
+} from '@/types/gqlTypes';
+type Colors =
+  | 'disabled'
+  | 'error'
+  | 'secondary'
+  | 'text.secondary'
+  | 'text.primary';
 
 const EnrollmentStatus = ({
   enrollment,
+  hideIcon = false,
+  withActiveRange = false,
+  activeColor = 'secondary',
+  closedColor = 'text.secondary',
 }: {
-  enrollment: EnrollmentFieldsFragment;
+  enrollment:
+    | EnrollmentFieldsFragment
+    | HouseholdClientFieldsFragment['enrollment'];
+  hideIcon?: boolean;
+  withActiveRange?: boolean;
+  activeColor?: Colors;
+  closedColor?: Colors;
 }) => {
   let Icon = TimerIcon;
   let color: 'disabled' | 'error' | 'secondary' = 'disabled';
   let text = 'Closed';
-  let textColor = 'gray';
+  let textColor = closedColor;
+
   if (enrollment.inProgress) {
     Icon = ErrorOutlineIcon;
     color = 'error';
@@ -23,11 +44,19 @@ const EnrollmentStatus = ({
     Icon = HistoryIcon;
     color = 'secondary';
     text = 'Active';
-    textColor = color;
+    textColor = activeColor;
+  }
+
+  if (withActiveRange) {
+    const range = entryExitRange(
+      enrollment,
+      enrollment.inProgress ? 'Incomplete' : undefined
+    );
+    if (range) text = range;
   }
   return (
     <Stack direction='row' alignItems='center' gap={0.8}>
-      <Icon color={color} fontSize='small' />
+      {!hideIcon && <Icon color={color} fontSize='small' />}
       <Typography
         variant='body2'
         color={textColor}

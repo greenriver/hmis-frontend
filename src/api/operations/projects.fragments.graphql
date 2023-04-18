@@ -17,6 +17,7 @@ fragment ProjectOmniSearchFields on Project {
 fragment ProjectPermissionsFields on Project {
   id
   access {
+    id
     canViewDob
     canViewFullSsn
     canDeleteProject
@@ -46,6 +47,7 @@ fragment OrganizationAllFields on Organization {
 fragment OrganizationPermissionsFields on Organization {
   id
   access {
+    id
     canEditOrganization
     canDeleteOrganization
   }

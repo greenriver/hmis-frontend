@@ -20,6 +20,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+untracked
+docker-compose.yml
+docker-dev
 
 npm-debug.log*
 yarn-debug.log*

@@ -18,6 +18,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import TextInput from '@/components/elements/input/TextInput';
 import DynamicField from '@/modules/form/components/DynamicField';
+import { ItemChangedFn } from '@/modules/form/types';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { FormDefinitionJson, FormItem } from '@/types/gqlTypes';
 
@@ -82,8 +83,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const fieldChanged = (fieldId: string, value: any) => {
     setValues((currentValues) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       currentValues[fieldId] = value;
+      return { ...currentValues };
+    });
+  };
+  const itemChanged: ItemChangedFn = ({ linkId, value }) => {
+    setValues((currentValues) => {
+      currentValues[linkId] = value;
       return { ...currentValues };
     });
   };
@@ -232,7 +238,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 nestingLevel={0}
                 key={item.linkId}
                 item={item}
-                itemChanged={fieldChanged}
+                itemChanged={itemChanged}
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                 value={values[item.linkId] ?? ''}
               />

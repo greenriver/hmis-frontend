@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { ColumnDef } from '../elements/GenericTable';
 import Loading from '../elements/Loading';
 
+import NotFound from './404';
 import { InactiveChip } from './Project';
 
 import LoadingButton from '@/components/elements/LoadingButton';
@@ -44,7 +45,7 @@ const BulkAddServices = () => {
   const [enrollmentsAdded, setEnrollmentsAdded] = useState<string[]>([]);
 
   if (crumbsLoading) return <Loading />;
-  if (!crumbs || !project) throw Error('Project not found');
+  if (!crumbs || !project) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>

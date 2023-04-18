@@ -9,6 +9,8 @@ import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '../layout/dashboard/sideNav/types';
 import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNavItems';
 
+import NotFound from './404';
+
 import useCurrentPath from '@/hooks/useCurrentPath';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
@@ -42,7 +44,7 @@ const ClientDashboard: React.FC = () => {
     params.enrollmentId
   );
 
-  const navItems: NavItem[] = useDashboardNavItems(client?.id);
+  const navItems: NavItem[] = useDashboardNavItems(client || undefined);
 
   const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
@@ -97,9 +99,10 @@ const ClientDashboard: React.FC = () => {
   );
 
   if (loading || enrollmentLoading || !navItems) return <Loading />;
-  if (!client || !outletContext) throw Error('Client not found');
-  if (enrollment && enrollment.client.id !== params.clientId)
-    throw Error('Page not found');
+  if (!client || !outletContext) return <NotFound />;
+  if (enrollment && enrollment.client.id !== params.clientId) {
+    return <NotFound />;
+  }
 
   return (
     <DashboardContentContainer

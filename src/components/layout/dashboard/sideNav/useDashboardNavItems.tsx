@@ -2,13 +2,26 @@ import { useMemo } from 'react';
 
 import { NavItem } from './types';
 
+import {
+  useHasClientPermissions,
+  useHasRootPermissions,
+} from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
+import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-export const useDashboardNavItems = (clientId?: string) => {
+export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
+  const [canViewEnrollments] = useHasClientPermissions(client?.id || '', [
+    'canViewEnrollmentDetails',
+  ]);
+  const [canViewFiles] = useHasClientPermissions(client?.id || '', [
+    'canViewAnyConfidentialClientFiles',
+    'canViewAnyNonconfidentialClientFiles',
+  ]);
+  const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
-    if (!clientId) return [];
-    const params = { clientId };
+    if (!client) return [];
+    const params = { clientId: client.id };
     return [
       {
         id: 'client-nav',
@@ -20,16 +33,23 @@ export const useDashboardNavItems = (clientId?: string) => {
             title: 'Overview',
             path: generateSafePath(DashboardRoutes.PROFILE, params),
           },
-          {
-            id: 'enrollments',
-            title: 'Enrollments',
-            path: generateSafePath(DashboardRoutes.ALL_ENROLLMENTS, params),
-          },
-          {
-            id: 'assessments',
-            title: 'Assessments',
-            path: generateSafePath(DashboardRoutes.ASSESSMENTS, params),
-          },
+          ...(canViewEnrollments
+            ? [
+                {
+                  id: 'enrollments',
+                  title: 'Enrollments',
+                  path: generateSafePath(
+                    DashboardRoutes.ALL_ENROLLMENTS,
+                    params
+                  ),
+                },
+                {
+                  id: 'assessments',
+                  title: 'Assessments',
+                  path: generateSafePath(DashboardRoutes.ASSESSMENTS, params),
+                },
+              ]
+            : []),
           {
             id: 'services-and-contacts',
             title: 'Services and Contacts',
@@ -53,11 +73,15 @@ export const useDashboardNavItems = (clientId?: string) => {
             title: 'Notes',
             path: generateSafePath(DashboardRoutes.NOTES, params),
           },
-          {
-            id: 'files',
-            title: 'Files',
-            path: generateSafePath(DashboardRoutes.FILES, params),
-          },
+          ...(canViewFiles
+            ? [
+                {
+                  id: 'files',
+                  title: 'Files',
+                  path: generateSafePath(DashboardRoutes.FILES, params),
+                },
+              ]
+            : []),
           // {
           //   title: 'Contact',
           //   path: DashboardRoutes.CONTACT,
@@ -78,27 +102,26 @@ export const useDashboardNavItems = (clientId?: string) => {
         title: 'Administrative',
         type: 'category',
         items: [
-          {
-            id: 'audit',
-            title: 'Audit History',
-            path: DashboardRoutes.HISTORY,
-          },
-          ...(clientId && import.meta.env.PUBLIC_WAREHOUSE_URL
+          ...(canAuditClients
             ? [
                 {
-                  id: 'warehouse-link',
-                  title: 'View in Warehouse',
-                  path: undefined,
-                  href: `${
-                    import.meta.env.PUBLIC_WAREHOUSE_URL
-                  }clients/${clientId}/from_source`,
+                  id: 'audit',
+                  title: 'Audit History',
+                  path: generateSafePath(DashboardRoutes.HISTORY, params),
                 },
               ]
             : []),
+
+          {
+            id: 'warehouse-link',
+            title: 'View in Warehouse',
+            path: undefined,
+            href: client.warehouseUrl,
+          },
         ],
       },
     ];
-  }, [clientId]);
+  }, [client, canViewEnrollments, canViewFiles, canAuditClients]);
 
   return navItems;
 };
