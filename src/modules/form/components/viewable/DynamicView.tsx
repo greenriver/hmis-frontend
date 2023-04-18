@@ -1,13 +1,12 @@
 import { Box, Grid } from '@mui/material';
 
-import useDynamicViewFields from '../../hooks/useDynamicViewFields';
+import useDynamicFields from '../../hooks/useDynamicFields';
 
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
   definition: FormDefinitionJson;
-  loading?: boolean;
-  values?: Record<string, any>;
+  values: Record<string, any>;
   horizontal?: boolean;
   pickListRelationId?: string;
   visible?: boolean;
@@ -15,15 +14,15 @@ export interface DynamicViewProps {
 
 const DynamicView = ({
   definition,
-  // loading,
-  values = {},
+  values,
   horizontal = false,
   visible = true,
   pickListRelationId,
 }: DynamicViewProps): JSX.Element => {
-  const { renderFields } = useDynamicViewFields({
+  const { renderFields } = useDynamicFields({
     definition,
-    values,
+    initialValues: values,
+    viewOnly: true,
   });
 
   return (

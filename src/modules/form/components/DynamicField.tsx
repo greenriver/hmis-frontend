@@ -7,7 +7,7 @@ import {
   DynamicFieldProps,
   DynamicInputCommonProps,
 } from '../types';
-import { hasMeaningfulValue } from '../util/formUtil';
+import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
@@ -46,9 +46,6 @@ const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input befor
 const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
-
-export const maxWidthAtNestingLevel = (nestingLevel: number) =>
-  600 - nestingLevel * 26;
 
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,

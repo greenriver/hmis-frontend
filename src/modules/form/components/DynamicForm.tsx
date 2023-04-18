@@ -11,7 +11,7 @@ import React, {
 
 import ErrorAlert from '../../errors/components/ErrorAlert';
 import { ValidationDialogProps } from '../../errors/components/ValidationDialog';
-import useDynamicFormFields from '../hooks/useDynamicFormFields';
+import useDynamicFields from '../hooks/useDynamicFields';
 import useElementInView from '../hooks/useElementInView';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
@@ -85,7 +85,7 @@ const DynamicForm = forwardRef(
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
-    const { renderFields, getCleanedValues } = useDynamicFormFields({
+    const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
       initialValues,
     });

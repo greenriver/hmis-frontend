@@ -33,6 +33,7 @@ fragment ItemFields on FormItem {
   prefix
   text
   briefText
+  readonlyText
   helperText
   required
   warnIfEmpty
@@ -76,6 +77,7 @@ fragment ItemFields on FormItem {
     valueNumber
     sumQuestions
     autofillBehavior
+    autofillReadonly
     autofillWhen {
       ...EnableWhenFields
     }

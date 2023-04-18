@@ -149,6 +149,8 @@ export enum AuditEventType {
 export type AutofillValue = {
   __typename?: 'AutofillValue';
   autofillBehavior: EnableBehavior;
+  /** Whether to perform autofill when displaying a read-only view (defaults to false) */
+  autofillReadonly?: Maybe<Scalars['Boolean']>;
   autofillWhen: Array<EnableWhen>;
   /** Link IDs of numeric questions to sum up and set as the value if condition is met */
   sumQuestions?: Maybe<Array<Scalars['String']>>;
@@ -467,6 +469,8 @@ export enum Component {
   InfoGroup = 'INFO_GROUP',
   /** Render a group that contains children of the same type (e.g. all booleans) */
   InputGroup = 'INPUT_GROUP',
+  /** MCI linking component */
+  Mci = 'MCI',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -1323,6 +1327,8 @@ export type FormItem = {
   projectTypesIncluded?: Maybe<Array<ProjectType>>;
   /** Whether human editing is allowed */
   readOnly?: Maybe<Scalars['Boolean']>;
+  /** Text to use for the item when displayed in read-only view */
+  readonlyText?: Maybe<Scalars['String']>;
   /** Record type to use for population and extraction */
   recordType?: Maybe<RelatedRecordType>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
@@ -3460,6 +3466,7 @@ export type ItemFieldsFragment = {
   prefix?: string | null;
   text?: string | null;
   briefText?: string | null;
+  readonlyText?: string | null;
   helperText?: string | null;
   required?: boolean | null;
   warnIfEmpty?: boolean | null;
@@ -3520,6 +3527,7 @@ export type ItemFieldsFragment = {
     valueNumber?: number | null;
     sumQuestions?: Array<string> | null;
     autofillBehavior: EnableBehavior;
+    autofillReadonly?: boolean | null;
     autofillWhen: Array<{
       __typename?: 'EnableWhen';
       question: string;
@@ -3551,6 +3559,7 @@ export type FormDefinitionWithJsonFragment = {
       prefix?: string | null;
       text?: string | null;
       briefText?: string | null;
+      readonlyText?: string | null;
       helperText?: string | null;
       required?: boolean | null;
       warnIfEmpty?: boolean | null;
@@ -3575,6 +3584,7 @@ export type FormDefinitionWithJsonFragment = {
         prefix?: string | null;
         text?: string | null;
         briefText?: string | null;
+        readonlyText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
         warnIfEmpty?: boolean | null;
@@ -3599,6 +3609,7 @@ export type FormDefinitionWithJsonFragment = {
           prefix?: string | null;
           text?: string | null;
           briefText?: string | null;
+          readonlyText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           warnIfEmpty?: boolean | null;
@@ -3623,6 +3634,7 @@ export type FormDefinitionWithJsonFragment = {
             prefix?: string | null;
             text?: string | null;
             briefText?: string | null;
+            readonlyText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             warnIfEmpty?: boolean | null;
@@ -3647,6 +3659,7 @@ export type FormDefinitionWithJsonFragment = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -3707,6 +3720,7 @@ export type FormDefinitionWithJsonFragment = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -3764,6 +3778,7 @@ export type FormDefinitionWithJsonFragment = {
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
@@ -3821,6 +3836,7 @@ export type FormDefinitionWithJsonFragment = {
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
               question: string;
@@ -3878,6 +3894,7 @@ export type FormDefinitionWithJsonFragment = {
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
+          autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
             question: string;
@@ -3935,6 +3952,7 @@ export type FormDefinitionWithJsonFragment = {
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
         autofillBehavior: EnableBehavior;
+        autofillReadonly?: boolean | null;
         autofillWhen: Array<{
           __typename?: 'EnableWhen';
           question: string;
@@ -4016,6 +4034,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           prefix?: string | null;
           text?: string | null;
           briefText?: string | null;
+          readonlyText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           warnIfEmpty?: boolean | null;
@@ -4040,6 +4059,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             prefix?: string | null;
             text?: string | null;
             briefText?: string | null;
+            readonlyText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             warnIfEmpty?: boolean | null;
@@ -4064,6 +4084,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -4088,6 +4109,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 prefix?: string | null;
                 text?: string | null;
                 briefText?: string | null;
+                readonlyText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 warnIfEmpty?: boolean | null;
@@ -4112,6 +4134,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   prefix?: string | null;
                   text?: string | null;
                   briefText?: string | null;
+                  readonlyText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   warnIfEmpty?: boolean | null;
@@ -4172,6 +4195,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
@@ -4229,6 +4253,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
@@ -4286,6 +4311,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -4343,6 +4369,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
@@ -4400,6 +4427,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
               question: string;
@@ -4497,6 +4525,7 @@ export type GetAssessmentQuery = {
             prefix?: string | null;
             text?: string | null;
             briefText?: string | null;
+            readonlyText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             warnIfEmpty?: boolean | null;
@@ -4521,6 +4550,7 @@ export type GetAssessmentQuery = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -4545,6 +4575,7 @@ export type GetAssessmentQuery = {
                 prefix?: string | null;
                 text?: string | null;
                 briefText?: string | null;
+                readonlyText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 warnIfEmpty?: boolean | null;
@@ -4569,6 +4600,7 @@ export type GetAssessmentQuery = {
                   prefix?: string | null;
                   text?: string | null;
                   briefText?: string | null;
+                  readonlyText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   warnIfEmpty?: boolean | null;
@@ -4593,6 +4625,7 @@ export type GetAssessmentQuery = {
                     prefix?: string | null;
                     text?: string | null;
                     briefText?: string | null;
+                    readonlyText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
                     warnIfEmpty?: boolean | null;
@@ -4653,6 +4686,7 @@ export type GetAssessmentQuery = {
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
+                      autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
                         question: string;
@@ -4710,6 +4744,7 @@ export type GetAssessmentQuery = {
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
@@ -4767,6 +4802,7 @@ export type GetAssessmentQuery = {
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
@@ -4824,6 +4860,7 @@ export type GetAssessmentQuery = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -4881,6 +4918,7 @@ export type GetAssessmentQuery = {
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
@@ -4989,6 +5027,7 @@ export type GetFormDefinitionQuery = {
         prefix?: string | null;
         text?: string | null;
         briefText?: string | null;
+        readonlyText?: string | null;
         helperText?: string | null;
         required?: boolean | null;
         warnIfEmpty?: boolean | null;
@@ -5013,6 +5052,7 @@ export type GetFormDefinitionQuery = {
           prefix?: string | null;
           text?: string | null;
           briefText?: string | null;
+          readonlyText?: string | null;
           helperText?: string | null;
           required?: boolean | null;
           warnIfEmpty?: boolean | null;
@@ -5037,6 +5077,7 @@ export type GetFormDefinitionQuery = {
             prefix?: string | null;
             text?: string | null;
             briefText?: string | null;
+            readonlyText?: string | null;
             helperText?: string | null;
             required?: boolean | null;
             warnIfEmpty?: boolean | null;
@@ -5061,6 +5102,7 @@ export type GetFormDefinitionQuery = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -5085,6 +5127,7 @@ export type GetFormDefinitionQuery = {
                 prefix?: string | null;
                 text?: string | null;
                 briefText?: string | null;
+                readonlyText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 warnIfEmpty?: boolean | null;
@@ -5145,6 +5188,7 @@ export type GetFormDefinitionQuery = {
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
@@ -5202,6 +5246,7 @@ export type GetFormDefinitionQuery = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -5259,6 +5304,7 @@ export type GetFormDefinitionQuery = {
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
               autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
               autofillWhen: Array<{
                 __typename?: 'EnableWhen';
                 question: string;
@@ -5316,6 +5362,7 @@ export type GetFormDefinitionQuery = {
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
             autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
             autofillWhen: Array<{
               __typename?: 'EnableWhen';
               question: string;
@@ -5373,6 +5420,7 @@ export type GetFormDefinitionQuery = {
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
           autofillBehavior: EnableBehavior;
+          autofillReadonly?: boolean | null;
           autofillWhen: Array<{
             __typename?: 'EnableWhen';
             question: string;
@@ -5428,6 +5476,7 @@ export type SaveAssessmentMutation = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -5452,6 +5501,7 @@ export type SaveAssessmentMutation = {
                 prefix?: string | null;
                 text?: string | null;
                 briefText?: string | null;
+                readonlyText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 warnIfEmpty?: boolean | null;
@@ -5476,6 +5526,7 @@ export type SaveAssessmentMutation = {
                   prefix?: string | null;
                   text?: string | null;
                   briefText?: string | null;
+                  readonlyText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   warnIfEmpty?: boolean | null;
@@ -5500,6 +5551,7 @@ export type SaveAssessmentMutation = {
                     prefix?: string | null;
                     text?: string | null;
                     briefText?: string | null;
+                    readonlyText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
                     warnIfEmpty?: boolean | null;
@@ -5524,6 +5576,7 @@ export type SaveAssessmentMutation = {
                       prefix?: string | null;
                       text?: string | null;
                       briefText?: string | null;
+                      readonlyText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
                       warnIfEmpty?: boolean | null;
@@ -5584,6 +5637,7 @@ export type SaveAssessmentMutation = {
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
+                        autofillReadonly?: boolean | null;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
                           question: string;
@@ -5641,6 +5695,7 @@ export type SaveAssessmentMutation = {
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
+                      autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
                         question: string;
@@ -5698,6 +5753,7 @@ export type SaveAssessmentMutation = {
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
@@ -5755,6 +5811,7 @@ export type SaveAssessmentMutation = {
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
@@ -5812,6 +5869,7 @@ export type SaveAssessmentMutation = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -5885,6 +5943,7 @@ export type SubmitAssessmentMutation = {
               prefix?: string | null;
               text?: string | null;
               briefText?: string | null;
+              readonlyText?: string | null;
               helperText?: string | null;
               required?: boolean | null;
               warnIfEmpty?: boolean | null;
@@ -5909,6 +5968,7 @@ export type SubmitAssessmentMutation = {
                 prefix?: string | null;
                 text?: string | null;
                 briefText?: string | null;
+                readonlyText?: string | null;
                 helperText?: string | null;
                 required?: boolean | null;
                 warnIfEmpty?: boolean | null;
@@ -5933,6 +5993,7 @@ export type SubmitAssessmentMutation = {
                   prefix?: string | null;
                   text?: string | null;
                   briefText?: string | null;
+                  readonlyText?: string | null;
                   helperText?: string | null;
                   required?: boolean | null;
                   warnIfEmpty?: boolean | null;
@@ -5957,6 +6018,7 @@ export type SubmitAssessmentMutation = {
                     prefix?: string | null;
                     text?: string | null;
                     briefText?: string | null;
+                    readonlyText?: string | null;
                     helperText?: string | null;
                     required?: boolean | null;
                     warnIfEmpty?: boolean | null;
@@ -5981,6 +6043,7 @@ export type SubmitAssessmentMutation = {
                       prefix?: string | null;
                       text?: string | null;
                       briefText?: string | null;
+                      readonlyText?: string | null;
                       helperText?: string | null;
                       required?: boolean | null;
                       warnIfEmpty?: boolean | null;
@@ -6041,6 +6104,7 @@ export type SubmitAssessmentMutation = {
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
                         autofillBehavior: EnableBehavior;
+                        autofillReadonly?: boolean | null;
                         autofillWhen: Array<{
                           __typename?: 'EnableWhen';
                           question: string;
@@ -6098,6 +6162,7 @@ export type SubmitAssessmentMutation = {
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
                       autofillBehavior: EnableBehavior;
+                      autofillReadonly?: boolean | null;
                       autofillWhen: Array<{
                         __typename?: 'EnableWhen';
                         question: string;
@@ -6155,6 +6220,7 @@ export type SubmitAssessmentMutation = {
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
                     autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
                     autofillWhen: Array<{
                       __typename?: 'EnableWhen';
                       question: string;
@@ -6212,6 +6278,7 @@ export type SubmitAssessmentMutation = {
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
                   autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
                   autofillWhen: Array<{
                     __typename?: 'EnableWhen';
                     question: string;
@@ -6269,6 +6336,7 @@ export type SubmitAssessmentMutation = {
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
                 autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
                 autofillWhen: Array<{
                   __typename?: 'EnableWhen';
                   question: string;
@@ -9841,6 +9909,7 @@ export const ItemFieldsFragmentDoc = gql`
     prefix
     text
     briefText
+    readonlyText
     helperText
     required
     warnIfEmpty
@@ -9884,6 +9953,7 @@ export const ItemFieldsFragmentDoc = gql`
       valueNumber
       sumQuestions
       autofillBehavior
+      autofillReadonly
       autofillWhen {
         ...EnableWhenFields
       }
