@@ -2,7 +2,12 @@ import { Chip, Stack, Typography } from '@mui/material';
 import { groupBy } from 'lodash-es';
 import pluralize from 'pluralize';
 
-import { ErrorState, hasAnyValue, UNKNOWN_ERROR_HEADING } from '../util';
+import {
+  ErrorRenderFn,
+  ErrorState,
+  hasAnyValue,
+  UNKNOWN_ERROR_HEADING,
+} from '../util';
 
 import ApolloErrorAlert from './ApolloErrorAlert';
 import ErrorAlert from './ErrorAlert';
@@ -27,9 +32,11 @@ export type ValidationDialogProps = Omit<ConfirmationDialogProps, 'children'> &
 const WarningAccordion = ({
   warnings,
   sectionLabels,
+  renderError,
 }: {
   warnings: ValidationError[];
   sectionLabels: SectionLabels;
+  renderError?: ErrorRenderFn;
 }) => {
   const warningsByRecordId = groupBy(warnings, 'recordId');
   return (
@@ -62,7 +69,12 @@ const WarningAccordion = ({
               />
             </Stack>
           ),
-          content: <WarningAlert warnings={warningsByRecordId[id]} />,
+          content: (
+            <WarningAlert
+              warnings={warningsByRecordId[id]}
+              renderError={renderError}
+            />
+          ),
         };
       })}
     />
@@ -75,6 +87,7 @@ const WarningAccordion = ({
 const ValidationDialog = ({
   errorState,
   sectionLabels,
+  renderError,
   ...props
 }: ValidationDialogProps) => {
   if (!hasAnyValue(errorState)) return null;
@@ -85,9 +98,13 @@ const ValidationDialog = ({
   let warningContent;
   if (!hasErrors && warnings.length > 0) {
     warningContent = sectionLabels ? (
-      <WarningAccordion warnings={warnings} sectionLabels={sectionLabels} />
+      <WarningAccordion
+        warnings={warnings}
+        sectionLabels={sectionLabels}
+        renderError={renderError}
+      />
     ) : (
-      <WarningAlert warnings={warnings} />
+      <WarningAlert warnings={warnings} renderError={renderError} />
     );
   }
 
@@ -103,7 +120,7 @@ const ValidationDialog = ({
       hideCancelButton={hasErrors}
     >
       <ApolloErrorAlert error={apolloError} />
-      {hasErrors && <ErrorAlert errors={errors} />}
+      {hasErrors && <ErrorAlert errors={errors} renderError={renderError} />}
       {warningContent && (
         <>
           <Typography sx={{ mb: 3 }} variant='body2'>

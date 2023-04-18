@@ -12,17 +12,18 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
-import { ErrorState, hasAnyValue } from '@/modules/errors/util';
+import { ErrorRenderFn, ErrorState, hasAnyValue } from '@/modules/errors/util';
 
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
   children: React.ReactNode;
-  confirmText?: string;
+  confirmText?: React.ReactNode;
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
   color?: ButtonProps['color'];
   errors?: ErrorState;
   hideCancelButton?: boolean;
+  renderError?: ErrorRenderFn;
 }
 
 const ConfirmationDialog = ({
@@ -35,6 +36,7 @@ const ConfirmationDialog = ({
   color,
   errors,
   hideCancelButton,
+  renderError,
   ...other
 }: ConfirmationDialogProps) => {
   return (

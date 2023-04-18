@@ -2482,6 +2482,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canDeleteClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2773,6 +2781,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'data',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
       {
         name: 'fullMessage',

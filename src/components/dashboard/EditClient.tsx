@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +8,9 @@ import {
 } from '../layout/layoutConstants';
 import { useDashboardClient } from '../pages/ClientDashboard';
 
+import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import EditRecord from '@/modules/form/components/EditRecord';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -49,11 +51,21 @@ const Profile = () => {
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
-        <>
-          <Typography variant='h3' sx={{ pt: 0, pb: 4 }}>
+        <Stack direction='row' justifyContent='space-between'>
+          <Typography variant='h3' sx={{ pt: 0, pb: 4 }} flexGrow={1}>
             Edit Client Details
           </Typography>
-        </>
+          <div>
+            <RootPermissionsFilter permissions='canDeleteClients'>
+              <DeleteClientButton
+                clientId={client.id}
+                onSuccess={() =>
+                  navigate(generateSafePath(Routes.CLIENT_SEARCH))
+                }
+              />
+            </RootPermissionsFilter>
+          </div>
+        </Stack>
       }
     />
   );

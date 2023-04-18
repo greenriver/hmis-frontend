@@ -8,6 +8,7 @@ import {
   Grid,
   Link,
   Skeleton,
+  Stack,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -368,14 +369,13 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     : {}),
                 }}
               />
-              <Box sx={{ flexGrow: 1 }}>
+              <Stack sx={{ flexGrow: 1 }} gap={1} mt={2}>
                 <RootPermissionsFilter permissions='canEditClients'>
                   <ButtonLink
                     data-testid='editClientButton'
                     startIcon={<EditIcon />}
                     variant='outlined'
                     fullWidth
-                    sx={{ mt: 2, mb: 1 }}
                     to={generateSafePath(DashboardRoutes.EDIT, {
                       clientId: client.id,
                     })}
@@ -383,11 +383,10 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     Edit Client Details
                   </ButtonLink>
                 </RootPermissionsFilter>
-
                 <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
                   Last Updated on {lastUpdated(client, true)}
                 </Typography>
-              </Box>
+              </Stack>
             </Box>
           </Grid>
         </Grid>
