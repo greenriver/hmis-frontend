@@ -48,8 +48,7 @@ export default defineConfig(({ command, mode }) => {
       react(),
       mkcert(),
       sourcemapExclude({ excludeNodeModules: true }),
-      // Note: leaving source map upload disabled, because source maps are public.
-      /*
+      // Note: even though sourcemaps are public, we upload them to get additional Sentry tooling around releases
       ...(env.SENTRY_ORG && env.SENTRY_PROJECT && env.SENTRY_AUTH_TOKEN
         ? [
             sentryVitePlugin({
@@ -68,7 +67,6 @@ export default defineConfig(({ command, mode }) => {
             }),
           ]
         : []),
-        */
     ],
     define: {
       __APP_ENV__: env.APP_ENV,
