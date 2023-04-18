@@ -1,5 +1,4 @@
 import { Box, Stack, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
 import { Ref, useEffect, useMemo } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
@@ -19,7 +18,7 @@ import NotFound from '@/components/pages/NotFound';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
-import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   DynamicFormProps,
   DynamicFormRef,
@@ -184,9 +183,9 @@ const IndividualAssessment = ({
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
   <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
+    <SentryErrorBoundary>
       <IndividualAssessment {...props} />
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   </Box>
 );
 

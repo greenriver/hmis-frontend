@@ -1,4 +1,3 @@
-import * as Sentry from '@sentry/react';
 import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
@@ -43,9 +42,7 @@ import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
-import { sentryUser } from '@/modules/auth/api/sessions';
-import useAuth from '@/modules/auth/hooks/useAuth';
-import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -53,19 +50,12 @@ import {
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
-  const { user } = useAuth();
-
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <Sentry.ErrorBoundary
-          fallback={fullPageErrorFallback}
-          beforeCapture={(scope) => {
-            scope.setUser(sentryUser(user));
-          }}
-        >
+        <SentryErrorBoundary fullpage>
           <Outlet />
-        </Sentry.ErrorBoundary>
+        </SentryErrorBoundary>
       </Suspense>
     </MainLayout>
   );
