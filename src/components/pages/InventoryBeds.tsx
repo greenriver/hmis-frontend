@@ -12,7 +12,7 @@ import { useCallback, useState } from 'react';
 
 import Loading from '../elements/Loading';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 import { InactiveChip } from './Project';
 
 import useSafeParams from '@/hooks/useSafeParams';

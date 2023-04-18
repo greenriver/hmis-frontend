@@ -4,7 +4,11 @@ import { FallbackRender } from '@sentry/react';
 
 import ApolloErrorTrace from './ApolloErrorTrace';
 
-const ErrorFallback = () => (
+const ErrorFallback = ({
+  text = 'Something went wrong.',
+}: {
+  text?: string;
+}) => (
   <Box
     display='flex'
     justifyContent='center'
@@ -14,7 +18,7 @@ const ErrorFallback = () => (
     flexDirection='column'
     sx={{ p: 10 }}
   >
-    <Typography variant='h4'>Something went wrong.</Typography>
+    <Typography variant='h4'>{text}</Typography>
   </Box>
 );
 

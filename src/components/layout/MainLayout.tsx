@@ -52,6 +52,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             noWrap
             underline='none'
             to='/'
+            sx={{ textTransform: 'uppercase' }}
           >
             {appName || 'Open Path HMIS'}
           </RouterLink>
@@ -62,6 +63,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
               to='/'
               color='secondary'
               data-testid='navToClients'
+              sx={{ fontSize: '1rem' }}
             >
               Clients
             </ButtonLink>
@@ -71,6 +73,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             to={Routes.ALL_PROJECTS}
             color='secondary'
             data-testid='navToProjects'
+            sx={{ fontSize: '1rem' }}
           >
             Projects
           </ButtonLink>

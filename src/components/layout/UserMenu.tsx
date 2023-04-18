@@ -33,6 +33,7 @@ const UserMenu: React.FC = () => {
         startIcon={<AccountCircleIcon />}
         variant='text'
         color='secondary'
+        sx={{ fontSize: '1rem' }}
         {...bindTrigger(popupState)}
       >
         {user.name}
