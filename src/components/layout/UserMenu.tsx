@@ -17,7 +17,7 @@ import {
 import React, { useCallback } from 'react';
 
 import useAuth from '@/modules/auth/hooks/useAuth';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });

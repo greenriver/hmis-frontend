@@ -1,4 +1,4 @@
-import { AppBar, Box, Chip, CssBaseline, Toolbar } from '@mui/material';
+import { AppBar, Box, CssBaseline, Toolbar } from '@mui/material';
 import * as React from 'react';
 
 import ButtonLink from '../elements/ButtonLink';
@@ -14,9 +14,11 @@ import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import OmniSearch from '@/modules/search/components/OmniSearch';
 import { Routes } from '@/routes/routes';
+import { useGetRootPermissionsQuery } from '@/types/gqlTypes';
 
 interface Props {
   children: React.ReactNode;
@@ -24,8 +26,10 @@ interface Props {
 
 const MainLayout: React.FC<Props> = ({ children }) => {
   const { user, loading } = useAuth();
-
-  if (loading || !user) return <Loading />;
+  const { appName } = useHmisAppSettings();
+  // Load root permissions into the cache before loading the page
+  const { loading: permissionsLoading } = useGetRootPermissionsQuery();
+  if (loading || permissionsLoading || !user) return <Loading />;
 
   return (
     <React.Fragment>
@@ -49,16 +53,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             underline='none'
             to='/'
           >
-            {import.meta.env.PUBLIC_APP_NAME}
-            {import.meta.env.MODE === 'staging' &&
-              import.meta.env.PUBLIC_GIT_COMMIT_HASH && (
-                <Chip
-                  label={import.meta.env.PUBLIC_GIT_COMMIT_HASH}
-                  size='small'
-                  variant='outlined'
-                  sx={{ ml: 2 }}
-                />
-              )}
+            {appName || 'Open Path HMIS'}
           </RouterLink>
           <Box display='flex' sx={{ flexGrow: 1 }}></Box>
           <RootPermissionsFilter permissions={'canViewClients'}>
@@ -79,7 +74,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           >
             Projects
           </ButtonLink>
-          <Box>
+          <Box sx={{ mx: 2 }}>
             <OmniSearch />
           </Box>
           <UserMenu />

@@ -8,7 +8,7 @@ import OneTimePassword from './OneTimePassword';
 import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
 import useAuth from '@/modules/auth/hooks/useAuth';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const errorMessage = (error: Error) => {
   if (isHmisResponseError(error)) {

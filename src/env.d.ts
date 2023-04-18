@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
-  readonly PUBLIC_APP_NAME: string;
   readonly PUBLIC_SENTRY_DSN: string;
   readonly PUBLIC_PROTECTED_IDS: string;
   readonly PUBLIC_INITIAL_DELIMITER: string;

@@ -7,4 +7,5 @@ export interface HmisAppSettings {
   unlockAccountUrl?: string;
   manageAccountUrl?: string;
   casUrl?: string;
+  appName?: string;
 }

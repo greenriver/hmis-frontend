@@ -71,8 +71,7 @@ const App = () => {
 };
 
 const InternalError: React.FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
-  throw 'This is a test error';
+  throw new Error('This is a test error');
 };
 
 const ParamsWrapper = <T extends { [x: string]: string } = any>({

@@ -8,7 +8,6 @@
   "scripts": {
     "dev": "DEBUG=vite:proxy vite --clearScreen false",
     "build": "vite build",
-    "build:staging": "vite build --mode staging",
     "preview": "vite preview",
     "format": "prettier --write .",
     "format:check": "prettier --check .",

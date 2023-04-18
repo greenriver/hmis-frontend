@@ -4,7 +4,7 @@ import { useState } from 'react';
 import OktaLoginForm from './OktaLoginForm';
 
 import LoginForm from '@/modules/auth/components/LoginForm';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const Login: React.FC = () => {
   const { oktaPath, logoPath, warehouseUrl, warehouseName } =

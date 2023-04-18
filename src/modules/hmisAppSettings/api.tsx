@@ -14,7 +14,9 @@ export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
 
   if (response.ok) {
     return response.json();
+  } else {
+    return response.text().then((text) => {
+      throw new Error(`Failed to fetch app settings: ${text}`);
+    });
   }
-
-  throw new Error('Failed to fetch app settings');
 };

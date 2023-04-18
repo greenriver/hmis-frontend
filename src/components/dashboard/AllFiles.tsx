@@ -154,7 +154,6 @@ const AllFiles = () => {
             })}
             data-testid='addClientFileButton'
             Icon={UploadIcon}
-            size='large'
           >
             Upload File
           </ButtonLink>
