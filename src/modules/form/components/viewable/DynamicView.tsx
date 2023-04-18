@@ -19,7 +19,6 @@ const DynamicView = ({
   visible = true,
   pickListRelationId,
 }: DynamicViewProps): JSX.Element => {
-  console.log('rendering with', values);
   const { renderFields } = useDynamicFields({
     definition,
     initialValues: values,
