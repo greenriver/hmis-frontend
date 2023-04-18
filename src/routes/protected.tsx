@@ -43,6 +43,7 @@ import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
+import { sentryUser } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
 import {
@@ -60,7 +61,7 @@ const App = () => {
         <Sentry.ErrorBoundary
           fallback={fullPageErrorFallback}
           beforeCapture={(scope) => {
-            scope.setUser({ email: user?.email, username: user?.name });
+            scope.setUser(sentryUser(user));
           }}
         >
           <Outlet />
