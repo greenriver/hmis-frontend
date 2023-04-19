@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 
 import { NavItem } from './types';
 
-import {
-  useHasClientPermissions,
-  useHasRootPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -19,7 +16,6 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
     'canViewAnyNonconfidentialClientFiles',
     'canManageOwnClientFiles',
   ]);
-  const [canAuditClients] = useHasRootPermissions(['canAuditClients']);
   const navItems: NavItem[] = useMemo(() => {
     if (!client) return [];
     const params = { clientId: client.id };
@@ -103,16 +99,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
         title: 'Administrative',
         type: 'category',
         items: [
-          ...(canAuditClients
-            ? [
-                {
-                  id: 'audit',
-                  title: 'Client Audit History',
-                  path: generateSafePath(DashboardRoutes.AUDIT_HISTORY, params),
-                },
-              ]
-            : []),
-
+          // TODO: remove once link is added to IDs accordion
           {
             id: 'warehouse-link',
             title: 'View in Warehouse',
@@ -122,7 +109,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
         ],
       },
     ];
-  }, [client, canViewEnrollments, canViewFiles, canAuditClients]);
+  }, [client, canViewEnrollments, canViewFiles]);
 
   return navItems;
 };
