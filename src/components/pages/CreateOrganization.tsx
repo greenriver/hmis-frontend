@@ -46,11 +46,7 @@ const CreateOrganization = () => {
         formRole={FormRole.Organization}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}
-        title={
-          <>
-            <Typography variant='h3'>Create a new organization</Typography>
-          </>
-        }
+        title={<Typography variant='h3'>Create a new organization</Typography>}
       />
     </ProjectLayout>
   );

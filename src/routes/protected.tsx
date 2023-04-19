@@ -8,10 +8,10 @@ import AuditHistory from '@/components/dashboard/AuditHistory';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import EditAssessmentPage from '@/components/dashboard/enrollments/EditAssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
+import NewAssessmentPage from '@/components/dashboard/enrollments/NewAssessmentPage';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
@@ -276,7 +276,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <EditAssessmentPage />
+                <NewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -285,17 +285,6 @@ export const protectedRoutes = [
             element: (
               <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
                 <ViewAssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: DashboardRoutes.EDIT_ASSESSMENT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },

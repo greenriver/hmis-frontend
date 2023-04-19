@@ -151,7 +151,6 @@ const HouseholdAssessmentTabPanel = memo(
           formRole={formRole}
           getFormActionProps={getFormActionProps}
           visible={active}
-          lockIfSubmitted
           formRef={formRef}
         />
       </AlwaysMountedTabPanel>

@@ -1,4 +1,4 @@
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -52,10 +52,14 @@ const Profile = () => {
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
         <Stack direction='row' justifyContent='space-between'>
-          <Typography variant='h3' sx={{ pt: 0, pb: 4 }} flexGrow={1}>
-            Edit Client Details
+          <Typography variant='h3' sx={{ pt: 2, pb: 4 }} flexGrow={1}>
+            Update Client Details
           </Typography>
-          <div>
+        </Stack>
+      }
+      FormNavigationProps={{
+        contentsBelowNavigation: (
+          <Box sx={{ mt: 3 }}>
             <RootPermissionsFilter permissions='canDeleteClients'>
               <DeleteClientButton
                 clientId={client.id}
@@ -64,9 +68,9 @@ const Profile = () => {
                 }
               />
             </RootPermissionsFilter>
-          </div>
-        </Stack>
-      }
+          </Box>
+        ),
+      }}
     />
   );
 };

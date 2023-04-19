@@ -24,6 +24,6 @@ const Template: ComponentStory<typeof SsnInput> = (args) => {
 export const Default = Template.bind({});
 export const Labeled = Template.bind({});
 Labeled.args = {
-  label: 'Social Secutity Number',
+  label: 'Social Security Number',
   helperText: 'Helper text here',
 };

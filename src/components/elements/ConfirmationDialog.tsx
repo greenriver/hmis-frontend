@@ -12,7 +12,13 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
-import { ErrorRenderFn, ErrorState, hasAnyValue } from '@/modules/errors/util';
+import {
+  ErrorRenderFn,
+  ErrorState,
+  hasAnyValue,
+  hasErrors,
+  hasOnlyWarnings,
+} from '@/modules/errors/util';
 
 export interface ConfirmationDialogProps extends DialogProps {
   loading: boolean;
@@ -21,7 +27,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   onConfirm: React.MouseEventHandler<HTMLButtonElement>;
   onCancel: () => void;
   color?: ButtonProps['color'];
-  errors?: ErrorState;
+  errorState?: ErrorState;
   hideCancelButton?: boolean;
   renderError?: ErrorRenderFn;
 }
@@ -34,11 +40,12 @@ const ConfirmationDialog = ({
   loading,
   confirmText = 'Confirm',
   color,
-  errors,
+  errorState,
   hideCancelButton,
   renderError,
   ...other
 }: ConfirmationDialogProps) => {
+  const unconfirmable = errorState && hasErrors(errorState);
   return (
     <Dialog keepMounted={false} {...other}>
       <DialogTitle
@@ -56,11 +63,13 @@ const ConfirmationDialog = ({
       </DialogTitle>
       <DialogContent sx={{ pb: 3 }}>
         {children}
-        {errors && hasAnyValue(errors) && (
+        {errorState && hasAnyValue(errorState) && (
           <Stack gap={1} sx={{ mt: 4 }}>
-            <ApolloErrorAlert error={errors.apolloError} />
-            <ErrorAlert key='errors' errors={errors.errors} />
-            <WarningAlert key='warnings' warnings={errors.warnings} />
+            <ApolloErrorAlert error={errorState.apolloError} />
+            <ErrorAlert key='errors' errors={errorState.errors} />
+            {hasOnlyWarnings(errorState) && (
+              <WarningAlert key='warnings' warnings={errorState.warnings} />
+            )}
           </Stack>
         )}
       </DialogContent>
@@ -82,19 +91,21 @@ const ConfirmationDialog = ({
               variant='gray'
               data-testid='cancelDialogAction'
             >
-              Cancel
+              {unconfirmable ? 'Close' : 'Cancel'}
             </Button>
           )}
-          <LoadingButton
-            onClick={onConfirm}
-            type='submit'
-            loading={loading}
-            data-testid='confirmDialogAction'
-            sx={{ minWidth: '120px' }}
-            color={color}
-          >
-            {confirmText}
-          </LoadingButton>
+          {!unconfirmable && (
+            <LoadingButton
+              onClick={onConfirm}
+              type='submit'
+              loading={loading}
+              data-testid='confirmDialogAction'
+              sx={{ minWidth: '120px' }}
+              color={color}
+            >
+              {confirmText}
+            </LoadingButton>
+          )}
         </Stack>
       </DialogActions>
       <IconButton

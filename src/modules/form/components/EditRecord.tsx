@@ -55,7 +55,7 @@ export interface Props<RecordType>
   localConstants?: LocalConstants;
   onCompleted: (data: RecordType) => void;
   title: ReactNode;
-  navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
+  FormNavigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
   top?: number;
 }
 
@@ -71,7 +71,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   record,
   onCompleted,
   title,
-  navigationProps,
+  FormNavigationProps,
   inputVariables = {},
   localConstants = {},
   top = STICKY_BAR_HEIGHT,
@@ -214,7 +214,11 @@ const EditRecord = <RecordType extends AllowedTypes>({
           {title}
         </Box>
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation items={leftNavItems} top={top} {...navigationProps}>
+          <FormNavigation
+            items={leftNavItems}
+            top={top}
+            {...FormNavigationProps}
+          >
             {form}
           </FormNavigation>
         </Grid>

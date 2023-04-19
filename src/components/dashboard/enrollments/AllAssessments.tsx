@@ -59,7 +59,7 @@ const AllAssessments = () => {
 
   const rowLinkTo = useCallback(
     (record: AssessmentType) =>
-      generateSafePath(DashboardRoutes.EDIT_ASSESSMENT, {
+      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId: record.enrollment.id,
         assessmentId: record.id,
