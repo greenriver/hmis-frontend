@@ -99,7 +99,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         }}
         items={[
           {
-            key: 'Client IDs',
+            key: 'IDs',
             content: (
               <ClientProfileCardTextTable
                 content={{
