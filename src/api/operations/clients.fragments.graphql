@@ -392,6 +392,10 @@ fragment FileFields on File {
   enrollment {
     id
   }
+  uploadedBy {
+    id
+    name
+  }
   updatedBy {
     id
     name
