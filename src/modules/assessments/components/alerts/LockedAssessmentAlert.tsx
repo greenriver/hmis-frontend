@@ -27,7 +27,12 @@ const LockedAssessmentAlert = ({
         >
           <AlertTitle>This assessment has been submitted.</AlertTitle>
           {allowUnlock && (
-            <Button onClick={onUnlock} variant='text' sx={{ fontWeight: 600 }}>
+            <Button
+              data-testid='unlockAssessmentButton'
+              variant='text'
+              onClick={onUnlock}
+              sx={{ fontWeight: 600 }}
+            >
               Unlock to make changes
             </Button>
           )}

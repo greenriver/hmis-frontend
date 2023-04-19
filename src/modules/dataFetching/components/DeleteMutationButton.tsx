@@ -51,7 +51,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   return (
     <>
       <Button
-        data-testid='deleteRecordButton'
+        data-testid={`deleteRecordButton-${recordName}`}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
