@@ -138,7 +138,7 @@ const AuditHistory = () => {
         justifyContent={'space-between'}
         sx={{ mb: 2, pr: 1, alignItems: 'center' }}
       >
-        <Typography variant='h4'>Audit History</Typography>
+        <Typography variant='h4'>Client Audit History</Typography>
       </Stack>
       <Paper>
         <GenericTableWithData<
