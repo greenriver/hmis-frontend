@@ -6578,6 +6578,11 @@ export type SubmitFormMutation = {
           ownFile: boolean;
           enrollmentId?: string | null;
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+          uploadedBy?: {
+            __typename?: 'ApplicationUser';
+            id: string;
+            name: string;
+          } | null;
           updatedBy?: {
             __typename?: 'ApplicationUser';
             id: string;
@@ -7230,6 +7235,11 @@ export type FileFieldsFragment = {
   ownFile: boolean;
   enrollmentId?: string | null;
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  uploadedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
   updatedBy?: {
     __typename?: 'ApplicationUser';
     id: string;
@@ -7860,6 +7870,11 @@ export type DeleteClientFileMutation = {
       ownFile: boolean;
       enrollmentId?: string | null;
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+      uploadedBy?: {
+        __typename?: 'ApplicationUser';
+        id: string;
+        name: string;
+      } | null;
       updatedBy?: {
         __typename?: 'ApplicationUser';
         id: string;
@@ -8600,6 +8615,11 @@ export type GetFileQuery = {
     ownFile: boolean;
     enrollmentId?: string | null;
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    uploadedBy?: {
+      __typename?: 'ApplicationUser';
+      id: string;
+      name: string;
+    } | null;
     updatedBy?: {
       __typename?: 'ApplicationUser';
       id: string;
@@ -8640,6 +8660,11 @@ export type GetClientFilesQuery = {
         ownFile: boolean;
         enrollmentId?: string | null;
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+        uploadedBy?: {
+          __typename?: 'ApplicationUser';
+          id: string;
+          name: string;
+        } | null;
         updatedBy?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -10448,6 +10473,10 @@ export const FileFieldsFragmentDoc = gql`
     enrollmentId
     enrollment {
       id
+    }
+    uploadedBy {
+      id
+      name
     }
     updatedBy {
       id
