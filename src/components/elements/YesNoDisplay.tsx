@@ -65,7 +65,7 @@ const YesNoDisplay: React.FC<Props> = ({
   return (
     <Stack direction='row' gap={0.8}>
       {Icon && <Icon fontSize='small' sx={{ alignSelf: 'center' }} />}
-      <Typography variant='body2' color='text.disabled' {...props}>
+      <Typography variant='body2' color='text.secondary' {...props}>
         {text}
       </Typography>
     </Stack>

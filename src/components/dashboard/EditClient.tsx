@@ -53,7 +53,7 @@ const Profile = () => {
       title={
         <Stack direction='row' justifyContent='space-between'>
           <Typography variant='h3' sx={{ pt: 2, pb: 4 }} flexGrow={1}>
-            Edit Client Details
+            Update Client Details
           </Typography>
         </Stack>
       }
