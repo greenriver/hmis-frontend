@@ -1,8 +1,14 @@
 import { format } from 'date-fns';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 import {
   RelationshipToHoH,
   useAddHouseholdMembersMutation,
@@ -27,13 +33,29 @@ const AddToHouseholdButton = ({
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
-  const [addHouseholdMember, { loading, error }] =
-    useAddHouseholdMembersMutation({
-      onCompleted: () => {
+
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+
+  const [addHouseholdMember, { loading }] = useAddHouseholdMembersMutation({
+    onCompleted: (data) => {
+      const errors = data.addHouseholdMembersToEnrollment?.errors || [];
+
+      if (errors.length > 0) {
+        setErrorState(partitionValidations(errors));
+      } else {
+        setErrorState(emptyErrorState);
         setAdded(true);
         onSuccess();
-      },
-    });
+      }
+    },
+    onError: (apolloError) =>
+      setErrorState({ ...emptyErrorState, apolloError }),
+  });
+
+  const { renderValidationDialog } = useValidationDialog({
+    errorState,
+    includeErrors: true,
+  });
 
   useEffect(() => {
     // If client was previously added but has since been removed
@@ -43,15 +65,15 @@ const AddToHouseholdButton = ({
   }, [prevIsMember, isMember, setAdded]);
 
   let text = 'Add to Enrollment';
-  let color: 'secondary' | 'error' = 'secondary';
+  const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
-  if (error) {
-    text = 'Error';
-    color = 'error';
-  }
+  // if (hasErrors(errorState)) {
+  //   text = 'Error';
+  //   color = 'error';
+  // }
 
-  const onClick = useMemo(
-    () => () =>
+  const handleSubmit = useCallback(
+    (confirmed: boolean) => () =>
       addHouseholdMember({
         variables: {
           input: {
@@ -64,6 +86,7 @@ const AddToHouseholdButton = ({
               },
             ],
             entryDate: format(startDate || new Date(), 'yyyy-MM-dd'),
+            confirmed,
           },
         },
       }),
@@ -71,17 +94,23 @@ const AddToHouseholdButton = ({
   );
 
   return (
-    <LoadingButton
-      disabled={added || loading}
-      color={color}
-      fullWidth
-      size='small'
-      onClick={onClick}
-      sx={{ maxWidth: '180px' }}
-      loading={loading}
-    >
-      {text}
-    </LoadingButton>
+    <>
+      <LoadingButton
+        disabled={added || loading}
+        color={color}
+        fullWidth
+        size='small'
+        onClick={handleSubmit(false)}
+        sx={{ maxWidth: '180px' }}
+        loading={loading}
+      >
+        {text}
+      </LoadingButton>
+      {renderValidationDialog({
+        onConfirm: handleSubmit(true),
+        loading,
+      })}
+    </>
   );
 };
 

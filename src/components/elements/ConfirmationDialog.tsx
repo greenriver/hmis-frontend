@@ -64,7 +64,7 @@ const ConfirmationDialog = ({
       <DialogContent sx={{ pb: 3 }}>
         {children}
         {errorState && hasAnyValue(errorState) && (
-          <Stack gap={1} sx={{ mt: 4 }}>
+          <Stack gap={1} sx={{ mt: children ? 3 : undefined }}>
             <ApolloErrorAlert error={errorState.apolloError} />
             <ErrorAlert key='errors' errors={errorState.errors} />
             {hasOnlyWarnings(errorState) && (
