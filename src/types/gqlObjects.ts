@@ -2105,32 +2105,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'MciClearanceResult',
-    fields: [
-      {
-        name: 'existingClientId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'score',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'MciClient',
+    name: 'MciClearanceMatch',
     fields: [
       {
         name: 'age',
@@ -2147,6 +2122,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+      {
+        name: 'existingClientId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'firstName',
@@ -2218,6 +2197,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
               ofType: { kind: 'ENUM', name: 'Race', ofType: null },
             },
           },
+        },
+      },
+      {
+        name: 'score',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
