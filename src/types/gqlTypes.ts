@@ -361,6 +361,7 @@ export type ClientServicesArgs = {
 
 export type ClientAccess = {
   __typename?: 'ClientAccess';
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   canManageAnyClientFiles: Scalars['Boolean'];
@@ -2377,6 +2378,7 @@ export type ProjectProjectCocsArgs = {
 
 export type ProjectAccess = {
   __typename?: 'ProjectAccess';
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canDeleteProject: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
@@ -2583,6 +2585,7 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean'];
   canAuditClients: Scalars['Boolean'];
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteAssignedProjectData: Scalars['Boolean'];
   canDeleteClients: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
@@ -6729,6 +6732,7 @@ export type ClientAccessFieldsFragment = {
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
+  canDeleteAssessments: boolean;
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
@@ -6747,6 +6751,7 @@ export type ClientPermissionsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
@@ -6864,6 +6869,7 @@ export type HouseholdClientFieldsFragment = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -6923,6 +6929,7 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7010,6 +7017,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
@@ -7352,6 +7360,7 @@ export type GetClientQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7401,6 +7410,7 @@ export type GetClientPermissionsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7762,6 +7772,7 @@ export type UpdateRelationshipToHoHMutation = {
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
               canViewEnrollmentDetails: boolean;
+              canDeleteAssessments: boolean;
               canManageAnyClientFiles: boolean;
               canManageOwnClientFiles: boolean;
               canViewAnyConfidentialClientFiles: boolean;
@@ -7944,6 +7955,7 @@ export type AddHouseholdMembersMutation = {
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
               canViewEnrollmentDetails: boolean;
+              canDeleteAssessments: boolean;
               canManageAnyClientFiles: boolean;
               canManageOwnClientFiles: boolean;
               canViewAnyConfidentialClientFiles: boolean;
@@ -8240,6 +8252,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
@@ -8374,6 +8387,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
+                canDeleteAssessments: boolean;
                 canManageAnyClientFiles: boolean;
                 canManageOwnClientFiles: boolean;
                 canViewAnyConfidentialClientFiles: boolean;
@@ -8834,6 +8848,7 @@ export type RootPermissionsFragmentFragment = {
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
+  canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
@@ -8863,6 +8878,7 @@ export type GetRootPermissionsQuery = {
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
+    canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
@@ -8903,6 +8919,7 @@ export type ProjectPermissionsFieldsFragment = {
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
+    canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
   };
 };
@@ -9113,6 +9130,7 @@ export type GetProjectPermissionsQuery = {
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
       canDeleteEnrollments: boolean;
+      canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
     };
   } | null;
@@ -10165,6 +10183,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
+    canDeleteAssessments
     canManageAnyClientFiles
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
@@ -10517,6 +10536,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canEditEnrollments
     canViewEnrollmentDetails
     canDeleteEnrollments
+    canDeleteAssessments
     canEditProjectDetails
     canManageAnyClientFiles
     canManageOwnClientFiles
@@ -10554,6 +10574,7 @@ export const ProjectPermissionsFieldsFragmentDoc = gql`
       canEditEnrollments
       canViewEnrollmentDetails
       canDeleteEnrollments
+      canDeleteAssessments
       canEditProjectDetails
     }
   }
