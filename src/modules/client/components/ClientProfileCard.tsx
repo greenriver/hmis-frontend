@@ -97,7 +97,6 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
         renderHeader={(header) => <Typography>{header}</Typography>}
         renderContent={(content) => content}
         AccordionProps={{
-          defaultExpanded: true,
           sx: { '&.MuiAccordion-root': { my: 0 } },
         }}
         items={[
@@ -124,6 +123,7 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
           },
           {
             key: 'Demographics',
+            defaultExpanded: true,
             content: (
               <ClientProfileCardTextTable
                 content={{
