@@ -49,6 +49,29 @@ export const RITA_ACKROYD = {
   dateUpdated: '2022-07-27T15:14:29.062',
   dateCreated: '2022-07-27T15:14:29.062',
   pronouns: ['she/hers'],
+  externalIds: [
+    {
+      id: 'client_id:999',
+      identifier: '999',
+      url: null,
+      label: 'Client ID',
+      __typename: 'ClientIdentifier',
+    },
+    {
+      id: 'personal_id:999',
+      identifier: '9999',
+      url: null,
+      label: 'Personal ID',
+      __typename: 'ClientIdentifier',
+    },
+    {
+      id: 'warehouse_id:999',
+      identifier: '9999',
+      url: 'https://hmis-warehouse.dev.test/clients/999/from_source',
+      label: 'Warehouse ID',
+      __typename: 'ClientIdentifier',
+    },
+  ],
   enrollments: {
     nodesCount: 5,
     offset: 0,
