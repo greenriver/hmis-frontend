@@ -132,7 +132,6 @@ const EditHouseholdMemberTable = ({
     includeErrors: true,
   });
 
-  console.log(':CCc', errorState);
   const columns = useMemo(() => {
     return [
       {
