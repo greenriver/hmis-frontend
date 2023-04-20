@@ -13,9 +13,11 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { fromPairs } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import ExternalLink from '@/components/elements/ExternalLink';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotSpecified from '@/components/elements/NotSpecified';
 import RouterLink from '@/components/elements/RouterLink';
@@ -60,6 +62,7 @@ export const ClientProfileCardTextTable = ({
           px: 1,
           '&:first-of-type': {
             pl: 0,
+            pr: 2,
             width: '1px',
             whiteSpace: 'nowrap',
             verticalAlign: 'baseline',
@@ -102,13 +105,20 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             key: 'IDs',
             content: (
               <ClientProfileCardTextTable
-                content={{
-                  'HMIS ID': client.id,
-                  'Personal ID': client.personalId,
-                  // TODO: show id, link to client.warehouseUrl
-                  // 'Warehouse ID': client.id,
-                  // TODO: show external IDs
-                }}
+                content={fromPairs(
+                  client.externalIds.map(({ identifier, label, url }) => {
+                    return [
+                      label,
+                      url ? (
+                        <ExternalLink variant='inherit' href={url}>
+                          {identifier}
+                        </ExternalLink>
+                      ) : (
+                        <Typography variant='inherit'>{identifier}</Typography>
+                      ),
+                    ];
+                  })
+                )}
               />
             ),
           },

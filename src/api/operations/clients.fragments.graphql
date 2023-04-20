@@ -77,9 +77,19 @@ fragment ClientFields on Client {
   ...ClientName
   ...ClientImage
   warehouseUrl
+  externalIds {
+    ...ClientIdentifierFields
+  }
   user {
     ...UserFields
   }
+}
+
+fragment ClientIdentifierFields on ClientIdentifier {
+  id
+  identifier
+  url
+  label
 }
 
 fragment ClientImageFields on ClientImage {

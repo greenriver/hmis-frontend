@@ -276,6 +276,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
+  externalIds: Array<ClientIdentifier>;
   files: FilesPaginated;
   firstName?: Maybe<Scalars['String']>;
   gender: Array<Gender>;
@@ -394,6 +395,17 @@ export type ClientAuditEventsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
+};
+
+/** Client Identifier */
+export type ClientIdentifier = {
+  __typename?: 'ClientIdentifier';
+  /** API ID, not the actual identifier value */
+  id: Scalars['ID'];
+  /** The client identifier value */
+  identifier: Scalars['ID'];
+  label: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 /** Client Image */
@@ -6548,6 +6560,13 @@ export type SubmitFormMutation = {
           preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
+          externalIds: Array<{
+            __typename?: 'ClientIdentifier';
+            id: string;
+            identifier: string;
+            url?: string | null;
+            label: string;
+          }>;
           user?: { __typename: 'User'; id: string; name: string } | null;
           access: {
             __typename?: 'ClientAccess';
@@ -6803,6 +6822,13 @@ export type ClientFieldsFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+  externalIds: Array<{
+    __typename?: 'ClientIdentifier';
+    id: string;
+    identifier: string;
+    url?: string | null;
+    label: string;
+  }>;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
     __typename?: 'ClientAccess';
@@ -6816,6 +6842,14 @@ export type ClientFieldsFragment = {
     contentType: string;
     base64: string;
   } | null;
+};
+
+export type ClientIdentifierFieldsFragment = {
+  __typename?: 'ClientIdentifier';
+  id: string;
+  identifier: string;
+  url?: string | null;
+  label: string;
 };
 
 export type ClientImageFieldsFragment = {
@@ -7295,6 +7329,13 @@ export type SearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ClientIdentifier';
+        id: string;
+        identifier: string;
+        url?: string | null;
+        label: string;
+      }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
@@ -7342,6 +7383,13 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    externalIds: Array<{
+      __typename?: 'ClientIdentifier';
+      id: string;
+      identifier: string;
+      url?: string | null;
+      label: string;
+    }>;
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
       __typename?: 'ClientAccess';
@@ -8017,6 +8065,13 @@ export type DeleteClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ClientIdentifier';
+        id: string;
+        identifier: string;
+        url?: string | null;
+        label: string;
+      }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
@@ -10118,6 +10173,14 @@ export const ClientImageFragmentDoc = gql`
   }
   ${ClientImageFieldsFragmentDoc}
 `;
+export const ClientIdentifierFieldsFragmentDoc = gql`
+  fragment ClientIdentifierFields on ClientIdentifier {
+    id
+    identifier
+    url
+    label
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -10136,6 +10199,9 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientName
     ...ClientImage
     warehouseUrl
+    externalIds {
+      ...ClientIdentifierFields
+    }
     user {
       ...UserFields
     }
@@ -10143,6 +10209,7 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
