@@ -276,7 +276,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
-  externalIds: Array<ClientIdentifier>;
+  externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
   firstName?: Maybe<Scalars['String']>;
   gender: Array<Gender>;
@@ -395,17 +395,6 @@ export type ClientAuditEventsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
-};
-
-/** Client Identifier */
-export type ClientIdentifier = {
-  __typename?: 'ClientIdentifier';
-  /** API ID, not the actual identifier value */
-  id: Scalars['ID'];
-  /** The client identifier value */
-  identifier: Scalars['ID'];
-  label: Scalars['String'];
-  url?: Maybe<Scalars['String']>;
 };
 
 /** Client Image */
@@ -1192,6 +1181,17 @@ export type EventsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
+};
+
+/** External Identifier */
+export type ExternalIdentifier = {
+  __typename?: 'ExternalIdentifier';
+  /** API ID, not the actual identifier value */
+  id: Scalars['ID'];
+  /** The identifier value */
+  identifier: Scalars['ID'];
+  label: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 /** C1.2 */
@@ -6561,7 +6561,7 @@ export type SubmitFormMutation = {
           lastName?: string | null;
           nameSuffix?: string | null;
           externalIds: Array<{
-            __typename?: 'ClientIdentifier';
+            __typename?: 'ExternalIdentifier';
             id: string;
             identifier: string;
             url?: string | null;
@@ -6823,7 +6823,7 @@ export type ClientFieldsFragment = {
   lastName?: string | null;
   nameSuffix?: string | null;
   externalIds: Array<{
-    __typename?: 'ClientIdentifier';
+    __typename?: 'ExternalIdentifier';
     id: string;
     identifier: string;
     url?: string | null;
@@ -6845,7 +6845,7 @@ export type ClientFieldsFragment = {
 };
 
 export type ClientIdentifierFieldsFragment = {
-  __typename?: 'ClientIdentifier';
+  __typename?: 'ExternalIdentifier';
   id: string;
   identifier: string;
   url?: string | null;
@@ -7330,7 +7330,7 @@ export type SearchClientsQuery = {
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
-        __typename?: 'ClientIdentifier';
+        __typename?: 'ExternalIdentifier';
         id: string;
         identifier: string;
         url?: string | null;
@@ -7384,7 +7384,7 @@ export type GetClientQuery = {
     lastName?: string | null;
     nameSuffix?: string | null;
     externalIds: Array<{
-      __typename?: 'ClientIdentifier';
+      __typename?: 'ExternalIdentifier';
       id: string;
       identifier: string;
       url?: string | null;
@@ -8066,7 +8066,7 @@ export type DeleteClientMutation = {
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
-        __typename?: 'ClientIdentifier';
+        __typename?: 'ExternalIdentifier';
         id: string;
         identifier: string;
         url?: string | null;
@@ -10174,7 +10174,7 @@ export const ClientImageFragmentDoc = gql`
   ${ClientImageFieldsFragmentDoc}
 `;
 export const ClientIdentifierFieldsFragmentDoc = gql`
-  fragment ClientIdentifierFields on ClientIdentifier {
+  fragment ClientIdentifierFields on ExternalIdentifier {
     id
     identifier
     url

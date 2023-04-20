@@ -85,7 +85,7 @@ fragment ClientFields on Client {
   }
 }
 
-fragment ClientIdentifierFields on ClientIdentifier {
+fragment ClientIdentifierFields on ExternalIdentifier {
   id
   identifier
   url
