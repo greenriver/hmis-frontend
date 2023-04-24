@@ -1,4 +1,8 @@
-import { FormRole, EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import {
+  FormRole,
+  EnrollmentFieldsFragment,
+  AssessmentFieldsFragment,
+} from '@/types/gqlTypes';
 
 export const assessmentPrefix = (role: FormRole) => {
   switch (role) {
@@ -25,3 +29,6 @@ export const assessmentDate = (
       return;
   }
 };
+
+export const assessmentRole = (assessment: AssessmentFieldsFragment) =>
+  assessment?.customForm?.definition?.role;

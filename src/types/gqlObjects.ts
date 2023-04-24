@@ -441,6 +441,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ClientAccess',
     fields: [
       {
+        name: 'canDeleteAssessments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2351,6 +2359,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
+        name: 'canDeleteAssessments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2501,6 +2517,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canAuditClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canDeleteAssessments',
         type: {
           kind: 'NON_NULL',
           name: null,

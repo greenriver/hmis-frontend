@@ -28,6 +28,7 @@ fragment ClientAccessFields on ClientAccess {
   canEditEnrollments
   canDeleteEnrollments
   canViewEnrollmentDetails
+  canDeleteAssessments
   canManageAnyClientFiles
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
