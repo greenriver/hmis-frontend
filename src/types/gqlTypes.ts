@@ -292,6 +292,7 @@ export type Client = {
   dobDataQuality: DobDataQuality;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
+  externalIds: Array<ExternalIdentifier>;
   files: FilesPaginated;
   firstName?: Maybe<Scalars['String']>;
   gender: Array<Gender>;
@@ -377,6 +378,7 @@ export type ClientServicesArgs = {
 
 export type ClientAccess = {
   __typename?: 'ClientAccess';
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   canManageAnyClientFiles: Scalars['Boolean'];
@@ -1196,6 +1198,17 @@ export type EventsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
+};
+
+/** External Identifier */
+export type ExternalIdentifier = {
+  __typename?: 'ExternalIdentifier';
+  /** API ID, not the actual identifier value */
+  id: Scalars['ID'];
+  /** The identifier value */
+  identifier?: Maybe<Scalars['ID']>;
+  label: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
 };
 
 /** C1.2 */
@@ -2426,6 +2439,7 @@ export type ProjectProjectCocsArgs = {
 
 export type ProjectAccess = {
   __typename?: 'ProjectAccess';
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
   canDeleteProject: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
@@ -2632,6 +2646,7 @@ export type QueryAccess = {
   __typename?: 'QueryAccess';
   canAdministerHmis: Scalars['Boolean'];
   canAuditClients: Scalars['Boolean'];
+  canDeleteAssessments: Scalars['Boolean'];
   canDeleteAssignedProjectData: Scalars['Boolean'];
   canDeleteClients: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
@@ -6597,6 +6612,13 @@ export type SubmitFormMutation = {
           preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+          }>;
           user?: { __typename: 'User'; id: string; name: string } | null;
           access: {
             __typename?: 'ClientAccess';
@@ -6778,6 +6800,7 @@ export type ClientAccessFieldsFragment = {
   canEditEnrollments: boolean;
   canDeleteEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
+  canDeleteAssessments: boolean;
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
@@ -6796,6 +6819,7 @@ export type ClientPermissionsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
@@ -6852,6 +6876,13 @@ export type ClientFieldsFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+  externalIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+  }>;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
     __typename?: 'ClientAccess';
@@ -6865,6 +6896,14 @@ export type ClientFieldsFragment = {
     contentType: string;
     base64: string;
   } | null;
+};
+
+export type ClientIdentifierFieldsFragment = {
+  __typename?: 'ExternalIdentifier';
+  id: string;
+  identifier?: string | null;
+  url?: string | null;
+  label: string;
 };
 
 export type ClientImageFieldsFragment = {
@@ -6913,6 +6952,7 @@ export type HouseholdClientFieldsFragment = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -6972,6 +7012,7 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7059,6 +7100,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
           canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
           canManageAnyClientFiles: boolean;
           canManageOwnClientFiles: boolean;
           canViewAnyConfidentialClientFiles: boolean;
@@ -7344,6 +7386,13 @@ export type SearchClientsQuery = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+      }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
@@ -7391,6 +7440,13 @@ export type GetClientQuery = {
     preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
+    externalIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+    }>;
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
       __typename?: 'ClientAccess';
@@ -7401,6 +7457,7 @@ export type GetClientQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7450,6 +7507,7 @@ export type GetClientPermissionsQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
+      canDeleteAssessments: boolean;
       canManageAnyClientFiles: boolean;
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
@@ -7811,6 +7869,7 @@ export type UpdateRelationshipToHoHMutation = {
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
               canViewEnrollmentDetails: boolean;
+              canDeleteAssessments: boolean;
               canManageAnyClientFiles: boolean;
               canManageOwnClientFiles: boolean;
               canViewAnyConfidentialClientFiles: boolean;
@@ -7993,6 +8052,7 @@ export type AddHouseholdMembersMutation = {
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
               canViewEnrollmentDetails: boolean;
+              canDeleteAssessments: boolean;
               canManageAnyClientFiles: boolean;
               canManageOwnClientFiles: boolean;
               canViewAnyConfidentialClientFiles: boolean;
@@ -8066,6 +8126,13 @@ export type DeleteClientMutation = {
       preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+      }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'ClientAccess';
@@ -8289,6 +8356,7 @@ export type GetEnrollmentWithHouseholdQuery = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
             canManageAnyClientFiles: boolean;
             canManageOwnClientFiles: boolean;
             canViewAnyConfidentialClientFiles: boolean;
@@ -8423,6 +8491,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
                 canViewEnrollmentDetails: boolean;
+                canDeleteAssessments: boolean;
                 canManageAnyClientFiles: boolean;
                 canManageOwnClientFiles: boolean;
                 canViewAnyConfidentialClientFiles: boolean;
@@ -8942,6 +9011,7 @@ export type RootPermissionsFragmentFragment = {
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
+  canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
   canManageAnyClientFiles: boolean;
   canManageOwnClientFiles: boolean;
@@ -8971,6 +9041,7 @@ export type GetRootPermissionsQuery = {
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
+    canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
     canManageAnyClientFiles: boolean;
     canManageOwnClientFiles: boolean;
@@ -9011,6 +9082,7 @@ export type ProjectPermissionsFieldsFragment = {
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
+    canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
   };
 };
@@ -9221,6 +9293,7 @@ export type GetProjectPermissionsQuery = {
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
       canDeleteEnrollments: boolean;
+      canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
     };
   } | null;
@@ -10226,6 +10299,14 @@ export const ClientImageFragmentDoc = gql`
   }
   ${ClientImageFieldsFragmentDoc}
 `;
+export const ClientIdentifierFieldsFragmentDoc = gql`
+  fragment ClientIdentifierFields on ExternalIdentifier {
+    id
+    identifier
+    url
+    label
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -10244,6 +10325,9 @@ export const ClientFieldsFragmentDoc = gql`
     ...ClientName
     ...ClientImage
     warehouseUrl
+    externalIds {
+      ...ClientIdentifierFields
+    }
     user {
       ...UserFields
     }
@@ -10251,6 +10335,7 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
@@ -10273,6 +10358,7 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canEditEnrollments
     canDeleteEnrollments
     canViewEnrollmentDetails
+    canDeleteAssessments
     canManageAnyClientFiles
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
@@ -10642,6 +10728,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canEditEnrollments
     canViewEnrollmentDetails
     canDeleteEnrollments
+    canDeleteAssessments
     canEditProjectDetails
     canManageAnyClientFiles
     canManageOwnClientFiles
@@ -10679,6 +10766,7 @@ export const ProjectPermissionsFieldsFragmentDoc = gql`
       canEditEnrollments
       canViewEnrollmentDetails
       canDeleteEnrollments
+      canDeleteAssessments
       canEditProjectDetails
     }
   }

@@ -1,3 +1,8 @@
+export interface GlobalFeatureFlags {
+  mciId?: boolean;
+  externalReferrals?: boolean;
+}
+
 export interface HmisAppSettings {
   oktaPath?: string;
   logoPath?: string;
@@ -8,4 +13,5 @@ export interface HmisAppSettings {
   manageAccountUrl?: string;
   casUrl?: string;
   appName?: string;
+  globalFeatureFlags?: GlobalFeatureFlags;
 }

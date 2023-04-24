@@ -4,6 +4,9 @@ import IdEncoder from '@/modules/hmis/IdEncoder';
 
 export const isIdParam = (key: string) => key.match(/Id$/);
 
+export const withHash = (path: string, hash: string) =>
+  [path, hash].join('#').replace(/#+/, '#');
+
 const generateSafePath: typeof generatePath = (basePath, params) => {
   const safeParams: { [x: string]: string | undefined } = { ...params };
   type Key = keyof NonNullable<typeof params>;

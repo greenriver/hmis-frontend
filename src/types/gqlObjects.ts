@@ -441,6 +441,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ClientAccess',
     fields: [
       {
+        name: 'canDeleteAssessments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -1093,6 +1101,32 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'resultDate',
         type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'ExternalIdentifier',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'identifier',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'label',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {
@@ -2431,6 +2465,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ProjectAccess',
     fields: [
       {
+        name: 'canDeleteAssessments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2581,6 +2623,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canAuditClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canDeleteAssessments',
         type: {
           kind: 'NON_NULL',
           name: null,

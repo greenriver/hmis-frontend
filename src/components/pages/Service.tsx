@@ -15,7 +15,7 @@ import {
   ServiceFieldsFragment,
   useGetServiceQuery,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import generateSafePath, { withHash } from '@/utils/generateSafePath';
 
 const Service = ({ create = false }: { create?: boolean }) => {
   const navigate = useNavigate();
@@ -32,10 +32,13 @@ const Service = ({ create = false }: { create?: boolean }) => {
       cache.evict({ id: `Enrollment:${enrollmentId}`, fieldName: 'services' });
     }
     navigate(
-      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
-        enrollmentId,
-        clientId,
-      })
+      withHash(
+        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          enrollmentId,
+          clientId,
+        }),
+        'services'
+      )
     );
   }, [navigate, enrollmentId, clientId, create]);
 

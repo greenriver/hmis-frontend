@@ -25,6 +25,7 @@ fragment ProjectPermissionsFields on Project {
     canEditEnrollments
     canViewEnrollmentDetails
     canDeleteEnrollments
+    canDeleteAssessments
     canEditProjectDetails
   }
 }
