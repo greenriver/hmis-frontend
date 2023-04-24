@@ -11,5 +11,12 @@ export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
       'X-CSRF-Token': getCsrfToken(),
     },
   });
-  return response.json();
+
+  if (response.ok) {
+    return response.json();
+  } else {
+    return response.text().then((text) => {
+      throw new Error(`Failed to fetch app settings: ${text}`);
+    });
+  }
 };

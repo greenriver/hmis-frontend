@@ -15,7 +15,7 @@ import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import Loading from '@/components/elements/Loading';
 import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/404';
+import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import {
   emptyErrorState,
@@ -55,7 +55,7 @@ export interface Props<RecordType>
   localConstants?: LocalConstants;
   onCompleted: (data: RecordType) => void;
   title: ReactNode;
-  navigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
+  FormNavigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
   top?: number;
 }
 
@@ -71,7 +71,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   record,
   onCompleted,
   title,
-  navigationProps,
+  FormNavigationProps,
   inputVariables = {},
   localConstants = {},
   top = STICKY_BAR_HEIGHT,
@@ -194,9 +194,9 @@ const EditRecord = <RecordType extends AllowedTypes>({
           submitButtonText: 'Save Changes',
           ...props.FormActionProps,
         }}
-        FormWarningDialogProps={{
+        ValidationDialogProps={{
           confirmText: 'Confirm Change',
-          ...props.FormWarningDialogProps,
+          ...props.ValidationDialogProps,
         }}
       />
     </>
@@ -214,7 +214,11 @@ const EditRecord = <RecordType extends AllowedTypes>({
           {title}
         </Box>
         <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-          <FormNavigation items={leftNavItems} top={top} {...navigationProps}>
+          <FormNavigation
+            items={leftNavItems}
+            top={top}
+            {...FormNavigationProps}
+          >
             {form}
           </FormNavigation>
         </Grid>

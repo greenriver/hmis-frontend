@@ -173,24 +173,24 @@ Cypress.Commands.add('assertPriorLivingSituation', () => {
 /**
  * Income and Sources
  */
-Cypress.Commands.add('assertIncomeAndSources', () => {
-  const incomePerSource = 5;
-  const fromAnySource = '4.02.2';
-  const inputGroup = 'income-sources-group';
+export const incomePerSource = 5;
+export const incomeSourcesGroup = 'income-sources-group';
 
+Cypress.Commands.add('assertIncomeAndSources', () => {
+  const fromAnySource = '4.02.2';
   cy.testId('formNavTo-income-and-sources').click();
-  cy.getById(inputGroup).should('exist');
+  cy.getById(incomeSourcesGroup).should('exist');
 
   cy.checkOption(fromAnySource, 'CLIENT_REFUSED');
-  cy.getById(inputGroup).should('not.exist');
+  cy.getById(incomeSourcesGroup).should('not.exist');
   cy.checkOption(fromAnySource, 'CLIENT_DOESN_T_KNOW');
-  cy.getById(inputGroup).should('not.exist');
+  cy.getById(incomeSourcesGroup).should('not.exist');
   cy.checkOption(fromAnySource, 'NO');
-  cy.getById(inputGroup).should('not.exist');
+  cy.getById(incomeSourcesGroup).should('not.exist');
 
   // Un-check NO to make rest of form appear again
   cy.checkOption(fromAnySource, 'NO');
-  cy.getById(inputGroup).should('exist');
+  cy.getById(incomeSourcesGroup).should('exist');
   cy.getChecked(fromAnySource).should('not.exist');
 
   // Fill in number for each income source
@@ -209,7 +209,7 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
   cy.inputId(`4.02.P`).type('other description');
   cy.getChecked(fromAnySource, 'YES').should('exist');
 
-  cy.getById(inputGroup)
+  cy.getById(incomeSourcesGroup)
     .findTestId('inputSum')
     .contains(incomePerSource * (AlphaIncomeSources.length + 1))
     .should('exist');
@@ -254,7 +254,7 @@ Cypress.Commands.add('assertIncomeAndSources', () => {
 
   // When disabled, all income values should be removed from hudValues
   cy.checkOption(fromAnySource, 'NO');
-  cy.getById(inputGroup).should('not.exist');
+  cy.getById(incomeSourcesGroup).should('not.exist');
 
   cy.expectHudValuesSectionToDeepEqual({
     ...EmptyInsurance,

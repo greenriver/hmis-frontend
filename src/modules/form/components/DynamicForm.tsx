@@ -10,16 +10,17 @@ import React, {
 } from 'react';
 
 import ErrorAlert from '../../errors/components/ErrorAlert';
-import useDynamicFormFields from '../hooks/useDynamicFormFields';
+import { ValidationDialogProps } from '../../errors/components/ValidationDialog';
+import useDynamicFields from '../hooks/useDynamicFields';
 import useElementInView from '../hooks/useElementInView';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
-import FormWarningDialog, { FormWarningDialogProps } from './FormWarningDialog';
 import SaveSlide from './SaveSlide';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { ErrorState, hasErrors, hasOnlyWarnings } from '@/modules/errors/util';
+import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
+import { ErrorState, hasErrors } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 interface DynamicFormSubmitInput {
@@ -53,9 +54,9 @@ export interface DynamicFormProps
     FormActionProps,
     'loading' | 'onSubmit' | 'onSaveDraft'
   >;
-  FormWarningDialogProps?: Omit<
-    FormWarningDialogProps,
-    'warnings' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
+  ValidationDialogProps?: Omit<
+    ValidationDialogProps,
+    'errorState' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
 }
 export interface DynamicFormRef {
@@ -80,18 +81,17 @@ const DynamicForm = forwardRef(
       visible = true,
       pickListRelationId,
       FormActionProps = {},
-      FormWarningDialogProps = {},
+      ValidationDialogProps = {},
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
-    const { renderFields, getCleanedValues } = useDynamicFormFields({
+    const { renderFields, getCleanedValues } = useDynamicFields({
       definition,
       initialValues,
     });
     const [dirty, setDirty] = useState(false);
 
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
-    const [showConfirmDialog, setShowConfirmDialog] = useState<boolean>(false);
 
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
@@ -126,11 +126,6 @@ const DynamicForm = forwardRef(
       setPromptSave(!isSaveButtonVisible);
     }, [isSaveButtonVisible, promptSave]);
 
-    useEffect(() => {
-      // if we have warnings and no errors, show dialog. otherwise hide it.
-      setShowConfirmDialog(!!(errorState && hasOnlyWarnings(errorState)));
-    }, [errorState]);
-
     const handleSubmit = useCallback(
       (
         event: React.MouseEvent<HTMLButtonElement>,
@@ -164,6 +159,8 @@ const DynamicForm = forwardRef(
       [onSubmit, getCleanedValues, FormActionProps]
     );
 
+    const { renderValidationDialog, validationDialogVisible } =
+      useValidationDialog({ errorState });
     const handleSaveDraft = useCallback(
       (onSuccess?: VoidFunction) => {
         if (!onSaveDraft) return;
@@ -186,7 +183,7 @@ const DynamicForm = forwardRef(
       <FormActions
         onSubmit={handleSubmit}
         onSaveDraft={onSaveDraft ? handleSaveDraft : undefined}
-        disabled={locked || !!loading || showConfirmDialog}
+        disabled={locked || !!loading || validationDialogVisible}
         loading={loading}
         {...FormActionProps}
       />
@@ -202,7 +199,7 @@ const DynamicForm = forwardRef(
             <Grid item>
               <Stack gap={2}>
                 <ApolloErrorAlert error={errorState.apolloError} />
-                <ErrorAlert errors={errorState.errors} />
+                <ErrorAlert errors={errorState.errors} fixable />
               </Stack>
             </Grid>
           )}
@@ -223,19 +220,12 @@ const DynamicForm = forwardRef(
             {saveButtons}
           </Box>
         )}
-
-        {showConfirmDialog && (
-          <FormWarningDialog
-            open
-            onConfirm={handleConfirm}
-            onCancel={() => setShowConfirmDialog(false)}
-            loading={loading || false}
-            confirmText={FormActionProps?.submitButtonText || 'Confirm'}
-            warnings={errorState.warnings}
-            {...FormWarningDialogProps}
-          />
-        )}
-
+        {renderValidationDialog({
+          onConfirm: handleConfirm,
+          loading: loading || false,
+          confirmText: FormActionProps?.submitButtonText || 'Confirm',
+          ...ValidationDialogProps,
+        })}
         {(alwaysShowSaveSlide || (showSavePrompt && !isSaveButtonVisible)) && (
           <SaveSlide
             in={alwaysShowSaveSlide || (promptSave && !isSaveButtonVisible)}

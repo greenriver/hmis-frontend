@@ -4,7 +4,7 @@ import { Stack } from '@mui/system';
 import { ReactNode, useMemo, useState } from 'react';
 
 import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/404';
+import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import WarningAlert from '@/modules/errors/components/WarningAlert';
@@ -15,7 +15,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
-import useDynamicFormFields from '@/modules/form/hooks/useDynamicFormFields';
+import useDynamicFields from '@/modules/form/hooks/useDynamicFields';
 import {
   DynamicFieldProps,
   FormValues,
@@ -102,7 +102,7 @@ const BulkAdd = <
   );
 
   const { renderFields, values, shouldShowItem, getCleanedValues } =
-    useDynamicFormFields({
+    useDynamicFields({
       definition,
       bulk: true,
     });
@@ -157,7 +157,7 @@ const BulkAdd = <
       {errors && hasAnyValue(errors) && (
         <Stack gap={1} sx={{ mt: 4 }}>
           <ApolloErrorAlert error={errors.apolloError} />
-          <ErrorAlert key='errors' errors={errors.errors} fixable={false} />
+          <ErrorAlert key='errors' errors={errors.errors} />
           <WarningAlert key='warnings' warnings={errors.warnings} />
         </Stack>
       )}

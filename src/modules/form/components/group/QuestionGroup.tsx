@@ -2,27 +2,27 @@ import { Box, Grid, Typography } from '@mui/material';
 
 import { GroupItemComponentProps } from '../../types';
 
+import { Component } from '@/types/gqlTypes';
+
 const QuestionGroup = ({
   item,
   nestingLevel,
   renderChildItem,
 }: GroupItemComponentProps) => {
   const wrappedChildren = (
-    <Grid
-      container
-      direction='column'
-      sx={{
-        '& .MuiGrid-item:first-of-type': { pt: 1 },
-        mt: 0,
-      }}
-    >
+    <Grid container direction='column' sx={{ mt: 0 }}>
       {renderChildItem &&
         item.item?.map((childItem) => renderChildItem(childItem))}
     </Grid>
   );
 
   if (nestingLevel === 1) {
-    const indentChildren = item.item && item.item[0].enableWhen;
+    const indentChildren =
+      !!item.item &&
+      !!item.item[0].enableWhen &&
+      // Don't indent InfoGroup because it already has visual distinction
+      item.component !== Component.InfoGroup;
+
     return (
       <Grid item xs>
         <Box

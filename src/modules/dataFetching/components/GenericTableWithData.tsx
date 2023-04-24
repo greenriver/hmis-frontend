@@ -4,7 +4,6 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
 import { get, isEqual, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -17,7 +16,7 @@ import GenericTable, {
 import Loading from '@/components/elements/Loading';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
-import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
@@ -217,9 +216,9 @@ const WrappedGenericTableWithData = <
   props: Props<Query, QueryVariables, RowDataType>
 ) => (
   <Box sx={props.fullHeight ? { height: '100%' } : undefined}>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
+    <SentryErrorBoundary>
       <GenericTableWithData {...props} />
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   </Box>
 );
 

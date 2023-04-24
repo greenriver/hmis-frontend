@@ -1,6 +1,5 @@
 import UploadIcon from '@mui/icons-material/Upload';
 import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
-import { format } from 'date-fns';
 import { useMemo, useState } from 'react';
 
 import FileDialog from './files/FileModal';
@@ -10,6 +9,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import {
   useClientPermissions,
   useHasClientPermissions,
@@ -78,11 +78,11 @@ const AllFiles = () => {
             component='button'
             onClick={() => setViewingFile(file)}
             align='left'
+            tabIndex={-1}
           >
             {file.name}
           </Link>
         ),
-        linkTreatment: true,
       },
       {
         header: 'Tags',
@@ -106,37 +106,21 @@ const AllFiles = () => {
           ) : null,
       },
       {
-        header: 'Last Updated',
+        header: 'Uploaded At',
         render: (file) =>
-          `${format(new Date(file.updatedAt), 'MM/dd/yyyy h:mm a')}${
-            file.updatedBy ? ` by ${file.updatedBy?.name}` : ''
+          `${parseAndFormatDateTime(file.createdAt)}${
+            file.uploadedBy?.name ? ` by ${file.uploadedBy?.name}` : ''
           }`,
       },
-      ...((canEdit
-        ? [
-            {
-              header: 'Actions',
-              width: '1%',
-              render: (file) => (
-                <Stack
-                  direction='row'
-                  spacing={1}
-                  justifyContent='flex-end'
-                  flexGrow={1}
-                >
-                  <FileActions
-                    clientId={clientId}
-                    file={file}
-                    onDone={() => setViewingFile(undefined)}
-                    noDownload
-                  />
-                </Stack>
-              ),
-            },
-          ]
-        : []) as typeof columns),
+      // {
+      //   header: 'Last Updated',
+      //   render: (file) =>
+      //     `${parseAndFormatDateTime(file.updatedAt)}${
+      //       file.updatedBy?.name ? ` by ${file.updatedBy?.name}` : ''
+      //     }`,
+      // },
     ];
-  }, [canEdit, pickListData, clientId]);
+  }, [pickListData]);
 
   return (
     <>
@@ -154,7 +138,6 @@ const AllFiles = () => {
             })}
             data-testid='addClientFileButton'
             Icon={UploadIcon}
-            size='large'
           >
             Upload File
           </ButtonLink>
@@ -170,6 +153,7 @@ const AllFiles = () => {
           queryDocument={GetClientFilesDocument}
           columns={columns}
           pagePath='client.files'
+          handleRowClick={(file) => setViewingFile(file)}
         />
       </Paper>
       {viewingFile && (

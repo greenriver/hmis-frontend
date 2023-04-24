@@ -1,6 +1,7 @@
 import { Box, Grid } from '@mui/material';
 
 import { GroupItemComponentProps } from '../types';
+import { maxWidthAtNestingLevel } from '../util/formUtil';
 
 import DisabilityTable from './group/DisabilityTable';
 import FormCard from './group/FormCard';
@@ -45,14 +46,9 @@ const DynamicGroup = ({
         <Box
           sx={{
             backgroundColor: (theme) => theme.palette.grey[100],
-            // borderLeft: (theme) => `1px solid ${theme.palette.grey[300]}`,
-            // backgroundColor: 'rgb(255,255,224, 0.8)',
             borderRadius: 1,
-            // TODO make flexible if we go with this
-            width: '415px',
-            pb: 1,
-            px: 1,
-            ml: -1,
+            maxWidth: maxWidthAtNestingLevel(props.nestingLevel + 1),
+            p: 1,
           }}
         >
           <QuestionGroup key={props.item.linkId} {...props} />

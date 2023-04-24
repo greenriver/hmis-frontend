@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';

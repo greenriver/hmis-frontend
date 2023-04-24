@@ -17,8 +17,8 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
       permissions={['canEditEnrollments']}
     >
       <Card sx={{ mb: 2, p: 2 }}>
-        <Typography sx={{ mb: 1.5 }}>Quick Actions</Typography>
-        <Grid container spacing={1}>
+        <Typography sx={{ mb: 2 }}>Quick Actions</Typography>
+        <Grid container spacing={4}>
           <Grid item xs={12} sm={6}>
             <ButtonLink
               fullWidth
@@ -31,18 +31,8 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
               Enroll
             </ButtonLink>
           </Grid>
-          {/* <Grid item xs={12} sm={6}>
-            <Button fullWidth variant='outlined' color='error'>
-              Exit
-            </Button>
-          </Grid>
           <Grid item xs={12} sm={6}>
-            <Button fullWidth variant='outlined'>
-              Case Notes
-            </Button>
-          </Grid> */}
-          <Grid item xs={12} sm={6}>
-            <Button fullWidth variant='outlined'>
+            <Button fullWidth variant='outlined' color='secondary'>
               Add Service
             </Button>
           </Grid>

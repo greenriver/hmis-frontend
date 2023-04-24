@@ -1,6 +1,7 @@
-import { Box, Stack, Typography } from '@mui/material';
-import * as Sentry from '@sentry/react';
-import { Ref, useEffect, useMemo } from 'react';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Box, Button, Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
+import { Ref, useEffect, useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 
 import { assessmentDate } from '../util';
@@ -14,17 +15,19 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import NotFound from '@/components/pages/NotFound';
+import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
-import { alertErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
+import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -41,7 +44,7 @@ export interface IndividualAssessmentProps {
   clientName?: string;
   relationshipToHoH: RelationshipToHoH;
   client: ClientNameDobVeteranFields;
-  lockIfSubmitted?: boolean;
+  readOnly?: boolean;
   visible?: boolean;
   getFormActionProps?: (
     assessment?: AssessmentFieldsFragment
@@ -63,7 +66,6 @@ const IndividualAssessment = ({
   clientName,
   client,
   relationshipToHoH,
-  lockIfSubmitted,
   getFormActionProps,
   visible,
   formRef,
@@ -115,7 +117,7 @@ const IndividualAssessment = ({
     if (!assessmentTitle || embeddedInWorkflow) return;
     // Override breadcrumb to include the assessment type and information date
     const currentRoute = assessment
-      ? DashboardRoutes.EDIT_ASSESSMENT
+      ? DashboardRoutes.VIEW_ASSESSMENT
       : DashboardRoutes.NEW_ASSESSMENT;
     overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
   }, [
@@ -126,13 +128,30 @@ const IndividualAssessment = ({
     overrideBreadcrumbTitles,
   ]);
 
+  const [canEdit] = useHasClientPermissions(enrollment?.client.id || '', [
+    'canViewEnrollmentDetails',
+  ]);
+
+  // Whether assessment is read-only
+  const [readOnly, setReadOnly] = useState<boolean | null>(null);
+  useEffect(() => {
+    if (dataLoading) return;
+    if (!isNil(readOnly)) return;
+    const isSubmitted = assessment && !assessment.inProgress;
+    setReadOnly(isSubmitted || !canEdit);
+  }, [dataLoading, canEdit, readOnly, assessment]);
+
   const topOffsetHeight =
     STICKY_BAR_HEIGHT +
     CONTEXT_HEADER_HEIGHT +
     (embeddedInWorkflow ? HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT : 0);
 
+  useScrollToHash(dataLoading || enrollmentLoading, topOffsetHeight);
+
   if (dataLoading || enrollmentLoading) return <Loading />;
+  if (isNil(readOnly)) return <Loading />;
   if (!enrollment) return <NotFound />;
+  if (assessmentId && !assessment) return <NotFound />;
 
   return (
     <>
@@ -140,6 +159,17 @@ const IndividualAssessment = ({
         <AssessmentTitle
           assessmentTitle={assessmentTitle}
           clientName={clientName || undefined}
+          actions={
+            readOnly ? (
+              <Button
+                color='secondary'
+                variant='outlined'
+                startIcon={<DownloadIcon />}
+              >
+                Download PDF
+              </Button>
+            ) : undefined
+          }
         />
       )}
       {!definition && (
@@ -155,7 +185,7 @@ const IndividualAssessment = ({
           top={topOffsetHeight}
           embeddedInWorkflow={embeddedInWorkflow}
           FormActionProps={FormActionProps}
-          locked={lockIfSubmitted && assessment && !assessment.inProgress}
+          locked={readOnly || false}
           visible={visible}
           formRef={formRef}
           navigationTitle={
@@ -184,9 +214,9 @@ const IndividualAssessment = ({
 
 const WrappedAssessment = (props: IndividualAssessmentProps) => (
   <Box>
-    <Sentry.ErrorBoundary fallback={alertErrorFallback}>
+    <SentryErrorBoundary>
       <IndividualAssessment {...props} />
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   </Box>
 );
 

@@ -1,4 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit';
+import PersonIcon from '@mui/icons-material/Person';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {
   Box,
@@ -8,6 +9,7 @@ import {
   Grid,
   Link,
   Skeleton,
+  Stack,
   SxProps,
   Typography,
 } from '@mui/material';
@@ -16,6 +18,7 @@ import { useCallback, useRef, useState } from 'react';
 import ButtonLink from '@/components/elements/ButtonLink';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotSpecified from '@/components/elements/NotSpecified';
+import RouterLink from '@/components/elements/RouterLink';
 import SimpleAccordion from '@/components/elements/SimpleAccordion';
 import SimpleTable from '@/components/elements/SimpleTable';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
@@ -33,8 +36,8 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
   ClientImageFragment,
-  useGetClientImageQuery,
   Gender,
+  useGetClientImageQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -90,8 +93,25 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
       <SimpleAccordion
         renderHeader={(header) => <Typography>{header}</Typography>}
         renderContent={(content) => content}
-        AccordionProps={{ defaultExpanded: true }}
+        AccordionProps={{
+          defaultExpanded: true,
+          sx: { '&.MuiAccordion-root': { my: 0 } },
+        }}
         items={[
+          {
+            key: 'IDs',
+            content: (
+              <ClientProfileCardTextTable
+                content={{
+                  'HMIS ID': client.id,
+                  'Personal ID': client.personalId,
+                  // TODO: show id, link to client.warehouseUrl
+                  // 'Warehouse ID': client.id,
+                  // TODO: show external IDs
+                }}
+              />
+            ),
+          },
           {
             key: 'Demographics',
             content: (
@@ -322,13 +342,6 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography
-              color='text.secondary'
-              variant='body2'
-              sx={{ float: 'right', ml: 1, mb: 1 }}
-            >
-              <strong>ID</strong> {client.id}
-            </Typography>
             <Typography variant='h4'>{primaryName}</Typography>
             {secondaryName && (
               <Typography color='GrayText'>
@@ -352,7 +365,12 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                 client={clientImageData || undefined}
               />
             )}
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <ClientProfileCardTextTable
                 content={{
                   ...(pronouns(client)
@@ -363,31 +381,39 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   ),
                   ...(canViewSsn
                     ? {
-                        Social: <ClientSafeSsn client={client} />,
+                        SSN: <ClientSafeSsn client={client} />,
                       }
                     : {}),
                 }}
               />
-              <Box sx={{ flexGrow: 1 }}>
+              <Stack sx={{ flexGrow: 1, maxWidth: '300px' }} gap={1} mt={2}>
                 <RootPermissionsFilter permissions='canEditClients'>
                   <ButtonLink
                     data-testid='editClientButton'
-                    startIcon={<EditIcon />}
+                    startIcon={<PersonIcon />}
                     variant='outlined'
+                    color='primary'
                     fullWidth
-                    sx={{ mt: 2, mb: 1 }}
                     to={generateSafePath(DashboardRoutes.EDIT, {
                       clientId: client.id,
                     })}
                   >
-                    Edit Client Details
+                    Update Client Details
                   </ButtonLink>
                 </RootPermissionsFilter>
-
-                <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
-                  Last Updated on {lastUpdated(client, true)}
+                <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
+                  Last Updated on {lastUpdated(client, true)}.{' '}
+                  <RootPermissionsFilter permissions='canAuditClients'>
+                    <RouterLink
+                      to={generateSafePath(DashboardRoutes.AUDIT_HISTORY, {
+                        clientId: client.id,
+                      })}
+                    >
+                      View client audit history
+                    </RouterLink>
+                  </RootPermissionsFilter>
                 </Typography>
-              </Box>
+              </Stack>
             </Box>
           </Grid>
         </Grid>

@@ -1,8 +1,9 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { ReactNode, useCallback, useMemo } from 'react';
 
 import { GroupItemComponentProps } from '../../types';
-import { maxWidthAtNestingLevel } from '../DynamicField';
+import { maxWidthAtNestingLevel } from '../../util/formUtil';
 
 import { formatCurrency } from '@/modules/hmis/hmisUtil';
 import { FormItem, ItemType } from '@/types/gqlTypes';
@@ -107,10 +108,11 @@ const InputGroup = ({
   ]);
 
   const maxWidth = maxWidthAtNestingLevel(nestingLevel + 1);
-
+  let label = item.text;
+  if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
   return (
     <Box id={item.linkId}>
-      {item.text && <Typography sx={{ mb: 1 }}>{item.text}</Typography>}
+      {label && <Typography sx={{ mb: 1 }}>{label}</Typography>}
       {wrappedChildren}
       {isNumeric && summaryItem && (
         <Stack

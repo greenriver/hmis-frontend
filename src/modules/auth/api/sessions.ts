@@ -127,3 +127,8 @@ export async function logout() {
   apolloClient.resetStore();
   return response;
 }
+
+export const sentryUser = (user?: HmisUser) => ({
+  email: user?.email,
+  username: user?.name,
+});

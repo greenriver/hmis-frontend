@@ -1,9 +1,23 @@
 import { Box, Typography } from '@mui/material';
 import { groupBy } from 'lodash-es';
 
+import { ErrorRenderFn } from '../util';
+
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
-const ValidationErrorList = ({ errors }: { errors: ValidationError[] }) => {
+export const defaultRenderError: ErrorRenderFn = (e: ValidationError) => (
+  <li key={e.fullMessage}>
+    <Typography variant='inherit'>{e.fullMessage}</Typography>
+  </li>
+);
+
+const ValidationErrorList = ({
+  errors,
+  renderError = defaultRenderError,
+}: {
+  errors: ValidationError[];
+  renderError?: ErrorRenderFn;
+}) => {
   const grouped = groupBy(errors, (e) =>
     e.type === ValidationType.Required ? 'required' : 'other'
   );
@@ -32,12 +46,7 @@ const ValidationErrorList = ({ errors }: { errors: ValidationError[] }) => {
           </Typography>
         </li>
       )}
-      {grouped.other &&
-        grouped.other.map((e) => (
-          <li>
-            <Typography variant='inherit'>{e.fullMessage}</Typography>
-          </li>
-        ))}
+      {grouped.other && grouped.other.map((e) => renderError(e))}
     </Box>
   );
 };

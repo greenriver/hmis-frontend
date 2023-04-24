@@ -56,12 +56,6 @@ yarn tsc
 
 ### Build for Production
 
-Preview staging build
-
-```sh
-yarn build:staging && yarn preview
-```
-
 Preview production build
 
 ```sh

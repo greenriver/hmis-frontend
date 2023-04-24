@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import NotFound from './404';
+import NotFound from './NotFound';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
@@ -46,11 +46,7 @@ const CreateOrganization = () => {
         formRole={FormRole.Organization}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}
-        title={
-          <>
-            <Typography variant='h3'>Create a new organization</Typography>
-          </>
-        }
+        title={<Typography variant='h3'>Create a new organization</Typography>}
       />
     </ProjectLayout>
   );

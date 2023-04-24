@@ -1,4 +1,3 @@
-import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
@@ -8,12 +7,13 @@ import {
   DynamicFieldProps,
   DynamicInputCommonProps,
 } from '../types';
-import { hasMeaningfulValue } from '../util/formUtil';
+import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
 import InputContainer from './InputContainer';
+import RequiredLabel from './RequiredLabel';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import LabeledCheckbox from '@/components/elements/input/LabeledCheckbox';
@@ -28,24 +28,17 @@ import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
-  if (!item.prefix && !item.text) return null;
+  if (!item.text) return null;
 
   return (
-    <Stack direction='row' spacing={1}>
-      <Typography
-        variant='body2'
-        fontWeight={
-          item.component === Component.Checkbox || horizontal ? undefined : 600
-        }
-      >
-        {item.text}
-      </Typography>
-      {item.required && (
-        <Typography variant='body2' color='error'>
-          (Required)
-        </Typography>
-      )}
-    </Stack>
+    <RequiredLabel
+      text={item.text}
+      required={item.required}
+      TypographyProps={{
+        fontWeight:
+          item.component === Component.Checkbox || horizontal ? undefined : 600,
+      }}
+    />
   );
 };
 
@@ -53,9 +46,6 @@ const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input befor
 const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
-
-export const maxWidthAtNestingLevel = (nestingLevel: number) =>
-  600 - nestingLevel * 26;
 
 const DynamicField: React.FC<DynamicFieldProps> = ({
   item,

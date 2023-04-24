@@ -142,6 +142,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'autofillReadonly',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
         name: 'sumQuestions',
         type: {
           kind: 'LIST',
@@ -1338,6 +1342,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
+        name: 'readonlyText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'recordType',
         type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
       },
@@ -2482,6 +2490,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canDeleteClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
         type: {
           kind: 'NON_NULL',
@@ -2773,6 +2789,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
         },
+      },
+      {
+        name: 'data',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
       {
         name: 'fullMessage',

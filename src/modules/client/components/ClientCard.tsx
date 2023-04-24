@@ -89,7 +89,6 @@ const RecentEnrollments = ({
 interface Props {
   client: ClientFieldsFragment;
   showNotices?: boolean;
-  showEditLink?: boolean;
   linkTargetBlank?: boolean;
   hideImage?: boolean;
 }
@@ -97,7 +96,6 @@ interface Props {
 const ClientCard: React.FC<Props> = ({
   client,
   showNotices = false,
-  showEditLink = false,
   linkTargetBlank = false,
   hideImage = false,
 }) => {
@@ -215,38 +213,6 @@ const ClientCard: React.FC<Props> = ({
                     SSN: <ClientSafeSsn client={client} />
                   </Typography>
                 </ClientPermissionsFilter>
-                {/* {showLinkToRecord && (
-                  <Box sx={{ pt: 1 }}>
-                    <ButtonLink
-                      data-testid='goToProfileButton'
-                      variant='contained'
-                      to={generateSafePath(DashboardRoutes.PROFILE, {
-                        clientId: client.id,
-                      })}
-                      target={linkTargetBlank ? '_blank' : undefined}
-                      color='secondary'
-                    >
-                      Go to Profile
-                    </ButtonLink>
-                  </Box>
-                )} */}
-                {showEditLink && (
-                  <Box sx={{ pt: 1 }}>
-                    <ButtonLink
-                      data-testid='editClientButton'
-                      variant='contained'
-                      to={generateSafePath(DashboardRoutes.EDIT, {
-                        clientId: client.id,
-                      })}
-                      target={linkTargetBlank ? '_blank' : undefined}
-                      color='secondary'
-                      size='small'
-                      aria-label='Edit Client Details'
-                    >
-                      Edit Client Details
-                    </ButtonLink>
-                  </Box>
-                )}
               </Stack>
             </Stack>
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>

@@ -8,7 +8,7 @@ import OneTimePassword from './OneTimePassword';
 import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
 import useAuth from '@/modules/auth/hooks/useAuth';
-import { useHmisAppSettings } from '@/modules/hmisAppSettings/hooks';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const errorMessage = (error: Error) => {
   if (isHmisResponseError(error)) {
@@ -47,7 +47,7 @@ const LoginForm = () => {
   if (prompt2fa) return <OneTimePassword />;
 
   return (
-    <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box component='form' onSubmit={handleSubmit} noValidate>
       <TextInput
         margin='normal'
         required
@@ -80,7 +80,7 @@ const LoginForm = () => {
         variant='contained'
         color='primary'
         fullWidth
-        sx={{ mt: 5, mb: 2 }}
+        sx={{ mt: 3, mb: 2 }}
         loading={loading}
       >
         Sign In
@@ -88,7 +88,7 @@ const LoginForm = () => {
       {error && <Alert severity='error'>{errorMessage(error)}</Alert>}
       {resetPasswordUrl && (
         <Box
-          sx={{ width: '100%', display: 'flex', mt: 3, justifyContent: 'end' }}
+          sx={{ width: '100%', display: 'flex', mt: 2, justifyContent: 'end' }}
         >
           <Link href={resetPasswordUrl} color='text.secondary'>
             Forgot password?

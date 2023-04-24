@@ -36,12 +36,13 @@ const SimpleAccordion: React.FC<SimpleAccordionProps> = ({
       {items.map((item) => (
         <Accordion
           key={item.key}
+          {...AccordionProps}
           sx={{
             '&::before': {
               height: '0px',
             },
+            ...AccordionProps.sx,
           }}
-          {...AccordionProps}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}

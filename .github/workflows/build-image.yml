@@ -73,6 +73,8 @@ jobs:
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
             GITHASH=${{ steps.env.outputs.git_hash }}
+            FULL_GITHASH=${{ github.event.pull_request.head.sha }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
       - name: Run vulnerability scan for PR
         if: github.event_name == 'pull_request'
@@ -103,6 +105,8 @@ jobs:
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
             GITHASH=${{ steps.env.outputs.git_hash }}
+            FULL_GITHASH=${{ github.sha }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
 
       # log medium vulnerabilities
       - name: Run scan for medium vulnerabilities
@@ -157,3 +161,5 @@ jobs:
           build-args: |
             NODE_VERSION=${{ steps.env.outputs.node_version }}
             GITHASH=${{ steps.env.outputs.git_hash }}
+            FULL_GITHASH=${{ github.sha }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}

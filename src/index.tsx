@@ -10,6 +10,8 @@ if (import.meta.env.PUBLIC_SENTRY_DSN) {
   Sentry.init({ dsn: import.meta.env.PUBLIC_SENTRY_DSN });
 }
 
+window.gitCommitHash = import.meta.env.PUBLIC_GIT_COMMIT_HASH;
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

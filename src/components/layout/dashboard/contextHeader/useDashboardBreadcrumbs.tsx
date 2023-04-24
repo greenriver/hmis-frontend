@@ -36,7 +36,7 @@ export const useDashboardBreadcrumbs = (
        */
       [DashboardRoutes.PROFILE]: { title: clientBriefName(context.client) },
       [DashboardRoutes.EDIT]: {
-        title: 'Edit Client Details',
+        title: 'Update Client Details',
         parent: DashboardRoutes.PROFILE,
       },
       [DashboardRoutes.ALL_ENROLLMENTS]: {
@@ -58,10 +58,6 @@ export const useDashboardBreadcrumbs = (
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
       [DashboardRoutes.NEW_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [DashboardRoutes.EDIT_ASSESSMENT]: {
         title: 'Assessment',
         parent: DashboardRoutes.VIEW_ENROLLMENT,
       },
@@ -87,6 +83,10 @@ export const useDashboardBreadcrumbs = (
       },
       [DashboardRoutes.FILES]: {
         title: 'Files',
+        parent: DashboardRoutes.PROFILE,
+      },
+      [DashboardRoutes.AUDIT_HISTORY]: {
+        title: 'Client Audit History',
         parent: DashboardRoutes.PROFILE,
       },
       [DashboardRoutes.NEW_FILE]: {

@@ -2,7 +2,8 @@
 export const OP_LINK_BAR_HEIGHT = 40;
 
 // whether to show bar linking to warehouse and cas
-export const SHOW_OP_LINK_BAR = import.meta.env.MODE === 'staging';
+// TODO: decide if this should be configurable on the backend?
+export const SHOW_OP_LINK_BAR = true;
 
 // height of main app bar
 export const APP_BAR_HEIGHT = 64;

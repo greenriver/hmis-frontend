@@ -30,11 +30,10 @@ const subRoutes = {
   HOUSEHOLD_INTAKE: 'enrollments/:enrollmentId/household-intake',
   NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/new',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
-  EDIT_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId/edit',
   NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
   EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
   ALL_ENROLLMENTS: 'enrollments',
-  HISTORY: 'history',
+  AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
   NOTES: 'notes',
   FILES: 'files',
@@ -57,7 +56,6 @@ export const DashboardRoutes: { [k in SubRoutesType]: string } = subRoutes;
 export const HIDE_NAV_ROUTES = [
   DashboardRoutes.VIEW_ASSESSMENT,
   DashboardRoutes.NEW_ASSESSMENT,
-  DashboardRoutes.EDIT_ASSESSMENT,
 ];
 
 export const FOCUS_MODE_ROUTES = [

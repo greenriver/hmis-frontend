@@ -1,25 +1,23 @@
-import * as Sentry from '@sentry/react';
 import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { DashboardRoutes, Routes } from './routes';
 
 import AllFiles from '@/components/dashboard/AllFiles';
+import AuditHistory from '@/components/dashboard/AuditHistory';
 import EditClient from '@/components/dashboard/EditClient';
 import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import EditAssessmentPage from '@/components/dashboard/enrollments/EditAssessmentPage';
 import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
 import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
+import NewAssessmentPage from '@/components/dashboard/enrollments/NewAssessmentPage';
 import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
 import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
-import History from '@/components/dashboard/History';
 import Profile from '@/components/dashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
-import NotFound from '@/components/pages/404';
 import AllProjects from '@/components/pages/AllProjects';
 import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
@@ -36,6 +34,7 @@ import FileEditRoute from '@/components/pages/FileEditRoute';
 import Funder from '@/components/pages/Funder';
 import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
+import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
@@ -43,7 +42,7 @@ import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
-import { fullPageErrorFallback } from '@/modules/errors/components/ErrorFallback';
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -54,12 +53,16 @@ const App = () => {
   return (
     <MainLayout>
       <Suspense fallback={<Loading />}>
-        <Sentry.ErrorBoundary fallback={fullPageErrorFallback}>
+        <SentryErrorBoundary fullpage>
           <Outlet />
-        </Sentry.ErrorBoundary>
+        </SentryErrorBoundary>
       </Suspense>
     </MainLayout>
   );
+};
+
+const InternalError: React.FC = () => {
+  throw new Error('This is a test error');
 };
 
 const ParamsWrapper = <T extends { [x: string]: string } = any>({
@@ -273,7 +276,7 @@ export const protectedRoutes = [
                 edit
                 redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
               >
-                <EditAssessmentPage />
+                <NewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -282,17 +285,6 @@ export const protectedRoutes = [
             element: (
               <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
                 <ViewAssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: DashboardRoutes.EDIT_ASSESSMENT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <EditAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
@@ -327,13 +319,13 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.HISTORY,
+            path: DashboardRoutes.AUDIT_HISTORY,
             element: (
               <RootPermissionsFilter
                 permissions='canAuditClients'
                 otherwise={<Navigate to='profile' replace />}
               >
-                <History />
+                <AuditHistory />
               </RootPermissionsFilter>
             ),
           },
@@ -356,6 +348,7 @@ export const protectedRoutes = [
                     permissions={[
                       'canViewAnyConfidentialClientFiles',
                       'canViewAnyNonconfidentialClientFiles',
+                      'canManageOwnClientFiles',
                     ]}
                     otherwise={
                       <Navigate
@@ -393,6 +386,11 @@ export const protectedRoutes = [
           { path: DashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
+      },
+      // Route for testing sentry errors
+      {
+        path: '/internal-error',
+        element: <InternalError />,
       },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <NotFound /> },

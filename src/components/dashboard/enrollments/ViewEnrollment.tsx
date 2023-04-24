@@ -6,8 +6,8 @@ import { useOutletContext } from 'react-router-dom';
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import NotFound from '@/components/pages/404';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';

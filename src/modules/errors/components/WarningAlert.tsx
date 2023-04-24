@@ -2,6 +2,8 @@ import { Box, lighten, Stack, Typography } from '@mui/material';
 import { groupBy, reject } from 'lodash-es';
 import { ReactNode } from 'react';
 
+import { ErrorRenderFn } from '../util';
+
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
 const WarningSection = ({
@@ -29,14 +31,27 @@ const WarningSection = ({
   </Box>
 );
 
+export const defaultRenderError: ErrorRenderFn = (
+  e: ValidationError,
+  { attributeOnly } = {}
+) => (
+  <li key={e.fullMessage}>
+    <Typography variant='body2'>
+      {attributeOnly ? e.readableAttribute || e.attribute : e.fullMessage}
+    </Typography>
+  </li>
+);
+
 const WarningList = ({
   title,
   errors,
   attributeOnly = false,
+  renderError = defaultRenderError,
 }: {
   title?: string;
   errors: ValidationError[];
   attributeOnly?: boolean;
+  renderError?: ErrorRenderFn;
 }) => (
   <Box>
     {title && (
@@ -45,21 +60,17 @@ const WarningList = ({
       </Typography>
     )}
     <Box component='ul' sx={{ mt: 0, pl: 3, mb: 1 }}>
-      {errors.map((e) => (
-        <li key={e.fullMessage}>
-          <Typography variant='body2'>
-            {attributeOnly ? e.readableAttribute || e.attribute : e.fullMessage}
-          </Typography>
-        </li>
-      ))}
+      {errors.map((e) => renderError(e, { attributeOnly }))}
     </Box>
   </Box>
 );
 
 const WarningAlert = ({
   warnings: validations,
+  renderError,
 }: {
   warnings: ValidationError[];
+  renderError?: ErrorRenderFn;
 }) => {
   const warnings = reject(validations, ['severity', 'error']);
   if (warnings.length === 0) return null;
@@ -75,7 +86,7 @@ const WarningAlert = ({
         <WarningSection
           header={<Typography fontWeight={600}>Warnings</Typography>}
         >
-          <WarningList errors={grouped.other} />
+          <WarningList errors={grouped.other} renderError={renderError} />
         </WarningSection>
       )}
       {grouped.dnc && (
@@ -97,6 +108,7 @@ const WarningAlert = ({
                   title={title}
                   errors={errors}
                   attributeOnly
+                  renderError={renderError}
                 />
               )
             )}
