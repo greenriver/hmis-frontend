@@ -18,8 +18,14 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     fetchHmisAppSettings().then(setFetched).catch(setError);
     return () => controller.abort();
   }, []);
+
+  useEffect(() => {
+    if (fetched?.appName) document.title = fetched.appName;
+  }, [fetched]);
+
   if (error) throw error;
   if (!fetched) return <Loading />;
+
   return (
     <HmisAppSettingsContext.Provider value={fetched}>
       {children}
