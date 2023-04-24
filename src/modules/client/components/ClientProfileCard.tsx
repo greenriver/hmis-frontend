@@ -108,12 +108,18 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
                   client.externalIds.map(({ identifier, label, url }) => {
                     return [
                       label,
-                      url ? (
+                      url && identifier ? (
                         <ExternalLink variant='inherit' href={url}>
                           {identifier}
                         </ExternalLink>
+                      ) : identifier ? (
+                        <Typography variant='inherit'>
+                          {identifier || 'none'}
+                        </Typography>
                       ) : (
-                        <Typography variant='inherit'>{identifier}</Typography>
+                        <Typography variant='inherit' color='text.secondary'>
+                          None
+                        </Typography>
                       ),
                     ];
                   })

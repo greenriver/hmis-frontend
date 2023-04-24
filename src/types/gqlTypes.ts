@@ -1189,7 +1189,7 @@ export type ExternalIdentifier = {
   /** API ID, not the actual identifier value */
   id: Scalars['ID'];
   /** The identifier value */
-  identifier: Scalars['ID'];
+  identifier?: Maybe<Scalars['ID']>;
   label: Scalars['String'];
   url?: Maybe<Scalars['String']>;
 };
@@ -6563,7 +6563,7 @@ export type SubmitFormMutation = {
           externalIds: Array<{
             __typename?: 'ExternalIdentifier';
             id: string;
-            identifier: string;
+            identifier?: string | null;
             url?: string | null;
             label: string;
           }>;
@@ -6825,7 +6825,7 @@ export type ClientFieldsFragment = {
   externalIds: Array<{
     __typename?: 'ExternalIdentifier';
     id: string;
-    identifier: string;
+    identifier?: string | null;
     url?: string | null;
     label: string;
   }>;
@@ -6847,7 +6847,7 @@ export type ClientFieldsFragment = {
 export type ClientIdentifierFieldsFragment = {
   __typename?: 'ExternalIdentifier';
   id: string;
-  identifier: string;
+  identifier?: string | null;
   url?: string | null;
   label: string;
 };
@@ -7332,7 +7332,7 @@ export type SearchClientsQuery = {
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
-        identifier: string;
+        identifier?: string | null;
         url?: string | null;
         label: string;
       }>;
@@ -7386,7 +7386,7 @@ export type GetClientQuery = {
     externalIds: Array<{
       __typename?: 'ExternalIdentifier';
       id: string;
-      identifier: string;
+      identifier?: string | null;
       url?: string | null;
       label: string;
     }>;
@@ -8068,7 +8068,7 @@ export type DeleteClientMutation = {
       externalIds: Array<{
         __typename?: 'ExternalIdentifier';
         id: string;
-        identifier: string;
+        identifier?: string | null;
         url?: string | null;
         label: string;
       }>;
