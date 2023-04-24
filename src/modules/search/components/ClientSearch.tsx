@@ -5,6 +5,7 @@ import { createSearchParams, useSearchParams } from 'react-router-dom';
 
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
+import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
@@ -20,6 +21,7 @@ import { SearchFormDefinition } from '@/modules/form/data';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
@@ -35,7 +37,7 @@ const MAX_CARDS_THRESHOLD = 10;
 export const CLIENT_COLUMNS: {
   [key: string]: ColumnDef<ClientFieldsFragment>;
 } = {
-  id: { header: 'ID', render: 'id', width: '10%' },
+  id: { header: 'HMIS ID', render: 'id', width: '10%' },
   name: {
     header: 'Name',
     key: 'name',
@@ -145,6 +147,17 @@ const ClientSearch: React.FC<Props> = ({
 
   const isMobile = useIsMobile();
 
+  const { globalFeatureFlags } = useHmisAppSettings();
+
+  const columns = useMemo(() => {
+    let baseColumns = isMobile
+      ? MOBILE_SEARCH_RESULT_COLUMNS
+      : SEARCH_RESULT_COLUMNS;
+    if (globalFeatureFlags?.mciId) {
+      baseColumns = [externalIdColumn('MCI ID'), ...baseColumns];
+    }
+    return baseColumns;
+  }, [isMobile, globalFeatureFlags]);
   const handleSetSortOrder: typeof setSortOrder = useCallback((value) => {
     setOffset(0);
     return setSortOrder(value);
@@ -269,11 +282,7 @@ const ClientSearch: React.FC<Props> = ({
             ) : (
               <WrapperComponent>
                 <GenericTable
-                  columns={
-                    isMobile
-                      ? MOBILE_SEARCH_RESULT_COLUMNS
-                      : SEARCH_RESULT_COLUMNS
-                  }
+                  columns={columns}
                   rowLinkTo={rowLinkTo}
                   rows={data.clientSearch.nodes || []}
                   headerCellSx={() => ({

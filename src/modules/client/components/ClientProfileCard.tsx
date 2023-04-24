@@ -17,7 +17,7 @@ import { fromPairs } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ExternalLink from '@/components/elements/ExternalLink';
+import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import ClientImageUploadDialog from '@/components/elements/input/ClientImageUploadDialog';
 import NotSpecified from '@/components/elements/NotSpecified';
 import RouterLink from '@/components/elements/RouterLink';
@@ -105,22 +105,10 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             content: (
               <ClientProfileCardTextTable
                 content={fromPairs(
-                  client.externalIds.map(({ identifier, label, url }) => {
+                  client.externalIds.map((externalId) => {
                     return [
-                      label,
-                      url && identifier ? (
-                        <ExternalLink variant='inherit' href={url}>
-                          {identifier}
-                        </ExternalLink>
-                      ) : identifier ? (
-                        <Typography variant='inherit'>
-                          {identifier || 'none'}
-                        </Typography>
-                      ) : (
-                        <Typography variant='inherit' color='text.secondary'>
-                          None
-                        </Typography>
-                      ),
+                      externalId.label,
+                      <ExternalIdDisplay value={externalId} />,
                     ];
                   })
                 )}
