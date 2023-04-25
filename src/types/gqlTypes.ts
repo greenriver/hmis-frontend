@@ -1988,10 +1988,10 @@ export enum LivingSituation {
 export type MciClearanceInput = {
   dob: Scalars['ISO8601Date'];
   firstName: Scalars['String'];
-  gender: Array<Gender>;
+  gender?: InputMaybe<Array<Gender>>;
   lastName: Scalars['String'];
-  middleName: Scalars['String'];
-  ssn: Scalars['String'];
+  middleName?: InputMaybe<Scalars['String']>;
+  ssn?: InputMaybe<Scalars['String']>;
 };
 
 export type MciClearanceMatch = {
@@ -2053,7 +2053,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addHouseholdMembersToEnrollment?: Maybe<AddHouseholdMembersToEnrollmentPayload>;
   addRecentItem?: Maybe<ApplicationUser>;
-  /** Submit a form to create/update HUD record(s) */
+  /** Perform MCI clearance and return matches */
   clearMci?: Maybe<ClearMciPayload>;
   clearRecentItems?: Maybe<ApplicationUser>;
   createBeds?: Maybe<CreateBedsPayload>;
