@@ -2007,7 +2007,6 @@ export type MciClearanceMatch = {
   mciId: Scalars['String'];
   middleName?: Maybe<Scalars['String']>;
   nameSuffix?: Maybe<Scalars['String']>;
-  race: Array<Race>;
   score: Scalars['Int'];
   ssn?: Maybe<Scalars['String']>;
 };
@@ -8806,7 +8805,6 @@ export type MciMatchFragmentFragment = {
   mciId: string;
   middleName?: string | null;
   nameSuffix?: string | null;
-  race: Array<Race>;
   ssn?: string | null;
 };
 
@@ -8832,7 +8830,6 @@ export type ClearMciMutation = {
       mciId: string;
       middleName?: string | null;
       nameSuffix?: string | null;
-      race: Array<Race>;
       ssn?: string | null;
     }> | null;
     errors: Array<{
@@ -10706,7 +10703,6 @@ export const MciMatchFragmentFragmentDoc = gql`
     mciId
     middleName
     nameSuffix
-    race
     ssn
   }
 `;

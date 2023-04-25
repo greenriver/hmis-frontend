@@ -10,7 +10,6 @@ fragment MciMatchFragment on MciClearanceMatch {
   mciId
   middleName
   nameSuffix
-  race
   ssn
 }
 
