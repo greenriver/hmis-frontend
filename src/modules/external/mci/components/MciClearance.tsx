@@ -10,9 +10,11 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
+import { isNil } from 'lodash-es';
 import pluralize from 'pluralize';
 import {
   Dispatch,
+  ReactNode,
   SetStateAction,
   useCallback,
   useMemo,
@@ -27,7 +29,9 @@ import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
 import { DynamicInputCommonProps } from '@/modules/form/types';
+import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientNameFragment,
   ExternalIdentifier,
@@ -126,7 +130,91 @@ const getClearanceAlertText = (state: ClearanceState) => {
   }
 };
 
-const UNCLEARED_CLIENT_STRING = '__NO_MCI_MATCH';
+const NEW_MCI_STRING = '__CREATE_MCI_ID';
+const UNCLEARED_CLIENT_STRING = '__UNCLEARED_CLIENT';
+
+const matchScoreColorConfig: { [threshold: number]: string } = {
+  95: '#8BC34A',
+  80: '#FB8C00',
+};
+const MatchScore = ({
+  score,
+  config = matchScoreColorConfig,
+}: {
+  score: number;
+  config?: typeof matchScoreColorConfig;
+}) => {
+  const thresholds = Object.keys(config).map((k) => parseInt(k));
+  let key = thresholds.find((k) => score >= k);
+  if (isNil(key)) key = thresholds[thresholds.length - 1];
+  const baseColor = config[key];
+  return (
+    <Stack
+      direction='row'
+      sx={{
+        backgroundColor: lighten(baseColor, 0.5),
+        height: '14px',
+        width: '120px',
+      }}
+    >
+      <Box sx={{ backgroundColor: baseColor, width: `${score}%` }}></Box>
+    </Stack>
+  );
+};
+
+const MciScoreInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
+  return (
+    <Stack gap={1}>
+      <Typography variant='inherit'>
+        <b>
+          {match.score}
+          {'% '}
+        </b>
+        match confidence
+      </Typography>
+      <MatchScore score={match.score} />
+      <Typography variant='inherit'>{match.mciId}</Typography>
+      {match.existingClientId && (
+        <Typography variant='inherit'>
+          {/* TODO: link */}
+          <b>Already in HMIS</b>
+        </Typography>
+      )}
+    </Stack>
+  );
+};
+
+const LabeledText = ({ value, label }: { value: ReactNode; label: string }) => (
+  <Typography variant='inherit'>
+    <b>{label}:</b> {value}
+  </Typography>
+);
+
+const MciDemographicInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
+  return (
+    <Stack gap={1}>
+      <Typography variant='inherit'>
+        {clientNameAllParts(match as ClientNameFragment)}
+      </Typography>
+      <LabeledText label='DOB' value={match.dob} />
+      <LabeledText
+        label='Age'
+        value={`${match.age} ${pluralize('year', match.age)}`}
+      />
+      {match.ssn && <LabeledText label='SSN' value={match.ssn} />}
+      <LabeledText
+        label='Gender'
+        value={
+          <MultiHmisEnum
+            values={match.gender}
+            enumMap={HmisEnums.Gender}
+            display='inline'
+          />
+        }
+      />
+    </Stack>
+  );
+};
 
 const MciMatchSelector = ({
   value,
@@ -166,11 +254,11 @@ const MciMatchSelector = ({
     },
     {
       key: 'score',
-      render: (m) => m.score,
+      render: (m) => <MciScoreInfo match={m} />,
     },
     {
       key: 'details',
-      render: (m) => clientNameAllParts(m as ClientNameFragment),
+      render: (m) => <MciDemographicInfo match={m} />,
     },
   ];
 
@@ -182,6 +270,21 @@ const MciMatchSelector = ({
       <GenericTable<MciMatchFieldsFragment>
         rows={matches}
         columns={columns}
+        tableProps={{
+          sx: {
+            td: { py: 2 },
+            borderTop: '1px solid white',
+            borderColor: 'borders.light',
+            'td:nth-child(2)': {
+              borderLeft: '1px solid white',
+              borderColor: 'borders.light',
+            },
+            'td:nth-child(3)': {
+              borderLeft: '1px solid white',
+              borderColor: 'borders.light',
+            },
+          },
+        }}
         actionRow={
           autocleared ? undefined : (
             <>
@@ -189,8 +292,8 @@ const MciMatchSelector = ({
                 <TableCell>
                   <Switch
                     inputProps={{ 'aria-label': 'controlled' }}
-                    checked={value == UNCLEARED_CLIENT_STRING}
-                    onChange={handleChange(UNCLEARED_CLIENT_STRING)}
+                    checked={value == NEW_MCI_STRING}
+                    onChange={handleChange(NEW_MCI_STRING)}
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>
