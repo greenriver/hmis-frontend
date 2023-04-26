@@ -8792,7 +8792,7 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
-export type MciMatchFragmentFragment = {
+export type MciMatchFieldsFragment = {
   __typename?: 'MciClearanceMatch';
   id: string;
   score: number;
@@ -10690,8 +10690,8 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
-export const MciMatchFragmentFragmentDoc = gql`
-  fragment MciMatchFragment on MciClearanceMatch {
+export const MciMatchFieldsFragmentDoc = gql`
+  fragment MciMatchFields on MciClearanceMatch {
     id
     score
     existingClientId
@@ -13469,14 +13469,14 @@ export const ClearMciDocument = gql`
     clearMci(input: $input) {
       clientMutationId
       matches {
-        ...MciMatchFragment
+        ...MciMatchFields
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${MciMatchFragmentFragmentDoc}
+  ${MciMatchFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type ClearMciMutationFn = Apollo.MutationFunction<

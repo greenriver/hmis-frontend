@@ -1,4 +1,4 @@
-fragment MciMatchFragment on MciClearanceMatch {
+fragment MciMatchFields on MciClearanceMatch {
   id
   score
   existingClientId
@@ -17,7 +17,7 @@ mutation ClearMci($input: ClearMciInput!) {
   clearMci(input: $input) {
     clientMutationId
     matches {
-      ...MciMatchFragment
+      ...MciMatchFields
     }
     errors {
       ...ValidationErrorFields
