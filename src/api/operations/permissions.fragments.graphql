@@ -3,7 +3,6 @@ fragment RootPermissionsFragment on QueryAccess {
   canAdministerHmis
   canEditClients
   canViewClients
-  canViewUnenrolledClients
   canDeleteClients
   canAuditClients
   canEditOrganization

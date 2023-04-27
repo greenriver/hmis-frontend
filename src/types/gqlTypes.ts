@@ -2619,7 +2619,6 @@ export type QueryAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
-  canViewUnenrolledClients: Scalars['Boolean'];
   id: Scalars['ID'];
 };
 
@@ -8928,7 +8927,6 @@ export type RootPermissionsFragmentFragment = {
   canAdministerHmis: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
-  canViewUnenrolledClients: boolean;
   canDeleteClients: boolean;
   canAuditClients: boolean;
   canEditOrganization: boolean;
@@ -8959,7 +8957,6 @@ export type GetRootPermissionsQuery = {
     canAdministerHmis: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
-    canViewUnenrolledClients: boolean;
     canDeleteClients: boolean;
     canAuditClients: boolean;
     canEditOrganization: boolean;
@@ -10633,7 +10630,6 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canAdministerHmis
     canEditClients
     canViewClients
-    canViewUnenrolledClients
     canDeleteClients
     canAuditClients
     canEditOrganization

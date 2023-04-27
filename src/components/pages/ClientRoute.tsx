@@ -18,19 +18,11 @@ const ClientRoute: React.FC<
   const [clientPerms, clientStatus] = useClientPermissions(clientId || '');
   const [rootPerms, rootStatus] = useRootPermissions();
 
-  // const [allowed, { loading, data }] = useHasClientPermissions(
-  //   clientId || '',
-  //   compact([view ? 'canViewClient' : null, edit ? 'canEditClient' : null])
-  // );
-
-  console.log({ clientPerms });
-
   const allowed = useMemo(() => {
     if (!clientPerms || !rootPerms) return false;
     const { canViewClient, canEditClient } = clientPerms;
-    const { canViewUnenrolledClients } = rootPerms;
 
-    if (view) return canViewClient || canViewUnenrolledClients;
+    if (view) return canViewClient;
     if (edit) return canEditClient;
   }, [clientPerms, rootPerms, view, edit]);
 
