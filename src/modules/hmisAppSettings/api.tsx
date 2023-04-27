@@ -12,11 +12,13 @@ export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
     },
   });
 
+  const json = await response.json();
+
   if (response.ok) {
-    return response.json();
+    return json;
   } else {
-    return response.text().then((text) => {
-      throw new Error(`Failed to fetch app settings: ${text}`);
+    throw new Error(`Failed to fetch app settings: ${JSON.stringify(json)}`, {
+      cause: json,
     });
   }
 };
