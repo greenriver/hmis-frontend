@@ -77,7 +77,6 @@ fragment ClientFields on Client {
   dateUpdated
   ...ClientName
   ...ClientImage
-  warehouseUrl
   externalIds {
     ...ClientIdentifierFields
   }

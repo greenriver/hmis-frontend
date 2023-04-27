@@ -22,7 +22,6 @@ import {
 export const RITA_ACKROYD = {
   __typename: 'Client',
   id: '9999',
-  warehouseUrl: 'https://hmis-warehouse.dev.test/clients/9999/from_source',
   personalId: '9999',
   ssn: '0001',
   firstName: 'Rita',
