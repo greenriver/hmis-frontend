@@ -10,7 +10,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { isNil, min } from 'lodash-es';
 import pluralize from 'pluralize';
 import {
   Dispatch,
@@ -28,7 +28,9 @@ import { useDashboardClient } from '@/components/pages/ClientDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
+import useDynamicFormContext from '@/modules/form/components/useDynamicFormContext';
 import { DynamicInputCommonProps } from '@/modules/form/types';
+import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -146,8 +148,8 @@ const MatchScore = ({
 }) => {
   const thresholds = Object.keys(config).map((k) => parseInt(k));
   let key = thresholds.find((k) => score >= k);
-  if (isNil(key)) key = thresholds[thresholds.length - 1];
-  const baseColor = config[key];
+  if (isNil(key)) key = min(thresholds);
+  const baseColor = config[key as number];
   return (
     <Stack
       direction='row'
@@ -173,7 +175,9 @@ const MciScoreInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
         match confidence
       </Typography>
       <MatchScore score={match.score} />
-      <Typography variant='inherit'>{match.mciId}</Typography>
+      <Typography variant='inherit' sx={{ pt: 2 }}>
+        {match.mciId}
+      </Typography>
       {match.existingClientId && (
         <Typography variant='inherit'>
           {/* TODO: link */}
@@ -229,7 +233,7 @@ const MciMatchSelector = ({
 }) => {
   // TODO: disable toggle if it's an auto-clearance; and dont show the action row
 
-  console.log(value, matches);
+  // console.log(value, matches);
   const handleChange =
     (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
@@ -323,6 +327,7 @@ const MciMatchSelector = ({
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MciClearance = ({ value, onChange }: MciClearanceProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+  const { getCleanedValues, definition } = useDynamicFormContext();
   const [{ status, candidates }, setState] = useState<ClearanceState>(
     initialClearanceState
   );
@@ -363,6 +368,15 @@ const MciClearance = ({ value, onChange }: MciClearanceProps) => {
 
   // TODO: need form state to construct mutation input
   const onClickSearch = useCallback(() => {
+    console.log(getCleanedValues ? getCleanedValues() : 'none');
+    if (definition && getCleanedValues) {
+      const currentFormValues = createHudValuesForSubmit(
+        getCleanedValues(),
+        definition
+      );
+      console.log(currentFormValues);
+    }
+
     clearMci({
       variables: {
         input: {
@@ -374,7 +388,7 @@ const MciClearance = ({ value, onChange }: MciClearanceProps) => {
         },
       },
     });
-  }, [clearMci]);
+  }, [clearMci, getCleanedValues]);
 
   const { title, subtitle, buttonText } = useMemo(
     () =>

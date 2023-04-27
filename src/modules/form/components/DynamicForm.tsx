@@ -17,6 +17,7 @@ import { ChangeType, FormActionTypes, FormValues } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
+import { DynamicFormContext } from './useDynamicFormContext';
 
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -96,6 +97,7 @@ const DynamicForm = forwardRef(
     const saveButtonsRef = React.createRef<HTMLDivElement>();
     const isSaveButtonVisible = useElementInView(saveButtonsRef, '200px');
 
+    // Expose handle for parent components to initiate a background save (used for household workflow tabs)
     useImperativeHandle(
       ref,
       () => ({
@@ -203,17 +205,19 @@ const DynamicForm = forwardRef(
               </Stack>
             </Grid>
           )}
-          {renderFields({
-            itemChanged: handleChangeCallback,
-            severalItemsChanged: handleChangeCallback,
-            errors: errorState.errors,
-            warnings: errorState.warnings,
-            horizontal,
-            pickListRelationId,
-            warnIfEmpty,
-            locked,
-            visible,
-          })}
+          <DynamicFormContext.Provider value={{ getCleanedValues, definition }}>
+            {renderFields({
+              itemChanged: handleChangeCallback,
+              severalItemsChanged: handleChangeCallback,
+              errors: errorState.errors,
+              warnings: errorState.warnings,
+              horizontal,
+              pickListRelationId,
+              warnIfEmpty,
+              locked,
+              visible,
+            })}
+          </DynamicFormContext.Provider>
         </Grid>
         {!alwaysShowSaveSlide && (
           <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
