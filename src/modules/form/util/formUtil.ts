@@ -272,7 +272,7 @@ const evaluateEnableWhen = (
         currentValue <= comparisonValue;
       break;
     case EnableOperator.Exists:
-      result = !isNil(currentValue);
+      result = hasMeaningfulValue(currentValue);
       // flip the result if this is "not exists"
       if (en.answerBoolean === false) {
         result = !result;

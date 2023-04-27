@@ -1,0 +1,2 @@
+export const NEW_MCI_STRING = '__CREATE_MCI_ID';
+export const UNCLEARED_CLIENT_STRING = '__UNCLEARED_CLIENT';
