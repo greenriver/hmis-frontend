@@ -124,3 +124,9 @@ export const useHasRootPermissions = (
 
   return useMemo(() => [result, data] as const, [result, data]);
 };
+
+export const useRootPermissions = () => {
+  const rootData = useGetRootPermissionsQuery();
+
+  return useMemo(() => [rootData?.data?.access, rootData] as const, [rootData]);
+};

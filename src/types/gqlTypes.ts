@@ -363,12 +363,15 @@ export type ClientServicesArgs = {
 export type ClientAccess = {
   __typename?: 'ClientAccess';
   canDeleteAssessments: Scalars['Boolean'];
+  canDeleteClient: Scalars['Boolean'];
   canDeleteEnrollments: Scalars['Boolean'];
+  canEditClient: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   canManageAnyClientFiles: Scalars['Boolean'];
   canManageOwnClientFiles: Scalars['Boolean'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
+  canViewClient: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
@@ -2616,6 +2619,7 @@ export type QueryAccess = {
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
+  canViewUnenrolledClients: Scalars['Boolean'];
   id: Scalars['ID'];
 };
 
@@ -6745,6 +6749,9 @@ export type ClientNameFragment = {
 export type ClientAccessFieldsFragment = {
   __typename?: 'ClientAccess';
   id: string;
+  canViewClient: boolean;
+  canEditClient: boolean;
+  canDeleteClient: boolean;
   canViewDob: boolean;
   canViewFullSsn: boolean;
   canViewPartialSsn: boolean;
@@ -6764,6 +6771,9 @@ export type ClientPermissionsFragment = {
   access: {
     __typename?: 'ClientAccess';
     id: string;
+    canViewClient: boolean;
+    canEditClient: boolean;
+    canDeleteClient: boolean;
     canViewDob: boolean;
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
@@ -6899,6 +6909,9 @@ export type HouseholdClientFieldsFragment = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClient: boolean;
+      canEditClient: boolean;
+      canDeleteClient: boolean;
       canViewDob: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
@@ -6959,6 +6972,9 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClient: boolean;
+      canEditClient: boolean;
+      canDeleteClient: boolean;
       canViewDob: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
@@ -7047,6 +7063,9 @@ export type EnrollmentWithHouseholdFragmentFragment = {
           id: string;
           canViewFullSsn: boolean;
           canViewPartialSsn: boolean;
+          canViewClient: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
           canViewDob: boolean;
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
@@ -7404,6 +7423,9 @@ export type GetClientQuery = {
       id: string;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
+      canViewClient: boolean;
+      canEditClient: boolean;
+      canDeleteClient: boolean;
       canViewDob: boolean;
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
@@ -7452,6 +7474,9 @@ export type GetClientPermissionsQuery = {
     access: {
       __typename?: 'ClientAccess';
       id: string;
+      canViewClient: boolean;
+      canEditClient: boolean;
+      canDeleteClient: boolean;
       canViewDob: boolean;
       canViewFullSsn: boolean;
       canViewPartialSsn: boolean;
@@ -7816,6 +7841,9 @@ export type UpdateRelationshipToHoHMutation = {
               id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
+              canViewClient: boolean;
+              canEditClient: boolean;
+              canDeleteClient: boolean;
               canViewDob: boolean;
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
@@ -7999,6 +8027,9 @@ export type AddHouseholdMembersMutation = {
               id: string;
               canViewFullSsn: boolean;
               canViewPartialSsn: boolean;
+              canViewClient: boolean;
+              canEditClient: boolean;
+              canDeleteClient: boolean;
               canViewDob: boolean;
               canEditEnrollments: boolean;
               canDeleteEnrollments: boolean;
@@ -8303,6 +8334,9 @@ export type GetEnrollmentWithHouseholdQuery = {
             id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
+            canViewClient: boolean;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
             canViewDob: boolean;
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
@@ -8438,6 +8472,9 @@ export type GetClientHouseholdMemberCandidatesQuery = {
                 id: string;
                 canViewFullSsn: boolean;
                 canViewPartialSsn: boolean;
+                canViewClient: boolean;
+                canEditClient: boolean;
+                canDeleteClient: boolean;
                 canViewDob: boolean;
                 canEditEnrollments: boolean;
                 canDeleteEnrollments: boolean;
@@ -8891,6 +8928,7 @@ export type RootPermissionsFragmentFragment = {
   canAdministerHmis: boolean;
   canEditClients: boolean;
   canViewClients: boolean;
+  canViewUnenrolledClients: boolean;
   canDeleteClients: boolean;
   canAuditClients: boolean;
   canEditOrganization: boolean;
@@ -8921,6 +8959,7 @@ export type GetRootPermissionsQuery = {
     canAdministerHmis: boolean;
     canEditClients: boolean;
     canViewClients: boolean;
+    canViewUnenrolledClients: boolean;
     canDeleteClients: boolean;
     canAuditClients: boolean;
     canEditOrganization: boolean;
@@ -10244,6 +10283,9 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
 export const ClientAccessFieldsFragmentDoc = gql`
   fragment ClientAccessFields on ClientAccess {
     id
+    canViewClient
+    canEditClient
+    canDeleteClient
     canViewDob
     canViewFullSsn
     canViewPartialSsn
@@ -10591,6 +10633,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canAdministerHmis
     canEditClients
     canViewClients
+    canViewUnenrolledClients
     canDeleteClients
     canAuditClients
     canEditOrganization

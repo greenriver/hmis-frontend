@@ -22,6 +22,9 @@ fragment ClientName on Client {
 
 fragment ClientAccessFields on ClientAccess {
   id
+  canViewClient
+  canEditClient
+  canDeleteClient
   canViewDob
   canViewFullSsn
   canViewPartialSsn

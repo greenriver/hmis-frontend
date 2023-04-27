@@ -449,7 +449,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canDeleteClient',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditClient',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -490,6 +506,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewAnyNonconfidentialClientFiles',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewClient',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -2669,6 +2693,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canViewPartialSsn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canViewUnenrolledClients',
         type: {
           kind: 'NON_NULL',
           name: null,

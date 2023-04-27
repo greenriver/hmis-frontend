@@ -209,12 +209,24 @@ export const protectedRoutes = [
           {
             path: DashboardRoutes.EDIT,
             element: (
-              <RootPermissionsFilter
-                permissions='canEditClients'
-                otherwise={<Navigate to='profile' replace />}
-              >
-                <EditClient />
-              </RootPermissionsFilter>
+              <ParamsWrapper<{ clientId: string }>>
+                {({ clientId }) => (
+                  <ClientPermissionsFilter
+                    id={clientId}
+                    permissions='canEditClient'
+                    otherwise={
+                      <Navigate
+                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                          clientId,
+                        })}
+                        replace
+                      />
+                    }
+                  >
+                    <EditClient />
+                  </ClientPermissionsFilter>
+                )}
+              </ParamsWrapper>
             ),
           },
           {
