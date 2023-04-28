@@ -105,12 +105,12 @@ const ViewEnrollment = () => {
               <IdDisplay
                 prefix='Enrollment'
                 color='text.secondary'
-                id={enrollment.id}
+                value={enrollment.id}
               />
               <IdDisplay
                 prefix='Household'
                 color='text.secondary'
-                id={enrollment.household.shortId}
+                value={enrollment.household.shortId}
               />
             </Stack>
           </Paper>

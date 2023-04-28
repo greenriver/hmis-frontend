@@ -161,7 +161,7 @@ const Project = () => {
               sx={{ mb: 2 }}
             >
               <Typography variant='h5'>Project Details</Typography>
-              <IdDisplay prefix='Project' id={project.id} />
+              <IdDisplay prefix='Project' value={project.id} />
             </Stack>
             <ProjectDetails project={project} />
           </Paper>

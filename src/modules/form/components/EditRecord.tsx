@@ -106,7 +106,10 @@ const EditRecord = <RecordType extends AllowedTypes>({
         if (record) onCompleted(record as RecordType);
       }
     },
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+    onError: (apolloError) => {
+      setErrors({ ...emptyErrorState, apolloError });
+      window.scrollTo(0, 0);
+    },
   });
 
   const initialValues = useMemo(() => {

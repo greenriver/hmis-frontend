@@ -16,13 +16,16 @@ import { NEW_MCI_STRING, UNCLEARED_CLIENT_STRING } from '../util';
 import { MciClearanceProps } from './MciClearance';
 
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
+import RouterLink from '@/components/elements/RouterLink';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameAllParts,
   parseAndFormatDate,
 } from '@/modules/hmis/hmisUtil';
+import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ClientNameFragment, MciMatchFieldsFragment } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const matchScoreColorConfig: { [threshold: number]: string } = {
   95: '#8BC34A',
@@ -76,10 +79,14 @@ const MciScoreInfo = ({ match }: { match: MciMatchFieldsFragment }) => {
         {match.mciId}
       </Typography>
       {match.existingClientId && (
-        <Typography variant='inherit'>
-          {/* TODO: link */}
-          <b>Already in HMIS</b>
-        </Typography>
+        <RouterLink
+          to={generateSafePath(Routes.CLIENT_DASHBOARD, {
+            clientId: match.existingClientId,
+          })}
+          openInNew
+        >
+          <Typography variant='inherit'>Already in HMIS</Typography>
+        </RouterLink>
       )}
     </Stack>
   );
@@ -121,9 +128,11 @@ const MciMatchSelector = ({
   onChange,
   matches,
   autocleared = false,
+  allowSelectingExistingClient = false,
 }: Pick<MciClearanceProps, 'value' | 'onChange'> & {
   matches: MciMatchFieldsFragment[];
   autocleared?: boolean;
+  allowSelectingExistingClient?: boolean;
 }) => {
   const handleChange =
     (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +152,10 @@ const MciMatchSelector = ({
           inputProps={{ 'aria-label': 'controlled' }}
           checked={value == m.mciId}
           onChange={handleChange(m.mciId)}
-          disabled={autocleared}
+          disabled={
+            autocleared ||
+            (!!m.existingClientId && !allowSelectingExistingClient)
+          }
         />
       ),
     },

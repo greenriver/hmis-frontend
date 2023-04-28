@@ -26,6 +26,7 @@ import { useClearMciMutation } from '@/types/gqlTypes';
 export interface MciClearanceProps extends DynamicInputCommonProps {
   value?: string | null;
   onChange: (value?: string | null) => void;
+  existingClient: boolean;
 }
 
 const initialClearanceState: ClearanceState = {
@@ -33,7 +34,11 @@ const initialClearanceState: ClearanceState = {
   candidates: [],
 };
 
-const MciClearance = ({ value, onChange }: MciClearanceProps) => {
+const MciClearance = ({
+  value,
+  onChange,
+  existingClient,
+}: MciClearanceProps) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const { getCleanedValues, definition } = useDynamicFormContext();
   const [{ status, candidates }, setState] = useState<ClearanceState>(
@@ -60,7 +65,7 @@ const MciClearance = ({ value, onChange }: MciClearanceProps) => {
           status = 'several_matches';
         }
 
-        console.log('Cleared MCI:', status, matches);
+        console.debug('Cleared MCI:', status, matches);
         setState({ status, candidates: matches });
         if (status == 'auto_cleared') {
           onChange(matches[0].mciId);
@@ -154,6 +159,8 @@ const MciClearance = ({ value, onChange }: MciClearanceProps) => {
           onChange={onChange}
           matches={candidates}
           autocleared={status == 'auto_cleared'}
+          // Only allow them to link a duplicate if this client has already been saved.
+          allowSelectingExistingClient={existingClient}
         />
       )}
     </>
@@ -181,9 +188,16 @@ const MciClearanceWrapper = ({
   // Post-MVP: allow re-clear
   if (ctx && ctx.client) {
     const mci = ctx.client.externalIds.find((c) => c.label == 'MCI ID');
-    if (mci) return <MciSuccessAlert mci={mci} />;
+    if (mci && mci.identifier) return <MciSuccessAlert mci={mci} />;
   }
 
-  return <MciClearance disabled={disabled} onChange={onChange} {...props} />;
+  return (
+    <MciClearance
+      disabled={disabled}
+      onChange={onChange}
+      existingClient={ctx && ctx.client}
+      {...props}
+    />
+  );
 };
 export default MciClearanceWrapper;

@@ -1,5 +1,5 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PersonIcon from '@mui/icons-material/Person';
 import {
   Alert,
   Box,
@@ -9,12 +9,13 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import { Fragment, useMemo } from 'react';
 
 import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
@@ -27,6 +28,7 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { DashboardRoutes } from '@/routes/routes';
 import {
@@ -110,7 +112,7 @@ const ClientCard: React.FC<Props> = ({
   const { data, loading: enrollmentsLoading } = useGetClientEnrollmentsQuery({
     variables: { id: client.id },
   });
-
+  const { globalFeatureFlags } = useHmisAppSettings();
   const recentEnrollments = useMemo(
     () =>
       data?.client
@@ -189,30 +191,50 @@ const ClientCard: React.FC<Props> = ({
                     {secondaryName}
                   </Typography>
                 )}
+                {globalFeatureFlags?.mciId && (
+                  <IdDisplay
+                    prefix='MCI'
+                    value={
+                      <ExternalIdDisplay
+                        value={client.externalIds.find(
+                          (c) => c.label == 'MCI ID'
+                        )}
+                      />
+                    }
+                    color='text.primary'
+                    withoutEmphasis
+                  />
+                )}
                 <IdDisplay
-                  id={client.id}
+                  prefix='HMIS'
+                  value={client.id}
                   color='text.primary'
                   withoutEmphasis
                 />
-                <Typography
-                  variant='body2'
-                  component={Box}
-                  sx={{ display: 'flex', gap: 0.5 }}
-                >
-                  Age: <ClientDobAge client={client} />
-                </Typography>
-                <ClientPermissionsFilter
-                  id={client.id}
-                  permissions={['canViewFullSsn', 'canViewPartialSsn']}
-                >
+
+                {!isNil(client.age) && (
                   <Typography
                     variant='body2'
                     component={Box}
                     sx={{ display: 'flex', gap: 0.5 }}
                   >
-                    SSN: <ClientSafeSsn client={client} />
+                    Age: <ClientDobAge client={client} />
                   </Typography>
-                </ClientPermissionsFilter>
+                )}
+                {client.ssn && (
+                  <ClientPermissionsFilter
+                    id={client.id}
+                    permissions={['canViewFullSsn', 'canViewPartialSsn']}
+                  >
+                    <Typography
+                      variant='body2'
+                      component={Box}
+                      sx={{ display: 'flex', gap: 0.5 }}
+                    >
+                      SSN: <ClientSafeSsn client={client} />
+                    </Typography>
+                  </ClientPermissionsFilter>
+                )}
               </Stack>
             </Stack>
             <Typography variant='body2' sx={{ fontStyle: 'italic' }}>
@@ -245,7 +267,7 @@ const ClientCard: React.FC<Props> = ({
                 clientId: client.id,
               })}
               target={linkTargetBlank ? '_blank' : undefined}
-              Icon={OpenInNewIcon}
+              Icon={PersonIcon}
               leftAlign
             >
               Client Profile

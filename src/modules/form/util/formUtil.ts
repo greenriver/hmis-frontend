@@ -772,7 +772,7 @@ export const applyDataCollectedAbout = (
         return (
           relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
           isNil(client.dob) ||
-          (clientAge && clientAge >= 18)
+          (!isNil(clientAge) && clientAge >= 18)
         );
       case DataCollectedAbout.VeteranHoh:
         return (

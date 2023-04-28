@@ -209,7 +209,7 @@ const AssessmentForm = ({
               />
             )}
             {import.meta.env.MODE === 'development' && assessment && (
-              <IdDisplay prefix='Assessment' id={assessment.id} />
+              <IdDisplay prefix='Assessment' value={assessment.id} />
             )}
           </Stack>
         </Box>
