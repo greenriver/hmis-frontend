@@ -6,7 +6,7 @@ import NotFound from './NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -36,7 +36,7 @@ const CreateProject = () => {
   if (!crumbs) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       <EditRecord<ProjectAllFieldsFragment>
         formRole={FormRole.Project}
         onCompleted={onCompleted}
@@ -48,7 +48,7 @@ const CreateProject = () => {
           </Typography>
         }
       />
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default CreateProject;

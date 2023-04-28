@@ -3,15 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
 
-import NotFound from './NotFound';
 import { ProjectFormTitle } from './Project';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   ProjectCocFieldsFragment,
@@ -26,14 +24,14 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
     cocId: string;
   };
   const title = create ? `Add Project CoC` : `Edit Project CoC`;
-  const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
+  const { project } = useProjectDashboardContext();
 
   const onCompleted = useCallback(() => {
     // Force refresh table if we just created a new record
     if (create) {
       cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
     }
-    navigate(generateSafePath(Routes.PROJECT, { projectId }));
+    navigate(generateSafePath(ProjectDashboardRoutes.COCS, { projectId }));
   }, [navigate, projectId, create]);
 
   const { data, loading, error } = useGetProjectCocQuery({
@@ -41,23 +39,20 @@ const ProjectCoc = ({ create = false }: { create?: boolean }) => {
     skip: create,
   });
 
-  if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) return <NotFound />;
+  if (loading) return <Loading />;
   if (error) throw error;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <EditRecord<ProjectCocFieldsFragment>
-        FormActionProps={
-          create ? { submitButtonText: 'Create Project CoC' } : undefined
-        }
-        onCompleted={onCompleted}
-        formRole={FormRole.ProjectCoc}
-        inputVariables={{ projectId }}
-        record={data?.projectCoc || undefined}
-        title={<ProjectFormTitle title={title} project={project} />}
-      />
-    </ProjectLayout>
+    <EditRecord<ProjectCocFieldsFragment>
+      FormActionProps={
+        create ? { submitButtonText: 'Create Project CoC' } : undefined
+      }
+      onCompleted={onCompleted}
+      formRole={FormRole.ProjectCoc}
+      inputVariables={{ projectId }}
+      record={data?.projectCoc || undefined}
+      title={<ProjectFormTitle title={title} project={project} />}
+    />
   );
 };
 export default ProjectCoc;

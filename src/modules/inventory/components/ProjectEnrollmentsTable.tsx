@@ -100,11 +100,17 @@ const ProjectEnrollmentsTable = ({
   columns,
   openOnDate,
   linkRowToEnrollment = false,
+  searchable = true,
+  // TODO: implement, needs a backend flag
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
+  searchable?: boolean;
+  wipEnrollmentsOnly?: boolean;
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -134,14 +140,16 @@ const ProjectEnrollmentsTable = ({
       EnrollmentFields
     >
       header={
-        <TextInput
-          label='Search Clients'
-          name='search client'
-          placeholder='Search clients...'
-          value={search || ''}
-          onChange={(e) => setSearch(e.target.value)}
-          inputWidth='200px'
-        />
+        searchable ? (
+          <TextInput
+            label='Search Clients'
+            name='search client'
+            placeholder='Search clients...'
+            value={search || ''}
+            onChange={(e) => setSearch(e.target.value)}
+            inputWidth='200px'
+          />
+        ) : undefined
       }
       queryVariables={{
         id: projectId,

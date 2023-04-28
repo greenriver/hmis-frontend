@@ -1,4 +1,3 @@
-import AddIcon from '@mui/icons-material/Add';
 import {
   Alert,
   Button,
@@ -15,11 +14,11 @@ import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
 import ConfirmationDialog from '../elements/ConfirmationDialog';
-import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';
+import PageTitle from '../layout/PageTitle';
 
-import NotFound from './NotFound';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -27,20 +26,14 @@ import {
   parseAndFormatDateRange,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
-import FunderTable from '@/modules/inventory/components/FunderTable';
-import InventoryTable from '@/modules/inventory/components/InventoryTable';
-import ProjectCocTable from '@/modules/inventory/components/ProjectCocTable';
 import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
 import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
   PickListType,
   ProjectAllFieldsFragment,
-  ProjectType,
   useDeleteProjectMutation,
 } from '@/types/gqlTypes';
 import { evictPickList } from '@/utils/cacheUtil';
@@ -104,7 +97,7 @@ export const ProjectFormTitle = ({
   title: string;
   project: ProjectAllFieldsFragment;
 }) => (
-  <Stack direction={'row'} spacing={2}>
+  <Stack direction={'row'} spacing={2} sx={{ my: 1 }}>
     <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
       {title}
     </Typography>
@@ -118,7 +111,7 @@ const Project = () => {
   };
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [crumbs, loading, project] = useProjectCrumbs();
+  const { project } = useProjectDashboardContext();
 
   const [deleteProject, { loading: deleteLoading, error: deleteError }] =
     useDeleteProjectMutation({
@@ -142,15 +135,11 @@ const Project = () => {
       },
     });
 
-  if (loading) return <Loading />;
   if (deleteError) console.error(deleteError);
-  if (!crumbs || !project) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <Typography variant='h3' sx={{ mb: 4 }}>
-        {project.projectName}
-      </Typography>
+    <>
+      <PageTitle title={project.projectName} />
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <InactiveBanner project={project} />
@@ -165,18 +154,6 @@ const Project = () => {
             </Stack>
             <ProjectDetails project={project} />
           </Paper>
-          <TitleCard data-testid='funderCard' title='Funding Sources'>
-            <FunderTable projectId={projectId} />
-          </TitleCard>
-          <TitleCard data-testid='projectCocCard' title='Project CoCs'>
-            <ProjectCocTable projectId={projectId} />
-          </TitleCard>
-          <TitleCard data-testid='inventoryCard' title='Inventory'>
-            <InventoryTable
-              projectId={projectId}
-              es={project.projectType === ProjectType.Es}
-            />
-          </TitleCard>
           <ProjectPermissionsFilter
             id={project.id}
             permissions='canViewEnrollmentDetails'
@@ -199,43 +176,11 @@ const Project = () => {
                   variant='outlined'
                   color='secondary'
                   sx={{ pl: 3, justifyContent: 'left' }}
-                  to={generateSafePath(Routes.ADD_SERVICES, { projectId })}
+                  to={generateSafePath(ProjectDashboardRoutes.ADD_SERVICES, {
+                    projectId,
+                  })}
                 >
                   Record Services
-                </ButtonLink>
-              </Stack>
-            </Paper>
-          </ProjectPermissionsFilter>
-          <ProjectPermissionsFilter
-            id={projectId}
-            permissions='canEditProjectDetails'
-          >
-            <Paper sx={{ p: 2, mb: 3 }}>
-              <Stack spacing={2}>
-                <Typography variant='h6'>Add to Project</Typography>
-                <ButtonLink
-                  data-testid='addFunderButton'
-                  to={generateSafePath(Routes.NEW_FUNDER, { projectId })}
-                  Icon={AddIcon}
-                  leftAlign
-                >
-                  Add Funding Source
-                </ButtonLink>
-                <ButtonLink
-                  data-testid='addProjectCocButton'
-                  to={generateSafePath(Routes.NEW_COC, { projectId })}
-                  Icon={AddIcon}
-                  leftAlign
-                >
-                  Add Project CoC
-                </ButtonLink>
-                <ButtonLink
-                  data-testid='addInventoryButton'
-                  to={generateSafePath(Routes.NEW_INVENTORY, { projectId })}
-                  Icon={AddIcon}
-                  leftAlign
-                >
-                  Add Inventory
                 </ButtonLink>
               </Stack>
             </Paper>
@@ -264,7 +209,7 @@ const Project = () => {
                     data-testid='updateProjectButton'
                     variant='text'
                     color='secondary'
-                    to={generateSafePath(Routes.EDIT_PROJECT, {
+                    to={generateSafePath(ProjectDashboardRoutes.EDIT_PROJECT, {
                       projectId,
                     })}
                     sx={{ justifyContent: 'left' }}
@@ -310,7 +255,7 @@ const Project = () => {
           <Typography>This action cannot be undone.</Typography>
         </ConfirmationDialog>
       </ProjectPermissionsFilter>
-    </ProjectLayout>
+    </>
   );
 };
 export default Project;

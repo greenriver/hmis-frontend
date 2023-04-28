@@ -1,6 +1,8 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import { Box, Chip, Link, Paper, Stack, Typography } from '@mui/material';
+import { Box, Chip, Link, Paper } from '@mui/material';
 import { useMemo, useState } from 'react';
+
+import PageTitle from '../layout/PageTitle';
 
 import FileDialog from './files/FileModal';
 import useFileActions from './files/useFileActions';
@@ -124,25 +126,22 @@ const AllFiles = () => {
 
   return (
     <>
-      <Stack
-        gap={3}
-        direction='row'
-        justifyContent={'space-between'}
-        sx={{ mb: 2, pr: 1, alignItems: 'center' }}
-      >
-        <Typography variant='h4'>All Files</Typography>
-        {canEdit && (
-          <ButtonLink
-            to={generateSafePath(DashboardRoutes.NEW_FILE, {
-              clientId,
-            })}
-            data-testid='addClientFileButton'
-            Icon={UploadIcon}
-          >
-            Upload File
-          </ButtonLink>
-        )}
-      </Stack>
+      <PageTitle
+        title='Files'
+        actions={
+          canEdit && (
+            <ButtonLink
+              to={generateSafePath(DashboardRoutes.NEW_FILE, {
+                clientId,
+              })}
+              data-testid='addClientFileButton'
+              Icon={UploadIcon}
+            >
+              Upload File
+            </ButtonLink>
+          )
+        }
+      />
       <Paper>
         <GenericTableWithData<
           GetClientFilesQuery,

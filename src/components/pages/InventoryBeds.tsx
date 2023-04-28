@@ -11,9 +11,11 @@ import {
 import { useCallback, useState } from 'react';
 
 import Loading from '../elements/Loading';
+import PageTitle from '../layout/PageTitle';
 
 import NotFound from './NotFound';
 import { InactiveChip } from './Project';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import {
@@ -32,9 +34,6 @@ import DynamicForm, {
 } from '@/modules/form/components/DynamicForm';
 import { BedsDefinition, UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
-import { Routes } from '@/routes/routes';
 import {
   CreateBedsInput,
   CreateUnitsInput,
@@ -50,7 +49,7 @@ const InventoryBeds = () => {
     inventoryId: string;
   };
   const title = 'Beds and Units';
-  const [crumbs, crumbsLoading, project] = useProjectCrumbs();
+  const { project } = useProjectDashboardContext();
   const [dialogOpen, setDialogOpen] = useState<'BEDS' | 'UNITS' | null>(null);
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
   const { data, loading, error } = useGetInventoryQuery({
@@ -116,25 +115,22 @@ const InventoryBeds = () => {
     [createUnits, inventoryId]
   );
 
-  if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) return <NotFound />;
+  if (loading) return <Loading />;
   if (!data?.inventory) return <NotFound />;
   if (error) throw error;
 
   return (
-    <ProjectLayout
-      crumbs={[
-        ...crumbs,
-        { label: 'Inventory', to: Routes.EDIT_INVENTORY },
-        { label: title, to: '' },
-      ]}
-    >
-      <Stack direction={'row'} spacing={2} sx={{ mb: 4 }}>
-        <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-          {title}
-        </Typography>
-        <InactiveChip project={project} />
-      </Stack>
+    <>
+      <PageTitle
+        title={
+          <>
+            <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+              {title}
+            </Typography>
+            <InactiveChip project={project} />
+          </>
+        }
+      />
       <Grid container spacing={4}>
         <Grid item xs={12}>
           <Paper sx={{ mb: 4 }}>
@@ -219,7 +215,7 @@ const InventoryBeds = () => {
           )}
         </DialogContent>
       </Dialog>
-    </ProjectLayout>
+    </>
   );
 };
 export default InventoryBeds;

@@ -1,25 +1,24 @@
-import { Button, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import { Button, Paper, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData, {
-  Props as GenericTableWithDataProps,
-} from '@/modules/dataFetching/components/GenericTableWithData';
+import PageTitle from '@/components/layout/PageTitle';
+import useSafeParams from '@/hooks/useSafeParams';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   FunderFieldsFragment,
   GetProjectFundersDocument,
-  GetProjectFundersQuery,
-  GetProjectFundersQueryVariables,
   useDeleteFunderMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -40,19 +39,22 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
   { header: 'Grant ID', render: 'grantId' },
 ];
 
-interface Props
-  extends Omit<
-    GenericTableWithDataProps<
-      GetProjectFundersQuery,
-      GetProjectFundersQueryVariables,
-      FunderFieldsFragment
-    >,
-    'queryVariables' | 'queryDocument' | 'pagePath'
-  > {
-  projectId: string;
-}
+// interface Props
+//   extends Omit<
+//     GenericTableWithDataProps<
+//       GetProjectFundersQuery,
+//       GetProjectFundersQueryVariables,
+//       FunderFieldsFragment
+//     >,
+//     'queryVariables' | 'queryDocument' | 'pagePath'
+//   > {
+//   projectId: string;
+// }
 
-const FunderTable = ({ projectId, ...props }: Props) => {
+const FunderTable = () => {
+  const { projectId } = useSafeParams() as {
+    projectId: string;
+  };
   const [recordToDelete, setDelete] = useState<FunderFieldsFragment | null>(
     null
   );
@@ -90,7 +92,7 @@ const FunderTable = ({ projectId, ...props }: Props) => {
                 <Stack direction='row' spacing={1}>
                   <ButtonLink
                     data-testid='updateButton'
-                    to={generateSafePath(Routes.EDIT_FUNDER, {
+                    to={generateSafePath(ProjectDashboardRoutes.EDIT_FUNDER, {
                       projectId,
                       funderId: record.id,
                     })}
@@ -118,15 +120,35 @@ const FunderTable = ({ projectId, ...props }: Props) => {
 
   return (
     <>
-      <GenericTableWithData
-        queryVariables={{ id: projectId }}
-        queryDocument={GetProjectFundersDocument}
-        columns={tableColumns}
-        recordType='Funder'
-        pagePath='project.funders'
-        noData='No funding sources.'
-        {...props}
+      <PageTitle
+        title='Funders'
+        actions={
+          <ProjectPermissionsFilter
+            id={projectId}
+            permissions='canEditProjectDetails'
+          >
+            <ButtonLink
+              data-testid='addFunderButton'
+              to={generateSafePath(ProjectDashboardRoutes.NEW_FUNDER, {
+                projectId,
+              })}
+              Icon={AddIcon}
+            >
+              Add Funder
+            </ButtonLink>
+          </ProjectPermissionsFilter>
+        }
       />
+      <Paper>
+        <GenericTableWithData
+          queryVariables={{ id: projectId }}
+          queryDocument={GetProjectFundersDocument}
+          columns={tableColumns}
+          recordType='Funder'
+          pagePath='project.funders'
+          noData='No funding sources.'
+        />
+      </Paper>
       <ProjectPermissionsFilter
         id={projectId}
         permissions='canEditProjectDetails'

@@ -5,14 +5,13 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 import { ProjectFormTitle } from './Project';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   FunderFieldsFragment,
@@ -27,7 +26,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     funderId: string; // Not present if create!
   };
   const title = create ? `Add Funder` : `Edit Funder`;
-  const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
+  const { project } = useProjectDashboardContext();
 
   const { data, loading, error } = useGetFunderQuery({
     variables: { id: funderId },
@@ -39,7 +38,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     if (create) {
       cache.evict({ id: `Project:${projectId}`, fieldName: 'funders' });
     }
-    navigate(generateSafePath(Routes.PROJECT, { projectId }));
+    navigate(generateSafePath(ProjectDashboardRoutes.FUNDERS, { projectId }));
   }, [navigate, create, projectId]);
 
   // Local variables to use for form population.
@@ -52,25 +51,22 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     };
   }, [project]);
 
-  if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) return <NotFound />;
+  if (loading) return <Loading />;
   if (!create && !data?.funder) return <NotFound />;
   if (error) throw error;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <EditRecord<FunderFieldsFragment>
-        FormActionProps={
-          create ? { submitButtonText: 'Create Funder' } : undefined
-        }
-        onCompleted={onCompleted}
-        localConstants={localConstants}
-        formRole={FormRole.Funder}
-        inputVariables={{ projectId }}
-        record={data?.funder || undefined}
-        title={<ProjectFormTitle title={title} project={project} />}
-      />
-    </ProjectLayout>
+    <EditRecord<FunderFieldsFragment>
+      FormActionProps={
+        create ? { submitButtonText: 'Create Funder' } : undefined
+      }
+      onCompleted={onCompleted}
+      localConstants={localConstants}
+      formRole={FormRole.Funder}
+      inputVariables={{ projectId }}
+      record={data?.funder || undefined}
+      title={<ProjectFormTitle title={title} project={project} />}
+    />
   );
 };
 export default Funder;

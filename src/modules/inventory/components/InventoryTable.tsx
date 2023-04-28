@@ -13,7 +13,7 @@ import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectInventoriesDocument,
@@ -104,10 +104,13 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
               render: (record: InventoryFieldsFragment) => (
                 <Stack direction='row' spacing={1}>
                   <ButtonLink
-                    to={generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
-                      projectId,
-                      inventoryId: record.id,
-                    })}
+                    to={generateSafePath(
+                      ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
+                      {
+                        projectId,
+                        inventoryId: record.id,
+                      }
+                    )}
                     size='small'
                     variant='outlined'
                   >
@@ -115,10 +118,13 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
                   </ButtonLink>
                   <ButtonLink
                     data-testid='updateButton'
-                    to={generateSafePath(Routes.EDIT_INVENTORY, {
-                      projectId,
-                      inventoryId: record.id,
-                    })}
+                    to={generateSafePath(
+                      ProjectDashboardRoutes.EDIT_INVENTORY,
+                      {
+                        projectId,
+                        inventoryId: record.id,
+                      }
+                    )}
                     size='small'
                     variant='outlined'
                   >

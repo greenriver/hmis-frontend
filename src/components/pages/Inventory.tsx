@@ -5,14 +5,13 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 import { ProjectFormTitle } from './Project';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
   FormRole,
   InventoryFieldsFragment,
@@ -27,7 +26,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     inventoryId: string; // Not present if create!
   };
   const title = create ? `Add Inventory` : `Edit Inventory`;
-  const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
+  const { project } = useProjectDashboardContext();
 
   const { data, loading, error } = useGetInventoryQuery({
     variables: { id: inventoryId },
@@ -40,7 +39,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
         cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
 
         navigate(
-          generateSafePath(Routes.MANAGE_INVENTORY_BEDS, {
+          generateSafePath(ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS, {
             projectId,
             inventoryId: data.id,
           })
@@ -65,26 +64,23 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     };
   }, [project, inventoryId, data]);
 
-  if (loading || crumbsLoading) return <Loading />;
-  if (!crumbs || !project) return <NotFound />;
+  if (loading) return <Loading />;
   if (!create && !data?.inventory) return <NotFound />;
   if (error) throw error;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <EditRecord<InventoryFieldsFragment>
-        FormActionProps={
-          create ? { submitButtonText: 'Create Inventory' } : undefined
-        }
-        onCompleted={onCompleted}
-        formRole={FormRole.Inventory}
-        inputVariables={{ projectId }}
-        record={data?.inventory || undefined}
-        title={<ProjectFormTitle title={title} project={project} />}
-        localConstants={localConstants}
-        pickListRelationId={projectId}
-      />
-    </ProjectLayout>
+    <EditRecord<InventoryFieldsFragment>
+      FormActionProps={
+        create ? { submitButtonText: 'Create Inventory' } : undefined
+      }
+      onCompleted={onCompleted}
+      formRole={FormRole.Inventory}
+      inputVariables={{ projectId }}
+      record={data?.inventory || undefined}
+      title={<ProjectFormTitle title={title} project={project} />}
+      localConstants={localConstants}
+      pickListRelationId={projectId}
+    />
   );
 };
 export default Inventory;

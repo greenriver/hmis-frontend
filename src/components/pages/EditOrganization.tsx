@@ -7,7 +7,7 @@ import Loading from '../elements/Loading';
 import NotFound from './NotFound';
 
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { FormRole, OrganizationAllFieldsFragment } from '@/types/gqlTypes';
@@ -32,7 +32,7 @@ const EditOrganization = () => {
   if (!crumbs || !organization) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
         <EditRecord<OrganizationAllFieldsFragment>
@@ -42,7 +42,7 @@ const EditOrganization = () => {
           title={<Typography variant='h3'>Edit {organizationName}</Typography>}
         />
       )}
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default EditOrganization;

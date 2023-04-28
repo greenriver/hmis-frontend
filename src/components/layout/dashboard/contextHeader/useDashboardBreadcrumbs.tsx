@@ -2,9 +2,10 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { ProjectDashboardContext } from '@/components/pages/ProjectDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
+import { DashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 
 type CrumbConfig = {
   [x: string]: {
@@ -25,12 +26,94 @@ const buildParentPaths = (
   }
 };
 
+function isProjectContext(
+  ctx: DashboardContext | ProjectDashboardContext
+): ctx is ProjectDashboardContext {
+  return !!(
+    typeof ctx === 'object' &&
+    typeof (ctx as ProjectDashboardContext).project === 'object'
+  );
+}
+
+// function isClientContext(
+//   ctx: DashboardContext | ProjectDashboardContext
+// ): ctx is DashboardContext {
+//   return !!(
+//     typeof ctx === 'object' &&
+//     typeof (ctx as DashboardContext).client === 'object'
+//   );
+// }
+
 export const useDashboardBreadcrumbs = (
-  context: DashboardContext,
+  context: DashboardContext | ProjectDashboardContext,
   breadcrumbOverrides?: Record<string, string>
 ) => {
-  const crumbConfig: CrumbConfig = useMemo(
-    () => ({
+  const crumbConfig: CrumbConfig = useMemo(() => {
+    if (isProjectContext(context)) {
+      return {
+        [ProjectDashboardRoutes.OVERVIEW]: {
+          title: context.project.projectName,
+        },
+        [ProjectDashboardRoutes.EDIT_PROJECT]: {
+          title: 'Edit Project',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.ENROLLMENTS]: {
+          title: 'Enrollments',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.ADD_SERVICES]: {
+          title: 'Add Services',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.REFERRALS]: {
+          title: 'Referrals',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.FUNDERS]: {
+          title: 'Funders',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.NEW_FUNDER]: {
+          title: 'Add Funder',
+          parent: ProjectDashboardRoutes.FUNDERS,
+        },
+        [ProjectDashboardRoutes.EDIT_FUNDER]: {
+          title: 'Edit Funder',
+          parent: ProjectDashboardRoutes.FUNDERS,
+        },
+        [ProjectDashboardRoutes.COCS]: {
+          title: 'Project CoCs',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.NEW_COC]: {
+          title: 'Add CoC',
+          parent: ProjectDashboardRoutes.COCS,
+        },
+        [ProjectDashboardRoutes.EDIT_COC]: {
+          title: 'Edit CoC',
+          parent: ProjectDashboardRoutes.COCS,
+        },
+        [ProjectDashboardRoutes.INVENTORY]: {
+          title: 'Inventory',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+
+        [ProjectDashboardRoutes.NEW_INVENTORY]: {
+          title: 'Add Inventory',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+        [ProjectDashboardRoutes.EDIT_INVENTORY]: {
+          title: 'Update Inventory',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+        [ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS]: {
+          title: 'Beds and Units',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+      };
+    }
+    return {
       /**
        * Map each path to it's title and it's direct parent
        */
@@ -97,9 +180,8 @@ export const useDashboardBreadcrumbs = (
         title: 'Edit File',
         parent: DashboardRoutes.FILES,
       },
-    }),
-    [context]
-  );
+    };
+  }, [context]);
   const { pathname } = useLocation();
 
   const currentPath = useCurrentPath();

@@ -1,10 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
@@ -64,27 +65,24 @@ const AllEnrollments = () => {
 
   return (
     <>
-      <Stack
-        gap={3}
-        direction='row'
-        justifyContent={'space-between'}
-        sx={{ mb: 2, pr: 1, alignItems: 'center' }}
-      >
-        <Typography variant='h4'>All Enrollments</Typography>
-        <ClientPermissionsFilter
-          id={clientId}
-          permissions={['canEditEnrollments']}
-        >
-          <ButtonLink
-            to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
-              clientId,
-            })}
-            Icon={AddIcon}
+      <PageTitle
+        title='Enrollments'
+        actions={
+          <ClientPermissionsFilter
+            id={clientId}
+            permissions={['canEditEnrollments']}
           >
-            Add Enrollment
-          </ButtonLink>
-        </ClientPermissionsFilter>
-      </Stack>
+            <ButtonLink
+              to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+                clientId,
+              })}
+              Icon={AddIcon}
+            >
+              Add Enrollment
+            </ButtonLink>
+          </ClientPermissionsFilter>
+        }
+      />
       <Paper>
         <GenericTableWithData<
           GetClientEnrollmentsQuery,

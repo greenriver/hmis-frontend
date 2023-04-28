@@ -1,7 +1,5 @@
 import { useLocation } from 'react-router-dom';
 
-import { ALL_PROJECTS_CRUMB } from './useProjectCrumbs';
-
 import useSafeParams from '@/hooks/useSafeParams';
 import apolloClient from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
@@ -10,6 +8,11 @@ import {
   OrganizationFieldsFragmentDoc,
   useGetOrganizationQuery,
 } from '@/types/gqlTypes';
+
+export const ALL_PROJECTS_CRUMB = {
+  label: 'All Projects & Organizations',
+  to: Routes.ALL_PROJECTS,
+};
 
 export function useOrganizationCrumbs(current?: string) {
   const { organizationId } = useSafeParams() as {

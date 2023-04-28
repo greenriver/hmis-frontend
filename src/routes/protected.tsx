@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { DashboardRoutes, Routes } from './routes';
+import { DashboardRoutes, ProjectDashboardRoutes, Routes } from './routes';
 
 import AllFiles from '@/components/dashboard/AllFiles';
 import AuditHistory from '@/components/dashboard/AuditHistory';
@@ -39,10 +39,16 @@ import Organization from '@/components/pages/Organization';
 import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
+import ProjectDashboard from '@/components/pages/ProjectDashboard';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
 import Service from '@/components/pages/Service';
 import useSafeParams from '@/hooks/useSafeParams';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import Cocs from '@/modules/inventory/components/Cocs';
+import Funders from '@/modules/inventory/components/Funders';
+import Inventories from '@/modules/inventory/components/Inventories';
+import ProjectEnrollments from '@/modules/inventory/components/ProjectEnrollments';
+import ProjectReferrals from '@/modules/inventory/components/ProjectReferrals';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -80,14 +86,111 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
-      { path: Routes.PROJECT, element: <Project /> },
       {
-        path: Routes.EDIT_PROJECT,
-        element: (
-          <ProjectEditRoute>
-            <EditProject />
-          </ProjectEditRoute>
-        ),
+        path: Routes.PROJECT,
+        element: <ProjectDashboard />,
+        children: [
+          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: ProjectDashboardRoutes.OVERVIEW,
+            element: <Project />,
+          },
+          {
+            path: ProjectDashboardRoutes.ENROLLMENTS,
+            element: <ProjectEnrollments />,
+          },
+          {
+            path: ProjectDashboardRoutes.REFERRALS,
+            element: <ProjectReferrals />,
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_PROJECT,
+            element: (
+              <ProjectEditRoute>
+                <EditProject />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.INVENTORY,
+            element: <Inventories />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_INVENTORY,
+            element: (
+              <ProjectEditRoute>
+                <Inventory create />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_INVENTORY,
+            element: (
+              <ProjectEditRoute>
+                <Inventory />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
+            element: (
+              <ProjectEditRoute>
+                <InventoryBeds />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.FUNDERS,
+            element: <Funders />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_FUNDER,
+            element: (
+              <ProjectEditRoute>
+                <Funder create={true} />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_FUNDER,
+            element: (
+              <ProjectEditRoute>
+                <Funder />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.COCS,
+            element: <Cocs />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_COC,
+            element: (
+              <ProjectEditRoute>
+                <ProjectCoc create />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_COC,
+            element: (
+              <ProjectEditRoute>
+                <ProjectCoc />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.ADD_SERVICES,
+            element: (
+              <ProjectEditRoute
+                permissions={['canEditEnrollments']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <AddServices />
+              </ProjectEditRoute>
+            ),
+          },
+        ],
       },
       {
         path: Routes.CREATE_PROJECT,
@@ -104,73 +207,6 @@ export const protectedRoutes = [
           <OrganizationEditRoute>
             <EditOrganization />
           </OrganizationEditRoute>
-        ),
-      },
-      {
-        path: Routes.NEW_INVENTORY,
-        element: (
-          <ProjectEditRoute>
-            <Inventory create />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_INVENTORY,
-        element: (
-          <ProjectEditRoute>
-            <Inventory />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.MANAGE_INVENTORY_BEDS,
-        element: (
-          <ProjectEditRoute>
-            <InventoryBeds />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.NEW_FUNDER,
-        element: (
-          <ProjectEditRoute>
-            <Funder create={true} />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_FUNDER,
-        element: (
-          <ProjectEditRoute>
-            <Funder />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.NEW_COC,
-        element: (
-          <ProjectEditRoute>
-            <ProjectCoc create />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_COC,
-        element: (
-          <ProjectEditRoute>
-            <ProjectCoc />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.ADD_SERVICES,
-        element: (
-          <ProjectEditRoute
-            permissions={['canEditEnrollments']}
-            redirectRoute={Routes.PROJECT}
-          >
-            <AddServices />
-          </ProjectEditRoute>
         ),
       },
       {

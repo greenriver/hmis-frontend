@@ -1,8 +1,16 @@
 import { matchRoutes, useLocation } from 'react-router-dom';
 
-import { DashboardRoutes, Routes } from '@/routes/routes';
+import {
+  DashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from '@/routes/routes';
 
-const allRoutes = Object.values({ ...Routes, ...DashboardRoutes }).map((s) => ({
+const allRoutes = Object.values({
+  ...Routes,
+  ...DashboardRoutes,
+  ...ProjectDashboardRoutes,
+}).map((s) => ({
   path: s,
 }));
 

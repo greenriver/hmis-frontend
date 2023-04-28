@@ -4,20 +4,17 @@ import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
 
 import { ColumnDef } from '../elements/GenericTable';
-import Loading from '../elements/Loading';
 
-import NotFound from './NotFound';
 import { InactiveChip } from './Project';
+import { useProjectDashboardContext } from './ProjectDashboard';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
 import ProjectEnrollmentsTable, {
-  ENROLLMENT_COLUMNS,
   EnrollmentFields,
+  ENROLLMENT_COLUMNS,
 } from '@/modules/inventory/components/ProjectEnrollmentsTable';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useProjectCrumbs } from '@/modules/inventory/components/useProjectCrumbs';
 import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
@@ -38,115 +35,110 @@ const BulkAddServices = () => {
     projectId: string;
   };
   const title = 'Record Services';
-  const [crumbs, crumbsLoading, project] = useProjectCrumbs(title);
+  const { project } = useProjectDashboardContext();
   const [loadingEnrollmentIds, setLoadingEnrollmentIds] = useState<string[]>(
     []
   );
   const [enrollmentsAdded, setEnrollmentsAdded] = useState<string[]>([]);
 
-  if (crumbsLoading) return <Loading />;
-  if (!crumbs || !project) return <NotFound />;
-
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <BulkAdd<
-        EnrollmentFields,
-        AddServiceToEnrollmentMutation,
-        AddServiceToEnrollmentMutationVariables
-      >
-        mutationDocument={AddServiceToEnrollmentDocument}
-        renderList={(items, { onSelect, mutationLoading, values }) => (
-          <>
-            {(!values?.dateProvided || !values?.typeProvided) && (
-              <Typography>
-                Select a service type and service date to begin.
-              </Typography>
-            )}
-            {values?.dateProvided && values?.typeProvided && (
-              <ProjectEnrollmentsTable
-                projectId={projectId}
-                openOnDate={values.dateProvided}
-                linkRowToEnrollment={false}
-                columns={[
-                  ...tableColumns,
-                  ...items.map((item) => ({
-                    header: item.label,
-                    render: (enrollment: EnrollmentFields) =>
-                      item.getNode(enrollment, {
-                        disabled: enrollmentsAdded.includes(enrollment.id),
-                      }),
-                  })),
-                  {
-                    header: '',
-                    render: (enrollment: EnrollmentFields) => (
-                      <Box sx={{ textAlign: 'right' }}>
-                        <LoadingButton
-                          color='secondary'
-                          onClick={() => {
-                            onSelect(enrollment);
-                            setLoadingEnrollmentIds((ids) => [
-                              ...ids,
-                              enrollment.id,
-                            ]);
-                          }}
-                          disabled={
-                            loadingEnrollmentIds.includes(enrollment.id) ||
-                            enrollmentsAdded.includes(enrollment.id)
-                          }
-                          loading={
-                            mutationLoading &&
-                            loadingEnrollmentIds.includes(enrollment.id)
-                          }
-                          startIcon={
-                            enrollmentsAdded.includes(enrollment.id) ? (
-                              <CheckIcon />
-                            ) : undefined
-                          }
-                        >
-                          {enrollmentsAdded.includes(enrollment.id)
-                            ? 'Assigned'
-                            : 'Assign'}
-                        </LoadingButton>
-                      </Box>
-                    ),
-                  },
-                ]}
-              />
-            )}
-          </>
-        )}
-        formRole={FormRole.Service}
-        getInputFromTarget={(formData, enrollment) => ({
-          // We should be hitting `SubmitForm` and constructing `SubmitFormValues` here
-          input: {
-            input: { ...formData, enrollmentId: enrollment.id },
-          },
-        })}
-        getKeyForTarget={(enrollment) => enrollment.id}
-        getErrors={(data) => data.createService?.errors}
-        onSuccess={(enrollment, data) => {
-          const service = data?.createService?.service;
-
-          if (service)
-            setEnrollmentsAdded((added) =>
-              uniq(compact([...added, enrollment.id]))
-            );
-        }}
-        onCompleted={(enrollment) =>
-          setLoadingEnrollmentIds((ids) =>
-            ids.filter((id) => id !== enrollment.id)
-          )
-        }
-        title={
-          <Stack direction={'row'} spacing={2}>
-            <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-              {title}
+    <BulkAdd<
+      EnrollmentFields,
+      AddServiceToEnrollmentMutation,
+      AddServiceToEnrollmentMutationVariables
+    >
+      mutationDocument={AddServiceToEnrollmentDocument}
+      renderList={(items, { onSelect, mutationLoading, values }) => (
+        <>
+          {(!values?.dateProvided || !values?.typeProvided) && (
+            <Typography>
+              Select a service type and service date to begin.
             </Typography>
-            <InactiveChip project={project} />
-          </Stack>
-        }
-      />
-    </ProjectLayout>
+          )}
+          {values?.dateProvided && values?.typeProvided && (
+            <ProjectEnrollmentsTable
+              projectId={projectId}
+              openOnDate={values.dateProvided}
+              linkRowToEnrollment={false}
+              columns={[
+                ...tableColumns,
+                ...items.map((item) => ({
+                  header: item.label,
+                  render: (enrollment: EnrollmentFields) =>
+                    item.getNode(enrollment, {
+                      disabled: enrollmentsAdded.includes(enrollment.id),
+                    }),
+                })),
+                {
+                  header: '',
+                  render: (enrollment: EnrollmentFields) => (
+                    <Box sx={{ textAlign: 'right' }}>
+                      <LoadingButton
+                        color='secondary'
+                        onClick={() => {
+                          onSelect(enrollment);
+                          setLoadingEnrollmentIds((ids) => [
+                            ...ids,
+                            enrollment.id,
+                          ]);
+                        }}
+                        disabled={
+                          loadingEnrollmentIds.includes(enrollment.id) ||
+                          enrollmentsAdded.includes(enrollment.id)
+                        }
+                        loading={
+                          mutationLoading &&
+                          loadingEnrollmentIds.includes(enrollment.id)
+                        }
+                        startIcon={
+                          enrollmentsAdded.includes(enrollment.id) ? (
+                            <CheckIcon />
+                          ) : undefined
+                        }
+                      >
+                        {enrollmentsAdded.includes(enrollment.id)
+                          ? 'Assigned'
+                          : 'Assign'}
+                      </LoadingButton>
+                    </Box>
+                  ),
+                },
+              ]}
+            />
+          )}
+        </>
+      )}
+      formRole={FormRole.Service}
+      getInputFromTarget={(formData, enrollment) => ({
+        // We should be hitting `SubmitForm` and constructing `SubmitFormValues` here
+        input: {
+          input: { ...formData, enrollmentId: enrollment.id },
+        },
+      })}
+      getKeyForTarget={(enrollment) => enrollment.id}
+      getErrors={(data) => data.createService?.errors}
+      onSuccess={(enrollment, data) => {
+        const service = data?.createService?.service;
+
+        if (service)
+          setEnrollmentsAdded((added) =>
+            uniq(compact([...added, enrollment.id]))
+          );
+      }}
+      onCompleted={(enrollment) =>
+        setLoadingEnrollmentIds((ids) =>
+          ids.filter((id) => id !== enrollment.id)
+        )
+      }
+      title={
+        <Stack direction={'row'} spacing={2}>
+          <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+            {title}
+          </Typography>
+          <InactiveChip project={project} />
+        </Stack>
+      }
+    />
   );
 };
 export default BulkAddServices;

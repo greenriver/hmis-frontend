@@ -13,7 +13,7 @@ import NotFound from './NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
+import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
 import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -52,7 +52,7 @@ const Organization = () => {
   const hasDetails = organization && organization?.description;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       <Typography variant='h3' sx={{ mb: 4 }}>
         {organizationName}
       </Typography>
@@ -159,7 +159,7 @@ const Organization = () => {
         </Typography>
         <Typography>This action cannot be undone.</Typography>
       </ConfirmationDialog>
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default Organization;

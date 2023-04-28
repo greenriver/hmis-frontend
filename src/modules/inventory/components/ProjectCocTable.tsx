@@ -12,7 +12,7 @@ import GenericTableWithData, {
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectProjectCocsDocument,
   GetProjectProjectCocsQuery,
@@ -91,7 +91,7 @@ const ProjectCocTable = ({ projectId, ...props }: Props) => {
                 <Stack direction='row' spacing={1}>
                   <ButtonLink
                     data-testid='updateButton'
-                    to={generateSafePath(Routes.EDIT_COC, {
+                    to={generateSafePath(ProjectDashboardRoutes.EDIT_COC, {
                       projectId,
                       cocId: record.id,
                     })}

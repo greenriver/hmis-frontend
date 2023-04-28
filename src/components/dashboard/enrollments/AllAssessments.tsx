@@ -1,14 +1,15 @@
-import { Paper, Stack, Typography } from '@mui/material';
+import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 
 import AssessmentStatus from '@/components/elements/AssessmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   assessmentDescription,
-  formRoleDisplay,
   enrollmentName,
+  formRoleDisplay,
   parseAndFormatDate,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
@@ -69,14 +70,7 @@ const AllAssessments = () => {
 
   return (
     <>
-      <Stack
-        gap={3}
-        direction='row'
-        justifyContent={'space-between'}
-        sx={{ mb: 2, pr: 1, alignItems: 'center' }}
-      >
-        <Typography variant='h4'>All Assessments</Typography>
-      </Stack>
+      <PageTitle title='Assessments' />
       <Paper>
         <GenericTableWithData<
           GetClientAssessmentsQuery,
