@@ -13,7 +13,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { DashboardRoutes, Routes } from '@/routes/routes';
+import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -64,7 +64,7 @@ const ViewEnrollment = () => {
                 permissions={['canEditEnrollments']}
               >
                 <ButtonLink
-                  to={generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
+                  to={generateSafePath(ClientDashboardRoutes.NEW_ASSESSMENT, {
                     clientId,
                     enrollmentId,
                     formRole: FormRole.Update.toLowerCase(),
@@ -75,7 +75,7 @@ const ViewEnrollment = () => {
                   New Assessment
                 </ButtonLink>
                 <ButtonLink
-                  to={generateSafePath(DashboardRoutes.NEW_SERVICE, {
+                  to={generateSafePath(ClientDashboardRoutes.NEW_SERVICE, {
                     clientId,
                     enrollmentId,
                   })}

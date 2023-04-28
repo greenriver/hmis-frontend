@@ -14,7 +14,7 @@ import {
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   GetClientEnrollmentsDocument,
@@ -56,7 +56,7 @@ const AllEnrollments = () => {
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
-      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
         clientId,
         enrollmentId: enrollment.id,
       }),
@@ -73,7 +73,7 @@ const AllEnrollments = () => {
             permissions={['canEditEnrollments']}
           >
             <ButtonLink
-              to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+              to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
                 clientId,
               })}
               Icon={AddIcon}

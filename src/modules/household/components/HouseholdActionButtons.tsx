@@ -6,7 +6,7 @@ import { useCallback, useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HouseholdClientFieldsWithAssessmentsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -64,7 +64,7 @@ const HouseholdActionButtons = ({
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
       <ButtonLink
         Icon={PeopleIcon}
-        to={buildPath(DashboardRoutes.EDIT_HOUSEHOLD)}
+        to={buildPath(ClientDashboardRoutes.EDIT_HOUSEHOLD)}
       >
         Manage Household
       </ButtonLink>
@@ -74,7 +74,7 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             icon={PostAddIcon}
-            to={buildPath(DashboardRoutes.HOUSEHOLD_INTAKE)}
+            to={buildPath(ClientDashboardRoutes.HOUSEHOLD_INTAKE)}
           >
             Household Intakes
           </ButtonLink>
@@ -85,7 +85,7 @@ const HouseholdActionButtons = ({
           <ButtonLink
             disabled={!canExit}
             icon={ExitToAppIcon}
-            to={buildPath(DashboardRoutes.HOUSEHOLD_EXIT)}
+            to={buildPath(ClientDashboardRoutes.HOUSEHOLD_EXIT)}
           >
             Household Exits
           </ButtonLink>

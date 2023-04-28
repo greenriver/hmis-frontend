@@ -9,7 +9,7 @@ import NotFound from './NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   ServiceFieldsFragment,
@@ -33,7 +33,7 @@ const Service = ({ create = false }: { create?: boolean }) => {
     }
     navigate(
       withHash(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
           enrollmentId,
           clientId,
         }),

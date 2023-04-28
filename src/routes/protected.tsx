@@ -1,21 +1,25 @@
 import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { DashboardRoutes, ProjectDashboardRoutes, Routes } from './routes';
+import {
+  ClientDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from './routes';
 
-import AllFiles from '@/components/dashboard/AllFiles';
-import AuditHistory from '@/components/dashboard/AuditHistory';
-import EditClient from '@/components/dashboard/EditClient';
-import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
-import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
-import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
-import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
-import NewAssessmentPage from '@/components/dashboard/enrollments/NewAssessmentPage';
-import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
-import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
-import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
-import Profile from '@/components/dashboard/Profile';
+import AllFiles from '@/components/clientDashboard/AllFiles';
+import AuditHistory from '@/components/clientDashboard/AuditHistory';
+import EditClient from '@/components/clientDashboard/EditClient';
+import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
+import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
+import EditHousehold from '@/components/clientDashboard/enrollments/EditHousehold';
+import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
+import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
+import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
+import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
+import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
+import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
+import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
@@ -235,7 +239,7 @@ export const protectedRoutes = [
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
           {
-            path: DashboardRoutes.PROFILE,
+            path: ClientDashboardRoutes.PROFILE,
             element: (
               <ClientRoute view>
                 <Profile />
@@ -243,7 +247,7 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.EDIT,
+            path: ClientDashboardRoutes.EDIT,
             element: (
               <RootPermissionsFilter
                 permissions='canEditClients'
@@ -254,108 +258,117 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.NEW_ENROLLMENT,
+            path: ClientDashboardRoutes.NEW_ENROLLMENT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.ALL_ENROLLMENTS}
+                redirectRoute={ClientDashboardRoutes.ALL_ENROLLMENTS}
               >
                 <NewEnrollment />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.VIEW_ENROLLMENT,
+            path: ClientDashboardRoutes.VIEW_ENROLLMENT,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ViewEnrollment />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.EDIT_HOUSEHOLD,
+            path: ClientDashboardRoutes.EDIT_HOUSEHOLD,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <EditHousehold />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.HOUSEHOLD_EXIT,
+            path: ClientDashboardRoutes.HOUSEHOLD_EXIT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <HouseholdExit />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.HOUSEHOLD_INTAKE,
+            path: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <HouseholdIntake />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.NEW_ASSESSMENT,
+            path: ClientDashboardRoutes.NEW_ASSESSMENT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <NewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.VIEW_ASSESSMENT,
+            path: ClientDashboardRoutes.VIEW_ASSESSMENT,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ViewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.NEW_SERVICE,
+            path: ClientDashboardRoutes.NEW_SERVICE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <Service create />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.EDIT_SERVICE,
+            path: ClientDashboardRoutes.EDIT_SERVICE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <Service />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.ALL_ENROLLMENTS,
+            path: ClientDashboardRoutes.ALL_ENROLLMENTS,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <AllEnrollments />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.AUDIT_HISTORY,
+            path: ClientDashboardRoutes.AUDIT_HISTORY,
             element: (
               <RootPermissionsFilter
                 permissions='canAuditClients'
@@ -366,16 +379,19 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.ASSESSMENTS,
+            path: ClientDashboardRoutes.ASSESSMENTS,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <AllAssessments />
               </EnrollmentsRoute>
             ),
           },
-          { path: DashboardRoutes.NOTES, element: null },
+          { path: ClientDashboardRoutes.NOTES, element: null },
           {
-            path: DashboardRoutes.FILES,
+            path: ClientDashboardRoutes.FILES,
             element: (
               <ParamsWrapper<{ clientId: string }>>
                 {({ clientId }) => (
@@ -388,7 +404,7 @@ export const protectedRoutes = [
                     ]}
                     otherwise={
                       <Navigate
-                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                           clientId,
                         })}
                         replace
@@ -402,7 +418,7 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.NEW_FILE,
+            path: ClientDashboardRoutes.NEW_FILE,
             element: (
               <FileEditRoute create>
                 <File create />
@@ -410,16 +426,16 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.EDIT_FILE,
+            path: ClientDashboardRoutes.EDIT_FILE,
             element: (
               <FileEditRoute>
                 <File />
               </FileEditRoute>
             ),
           },
-          { path: DashboardRoutes.CONTACT, element: null },
-          { path: DashboardRoutes.LOCATIONS, element: null },
-          { path: DashboardRoutes.REFERRALS, element: null },
+          { path: ClientDashboardRoutes.CONTACT, element: null },
+          { path: ClientDashboardRoutes.LOCATIONS, element: null },
+          { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
       },

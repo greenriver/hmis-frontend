@@ -30,7 +30,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   GetClientEnrollmentsQuery,
@@ -64,7 +64,7 @@ const RecentEnrollments = ({
             <Grid item xs={6} lg={4}>
               <RouterLink
                 aria-label={enrollmentName(enrollment)}
-                to={generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+                to={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
                   clientId: enrollment.client.id,
                   enrollmentId: enrollment.id,
                 })}
@@ -162,7 +162,7 @@ const ClientCard: React.FC<Props> = ({
           <Stack spacing={1}>
             <RouterLink
               plain
-              to={generateSafePath(DashboardRoutes.PROFILE, {
+              to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                 clientId: client.id,
               })}
             >
@@ -263,7 +263,7 @@ const ClientCard: React.FC<Props> = ({
           <Stack spacing={1}>
             <ButtonLink
               data-testid='goToProfileButton'
-              to={generateSafePath(DashboardRoutes.PROFILE, {
+              to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                 clientId: client.id,
               })}
               target={linkTargetBlank ? '_blank' : undefined}
@@ -275,7 +275,7 @@ const ClientCard: React.FC<Props> = ({
             <ButtonLink
               fullWidth
               data-testid='enrollButton'
-              to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+              to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
                 clientId: client.id,
               })}
               Icon={LibraryAddIcon}

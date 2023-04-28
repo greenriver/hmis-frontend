@@ -16,7 +16,7 @@ import {
   useClientPermissions,
   useHasClientPermissions,
 } from '@/modules/permissions/useHasPermissionsHooks';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FileFieldsFragment,
   GetClientFilesDocument,
@@ -131,7 +131,7 @@ const AllFiles = () => {
         actions={
           canEdit && (
             <ButtonLink
-              to={generateSafePath(DashboardRoutes.NEW_FILE, {
+              to={generateSafePath(ClientDashboardRoutes.NEW_FILE, {
                 clientId,
               })}
               data-testid='addClientFileButton'

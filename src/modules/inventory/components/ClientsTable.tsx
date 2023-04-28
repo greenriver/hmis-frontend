@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   SearchClientsDocument,
@@ -17,7 +17,7 @@ const ClientsTable = ({ projectId }: { projectId: string }) => {
 
   const rowLinkTo = useCallback(
     (client: ClientFieldsFragment) =>
-      generateSafePath(DashboardRoutes.PROFILE, {
+      generateSafePath(ClientDashboardRoutes.PROFILE, {
         clientId: client.id,
       }),
     []

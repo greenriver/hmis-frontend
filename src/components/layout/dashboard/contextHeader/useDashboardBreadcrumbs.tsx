@@ -5,7 +5,7 @@ import { DashboardContext } from '@/components/pages/ClientDashboard';
 import { ProjectDashboardContext } from '@/components/pages/ProjectDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 
 type CrumbConfig = {
   [x: string]: {
@@ -34,15 +34,6 @@ function isProjectContext(
     typeof (ctx as ProjectDashboardContext).project === 'object'
   );
 }
-
-// function isClientContext(
-//   ctx: DashboardContext | ProjectDashboardContext
-// ): ctx is DashboardContext {
-//   return !!(
-//     typeof ctx === 'object' &&
-//     typeof (ctx as DashboardContext).client === 'object'
-//   );
-// }
 
 export const useDashboardBreadcrumbs = (
   context: DashboardContext | ProjectDashboardContext,
@@ -117,68 +108,70 @@ export const useDashboardBreadcrumbs = (
       /**
        * Map each path to it's title and it's direct parent
        */
-      [DashboardRoutes.PROFILE]: { title: clientBriefName(context.client) },
-      [DashboardRoutes.EDIT]: {
+      [ClientDashboardRoutes.PROFILE]: {
+        title: clientBriefName(context.client),
+      },
+      [ClientDashboardRoutes.EDIT]: {
         title: 'Update Client Details',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.ALL_ENROLLMENTS]: {
+      [ClientDashboardRoutes.ALL_ENROLLMENTS]: {
         title: 'Enrollments',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NEW_ENROLLMENT]: {
+      [ClientDashboardRoutes.NEW_ENROLLMENT]: {
         title: 'Add Enrollment',
-        parent: DashboardRoutes.ALL_ENROLLMENTS,
+        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [DashboardRoutes.VIEW_ENROLLMENT]: {
+      [ClientDashboardRoutes.VIEW_ENROLLMENT]: {
         title: context.enrollment
           ? enrollmentName(context.enrollment)
           : 'Enrollment',
-        parent: DashboardRoutes.ALL_ENROLLMENTS,
+        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [DashboardRoutes.VIEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.VIEW_ASSESSMENT]: {
         title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.NEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.NEW_ASSESSMENT]: {
         title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.NEW_SERVICE]: {
+      [ClientDashboardRoutes.NEW_SERVICE]: {
         title: 'Add Service',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EDIT_SERVICE]: {
+      [ClientDashboardRoutes.EDIT_SERVICE]: {
         title: 'Edit Service',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EDIT_HOUSEHOLD]: {
+      [ClientDashboardRoutes.EDIT_HOUSEHOLD]: {
         title: 'Edit Household',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.ASSESSMENTS]: {
+      [ClientDashboardRoutes.ASSESSMENTS]: {
         title: 'Assessments',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NOTES]: {
+      [ClientDashboardRoutes.NOTES]: {
         title: 'Notes',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.FILES]: {
+      [ClientDashboardRoutes.FILES]: {
         title: 'Files',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.AUDIT_HISTORY]: {
+      [ClientDashboardRoutes.AUDIT_HISTORY]: {
         title: 'Client Audit History',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NEW_FILE]: {
+      [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
-        parent: DashboardRoutes.FILES,
+        parent: ClientDashboardRoutes.FILES,
       },
-      [DashboardRoutes.EDIT_FILE]: {
+      [ClientDashboardRoutes.EDIT_FILE]: {
         title: 'Edit File',
-        parent: DashboardRoutes.FILES,
+        parent: ClientDashboardRoutes.FILES,
       },
     };
   }, [context]);

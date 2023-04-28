@@ -8,7 +8,7 @@ import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FileFieldsFragment,
   useDeleteClientFileMutation,
@@ -80,7 +80,7 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
           variant='outlined'
           color='secondary'
           component={ReactRouterLink}
-          to={generateSafePath(DashboardRoutes.EDIT_FILE, {
+          to={generateSafePath(ClientDashboardRoutes.EDIT_FILE, {
             clientId,
             fileId: file.id,
           })}

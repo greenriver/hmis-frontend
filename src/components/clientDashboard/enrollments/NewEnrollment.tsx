@@ -23,7 +23,7 @@ import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   Client,
   CreateEnrollmentInput,
@@ -59,11 +59,11 @@ const NewEnrollment = () => {
           (e) => e.client.id === clientId
         )?.id;
         const path = enrollmentId
-          ? generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          ? generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
               clientId,
               enrollmentId,
             })
-          : generateSafePath(DashboardRoutes.ALL_ENROLLMENTS, {
+          : generateSafePath(ClientDashboardRoutes.ALL_ENROLLMENTS, {
               clientId,
             });
         navigate(path);

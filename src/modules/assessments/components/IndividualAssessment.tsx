@@ -28,7 +28,7 @@ import {
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
@@ -117,8 +117,8 @@ const IndividualAssessment = ({
     if (!assessmentTitle || embeddedInWorkflow) return;
     // Override breadcrumb to include the assessment type and information date
     const currentRoute = assessment
-      ? DashboardRoutes.VIEW_ASSESSMENT
-      : DashboardRoutes.NEW_ASSESSMENT;
+      ? ClientDashboardRoutes.VIEW_ASSESSMENT
+      : ClientDashboardRoutes.NEW_ASSESSMENT;
     overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
   }, [
     embeddedInWorkflow,

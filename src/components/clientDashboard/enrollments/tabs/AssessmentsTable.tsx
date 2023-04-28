@@ -8,7 +8,7 @@ import {
   parseAndFormatDate,
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -77,7 +77,7 @@ const AssessmentsTable = ({
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(ClientDashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: assessment.id,

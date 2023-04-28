@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import ButtonLink, { ButtonLinkProps } from '@/components/elements/ButtonLink';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   FormRole,
@@ -36,7 +36,7 @@ const HouseholdMemberActionButton = ({
 }: Props) => {
   const pathToAssessment = useCallback(
     (id: string) =>
-      generateSafePath(DashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(ClientDashboardRoutes.VIEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: id,
@@ -45,7 +45,7 @@ const HouseholdMemberActionButton = ({
   );
   const pathToNewAssessment = useCallback(
     (role: FormRole) =>
-      generateSafePath(DashboardRoutes.NEW_ASSESSMENT, {
+      generateSafePath(ClientDashboardRoutes.NEW_ASSESSMENT, {
         clientId,
         enrollmentId,
         formRole: role.toLowerCase(),

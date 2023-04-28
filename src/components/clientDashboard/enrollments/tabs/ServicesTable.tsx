@@ -8,7 +8,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetEnrollmentServicesDocument,
@@ -60,7 +60,7 @@ const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
     useState<ServiceFieldsFragment | null>(null);
   const rowLinkTo = useCallback(
     (record: ServiceFieldsFragment) =>
-      generateSafePath(DashboardRoutes.EDIT_SERVICE, {
+      generateSafePath(ClientDashboardRoutes.EDIT_SERVICE, {
         clientId,
         enrollmentId,
         serviceId: record.id,

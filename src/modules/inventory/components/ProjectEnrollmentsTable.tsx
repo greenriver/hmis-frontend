@@ -14,7 +14,7 @@ import {
   formatDateForDisplay,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
@@ -40,7 +40,7 @@ export const ENROLLMENT_COLUMNS: {
       <ClientName
         client={e.client}
         routerLinkProps={{
-          to: generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+          to: generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
             clientId: e.client.id,
             enrollmentId: e.id,
           }),
@@ -118,7 +118,7 @@ const ProjectEnrollmentsTable = ({
 
   const rowLinkTo = useCallback(
     (en: EnrollmentFields) =>
-      generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
         clientId: en.client.id,
         enrollmentId: en.id,
       }),

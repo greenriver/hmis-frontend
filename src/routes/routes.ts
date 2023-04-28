@@ -20,7 +20,7 @@ export const Routes = {
 } as const;
 
 // Routes within the client dashboard
-const clientDashboardRoutes = {
+const clientClientDashboardRoutes = {
   PROFILE: 'profile',
   EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
@@ -45,7 +45,7 @@ const clientDashboardRoutes = {
 };
 
 // Routes within the project dashboard
-const projectDashboardRoutes = {
+const projectClientDashboardRoutes = {
   OVERVIEW: 'overview',
   EDIT_PROJECT: 'overview/edit',
 
@@ -68,39 +68,40 @@ const projectDashboardRoutes = {
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
-type SubRoutesType = keyof typeof clientDashboardRoutes;
+type SubRoutesType = keyof typeof clientClientDashboardRoutes;
 let key: SubRoutesType;
-for (key in clientDashboardRoutes) {
-  clientDashboardRoutes[
+for (key in clientClientDashboardRoutes) {
+  clientClientDashboardRoutes[
     key
-  ] = `${Routes.CLIENT_DASHBOARD}/${clientDashboardRoutes[key]}`;
+  ] = `${Routes.CLIENT_DASHBOARD}/${clientClientDashboardRoutes[key]}`;
 }
-type DashboardSubRoutesType = keyof typeof projectDashboardRoutes;
+type DashboardSubRoutesType = keyof typeof projectClientDashboardRoutes;
 let key2: DashboardSubRoutesType;
-for (key2 in projectDashboardRoutes) {
-  projectDashboardRoutes[
+for (key2 in projectClientDashboardRoutes) {
+  projectClientDashboardRoutes[
     key2
-  ] = `${Routes.PROJECT}/${projectDashboardRoutes[key2]}`;
+  ] = `${Routes.PROJECT}/${projectClientDashboardRoutes[key2]}`;
 }
 
-export const DashboardRoutes: { [k in SubRoutesType]: string } =
-  clientDashboardRoutes;
+export const ClientDashboardRoutes: { [k in SubRoutesType]: string } =
+  clientClientDashboardRoutes;
 
-export const ProjectDashboardRoutes: { [k in DashboardSubRoutesType]: string } =
-  projectDashboardRoutes;
+export const ProjectDashboardRoutes: {
+  [k in DashboardSubRoutesType]: string;
+} = projectClientDashboardRoutes;
 
 export const HIDE_NAV_ROUTES = [
-  DashboardRoutes.VIEW_ASSESSMENT,
-  DashboardRoutes.NEW_ASSESSMENT,
+  ClientDashboardRoutes.VIEW_ASSESSMENT,
+  ClientDashboardRoutes.NEW_ASSESSMENT,
 ];
 
 export const FOCUS_MODE_ROUTES = [
   {
-    route: DashboardRoutes.HOUSEHOLD_EXIT,
-    previous: DashboardRoutes.VIEW_ENROLLMENT,
+    route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
+    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
   {
-    route: DashboardRoutes.HOUSEHOLD_INTAKE,
-    previous: DashboardRoutes.VIEW_ENROLLMENT,
+    route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
+    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
 ];

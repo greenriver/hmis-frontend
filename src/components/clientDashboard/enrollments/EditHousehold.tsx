@@ -23,7 +23,7 @@ import {
   RecentHouseholdMember,
 } from '@/modules/household/types';
 import ClientSearch from '@/modules/search/components/ClientSearch';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   RelationshipToHoH,
@@ -93,7 +93,7 @@ const EditHousehold = () => {
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
           clientId,
           enrollmentId,
         })

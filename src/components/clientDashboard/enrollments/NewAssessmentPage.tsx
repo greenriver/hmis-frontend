@@ -7,7 +7,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -23,7 +23,7 @@ const NewAssessmentPage = () => {
   const navigateToEnrollment = useCallback(
     () =>
       navigate(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
           enrollmentId,
           clientId,
         })
