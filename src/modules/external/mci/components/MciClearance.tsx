@@ -26,7 +26,6 @@ import { useClearMciMutation } from '@/types/gqlTypes';
 export interface MciClearanceProps extends DynamicInputCommonProps {
   value?: string | null;
   onChange: (value?: string | null) => void;
-  existingClient: boolean;
 }
 
 const initialClearanceState: ClearanceState = {
@@ -38,7 +37,7 @@ const MciClearance = ({
   value,
   onChange,
   existingClient,
-}: MciClearanceProps) => {
+}: MciClearanceProps & { existingClient: boolean }) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const { getCleanedValues, definition } = useDynamicFormContext();
   const [{ status, candidates }, setState] = useState<ClearanceState>(
@@ -172,7 +171,6 @@ const MciClearanceWrapper = ({
   onChange,
   ...props
 }: MciClearanceProps) => {
-  console.log('MciClearanceWrapper rendering');
   // Dashboard context would be present only if we are editing an existing client
   const ctx = useDashboardClient();
 
@@ -184,9 +182,10 @@ const MciClearanceWrapper = ({
 
   if (disabled) return <MciUnavailableAlert />;
 
-  // If client already has an MCI ID, just show that.
-  // Post-MVP: allow re-clear
-  if (ctx && ctx.client) {
+  const isExistingClient = !!(ctx && ctx.client);
+  if (isExistingClient) {
+    // If client already has an MCI ID, just show that.
+    // Post-MVP: allow re-clear
     const mci = ctx.client.externalIds.find((c) => c.label == 'MCI ID');
     if (mci && mci.identifier) return <MciSuccessAlert mci={mci} />;
   }
@@ -195,7 +194,7 @@ const MciClearanceWrapper = ({
     <MciClearance
       disabled={disabled}
       onChange={onChange}
-      existingClient={ctx && ctx.client}
+      existingClient={isExistingClient}
       {...props}
     />
   );
