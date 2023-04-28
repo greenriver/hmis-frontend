@@ -94,20 +94,19 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
         ],
       },
 
-      {
-        id: 'admin',
-        title: 'Administrative',
-        type: 'category',
-        items: [
-          // TODO: remove once link is added to IDs accordion
-          {
-            id: 'warehouse-link',
-            title: 'View in Warehouse',
-            path: undefined,
-            href: client.warehouseUrl,
-          },
-        ],
-      },
+      // {
+      //   id: 'admin',
+      //   title: 'Administrative',
+      //   type: 'category',
+      //   items: [
+      //     {
+      //       id: 'warehouse-link',
+      //       title: 'View in Warehouse',
+      //       path: undefined,
+      //       href: client.warehouseUrl,
+      //     },
+      //   ],
+      // },
     ];
   }, [client, canViewEnrollments, canViewFiles]);
 
