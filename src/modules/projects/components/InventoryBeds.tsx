@@ -10,13 +10,12 @@ import {
 } from '@mui/material';
 import { useCallback, useState } from 'react';
 
-import Loading from '../elements/Loading';
-import PageTitle from '../layout/PageTitle';
-
-import NotFound from './NotFound';
-import { InactiveChip } from './Project';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import { InactiveChip } from './ProjectOverview';
 
+import Loading from '@/components/elements/Loading';
+import PageTitle from '@/components/layout/PageTitle';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import {
   evictBedsQuery,

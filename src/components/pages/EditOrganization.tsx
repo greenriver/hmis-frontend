@@ -6,9 +6,9 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { FormRole, OrganizationAllFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';

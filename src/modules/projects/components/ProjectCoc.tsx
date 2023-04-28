@@ -1,11 +1,10 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
-
-import { ProjectFormTitle } from './Project';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import { ProjectFormTitle } from './ProjectOverview';
 
+import Loading from '@/components/elements/Loading';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';

@@ -5,7 +5,7 @@ import PageHeader from '../layout/PageHeader';
 
 import ClientSearch from '@/modules/search/components/ClientSearch';
 
-const Dashboard: React.FC = () => {
+const UserDashboard = () => {
   return (
     <>
       <PageHeader>
@@ -18,4 +18,4 @@ const Dashboard: React.FC = () => {
   );
 };
 
-export default Dashboard;
+export default UserDashboard;

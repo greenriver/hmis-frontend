@@ -1,7 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
-import InventoryTable from './InventoryTable';
+import ProjectCocTable from './tables/ProjectCocTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -9,8 +9,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
-
-const Inventories = () => {
+const Cocs = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -18,28 +17,28 @@ const Inventories = () => {
   return (
     <>
       <PageTitle
-        title='Inventory Records'
+        title='Project CoC Records'
         actions={
           <ProjectPermissionsFilter
             id={projectId}
             permissions='canEditProjectDetails'
           >
             <ButtonLink
-              data-testid='addInventoryButton'
-              to={generateSafePath(ProjectDashboardRoutes.NEW_INVENTORY, {
+              data-testid='addProjectCocButton'
+              to={generateSafePath(ProjectDashboardRoutes.NEW_COC, {
                 projectId,
               })}
               Icon={AddIcon}
             >
-              Add Inventory
+              Add CoC
             </ButtonLink>
           </ProjectPermissionsFilter>
         }
       />
       <Paper>
-        <InventoryTable projectId={projectId} />
+        <ProjectCocTable projectId={projectId} />
       </Paper>
     </>
   );
 };
-export default Inventories;
+export default Cocs;

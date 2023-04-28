@@ -1,8 +1,7 @@
 import { Navigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
-
-import NotFound from './NotFound';
+import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';

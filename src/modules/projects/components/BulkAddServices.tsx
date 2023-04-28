@@ -3,10 +3,10 @@ import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useState } from 'react';
 
-import { ColumnDef } from '../elements/GenericTable';
+import { ColumnDef } from '../../../components/elements/GenericTable';
 
-import { InactiveChip } from './Project';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import { InactiveChip } from './ProjectOverview';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -14,7 +14,7 @@ import BulkAdd from '@/modules/bulk/components/BulkAdd';
 import ProjectEnrollmentsTable, {
   EnrollmentFields,
   ENROLLMENT_COLUMNS,
-} from '@/modules/inventory/components/ProjectEnrollmentsTable';
+} from '@/modules/projects/components/tables/ProjectEnrollmentsTable';
 import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,

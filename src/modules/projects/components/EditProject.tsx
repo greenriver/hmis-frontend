@@ -2,8 +2,8 @@ import { Box } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ProjectFormTitle } from './Project';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import { ProjectFormTitle } from './ProjectOverview';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';

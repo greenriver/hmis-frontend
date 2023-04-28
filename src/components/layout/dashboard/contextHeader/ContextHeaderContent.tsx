@@ -6,7 +6,7 @@ import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
-import { ProjectDashboardContext } from '@/components/pages/ProjectDashboard';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 interface Props {
   breadcrumbOverrides?: Record<string, string>; // Path => Title

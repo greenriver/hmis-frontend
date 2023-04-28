@@ -4,8 +4,8 @@ import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
 import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
 
-import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTable';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import GroupedProjectTable from '@/modules/projects/components/tables/GroupedProjectTable';
 import { Routes } from '@/routes/routes';
 import { useGetAllOrganizationsQuery } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';

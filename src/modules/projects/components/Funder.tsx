@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
+import Loading from '../../../components/elements/Loading';
+import NotFound from '../../../components/pages/NotFound';
 
-import NotFound from './NotFound';
-import { ProjectFormTitle } from './Project';
 import { useProjectDashboardContext } from './ProjectDashboard';
+import { ProjectFormTitle } from './ProjectOverview';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';

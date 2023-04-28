@@ -1,6 +1,5 @@
 import Loading from '../elements/Loading';
-
-import NotFound from './NotFound';
+import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
 import { useClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';

@@ -1,8 +1,7 @@
 import { compact } from 'lodash-es';
 
 import Loading from '../elements/Loading';
-
-import NotFound from './NotFound';
+import NotFound from '../pages/NotFound';
 
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 

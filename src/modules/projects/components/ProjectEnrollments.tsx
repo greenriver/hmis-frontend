@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material';
 
-import ProjectEnrollmentsTable from './ProjectEnrollmentsTable';
+import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
 
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';

@@ -12,23 +12,22 @@ import { addDays, isBefore } from 'date-fns';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import ButtonLink from '../elements/ButtonLink';
-import ConfirmationDialog from '../elements/ConfirmationDialog';
-import MultilineTypography from '../elements/MultilineTypography';
-import TitleCard from '../elements/TitleCard';
-import PageTitle from '../layout/PageTitle';
-
 import { useProjectDashboardContext } from './ProjectDashboard';
+import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
 
+import ButtonLink from '@/components/elements/ButtonLink';
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import MultilineTypography from '@/components/elements/MultilineTypography';
+import TitleCard from '@/components/elements/TitleCard';
+import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
   parseAndFormatDateRange,
   parseHmisDateString,
 } from '@/modules/hmis/hmisUtil';
-import ProjectDetails from '@/modules/inventory/components/ProjectDetails';
-import ProjectEnrollmentsTable from '@/modules/inventory/components/ProjectEnrollmentsTable';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import ProjectDetails from '@/modules/projects/components/ProjectDetails';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import {
@@ -105,7 +104,7 @@ export const ProjectFormTitle = ({
   </Stack>
 );
 
-const Project = () => {
+const ProjectOverview = () => {
   const { projectId } = useSafeParams() as {
     projectId: string;
   };
@@ -258,4 +257,4 @@ const Project = () => {
     </>
   );
 };
-export default Project;
+export default ProjectOverview;

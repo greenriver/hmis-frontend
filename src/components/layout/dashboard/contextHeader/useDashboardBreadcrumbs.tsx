@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { DashboardContext } from '@/components/pages/ClientDashboard';
-import { ProjectDashboardContext } from '@/components/pages/ProjectDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 
 type CrumbConfig = {

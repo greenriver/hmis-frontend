@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';

@@ -7,6 +7,11 @@ import {
   Routes,
 } from './routes';
 
+import ClientRoute from '@/components/accessWrappers/ClientRoute';
+import EnrollmentsRoute from '@/components/accessWrappers/EnrollmentRoute';
+import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
+import OrganizationEditRoute from '@/components/accessWrappers/OrganizationEditRoute';
+import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import AllFiles from '@/components/clientDashboard/AllFiles';
 import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
@@ -20,43 +25,38 @@ import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollmen
 import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
+import Service from '@/components/clientDashboard/Service';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
-import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
-import ClientRoute from '@/components/pages/ClientRoute';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
-import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
-import EditProject from '@/components/pages/EditProject';
-import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
 import File from '@/components/pages/File';
-import FileEditRoute from '@/components/pages/FileEditRoute';
-import Funder from '@/components/pages/Funder';
-import Inventory from '@/components/pages/Inventory';
-import InventoryBeds from '@/components/pages/InventoryBeds';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
-import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
-import Project from '@/components/pages/Project';
-import ProjectCoc from '@/components/pages/ProjectCoc';
-import ProjectDashboard from '@/components/pages/ProjectDashboard';
-import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
-import Service from '@/components/pages/Service';
+import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
-import Cocs from '@/modules/inventory/components/Cocs';
-import Funders from '@/modules/inventory/components/Funders';
-import Inventories from '@/modules/inventory/components/Inventories';
-import ProjectEnrollments from '@/modules/inventory/components/ProjectEnrollments';
-import ProjectReferrals from '@/modules/inventory/components/ProjectReferrals';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
+import AddServices from '@/modules/projects/components/BulkAddServices';
+import Cocs from '@/modules/projects/components/Cocs';
+import EditProject from '@/modules/projects/components/EditProject';
+import Funder from '@/modules/projects/components/Funder';
+import Funders from '@/modules/projects/components/Funders';
+import Inventories from '@/modules/projects/components/Inventories';
+import Inventory from '@/modules/projects/components/Inventory';
+import InventoryBeds from '@/modules/projects/components/InventoryBeds';
+import ProjectCoc from '@/modules/projects/components/ProjectCoc';
+import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
+import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
+import Project from '@/modules/projects/components/ProjectOverview';
+import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {

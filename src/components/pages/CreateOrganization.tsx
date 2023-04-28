@@ -2,9 +2,9 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import OrganizationLayout from '@/modules/inventory/components/OrganizationLayout';
-import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { ALL_PROJECTS_CRUMB } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
   FormRole,

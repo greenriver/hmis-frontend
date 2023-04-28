@@ -2,14 +2,12 @@ import { Container, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
-import ContextHeaderContent from '../layout/dashboard/contextHeader/ContextHeaderContent';
-import DashboardContentContainer from '../layout/dashboard/DashboardContentContainer';
-import SideNavMenu from '../layout/dashboard/sideNav/SideNavMenu';
-import { NavItem } from '../layout/dashboard/sideNav/types';
-
-import NotFound from './NotFound';
-
+import Loading from '@/components/elements/Loading';
+import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
+import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
+import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
+import { NavItem } from '@/components/layout/dashboard/sideNav/types';
+import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useSafeParams from '@/hooks/useSafeParams';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
