@@ -313,7 +313,6 @@ export type Client = {
   ssnDataQuality: SsnDataQuality;
   user?: Maybe<User>;
   veteranStatus: NoYesReasonsForMissingData;
-  warehouseUrl: Scalars['String'];
 };
 
 /** HUD Client */
@@ -6601,7 +6600,6 @@ export type SubmitFormMutation = {
           dateCreated: string;
           dateDeleted?: string | null;
           dateUpdated: string;
-          warehouseUrl: string;
           id: string;
           dob?: string | null;
           age?: number | null;
@@ -6865,7 +6863,6 @@ export type ClientFieldsFragment = {
   dateCreated: string;
   dateDeleted?: string | null;
   dateUpdated: string;
-  warehouseUrl: string;
   id: string;
   dob?: string | null;
   age?: number | null;
@@ -7375,7 +7372,6 @@ export type SearchClientsQuery = {
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
-      warehouseUrl: string;
       id: string;
       dob?: string | null;
       age?: number | null;
@@ -7429,7 +7425,6 @@ export type GetClientQuery = {
     dateCreated: string;
     dateDeleted?: string | null;
     dateUpdated: string;
-    warehouseUrl: string;
     id: string;
     dob?: string | null;
     age?: number | null;
@@ -8115,7 +8110,6 @@ export type DeleteClientMutation = {
       dateCreated: string;
       dateDeleted?: string | null;
       dateUpdated: string;
-      warehouseUrl: string;
       id: string;
       dob?: string | null;
       age?: number | null;
@@ -10321,7 +10315,6 @@ export const ClientFieldsFragmentDoc = gql`
     dateUpdated
     ...ClientName
     ...ClientImage
-    warehouseUrl
     externalIds {
       ...ClientIdentifierFields
     }
