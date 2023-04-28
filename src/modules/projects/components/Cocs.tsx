@@ -35,7 +35,7 @@ const Cocs = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <Paper>
+      <Paper data-testid='projectCocCard'>
         <ProjectCocTable projectId={projectId} />
       </Paper>
     </>

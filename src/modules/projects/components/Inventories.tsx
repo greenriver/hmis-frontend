@@ -36,7 +36,7 @@ const Inventories = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <Paper>
+      <Paper data-testid='inventoryCard'>
         <InventoryTable projectId={projectId} />
       </Paper>
     </>

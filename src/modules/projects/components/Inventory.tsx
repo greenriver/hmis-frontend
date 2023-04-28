@@ -10,7 +10,7 @@ import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
-import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   InventoryFieldsFragment,
@@ -44,7 +44,9 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
           })
         );
       } else {
-        navigate(generateSafePath(Routes.PROJECT, { projectId }));
+        navigate(
+          generateSafePath(ProjectDashboardRoutes.INVENTORY, { projectId })
+        );
       }
     },
     [navigate, projectId, create]

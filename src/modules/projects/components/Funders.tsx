@@ -139,7 +139,7 @@ const FunderTable = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <Paper>
+      <Paper data-testid='funderCard'>
         <GenericTableWithData
           queryVariables={{ id: projectId }}
           queryDocument={GetProjectFundersDocument}
