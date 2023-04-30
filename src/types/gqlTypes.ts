@@ -8786,6 +8786,63 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type MciMatchFieldsFragment = {
+  __typename?: 'MciClearanceMatch';
+  id: string;
+  score: number;
+  existingClientId?: string | null;
+  age: number;
+  dob: string;
+  firstName: string;
+  gender: Array<Gender>;
+  lastName: string;
+  mciId: string;
+  middleName?: string | null;
+  nameSuffix?: string | null;
+  ssn?: string | null;
+};
+
+export type ClearMciMutationVariables = Exact<{
+  input: ClearMciInput;
+}>;
+
+export type ClearMciMutation = {
+  __typename?: 'Mutation';
+  clearMci?: {
+    __typename?: 'ClearMciPayload';
+    clientMutationId?: string | null;
+    matches?: Array<{
+      __typename?: 'MciClearanceMatch';
+      id: string;
+      score: number;
+      existingClientId?: string | null;
+      age: number;
+      dob: string;
+      firstName: string;
+      gender: Array<Gender>;
+      lastName: string;
+      mciId: string;
+      middleName?: string | null;
+      nameSuffix?: string | null;
+      ssn?: string | null;
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type OmniSearchClientsQueryVariables = Exact<{
   textSearch: Scalars['String'];
 }>;
@@ -10624,6 +10681,22 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
       id
       name
     }
+  }
+`;
+export const MciMatchFieldsFragmentDoc = gql`
+  fragment MciMatchFields on MciClearanceMatch {
+    id
+    score
+    existingClientId
+    age
+    dob
+    firstName
+    gender
+    lastName
+    mciId
+    middleName
+    nameSuffix
+    ssn
   }
 `;
 export const RootPermissionsFragmentFragmentDoc = gql`
@@ -13383,6 +13456,61 @@ export type GetClientFilesLazyQueryHookResult = ReturnType<
 export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
+>;
+export const ClearMciDocument = gql`
+  mutation ClearMci($input: ClearMciInput!) {
+    clearMci(input: $input) {
+      clientMutationId
+      matches {
+        ...MciMatchFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${MciMatchFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type ClearMciMutationFn = Apollo.MutationFunction<
+  ClearMciMutation,
+  ClearMciMutationVariables
+>;
+
+/**
+ * __useClearMciMutation__
+ *
+ * To run a mutation, you first call `useClearMciMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useClearMciMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [clearMciMutation, { data, loading, error }] = useClearMciMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useClearMciMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ClearMciMutation,
+    ClearMciMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<ClearMciMutation, ClearMciMutationVariables>(
+    ClearMciDocument,
+    options
+  );
+}
+export type ClearMciMutationHookResult = ReturnType<typeof useClearMciMutation>;
+export type ClearMciMutationResult = Apollo.MutationResult<ClearMciMutation>;
+export type ClearMciMutationOptions = Apollo.BaseMutationOptions<
+  ClearMciMutation,
+  ClearMciMutationVariables
 >;
 export const OmniSearchClientsDocument = gql`
   query OmniSearchClients($textSearch: String!) {

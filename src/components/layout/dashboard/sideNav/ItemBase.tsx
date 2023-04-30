@@ -108,6 +108,7 @@ const ItemBase = ({
             ) : item.path ? (
               <RouterLink
                 id={`side-nav-${item.id}`}
+                data-testid={`sideNav-${item.id}`}
                 aria-label={item.title}
                 // class='Mui-focusVisible'
                 variant='body1'

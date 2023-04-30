@@ -11,13 +11,13 @@ import TitleCard from '../elements/TitleCard';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import useSafeParams from '@/hooks/useSafeParams';
-import OrganizationDetails from '@/modules/inventory/components/OrganizationDetails';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import ProjectsTable from '@/modules/inventory/components/ProjectsTable';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import OrganizationDetails from '@/modules/projects/components/OrganizationDetails';
+import ProjectsTable from '@/modules/projects/components/tables/ProjectsTable';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
@@ -52,7 +52,7 @@ const Organization = () => {
   const hasDetails = organization && organization?.description;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       <Typography variant='h3' sx={{ mb: 4 }}>
         {organizationName}
       </Typography>
@@ -159,7 +159,7 @@ const Organization = () => {
         </Typography>
         <Typography>This action cannot be undone.</Typography>
       </ConfirmationDialog>
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default Organization;

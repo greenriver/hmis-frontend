@@ -1,15 +1,27 @@
 import { Typography, TypographyProps } from '@mui/material';
+import { ReactNode } from 'react';
 
 interface Props extends TypographyProps {
   prefix?: string;
-  id?: string;
+  value?: ReactNode;
   withoutEmphasis?: boolean;
 }
 
-const IdDisplay = ({ id, prefix, withoutEmphasis, ...props }: Props) => {
+const IdDisplay = ({ value, prefix, withoutEmphasis, ...props }: Props) => {
   return (
-    <Typography variant='body2' color='text.disabled' {...props}>
-      {prefix ? `${prefix} ` : ''} ID: {withoutEmphasis ? id : <b>{id}</b>}
+    <Typography
+      variant='body2'
+      color='text.disabled'
+      {...props}
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 0.5,
+        ...props.sx,
+      }}
+    >
+      {prefix ? `${prefix} ` : ''} ID:{' '}
+      {withoutEmphasis ? value : <b>{value}</b>}
     </Typography>
   );
 };

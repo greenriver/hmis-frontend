@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import GenericTable from '@/components/elements/GenericTable';
 import { enrollmentName, isRecentEnrollment } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   useGetClientEnrollmentsQuery,
@@ -99,7 +99,7 @@ const RecentEnrollments = ({
         },
       ]}
       rowLinkTo={(row) =>
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
           clientId: client.id,
           enrollmentId: row.id,
         })

@@ -6,6 +6,7 @@ import { sortedUniq } from 'lodash-es';
 Cypress.Commands.add('testId', (id, pseudo) => {
   return cy.get(`[data-testid="${id}"]${pseudo || ''}`);
 });
+
 Cypress.Commands.add(
   'findTestId',
   { prevSubject: true },
@@ -13,6 +14,11 @@ Cypress.Commands.add(
     return subject.find(`[data-testid="${id}"]${pseudo || ''}`);
   }
 );
+
+Cypress.Commands.add('navItem', (id) => {
+  // first because the mobile one is hidden
+  return cy.get(`[data-testid="sideNav-${id}"]`).first();
+});
 
 Cypress.Commands.add('login', (email, password) => {
   cy.session(
@@ -192,6 +198,7 @@ declare global {
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
       findTestId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
+      navItem(id: string): Chainable<JQuery<Element>>;
       getById(id: string): Chainable<JQuery<Element>>;
       inputId(id: string): Chainable<JQuery<Element>>;
       getByIds(ids: string[]): Chainable<JQuery<Element>>;

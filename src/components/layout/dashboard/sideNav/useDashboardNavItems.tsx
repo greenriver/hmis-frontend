@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { NavItem } from './types';
 
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -28,7 +28,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
           {
             id: 'overview',
             title: 'Overview',
-            path: generateSafePath(DashboardRoutes.PROFILE, params),
+            path: generateSafePath(ClientDashboardRoutes.PROFILE, params),
           },
           ...(canViewEnrollments
             ? [
@@ -36,14 +36,17 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                   id: 'enrollments',
                   title: 'Enrollments',
                   path: generateSafePath(
-                    DashboardRoutes.ALL_ENROLLMENTS,
+                    ClientDashboardRoutes.ALL_ENROLLMENTS,
                     params
                   ),
                 },
                 {
                   id: 'assessments',
                   title: 'Assessments',
-                  path: generateSafePath(DashboardRoutes.ASSESSMENTS, params),
+                  path: generateSafePath(
+                    ClientDashboardRoutes.ASSESSMENTS,
+                    params
+                  ),
                 },
               ]
             : []),
@@ -68,28 +71,28 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
           {
             id: 'notes',
             title: 'Notes',
-            path: generateSafePath(DashboardRoutes.NOTES, params),
+            path: generateSafePath(ClientDashboardRoutes.NOTES, params),
           },
           ...(canViewFiles
             ? [
                 {
                   id: 'files',
                   title: 'Files',
-                  path: generateSafePath(DashboardRoutes.FILES, params),
+                  path: generateSafePath(ClientDashboardRoutes.FILES, params),
                 },
               ]
             : []),
           // {
           //   title: 'Contact',
-          //   path: DashboardRoutes.CONTACT,
+          //   path: ClientDashboardRoutes.CONTACT,
           // },
           // {
           //   title: 'Locations',
-          //   path: DashboardRoutes.LOCATIONS,
+          //   path: ClientDashboardRoutes.LOCATIONS,
           // },
           // {
           //   title: 'Referrals',
-          //   path: DashboardRoutes.REFERRALS,
+          //   path: ClientDashboardRoutes.REFERRALS,
           // },
         ],
       },

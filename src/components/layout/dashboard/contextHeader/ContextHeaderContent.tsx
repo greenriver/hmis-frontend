@@ -6,10 +6,11 @@ import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
 import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 interface Props {
   breadcrumbOverrides?: Record<string, string>; // Path => Title
-  dashboardContext: DashboardContext;
+  dashboardContext: DashboardContext | ProjectDashboardContext;
 }
 
 const ContextHeaderContent: React.FC<Props> = ({
