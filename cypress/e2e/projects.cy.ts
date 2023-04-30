@@ -98,7 +98,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('projectDetailsCard').contains('Day Shelter');
 
   // Navigate to Organization page
-  cy.testId('breadcrumb-1').click();
+  cy.testId('organizationLink').click();
 
   // Assert project shows up in table
   cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
@@ -125,7 +125,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('projectDetailsCard').contains('Permanent Housing');
 
   // Navigate to Organization page, ensure change to project type is reflected there too
-  cy.testId('breadcrumb-1').click();
+  cy.testId('organizationLink').click();
   cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
   cy.testId('projectsCard')
     .find('table tbody tr')
@@ -138,6 +138,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   /*** Funder ***/
 
   // Create funder
+  cy.navItem('funders').click();
   cy.testId('addFunderButton').click();
 
   cy.inputId('grant-id').safeType('ABC123');
@@ -213,7 +214,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
 
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
-
+  cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
   cy.checkOption('es-availability', 'OVERFLOW');
@@ -226,6 +227,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   /*** Project CoC ***/
 
   // Create new ProjectCoC
+  cy.navItem('cocs').click();
   cy.testId('addProjectCocButton').click();
   cy.choose('coc', 'MA-505');
   cy.choose('geocode', '250126');
@@ -285,6 +287,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   /*** Inventory ***/
 
   // Create new Inventory
+  cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
   cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
@@ -316,10 +319,9 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Submit (create Inventory)
   cy.testId('formButton-submit').click();
   cy.get('h3').first().contains('Beds and Units');
-  // Navigate to Project page
-  cy.testId('breadcrumb-2').click();
 
   // Assert it shows up in table
+  cy.navItem('inventory').click();
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
   cy.testId('inventoryCard')
     .find('table tbody tr')
@@ -353,8 +355,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('formButton-submit').click();
   cy.get('h3').first().contains('Beds and Units');
 
-  // Navigate to Project page
-  cy.testId('breadcrumb-2').click();
+  cy.navItem('inventory').click();
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 2);
 
   // Delete an Inventory record
@@ -363,6 +364,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
+  cy.navItem('overview').click();
   cy.testId('updateProjectButton').click();
   cy.inputId('2.02.4').clear().safeType('01/31/2022');
   cy.testId('formButton-submit').click();

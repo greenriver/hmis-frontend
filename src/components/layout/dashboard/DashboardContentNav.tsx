@@ -16,9 +16,16 @@ interface Props {
   handleCloseMobileMenu: VoidFunction;
   handleCloseDesktopMenu: VoidFunction;
   window?: () => Window;
+  label?: string;
 }
 
-const CloseMenuRow = ({ onClose }: { onClose: VoidFunction }) => (
+const CloseMenuRow = ({
+  onClose,
+  label,
+}: {
+  onClose: VoidFunction;
+  label?: string;
+}) => (
   <Stack
     justifyContent='space-between'
     alignItems='center'
@@ -32,7 +39,7 @@ const CloseMenuRow = ({ onClose }: { onClose: VoidFunction }) => (
       height: CONTEXT_HEADER_HEIGHT,
     }}
   >
-    <Typography variant='h6'>Client Navigation</Typography>
+    {label ? <Typography variant='h6'>{label}</Typography> : <Box />}
     <Button
       variant='transparent'
       onClick={onClose}
@@ -52,6 +59,7 @@ const DashboardContentNav: React.FC<Props> = ({
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
   window,
+  label,
 }) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
@@ -74,7 +82,7 @@ const DashboardContentNav: React.FC<Props> = ({
           display: { md: 'block', lg: 'none' },
         }}
       >
-        <CloseMenuRow onClose={handleCloseMobileMenu} />
+        <CloseMenuRow onClose={handleCloseMobileMenu} label={label} />
         <Box>{children}</Box>
       </Drawer>
       <Drawer
@@ -106,7 +114,7 @@ const DashboardContentNav: React.FC<Props> = ({
         })}
       >
         <Box>
-          <CloseMenuRow onClose={handleCloseDesktopMenu} />
+          <CloseMenuRow onClose={handleCloseDesktopMenu} label={label} />
           <Box
             sx={{
               px: 2,

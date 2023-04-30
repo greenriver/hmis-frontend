@@ -18,6 +18,7 @@ interface Props {
   desktopNavIsOpen: boolean;
   mobileNavIsOpen: boolean;
   focusMode?: string;
+  navLabel?: string;
   handleOpenDesktopMenu: VoidFunction;
   handleOpenMobileMenu: VoidFunction;
   handleCloseMobileMenu: VoidFunction;
@@ -37,6 +38,7 @@ const DashboardContentContainer: React.FC<Props> = ({
   handleOpenMobileMenu,
   handleCloseMobileMenu,
   handleCloseDesktopMenu,
+  navLabel,
 }) => {
   const theme = useTheme();
   const maxPageWidth = theme.breakpoints.values.xl;
@@ -77,6 +79,7 @@ const DashboardContentContainer: React.FC<Props> = ({
             mobileNavIsOpen={mobileNavIsOpen}
             handleCloseMobileMenu={handleCloseMobileMenu}
             handleCloseDesktopMenu={handleCloseDesktopMenu}
+            label={navLabel}
           >
             {sidebar}
           </DashboardContentNav>
