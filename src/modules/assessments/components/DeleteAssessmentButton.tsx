@@ -66,7 +66,13 @@ const DeleteAssessmentButton = ({
         }
       }}
       ConfirmationDialogProps={
-        deletesEnrollment ? { title: 'Delete Enrollment' } : undefined
+        deletesEnrollment
+          ? {
+              title: 'Delete Enrollment',
+              confirmText: 'Yes, delete enrollment',
+              color: 'error',
+            }
+          : undefined
       }
       confirmationDialogContent={
         <Stack gap={2}>
