@@ -42,13 +42,14 @@ export const useHasPermissions = <T,>(
 };
 
 export type ProjectPermissions = keyof Omit<ProjectAccess, '__typename'>;
+
 export const useHasProjectPermissions = (
-  id: string,
+  projectId: string,
   permissions: ProjectPermissions[],
   mode?: PermissionsMode
 ) => {
   const projectData = useGetProjectPermissionsQuery({
-    variables: { id },
+    variables: { id: projectId },
   });
   const result = useHasPermissions(
     projectData?.data?.project?.access,
@@ -57,6 +58,17 @@ export const useHasProjectPermissions = (
   );
 
   return useMemo(() => [result, projectData] as const, [result, projectData]);
+};
+
+export const useProjectPermissions = (projectId: string) => {
+  const { data, ...status } = useGetProjectPermissionsQuery({
+    variables: { id: projectId },
+  });
+
+  return useMemo(
+    () => [data?.project?.access, status] as const,
+    [data, status]
+  );
 };
 
 export type OrganizationPermissions = keyof Omit<

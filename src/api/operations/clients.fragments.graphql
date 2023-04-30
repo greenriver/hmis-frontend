@@ -83,6 +83,9 @@ fragment ClientFields on Client {
   user {
     ...UserFields
   }
+  access {
+    ...ClientAccessFields
+  }
 }
 
 fragment ClientIdentifierFields on ExternalIdentifier {
@@ -145,6 +148,12 @@ fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
   }
 }
 
+fragment EnrollmentAccessFields on EnrollmentAccess {
+  id
+  canEditEnrollments
+  canDeleteEnrollments
+}
+
 fragment EnrollmentFields on Enrollment {
   id
   entryDate
@@ -163,6 +172,9 @@ fragment EnrollmentFields on Enrollment {
   householdSize
   client {
     id
+  }
+  access {
+    ...EnrollmentAccessFields
   }
 }
 

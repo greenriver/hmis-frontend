@@ -9,14 +9,19 @@ import ConfirmationDialog, {
 
 interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
-  ConfirmationDialogProps?: ConfirmationDialogProps;
+  ConfirmationDialogProps?: Omit<
+    ConfirmationDialogProps,
+    'loading' | 'children' | 'onConfirm' | 'onCancel' | 'open'
+  >;
   onSuccess?: VoidFunction;
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
   variables: MutationVariables;
   idPath: string;
   children: ReactNode;
   recordName?: string;
+  confirmationDialogContent?: ReactNode;
 }
+
 const DeleteMutationButton = <Mutation, MutationVariables>({
   variables,
   queryDocument,
@@ -26,6 +31,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   ConfirmationDialogProps,
   recordName = 'record',
   onSuccess,
+  confirmationDialogContent,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
 
@@ -35,9 +41,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   >(queryDocument, {
     variables,
     onCompleted: (result) => {
-      //idPath
       const id = get(result, idPath);
-      //res.deleteAssessment?.assessment?.id;
       if (id) {
         setShowDialog(false);
         if (onSuccess) onSuccess();
@@ -74,12 +78,16 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         errorState={{ apolloError: error, errors: [], warnings: [] }}
         {...ConfirmationDialogProps}
       >
-        <>
-          <Typography>
-            {`Are you sure you want to delete this ${lowerCase(recordName)}?`}
-          </Typography>
-          <Typography>This action cannot be undone.</Typography>
-        </>
+        {confirmationDialogContent ? (
+          confirmationDialogContent
+        ) : (
+          <>
+            <Typography>
+              {`Are you sure you want to delete this ${lowerCase(recordName)}?`}
+            </Typography>
+            <Typography>This action cannot be undone.</Typography>
+          </>
+        )}
       </ConfirmationDialog>
     </>
   );

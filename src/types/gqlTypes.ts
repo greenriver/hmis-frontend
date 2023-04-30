@@ -70,6 +70,7 @@ export type ApplicationUser = {
 /** Custom Assessment */
 export type Assessment = {
   __typename?: 'Assessment';
+  access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
   customForm?: Maybe<CustomForm>;
@@ -81,6 +82,14 @@ export type Assessment = {
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   user?: Maybe<User>;
+};
+
+export type AssessmentAccess = {
+  __typename?: 'AssessmentAccess';
+  canDeleteAssessments: Scalars['Boolean'];
+  canDeleteEnrollments: Scalars['Boolean'];
+  canEditEnrollments: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 export type AssessmentInput = {
@@ -997,6 +1006,7 @@ export type EnableWhen = {
 /** HUD Enrollment */
 export type Enrollment = {
   __typename?: 'Enrollment';
+  access: EnrollmentAccess;
   assessments: AssessmentsPaginated;
   ceAssessments: CeAssessmentsPaginated;
   client: Client;
@@ -1066,6 +1076,13 @@ export type EnrollmentServicesArgs = {
   serviceCategory?: InputMaybe<Scalars['ID']>;
   serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
+};
+
+export type EnrollmentAccess = {
+  __typename?: 'EnrollmentAccess';
+  canDeleteEnrollments: Scalars['Boolean'];
+  canEditEnrollments: Scalars['Boolean'];
+  id: Scalars['ID'];
 };
 
 /** HMIS Enrollment household member input */
@@ -4042,6 +4059,14 @@ export type UserFieldsFragment = {
   name: string;
 };
 
+export type AssessmentAccessFieldsFragment = {
+  __typename?: 'AssessmentAccess';
+  id: string;
+  canDeleteAssessments: boolean;
+  canDeleteEnrollments: boolean;
+  canEditEnrollments: boolean;
+};
+
 export type AssessmentFieldsFragment = {
   __typename?: 'Assessment';
   id: string;
@@ -4064,6 +4089,13 @@ export type AssessmentFieldsFragment = {
       identifier: string;
     };
   } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
 };
 
 export type AssessmentWithDefinitionAndValuesFragment = {
@@ -4507,6 +4539,13 @@ export type AssessmentWithDefinitionAndValuesFragment = {
     };
   } | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
 };
 
 export type AssessmentWithValuesFragment = {
@@ -4547,8 +4586,21 @@ export type AssessmentWithValuesFragment = {
     };
     household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
 };
 
 export type GetAssessmentQueryVariables = Exact<{
@@ -4998,6 +5050,13 @@ export type GetAssessmentQuery = {
       };
     } | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
+    access: {
+      __typename?: 'AssessmentAccess';
+      id: string;
+      canDeleteAssessments: boolean;
+      canDeleteEnrollments: boolean;
+      canEditEnrollments: boolean;
+    };
   } | null;
 };
 
@@ -5059,6 +5118,13 @@ export type GetEnrollmentAssessmentsQuery = {
             identifier: string;
           };
         } | null;
+        access: {
+          __typename?: 'AssessmentAccess';
+          id: string;
+          canDeleteAssessments: boolean;
+          canDeleteEnrollments: boolean;
+          canEditEnrollments: boolean;
+        };
       }>;
     };
   } | null;
@@ -5949,6 +6015,13 @@ export type SaveAssessmentMutation = {
         };
       } | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'AssessmentAccess';
+        id: string;
+        canDeleteAssessments: boolean;
+        canDeleteEnrollments: boolean;
+        canEditEnrollments: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -6416,6 +6489,13 @@ export type SubmitAssessmentMutation = {
         };
       } | null;
       user?: { __typename: 'User'; id: string; name: string } | null;
+      access: {
+        __typename?: 'AssessmentAccess';
+        id: string;
+        canDeleteAssessments: boolean;
+        canDeleteEnrollments: boolean;
+        canEditEnrollments: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -6520,8 +6600,21 @@ export type GetAssessmentsForPopulationQuery = {
           };
           household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
+        access: {
+          __typename?: 'AssessmentAccess';
+          id: string;
+          canDeleteAssessments: boolean;
+          canDeleteEnrollments: boolean;
+          canEditEnrollments: boolean;
+        };
       }>;
     };
   } | null;
@@ -6558,6 +6651,13 @@ export type DeleteAssessmentMutation = {
           identifier: string;
         };
       } | null;
+      access: {
+        __typename?: 'AssessmentAccess';
+        id: string;
+        canDeleteAssessments: boolean;
+        canDeleteEnrollments: boolean;
+        canEditEnrollments: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -6622,6 +6722,15 @@ export type SubmitFormMutation = {
             id: string;
             canViewFullSsn: boolean;
             canViewPartialSsn: boolean;
+            canViewDob: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
           };
           image?: {
             __typename?: 'ClientImage';
@@ -6885,6 +6994,15 @@ export type ClientFieldsFragment = {
     id: string;
     canViewFullSsn: boolean;
     canViewPartialSsn: boolean;
+    canViewDob: boolean;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+    canViewEnrollmentDetails: boolean;
+    canDeleteAssessments: boolean;
+    canManageAnyClientFiles: boolean;
+    canManageOwnClientFiles: boolean;
+    canViewAnyConfidentialClientFiles: boolean;
+    canViewAnyNonconfidentialClientFiles: boolean;
   };
   image?: {
     __typename?: 'ClientImage';
@@ -7017,6 +7135,13 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
   };
 };
 
+export type EnrollmentAccessFieldsFragment = {
+  __typename?: 'EnrollmentAccess';
+  id: string;
+  canEditEnrollments: boolean;
+  canDeleteEnrollments: boolean;
+};
+
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
@@ -7033,6 +7158,12 @@ export type EnrollmentFieldsFragment = {
   };
   household: { __typename?: 'Household'; id: string; shortId: string };
   client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
 };
 
 export type EnrollmentFieldsFromAssessmentFragment = {
@@ -7119,6 +7250,12 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     projectType?: ProjectType | null;
   };
   client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
 };
 
 export type EventFieldsFragment = {
@@ -7394,6 +7531,15 @@ export type SearchClientsQuery = {
         id: string;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
+        canViewDob: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
       };
       image?: {
         __typename?: 'ClientImage';
@@ -7560,6 +7706,12 @@ export type GetClientEnrollmentsQuery = {
         };
         household: { __typename?: 'Household'; id: string; shortId: string };
         client: { __typename?: 'Client'; id: string };
+        access: {
+          __typename?: 'EnrollmentAccess';
+          id: string;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+        };
       }>;
     };
   } | null;
@@ -7639,6 +7791,12 @@ export type GetClientAssessmentsQuery = {
           };
           household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
         customForm?: {
@@ -7653,6 +7811,13 @@ export type GetClientAssessmentsQuery = {
             identifier: string;
           };
         } | null;
+        access: {
+          __typename?: 'AssessmentAccess';
+          id: string;
+          canDeleteAssessments: boolean;
+          canDeleteEnrollments: boolean;
+          canEditEnrollments: boolean;
+        };
       }>;
     };
   } | null;
@@ -7799,6 +7964,12 @@ export type CreateEnrollmentMutation = {
       };
       household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -7886,6 +8057,12 @@ export type UpdateRelationshipToHoHMutation = {
         projectType?: ProjectType | null;
       };
       client: { __typename?: 'Client'; id: string };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -7929,6 +8106,12 @@ export type DeleteEnrollmentMutation = {
       };
       household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8069,6 +8252,12 @@ export type AddHouseholdMembersMutation = {
         projectType?: ProjectType | null;
       };
       client: { __typename?: 'Client'; id: string };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -8132,6 +8321,15 @@ export type DeleteClientMutation = {
         id: string;
         canViewFullSsn: boolean;
         canViewPartialSsn: boolean;
+        canViewDob: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
       };
       image?: {
         __typename?: 'ClientImage';
@@ -8284,6 +8482,12 @@ export type GetEnrollmentQuery = {
     };
     household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
   } | null;
 };
 
@@ -8365,6 +8569,12 @@ export type GetEnrollmentWithHouseholdQuery = {
       projectType?: ProjectType | null;
     };
     client: { __typename?: 'Client'; id: string };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
   } | null;
 };
 
@@ -9284,6 +9494,12 @@ export type GetProjectEnrollmentsQuery = {
           projectType?: ProjectType | null;
         };
         household: { __typename?: 'Household'; id: string; shortId: string };
+        access: {
+          __typename?: 'EnrollmentAccess';
+          id: string;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+        };
       }>;
     };
   } | null;
@@ -9995,6 +10211,14 @@ export const FormDefinitionFieldsFragmentDoc = gql`
     identifier
   }
 `;
+export const AssessmentAccessFieldsFragmentDoc = gql`
+  fragment AssessmentAccessFields on AssessmentAccess {
+    id
+    canDeleteAssessments
+    canDeleteEnrollments
+    canEditEnrollments
+  }
+`;
 export const AssessmentFieldsFragmentDoc = gql`
   fragment AssessmentFields on Assessment {
     id
@@ -10013,10 +10237,14 @@ export const AssessmentFieldsFragmentDoc = gql`
         ...FormDefinitionFields
       }
     }
+    access {
+      ...AssessmentAccessFields
+    }
   }
   ${UserFieldsFragmentDoc}
   ${CustomFormFieldsFragmentDoc}
   ${FormDefinitionFieldsFragmentDoc}
+  ${AssessmentAccessFieldsFragmentDoc}
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
   fragment PickListOptionFields on PickListOption {
@@ -10142,6 +10370,13 @@ export const AssessmentWithDefinitionAndValuesFragmentDoc = gql`
   ${CustomFormFieldsFragmentDoc}
   ${FormDefinitionWithJsonFragmentDoc}
 `;
+export const EnrollmentAccessFieldsFragmentDoc = gql`
+  fragment EnrollmentAccessFields on EnrollmentAccess {
+    id
+    canEditEnrollments
+    canDeleteEnrollments
+  }
+`;
 export const EnrollmentFieldsFragmentDoc = gql`
   fragment EnrollmentFields on Enrollment {
     id
@@ -10162,7 +10397,11 @@ export const EnrollmentFieldsFragmentDoc = gql`
     client {
       id
     }
+    access {
+      ...EnrollmentAccessFields
+    }
   }
+  ${EnrollmentAccessFieldsFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {
@@ -10241,6 +10480,22 @@ export const ClientIdentifierFieldsFragmentDoc = gql`
     label
   }
 `;
+export const ClientAccessFieldsFragmentDoc = gql`
+  fragment ClientAccessFields on ClientAccess {
+    id
+    canViewDob
+    canViewFullSsn
+    canViewPartialSsn
+    canEditEnrollments
+    canDeleteEnrollments
+    canViewEnrollmentDetails
+    canDeleteAssessments
+    canManageAnyClientFiles
+    canManageOwnClientFiles
+    canViewAnyConfidentialClientFiles
+    canViewAnyNonconfidentialClientFiles
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -10264,12 +10519,16 @@ export const ClientFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    access {
+      ...ClientAccessFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
@@ -10281,22 +10540,6 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
     ...ClientName
   }
   ${ClientNameFragmentDoc}
-`;
-export const ClientAccessFieldsFragmentDoc = gql`
-  fragment ClientAccessFields on ClientAccess {
-    id
-    canViewDob
-    canViewFullSsn
-    canViewPartialSsn
-    canEditEnrollments
-    canDeleteEnrollments
-    canViewEnrollmentDetails
-    canDeleteAssessments
-    canManageAnyClientFiles
-    canManageOwnClientFiles
-    canViewAnyConfidentialClientFiles
-    canViewAnyNonconfidentialClientFiles
-  }
 `;
 export const ClientPermissionsFragmentDoc = gql`
   fragment ClientPermissions on Client {

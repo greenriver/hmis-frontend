@@ -117,6 +117,13 @@ fragment UserFields on User {
   name
 }
 
+fragment AssessmentAccessFields on AssessmentAccess {
+  id
+  canDeleteAssessments
+  canDeleteEnrollments
+  canEditEnrollments
+}
+
 fragment AssessmentFields on Assessment {
   id
   inProgress
@@ -133,6 +140,9 @@ fragment AssessmentFields on Assessment {
     definition {
       ...FormDefinitionFields
     }
+  }
+  access {
+    ...AssessmentAccessFields
   }
 }
 

@@ -1,8 +1,12 @@
+import { Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+
 import { assessmentRole } from '../util';
 
+import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { useClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
+import { DashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   DeleteAssessmentDocument,
@@ -10,23 +14,35 @@ import {
   DeleteAssessmentMutationVariables,
   FormRole,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const DeleteAssessmentButton = ({
   assessment,
   clientId,
   onSuccess,
+  enrollmentId,
 }: {
   assessment: AssessmentFieldsFragment;
   clientId: string;
+  enrollmentId: string;
   onSuccess?: VoidFunction;
 }) => {
-  const [{ canDeleteAssessments = false, canEditEnrollments = false } = {}] =
-    useClientPermissions(clientId);
+  const navigate = useNavigate();
+  const { canDeleteAssessments, canEditEnrollments, canDeleteEnrollments } =
+    assessment.access;
 
-  if (assessment.inProgress && !canEditEnrollments) return null;
-  if (!assessment.inProgress && !canDeleteAssessments) return null;
-  if (!assessment.inProgress && assessmentRole(assessment) === FormRole.Intake)
-    return null;
+  // canEditEnrollments is required for deleting WIP or Submitted assessments
+  if (!canEditEnrollments) return null;
+
+  const isSubmitted = !assessment.inProgress;
+  const deletesEnrollment = assessmentRole(assessment) === FormRole.Intake;
+  if (isSubmitted) {
+    // canDeleteAssessments is required for deleting submitted assessments
+    if (!canDeleteAssessments) return null;
+
+    // canDeleteEnrollments is required for deleting submitted INTAKE assessments
+    if (!canDeleteEnrollments && deletesEnrollment) return null;
+  }
 
   return (
     <DeleteMutationButton<
@@ -43,8 +59,43 @@ const DeleteAssessmentButton = ({
           id: `Assessment:${assessment.id}`,
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
-        if (onSuccess) onSuccess();
+        if (deletesEnrollment) {
+          navigate(generateSafePath(DashboardRoutes.PROFILE, { clientId }));
+        } else if (onSuccess) {
+          onSuccess();
+        }
       }}
+      ConfirmationDialogProps={
+        deletesEnrollment ? { title: 'Delete Enrollment' } : undefined
+      }
+      confirmationDialogContent={
+        <Stack gap={2}>
+          <Typography>
+            Are you sure you want to delete this intake assessment?
+          </Typography>
+          {assessmentRole(assessment) === FormRole.Intake && (
+            <>
+              <Typography fontWeight={600}>
+                This will delete the enrollment.
+              </Typography>
+
+              <Typography>
+                If there are other household members, you may need to{' '}
+                <RouterLink
+                  to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+                    clientId,
+                    enrollmentId,
+                  })}
+                  variant='inherit'
+                >
+                  change the Head of Household
+                </RouterLink>{' '}
+                before taking this action.
+              </Typography>
+            </>
+          )}
+        </Stack>
+      }
     >
       Delete Assessment
     </DeleteMutationButton>

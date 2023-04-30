@@ -27,7 +27,6 @@ import {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { DashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -128,9 +127,7 @@ const IndividualAssessment = ({
     overrideBreadcrumbTitles,
   ]);
 
-  const [canEdit] = useHasClientPermissions(enrollment?.client.id || '', [
-    'canViewEnrollmentDetails',
-  ]);
+  const canEdit = enrollment?.access.canEditEnrollments;
 
   // Whether assessment is read-only
   const [readOnly, setReadOnly] = useState<boolean | null>(null);
