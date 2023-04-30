@@ -10,7 +10,7 @@ import EditRecord from '@/modules/form/components/EditRecord';
 import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { FormRole, OrganizationAllFieldsFragment } from '@/types/gqlTypes';
+import { FormRole, OrganizationFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditOrganization = () => {
@@ -20,7 +20,7 @@ const EditOrganization = () => {
     useOrganizationCrumbs('Edit Organization');
 
   const onCompleted = useCallback(
-    (data: OrganizationAllFieldsFragment) => {
+    (data: OrganizationFieldsFragment) => {
       navigate(
         generateSafePath(Routes.ORGANIZATION, { organizationId: data.id })
       );
@@ -35,7 +35,7 @@ const EditOrganization = () => {
     <ProjectLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
-        <EditRecord<OrganizationAllFieldsFragment>
+        <EditRecord<OrganizationFieldsFragment>
           formRole={FormRole.Organization}
           record={organization}
           onCompleted={onCompleted}

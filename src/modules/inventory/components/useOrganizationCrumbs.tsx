@@ -7,7 +7,7 @@ import apolloClient from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   GetOrganizationQuery,
-  OrganizationFieldsFragmentDoc,
+  OrganizationNameFieldsFragmentDoc,
   useGetOrganizationQuery,
 } from '@/types/gqlTypes';
 
@@ -20,8 +20,8 @@ export function useOrganizationCrumbs(current?: string) {
   // get org name from cache if we have it
   const organizationNameFragment = apolloClient.readFragment({
     id: `Organization:${organizationId}`,
-    fragment: OrganizationFieldsFragmentDoc,
-    fragmentName: 'OrganizationFields',
+    fragment: OrganizationNameFieldsFragmentDoc,
+    fragmentName: 'OrganizationNameFields',
   });
 
   const {

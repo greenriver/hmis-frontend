@@ -1,0 +1,54 @@
+fragment ProjectNameAndType on Project {
+  id
+  projectName
+  projectType
+}
+
+fragment ProjectAllFields on Project {
+  id
+  ...ProjectNameAndType
+  HMISParticipatingProject
+  HOPWAMedAssistedLivingFac
+  contactInformation
+  continuumProject
+  description
+  housingType
+  operatingEndDate
+  operatingStartDate
+  residentialAffiliation
+  targetPopulation
+  trackingMethod
+  organization {
+    ...OrganizationNameFields
+  }
+  access {
+    ...ProjectAccessFields
+  }
+}
+
+fragment ProjectCocFields on ProjectCoc {
+  id
+  address1
+  address2
+  city
+  cocCode
+  dateCreated
+  dateDeleted
+  dateUpdated
+  geocode
+  geographyType
+  state
+  zip
+}
+
+fragment FunderFields on Funder {
+  id
+  dateCreated
+  dateDeleted
+  dateUpdated
+  endDate
+  funder
+  grantId
+  otherFunder
+  startDate
+}

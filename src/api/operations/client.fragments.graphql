@@ -1,66 +1,3 @@
-fragment ValidationErrorFields on ValidationError {
-  type
-  attribute
-  readableAttribute
-  message
-  fullMessage
-  severity
-  id
-  recordId
-  linkId
-  section
-  data
-}
-
-fragment ClientName on Client {
-  firstName
-  middleName
-  preferredName
-  lastName
-  nameSuffix
-}
-
-fragment ClientAccessFields on ClientAccess {
-  id
-  canViewDob
-  canViewFullSsn
-  canViewPartialSsn
-  canEditEnrollments
-  canDeleteEnrollments
-  canViewEnrollmentDetails
-  canDeleteAssessments
-  canManageAnyClientFiles
-  canManageOwnClientFiles
-  canViewAnyConfidentialClientFiles
-  canViewAnyNonconfidentialClientFiles
-}
-
-fragment ClientPermissions on Client {
-  id
-  access {
-    ...ClientAccessFields
-  }
-}
-
-fragment ClientImage on Client {
-  id
-  image {
-    ...ClientImageFields
-  }
-}
-
-fragment ClientIdentificationFields on Client {
-  id
-  dob
-  age
-  ssn
-  access {
-    id
-    canViewFullSsn
-    canViewPartialSsn
-  }
-}
-
 fragment ClientFields on Client {
   ...ClientIdentificationFields
   dobDataQuality
@@ -85,6 +22,33 @@ fragment ClientFields on Client {
   }
   access {
     ...ClientAccessFields
+  }
+}
+
+fragment ClientName on Client {
+  firstName
+  middleName
+  preferredName
+  lastName
+  nameSuffix
+}
+
+fragment ClientImage on Client {
+  id
+  image {
+    ...ClientImageFields
+  }
+}
+
+fragment ClientIdentificationFields on Client {
+  id
+  dob
+  age
+  ssn
+  access {
+    id
+    canViewFullSsn
+    canViewPartialSsn
   }
 }
 
@@ -117,8 +81,10 @@ fragment HouseholdClientFields on HouseholdClient {
     id
     ...ClientName
     ...ClientIdentificationFields
-    ...ClientPermissions
     veteranStatus
+    access {
+      ...ClientAccessFields
+    }
   }
   enrollment {
     id
@@ -146,12 +112,6 @@ fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
       assessmentDate
     }
   }
-}
-
-fragment EnrollmentAccessFields on EnrollmentAccess {
-  id
-  canEditEnrollments
-  canDeleteEnrollments
 }
 
 fragment EnrollmentFields on Enrollment {

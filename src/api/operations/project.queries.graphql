@@ -2,7 +2,7 @@ query GetAllOrganizations {
   organizations(limit: 500, sortOrder: NAME) {
     nodesCount
     nodes {
-      ...OrganizationFields
+      ...OrganizationNameFields
       projects(limit: 1) {
         nodesCount
       }
@@ -12,7 +12,10 @@ query GetAllOrganizations {
 
 query GetOrganizationPermissions($id: ID!) {
   organization(id: $id) {
-    ...OrganizationPermissionsFields
+    id
+    access {
+      ...OrganizationAccessFields
+    }
   }
 }
 
@@ -24,7 +27,10 @@ query GetProject($id: ID!) {
 
 query GetProjectPermissions($id: ID!) {
   project(id: $id) {
-    ...ProjectPermissionsFields
+    id
+    access {
+      ...ProjectAccessFields
+    }
   }
 }
 
@@ -126,7 +132,7 @@ query GetProjectCoc($id: ID!) {
 
 query GetOrganization($id: ID!) {
   organization(id: $id) {
-    ...OrganizationAllFields
+    ...OrganizationFields
   }
 }
 

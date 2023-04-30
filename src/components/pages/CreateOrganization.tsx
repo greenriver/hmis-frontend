@@ -10,7 +10,7 @@ import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCru
 import { Routes } from '@/routes/routes';
 import {
   FormRole,
-  OrganizationAllFieldsFragment,
+  OrganizationFieldsFragment,
   PickListType,
 } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
@@ -28,7 +28,7 @@ const CreateOrganization = () => {
   ];
 
   const onCompleted = useCallback(
-    (data: OrganizationAllFieldsFragment) => {
+    (data: OrganizationFieldsFragment) => {
       evictPickList(PickListType.Project);
       evictQuery('organizations');
       navigate(
@@ -42,7 +42,7 @@ const CreateOrganization = () => {
 
   return (
     <ProjectLayout crumbs={crumbs}>
-      <EditRecord<OrganizationAllFieldsFragment>
+      <EditRecord<OrganizationFieldsFragment>
         formRole={FormRole.Organization}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}

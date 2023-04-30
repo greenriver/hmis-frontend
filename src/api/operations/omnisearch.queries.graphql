@@ -13,7 +13,7 @@ query OmniSearchProjects($searchTerm: String!) {
     limit
     nodesCount
     nodes {
-      ...ProjectOmniSearchFields
+      ...ProjectNameAndType
     }
   }
 }
@@ -26,7 +26,7 @@ query GetRecentItems {
         ...ClientOmniSearchFields
       }
       ... on Project {
-        ...ProjectOmniSearchFields
+        ...ProjectNameAndType
       }
     }
   }
@@ -40,7 +40,7 @@ mutation AddRecentItem($itemId: ID!, $itemType: RecentItemType!) {
         ...ClientOmniSearchFields
       }
       ... on Project {
-        ...ProjectOmniSearchFields
+        ...ProjectNameAndType
       }
     }
   }
@@ -54,7 +54,7 @@ mutation ClearRecentItems {
         ...ClientOmniSearchFields
       }
       ... on Project {
-        ...ProjectOmniSearchFields
+        ...ProjectNameAndType
       }
     }
   }

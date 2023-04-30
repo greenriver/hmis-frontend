@@ -22,8 +22,6 @@ query SearchClients(
 query GetClient($id: ID!) {
   client(id: $id) {
     ...ClientFields
-    # Load client permissions so that they are in the cache for subsequent requests
-    ...ClientPermissions
   }
 }
 
@@ -36,7 +34,10 @@ query GetClientName($id: ID!) {
 
 query GetClientPermissions($id: ID!) {
   client(id: $id) {
-    ...ClientPermissions
+    id
+    access {
+      ...ClientAccessFields
+    }
   }
 }
 
@@ -89,7 +90,6 @@ query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodes {
         ...AssessmentFields
         enrollment {
-          id
           ...EnrollmentFields
         }
       }
@@ -302,8 +302,7 @@ query GetClientHouseholdMemberCandidates(
       nodesCount
       nodes {
         project {
-          id
-          projectName
+          ...ProjectNameAndType
         }
         household {
           id
