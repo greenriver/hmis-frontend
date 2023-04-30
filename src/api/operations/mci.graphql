@@ -1,0 +1,26 @@
+fragment MciMatchFields on MciClearanceMatch {
+  id
+  score
+  existingClientId
+  age
+  dob
+  firstName
+  gender
+  lastName
+  mciId
+  middleName
+  nameSuffix
+  ssn
+}
+
+mutation ClearMci($input: ClearMciInput!) {
+  clearMci(input: $input) {
+    clientMutationId
+    matches {
+      ...MciMatchFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

@@ -2,7 +2,7 @@ import { Button, Card, Grid, Typography } from '@mui/material';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -24,7 +24,7 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
               fullWidth
               variant='outlined'
               data-testid='enrollButton'
-              to={generateSafePath(DashboardRoutes.NEW_ENROLLMENT, {
+              to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
                 clientId: client.id,
               })}
             >

@@ -6,7 +6,7 @@ import { assessmentRole } from '../util';
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   DeleteAssessmentDocument,
@@ -60,7 +60,9 @@ const DeleteAssessmentButton = ({
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
         if (deletesEnrollment) {
-          navigate(generateSafePath(DashboardRoutes.PROFILE, { clientId }));
+          navigate(
+            generateSafePath(ClientDashboardRoutes.PROFILE, { clientId })
+          );
         } else if (onSuccess) {
           onSuccess();
         }
@@ -88,7 +90,7 @@ const DeleteAssessmentButton = ({
               <Typography>
                 If there are other household members, you may need to{' '}
                 <RouterLink
-                  to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
                     clientId,
                     enrollmentId,
                   })}

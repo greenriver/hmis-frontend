@@ -92,8 +92,12 @@ export const isEnabled = (
 ): boolean => {
   if (item.hidden) return false;
   if (!item.enableWhen && item.item) {
-    // This is a group. Only show it if some children are enabled.
-    return item.item.some((i) => isEnabled(i, disabledLinkIds));
+    // This is a group. Only show it if some children are visible.
+    return item.item.some(
+      (i) =>
+        i.disabledDisplay === DisabledDisplay.Protected ||
+        isEnabled(i, disabledLinkIds)
+    );
   }
   return !disabledLinkIds.includes(item.linkId);
 };
@@ -268,7 +272,7 @@ const evaluateEnableWhen = (
         currentValue <= comparisonValue;
       break;
     case EnableOperator.Exists:
-      result = !isNil(currentValue);
+      result = hasMeaningfulValue(currentValue);
       // flip the result if this is "not exists"
       if (en.answerBoolean === false) {
         result = !result;
@@ -768,7 +772,7 @@ export const applyDataCollectedAbout = (
         return (
           relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold ||
           isNil(client.dob) ||
-          (clientAge && clientAge >= 18)
+          (!isNil(clientAge) && clientAge >= 18)
         );
       case DataCollectedAbout.VeteranHoh:
         return (

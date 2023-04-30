@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Container } from '@mui/material';
+import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import { useEnrollment } from '../../modules/dataFetching/hooks/useEnrollment';
@@ -11,10 +12,9 @@ import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNa
 
 import NotFound from './NotFound';
 
-import useCurrentPath from '@/hooks/useCurrentPath';
+import { useDashboardState } from '@/hooks/useDashboardState';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
-import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -46,47 +46,9 @@ const ClientDashboard: React.FC = () => {
 
   const navItems: NavItem[] = useDashboardNavItems(client || undefined);
 
-  const currentPath = useCurrentPath();
-  const [desktopNavIsOpen, setDesktopNavState] = useState(true);
-  const [mobileNavIsOpen, setMobileNavState] = useState(false);
-  const [focusMode, setFocusMode] = useState<string | undefined>();
+  const dashboardState = useDashboardState();
 
-  useEffect(() => {
-    if (!currentPath) return;
-    // Auto-hide nav for certain pages, like assessments
-    if (HIDE_NAV_ROUTES.includes(currentPath)) {
-      setDesktopNavState(false);
-    }
-    // Auto-enable focus mode for certain pages, like household exit
-    const focused = FOCUS_MODE_ROUTES.find(
-      ({ route }) => route === currentPath
-    );
-    if (focused) {
-      // Path that you go "back" to when exiting focus mode
-      setFocusMode(focused.previous);
-    } else {
-      setFocusMode(undefined);
-    }
-  }, [currentPath]);
-
-  useEffect(() => {
-    if (focusMode) setDesktopNavState(false);
-  }, [focusMode]);
-
-  const handleCloseMobileMenu = useCallback(() => {
-    setMobileNavState(false);
-  }, []);
-  const handleOpenMobileMenu = useCallback(() => {
-    setMobileNavState(true);
-  }, []);
-  const handleCloseDesktopMenu = useCallback(() => {
-    setDesktopNavState(false);
-  }, []);
-  const handleOpenDesktopMenu = useCallback(() => {
-    setDesktopNavState(true);
-  }, []);
-
-  const outletContext: DashboardContext | undefined = useMemo(
+  const outletContext: ClientDashboardContext | undefined = useMemo(
     () =>
       client && !enrollmentLoading
         ? {
@@ -107,14 +69,6 @@ const ClientDashboard: React.FC = () => {
   return (
     <DashboardContentContainer
       navHeader={<ClientCardMini client={client} />}
-      desktopNavIsOpen={desktopNavIsOpen}
-      mobileNavIsOpen={mobileNavIsOpen}
-      handleCloseMobileMenu={handleCloseMobileMenu}
-      handleCloseDesktopMenu={handleCloseDesktopMenu}
-      handleOpenDesktopMenu={handleOpenDesktopMenu}
-      handleOpenMobileMenu={handleOpenMobileMenu}
-      // TODO add back to standardize headers
-      // header={header}
       sidebar={<SideNavMenu items={navItems} />}
       contextHeader={
         <ContextHeaderContent
@@ -122,18 +76,22 @@ const ClientDashboard: React.FC = () => {
           dashboardContext={outletContext}
         />
       }
-      focusMode={focusMode}
+      navLabel='Client Navigation'
+      {...dashboardState}
     >
-      <Outlet context={outletContext} />
+      <Container maxWidth='lg' sx={{ pb: 6 }}>
+        <Outlet context={outletContext} />
+      </Container>
     </DashboardContentContainer>
   );
 };
 
-export type DashboardContext = {
+export type ClientDashboardContext = {
   client: ClientFieldsFragment;
   enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
-export const useDashboardClient = () => useOutletContext<DashboardContext>();
+export const useClientDashboardContext = () =>
+  useOutletContext<ClientDashboardContext>();
 
 export default ClientDashboard;

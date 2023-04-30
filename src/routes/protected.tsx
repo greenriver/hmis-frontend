@@ -1,51 +1,61 @@
 import { Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { DashboardRoutes, Routes } from './routes';
+import {
+  ClientDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from './routes';
 
-import AllFiles from '@/components/dashboard/AllFiles';
-import AuditHistory from '@/components/dashboard/AuditHistory';
-import EditClient from '@/components/dashboard/EditClient';
-import AllAssessments from '@/components/dashboard/enrollments/AllAssessments';
-import AllEnrollments from '@/components/dashboard/enrollments/AllEnrollments';
-import EditHousehold from '@/components/dashboard/enrollments/EditHousehold';
-import HouseholdExit from '@/components/dashboard/enrollments/HouseholdExit';
-import HouseholdIntake from '@/components/dashboard/enrollments/HouseholdIntake';
-import NewAssessmentPage from '@/components/dashboard/enrollments/NewAssessmentPage';
-import NewEnrollment from '@/components/dashboard/enrollments/NewEnrollment';
-import ViewAssessmentPage from '@/components/dashboard/enrollments/ViewAssessmentPage';
-import ViewEnrollment from '@/components/dashboard/enrollments/ViewEnrollment';
-import Profile from '@/components/dashboard/Profile';
+import ClientRoute from '@/components/accessWrappers/ClientRoute';
+import EnrollmentsRoute from '@/components/accessWrappers/EnrollmentRoute';
+import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
+import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
+import AllFiles from '@/components/clientDashboard/AllFiles';
+import AuditHistory from '@/components/clientDashboard/AuditHistory';
+import EditClient from '@/components/clientDashboard/EditClient';
+import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
+import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
+import EditHousehold from '@/components/clientDashboard/enrollments/EditHousehold';
+import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
+import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
+import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
+import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
+import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
+import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
+import Profile from '@/components/clientDashboard/Profile';
+import Service from '@/components/clientDashboard/Service';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
-import AddServices from '@/components/pages/BulkAddServices';
 import ClientDashboard from '@/components/pages/ClientDashboard';
-import ClientRoute from '@/components/pages/ClientRoute';
 import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
-import Dashboard from '@/components/pages/Dashboard';
 import EditOrganization from '@/components/pages/EditOrganization';
-import EditProject from '@/components/pages/EditProject';
-import EnrollmentsRoute from '@/components/pages/EnrollmentRoute';
 import File from '@/components/pages/File';
-import FileEditRoute from '@/components/pages/FileEditRoute';
-import Funder from '@/components/pages/Funder';
-import Inventory from '@/components/pages/Inventory';
-import InventoryBeds from '@/components/pages/InventoryBeds';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
-import Project from '@/components/pages/Project';
-import ProjectCoc from '@/components/pages/ProjectCoc';
-import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
-import Service from '@/components/pages/Service';
+import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
+import AddServices from '@/modules/projects/components/BulkAddServices';
+import Cocs from '@/modules/projects/components/Cocs';
+import EditProject from '@/modules/projects/components/EditProject';
+import Funder from '@/modules/projects/components/Funder';
+import Funders from '@/modules/projects/components/Funders';
+import Inventories from '@/modules/projects/components/Inventories';
+import Inventory from '@/modules/projects/components/Inventory';
+import InventoryBeds from '@/modules/projects/components/InventoryBeds';
+import ProjectCoc from '@/modules/projects/components/ProjectCoc';
+import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
+import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
+import Project from '@/modules/projects/components/ProjectOverview';
+import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
@@ -79,14 +89,111 @@ export const protectedRoutes = [
     element: <App />,
     children: [
       { path: Routes.ALL_PROJECTS, element: <AllProjects /> },
-      { path: Routes.PROJECT, element: <Project /> },
       {
-        path: Routes.EDIT_PROJECT,
-        element: (
-          <ProjectEditRoute>
-            <EditProject />
-          </ProjectEditRoute>
-        ),
+        path: Routes.PROJECT,
+        element: <ProjectDashboard />,
+        children: [
+          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: ProjectDashboardRoutes.OVERVIEW,
+            element: <Project />,
+          },
+          {
+            path: ProjectDashboardRoutes.ENROLLMENTS,
+            element: <ProjectEnrollments />,
+          },
+          {
+            path: ProjectDashboardRoutes.REFERRALS,
+            element: <ProjectReferrals />,
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_PROJECT,
+            element: (
+              <ProjectEditRoute>
+                <EditProject />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.INVENTORY,
+            element: <Inventories />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_INVENTORY,
+            element: (
+              <ProjectEditRoute>
+                <Inventory create />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_INVENTORY,
+            element: (
+              <ProjectEditRoute>
+                <Inventory />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
+            element: (
+              <ProjectEditRoute>
+                <InventoryBeds />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.FUNDERS,
+            element: <Funders />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_FUNDER,
+            element: (
+              <ProjectEditRoute>
+                <Funder create={true} />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_FUNDER,
+            element: (
+              <ProjectEditRoute>
+                <Funder />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.COCS,
+            element: <Cocs />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_COC,
+            element: (
+              <ProjectEditRoute>
+                <ProjectCoc create />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.EDIT_COC,
+            element: (
+              <ProjectEditRoute>
+                <ProjectCoc />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.ADD_SERVICES,
+            element: (
+              <ProjectEditRoute
+                permissions={['canEditEnrollments']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <AddServices />
+              </ProjectEditRoute>
+            ),
+          },
+        ],
       },
       {
         path: Routes.CREATE_PROJECT,
@@ -100,73 +207,6 @@ export const protectedRoutes = [
       {
         path: Routes.EDIT_ORGANIZATION,
         element: <EditOrganization />,
-      },
-      {
-        path: Routes.NEW_INVENTORY,
-        element: (
-          <ProjectEditRoute>
-            <Inventory create />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_INVENTORY,
-        element: (
-          <ProjectEditRoute>
-            <Inventory />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.MANAGE_INVENTORY_BEDS,
-        element: (
-          <ProjectEditRoute>
-            <InventoryBeds />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.NEW_FUNDER,
-        element: (
-          <ProjectEditRoute>
-            <Funder create={true} />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_FUNDER,
-        element: (
-          <ProjectEditRoute>
-            <Funder />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.NEW_COC,
-        element: (
-          <ProjectEditRoute>
-            <ProjectCoc create />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.EDIT_COC,
-        element: (
-          <ProjectEditRoute>
-            <ProjectCoc />
-          </ProjectEditRoute>
-        ),
-      },
-      {
-        path: Routes.ADD_SERVICES,
-        element: (
-          <ProjectEditRoute
-            permissions={['canEditEnrollments']}
-            redirectRoute={Routes.PROJECT}
-          >
-            <AddServices />
-          </ProjectEditRoute>
-        ),
       },
       {
         path: Routes.CREATE_ORGANIZATION,
@@ -194,7 +234,7 @@ export const protectedRoutes = [
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
           {
-            path: DashboardRoutes.PROFILE,
+            path: ClientDashboardRoutes.PROFILE,
             element: (
               <ClientRoute view>
                 <Profile />
@@ -202,7 +242,7 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.EDIT,
+            path: ClientDashboardRoutes.EDIT,
             element: (
               <RootPermissionsFilter
                 permissions='canEditClients'
@@ -213,108 +253,117 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.NEW_ENROLLMENT,
+            path: ClientDashboardRoutes.NEW_ENROLLMENT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.ALL_ENROLLMENTS}
+                redirectRoute={ClientDashboardRoutes.ALL_ENROLLMENTS}
               >
                 <NewEnrollment />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.VIEW_ENROLLMENT,
+            path: ClientDashboardRoutes.VIEW_ENROLLMENT,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ViewEnrollment />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.EDIT_HOUSEHOLD,
+            path: ClientDashboardRoutes.EDIT_HOUSEHOLD,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <EditHousehold />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.HOUSEHOLD_EXIT,
+            path: ClientDashboardRoutes.HOUSEHOLD_EXIT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <HouseholdExit />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.HOUSEHOLD_INTAKE,
+            path: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <HouseholdIntake />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.NEW_ASSESSMENT,
+            path: ClientDashboardRoutes.NEW_ASSESSMENT,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <NewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.VIEW_ASSESSMENT,
+            path: ClientDashboardRoutes.VIEW_ASSESSMENT,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <ViewAssessmentPage />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.NEW_SERVICE,
+            path: ClientDashboardRoutes.NEW_SERVICE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <Service create />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.EDIT_SERVICE,
+            path: ClientDashboardRoutes.EDIT_SERVICE,
             element: (
               <EnrollmentsRoute
                 edit
-                redirectRoute={DashboardRoutes.VIEW_ENROLLMENT}
+                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
                 <Service />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.ALL_ENROLLMENTS,
+            path: ClientDashboardRoutes.ALL_ENROLLMENTS,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <AllEnrollments />
               </EnrollmentsRoute>
             ),
           },
           {
-            path: DashboardRoutes.AUDIT_HISTORY,
+            path: ClientDashboardRoutes.AUDIT_HISTORY,
             element: (
               <RootPermissionsFilter
                 permissions='canAuditClients'
@@ -325,16 +374,19 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.ASSESSMENTS,
+            path: ClientDashboardRoutes.ASSESSMENTS,
             element: (
-              <EnrollmentsRoute view redirectRoute={DashboardRoutes.PROFILE}>
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
                 <AllAssessments />
               </EnrollmentsRoute>
             ),
           },
-          { path: DashboardRoutes.NOTES, element: null },
+          { path: ClientDashboardRoutes.NOTES, element: null },
           {
-            path: DashboardRoutes.FILES,
+            path: ClientDashboardRoutes.FILES,
             element: (
               <ParamsWrapper<{ clientId: string }>>
                 {({ clientId }) => (
@@ -347,7 +399,7 @@ export const protectedRoutes = [
                     ]}
                     otherwise={
                       <Navigate
-                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                           clientId,
                         })}
                         replace
@@ -361,7 +413,7 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.NEW_FILE,
+            path: ClientDashboardRoutes.NEW_FILE,
             element: (
               <FileEditRoute create>
                 <File create />
@@ -369,16 +421,16 @@ export const protectedRoutes = [
             ),
           },
           {
-            path: DashboardRoutes.EDIT_FILE,
+            path: ClientDashboardRoutes.EDIT_FILE,
             element: (
               <FileEditRoute>
                 <File />
               </FileEditRoute>
             ),
           },
-          { path: DashboardRoutes.CONTACT, element: null },
-          { path: DashboardRoutes.LOCATIONS, element: null },
-          { path: DashboardRoutes.REFERRALS, element: null },
+          { path: ClientDashboardRoutes.CONTACT, element: null },
+          { path: ClientDashboardRoutes.LOCATIONS, element: null },
+          { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
         ],
       },

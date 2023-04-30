@@ -24,6 +24,7 @@ import SsnInput from '@/components/elements/input/SsnInput';
 import TextInput from '@/components/elements/input/TextInput';
 import YesNoRadio from '@/components/elements/input/YesNoRadio';
 import Uploader from '@/components/elements/upload/UploaderBase';
+import MciClearance from '@/modules/external/mci/components/MciClearance';
 import { INVALID_ENUM, parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { Component, FormItem, InputSize, ItemType } from '@/types/gqlTypes';
 
@@ -133,6 +134,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       ? undefined
       : `Select ${item.briefText || item.text || ''}...`;
 
+  if (item.component === Component.Mci) {
+    return (
+      <MciClearance
+        value={value}
+        onChange={onChangeValue}
+        {...commonInputProps}
+      />
+    );
+  }
   switch (item.type) {
     case ItemType.Display:
       return <DynamicDisplay maxWidth={maxWidth + 100} item={item} />;

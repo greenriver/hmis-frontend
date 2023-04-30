@@ -30,7 +30,7 @@ import {
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentWithDefinitionAndValuesFragment,
   AssessmentWithValuesFragment,
@@ -153,7 +153,7 @@ const AssessmentForm = ({
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(DashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
           clientId: enrollment.client.id,
           enrollmentId: enrollment.id,
         })
@@ -206,7 +206,7 @@ const AssessmentForm = ({
               />
             )}
             {import.meta.env.MODE === 'development' && assessment && (
-              <IdDisplay prefix='Assessment' id={assessment.id} />
+              <IdDisplay prefix='Assessment' value={assessment.id} />
             )}
           </Stack>
         </Box>

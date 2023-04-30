@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
@@ -36,7 +36,7 @@ const CreateProject = () => {
   if (!crumbs) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       <EditRecord<ProjectAllFieldsFragment>
         formRole={FormRole.Project}
         onCompleted={onCompleted}
@@ -48,7 +48,7 @@ const CreateProject = () => {
           </Typography>
         }
       />
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default CreateProject;

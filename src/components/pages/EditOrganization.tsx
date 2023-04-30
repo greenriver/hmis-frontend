@@ -6,9 +6,9 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import { FormRole, OrganizationFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -33,14 +33,17 @@ const EditOrganization = () => {
   if (!organization.access.canEditOrganization) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <EditRecord<OrganizationFieldsFragment>
-        formRole={FormRole.Organization}
-        record={organization}
-        onCompleted={onCompleted}
-        title={<Typography variant='h3'>Edit {organizationName}</Typography>}
-      />
-    </ProjectLayout>
+    <OrganizationLayout crumbs={crumbs}>
+      {loading && <Loading />}
+      {organization && (
+        <EditRecord<OrganizationFieldsFragment>
+          formRole={FormRole.Organization}
+          record={organization}
+          onCompleted={onCompleted}
+          title={<Typography variant='h3'>Edit {organizationName}</Typography>}
+        />
+      )}
+    </OrganizationLayout>
   );
 };
 export default EditOrganization;
