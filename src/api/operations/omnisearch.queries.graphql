@@ -3,6 +3,7 @@ query OmniSearchClients($textSearch: String!) {
     limit
     nodesCount
     nodes {
+      id
       ...ClientOmniSearchFields
     }
   }

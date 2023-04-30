@@ -28,7 +28,6 @@ export function useOrganizationCrumbs(current?: string) {
     data: { organization } = {},
     loading,
     error,
-    // FIXME: this includes the entire project list, which we don't always need
   } = useGetOrganizationQuery({ variables: { id: organizationId } });
 
   if (error) throw error;

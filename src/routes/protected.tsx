@@ -36,7 +36,6 @@ import Inventory from '@/components/pages/Inventory';
 import InventoryBeds from '@/components/pages/InventoryBeds';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
-import OrganizationEditRoute from '@/components/pages/OrganizationEditRoute';
 import Project from '@/components/pages/Project';
 import ProjectCoc from '@/components/pages/ProjectCoc';
 import ProjectEditRoute from '@/components/pages/ProjectEditRoute';
@@ -100,11 +99,7 @@ export const protectedRoutes = [
       { path: Routes.ORGANIZATION, element: <Organization /> },
       {
         path: Routes.EDIT_ORGANIZATION,
-        element: (
-          <OrganizationEditRoute>
-            <EditOrganization />
-          </OrganizationEditRoute>
-        ),
+        element: <EditOrganization />,
       },
       {
         path: Routes.NEW_INVENTORY,

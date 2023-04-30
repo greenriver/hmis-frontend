@@ -3,11 +3,9 @@ import { useMemo } from 'react';
 import {
   ClientAccess,
   Maybe,
-  OrganizationAccess,
   ProjectAccess,
   QueryAccess,
   useGetClientPermissionsQuery,
-  useGetOrganizationPermissionsQuery,
   useGetProjectPermissionsQuery,
   useGetRootPermissionsQuery,
 } from '@/types/gqlTypes';
@@ -68,30 +66,6 @@ export const useProjectPermissions = (projectId: string) => {
   return useMemo(
     () => [data?.project?.access, status] as const,
     [data, status]
-  );
-};
-
-export type OrganizationPermissions = keyof Omit<
-  OrganizationAccess,
-  '__typename'
->;
-export const useHasOrganizationPermissions = (
-  id: string,
-  permissions: OrganizationPermissions[],
-  mode?: PermissionsMode
-) => {
-  const organizationData = useGetOrganizationPermissionsQuery({
-    variables: { id },
-  });
-  const result = useHasPermissions(
-    organizationData?.data?.organization?.access,
-    permissions,
-    mode
-  );
-
-  return useMemo(
-    () => [result, organizationData] as const,
-    [result, organizationData]
   );
 };
 

@@ -8992,19 +8992,19 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Project';
           id: string;
+          description?: string | null;
           HMISParticipatingProject?: NoYesMissing | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
           contactInformation?: string | null;
           continuumProject?: NoYesMissing | null;
-          description?: string | null;
           housingType?: HousingType | null;
-          operatingEndDate?: string | null;
-          operatingStartDate: string;
           residentialAffiliation?: NoYesMissing | null;
           targetPopulation?: TargetPopulation | null;
           trackingMethod?: TrackingMethod | null;
           projectName: string;
           projectType?: ProjectType | null;
+          operatingEndDate?: string | null;
+          operatingStartDate: string;
           organization: {
             __typename?: 'Organization';
             id: string;
@@ -9274,6 +9274,100 @@ export type OrganizationFieldsFragment = {
   victimServiceProvider: NoYesMissing;
 };
 
+export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetAllOrganizationsQuery = {
+  __typename?: 'Query';
+  organizations: {
+    __typename?: 'OrganizationsPaginated';
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+      projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
+    }>;
+  };
+};
+
+export type GetOrganizationQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetOrganizationQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+    description?: string | null;
+    contactInformation?: string | null;
+    victimServiceProvider: NoYesMissing;
+    access: {
+      __typename?: 'OrganizationAccess';
+      id: string;
+      canEditOrganization: boolean;
+      canDeleteOrganization: boolean;
+    };
+  } | null;
+};
+
+export type GetOrganizationProjectsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetOrganizationProjectsQuery = {
+  __typename?: 'Query';
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    projects: {
+      __typename?: 'ProjectsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+        operatingEndDate?: string | null;
+        operatingStartDate: string;
+      }>;
+    };
+  } | null;
+};
+
+export type DeleteOrganizationMutationVariables = Exact<{
+  input: DeleteOrganizationInput;
+}>;
+
+export type DeleteOrganizationMutation = {
+  __typename?: 'Mutation';
+  deleteOrganization?: {
+    __typename?: 'DeleteOrganizationPayload';
+    clientMutationId?: string | null;
+    organization?: { __typename?: 'Organization'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type ProjectNameAndTypeFragment = {
   __typename?: 'Project';
   id: string;
@@ -9281,22 +9375,29 @@ export type ProjectNameAndTypeFragment = {
   projectType?: ProjectType | null;
 };
 
+export type ProjectOperatingPeriodFragment = {
+  __typename?: 'Project';
+  id: string;
+  operatingEndDate?: string | null;
+  operatingStartDate: string;
+};
+
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
+  description?: string | null;
   HMISParticipatingProject?: NoYesMissing | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
   contactInformation?: string | null;
   continuumProject?: NoYesMissing | null;
-  description?: string | null;
   housingType?: HousingType | null;
-  operatingEndDate?: string | null;
-  operatingStartDate: string;
   residentialAffiliation?: NoYesMissing | null;
   targetPopulation?: TargetPopulation | null;
   trackingMethod?: TrackingMethod | null;
   projectName: string;
   projectType?: ProjectType | null;
+  operatingEndDate?: string | null;
+  operatingStartDate: string;
   organization: {
     __typename?: 'Organization';
     id: string;
@@ -9346,40 +9447,6 @@ export type FunderFieldsFragment = {
   startDate: string;
 };
 
-export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetAllOrganizationsQuery = {
-  __typename?: 'Query';
-  organizations: {
-    __typename?: 'OrganizationsPaginated';
-    nodesCount: number;
-    nodes: Array<{
-      __typename?: 'Organization';
-      id: string;
-      organizationName: string;
-      projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
-    }>;
-  };
-};
-
-export type GetOrganizationPermissionsQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetOrganizationPermissionsQuery = {
-  __typename?: 'Query';
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    access: {
-      __typename?: 'OrganizationAccess';
-      id: string;
-      canEditOrganization: boolean;
-      canDeleteOrganization: boolean;
-    };
-  } | null;
-};
-
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -9389,19 +9456,19 @@ export type GetProjectQuery = {
   project?: {
     __typename?: 'Project';
     id: string;
+    description?: string | null;
     HMISParticipatingProject?: NoYesMissing | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
     contactInformation?: string | null;
     continuumProject?: NoYesMissing | null;
-    description?: string | null;
     housingType?: HousingType | null;
-    operatingEndDate?: string | null;
-    operatingStartDate: string;
     residentialAffiliation?: NoYesMissing | null;
     targetPopulation?: TargetPopulation | null;
     trackingMethod?: TrackingMethod | null;
     projectName: string;
     projectType?: ProjectType | null;
+    operatingEndDate?: string | null;
+    operatingStartDate: string;
     organization: {
       __typename?: 'Organization';
       id: string;
@@ -9663,105 +9730,6 @@ export type GetProjectCocQuery = {
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
-  } | null;
-};
-
-export type GetOrganizationQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetOrganizationQuery = {
-  __typename?: 'Query';
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    organizationName: string;
-    description?: string | null;
-    contactInformation?: string | null;
-    victimServiceProvider: NoYesMissing;
-  } | null;
-};
-
-export type DeleteOrganizationMutationVariables = Exact<{
-  input: DeleteOrganizationInput;
-}>;
-
-export type DeleteOrganizationMutation = {
-  __typename?: 'Mutation';
-  deleteOrganization?: {
-    __typename?: 'DeleteOrganizationPayload';
-    clientMutationId?: string | null;
-    organization?: { __typename?: 'Organization'; id: string } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type GetOrganizationWithPaginatedProjectsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-export type GetOrganizationWithPaginatedProjectsQuery = {
-  __typename?: 'Query';
-  organization?: {
-    __typename?: 'Organization';
-    id: string;
-    projects: {
-      __typename?: 'ProjectsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Project';
-        id: string;
-        HMISParticipatingProject?: NoYesMissing | null;
-        HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
-        contactInformation?: string | null;
-        continuumProject?: NoYesMissing | null;
-        description?: string | null;
-        housingType?: HousingType | null;
-        operatingEndDate?: string | null;
-        operatingStartDate: string;
-        residentialAffiliation?: NoYesMissing | null;
-        targetPopulation?: TargetPopulation | null;
-        trackingMethod?: TrackingMethod | null;
-        projectName: string;
-        projectType?: ProjectType | null;
-        organization: {
-          __typename?: 'Organization';
-          id: string;
-          organizationName: string;
-        };
-        access: {
-          __typename?: 'ProjectAccess';
-          id: string;
-          canViewDob: boolean;
-          canViewFullSsn: boolean;
-          canDeleteProject: boolean;
-          canViewPartialSsn: boolean;
-          canEditEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteEnrollments: boolean;
-          canDeleteAssessments: boolean;
-          canEditProjectDetails: boolean;
-        };
-      }>;
-    };
   } | null;
 };
 
@@ -10987,6 +10955,13 @@ export const ProjectNameAndTypeFragmentDoc = gql`
     projectType
   }
 `;
+export const ProjectOperatingPeriodFragmentDoc = gql`
+  fragment ProjectOperatingPeriod on Project {
+    id
+    operatingEndDate
+    operatingStartDate
+  }
+`;
 export const ProjectAccessFieldsFragmentDoc = gql`
   fragment ProjectAccessFields on ProjectAccess {
     id
@@ -11005,14 +10980,13 @@ export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
     ...ProjectNameAndType
+    ...ProjectOperatingPeriod
+    description
     HMISParticipatingProject
     HOPWAMedAssistedLivingFac
     contactInformation
     continuumProject
-    description
     housingType
-    operatingEndDate
-    operatingStartDate
     residentialAffiliation
     targetPopulation
     trackingMethod
@@ -11024,6 +10998,7 @@ export const ProjectAllFieldsFragmentDoc = gql`
     }
   }
   ${ProjectNameAndTypeFragmentDoc}
+  ${ProjectOperatingPeriodFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
 `;
@@ -13690,6 +13665,7 @@ export const OmniSearchClientsDocument = gql`
       limit
       nodesCount
       nodes {
+        id
         ...ClientOmniSearchFields
       }
     }
@@ -14061,67 +14037,204 @@ export type GetAllOrganizationsQueryResult = Apollo.QueryResult<
   GetAllOrganizationsQuery,
   GetAllOrganizationsQueryVariables
 >;
-export const GetOrganizationPermissionsDocument = gql`
-  query GetOrganizationPermissions($id: ID!) {
+export const GetOrganizationDocument = gql`
+  query GetOrganization($id: ID!) {
     organization(id: $id) {
-      id
+      ...OrganizationFields
       access {
+        id
         ...OrganizationAccessFields
       }
     }
   }
+  ${OrganizationFieldsFragmentDoc}
   ${OrganizationAccessFieldsFragmentDoc}
 `;
 
 /**
- * __useGetOrganizationPermissionsQuery__
+ * __useGetOrganizationQuery__
  *
- * To run a query within a React component, call `useGetOrganizationPermissionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationPermissionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetOrganizationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetOrganizationPermissionsQuery({
+ * const { data, loading, error } = useGetOrganizationQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useGetOrganizationPermissionsQuery(
+export function useGetOrganizationQuery(
   baseOptions: Apollo.QueryHookOptions<
-    GetOrganizationPermissionsQuery,
-    GetOrganizationPermissionsQueryVariables
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetOrganizationPermissionsQuery,
-    GetOrganizationPermissionsQueryVariables
-  >(GetOrganizationPermissionsDocument, options);
+  return Apollo.useQuery<GetOrganizationQuery, GetOrganizationQueryVariables>(
+    GetOrganizationDocument,
+    options
+  );
 }
-export function useGetOrganizationPermissionsLazyQuery(
+export function useGetOrganizationLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrganizationPermissionsQuery,
-    GetOrganizationPermissionsQueryVariables
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
-    GetOrganizationPermissionsQuery,
-    GetOrganizationPermissionsQueryVariables
-  >(GetOrganizationPermissionsDocument, options);
+    GetOrganizationQuery,
+    GetOrganizationQueryVariables
+  >(GetOrganizationDocument, options);
 }
-export type GetOrganizationPermissionsQueryHookResult = ReturnType<
-  typeof useGetOrganizationPermissionsQuery
+export type GetOrganizationQueryHookResult = ReturnType<
+  typeof useGetOrganizationQuery
 >;
-export type GetOrganizationPermissionsLazyQueryHookResult = ReturnType<
-  typeof useGetOrganizationPermissionsLazyQuery
+export type GetOrganizationLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationLazyQuery
 >;
-export type GetOrganizationPermissionsQueryResult = Apollo.QueryResult<
-  GetOrganizationPermissionsQuery,
-  GetOrganizationPermissionsQueryVariables
+export type GetOrganizationQueryResult = Apollo.QueryResult<
+  GetOrganizationQuery,
+  GetOrganizationQueryVariables
+>;
+export const GetOrganizationProjectsDocument = gql`
+  query GetOrganizationProjects(
+    $id: ID!
+    $searchTerm: String
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    organization(id: $id) {
+      id
+      projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          id
+          ...ProjectNameAndType
+          ...ProjectOperatingPeriod
+        }
+      }
+    }
+  }
+  ${ProjectNameAndTypeFragmentDoc}
+  ${ProjectOperatingPeriodFragmentDoc}
+`;
+
+/**
+ * __useGetOrganizationProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationProjectsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      searchTerm: // value for 'searchTerm'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetOrganizationProjectsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOrganizationProjectsQuery,
+    GetOrganizationProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOrganizationProjectsQuery,
+    GetOrganizationProjectsQueryVariables
+  >(GetOrganizationProjectsDocument, options);
+}
+export function useGetOrganizationProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOrganizationProjectsQuery,
+    GetOrganizationProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOrganizationProjectsQuery,
+    GetOrganizationProjectsQueryVariables
+  >(GetOrganizationProjectsDocument, options);
+}
+export type GetOrganizationProjectsQueryHookResult = ReturnType<
+  typeof useGetOrganizationProjectsQuery
+>;
+export type GetOrganizationProjectsLazyQueryHookResult = ReturnType<
+  typeof useGetOrganizationProjectsLazyQuery
+>;
+export type GetOrganizationProjectsQueryResult = Apollo.QueryResult<
+  GetOrganizationProjectsQuery,
+  GetOrganizationProjectsQueryVariables
+>;
+export const DeleteOrganizationDocument = gql`
+  mutation DeleteOrganization($input: DeleteOrganizationInput!) {
+    deleteOrganization(input: $input) {
+      clientMutationId
+      organization {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteOrganizationMutationFn = Apollo.MutationFunction<
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables
+>;
+
+/**
+ * __useDeleteOrganizationMutation__
+ *
+ * To run a mutation, you first call `useDeleteOrganizationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOrganizationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOrganizationMutation, { data, loading, error }] = useDeleteOrganizationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteOrganizationMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOrganizationMutation,
+    DeleteOrganizationMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteOrganizationMutation,
+    DeleteOrganizationMutationVariables
+  >(DeleteOrganizationDocument, options);
+}
+export type DeleteOrganizationMutationHookResult = ReturnType<
+  typeof useDeleteOrganizationMutation
+>;
+export type DeleteOrganizationMutationResult =
+  Apollo.MutationResult<DeleteOrganizationMutation>;
+export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables
 >;
 export const GetProjectDocument = gql`
   query GetProject($id: ID!) {
@@ -14699,197 +14812,6 @@ export type GetProjectCocQueryResult = Apollo.QueryResult<
   GetProjectCocQuery,
   GetProjectCocQueryVariables
 >;
-export const GetOrganizationDocument = gql`
-  query GetOrganization($id: ID!) {
-    organization(id: $id) {
-      ...OrganizationFields
-    }
-  }
-  ${OrganizationFieldsFragmentDoc}
-`;
-
-/**
- * __useGetOrganizationQuery__
- *
- * To run a query within a React component, call `useGetOrganizationQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrganizationQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetOrganizationQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetOrganizationQuery,
-    GetOrganizationQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetOrganizationQuery, GetOrganizationQueryVariables>(
-    GetOrganizationDocument,
-    options
-  );
-}
-export function useGetOrganizationLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrganizationQuery,
-    GetOrganizationQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetOrganizationQuery,
-    GetOrganizationQueryVariables
-  >(GetOrganizationDocument, options);
-}
-export type GetOrganizationQueryHookResult = ReturnType<
-  typeof useGetOrganizationQuery
->;
-export type GetOrganizationLazyQueryHookResult = ReturnType<
-  typeof useGetOrganizationLazyQuery
->;
-export type GetOrganizationQueryResult = Apollo.QueryResult<
-  GetOrganizationQuery,
-  GetOrganizationQueryVariables
->;
-export const DeleteOrganizationDocument = gql`
-  mutation DeleteOrganization($input: DeleteOrganizationInput!) {
-    deleteOrganization(input: $input) {
-      clientMutationId
-      organization {
-        id
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteOrganizationMutationFn = Apollo.MutationFunction<
-  DeleteOrganizationMutation,
-  DeleteOrganizationMutationVariables
->;
-
-/**
- * __useDeleteOrganizationMutation__
- *
- * To run a mutation, you first call `useDeleteOrganizationMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteOrganizationMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteOrganizationMutation, { data, loading, error }] = useDeleteOrganizationMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteOrganizationMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteOrganizationMutation,
-    DeleteOrganizationMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteOrganizationMutation,
-    DeleteOrganizationMutationVariables
-  >(DeleteOrganizationDocument, options);
-}
-export type DeleteOrganizationMutationHookResult = ReturnType<
-  typeof useDeleteOrganizationMutation
->;
-export type DeleteOrganizationMutationResult =
-  Apollo.MutationResult<DeleteOrganizationMutation>;
-export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<
-  DeleteOrganizationMutation,
-  DeleteOrganizationMutationVariables
->;
-export const GetOrganizationWithPaginatedProjectsDocument = gql`
-  query GetOrganizationWithPaginatedProjects(
-    $id: ID!
-    $searchTerm: String
-    $limit: Int = 10
-    $offset: Int = 0
-  ) {
-    organization(id: $id) {
-      id
-      projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ProjectAllFields
-        }
-      }
-    }
-  }
-  ${ProjectAllFieldsFragmentDoc}
-`;
-
-/**
- * __useGetOrganizationWithPaginatedProjectsQuery__
- *
- * To run a query within a React component, call `useGetOrganizationWithPaginatedProjectsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrganizationWithPaginatedProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrganizationWithPaginatedProjectsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetOrganizationWithPaginatedProjectsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetOrganizationWithPaginatedProjectsQuery,
-    GetOrganizationWithPaginatedProjectsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetOrganizationWithPaginatedProjectsQuery,
-    GetOrganizationWithPaginatedProjectsQueryVariables
-  >(GetOrganizationWithPaginatedProjectsDocument, options);
-}
-export function useGetOrganizationWithPaginatedProjectsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetOrganizationWithPaginatedProjectsQuery,
-    GetOrganizationWithPaginatedProjectsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetOrganizationWithPaginatedProjectsQuery,
-    GetOrganizationWithPaginatedProjectsQueryVariables
-  >(GetOrganizationWithPaginatedProjectsDocument, options);
-}
-export type GetOrganizationWithPaginatedProjectsQueryHookResult = ReturnType<
-  typeof useGetOrganizationWithPaginatedProjectsQuery
->;
-export type GetOrganizationWithPaginatedProjectsLazyQueryHookResult =
-  ReturnType<typeof useGetOrganizationWithPaginatedProjectsLazyQuery>;
-export type GetOrganizationWithPaginatedProjectsQueryResult =
-  Apollo.QueryResult<
-    GetOrganizationWithPaginatedProjectsQuery,
-    GetOrganizationWithPaginatedProjectsQueryVariables
-  >;
 export const GetProjectInventoriesDocument = gql`
   query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     project(id: $id) {

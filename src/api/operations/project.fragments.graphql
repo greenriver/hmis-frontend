@@ -4,17 +4,22 @@ fragment ProjectNameAndType on Project {
   projectType
 }
 
+fragment ProjectOperatingPeriod on Project {
+  id
+  operatingEndDate
+  operatingStartDate
+}
+
 fragment ProjectAllFields on Project {
   id
   ...ProjectNameAndType
+  ...ProjectOperatingPeriod
+  description
   HMISParticipatingProject
   HOPWAMedAssistedLivingFac
   contactInformation
   continuumProject
-  description
   housingType
-  operatingEndDate
-  operatingStartDate
   residentialAffiliation
   targetPopulation
   trackingMethod

@@ -30,18 +30,16 @@ const EditOrganization = () => {
 
   if (loading) return <Loading />;
   if (!crumbs || !organization) return <NotFound />;
+  if (!organization.access.canEditOrganization) return <NotFound />;
 
   return (
     <ProjectLayout crumbs={crumbs}>
-      {loading && <Loading />}
-      {organization && (
-        <EditRecord<OrganizationFieldsFragment>
-          formRole={FormRole.Organization}
-          record={organization}
-          onCompleted={onCompleted}
-          title={<Typography variant='h3'>Edit {organizationName}</Typography>}
-        />
-      )}
+      <EditRecord<OrganizationFieldsFragment>
+        formRole={FormRole.Organization}
+        record={organization}
+        onCompleted={onCompleted}
+        title={<Typography variant='h3'>Edit {organizationName}</Typography>}
+      />
     </ProjectLayout>
   );
 };
