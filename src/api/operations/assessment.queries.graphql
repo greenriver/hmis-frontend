@@ -4,12 +4,6 @@ query GetAssessment($id: ID!) {
   }
 }
 
-query GetPickList($pickListType: PickListType!, $relationId: ID) {
-  pickList(pickListType: $pickListType, relationId: $relationId) {
-    ...PickListOptionFields
-  }
-}
-
 query GetEnrollmentAssessments(
   $id: ID!
   $limit: Int = 10
@@ -33,16 +27,6 @@ query GetEnrollmentAssessments(
         ...AssessmentFields
       }
     }
-  }
-}
-
-query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
-  getFormDefinition(
-    role: $role
-    enrollmentId: $enrollmentId
-    projectId: $projectId
-  ) {
-    ...FormDefinitionWithJson
   }
 }
 
@@ -111,41 +95,6 @@ mutation DeleteAssessment($id: ID!) {
     clientMutationId
     assessment {
       ...AssessmentFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation SubmitForm($input: SubmitFormInput!) {
-  submitForm(input: $input) {
-    clientMutationId
-    record {
-      ... on Client {
-        ...ClientFields
-      }
-      ... on Organization {
-        ...OrganizationAllFields
-      }
-      ... on Project {
-        ...ProjectAllFields
-      }
-      ... on Funder {
-        ...FunderFields
-      }
-      ... on ProjectCoc {
-        ...ProjectCocFields
-      }
-      ... on Inventory {
-        ...InventoryFields
-      }
-      ... on Service {
-        ...ServiceFields
-      }
-      ... on File {
-        ...FileFields
-      }
     }
     errors {
       ...ValidationErrorFields

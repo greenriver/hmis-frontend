@@ -48,7 +48,7 @@ const ClientDashboard: React.FC = () => {
 
   const dashboardState = useDashboardState();
 
-  const outletContext: DashboardContext | undefined = useMemo(
+  const outletContext: ClientDashboardContext | undefined = useMemo(
     () =>
       client && !enrollmentLoading
         ? {
@@ -86,11 +86,12 @@ const ClientDashboard: React.FC = () => {
   );
 };
 
-export type DashboardContext = {
+export type ClientDashboardContext = {
   client: ClientFieldsFragment;
   enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
-export const useDashboardClient = () => useOutletContext<DashboardContext>();
+export const useClientDashboardContext = () =>
+  useOutletContext<ClientDashboardContext>();
 
 export default ClientDashboard;

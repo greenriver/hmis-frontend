@@ -1,12 +1,11 @@
 import { Typography } from '@mui/material';
-import { useOutletContext } from 'react-router-dom';
 
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import HouseholdAssessments from '@/modules/assessments/components/household/HouseholdAssessments';
 
 const HouseholdExit = () => {
-  const { enrollment } = useOutletContext<DashboardContext>();
+  const { enrollment } = useClientDashboardContext();
   if (!enrollment) return <NotFound />;
 
   return (

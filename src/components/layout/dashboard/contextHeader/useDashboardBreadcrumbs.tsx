@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
@@ -27,7 +27,7 @@ const buildParentPaths = (
 };
 
 function isProjectContext(
-  ctx: DashboardContext | ProjectDashboardContext
+  ctx: ClientDashboardContext | ProjectDashboardContext
 ): ctx is ProjectDashboardContext {
   return !!(
     typeof ctx === 'object' &&
@@ -36,7 +36,7 @@ function isProjectContext(
 }
 
 export const useDashboardBreadcrumbs = (
-  context: DashboardContext | ProjectDashboardContext,
+  context: ClientDashboardContext | ProjectDashboardContext,
   breadcrumbOverrides?: Record<string, string>
 ) => {
   const crumbConfig: CrumbConfig = useMemo(() => {

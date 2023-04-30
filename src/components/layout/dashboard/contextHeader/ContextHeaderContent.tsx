@@ -5,12 +5,12 @@ import { CONTEXT_HEADER_HEIGHT } from '../../layoutConstants';
 import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
 
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 interface Props {
   breadcrumbOverrides?: Record<string, string>; // Path => Title
-  dashboardContext: DashboardContext | ProjectDashboardContext;
+  dashboardContext: ClientDashboardContext | ProjectDashboardContext;
 }
 
 const ContextHeaderContent: React.FC<Props> = ({

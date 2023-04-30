@@ -2,12 +2,12 @@ import { NetworkStatus } from '@apollo/client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Box, Button, Grid, Paper, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { enrollmentName, sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
@@ -33,8 +33,8 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const EditHousehold = () => {
   const navigate = useNavigate();
-  const { enrollment } = useOutletContext<DashboardContext>();
-  // const { client, overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
+  const { enrollment } = useClientDashboardContext();
+
   const { clientId, enrollmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;

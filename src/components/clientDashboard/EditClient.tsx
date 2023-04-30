@@ -6,7 +6,7 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '../layout/layoutConstants';
-import { useDashboardClient } from '../pages/ClientDashboard';
+import { useClientDashboardContext } from '../pages/ClientDashboard';
 
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import EditRecord from '@/modules/form/components/EditRecord';
@@ -20,7 +20,7 @@ import {
 import generateSafePath from '@/utils/generateSafePath';
 
 const Profile = () => {
-  const { client } = useDashboardClient();
+  const { client } = useClientDashboardContext();
   const navigate = useNavigate();
   const { data, loading } = useGetClientPermissionsQuery({
     variables: { id: client.id },

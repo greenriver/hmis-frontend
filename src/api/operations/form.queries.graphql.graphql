@@ -1,0 +1,50 @@
+query GetPickList($pickListType: PickListType!, $relationId: ID) {
+  pickList(pickListType: $pickListType, relationId: $relationId) {
+    ...PickListOptionFields
+  }
+}
+
+query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
+  getFormDefinition(
+    role: $role
+    enrollmentId: $enrollmentId
+    projectId: $projectId
+  ) {
+    ...FormDefinitionWithJson
+  }
+}
+
+mutation SubmitForm($input: SubmitFormInput!) {
+  submitForm(input: $input) {
+    clientMutationId
+    record {
+      ... on Client {
+        ...ClientFields
+      }
+      ... on Organization {
+        ...OrganizationFields
+      }
+      ... on Project {
+        ...ProjectAllFields
+      }
+      ... on Funder {
+        ...FunderFields
+      }
+      ... on ProjectCoc {
+        ...ProjectCocFields
+      }
+      ... on Inventory {
+        ...InventoryFields
+      }
+      ... on Service {
+        ...ServiceFields
+      }
+      ... on File {
+        ...FileFields
+      }
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

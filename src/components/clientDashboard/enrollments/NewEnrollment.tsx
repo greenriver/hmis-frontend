@@ -1,7 +1,7 @@
 import { Box, Grid, Paper, Stack, Typography } from '@mui/material';
 import { format } from 'date-fns';
 import { useCallback, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import DatePicker from '@/components/elements/input/DatePicker';
 import ProjectSelect, {
@@ -9,6 +9,7 @@ import ProjectSelect, {
 } from '@/components/elements/input/ProjectSelect';
 import Loading from '@/components/elements/Loading';
 import LoadingButton from '@/components/elements/LoadingButton';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -25,7 +26,6 @@ import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHou
 import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  Client,
   CreateEnrollmentInput,
   RelationshipToHoH,
   useCreateEnrollmentMutation,
@@ -50,7 +50,7 @@ const NewEnrollment = () => {
   const [recentMembers, recentHouseholdMembersLoading] =
     useRecentHouseholdMembers(clientId, true);
 
-  const { client } = useOutletContext<{ client: Client | null }>();
+  const { client } = useClientDashboardContext();
 
   const [mutateFunction, { loading }] = useCreateEnrollmentMutation({
     onCompleted: (data) => {

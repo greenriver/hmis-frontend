@@ -1,0 +1,71 @@
+fragment RootPermissionsFragment on QueryAccess {
+  id
+  canAdministerHmis
+  canEditClients
+  canViewClients
+  canDeleteClients
+  canAuditClients
+  canEditOrganization
+  canDeleteOrganization
+  canViewDob
+  canViewFullSsn
+  canDeleteProject
+  canDeleteAssignedProjectData
+  canViewPartialSsn
+  canEditEnrollments
+  canViewEnrollmentDetails
+  canDeleteEnrollments
+  canDeleteAssessments
+  canEditProjectDetails
+  canManageAnyClientFiles
+  canManageOwnClientFiles
+  canViewAnyConfidentialClientFiles
+  canViewAnyNonconfidentialClientFiles
+}
+
+fragment ClientAccessFields on ClientAccess {
+  id
+  canViewDob
+  canViewFullSsn
+  canViewPartialSsn
+  canEditEnrollments
+  canDeleteEnrollments
+  canViewEnrollmentDetails
+  canDeleteAssessments
+  canManageAnyClientFiles
+  canManageOwnClientFiles
+  canViewAnyConfidentialClientFiles
+  canViewAnyNonconfidentialClientFiles
+}
+
+fragment EnrollmentAccessFields on EnrollmentAccess {
+  id
+  canEditEnrollments
+  canDeleteEnrollments
+}
+
+fragment AssessmentAccessFields on AssessmentAccess {
+  id
+  canDeleteAssessments
+  canDeleteEnrollments
+  canEditEnrollments
+}
+
+fragment ProjectAccessFields on ProjectAccess {
+  id
+  canViewDob
+  canViewFullSsn
+  canDeleteProject
+  canViewPartialSsn
+  canEditEnrollments
+  canViewEnrollmentDetails
+  canDeleteEnrollments
+  canDeleteAssessments
+  canEditProjectDetails
+}
+
+fragment OrganizationAccessFields on OrganizationAccess {
+  id
+  canEditOrganization
+  canDeleteOrganization
+}

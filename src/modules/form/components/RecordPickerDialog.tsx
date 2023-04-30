@@ -24,7 +24,7 @@ import HealthAndDvsTable from '@/components/clientDashboard/enrollments/tables/H
 import IncomeBenefitsTable from '@/components/clientDashboard/enrollments/tables/IncomeBenefitsTable';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import RelativeDate from '@/components/elements/RelativeDate';
-import { useDashboardClient } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
@@ -78,7 +78,7 @@ const RecordPickerDialog = ({
   description,
   ...other
 }: Props) => {
-  const { client } = useDashboardClient();
+  const { client } = useClientDashboardContext();
 
   const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
     const metadataColumns: ColumnDef<RelatedRecord>[] =

@@ -10,7 +10,6 @@ import {
 import ClientRoute from '@/components/accessWrappers/ClientRoute';
 import EnrollmentsRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
-import OrganizationEditRoute from '@/components/accessWrappers/OrganizationEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import AllFiles from '@/components/clientDashboard/AllFiles';
 import AuditHistory from '@/components/clientDashboard/AuditHistory';
@@ -207,11 +206,7 @@ export const protectedRoutes = [
       { path: Routes.ORGANIZATION, element: <Organization /> },
       {
         path: Routes.EDIT_ORGANIZATION,
-        element: (
-          <OrganizationEditRoute>
-            <EditOrganization />
-          </OrganizationEditRoute>
-        ),
+        element: <EditOrganization />,
       },
       {
         path: Routes.CREATE_ORGANIZATION,

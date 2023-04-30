@@ -1,0 +1,54 @@
+query GetAllOrganizations {
+  organizations(limit: 500, sortOrder: NAME) {
+    nodesCount
+    nodes {
+      ...OrganizationNameFields
+      projects(limit: 1) {
+        nodesCount
+      }
+    }
+  }
+}
+
+query GetOrganization($id: ID!) {
+  organization(id: $id) {
+    ...OrganizationFields
+    access {
+      id
+      ...OrganizationAccessFields
+    }
+  }
+}
+
+query GetOrganizationProjects(
+  $id: ID!
+  $searchTerm: String
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  organization(id: $id) {
+    id
+    projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        ...ProjectNameAndType
+        ...ProjectOperatingPeriod
+      }
+    }
+  }
+}
+
+mutation DeleteOrganization($input: DeleteOrganizationInput!) {
+  deleteOrganization(input: $input) {
+    clientMutationId
+    organization {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

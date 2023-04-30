@@ -2,7 +2,6 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { Ref, useEffect, useMemo, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
 
 import { assessmentDate } from '../util';
 
@@ -15,7 +14,7 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
@@ -27,7 +26,6 @@ import {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -70,7 +68,7 @@ const IndividualAssessment = ({
   visible,
   formRef,
 }: IndividualAssessmentProps) => {
-  const { overrideBreadcrumbTitles } = useOutletContext<DashboardContext>();
+  const { overrideBreadcrumbTitles } = useClientDashboardContext();
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
@@ -128,9 +126,7 @@ const IndividualAssessment = ({
     overrideBreadcrumbTitles,
   ]);
 
-  const [canEdit] = useHasClientPermissions(enrollment?.client.id || '', [
-    'canViewEnrollmentDetails',
-  ]);
+  const canEdit = enrollment?.access.canEditEnrollments;
 
   // Whether assessment is read-only
   const [readOnly, setReadOnly] = useState<boolean | null>(null);

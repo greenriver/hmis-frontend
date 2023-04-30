@@ -1,10 +1,9 @@
 import { Navigate } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
+import { useClientDashboardContext } from '../pages/ClientDashboard';
 import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentsRoute: React.FC<
@@ -30,15 +29,19 @@ const EnrollmentsRoute: React.FC<
   const { [clientIdParam]: clientId, [enrollmentIdParam]: enrollmentId } =
     useSafeParams();
 
-  const [allowed, { loading, data }] = useHasClientPermissions(clientId || '', [
-    edit ? 'canEditEnrollments' : 'canViewEnrollmentDetails',
-  ]);
+  // Use dashboard outlet context that gets set in ClientDashboard
+  const { client, enrollment } = useClientDashboardContext();
 
-  if (loading) return <Loading />;
-  if (!data) {
-    console.error('Error loading permissions');
-    return <NotFound />;
+  let allowed;
+  if (enrollment) {
+    // If enrollment was resolved, we know the user has canViewEnrollmentDetails for this enrollment
+    allowed = edit ? enrollment.access.canEditEnrollments : true;
+  } else {
+    allowed = edit
+      ? client.access.canEditEnrollments
+      : client.access.canViewEnrollmentDetails;
   }
+
   if (!allowed)
     return redirectRoute ? (
       <Navigate

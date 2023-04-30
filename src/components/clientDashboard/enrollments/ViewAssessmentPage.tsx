@@ -1,14 +1,14 @@
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 
 const ViewAssessmentPage = () => {
   const navigate = useNavigate();
-  const { client, enrollment } = useOutletContext<DashboardContext>();
+  const { client, enrollment } = useClientDashboardContext();
   const { enrollmentId, assessmentId } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;

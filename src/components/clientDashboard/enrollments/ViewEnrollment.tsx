@@ -1,12 +1,11 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
-import { useOutletContext } from 'react-router-dom';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -18,7 +17,7 @@ import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ViewEnrollment = () => {
-  const { enrollment } = useOutletContext<DashboardContext>();
+  const { enrollment } = useClientDashboardContext();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
     clientId: string;

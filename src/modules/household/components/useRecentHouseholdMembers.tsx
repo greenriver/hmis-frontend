@@ -25,11 +25,13 @@ export function useRecentHouseholdMembers(
     let sourceClient;
     client.enrollments.nodes.forEach((en) => {
       en.household.householdClients.forEach((hc) => {
-        if (hc.client.id in members) return;
         if (hc.client.id === clientId) {
           sourceClient = { ...hc, projectName: en.project.projectName };
-        } else {
-          members[client.id] = { ...hc, projectName: en.project.projectName };
+        } else if (!members[hc.client.id]) {
+          members[hc.client.id] = {
+            ...hc,
+            projectName: en.project.projectName,
+          };
         }
       });
     });

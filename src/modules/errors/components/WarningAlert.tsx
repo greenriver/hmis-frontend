@@ -6,12 +6,12 @@ import { ErrorRenderFn } from '../util';
 
 import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
-const WarningSection = ({
+export const WarningSection = ({
   header,
   children,
 }: {
   header: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
 }) => (
   <Box
     sx={{
@@ -27,7 +27,7 @@ const WarningSection = ({
     >
       {header}
     </Box>
-    <Box sx={{ px: 2, py: 2 }}>{children}</Box>
+    {children && <Box sx={{ px: 2, py: 2 }}>{children}</Box>}
   </Box>
 );
 

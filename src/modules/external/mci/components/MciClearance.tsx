@@ -14,7 +14,7 @@ import {
 import MciMatchSelector from './MciMatchSelector';
 
 import LoadingButton from '@/components/elements/LoadingButton';
-import { useDashboardClient } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
@@ -172,7 +172,7 @@ const MciClearanceWrapper = ({
   ...props
 }: MciClearanceProps) => {
   // Dashboard context would be present only if we are editing an existing client
-  const ctx = useDashboardClient();
+  const ctx = useClientDashboardContext();
 
   // If element becomes disabled, set value to uncleared
   useEffect(() => {

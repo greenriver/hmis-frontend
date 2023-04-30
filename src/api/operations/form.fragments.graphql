@@ -1,3 +1,17 @@
+fragment ValidationErrorFields on ValidationError {
+  type
+  attribute
+  readableAttribute
+  message
+  fullMessage
+  severity
+  id
+  recordId
+  linkId
+  section
+  data
+}
+
 fragment FormDefinitionFields on FormDefinition {
   id
   version
@@ -115,48 +129,4 @@ fragment UserFields on User {
   __typename
   id
   name
-}
-
-fragment AssessmentFields on Assessment {
-  id
-  inProgress
-  assessmentDate
-  dataCollectionStage
-  dateCreated
-  dateUpdated
-  dateDeleted
-  user {
-    ...UserFields
-  }
-  customForm {
-    ...CustomFormFields
-    definition {
-      ...FormDefinitionFields
-    }
-  }
-}
-
-# contains big JSON definition & form values
-fragment AssessmentWithDefinitionAndValues on Assessment {
-  ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-    definition {
-      ...FormDefinitionWithJson
-    }
-  }
-}
-
-# contains form values
-fragment AssessmentWithValues on Assessment {
-  ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-  }
-  enrollment {
-    id
-    ...EnrollmentFields
-  }
 }

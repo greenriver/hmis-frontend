@@ -9,9 +9,9 @@ import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  GetOrganizationWithPaginatedProjectsDocument,
-  GetOrganizationWithPaginatedProjectsQuery,
-  GetOrganizationWithPaginatedProjectsQueryVariables,
+  GetOrganizationProjectsDocument,
+  GetOrganizationProjectsQuery,
+  GetOrganizationProjectsQueryVariables,
   ProjectAllFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -60,8 +60,8 @@ const ProjectsTable = ({
 
   return (
     <GenericTableWithData<
-      GetOrganizationWithPaginatedProjectsQuery,
-      GetOrganizationWithPaginatedProjectsQueryVariables,
+      GetOrganizationProjectsQuery,
+      GetOrganizationProjectsQueryVariables,
       ProjectAllFieldsFragment
     >
       header={
@@ -77,7 +77,7 @@ const ProjectsTable = ({
         )
       }
       queryVariables={{ id: organizationId, searchTerm: debouncedSearch }}
-      queryDocument={GetOrganizationWithPaginatedProjectsDocument}
+      queryDocument={GetOrganizationProjectsDocument}
       columns={columns}
       rowLinkTo={rowLinkTo}
       noData='No projects.'

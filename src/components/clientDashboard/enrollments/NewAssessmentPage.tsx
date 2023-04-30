@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
@@ -12,7 +12,7 @@ import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const NewAssessmentPage = () => {
-  const { client, enrollment } = useOutletContext<DashboardContext>();
+  const { client, enrollment } = useClientDashboardContext();
   const { clientId, enrollmentId, formRole } = useSafeParams() as {
     clientId: string;
     enrollmentId: string;

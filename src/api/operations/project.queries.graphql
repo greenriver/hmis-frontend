@@ -1,21 +1,3 @@
-query GetAllOrganizations {
-  organizations(limit: 500, sortOrder: NAME) {
-    nodesCount
-    nodes {
-      ...OrganizationFields
-      projects(limit: 1) {
-        nodesCount
-      }
-    }
-  }
-}
-
-query GetOrganizationPermissions($id: ID!) {
-  organization(id: $id) {
-    ...OrganizationPermissionsFields
-  }
-}
-
 query GetProject($id: ID!) {
   project(id: $id) {
     ...ProjectAllFields
@@ -24,7 +6,10 @@ query GetProject($id: ID!) {
 
 query GetProjectPermissions($id: ID!) {
   project(id: $id) {
-    ...ProjectPermissionsFields
+    id
+    access {
+      ...ProjectAccessFields
+    }
   }
 }
 
@@ -121,43 +106,6 @@ query GetBeds(
 query GetProjectCoc($id: ID!) {
   projectCoc(id: $id) {
     ...ProjectCocFields
-  }
-}
-
-query GetOrganization($id: ID!) {
-  organization(id: $id) {
-    ...OrganizationAllFields
-  }
-}
-
-mutation DeleteOrganization($input: DeleteOrganizationInput!) {
-  deleteOrganization(input: $input) {
-    clientMutationId
-    organization {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-query GetOrganizationWithPaginatedProjects(
-  $id: ID!
-  $searchTerm: String
-  $limit: Int = 10
-  $offset: Int = 0
-) {
-  organization(id: $id) {
-    id
-    projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ProjectAllFields
-      }
-    }
   }
 }
 

@@ -6,11 +6,11 @@ import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  EnrollmentFieldsFragment,
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
@@ -22,6 +22,7 @@ import generateSafePath from '@/utils/generateSafePath';
 interface Props {
   clientId: string;
   enrollmentId: string;
+  enrollment: EnrollmentFieldsFragment;
 }
 
 const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
@@ -55,7 +56,11 @@ const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
   },
 ];
 
-const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
+const ServicesTable: React.FC<Props> = ({
+  clientId,
+  enrollmentId,
+  enrollment,
+}) => {
   const [recordToDelete, setRecordToDelete] =
     useState<ServiceFieldsFragment | null>(null);
   const rowLinkTo = useCallback(
@@ -88,13 +93,9 @@ const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
   }, [recordToDelete, deleteRecord]);
   if (deleteError) console.error(deleteError);
 
-  const [canEditEnrollments] = useHasClientPermissions(clientId, [
-    'canEditEnrollments',
-  ]);
-
   const columns = useMemo(
     () =>
-      canEditEnrollments
+      enrollment.access.canEditEnrollments
         ? [
             ...baseColumns,
             {
@@ -119,7 +120,7 @@ const ServicesTable: React.FC<Props> = ({ clientId, enrollmentId }) => {
             },
           ]
         : baseColumns,
-    [canEditEnrollments]
+    [enrollment]
   );
 
   return (
