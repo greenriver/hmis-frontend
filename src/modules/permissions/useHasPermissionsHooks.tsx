@@ -3,11 +3,9 @@ import { useMemo } from 'react';
 import {
   ClientAccess,
   Maybe,
-  OrganizationAccess,
   ProjectAccess,
   QueryAccess,
   useGetClientPermissionsQuery,
-  useGetOrganizationPermissionsQuery,
   useGetProjectPermissionsQuery,
   useGetRootPermissionsQuery,
 } from '@/types/gqlTypes';
@@ -42,13 +40,14 @@ export const useHasPermissions = <T,>(
 };
 
 export type ProjectPermissions = keyof Omit<ProjectAccess, '__typename'>;
+
 export const useHasProjectPermissions = (
-  id: string,
+  projectId: string,
   permissions: ProjectPermissions[],
   mode?: PermissionsMode
 ) => {
   const projectData = useGetProjectPermissionsQuery({
-    variables: { id },
+    variables: { id: projectId },
   });
   const result = useHasPermissions(
     projectData?.data?.project?.access,
@@ -59,27 +58,14 @@ export const useHasProjectPermissions = (
   return useMemo(() => [result, projectData] as const, [result, projectData]);
 };
 
-export type OrganizationPermissions = keyof Omit<
-  OrganizationAccess,
-  '__typename'
->;
-export const useHasOrganizationPermissions = (
-  id: string,
-  permissions: OrganizationPermissions[],
-  mode?: PermissionsMode
-) => {
-  const organizationData = useGetOrganizationPermissionsQuery({
-    variables: { id },
+export const useProjectPermissions = (projectId: string) => {
+  const { data, ...status } = useGetProjectPermissionsQuery({
+    variables: { id: projectId },
   });
-  const result = useHasPermissions(
-    organizationData?.data?.organization?.access,
-    permissions,
-    mode
-  );
 
   return useMemo(
-    () => [result, organizationData] as const,
-    [result, organizationData]
+    () => [data?.project?.access, status] as const,
+    [data, status]
   );
 };
 

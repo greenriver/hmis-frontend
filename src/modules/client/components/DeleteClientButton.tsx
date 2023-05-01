@@ -12,7 +12,7 @@ import {
 } from '@/modules/errors/util';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   DeleteClientMutation,
   useDeleteClientMutation,
@@ -126,10 +126,13 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
                   <li key={enrollment.id}>
                     <Link
                       component={RouterLink}
-                      to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
-                        clientId: clientId,
-                        enrollmentId: enrollment.id,
-                      })}
+                      to={generateSafePath(
+                        ClientDashboardRoutes.EDIT_HOUSEHOLD,
+                        {
+                          clientId: clientId,
+                          enrollmentId: enrollment.id,
+                        }
+                      )}
                     >
                       {enrollment.name} (
                       {parseAndFormatDateRange(

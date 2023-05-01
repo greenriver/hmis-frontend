@@ -6,11 +6,11 @@ import Loading from '../elements/Loading';
 
 import NotFound from './NotFound';
 
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { useOrganizationCrumbs } from '@/modules/inventory/components/useOrganizationCrumbs';
+import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { FormRole, OrganizationAllFieldsFragment } from '@/types/gqlTypes';
+import { FormRole, OrganizationFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditOrganization = () => {
@@ -20,7 +20,7 @@ const EditOrganization = () => {
     useOrganizationCrumbs('Edit Organization');
 
   const onCompleted = useCallback(
-    (data: OrganizationAllFieldsFragment) => {
+    (data: OrganizationFieldsFragment) => {
       navigate(
         generateSafePath(Routes.ORGANIZATION, { organizationId: data.id })
       );
@@ -30,19 +30,20 @@ const EditOrganization = () => {
 
   if (loading) return <Loading />;
   if (!crumbs || !organization) return <NotFound />;
+  if (!organization.access.canEditOrganization) return <NotFound />;
 
   return (
-    <ProjectLayout crumbs={crumbs}>
+    <OrganizationLayout crumbs={crumbs}>
       {loading && <Loading />}
       {organization && (
-        <EditRecord<OrganizationAllFieldsFragment>
+        <EditRecord<OrganizationFieldsFragment>
           formRole={FormRole.Organization}
           record={organization}
           onCompleted={onCompleted}
           title={<Typography variant='h3'>Edit {organizationName}</Typography>}
         />
       )}
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default EditOrganization;

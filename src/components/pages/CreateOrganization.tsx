@@ -2,15 +2,13 @@ import { Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import NotFound from './NotFound';
-
+import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import EditRecord from '@/modules/form/components/EditRecord';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
-import { ALL_PROJECTS_CRUMB } from '@/modules/inventory/components/useProjectCrumbs';
+import { ALL_PROJECTS_CRUMB } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
   FormRole,
-  OrganizationAllFieldsFragment,
+  OrganizationFieldsFragment,
   PickListType,
 } from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
@@ -28,7 +26,7 @@ const CreateOrganization = () => {
   ];
 
   const onCompleted = useCallback(
-    (data: OrganizationAllFieldsFragment) => {
+    (data: OrganizationFieldsFragment) => {
       evictPickList(PickListType.Project);
       evictQuery('organizations');
       navigate(
@@ -38,17 +36,19 @@ const CreateOrganization = () => {
     [navigate]
   );
 
-  if (!crumbs) return <NotFound />;
-
   return (
-    <ProjectLayout crumbs={crumbs}>
-      <EditRecord<OrganizationAllFieldsFragment>
+    <OrganizationLayout crumbs={crumbs}>
+      <EditRecord<OrganizationFieldsFragment>
         formRole={FormRole.Organization}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Organization' }}
-        title={<Typography variant='h3'>Create a new organization</Typography>}
+        title={
+          <Typography variant='h3' sx={{ mt: 2 }}>
+            Create a new organization
+          </Typography>
+        }
       />
-    </ProjectLayout>
+    </OrganizationLayout>
   );
 };
 export default CreateOrganization;

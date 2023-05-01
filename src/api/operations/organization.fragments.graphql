@@ -1,0 +1,22 @@
+fragment OrganizationNameFields on Organization {
+  id
+  organizationName
+}
+
+fragment OrganizationDetailFields on Organization {
+  id
+  description
+  contactInformation
+  victimServiceProvider
+  dateCreated
+  dateUpdated
+  dateDeleted
+  user {
+    ...UserFields
+  }
+}
+
+fragment OrganizationFields on Organization {
+  ...OrganizationNameFields
+  ...OrganizationDetailFields
+}

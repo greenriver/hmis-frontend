@@ -1,0 +1,369 @@
+query SearchClients(
+  $input: ClientSearchInput!
+  $limit: Int
+  $offset: Int
+  $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+) {
+  clientSearch(
+    input: $input
+    limit: $limit
+    offset: $offset
+    sortOrder: $sortOrder
+  ) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ClientFields
+    }
+  }
+}
+
+query GetClient($id: ID!) {
+  client(id: $id) {
+    ...ClientFields
+  }
+}
+
+query GetClientName($id: ID!) {
+  client(id: $id) {
+    id
+    ...ClientName
+  }
+}
+
+query GetClientPermissions($id: ID!) {
+  client(id: $id) {
+    id
+    access {
+      ...ClientAccessFields
+    }
+  }
+}
+
+query GetClientImage($id: ID!) {
+  client(id: $id) {
+    ...ClientImage
+  }
+}
+
+query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      includeInProgress: true
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFields
+      }
+    }
+  }
+}
+
+query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    auditHistory(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ClientAuditEventFields
+      }
+    }
+  }
+}
+
+query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    assessments(limit: $limit, offset: $offset, sortOrder: ASSESSMENT_DATE) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+        enrollment {
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+}
+
+query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      includeInProgress: false
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFieldsFromAssessment
+      }
+    }
+  }
+}
+
+mutation UpdateClientImage($clientId: ID!, $imageBlobId: ID!) {
+  updateClientImage(input: { clientId: $clientId, imageBlobId: $imageBlobId }) {
+    clientMutationId
+    client {
+      ...ClientImage
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteClientImage($clientId: ID!) {
+  deleteClientImage(input: { clientId: $clientId }) {
+    clientMutationId
+    client {
+      ...ClientImage
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+  createEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
+  updateRelationshipToHoH(input: $input) {
+    clientMutationId
+    enrollment {
+      ...EnrollmentWithHouseholdFragment
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
+  deleteEnrollment(input: $input) {
+    clientMutationId
+    enrollment {
+      ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteClientFile($input: DeleteClientFileInput!) {
+  deleteClientFile(input: $input) {
+    clientMutationId
+    file {
+      ...FileFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
+  addHouseholdMembersToEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentWithHouseholdFragment
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteClient($input: DeleteClientInput!) {
+  deleteClient(input: $input) {
+    clientMutationId
+    client {
+      ...ClientFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+query GetService($id: ID!) {
+  service(id: $id) {
+    ...ServiceFields
+  }
+}
+
+mutation AddServiceToEnrollment($input: CreateServiceInput!) {
+  createService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteService($input: DeleteServiceInput!) {
+  deleteService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+query GetEnrollment($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+  }
+}
+
+query GetEnrollmentWithHousehold($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+    household {
+      id
+      shortId
+      householdClients {
+        ...HouseholdClientFieldsWithAssessments
+      }
+    }
+  }
+}
+
+query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    events(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EventFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    services(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+      }
+    }
+  }
+}
+
+query GetClientHouseholdMemberCandidates(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  client(id: $id) {
+    id
+    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        project {
+          ...ProjectNameAndType
+        }
+        household {
+          id
+          householdClients {
+            ...HouseholdClientFields
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetRecentIncomeBenefits($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    incomeBenefits(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...IncomeBenefitFields
+      }
+    }
+  }
+}
+
+query GetRecentDisabilities($id: ID!) {
+  client(id: $id) {
+    id
+    disabilityGroups {
+      ...DisabilityGroupFields
+    }
+  }
+}
+
+query GetRecentHealthAndDvs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    healthAndDvs(offset: $offset, limit: $limit) {
+      nodesCount
+      nodes {
+        ...HealthAndDvFields
+      }
+    }
+  }
+}
+
+query GetFile($id: ID!) {
+  file(id: $id) {
+    ...FileFields
+  }
+}
+
+query GetClientFiles($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  client(id: $id) {
+    id
+    files(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FileFields
+      }
+    }
+  }
+}

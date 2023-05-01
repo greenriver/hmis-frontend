@@ -36,7 +36,7 @@ import {
   RootPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
@@ -404,7 +404,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                     variant='outlined'
                     color='primary'
                     fullWidth
-                    to={generateSafePath(DashboardRoutes.EDIT, {
+                    to={generateSafePath(ClientDashboardRoutes.EDIT, {
                       clientId: client.id,
                     })}
                   >
@@ -415,9 +415,12 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                   Last Updated on {lastUpdated(client, true)}.{' '}
                   <RootPermissionsFilter permissions='canAuditClients'>
                     <RouterLink
-                      to={generateSafePath(DashboardRoutes.AUDIT_HISTORY, {
-                        clientId: client.id,
-                      })}
+                      to={generateSafePath(
+                        ClientDashboardRoutes.AUDIT_HISTORY,
+                        {
+                          clientId: client.id,
+                        }
+                      )}
                     >
                       View client audit history
                     </RouterLink>

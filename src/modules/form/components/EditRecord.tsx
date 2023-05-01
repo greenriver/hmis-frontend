@@ -1,20 +1,23 @@
 import { Box, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import useFormDefinition from '../hooks/useFormDefinition';
 import { LocalConstants } from '../types';
 import {
   createHudValuesForSubmit,
   createValuesForSubmit,
   debugFormValues,
   getInitialValues,
-  getItemMap,
   shouldEnableItem,
 } from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
 import Loading from '@/components/elements/Loading';
-import { STICKY_BAR_HEIGHT } from '@/components/layout/layoutConstants';
+import {
+  CONTEXT_HEADER_HEIGHT,
+  STICKY_BAR_HEIGHT,
+} from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import {
@@ -32,7 +35,6 @@ import {
   FormRole,
   ItemType,
   SubmitFormMutation,
-  useGetFormDefinitionQuery,
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
 
@@ -74,26 +76,18 @@ const EditRecord = <RecordType extends AllowedTypes>({
   FormNavigationProps,
   inputVariables = {},
   localConstants = {},
-  top = STICKY_BAR_HEIGHT,
+  top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
   ...props
 }: Props<RecordType>) => {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const {
-    data,
+    formDefinition,
+    itemMap,
     loading: definitionLoading,
-    error: definitionError,
-  } = useGetFormDefinitionQuery({
-    variables: { role: formRole },
-  });
+  } = useFormDefinition(formRole);
 
   useScrollToHash(definitionLoading, top);
-
-  const definition = useMemo(() => data?.getFormDefinition, [data]);
-  const itemMap = useMemo(
-    () => (definition ? getItemMap(definition.definition, false) : undefined),
-    [definition]
-  );
 
   const [submitForm, { loading: saveLoading }] = useSubmitFormMutation({
     onCompleted: (data) => {
@@ -106,13 +100,16 @@ const EditRecord = <RecordType extends AllowedTypes>({
         if (record) onCompleted(record as RecordType);
       }
     },
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
+    onError: (apolloError) => {
+      setErrors({ ...emptyErrorState, apolloError });
+      window.scrollTo(0, 0);
+    },
   });
 
   const initialValues = useMemo(() => {
-    if (!itemMap || !definition) return {};
+    if (!itemMap || !formDefinition) return {};
     const initialValuesFromDefinition = getInitialValues(
-      definition.definition,
+      formDefinition.definition,
       localConstants
     );
     if (!record) return initialValuesFromDefinition;
@@ -125,19 +122,19 @@ const EditRecord = <RecordType extends AllowedTypes>({
       ...initialValuesFromDefinition,
       ...initialValuesFromRecord,
     };
-    console.log('Initial form values:', values, 'from', record);
+    console.debug('Initial form values:', values, 'from', record);
     return values;
-  }, [record, definition, itemMap, localConstants]);
+  }, [record, formDefinition, itemMap, localConstants]);
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
     ({ event, values, confirmed = false }) => {
-      if (!definition) return;
+      if (!formDefinition) return;
       if (
         event &&
         debugFormValues(
           event,
           values,
-          definition.definition,
+          formDefinition.definition,
           createValuesForSubmit,
           createHudValuesForSubmit
         )
@@ -145,9 +142,9 @@ const EditRecord = <RecordType extends AllowedTypes>({
         return;
 
       const input = {
-        formDefinitionId: definition.id,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
+        formDefinitionId: formDefinition.id,
+        values: createValuesForSubmit(values, formDefinition.definition),
+        hudValues: createHudValuesForSubmit(values, formDefinition.definition),
         recordId: record?.id,
         confirmed,
         ...inputVariables,
@@ -156,14 +153,14 @@ const EditRecord = <RecordType extends AllowedTypes>({
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });
     },
-    [definition, inputVariables, submitForm, record]
+    [formDefinition, inputVariables, submitForm, record]
   );
 
   // Top-level items for the left nav (of >=3 groups)
   const leftNavItems = useMemo(() => {
-    if (!definition || !itemMap) return false;
+    if (!formDefinition || !itemMap) return false;
 
-    let topLevelItems = definition.definition.item.filter(
+    let topLevelItems = formDefinition.definition.item.filter(
       (i) => i.type === ItemType.Group && !i.hidden
     );
 
@@ -175,16 +172,15 @@ const EditRecord = <RecordType extends AllowedTypes>({
     );
     if (topLevelItems.length < 3) return false;
     return topLevelItems;
-  }, [itemMap, definition, initialValues]);
+  }, [itemMap, formDefinition, initialValues]);
 
   if (definitionLoading) return <Loading />;
-  if (definitionError) console.error(definitionError);
-  if (!definition) return <NotFound />;
+  if (!formDefinition) return <NotFound />;
 
   const form = (
     <>
       <DynamicForm
-        definition={definition.definition}
+        definition={formDefinition.definition}
         onSubmit={submitHandler}
         initialValues={initialValues}
         loading={saveLoading}

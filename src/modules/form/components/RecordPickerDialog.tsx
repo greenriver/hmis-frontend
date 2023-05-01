@@ -17,14 +17,14 @@ import {
   RelatedRecord,
 } from '../util/recordPickerUtil';
 
-import AssessmentsForPopulationTable from '@/components/dashboard/enrollments/tables/AssessmentsForPopulationTable';
-import DisabilitiesTable from '@/components/dashboard/enrollments/tables/DisabilitiesTable';
-import EnrollmentsTable from '@/components/dashboard/enrollments/tables/EnrollmentsTable';
-import HealthAndDvsTable from '@/components/dashboard/enrollments/tables/HealthAndDvsTable';
-import IncomeBenefitsTable from '@/components/dashboard/enrollments/tables/IncomeBenefitsTable';
+import AssessmentsForPopulationTable from '@/components/clientDashboard/enrollments/tables/AssessmentsForPopulationTable';
+import DisabilitiesTable from '@/components/clientDashboard/enrollments/tables/DisabilitiesTable';
+import EnrollmentsTable from '@/components/clientDashboard/enrollments/tables/EnrollmentsTable';
+import HealthAndDvsTable from '@/components/clientDashboard/enrollments/tables/HealthAndDvsTable';
+import IncomeBenefitsTable from '@/components/clientDashboard/enrollments/tables/IncomeBenefitsTable';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import RelativeDate from '@/components/elements/RelativeDate';
-import { useDashboardClient } from '@/components/pages/ClientDashboard';
+import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
 import { FormRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
@@ -78,7 +78,7 @@ const RecordPickerDialog = ({
   description,
   ...other
 }: Props) => {
-  const { client } = useDashboardClient();
+  const { client } = useClientDashboardContext();
 
   const columns: ColumnDef<RelatedRecord>[] = useMemo(() => {
     const metadataColumns: ColumnDef<RelatedRecord>[] =
