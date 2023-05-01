@@ -219,7 +219,13 @@ const HouseholdAssessments = ({
           width: '100vw',
         }}
       >
-        <Grid container sx={{ height: '100%', alignItems: 'center' }}>
+        <Grid
+          container
+          sx={{
+            height: '100%',
+            alignItems: 'center',
+          }}
+        >
           <Grid
             item
             xs={2}

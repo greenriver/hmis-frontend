@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { addDays, isBefore } from 'date-fns';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
@@ -92,15 +92,26 @@ export const InactiveChip = ({
 export const ProjectFormTitle = ({
   title,
   project,
+  actions,
 }: {
   title: string;
   project: ProjectAllFieldsFragment;
+  actions?: ReactNode;
 }) => (
-  <Stack direction={'row'} spacing={2} sx={{ my: 1 }}>
-    <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
-      {title}
-    </Typography>
-    <InactiveChip project={project} />
+  <Stack
+    direction={'row'}
+    justifyContent='space-between'
+    alignItems={'end'}
+    spacing={2}
+    sx={{ my: 1 }}
+  >
+    <Stack direction={'row'} spacing={2}>
+      <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>
+        {title}
+      </Typography>
+      <InactiveChip project={project} />
+    </Stack>
+    {actions}
   </Stack>
 );
 

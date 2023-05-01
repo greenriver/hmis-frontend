@@ -79,9 +79,14 @@ const ClientDashboard: React.FC = () => {
       navLabel='Client Navigation'
       {...dashboardState}
     >
-      <Container maxWidth='lg' sx={{ pb: 6 }}>
+      {dashboardState.focusMode ? (
+        // focused views like household intake/exit shouldn't have a container
         <Outlet context={outletContext} />
-      </Container>
+      ) : (
+        <Container maxWidth='lg' sx={{ pb: 6 }}>
+          <Outlet context={outletContext} />
+        </Container>
+      )}
     </DashboardContentContainer>
   );
 };

@@ -1438,6 +1438,7 @@ export type Funder = {
   otherFunder?: Maybe<Scalars['String']>;
   project: Project;
   startDate: Scalars['ISO8601Date'];
+  user?: Maybe<User>;
 };
 
 /** HUD Funder Sorting Options */
@@ -1861,6 +1862,7 @@ export type Inventory = {
   project: Project;
   unitInventory: Scalars['Int'];
   units: UnitsPaginated;
+  user?: Maybe<User>;
   vetBedInventory?: Maybe<Scalars['Int']>;
   youthBedInventory?: Maybe<Scalars['Int']>;
   youthVetBedInventory?: Maybe<Scalars['Int']>;
@@ -2307,6 +2309,7 @@ export type Organization = {
   id: Scalars['ID'];
   organizationName: Scalars['String'];
   projects: ProjectsPaginated;
+  user?: Maybe<User>;
   victimServiceProvider: NoYesMissing;
 };
 
@@ -2424,6 +2427,7 @@ export type Project = {
   residentialAffiliation?: Maybe<NoYesMissing>;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
+  user?: Maybe<User>;
 };
 
 export type ProjectEnrollmentsArgs = {
@@ -2480,6 +2484,7 @@ export type ProjectCoc = {
   id: Scalars['ID'];
   project: Project;
   state?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
   zip?: Maybe<Scalars['String']>;
 };
 
@@ -8963,6 +8968,7 @@ export type SubmitFormMutation = {
           grantId: string;
           otherFunder?: string | null;
           startDate: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Inventory';
@@ -8980,6 +8986,7 @@ export type SubmitFormMutation = {
           unitInventory: number;
           beds: { __typename?: 'BedsPaginated'; nodesCount: number };
           units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Organization';
@@ -8988,6 +8995,10 @@ export type SubmitFormMutation = {
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
+          dateCreated: string;
+          dateUpdated: string;
+          dateDeleted?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Project';
@@ -9023,6 +9034,7 @@ export type SubmitFormMutation = {
             canDeleteAssessments: boolean;
             canEditProjectDetails: boolean;
           };
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'ProjectCoc';
@@ -9038,6 +9050,7 @@ export type SubmitFormMutation = {
           geographyType?: GeographyType | null;
           state?: string | null;
           zip?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Service';
@@ -9088,6 +9101,7 @@ export type InventoryFieldsFragment = {
   unitInventory: number;
   beds: { __typename?: 'BedsPaginated'; nodesCount: number };
   units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type UnitFieldsFragment = {
@@ -9320,6 +9334,10 @@ export type OrganizationDetailFieldsFragment = {
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type OrganizationFieldsFragment = {
@@ -9329,6 +9347,10 @@ export type OrganizationFieldsFragment = {
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
@@ -9360,12 +9382,16 @@ export type GetOrganizationQuery = {
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
     access: {
       __typename?: 'OrganizationAccess';
       id: string;
       canEditOrganization: boolean;
       canDeleteOrganization: boolean;
     };
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -9473,6 +9499,7 @@ export type ProjectAllFieldsFragment = {
     canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
   };
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type ProjectCocFieldsFragment = {
@@ -9489,6 +9516,7 @@ export type ProjectCocFieldsFragment = {
   geographyType?: GeographyType | null;
   state?: string | null;
   zip?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type FunderFieldsFragment = {
@@ -9502,6 +9530,7 @@ export type FunderFieldsFragment = {
   grantId: string;
   otherFunder?: string | null;
   startDate: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type GetProjectQueryVariables = Exact<{
@@ -9544,6 +9573,7 @@ export type GetProjectQuery = {
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
     };
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -9678,6 +9708,7 @@ export type GetFunderQuery = {
     grantId: string;
     otherFunder?: string | null;
     startDate: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -9703,6 +9734,7 @@ export type GetInventoryQuery = {
     unitInventory: number;
     beds: { __typename?: 'BedsPaginated'; nodesCount: number };
     units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -9787,6 +9819,7 @@ export type GetProjectCocQuery = {
     geographyType?: GeographyType | null;
     state?: string | null;
     zip?: string | null;
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -9822,6 +9855,7 @@ export type GetProjectInventoriesQuery = {
         unitInventory: number;
         beds: { __typename?: 'BedsPaginated'; nodesCount: number };
         units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -9857,6 +9891,7 @@ export type GetProjectProjectCocsQuery = {
         geographyType?: GeographyType | null;
         state?: string | null;
         zip?: string | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -9889,6 +9924,7 @@ export type GetProjectFundersQuery = {
         grantId: string;
         otherFunder?: string | null;
         startDate: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -10000,6 +10036,7 @@ export type CreateBedsMutation = {
       unitInventory: number;
       beds: { __typename?: 'BedsPaginated'; nodesCount: number };
       units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10043,6 +10080,7 @@ export type CreateUnitsMutation = {
       unitInventory: number;
       beds: { __typename?: 'BedsPaginated'; nodesCount: number };
       units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10086,6 +10124,7 @@ export type DeleteUnitsMutation = {
       unitInventory: number;
       beds: { __typename?: 'BedsPaginated'; nodesCount: number };
       units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10129,6 +10168,7 @@ export type DeleteBedsMutation = {
       unitInventory: number;
       beds: { __typename?: 'BedsPaginated'; nodesCount: number };
       units: { __typename?: 'UnitsPaginated'; nodesCount: number };
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -10958,7 +10998,11 @@ export const InventoryFieldsFragmentDoc = gql`
       nodesCount
     }
     unitInventory
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const UnitFieldsFragmentDoc = gql`
   fragment UnitFields on Unit {
@@ -11011,7 +11055,14 @@ export const OrganizationDetailFieldsFragmentDoc = gql`
     description
     contactInformation
     victimServiceProvider
+    dateCreated
+    dateUpdated
+    dateDeleted
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
@@ -11069,11 +11120,15 @@ export const ProjectAllFieldsFragmentDoc = gql`
     access {
       ...ProjectAccessFields
     }
+    user {
+      ...UserFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
+  ${UserFieldsFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {
@@ -11089,7 +11144,11 @@ export const ProjectCocFieldsFragmentDoc = gql`
     geographyType
     state
     zip
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const FunderFieldsFragmentDoc = gql`
   fragment FunderFields on Funder {
@@ -11102,7 +11161,11 @@ export const FunderFieldsFragmentDoc = gql`
     grantId
     otherFunder
     startDate
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {

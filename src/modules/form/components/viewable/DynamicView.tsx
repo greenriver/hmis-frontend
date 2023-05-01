@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
 
@@ -26,15 +26,13 @@ const DynamicView = ({
   });
 
   return (
-    <Box>
-      <Grid container direction='column' spacing={2}>
-        {renderFields({
-          horizontal,
-          pickListRelationId,
-          visible,
-        })}
-      </Grid>
-    </Box>
+    <Grid container direction='column' spacing={2}>
+      {renderFields({
+        horizontal,
+        pickListRelationId,
+        visible,
+      })}
+    </Grid>
   );
 };
 

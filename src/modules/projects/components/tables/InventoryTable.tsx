@@ -1,33 +1,36 @@
-import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { useProjectDashboardContext } from '../ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
-import GenericTableWithData, {
-  Props as GenericTableWithDataProps,
-} from '@/modules/dataFetching/components/GenericTableWithData';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  DeleteInventoryDocument,
+  DeleteInventoryMutation,
+  DeleteInventoryMutationVariables,
+  FormRole,
   GetProjectInventoriesDocument,
-  GetProjectInventoriesQuery,
-  GetProjectInventoriesQueryVariables,
   InventoryFieldsFragment,
-  useDeleteInventoryMutation,
+  ProjectType,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<InventoryFieldsFragment>[] = [
   {
-    header: 'CoC Code',
-    render: 'cocCode',
+    header: 'Household Type',
+    render: (i: InventoryFieldsFragment) => (
+      <HmisEnum value={i.householdType} enumMap={HmisEnums.HouseholdType} />
+    ),
   },
   {
     header: 'Active Period',
@@ -35,57 +38,40 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
       parseAndFormatDateRange(i.inventoryStartDate, i.inventoryEndDate),
   },
   {
-    header: 'Household Type',
-    render: (i: InventoryFieldsFragment) => (
-      <HmisEnum value={i.householdType} enumMap={HmisEnums.HouseholdType} />
-    ),
+    header: 'CoC',
+    render: 'cocCode',
   },
 ];
 
-interface Props
-  extends Omit<
-    GenericTableWithDataProps<
-      GetProjectInventoriesQuery,
-      GetProjectInventoriesQueryVariables,
-      InventoryFieldsFragment
-    >,
-    'queryVariables' | 'queryDocument' | 'pagePath'
-  > {
-  projectId: string;
-  es?: boolean;
-}
+const InventoryTable = () => {
+  const { project } = useProjectDashboardContext();
+  const canEditProject = project.access.canEditProjectDetails;
 
-const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
-  const [recordToDelete, setDelete] = useState<InventoryFieldsFragment | null>(
-    null
-  );
-  const [canEditProject] = useHasProjectPermissions(projectId, [
-    'canEditProjectDetails',
-  ]);
-
-  const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
-    useDeleteInventoryMutation({
-      onCompleted: (res) => {
-        const id = res.deleteInventory?.inventory?.id;
-        if (id) {
-          setDelete(null);
-          // Force re-fetch table
-          cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
-        }
-      },
-    });
-
-  const handleDelete = useCallback(() => {
-    if (!recordToDelete) return;
-    deleteRecord({ variables: { input: { id: recordToDelete.id } } });
-  }, [recordToDelete, deleteRecord]);
-  if (deleteError) console.error(deleteError);
+  const [viewingRecord, setViewingRecord] = useState<
+    InventoryFieldsFragment | undefined
+  >();
 
   const tableColumns = useMemo(() => {
     return [
       ...columns,
-      ...(es
-        ? []
+      ...(project.projectType === ProjectType.Es
+        ? [
+            {
+              header: 'Availability',
+              render: (row: InventoryFieldsFragment) => (
+                <HmisEnum
+                  value={row.availability}
+                  enumMap={HmisEnums.Availability}
+                />
+              ),
+            },
+            {
+              header: 'Bed Type',
+              render: (row: InventoryFieldsFragment) => (
+                <HmisEnum value={row.esBedType} enumMap={HmisEnums.BedType} />
+              ),
+            },
+          ]
         : [
             {
               header: 'Units',
@@ -107,7 +93,7 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
                     to={generateSafePath(
                       ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
                       {
-                        projectId,
+                        projectId: project.id,
                         inventoryId: record.id,
                       }
                     )}
@@ -116,69 +102,69 @@ const InventoryTable = ({ projectId, es = false, ...props }: Props) => {
                   >
                     Beds
                   </ButtonLink>
-                  <ButtonLink
-                    data-testid='updateButton'
-                    to={generateSafePath(
-                      ProjectDashboardRoutes.EDIT_INVENTORY,
-                      {
-                        projectId,
-                        inventoryId: record.id,
-                      }
-                    )}
-                    size='small'
-                    variant='outlined'
-                  >
-                    Edit
-                  </ButtonLink>
-                  <Button
-                    data-testid='deleteButton'
-                    onClick={() => setDelete(record)}
-                    size='small'
-                    variant='outlined'
-                    color='error'
-                  >
-                    Delete
-                  </Button>
                 </Stack>
               ),
             },
           ]
         : []),
     ];
-  }, [projectId, es, canEditProject]);
+  }, [project, canEditProject]);
+
+  const navigate = useNavigate();
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({ id: `Project:${project.id}`, fieldName: 'inventories' });
+    navigate(
+      generateSafePath(ProjectDashboardRoutes.INVENTORY, {
+        projectId: project.id,
+      })
+    );
+  }, [project, navigate]);
 
   return (
     <>
       <GenericTableWithData
-        queryVariables={{ id: projectId }}
+        queryVariables={{ id: project.id }}
         queryDocument={GetProjectInventoriesDocument}
         columns={tableColumns}
         pagePath='project.inventories'
         noData='No inventory.'
-        {...props}
+        handleRowClick={(record) => setViewingRecord(record)}
       />
-      <ProjectPermissionsFilter
-        id={projectId}
-        permissions='canEditProjectDetails'
-      >
-        <ConfirmationDialog
-          id='deleteProjectCoc'
-          open={!!recordToDelete}
-          title='Delete Project CoC record'
-          onConfirm={handleDelete}
-          onCancel={() => setDelete(null)}
-          loading={deleteLoading}
-        >
-          {recordToDelete && (
-            <>
-              <Typography>
-                Are you sure you want to delete inventory record?
-              </Typography>
-              <Typography>This action cannot be undone.</Typography>
-            </>
-          )}
-        </ConfirmationDialog>
-      </ProjectPermissionsFilter>
+      {viewingRecord && (
+        <ViewRecordDialog<InventoryFieldsFragment>
+          record={viewingRecord}
+          formRole={FormRole.Inventory}
+          title='Inventory'
+          open={!!viewingRecord}
+          onClose={() => setViewingRecord(undefined)}
+          actions={
+            canEditProject && (
+              <>
+                <ButtonLink
+                  to={generateSafePath(ProjectDashboardRoutes.EDIT_INVENTORY, {
+                    projectId: project.id,
+                    inventoryId: viewingRecord.id,
+                  })}
+                >
+                  Edit
+                </ButtonLink>
+                <DeleteMutationButton<
+                  DeleteInventoryMutation,
+                  DeleteInventoryMutationVariables
+                >
+                  queryDocument={DeleteInventoryDocument}
+                  variables={{ input: { id: viewingRecord.id } }}
+                  idPath={'deleteInventory.inventory.id'}
+                  recordName='Inventory'
+                  onSuccess={onSuccessfulDelete}
+                >
+                  Delete
+                </DeleteMutationButton>
+              </>
+            )
+          }
+        />
+      )}
     </>
   );
 };

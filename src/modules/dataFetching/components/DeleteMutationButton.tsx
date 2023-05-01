@@ -1,6 +1,6 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { Button, ButtonProps, Typography } from '@mui/material';
-import { capitalize, get, lowerCase } from 'lodash-es';
+import { camelCase, get } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
 
 import ConfirmationDialog, {
@@ -55,7 +55,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   return (
     <>
       <Button
-        data-testid={`deleteRecordButton-${recordName}`}
+        data-testid={`deleteRecordButton-${camelCase(recordName)}`}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -70,12 +70,13 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
-        title={`Delete ${capitalize(recordName)}`}
-        confirmText={`Yes, delete ${lowerCase(recordName)}`}
+        title={`Delete ${recordName}`}
+        confirmText={`Yes, delete ${recordName}`}
         onConfirm={handleDelete}
         onCancel={() => setShowDialog(false)}
         loading={loading}
         errorState={{ apolloError: error, errors: [], warnings: [] }}
+        color='error'
         {...ConfirmationDialogProps}
       >
         {confirmationDialogContent ? (
@@ -83,7 +84,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         ) : (
           <>
             <Typography>
-              {`Are you sure you want to delete this ${lowerCase(recordName)}?`}
+              {`Are you sure you want to delete this ${recordName}?`}
             </Typography>
             <Typography>This action cannot be undone.</Typography>
           </>
