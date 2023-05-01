@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
+import Loading from '@/components/elements/Loading';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
-import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
@@ -15,7 +15,7 @@ const ViewAssessmentPage = () => {
     assessmentId: string;
   };
 
-  if (!enrollment) return <NotFound />;
+  if (!enrollment) return <Loading />;
 
   return (
     <IndividualAssessment

@@ -116,10 +116,7 @@ export const HmisEnums = {
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',
   },
-  EnrollmentSortOption: {
-    HOUSEHOLD_ID: 'HOUSEHOLD_ID',
-    MOST_RECENT: 'MOST_RECENT',
-  },
+  EnrollmentSortOption: { MOST_RECENT: 'MOST_RECENT' },
   EnrollmentStatus: {
     ACTIVE: 'Active',
     ANY_ENTRY_INCOMPLETE: 'Household Entry Incomplete',

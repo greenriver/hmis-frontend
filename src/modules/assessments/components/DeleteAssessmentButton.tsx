@@ -51,7 +51,7 @@ const DeleteAssessmentButton = ({
     >
       queryDocument={DeleteAssessmentDocument}
       variables={{ id: assessment.id }}
-      idPath={'deleteAssessment.assessmentId'}
+      idPath={'deleteAssessment.assessment.id'}
       ButtonProps={{ fullWidth: true }}
       recordName='assessment'
       onSuccess={() => {
@@ -60,11 +60,6 @@ const DeleteAssessmentButton = ({
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
         if (deletesEnrollment) {
-          cache.evict({ id: `Enrollment:${enrollmentId}` });
-          cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
-          // If we deleted the enrollment, navigate back to the profile.
-          // FIXME: this may result in "not found" if the user lost access to the client.
-          // we should probably show a modal that says something like "Success! Go to Client|Home" depending on access
           navigate(
             generateSafePath(ClientDashboardRoutes.PROFILE, { clientId })
           );

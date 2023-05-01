@@ -16,7 +16,6 @@ const AllProjects = () => {
   if (loading) return <Loading />;
   if (error) throw error;
 
-  const numOrganizations = data?.organizations?.nodesCount || 0;
   return (
     <Container maxWidth='lg' sx={{ pt: 2, pb: 6 }}>
       <Typography variant='h3' sx={{ mt: 2, mb: 4 }}>
@@ -24,12 +23,8 @@ const AllProjects = () => {
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          {numOrganizations > 0 ? (
-            <GroupedProjectTable
-              organizations={data?.organizations?.nodes || []}
-            />
-          ) : (
-            <Typography>No organizations.</Typography>
+          {data?.organizations?.nodesCount && (
+            <GroupedProjectTable organizations={data?.organizations?.nodes} />
           )}
         </Grid>
         <RootPermissionsFilter permissions={['canEditOrganization']}>
