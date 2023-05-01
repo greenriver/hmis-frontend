@@ -251,7 +251,7 @@ export const protectedRoutes = [
                     permissions='canEditClient'
                     otherwise={
                       <Navigate
-                        to={generateSafePath(DashboardRoutes.PROFILE, {
+                        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
                           clientId,
                         })}
                         replace

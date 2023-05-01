@@ -19,9 +19,10 @@ const ClientRoute: React.FC<
 
   const allowed = useMemo(() => {
     if (!clientPerms || !rootPerms) return false;
-    const { canViewClient, canEditClient } = clientPerms;
+    const { canEditClient } = clientPerms;
+    const { canViewClients } = rootPerms;
 
-    if (view) return canViewClient;
+    if (view) return canViewClients;
     if (edit) return canEditClient;
   }, [clientPerms, rootPerms, view, edit]);
 

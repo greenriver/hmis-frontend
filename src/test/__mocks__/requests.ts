@@ -31,6 +31,8 @@ export const RITA_ACKROYD = {
   nameSuffix: null,
   access: {
     id: '9999:1',
+    canEditClient: true,
+    canDeleteClient: true,
     canViewDob: true,
     canViewFullSsn: true,
     canViewPartialSsn: true,
