@@ -542,14 +542,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'canViewClient',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-        },
-      },
-      {
         name: 'canViewDob',
         type: {
           kind: 'NON_NULL',

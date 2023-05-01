@@ -3041,22 +3041,6 @@
             "deprecationReason": null
           },
           {
-            "name": "canViewClient",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "canViewDob",
             "description": null,
             "args": [],
