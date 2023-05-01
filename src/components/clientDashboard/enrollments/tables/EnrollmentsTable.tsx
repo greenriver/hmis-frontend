@@ -3,28 +3,29 @@ import GenericTableWithData, {
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   EnrollmentFieldsFromAssessmentFragment,
-  GetRecentEnrollmentsDocument,
-  GetRecentEnrollmentsQuery,
-  GetRecentEnrollmentsQueryVariables,
+  GetNonWipEnrollmentsDocument,
+  GetNonWipEnrollmentsQuery,
+  GetNonWipEnrollmentsQueryVariables,
 } from '@/types/gqlTypes';
 
 type Props = Omit<
   GenericTableWithDataProps<
-    GetRecentEnrollmentsQuery,
-    GetRecentEnrollmentsQueryVariables,
+    GetNonWipEnrollmentsQuery,
+    GetNonWipEnrollmentsQueryVariables,
     EnrollmentFieldsFromAssessmentFragment
   >,
   'queryDocument' | 'pagePath'
 >;
 
+// NOTE: excludes incomplete (WIP) enrollments. only used for record picker dialog.
 const EnrollmentsTable = (props: Props) => {
   return (
     <GenericTableWithData<
-      GetRecentEnrollmentsQuery,
-      GetRecentEnrollmentsQueryVariables,
+      GetNonWipEnrollmentsQuery,
+      GetNonWipEnrollmentsQueryVariables,
       EnrollmentFieldsFromAssessmentFragment
     >
-      queryDocument={GetRecentEnrollmentsDocument}
+      queryDocument={GetNonWipEnrollmentsDocument}
       recordType='Enrollment'
       pagePath='client.enrollments'
       {...props}
