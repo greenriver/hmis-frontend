@@ -66,7 +66,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
         alignItems={'center'}
         sx={{ px: 2, py: 1.5 }}
       >
-        <Stack>
+        <Stack gap={0.5}>
           <HudRecordMetadata
             record={record}
             RelativeDateDisplayProps={{

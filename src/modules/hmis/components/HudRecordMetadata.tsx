@@ -1,3 +1,5 @@
+import { Stack } from '@mui/material';
+
 import RelativeDateDisplay, {
   RelativeDateDisplayProps,
 } from './RelativeDateDisplay';
@@ -40,20 +42,42 @@ const HudRecordMetadata = ({
   if (hasMetadataUser(record)) {
     userLastUpdated = record.user?.name ? `by ${record.user?.name}` : undefined;
   }
+  // If dateUpdated and dateCreated are the same, just show 'Created X minutes ago by Y'
+  const createdSameAsUpdated = record.dateUpdated === record.dateCreated;
   return (
     <>
+      {!createdSameAsUpdated && (
+        <RelativeDateDisplay
+          dateString={record.dateUpdated}
+          prefixVerb='Updated'
+          suffixText={userLastUpdated}
+          {...RelativeDateDisplayProps}
+        />
+      )}
       <RelativeDateDisplay
         dateString={record.dateCreated}
         prefixVerb='Created'
-        {...RelativeDateDisplayProps}
-      />
-      <RelativeDateDisplay
-        dateString={record.dateUpdated}
-        prefixVerb='Updated'
-        suffixText={userLastUpdated}
+        suffixText={createdSameAsUpdated ? userLastUpdated : undefined}
         {...RelativeDateDisplayProps}
       />
     </>
   );
 };
+
+export const HudRecordMetadataHistoryColumn = {
+  header: 'History',
+  key: 'history',
+  render: (record: any) => (
+    <Stack gap={0.5} sx={{ py: 0.5 }}>
+      <HudRecordMetadata
+        record={record}
+        RelativeDateDisplayProps={{
+          TooltipProps: { placement: 'right' },
+          TypographyProps: { variant: 'body2' },
+        }}
+      />
+    </Stack>
+  ),
+};
+
 export default HudRecordMetadata;

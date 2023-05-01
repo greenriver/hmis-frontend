@@ -1,3 +1,4 @@
+import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 
 import { useProjectDashboardContext } from '../ProjectDashboard';
@@ -7,7 +8,7 @@ import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
@@ -36,15 +37,18 @@ const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
   },
   {
     header: 'Address',
-    render: (c: ProjectCocFieldsFragment) =>
-      [c.address1, c.address2, c.city, c.state, c.zip]
-        .filter((f) => !isNil(f))
-        .join(', '),
+    render: (c: ProjectCocFieldsFragment) => (
+      <Stack gap={0.5} sx={{ py: 0.5 }}>
+        <Typography variant='body2'>
+          {[c.address1, c.address2].filter((f) => !isNil(f)).join(', ')}
+        </Typography>
+        <Typography variant='body2'>
+          {[c.city, c.state, c.zip].filter((f) => !isNil(f)).join(', ')}
+        </Typography>
+      </Stack>
+    ),
   },
-  {
-    header: 'Date Created',
-    render: (c: ProjectCocFieldsFragment) => parseAndFormatDate(c.dateCreated),
-  },
+  HudRecordMetadataHistoryColumn,
 ];
 
 type Props = Omit<

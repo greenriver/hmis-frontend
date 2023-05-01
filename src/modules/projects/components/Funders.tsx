@@ -7,6 +7,7 @@ import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
@@ -27,7 +28,11 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
       f.funder === FundingSource.LocalOrOtherFundingSource && f.otherFunder ? (
         f.otherFunder
       ) : (
-        <HmisEnum value={f.funder} enumMap={HmisEnums.FundingSource} />
+        <HmisEnum
+          value={f.funder}
+          enumMap={HmisEnums.FundingSource}
+          color='inherit'
+        />
       ),
   },
   {
@@ -36,6 +41,7 @@ const columns: ColumnDef<FunderFieldsFragment>[] = [
       parseAndFormatDateRange(f.startDate, f.endDate),
   },
   { header: 'Grant ID', render: 'grantId' },
+  HudRecordMetadataHistoryColumn,
 ];
 
 // interface Props
