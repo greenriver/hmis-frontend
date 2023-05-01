@@ -24,6 +24,9 @@ fragment InventoryFields on Inventory {
   # vetBedInventory
   # youthBedInventory
   # youthVetBedInventory
+  user {
+    ...UserFields
+  }
 }
 
 fragment UnitFields on Unit {

@@ -1,10 +1,10 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { Grid, Paper, Stack, Typography } from '@mui/material';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import RouterLink from '@/components/elements/RouterLink';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -87,20 +87,20 @@ const ViewEnrollment = () => {
                   Add Event
                 </ButtonLink>
               </ClientPermissionsFilter>
-              <ButtonLink
-                fullWidth
-                to={generateSafePath(Routes.PROJECT, {
-                  projectId: enrollment.project.id,
-                })}
-                Icon={OpenInNewIcon}
-                leftAlign
-              >
-                Open Project
-              </ButtonLink>
             </Stack>
           </Paper>
           <Paper sx={{ p: 2, mb: 2 }}>
             <Stack gap={1}>
+              <Typography variant='body2' color='text.secondary'>
+                Project:{' '}
+                <RouterLink
+                  to={generateSafePath(Routes.PROJECT, {
+                    projectId: enrollment.project.id,
+                  })}
+                >
+                  {enrollment.project.projectName}
+                </RouterLink>
+              </Typography>
               <IdDisplay
                 prefix='Enrollment'
                 color='text.secondary'

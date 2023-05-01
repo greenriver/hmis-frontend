@@ -1,19 +1,17 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
+import { useProjectDashboardContext } from './ProjectDashboard';
 import InventoryTable from './tables/InventoryTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
-import useSafeParams from '@/hooks/useSafeParams';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const Inventories = () => {
-  const { projectId } = useSafeParams() as {
-    projectId: string;
-  };
+  const { project } = useProjectDashboardContext();
 
   return (
     <>
@@ -21,13 +19,13 @@ const Inventories = () => {
         title='Inventory Records'
         actions={
           <ProjectPermissionsFilter
-            id={projectId}
+            id={project.id}
             permissions='canEditProjectDetails'
           >
             <ButtonLink
               data-testid='addInventoryButton'
               to={generateSafePath(ProjectDashboardRoutes.NEW_INVENTORY, {
-                projectId,
+                projectId: project.id,
               })}
               Icon={AddIcon}
             >
@@ -37,7 +35,7 @@ const Inventories = () => {
         }
       />
       <Paper data-testid='inventoryCard'>
-        <InventoryTable projectId={projectId} />
+        <InventoryTable />
       </Paper>
     </>
   );

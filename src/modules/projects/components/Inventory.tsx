@@ -27,7 +27,11 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
   const title = create ? `Add Inventory` : `Edit Inventory`;
   const { project } = useProjectDashboardContext();
 
-  const { data, loading, error } = useGetInventoryQuery({
+  const {
+    data: { inventory } = {},
+    loading,
+    error,
+  } = useGetInventoryQuery({
     variables: { id: inventoryId },
     skip: create,
   });
@@ -60,13 +64,13 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
       inventoryId,
-      bedInventory: data?.inventory?.bedInventory || 0,
-      unitInventory: data?.inventory?.unitInventory || 0,
+      bedInventory: inventory?.bedInventory || 0,
+      unitInventory: inventory?.unitInventory || 0,
     };
-  }, [project, inventoryId, data]);
+  }, [project, inventoryId, inventory]);
 
   if (loading) return <Loading />;
-  if (!create && !data?.inventory) return <NotFound />;
+  if (!create && !inventory) return <NotFound />;
   if (error) throw error;
 
   return (
@@ -77,10 +81,13 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       onCompleted={onCompleted}
       formRole={FormRole.Inventory}
       inputVariables={{ projectId }}
-      record={data?.inventory || undefined}
-      title={<ProjectFormTitle title={title} project={project} />}
+      record={inventory || undefined}
       localConstants={localConstants}
       pickListRelationId={projectId}
+      title={
+        !create &&
+        inventory && <ProjectFormTitle title={title} project={project} />
+      }
     />
   );
 };

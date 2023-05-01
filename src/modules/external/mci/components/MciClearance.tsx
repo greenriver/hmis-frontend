@@ -18,7 +18,7 @@ import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
-import useDynamicFormContext from '@/modules/form/components/useDynamicFormContext';
+import useDynamicFormContext from '@/modules/form/hooks/useDynamicFormContext';
 import { DynamicInputCommonProps } from '@/modules/form/types';
 import { createHudValuesForSubmit } from '@/modules/form/util/formUtil';
 import { useClearMciMutation } from '@/types/gqlTypes';

@@ -1,24 +1,21 @@
-import { Button, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
 
-import ButtonLink from '@/components/elements/ButtonLink';
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
+import { useProjectDashboardContext } from '../ProjectDashboard';
+
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
-import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { useHasProjectPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { cache } from '@/providers/apolloClient';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { HudRecordMetadataHistoryColumn } from '@/modules/hmis/components/HudRecordMetadata';
 import { ProjectDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectProjectCocsDocument,
   GetProjectProjectCocsQuery,
   GetProjectProjectCocsQueryVariables,
   ProjectCocFieldsFragment,
-  useDeleteProjectCocMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -33,123 +30,58 @@ const columns: ColumnDef<ProjectCocFieldsFragment>[] = [
     render: 'geocode',
   },
   {
-    header: 'Address',
-    render: (c: ProjectCocFieldsFragment) =>
-      [c.address1, c.address2, c.city, c.state, c.zip]
-        .filter((f) => !isNil(f))
-        .join(', '),
+    header: 'Geography Type',
+    render: (c) => (
+      <HmisEnum enumMap={HmisEnums.GeographyType} value={c.geographyType} />
+    ),
   },
+  {
+    header: 'Address',
+    render: (c: ProjectCocFieldsFragment) => (
+      <Stack gap={0.5} sx={{ py: 0.5 }}>
+        <Typography variant='body2'>
+          {[c.address1, c.address2].filter((f) => !isNil(f)).join(', ')}
+        </Typography>
+        <Typography variant='body2'>
+          {[c.city, c.state, c.zip].filter((f) => !isNil(f)).join(', ')}
+        </Typography>
+      </Stack>
+    ),
+  },
+  HudRecordMetadataHistoryColumn,
 ];
 
-interface Props
-  extends Omit<
-    GenericTableWithDataProps<
-      GetProjectProjectCocsQuery,
-      GetProjectProjectCocsQueryVariables,
-      ProjectCocFieldsFragment
-    >,
-    'queryVariables' | 'queryDocument' | 'pagePath'
-  > {
-  projectId: string;
-}
+type Props = Omit<
+  GenericTableWithDataProps<
+    GetProjectProjectCocsQuery,
+    GetProjectProjectCocsQueryVariables,
+    ProjectCocFieldsFragment
+  >,
+  'queryVariables' | 'queryDocument' | 'pagePath'
+>;
 
-const ProjectCocTable = ({ projectId, ...props }: Props) => {
-  const [recordToDelete, setDelete] = useState<ProjectCocFieldsFragment | null>(
-    null
-  );
-  const [canEditProject] = useHasProjectPermissions(projectId, [
-    'canEditProjectDetails',
-  ]);
-
-  const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
-    useDeleteProjectCocMutation({
-      onCompleted: (res) => {
-        const id = res.deleteProjectCoc?.projectCoc?.id;
-        if (id) {
-          setDelete(null);
-          // Force re-fetch table
-          cache.evict({ id: `Project:${projectId}`, fieldName: 'projectCocs' });
-        }
-      },
-    });
-
-  const handleDelete = useCallback(() => {
-    if (!recordToDelete) return;
-    deleteRecord({ variables: { input: { id: recordToDelete.id } } });
-  }, [recordToDelete, deleteRecord]);
-  if (deleteError) console.error(deleteError);
-
-  const tableColumns = useMemo(() => {
-    return [
-      ...columns,
-      ...(canEditProject
-        ? [
-            {
-              key: 'actions',
-              width: '1%',
-              render: (record: ProjectCocFieldsFragment) => (
-                <Stack direction='row' spacing={1}>
-                  <ButtonLink
-                    data-testid='updateButton'
-                    to={generateSafePath(ProjectDashboardRoutes.EDIT_COC, {
-                      projectId,
-                      cocId: record.id,
-                    })}
-                    size='small'
-                    variant='outlined'
-                  >
-                    Edit
-                  </ButtonLink>
-                  <Button
-                    data-testid='deleteButton'
-                    onClick={() => setDelete(record)}
-                    size='small'
-                    variant='outlined'
-                    color='error'
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              ),
-            },
-          ]
-        : []),
-    ];
-  }, [projectId, canEditProject]);
+const ProjectCocTable = (props: Props) => {
+  const { project } = useProjectDashboardContext();
 
   return (
     <>
       <GenericTableWithData
-        queryVariables={{ id: projectId }}
+        queryVariables={{ id: project.id }}
         queryDocument={GetProjectProjectCocsDocument}
-        columns={tableColumns}
+        columns={columns}
         pagePath='project.projectCocs'
         noData='No Project CoC records.'
+        rowLinkTo={
+          project.access.canEditProjectDetails
+            ? (record) =>
+                generateSafePath(ProjectDashboardRoutes.EDIT_COC, {
+                  projectId: project.id,
+                  cocId: record.id,
+                })
+            : undefined
+        }
         {...props}
       />
-      <ProjectPermissionsFilter
-        id={projectId}
-        permissions='canEditProjectDetails'
-      >
-        <ConfirmationDialog
-          id='deleteProjectCoc'
-          open={!!recordToDelete}
-          title='Delete Project CoC record'
-          onConfirm={handleDelete}
-          onCancel={() => setDelete(null)}
-          loading={deleteLoading}
-        >
-          {recordToDelete && (
-            <>
-              <Typography>
-                Are you sure you want to delete Project CoC record for{' '}
-                <strong>{recordToDelete.cocCode}</strong>?
-              </Typography>
-              <Typography>This action cannot be undone.</Typography>
-            </>
-          )}
-        </ConfirmationDialog>
-      </ProjectPermissionsFilter>
     </>
   );
 };

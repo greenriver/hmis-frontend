@@ -9,17 +9,17 @@ import React, {
   useState,
 } from 'react';
 
-import ErrorAlert from '../../errors/components/ErrorAlert';
-import { ValidationDialogProps } from '../../errors/components/ValidationDialog';
 import useDynamicFields from '../hooks/useDynamicFields';
-import useElementInView from '../hooks/useElementInView';
+import { DynamicFormContext } from '../hooks/useDynamicFormContext';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
-import { DynamicFormContext } from './useDynamicFormContext';
 
+import useElementInView from '@/hooks/useElementInView';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ErrorAlert from '@/modules/errors/components/ErrorAlert';
+import { ValidationDialogProps } from '@/modules/errors/components/ValidationDialog';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import { ErrorState, hasErrors } from '@/modules/errors/util';
 import { FormDefinitionJson } from '@/types/gqlTypes';

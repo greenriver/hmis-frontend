@@ -29,6 +29,9 @@ fragment ProjectAllFields on Project {
   access {
     ...ProjectAccessFields
   }
+  user {
+    ...UserFields
+  }
 }
 
 fragment ProjectCocFields on ProjectCoc {
@@ -44,6 +47,9 @@ fragment ProjectCocFields on ProjectCoc {
   geographyType
   state
   zip
+  user {
+    ...UserFields
+  }
 }
 
 fragment FunderFields on Funder {
@@ -56,4 +62,7 @@ fragment FunderFields on Funder {
   grantId
   otherFunder
   startDate
+  user {
+    ...UserFields
+  }
 }

@@ -8,11 +8,15 @@ import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
 import useSafeParams from '@/hooks/useSafeParams';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
+  DeleteFunderDocument,
+  DeleteFunderMutation,
+  DeleteFunderMutationVariables,
   FormRole,
   FunderFieldsFragment,
   useGetFunderQuery,
@@ -28,7 +32,11 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   const title = create ? `Add Funder` : `Edit Funder`;
   const { project } = useProjectDashboardContext();
 
-  const { data, loading, error } = useGetFunderQuery({
+  const {
+    data: { funder } = {},
+    loading,
+    error,
+  } = useGetFunderQuery({
     variables: { id: funderId },
     skip: create,
   });
@@ -41,6 +49,11 @@ const Funder = ({ create = false }: { create?: boolean }) => {
     navigate(generateSafePath(ProjectDashboardRoutes.FUNDERS, { projectId }));
   }, [navigate, create, projectId]);
 
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({ id: `Project:${projectId}`, fieldName: 'funders' });
+    navigate(generateSafePath(ProjectDashboardRoutes.FUNDERS, { projectId }));
+  }, [projectId, navigate]);
+
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!
   const localConstants = useMemo(() => {
@@ -52,7 +65,7 @@ const Funder = ({ create = false }: { create?: boolean }) => {
   }, [project]);
 
   if (loading) return <Loading />;
-  if (!create && !data?.funder) return <NotFound />;
+  if (!create && !funder) return <NotFound />;
   if (error) throw error;
 
   return (
@@ -64,8 +77,30 @@ const Funder = ({ create = false }: { create?: boolean }) => {
       localConstants={localConstants}
       formRole={FormRole.Funder}
       inputVariables={{ projectId }}
-      record={data?.funder || undefined}
-      title={<ProjectFormTitle title={title} project={project} />}
+      record={funder || undefined}
+      title={
+        !create &&
+        funder && (
+          <ProjectFormTitle
+            title={title}
+            project={project}
+            actions={
+              <DeleteMutationButton<
+                DeleteFunderMutation,
+                DeleteFunderMutationVariables
+              >
+                queryDocument={DeleteFunderDocument}
+                variables={{ input: { id: funder.id } }}
+                idPath={'deleteFunder.funder.id'}
+                recordName='Funder'
+                onSuccess={onSuccessfulDelete}
+              >
+                Delete Record
+              </DeleteMutationButton>
+            }
+          />
+        )
+      }
     />
   );
 };
