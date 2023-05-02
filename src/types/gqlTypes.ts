@@ -436,7 +436,6 @@ export type ClientImage = {
 export type ClientName = {
   __typename?: 'ClientName';
   client: Client;
-  customClientNameId: Scalars['ID'];
   first?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   last?: Maybe<Scalars['String']>;
