@@ -61,6 +61,10 @@ export const useDashboardBreadcrumbs = (
           title: 'Referrals',
           parent: ProjectDashboardRoutes.OVERVIEW,
         },
+        [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {
+          title: 'Request a Referral',
+          parent: ProjectDashboardRoutes.REFERRALS,
+        },
         [ProjectDashboardRoutes.FUNDERS]: {
           title: 'Funders',
           parent: ProjectDashboardRoutes.OVERVIEW,
