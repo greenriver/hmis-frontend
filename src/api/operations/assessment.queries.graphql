@@ -93,9 +93,7 @@ query GetAssessmentsForPopulation(
 mutation DeleteAssessment($id: ID!) {
   deleteAssessment(input: { id: $id }) {
     clientMutationId
-    assessment {
-      ...AssessmentFields
-    }
+    assessmentId
     errors {
       ...ValidationErrorFields
     }

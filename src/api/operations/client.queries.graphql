@@ -50,12 +50,7 @@ query GetClientImage($id: ID!) {
 query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
-    enrollments(
-      limit: $limit
-      offset: $offset
-      sortOrder: MOST_RECENT
-      includeInProgress: true
-    ) {
+    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
       offset
       limit
       nodesCount
@@ -97,14 +92,14 @@ query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetRecentEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
     enrollments(
       limit: $limit
       offset: $offset
       sortOrder: MOST_RECENT
-      includeInProgress: false
+      enrollmentLimit: NON_WIP_ONLY
     ) {
       offset
       limit
