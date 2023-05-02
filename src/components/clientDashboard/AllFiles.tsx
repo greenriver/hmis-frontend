@@ -109,7 +109,7 @@ const AllFiles = () => {
       {
         header: 'Uploaded At',
         render: (file) =>
-          `${parseAndFormatDateTime(file.createdAt)}${
+          `${parseAndFormatDateTime(file.dateCreated)}${
             file.uploadedBy?.name ? ` by ${file.uploadedBy?.name}` : ''
           }`,
       },

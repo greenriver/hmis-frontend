@@ -360,13 +360,11 @@ fragment HealthAndDvFields on HealthAndDv {
 fragment FileFields on File {
   confidential
   contentType
-  createdAt
   effectiveDate
   expirationDate
   id
   name
   fileBlobId
-  updatedAt
   url
   tags
   ownFile
@@ -381,6 +379,11 @@ fragment FileFields on File {
   updatedBy {
     id
     name
+  }
+  dateCreated
+  dateUpdated
+  user {
+    ...UserFields
   }
 }
 

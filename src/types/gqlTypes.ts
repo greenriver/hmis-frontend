@@ -1254,7 +1254,8 @@ export type File = {
   __typename?: 'File';
   confidential?: Maybe<Scalars['Boolean']>;
   contentType: Scalars['String'];
-  createdAt: Scalars['ISO8601DateTime'];
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
   effectiveDate?: Maybe<Scalars['ISO8601Date']>;
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']>;
@@ -1264,10 +1265,10 @@ export type File = {
   name: Scalars['String'];
   ownFile: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
-  updatedAt: Scalars['ISO8601DateTime'];
   updatedBy?: Maybe<ApplicationUser>;
   uploadedBy?: Maybe<ApplicationUser>;
   url: Scalars['String'];
+  user?: Maybe<User>;
 };
 
 /** File Sorting Options */
@@ -6291,17 +6292,17 @@ export type FileFieldsFragment = {
   __typename?: 'File';
   confidential?: boolean | null;
   contentType: string;
-  createdAt: string;
   effectiveDate?: string | null;
   expirationDate?: string | null;
   id: string;
   name: string;
   fileBlobId: string;
-  updatedAt: string;
   url: string;
   tags: Array<string>;
   ownFile: boolean;
   enrollmentId?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
   enrollment?: { __typename?: 'Enrollment'; id: string } | null;
   uploadedBy?: {
     __typename?: 'ApplicationUser';
@@ -6313,6 +6314,7 @@ export type FileFieldsFragment = {
     id: string;
     name: string;
   } | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type ClientAuditEventFieldsFragment = {
@@ -6987,17 +6989,17 @@ export type DeleteClientFileMutation = {
       __typename?: 'File';
       confidential?: boolean | null;
       contentType: string;
-      createdAt: string;
       effectiveDate?: string | null;
       expirationDate?: string | null;
       id: string;
       name: string;
       fileBlobId: string;
-      updatedAt: string;
       url: string;
       tags: Array<string>;
       ownFile: boolean;
       enrollmentId?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
       enrollment?: { __typename?: 'Enrollment'; id: string } | null;
       uploadedBy?: {
         __typename?: 'ApplicationUser';
@@ -7009,6 +7011,7 @@ export type DeleteClientFileMutation = {
         id: string;
         name: string;
       } | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -7773,17 +7776,17 @@ export type GetFileQuery = {
     __typename?: 'File';
     confidential?: boolean | null;
     contentType: string;
-    createdAt: string;
     effectiveDate?: string | null;
     expirationDate?: string | null;
     id: string;
     name: string;
     fileBlobId: string;
-    updatedAt: string;
     url: string;
     tags: Array<string>;
     ownFile: boolean;
     enrollmentId?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
     enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     uploadedBy?: {
       __typename?: 'ApplicationUser';
@@ -7795,6 +7798,7 @@ export type GetFileQuery = {
       id: string;
       name: string;
     } | null;
+    user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
 };
 
@@ -7818,17 +7822,17 @@ export type GetClientFilesQuery = {
         __typename?: 'File';
         confidential?: boolean | null;
         contentType: string;
-        createdAt: string;
         effectiveDate?: string | null;
         expirationDate?: string | null;
         id: string;
         name: string;
         fileBlobId: string;
-        updatedAt: string;
         url: string;
         tags: Array<string>;
         ownFile: boolean;
         enrollmentId?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
         enrollment?: { __typename?: 'Enrollment'; id: string } | null;
         uploadedBy?: {
           __typename?: 'ApplicationUser';
@@ -7840,6 +7844,7 @@ export type GetClientFilesQuery = {
           id: string;
           name: string;
         } | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -8934,17 +8939,17 @@ export type SubmitFormMutation = {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType: string;
-          createdAt: string;
           effectiveDate?: string | null;
           expirationDate?: string | null;
           id: string;
           name: string;
           fileBlobId: string;
-          updatedAt: string;
           url: string;
           tags: Array<string>;
           ownFile: boolean;
           enrollmentId?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
           enrollment?: { __typename?: 'Enrollment'; id: string } | null;
           uploadedBy?: {
             __typename?: 'ApplicationUser';
@@ -8956,6 +8961,7 @@ export type SubmitFormMutation = {
             id: string;
             name: string;
           } | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
         }
       | {
           __typename?: 'Funder';
@@ -10924,13 +10930,11 @@ export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
     confidential
     contentType
-    createdAt
     effectiveDate
     expirationDate
     id
     name
     fileBlobId
-    updatedAt
     url
     tags
     ownFile
@@ -10946,7 +10950,13 @@ export const FileFieldsFragmentDoc = gql`
       id
       name
     }
+    dateCreated
+    dateUpdated
+    user {
+      ...UserFields
+    }
   }
+  ${UserFieldsFragmentDoc}
 `;
 export const ClientAuditEventFieldsFragmentDoc = gql`
   fragment ClientAuditEventFields on ClientAuditEvent {
