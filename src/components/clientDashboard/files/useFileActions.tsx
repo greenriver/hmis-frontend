@@ -1,17 +1,17 @@
-import { Button, Typography } from '@mui/material';
-import { uniq } from 'lodash-es';
-import { useCallback, useMemo, useState } from 'react';
+import { Button } from '@mui/material';
+import { useCallback, useMemo } from 'react';
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
-import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  DeleteClientFileDocument,
+  DeleteClientFileMutation,
+  DeleteClientFileMutationVariables,
   FileFieldsFragment,
-  useDeleteClientFileMutation,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -21,11 +21,6 @@ export type UseFileActionsArgs = {
 
 const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
   const { clientId } = useSafeParams() as { clientId: string };
-  const [deletingIds, setDeletingIds] = useState<string[]>([]);
-  const [fileToDelete, setFileToDelete] = useState<
-    FileFieldsFragment | undefined
-  >();
-  const [deleting, setDeleting] = useState<boolean>(false);
 
   const [canEdit] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
@@ -34,27 +29,6 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
   const [canEditAny] = useHasClientPermissions(clientId, [
     'canManageAnyClientFiles',
   ]);
-
-  const [deleteFile] = useDeleteClientFileMutation();
-
-  const handleDeleteFile = useCallback(
-    (fileId: string) => {
-      setDeletingIds((ids) => uniq([...ids, fileId]));
-      setDeleting(true);
-      return deleteFile({
-        variables: { input: { fileId } },
-      }).finally(() => {
-        cache.evict({
-          id: `File:${fileId}`,
-        });
-        setDeletingIds((ids) => ids.filter((id) => id !== fileId));
-        setFileToDelete(undefined);
-        setDeleting(false);
-        onDeleteFile(fileId);
-      });
-    },
-    [deleteFile, onDeleteFile]
-  );
 
   const getActionsForFile = useCallback(
     (file: FileFieldsFragment) => {
@@ -90,20 +64,23 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
       );
 
       const deleteButton = (
-        <LoadingButton
-          key='delete'
-          data-testid='deleteFile'
-          disabled={deletingIds.includes(file.id)}
-          onClick={() => {
-            setFileToDelete(file);
-          }}
-          size='small'
-          variant='outlined'
-          loading={deletingIds.includes(file.id)}
-          color='error'
+        <DeleteMutationButton<
+          DeleteClientFileMutation,
+          DeleteClientFileMutationVariables
         >
-          {deletingIds.includes(file.id) ? 'Deleting' : 'Delete'}
-        </LoadingButton>
+          queryDocument={DeleteClientFileDocument}
+          variables={{ input: { fileId: file.id } }}
+          idPath={'deleteClientFile.file.id'}
+          recordName='File'
+          onSuccess={() => {
+            cache.evict({
+              id: `File:${file.id}`,
+            });
+            onDeleteFile(file.id);
+          }}
+        >
+          Delete
+        </DeleteMutationButton>
       );
 
       return {
@@ -113,37 +90,15 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
           canEdit || canEditAny || file.ownFile ? deleteButton : null,
       } as const;
     },
-    [canEditAny, canEdit, clientId, deletingIds]
-  );
-
-  const deleteFileDialog = useMemo(
-    () => (
-      <ConfirmationDialog
-        id='deleteFile'
-        open={!!fileToDelete}
-        title='Delete File'
-        onConfirm={() => fileToDelete && handleDeleteFile(fileToDelete.id)}
-        onCancel={() => setFileToDelete(undefined)}
-        loading={deleting}
-      >
-        {fileToDelete && (
-          <>
-            <Typography>Are you sure you want to delete this file?</Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
-      </ConfirmationDialog>
-    ),
-    [deleting, fileToDelete, handleDeleteFile]
+    [canEditAny, canEdit, clientId, onDeleteFile]
   );
 
   return useMemo(
     () =>
       ({
         getActionsForFile,
-        deleteFileDialog,
       } as const),
-    [getActionsForFile, deleteFileDialog]
+    [getActionsForFile]
   );
 };
 

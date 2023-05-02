@@ -33,7 +33,7 @@ const FileActions: React.FC<{
   onDone?: (file: FileFieldsFragment) => any;
   noDownload?: boolean;
 }> = ({ clientId, file, onDone = () => {}, noDownload }) => {
-  const { getActionsForFile, deleteFileDialog } = useFileActions({
+  const { getActionsForFile } = useFileActions({
     onDeleteFile: () => onDone(file),
   });
 
@@ -50,7 +50,6 @@ const FileActions: React.FC<{
         <>
           {editButton}
           {deleteButton}
-          {deleteFileDialog}
         </>
       )}
     </>
