@@ -2281,11 +2281,11 @@
             "description": null,
             "args": [
               {
-                "name": "excludeWip",
+                "name": "enrollmentLimit",
                 "description": null,
                 "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
+                  "kind": "ENUM",
+                  "name": "EnrollmentLimit",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2354,18 +2354,6 @@
                 "type": {
                   "kind": "ENUM",
                   "name": "EnrollmentSortOption",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "wipOnly",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -7737,6 +7725,29 @@
         ],
         "interfaces": null,
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "EnrollmentLimit",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "NON_WIP_ONLY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WIP_ONLY",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -15969,11 +15980,11 @@
             "description": null,
             "args": [
               {
-                "name": "excludeWip",
+                "name": "enrollmentLimit",
                 "description": null,
                 "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
+                  "kind": "ENUM",
+                  "name": "EnrollmentLimit",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -16034,18 +16045,6 @@
                 "type": {
                   "kind": "ENUM",
                   "name": "EnrollmentSortOption",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "wipOnly",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "Boolean",
                   "ofType": null
                 },
                 "defaultValue": null,

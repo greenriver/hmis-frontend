@@ -347,13 +347,12 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  excludeWip?: InputMaybe<Scalars['Boolean']>;
+  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
-  wipOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** HUD Client */
@@ -1091,6 +1090,11 @@ export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
   relationshipToHoH: RelationshipToHoH;
 };
+
+export enum EnrollmentLimit {
+  NonWipOnly = 'NON_WIP_ONLY',
+  WipOnly = 'WIP_ONLY',
+}
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
@@ -2433,13 +2437,12 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  excludeWip?: InputMaybe<Scalars['Boolean']>;
+  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
-  wipOnly?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type ProjectFundersArgs = {
@@ -12184,7 +12187,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        excludeWip: true
+        enrollmentLimit: NON_WIP_ONLY
       ) {
         offset
         limit
