@@ -30,6 +30,15 @@ export const HmisEnums = {
     OTHER: 'Other',
   },
   BoundType: { MAX: 'MAX', MIN: 'MIN' },
+  ClientNameUse: {
+    anonymous: 'anonymous',
+    maiden: 'maiden',
+    nickname: 'nickname',
+    official: 'official',
+    old: 'old',
+    temp: 'temp',
+    usual: 'usual',
+  },
   ClientSortOption: {
     FIRST_NAME_A_TO_Z: 'First Name: A-Z',
     FIRST_NAME_Z_TO_A: 'First Name: Z-A',

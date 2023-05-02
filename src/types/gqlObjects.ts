@@ -630,6 +630,50 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientName',
+    fields: [
+      {
+        name: 'customClientNameId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'first', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'last', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'middle',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'nameDataQuality',
+        type: { kind: 'ENUM', name: 'NameDataQuality', ofType: null },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'primary',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'suffix',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientNameUse', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'CustomForm',
     fields: [
       {

@@ -313,8 +313,10 @@ export type Client = {
   middleName?: Maybe<Scalars['String']>;
   nameDataQuality: NameDataQuality;
   nameSuffix?: Maybe<Scalars['String']>;
+  names: Array<ClientName>;
   personalId: Scalars['String'];
   preferredName?: Maybe<Scalars['String']>;
+  primaryName?: Maybe<ClientName>;
   pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   services: ServicesPaginated;
@@ -429,6 +431,34 @@ export type ClientImage = {
   contentType: Scalars['String'];
   id: Scalars['ID'];
 };
+
+/** Client Image */
+export type ClientName = {
+  __typename?: 'ClientName';
+  client: Client;
+  customClientNameId: Scalars['ID'];
+  first?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  last?: Maybe<Scalars['String']>;
+  middle?: Maybe<Scalars['String']>;
+  nameDataQuality?: Maybe<NameDataQuality>;
+  notes?: Maybe<Scalars['String']>;
+  primary?: Maybe<Scalars['Boolean']>;
+  suffix?: Maybe<Scalars['String']>;
+  use?: Maybe<ClientNameUse>;
+  user?: Maybe<User>;
+};
+
+/** Allowed values for ClientName.use */
+export enum ClientNameUse {
+  Anonymous = 'anonymous',
+  Maiden = 'maiden',
+  Nickname = 'nickname',
+  Official = 'official',
+  Old = 'old',
+  Temp = 'temp',
+  Usual = 'usual',
+}
 
 /** HMIS Client search input */
 export type ClientSearchInput = {
