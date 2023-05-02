@@ -44,6 +44,8 @@ const projectClientDashboardRoutes = {
   ENROLLMENTS: 'enrollments',
   ADD_SERVICES: 'add-services',
   REFERRALS: 'referrals',
+  NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
+  NEW_REFERRAL: 'referrals/new-referral',
 
   // Project setup
   FUNDERS: 'funder',

@@ -51,6 +51,7 @@ import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
 import InventoryBeds from '@/modules/projects/components/InventoryBeds';
+import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
@@ -105,6 +106,10 @@ export const protectedRoutes = [
           {
             path: ProjectDashboardRoutes.REFERRALS,
             element: <ProjectReferrals />,
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
+            element: <NewReferralRequest />,
           },
           {
             path: ProjectDashboardRoutes.EDIT_PROJECT,
