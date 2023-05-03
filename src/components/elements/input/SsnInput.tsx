@@ -73,6 +73,16 @@ const SsnInput = ({
             ...baseInputProps,
             disabled: onlylast4 ? true : false,
             placeholder: hasValue ? undefined : '000',
+            // Allow pasting into first box to fill the entire SSN
+            onPaste: (event) => {
+              const pasted = event.clipboardData.getData('text/plain');
+              if (!pasted) return;
+              let val = pasted.replace(/[^\dX]/g, '').substring(0, 9);
+              if (val.length > 3) {
+                val = padEnd(val, 9, 'X');
+                if (val && onChange) onChange(val);
+              }
+            },
           },
         },
         {

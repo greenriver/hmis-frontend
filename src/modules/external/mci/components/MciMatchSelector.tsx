@@ -7,7 +7,6 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { chain, isNil, min } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useMemo } from 'react';
 
@@ -27,28 +26,11 @@ import { HmisEnums } from '@/types/gqlEnums';
 import { ClientNameFragment, MciMatchFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const matchScoreColorConfig: { [threshold: number]: string } = {
-  95: '#8BC34A',
-  80: '#FB8C00',
-};
-
-const MatchScore = ({
-  score,
-  config = matchScoreColorConfig,
-}: {
-  score: number;
-  config?: typeof matchScoreColorConfig;
-}) => {
+const MatchScore = ({ score }: { score: number }) => {
   const baseColor = useMemo(() => {
-    const thresholds = chain(Object.keys(config))
-      .map((k) => parseInt(k))
-      .sortedUniq()
-      .reverse()
-      .value();
-    let key = thresholds.find((k) => score >= k);
-    if (isNil(key)) key = min(thresholds);
-    return config[key as number];
-  }, [score, config]);
+    if (score >= 95) return '#8BC34A'; // green
+    return '#FB8C00'; // orange
+  }, [score]);
 
   return (
     <Stack
