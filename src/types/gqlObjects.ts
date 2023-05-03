@@ -568,6 +568,64 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientAddress',
+    fields: [
+      { name: 'city', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'country',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'district',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'line1', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'line2', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'postalCode',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'state', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'type',
+        type: { kind: 'ENUM', name: 'ClientAddressType', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientAddressUse', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ClientAuditEvent',
     fields: [
       {
@@ -598,6 +656,49 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'ClientContactPoint',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'system',
+        type: { kind: 'ENUM', name: 'ClientContactPointSystem', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientContactPointUse', ofType: null },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

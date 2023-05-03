@@ -289,9 +289,11 @@ export type ClearRecentItemsInput = {
 export type Client = {
   __typename?: 'Client';
   access: ClientAccess;
+  addresses: Array<ClientAddress>;
   age?: Maybe<Scalars['Int']>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
+  contactPoints: Array<ClientContactPoint>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -401,6 +403,42 @@ export type ClientAccess = {
   id: Scalars['ID'];
 };
 
+export type ClientAddress = {
+  __typename?: 'ClientAddress';
+  city?: Maybe<Scalars['String']>;
+  client: Client;
+  country?: Maybe<Scalars['String']>;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  district?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  line1?: Maybe<Scalars['String']>;
+  line2?: Maybe<Scalars['String']>;
+  notes?: Maybe<Scalars['String']>;
+  postalCode?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  type?: Maybe<ClientAddressType>;
+  use?: Maybe<ClientAddressUse>;
+  user?: Maybe<User>;
+};
+
+/** Allowed values for ClientAddress.type */
+export enum ClientAddressType {
+  Both = 'both',
+  Physical = 'physical',
+  Postal = 'postal',
+}
+
+/** Allowed values for ClientAddress.use */
+export enum ClientAddressUse {
+  Home = 'home',
+  Mail = 'mail',
+  Old = 'old',
+  Temp = 'temp',
+  Work = 'work',
+}
+
 export type ClientAuditEvent = {
   __typename?: 'ClientAuditEvent';
   createdAt: Scalars['ISO8601DateTime'];
@@ -422,6 +460,40 @@ export type ClientAuditEventsPaginated = {
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
 };
+
+export type ClientContactPoint = {
+  __typename?: 'ClientContactPoint';
+  client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  notes?: Maybe<Scalars['String']>;
+  system?: Maybe<ClientContactPointSystem>;
+  use?: Maybe<ClientContactPointUse>;
+  user?: Maybe<User>;
+  value?: Maybe<Scalars['String']>;
+};
+
+/** Allowed values for ClientContactPoint.system */
+export enum ClientContactPointSystem {
+  Email = 'email',
+  Fax = 'fax',
+  Other = 'other',
+  Pager = 'pager',
+  Phone = 'phone',
+  Sms = 'sms',
+  Url = 'url',
+}
+
+/** Allowed values for ClientContactPoint.use */
+export enum ClientContactPointUse {
+  Home = 'home',
+  Mobile = 'mobile',
+  Old = 'old',
+  Temp = 'temp',
+  Work = 'work',
+}
 
 /** Client Image */
 export type ClientImage = {
