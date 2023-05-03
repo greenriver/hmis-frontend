@@ -632,6 +632,26 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ClientName',
     fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
       { name: 'first', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'id',

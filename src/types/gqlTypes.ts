@@ -316,7 +316,6 @@ export type Client = {
   names: Array<ClientName>;
   personalId: Scalars['String'];
   preferredName?: Maybe<Scalars['String']>;
-  primaryName?: Maybe<ClientName>;
   pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   services: ServicesPaginated;
@@ -432,10 +431,12 @@ export type ClientImage = {
   id: Scalars['ID'];
 };
 
-/** Client Image */
 export type ClientName = {
   __typename?: 'ClientName';
   client: Client;
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateUpdated: Scalars['ISO8601DateTime'];
   first?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   last?: Maybe<Scalars['String']>;

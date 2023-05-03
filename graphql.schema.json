@@ -2717,18 +2717,6 @@
             "deprecationReason": null
           },
           {
-            "name": "primaryName",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "OBJECT",
-              "name": "ClientName",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "pronouns",
             "description": null,
             "args": [],
@@ -3422,7 +3410,7 @@
       {
         "kind": "OBJECT",
         "name": "ClientName",
-        "description": "Client Image",
+        "description": null,
         "fields": [
           {
             "name": "client",
@@ -3434,6 +3422,50 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Client",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateCreated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateDeleted",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateUpdated",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
