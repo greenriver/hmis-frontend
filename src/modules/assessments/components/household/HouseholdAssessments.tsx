@@ -154,7 +154,6 @@ const HouseholdAssessments = ({
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       event.preventDefault();
-      console.log('CHANGING TAB TO ', newValue);
       navigateToTab(newValue);
     },
     [navigateToTab]

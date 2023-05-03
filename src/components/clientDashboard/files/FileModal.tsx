@@ -1,14 +1,11 @@
-import CloseIcon from '@mui/icons-material/Close';
 import ImageNotSupportedIcon from '@mui/icons-material/ImageNotSupported';
 import {
   Box,
   CircularProgress,
-  Dialog,
   DialogProps,
-  DialogTitle,
-  Divider,
-  IconButton,
+  Link,
   Pagination,
+  Paper,
   Stack,
   Typography,
 } from '@mui/material';
@@ -19,7 +16,8 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.vite';
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
-import { FileFieldsFragment } from '@/types/gqlTypes';
+import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
+import { FileFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 export type FileDialogProps = {
   file: FileFieldsFragment;
@@ -44,12 +42,13 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
   return (
-    <>
+    <Box p={2}>
       {!loaded && <LoadingPreview />}
       <Box
         sx={(theme) => ({
           boxShadow: theme.shadows[1],
           backgroundColor: theme.palette.background.paper,
+          borderRadius: `${theme.shape.borderRadius}px`,
           maxWidth: '100%',
           display: loaded ? undefined : 'none',
         })}
@@ -57,7 +56,7 @@ const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
         src={file.url}
         onLoad={() => setLoaded(true)}
       />
-    </>
+    </Box>
   );
 };
 
@@ -68,53 +67,56 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   const fileProp = useMemo(() => ({ url: file?.url }), [file?.url]);
 
   return (
-    <Box>
+    <>
       {numPages && numPages > 1 && (
-        <Stack
-          direction='row'
-          mb={1}
-          justifyContent='space-between'
-          alignItems='center'
-        >
-          <Typography>
-            Page {pageNumber} of {numPages}
-          </Typography>
-          <Pagination
-            page={pageNumber}
-            count={numPages}
-            onChange={(e, page) => setPageNumber(page)}
-          />
-        </Stack>
-      )}
-      <Document
-        file={fileProp}
-        onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-        loading={
-          <Box
-            bgcolor='grey.100'
-            width={612}
-            height={792}
-            display='flex'
-            justifyContent='center'
+        <Paper sx={{ width: '100%' }}>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
             alignItems='center'
+            px={2}
+            py={1}
           >
-            <LoadingPreview />
-          </Box>
-        }
-      >
-        <Page
-          pageNumber={pageNumber}
-          renderTextLayer={false}
-          renderAnnotationLayer={false}
-        />
-      </Document>
-    </Box>
+            <Typography>
+              Page {pageNumber} of {numPages}
+            </Typography>
+            <Pagination
+              page={pageNumber}
+              count={numPages}
+              onChange={(e, page) => setPageNumber(page)}
+            />
+          </Stack>
+        </Paper>
+      )}
+      <Box my={4}>
+        <Document
+          file={fileProp}
+          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          loading={
+            <Box
+              bgcolor='grey.100'
+              width={612}
+              height={792}
+              display='flex'
+              justifyContent='center'
+              alignItems='center'
+            >
+              <LoadingPreview />
+            </Box>
+          }
+        >
+          <Page
+            pageNumber={pageNumber}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        </Document>
+      </Box>
+    </>
   );
 };
 
 const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
-  const { onClose } = props;
-
   const previewContent = useMemo(() => {
     if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)) {
       return <ImagePreview file={file} />;
@@ -124,11 +126,11 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
       return (
         <Box
           sx={(theme) => ({
-            boxShadow: theme.shadows[1],
             backgroundColor: theme.palette.background.paper,
             padding: 6,
             my: 6,
             textAlign: 'center',
+            borderRadius: `${theme.shape.borderRadius}px`,
           })}
         >
           <Box
@@ -155,9 +157,9 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           </Typography>
           <Typography align='center'>
             Please{' '}
-            <a href={file.url} target='_blank'>
+            <Link href={file.url} target='_blank' variant='inherit'>
               download the file
-            </a>{' '}
+            </Link>{' '}
             to view
           </Typography>
         </Box>
@@ -166,58 +168,54 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
   }, [file]);
 
   return (
-    <Dialog maxWidth='md' scroll='body' fullWidth {...props}>
-      <DialogTitle>
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          gap={2}
-          alignItems='center'
+    <>
+      {file && (
+        <ViewRecordDialog<FileFieldsFragment>
+          {...props}
+          record={file}
+          formRole={FormRole.File}
+          title={file.name}
+          actions={actions}
         >
-          <Typography
+          <Stack
+            width='100%'
+            display='flex'
+            alignItems='center'
+            justifyContent='center'
+          >
+            <Paper sx={{ width: '100%' }}>
+              <Typography p={2} variant='h6' component='p'>
+                File Preview
+              </Typography>
+              <Box
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.grey[300],
+                  padding: 2,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: `${theme.shape.borderRadius}px`,
+                  mx: 2,
+                  mb: 2,
+                })}
+              >
+                {previewContent}
+              </Box>
+            </Paper>
+          </Stack>
+          {/* <Box
             sx={{
-              fontSize: '1.5rem',
-              color: (theme) => theme.palette.text.primary,
-              textTransform: 'none',
+              display: 'flex',
+              alignContent: 'center',
+              justifyContent: 'center',
             }}
           >
-            {file.name}
-          </Typography>
-          {onClose && (
-            <IconButton onClick={(evt) => onClose(evt, 'escapeKeyDown')}>
-              <CloseIcon />
-            </IconButton>
-          )}
-        </Stack>
-      </DialogTitle>
-      <Divider />
-      {actions && (
-        <Box sx={{ padding: 2.5 }}>
-          <Stack
-            direction='row'
-            spacing={1}
-            justifyContent='center'
-            flexGrow={1}
-          >
-            {actions}
-          </Stack>
-        </Box>
+            {previewContent}
+          </Box> */}
+        </ViewRecordDialog>
       )}
-      <Divider />
-      <Box
-        sx={(theme) => ({
-          backgroundColor: theme.palette.grey[300],
-          boxShadow: `${theme.shadows[1]} inset`,
-          padding: theme.spacing(3),
-          display: 'flex',
-          alignContent: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-        })}
-      >
-        {previewContent}
-      </Box>
-    </Dialog>
+    </>
   );
 };
 

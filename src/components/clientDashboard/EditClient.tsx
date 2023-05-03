@@ -43,11 +43,7 @@ const Profile = () => {
     <EditRecord<ClientFieldsFragment>
       formRole={FormRole.Client}
       record={client}
-      localConstants={{
-        clientId: client.id,
-        canViewFullSsn,
-        canViewDob,
-      }}
+      localConstants={{ canViewFullSsn, canViewDob }}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={

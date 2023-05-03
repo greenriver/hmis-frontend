@@ -33,7 +33,7 @@ const FileActions: React.FC<{
   onDone?: (file: FileFieldsFragment) => any;
   noDownload?: boolean;
 }> = ({ clientId, file, onDone = () => {}, noDownload }) => {
-  const { getActionsForFile, deleteFileDialog } = useFileActions({
+  const { getActionsForFile } = useFileActions({
     onDeleteFile: () => onDone(file),
   });
 
@@ -50,7 +50,6 @@ const FileActions: React.FC<{
         <>
           {editButton}
           {deleteButton}
-          {deleteFileDialog}
         </>
       )}
     </>
@@ -110,7 +109,7 @@ const AllFiles = () => {
       {
         header: 'Uploaded At',
         render: (file) =>
-          `${parseAndFormatDateTime(file.createdAt)}${
+          `${parseAndFormatDateTime(file.dateCreated)}${
             file.uploadedBy?.name ? ` by ${file.uploadedBy?.name}` : ''
           }`,
       },
