@@ -15,6 +15,7 @@ export type SimpleAccordionProps = {
     key: string;
     header?: React.ReactNode;
     content: React.ReactNode;
+    defaultExpanded?: boolean;
   }[];
   renderHeader?: (content: React.ReactNode) => React.ReactNode;
   renderContent?: (content: React.ReactNode) => React.ReactNode;
@@ -35,6 +36,7 @@ const SimpleAccordion: React.FC<SimpleAccordionProps> = ({
     <>
       {items.map((item) => (
         <Accordion
+          defaultExpanded={item.defaultExpanded}
           key={item.key}
           {...AccordionProps}
           sx={{

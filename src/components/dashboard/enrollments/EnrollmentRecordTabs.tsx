@@ -1,11 +1,12 @@
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { Box, Tab } from '@mui/material';
-import { useState } from 'react';
+import { useCallback } from 'react';
 
 import AssessmentsTable from './tabs/AssessmentsTable';
 import EventsTable from './tabs/EventsTable';
 import ServicesTable from './tabs/ServicesTable';
 
+import useHashNavigation from '@/hooks/useHashNavigation';
 import useSafeParams from '@/hooks/useSafeParams';
 import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
@@ -44,12 +45,16 @@ const EnrollmentRecordTabs = ({
     clientId: string;
     enrollmentId: string;
   };
-  const [currentTab, setCurrentTab] = useState<string>(tabs[0].label);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    event.preventDefault();
-    setCurrentTab(newValue);
-  };
+  const [currentTab, setCurrentTab] = useHashNavigation(tabs.map((t) => t.key));
+
+  const handleChange = useCallback(
+    (event: React.SyntheticEvent, newValue: string) => {
+      event.preventDefault();
+      setCurrentTab(newValue);
+    },
+    [setCurrentTab]
+  );
 
   return (
     <TabContext value={currentTab}>
@@ -61,11 +66,11 @@ const EnrollmentRecordTabs = ({
           textColor='secondary'
           variant='fullWidth'
         >
-          {tabs.map(({ label }) => (
+          {tabs.map(({ label, key }) => (
             <Tab
               label={label}
-              key={label}
-              value={label}
+              key={key}
+              value={key}
               sx={{
                 textTransform: 'capitalize',
                 fontWeight: currentTab === label ? 'bold' : undefined,
@@ -75,14 +80,14 @@ const EnrollmentRecordTabs = ({
         </TabList>
       </Box>
       {/* Render inactive tab panels too (as empty divs) for accessibility https://www.w3.org/WAI/ARIA/apg/patterns/tabpanel/#wai-aria-roles-states-and-properties-22 */}
-      {tabs.map(({ key, label, Component }) => (
+      {tabs.map(({ key, Component }) => (
         <TabPanel
-          value={label}
+          value={key}
           key={key}
           sx={{ pt: 1, pb: 0, mb: 0, px: 0, mx: 0, h5: { ml: 3 } }}
           data-testid={`panel-${key}`}
         >
-          {label === currentTab && Component && (
+          {key === currentTab && Component && (
             <Component
               clientId={clientId}
               enrollmentId={enrollmentId}

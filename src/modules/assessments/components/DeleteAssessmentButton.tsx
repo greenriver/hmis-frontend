@@ -1,11 +1,14 @@
+import { assessmentRole } from '../util';
+
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import { useHasClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import { useClientPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import { cache } from '@/providers/apolloClient';
 import {
   AssessmentFieldsFragment,
   DeleteAssessmentDocument,
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
+  FormRole,
 } from '@/types/gqlTypes';
 
 const DeleteAssessmentButton = ({
@@ -17,12 +20,14 @@ const DeleteAssessmentButton = ({
   clientId: string;
   onSuccess?: VoidFunction;
 }) => {
-  const [canEditEnrollments] = useHasClientPermissions(clientId, [
-    'canEditEnrollments',
-  ]);
-  if (!canEditEnrollments) return null;
+  const [{ canDeleteAssessments = false, canEditEnrollments = false } = {}] =
+    useClientPermissions(clientId);
 
-  // TODO: should require `canDeleteAssessments` to delete assessment if !assessment.inProgress
+  if (assessment.inProgress && !canEditEnrollments) return null;
+  if (!assessment.inProgress && !canDeleteAssessments) return null;
+  if (!assessment.inProgress && assessmentRole(assessment) === FormRole.Intake)
+    return null;
+
   return (
     <DeleteMutationButton<
       DeleteAssessmentMutation,

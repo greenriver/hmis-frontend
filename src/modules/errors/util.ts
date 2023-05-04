@@ -43,9 +43,9 @@ export const emptyErrorState: ErrorState = {
   warnings: [],
 };
 
-export const partitionValidations = (
+export const partitionValidations: (
   validations: ValidationError[]
-): ErrorState => {
+) => ErrorState = (validations: ValidationError[]): ErrorState => {
   const split = partition(validations, { severity: ValidationSeverity.Error });
   return {
     errors: split[0],
