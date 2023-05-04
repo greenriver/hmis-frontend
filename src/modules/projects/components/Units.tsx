@@ -6,12 +6,14 @@ import {
   DialogTitle,
   Paper,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 
+import { ColumnDef } from '@/components/elements/GenericTable';
 import PageTitle from '@/components/layout/PageTitle';
 import { evictUnitsQuery } from '@/modules/bedUnitManagement/bedUnitUtil';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   emptyErrorState,
@@ -26,6 +28,9 @@ import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   CreateUnitsInput,
+  DeleteUnitsDocument,
+  DeleteUnitsMutation,
+  DeleteUnitsMutationVariables,
   GetUnitsDocument,
   GetUnitsQuery,
   GetUnitsQueryVariables,
@@ -72,6 +77,40 @@ const Units = () => {
     [createUnits, project]
   );
 
+  const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
+    return [
+      // TODO: maybe add back live input from UnitsTable
+      { header: 'Name', render: 'name' },
+      {
+        header: 'Unit Type',
+        render: (unit) => unit.unitType?.description,
+      },
+      // FIXME: add inventory-specific perm
+      ...(project.access.canEditProjectDetails
+        ? [
+            {
+              key: 'delete',
+              width: '1%',
+              render: (unit: UnitFieldsFragment) => (
+                <DeleteMutationButton<
+                  DeleteUnitsMutation,
+                  DeleteUnitsMutationVariables
+                >
+                  variables={{ input: { unitIds: [unit.id] } }}
+                  idPath={'deleteUnits.unitIds[0]'}
+                  recordName='unit'
+                  queryDocument={DeleteUnitsDocument}
+                  ButtonProps={{ size: 'small' }}
+                  onSuccess={() => evictUnitsQuery(project.id)}
+                >
+                  Delete
+                </DeleteMutationButton>
+              ),
+            },
+          ]
+        : []),
+    ];
+  }, [project]);
   return (
     <>
       <PageTitle
@@ -103,13 +142,7 @@ const Units = () => {
           defaultPageSize={10}
           queryVariables={{ id: project.id }}
           queryDocument={GetUnitsDocument}
-          columns={[
-            { header: 'Name', render: 'name' },
-            {
-              header: 'Unit Type',
-              render: (unit) => unit.unitType?.description,
-            },
-          ]}
+          columns={columns}
           pagePath='project.units'
           noData='No units.'
         />
