@@ -7,7 +7,10 @@ import './index.css';
 import App from './App';
 
 if (import.meta.env.PUBLIC_SENTRY_DSN) {
-  Sentry.init({ dsn: import.meta.env.PUBLIC_SENTRY_DSN });
+  Sentry.init({
+    dsn: import.meta.env.PUBLIC_SENTRY_DSN,
+    environment: window.location.hostname,
+  });
 }
 
 window.gitCommitHash = import.meta.env.PUBLIC_GIT_COMMIT_HASH;

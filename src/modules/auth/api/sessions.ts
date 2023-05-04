@@ -124,7 +124,8 @@ export async function logout() {
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   storage.removeUser();
-  apolloClient.resetStore();
+  // Clear cache without re-fetching any queries
+  apolloClient.clearStore();
   return response;
 }
 

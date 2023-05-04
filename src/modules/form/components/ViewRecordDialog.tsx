@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Dialog,
+  DialogContent,
   DialogProps,
   DialogTitle,
   Divider,
@@ -37,7 +38,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
-    <Dialog maxWidth='md' scroll='body' fullWidth onClose={onClose} {...props}>
+    <Dialog maxWidth='md' scroll='paper' fullWidth onClose={onClose} {...props}>
       <DialogTitle>
         <Stack
           direction='row'
@@ -85,24 +86,25 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
           </Box>
         )}
       </Stack>
-
       <Divider />
-      <Box
-        sx={(theme) => ({
-          backgroundColor: theme.palette.grey[300],
-          boxShadow: `${theme.shadows[1]} inset`,
-          padding: 2,
-          display: 'flex',
-          alignContent: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          flexDirection: 'column',
-          gap: 2,
-        })}
-      >
-        <ViewRecord record={record} formRole={formRole} />
-        {children}
-      </Box>
+      <DialogContent>
+        <Box
+          sx={(theme) => ({
+            backgroundColor: theme.palette.grey[300],
+            boxShadow: `${theme.shadows[1]} inset`,
+            padding: 2,
+            display: 'flex',
+            alignContent: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            flexDirection: 'column',
+            gap: 2,
+          })}
+        >
+          <ViewRecord record={record} formRole={formRole} />
+          {children}
+        </Box>
+      </DialogContent>
     </Dialog>
   );
 };
