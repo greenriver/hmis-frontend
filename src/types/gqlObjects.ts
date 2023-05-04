@@ -209,44 +209,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
-    name: 'Bed',
-    fields: [
-      {
-        name: 'bedType',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'ENUM', name: 'InventoryBedType', ofType: null },
-        },
-      },
-      {
-        name: 'endDate',
-        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-      },
-      {
-        name: 'gender',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      { name: 'name', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      {
-        name: 'startDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-    ],
-  },
-  {
     name: 'CeAssessment',
     fields: [
       {
@@ -3132,11 +3094,19 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Unit',
     fields: [
       {
-        name: 'bedCount',
+        name: 'dateCreated',
         type: {
           kind: 'NON_NULL',
           name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
       {
@@ -3160,6 +3130,45 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
       },
+      { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
+    ],
+  },
+  {
+    name: 'UnitTypeObject',
+    fields: [
+      {
+        name: 'bedType',
+        type: { kind: 'ENUM', name: 'InventoryBedType', ofType: null },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'description',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'unitSize', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
     ],
   },
   {
