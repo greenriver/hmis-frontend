@@ -68,35 +68,26 @@ query GetInventory($id: ID!) {
   }
 }
 
-query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0, $active: Boolean) {
-  inventory(id: $id) {
+query GetUnits(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $active: Boolean
+  $occupied: Boolean
+) {
+  project(id: $id) {
     id
-    units(limit: $limit, offset: $offset, active: $active) {
+    units(
+      limit: $limit
+      offset: $offset
+      active: $active
+      occupied: $occupied
+    ) {
       offset
       limit
       nodesCount
       nodes {
         ...UnitFields
-      }
-    }
-  }
-}
-
-query GetBeds(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $bedType: InventoryBedType
-  $active: Boolean
-) {
-  inventory(id: $id) {
-    id
-    beds(limit: $limit, offset: $offset, bedType: $bedType, active: $active) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...BedFields
       }
     }
   }
@@ -186,23 +177,11 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
   }
 }
 
-mutation CreateBeds($input: CreateBedsInput!) {
-  createBeds(input: $input) {
-    clientMutationId
-    inventory {
-      ...InventoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation CreateUnits($input: CreateUnitsInput!) {
   createUnits(input: $input) {
     clientMutationId
-    inventory {
-      ...InventoryFields
+    units {
+      ...UnitFields
     }
     errors {
       ...ValidationErrorFields
@@ -213,21 +192,7 @@ mutation CreateUnits($input: CreateUnitsInput!) {
 mutation DeleteUnits($input: DeleteUnitsInput!) {
   deleteUnits(input: $input) {
     clientMutationId
-    inventory {
-      ...InventoryFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteBeds($input: DeleteBedsInput!) {
-  deleteBeds(input: $input) {
-    clientMutationId
-    inventory {
-      ...InventoryFields
-    }
+    unitIds
     errors {
       ...ValidationErrorFields
     }
@@ -239,18 +204,6 @@ mutation UpdateUnits($input: UpdateUnitsInput!) {
     clientMutationId
     units {
       ...UnitFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateBeds($input: UpdateBedsInput!) {
-  updateBeds(input: $input) {
-    clientMutationId
-    beds {
-      ...BedFields
     }
     errors {
       ...ValidationErrorFields

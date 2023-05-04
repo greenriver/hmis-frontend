@@ -36,25 +36,12 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
     skip: create,
   });
 
-  const onCompleted = useCallback(
-    (data: InventoryFieldsFragment) => {
-      if (create) {
-        cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
-
-        navigate(
-          generateSafePath(ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS, {
-            projectId,
-            inventoryId: data.id,
-          })
-        );
-      } else {
-        navigate(
-          generateSafePath(ProjectDashboardRoutes.INVENTORY, { projectId })
-        );
-      }
-    },
-    [navigate, projectId, create]
-  );
+  const onCompleted = useCallback(() => {
+    if (create) {
+      cache.evict({ id: `Project:${projectId}`, fieldName: 'inventories' });
+    }
+    navigate(generateSafePath(ProjectDashboardRoutes.INVENTORY, { projectId }));
+  }, [navigate, projectId, create]);
 
   // Local variables to use for form population.
   // These variables names are referenced by the form definition!
@@ -64,10 +51,8 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       projectStartDate: parseHmisDateString(project.operatingStartDate),
       projectEndDate: parseHmisDateString(project.operatingEndDate),
       inventoryId,
-      bedInventory: inventory?.bedInventory || 0,
-      unitInventory: inventory?.unitInventory || 0,
     };
-  }, [project, inventoryId, inventory]);
+  }, [project, inventoryId]);
 
   if (loading) return <Loading />;
   if (!create && !inventory) return <NotFound />;

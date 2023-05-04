@@ -91,6 +91,11 @@ const ProjectDashboard: React.FC = () => {
         type: 'category',
         items: [
           {
+            id: 'units',
+            title: 'Units',
+            path: generateSafePath(ProjectDashboardRoutes.UNITS, params),
+          },
+          {
             id: 'inventory',
             title: 'Inventory',
             path: generateSafePath(ProjectDashboardRoutes.INVENTORY, params),
