@@ -606,21 +606,28 @@ export const HmisEnums = {
   },
   PickListType: {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
-    AVAILABLE_UNITS: 'AVAILABLE_UNITS',
-    CLIENT_ENROLLMENTS: 'CLIENT_ENROLLMENTS',
+    AVAILABLE_UNITS: 'Unoccupied units in the specified project',
+    AVAILABLE_UNIT_TYPES:
+      'Unit types that have unoccupied units in the specified project',
+    CLIENT_ENROLLMENTS:
+      'All Enrollments, including WIP and exited, for the client.',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DESTINATION: 'DESTINATION',
+    ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     GEOCODE: 'GEOCODE',
-    ORGANIZATION: 'ORGANIZATION',
+    ORGANIZATION: 'All Organizations that the User can see',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
-    PROJECT: 'PROJECT',
+    PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    UNITS: 'Units in the specified project',
+    UNIT_TYPES:
+      'Unit types. If project is specified, limited to unit types in the project.',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',

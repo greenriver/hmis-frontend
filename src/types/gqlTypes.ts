@@ -2511,14 +2511,22 @@ export type PickListOption = {
 
 export enum PickListType {
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
+  /** Unoccupied units in the specified project */
   AvailableUnits = 'AVAILABLE_UNITS',
+  /** Unit types that have unoccupied units in the specified project */
+  AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
+  /** All Enrollments, including WIP and exited, for the client. */
   ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   Destination = 'DESTINATION',
+  /** Projects that the User can enroll Clients in */
+  EnrollableProjects = 'ENROLLABLE_PROJECTS',
   Geocode = 'GEOCODE',
+  /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
+  /** All Projects that the User can see */
   Project = 'PROJECT',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   ServiceType = 'SERVICE_TYPE',
@@ -2526,6 +2534,10 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
+  /** Units in the specified project */
+  Units = 'UNITS',
+  /** Unit types. If project is specified, limited to unit types in the project. */
+  UnitTypes = 'UNIT_TYPES',
 }
 
 /** 4.19.7 */
@@ -3456,6 +3468,7 @@ export type UnitInput = {
   /** Prefix for unit names */
   prefix?: InputMaybe<Scalars['String']>;
   projectId: Scalars['ID'];
+  unitTypeId?: InputMaybe<Scalars['ID']>;
 };
 
 export type UnitTypeObject = {

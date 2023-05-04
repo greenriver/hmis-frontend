@@ -71,7 +71,7 @@ const Units = () => {
       });
       input.projectId = project.id;
       if (!input.prefix) input.prefix = 'Unit';
-      console.log('submitting', input);
+      console.debug('submitting', input);
       createUnits({ variables: { input: { input } as CreateUnitsInput } });
     },
     [createUnits, project]
