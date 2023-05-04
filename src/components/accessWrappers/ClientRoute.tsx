@@ -1,19 +1,33 @@
-import { compact } from 'lodash-es';
+import { useMemo } from 'react';
 
 import Loading from '../elements/Loading';
 import NotFound from '../pages/NotFound';
 
-import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import useSafeParams from '@/hooks/useSafeParams';
+import {
+  useClientPermissions,
+  useRootPermissions,
+} from '@/modules/permissions/useHasPermissionsHooks';
 
 const ClientRoute: React.FC<
   React.PropsWithChildren<{ param?: string; view?: boolean; edit?: boolean }>
-> = ({ view = false, edit = false, children }) => {
-  const [allowed, { loading, data }] = useHasRootPermissions(
-    compact([view ? 'canViewClients' : null, edit ? 'canEditClients' : null])
-  );
+> = ({ view = false, edit = false, param = 'clientId', children }) => {
+  const { [param]: clientId } = useSafeParams();
 
-  if (loading) return <Loading />;
-  if (!data) {
+  const [clientPerms, clientStatus] = useClientPermissions(clientId || '');
+  const [rootPerms, rootStatus] = useRootPermissions();
+
+  const allowed = useMemo(() => {
+    if (!clientPerms || !rootPerms) return false;
+    const { canEditClient } = clientPerms;
+    const { canViewClients } = rootPerms;
+
+    if (view) return canViewClients;
+    if (edit) return canEditClient;
+  }, [clientPerms, rootPerms, view, edit]);
+
+  if (clientStatus.loading || rootStatus.loading) return <Loading />;
+  if (!(clientStatus.data && rootStatus.data)) {
     console.error('Error loading permissions');
     return <NotFound />;
   }

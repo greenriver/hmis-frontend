@@ -25,6 +25,8 @@ fragment RootPermissionsFragment on QueryAccess {
 
 fragment ClientAccessFields on ClientAccess {
   id
+  canEditClient
+  canDeleteClient
   canViewDob
   canViewFullSsn
   canViewPartialSsn
