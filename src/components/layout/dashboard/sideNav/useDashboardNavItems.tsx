@@ -50,6 +50,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                 },
               ]
             : []),
+          /*
           {
             id: 'services-and-contacts',
             title: 'Services and Contacts',
@@ -73,6 +74,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
             title: 'Notes',
             path: generateSafePath(ClientDashboardRoutes.NOTES, params),
           },
+          */
           ...(canViewFiles
             ? [
                 {
