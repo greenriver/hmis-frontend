@@ -8,11 +8,10 @@ import {
 } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
-import { useProjectDashboardContext } from './ProjectDashboard';
+import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import PageTitle from '@/components/layout/PageTitle';
-import { evictUnitsQuery } from '@/modules/bedUnitManagement/bedUnitUtil';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -26,6 +25,7 @@ import DynamicForm, {
 import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { evictUnitsQuery } from '@/modules/units/util';
 import {
   CreateUnitsInput,
   DeleteUnitsDocument,
@@ -41,10 +41,10 @@ import {
 const Units = () => {
   const { project } = useProjectDashboardContext();
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
-  const [dialogOpen, setDialogOpen] = useState<'BEDS' | 'UNITS' | null>(null);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
 
   const closeDialog = useCallback(() => {
-    setDialogOpen(null);
+    setDialogOpen(false);
     setErrors(emptyErrorState);
   }, []);
   const [createUnits, { loading: createUnitsLoading }] = useCreateUnitsMutation(
@@ -122,7 +122,7 @@ const Units = () => {
           >
             <Button
               data-testid='addInventoryButton'
-              onClick={() => setDialogOpen('UNITS')}
+              onClick={() => setDialogOpen(true)}
               startIcon={<AddIcon />}
               variant='outlined'
               color='secondary'
@@ -153,10 +153,10 @@ const Units = () => {
           sx={{ textTransform: 'none', mb: 2 }}
           color='text.primary'
         >
-          {dialogOpen === 'BEDS' ? 'Create Beds' : 'Create Units'}
+          Create Units
         </DialogTitle>
         <DialogContent sx={{}}>
-          {dialogOpen === 'UNITS' && (
+          {dialogOpen && (
             <DynamicForm
               definition={UnitsDefinition}
               FormActionProps={{

@@ -56,7 +56,7 @@ import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
-import Units from '@/modules/projects/components/Units';
+import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
