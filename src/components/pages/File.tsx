@@ -49,7 +49,6 @@ const File = ({ create = false }: { create?: boolean }) => {
       formRole={FormRole.File}
       onCompleted={onCompleted}
       record={data?.file || undefined}
-      localConstants={{ fileId: data?.file?.id }}
       inputVariables={{ clientId }}
       FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}
       pickListRelationId={clientId}

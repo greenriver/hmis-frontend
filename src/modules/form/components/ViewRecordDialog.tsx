@@ -20,6 +20,7 @@ interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
   formRole: FormRole;
   actions?: ReactNode;
+  children?: ReactNode;
 }
 
 type AllowedTypes = NonNullable<
@@ -32,6 +33,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   formRole,
   onClose,
   title,
+  children,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -94,9 +96,12 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
           alignContent: 'center',
           justifyContent: 'center',
           overflow: 'hidden',
+          flexDirection: 'column',
+          gap: 2,
         })}
       >
         <ViewRecord record={record} formRole={formRole} />
+        {children}
       </Box>
     </Dialog>
   );
