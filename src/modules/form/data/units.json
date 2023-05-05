@@ -1,6 +1,14 @@
 {
   "item": [
     {
+      "type": "CHOICE",
+      "linkId": "type",
+      "required": false,
+      "text": "Unit Type",
+      "fieldName": "unitTypeId",
+      "pickListReference": "UNIT_TYPES"
+    },
+    {
       "type": "INTEGER",
       "linkId": "unit",
       "required": true,
