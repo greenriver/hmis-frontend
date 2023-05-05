@@ -1,5 +1,5 @@
-import DownloadIcon from '@mui/icons-material/Download';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import PrintIcon from '@mui/icons-material/Print';
+import { Box, Stack, Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import { Ref, useEffect, useMemo, useState } from 'react';
 
@@ -14,8 +14,10 @@ import {
   HOUSEHOLD_ASSESSMENTS_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
+import PrintViewButton from '@/components/layout/PrintViewButton';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
+import useIsPrintView from '@/hooks/useIsPrintView';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
 import { useAssessment } from '@/modules/assessments/components/useAssessment';
@@ -69,6 +71,8 @@ const IndividualAssessment = ({
   formRef,
 }: IndividualAssessmentProps) => {
   const { overrideBreadcrumbTitles } = useClientDashboardContext();
+
+  const isPrintView = useIsPrintView();
 
   // Fetch the enrollment, which may be different from the current context enrollment if this assessment is part of a workflow.
   const { enrollment, loading: enrollmentLoading } =
@@ -156,14 +160,14 @@ const IndividualAssessment = ({
           assessmentTitle={assessmentTitle}
           clientName={clientName || undefined}
           actions={
-            readOnly ? (
-              <Button
+            !isPrintView && readOnly ? (
+              <PrintViewButton
                 color='secondary'
                 variant='outlined'
-                startIcon={<DownloadIcon />}
+                startIcon={<PrintIcon />}
               >
-                Download PDF
-              </Button>
+                Print Assessment
+              </PrintViewButton>
             ) : undefined
           }
         />

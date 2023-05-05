@@ -98,3 +98,5 @@ export const FOCUS_MODE_ROUTES = [
     previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
 ];
+
+export const PRINTABLE_ROUTES = [ClientDashboardRoutes.VIEW_ASSESSMENT];
