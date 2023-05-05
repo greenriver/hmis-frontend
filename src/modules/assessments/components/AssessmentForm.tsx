@@ -14,7 +14,6 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/NotFound';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -171,11 +170,8 @@ const AssessmentForm = ({
 
   usePrintTrigger({
     startReady: isPrintView,
-    hold: !enrollment,
     timeout: 3000,
   });
-
-  if (!enrollment) return <NotFound />;
 
   const navigation = (
     <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
