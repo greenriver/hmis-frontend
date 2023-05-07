@@ -19,13 +19,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A base64 encoded string */
   Base64: string;
-  /** An ISO 8601-encoded date */
   ISO8601Date: string;
-  /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
-  /** Arbitrary JSON Type */
   JsonObject: any;
 };
 
@@ -9244,7 +9240,16 @@ export type SubmitFormMutation = {
           zip?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
-      | { __typename?: 'ReferralRequest' }
+      | {
+          __typename?: 'ReferralRequest';
+          id: string;
+          requestedDate: string;
+          unitType: string;
+          estimatedDateNeeded: string;
+          requestorName: string;
+          requestorPhone: string;
+          requestorEmailAddress: string;
+        }
       | {
           __typename?: 'Service';
           id: string;
@@ -10061,6 +10066,36 @@ export type GetProjectInventoriesQuery = {
   } | null;
 };
 
+export type GetProjectReferralRequestsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectReferralRequestsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    referralRequests: {
+      __typename?: 'ReferralRequestsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ReferralRequest';
+        id: string;
+        requestedDate: string;
+        unitType: string;
+        estimatedDateNeeded: string;
+        requestorName: string;
+        requestorPhone: string;
+        requestorEmailAddress: string;
+      }>;
+    };
+  } | null;
+};
+
 export type GetProjectProjectCocsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -10328,6 +10363,17 @@ export type UpdateUnitsMutation = {
       data?: any | null;
     }>;
   } | null;
+};
+
+export type ReferralRequestFieldsFragment = {
+  __typename?: 'ReferralRequest';
+  id: string;
+  requestedDate: string;
+  unitType: string;
+  estimatedDateNeeded: string;
+  requestorName: string;
+  requestorPhone: string;
+  requestorEmailAddress: string;
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -11252,6 +11298,17 @@ export const FunderFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ReferralRequestFieldsFragmentDoc = gql`
+  fragment ReferralRequestFields on ReferralRequest {
+    id
+    requestedDate
+    unitType
+    estimatedDateNeeded
+    requestorName
+    requestorPhone
+    requestorEmailAddress
+  }
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -13808,6 +13865,9 @@ export const SubmitFormDocument = gql`
         ... on Inventory {
           ...InventoryFields
         }
+        ... on ReferralRequest {
+          ...ReferralRequestFields
+        }
         ... on Service {
           ...ServiceFields
         }
@@ -13826,6 +13886,7 @@ export const SubmitFormDocument = gql`
   ${FunderFieldsFragmentDoc}
   ${ProjectCocFieldsFragmentDoc}
   ${InventoryFieldsFragmentDoc}
+  ${ReferralRequestFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
@@ -15088,6 +15149,79 @@ export type GetProjectInventoriesLazyQueryHookResult = ReturnType<
 export type GetProjectInventoriesQueryResult = Apollo.QueryResult<
   GetProjectInventoriesQuery,
   GetProjectInventoriesQueryVariables
+>;
+export const GetProjectReferralRequestsDocument = gql`
+  query GetProjectReferralRequests(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      referralRequests(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ReferralRequestFields
+        }
+      }
+    }
+  }
+  ${ReferralRequestFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectReferralRequestsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectReferralRequestsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectReferralRequestsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectReferralRequestsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectReferralRequestsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectReferralRequestsQuery,
+    GetProjectReferralRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectReferralRequestsQuery,
+    GetProjectReferralRequestsQueryVariables
+  >(GetProjectReferralRequestsDocument, options);
+}
+export function useGetProjectReferralRequestsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectReferralRequestsQuery,
+    GetProjectReferralRequestsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectReferralRequestsQuery,
+    GetProjectReferralRequestsQueryVariables
+  >(GetProjectReferralRequestsDocument, options);
+}
+export type GetProjectReferralRequestsQueryHookResult = ReturnType<
+  typeof useGetProjectReferralRequestsQuery
+>;
+export type GetProjectReferralRequestsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectReferralRequestsLazyQuery
+>;
+export type GetProjectReferralRequestsQueryResult = Apollo.QueryResult<
+  GetProjectReferralRequestsQuery,
+  GetProjectReferralRequestsQueryVariables
 >;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {

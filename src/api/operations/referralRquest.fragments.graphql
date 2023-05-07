@@ -1,0 +1,9 @@
+fragment ReferralRequestFields on ReferralRequest {
+  id
+  requestedDate
+  unitType
+  estimatedDateNeeded
+  requestorName
+  requestorPhone
+  requestorEmailAddress
+}
