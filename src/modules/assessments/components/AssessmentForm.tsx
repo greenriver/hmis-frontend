@@ -170,7 +170,8 @@ const AssessmentForm = ({
 
   usePrintTrigger({
     startReady: isPrintView,
-    timeout: 3000,
+    hold: !assessment || !definition,
+    timeout: 1000,
   });
 
   const navigation = (

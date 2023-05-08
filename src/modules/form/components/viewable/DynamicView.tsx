@@ -1,11 +1,7 @@
 import { Grid } from '@mui/material';
-import { useMemo } from 'react';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
-import usePreloadPicklists from '../../hooks/usePreloadPicklists';
-import { getItemMap } from '../../util/formUtil';
 
-import Loading from '@/components/elements/Loading';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
@@ -28,14 +24,6 @@ const DynamicView = ({
     initialValues: values,
     viewOnly: true,
   });
-
-  const itemMap = useMemo(() => getItemMap(definition, true), [definition]);
-  const { loading: pickListsLoading } = usePreloadPicklists(
-    itemMap,
-    pickListRelationId
-  );
-
-  if (pickListsLoading) return <Loading />;
 
   return (
     <Grid container direction='column' spacing={2}>

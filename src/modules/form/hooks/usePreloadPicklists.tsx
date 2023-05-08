@@ -1,4 +1,4 @@
-import { useApolloClient, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { compact, isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -14,12 +14,11 @@ const usePreloadPicklists = (
   itemMap: ItemMap | undefined,
   relationId?: string
 ) => {
-  const [doQuery] = useLazyQuery(GetPickListDocument);
-  const [loading, setLoading] = useState(false);
+  const [fetchPickList] = useLazyQuery(GetPickListDocument);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
-  const client = useApolloClient();
 
-  const pickListTypes = useMemo(
+  const pickListTypesToFetch = useMemo(
     () =>
       compact(
         Object.values(itemMap || {})
@@ -28,26 +27,22 @@ const usePreloadPicklists = (
             const isValid =
               reference &&
               Object.values<string>(PickListType).includes(reference);
-            const isFetched = client.readQuery({
-              query: GetPickListDocument,
-              variables: { relationId, pickListType: reference },
-            });
 
-            if (isValid && !isFetched) return true;
+            if (isValid) return true;
 
             return false;
           })
       ),
-    [itemMap, client, relationId]
+    [itemMap]
   );
 
   const fetch = useCallback(() => {
-    if (isEmpty(pickListTypes)) return;
+    if (isEmpty(pickListTypesToFetch)) return;
 
     setLoading(true);
     Promise.all(
-      pickListTypes.map((pickListType) =>
-        doQuery({ variables: { relationId, pickListType } })
+      pickListTypesToFetch.map((pickListType) =>
+        fetchPickList({ variables: { relationId, pickListType } })
       )
     )
       .then((results) => {
@@ -59,7 +54,7 @@ const usePreloadPicklists = (
       })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [doQuery, pickListTypes, relationId]);
+  }, [fetchPickList, pickListTypesToFetch, relationId]);
 
   useEffect(() => {
     fetch();
