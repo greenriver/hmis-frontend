@@ -116,7 +116,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     item,
     pickListRelationId,
     {
-      fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
       onCompleted: (data) => {
         const newValue = getValueFromPickListData({
           item,

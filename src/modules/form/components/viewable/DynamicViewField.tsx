@@ -48,7 +48,6 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   const label = noLabel ? null : getLabel(item, horizontal);
 
   const [, pickListLoading] = usePickList(item, pickListRelationId, {
-    fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
     onCompleted: (data) => {
       const newValue = getValueFromPickListData({
         item,
