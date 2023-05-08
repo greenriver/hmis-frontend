@@ -177,7 +177,7 @@ const AssessmentForm = ({
   );
   usePrintTrigger({
     startReady: isPrintView,
-    hold: !assessment || !definition || pickListsLoading,
+    hold: pickListsLoading,
   });
 
   const navigation = (
