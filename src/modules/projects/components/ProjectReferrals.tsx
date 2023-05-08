@@ -1,4 +1,5 @@
 import { useProjectDashboardContext } from './ProjectDashboard';
+import ProjectReferralRequestsTable from './tables/ProjectsReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -23,6 +24,7 @@ const ProjectReferrals = () => {
       )}
       {/* TODO: Render a GenericTableWithData for ReferralRequests */}
       {/* TODO: Render a GenericTableWithData for Referrals */}
+      <ProjectReferralRequestsTable projectId={project.id} />
     </>
   );
 };
