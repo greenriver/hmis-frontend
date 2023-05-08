@@ -25,9 +25,11 @@ import DynamicForm, {
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
   createInitialValuesFromSavedValues,
   getInitialValues,
+  getItemMap,
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -168,10 +170,14 @@ const AssessmentForm = ({
 
   const canEdit = enrollment?.access.canEditEnrollments;
 
+  // Manually preload picklists here so we can prevent printing until they're fetched
+  const { loading: pickListsLoading } = usePreloadPicklists(
+    getItemMap(definition.definition),
+    enrollment?.project?.id
+  );
   usePrintTrigger({
     startReady: isPrintView,
-    hold: !assessment || !definition,
-    timeout: 1000,
+    hold: !assessment || !definition || pickListsLoading,
   });
 
   const navigation = (

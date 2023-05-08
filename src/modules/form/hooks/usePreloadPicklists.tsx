@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ItemMap } from '../types';
 
+import useStabilizedValue from '@/hooks/useStabilizedValue';
 import {
   GetPickListDocument,
   PickListOptionFieldsFragment,
@@ -17,11 +18,13 @@ const usePreloadPicklists = (
   const [fetchPickList] = useLazyQuery(GetPickListDocument);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
+  // Stabilize the value in case we're not careful about reference equality on the input
+  const stabilizedItemMap = useStabilizedValue(itemMap);
 
   const pickListTypesToFetch = useMemo(
     () =>
       compact(
-        Object.values(itemMap || {})
+        Object.values(stabilizedItemMap || {})
           .map((item) => (item.hidden ? null : item.pickListReference))
           .filter((reference) => {
             const isValid =
@@ -33,11 +36,14 @@ const usePreloadPicklists = (
             return false;
           })
       ),
-    [itemMap]
+    [stabilizedItemMap]
   );
 
   const fetch = useCallback(() => {
-    if (isEmpty(pickListTypesToFetch)) return;
+    if (isEmpty(pickListTypesToFetch)) {
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
     Promise.all(
