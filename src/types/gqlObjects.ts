@@ -3025,14 +3025,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ReferralRequest',
     fields: [
       {
-        name: 'estimatedDateNeeded',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -3041,7 +3033,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'requestedDate',
+        name: 'neededBy',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -3049,7 +3041,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'requestorEmailAddress',
+        name: 'requestedOn',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'requestorEmail',
         type: {
           kind: 'NON_NULL',
           name: null,

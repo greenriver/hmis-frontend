@@ -19,9 +19,13 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A base64 encoded string */
   Base64: string;
+  /** An ISO 8601-encoded date */
   ISO8601Date: string;
+  /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
+  /** Arbitrary JSON Type */
   JsonObject: any;
 };
 
@@ -2929,10 +2933,10 @@ export enum RecordType {
 
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
-  estimatedDateNeeded: Scalars['String'];
   id: Scalars['ID'];
-  requestedDate: Scalars['String'];
-  requestorEmailAddress: Scalars['String'];
+  neededBy: Scalars['String'];
+  requestedOn: Scalars['String'];
+  requestorEmail: Scalars['String'];
   requestorName: Scalars['String'];
   requestorPhone: Scalars['String'];
   unitType: Scalars['ID'];
@@ -9243,12 +9247,12 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'ReferralRequest';
           id: string;
-          requestedDate: string;
+          requestedOn: string;
           unitType: string;
-          estimatedDateNeeded: string;
+          neededBy: string;
           requestorName: string;
           requestorPhone: string;
-          requestorEmailAddress: string;
+          requestorEmail: string;
         }
       | {
           __typename?: 'Service';
@@ -10085,12 +10089,12 @@ export type GetProjectReferralRequestsQuery = {
       nodes: Array<{
         __typename?: 'ReferralRequest';
         id: string;
-        requestedDate: string;
+        requestedOn: string;
         unitType: string;
-        estimatedDateNeeded: string;
+        neededBy: string;
         requestorName: string;
         requestorPhone: string;
-        requestorEmailAddress: string;
+        requestorEmail: string;
       }>;
     };
   } | null;
@@ -10368,12 +10372,12 @@ export type UpdateUnitsMutation = {
 export type ReferralRequestFieldsFragment = {
   __typename?: 'ReferralRequest';
   id: string;
-  requestedDate: string;
+  requestedOn: string;
   unitType: string;
-  estimatedDateNeeded: string;
+  neededBy: string;
   requestorName: string;
   requestorPhone: string;
-  requestorEmailAddress: string;
+  requestorEmail: string;
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -11302,12 +11306,12 @@ export const FunderFieldsFragmentDoc = gql`
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
     id
-    requestedDate
+    requestedOn
     unitType
-    estimatedDateNeeded
+    neededBy
     requestorName
     requestorPhone
-    requestorEmailAddress
+    requestorEmail
   }
 `;
 export const GetRootPermissionsDocument = gql`

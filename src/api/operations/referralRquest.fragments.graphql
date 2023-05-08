@@ -1,9 +1,9 @@
 fragment ReferralRequestFields on ReferralRequest {
   id
-  requestedDate
+  requestedOn
   unitType
-  estimatedDateNeeded
+  neededBy
   requestorName
   requestorPhone
-  requestorEmailAddress
+  requestorEmail
 }
