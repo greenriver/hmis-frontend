@@ -26,6 +26,11 @@ const ClientRoute: React.FC<
     if (edit) return canEditClient;
   }, [clientPerms, rootPerms, view, edit]);
 
+  if (!clientId) {
+    console.error('Loaded ClientRoute without a clientId');
+    return <NotFound />;
+  }
+
   if (clientStatus.loading || rootStatus.loading) return <Loading />;
   if (!(clientStatus.data && rootStatus.data)) {
     console.error('Error loading permissions');
