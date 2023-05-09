@@ -10,7 +10,7 @@ import {
 
 const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
   {
-    header: 'Date needed',
+    header: 'Date Needed',
     render: (row: ReferralRequestFieldsFragment) =>
       parseAndFormatDateRange(row.neededBy),
   },
@@ -30,7 +30,8 @@ const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
   },
   {
     header: 'requested on',
-    render: 'requestedOn',
+    render: (row: ReferralRequestFieldsFragment) =>
+      parseAndFormatDateRange(row.requestedOn),
   },
 ];
 

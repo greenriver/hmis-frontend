@@ -22,7 +22,6 @@ const ProjectReferrals = () => {
           Request a Referral
         </ButtonLink>
       )}
-      {/* TODO: Render a GenericTableWithData for ReferralRequests */}
       {/* TODO: Render a GenericTableWithData for Referrals */}
       <ProjectReferralRequestsTable projectId={project.id} />
     </>

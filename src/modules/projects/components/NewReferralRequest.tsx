@@ -19,10 +19,10 @@ const NewReferralRequest: React.FC = () => {
 
   const onCompleted = useCallback(() => {
     cache.evict({
-      id: `ReferralRequest:${projectId}`,
+      id: `Project:${projectId}`,
       fieldName: 'referralRequests',
     });
-    navigate(generateSafePath(ProjectDashboardRoutes.OVERVIEW, { projectId }));
+    navigate(generateSafePath(ProjectDashboardRoutes.REFERRALS, { projectId }));
   }, [navigate, projectId]);
 
   return (
