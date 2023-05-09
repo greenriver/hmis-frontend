@@ -2506,6 +2506,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'hudId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -2644,6 +2652,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'housingType',
         type: { kind: 'ENUM', name: 'HousingType', ofType: null },
+      },
+      {
+        name: 'hudId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'id',

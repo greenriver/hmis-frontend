@@ -5,6 +5,7 @@ fragment OrganizationNameFields on Organization {
 
 fragment OrganizationDetailFields on Organization {
   id
+  hudId
   description
   contactInformation
   victimServiceProvider

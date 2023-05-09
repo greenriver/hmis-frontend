@@ -31,6 +31,11 @@ import {
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
+const MAX_RECENT_ITEMS = 6;
+const MAX_CLIENT_RESULTS = 6;
+const MAX_PROJECT_RESULTS = 6;
+const MIN_CHAR_LENGTH_FOR_SEE_MORE = 3;
+
 const OmniSearch: React.FC = () => {
   const [value, setValue] = useState<string | null>('');
   const navigate = useNavigate();
@@ -55,10 +60,12 @@ const OmniSearch: React.FC = () => {
 
   const optionsBase = useMemo(() => {
     const allClients = clientsData?.clientOmniSearch?.nodes || [];
-    const projects = projectsData?.projects?.nodes?.slice(0, 4) || [];
+    const projects =
+      projectsData?.projects?.nodes?.slice(0, MAX_PROJECT_RESULTS) || [];
     const recentItems =
-      recentItemsData?.currentUser?.recentItems?.slice(0, 2) || [];
-    const clients = allClients.slice(0, 4);
+      recentItemsData?.currentUser?.recentItems?.slice(0, MAX_RECENT_ITEMS) ||
+      [];
+    const clients = allClients.slice(0, MAX_CLIENT_RESULTS);
 
     const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
       id: 'seeMore',
@@ -70,7 +77,8 @@ const OmniSearch: React.FC = () => {
         (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
       ),
       clients,
-      seeMoreOptions: allClients.length > 4 ? [seeMoreOption] : [],
+      seeMoreOptions:
+        allClients.length > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
       projects,
     };
   }, [clientsData, projectsData, recentItemsData]);
@@ -80,7 +88,9 @@ const OmniSearch: React.FC = () => {
     return [
       ...(value ? [] : recentItems),
       ...clients,
-      ...(value && value.length > 2 ? seeMoreOptions : []),
+      ...(value && value.length >= MIN_CHAR_LENGTH_FOR_SEE_MORE
+        ? seeMoreOptions
+        : []),
       ...projects,
     ];
   }, [optionsBase, value]);

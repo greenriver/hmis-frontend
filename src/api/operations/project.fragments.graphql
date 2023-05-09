@@ -12,6 +12,7 @@ fragment ProjectOperatingPeriod on Project {
 
 fragment ProjectAllFields on Project {
   id
+  hudId
   ...ProjectNameAndType
   ...ProjectOperatingPeriod
   description
