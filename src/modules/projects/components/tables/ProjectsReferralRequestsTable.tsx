@@ -16,7 +16,7 @@ const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
   },
   {
     header: 'Unit Type',
-    render: (row: ReferralRequestFieldsFragment) => row.unitType,
+    render: (row: ReferralRequestFieldsFragment) => row.unitType.description,
   },
   {
     header: 'Requestor',

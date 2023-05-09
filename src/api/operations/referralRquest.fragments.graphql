@@ -1,7 +1,9 @@
 fragment ReferralRequestFields on ReferralRequest {
   id
   requestedOn
-  unitType
+  unitType {
+    ...UnitTypeFields
+  }
   neededBy
   requestorName
   requestorPhone

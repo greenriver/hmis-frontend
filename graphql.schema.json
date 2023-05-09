@@ -19373,8 +19373,8 @@
               "kind": "NON_NULL",
               "name": null,
               "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
+                "kind": "OBJECT",
+                "name": "UnitTypeObject",
                 "ofType": null
               }
             },

@@ -2939,7 +2939,7 @@ export type ReferralRequest = {
   requestorEmail: Scalars['String'];
   requestorName: Scalars['String'];
   requestorPhone: Scalars['String'];
-  unitType: Scalars['ID'];
+  unitType: UnitTypeObject;
 };
 
 export type ReferralRequestsPaginated = {
@@ -9248,11 +9248,19 @@ export type SubmitFormMutation = {
           __typename?: 'ReferralRequest';
           id: string;
           requestedOn: string;
-          unitType: string;
           neededBy: string;
           requestorName: string;
           requestorPhone: string;
           requestorEmail: string;
+          unitType: {
+            __typename?: 'UnitTypeObject';
+            id: string;
+            description?: string | null;
+            bedType?: InventoryBedType | null;
+            unitSize?: number | null;
+            dateUpdated: string;
+            dateCreated: string;
+          };
         }
       | {
           __typename?: 'Service';
@@ -10090,11 +10098,19 @@ export type GetProjectReferralRequestsQuery = {
         __typename?: 'ReferralRequest';
         id: string;
         requestedOn: string;
-        unitType: string;
         neededBy: string;
         requestorName: string;
         requestorPhone: string;
         requestorEmail: string;
+        unitType: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+          bedType?: InventoryBedType | null;
+          unitSize?: number | null;
+          dateUpdated: string;
+          dateCreated: string;
+        };
       }>;
     };
   } | null;
@@ -10373,11 +10389,19 @@ export type ReferralRequestFieldsFragment = {
   __typename?: 'ReferralRequest';
   id: string;
   requestedOn: string;
-  unitType: string;
   neededBy: string;
   requestorName: string;
   requestorPhone: string;
   requestorEmail: string;
+  unitType: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+    bedType?: InventoryBedType | null;
+    unitSize?: number | null;
+    dateUpdated: string;
+    dateCreated: string;
+  };
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -11307,12 +11331,15 @@ export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
     id
     requestedOn
-    unitType
+    unitType {
+      ...UnitTypeFields
+    }
     neededBy
     requestorName
     requestorPhone
     requestorEmail
   }
+  ${UnitTypeFieldsFragmentDoc}
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
