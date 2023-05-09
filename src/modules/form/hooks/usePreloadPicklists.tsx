@@ -1,42 +1,42 @@
-import { useLazyQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { compact, isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ItemMap } from '../types';
+import { getItemMap } from '../util/formUtil';
 
-import useStabilizedValue from '@/hooks/useStabilizedValue';
 import {
+  FormDefinitionJson,
   GetPickListDocument,
   PickListOptionFieldsFragment,
   PickListType,
 } from '@/types/gqlTypes';
 
 const usePreloadPicklists = (
-  itemMap: ItemMap | undefined,
+  definition: FormDefinitionJson | undefined,
   relationId?: string
 ) => {
-  const [fetchPickList] = useLazyQuery(GetPickListDocument);
+  const client = useApolloClient();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
-  // Stabilize the value in case we're not careful about reference equality on the input
-  const stabilizedItemMap = useStabilizedValue(itemMap);
+
+  const itemMap: ItemMap = useMemo(
+    () => (definition ? getItemMap(definition) : {}),
+    [definition]
+  );
 
   const pickListTypesToFetch = useMemo(
     () =>
       compact(
-        Object.values(stabilizedItemMap || {})
-          .map((item) => (item.hidden ? null : item.pickListReference))
-          .filter((reference) => {
-            const isValid =
+        Object.values(itemMap || {})
+          .map((item) => item.pickListReference)
+          .filter(
+            (reference) =>
               reference &&
-              Object.values<string>(PickListType).includes(reference);
-
-            if (isValid) return true;
-
-            return false;
-          })
+              Object.values<string>(PickListType).includes(reference)
+          )
       ),
-    [stabilizedItemMap]
+    [itemMap]
   );
 
   const fetch = useCallback(() => {
@@ -48,7 +48,11 @@ const usePreloadPicklists = (
     setLoading(true);
     Promise.all(
       pickListTypesToFetch.map((pickListType) =>
-        fetchPickList({ variables: { relationId, pickListType } })
+        client.query({
+          query: GetPickListDocument,
+          variables: { relationId, pickListType },
+          fetchPolicy: 'network-only',
+        })
       )
     )
       .then((results) => {
@@ -60,7 +64,7 @@ const usePreloadPicklists = (
       })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [fetchPickList, pickListTypesToFetch, relationId]);
+  }, [pickListTypesToFetch, relationId, client]);
 
   useEffect(() => {
     fetch();

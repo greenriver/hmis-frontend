@@ -56,7 +56,8 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         data,
         setInitial: false,
       });
-      if (newValue) adjustValue(newValue);
+      // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
+      if (newValue) setTimeout(() => adjustValue(newValue));
     },
   });
 

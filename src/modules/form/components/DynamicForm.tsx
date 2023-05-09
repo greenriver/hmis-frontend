@@ -6,7 +6,6 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
-  useMemo,
   useState,
 } from 'react';
 
@@ -14,7 +13,6 @@ import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
 import usePreloadPicklists from '../hooks/usePreloadPicklists';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
-import { getItemMap } from '../util/formUtil';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
@@ -94,9 +92,8 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
     });
-    const itemMap = useMemo(() => getItemMap(definition, true), [definition]);
     const { loading: pickListsLoading } = usePreloadPicklists(
-      itemMap,
+      definition,
       pickListRelationId
     );
 
