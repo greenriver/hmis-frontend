@@ -220,9 +220,9 @@ export const protectedRoutes = [
       {
         path: Routes.CREATE_CLIENT,
         element: (
-          <ClientRoute edit>
+          <RootPermissionsFilter permissions='canEditClients'>
             <CreateClient />
-          </ClientRoute>
+          </RootPermissionsFilter>
         ),
       },
       {
