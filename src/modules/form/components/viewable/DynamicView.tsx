@@ -1,7 +1,9 @@
 import { Grid } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
+import usePreloadPicklists from '../../hooks/usePreloadPicklists';
 
+import Loading from '@/components/elements/Loading';
 import { FormDefinitionJson } from '@/types/gqlTypes';
 
 export interface DynamicViewProps {
@@ -24,6 +26,13 @@ const DynamicView = ({
     initialValues: values,
     viewOnly: true,
   });
+
+  const { loading: pickListsLoading } = usePreloadPicklists(
+    definition,
+    pickListRelationId
+  );
+
+  if (pickListsLoading) return <Loading />;
 
   return (
     <Grid container direction='column' spacing={2}>

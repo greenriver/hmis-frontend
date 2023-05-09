@@ -116,7 +116,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     item,
     pickListRelationId,
     {
-      fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
       onCompleted: (data) => {
         const newValue = getValueFromPickListData({
           item,
@@ -124,7 +123,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           linkId: item.linkId,
           data,
         });
-        if (newValue) itemChanged(newValue);
+        // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
+        if (newValue) setTimeout(() => itemChanged(newValue));
       },
     }
   );
