@@ -12,6 +12,7 @@ import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
 export interface ViewRecordProps<RecordType> {
   record: RecordType;
   formRole: FormRole;
+  pickListRelationId?: string;
 }
 
 type AllowedTypes = NonNullable<
@@ -25,6 +26,7 @@ type AllowedTypes = NonNullable<
 const ViewRecord = <RecordType extends AllowedTypes>({
   record,
   formRole,
+  pickListRelationId,
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition(formRole);
 
@@ -39,7 +41,13 @@ const ViewRecord = <RecordType extends AllowedTypes>({
   if (loading) return <Loading />;
   if (!formDefinition || !itemMap) return <NotFound />;
 
-  return <DynamicView values={values} definition={formDefinition.definition} />;
+  return (
+    <DynamicView
+      values={values}
+      definition={formDefinition.definition}
+      pickListRelationId={pickListRelationId}
+    />
+  );
 };
 
 export default ViewRecord;
