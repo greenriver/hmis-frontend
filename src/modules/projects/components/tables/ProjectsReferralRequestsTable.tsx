@@ -1,6 +1,6 @@
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   GetProjectReferralRequestsDocument,
   GetProjectReferralRequestsQuery,
@@ -10,16 +10,21 @@ import {
 
 const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
   {
-    header: 'Date Needed',
+    header: 'Requested Date',
     render: (row: ReferralRequestFieldsFragment) =>
-      parseAndFormatDateRange(row.neededBy),
+      parseAndFormatDate(row.requestedOn),
   },
   {
     header: 'Unit Type',
     render: (row: ReferralRequestFieldsFragment) => row.unitType.description,
   },
   {
-    header: 'Requestor',
+    header: 'Estimated Date Needed',
+    render: (row: ReferralRequestFieldsFragment) =>
+      parseAndFormatDate(row.neededBy),
+  },
+  {
+    header: 'Requestor Details',
     render: (row: ReferralRequestFieldsFragment) => (
       <>
         {`${row.requestorName} <${row.requestorEmail}>`}
@@ -27,11 +32,6 @@ const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
         {row.requestorPhone}
       </>
     ),
-  },
-  {
-    header: 'requested on',
-    render: (row: ReferralRequestFieldsFragment) =>
-      parseAndFormatDateRange(row.requestedOn),
   },
 ];
 
