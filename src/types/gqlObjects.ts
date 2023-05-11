@@ -2751,6 +2751,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canEnrollClients',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canManageDeniedReferrals',
         type: {
           kind: 'NON_NULL',
@@ -2981,6 +2989,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'canEditProjectDetails',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEnrollClients',
         type: {
           kind: 'NON_NULL',
           name: null,

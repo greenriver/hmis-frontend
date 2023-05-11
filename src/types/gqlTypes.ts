@@ -2630,6 +2630,7 @@ export type ProjectAccess = {
   canDeleteProject: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
+  canEnrollClients: Scalars['Boolean'];
   canManageDeniedReferrals: Scalars['Boolean'];
   canManageIncomingReferrals: Scalars['Boolean'];
   canManageInventory: Scalars['Boolean'];
@@ -2847,6 +2848,7 @@ export type QueryAccess = {
   canEditEnrollments: Scalars['Boolean'];
   canEditOrganization: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
+  canEnrollClients: Scalars['Boolean'];
   canManageAnyClientFiles: Scalars['Boolean'];
   canManageDeniedReferrals: Scalars['Boolean'];
   canManageIncomingReferrals: Scalars['Boolean'];
@@ -3719,6 +3721,7 @@ export type RootPermissionsFragmentFragment = {
   canDeleteProject: boolean;
   canDeleteAssignedProjectData: boolean;
   canViewPartialSsn: boolean;
+  canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
@@ -3774,6 +3777,7 @@ export type ProjectAccessFieldsFragment = {
   canViewFullSsn: boolean;
   canDeleteProject: boolean;
   canViewPartialSsn: boolean;
+  canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
   canDeleteEnrollments: boolean;
@@ -3811,6 +3815,7 @@ export type GetRootPermissionsQuery = {
     canDeleteProject: boolean;
     canDeleteAssignedProjectData: boolean;
     canViewPartialSsn: boolean;
+    canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
@@ -9244,6 +9249,7 @@ export type SubmitFormMutation = {
             canViewFullSsn: boolean;
             canDeleteProject: boolean;
             canViewPartialSsn: boolean;
+            canEnrollClients: boolean;
             canEditEnrollments: boolean;
             canViewEnrollmentDetails: boolean;
             canDeleteEnrollments: boolean;
@@ -9751,6 +9757,7 @@ export type ProjectAllFieldsFragment = {
     canViewFullSsn: boolean;
     canDeleteProject: boolean;
     canViewPartialSsn: boolean;
+    canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
     canDeleteEnrollments: boolean;
@@ -9830,6 +9837,7 @@ export type GetProjectQuery = {
       canViewFullSsn: boolean;
       canDeleteProject: boolean;
       canViewPartialSsn: boolean;
+      canEnrollClients: boolean;
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
       canDeleteEnrollments: boolean;
@@ -9860,6 +9868,7 @@ export type GetProjectPermissionsQuery = {
       canViewFullSsn: boolean;
       canDeleteProject: boolean;
       canViewPartialSsn: boolean;
+      canEnrollClients: boolean;
       canEditEnrollments: boolean;
       canViewEnrollmentDetails: boolean;
       canDeleteEnrollments: boolean;
@@ -10480,6 +10489,7 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canDeleteProject
     canDeleteAssignedProjectData
     canViewPartialSsn
+    canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
     canDeleteEnrollments
@@ -11303,6 +11313,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canViewFullSsn
     canDeleteProject
     canViewPartialSsn
+    canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
     canDeleteEnrollments

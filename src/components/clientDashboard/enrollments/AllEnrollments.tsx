@@ -13,7 +13,7 @@ import {
   enrollmentName,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
@@ -68,10 +68,7 @@ const AllEnrollments = () => {
       <PageTitle
         title='Enrollments'
         actions={
-          <ClientPermissionsFilter
-            id={clientId}
-            permissions={['canEditEnrollments']}
-          >
+          <RootPermissionsFilter permissions={['canEnrollClients']}>
             <ButtonLink
               to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
                 clientId,
@@ -80,7 +77,7 @@ const AllEnrollments = () => {
             >
               Add Enrollment
             </ButtonLink>
-          </ClientPermissionsFilter>
+          </RootPermissionsFilter>
         }
       />
       <Paper>

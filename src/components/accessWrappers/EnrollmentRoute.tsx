@@ -4,6 +4,7 @@ import { useClientDashboardContext } from '../pages/ClientDashboard';
 import NotFound from '../pages/NotFound';
 
 import useSafeParams from '@/hooks/useSafeParams';
+import { useRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentsRoute: React.FC<
@@ -31,6 +32,7 @@ const EnrollmentsRoute: React.FC<
 
   // Use dashboard outlet context that gets set in ClientDashboard
   const { client, enrollment } = useClientDashboardContext();
+  const [permissions] = useRootPermissions();
 
   let allowed;
   if (enrollment) {
@@ -38,7 +40,7 @@ const EnrollmentsRoute: React.FC<
     allowed = edit ? enrollment.access.canEditEnrollments : true;
   } else {
     allowed = edit
-      ? client.access.canEditEnrollments
+      ? permissions?.canEnrollClients
       : client.access.canViewEnrollmentDetails;
   }
 
