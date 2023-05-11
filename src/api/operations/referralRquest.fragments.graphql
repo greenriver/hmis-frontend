@@ -1,0 +1,11 @@
+fragment ReferralRequestFields on ReferralRequest {
+  id
+  requestedOn
+  unitType {
+    ...UnitTypeFields
+  }
+  neededBy
+  requestorName
+  requestorPhone
+  requestorEmail
+}

@@ -309,6 +309,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post-Exit Assessment',
     PROJECT: 'Project',
     PROJECT_COC: 'Project CoC',
+    REFERRAL_REQUEST: 'Referral Request',
     SERVICE: 'Service',
     UPDATE: 'Update Assessment',
   },
