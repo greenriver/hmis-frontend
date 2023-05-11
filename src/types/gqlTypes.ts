@@ -3697,6 +3697,10 @@ export type RootPermissionsFragmentFragment = {
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
   canViewAnyNonconfidentialClientFiles: boolean;
+  canManageInventory: boolean;
+  canManageDeniedReferrals: boolean;
+  canManageIncomingReferrals: boolean;
+  canManageOutgoingReferrals: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -3785,6 +3789,10 @@ export type GetRootPermissionsQuery = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canManageInventory: boolean;
+    canManageDeniedReferrals: boolean;
+    canManageIncomingReferrals: boolean;
+    canManageOutgoingReferrals: boolean;
   };
 };
 
@@ -10375,6 +10383,10 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
+    canManageInventory
+    canManageDeniedReferrals
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`

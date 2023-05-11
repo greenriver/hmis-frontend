@@ -21,6 +21,10 @@ fragment RootPermissionsFragment on QueryAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
+  canManageInventory
+  canManageDeniedReferrals
+  canManageIncomingReferrals
+  canManageOutgoingReferrals
 }
 
 fragment ClientAccessFields on ClientAccess {
