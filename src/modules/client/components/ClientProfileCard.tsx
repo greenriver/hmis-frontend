@@ -31,9 +31,12 @@ import {
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import {
+  ClientPermissionsFilter,
+  RootPermissionsFilter,
+} from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   ClientFieldsFragment,
@@ -391,27 +394,33 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
                 }}
               />
               <Stack sx={{ flexGrow: 1, maxWidth: '300px' }} gap={1} mt={2}>
-                <RootPermissionsFilter permissions='canEditClients'>
+                <ClientPermissionsFilter
+                  id={client.id}
+                  permissions='canEditClient'
+                >
                   <ButtonLink
                     data-testid='editClientButton'
                     startIcon={<PersonIcon />}
                     variant='outlined'
                     color='primary'
                     fullWidth
-                    to={generateSafePath(DashboardRoutes.EDIT, {
+                    to={generateSafePath(ClientDashboardRoutes.EDIT, {
                       clientId: client.id,
                     })}
                   >
                     Update Client Details
                   </ButtonLink>
-                </RootPermissionsFilter>
+                </ClientPermissionsFilter>
                 <Typography variant='body2' sx={{ fontStyle: 'italic', mt: 1 }}>
                   Last Updated on {lastUpdated(client, true)}.{' '}
                   <RootPermissionsFilter permissions='canAuditClients'>
                     <RouterLink
-                      to={generateSafePath(DashboardRoutes.AUDIT_HISTORY, {
-                        clientId: client.id,
-                      })}
+                      to={generateSafePath(
+                        ClientDashboardRoutes.AUDIT_HISTORY,
+                        {
+                          clientId: client.id,
+                        }
+                      )}
                     >
                       View client audit history
                     </RouterLink>

@@ -4,15 +4,6 @@ export const Routes = {
   CLIENT_DASHBOARD: '/client/:clientId',
   ALL_PROJECTS: '/projects',
   PROJECT: '/projects/:projectId',
-  EDIT_PROJECT: '/projects/:projectId/edit',
-  NEW_INVENTORY: '/projects/:projectId/inventory/new',
-  EDIT_INVENTORY: '/projects/:projectId/inventory/:inventoryId/edit',
-  MANAGE_INVENTORY_BEDS: '/projects/:projectId/inventory/:inventoryId/beds',
-  NEW_FUNDER: '/projects/:projectId/funder/new',
-  EDIT_FUNDER: '/projects/:projectId/funder/:funderId/edit',
-  NEW_COC: '/projects/:projectId/coc/new',
-  EDIT_COC: '/projects/:projectId/coc/:cocId/edit',
-  ADD_SERVICES: '/projects/:projectId/add-services',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
   CREATE_PROJECT: '/organizations/:organizationId/new-project',
@@ -20,7 +11,7 @@ export const Routes = {
 } as const;
 
 // Routes within the client dashboard
-const subRoutes = {
+const clientClientDashboardRoutes = {
   PROFILE: 'profile',
   EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
@@ -44,27 +35,66 @@ const subRoutes = {
   REFERRALS: 'referrals',
 };
 
-// Add prefix "/client/:clientId" to all, so we can use `generateSafePath`
-type SubRoutesType = keyof typeof subRoutes;
+// Routes within the project dashboard
+const projectClientDashboardRoutes = {
+  OVERVIEW: 'overview',
+  EDIT_PROJECT: 'overview/edit',
+
+  // Enrollment-related
+  ENROLLMENTS: 'enrollments',
+  ADD_SERVICES: 'add-services',
+  REFERRALS: 'referrals',
+  NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
+  NEW_REFERRAL: 'referrals/new-referral',
+
+  // Project setup
+  FUNDERS: 'funder',
+  NEW_FUNDER: 'funder/new',
+  EDIT_FUNDER: 'funder/:funderId/edit',
+  COCS: 'coc',
+  NEW_COC: 'coc/new',
+  EDIT_COC: 'coc/:cocId/edit',
+  INVENTORY: 'inventory',
+  NEW_INVENTORY: 'inventory/new',
+  EDIT_INVENTORY: 'inventory/:inventoryId/edit',
+  MANAGE_INVENTORY_BEDS: 'inventory/:inventoryId/beds',
+};
+
+// Set up full dashboard routes so we can use `generateSafePath`
+type SubRoutesType = keyof typeof clientClientDashboardRoutes;
 let key: SubRoutesType;
-for (key in subRoutes) {
-  subRoutes[key] = `${Routes.CLIENT_DASHBOARD}/${subRoutes[key]}`;
+for (key in clientClientDashboardRoutes) {
+  clientClientDashboardRoutes[
+    key
+  ] = `${Routes.CLIENT_DASHBOARD}/${clientClientDashboardRoutes[key]}`;
+}
+type DashboardSubRoutesType = keyof typeof projectClientDashboardRoutes;
+let key2: DashboardSubRoutesType;
+for (key2 in projectClientDashboardRoutes) {
+  projectClientDashboardRoutes[
+    key2
+  ] = `${Routes.PROJECT}/${projectClientDashboardRoutes[key2]}`;
 }
 
-export const DashboardRoutes: { [k in SubRoutesType]: string } = subRoutes;
+export const ClientDashboardRoutes: { [k in SubRoutesType]: string } =
+  clientClientDashboardRoutes;
+
+export const ProjectDashboardRoutes: {
+  [k in DashboardSubRoutesType]: string;
+} = projectClientDashboardRoutes;
 
 export const HIDE_NAV_ROUTES = [
-  DashboardRoutes.VIEW_ASSESSMENT,
-  DashboardRoutes.NEW_ASSESSMENT,
+  ClientDashboardRoutes.VIEW_ASSESSMENT,
+  ClientDashboardRoutes.NEW_ASSESSMENT,
 ];
 
 export const FOCUS_MODE_ROUTES = [
   {
-    route: DashboardRoutes.HOUSEHOLD_EXIT,
-    previous: DashboardRoutes.VIEW_ENROLLMENT,
+    route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
+    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
   {
-    route: DashboardRoutes.HOUSEHOLD_INTAKE,
-    previous: DashboardRoutes.VIEW_ENROLLMENT,
+    route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
+    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
 ];

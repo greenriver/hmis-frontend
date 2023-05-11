@@ -36,7 +36,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   SubmitHouseholdAssessmentsMutation,
@@ -182,7 +182,7 @@ const HouseholdSummaryTabPanel = memo(
                 before other members. In order to exit the HoH, you must either
                 exit all members or{' '}
                 <RouterLink
-                  to={generateSafePath(DashboardRoutes.EDIT_HOUSEHOLD, {
+                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
                     clientId: hohClientId,
                     enrollmentId: hohEnrollmentId,
                   })}

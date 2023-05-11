@@ -43,7 +43,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       {crumbs.map(({ label, to }, index) => {
         if (index === crumbs.length - 1) {
           return (
-            <Typography variant={variant} key={to}>
+            <Typography variant={variant} key={to} sx={{ display: 'inline' }}>
               {label}
             </Typography>
           );

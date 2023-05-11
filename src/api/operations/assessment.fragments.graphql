@@ -1,0 +1,46 @@
+fragment AssessmentFields on Assessment {
+  id
+  inProgress
+  assessmentDate
+  dataCollectionStage
+  dateCreated
+  dateUpdated
+  dateDeleted
+  user {
+    ...UserFields
+  }
+  customForm {
+    ...CustomFormFields
+    definition {
+      ...FormDefinitionFields
+    }
+  }
+  access {
+    ...AssessmentAccessFields
+  }
+}
+
+# contains big JSON definition & form values
+fragment AssessmentWithDefinitionAndValues on Assessment {
+  ...AssessmentFields
+  customForm {
+    ...CustomFormFields
+    values
+    definition {
+      ...FormDefinitionWithJson
+    }
+  }
+}
+
+# contains form values
+fragment AssessmentWithValues on Assessment {
+  ...AssessmentFields
+  customForm {
+    ...CustomFormFields
+    values
+  }
+  enrollment {
+    id
+    ...EnrollmentFields
+  }
+}

@@ -7,7 +7,7 @@ import Loading from '../elements/Loading';
 import useSafeParams from '@/hooks/useSafeParams';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { cache } from '@/providers/apolloClient';
-import { DashboardRoutes } from '@/routes/routes';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   FormRole,
   FileFieldsFragment,
@@ -29,7 +29,7 @@ const File = ({ create = false }: { create?: boolean }) => {
       cache.evict({ id: `Client:${clientId}`, fieldName: 'files' });
     }
     navigate(
-      generateSafePath(DashboardRoutes.FILES, {
+      generateSafePath(ClientDashboardRoutes.FILES, {
         clientId,
       })
     );
@@ -49,7 +49,6 @@ const File = ({ create = false }: { create?: boolean }) => {
       formRole={FormRole.File}
       onCompleted={onCompleted}
       record={data?.file || undefined}
-      localConstants={{ fileId: data?.file?.id }}
       inputVariables={{ clientId }}
       FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}
       pickListRelationId={clientId}

@@ -1,6 +1,6 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { Button, ButtonProps, Typography } from '@mui/material';
-import { capitalize, get, lowerCase } from 'lodash-es';
+import { camelCase, get } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
 
 import ConfirmationDialog, {
@@ -9,14 +9,19 @@ import ConfirmationDialog, {
 
 interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
-  ConfirmationDialogProps?: ConfirmationDialogProps;
+  ConfirmationDialogProps?: Omit<
+    ConfirmationDialogProps,
+    'loading' | 'children' | 'onConfirm' | 'onCancel' | 'open'
+  >;
   onSuccess?: VoidFunction;
   queryDocument: TypedDocumentNode<MutationVariables, MutationVariables>;
   variables: MutationVariables;
   idPath: string;
   children: ReactNode;
   recordName?: string;
+  confirmationDialogContent?: ReactNode;
 }
+
 const DeleteMutationButton = <Mutation, MutationVariables>({
   variables,
   queryDocument,
@@ -26,6 +31,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   ConfirmationDialogProps,
   recordName = 'record',
   onSuccess,
+  confirmationDialogContent,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
 
@@ -35,9 +41,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   >(queryDocument, {
     variables,
     onCompleted: (result) => {
-      //idPath
       const id = get(result, idPath);
-      //res.deleteAssessment?.assessment?.id;
       if (id) {
         setShowDialog(false);
         if (onSuccess) onSuccess();
@@ -51,7 +55,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   return (
     <>
       <Button
-        data-testid={`deleteRecordButton-${recordName}`}
+        data-testid={`deleteRecordButton-${camelCase(recordName)}`}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -66,20 +70,25 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
-        title={`Delete ${capitalize(recordName)}`}
-        confirmText={`Yes, delete ${lowerCase(recordName)}`}
+        title={`Delete ${recordName}`}
+        confirmText={`Yes, delete ${recordName}`}
         onConfirm={handleDelete}
         onCancel={() => setShowDialog(false)}
         loading={loading}
         errorState={{ apolloError: error, errors: [], warnings: [] }}
+        color='error'
         {...ConfirmationDialogProps}
       >
-        <>
-          <Typography>
-            {`Are you sure you want to delete this ${lowerCase(recordName)}?`}
-          </Typography>
-          <Typography>This action cannot be undone.</Typography>
-        </>
+        {confirmationDialogContent ? (
+          confirmationDialogContent
+        ) : (
+          <>
+            <Typography>
+              {`Are you sure you want to delete this ${recordName}?`}
+            </Typography>
+            <Typography>This action cannot be undone.</Typography>
+          </>
+        )}
       </ConfirmationDialog>
     </>
   );

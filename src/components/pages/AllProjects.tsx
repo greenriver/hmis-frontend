@@ -1,12 +1,11 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Container, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
 
-import GroupedProjectTable from '@/modules/inventory/components/GroupedProjectTable';
-import ProjectLayout from '@/modules/inventory/components/ProjectLayout';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import GroupedProjectTable from '@/modules/projects/components/tables/GroupedProjectTable';
 import { Routes } from '@/routes/routes';
 import { useGetAllOrganizationsQuery } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -17,15 +16,20 @@ const AllProjects = () => {
   if (loading) return <Loading />;
   if (error) throw error;
 
+  const numOrganizations = data?.organizations?.nodesCount || 0;
   return (
-    <ProjectLayout>
-      <Typography variant='h5' sx={{ mb: 2 }}>
+    <Container maxWidth='lg' sx={{ pt: 2, pb: 6 }}>
+      <Typography variant='h3' sx={{ mt: 2, mb: 4 }}>
         Organizations
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={9}>
-          {data?.organizations?.nodesCount && (
-            <GroupedProjectTable organizations={data?.organizations?.nodes} />
+          {numOrganizations > 0 ? (
+            <GroupedProjectTable
+              organizations={data?.organizations?.nodes || []}
+            />
+          ) : (
+            <Typography>No organizations.</Typography>
           )}
         </Grid>
         <RootPermissionsFilter permissions={['canEditOrganization']}>
@@ -46,7 +50,7 @@ const AllProjects = () => {
           </Grid>
         </RootPermissionsFilter>
       </Grid>
-    </ProjectLayout>
+    </Container>
   );
 };
 export default AllProjects;

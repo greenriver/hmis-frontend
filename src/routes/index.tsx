@@ -8,7 +8,7 @@ import {
 
 import { protectedRoutes } from './protected';
 
-import Login from '@/components/pages/Login';
+import Login from '@/modules/auth/components/Login';
 import useAuth, { RouteLocationState } from '@/modules/auth/hooks/useAuth';
 
 export const AppRoutes = () => {

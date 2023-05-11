@@ -154,7 +154,6 @@ const HouseholdAssessments = ({
   const handleChangeTab = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {
       event.preventDefault();
-      console.log('CHANGING TAB TO ', newValue);
       navigateToTab(newValue);
     },
     [navigateToTab]
@@ -219,7 +218,13 @@ const HouseholdAssessments = ({
           width: '100vw',
         }}
       >
-        <Grid container sx={{ height: '100%', alignItems: 'center' }}>
+        <Grid
+          container
+          sx={{
+            height: '100%',
+            alignItems: 'center',
+          }}
+        >
           <Grid
             item
             xs={2}

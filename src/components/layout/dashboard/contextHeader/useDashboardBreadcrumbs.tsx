@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { DashboardContext } from '@/components/pages/ClientDashboard';
+import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
-import { DashboardRoutes } from '@/routes/routes';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
 
 type CrumbConfig = {
   [x: string]: {
@@ -25,81 +26,159 @@ const buildParentPaths = (
   }
 };
 
+function isProjectContext(
+  ctx: ClientDashboardContext | ProjectDashboardContext
+): ctx is ProjectDashboardContext {
+  return !!(
+    typeof ctx === 'object' &&
+    typeof (ctx as ProjectDashboardContext).project === 'object'
+  );
+}
+
 export const useDashboardBreadcrumbs = (
-  context: DashboardContext,
+  context: ClientDashboardContext | ProjectDashboardContext,
   breadcrumbOverrides?: Record<string, string>
 ) => {
-  const crumbConfig: CrumbConfig = useMemo(
-    () => ({
+  const crumbConfig: CrumbConfig = useMemo(() => {
+    if (isProjectContext(context)) {
+      return {
+        [ProjectDashboardRoutes.OVERVIEW]: {
+          title: context.project.projectName,
+        },
+        [ProjectDashboardRoutes.EDIT_PROJECT]: {
+          title: 'Edit Project',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.ENROLLMENTS]: {
+          title: 'Enrollments',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.ADD_SERVICES]: {
+          title: 'Add Services',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.REFERRALS]: {
+          title: 'Referrals',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {
+          title: 'Request a Referral',
+          parent: ProjectDashboardRoutes.REFERRALS,
+        },
+        [ProjectDashboardRoutes.FUNDERS]: {
+          title: 'Funders',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.NEW_FUNDER]: {
+          title: 'Add Funder',
+          parent: ProjectDashboardRoutes.FUNDERS,
+        },
+        [ProjectDashboardRoutes.EDIT_FUNDER]: {
+          title: 'Edit Funder',
+          parent: ProjectDashboardRoutes.FUNDERS,
+        },
+        [ProjectDashboardRoutes.COCS]: {
+          title: 'Project CoCs',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+        [ProjectDashboardRoutes.NEW_COC]: {
+          title: 'Add CoC',
+          parent: ProjectDashboardRoutes.COCS,
+        },
+        [ProjectDashboardRoutes.EDIT_COC]: {
+          title: 'Edit CoC',
+          parent: ProjectDashboardRoutes.COCS,
+        },
+        [ProjectDashboardRoutes.INVENTORY]: {
+          title: 'Inventory',
+          parent: ProjectDashboardRoutes.OVERVIEW,
+        },
+
+        [ProjectDashboardRoutes.NEW_INVENTORY]: {
+          title: 'Add Inventory',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+        [ProjectDashboardRoutes.EDIT_INVENTORY]: {
+          title: 'Update Inventory',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+        [ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS]: {
+          title: 'Beds and Units',
+          parent: ProjectDashboardRoutes.INVENTORY,
+        },
+      };
+    }
+    return {
       /**
        * Map each path to it's title and it's direct parent
        */
-      [DashboardRoutes.PROFILE]: { title: clientBriefName(context.client) },
-      [DashboardRoutes.EDIT]: {
+      [ClientDashboardRoutes.PROFILE]: {
+        title: clientBriefName(context.client),
+      },
+      [ClientDashboardRoutes.EDIT]: {
         title: 'Update Client Details',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.ALL_ENROLLMENTS]: {
+      [ClientDashboardRoutes.ALL_ENROLLMENTS]: {
         title: 'Enrollments',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NEW_ENROLLMENT]: {
+      [ClientDashboardRoutes.NEW_ENROLLMENT]: {
         title: 'Add Enrollment',
-        parent: DashboardRoutes.ALL_ENROLLMENTS,
+        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [DashboardRoutes.VIEW_ENROLLMENT]: {
+      [ClientDashboardRoutes.VIEW_ENROLLMENT]: {
         title: context.enrollment
           ? enrollmentName(context.enrollment)
           : 'Enrollment',
-        parent: DashboardRoutes.ALL_ENROLLMENTS,
+        parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [DashboardRoutes.VIEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.VIEW_ASSESSMENT]: {
         title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.NEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.NEW_ASSESSMENT]: {
         title: 'Assessment',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.NEW_SERVICE]: {
+      [ClientDashboardRoutes.NEW_SERVICE]: {
         title: 'Add Service',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EDIT_SERVICE]: {
+      [ClientDashboardRoutes.EDIT_SERVICE]: {
         title: 'Edit Service',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.EDIT_HOUSEHOLD]: {
+      [ClientDashboardRoutes.EDIT_HOUSEHOLD]: {
         title: 'Edit Household',
-        parent: DashboardRoutes.VIEW_ENROLLMENT,
+        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },
-      [DashboardRoutes.ASSESSMENTS]: {
+      [ClientDashboardRoutes.ASSESSMENTS]: {
         title: 'Assessments',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NOTES]: {
+      [ClientDashboardRoutes.NOTES]: {
         title: 'Notes',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.FILES]: {
+      [ClientDashboardRoutes.FILES]: {
         title: 'Files',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.AUDIT_HISTORY]: {
+      [ClientDashboardRoutes.AUDIT_HISTORY]: {
         title: 'Client Audit History',
-        parent: DashboardRoutes.PROFILE,
+        parent: ClientDashboardRoutes.PROFILE,
       },
-      [DashboardRoutes.NEW_FILE]: {
+      [ClientDashboardRoutes.NEW_FILE]: {
         title: 'Upload',
-        parent: DashboardRoutes.FILES,
+        parent: ClientDashboardRoutes.FILES,
       },
-      [DashboardRoutes.EDIT_FILE]: {
+      [ClientDashboardRoutes.EDIT_FILE]: {
         title: 'Edit File',
-        parent: DashboardRoutes.FILES,
+        parent: ClientDashboardRoutes.FILES,
       },
-    }),
-    [context]
-  );
+    };
+  }, [context]);
   const { pathname } = useLocation();
 
   const currentPath = useCurrentPath();

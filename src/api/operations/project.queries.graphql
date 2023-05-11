@@ -1,0 +1,259 @@
+query GetProject($id: ID!) {
+  project(id: $id) {
+    ...ProjectAllFields
+  }
+}
+
+query GetProjectPermissions($id: ID!) {
+  project(id: $id) {
+    id
+    access {
+      ...ProjectAccessFields
+    }
+  }
+}
+
+query GetProjectEnrollments(
+  $id: ID!
+  $searchTerm: String
+  $openOnDate: ISO8601Date
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      openOnDate: $openOnDate
+      searchTerm: $searchTerm
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EnrollmentFields
+        client {
+          id
+          ...ClientName
+          ...ClientIdentificationFields
+        }
+      }
+    }
+  }
+}
+
+mutation DeleteProject($input: DeleteProjectInput!) {
+  deleteProject(input: $input) {
+    clientMutationId
+    project {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+query GetFunder($id: ID!) {
+  funder(id: $id) {
+    ...FunderFields
+  }
+}
+
+query GetInventory($id: ID!) {
+  inventory(id: $id) {
+    ...InventoryFields
+  }
+}
+
+query GetUnits($id: ID!, $limit: Int = 10, $offset: Int = 0, $active: Boolean) {
+  inventory(id: $id) {
+    id
+    units(limit: $limit, offset: $offset, active: $active) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...UnitFields
+      }
+    }
+  }
+}
+
+query GetBeds(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $bedType: InventoryBedType
+  $active: Boolean
+) {
+  inventory(id: $id) {
+    id
+    beds(limit: $limit, offset: $offset, bedType: $bedType, active: $active) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...BedFields
+      }
+    }
+  }
+}
+
+query GetProjectCoc($id: ID!) {
+  projectCoc(id: $id) {
+    ...ProjectCocFields
+  }
+}
+
+query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    inventories(limit: $limit, offset: $offset, sortOrder: START_DATE) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...InventoryFields
+      }
+    }
+  }
+}
+
+query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    projectCocs(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectCocFields
+      }
+    }
+  }
+}
+
+query GetProjectFunders($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    funders(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...FunderFields
+      }
+    }
+  }
+}
+
+mutation DeleteInventory($input: DeleteInventoryInput!) {
+  deleteInventory(input: $input) {
+    clientMutationId
+    inventory {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteFunder($input: DeleteFunderInput!) {
+  deleteFunder(input: $input) {
+    clientMutationId
+    funder {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
+  deleteProjectCoc(input: $input) {
+    clientMutationId
+    projectCoc {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateBeds($input: CreateBedsInput!) {
+  createBeds(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation CreateUnits($input: CreateUnitsInput!) {
+  createUnits(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteUnits($input: DeleteUnitsInput!) {
+  deleteUnits(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteBeds($input: DeleteBedsInput!) {
+  deleteBeds(input: $input) {
+    clientMutationId
+    inventory {
+      ...InventoryFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateUnits($input: UpdateUnitsInput!) {
+  updateUnits(input: $input) {
+    clientMutationId
+    units {
+      ...UnitFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateBeds($input: UpdateBedsInput!) {
+  updateBeds(input: $input) {
+    clientMutationId
+    beds {
+      ...BedFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

@@ -131,6 +131,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'AssessmentAccess',
+    fields: [
+      {
+        name: 'canDeleteAssessments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canDeleteEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'AutofillValue',
     fields: [
       {
@@ -427,14 +464,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
-      {
-        name: 'warehouseUrl',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
     ],
   },
   {
@@ -449,7 +478,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canDeleteClient',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canDeleteEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditClient',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -539,6 +584,64 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientAddress',
+    fields: [
+      { name: 'city', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'country',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'district',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'line1', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'line2', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'postalCode',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'state', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'type',
+        type: { kind: 'ENUM', name: 'ClientAddressType', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientAddressUse', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ClientAuditEvent',
     fields: [
       {
@@ -572,6 +675,49 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ClientContactPoint',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'system',
+        type: { kind: 'ENUM', name: 'ClientContactPointSystem', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientContactPointUse', ofType: null },
+      },
+      { name: 'value', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
     name: 'ClientImage',
     fields: [
       {
@@ -597,6 +743,62 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'ClientName',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      { name: 'first', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      { name: 'last', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'middle',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'nameDataQuality',
+        type: { kind: 'ENUM', name: 'NameDataQuality', ofType: null },
+      },
+      { name: 'notes', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'primary',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'suffix',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'use',
+        type: { kind: 'ENUM', name: 'ClientNameUse', ofType: null },
       },
     ],
   },
@@ -1035,6 +1237,35 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'EnrollmentAccess',
+    fields: [
+      {
+        name: 'canDeleteEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'canEditEnrollments',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Event',
     fields: [
       {
@@ -1104,6 +1335,59 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'Exit',
+    fields: [
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'destination',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'Destination', ofType: null },
+        },
+      },
+      {
+        name: 'exitDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'otherDestination',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ExternalIdentifier',
     fields: [
       {
@@ -1145,7 +1429,15 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'createdAt',
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateUpdated',
         type: {
           kind: 'NON_NULL',
           name: null,
@@ -1210,14 +1502,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
               ofType: { kind: 'SCALAR', name: 'String', ofType: null },
             },
           },
-        },
-      },
-      {
-        name: 'updatedAt',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
       },
       {
@@ -2136,6 +2420,96 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'youthVetBedInventory',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'MciClearanceMatch',
+    fields: [
+      {
+        name: 'age',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'dob',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'existingClientId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'firstName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'gender',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'LIST',
+            name: null,
+            ofType: {
+              kind: 'NON_NULL',
+              name: null,
+              ofType: { kind: 'ENUM', name: 'Gender', ofType: null },
+            },
+          },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lastName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'mciId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'middleName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'nameSuffix',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'score',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

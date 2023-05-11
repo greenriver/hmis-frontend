@@ -4,15 +4,15 @@ import { useHasPermissions } from './useHasPermissionsHooks';
 
 import apolloClient from '@/providers/apolloClient';
 import {
-  ProjectAccess,
-  QueryAccess,
-  OrganizationAccess,
-  useGetProjectPermissionsQuery,
-  useGetRootPermissionsQuery,
-  useGetOrganizationPermissionsQuery,
-  useGetClientPermissionsQuery,
   ClientAccess,
   ClientAccessFieldsFragmentDoc,
+  OrganizationAccess,
+  ProjectAccess,
+  QueryAccess,
+  useGetClientPermissionsQuery,
+  useGetOrganizationQuery,
+  useGetProjectPermissionsQuery,
+  useGetRootPermissionsQuery,
 } from '@/types/gqlTypes';
 
 export type EntityPermissionsFilterProps<T> = {
@@ -63,7 +63,7 @@ export type OrganizationPermissionsFilterProps<T> = Omit<
 export const OrganizationPermissionsFilter: React.FC<
   OrganizationPermissionsFilterProps<OrganizationAccess>
 > = ({ id, ...props }) => {
-  const { data, loading } = useGetOrganizationPermissionsQuery({
+  const { data, loading } = useGetOrganizationQuery({
     variables: { id },
   });
   const access = data?.organization?.access;
