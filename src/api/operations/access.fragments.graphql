@@ -64,6 +64,10 @@ fragment ProjectAccessFields on ProjectAccess {
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails
+  canManageInventory
+  canManageDeniedReferrals
+  canManageIncomingReferrals
+  canManageOutgoingReferrals
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

@@ -85,8 +85,7 @@ const Units = () => {
         header: 'Unit Type',
         render: (unit) => unit.unitType?.description,
       },
-      // FIXME: add inventory-specific perm
-      ...(project.access.canEditProjectDetails
+      ...(project.access.canManageInventory
         ? [
             {
               key: 'delete',
@@ -118,7 +117,7 @@ const Units = () => {
         actions={
           <ProjectPermissionsFilter
             id={project.id}
-            permissions='canEditProjectDetails'
+            permissions='canManageInventory'
           >
             <Button
               data-testid='addInventoryButton'
@@ -132,7 +131,6 @@ const Units = () => {
           </ProjectPermissionsFilter>
         }
       />
-      {/* <Paper>overview</Paper> */}
       <Paper data-testid='unitTableCard'>
         <GenericTableWithData<
           GetUnitsQuery,
