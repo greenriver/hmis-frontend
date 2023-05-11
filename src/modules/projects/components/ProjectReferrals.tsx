@@ -30,8 +30,7 @@ const ProjectReferrals = () => {
           }}
         >
           <Typography variant='h5'>Referral Requests</Typography>
-          {/* FIXME: use canManageIncomingReferrals */}
-          {project.access.canEditProjectDetails && (
+          {project.access.canManageIncomingReferrals && (
             <ButtonLink
               to={generateSafePath(
                 ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,

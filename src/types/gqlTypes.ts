@@ -2630,6 +2630,10 @@ export type ProjectAccess = {
   canDeleteProject: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
+  canManageDeniedReferrals: Scalars['Boolean'];
+  canManageIncomingReferrals: Scalars['Boolean'];
+  canManageInventory: Scalars['Boolean'];
+  canManageOutgoingReferrals: Scalars['Boolean'];
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
@@ -2844,6 +2848,10 @@ export type QueryAccess = {
   canEditOrganization: Scalars['Boolean'];
   canEditProjectDetails: Scalars['Boolean'];
   canManageAnyClientFiles: Scalars['Boolean'];
+  canManageDeniedReferrals: Scalars['Boolean'];
+  canManageIncomingReferrals: Scalars['Boolean'];
+  canManageInventory: Scalars['Boolean'];
+  canManageOutgoingReferrals: Scalars['Boolean'];
   canManageOwnClientFiles: Scalars['Boolean'];
   canViewAnyConfidentialClientFiles: Scalars['Boolean'];
   canViewAnyNonconfidentialClientFiles: Scalars['Boolean'];
@@ -3720,6 +3728,10 @@ export type RootPermissionsFragmentFragment = {
   canManageOwnClientFiles: boolean;
   canViewAnyConfidentialClientFiles: boolean;
   canViewAnyNonconfidentialClientFiles: boolean;
+  canManageInventory: boolean;
+  canManageDeniedReferrals: boolean;
+  canManageIncomingReferrals: boolean;
+  canManageOutgoingReferrals: boolean;
 };
 
 export type ClientAccessFieldsFragment = {
@@ -3767,6 +3779,10 @@ export type ProjectAccessFieldsFragment = {
   canDeleteEnrollments: boolean;
   canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
+  canManageInventory: boolean;
+  canManageDeniedReferrals: boolean;
+  canManageIncomingReferrals: boolean;
+  canManageOutgoingReferrals: boolean;
 };
 
 export type OrganizationAccessFieldsFragment = {
@@ -3804,6 +3820,10 @@ export type GetRootPermissionsQuery = {
     canManageOwnClientFiles: boolean;
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
+    canManageInventory: boolean;
+    canManageDeniedReferrals: boolean;
+    canManageIncomingReferrals: boolean;
+    canManageOutgoingReferrals: boolean;
   };
 };
 
@@ -9229,6 +9249,10 @@ export type SubmitFormMutation = {
             canDeleteEnrollments: boolean;
             canDeleteAssessments: boolean;
             canEditProjectDetails: boolean;
+            canManageInventory: boolean;
+            canManageDeniedReferrals: boolean;
+            canManageIncomingReferrals: boolean;
+            canManageOutgoingReferrals: boolean;
           };
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
@@ -9732,6 +9756,10 @@ export type ProjectAllFieldsFragment = {
     canDeleteEnrollments: boolean;
     canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
+    canManageInventory: boolean;
+    canManageDeniedReferrals: boolean;
+    canManageIncomingReferrals: boolean;
+    canManageOutgoingReferrals: boolean;
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
@@ -9807,6 +9835,10 @@ export type GetProjectQuery = {
       canDeleteEnrollments: boolean;
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
+      canManageInventory: boolean;
+      canManageDeniedReferrals: boolean;
+      canManageIncomingReferrals: boolean;
+      canManageOutgoingReferrals: boolean;
     };
     user?: { __typename: 'User'; id: string; name: string } | null;
   } | null;
@@ -9833,6 +9865,10 @@ export type GetProjectPermissionsQuery = {
       canDeleteEnrollments: boolean;
       canDeleteAssessments: boolean;
       canEditProjectDetails: boolean;
+      canManageInventory: boolean;
+      canManageDeniedReferrals: boolean;
+      canManageIncomingReferrals: boolean;
+      canManageOutgoingReferrals: boolean;
     };
   } | null;
 };
@@ -10453,6 +10489,10 @@ export const RootPermissionsFragmentFragmentDoc = gql`
     canManageOwnClientFiles
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
+    canManageInventory
+    canManageDeniedReferrals
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
   }
 `;
 export const OrganizationAccessFieldsFragmentDoc = gql`
@@ -11268,6 +11308,10 @@ export const ProjectAccessFieldsFragmentDoc = gql`
     canDeleteEnrollments
     canDeleteAssessments
     canEditProjectDetails
+    canManageInventory
+    canManageDeniedReferrals
+    canManageIncomingReferrals
+    canManageOutgoingReferrals
   }
 `;
 export const ProjectAllFieldsFragmentDoc = gql`
