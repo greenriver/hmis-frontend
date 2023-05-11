@@ -1,12 +1,13 @@
-import { Typography } from '@mui/material';
+import { Typography, TypographyProps } from '@mui/material';
 
 import { RelationshipToHoH } from '@/types/gqlTypes';
 
 const HohIndicator = ({
   relationshipToHoh,
+  ...props
 }: {
   relationshipToHoh: RelationshipToHoH;
-}) => {
+} & TypographyProps) => {
   if (relationshipToHoh !== RelationshipToHoH.SelfHeadOfHousehold) {
     return null;
   }
@@ -15,11 +16,13 @@ const HohIndicator = ({
     <Typography
       variant='subtitle2'
       color='text.disabled'
+      {...props}
       sx={{
         fontWeight: 600,
         pl: 1,
         pt: 0.5,
         fontSize: '.75rem',
+        ...props.sx,
       }}
     >
       HoH
