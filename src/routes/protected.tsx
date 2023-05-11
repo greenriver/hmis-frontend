@@ -114,7 +114,14 @@ export const protectedRoutes: RouteNode[] = [
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
-            element: <NewReferralRequest />,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageIncomingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <NewReferralRequest />
+              </ProjectEditRoute>
+            ),
           },
           {
             path: ProjectDashboardRoutes.EDIT_PROJECT,
