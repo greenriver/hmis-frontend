@@ -151,7 +151,7 @@ const ProjectOverview = () => {
     <>
       <PageTitle title={project.projectName} />
       <Grid container spacing={4}>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <InactiveBanner project={project} />
           <Paper sx={{ p: 2, mb: 2 }} data-testid='projectDetailsCard'>
             <Stack
@@ -160,7 +160,6 @@ const ProjectOverview = () => {
               sx={{ mb: 2 }}
             >
               <Typography variant='h5'>Project Details</Typography>
-              <IdDisplay prefix='Project' value={project.id} />
             </Stack>
             <ProjectDetails project={project} />
           </Paper>
@@ -173,7 +172,7 @@ const ProjectOverview = () => {
             </TitleCard>
           </ProjectPermissionsFilter>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={4}>
           <ProjectPermissionsFilter
             id={project.id}
             permissions='canEditEnrollments'
@@ -209,7 +208,7 @@ const ProjectOverview = () => {
             id={project.id}
             permissions={['canDeleteProject', 'canEditProjectDetails']}
           >
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 2, mb: 2 }}>
               <Stack>
                 <ProjectPermissionsFilter
                   id={project.id}
@@ -244,6 +243,20 @@ const ProjectOverview = () => {
               </Stack>
             </Paper>
           </ProjectPermissionsFilter>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Stack gap={0.5}>
+              <IdDisplay
+                prefix='HMIS'
+                color='text.secondary'
+                value={project.id}
+              />
+              <IdDisplay
+                prefix='Project'
+                color='text.secondary'
+                value={project.hudId}
+              />
+            </Stack>
+          </Paper>
         </Grid>
       </Grid>
       <ProjectPermissionsFilter

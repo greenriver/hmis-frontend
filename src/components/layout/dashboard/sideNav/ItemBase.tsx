@@ -51,8 +51,8 @@ const ItemBase = ({
 
   const isClickable = collapsible || !hasItems;
   const itemSx = {
-    // py: 0.5,
-    px: 2,
+    py: 1,
+    px: 3,
     textDecoration: 'none',
     textOverflow: 'ellipsis',
     overflowX: 'hidden',
@@ -60,6 +60,9 @@ const ItemBase = ({
     display: 'block',
     color: isSelected ? 'secondary.main' : 'text.primary',
     fontWeight: isSelected ? 600 : 400,
+    '&.Mui-focusVisible': {
+      outlineOffset: '-2px',
+    },
   };
 
   return (
@@ -90,8 +93,8 @@ const ItemBase = ({
               width: '100%',
               overflowX: 'hidden',
               border: '2px solid transparent',
-              py: 1,
-              px: 1,
+              // do the padding inside the link if possible so we get the whole click target
+              p: item.href || item.path ? undefined : 1,
             }}
           >
             {item.href ? (
@@ -100,7 +103,6 @@ const ItemBase = ({
                 variant='body1'
                 href={item.href || '#'}
                 aria-label={item.title as string}
-                onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
                 sx={itemSx}
               >
                 {renderTitle(item.title || item.id)}
@@ -110,10 +112,8 @@ const ItemBase = ({
                 id={`side-nav-${item.id}`}
                 data-testid={`sideNav-${item.id}`}
                 aria-label={item.title}
-                // class='Mui-focusVisible'
                 variant='body1'
                 to={item.path}
-                onClick={(e: React.SyntheticEvent) => e.stopPropagation()}
                 sx={itemSx}
                 plain
               >

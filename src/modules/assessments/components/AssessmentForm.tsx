@@ -25,6 +25,7 @@ import DynamicForm, {
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
   createInitialValuesFromSavedValues,
   getInitialValues,
@@ -168,9 +169,14 @@ const AssessmentForm = ({
 
   const canEdit = enrollment?.access.canEditEnrollments;
 
+  // Manually preload picklists here so we can prevent printing until they're fetched
+  const { loading: pickListsLoading } = usePreloadPicklists(
+    definition.definition,
+    enrollment?.project?.id
+  );
   usePrintTrigger({
     startReady: isPrintView,
-    timeout: 3000,
+    hold: pickListsLoading,
   });
 
   const navigation = (

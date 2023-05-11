@@ -13,6 +13,7 @@ import NotFound from './NotFound';
 
 import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import useSafeParams from '@/hooks/useSafeParams';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import OrganizationDetails from '@/modules/projects/components/OrganizationDetails';
@@ -108,7 +109,7 @@ const Organization = () => {
             id={organizationId}
             permissions={['canDeleteOrganization', 'canEditOrganization']}
           >
-            <Paper sx={{ p: 2 }}>
+            <Paper sx={{ p: 2, mb: 2 }}>
               <Stack>
                 <OrganizationPermissionsFilter
                   id={organizationId}
@@ -143,6 +144,22 @@ const Organization = () => {
               </Stack>
             </Paper>
           </OrganizationPermissionsFilter>
+          <Paper sx={{ p: 2, mb: 2 }}>
+            <Stack gap={0.5}>
+              <IdDisplay
+                prefix='HMIS'
+                color='text.secondary'
+                value={organizationId}
+              />
+              {organization && (
+                <IdDisplay
+                  prefix='Organization'
+                  color='text.secondary'
+                  value={organization.hudId}
+                />
+              )}
+            </Stack>
+          </Paper>
         </Grid>
       </Grid>
       <ConfirmationDialog

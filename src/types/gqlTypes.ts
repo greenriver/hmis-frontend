@@ -2445,6 +2445,7 @@ export type Organization = {
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   description?: Maybe<Scalars['String']>;
+  hudId: Scalars['ID'];
   id: Scalars['ID'];
   organizationName: Scalars['String'];
   projects: ProjectsPaginated;
@@ -2567,6 +2568,7 @@ export type Project = {
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
   housingType?: Maybe<HousingType>;
+  hudId: Scalars['ID'];
   id: Scalars['ID'];
   inventories: InventoriesPaginated;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']>;
@@ -9184,6 +9186,7 @@ export type SubmitFormMutation = {
           __typename?: 'Organization';
           id: string;
           organizationName: string;
+          hudId: string;
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
@@ -9195,6 +9198,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Project';
           id: string;
+          hudId: string;
           description?: string | null;
           HMISParticipatingProject?: NoYesMissing | null;
           HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -9557,6 +9561,7 @@ export type OrganizationNameFieldsFragment = {
 export type OrganizationDetailFieldsFragment = {
   __typename?: 'Organization';
   id: string;
+  hudId: string;
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
@@ -9570,6 +9575,7 @@ export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
   organizationName: string;
+  hudId: string;
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
@@ -9605,6 +9611,7 @@ export type GetOrganizationQuery = {
     __typename?: 'Organization';
     id: string;
     organizationName: string;
+    hudId: string;
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
@@ -9694,6 +9701,7 @@ export type ProjectOperatingPeriodFragment = {
 export type ProjectAllFieldsFragment = {
   __typename?: 'Project';
   id: string;
+  hudId: string;
   description?: string | null;
   HMISParticipatingProject?: NoYesMissing | null;
   HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -9768,6 +9776,7 @@ export type GetProjectQuery = {
   project?: {
     __typename?: 'Project';
     id: string;
+    hudId: string;
     description?: string | null;
     HMISParticipatingProject?: NoYesMissing | null;
     HOPWAMedAssistedLivingFac?: HopwaMedAssistedLivingFac | null;
@@ -11212,6 +11221,7 @@ export const OrganizationNameFieldsFragmentDoc = gql`
 export const OrganizationDetailFieldsFragmentDoc = gql`
   fragment OrganizationDetailFields on Organization {
     id
+    hudId
     description
     contactInformation
     victimServiceProvider
@@ -11263,6 +11273,7 @@ export const ProjectAccessFieldsFragmentDoc = gql`
 export const ProjectAllFieldsFragmentDoc = gql`
   fragment ProjectAllFields on Project {
     id
+    hudId
     ...ProjectNameAndType
     ...ProjectOperatingPeriod
     description
