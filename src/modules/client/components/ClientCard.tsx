@@ -29,7 +29,10 @@ import {
   pronouns,
 } from '@/modules/hmis/hmisUtil';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import {
+  ClientPermissionsFilter,
+  RootPermissionsFilter,
+} from '@/modules/permissions/PermissionsFilters';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -272,17 +275,20 @@ const ClientCard: React.FC<Props> = ({
             >
               Client Profile
             </ButtonLink>
-            <ButtonLink
-              fullWidth
-              data-testid='enrollButton'
-              to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
-                clientId: client.id,
-              })}
-              Icon={LibraryAddIcon}
-              leftAlign
-            >
-              Enroll
-            </ButtonLink>
+            <RootPermissionsFilter permissions='canEnrollClients'>
+              <ButtonLink
+                fullWidth
+                data-testid='enrollButton'
+                to={generateSafePath(ClientDashboardRoutes.NEW_ENROLLMENT, {
+                  clientId: client.id,
+                })}
+                Icon={LibraryAddIcon}
+                leftAlign
+              >
+                Enroll
+              </ButtonLink>
+            </RootPermissionsFilter>
+
             {/* <Button fullWidth variant='outlined' color='error'>
               Exit
             </Button>
