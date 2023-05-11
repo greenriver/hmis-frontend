@@ -175,7 +175,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   }, [itemMap, formDefinition, initialValues]);
 
   if (definitionLoading) return <Loading />;
-  if (!formDefinition) return <NotFound />;
+  if (!formDefinition) return <NotFound text='Form definition not found.' />;
 
   const form = (
     <>

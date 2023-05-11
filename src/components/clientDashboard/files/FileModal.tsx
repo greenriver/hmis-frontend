@@ -16,6 +16,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.vite';
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
+import useSafeParams from '@/hooks/useSafeParams';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
 import { FileFieldsFragment, FormRole } from '@/types/gqlTypes';
 
@@ -117,6 +118,7 @@ const PdfPreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
 };
 
 const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
+  const { clientId } = useSafeParams() as { clientId?: string };
   const previewContent = useMemo(() => {
     if (['image/jpeg', 'image/jpg', 'image/png'].includes(file.contentType)) {
       return <ImagePreview file={file} />;
@@ -176,6 +178,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           formRole={FormRole.File}
           title={file.name}
           actions={actions}
+          pickListRelationId={clientId}
         >
           <Stack
             width='100%'

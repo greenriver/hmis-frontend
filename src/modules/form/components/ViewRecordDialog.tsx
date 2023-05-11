@@ -20,6 +20,7 @@ import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
 interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
   formRole: FormRole;
+  pickListRelationId?: string;
   actions?: ReactNode;
   children?: ReactNode;
 }
@@ -35,6 +36,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   onClose,
   title,
   children,
+  pickListRelationId,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -101,7 +103,11 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
             gap: 2,
           })}
         >
-          <ViewRecord record={record} formRole={formRole} />
+          <ViewRecord
+            record={record}
+            formRole={formRole}
+            pickListRelationId={pickListRelationId}
+          />
           {children}
         </Box>
       </DialogContent>

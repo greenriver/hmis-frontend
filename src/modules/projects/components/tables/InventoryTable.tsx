@@ -110,6 +110,7 @@ const InventoryTable = () => {
           title='Inventory'
           open={!!viewingRecord}
           onClose={() => setViewingRecord(undefined)}
+          pickListRelationId={project.id}
           actions={
             canEditProject && (
               <>

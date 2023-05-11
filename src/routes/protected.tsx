@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -84,7 +84,12 @@ const ParamsWrapper = <T extends { [x: string]: string } = any>({
   return children(params);
 };
 
-export const protectedRoutes = [
+interface RouteNode {
+  path: string;
+  element: ReactNode;
+  children?: RouteNode[];
+}
+export const protectedRoutes: RouteNode[] = [
   {
     path: '/',
     element: <App />,

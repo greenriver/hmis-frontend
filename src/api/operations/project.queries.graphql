@@ -113,6 +113,20 @@ query GetProjectInventories($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetProjectReferralRequests($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    referralRequests(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ReferralRequestFields
+      }
+    }
+  }
+}
+
 query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
