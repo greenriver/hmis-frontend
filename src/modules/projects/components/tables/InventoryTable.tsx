@@ -44,7 +44,7 @@ const columns: ColumnDef<InventoryFieldsFragment>[] = [
 
 const InventoryTable = () => {
   const { project } = useProjectDashboardContext();
-  const canEditProject = project.access.canEditProjectDetails;
+  const canManageInventory = project.access.canManageInventory;
 
   const [viewingRecord, setViewingRecord] = useState<
     InventoryFieldsFragment | undefined
@@ -112,7 +112,7 @@ const InventoryTable = () => {
           onClose={() => setViewingRecord(undefined)}
           pickListRelationId={project.id}
           actions={
-            canEditProject && (
+            canManageInventory && (
               <>
                 <ButtonLink
                   to={generateSafePath(ProjectDashboardRoutes.EDIT_INVENTORY, {
