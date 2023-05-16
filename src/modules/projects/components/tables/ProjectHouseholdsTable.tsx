@@ -1,6 +1,6 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { formatISO } from 'date-fns';
-import { useMemo } from 'react';
+import { ReactNode, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -28,6 +28,12 @@ export type HouseholdFields = NonNullable<
   GetProjectHouseholdsQuery['project']
 >['households']['nodes'][number];
 
+const TableCellConatiner = ({ children }: { children: ReactNode }) => (
+  <Stack direction='column' gap={1} sx={{ py: 1 }}>
+    {children}
+  </Stack>
+);
+
 export const HOUSEHOLD_COLUMNS: {
   [key: string]: ColumnDef<HouseholdFields>;
 } = {
@@ -35,7 +41,7 @@ export const HOUSEHOLD_COLUMNS: {
     header: ' ',
     width: '0%',
     render: (hh) => (
-      <>
+      <TableCellConatiner>
         {hh.householdClients.map((c) =>
           RelationshipToHoH.SelfHeadOfHousehold === c.relationshipToHoH ? (
             <HohIndicator
@@ -47,13 +53,13 @@ export const HOUSEHOLD_COLUMNS: {
             <Typography variant='body2'>&#160;</Typography>
           )
         )}
-      </>
+      </TableCellConatiner>
     ),
   },
   clients: {
     header: 'Clients',
     render: (hh) => (
-      <>
+      <TableCellConatiner>
         {hh.householdClients.map((c) => (
           <Stack
             key={c.id}
@@ -71,41 +77,45 @@ export const HOUSEHOLD_COLUMNS: {
             <ClientDobAge client={c.client} noDob />
           </Stack>
         ))}
-      </>
+      </TableCellConatiner>
     ),
   },
   relationshipToHoH: {
     header: 'Relationship to HoH',
     render: (hh) => (
-      <>
-        {hh.householdClients.map((c) => (
-          <HmisEnum
-            key={c.id}
-            value={c.relationshipToHoH}
-            enumMap={{
-              ...HmisEnums.RelationshipToHoH,
-              [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
-            }}
-            whiteSpace='nowrap'
-          />
-        ))}
-      </>
+      <TableCellConatiner>
+        {hh.householdClients.map((c) =>
+          c.relationshipToHoH === RelationshipToHoH.DataNotCollected ? (
+            <Typography variant='body2'>&#160;</Typography>
+          ) : (
+            <HmisEnum
+              key={c.id}
+              value={c.relationshipToHoH}
+              enumMap={{
+                ...HmisEnums.RelationshipToHoH,
+                [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
+              }}
+              whiteSpace='nowrap'
+            />
+          )
+        )}
+      </TableCellConatiner>
     ),
   },
   status: {
     header: 'Status',
     render: (hh) => (
-      <>
+      <TableCellConatiner>
         {hh.householdClients.map((c) => (
           <EnrollmentStatus key={c.id} enrollment={c.enrollment} />
         ))}
-      </>
+      </TableCellConatiner>
     ),
   },
   enrollmentPeriod: {
     header: 'Enrollment Period',
     render: (hh) => (
-      <>
+      <TableCellConatiner>
         {hh.householdClients.map((c) => (
           <Typography key={c.id} variant='body2' whiteSpace='nowrap'>
             {parseAndFormatDateRange(
@@ -114,7 +124,7 @@ export const HOUSEHOLD_COLUMNS: {
             )}
           </Typography>
         ))}
-      </>
+      </TableCellConatiner>
     ),
   },
   householdId: {

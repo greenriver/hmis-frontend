@@ -48,12 +48,12 @@ const ProjectEnrollmentsTable = ({
 
   return (
     <>
-      <Box p={2}>
-        <Stack direction='row' gap={2}>
+      <Box py={2} px={3} sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Stack direction='row' gap={4}>
           {!modeProp && (
             <Box>
               <LabelWithContent
-                label='View Results as'
+                label='View enrollments by'
                 labelId='results-display-format-label'
                 renderChildren={(labelElement) => (
                   <ToggleButtonGroup
@@ -70,16 +70,18 @@ const ProjectEnrollmentsTable = ({
                       value='households'
                       aria-label='Enrollments'
                       size='small'
+                      sx={{ px: 2 }}
                     >
-                      <PeopleIcon />
+                      <PeopleIcon fontSize='small' />
                       <Box sx={{ pl: 0.5 }}>Households</Box>
                     </ToggleButton>
                     <ToggleButton
                       value='clients'
                       aria-label='Clients'
                       size='small'
+                      sx={{ px: 2 }}
                     >
-                      <PersonIcon />
+                      <PersonIcon fontSize='small' />
                       <Box sx={{ pl: 0.5 }}>Clients</Box>
                     </ToggleButton>
                   </ToggleButtonGroup>
