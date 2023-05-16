@@ -1,5 +1,4 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
-import { formatISO } from 'date-fns';
 import { ReactNode, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -11,6 +10,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
   formatDateForDisplay,
+  formatDateForGql,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
@@ -162,10 +162,7 @@ const ProjectHouseholdsTable = ({
   wipEnrollmentsOnly?: boolean;
 }) => {
   const openOnDateString = useMemo(
-    () =>
-      openOnDate
-        ? formatISO(openOnDate, { representation: 'date' })
-        : undefined,
+    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
     [openOnDate]
   );
 

@@ -1,5 +1,4 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
-import { formatISO } from 'date-fns';
 import { useCallback, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -10,6 +9,7 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
   formatDateForDisplay,
+  formatDateForGql,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
@@ -120,13 +120,9 @@ const ProjectClientEnrollmentsTable = ({
   );
 
   const openOnDateString = useMemo(
-    () =>
-      openOnDate
-        ? formatISO(openOnDate, { representation: 'date' })
-        : undefined,
+    () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
     [openOnDate]
   );
-
   return (
     <GenericTableWithData<
       GetProjectEnrollmentsQuery,
