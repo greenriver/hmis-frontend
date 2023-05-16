@@ -1843,6 +1843,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Household',
     fields: [
       {
+        name: 'householdSize',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',

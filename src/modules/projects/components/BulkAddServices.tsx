@@ -7,14 +7,15 @@ import { ColumnDef } from '../../../components/elements/GenericTable';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { InactiveChip } from './ProjectOverview';
+import {
+  ENROLLMENT_COLUMNS,
+  EnrollmentFields,
+} from './tables/ProjectClientEnrollmentsTable';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import useSafeParams from '@/hooks/useSafeParams';
 import BulkAdd from '@/modules/bulk/components/BulkAdd';
-import ProjectEnrollmentsTable, {
-  EnrollmentFields,
-  ENROLLMENT_COLUMNS,
-} from '@/modules/projects/components/tables/ProjectEnrollmentsTable';
+import ProjectEnrollmentsTable from '@/modules/projects/components/tables/ProjectEnrollmentsTable';
 import {
   AddServiceToEnrollmentDocument,
   AddServiceToEnrollmentMutation,
@@ -57,6 +58,7 @@ const BulkAddServices = () => {
           )}
           {values?.dateProvided && values?.typeProvided && (
             <ProjectEnrollmentsTable
+              mode='clients'
               projectId={projectId}
               openOnDate={values.dateProvided}
               linkRowToEnrollment={false}
