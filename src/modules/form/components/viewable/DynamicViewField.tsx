@@ -48,7 +48,6 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
   const label = noLabel ? null : getLabel(item, horizontal);
 
   const [, pickListLoading] = usePickList(item, pickListRelationId, {
-    fetchPolicy: 'network-only', // Always fetch, because ProjectCoC and Enrollment records change
     onCompleted: (data) => {
       const newValue = getValueFromPickListData({
         item,
@@ -57,7 +56,8 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
         data,
         setInitial: false,
       });
-      if (newValue) adjustValue(newValue);
+      // If this is already cached this will call setState within a render, which is an error; So use timeout to push the setter call to the next render cycle
+      if (newValue) setTimeout(() => adjustValue(newValue));
     },
   });
 

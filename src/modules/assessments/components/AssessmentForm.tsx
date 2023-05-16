@@ -14,7 +14,8 @@ import {
   CONTEXT_HEADER_HEIGHT,
   STICKY_BAR_HEIGHT,
 } from '@/components/layout/layoutConstants';
-import NotFound from '@/components/pages/NotFound';
+import useIsPrintView from '@/hooks/useIsPrintView';
+import usePrintTrigger from '@/hooks/usePrintTrigger';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import { hasAnyValue } from '@/modules/errors/util';
 import DynamicForm, {
@@ -24,6 +25,7 @@ import DynamicForm, {
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
   createInitialValuesFromSavedValues,
   getInitialValues,
@@ -88,6 +90,8 @@ const AssessmentForm = ({
     setDialogOpen(false);
     setReloadInitialValues((old) => !old);
   }, []);
+
+  const isPrintView = useIsPrintView();
 
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
@@ -165,54 +169,66 @@ const AssessmentForm = ({
 
   const canEdit = enrollment?.access.canEditEnrollments;
 
-  if (!enrollment) return <NotFound />;
+  // Manually preload picklists here so we can prevent printing until they're fetched
+  const { loading: pickListsLoading } = usePreloadPicklists(
+    definition.definition,
+    enrollment?.project?.id
+  );
+  usePrintTrigger({
+    startReady: isPrintView,
+    hold: pickListsLoading,
+  });
+
+  const navigation = (
+    <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
+      <Box
+        sx={{
+          position: 'sticky',
+          top: top + 16,
+        }}
+      >
+        <Paper sx={{ p: 2 }}>
+          {navigationTitle}
+          <FormStepper
+            items={definition.definition.item}
+            scrollOffset={top}
+            useUrlHash={!embeddedInWorkflow}
+          />
+        </Paper>
+        <Stack gap={2} sx={{ mt: 2 }}>
+          {!assessment && (
+            <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
+              <Button
+                variant='outlined'
+                onClick={() => setDialogOpen(true)}
+                sx={{ height: 'fit-content' }}
+                fullWidth
+              >
+                Autofill Assessment
+              </Button>
+            </ButtonTooltipContainer>
+          )}
+          {assessment && (
+            <DeleteAssessmentButton
+              assessment={assessment}
+              clientId={enrollment.client.id}
+              enrollmentId={enrollment.id}
+              onSuccess={navigateToEnrollment}
+            />
+          )}
+          {import.meta.env.MODE === 'development' && assessment && (
+            <IdDisplay prefix='Assessment' value={assessment.id} />
+          )}
+        </Stack>
+      </Box>
+    </Grid>
+  );
 
   return (
     <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
-      <Grid item xs={2.5} sx={{ pr: 2, pt: '0 !important' }}>
-        <Box
-          sx={{
-            position: 'sticky',
-            top: top + 16,
-          }}
-        >
-          <Paper sx={{ p: 2 }}>
-            {navigationTitle}
-            <FormStepper
-              items={definition.definition.item}
-              scrollOffset={top}
-              useUrlHash={!embeddedInWorkflow}
-            />
-          </Paper>
-          <Stack gap={2} sx={{ mt: 2 }}>
-            {!assessment && (
-              <ButtonTooltipContainer title='Choose a previous assessment to copy into this assessment'>
-                <Button
-                  variant='outlined'
-                  onClick={() => setDialogOpen(true)}
-                  sx={{ height: 'fit-content' }}
-                  fullWidth
-                >
-                  Autofill Assessment
-                </Button>
-              </ButtonTooltipContainer>
-            )}
-            {assessment && (
-              <DeleteAssessmentButton
-                assessment={assessment}
-                clientId={enrollment.client.id}
-                enrollmentId={enrollment.id}
-                onSuccess={navigateToEnrollment}
-              />
-            )}
-            {import.meta.env.MODE === 'development' && assessment && (
-              <IdDisplay prefix='Assessment' value={assessment.id} />
-            )}
-          </Stack>
-        </Box>
-      </Grid>
-      <Grid item xs={9} sx={{ pt: '0 !important' }}>
-        {assessment && !assessment.inProgress && locked && (
+      {!isPrintView && navigation}
+      <Grid item xs sx={{ pt: '0 !important' }}>
+        {!isPrintView && assessment && !assessment.inProgress && locked && (
           <LockedAssessmentAlert
             allowUnlock={canEdit}
             onUnlock={() => setLocked(false)}

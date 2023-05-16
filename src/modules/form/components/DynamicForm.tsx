@@ -11,11 +11,13 @@ import React, {
 
 import useDynamicFields from '../hooks/useDynamicFields';
 import { DynamicFormContext } from '../hooks/useDynamicFormContext';
+import usePreloadPicklists from '../hooks/usePreloadPicklists';
 import { ChangeType, FormActionTypes, FormValues } from '../types';
 
 import FormActions, { FormActionProps } from './FormActions';
 import SaveSlide from './SaveSlide';
 
+import Loading from '@/components/elements/Loading';
 import useElementInView from '@/hooks/useElementInView';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -90,6 +92,11 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
     });
+    const { loading: pickListsLoading } = usePreloadPicklists(
+      definition,
+      pickListRelationId
+    );
+
     const [dirty, setDirty] = useState(false);
 
     const [promptSave, setPromptSave] = useState<boolean | undefined>();
@@ -180,6 +187,8 @@ const DynamicForm = forwardRef(
       },
       []
     );
+
+    if (pickListsLoading) return <Loading />;
 
     const saveButtons = (
       <FormActions

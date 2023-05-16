@@ -1,4 +1,3 @@
-import { Stack } from '@mui/system';
 import { useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -72,43 +71,17 @@ const InventoryTable = () => {
               ),
             },
           ]
-        : [
-            {
-              header: 'Units',
-              render: 'units.nodesCount' as keyof InventoryFieldsFragment,
-            },
-          ]),
+        : []),
+      {
+        header: 'Units',
+        render: 'unitInventory' as keyof InventoryFieldsFragment,
+      },
       {
         header: 'Beds',
-        render: 'beds.nodesCount' as keyof InventoryFieldsFragment,
+        render: 'bedInventory' as keyof InventoryFieldsFragment,
       },
-      ...(canEditProject
-        ? [
-            {
-              key: 'actions',
-              width: '1%',
-              render: (record: InventoryFieldsFragment) => (
-                <Stack direction='row' spacing={1}>
-                  <ButtonLink
-                    to={generateSafePath(
-                      ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
-                      {
-                        projectId: project.id,
-                        inventoryId: record.id,
-                      }
-                    )}
-                    size='small'
-                    variant='outlined'
-                  >
-                    Beds
-                  </ButtonLink>
-                </Stack>
-              ),
-            },
-          ]
-        : []),
     ];
-  }, [project, canEditProject]);
+  }, [project]);
 
   const navigate = useNavigate();
   const onSuccessfulDelete = useCallback(() => {
@@ -137,6 +110,7 @@ const InventoryTable = () => {
           title='Inventory'
           open={!!viewingRecord}
           onClose={() => setViewingRecord(undefined)}
+          pickListRelationId={project.id}
           actions={
             canEditProject && (
               <>

@@ -93,7 +93,6 @@ export const useDashboardBreadcrumbs = (
           title: 'Inventory',
           parent: ProjectDashboardRoutes.OVERVIEW,
         },
-
         [ProjectDashboardRoutes.NEW_INVENTORY]: {
           title: 'Add Inventory',
           parent: ProjectDashboardRoutes.INVENTORY,
@@ -102,9 +101,9 @@ export const useDashboardBreadcrumbs = (
           title: 'Update Inventory',
           parent: ProjectDashboardRoutes.INVENTORY,
         },
-        [ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS]: {
-          title: 'Beds and Units',
-          parent: ProjectDashboardRoutes.INVENTORY,
+        [ProjectDashboardRoutes.UNITS]: {
+          title: 'Units',
+          parent: ProjectDashboardRoutes.OVERVIEW,
         },
       };
     }

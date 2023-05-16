@@ -54,10 +54,10 @@ const projectClientDashboardRoutes = {
   COCS: 'coc',
   NEW_COC: 'coc/new',
   EDIT_COC: 'coc/:cocId/edit',
+  UNITS: 'units',
   INVENTORY: 'inventory',
   NEW_INVENTORY: 'inventory/new',
   EDIT_INVENTORY: 'inventory/:inventoryId/edit',
-  MANAGE_INVENTORY_BEDS: 'inventory/:inventoryId/beds',
 };
 
 // Set up full dashboard routes so we can use `generateSafePath`
@@ -98,3 +98,5 @@ export const FOCUS_MODE_ROUTES = [
     previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
   },
 ];
+
+export const PRINTABLE_ROUTES = [ClientDashboardRoutes.VIEW_ASSESSMENT];

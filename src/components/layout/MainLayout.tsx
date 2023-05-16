@@ -9,10 +9,12 @@ import {
   OP_LINK_BAR_HEIGHT,
   SHOW_OP_LINK_BAR,
 } from './layoutConstants';
+import PrintViewButton from './PrintViewButton';
 import UserMenu from './UserMenu';
 import WarehouseLinkBar from './WarehouseLinkBar';
 
 import Loading from '@/components/elements/Loading';
+import useIsPrintView from '@/hooks/useIsPrintView';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -27,9 +29,36 @@ interface Props {
 const MainLayout: React.FC<Props> = ({ children }) => {
   const { user, loading } = useAuth();
   const { appName } = useHmisAppSettings();
+  const isPrint = useIsPrintView();
   // Load root permissions into the cache before loading the page
   const { loading: permissionsLoading } = useGetRootPermissionsQuery();
   if (loading || permissionsLoading || !user) return <Loading />;
+
+  if (isPrint)
+    return (
+      <>
+        <CssBaseline />
+        <Box
+          sx={(theme) => ({
+            position: 'fixed',
+            right: theme.spacing(1),
+            top: theme.spacing(1),
+            backgroundColor: theme.palette.background.paper,
+            '& > *': {
+              boxShadow: `${theme.shadows[2]} !important`,
+            },
+            '@media print': {
+              '&': {
+                display: 'none',
+              },
+            },
+          })}
+        >
+          <PrintViewButton exit />
+        </Box>
+        {children}
+      </>
+    );
 
   return (
     <React.Fragment>

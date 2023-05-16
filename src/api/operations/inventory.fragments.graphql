@@ -1,9 +1,9 @@
 fragment InventoryFields on Inventory {
   availability
   bedInventory
-  # chBedInventory
-  # chVetBedInventory
-  # chYouthBedInventory
+  chBedInventory
+  chVetBedInventory
+  chYouthBedInventory
   cocCode
   dateCreated
   dateDeleted
@@ -13,39 +13,37 @@ fragment InventoryFields on Inventory {
   id
   inventoryEndDate
   inventoryStartDate
-  beds {
-    nodesCount
-  }
-  units {
-    nodesCount
-  }
-  # otherBedInventory
+  otherBedInventory
   unitInventory
-  # vetBedInventory
-  # youthBedInventory
-  # youthVetBedInventory
+  vetBedInventory
+  youthBedInventory
+  youthVetBedInventory
   user {
     ...UserFields
   }
 }
 
+fragment UnitTypeFields on UnitTypeObject {
+  id
+  description
+  bedType
+  unitSize
+  dateUpdated
+  dateCreated
+}
+
 fragment UnitFields on Unit {
   id
   name
-  bedCount
   startDate
   endDate
-}
-
-fragment BedFields on Bed {
-  id
-  bedType
-  name
-  gender
-  startDate
-  endDate
-  unit {
-    id
-    name
+  unitSize
+  dateUpdated
+  dateCreated
+  unitType {
+    ...UnitTypeFields
+  }
+  user {
+    ...UserFields
   }
 }

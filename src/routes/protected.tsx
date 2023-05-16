@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { ReactNode, Suspense } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import {
@@ -50,13 +50,13 @@ import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
-import InventoryBeds from '@/modules/projects/components/InventoryBeds';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
@@ -84,7 +84,12 @@ const ParamsWrapper = <T extends { [x: string]: string } = any>({
   return children(params);
 };
 
-export const protectedRoutes = [
+interface RouteNode {
+  path: string;
+  element: ReactNode;
+  children?: RouteNode[];
+}
+export const protectedRoutes: RouteNode[] = [
   {
     path: '/',
     element: <App />,
@@ -124,6 +129,10 @@ export const protectedRoutes = [
             element: <Inventories />,
           },
           {
+            path: ProjectDashboardRoutes.UNITS,
+            element: <Units />,
+          },
+          {
             path: ProjectDashboardRoutes.NEW_INVENTORY,
             element: (
               <ProjectEditRoute>
@@ -136,14 +145,6 @@ export const protectedRoutes = [
             element: (
               <ProjectEditRoute>
                 <Inventory />
-              </ProjectEditRoute>
-            ),
-          },
-          {
-            path: ProjectDashboardRoutes.MANAGE_INVENTORY_BEDS,
-            element: (
-              <ProjectEditRoute>
-                <InventoryBeds />
               </ProjectEditRoute>
             ),
           },
@@ -224,9 +225,9 @@ export const protectedRoutes = [
       {
         path: Routes.CREATE_CLIENT,
         element: (
-          <ClientRoute edit>
+          <RootPermissionsFilter permissions='canEditClients'>
             <CreateClient />
-          </ClientRoute>
+          </RootPermissionsFilter>
         ),
       },
       {

@@ -1,4 +1,4 @@
-import { Typography, TypographyProps } from '@mui/material';
+import { Box, Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props extends TypographyProps {
@@ -16,12 +16,20 @@ const IdDisplay = ({ value, prefix, withoutEmphasis, ...props }: Props) => {
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 0.5,
+        gap: 0.8,
         ...props.sx,
       }}
     >
       {prefix ? `${prefix} ` : ''} ID:{' '}
-      {withoutEmphasis ? value : <b>{value}</b>}
+      <Box
+        component='span'
+        sx={{
+          fontWeight: withoutEmphasis ? undefined : 600,
+          wordBreak: 'break-all',
+        }}
+      >
+        {value}
+      </Box>
     </Typography>
   );
 };
