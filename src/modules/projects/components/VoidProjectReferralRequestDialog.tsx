@@ -54,6 +54,8 @@ const VoidProjectReferralRequestDialog: React.FC<Props> = ({
       onConfirm={handleConfirm}
       onCancel={onClose}
       loading={loading}
+      color='error'
+      confirmText='Confirm Cancellation'
     >
       {error && <ApolloErrorAlert error={error} />}
       <ErrorAlert errors={errors} />

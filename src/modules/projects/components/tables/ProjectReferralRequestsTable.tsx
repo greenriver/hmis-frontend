@@ -50,7 +50,13 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       {
         header: 'Action',
         render: (row: ReferralRequestFieldsFragment) => (
-          <Button onClick={() => setVoidingReferralRequest(row)}>Cancel</Button>
+          <Button
+            variant='outlined'
+            color='error'
+            onClick={() => setVoidingReferralRequest(row)}
+          >
+            Cancel Request
+          </Button>
         ),
       },
     ],
