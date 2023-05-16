@@ -65,7 +65,7 @@ const GenericTableWithData = <
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
   recordType,
-  fetchPolicy,
+  fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
   header,
