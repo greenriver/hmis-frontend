@@ -6,6 +6,7 @@ import { ReactNode, useCallback, useState } from 'react';
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
+import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 
 interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
@@ -20,6 +21,7 @@ interface DeleteMutationButtonProps<MutationVariables> {
   children: ReactNode;
   recordName?: string;
   confirmationDialogContent?: ReactNode;
+  verb?: string;
 }
 
 const DeleteMutationButton = <Mutation, MutationVariables>({
@@ -32,25 +34,24 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   recordName = 'record',
   onSuccess,
   confirmationDialogContent,
+  verb = 'delete',
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
 
   const [deleteRecord, { loading, error }] = useMutation<
     Mutation,
     MutationVariables
-  >(queryDocument, {
-    variables,
-    onCompleted: (result) => {
+  >(queryDocument, { variables });
+  const handleDelete = useCallback(() => {
+    deleteRecord().then((result) => {
+      // fixme: should probably look for errors[] in mutation response
       const id = get(result, idPath);
       if (id) {
         setShowDialog(false);
         if (onSuccess) onSuccess();
       }
-    },
-  });
-  const handleDelete = useCallback(() => {
-    deleteRecord();
-  }, [deleteRecord]);
+    });
+  }, [deleteRecord, idPath, onSuccess]);
 
   return (
     <>
@@ -70,8 +71,9 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
-        title={`Delete ${recordName}`}
-        confirmText={`Yes, delete ${recordName}`}
+        title={`${verb} ${recordName}`}
+        confirmText={`Yes, ${verb} ${recordName}`}
+        cancelText='Close'
         onConfirm={handleDelete}
         onCancel={() => setShowDialog(false)}
         loading={loading}
@@ -79,16 +81,20 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         color='error'
         {...ConfirmationDialogProps}
       >
-        {confirmationDialogContent ? (
-          confirmationDialogContent
-        ) : (
-          <>
-            <Typography>
-              {`Are you sure you want to delete this ${recordName}?`}
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
+        <>
+          {error && <ApolloErrorAlert error={error} />}
+
+          {confirmationDialogContent ? (
+            confirmationDialogContent
+          ) : (
+            <>
+              <Typography>
+                {`Are you sure you want to ${verb} this ${recordName}?`}
+              </Typography>
+              <Typography>This action cannot be undone.</Typography>
+            </>
+          )}
+        </>
       </ConfirmationDialog>
     </>
   );

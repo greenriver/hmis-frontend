@@ -1,25 +1,33 @@
-import { Button } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import VoidProjectReferralRequestDialog from '@/modules/projects/components/VoidProjectReferralRequestDialog';
+import { cache } from '@/providers/apolloClient';
 import {
   GetProjectReferralRequestsDocument,
   GetProjectReferralRequestsQuery,
   GetProjectReferralRequestsQueryVariables,
   ProjectAllFieldsFragment,
   ReferralRequestFieldsFragment,
+  VoidReferralRequestDocument,
+  VoidReferralRequestMutation,
+  VoidReferralRequestMutationVariables,
 } from '@/types/gqlTypes';
+
+const clearCache = (projectId: string) => {
+  cache.evict({
+    id: `Project:${projectId}`,
+    fieldName: 'referralRequests',
+  });
+};
 
 interface Props {
   project: ProjectAllFieldsFragment;
 }
 
 const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
-  const [voidingReferralRequest, setVoidingReferralRequest] =
-    useState<ReferralRequestFieldsFragment>();
   const columns = useMemo<ColumnDef<ReferralRequestFieldsFragment>[]>(
     () => [
       {
@@ -41,7 +49,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
         header: 'Requestor Details',
         render: (row: ReferralRequestFieldsFragment) => (
           <>
-            {`${row.requestorName} <${row}>`}
+            {`${row.requestorName} <${row.requestorEmail}>`}
             <br />
             {row.requestorPhone}
           </>
@@ -49,46 +57,47 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       },
       {
         header: 'Action',
-        render: (row: ReferralRequestFieldsFragment) => (
-          <Button
-            variant='outlined'
-            color='error'
-            onClick={() => setVoidingReferralRequest(row)}
+        render: (referralRequest: ReferralRequestFieldsFragment) => (
+          <DeleteMutationButton<
+            VoidReferralRequestMutation,
+            VoidReferralRequestMutationVariables
+          >
+            queryDocument={VoidReferralRequestDocument}
+            variables={{ id: referralRequest.id }}
+            idPath={'data.voidReferralRequest.record.id'}
+            recordName='Referral Request'
+            verb='cancel'
+            onSuccess={() => {
+              clearCache(project.id);
+            }}
+            ConfirmationDialogProps={{
+              confirmText: 'Confirm Cancellation',
+              cancelText: 'close',
+            }}
+            confirmationDialogContent={
+              <p>{`This will cancel the referral request at ${project.projectName} for ${referralRequest.unitType.description} requested by ${referralRequest.requestorName} for the estimated date needed of ${referralRequest.neededBy}.`}</p>
+            }
           >
             Cancel Request
-          </Button>
+          </DeleteMutationButton>
         ),
       },
     ],
-    []
+    [project.id, project.projectName]
   );
 
-  const handleClose = useCallback(() => {
-    setVoidingReferralRequest(undefined);
-  }, []);
-
   return (
-    <>
-      {voidingReferralRequest && (
-        <VoidProjectReferralRequestDialog
-          project={project}
-          onClose={handleClose}
-          referralRequest={voidingReferralRequest}
-        />
-      )}
-
-      <GenericTableWithData<
-        GetProjectReferralRequestsQuery,
-        GetProjectReferralRequestsQueryVariables,
-        ReferralRequestFieldsFragment
-      >
-        queryVariables={{ id: project.id }}
-        queryDocument={GetProjectReferralRequestsDocument}
-        columns={columns}
-        noData='No referral requests.'
-        pagePath='project.referralRequests'
-      />
-    </>
+    <GenericTableWithData<
+      GetProjectReferralRequestsQuery,
+      GetProjectReferralRequestsQueryVariables,
+      ReferralRequestFieldsFragment
+    >
+      queryVariables={{ id: project.id }}
+      queryDocument={GetProjectReferralRequestsDocument}
+      columns={columns}
+      noData='No referral requests.'
+      pagePath='project.referralRequests'
+    />
   );
 };
 export default ProjectReferralRequestsTable;
