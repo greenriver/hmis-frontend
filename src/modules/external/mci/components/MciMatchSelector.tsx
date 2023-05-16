@@ -174,6 +174,10 @@ const MciMatchSelector = ({
               borderLeft: '1px solid white',
               borderColor: 'borders.light',
             },
+            'tr:nth-last-child(3) td': {
+              borderBottom: (theme) =>
+                `2px solid ${theme.palette.borders.dark}`,
+            },
           },
         }}
         actionRow={
@@ -188,7 +192,7 @@ const MciMatchSelector = ({
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>
-                  No match, create a new MCI ID
+                  New MCI ID
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -200,7 +204,16 @@ const MciMatchSelector = ({
                   />
                 </TableCell>
                 <TableCell colSpan={2} sx={{ py: 3 }}>
-                  No match, leave uncleared (not recommmended)
+                  <Stack direction={'row'} gap={1}>
+                    Uncleared Client{' '}
+                    <Typography
+                      variant='inherit'
+                      fontStyle={'italic'}
+                      color='text.secondary'
+                    >
+                      (Not Recommmended)
+                    </Typography>
+                  </Stack>
                 </TableCell>
               </TableRow>
             </>
