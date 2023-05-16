@@ -2,8 +2,10 @@ import { ApolloClient, InMemoryCache, from, ServerError } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
+import * as Sentry from '@sentry/react';
 import fetch from 'cross-fetch';
 
+import { sentryUser } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 
@@ -31,11 +33,24 @@ const authLink = setContext(
  *
  * If unauthenticated, remove user info from storage and redirect to the login page.
  */
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) console.log('[GraphQL error]', graphQLErrors);
+const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
+  if (graphQLErrors) {
+    console.error('[GraphQL error]', graphQLErrors);
+    graphQLErrors.forEach(({ message, locations, path }) =>
+      Sentry.captureException(new Error(message), {
+        extra: {
+          query: operation?.query?.loc?.source?.body,
+          locations,
+          path,
+        },
+        user: sentryUser(),
+      })
+    );
+  }
 
   if (networkError) {
-    console.log('[Network error]', networkError);
+    console.error('[Network error]', networkError);
+    Sentry.captureException(networkError, { user: sentryUser() });
     if ((networkError as ServerError).statusCode == 401) {
       storage.removeUser();
       location.reload();

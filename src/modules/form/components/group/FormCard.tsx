@@ -96,6 +96,7 @@ const FormCard = ({
         sx={{
           py: 3,
           px: 2.5,
+          pageBreakInside: 'avoid',
         }}
       >
         {/* Card title */}

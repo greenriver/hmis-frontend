@@ -18,7 +18,8 @@ const SentryErrorBoundary = ({
     <ErrorBoundary
       fallback={fullpage ? fullPageErrorFallback : alertErrorFallback}
       beforeCapture={(scope) => {
-        scope.setUser(sentryUser(user));
+        const userObj = sentryUser(user);
+        if (userObj) scope.setUser(userObj);
       }}
     >
       {children}

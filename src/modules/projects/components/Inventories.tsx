@@ -20,7 +20,7 @@ const Inventories = () => {
         actions={
           <ProjectPermissionsFilter
             id={project.id}
-            permissions='canEditProjectDetails'
+            permissions='canManageInventory'
           >
             <ButtonLink
               data-testid='addInventoryButton'
