@@ -22,11 +22,13 @@ const ProjectEnrollmentsTable = ({
   linkRowToEnrollment = false,
   searchable = true,
   mode: modeProp,
+  initialMode: initialModeProp = 'households',
   // TODO: implement, needs a backend flag
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   wipEnrollmentsOnly = false,
 }: {
   mode?: Mode;
+  initialMode?: Mode;
   projectId: string;
   columns?: ColumnDef<EnrollmentFields>[];
   linkRowToEnrollment?: boolean;
@@ -38,7 +40,7 @@ const ProjectEnrollmentsTable = ({
     string | undefined
   >(undefined);
 
-  const [mode, setMode] = useState<Mode>(modeProp || 'clients');
+  const [mode, setMode] = useState<Mode>(modeProp || initialModeProp);
 
   const onChangeMode = useCallback(
     (event: React.MouseEvent<HTMLElement>, value: Mode) =>
