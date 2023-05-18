@@ -11,6 +11,7 @@ interface Props {
   noValue?: ReactNode;
   variant?: TypographyProps['variant'];
   reveal?: boolean;
+  noDob?: boolean;
 }
 
 const ClientDobAge = ({
@@ -18,6 +19,7 @@ const ClientDobAge = ({
   noValue,
   reveal,
   variant = 'body2',
+  noDob = false,
 }: Props) => {
   if (isNil(client.dob) && isNil(client.age)) return <>{noValue}</> || null;
 
@@ -26,7 +28,8 @@ const ClientDobAge = ({
 
   return (
     <Stack direction='row' gap={0.5}>
-      {client.dob &&
+      {!noDob &&
+        client.dob &&
         !onlyAge &&
         (reveal ? (
           dobComponent
