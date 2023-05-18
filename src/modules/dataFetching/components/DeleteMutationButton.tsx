@@ -6,7 +6,6 @@ import { ReactNode, useCallback, useState } from 'react';
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
-import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 
 interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
@@ -82,8 +81,6 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         {...ConfirmationDialogProps}
       >
         <>
-          {error && <ApolloErrorAlert error={error} />}
-
           {confirmationDialogContent ? (
             confirmationDialogContent
           ) : (
