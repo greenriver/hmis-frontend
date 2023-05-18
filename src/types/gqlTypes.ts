@@ -73,6 +73,7 @@ export type Assessment = {
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -263,6 +264,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -634,6 +636,31 @@ export type CreateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   units?: Maybe<Array<Unit>>;
+};
+
+export type CustomDataElement = {
+  __typename?: 'CustomDataElement';
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  label: Scalars['String'];
+  repeats: Scalars['Boolean'];
+  value?: Maybe<CustomDataElementValue>;
+  values?: Maybe<Array<CustomDataElementValue>>;
+};
+
+export type CustomDataElementValue = {
+  __typename?: 'CustomDataElementValue';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueFloat?: Maybe<Scalars['Float']>;
+  valueInteger?: Maybe<Scalars['Int']>;
+  valueJson?: Maybe<Scalars['JsonObject']>;
+  valueString?: Maybe<Scalars['String']>;
+  valueText?: Maybe<Scalars['String']>;
 };
 
 /** CustomForm */
@@ -1499,6 +1526,8 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  /** Key of CustomDataElement to save record as. Use record_type to specify type. */
+  customFieldKey?: Maybe<Scalars['String']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -1597,6 +1626,7 @@ export enum FormRole {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2030,6 +2060,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']>;
   chYouthBedInventory?: Maybe<Scalars['Int']>;
   cocCode: Scalars['String'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2453,6 +2484,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2573,6 +2605,7 @@ export type Project = {
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<NoYesMissing>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -3100,6 +3133,7 @@ export type Service = {
   __typename?: 'Service';
   FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateProvided: Scalars['ISO8601Date'];
@@ -3923,6 +3957,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -3948,6 +3983,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -3973,6 +4009,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -3998,6 +4035,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4023,6 +4061,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4434,6 +4473,7 @@ export type GetAssessmentQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -4459,6 +4499,7 @@ export type GetAssessmentQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4484,6 +4525,7 @@ export type GetAssessmentQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4509,6 +4551,7 @@ export type GetAssessmentQuery = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4534,6 +4577,7 @@ export type GetAssessmentQuery = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -4945,6 +4989,7 @@ export type SaveAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4970,6 +5015,7 @@ export type SaveAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4995,6 +5041,7 @@ export type SaveAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5020,6 +5067,7 @@ export type SaveAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5045,6 +5093,7 @@ export type SaveAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -5419,6 +5468,7 @@ export type SubmitAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -5444,6 +5494,7 @@ export type SubmitAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -5469,6 +5520,7 @@ export type SubmitAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5494,6 +5546,7 @@ export type SubmitAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5519,6 +5572,7 @@ export type SubmitAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -8195,6 +8249,57 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type CustomDataElementValueFieldsFragment = {
+  __typename?: 'CustomDataElementValue';
+  id: string;
+  valueBoolean?: boolean | null;
+  valueDate?: string | null;
+  valueFloat?: number | null;
+  valueInteger?: number | null;
+  valueJson?: any | null;
+  valueString?: string | null;
+  valueText?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type CustomDataElementFieldsFragment = {
+  __typename?: 'CustomDataElement';
+  id: string;
+  key: string;
+  label: string;
+  repeats: boolean;
+  value?: {
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  } | null;
+  values?: Array<{
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  }> | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -8257,6 +8362,7 @@ export type ItemFieldsFragment = {
   readOnly?: boolean | null;
   repeats?: boolean | null;
   fieldName?: string | null;
+  customFieldKey?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
@@ -8350,6 +8456,7 @@ export type FormDefinitionWithJsonFragment = {
       readOnly?: boolean | null;
       repeats?: boolean | null;
       fieldName?: string | null;
+      customFieldKey?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
@@ -8375,6 +8482,7 @@ export type FormDefinitionWithJsonFragment = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8400,6 +8508,7 @@ export type FormDefinitionWithJsonFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8425,6 +8534,7 @@ export type FormDefinitionWithJsonFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8450,6 +8560,7 @@ export type FormDefinitionWithJsonFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8814,6 +8925,7 @@ export type GetFormDefinitionQuery = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8839,6 +8951,7 @@ export type GetFormDefinitionQuery = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8864,6 +8977,7 @@ export type GetFormDefinitionQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8889,6 +9003,7 @@ export type GetFormDefinitionQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8914,6 +9029,7 @@ export type GetFormDefinitionQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -9345,6 +9461,41 @@ export type SubmitFormMutation = {
           youthBedInventory?: number | null;
           youthVetBedInventory?: number | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Organization';
@@ -9490,6 +9641,41 @@ export type InventoryFieldsFragment = {
   youthBedInventory?: number | null;
   youthVetBedInventory?: number | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type UnitTypeFieldsFragment = {
@@ -10218,6 +10404,41 @@ export type GetInventoryQuery = {
     youthBedInventory?: number | null;
     youthVetBedInventory?: number | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -10325,6 +10546,41 @@ export type GetProjectInventoriesQuery = {
         youthBedInventory?: number | null;
         youthVetBedInventory?: number | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -10805,6 +11061,7 @@ export const ItemFieldsFragmentDoc = gql`
     readOnly
     repeats
     fieldName
+    customFieldKey
     recordType
     pickListReference
     serviceDetailType
@@ -11429,6 +11686,39 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     data
   }
 `;
+export const CustomDataElementValueFieldsFragmentDoc = gql`
+  fragment CustomDataElementValueFields on CustomDataElementValue {
+    id
+    valueBoolean
+    valueDate
+    valueFloat
+    valueInteger
+    valueJson
+    valueString
+    valueText
+    user {
+      ...UserFields
+    }
+    dateCreated
+    dateUpdated
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const CustomDataElementFieldsFragmentDoc = gql`
+  fragment CustomDataElementFields on CustomDataElement {
+    id
+    key
+    label
+    repeats
+    value {
+      ...CustomDataElementValueFields
+    }
+    values {
+      ...CustomDataElementValueFields
+    }
+  }
+  ${CustomDataElementValueFieldsFragmentDoc}
+`;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
     availability
@@ -11453,8 +11743,12 @@ export const InventoryFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UnitTypeFieldsFragmentDoc = gql`
   fragment UnitTypeFields on UnitTypeObject {
