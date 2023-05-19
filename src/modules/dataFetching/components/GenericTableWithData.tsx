@@ -8,12 +8,14 @@ import { get, isEqual, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
+import { FilterType } from '../types';
 
 import GenericTable, {
   ColumnDef,
   Props as GenericTableProps,
 } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import TableFilters from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
@@ -22,11 +24,15 @@ import { getSchemaForType } from '@/modules/hmis/hmisUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 10;
 
-export interface Props<Query, QueryVariables, RowDataType>
+export interface Props<Query, QueryVariables, RowDataType, FilterOptionsType>
   extends Omit<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
   > {
+  filters?: Partial<
+    Record<keyof FilterOptionsType, FilterType<FilterOptionsType>>
+  >;
+  defaultFilters?: Partial<FilterOptionsType>;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -55,8 +61,11 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 const GenericTableWithData = <
   Query,
   QueryVariables,
-  RowDataType extends { id: string }
+  RowDataType extends { id: string },
+  FilterOptionsType extends Record<string, any>
 >({
+  filters,
+  defaultFilters,
   queryVariables,
   queryDocument,
   pagePath,
@@ -70,10 +79,16 @@ const GenericTableWithData = <
   fullHeight = false,
   header,
   ...props
-}: Props<Query, QueryVariables, RowDataType>) => {
+}: Props<Query, QueryVariables, RowDataType, FilterOptionsType>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
+  const [filterValues, setFilterValues] = useState<Partial<FilterOptionsType>>(
+    defaultFilters || {}
+  );
+
+  const offset = page * rowsPerPage;
+  const limit = rowsPerPage;
 
   const { data, loading, error, networkStatus } = useQuery<
     Query,
@@ -81,9 +96,10 @@ const GenericTableWithData = <
   >(queryDocument, {
     variables: {
       ...queryVariables,
+      filters: filterValues,
       ...(!rowsPath && {
-        offset: page * rowsPerPage,
-        limit: rowsPerPage,
+        offset,
+        limit,
       }),
     },
     notifyOnNetworkStatusChange: true,
@@ -176,6 +192,29 @@ const GenericTableWithData = <
           <Typography sx={{ px: 2, pt: 1, pb: 2 }}>{noData}</Typography>
         ) : (
           <>
+            <Box
+              p={2}
+              sx={(theme) => ({
+                borderBottom: `1px solid ${theme.palette.divider}`,
+              })}
+            >
+              <TableFilters
+                filters={
+                  filters
+                    ? {
+                        filters,
+                        filterValues,
+                        setFilterValues,
+                      }
+                    : undefined
+                }
+                pagination={{
+                  limit,
+                  offset,
+                  totalEntries: nodesCount,
+                }}
+              />
+            </Box>
             <GenericTable<RowDataType>
               loading={loading}
               rows={rows}
@@ -211,9 +250,10 @@ const GenericTableWithData = <
 const WrappedGenericTableWithData = <
   Query,
   QueryVariables,
-  RowDataType extends { id: string }
+  RowDataType extends { id: string },
+  FilterOptionsType extends Record<string, any>
 >(
-  props: Props<Query, QueryVariables, RowDataType>
+  props: Props<Query, QueryVariables, RowDataType, FilterOptionsType>
 ) => (
   <Box sx={props.fullHeight ? { height: '100%' } : undefined}>
     <SentryErrorBoundary>

@@ -73,6 +73,7 @@ export type Assessment = {
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -94,6 +95,12 @@ export type AssessmentAccess = {
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   id: Scalars['ID'];
+};
+
+export type AssessmentFilterOptions = {
+  projects?: InputMaybe<Array<Scalars['ID']>>;
+  roles?: InputMaybe<Array<FormRole>>;
+  textSearch?: InputMaybe<Scalars['String']>;
 };
 
 export type AssessmentInput = {
@@ -140,6 +147,11 @@ export enum AssessmentType {
   /** (2) Virtual */
   Virtual = 'VIRTUAL',
 }
+
+export type AssessmentsForEnrollmentFilterOptions = {
+  roles?: InputMaybe<Array<FormRole>>;
+  textSearch?: InputMaybe<Scalars['String']>;
+};
 
 export type AssessmentsPaginated = {
   __typename?: 'AssessmentsPaginated';
@@ -263,6 +275,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -298,6 +311,7 @@ export type Client = {
 
 /** HUD Client */
 export type ClientAssessmentsArgs = {
+  filter?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -634,6 +648,31 @@ export type CreateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   units?: Maybe<Array<Unit>>;
+};
+
+export type CustomDataElement = {
+  __typename?: 'CustomDataElement';
+  id: Scalars['ID'];
+  key?: Maybe<Scalars['String']>;
+  label?: Maybe<Scalars['String']>;
+  repeats: Scalars['Boolean'];
+  value?: Maybe<CustomDataElementValue>;
+  values?: Maybe<Array<CustomDataElementValue>>;
+};
+
+export type CustomDataElementValue = {
+  __typename?: 'CustomDataElementValue';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueFloat?: Maybe<Scalars['Float']>;
+  valueInteger?: Maybe<Scalars['Int']>;
+  valueJson?: Maybe<Scalars['JsonObject']>;
+  valueString?: Maybe<Scalars['String']>;
+  valueText?: Maybe<Scalars['String']>;
 };
 
 /** CustomForm */
@@ -1168,6 +1207,7 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
+  filter?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1597,6 +1637,7 @@ export enum FormRole {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2030,6 +2071,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']>;
   chYouthBedInventory?: Maybe<Scalars['Int']>;
   cocCode: Scalars['String'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2453,6 +2495,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2573,6 +2616,7 @@ export type Project = {
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<NoYesMissing>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -3100,6 +3144,7 @@ export type Service = {
   __typename?: 'Service';
   FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateProvided: Scalars['ISO8601Date'];

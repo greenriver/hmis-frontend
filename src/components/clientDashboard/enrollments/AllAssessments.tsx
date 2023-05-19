@@ -14,10 +14,13 @@ import {
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
+  AssessmentFilterOptions,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
+  PickListType,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -75,7 +78,8 @@ const AllAssessments = () => {
         <GenericTableWithData<
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,
-          AssessmentType
+          AssessmentType,
+          AssessmentFilterOptions
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
@@ -84,6 +88,23 @@ const AllAssessments = () => {
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments.'
+          filters={{
+            textSearch: {
+              type: 'text',
+              title: 'Text Search',
+            },
+            projects: {
+              type: 'picklist',
+              pickListReference: PickListType.Project,
+            },
+            roles: {
+              type: 'enum',
+              enumType: HmisEnums.FormRole,
+              multi: true,
+              variant: 'select',
+              title: 'Roles',
+            },
+          }}
         />
       </Paper>
     </>
