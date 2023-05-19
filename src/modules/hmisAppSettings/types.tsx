@@ -1,3 +1,5 @@
+import { ThemeOptions } from '@mui/material';
+
 export interface GlobalFeatureFlags {
   mciId?: boolean;
   externalReferrals?: boolean;
@@ -14,4 +16,5 @@ export interface HmisAppSettings {
   casUrl?: string;
   appName?: string;
   globalFeatureFlags?: GlobalFeatureFlags;
+  theme?: ThemeOptions;
 }
