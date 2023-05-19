@@ -19,7 +19,7 @@ const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
   // Allow changing theme dynamically in the console. This is purely for theme QA.
   // In the dev console, run:
   //    window.getThemes()
-  //    window.setTheme('<key>')
+  //    window.setTheme(id)
   //
   // For developing new themes:
   //    window.setThemeOptions({ palette: { secondary: { main: '#463576' } } })
