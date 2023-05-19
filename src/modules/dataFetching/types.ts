@@ -1,6 +1,8 @@
+import { PickListType } from '@/types/gqlTypes';
+
 export interface BaseFilter<I> {
   key?: keyof I;
-  title?: React.ReactNode;
+  label?: React.ReactNode;
   toInput?: (value: any) => I;
   fromInput?: (value: I) => any;
 }
@@ -32,8 +34,9 @@ export interface EnumFilter<I> extends BaseFilter<I> {
 export interface PickListFilter<I> extends BaseFilter<I> {
   type: 'picklist';
   multi?: boolean;
-  pickListReference: string;
+  pickListReference: PickListType;
   variant?: SelectElementVariant;
+  relationId?: string;
 }
 
 export type FilterType<I> =

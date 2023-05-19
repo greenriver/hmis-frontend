@@ -10,7 +10,7 @@ const TableFilterItemCheckboxes: React.FC<
     <>
       {options.map((option) => (
         <FormControlLabel
-          label={option.label || option.value}
+          label={option.label || option.code}
           control={
             <Checkbox
               size='small'
@@ -18,17 +18,17 @@ const TableFilterItemCheckboxes: React.FC<
                 if (Array.isArray(value)) {
                   onChange(
                     val
-                      ? [...value, option.value]
-                      : value.filter((v) => v !== option.value)
+                      ? [...value, option.code]
+                      : value.filter((v) => v !== option.code)
                   );
                 } else {
-                  onChange(option.value);
+                  onChange(option.code);
                 }
               }}
               checked={
                 Array.isArray(value)
-                  ? value.includes(option.value)
-                  : option.value === value
+                  ? value.includes(option.code)
+                  : option.code === value
               }
             />
           }

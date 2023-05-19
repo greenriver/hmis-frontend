@@ -193,7 +193,8 @@ const GenericTableWithData = <
         ) : (
           <>
             <Box
-              p={2}
+              px={2}
+              py={1}
               sx={(theme) => ({
                 borderBottom: `1px solid ${theme.palette.divider}`,
               })}

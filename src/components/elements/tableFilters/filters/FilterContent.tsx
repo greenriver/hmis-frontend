@@ -37,10 +37,18 @@ const TableFilterContent = <T,>({
       </Stack>
       <Divider sx={{ my: 3 }} />
       <Stack direction='row' gap={1}>
-        <Button variant='outlined' onClick={() => setIntermediateValues({})}>
+        <Button
+          variant='outlined'
+          size='small'
+          color='inherit'
+          onClick={() => setIntermediateValues({})}
+        >
           Clear All
         </Button>
-        <Button onClick={() => setFilterValues(intermediateValues)}>
+        <Button
+          size='small'
+          onClick={() => setFilterValues(intermediateValues)}
+        >
           Apply Filters
         </Button>
       </Stack>

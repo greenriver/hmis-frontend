@@ -91,9 +91,10 @@ const AllAssessments = () => {
           filters={{
             textSearch: {
               type: 'text',
-              title: 'Text Search',
+              label: 'Text Search',
             },
             projects: {
+              label: 'Projects',
               type: 'picklist',
               pickListReference: PickListType.Project,
             },
@@ -102,7 +103,7 @@ const AllAssessments = () => {
               enumType: HmisEnums.FormRole,
               multi: true,
               variant: 'select',
-              title: 'Roles',
+              label: 'Roles',
             },
           }}
         />

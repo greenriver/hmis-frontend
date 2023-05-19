@@ -1,18 +1,19 @@
-import React, { ReactNode } from 'react';
-
 import TextInput from '../../input/TextInput';
 import LabelWithContent from '../../LabelWithContent';
 
 import TableFilterItemCheckboxes from './items/Checkboxes';
+import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/Select';
 
 import { FilterType, SelectElementVariant } from '@/modules/dataFetching/types';
+import { PickListOption } from '@/types/gqlTypes';
 
 export interface TableFilterItemSelectorProps {
   variant?: SelectElementVariant;
-  options: { value: string; label?: ReactNode }[];
-  value: string | string[];
-  onChange: (value: string | string[]) => any;
+  options: PickListOption[];
+  value: string | string[] | null | undefined;
+  onChange: (value: string | string[] | null | undefined) => any;
+  loading?: boolean;
 }
 
 const TableFilterItemSelector = ({
@@ -39,7 +40,7 @@ const TableFilterItem = <T,>({
   onChange,
 }: TableFilterItemProps<T>): JSX.Element => {
   return (
-    <LabelWithContent label={filter.title || keyName}>
+    <LabelWithContent label={filter.label || keyName}>
       {(() => {
         if (filter.type === 'text')
           return (
@@ -54,12 +55,30 @@ const TableFilterItem = <T,>({
             <TableFilterItemSelector
               variant={filter.variant}
               options={Object.entries(filter.enumType).map(([key, val]) => ({
-                value: key,
+                code: key,
                 label: val,
               }))}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
             />
+          );
+
+        if (filter.type === 'picklist')
+          return (
+            <PickListWrapper
+              pickListType={filter.pickListReference}
+              relationId={filter.relationId}
+            >
+              {(options, loading) => (
+                <TableFilterItemSelector
+                  loading={loading}
+                  variant={filter.variant}
+                  options={options}
+                  value={filter.multi ? value || [] : value}
+                  onChange={onChange}
+                />
+              )}
+            </PickListWrapper>
           );
 
         return 'Not Implemented';
