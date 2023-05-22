@@ -34,8 +34,8 @@ export interface Props<
   Query,
   QueryVariables,
   RowDataType,
-  FilterOptionsType,
-  SortOptionsType
+  FilterOptionsType = Record<string, any>,
+  SortOptionsType = Record<string, string>
 > extends Omit<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
