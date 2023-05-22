@@ -20,18 +20,33 @@ import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import { getSchemaForType } from '@/modules/hmis/hmisUtil';
+import { getFilter } from '@/modules/hmis/components/HmisFilter';
+import {
+  getSchemaForInputType,
+  getSchemaForType,
+} from '@/modules/hmis/hmisUtil';
 
 const DEFAULT_ROWS_PER_PAGE = 10;
 
-export interface Props<Query, QueryVariables, RowDataType, FilterOptionsType>
-  extends Omit<
+export type TableFilterType<T> = Partial<Record<keyof T, FilterType<T>>>;
+
+export interface Props<
+  Query,
+  QueryVariables,
+  RowDataType,
+  FilterOptionsType,
+  SortOptionsType
+> extends Omit<
     GenericTableProps<RowDataType>,
     'rows' | 'tablePaginationProps' | 'loading' | 'paginated'
   > {
-  filters?: Partial<
-    Record<keyof FilterOptionsType, FilterType<FilterOptionsType>>
-  >;
+  filters?:
+    | TableFilterType<FilterOptionsType>
+    | ((
+        baseFilters: TableFilterType<FilterOptionsType>
+      ) => TableFilterType<FilterOptionsType>);
+  sortOptions?: SortOptionsType;
+  defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
@@ -41,6 +56,7 @@ export interface Props<Query, QueryVariables, RowDataType, FilterOptionsType>
   noData?: string;
   defaultPageSize?: number;
   recordType?: string; // record type for inferring columns if not provided
+  filterInputType?: string; // filter input type type for inferring filters if not provided
   nonTablePagination?: boolean; // use external pagination variant instead of MUI table pagination
   clientSidePagination?: boolean; // whether to use client-side pagination
   header?: ReactNode;
@@ -58,14 +74,34 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
   }));
 }
 
+function allFieldFilters<T>(
+  filterInputType: string
+): Partial<Record<keyof T, FilterType<T>>> {
+  const schema = getSchemaForInputType(filterInputType);
+  if (!schema) return {};
+
+  const result: Partial<Record<keyof T, FilterType<T>>> = {};
+
+  schema.args.forEach(({ name }) => {
+    const filter = getFilter(filterInputType, name);
+
+    if (filter) result[name as keyof T] = filter;
+  });
+
+  return result;
+}
+
 const GenericTableWithData = <
   Query,
   QueryVariables,
   RowDataType extends { id: string },
-  FilterOptionsType extends Record<string, any>
+  FilterOptionsType extends Record<string, any>,
+  SortOptionsType extends Record<string, string>
 >({
   filters,
-  defaultFilters,
+  defaultFilters = {},
+  sortOptions,
+  defaultSortOption,
   queryVariables,
   queryDocument,
   pagePath,
@@ -74,18 +110,25 @@ const GenericTableWithData = <
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
   recordType,
+  filterInputType,
   fetchPolicy,
   nonTablePagination = false,
   fullHeight = false,
   header,
   ...props
-}: Props<Query, QueryVariables, RowDataType, FilterOptionsType>) => {
+}: Props<
+  Query,
+  QueryVariables,
+  RowDataType,
+  FilterOptionsType,
+  SortOptionsType
+>) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
-  const [filterValues, setFilterValues] = useState<Partial<FilterOptionsType>>(
-    defaultFilters || {}
-  );
+  const [filterValues, setFilterValues] = useState(defaultFilters);
+  const [sortOrder, setSortOrder] =
+    useState<typeof defaultSortOption>(defaultSortOption);
 
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
@@ -97,6 +140,7 @@ const GenericTableWithData = <
     variables: {
       ...queryVariables,
       filters: filterValues,
+      sortOrder,
       ...(!rowsPath && {
         offset,
         limit,
@@ -170,6 +214,18 @@ const GenericTableWithData = <
     return [];
   }, [columns, recordType]);
 
+  const filterDefs = useMemo(() => {
+    const derivedFilters = filterInputType
+      ? allFieldFilters(filterInputType)
+      : {};
+    return {
+      ...derivedFilters,
+      ...(typeof filters === 'function'
+        ? filters(derivedFilters)
+        : filters || {}),
+    };
+  }, [filters, filterInputType]);
+
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched) return <Loading />;
 
@@ -200,10 +256,19 @@ const GenericTableWithData = <
               })}
             >
               <TableFilters
-                filters={
-                  filters
+                sorting={
+                  sortOptions
                     ? {
-                        filters,
+                        sortOptions,
+                        sortOptionValue: sortOrder,
+                        setSortOptionValue: setSortOrder,
+                      }
+                    : undefined
+                }
+                filters={
+                  filterDefs
+                    ? {
+                        filters: filterDefs,
                         filterValues,
                         setFilterValues,
                       }
@@ -248,14 +313,7 @@ const GenericTableWithData = <
   );
 };
 
-const WrappedGenericTableWithData = <
-  Query,
-  QueryVariables,
-  RowDataType extends { id: string },
-  FilterOptionsType extends Record<string, any>
->(
-  props: Props<Query, QueryVariables, RowDataType, FilterOptionsType>
-) => (
+const WrappedGenericTableWithData: typeof GenericTableWithData = (props) => (
   <Box sx={props.fullHeight ? { height: '100%' } : undefined}>
     <SentryErrorBoundary>
       <GenericTableWithData {...props} />

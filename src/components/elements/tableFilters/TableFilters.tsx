@@ -3,6 +3,7 @@ import { compact, min } from 'lodash-es';
 import React from 'react';
 
 import TableFilterMenu from './filters/FilterMenu';
+import TableSortMenu from './filters/SortMenu';
 
 import { FilterType } from '@/modules/dataFetching/types';
 
@@ -12,16 +13,16 @@ export interface PaginationProps {
   offset: number;
 }
 
-export interface TableFiltersProps<T> {
+export interface TableFiltersProps<T, S> {
   filters?: {
     filters: Partial<Record<keyof T, FilterType<T>>>;
     filterValues: Partial<T>;
     setFilterValues: (value: Partial<T>) => any;
   };
   sorting?: {
-    sortOptions?: Record<string, string>;
-    sortOptionValue?: string;
-    setSortOptionValue?: (value: string) => any;
+    sortOptions: S;
+    sortOptionValue?: keyof S;
+    setSortOptionValue?: (value: keyof S) => any;
   };
   pagination?: PaginationProps;
 }
@@ -45,11 +46,11 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   );
 };
 
-const TableFilters = <T,>({
+const TableFilters = <T, S extends Record<string, string>>({
   filters,
-  // sorting,
+  sorting,
   pagination,
-}: TableFiltersProps<T>) => {
+}: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center'>
       <Box flexGrow={1}>
@@ -58,6 +59,11 @@ const TableFilters = <T,>({
       {filters && (
         <Box>
           <TableFilterMenu {...filters} />
+        </Box>
+      )}
+      {sorting && (
+        <Box>
+          <TableSortMenu {...sorting} />
         </Box>
       )}
     </Box>

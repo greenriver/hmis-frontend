@@ -20,7 +20,6 @@ import {
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
-  PickListType,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -79,7 +78,8 @@ const AllAssessments = () => {
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,
           AssessmentType,
-          AssessmentFilterOptions
+          AssessmentFilterOptions,
+          typeof HmisEnums.AssessmentSortOption
         >
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
@@ -88,23 +88,13 @@ const AllAssessments = () => {
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments.'
-          filters={{
-            textSearch: {
-              type: 'text',
-              label: 'Text Search',
-            },
-            projects: {
-              label: 'Projects',
-              type: 'picklist',
-              pickListReference: PickListType.Project,
-            },
-            roles: {
-              type: 'enum',
-              enumType: HmisEnums.FormRole,
-              multi: true,
-              variant: 'select',
-              label: 'Roles',
-            },
+          sortOptions={HmisEnums.AssessmentSortOption}
+          defaultSortOption='ASSESSMENT_DATE'
+          filterInputType='AssessmentFilterOptions'
+          filters={(filters) => {
+            if (filters.roles && filters.roles.type === 'enum')
+              filters.roles.multi = false;
+            return filters;
           }}
         />
       </Paper>

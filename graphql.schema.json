@@ -863,13 +863,13 @@
         "enumValues": [
           {
             "name": "ASSESSMENT_DATE",
-            "description": null,
+            "description": "Assessment Date: Most Recent First",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "DATE_UPDATED",
-            "description": null,
+            "description": "Last Updated: Most Recent First",
             "isDeprecated": false,
             "deprecationReason": null
           }

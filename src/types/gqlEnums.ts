@@ -7,8 +7,8 @@ export const HmisEnums = {
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
   AssessmentSortOption: {
-    ASSESSMENT_DATE: 'ASSESSMENT_DATE',
-    DATE_UPDATED: 'DATE_UPDATED',
+    ASSESSMENT_DATE: 'Assessment Date: Most Recent First',
+    DATE_UPDATED: 'Last Updated: Most Recent First',
   },
   AssessmentType: {
     INVALID: 'Invalid Value',

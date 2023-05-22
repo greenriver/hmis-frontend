@@ -132,7 +132,9 @@ export enum AssessmentLevel {
 
 /** HUD Assessment Sorting Options */
 export enum AssessmentSortOption {
+  /** Assessment Date: Most Recent First */
   AssessmentDate = 'ASSESSMENT_DATE',
+  /** Last Updated: Most Recent First */
   DateUpdated = 'DATE_UPDATED',
 }
 

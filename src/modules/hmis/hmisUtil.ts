@@ -12,7 +12,7 @@ import {
 import { isNil, sortBy, startCase } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
-import { HmisObjectSchemas } from '@/types/gqlObjects';
+import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
   ClientFieldsFragment,
@@ -378,6 +378,10 @@ export const sortHouseholdMembers = (
 
 export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);
+};
+
+export const getSchemaForInputType = (type: string) => {
+  return HmisInputObjectSchemas.find((t: any) => t.name === type);
 };
 
 export const briefProjectType = (projectType: ProjectType) => {
