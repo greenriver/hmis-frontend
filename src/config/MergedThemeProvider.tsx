@@ -32,13 +32,14 @@ const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
         fetchThemes().then(console.log);
         return 'Fetching...';
       };
-      window.setThemeOptions = (options: ThemeOptions) =>
-        setThemeOptions(options);
-      return () => {
-        delete window.setTheme;
-        delete window.getThemes;
-      };
     }
+    window.setThemeOptions = (options: ThemeOptions) =>
+      setThemeOptions(options);
+    return () => {
+      delete window.setTheme;
+      delete window.getThemes;
+      delete window.setThemeOptions;
+    };
   }, [setThemeOptions]);
 
   return <ThemeProvider theme={fullTheme}>{children}</ThemeProvider>;
