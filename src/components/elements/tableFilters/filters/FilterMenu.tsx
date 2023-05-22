@@ -50,7 +50,13 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
         }}
       >
         <Box p={2} maxWidth={300}>
-          <TableFilterContent {...props}></TableFilterContent>
+          <TableFilterContent
+            {...props}
+            setFilterValues={(val) => {
+              popupState.close();
+              props.setFilterValues(val);
+            }}
+          ></TableFilterContent>
         </Box>
       </Popover>
     </>

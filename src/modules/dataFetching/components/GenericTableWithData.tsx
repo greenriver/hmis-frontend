@@ -96,8 +96,8 @@ const GenericTableWithData = <
   Query,
   QueryVariables,
   RowDataType extends { id: string },
-  FilterOptionsType extends Record<string, any>,
-  SortOptionsType extends Record<string, string>
+  FilterOptionsType extends Record<string, any> = Record<string, any>,
+  SortOptionsType extends Record<string, string> = Record<string, string>
 >({
   filters,
   defaultFilters = {},
