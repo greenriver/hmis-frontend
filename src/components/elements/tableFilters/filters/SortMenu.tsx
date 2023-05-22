@@ -1,10 +1,13 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import { Button, Menu, MenuItem, Typography } from '@mui/material';
+import { Menu, MenuItem, Typography } from '@mui/material';
+import { isNil } from 'lodash-es';
 import {
   usePopupState,
   bindTrigger,
   bindMenu,
 } from 'material-ui-popup-state/hooks';
+
+import TableFilterButton from './FilterButton';
 
 export interface TableSortMenuProps<S> {
   sortOptions: S;
@@ -24,16 +27,13 @@ const TableSortMenu = <S extends Record<string, string>>({
 
   return (
     <>
-      <Button
-        size='small'
-        color='inherit'
-        variant='text'
+      <TableFilterButton
         startIcon={<ArrowDownwardIcon />}
-        sx={{ fontWeight: 600 }}
+        active={!isNil(sortOptionValue)}
         {...bindTrigger(popupState)}
       >
         Sort
-      </Button>
+      </TableFilterButton>
       <Menu
         {...bindMenu(popupState)}
         anchorOrigin={{

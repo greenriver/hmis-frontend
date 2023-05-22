@@ -1,5 +1,5 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { Box, Button, Popover } from '@mui/material';
+import { Box, Popover } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import {
   usePopupState,
@@ -7,6 +7,7 @@ import {
   bindPopover,
 } from 'material-ui-popup-state/hooks';
 
+import TableFilterButton from './FilterButton';
 import TableFilterContent from './FilterContent';
 
 import { FilterType } from '@/modules/dataFetching/types';
@@ -29,17 +30,14 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
 
   return (
     <>
-      <Button
-        size='small'
-        color='secondary'
-        variant='text'
+      <TableFilterButton
         startIcon={<FilterListIcon />}
-        sx={{ fontWeight: 600 }}
+        active={filterCount > 0}
         {...bindTrigger(popupState)}
       >
         Filters
         {filterCount > 0 && <> ({filterCount})</>}
-      </Button>
+      </TableFilterButton>
       <Popover
         {...bindPopover(popupState)}
         anchorOrigin={{

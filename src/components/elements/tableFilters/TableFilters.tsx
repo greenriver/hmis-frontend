@@ -52,7 +52,7 @@ const TableFilters = <T, S extends Record<string, string>>({
   pagination,
 }: TableFiltersProps<T, S>) => {
   return (
-    <Box display='flex' alignItems='center'>
+    <Box display='flex' alignItems='center' gap={1}>
       <Box flexGrow={1}>
         {pagination && <PaginationDisplay {...pagination} />}
       </Box>
