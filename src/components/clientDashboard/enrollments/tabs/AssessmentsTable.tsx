@@ -93,6 +93,7 @@ const AssessmentsTable = ({
         GetEnrollmentAssessmentsQueryVariables,
         AssessmentFieldsFragment
       >
+        showFilters
         queryVariables={{ id: enrollmentId }}
         queryDocument={GetEnrollmentAssessmentsDocument}
         rowLinkTo={rowLinkTo}
@@ -100,7 +101,7 @@ const AssessmentsTable = ({
         pagePath='enrollment.assessments'
         noData='No assessments.'
         recordType='Assessment'
-        filterInputType='AssessmentFilterOptions'
+        filterInputType='AssessmentsForEnrollmentFilterOptions'
         sortOptions={HmisEnums.AssessmentSortOption}
         defaultSortOption='ASSESSMENT_DATE'
         headerCellSx={() => ({ color: 'text.secondary' })}

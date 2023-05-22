@@ -16,7 +16,6 @@ import {
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  AssessmentFilterOptions,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
@@ -77,10 +76,9 @@ const AllAssessments = () => {
         <GenericTableWithData<
           GetClientAssessmentsQuery,
           GetClientAssessmentsQueryVariables,
-          AssessmentType,
-          AssessmentFilterOptions,
-          typeof HmisEnums.AssessmentSortOption
+          AssessmentType
         >
+          showFilters
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           rowLinkTo={rowLinkTo}

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Skeleton, Typography } from '@mui/material';
 import { compact, min } from 'lodash-es';
 import React from 'react';
 
@@ -25,6 +25,7 @@ export interface TableFiltersProps<T, S> {
     setSortOptionValue?: (value: keyof S) => any;
   };
   pagination?: PaginationProps;
+  loading?: boolean;
 }
 
 const PaginationDisplay: React.FC<PaginationProps> = ({
@@ -50,11 +51,18 @@ const TableFilters = <T, S extends Record<string, string>>({
   filters,
   sorting,
   pagination,
+  loading,
 }: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center' gap={1}>
       <Box flexGrow={1}>
-        {pagination && <PaginationDisplay {...pagination} />}
+        {loading ? (
+          <Skeleton variant='text'>
+            <Typography variant='body2'>Displaying X of X results</Typography>
+          </Skeleton>
+        ) : (
+          pagination && <PaginationDisplay {...pagination} />
+        )}
       </Box>
       {filters && (
         <Box>

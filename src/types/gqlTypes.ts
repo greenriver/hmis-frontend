@@ -98,9 +98,7 @@ export type AssessmentAccess = {
 };
 
 export type AssessmentFilterOptions = {
-  projects?: InputMaybe<Array<Scalars['ID']>>;
   roles?: InputMaybe<Array<FormRole>>;
-  textSearch?: InputMaybe<Scalars['String']>;
 };
 
 export type AssessmentInput = {
@@ -152,7 +150,6 @@ export enum AssessmentType {
 
 export type AssessmentsForEnrollmentFilterOptions = {
   roles?: InputMaybe<Array<FormRole>>;
-  textSearch?: InputMaybe<Scalars['String']>;
 };
 
 export type AssessmentsPaginated = {
@@ -313,7 +310,7 @@ export type Client = {
 
 /** HUD Client */
 export type ClientAssessmentsArgs = {
-  filter?: InputMaybe<AssessmentFilterOptions>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1209,7 +1206,7 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
-  filter?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
+  filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -4900,6 +4897,8 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
   roles?: InputMaybe<Array<FormRole> | FormRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
 }>;
 
 export type GetEnrollmentAssessmentsQuery = {
@@ -6982,6 +6981,8 @@ export type GetClientAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
 }>;
 
 export type GetClientAssessmentsQuery = {
@@ -11817,6 +11818,8 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $offset: Int = 0
     $roles: [FormRole!]
     $inProgress: Boolean
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentsForEnrollmentFilterOptions
   ) {
     enrollment(id: $id) {
       id
@@ -11825,7 +11828,8 @@ export const GetEnrollmentAssessmentsDocument = gql`
         offset: $offset
         roles: $roles
         inProgress: $inProgress
-        sortOrder: ASSESSMENT_DATE
+        sortOrder: $sortOrder
+        filters: $filters
       ) {
         offset
         limit
@@ -11856,6 +11860,8 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      offset: // value for 'offset'
  *      roles: // value for 'roles'
  *      inProgress: // value for 'inProgress'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -12656,10 +12662,21 @@ export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
   GetClientAuditEventsQueryVariables
 >;
 export const GetClientAssessmentsDocument = gql`
-  query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions = null
+  ) {
     client(id: $id) {
       id
-      assessments(limit: $limit, offset: $offset, sortOrder: ASSESSMENT_DATE) {
+      assessments(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -12691,6 +12708,8 @@ export const GetClientAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

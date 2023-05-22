@@ -10,6 +10,8 @@ query GetEnrollmentAssessments(
   $offset: Int = 0
   $roles: [FormRole!]
   $inProgress: Boolean
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentsForEnrollmentFilterOptions
 ) {
   enrollment(id: $id) {
     id
@@ -18,7 +20,8 @@ query GetEnrollmentAssessments(
       offset: $offset
       roles: $roles
       inProgress: $inProgress
-      sortOrder: ASSESSMENT_DATE
+      sortOrder: $sortOrder
+      filters: $filters
     ) {
       offset
       limit

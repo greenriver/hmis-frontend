@@ -48,6 +48,7 @@ export interface Props<
   sortOptions?: SortOptionsType;
   defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
+  showFilters?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -101,6 +102,7 @@ const GenericTableWithData = <
 >({
   filters,
   defaultFilters = {},
+  showFilters = false,
   sortOptions,
   defaultSortOption,
   queryVariables,
@@ -216,6 +218,8 @@ const GenericTableWithData = <
   }, [columns, recordType]);
 
   const filterDefs = useMemo(() => {
+    if (!filters && !(filterInputType && recordType)) return undefined;
+
     const derivedFilters =
       filterInputType && recordType
         ? allFieldFilters(recordType, filterInputType)
@@ -250,39 +254,42 @@ const GenericTableWithData = <
           <Typography sx={{ px: 2, pt: 1, pb: 2 }}>{noData}</Typography>
         ) : (
           <>
-            <Box
-              px={2}
-              py={1}
-              sx={(theme) => ({
-                borderBottom: `1px solid ${theme.palette.divider}`,
-              })}
-            >
-              <TableFilters
-                sorting={
-                  sortOptions
-                    ? {
-                        sortOptions,
-                        sortOptionValue: sortOrder,
-                        setSortOptionValue: setSortOrder,
-                      }
-                    : undefined
-                }
-                filters={
-                  filterDefs
-                    ? {
-                        filters: filterDefs,
-                        filterValues,
-                        setFilterValues,
-                      }
-                    : undefined
-                }
-                pagination={{
-                  limit,
-                  offset,
-                  totalEntries: nodesCount,
-                }}
-              />
-            </Box>
+            {showFilters && (
+              <Box
+                px={2}
+                py={1}
+                sx={(theme) => ({
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                })}
+              >
+                <TableFilters
+                  loading={loading}
+                  sorting={
+                    sortOptions
+                      ? {
+                          sortOptions,
+                          sortOptionValue: sortOrder,
+                          setSortOptionValue: setSortOrder,
+                        }
+                      : undefined
+                  }
+                  filters={
+                    filterDefs
+                      ? {
+                          filters: filterDefs,
+                          filterValues,
+                          setFilterValues,
+                        }
+                      : undefined
+                  }
+                  pagination={{
+                    limit,
+                    offset,
+                    totalEntries: nodesCount,
+                  }}
+                />
+              </Box>
+            )}
             <GenericTable<RowDataType>
               loading={loading}
               rows={rows}
