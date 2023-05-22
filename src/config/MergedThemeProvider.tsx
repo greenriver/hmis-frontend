@@ -1,31 +1,47 @@
-import { ThemeProvider } from '@mui/material';
-import React, { PropsWithChildren, useEffect } from 'react';
+import { ThemeOptions, ThemeProvider } from '@mui/material';
+import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
-import useMergedTheme from './useMergedTheme';
-import { fetchThemes } from './utils';
+import { createFullTheme } from './theme';
+import { fetchTheme, fetchThemes } from './utils';
 
-import useLocalStorage from '@/hooks/useLocalStorage';
+import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [remoteThemeId, setRemoteThemeId] =
-    useLocalStorage<string>('remoteThemeId');
-  const theme = useMergedTheme(remoteThemeId);
+  const { theme: defaultThemeOptions } = useHmisAppSettings();
+  const [themeOptions, setThemeOptions] = useState<ThemeOptions | undefined>(
+    defaultThemeOptions
+  );
+  const fullTheme = useMemo(
+    () => createFullTheme(themeOptions),
+    [themeOptions]
+  );
 
+  // Allow changing theme dynamically in the console. This is purely for theme QA.
+  // In the dev console, run:
+  //    window.getThemes()
+  //    window.setTheme(id)
+  //
+  // For developing new themes:
+  //    window.setThemeOptions({ palette: { secondary: { main: '#463576' } } })
   useEffect(() => {
     if (import.meta.env.PUBLIC_ALLOW_SET_THEME) {
-      window.setTheme = (id: string) => setRemoteThemeId(id);
+      window.setTheme = (id: string) => {
+        fetchTheme(id).then((data) => setThemeOptions(data as ThemeOptions));
+      };
       window.getThemes = () => {
         fetchThemes().then(console.log);
         return 'Fetching...';
       };
+      window.setThemeOptions = (options: ThemeOptions) =>
+        setThemeOptions(options);
       return () => {
         delete window.setTheme;
         delete window.getThemes;
       };
     }
-  }, [setRemoteThemeId]);
+  }, [setThemeOptions]);
 
-  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+  return <ThemeProvider theme={fullTheme}>{children}</ThemeProvider>;
 };
 
 export default MergedThemeProvider;
