@@ -91,11 +91,7 @@ const AllAssessments = () => {
           sortOptions={HmisEnums.AssessmentSortOption}
           defaultSortOption='ASSESSMENT_DATE'
           filterInputType='AssessmentFilterOptions'
-          filters={(filters) => {
-            if (filters.roles && filters.roles.type === 'enum')
-              filters.roles.multi = false;
-            return filters;
-          }}
+          recordType='Assessment'
         />
       </Paper>
     </>

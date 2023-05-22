@@ -75,6 +75,7 @@ function allFieldColumns<T>(recordType: string): ColumnDef<T>[] {
 }
 
 function allFieldFilters<T>(
+  recordType: string,
   filterInputType: string
 ): Partial<Record<keyof T, FilterType<T>>> {
   const schema = getSchemaForInputType(filterInputType);
@@ -83,7 +84,7 @@ function allFieldFilters<T>(
   const result: Partial<Record<keyof T, FilterType<T>>> = {};
 
   schema.args.forEach(({ name }) => {
-    const filter = getFilter(filterInputType, name);
+    const filter = getFilter(recordType, filterInputType, name);
 
     if (filter) result[name as keyof T] = filter;
   });
@@ -215,16 +216,17 @@ const GenericTableWithData = <
   }, [columns, recordType]);
 
   const filterDefs = useMemo(() => {
-    const derivedFilters = filterInputType
-      ? allFieldFilters(filterInputType)
-      : {};
+    const derivedFilters =
+      filterInputType && recordType
+        ? allFieldFilters(recordType, filterInputType)
+        : {};
     return {
       ...derivedFilters,
       ...(typeof filters === 'function'
         ? filters(derivedFilters)
         : filters || {}),
     };
-  }, [filters, filterInputType]);
+  }, [filters, filterInputType, recordType]);
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched) return <Loading />;

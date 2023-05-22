@@ -15,6 +15,7 @@ import { PickListType } from '@/types/gqlTypes';
  */
 
 interface Props {
+  recordType: string;
   inputType: string;
   fieldName: string;
   value: any;
@@ -29,7 +30,7 @@ const getType = (
 };
 
 const getFilterForType = (
-  inputType: string,
+  recordType: string,
   fieldName: any,
   type: GqlInputObjectSchemaType['name']
 ): FilterType<any> | null => {
@@ -46,7 +47,7 @@ const getFilterForType = (
         ...baseFields,
         type: 'picklist',
         pickListReference: PickListType.Project,
-        multi: ['AssessmentFilterOptions'].includes(fieldName),
+        multi: ['Assessment'].includes(fieldName),
       };
   }
 
@@ -55,7 +56,7 @@ const getFilterForType = (
       return {
         ...baseFields,
         enumType: HmisEnums.FormRole,
-        multi: ['AssessmentFilterOptions'].includes(inputType),
+        multi: ['Assessment'].includes(recordType),
         variant: 'select',
         label: 'Roles',
         type: 'enum',
@@ -65,7 +66,11 @@ const getFilterForType = (
   return null;
 };
 
-export const getFilter = (inputType: string, fieldName: string) => {
+export const getFilter = (
+  recordType: string,
+  inputType: string,
+  fieldName: string
+) => {
   const fieldSchema = (getSchemaForInputType(inputType)?.args || []).find(
     (f) => f.name == fieldName
   );
@@ -74,13 +79,19 @@ export const getFilter = (inputType: string, fieldName: string) => {
   const type = getType(fieldSchema.type);
   if (!type) return null;
 
-  return getFilterForType(inputType, fieldName, type);
+  return getFilterForType(recordType, fieldName, type);
 };
 
-const HmisFilter = ({ inputType, fieldName, value, onChange }: Props) => {
+const HmisFilter = ({
+  recordType,
+  inputType,
+  fieldName,
+  value,
+  onChange,
+}: Props) => {
   if (isNil(value)) return null;
 
-  const filter = getFilter(inputType, fieldName);
+  const filter = getFilter(recordType, inputType, fieldName);
   if (!filter) return null;
 
   return (
