@@ -69,6 +69,10 @@ Cypress.Commands.add('exitModal', () => {
   cy.get('body').type('{esc}');
 });
 
+Cypress.Commands.add('tableRows', (id) => {
+  return cy.get(`[data-testid="${id}"] table tbody tr`);
+});
+
 Cypress.Commands.add('choose', (id, optionCode, optionName = 'option') => {
   cy.inputId(id).click({ force: true });
   cy.get('.MuiAutocomplete-popper .MuiAutocomplete-loading').should(
@@ -198,6 +202,7 @@ declare global {
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
       findTestId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
+      tableRows(id: string): Chainable<JQuery<Element>>;
       navItem(id: string): Chainable<JQuery<Element>>;
       getById(id: string): Chainable<JQuery<Element>>;
       inputId(id: string): Chainable<JQuery<Element>>;

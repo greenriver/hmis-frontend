@@ -13,7 +13,11 @@ import {
 } from 'support/assessmentConstants';
 
 import {
+  Availability,
+  BedType,
   FundingSource,
+  GeographyType,
+  HouseholdType,
   NoYesMissing,
   ProjectType,
 } from '../../src/types/gqlTypes';
@@ -89,26 +93,25 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     description: 'Project Description',
     contactInformation: 'Project Contact',
     operatingStartDate: '2022-01-01',
-    projectType: 'DAY_SHELTER',
+    projectType: ProjectType.DayShelter,
   };
   cy.expectHudValuesToDeepEqual(expectedFormValues);
   cy.testId('formButton-submit').click();
 
   // Confirm details are correct
-  cy.testId('projectDetailsCard').contains('Day Shelter');
+  cy.testId('dynamicView').should('exist');
+  cy.testId('2.02.6').contains('Day Shelter');
 
   // Navigate to Organization page
   cy.testId('organizationLink').click();
 
   // Assert project shows up in table
-  cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('projectsCard')
-    .find('table tbody tr')
-    .contains(projectName)
-    .should('exist');
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('projectsCard').should('have.length', 1);
+  cy.tableRows('projectsCard').contains(projectName).should('exist');
 
   // Navigate back to project page
-  cy.testId('projectsCard').find('table tbody tr').click();
+  cy.tableRows('projectsCard').first().click();
 
   // Edit project, assert details updated
   cy.testId('updateProjectButton').click();
@@ -122,18 +125,16 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Assert changes to project details are reflected
   cy.get('h3').first().contains(newProjectName);
-  cy.testId('projectDetailsCard').contains('Permanent Housing');
+  cy.testId('dynamicView').should('exist');
+  cy.testId('2.02.6').contains('Permanent Housing');
 
   // Navigate to Organization page, ensure change to project type is reflected there too
   cy.testId('organizationLink').click();
-  cy.testId('projectsCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('projectsCard')
-    .find('table tbody tr')
-    .contains('Permanent Housing')
-    .should('exist');
+  cy.tableRows('projectsCard').should('have.length', 1);
+  cy.tableRows('projectsCard').contains('Permanent Housing').should('exist');
 
   // Navigate back to project page
-  cy.testId('projectsCard').find('table tbody tr').click();
+  cy.tableRows('projectsCard').first().click();
 
   /*** Funder ***/
 
@@ -169,25 +170,23 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('end').clear();
   cy.expectHudValuesToDeepEqual({
     endDate: null,
-    funder: 'LOCAL_OR_OTHER_FUNDING_SOURCE',
+    funder: FundingSource.LocalOrOtherFundingSource,
     grantId: 'ABC123',
     otherFunder: 'other funder details',
     startDate: '2022-01-01',
   });
   cy.testId('formButton-submit').click();
 
-  cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('funderCard').findTestId('updateButton').click();
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('funderCard').should('have.length', 1);
+  cy.tableRows('funderCard').first().click();
 
   // Edit funder, assert table updated
   cy.choose('funder', FundingSource.HudCocSafeHaven);
   cy.inputId('other').should('not.exist');
   cy.testId('formButton-submit').click();
-  cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('funderCard')
-    .find('table tbody tr')
-    .contains('Safe Haven')
-    .should('exist');
+  cy.tableRows('funderCard').should('have.length', 1);
+  cy.tableRows('funderCard').contains('Safe Haven').should('exist');
 
   // Create another funder
   cy.testId('addFunderButton').click();
@@ -197,29 +196,31 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('end').safeType('01/01/2025');
   cy.expectHudValuesToDeepEqual({
     endDate: '2025-01-01',
-    funder: 'HUD_ESG_CV',
+    funder: FundingSource.HudEsgCv,
     grantId: 'ABC123',
     otherFunder: HIDDEN,
     startDate: '2022-01-01',
   });
   cy.testId('formButton-submit').click();
-  cy.testId('funderCard').find('table tbody tr').should('have.length', 2);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('funderCard').should('have.length', 2);
 
   // Delete funder, assert table updated
-  cy.testId('funderCard').findTestId('deleteButton').first().click();
-  cy.cancelDialog();
-  cy.testId('funderCard').find('table tbody tr').should('have.length', 2);
-  cy.testId('funderCard').findTestId('deleteButton').first().click();
+  cy.tableRows('funderCard').first().click();
+  cy.testId('deleteRecordButton-funder').click();
   cy.confirmDialog();
-  cy.testId('funderCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('funderCard').should('have.length', 1);
 
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
-  cy.checkOption('es-availability', 'OVERFLOW');
-  cy.checkOption('es-bed-type', 'VOUCHER');
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.checkOption('es-availability', Availability.Overflow);
+  cy.checkOption('es-bed-type', BedType.Voucher);
   cy.inputId('2.07.1').safeType('01/01/2022');
+  cy.inputId('unit').safeType('3');
+  cy.inputId('other-beds').safeType('3');
   cy.testId('formButton-submit').click();
   cy.testId('formErrorAlert').contains('CoC Code').should('exist');
   cy.testId('formButton-discard').click();
@@ -231,7 +232,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('addProjectCocButton').click();
   cy.choose('coc', 'MA-505');
   cy.choose('geocode', '250126');
-  cy.checkOption('geotype', 'RURAL');
+  cy.checkOption('geotype', GeographyType.Rural);
   cy.inputId('address1').safeType('Addr 1');
   cy.inputId('address2').safeType('Addr 2');
   cy.inputId('city').safeType('City');
@@ -240,31 +241,26 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     ...EmptyProjectCoc,
     cocCode: 'MA-505',
     geocode: '250126',
-    geographyType: 'RURAL',
+    geographyType: GeographyType.Rural,
     address1: 'Addr 1',
     address2: 'Addr 2',
     city: 'City',
-    state: 'MA', // SHould be auto-filled
+    state: 'MA', // Should be auto-filled
     zip: '00001',
   });
   cy.testId('formButton-submit').click();
 
   // Assert it shows up
-  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('projectCocCard')
-    .find('table tbody tr')
-    .contains('MA-505')
-    .should('exist');
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('projectCocCard').should('have.length', 1);
+  cy.tableRows('projectCocCard').contains('MA-505').should('exist');
 
   // Update it and ensure changes are reflected in the table
-  cy.testId('projectCocCard').findTestId('updateButton').click();
+  cy.tableRows('projectCocCard').first().click();
   cy.choose('state', 'AZ');
   cy.testId('formButton-submit').click();
-  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('projectCocCard')
-    .find('table tbody tr')
-    .contains('AZ')
-    .should('exist');
+  cy.tableRows('projectCocCard').should('have.length', 1);
+  cy.tableRows('projectCocCard').contains('AZ').should('exist');
 
   // Add another ProjectCoC
   cy.testId('addProjectCocButton').click();
@@ -277,12 +273,15 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     state: 'MA',
   });
   cy.testId('formButton-submit').click();
-  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 2);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('projectCocCard').should('have.length', 2);
 
   // Delete the second ProjectCoC
-  cy.testId('projectCocCard').findTestId('deleteButton').first().click();
+  cy.tableRows('projectCocCard').first().click();
+  cy.testId('deleteRecordButton-projectCoCRecord').click();
   cy.confirmDialog();
-  cy.testId('projectCocCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('projectCocCard').should('have.length', 1);
 
   /*** Inventory ***/
 
@@ -290,9 +289,11 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
-  cy.checkOption('es-availability', 'OVERFLOW');
-  cy.checkOption('es-bed-type', 'VOUCHER');
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.checkOption('es-availability', Availability.Overflow);
+  cy.checkOption('es-bed-type', BedType.Voucher);
+  cy.inputId('unit').safeType('0');
+  cy.inputId('other-beds').safeType('0');
 
   cy.inputId('2.07.1').safeType('01/01/2022'); // start date
   cy.inputId('2.07.2').safeType('01/01/2020'); // end date (invalid, must be after start)
@@ -307,41 +308,50 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   cy.expectHudValuesToDeepEqual({
     cocCode: 'MA-505',
-    householdType: 'HOUSEHOLDS_WITH_ONLY_CHILDREN',
-    availability: 'OVERFLOW',
-    esBedType: 'VOUCHER',
+    householdType: HouseholdType.HouseholdsWithOnlyChildren,
+    availability: Availability.Overflow,
+    esBedType: BedType.Voucher,
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
-    bedInventory: 0,
     unitInventory: 0,
+    bedInventory: 0,
+    otherBedInventory: 0,
+    chBedInventory: null,
+    vetBedInventory: null,
+    chVetBedInventory: null,
+    youthBedInventory: null,
+    youthVetBedInventory: null,
+    chYouthBedInventory: null,
   });
 
   // Submit (create Inventory)
   cy.testId('formButton-submit').click();
-  cy.get('h3').first().contains('Beds and Units');
-
   // Assert it shows up in table
-  cy.navItem('inventory').click();
-  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('inventoryCard')
-    .find('table tbody tr')
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('inventoryCard').should('have.length', 1);
+  cy.tableRows('inventoryCard')
     .contains('Households with only children')
     .should('exist');
 
   // Update it and ensure changes are reflected in the table
-  cy.testId('inventoryCard').findTestId('updateButton').click();
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITHOUT_CHILDREN');
+  cy.tableRows('inventoryCard').first().click();
+  cy.testId('updateInventoryButton').click();
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithoutChildren);
   cy.testId('formButton-submit').click();
-  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
-  cy.testId('inventoryCard')
-    .find('table tbody tr')
+  cy.tableRows('inventoryCard').should('have.length', 1);
+  cy.tableRows('inventoryCard')
     .contains('Households without children')
     .should('exist');
 
   // Add another Inventory record
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD');
+  cy.checkOption(
+    'hhtype',
+    HouseholdType.HouseholdsWithAtLeastOneAdultAndOneChild
+  );
+  cy.inputId('unit').safeType('0');
+  cy.inputId('other-beds').safeType('0');
   cy.inputId('2.07.1').safeType('01/01/2020'); // start date (too early)
 
   // Try to submit, expect error
@@ -353,15 +363,15 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Fix start date and submit again
   cy.inputId('2.07.1').clear().safeType('06/01/2022');
   cy.testId('formButton-submit').click();
-  cy.get('h3').first().contains('Beds and Units');
-
-  cy.navItem('inventory').click();
-  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 2);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('inventoryCard').should('have.length', 2);
 
   // Delete an Inventory record
-  cy.testId('inventoryCard').findTestId('deleteButton').last().click();
+  cy.tableRows('inventoryCard').first().click();
+  cy.testId('deleteRecordButton-inventory').click();
   cy.confirmDialog();
-  cy.testId('inventoryCard').find('table tbody tr').should('have.length', 1);
+  cy.testId('loading').should('not.exist');
+  cy.tableRows('inventoryCard').should('have.length', 1);
 
   /*** Close project (should warn about open funders) ***/
   cy.navItem('overview').click();
@@ -371,9 +381,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.confirmDialog();
 
   /*** Delete project and organization ***/
-  cy.testId('deleteProjectButton').click();
+  cy.testId('updateProjectButton').click();
+  cy.testId('deleteRecordButton-project').click();
   cy.confirmDialog();
 
-  cy.testId('deleteOrganizationButton').click();
+  cy.testId('deleteRecordButton-organization').click();
   cy.confirmDialog();
 });

@@ -173,7 +173,7 @@ const GenericTableWithData = <
       )}
       <Box sx={containerSx}>
         {noResults ? (
-          <Typography sx={{ px: 2, pt: 1, pb: 2 }}>{noData}</Typography>
+          <Typography sx={{ px: 2, py: 2 }}>{noData}</Typography>
         ) : (
           <>
             <GenericTable<RowDataType>

@@ -66,8 +66,9 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       label,
       value,
       horizontal,
+      'data-testid': item.linkId,
     }),
-    [label, value, horizontal]
+    [label, value, horizontal, item]
   );
 
   switch (item.type) {
@@ -84,8 +85,8 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           hasValue={(val) => !isNil(val)}
         />
       );
-    case ItemType.String:
     case ItemType.Text:
+    case ItemType.String:
     case ItemType.Integer:
       return <TextContent {...commonProps} />;
     case ItemType.Currency:

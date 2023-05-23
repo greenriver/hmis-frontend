@@ -1,4 +1,4 @@
-import { Container, Stack, Typography } from '@mui/material';
+import { Container } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
@@ -16,14 +16,10 @@ import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
-import ClientName from '@/modules/client/components/ClientName';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { enrollmentName, entryExitRange } from '@/modules/hmis/hmisUtil';
-import { HmisEnums } from '@/types/gqlEnums';
+import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
-  RelationshipToHoH,
   useGetClientQuery,
 } from '@/types/gqlTypes';
 
@@ -73,40 +69,14 @@ const ClientDashboard: React.FC = () => {
     return <NotFound />;
   }
 
-  if (isPrint)
+  if (isPrint) {
     return (
       <>
-        <Stack
-          direction='row'
-          gap={2}
-          sx={(theme) => ({
-            position: 'running(pageHeader)',
-            borderBottom: `1px solid ${theme.palette.divider}`,
-            p: 2,
-            mb: 2,
-          })}
-        >
-          <Typography>
-            <ClientName client={client} variant='body1' />
-          </Typography>
-          {enrollment && (
-            <>
-              <HmisEnum
-                variant='body1'
-                value={enrollment.relationshipToHoH}
-                enumMap={{
-                  ...HmisEnums.RelationshipToHoH,
-                  [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
-                }}
-              />
-              <Typography>{enrollmentName(enrollment)}</Typography>
-              <Typography>{entryExitRange(enrollment)}</Typography>
-            </>
-          )}
-        </Stack>
+        <ClientPrintHeader client={client} enrollment={enrollment} />
         <Outlet context={outletContext} />
       </>
     );
+  }
 
   return (
     <DashboardContentContainer
