@@ -31,6 +31,7 @@ const ProjectNavHeader = ({
           organizationId: project.organization.id,
         })}
         fontStyle='italic'
+        data-testid='organizationLink'
       >
         {project.organization.organizationName}
       </RouterLink>

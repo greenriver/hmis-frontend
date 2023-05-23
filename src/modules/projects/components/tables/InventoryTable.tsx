@@ -119,6 +119,7 @@ const InventoryTable = () => {
                     projectId: project.id,
                     inventoryId: viewingRecord.id,
                   })}
+                  data-testid='updateInventoryButton'
                 >
                   Edit
                 </ButtonLink>

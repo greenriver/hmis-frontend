@@ -66,8 +66,9 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
       label,
       value,
       horizontal,
+      'data-testid': item.linkId,
     }),
-    [label, value, horizontal]
+    [label, value, horizontal, item]
   );
 
   switch (item.type) {

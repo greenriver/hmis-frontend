@@ -60,6 +60,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       </>
     );
 
+  const navItemSx = {
+    fontSize: '1rem',
+    fontWeight: 400,
+    px: 2,
+    ml: 1,
+    color: 'text.primary',
+  };
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
@@ -90,9 +97,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             <ButtonLink
               variant='text'
               to='/'
-              color='secondary'
               data-testid='navToClients'
-              sx={{ fontSize: '1rem' }}
+              sx={navItemSx}
             >
               Clients
             </ButtonLink>
@@ -100,9 +106,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           <ButtonLink
             variant='text'
             to={Routes.ALL_PROJECTS}
-            color='secondary'
             data-testid='navToProjects'
-            sx={{ fontSize: '1rem' }}
+            sx={navItemSx}
           >
             Projects
           </ButtonLink>

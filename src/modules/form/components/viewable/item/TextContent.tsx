@@ -12,6 +12,7 @@ export interface TextContentProps<T extends ReactNode> {
   horizontal?: boolean;
   hasValue?: (value: T) => boolean;
   renderValue?: (value: T) => ReactNode;
+  'data-testid'?: string;
 }
 
 const TextContent = <T extends ReactNode>({
@@ -19,25 +20,31 @@ const TextContent = <T extends ReactNode>({
   value,
   horizontal = false,
   renderValue = (x) => x,
+  ...props
 }: TextContentProps<T>): JSX.Element => {
+  const testId = props['data-testid'];
   const displayValue = useMemo(() => {
     if (hasMeaningfulValue(value)) {
       const renderedValue = renderValue(value);
       if (typeof renderedValue === 'string') {
         return (
-          <MultilineTypography variant='body2'>
+          <MultilineTypography variant='body2' data-testid={testId}>
             {renderedValue}
           </MultilineTypography>
         );
       }
       return renderedValue;
     } else {
-      return <NotCollectedText variant='body2' />;
+      return <NotCollectedText variant='body2' data-testid={testId} />;
     }
-  }, [renderValue, value]);
+  }, [renderValue, value, testId]);
 
   return (
-    <LabelWithContent label={label} horizontal={horizontal}>
+    <LabelWithContent
+      label={label}
+      horizontal={horizontal}
+      data-testid={testId}
+    >
       {displayValue}
     </LabelWithContent>
   );
