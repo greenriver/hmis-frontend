@@ -207,15 +207,6 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
               </Box>
             </Paper>
           </Stack>
-          {/* <Box
-            sx={{
-              display: 'flex',
-              alignContent: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            {previewContent}
-          </Box> */}
         </ViewRecordDialog>
       )}
     </>

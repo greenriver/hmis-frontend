@@ -85,6 +85,7 @@ const InventoryTable = () => {
 
   const navigate = useNavigate();
   const onSuccessfulDelete = useCallback(() => {
+    setViewingRecord(undefined);
     cache.evict({ id: `Project:${project.id}`, fieldName: 'inventories' });
     navigate(
       generateSafePath(ProjectDashboardRoutes.INVENTORY, {

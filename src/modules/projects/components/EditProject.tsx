@@ -80,7 +80,6 @@ const EditProject = () => {
                 DeleteProjectMutation,
                 DeleteProjectMutationVariables
               >
-                data-testid='deleteProjectButton'
                 queryDocument={DeleteProjectDocument}
                 variables={{ input: { id: project.id } }}
                 idPath='deleteProject.project.id'

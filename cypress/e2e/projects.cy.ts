@@ -314,6 +314,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
     unitInventory: 0,
+    bedInventory: 0,
     otherBedInventory: 0,
     chBedInventory: null,
     vetBedInventory: null,
@@ -334,7 +335,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   // Update it and ensure changes are reflected in the table
   cy.tableRows('inventoryCard').first().click();
-  cy.findTestId('updateInventoryButton').click();
+  cy.testId('updateInventoryButton').click();
   cy.checkOption('hhtype', HouseholdType.HouseholdsWithoutChildren);
   cy.testId('formButton-submit').click();
   cy.tableRows('inventoryCard').should('have.length', 1);
@@ -380,9 +381,10 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.confirmDialog();
 
   /*** Delete project and organization ***/
-  cy.testId('deleteProjectButton').click();
+  cy.testId('updateProjectButton').click();
+  cy.testId('deleteRecordButton-project').click();
   cy.confirmDialog();
 
-  cy.testId('deleteOrganizationButton').click();
+  cy.testId('deleteRecordButton-organization').click();
   cy.confirmDialog();
 });
