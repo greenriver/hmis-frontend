@@ -69,8 +69,8 @@ Cypress.Commands.add('exitModal', () => {
   cy.get('body').type('{esc}');
 });
 
-Cypress.Commands.add('tableRows', { prevSubject: true }, (subject, id) => {
-  return subject.find(`[data-testid="${id}"] table tbody tr`);
+Cypress.Commands.add('tableRows', (id) => {
+  return cy.get(`[data-testid="${id}"] table tbody tr`);
 });
 
 Cypress.Commands.add('choose', (id, optionCode, optionName = 'option') => {

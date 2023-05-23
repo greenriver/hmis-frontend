@@ -13,7 +13,11 @@ import {
 } from 'support/assessmentConstants';
 
 import {
+  Availability,
+  BedType,
   FundingSource,
+  GeographyType,
+  HouseholdType,
   NoYesMissing,
   ProjectType,
 } from '../../src/types/gqlTypes';
@@ -89,7 +93,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     description: 'Project Description',
     contactInformation: 'Project Contact',
     operatingStartDate: '2022-01-01',
-    projectType: 'DAY_SHELTER',
+    projectType: ProjectType.DayShelter,
   };
   cy.expectHudValuesToDeepEqual(expectedFormValues);
   cy.testId('formButton-submit').click();
@@ -166,7 +170,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('end').clear();
   cy.expectHudValuesToDeepEqual({
     endDate: null,
-    funder: 'LOCAL_OR_OTHER_FUNDING_SOURCE',
+    funder: FundingSource.LocalOrOtherFundingSource,
     grantId: 'ABC123',
     otherFunder: 'other funder details',
     startDate: '2022-01-01',
@@ -192,7 +196,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.inputId('end').safeType('01/01/2025');
   cy.expectHudValuesToDeepEqual({
     endDate: '2025-01-01',
-    funder: 'HUD_ESG_CV',
+    funder: FundingSource.HudEsgCv,
     grantId: 'ABC123',
     otherFunder: HIDDEN,
     startDate: '2022-01-01',
@@ -211,10 +215,12 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   /** Try to create inventory (unable to because there are no ProjectCoC records yet) */
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
-  cy.checkOption('es-availability', 'OVERFLOW');
-  cy.checkOption('es-bed-type', 'VOUCHER');
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.checkOption('es-availability', Availability.Overflow);
+  cy.checkOption('es-bed-type', BedType.Voucher);
   cy.inputId('2.07.1').safeType('01/01/2022');
+  cy.inputId('unit').safeType('3');
+  cy.inputId('other-beds').safeType('3');
   cy.testId('formButton-submit').click();
   cy.testId('formErrorAlert').contains('CoC Code').should('exist');
   cy.testId('formButton-discard').click();
@@ -226,7 +232,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.testId('addProjectCocButton').click();
   cy.choose('coc', 'MA-505');
   cy.choose('geocode', '250126');
-  cy.checkOption('geotype', 'RURAL');
+  cy.checkOption('geotype', GeographyType.Rural);
   cy.inputId('address1').safeType('Addr 1');
   cy.inputId('address2').safeType('Addr 2');
   cy.inputId('city').safeType('City');
@@ -235,7 +241,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
     ...EmptyProjectCoc,
     cocCode: 'MA-505',
     geocode: '250126',
-    geographyType: 'RURAL',
+    geographyType: GeographyType.Rural,
     address1: 'Addr 1',
     address2: 'Addr 2',
     city: 'City',
@@ -283,9 +289,11 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   cy.navItem('inventory').click();
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_ONLY_CHILDREN');
-  cy.checkOption('es-availability', 'OVERFLOW');
-  cy.checkOption('es-bed-type', 'VOUCHER');
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithOnlyChildren);
+  cy.checkOption('es-availability', Availability.Overflow);
+  cy.checkOption('es-bed-type', BedType.Voucher);
+  cy.inputId('unit').safeType('0');
+  cy.inputId('other-beds').safeType('0');
 
   cy.inputId('2.07.1').safeType('01/01/2022'); // start date
   cy.inputId('2.07.2').safeType('01/01/2020'); // end date (invalid, must be after start)
@@ -300,13 +308,19 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
 
   cy.expectHudValuesToDeepEqual({
     cocCode: 'MA-505',
-    householdType: 'HOUSEHOLDS_WITH_ONLY_CHILDREN',
-    availability: 'OVERFLOW',
-    esBedType: 'VOUCHER',
+    householdType: HouseholdType.HouseholdsWithOnlyChildren,
+    availability: Availability.Overflow,
+    esBedType: BedType.Voucher,
     inventoryStartDate: '2022-01-01',
     inventoryEndDate: '2023-01-01',
-    bedInventory: 0,
     unitInventory: 0,
+    otherBedInventory: 0,
+    chBedInventory: null,
+    vetBedInventory: null,
+    chVetBedInventory: null,
+    youthBedInventory: null,
+    youthVetBedInventory: null,
+    chYouthBedInventory: null,
   });
 
   // Submit (create Inventory)
@@ -321,7 +335,7 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Update it and ensure changes are reflected in the table
   cy.tableRows('inventoryCard').first().click();
   cy.findTestId('updateInventoryButton').click();
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITHOUT_CHILDREN');
+  cy.checkOption('hhtype', HouseholdType.HouseholdsWithoutChildren);
   cy.testId('formButton-submit').click();
   cy.tableRows('inventoryCard').should('have.length', 1);
   cy.tableRows('inventoryCard')
@@ -331,7 +345,12 @@ it('should create and update Organization, Project, Funder, Project CoC, and Inv
   // Add another Inventory record
   cy.testId('addInventoryButton').click();
   cy.inputId('coc').invoke('val').should('not.be.empty'); // should autofill
-  cy.checkOption('hhtype', 'HOUSEHOLDS_WITH_AT_LEAST_ONE_ADULT_AND_ONE_CHILD');
+  cy.checkOption(
+    'hhtype',
+    HouseholdType.HouseholdsWithAtLeastOneAdultAndOneChild
+  );
+  cy.inputId('unit').safeType('0');
+  cy.inputId('other-beds').safeType('0');
   cy.inputId('2.07.1').safeType('01/01/2020'); // start date (too early)
 
   // Try to submit, expect error
