@@ -23,6 +23,9 @@ fragment ClientFields on Client {
   access {
     ...ClientAccessFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment ClientName on Client {
