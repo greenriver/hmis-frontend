@@ -129,7 +129,20 @@ export async function logout() {
   return response;
 }
 
-export const sentryUser = (user?: HmisUser) => ({
-  email: user?.email,
-  username: user?.name,
-});
+export const sentryUser = (user?: HmisUser) => {
+  if (user && user.email) {
+    return {
+      email: user.email,
+      username: user.name,
+    };
+  }
+  const storedUser = storage.getUser();
+  if (storedUser) {
+    const storedHmisUser = JSON.parse(storedUser) as HmisUser;
+    return {
+      email: storedHmisUser.email,
+      username: storedHmisUser.name,
+    };
+  }
+  return undefined;
+};

@@ -44,6 +44,34 @@ query GetProjectEnrollments(
   }
 }
 
+query GetProjectHouseholds(
+  $id: ID!
+  $searchTerm: String
+  $openOnDate: ISO8601Date
+  $enrollmentLimit: EnrollmentLimit
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    households(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      openOnDate: $openOnDate
+      searchTerm: $searchTerm
+      enrollmentLimit: $enrollmentLimit
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectEnrollmentsHouseholdFields
+      }
+    }
+  }
+}
+
 mutation DeleteProject($input: DeleteProjectInput!) {
   deleteProject(input: $input) {
     clientMutationId

@@ -12,6 +12,7 @@ fragment RootPermissionsFragment on QueryAccess {
   canDeleteProject
   canDeleteAssignedProjectData
   canViewPartialSsn
+  canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails
   canDeleteEnrollments
@@ -21,6 +22,10 @@ fragment RootPermissionsFragment on QueryAccess {
   canManageOwnClientFiles
   canViewAnyConfidentialClientFiles
   canViewAnyNonconfidentialClientFiles
+  canManageInventory
+  canManageDeniedReferrals
+  canManageIncomingReferrals
+  canManageOutgoingReferrals
 }
 
 fragment ClientAccessFields on ClientAccess {
@@ -59,11 +64,16 @@ fragment ProjectAccessFields on ProjectAccess {
   canViewFullSsn
   canDeleteProject
   canViewPartialSsn
+  canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails
+  canManageInventory
+  canManageDeniedReferrals
+  canManageIncomingReferrals
+  canManageOutgoingReferrals
 }
 
 fragment OrganizationAccessFields on OrganizationAccess {

@@ -1,6 +1,6 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Alert, AlertTitle, Box, lighten, Stack } from '@mui/material';
-import { pick } from 'lodash-es';
+import { isEqual, pick } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { ClearanceState, ClearanceStatus } from '../types';
@@ -15,6 +15,7 @@ import MciMatchSelector from './MciMatchSelector';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
 import { emptyErrorState, ErrorState, hasErrors } from '@/modules/errors/util';
@@ -28,6 +29,15 @@ export interface MciClearanceProps extends DynamicInputCommonProps {
   onChange: (value?: string | null) => void;
 }
 
+const MCI_CLEARANCE_FIELDS = [
+  'firstName',
+  'middleName',
+  'lastName',
+  'dob',
+  'gender',
+  'ssn',
+] as const;
+
 const initialClearanceState: ClearanceState = {
   status: 'initial',
   candidates: [],
@@ -37,6 +47,7 @@ const MciClearance = ({
   value,
   onChange,
   existingClient,
+  error: hasValidationError,
 }: MciClearanceProps & { existingClient: boolean }) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const { getCleanedValues, definition } = useDynamicFormContext();
@@ -78,28 +89,37 @@ const MciClearance = ({
     },
   });
 
-  const handleSearch = useCallback(() => {
+  // Gets re-calculated any time one of the dependent values changes (because of enableWhen dependency)
+  const currentFormValues = useMemo(() => {
     if (!definition || !getCleanedValues) {
       console.error('Context missing, unable to do MCI search');
       return;
     }
-    const currentFormValues = createHudValuesForSubmit(
-      getCleanedValues(),
-      definition
+    const values = createHudValuesForSubmit(getCleanedValues(), definition);
+    return pick(values, MCI_CLEARANCE_FIELDS);
+  }, [definition, getCleanedValues]);
+
+  const previousFormValues = usePrevious(currentFormValues);
+
+  useEffect(() => {
+    const relevantFieldChanged = !isEqual(
+      currentFormValues,
+      previousFormValues
     );
 
-    const input = pick(currentFormValues, [
-      'firstName',
-      'middleName',
-      'lastName',
-      'dob',
-      'gender',
-      'ssn',
-    ]);
-    console.debug('Clearing MCI with input', input);
+    // If one of the relevant dependent fields changed, reset state to force user to re-clear.
+    if (relevantFieldChanged && status !== 'initial') {
+      onChange(null);
+      setState(initialClearanceState);
+    }
+  }, [status, onChange, currentFormValues, previousFormValues]);
+
+  const handleSearch = useCallback(() => {
+    if (!currentFormValues) return;
+    console.debug('Clearing MCI with input', currentFormValues);
     onChange(null);
-    clearMci({ variables: { input: { input } } });
-  }, [clearMci, definition, getCleanedValues, onChange]);
+    clearMci({ variables: { input: { input: currentFormValues } } });
+  }, [clearMci, onChange, currentFormValues]);
 
   const { title, subtitle, buttonText, rightAlignButton } = useMemo(
     () =>
@@ -126,6 +146,13 @@ const MciClearance = ({
 
   return (
     <>
+      {hasValidationError && !value && (
+        <Alert severity='error'>
+          {status === 'initial'
+            ? 'MCI search is required.'
+            : 'Please make a selection.'}
+        </Alert>
+      )}
       <Alert
         color='info'
         icon={false}
@@ -152,6 +179,7 @@ const MciClearance = ({
           <ErrorAlert errors={errorState.errors} />
         </Stack>
       )}
+
       {candidates && status !== 'initial' && !loading && (
         <MciMatchSelector
           value={value}
@@ -175,8 +203,13 @@ const MciClearanceWrapper = ({
   const ctx = useClientDashboardContext();
 
   // If element becomes disabled, set value to uncleared
+  // If element becomes enabled, set value to null
   useEffect(() => {
-    if (disabled) onChange(UNCLEARED_CLIENT_STRING);
+    if (disabled) {
+      onChange(UNCLEARED_CLIENT_STRING);
+    } else {
+      onChange(null);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled]);
 

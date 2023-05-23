@@ -1,0 +1,10 @@
+mutation VoidReferralRequest($id: ID!) {
+  voidReferralRequest(referralRequestId: $id) {
+    record {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

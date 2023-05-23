@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Paper, Stack, Typography } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
-import ProjectReferralRequestsTable from './tables/ProjectsReferralRequestsTable';
+import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -30,8 +30,7 @@ const ProjectReferrals = () => {
           }}
         >
           <Typography variant='h5'>Referral Requests</Typography>
-          {/* FIXME: use canManageIncomingReferrals */}
-          {project.access.canEditProjectDetails && (
+          {project.access.canManageIncomingReferrals && (
             <ButtonLink
               to={generateSafePath(
                 ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
@@ -45,7 +44,7 @@ const ProjectReferrals = () => {
             </ButtonLink>
           )}
         </Stack>
-        <ProjectReferralRequestsTable projectId={project.id} />
+        <ProjectReferralRequestsTable project={project} />
       </Paper>
       {/* TODO: Render a GenericTableWithData for Referrals */}
     </>
