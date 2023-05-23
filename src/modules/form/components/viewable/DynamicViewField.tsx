@@ -84,8 +84,8 @@ const DynamicViewField: React.FC<DynamicViewFieldProps> = ({
           hasValue={(val) => !isNil(val)}
         />
       );
-    case ItemType.String:
     case ItemType.Text:
+    case ItemType.String:
     case ItemType.Integer:
       return <TextContent {...commonProps} />;
     case ItemType.Currency:

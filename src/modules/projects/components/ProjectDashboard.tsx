@@ -1,8 +1,9 @@
-import { Container, Stack, Typography } from '@mui/material';
+import { Chip, Container, Stack, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
 import Loading from '@/components/elements/Loading';
+import RouterLink from '@/components/elements/RouterLink';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
@@ -11,8 +12,9 @@ import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useSafeParams from '@/hooks/useSafeParams';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import { ProjectDashboardRoutes, Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ProjectAllFieldsFragment, useGetProjectQuery } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -23,18 +25,36 @@ const ProjectNavHeader = ({
   project: ProjectAllFieldsFragment;
 }) => {
   return (
-    <Stack gap={0.5}>
-      <Typography variant='body1' color='text.secondary' fontStyle='italic'>
+    <Stack gap={1}>
+      <RouterLink
+        to={generateSafePath(Routes.ORGANIZATION, {
+          organizationId: project.organization.id,
+        })}
+        fontStyle='italic'
+      >
         {project.organization.organizationName}
-      </Typography>
+      </RouterLink>
       <Typography variant='h4'>{project.projectName}</Typography>
-      <Stack sx={{ mt: 0.5 }}>
-        {project.projectType && (
-          <HmisEnum
-            value={project.projectType}
-            enumMap={HmisEnums.ProjectType}
-          />
-        )}
+      {project.projectType && (
+        <Chip
+          label={
+            <HmisEnum
+              value={project.projectType}
+              enumMap={HmisEnums.ProjectType}
+            />
+          }
+          size='small'
+          variant='filled'
+          sx={{ width: 'fit-content', px: 1, mt: 0.5 }}
+        />
+      )}
+      <Stack gap={0.5} sx={{ mt: 1 }}>
+        <IdDisplay prefix='HMIS' color='text.primary' value={project.id} />
+        <IdDisplay
+          prefix='Project'
+          color='text.primary'
+          value={project.hudId}
+        />
       </Stack>
     </Stack>
   );
