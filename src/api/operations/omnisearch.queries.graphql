@@ -1,5 +1,5 @@
-query OmniSearchClients($textSearch: String!) {
-  clientOmniSearch(textSearch: $textSearch, limit: 5) {
+query OmniSearchClients($textSearch: String!, $limit: Int) {
+  clientOmniSearch(textSearch: $textSearch, limit: $limit, offset: 0) {
     limit
     nodesCount
     nodes {
@@ -9,8 +9,8 @@ query OmniSearchClients($textSearch: String!) {
   }
 }
 
-query OmniSearchProjects($searchTerm: String!) {
-  projects(searchTerm: $searchTerm, limit: 5) {
+query OmniSearchProjects($searchTerm: String!, $limit: Int) {
+  projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
     limit
     nodesCount
     nodes {

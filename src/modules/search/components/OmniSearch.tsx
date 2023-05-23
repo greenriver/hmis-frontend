@@ -43,12 +43,12 @@ const OmniSearch: React.FC = () => {
 
   const { data: clientsData, loading: clientsLoading } =
     useOmniSearchClientsQuery({
-      variables: { textSearch: value || '' },
+      variables: { textSearch: value || '', limit: MAX_CLIENT_RESULTS },
       skip: !value,
     });
   const { data: projectsData, loading: projectsLoading } =
     useOmniSearchProjectsQuery({
-      variables: { searchTerm: value as string },
+      variables: { searchTerm: value as string, limit: MAX_PROJECT_RESULTS },
       skip: !value,
     });
   const { data: recentItemsData, loading: recentItemsLoading } =
@@ -59,13 +59,12 @@ const OmniSearch: React.FC = () => {
     useClearRecentItemsMutation();
 
   const optionsBase = useMemo(() => {
-    const allClients = clientsData?.clientOmniSearch?.nodes || [];
-    const projects =
-      projectsData?.projects?.nodes?.slice(0, MAX_PROJECT_RESULTS) || [];
+    const clients = clientsData?.clientOmniSearch?.nodes || [];
+    const numClients = clientsData?.clientOmniSearch?.nodesCount || 0;
+    const projects = projectsData?.projects?.nodes || [];
     const recentItems =
       recentItemsData?.currentUser?.recentItems?.slice(0, MAX_RECENT_ITEMS) ||
       [];
-    const clients = allClients.slice(0, MAX_CLIENT_RESULTS);
 
     const seeMoreOption: { id: 'seeMore'; __typename: 'SeeMore' } = {
       id: 'seeMore',
@@ -77,8 +76,7 @@ const OmniSearch: React.FC = () => {
         (item) => ({ id: item.id, item, __typename: 'RecentItem' } as const)
       ),
       clients,
-      seeMoreOptions:
-        allClients.length > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
+      seeMoreOptions: numClients > MAX_CLIENT_RESULTS ? [seeMoreOption] : [],
       projects,
     };
   }, [clientsData, projectsData, recentItemsData]);
@@ -132,25 +130,30 @@ const OmniSearch: React.FC = () => {
     [value]
   );
 
-  const getOptionLabel = useCallback((option: Option) => {
-    let label: React.ReactNode = option.id;
-    if (option.__typename === 'Client')
-      label = <ClientName client={option} variant='body1' />;
-    if (
-      option.__typename === 'RecentItem' &&
-      option.item.__typename === 'Client'
-    )
-      label = <ClientName client={option.item} variant='body1' />;
-    if (option.__typename === 'Project') label = option.projectName;
-    if (
-      option.__typename === 'RecentItem' &&
-      option.item.__typename === 'Project'
-    )
-      label = option.item.projectName;
-    if (option.__typename === 'SeeMore')
-      label = <Link variant='inherit'>See All Clients</Link>;
-    return label;
-  }, []);
+  const getOptionLabel = useCallback(
+    (option: Option) => {
+      let label: React.ReactNode = option.id;
+      if (option.__typename === 'Client')
+        label = <ClientName client={option} variant='body1' />;
+      if (
+        option.__typename === 'RecentItem' &&
+        option.item.__typename === 'Client'
+      )
+        label = <ClientName client={option.item} variant='body1' />;
+      if (option.__typename === 'Project') label = option.projectName;
+      if (
+        option.__typename === 'RecentItem' &&
+        option.item.__typename === 'Project'
+      )
+        label = option.item.projectName;
+      if (option.__typename === 'SeeMore') {
+        const total = clientsData?.clientOmniSearch?.nodesCount || 0;
+        label = <Link variant='inherit'>{`See All Results (${total})`}</Link>;
+      }
+      return label;
+    },
+    [clientsData]
+  );
 
   const handleSelectItem = useCallback(
     (option: Option) => {
@@ -220,7 +223,7 @@ const OmniSearch: React.FC = () => {
         open={values.popupOpen}
         anchorEl={values.anchorEl}
         placement='bottom-end'
-        sx={{ zIndex: (theme) => theme.zIndex.modal }}
+        sx={{ zIndex: (theme) => theme.zIndex.modal, minWidth: '350px' }}
       >
         <Paper
           sx={{
@@ -288,6 +291,7 @@ const OmniSearch: React.FC = () => {
                             sx={{
                               display: 'flex',
                               alignItems: 'baseline',
+                              justifyContent: 'space-between',
                               gap: 4,
                             }}
                           >
