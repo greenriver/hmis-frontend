@@ -10034,6 +10034,7 @@ export type ClearMciMutation = {
 
 export type OmniSearchClientsQueryVariables = Exact<{
   textSearch: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchClientsQuery = {
@@ -10060,6 +10061,7 @@ export type OmniSearchClientsQuery = {
 
 export type OmniSearchProjectsQueryVariables = Exact<{
   searchTerm: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchProjectsQuery = {
@@ -15073,8 +15075,8 @@ export type ClearMciMutationOptions = Apollo.BaseMutationOptions<
   ClearMciMutationVariables
 >;
 export const OmniSearchClientsDocument = gql`
-  query OmniSearchClients($textSearch: String!) {
-    clientOmniSearch(textSearch: $textSearch, limit: 5) {
+  query OmniSearchClients($textSearch: String!, $limit: Int) {
+    clientOmniSearch(textSearch: $textSearch, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -15099,6 +15101,7 @@ export const OmniSearchClientsDocument = gql`
  * const { data, loading, error } = useOmniSearchClientsQuery({
  *   variables: {
  *      textSearch: // value for 'textSearch'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -15137,8 +15140,8 @@ export type OmniSearchClientsQueryResult = Apollo.QueryResult<
   OmniSearchClientsQueryVariables
 >;
 export const OmniSearchProjectsDocument = gql`
-  query OmniSearchProjects($searchTerm: String!) {
-    projects(searchTerm: $searchTerm, limit: 5) {
+  query OmniSearchProjects($searchTerm: String!, $limit: Int) {
+    projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -15162,6 +15165,7 @@ export const OmniSearchProjectsDocument = gql`
  * const { data, loading, error } = useOmniSearchProjectsQuery({
  *   variables: {
  *      searchTerm: // value for 'searchTerm'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
