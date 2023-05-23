@@ -292,7 +292,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else if (
         item.component === Component.RadioButtons ||
         item.component === Component.RadioButtonsVertical ||
-        (isLocalPickList && options && options.length > 0 && options.length < 4)
+        (isLocalPickList &&
+          options &&
+          options.length > 0 &&
+          options.length < 4 &&
+          !item.repeats)
       ) {
         inputComponent = (
           <RadioGroupInput
