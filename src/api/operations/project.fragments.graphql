@@ -33,6 +33,9 @@ fragment ProjectAllFields on Project {
   user {
     ...UserFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment ProjectCocFields on ProjectCoc {
