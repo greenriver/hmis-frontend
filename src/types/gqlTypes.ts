@@ -329,7 +329,6 @@ export type ClientAssessmentsArgs = {
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -1225,7 +1224,6 @@ export type EnrollmentAssessmentsArgs = {
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -4933,7 +4931,6 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
   filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
@@ -5965,7 +5962,7 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
+  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
@@ -11854,7 +11851,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
     $inProgress: Boolean
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
     $filters: AssessmentsForEnrollmentFilterOptions
@@ -11864,7 +11860,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
         inProgress: $inProgress
         sortOrder: $sortOrder
         filters: $filters
@@ -11896,7 +11891,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      roles: // value for 'roles'
  *      inProgress: // value for 'inProgress'
  *      sortOrder: // value for 'sortOrder'
  *      filters: // value for 'filters'
@@ -12116,7 +12110,7 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
+    $roles: [AssessmentRole!]
     $inProgress: Boolean
   ) {
     client(id: $id) {
@@ -12124,7 +12118,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
+        filters: { roles: $roles }
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
