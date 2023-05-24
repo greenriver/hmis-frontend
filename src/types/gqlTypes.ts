@@ -163,10 +163,6 @@ export enum AssessmentType {
   Virtual = 'VIRTUAL',
 }
 
-export type AssessmentsForEnrollmentFilterOptions = {
-  roles?: InputMaybe<Array<AssessmentRole>>;
-};
-
 export type AssessmentsPaginated = {
   __typename?: 'AssessmentsPaginated';
   hasMoreAfter: Scalars['Boolean'];
@@ -1220,7 +1216,7 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
-  filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -4933,7 +4929,7 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   offset?: InputMaybe<Scalars['Int']>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
-  filters?: InputMaybe<AssessmentsForEnrollmentFilterOptions>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
 }>;
 
 export type GetEnrollmentAssessmentsQuery = {
@@ -11853,7 +11849,7 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $offset: Int = 0
     $inProgress: Boolean
     $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-    $filters: AssessmentsForEnrollmentFilterOptions
+    $filters: AssessmentFilterOptions
   ) {
     enrollment(id: $id) {
       id

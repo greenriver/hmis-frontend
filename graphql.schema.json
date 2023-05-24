@@ -927,37 +927,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "INPUT_OBJECT",
-        "name": "AssessmentsForEnrollmentFilterOptions",
-        "description": null,
-        "fields": null,
-        "inputFields": [
-          {
-            "name": "roles",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "AssessmentRole",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "AssessmentsPaginated",
         "description": null,
@@ -7960,7 +7929,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "AssessmentsForEnrollmentFilterOptions",
+                  "name": "AssessmentFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,

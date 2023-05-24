@@ -14,7 +14,6 @@ import {
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
@@ -86,9 +85,6 @@ const AllAssessments = () => {
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments.'
-          sortOptions={HmisEnums.AssessmentSortOption}
-          defaultSortOption='ASSESSMENT_DATE'
-          filterInputType='AssessmentFilterOptions'
           recordType='Assessment'
         />
       </Paper>

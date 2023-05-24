@@ -4,7 +4,7 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack, Typography } from '@mui/material';
-import { get, isEqual, startCase } from 'lodash-es';
+import { get, isEmpty, isEqual, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import Pagination from '../../../components/elements/Pagination';
@@ -20,7 +20,12 @@ import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
-import { getFilter } from '@/modules/hmis/components/HmisFilter';
+import {
+  getDefaultSortOptionForType,
+  getFilter,
+  getInputTypeForRecordType,
+  getSortOptionForType,
+} from '@/modules/hmis/components/HmisFilter';
 import {
   getSchemaForInputType,
   getSchemaForType,
@@ -103,8 +108,8 @@ const GenericTableWithData = <
   filters,
   defaultFilters = {},
   showFilters = false,
-  sortOptions,
-  defaultSortOption,
+  sortOptions: sortOptionsProp,
+  defaultSortOption: defaultSortOptionProp,
   queryVariables,
   queryDocument,
   pagePath,
@@ -113,7 +118,7 @@ const GenericTableWithData = <
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
   recordType,
-  filterInputType,
+  filterInputType: filterInputTypeProp,
   fetchPolicy,
   nonTablePagination = false,
   fullHeight = false,
@@ -130,8 +135,12 @@ const GenericTableWithData = <
   const [rowsPerPage, setRowsPerPage] = useState(defaultPageSize);
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
-  const [sortOrder, setSortOrder] =
-    useState<typeof defaultSortOption>(defaultSortOption);
+  const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
+    defaultSortOptionProp ||
+      (recordType
+        ? (getDefaultSortOptionForType(recordType) as keyof SortOptionsType)
+        : undefined)
+  );
 
   const offset = page * rowsPerPage;
   const limit = rowsPerPage;
@@ -218,6 +227,9 @@ const GenericTableWithData = <
   }, [columns, recordType]);
 
   const filterDefs = useMemo(() => {
+    const filterInputType =
+      filterInputTypeProp ||
+      (recordType ? getInputTypeForRecordType(recordType) : undefined);
     if (!filters && !(filterInputType && recordType)) return undefined;
 
     const derivedFilters =
@@ -230,7 +242,16 @@ const GenericTableWithData = <
         ? filters(derivedFilters)
         : filters || {}),
     };
-  }, [filters, filterInputType, recordType]);
+  }, [filters, recordType, filterInputTypeProp]);
+
+  const sortOptions = useMemo(
+    () =>
+      sortOptionsProp ||
+      (recordType
+        ? (getSortOptionForType(recordType) as SortOptionsType)
+        : undefined),
+    [sortOptionsProp, recordType]
+  );
 
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched) return <Loading />;
@@ -274,7 +295,7 @@ const GenericTableWithData = <
                       : undefined
                   }
                   filters={
-                    filterDefs
+                    !isEmpty(filterDefs)
                       ? {
                           filters: filterDefs,
                           filterValues,

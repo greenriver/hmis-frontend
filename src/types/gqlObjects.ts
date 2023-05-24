@@ -3700,23 +3700,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'AssessmentsForEnrollmentFilterOptions',
-    args: [
-      {
-        name: 'roles',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
-          },
-        },
-      },
-    ],
-  },
-  {
     name: 'ClearMciInput',
     args: [
       {

@@ -9,7 +9,6 @@ import {
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
   EnrollmentFieldsFragment,
@@ -101,9 +100,6 @@ const AssessmentsTable = ({
         pagePath='enrollment.assessments'
         noData='No assessments.'
         recordType='Assessment'
-        filterInputType='AssessmentsForEnrollmentFilterOptions'
-        sortOptions={HmisEnums.AssessmentSortOption}
-        defaultSortOption='ASSESSMENT_DATE'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />
     </>

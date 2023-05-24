@@ -10,7 +10,7 @@ query GetEnrollmentAssessments(
   $offset: Int = 0
   $inProgress: Boolean
   $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentsForEnrollmentFilterOptions
+  $filters: AssessmentFilterOptions
 ) {
   enrollment(id: $id) {
     id

@@ -6,7 +6,7 @@ import TableFilterItem from '@/components/elements/tableFilters/filters/FilterIt
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
-import { PickListType } from '@/types/gqlTypes';
+import { AssessmentSortOption, PickListType } from '@/types/gqlTypes';
 
 /**
  * Component for dynamically displaying a filter
@@ -42,6 +42,31 @@ const getFilterValuesForRecordType = <T,>(
   }
 
   return baseFilter;
+};
+
+export const getSortOptionForType = (
+  recordType: string
+): Record<string, string> | null => {
+  if (recordType === 'Assessment')
+    return HmisEnums.AssessmentSortOption as Record<string, string>;
+
+  return null;
+};
+
+export const getDefaultSortOptionForType = (
+  recordType: string
+): string | null => {
+  if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
+
+  return null;
+};
+
+export const getInputTypeForRecordType = (
+  recordType: string
+): string | null => {
+  if (recordType === 'Assessment') return 'AssessmentFilterOptions';
+
+  return null;
 };
 
 const getFilterForType = (
