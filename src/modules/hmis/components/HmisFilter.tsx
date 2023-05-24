@@ -29,39 +29,60 @@ const getType = (
   return getType(type.ofType);
 };
 
+const getFilterValuesForRecordType = <T,>(
+  recordType: string,
+  fieldName: string,
+  baseFilter: FilterType<T>
+): FilterType<T> => {
+  if (recordType === 'Assessment') {
+    if (fieldName === 'roles' && baseFilter.type === 'enum')
+      return { ...baseFilter, multi: true };
+    if (fieldName === 'projects' && baseFilter.type === 'picklist')
+      return { ...baseFilter, multi: true };
+  }
+
+  return baseFilter;
+};
+
 const getFilterForType = (
   recordType: string,
   fieldName: any,
   type: GqlInputObjectSchemaType['name']
 ): FilterType<any> | null => {
+  if (!type) return null;
+
   const baseFields: BaseFilter<any> = {
     key: fieldName,
     label: startCase(fieldName),
   };
 
+  let filter: FilterType<any> | null = null;
+
   switch (fieldName) {
     case 'textSearch':
-      return { ...baseFields, type: 'text' };
+      filter = { ...baseFields, type: 'text' };
+      break;
     case 'projects':
-      return {
+      filter = {
         ...baseFields,
         type: 'picklist',
         pickListReference: PickListType.Project,
-        multi: ['Assessment'].includes(fieldName),
       };
+      break;
   }
 
-  switch (type) {
-    case 'FormRole':
-      return {
-        ...baseFields,
-        enumType: HmisEnums.FormRole,
-        multi: ['Assessment'].includes(recordType),
-        variant: 'select',
-        label: 'Roles',
-        type: 'enum',
-      };
+  if (type in HmisEnums) {
+    const enumType = HmisEnums[type as keyof typeof HmisEnums];
+    filter = {
+      ...baseFields,
+      enumType,
+      variant: 'select',
+      type: 'enum',
+    };
   }
+
+  if (filter)
+    return getFilterValuesForRecordType(recordType, fieldName, filter);
 
   return null;
 };

@@ -790,8 +790,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
       },
-      { name: 'key', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      { name: 'label', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'key',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'label',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
       {
         name: 'repeats',
         type: {
@@ -1631,6 +1645,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'component',
         type: { kind: 'ENUM', name: 'Component', ofType: null },
+      },
+      {
+        name: 'customFieldKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'dataCollectedAbout',
@@ -3642,7 +3660,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
           },
         },
       },
@@ -3692,7 +3710,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           ofType: {
             kind: 'NON_NULL',
             name: null,
-            ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
+            ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
           },
         },
       },

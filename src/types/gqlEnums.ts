@@ -6,6 +6,14 @@ export const HmisEnums = {
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
     HOUSING_NEEDS_ASSESSMENT: 'Housing Needs Assessment',
   },
+  AssessmentRole: {
+    ANNUAL: 'Annual Assessment',
+    CE: 'Coordinated Entry',
+    EXIT: 'Exit Assessment',
+    INTAKE: 'Intake Assessment',
+    POST_EXIT: 'Post-Exit Assessment',
+    UPDATE: 'Update Assessment',
+  },
   AssessmentSortOption: {
     ASSESSMENT_DATE: 'Assessment Date: Most Recent First',
     DATE_UPDATED: 'Last Updated: Most Recent First',
@@ -607,6 +615,7 @@ export const HmisEnums = {
   },
   PickListType: {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
+    AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS: 'Unoccupied units in the specified project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',

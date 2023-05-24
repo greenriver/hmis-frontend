@@ -683,7 +683,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "FormRole",
+                  "name": "AssessmentRole",
                   "ofType": null
                 }
               }
@@ -823,6 +823,53 @@
       },
       {
         "kind": "ENUM",
+        "name": "AssessmentRole",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ANNUAL",
+            "description": "(ANNUAL) Annual Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CE",
+            "description": "(CE) Coordinated Entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXIT",
+            "description": "(EXIT) Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INTAKE",
+            "description": "(INTAKE) Intake Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POST_EXIT",
+            "description": "(POST_EXIT) Post-Exit Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UPDATE",
+            "description": "(UPDATE) Update Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "AssessmentSortOption",
         "description": "HUD Assessment Sorting Options",
         "fields": null,
@@ -896,7 +943,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "ENUM",
-                  "name": "FormRole",
+                  "name": "AssessmentRole",
                   "ofType": null
                 }
               }
@@ -4919,9 +4966,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4931,9 +4982,13 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -10660,6 +10715,18 @@
             "deprecationReason": null
           },
           {
+            "name": "customFieldKey",
+            "description": "Key of CustomDataElement to save record as. Use record_type to specify type.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dataCollectedAbout",
             "description": "Include this item only if the Client meets this HUD DataCollectedAbout condition",
             "args": [],
@@ -16201,6 +16268,35 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "voidReferralRequest",
+            "description": "Void a referral request",
+            "args": [
+              {
+                "name": "referralRequestId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "VoidReferralRequestPayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -17036,6 +17132,12 @@
         "enumValues": [
           {
             "name": "AVAILABLE_FILE_TYPES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "AVAILABLE_SERVICE_TYPES",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -19139,6 +19241,51 @@
                   "ofType": {
                     "kind": "ENUM",
                     "name": "FormRole",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FormDefinition",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "getServiceFormDefinition",
+            "description": "Get most relevant form definition for the specified service type",
+            "args": [
+              {
+                "name": "customServiceTypeId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "projectId",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
                     "ofType": null
                   }
                 },
@@ -23975,6 +24122,53 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "VoidReferralRequestPayload",
+        "description": "Autogenerated return type of VoidReferralRequest.",
+        "fields": [
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "record",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ReferralRequest",
               "ofType": null
             },
             "isDeprecated": false,
