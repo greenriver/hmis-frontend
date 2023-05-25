@@ -46,6 +46,7 @@ export const RITA_ACKROYD = {
     canViewAnyNonconfidentialClientFiles: true,
   },
   customDataElements: [],
+  names: [],
   gender: [Gender.Male, Gender.NoSingleGender],
   race: [Race.ClientRefused],
   dobDataQuality: DobDataQuality.ApproximateOrPartialDobReported,

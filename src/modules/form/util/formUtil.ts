@@ -67,7 +67,7 @@ export const hasMeaningfulValue = (value: any): boolean => {
   return true;
 };
 
-const localResolvePickList = (
+export const localResolvePickList = (
   pickListReference: string,
   includeDataNotCollected = false
 ): PickListOption[] | null => {
@@ -696,6 +696,9 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
     // If this item is dependent on another item being enabled,
     // recusively add those to its dependency list
     if (en.operator === EnableOperator.Enabled) {
+      if (!itemMap[en.question]) {
+        throw new Error(`No such question: ${en.question}`);
+      }
       (itemMap[en.question].enableWhen || []).forEach((en2) =>
         addEnableWhen(linkId, en2)
       );

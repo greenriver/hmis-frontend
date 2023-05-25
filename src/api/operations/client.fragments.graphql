@@ -26,6 +26,9 @@ fragment ClientFields on Client {
   customDataElements {
     ...CustomDataElementFields
   }
+  names {
+    ...ClientNameObjectFields
+  }
 }
 
 fragment ClientName on Client {
@@ -34,6 +37,23 @@ fragment ClientName on Client {
   preferredName
   lastName
   nameSuffix
+}
+
+fragment ClientNameObjectFields on ClientName {
+  id
+  first
+  middle
+  last
+  suffix
+  nameDataQuality
+  use
+  notes
+  primary
+  dateCreated
+  dateUpdated
+  user {
+    ...UserFields
+  }
 }
 
 fragment ClientImage on Client {

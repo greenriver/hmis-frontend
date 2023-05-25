@@ -80,6 +80,7 @@ export const HmisEnums = {
     AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
   Component: {
+    ADDRESS: 'Client Address input',
     ALERT_ERROR: 'Display text as an error alert',
     ALERT_INFO: 'Display text as an info alert',
     ALERT_SUCCESS: 'Display text as a success alert',
@@ -87,11 +88,14 @@ export const HmisEnums = {
     CHECKBOX: 'Render a boolean input item as a checkbox',
     DISABILITY_TABLE:
       'Specialized component for rendering disabilities in a table',
+    EMAIL: 'Email address input for ContactPoint',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
     INPUT_GROUP:
       'Render a group that contains children of the same type (e.g. all booleans)',
     MCI: 'MCI linking component',
+    NAME: 'Client Name input',
+    PHONE: 'Phone number input for ContactPoint',
     RADIO_BUTTONS: 'Render a choice input item as radio buttons',
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
@@ -480,6 +484,7 @@ export const HmisEnums = {
     GROUP: 'GROUP',
     IMAGE: 'IMAGE',
     INTEGER: 'INTEGER',
+    OBJECT: 'OBJECT',
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
     TEXT: 'TEXT',
