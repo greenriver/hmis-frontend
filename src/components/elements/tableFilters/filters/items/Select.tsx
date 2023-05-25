@@ -2,7 +2,7 @@ import React from 'react';
 
 import { TableFilterItemSelectorProps } from '../FilterItem';
 
-import CreatableFormSelect from '@/modules/form/components/CreatableFormSelect';
+import FormSelect from '@/modules/form/components/FormSelect';
 
 const TableFilterItemSelect: React.FC<
   Omit<TableFilterItemSelectorProps, 'variant'>
@@ -10,7 +10,7 @@ const TableFilterItemSelect: React.FC<
   // This is repetative, but need to use a non-conditional value for the `multiple` prop for the types to work out
   if (Array.isArray(value)) {
     return (
-      <CreatableFormSelect
+      <FormSelect
         multiple
         value={options.filter((opt) => value.includes(opt.code))}
         options={options || []}
@@ -26,8 +26,8 @@ const TableFilterItemSelect: React.FC<
     );
   }
   return (
-    <CreatableFormSelect
-      value={options.find((opt) => value === opt.code) || ''}
+    <FormSelect
+      value={options.find((opt) => value === opt.code)}
       options={options || []}
       onChange={(e, val) =>
         onChange(val ? (typeof val === 'string' ? val : val.code) : val)
