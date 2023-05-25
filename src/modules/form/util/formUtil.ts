@@ -1,5 +1,16 @@
 import { getYear, isDate, isValid, max, min } from 'date-fns';
-import { compact, isNil, isUndefined, pull, sum } from 'lodash-es';
+import {
+  compact,
+  isArray,
+  isNil,
+  isObject,
+  isUndefined,
+  mapValues,
+  omit,
+  omitBy,
+  pull,
+  sum,
+} from 'lodash-es';
 
 import {
   DynamicInputCommonProps,
@@ -460,6 +471,21 @@ export const buildCommonInputProps = (
   return inputProps;
 };
 
+type TypedObject = { __typename: string };
+const isTypedObject = (o: any): o is TypedObject => {
+  return isObject(o) && o.hasOwnProperty('__typename');
+};
+const cleanTypedObject = (o: TypedObject) => {
+  return omit(
+    o,
+    '__typename',
+    'dateUpdated',
+    'dateCreated',
+    'dateDeleted',
+    'user'
+  );
+};
+
 /**
  * Transform GraphQL value shape into form value shape
  *
@@ -486,6 +512,12 @@ export const gqlValueToFormValue = (
 
     default:
       // Set the property directly as the initial form value
+      if (Array.isArray(value)) {
+        return value.map((v) => (isTypedObject(v) ? cleanTypedObject(v) : v));
+      } else if (isTypedObject(value)) {
+        return cleanTypedObject(value);
+      }
+
       return value;
   }
 };
@@ -1064,4 +1096,18 @@ export const setDisabledLinkIdsBase = (
 
     return newList;
   });
+};
+
+const underscoreKey = (v: any, k: string) => k.startsWith('_');
+
+// Remove any keys that start with "_" (those are frontend-specific values like keys that shouldnt be sent)
+export const dropUnderscorePrefixedKeys = (
+  obj: Record<string, any>
+): Record<string, any> => {
+  const cleaned = omitBy(obj, underscoreKey);
+  return mapValues(cleaned, (v) =>
+    isArray(v)
+      ? v.map((item) => (isObject(item) ? omitBy(item, underscoreKey) : item))
+      : v
+  );
 };

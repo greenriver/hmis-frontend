@@ -1,4 +1,4 @@
-import { mapValues, omit, isObject, omitBy } from 'lodash-es';
+import { omit } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import DynamicFormFields, {
@@ -9,6 +9,7 @@ import { FormValues, ItemChangedFn, SeveralItemsChangedFn } from '../types';
 import {
   addDescendants,
   autofillValues,
+  dropUnderscorePrefixedKeys,
   isShown,
   setDisabledLinkIdsBase,
 } from '../util/formUtil';
@@ -49,10 +50,7 @@ const useDynamicFields = ({
     const excluded = addDescendants(disabledLinkIds, definition);
     // Drop "hidden" fields and their children
     const cleaned = omit(values, excluded);
-    // Remove any keys that start with "_" (those are frontend-specific values like keys that shouldnt be sent)
-    return mapValues(cleaned, (v) =>
-      isObject(v) ? omitBy(v, (v, k) => k.startsWith('_')) : v
-    );
+    return dropUnderscorePrefixedKeys(cleaned);
   }, [definition, disabledLinkIds, values]);
 
   const shouldShowItem = useCallback(

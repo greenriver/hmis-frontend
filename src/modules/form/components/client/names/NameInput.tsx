@@ -59,6 +59,7 @@ const NameInput = ({
             value={value.first || null}
             onChange={(e) => onChange({ ...value, first: e.target.value })}
             label={getLabel('First Name')}
+            data-testid='first-name'
           />
         </Grid>
         <Grid item xs={3}>
@@ -72,7 +73,8 @@ const NameInput = ({
           <TextInput
             value={value.last || null}
             onChange={(e) => onChange({ ...value, last: e.target.value })}
-            label={getLabel('Last Name')}
+            label={getLabel('Last')}
+            data-testid='last-name'
           />
         </Grid>
         <Grid item xs={2}>
@@ -102,8 +104,6 @@ const NameInput = ({
             sx: { width: MAX_INPUT_WIDTH },
           }}
           label={getLabel('Name Data Quality')}
-          // sx={{ maxWidth: MAX_INPUT_WIDTH }} // for click target for closing dropdwon
-          // {...commonInputProps}
         />
       </InfoGroup>
       <Button
