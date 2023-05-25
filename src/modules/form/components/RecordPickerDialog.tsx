@@ -27,7 +27,12 @@ import RelativeDate from '@/components/elements/RelativeDate';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
-import { FormRole, FormItem, RelatedRecordType } from '@/types/gqlTypes';
+import {
+  FormRole,
+  FormItem,
+  RelatedRecordType,
+  AssessmentRole,
+} from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
@@ -145,7 +150,12 @@ const RecordPickerDialog = ({
         <TableComponent
           queryVariables={{
             id: client.id,
-            ...(role ? { roles: [role], inProgress: false } : undefined),
+            ...(role
+              ? {
+                  roles: [role as unknown as AssessmentRole],
+                  inProgress: false,
+                }
+              : undefined),
           }}
           defaultPageSize={5}
           columns={columns}
