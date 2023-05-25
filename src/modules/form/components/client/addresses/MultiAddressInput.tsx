@@ -57,7 +57,7 @@ const MultiAddressInputWrapper = ({
   value,
   ...props
 }: PartialPick<Props, 'value'>) => (
-  <MultiAddressInput {...props} value={value || [generateNewAddress(true)]} />
+  <MultiAddressInput {...props} value={value || [generateNewAddress()]} />
 );
 
 export default MultiAddressInputWrapper;
