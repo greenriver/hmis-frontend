@@ -29,6 +29,12 @@ fragment ClientFields on Client {
   names {
     ...ClientNameObjectFields
   }
+  addresses {
+    ...ClientAddressFields
+  }
+  contactPoints {
+    ...ClientContactPointFields
+  }
 }
 
 fragment ClientName on Client {
@@ -49,11 +55,27 @@ fragment ClientNameObjectFields on ClientName {
   use
   notes
   primary
-  dateCreated
-  dateUpdated
-  user {
-    ...UserFields
-  }
+}
+fragment ClientAddressFields on ClientAddress {
+  id
+  line1
+  line2
+  city
+  state
+  district
+  country
+  postalCode
+  notes
+  use
+  type
+}
+
+fragment ClientContactPointFields on ClientContactPoint {
+  id
+  value
+  notes
+  use
+  system
 }
 
 fragment ClientImage on Client {

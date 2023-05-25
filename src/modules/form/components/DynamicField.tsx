@@ -9,7 +9,8 @@ import {
 } from '../types';
 import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
-import NameGroupInput from './client/names/NameGroupInput';
+import MultiAddressInput from './client/addresses/MultiAddressInput';
+import MultiNameInput from './client/names/MultiNameInput';
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
@@ -362,14 +363,16 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       );
     case ItemType.Object:
       if (item.component == Component.Name) {
-        return <NameGroupInput value={value} onChange={onChangeValue} />;
-      } else {
-        console.warn(
-          'Unable to render component for object type. Link ID:',
-          item.linkId
-        );
-        return <></>;
+        return <MultiNameInput value={value} onChange={onChangeValue} />;
       }
+      if (item.component == Component.Address) {
+        return <MultiAddressInput value={value} onChange={onChangeValue} />;
+      }
+      console.warn(
+        'Unable to render component for object type. Link ID:',
+        item.linkId
+      );
+      return <></>;
 
     default:
       console.warn('Unrecognized item type:', item.type);

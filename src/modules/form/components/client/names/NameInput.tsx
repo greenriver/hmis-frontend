@@ -1,4 +1,4 @@
-import { Box, Button, Grid, lighten, Stack } from '@mui/material';
+import { Box, Grid, Stack } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
 import { MAX_INPUT_WIDTH } from '../../DynamicField';
@@ -30,12 +30,10 @@ const getLabel = (text: string, required?: boolean) => {
 const NameInput = ({
   value,
   onChange,
-  onRemove,
   radioElement,
 }: {
   value: NameInputType;
   onChange: (value: NameInputType) => void;
-  onRemove?: VoidFunction;
   radioElement?: ReactNode;
 }) => {
   const dqValue = useMemo(
@@ -44,15 +42,7 @@ const NameInput = ({
   );
 
   return (
-    <Stack
-      direction={'column'}
-      rowGap={2}
-      sx={{
-        p: 2,
-        backgroundColor: (theme) => lighten(theme.palette.grey[50], 0.4),
-        borderRadius: 1,
-      }}
-    >
+    <Stack direction={'column'} rowGap={2}>
       <Grid container gap={2}>
         <Grid item xs={3}>
           <TextInput
@@ -106,15 +96,6 @@ const NameInput = ({
           label={getLabel('Name Data Quality')}
         />
       </InfoGroup>
-      <Button
-        onClick={() => onRemove && onRemove()}
-        color='error'
-        variant='text'
-        disabled={!onRemove}
-        sx={{ width: 'fit-content', textDecoration: 'underline', py: 0 }}
-      >
-        Delete Name
-      </Button>
     </Stack>
   );
 };

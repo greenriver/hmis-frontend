@@ -1,16 +1,10 @@
-import AddIcon from '@mui/icons-material/Add';
-import {
-  Button,
-  FormControlLabel,
-  Radio,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { filter } from 'lodash-es';
+import { FormControlLabel, Radio, Typography } from '@mui/material';
+import { pullAt } from 'lodash-es';
 import { useCallback } from 'react';
 import { v4 } from 'uuid';
 
 import { DynamicInputCommonProps } from '../../../types';
+import RepeatedInputContainer from '../RepeatedInputContainer';
 
 import NameInput from './NameInput';
 import { NameInputType } from './types';
@@ -27,29 +21,25 @@ interface Props extends DynamicInputCommonProps {
   onChange: (value: NameInputType[]) => void;
 }
 
-const NameGroupInput = ({ id, value, onChange }: Props) => {
-  console.log('all names:', JSON.stringify(value));
+const MultiNameInput = ({ id, value, onChange }: Props) => {
   const handleAddName = useCallback(() => {
     onChange([...value, generateNewName()]);
   }, [onChange, value]);
 
   return (
-    <Stack id={id} gap={2}>
-      {value.map((nameValue, idx) => {
+    <RepeatedInputContainer
+      id={id}
+      values={value}
+      valueKey={(nameValue) => nameValue._key || nameValue.id || ''}
+      renderChild={(nameValue, idx) => {
         return (
           <NameInput
-            key={nameValue._key || nameValue.id || idx}
             value={nameValue}
             onChange={(val) => {
               const copied = [...value];
               copied[idx] = val;
               onChange(copied);
             }}
-            onRemove={
-              nameValue.primary
-                ? undefined
-                : () => onChange(filter(value, (_o, index) => index !== idx))
-            }
             radioElement={
               <FormControlLabel
                 checked={nameValue.primary || false}
@@ -57,36 +47,41 @@ const NameGroupInput = ({ id, value, onChange }: Props) => {
                 label={
                   <Typography variant='body2'>Client's Primary Name</Typography>
                 }
-                onChange={(_event, checked) => {
-                  console.log(checked);
+                onChange={() =>
                   onChange(
                     value.map((val, i) =>
                       i == idx
                         ? { ...val, primary: true }
                         : { ...val, primary: false }
                     )
-                  );
-                }}
+                  )
+                }
               />
             }
           />
         );
-      })}
-      <Button
-        onClick={handleAddName}
-        color='secondary'
-        variant='outlined'
-        sx={{ width: 'fit-content', px: 4, mt: 2 }}
-        startIcon={<AddIcon />}
-      >
-        Add name
-      </Button>
-    </Stack>
+      }}
+      onClickAdd={handleAddName}
+      removeAt={(val, idx) =>
+        val.primary || value.length === 1
+          ? undefined
+          : () => {
+              const copied = [...value];
+              pullAt(copied, [idx]);
+              onChange(copied);
+            }
+      }
+      removeText='Delete name'
+      addText='Add Name'
+    />
   );
 };
 
-const NameGroupWrapper = ({ value, ...props }: PartialPick<Props, 'value'>) => (
-  <NameGroupInput {...props} value={value || [generateNewName(true)]} />
+const MultiNameInputWrapper = ({
+  value,
+  ...props
+}: PartialPick<Props, 'value'>) => (
+  <MultiNameInput {...props} value={value || [generateNewName(true)]} />
 );
 
-export default NameGroupWrapper;
+export default MultiNameInputWrapper;

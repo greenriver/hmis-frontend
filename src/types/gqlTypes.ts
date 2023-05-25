@@ -419,17 +419,25 @@ export type ClientAddress = {
 
 /** Allowed values for ClientAddress.type */
 export enum ClientAddressType {
+  /** Both */
   Both = 'both',
+  /** Physical */
   Physical = 'physical',
+  /** Postal */
   Postal = 'postal',
 }
 
 /** Allowed values for ClientAddress.use */
 export enum ClientAddressUse {
+  /** Home */
   Home = 'home',
+  /** Mail */
   Mail = 'mail',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -471,21 +479,33 @@ export type ClientContactPoint = {
 
 /** Allowed values for ClientContactPoint.system */
 export enum ClientContactPointSystem {
+  /** Email */
   Email = 'email',
+  /** Fax */
   Fax = 'fax',
+  /** Other */
   Other = 'other',
+  /** Pager */
   Pager = 'pager',
+  /** Phone */
   Phone = 'phone',
+  /** Sms */
   Sms = 'sms',
+  /** Url */
   Url = 'url',
 }
 
 /** Allowed values for ClientContactPoint.use */
 export enum ClientContactPointUse {
+  /** Home */
   Home = 'home',
+  /** Mobile */
   Mobile = 'mobile',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -517,12 +537,19 @@ export type ClientName = {
 
 /** Allowed values for ClientName.use */
 export enum ClientNameUse {
+  /** Anonymous */
   Anonymous = 'anonymous',
+  /** Maiden */
   Maiden = 'maiden',
+  /** Nickname */
   Nickname = 'nickname',
+  /** Official */
   Official = 'official',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Usual */
   Usual = 'usual',
 }
 
@@ -6180,9 +6207,28 @@ export type ClientFieldsFragment = {
     use?: ClientNameUse | null;
     notes?: string | null;
     primary?: boolean | null;
-    dateCreated: string;
-    dateUpdated: string;
-    user?: { __typename: 'User'; id: string; name: string } | null;
+  }>;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    type?: ClientAddressType | null;
+  }>;
+  contactPoints: Array<{
+    __typename?: 'ClientContactPoint';
+    id: string;
+    value?: string | null;
+    notes?: string | null;
+    use?: ClientContactPointUse | null;
+    system?: ClientContactPointSystem | null;
   }>;
   image?: {
     __typename?: 'ClientImage';
@@ -6212,9 +6258,30 @@ export type ClientNameObjectFieldsFragment = {
   use?: ClientNameUse | null;
   notes?: string | null;
   primary?: boolean | null;
-  dateCreated: string;
-  dateUpdated: string;
-  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type ClientAddressFieldsFragment = {
+  __typename?: 'ClientAddress';
+  id: string;
+  line1?: string | null;
+  line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  district?: string | null;
+  country?: string | null;
+  postalCode?: string | null;
+  notes?: string | null;
+  use?: ClientAddressUse | null;
+  type?: ClientAddressType | null;
+};
+
+export type ClientContactPointFieldsFragment = {
+  __typename?: 'ClientContactPoint';
+  id: string;
+  value?: string | null;
+  notes?: string | null;
+  use?: ClientContactPointUse | null;
+  system?: ClientContactPointSystem | null;
 };
 
 export type ClientImageFragment = {
@@ -6936,9 +7003,28 @@ export type SearchClientsQuery = {
         use?: ClientNameUse | null;
         notes?: string | null;
         primary?: boolean | null;
-        dateCreated: string;
-        dateUpdated: string;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        type?: ClientAddressType | null;
+      }>;
+      contactPoints: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
       }>;
       image?: {
         __typename?: 'ClientImage';
@@ -7050,9 +7136,28 @@ export type GetClientQuery = {
       use?: ClientNameUse | null;
       notes?: string | null;
       primary?: boolean | null;
-      dateCreated: string;
-      dateUpdated: string;
-      user?: { __typename: 'User'; id: string; name: string } | null;
+    }>;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      type?: ClientAddressType | null;
+    }>;
+    contactPoints: Array<{
+      __typename?: 'ClientContactPoint';
+      id: string;
+      value?: string | null;
+      notes?: string | null;
+      use?: ClientContactPointUse | null;
+      system?: ClientContactPointSystem | null;
     }>;
     image?: {
       __typename?: 'ClientImage';
@@ -7839,9 +7944,28 @@ export type DeleteClientMutation = {
         use?: ClientNameUse | null;
         notes?: string | null;
         primary?: boolean | null;
-        dateCreated: string;
-        dateUpdated: string;
-        user?: { __typename: 'User'; id: string; name: string } | null;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        type?: ClientAddressType | null;
+      }>;
+      contactPoints: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
       }>;
       image?: {
         __typename?: 'ClientImage';
@@ -9707,9 +9831,28 @@ export type SubmitFormMutation = {
             use?: ClientNameUse | null;
             notes?: string | null;
             primary?: boolean | null;
-            dateCreated: string;
-            dateUpdated: string;
-            user?: { __typename: 'User'; id: string; name: string } | null;
+          }>;
+          addresses: Array<{
+            __typename?: 'ClientAddress';
+            id: string;
+            line1?: string | null;
+            line2?: string | null;
+            city?: string | null;
+            state?: string | null;
+            district?: string | null;
+            country?: string | null;
+            postalCode?: string | null;
+            notes?: string | null;
+            use?: ClientAddressUse | null;
+            type?: ClientAddressType | null;
+          }>;
+          contactPoints: Array<{
+            __typename?: 'ClientContactPoint';
+            id: string;
+            value?: string | null;
+            notes?: string | null;
+            use?: ClientContactPointUse | null;
+            system?: ClientContactPointSystem | null;
           }>;
           image?: {
             __typename?: 'ClientImage';
@@ -11871,13 +12014,31 @@ export const ClientNameObjectFieldsFragmentDoc = gql`
     use
     notes
     primary
-    dateCreated
-    dateUpdated
-    user {
-      ...UserFields
-    }
   }
-  ${UserFieldsFragmentDoc}
+`;
+export const ClientAddressFieldsFragmentDoc = gql`
+  fragment ClientAddressFields on ClientAddress {
+    id
+    line1
+    line2
+    city
+    state
+    district
+    country
+    postalCode
+    notes
+    use
+    type
+  }
+`;
+export const ClientContactPointFieldsFragmentDoc = gql`
+  fragment ClientContactPointFields on ClientContactPoint {
+    id
+    value
+    notes
+    use
+    system
+  }
 `;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
@@ -11911,6 +12072,12 @@ export const ClientFieldsFragmentDoc = gql`
     names {
       ...ClientNameObjectFields
     }
+    addresses {
+      ...ClientAddressFields
+    }
+    contactPoints {
+      ...ClientContactPointFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
@@ -11920,6 +12087,8 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientAccessFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
   ${ClientNameObjectFieldsFragmentDoc}
+  ${ClientAddressFieldsFragmentDoc}
+  ${ClientContactPointFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {

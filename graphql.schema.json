@@ -3224,19 +3224,19 @@
         "enumValues": [
           {
             "name": "both",
-            "description": null,
+            "description": "Both",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "physical",
-            "description": null,
+            "description": "Physical",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "postal",
-            "description": null,
+            "description": "Postal",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -3253,31 +3253,31 @@
         "enumValues": [
           {
             "name": "home",
-            "description": null,
+            "description": "Home",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "mail",
-            "description": null,
+            "description": "Mail",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "old",
-            "description": null,
+            "description": "Old",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "temp",
-            "description": null,
+            "description": "Temp",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "work",
-            "description": null,
+            "description": "Work",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -3671,43 +3671,43 @@
         "enumValues": [
           {
             "name": "email",
-            "description": null,
+            "description": "Email",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "fax",
-            "description": null,
+            "description": "Fax",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "other",
-            "description": null,
+            "description": "Other",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "pager",
-            "description": null,
+            "description": "Pager",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "phone",
-            "description": null,
+            "description": "Phone",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "sms",
-            "description": null,
+            "description": "Sms",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "url",
-            "description": null,
+            "description": "Url",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -3724,31 +3724,31 @@
         "enumValues": [
           {
             "name": "home",
-            "description": null,
+            "description": "Home",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "mobile",
-            "description": null,
+            "description": "Mobile",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "old",
-            "description": null,
+            "description": "Old",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "temp",
-            "description": null,
+            "description": "Temp",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "work",
-            "description": null,
+            "description": "Work",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -4019,43 +4019,43 @@
         "enumValues": [
           {
             "name": "anonymous",
-            "description": null,
+            "description": "Anonymous",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "maiden",
-            "description": null,
+            "description": "Maiden",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "nickname",
-            "description": null,
+            "description": "Nickname",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "official",
-            "description": null,
+            "description": "Official",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "old",
-            "description": null,
+            "description": "Old",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "temp",
-            "description": null,
+            "description": "Temp",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "usual",
-            "description": null,
+            "description": "Usual",
             "isDeprecated": false,
             "deprecationReason": null
           }
