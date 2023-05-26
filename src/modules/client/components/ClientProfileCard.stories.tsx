@@ -19,11 +19,6 @@ Default.args = {
   client: RITA_ACKROYD as ClientFieldsFragment,
 };
 
-export const WithPreferredName = Template.bind({});
-WithPreferredName.args = {
-  client: { ...RITA_ACKROYD, preferredName: 'RJ' } as ClientFieldsFragment,
-};
-
 export const WithFewerDetails = Template.bind({});
 WithFewerDetails.args = {
   onlyCard: true,

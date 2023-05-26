@@ -25,12 +25,6 @@ WithoutImage.args = {
   hideImage: true,
 };
 
-export const WithPreferredName = Template.bind({});
-WithPreferredName.args = {
-  client: { ...RITA_ACKROYD, preferredName: 'RJ' } as ClientFieldsFragment,
-  hideImage: true,
-};
-
 export const WithFewerDetails = Template.bind({});
 WithFewerDetails.args = {
   client: {

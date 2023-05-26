@@ -21,7 +21,7 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import {
-  clientNameWithoutPreferred,
+  clientNameAllParts,
   enrollmentName,
   entryExitRange,
   isRecentEnrollment,
@@ -140,12 +140,6 @@ const ClientCard: React.FC<Props> = ({
     );
   }
 
-  const primaryName =
-    client.preferredName || clientNameWithoutPreferred(client);
-  const secondaryName = client.preferredName
-    ? clientNameWithoutPreferred(client)
-    : null;
-
   return (
     <Card sx={{ mb: 2, p: 2 }}>
       {showNotices && (
@@ -171,7 +165,7 @@ const ClientCard: React.FC<Props> = ({
             >
               <Stack direction='row' spacing={1}>
                 <Typography variant='h5' fontWeight={600}>
-                  {primaryName}
+                  {clientNameAllParts(client)}
                 </Typography>
                 {!isEmpty(client.pronouns) && (
                   <Typography variant='h5' color='text.secondary'>
@@ -185,15 +179,6 @@ const ClientCard: React.FC<Props> = ({
                 <ClientCardImageElement size={150} client={clientImageData} />
               )}
               <Stack spacing={0.5} sx={{ pr: 1 }}>
-                {secondaryName && (
-                  <Typography
-                    variant='body1'
-                    color='text.secondary'
-                    fontStyle='italic'
-                  >
-                    {secondaryName}
-                  </Typography>
-                )}
                 {globalFeatureFlags?.mciId && (
                   <IdDisplay
                     prefix='MCI'
