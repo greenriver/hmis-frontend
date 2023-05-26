@@ -27,6 +27,7 @@ const TableFilterButton: React.FC<TableFilterButtonProps> = ({
             ? alpha(theme.palette.secondary.main, 0.15)
             : undefined,
         },
+        px: 2,
       })}
       {...props}
     />

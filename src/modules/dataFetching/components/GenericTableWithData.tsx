@@ -270,47 +270,47 @@ const GenericTableWithData = <
           {header}
         </Box>
       )}
+      {showFilters && !noResultsOnFirstLoad && (
+        <Box
+          px={2}
+          py={1}
+          sx={(theme) => ({
+            borderBottom: `1px solid ${theme.palette.divider}`,
+          })}
+        >
+          <TableFilters
+            loading={loading}
+            sorting={
+              sortOptions
+                ? {
+                    sortOptions,
+                    sortOptionValue: sortOrder,
+                    setSortOptionValue: setSortOrder,
+                  }
+                : undefined
+            }
+            filters={
+              !isEmpty(filterDefs)
+                ? {
+                    filters: filterDefs,
+                    filterValues,
+                    setFilterValues,
+                  }
+                : undefined
+            }
+            pagination={{
+              limit,
+              offset,
+              totalEntries: nodesCount,
+            }}
+          />
+        </Box>
+      )}
       <Box sx={containerSx}>
         {noResults ? (
           <Typography sx={{ px: 2, py: 2 }}>{noData}</Typography>
         ) : (
           <>
-            {showFilters && (
-              <Box
-                px={2}
-                py={1}
-                sx={(theme) => ({
-                  borderBottom: `1px solid ${theme.palette.divider}`,
-                })}
-              >
-                <TableFilters
-                  loading={loading}
-                  sorting={
-                    sortOptions
-                      ? {
-                          sortOptions,
-                          sortOptionValue: sortOrder,
-                          setSortOptionValue: setSortOrder,
-                        }
-                      : undefined
-                  }
-                  filters={
-                    !isEmpty(filterDefs)
-                      ? {
-                          filters: filterDefs,
-                          filterValues,
-                          setFilterValues,
-                        }
-                      : undefined
-                  }
-                  pagination={{
-                    limit,
-                    offset,
-                    totalEntries: nodesCount,
-                  }}
-                />
-              </Box>
-            )}
             <GenericTable<RowDataType>
               loading={loading}
               rows={rows}
