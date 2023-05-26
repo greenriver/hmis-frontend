@@ -419,17 +419,25 @@ export type ClientAddress = {
 
 /** Allowed values for ClientAddress.type */
 export enum ClientAddressType {
+  /** Both */
   Both = 'both',
+  /** Physical */
   Physical = 'physical',
+  /** Postal */
   Postal = 'postal',
 }
 
 /** Allowed values for ClientAddress.use */
 export enum ClientAddressUse {
+  /** Home */
   Home = 'home',
+  /** Mail */
   Mail = 'mail',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -471,21 +479,33 @@ export type ClientContactPoint = {
 
 /** Allowed values for ClientContactPoint.system */
 export enum ClientContactPointSystem {
+  /** Email */
   Email = 'email',
+  /** Fax */
   Fax = 'fax',
+  /** Other */
   Other = 'other',
+  /** Pager */
   Pager = 'pager',
+  /** Phone */
   Phone = 'phone',
+  /** Sms */
   Sms = 'sms',
+  /** Url */
   Url = 'url',
 }
 
 /** Allowed values for ClientContactPoint.use */
 export enum ClientContactPointUse {
+  /** Home */
   Home = 'home',
+  /** Mobile */
   Mobile = 'mobile',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -517,12 +537,19 @@ export type ClientName = {
 
 /** Allowed values for ClientName.use */
 export enum ClientNameUse {
+  /** Anonymous */
   Anonymous = 'anonymous',
+  /** Maiden */
   Maiden = 'maiden',
+  /** Nickname */
   Nickname = 'nickname',
+  /** Official */
   Official = 'official',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Usual */
   Usual = 'usual',
 }
 
@@ -573,6 +600,8 @@ export type ClientsPaginated = {
 };
 
 export enum Component {
+  /** Client Address input */
+  Address = 'ADDRESS',
   /** Display text as an error alert */
   AlertError = 'ALERT_ERROR',
   /** Display text as an info alert */
@@ -585,6 +614,8 @@ export enum Component {
   Checkbox = 'CHECKBOX',
   /** Specialized component for rendering disabilities in a table */
   DisabilityTable = 'DISABILITY_TABLE',
+  /** Email address input for ContactPoint */
+  Email = 'EMAIL',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
   /** Render contents in an info box */
@@ -593,6 +624,10 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Client Name input */
+  Name = 'NAME',
+  /** Phone number input for ContactPoint */
+  Phone = 'PHONE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -2131,6 +2166,7 @@ export enum ItemType {
   Group = 'GROUP',
   Image = 'IMAGE',
   Integer = 'INTEGER',
+  Object = 'OBJECT',
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
@@ -6160,6 +6196,40 @@ export type ClientFieldsFragment = {
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
+  names: Array<{
+    __typename?: 'ClientName';
+    id: string;
+    first?: string | null;
+    middle?: string | null;
+    last?: string | null;
+    suffix?: string | null;
+    nameDataQuality?: NameDataQuality | null;
+    use?: ClientNameUse | null;
+    notes?: string | null;
+    primary?: boolean | null;
+  }>;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    type?: ClientAddressType | null;
+  }>;
+  contactPoints: Array<{
+    __typename?: 'ClientContactPoint';
+    id: string;
+    value?: string | null;
+    notes?: string | null;
+    use?: ClientContactPointUse | null;
+    system?: ClientContactPointSystem | null;
+  }>;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6175,6 +6245,43 @@ export type ClientNameFragment = {
   preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+};
+
+export type ClientNameObjectFieldsFragment = {
+  __typename?: 'ClientName';
+  id: string;
+  first?: string | null;
+  middle?: string | null;
+  last?: string | null;
+  suffix?: string | null;
+  nameDataQuality?: NameDataQuality | null;
+  use?: ClientNameUse | null;
+  notes?: string | null;
+  primary?: boolean | null;
+};
+
+export type ClientAddressFieldsFragment = {
+  __typename?: 'ClientAddress';
+  id: string;
+  line1?: string | null;
+  line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  district?: string | null;
+  country?: string | null;
+  postalCode?: string | null;
+  notes?: string | null;
+  use?: ClientAddressUse | null;
+  type?: ClientAddressType | null;
+};
+
+export type ClientContactPointFieldsFragment = {
+  __typename?: 'ClientContactPoint';
+  id: string;
+  value?: string | null;
+  notes?: string | null;
+  use?: ClientContactPointUse | null;
+  system?: ClientContactPointSystem | null;
 };
 
 export type ClientImageFragment = {
@@ -6885,6 +6992,40 @@ export type SearchClientsQuery = {
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
       }>;
+      names: Array<{
+        __typename?: 'ClientName';
+        id: string;
+        first?: string | null;
+        middle?: string | null;
+        last?: string | null;
+        suffix?: string | null;
+        nameDataQuality?: NameDataQuality | null;
+        use?: ClientNameUse | null;
+        notes?: string | null;
+        primary?: boolean | null;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        type?: ClientAddressType | null;
+      }>;
+      contactPoints: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+      }>;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -6983,6 +7124,40 @@ export type GetClientQuery = {
         dateUpdated: string;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
+    }>;
+    names: Array<{
+      __typename?: 'ClientName';
+      id: string;
+      first?: string | null;
+      middle?: string | null;
+      last?: string | null;
+      suffix?: string | null;
+      nameDataQuality?: NameDataQuality | null;
+      use?: ClientNameUse | null;
+      notes?: string | null;
+      primary?: boolean | null;
+    }>;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      type?: ClientAddressType | null;
+    }>;
+    contactPoints: Array<{
+      __typename?: 'ClientContactPoint';
+      id: string;
+      value?: string | null;
+      notes?: string | null;
+      use?: ClientContactPointUse | null;
+      system?: ClientContactPointSystem | null;
     }>;
     image?: {
       __typename?: 'ClientImage';
@@ -7757,6 +7932,40 @@ export type DeleteClientMutation = {
           dateUpdated: string;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }> | null;
+      }>;
+      names: Array<{
+        __typename?: 'ClientName';
+        id: string;
+        first?: string | null;
+        middle?: string | null;
+        last?: string | null;
+        suffix?: string | null;
+        nameDataQuality?: NameDataQuality | null;
+        use?: ClientNameUse | null;
+        notes?: string | null;
+        primary?: boolean | null;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        type?: ClientAddressType | null;
+      }>;
+      contactPoints: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
       }>;
       image?: {
         __typename?: 'ClientImage';
@@ -9610,6 +9819,40 @@ export type SubmitFormMutation = {
               dateUpdated: string;
               user?: { __typename: 'User'; id: string; name: string } | null;
             }> | null;
+          }>;
+          names: Array<{
+            __typename?: 'ClientName';
+            id: string;
+            first?: string | null;
+            middle?: string | null;
+            last?: string | null;
+            suffix?: string | null;
+            nameDataQuality?: NameDataQuality | null;
+            use?: ClientNameUse | null;
+            notes?: string | null;
+            primary?: boolean | null;
+          }>;
+          addresses: Array<{
+            __typename?: 'ClientAddress';
+            id: string;
+            line1?: string | null;
+            line2?: string | null;
+            city?: string | null;
+            state?: string | null;
+            district?: string | null;
+            country?: string | null;
+            postalCode?: string | null;
+            notes?: string | null;
+            use?: ClientAddressUse | null;
+            type?: ClientAddressType | null;
+          }>;
+          contactPoints: Array<{
+            __typename?: 'ClientContactPoint';
+            id: string;
+            value?: string | null;
+            notes?: string | null;
+            use?: ClientContactPointUse | null;
+            system?: ClientContactPointSystem | null;
           }>;
           image?: {
             __typename?: 'ClientImage';
@@ -11760,6 +12003,43 @@ export const CustomDataElementFieldsFragmentDoc = gql`
   }
   ${CustomDataElementValueFieldsFragmentDoc}
 `;
+export const ClientNameObjectFieldsFragmentDoc = gql`
+  fragment ClientNameObjectFields on ClientName {
+    id
+    first
+    middle
+    last
+    suffix
+    nameDataQuality
+    use
+    notes
+    primary
+  }
+`;
+export const ClientAddressFieldsFragmentDoc = gql`
+  fragment ClientAddressFields on ClientAddress {
+    id
+    line1
+    line2
+    city
+    state
+    district
+    country
+    postalCode
+    notes
+    use
+    type
+  }
+`;
+export const ClientContactPointFieldsFragmentDoc = gql`
+  fragment ClientContactPointFields on ClientContactPoint {
+    id
+    value
+    notes
+    use
+    system
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -11789,6 +12069,15 @@ export const ClientFieldsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    names {
+      ...ClientNameObjectFields
+    }
+    addresses {
+      ...ClientAddressFields
+    }
+    contactPoints {
+      ...ClientContactPointFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
@@ -11797,6 +12086,9 @@ export const ClientFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${ClientNameObjectFieldsFragmentDoc}
+  ${ClientAddressFieldsFragmentDoc}
+  ${ClientContactPointFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {

@@ -9,6 +9,8 @@ import {
 } from '../types';
 import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
+import MultiAddressInput from './client/addresses/MultiAddressInput';
+import MultiNameInput from './client/names/MultiNameInput';
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
@@ -44,7 +46,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-const MAX_INPUT_WIDTH = 430;
+export const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
@@ -359,6 +361,19 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         </InputContainer>
       );
+    case ItemType.Object:
+      if (item.component == Component.Name) {
+        return <MultiNameInput value={value} onChange={onChangeValue} />;
+      }
+      if (item.component == Component.Address) {
+        return <MultiAddressInput value={value} onChange={onChangeValue} />;
+      }
+      console.warn(
+        'Unable to render component for object type. Link ID:',
+        item.linkId
+      );
+      return <></>;
+
     default:
       console.warn('Unrecognized item type:', item.type);
       return <></>;
