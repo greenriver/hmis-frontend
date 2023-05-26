@@ -56,6 +56,11 @@ const ProjectNavHeader = ({
           color='text.primary'
           value={project.hudId}
         />
+        <IdDisplay
+          prefix='Organization'
+          color='text.primary'
+          value={project.organization.hudId}
+        />
       </Stack>
     </Stack>
   );

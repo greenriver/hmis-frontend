@@ -9963,8 +9963,8 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'Organization';
           id: string;
-          organizationName: string;
           hudId: string;
+          organizationName: string;
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
@@ -10028,6 +10028,7 @@ export type SubmitFormMutation = {
           organization: {
             __typename?: 'Organization';
             id: string;
+            hudId: string;
             organizationName: string;
           };
           access: {
@@ -10445,6 +10446,7 @@ export type ClearRecentItemsMutation = {
 export type OrganizationNameFieldsFragment = {
   __typename?: 'Organization';
   id: string;
+  hudId: string;
   organizationName: string;
 };
 
@@ -10499,8 +10501,8 @@ export type OrganizationDetailFieldsFragment = {
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
-  organizationName: string;
   hudId: string;
+  organizationName: string;
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
@@ -10555,6 +10557,7 @@ export type GetAllOrganizationsQuery = {
     nodes: Array<{
       __typename?: 'Organization';
       id: string;
+      hudId: string;
       organizationName: string;
       projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
     }>;
@@ -10570,8 +10573,8 @@ export type GetOrganizationQuery = {
   organization?: {
     __typename?: 'Organization';
     id: string;
-    organizationName: string;
     hudId: string;
+    organizationName: string;
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
@@ -10713,6 +10716,7 @@ export type ProjectAllFieldsFragment = {
   organization: {
     __typename?: 'Organization';
     id: string;
+    hudId: string;
     organizationName: string;
   };
   access: {
@@ -10828,6 +10832,7 @@ export type GetProjectQuery = {
     organization: {
       __typename?: 'Organization';
       id: string;
+      hudId: string;
       organizationName: string;
     };
     access: {
@@ -12561,6 +12566,7 @@ export const MciMatchFieldsFragmentDoc = gql`
 export const OrganizationNameFieldsFragmentDoc = gql`
   fragment OrganizationNameFields on Organization {
     id
+    hudId
     organizationName
   }
 `;
