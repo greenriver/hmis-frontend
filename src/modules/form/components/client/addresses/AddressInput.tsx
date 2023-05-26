@@ -42,7 +42,7 @@ const AddressInput = ({
 }) => {
   const [stateList, loading] = usePickList(fakeStateItem);
   const typeValue = useMemo(
-    () => addressTypePicklist.find((o) => o.code == value.type) || null,
+    () => addressTypePicklist.find((o) => o.code == value.addressType) || null,
     [value]
   );
   const stateValue = useMemo(
@@ -70,7 +70,11 @@ const AddressInput = ({
               onChange={(e) => onChange({ ...value, line2: e.target.value })}
               label={getLabel('Address Line 2')}
             />
-
+            <TextInput
+              value={value.district || ''}
+              onChange={(e) => onChange({ ...value, district: e.target.value })}
+              label={getLabel('District (County)')}
+            />
             <Stack direction='row' columnGap={2}>
               <TextInput
                 value={value.city || ''}
@@ -110,7 +114,7 @@ const AddressInput = ({
               onChange={(e, val) =>
                 onChange({
                   ...value,
-                  type: isPickListOption(val)
+                  addressType: isPickListOption(val)
                     ? (val.code as ClientAddressType)
                     : null,
                 })
@@ -132,7 +136,7 @@ const AddressInput = ({
               height: '100%',
               '.MuiInputBase-root': { height: '100%' },
             }}
-            rows={12}
+            rows={16}
           />
         </Grid>
       </Grid>

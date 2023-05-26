@@ -399,6 +399,7 @@ export type ClientAccess = {
 
 export type ClientAddress = {
   __typename?: 'ClientAddress';
+  addressType?: Maybe<ClientAddressType>;
   city?: Maybe<Scalars['String']>;
   client: Client;
   country?: Maybe<Scalars['String']>;
@@ -412,7 +413,6 @@ export type ClientAddress = {
   notes?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
-  type?: Maybe<ClientAddressType>;
   use?: Maybe<ClientAddressUse>;
   user?: Maybe<User>;
 };
@@ -6222,7 +6222,7 @@ export type ClientFieldsFragment = {
     postalCode?: string | null;
     notes?: string | null;
     use?: ClientAddressUse | null;
-    type?: ClientAddressType | null;
+    addressType?: ClientAddressType | null;
     dateCreated: string;
     dateUpdated: string;
   }>;
@@ -6280,7 +6280,7 @@ export type ClientAddressFieldsFragment = {
   postalCode?: string | null;
   notes?: string | null;
   use?: ClientAddressUse | null;
-  type?: ClientAddressType | null;
+  addressType?: ClientAddressType | null;
   dateCreated: string;
   dateUpdated: string;
 };
@@ -7030,7 +7030,7 @@ export type SearchClientsQuery = {
         postalCode?: string | null;
         notes?: string | null;
         use?: ClientAddressUse | null;
-        type?: ClientAddressType | null;
+        addressType?: ClientAddressType | null;
         dateCreated: string;
         dateUpdated: string;
       }>;
@@ -7169,7 +7169,7 @@ export type GetClientQuery = {
       postalCode?: string | null;
       notes?: string | null;
       use?: ClientAddressUse | null;
-      type?: ClientAddressType | null;
+      addressType?: ClientAddressType | null;
       dateCreated: string;
       dateUpdated: string;
     }>;
@@ -7983,7 +7983,7 @@ export type DeleteClientMutation = {
         postalCode?: string | null;
         notes?: string | null;
         use?: ClientAddressUse | null;
-        type?: ClientAddressType | null;
+        addressType?: ClientAddressType | null;
         dateCreated: string;
         dateUpdated: string;
       }>;
@@ -9876,7 +9876,7 @@ export type SubmitFormMutation = {
             postalCode?: string | null;
             notes?: string | null;
             use?: ClientAddressUse | null;
-            type?: ClientAddressType | null;
+            addressType?: ClientAddressType | null;
             dateCreated: string;
             dateUpdated: string;
           }>;
@@ -12071,7 +12071,7 @@ export const ClientAddressFieldsFragmentDoc = gql`
     postalCode
     notes
     use
-    type
+    addressType
     dateCreated
     dateUpdated
   }

@@ -69,7 +69,7 @@ fragment ClientAddressFields on ClientAddress {
   postalCode
   notes
   use
-  type
+  addressType
   dateCreated
   dateUpdated
 }

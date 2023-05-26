@@ -563,6 +563,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ClientAddress',
     fields: [
+      {
+        name: 'addressType',
+        type: { kind: 'ENUM', name: 'ClientAddressType', ofType: null },
+      },
       { name: 'city', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       {
         name: 'country',
@@ -608,10 +612,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'state', type: { kind: 'SCALAR', name: 'String', ofType: null } },
-      {
-        name: 'type',
-        type: { kind: 'ENUM', name: 'ClientAddressType', ofType: null },
-      },
       {
         name: 'use',
         type: { kind: 'ENUM', name: 'ClientAddressUse', ofType: null },

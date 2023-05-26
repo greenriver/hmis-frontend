@@ -8,6 +8,9 @@ import { AddressInputType } from '../types';
 
 import AddressInput from './AddressInput';
 
+import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
+import apolloClient from '@/providers/apolloClient';
+import { ClientAddressFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 const generateNewAddress = () => ({
@@ -23,6 +26,28 @@ const MultiAddressInput = ({ id, value, onChange }: Props) => {
   const handleAddName = useCallback(() => {
     onChange([...value, generateNewAddress()]);
   }, [onChange, value]);
+
+  const renderMetadata = useCallback((addrValue: AddressInputType) => {
+    if (!addrValue.id) return null;
+    const record = apolloClient.readFragment({
+      id: `ClientAddress:${addrValue.id}`,
+      fragment: ClientAddressFieldsFragmentDoc,
+      fragmentName: 'ClientAddressFields',
+    });
+    if (!record) return null;
+    return (
+      <RelativeDateDisplay
+        dateString={record.dateUpdated}
+        prefixVerb='Last updated'
+        TypographyProps={{
+          variant: 'body2',
+          fontStyle: 'italic',
+          color: 'text.disabled',
+          fontSize: 'inherit',
+        }}
+      />
+    );
+  }, []);
 
   return (
     <RepeatedInputContainer
@@ -49,6 +74,7 @@ const MultiAddressInput = ({ id, value, onChange }: Props) => {
       }}
       removeText='Delete address'
       addText='Add address'
+      renderMetadata={renderMetadata}
     />
   );
 };
