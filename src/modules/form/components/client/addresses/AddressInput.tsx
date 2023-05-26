@@ -3,8 +3,7 @@ import { useMemo } from 'react';
 
 import FormSelect from '../../FormSelect';
 import RequiredLabel from '../../RequiredLabel';
-
-import { AddressInputType } from './types';
+import { AddressInputType } from '../types';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { usePickList } from '@/modules/form/hooks/usePickList';
@@ -62,24 +61,24 @@ const AddressInput = ({
         <Grid item xs={7}>
           <Stack rowGap={2}>
             <TextInput
-              value={value.line1 || null}
+              value={value.line1 || ''}
               onChange={(e) => onChange({ ...value, line1: e.target.value })}
               label={getLabel('Address Line 1')}
             />
             <TextInput
-              value={value.line2 || null}
+              value={value.line2 || ''}
               onChange={(e) => onChange({ ...value, line2: e.target.value })}
               label={getLabel('Address Line 2')}
             />
 
             <Stack direction='row' columnGap={2}>
               <TextInput
-                value={value.city || null}
+                value={value.city || ''}
                 onChange={(e) => onChange({ ...value, city: e.target.value })}
                 label={getLabel('City')}
               />
               <FormSelect
-                value={stateValue}
+                value={stateValue || null}
                 options={stateList || []}
                 onChange={(e, val) =>
                   onChange({
@@ -87,22 +86,22 @@ const AddressInput = ({
                     state: isPickListOption(val) ? val.code : null,
                   })
                 }
-                // placeholder='Select state..'
-                // textInputProps={{ name: 'state' }}
                 label={getLabel('State')}
                 loading={loading}
                 textInputProps={{
                   name: 'state',
                   sx: { width: '96px' },
                 }}
+                autoHighlight
               />
               <TextInput
-                value={value.postalCode || null}
+                value={value.postalCode || ''}
                 onChange={(e) =>
                   onChange({ ...value, postalCode: e.target.value })
                 }
                 label={getLabel('Zip')}
                 sx={{ maxWidth: '96px' }}
+                max={5}
               />
             </Stack>
             <FormSelect
@@ -124,7 +123,7 @@ const AddressInput = ({
         </Grid>
         <Grid item xs={5}>
           <TextInput
-            value={value.notes || null}
+            value={value.notes || ''}
             onChange={(e) => onChange({ ...value, notes: e.target.value })}
             label={getLabel('Notes')}
             multiline

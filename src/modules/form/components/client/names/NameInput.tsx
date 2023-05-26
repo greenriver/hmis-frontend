@@ -1,12 +1,9 @@
 import { Box, Grid, Stack } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
-import { MAX_INPUT_WIDTH } from '../../DynamicField';
-import { InfoGroup } from '../../DynamicGroup';
 import FormSelect from '../../FormSelect';
 import RequiredLabel from '../../RequiredLabel';
-
-import { NameInputType } from './types';
+import { NameInputType } from '../types';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { isPickListOption } from '@/modules/form/types';
@@ -43,10 +40,10 @@ const NameInput = ({
 
   return (
     <Stack direction={'column'} rowGap={2}>
-      <Grid container gap={2}>
-        <Grid item xs={3}>
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
           <TextInput
-            value={value.first || null}
+            value={value.first || ''}
             onChange={(e) => onChange({ ...value, first: e.target.value })}
             label={getLabel('First Name')}
             data-testid='first-name'
@@ -54,48 +51,57 @@ const NameInput = ({
         </Grid>
         <Grid item xs={3}>
           <TextInput
-            value={value.middle || null}
+            value={value.middle || ''}
             onChange={(e) => onChange({ ...value, middle: e.target.value })}
             label={getLabel('Middle Name')}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextInput
-            value={value.last || null}
+            value={value.last || ''}
             onChange={(e) => onChange({ ...value, last: e.target.value })}
-            label={getLabel('Last')}
+            label={getLabel('Last Name')}
             data-testid='last-name'
           />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={1}>
           <TextInput
-            value={value.suffix || null}
+            value={value.suffix || ''}
             onChange={(e) => onChange({ ...value, suffix: e.target.value })}
             label={getLabel('Suffix')}
           />
         </Grid>
       </Grid>
       <Box>{radioElement}</Box>
-      <InfoGroup>
-        <FormSelect
-          value={dqValue}
-          options={nameDqPickList}
-          onChange={(e, dqVal) =>
-            onChange({
-              ...value,
-              nameDataQuality: isPickListOption(dqVal)
-                ? (dqVal.code as NameDataQuality)
-                : null,
-            })
-          }
-          placeholder='Select data quality..'
-          textInputProps={{
-            name: 'name data quality',
-            sx: { width: MAX_INPUT_WIDTH },
-          }}
-          label={getLabel('Name Data Quality')}
-        />
-      </InfoGroup>
+      <Grid container spacing={2}>
+        <Grid item xs={7}>
+          <FormSelect
+            value={dqValue}
+            options={nameDqPickList}
+            onChange={(e, dqVal) =>
+              onChange({
+                ...value,
+                nameDataQuality: isPickListOption(dqVal)
+                  ? (dqVal.code as NameDataQuality)
+                  : null,
+              })
+            }
+            placeholder='Select data quality..'
+            textInputProps={{ name: 'name data quality' }}
+            label={getLabel('Name Data Quality')}
+          />
+        </Grid>
+        <Grid item xs={5}>
+          <TextInput
+            value={value.notes || ''}
+            onChange={(e) => onChange({ ...value, notes: e.target.value })}
+            label={getLabel('Notes')}
+            multiline
+            minRows={1}
+            maxRows={3}
+          />
+        </Grid>
+      </Grid>
     </Stack>
   );
 };

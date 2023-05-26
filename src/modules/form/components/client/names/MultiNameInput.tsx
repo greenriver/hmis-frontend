@@ -5,10 +5,13 @@ import { v4 } from 'uuid';
 
 import { DynamicInputCommonProps } from '../../../types';
 import RepeatedInputContainer from '../RepeatedInputContainer';
+import { NameInputType } from '../types';
 
 import NameInput from './NameInput';
-import { NameInputType } from './types';
 
+import RelativeDateDisplay from '@/modules/hmis/components/RelativeDateDisplay';
+import apolloClient from '@/providers/apolloClient';
+import { ClientNameObjectFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 const generateNewName = (primary = false) => ({
@@ -25,6 +28,28 @@ const MultiNameInput = ({ id, value, onChange }: Props) => {
   const handleAddName = useCallback(() => {
     onChange([...value, generateNewName()]);
   }, [onChange, value]);
+
+  const renderMetadata = useCallback((nameValue: NameInputType) => {
+    if (!nameValue.id) return null;
+    const record = apolloClient.readFragment({
+      id: `ClientName:${nameValue.id}`,
+      fragment: ClientNameObjectFieldsFragmentDoc,
+      fragmentName: 'ClientNameObjectFields',
+    });
+    if (!record) return null;
+    return (
+      <RelativeDateDisplay
+        dateString={record.dateUpdated}
+        prefixVerb='Last updated'
+        TypographyProps={{
+          variant: 'body2',
+          fontStyle: 'italic',
+          color: 'text.disabled',
+          fontSize: 'inherit',
+        }}
+      />
+    );
+  }, []);
 
   return (
     <RepeatedInputContainer
@@ -73,6 +98,7 @@ const MultiNameInput = ({ id, value, onChange }: Props) => {
       }
       removeText='Delete name'
       addText='Add Name'
+      renderMetadata={renderMetadata}
     />
   );
 };

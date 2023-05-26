@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 interface Props<T> {
   values: T[];
   renderChild: (val: T, index: number) => ReactNode;
+  renderMetadata?: (val: T) => ReactNode;
   onClickAdd: VoidFunction;
   removeAt: (val: T, index: number) => VoidFunction | undefined;
   addText?: string;
@@ -21,51 +22,70 @@ const RepeatedInputContainer = <T extends object>({
   addText,
   removeText,
   id,
+  renderMetadata,
   valueKey,
 }: Props<T>) => {
-  return (
-    <Stack id={id} gap={2}>
-      {values.map((val, idx) => {
-        return (
-          <Box
-            key={valueKey(val)}
-            sx={{
-              p: 2,
-              backgroundColor: (theme) => lighten(theme.palette.grey[50], 0.4),
-              borderRadius: 1,
-            }}
-          >
-            {renderChild(val, idx)}
-            <Button
-              onClick={removeAt(val, idx)}
-              color='error'
-              variant='text'
-              disabled={!removeAt(val, idx)}
-              sx={{
-                color: 'error.dark',
-                width: 'fit-content',
-                textDecoration: 'underline',
-                py: 0,
-                mt: 2,
+  const addButton = (
+    <Button
+      onClick={onClickAdd}
+      color='secondary'
+      variant='outlined'
+      sx={{ width: 'fit-content', px: 4 }}
+      startIcon={<AddIcon />}
+    >
+      {addText || 'Add'}
+    </Button>
+  );
+  if (values.length === 0) return <Box sx={{ mt: 1 }}>{addButton}</Box>;
 
-                ml: -1,
+  return (
+    <>
+      <Stack id={id} gap={4}>
+        {values.map((val, idx) => {
+          return (
+            <Box
+              key={valueKey(val)}
+              sx={{
+                p: 2,
+                backgroundColor: (theme) =>
+                  lighten(theme.palette.grey[50], 0.4),
+                borderRadius: 1,
               }}
             >
-              {removeText || 'Remove'}
-            </Button>
-          </Box>
-        );
-      })}
-      <Button
-        onClick={onClickAdd}
-        color='secondary'
-        variant='outlined'
-        sx={{ width: 'fit-content', px: 4 }}
-        startIcon={<AddIcon />}
-      >
-        {addText || 'Add'}
-      </Button>
-    </Stack>
+              {renderChild(val, idx)}
+              <Stack
+                justifyContent={'space-between'}
+                direction='row'
+                sx={{ mt: 3, fontSize: '.825rem' }}
+              >
+                {renderMetadata ? (
+                  renderMetadata(val) || <Box></Box>
+                ) : (
+                  <Box></Box>
+                )}
+                <Button
+                  onClick={removeAt(val, idx)}
+                  color='error'
+                  variant='text'
+                  disabled={!removeAt(val, idx)}
+                  sx={{
+                    color: 'error.dark',
+                    width: 'fit-content',
+                    textDecoration: 'underline',
+                    py: 0,
+                    ml: -1,
+                    fontSize: 'inherit',
+                  }}
+                >
+                  {removeText || 'Remove'}
+                </Button>
+              </Stack>
+            </Box>
+          );
+        })}
+      </Stack>
+      {addButton}
+    </>
   );
 };
 

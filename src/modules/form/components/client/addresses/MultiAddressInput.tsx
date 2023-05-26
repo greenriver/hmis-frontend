@@ -4,9 +4,9 @@ import { v4 } from 'uuid';
 
 import { DynamicInputCommonProps } from '../../../types';
 import RepeatedInputContainer from '../RepeatedInputContainer';
+import { AddressInputType } from '../types';
 
 import AddressInput from './AddressInput';
-import { AddressInputType } from './types';
 
 import { PartialPick } from '@/utils/typeUtil';
 
