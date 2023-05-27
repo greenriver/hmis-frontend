@@ -2680,6 +2680,7 @@ export type Project = {
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID'];
   id: Scalars['ID'];
+  incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']>;
   operatingStartDate: Scalars['ISO8601Date'];
@@ -2717,6 +2718,11 @@ export type ProjectHouseholdsArgs = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+export type ProjectIncomingReferralPostingsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type ProjectInventoriesArgs = {
@@ -3068,6 +3074,30 @@ export enum RecordType {
   /** (144) SSVF Service */
   SsvfService = 'SSVF_SERVICE',
 }
+
+export type ReferralPosting = {
+  __typename?: 'ReferralPosting';
+  chronic?: Maybe<Scalars['Boolean']>;
+  id: Scalars['ID'];
+  needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
+  referralDate: Scalars['ISO8601Date'];
+  referralIdentifier?: Maybe<Scalars['ID']>;
+  referralNotes?: Maybe<Scalars['String']>;
+  referredBy: Scalars['String'];
+  resourceCoordinatorNotes?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Int']>;
+};
+
+export type ReferralPostingsPaginated = {
+  __typename?: 'ReferralPostingsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<ReferralPosting>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
@@ -10478,6 +10508,31 @@ export type GetProjectReferralRequestsQuery = {
   } | null;
 };
 
+export type GetProjectReferralPostingsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectReferralPostingsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    incomingReferralPostings: {
+      __typename?: 'ReferralPostingsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ReferralPosting';
+        id: string;
+        referralDate: string;
+      }>;
+    };
+  } | null;
+};
+
 export type GetProjectProjectCocsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -10745,6 +10800,12 @@ export type UpdateUnitsMutation = {
       data?: any | null;
     }>;
   } | null;
+};
+
+export type ReferralPostingFieldsFragment = {
+  __typename?: 'ReferralPosting';
+  id: string;
+  referralDate: string;
 };
 
 export type ReferralRequestFieldsFragment = {
@@ -11741,6 +11802,12 @@ export const FunderFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ReferralPostingFieldsFragmentDoc = gql`
+  fragment ReferralPostingFields on ReferralPosting {
+    id
+    referralDate
+  }
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
@@ -15748,6 +15815,79 @@ export type GetProjectReferralRequestsLazyQueryHookResult = ReturnType<
 export type GetProjectReferralRequestsQueryResult = Apollo.QueryResult<
   GetProjectReferralRequestsQuery,
   GetProjectReferralRequestsQueryVariables
+>;
+export const GetProjectReferralPostingsDocument = gql`
+  query GetProjectReferralPostings(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      incomingReferralPostings(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ReferralPostingFields
+        }
+      }
+    }
+  }
+  ${ReferralPostingFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectReferralPostingsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectReferralPostingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectReferralPostingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectReferralPostingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectReferralPostingsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >(GetProjectReferralPostingsDocument, options);
+}
+export function useGetProjectReferralPostingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >(GetProjectReferralPostingsDocument, options);
+}
+export type GetProjectReferralPostingsQueryHookResult = ReturnType<
+  typeof useGetProjectReferralPostingsQuery
+>;
+export type GetProjectReferralPostingsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectReferralPostingsLazyQuery
+>;
+export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
+  GetProjectReferralPostingsQuery,
+  GetProjectReferralPostingsQueryVariables
 >;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {

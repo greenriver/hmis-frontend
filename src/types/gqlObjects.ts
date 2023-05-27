@@ -3224,6 +3224,56 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ReferralPosting',
+    fields: [
+      {
+        name: 'chronic',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'needsWheelchairAccessibleUnit',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'referralDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'referralIdentifier',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'referralNotes',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'referredBy',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'resourceCoordinatorNotes',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      { name: 'score', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
+    ],
+  },
+  {
     name: 'ReferralRequest',
     fields: [
       {

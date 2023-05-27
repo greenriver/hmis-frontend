@@ -1,0 +1,4 @@
+fragment ReferralPostingFields on ReferralPosting {
+  id
+  referralDate
+}
