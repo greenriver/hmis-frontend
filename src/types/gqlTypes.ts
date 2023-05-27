@@ -73,6 +73,7 @@ export type Assessment = {
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -94,6 +95,10 @@ export type AssessmentAccess = {
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   id: Scalars['ID'];
+};
+
+export type AssessmentFilterOptions = {
+  roles?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -123,9 +128,26 @@ export enum AssessmentLevel {
   Invalid = 'INVALID',
 }
 
+export enum AssessmentRole {
+  /** (ANNUAL) Annual Assessment */
+  Annual = 'ANNUAL',
+  /** (CE) Coordinated Entry */
+  Ce = 'CE',
+  /** (EXIT) Exit Assessment */
+  Exit = 'EXIT',
+  /** (INTAKE) Intake Assessment */
+  Intake = 'INTAKE',
+  /** (POST_EXIT) Post-Exit Assessment */
+  PostExit = 'POST_EXIT',
+  /** (UPDATE) Update Assessment */
+  Update = 'UPDATE',
+}
+
 /** HUD Assessment Sorting Options */
 export enum AssessmentSortOption {
+  /** Assessment Date: Most Recent First */
   AssessmentDate = 'ASSESSMENT_DATE',
+  /** Last Updated: Most Recent First */
   DateUpdated = 'DATE_UPDATED',
 }
 
@@ -263,6 +285,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -298,10 +321,10 @@ export type Client = {
 
 /** HUD Client */
 export type ClientAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -396,17 +419,25 @@ export type ClientAddress = {
 
 /** Allowed values for ClientAddress.type */
 export enum ClientAddressType {
+  /** Both */
   Both = 'both',
+  /** Physical */
   Physical = 'physical',
+  /** Postal */
   Postal = 'postal',
 }
 
 /** Allowed values for ClientAddress.use */
 export enum ClientAddressUse {
+  /** Home */
   Home = 'home',
+  /** Mail */
   Mail = 'mail',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -448,21 +479,33 @@ export type ClientContactPoint = {
 
 /** Allowed values for ClientContactPoint.system */
 export enum ClientContactPointSystem {
+  /** Email */
   Email = 'email',
+  /** Fax */
   Fax = 'fax',
+  /** Other */
   Other = 'other',
+  /** Pager */
   Pager = 'pager',
+  /** Phone */
   Phone = 'phone',
+  /** Sms */
   Sms = 'sms',
+  /** Url */
   Url = 'url',
 }
 
 /** Allowed values for ClientContactPoint.use */
 export enum ClientContactPointUse {
+  /** Home */
   Home = 'home',
+  /** Mobile */
   Mobile = 'mobile',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -494,12 +537,19 @@ export type ClientName = {
 
 /** Allowed values for ClientName.use */
 export enum ClientNameUse {
+  /** Anonymous */
   Anonymous = 'anonymous',
+  /** Maiden */
   Maiden = 'maiden',
+  /** Nickname */
   Nickname = 'nickname',
+  /** Official */
   Official = 'official',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Usual */
   Usual = 'usual',
 }
 
@@ -550,6 +600,8 @@ export type ClientsPaginated = {
 };
 
 export enum Component {
+  /** Client Address input */
+  Address = 'ADDRESS',
   /** Display text as an error alert */
   AlertError = 'ALERT_ERROR',
   /** Display text as an info alert */
@@ -562,6 +614,8 @@ export enum Component {
   Checkbox = 'CHECKBOX',
   /** Specialized component for rendering disabilities in a table */
   DisabilityTable = 'DISABILITY_TABLE',
+  /** Email address input for ContactPoint */
+  Email = 'EMAIL',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
   /** Render contents in an info box */
@@ -570,6 +624,10 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Client Name input */
+  Name = 'NAME',
+  /** Phone number input for ContactPoint */
+  Phone = 'PHONE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -634,6 +692,31 @@ export type CreateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   units?: Maybe<Array<Unit>>;
+};
+
+export type CustomDataElement = {
+  __typename?: 'CustomDataElement';
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  label: Scalars['String'];
+  repeats: Scalars['Boolean'];
+  value?: Maybe<CustomDataElementValue>;
+  values?: Maybe<Array<CustomDataElementValue>>;
+};
+
+export type CustomDataElementValue = {
+  __typename?: 'CustomDataElementValue';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueFloat?: Maybe<Scalars['Float']>;
+  valueInteger?: Maybe<Scalars['Int']>;
+  valueJson?: Maybe<Scalars['JsonObject']>;
+  valueString?: Maybe<Scalars['String']>;
+  valueText?: Maybe<Scalars['String']>;
 };
 
 /** CustomForm */
@@ -1168,10 +1251,10 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -1499,6 +1582,8 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  /** Key of CustomDataElement to save record as. Use record_type to specify type. */
+  customFieldKey?: Maybe<Scalars['String']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -1597,6 +1682,7 @@ export enum FormRole {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2030,6 +2116,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']>;
   chYouthBedInventory?: Maybe<Scalars['Int']>;
   cocCode: Scalars['String'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2079,6 +2166,7 @@ export enum ItemType {
   Group = 'GROUP',
   Image = 'IMAGE',
   Integer = 'INTEGER',
+  Object = 'OBJECT',
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
@@ -2268,6 +2356,8 @@ export type Mutation = {
   updateRelationshipToHoH?: Maybe<UpdateRelationshipToHoHPayload>;
   updateService?: Maybe<UpdateServicePayload>;
   updateUnits?: Maybe<UpdateUnitsPayload>;
+  /** Void a referral request */
+  voidReferralRequest?: Maybe<VoidReferralRequestPayload>;
 };
 
 export type MutationAddHouseholdMembersToEnrollmentArgs = {
@@ -2382,6 +2472,10 @@ export type MutationUpdateUnitsArgs = {
   input: UpdateUnitsInput;
 };
 
+export type MutationVoidReferralRequestArgs = {
+  referralRequestId: Scalars['ID'];
+};
+
 /** 3.01.5 */
 export enum NameDataQuality {
   /** (8) Client doesn't know */
@@ -2453,6 +2547,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2526,6 +2621,7 @@ export type PickListOption = {
 
 export enum PickListType {
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
+  AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Unoccupied units in the specified project */
   AvailableUnits = 'AVAILABLE_UNITS',
   /** Unit types that have unoccupied units in the specified project */
@@ -2573,6 +2669,7 @@ export type Project = {
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<NoYesMissing>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2761,6 +2858,8 @@ export type Query = {
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
   getFormDefinition?: Maybe<FormDefinition>;
+  /** Get most relevant form definition for the specified service type */
+  getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
@@ -2815,6 +2914,11 @@ export type QueryGetFormDefinitionArgs = {
   enrollmentId?: InputMaybe<Scalars['ID']>;
   projectId?: InputMaybe<Scalars['ID']>;
   role: FormRole;
+};
+
+export type QueryGetServiceFormDefinitionArgs = {
+  customServiceTypeId: Scalars['ID'];
+  projectId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -3100,6 +3204,7 @@ export type Service = {
   __typename?: 'Service';
   FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateProvided: Scalars['ISO8601Date'];
@@ -3684,6 +3789,13 @@ export type ValueBound = {
   type: BoundType;
   valueDate?: Maybe<Scalars['ISO8601Date']>;
   valueNumber?: Maybe<Scalars['Int']>;
+};
+
+/** Autogenerated return type of VoidReferralRequest. */
+export type VoidReferralRequestPayload = {
+  __typename?: 'VoidReferralRequestPayload';
+  errors: Array<ValidationError>;
+  record?: Maybe<ReferralRequest>;
 };
 
 /** C1.1 */
@@ -4851,7 +4963,6 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
@@ -5881,7 +5992,6 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
@@ -11768,7 +11878,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
     $inProgress: Boolean
   ) {
     enrollment(id: $id) {
@@ -11776,7 +11885,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -11807,7 +11915,6 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      roles: // value for 'roles'
  *      inProgress: // value for 'inProgress'
  *   },
  * });
@@ -12025,7 +12132,6 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
     $inProgress: Boolean
   ) {
     client(id: $id) {
@@ -12033,7 +12139,6 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -12064,7 +12169,6 @@ export const GetAssessmentsForPopulationDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      roles: // value for 'roles'
  *      inProgress: // value for 'inProgress'
  *   },
  * });
