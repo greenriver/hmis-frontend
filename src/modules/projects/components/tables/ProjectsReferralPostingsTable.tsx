@@ -1,5 +1,4 @@
 import { Chip } from '@mui/material';
-import { ReactNode } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -12,7 +11,9 @@ import {
   ReferralPostingStatus,
 } from '@/types/gqlTypes';
 
-const referralPostingStatus = (status: ReferralPostingStatus): ReactNode => {
+const StatusDisplay: React.FC<{ status: ReferralPostingStatus }> = ({
+  status,
+}) => {
   return (
     <Chip
       label={status.replace(/_status$/, '').replace(/_/g, ' ')}
@@ -43,8 +44,9 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'Status',
-    render: (row: ReferralPostingFieldsFragment) =>
-      referralPostingStatus(row.status),
+    render: (row: ReferralPostingFieldsFragment) => (
+      <StatusDisplay status={row.status} />
+    ),
   },
   {
     header: 'Assigned Date',
