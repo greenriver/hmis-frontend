@@ -1,5 +1,6 @@
 fragment OrganizationNameFields on Organization {
   id
+  hudId
   organizationName
 }
 
@@ -14,6 +15,9 @@ fragment OrganizationDetailFields on Organization {
   dateDeleted
   user {
     ...UserFields
+  }
+  customDataElements {
+    ...CustomDataElementFields
   }
 }
 

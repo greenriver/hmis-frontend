@@ -21,6 +21,9 @@ fragment InventoryFields on Inventory {
   user {
     ...UserFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment UnitTypeFields on UnitTypeObject {

@@ -92,12 +92,14 @@ const AssessmentsTable = ({
         GetEnrollmentAssessmentsQueryVariables,
         AssessmentFieldsFragment
       >
+        showFilters
         queryVariables={{ id: enrollmentId }}
         queryDocument={GetEnrollmentAssessmentsDocument}
         rowLinkTo={rowLinkTo}
         columns={columns}
         pagePath='enrollment.assessments'
         noData='No assessments.'
+        recordType='Assessment'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />
     </>

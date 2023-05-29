@@ -9,6 +9,8 @@ query GetEnrollmentAssessments(
   $limit: Int = 10
   $offset: Int = 0
   $inProgress: Boolean
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentFilterOptions
 ) {
   enrollment(id: $id) {
     id
@@ -16,7 +18,8 @@ query GetEnrollmentAssessments(
       limit: $limit
       offset: $offset
       inProgress: $inProgress
-      sortOrder: ASSESSMENT_DATE
+      sortOrder: $sortOrder
+      filters: $filters
     ) {
       offset
       limit
@@ -66,6 +69,7 @@ query GetAssessmentsForPopulation(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
+  $roles: [AssessmentRole!]
   $inProgress: Boolean
 ) {
   client(id: $id) {
@@ -73,6 +77,7 @@ query GetAssessmentsForPopulation(
     assessments(
       limit: $limit
       offset: $offset
+      filters: { roles: $roles }
       inProgress: $inProgress
       sortOrder: ASSESSMENT_DATE
     ) {

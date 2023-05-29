@@ -6,6 +6,11 @@ import { ReactNode, useCallback, useState } from 'react';
 import ConfirmationDialog, {
   ConfirmationDialogProps,
 } from '@/components/elements/ConfirmationDialog';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
 
 interface DeleteMutationButtonProps<MutationVariables> {
   ButtonProps?: ButtonProps;
@@ -34,20 +39,25 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   confirmationDialogContent,
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
-
-  const [deleteRecord, { loading, error }] = useMutation<
-    Mutation,
-    MutationVariables
-  >(queryDocument, {
-    variables,
-    onCompleted: (result) => {
-      const id = get(result, idPath);
-      if (id) {
-        setShowDialog(false);
-        if (onSuccess) onSuccess();
-      }
-    },
-  });
+  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
+  const [deleteRecord, { loading }] = useMutation<Mutation, MutationVariables>(
+    queryDocument,
+    {
+      variables,
+      onCompleted: (result) => {
+        const errors = get(result, [idPath.split('.')[0], 'errors']) || [];
+        const id = get(result, idPath);
+        if (errors.length > 0) {
+          setErrorState(partitionValidations(errors));
+        } else if (id) {
+          setShowDialog(false);
+          if (onSuccess) onSuccess();
+        }
+      },
+      onError: (apolloError) =>
+        setErrorState({ ...emptyErrorState, apolloError }),
+    }
+  );
   const handleDelete = useCallback(() => {
     deleteRecord();
   }, [deleteRecord]);
@@ -75,7 +85,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         onConfirm={handleDelete}
         onCancel={() => setShowDialog(false)}
         loading={loading}
-        errorState={{ apolloError: error, errors: [], warnings: [] }}
+        errorState={errorState}
         color='error'
         {...ConfirmationDialogProps}
       >

@@ -23,6 +23,18 @@ fragment ClientFields on Client {
   access {
     ...ClientAccessFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+  names {
+    ...ClientNameObjectFields
+  }
+  addresses {
+    ...ClientAddressFields
+  }
+  contactPoints {
+    ...ClientContactPointFields
+  }
 }
 
 fragment ClientName on Client {
@@ -31,6 +43,39 @@ fragment ClientName on Client {
   preferredName
   lastName
   nameSuffix
+}
+
+fragment ClientNameObjectFields on ClientName {
+  id
+  first
+  middle
+  last
+  suffix
+  nameDataQuality
+  use
+  notes
+  primary
+}
+fragment ClientAddressFields on ClientAddress {
+  id
+  line1
+  line2
+  city
+  state
+  district
+  country
+  postalCode
+  notes
+  use
+  type
+}
+
+fragment ClientContactPointFields on ClientContactPoint {
+  id
+  value
+  notes
+  use
+  system
 }
 
 fragment ClientImage on Client {
