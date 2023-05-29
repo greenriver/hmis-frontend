@@ -1,4 +1,9 @@
 fragment ReferralPostingFields on ReferralPosting {
   id
   referralDate
+  hohName
+  householdSize
+  referredBy
+  status
+  assignedDate
 }
