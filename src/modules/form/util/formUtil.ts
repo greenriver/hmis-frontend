@@ -1,5 +1,16 @@
 import { getYear, isDate, isValid, max, min } from 'date-fns';
-import { compact, isNil, isUndefined, pull, sum } from 'lodash-es';
+import {
+  compact,
+  isArray,
+  isNil,
+  isObject,
+  isUndefined,
+  mapValues,
+  omit,
+  omitBy,
+  pull,
+  sum,
+} from 'lodash-es';
 
 import {
   DynamicInputCommonProps,
@@ -15,6 +26,7 @@ import {
 
 import {
   age,
+  customDataElementValueForKey,
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
@@ -66,7 +78,7 @@ export const hasMeaningfulValue = (value: any): boolean => {
   return true;
 };
 
-const localResolvePickList = (
+export const localResolvePickList = (
   pickListReference: string,
   includeDataNotCollected = false
 ): PickListOption[] | null => {
@@ -459,6 +471,21 @@ export const buildCommonInputProps = (
   return inputProps;
 };
 
+type TypedObject = { __typename: string };
+const isTypedObject = (o: any): o is TypedObject => {
+  return isObject(o) && o.hasOwnProperty('__typename');
+};
+const cleanTypedObject = (o: TypedObject) => {
+  return omit(
+    o,
+    '__typename',
+    'dateUpdated',
+    'dateCreated',
+    'dateDeleted',
+    'user'
+  );
+};
+
 /**
  * Transform GraphQL value shape into form value shape
  *
@@ -485,6 +512,12 @@ export const gqlValueToFormValue = (
 
     default:
       // Set the property directly as the initial form value
+      if (Array.isArray(value)) {
+        return value.map((v) => (isTypedObject(v) ? cleanTypedObject(v) : v));
+      } else if (isTypedObject(value)) {
+        return cleanTypedObject(value);
+      }
+
       return value;
   }
 };
@@ -695,6 +728,9 @@ export const buildEnabledDependencyMap = (itemMap: ItemMap): LinkIdMap => {
     // If this item is dependent on another item being enabled,
     // recusively add those to its dependency list
     if (en.operator === EnableOperator.Enabled) {
+      if (!itemMap[en.question]) {
+        throw new Error(`No such question: ${en.question}`);
+      }
       (itemMap[en.question].enableWhen || []).forEach((en2) =>
         addEnableWhen(linkId, en2)
       );
@@ -862,10 +898,11 @@ export const transformSubmitValues = ({
       if (Array.isArray(item.item)) {
         rescursiveFillMap(item.item, result, recordType);
       }
-      if (!item.fieldName) return;
+      const fieldName = item.fieldName || item.customFieldKey;
+      if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
 
       // Build key for result map
-      let key = keyByFieldName ? item.fieldName : item.linkId;
+      let key = keyByFieldName ? fieldName : item.linkId;
       // Prefix key like "Enrollment.livingSituation"
       if (keyByFieldName && recordType) key = `${recordType}.${key}`;
 
@@ -921,6 +958,14 @@ export const createInitialValuesFromRecord = (
   const initialValues: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item) => {
+    if (item.customFieldKey && record.hasOwnProperty('customDataElements')) {
+      const customValue = customDataElementValueForKey(
+        item.customFieldKey,
+        record.customDataElements
+      );
+      initialValues[item.linkId] = gqlValueToFormValue(customValue, item);
+      return;
+    }
     // Skip: this question doesn't map to a field
     if (!item.fieldName) return;
 
@@ -1051,4 +1096,18 @@ export const setDisabledLinkIdsBase = (
 
     return newList;
   });
+};
+
+const underscoreKey = (v: any, k: string) => k.startsWith('_');
+
+// Remove any keys that start with "_" (those are frontend-specific values like keys that shouldnt be sent)
+export const dropUnderscorePrefixedKeys = (
+  obj: Record<string, any>
+): Record<string, any> => {
+  const cleaned = omitBy(obj, underscoreKey);
+  return mapValues(cleaned, (v) =>
+    isArray(v)
+      ? v.map((item) => (isObject(item) ? omitBy(item, underscoreKey) : item))
+      : v
+  );
 };

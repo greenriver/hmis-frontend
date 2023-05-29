@@ -35,7 +35,7 @@ const DynamicView = ({
   if (pickListsLoading) return <Loading />;
 
   return (
-    <Grid container direction='column' spacing={2}>
+    <Grid container direction='column' spacing={2} data-testid='dynamicView'>
       {renderFields({
         horizontal,
         pickListRelationId,

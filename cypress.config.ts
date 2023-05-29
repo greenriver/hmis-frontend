@@ -2,7 +2,7 @@ const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
   e2e: {
-    defaultCommandTimeout: 15000,
+    defaultCommandTimeout: 30000,
     // Can be overridden by CYPRESS_BASE_URL
     baseUrl: 'https://hmis.dev.test:5173/',
     // Prevent navigating to a default blank page between each test

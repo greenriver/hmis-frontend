@@ -55,6 +55,7 @@ fragment ItemFields on FormItem {
   readOnly
   repeats
   fieldName
+  customFieldKey
   recordType
   pickListReference
   serviceDetailType

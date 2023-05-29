@@ -170,6 +170,15 @@ fs.writeFile(filename, output, (err) => {
   console.log(filename);
 });
 
+const inputObjectSchemas = schema.__schema.types
+  .filter((o) => o.kind === 'INPUT_OBJECT' && !o.name.startsWith('__'))
+  .map(({ name, inputFields }) => {
+    const args = inputFields
+      .filter((f) => f.name !== 'clientMutationId')
+      .map(({ name, type }) => ({ name, type }));
+    return { name, args };
+  });
+
 const objectSchemas = schema.__schema.types
   .filter(
     (o) =>
@@ -191,6 +200,7 @@ const objectSchemas = schema.__schema.types
       .map(({ name, type }) => ({ name, type }));
     return { name, fields };
   });
+
 const schemaOutput = `
 ${generatedFiledHeader}
 import { HmisEnums } from './gqlEnums';
@@ -211,8 +221,28 @@ export interface GqlSchema {
   fields: GqlSchemaField[];
 }
 
+export interface GqlInputObjectSchemaType {
+  kind: 'NON_NULL' | 'LIST' | 'SCALAR' | 'ENUM' | 'INPUT_OBJECT';
+  name: string | null;
+  ofType: GqlInputObjectSchemaType | null;
+}
+
+export interface GqlSchemaInputArgument {
+  name: string;
+  type: GqlInputObjectSchemaType;
+}
+export interface GqlInputObjectSchema {
+  name: string;
+  args: GqlSchemaInputArgument[];
+}
+
 // Partial schema introspection for object types. Includes non-object fields only.
 export const HmisObjectSchemas: GqlSchema[] = ${JSON.stringify(objectSchemas)};
+
+// Partial schema introspection for input object types.
+export const HmisInputObjectSchemas: GqlInputObjectSchema[] = ${JSON.stringify(
+  inputObjectSchemas
+)};
 `;
 fs.writeFile('src/types/gqlObjects.ts', schemaOutput, (err) => {
   if (err) return console.log(err);

@@ -102,6 +102,7 @@ const ServicesTable: React.FC<Props> = ({
               header: '',
               render: (record) => (
                 <Stack direction='row' spacing={1}>
+                  {/* FIXME: use DeleteMutationButton */}
                   <Button
                     data-testid='deleteService'
                     onClick={(e) => {

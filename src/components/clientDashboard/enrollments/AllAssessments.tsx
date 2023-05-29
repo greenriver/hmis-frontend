@@ -77,6 +77,7 @@ const AllAssessments = () => {
           GetClientAssessmentsQueryVariables,
           AssessmentType
         >
+          showFilters
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           rowLinkTo={rowLinkTo}
@@ -84,6 +85,7 @@ const AllAssessments = () => {
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments.'
+          recordType='Assessment'
         />
       </Paper>
     </>

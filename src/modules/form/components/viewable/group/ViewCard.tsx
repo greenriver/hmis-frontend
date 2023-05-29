@@ -1,6 +1,8 @@
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 
 import { ViewGroupItemComponentProps } from '../../../types';
+
+import { ItemType } from '@/types/gqlTypes';
 
 const ViewCard = ({
   item,
@@ -9,29 +11,28 @@ const ViewCard = ({
 }: ViewGroupItemComponentProps & {
   anchor?: string;
 }) => {
+  const horizontal =
+    (item.item || []).length < 4 &&
+    !(item.item || []).find((item) => item.type === ItemType.Group);
   return (
     <Grid id={anchor} item>
       <Paper
         sx={{
-          py: 3,
+          py: 2,
           px: 2.5,
           pageBreakInside: 'avoid',
         }}
       >
-        {/* Card title */}
-        {item.text && (
-          <Stack justifyContent='space-between' direction='row'>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              {item.text}
-            </Typography>
-          </Stack>
-        )}
+        <Typography variant='body1' sx={{ pb: 0.5, mb: 1.5 }}>
+          {item.text}
+        </Typography>
 
         {/* Dynamically render child items */}
         <Grid
           container
-          direction='column'
-          gap={2}
+          direction={horizontal ? 'row' : 'column'}
+          rowGap={2}
+          columnGap={horizontal ? 6 : 2}
           sx={{
             '& .MuiGrid-item:first-of-type': !item.text ? { pt: 0 } : undefined,
             mt: 0,

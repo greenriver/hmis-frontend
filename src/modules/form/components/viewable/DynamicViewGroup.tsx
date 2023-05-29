@@ -51,11 +51,7 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
       );
     default:
       return (
-        <ViewCard
-          key={props.item.linkId}
-          anchor={props.visible ? props.item.linkId : undefined}
-          {...props}
-        />
+        <QuestionGroup key={props.item.linkId} {...props} nestingLevel={0} />
       );
   }
 };

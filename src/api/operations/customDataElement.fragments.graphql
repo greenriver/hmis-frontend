@@ -1,0 +1,28 @@
+fragment CustomDataElementValueFields on CustomDataElementValue {
+  id
+  valueBoolean
+  valueDate
+  valueFloat
+  valueInteger
+  valueJson
+  valueString
+  valueText
+  user {
+    ...UserFields
+  }
+  dateCreated
+  dateUpdated
+}
+
+fragment CustomDataElementFields on CustomDataElement {
+  id
+  key
+  label
+  repeats
+  value {
+    ...CustomDataElementValueFields
+  }
+  values {
+    ...CustomDataElementValueFields
+  }
+}
