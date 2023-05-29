@@ -55,6 +55,7 @@ import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import Project from '@/modules/projects/components/ProjectOverview';
+import ProjectReferralPostingDetails from '@/modules/projects/components/ProjectReferralPostingDetails';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
@@ -111,6 +112,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.REFERRALS,
             element: <ProjectReferrals />,
+          },
+          {
+            path: ProjectDashboardRoutes.REFERRAL_POSTING,
+            element: <ProjectReferralPostingDetails />,
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,

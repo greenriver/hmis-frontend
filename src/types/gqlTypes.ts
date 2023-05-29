@@ -2878,6 +2878,7 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
 };
@@ -2960,6 +2961,10 @@ export type QueryProjectsArgs = {
   projectTypes?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
+};
+
+export type QueryReferralPostingArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryServiceArgs = {
@@ -11429,6 +11434,38 @@ export type GetProjectReferralPostingsQuery = {
   } | null;
 };
 
+export type GetReferralPostingQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetReferralPostingQuery = {
+  __typename?: 'Query';
+  referralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    assignedDate: string;
+    chronic?: boolean | null;
+    denialNote?: string | null;
+    denialReason?: string | null;
+    needsWheelchairAccessibleUnit?: boolean | null;
+    postingIdentifier: string;
+    referralDate: string;
+    referralIdentifier?: string | null;
+    referralNotes?: string | null;
+    referralResult?: ReferralResult | null;
+    referredBy: string;
+    referredFrom: string;
+    resourceCoordinatorNotes?: string | null;
+    score?: number | null;
+    status: ReferralPostingStatus;
+    statusNote?: string | null;
+    statusNoteUpdatedAt?: string | null;
+    statusNoteUpdatedBy?: string | null;
+    statusUpdatedAt?: string | null;
+    statusUpdatedBy?: string | null;
+  } | null;
+};
+
 export type GetProjectProjectCocsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -11707,6 +11744,31 @@ export type ReferralPostingFieldsFragment = {
   referredBy: string;
   status: ReferralPostingStatus;
   assignedDate: string;
+};
+
+export type ReferralPostingDetailFieldsFragment = {
+  __typename?: 'ReferralPosting';
+  id: string;
+  assignedDate: string;
+  chronic?: boolean | null;
+  denialNote?: string | null;
+  denialReason?: string | null;
+  needsWheelchairAccessibleUnit?: boolean | null;
+  postingIdentifier: string;
+  referralDate: string;
+  referralIdentifier?: string | null;
+  referralNotes?: string | null;
+  referralResult?: ReferralResult | null;
+  referredBy: string;
+  referredFrom: string;
+  resourceCoordinatorNotes?: string | null;
+  score?: number | null;
+  status: ReferralPostingStatus;
+  statusNote?: string | null;
+  statusNoteUpdatedAt?: string | null;
+  statusNoteUpdatedBy?: string | null;
+  statusUpdatedAt?: string | null;
+  statusUpdatedBy?: string | null;
 };
 
 export type ReferralRequestFieldsFragment = {
@@ -12813,6 +12875,31 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     referredBy
     status
     assignedDate
+  }
+`;
+export const ReferralPostingDetailFieldsFragmentDoc = gql`
+  fragment ReferralPostingDetailFields on ReferralPosting {
+    id
+    assignedDate
+    chronic
+    denialNote
+    denialReason
+    needsWheelchairAccessibleUnit
+    postingIdentifier
+    referralDate
+    referralIdentifier
+    referralNotes
+    referralResult
+    referredBy
+    referredFrom
+    resourceCoordinatorNotes
+    score
+    status
+    statusNote
+    statusNoteUpdatedAt
+    statusNoteUpdatedBy
+    statusUpdatedAt
+    statusUpdatedBy
   }
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
@@ -16917,6 +17004,65 @@ export type GetProjectReferralPostingsLazyQueryHookResult = ReturnType<
 export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables
+>;
+export const GetReferralPostingDocument = gql`
+  query GetReferralPosting($id: ID!) {
+    referralPosting(id: $id) {
+      ...ReferralPostingDetailFields
+    }
+  }
+  ${ReferralPostingDetailFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetReferralPostingQuery__
+ *
+ * To run a query within a React component, call `useGetReferralPostingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReferralPostingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReferralPostingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetReferralPostingQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export function useGetReferralPostingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export type GetReferralPostingQueryHookResult = ReturnType<
+  typeof useGetReferralPostingQuery
+>;
+export type GetReferralPostingLazyQueryHookResult = ReturnType<
+  typeof useGetReferralPostingLazyQuery
+>;
+export type GetReferralPostingQueryResult = Apollo.QueryResult<
+  GetReferralPostingQuery,
+  GetReferralPostingQueryVariables
 >;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
