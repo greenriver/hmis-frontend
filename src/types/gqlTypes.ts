@@ -293,6 +293,7 @@ export type Client = {
   disabilityGroups: Array<DisabilityGroup>;
   dob?: Maybe<Scalars['ISO8601Date']>;
   dobDataQuality: DobDataQuality;
+  emailAddresses: Array<ClientContactPoint>;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
   externalIds: Array<ExternalIdentifier>;
@@ -309,6 +310,7 @@ export type Client = {
   nameSuffix?: Maybe<Scalars['String']>;
   names: Array<ClientName>;
   personalId: Scalars['String'];
+  phoneNumbers: Array<ClientContactPoint>;
   pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   services: ServicesPaginated;
@@ -6223,7 +6225,17 @@ export type ClientFieldsFragment = {
     dateCreated: string;
     dateUpdated: string;
   }>;
-  contactPoints: Array<{
+  phoneNumbers: Array<{
+    __typename?: 'ClientContactPoint';
+    id: string;
+    value?: string | null;
+    notes?: string | null;
+    use?: ClientContactPointUse | null;
+    system?: ClientContactPointSystem | null;
+    dateCreated: string;
+    dateUpdated: string;
+  }>;
+  emailAddresses: Array<{
     __typename?: 'ClientContactPoint';
     id: string;
     value?: string | null;
@@ -7022,7 +7034,17 @@ export type SearchClientsQuery = {
         dateCreated: string;
         dateUpdated: string;
       }>;
-      contactPoints: Array<{
+      phoneNumbers: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      emailAddresses: Array<{
         __typename?: 'ClientContactPoint';
         id: string;
         value?: string | null;
@@ -7160,7 +7182,17 @@ export type GetClientQuery = {
       dateCreated: string;
       dateUpdated: string;
     }>;
-    contactPoints: Array<{
+    phoneNumbers: Array<{
+      __typename?: 'ClientContactPoint';
+      id: string;
+      value?: string | null;
+      notes?: string | null;
+      use?: ClientContactPointUse | null;
+      system?: ClientContactPointSystem | null;
+      dateCreated: string;
+      dateUpdated: string;
+    }>;
+    emailAddresses: Array<{
       __typename?: 'ClientContactPoint';
       id: string;
       value?: string | null;
@@ -7970,7 +8002,17 @@ export type DeleteClientMutation = {
         dateCreated: string;
         dateUpdated: string;
       }>;
-      contactPoints: Array<{
+      phoneNumbers: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      emailAddresses: Array<{
         __typename?: 'ClientContactPoint';
         id: string;
         value?: string | null;
@@ -9860,7 +9902,17 @@ export type SubmitFormMutation = {
             dateCreated: string;
             dateUpdated: string;
           }>;
-          contactPoints: Array<{
+          phoneNumbers: Array<{
+            __typename?: 'ClientContactPoint';
+            id: string;
+            value?: string | null;
+            notes?: string | null;
+            use?: ClientContactPointUse | null;
+            system?: ClientContactPointSystem | null;
+            dateCreated: string;
+            dateUpdated: string;
+          }>;
+          emailAddresses: Array<{
             __typename?: 'ClientContactPoint';
             id: string;
             value?: string | null;
@@ -12095,7 +12147,10 @@ export const ClientFieldsFragmentDoc = gql`
     addresses {
       ...ClientAddressFields
     }
-    contactPoints {
+    phoneNumbers {
+      ...ClientContactPointFields
+    }
+    emailAddresses {
       ...ClientContactPointFields
     }
   }

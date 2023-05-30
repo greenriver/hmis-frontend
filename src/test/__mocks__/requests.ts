@@ -48,6 +48,8 @@ export const RITA_ACKROYD = {
   names: [],
   addresses: [],
   contactPoints: [],
+  phoneNumbers: [],
+  emailAddresses: [],
   gender: [Gender.Male, Gender.NoSingleGender],
   race: [Race.ClientRefused],
   dobDataQuality: DobDataQuality.ApproximateOrPartialDobReported,
