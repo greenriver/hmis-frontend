@@ -3,29 +3,29 @@ import { useCallback } from 'react';
 
 import { DynamicInputCommonProps } from '../../../types';
 import RepeatedInputContainer from '../RepeatedInputContainer';
-import { AddressInputType } from '../types';
+import { PhoneInputType } from '../types';
 import { useRenderLastUpdated } from '../useRenderLastUpdated';
 import { createInitialValue } from '../util';
 
-import AddressInput from './AddressInput';
+import PhoneInput from './PhoneInput';
 
-import { ClientAddressFieldsFragmentDoc } from '@/types/gqlTypes';
+import { ClientContactPointFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 interface Props extends DynamicInputCommonProps {
-  value: AddressInputType[];
-  onChange: (value: AddressInputType[]) => void;
+  value: PhoneInputType[];
+  onChange: (value: PhoneInputType[]) => void;
 }
 
-const MultiAddressInput = ({ id, value, onChange, label }: Props) => {
+const MultiPhoneInput = ({ id, value, onChange, label }: Props) => {
   const handleAddName = useCallback(() => {
     onChange([...value, createInitialValue()]);
   }, [onChange, value]);
 
   const { renderMetadata } = useRenderLastUpdated(
-    'ClientAddress',
-    ClientAddressFieldsFragmentDoc,
-    'ClientAddressFields'
+    'ClientContactPoint',
+    ClientContactPointFieldsFragmentDoc,
+    'ClientContactPointFields'
   );
 
   return (
@@ -35,7 +35,7 @@ const MultiAddressInput = ({ id, value, onChange, label }: Props) => {
       valueKey={(addrValue) => addrValue._key || addrValue.id || ''}
       renderChild={(addrValue, idx) => {
         return (
-          <AddressInput
+          <PhoneInput
             value={addrValue}
             onChange={(val) => {
               const copied = [...value];
@@ -52,18 +52,18 @@ const MultiAddressInput = ({ id, value, onChange, label }: Props) => {
         onChange(copied);
       }}
       title={label}
-      removeText='Delete address'
-      addText='Add address'
+      removeText='Delete phone'
+      addText='Add phone'
       renderMetadata={renderMetadata}
     />
   );
 };
 
-const MultiAddressInputWrapper = ({
+const MultiPhoneInputWrapper = ({
   value,
   ...props
 }: PartialPick<Props, 'value'>) => (
-  <MultiAddressInput {...props} value={value || [createInitialValue()]} />
+  <MultiPhoneInput {...props} value={value || [createInitialValue()]} />
 );
 
-export default MultiAddressInputWrapper;
+export default MultiPhoneInputWrapper;

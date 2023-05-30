@@ -1,5 +1,5 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Box, Button, lighten, Stack } from '@mui/material';
+import { Box, Button, Grid, lighten, Stack } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props<T> {
@@ -12,6 +12,7 @@ interface Props<T> {
   removeText?: string;
   id?: string;
   valueKey: (val: T) => string;
+  title?: ReactNode;
 }
 
 const RepeatedInputContainer = <T extends object>({
@@ -24,6 +25,7 @@ const RepeatedInputContainer = <T extends object>({
   id,
   renderMetadata,
   valueKey,
+  title,
 }: Props<T>) => {
   const addButton = (
     <Button
@@ -39,17 +41,33 @@ const RepeatedInputContainer = <T extends object>({
   if (values.length === 0) return <Box sx={{ mt: 1 }}>{addButton}</Box>;
 
   return (
-    <>
-      <Stack id={id} gap={4}>
+    <Grid
+      item
+      sx={{
+        '&::after': {
+          content: '""',
+          height: '1px',
+          backgroundColor: 'borders.light',
+          mt: 4,
+          mb: 2,
+          display: 'block',
+        },
+      }}
+    >
+      {title}
+      <Stack id={id} gap={4} sx={{ pb: 2 }}>
         {values.map((val, idx) => {
           return (
             <Box
               key={valueKey(val)}
               sx={{
-                p: 2,
-                backgroundColor: (theme) =>
-                  lighten(theme.palette.grey[50], 0.4),
+                py: 2,
+                px: 3,
+                backgroundColor: lighten('#D7D7D7', 0.95),
                 borderRadius: 1,
+                borderColor: 'borders.light',
+                borderStyle: 'solid',
+                borderWidth: 1,
               }}
             >
               {renderChild(val, idx)}
@@ -85,7 +103,7 @@ const RepeatedInputContainer = <T extends object>({
         })}
       </Stack>
       {addButton}
-    </>
+    </Grid>
   );
 };
 

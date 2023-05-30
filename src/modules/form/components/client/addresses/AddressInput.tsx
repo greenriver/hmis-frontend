@@ -2,7 +2,7 @@ import { Grid, Stack } from '@mui/material';
 import { useMemo } from 'react';
 
 import FormSelect from '../../FormSelect';
-import RequiredLabel from '../../RequiredLabel';
+import { getRequiredLabel } from '../../RequiredLabel';
 import { AddressInputType } from '../types';
 
 import TextInput from '@/components/elements/input/TextInput';
@@ -13,24 +13,11 @@ import { ClientAddressType, ItemType } from '@/types/gqlTypes';
 
 const addressTypePicklist =
   localResolvePickList('ClientAddressType', false) || [];
-// const addressTypePicklist = localResolvePickList('ClientAddressUse', false) || [];
 
 const fakeStateItem = {
   linkId: 'fake',
   type: ItemType.Choice,
   pickListReference: 'STATE',
-};
-
-const getLabel = (text: string, required?: boolean) => {
-  return (
-    <RequiredLabel
-      text={text}
-      required={required}
-      TypographyProps={{
-        fontWeight: 600,
-      }}
-    />
-  );
 };
 
 const AddressInput = ({
@@ -63,23 +50,23 @@ const AddressInput = ({
             <TextInput
               value={value.line1 || ''}
               onChange={(e) => onChange({ ...value, line1: e.target.value })}
-              label={getLabel('Address Line 1')}
+              label={getRequiredLabel('Address Line 1')}
             />
             <TextInput
               value={value.line2 || ''}
               onChange={(e) => onChange({ ...value, line2: e.target.value })}
-              label={getLabel('Address Line 2')}
+              label={getRequiredLabel('Address Line 2')}
             />
             <TextInput
               value={value.district || ''}
               onChange={(e) => onChange({ ...value, district: e.target.value })}
-              label={getLabel('District (County)')}
+              label={getRequiredLabel('District (County)')}
             />
             <Stack direction='row' columnGap={2}>
               <TextInput
                 value={value.city || ''}
                 onChange={(e) => onChange({ ...value, city: e.target.value })}
-                label={getLabel('City')}
+                label={getRequiredLabel('City')}
               />
               <FormSelect
                 value={stateValue || null}
@@ -90,7 +77,7 @@ const AddressInput = ({
                     state: isPickListOption(val) ? val.code : null,
                   })
                 }
-                label={getLabel('State')}
+                label={getRequiredLabel('State')}
                 loading={loading}
                 textInputProps={{
                   name: 'state',
@@ -103,7 +90,7 @@ const AddressInput = ({
                 onChange={(e) =>
                   onChange({ ...value, postalCode: e.target.value })
                 }
-                label={getLabel('Zip')}
+                label={getRequiredLabel('Zip')}
                 sx={{ maxWidth: '96px' }}
                 max={5}
               />
@@ -121,7 +108,7 @@ const AddressInput = ({
               }
               placeholder='Select address type..'
               textInputProps={{ name: 'address type' }}
-              label={getLabel('Address Type')}
+              label={getRequiredLabel('Address Type')}
             />
           </Stack>
         </Grid>
@@ -129,7 +116,7 @@ const AddressInput = ({
           <TextInput
             value={value.notes || ''}
             onChange={(e) => onChange({ ...value, notes: e.target.value })}
-            label={getLabel('Notes')}
+            label={getRequiredLabel('Notes')}
             multiline
             sx={{
               width: '100%',

@@ -2122,6 +2122,30 @@
             "deprecationReason": null
           },
           {
+            "name": "emailAddresses",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ClientContactPoint",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollments",
             "description": null,
             "args": [
@@ -2544,6 +2568,30 @@
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "phoneNumbers",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ClientContactPoint",
+                    "ofType": null
+                  }
+                }
               }
             },
             "isDeprecated": false,
@@ -3664,32 +3712,8 @@
             "deprecationReason": null
           },
           {
-            "name": "fax",
-            "description": "Fax",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "other",
-            "description": "Other",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pager",
-            "description": "Pager",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "phone",
             "description": "Phone",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "sms",
-            "description": "Sms",
             "isDeprecated": false,
             "deprecationReason": null
           },
