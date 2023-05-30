@@ -15,7 +15,7 @@ import { Fragment, useMemo } from 'react';
 import { ClientCardImageElement } from './ClientProfileCard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
+import { LabeledExternalIdDisplay } from '@/components/elements/ExternalIdDisplay';
 import RouterLink from '@/components/elements/RouterLink';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
@@ -180,17 +180,9 @@ const ClientCard: React.FC<Props> = ({
               )}
               <Stack spacing={0.5} sx={{ pr: 1 }}>
                 {globalFeatureFlags?.mciId && (
-                  <IdDisplay
-                    prefix='MCI'
-                    value={
-                      <ExternalIdDisplay
-                        value={client.externalIds.find(
-                          (c) => c.label == 'MCI ID'
-                        )}
-                      />
-                    }
-                    color='text.primary'
-                    withoutEmphasis
+                  <LabeledExternalIdDisplay
+                    label='MCI ID'
+                    externalIds={client.externalIds}
                   />
                 )}
                 <IdDisplay
