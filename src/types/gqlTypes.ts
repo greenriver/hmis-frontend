@@ -398,6 +398,7 @@ export type ClientAccess = {
 
 export type ClientAddress = {
   __typename?: 'ClientAddress';
+  addressType?: Maybe<ClientAddressType>;
   city?: Maybe<Scalars['String']>;
   client: Client;
   country?: Maybe<Scalars['String']>;
@@ -411,7 +412,6 @@ export type ClientAddress = {
   notes?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
-  type?: Maybe<ClientAddressType>;
   use?: Maybe<ClientAddressUse>;
   user?: Maybe<User>;
 };
@@ -6204,6 +6204,8 @@ export type ClientFieldsFragment = {
     use?: ClientNameUse | null;
     notes?: string | null;
     primary?: boolean | null;
+    dateCreated: string;
+    dateUpdated: string;
   }>;
   addresses: Array<{
     __typename?: 'ClientAddress';
@@ -6217,7 +6219,9 @@ export type ClientFieldsFragment = {
     postalCode?: string | null;
     notes?: string | null;
     use?: ClientAddressUse | null;
-    type?: ClientAddressType | null;
+    addressType?: ClientAddressType | null;
+    dateCreated: string;
+    dateUpdated: string;
   }>;
   contactPoints: Array<{
     __typename?: 'ClientContactPoint';
@@ -6226,6 +6230,8 @@ export type ClientFieldsFragment = {
     notes?: string | null;
     use?: ClientContactPointUse | null;
     system?: ClientContactPointSystem | null;
+    dateCreated: string;
+    dateUpdated: string;
   }>;
   image?: {
     __typename?: 'ClientImage';
@@ -6254,6 +6260,8 @@ export type ClientNameObjectFieldsFragment = {
   use?: ClientNameUse | null;
   notes?: string | null;
   primary?: boolean | null;
+  dateCreated: string;
+  dateUpdated: string;
 };
 
 export type ClientAddressFieldsFragment = {
@@ -6268,7 +6276,9 @@ export type ClientAddressFieldsFragment = {
   postalCode?: string | null;
   notes?: string | null;
   use?: ClientAddressUse | null;
-  type?: ClientAddressType | null;
+  addressType?: ClientAddressType | null;
+  dateCreated: string;
+  dateUpdated: string;
 };
 
 export type ClientContactPointFieldsFragment = {
@@ -6278,6 +6288,8 @@ export type ClientContactPointFieldsFragment = {
   notes?: string | null;
   use?: ClientContactPointUse | null;
   system?: ClientContactPointSystem | null;
+  dateCreated: string;
+  dateUpdated: string;
 };
 
 export type ClientImageFragment = {
@@ -6991,6 +7003,8 @@ export type SearchClientsQuery = {
         use?: ClientNameUse | null;
         notes?: string | null;
         primary?: boolean | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       addresses: Array<{
         __typename?: 'ClientAddress';
@@ -7004,7 +7018,9 @@ export type SearchClientsQuery = {
         postalCode?: string | null;
         notes?: string | null;
         use?: ClientAddressUse | null;
-        type?: ClientAddressType | null;
+        addressType?: ClientAddressType | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       contactPoints: Array<{
         __typename?: 'ClientContactPoint';
@@ -7013,6 +7029,8 @@ export type SearchClientsQuery = {
         notes?: string | null;
         use?: ClientContactPointUse | null;
         system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       image?: {
         __typename?: 'ClientImage';
@@ -7123,6 +7141,8 @@ export type GetClientQuery = {
       use?: ClientNameUse | null;
       notes?: string | null;
       primary?: boolean | null;
+      dateCreated: string;
+      dateUpdated: string;
     }>;
     addresses: Array<{
       __typename?: 'ClientAddress';
@@ -7136,7 +7156,9 @@ export type GetClientQuery = {
       postalCode?: string | null;
       notes?: string | null;
       use?: ClientAddressUse | null;
-      type?: ClientAddressType | null;
+      addressType?: ClientAddressType | null;
+      dateCreated: string;
+      dateUpdated: string;
     }>;
     contactPoints: Array<{
       __typename?: 'ClientContactPoint';
@@ -7145,6 +7167,8 @@ export type GetClientQuery = {
       notes?: string | null;
       use?: ClientContactPointUse | null;
       system?: ClientContactPointSystem | null;
+      dateCreated: string;
+      dateUpdated: string;
     }>;
     image?: {
       __typename?: 'ClientImage';
@@ -7927,6 +7951,8 @@ export type DeleteClientMutation = {
         use?: ClientNameUse | null;
         notes?: string | null;
         primary?: boolean | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       addresses: Array<{
         __typename?: 'ClientAddress';
@@ -7940,7 +7966,9 @@ export type DeleteClientMutation = {
         postalCode?: string | null;
         notes?: string | null;
         use?: ClientAddressUse | null;
-        type?: ClientAddressType | null;
+        addressType?: ClientAddressType | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       contactPoints: Array<{
         __typename?: 'ClientContactPoint';
@@ -7949,6 +7977,8 @@ export type DeleteClientMutation = {
         notes?: string | null;
         use?: ClientContactPointUse | null;
         system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
       }>;
       image?: {
         __typename?: 'ClientImage';
@@ -9811,6 +9841,8 @@ export type SubmitFormMutation = {
             use?: ClientNameUse | null;
             notes?: string | null;
             primary?: boolean | null;
+            dateCreated: string;
+            dateUpdated: string;
           }>;
           addresses: Array<{
             __typename?: 'ClientAddress';
@@ -9824,7 +9856,9 @@ export type SubmitFormMutation = {
             postalCode?: string | null;
             notes?: string | null;
             use?: ClientAddressUse | null;
-            type?: ClientAddressType | null;
+            addressType?: ClientAddressType | null;
+            dateCreated: string;
+            dateUpdated: string;
           }>;
           contactPoints: Array<{
             __typename?: 'ClientContactPoint';
@@ -9833,6 +9867,8 @@ export type SubmitFormMutation = {
             notes?: string | null;
             use?: ClientContactPointUse | null;
             system?: ClientContactPointSystem | null;
+            dateCreated: string;
+            dateUpdated: string;
           }>;
           image?: {
             __typename?: 'ClientImage';
@@ -11992,6 +12028,8 @@ export const ClientNameObjectFieldsFragmentDoc = gql`
     use
     notes
     primary
+    dateCreated
+    dateUpdated
   }
 `;
 export const ClientAddressFieldsFragmentDoc = gql`
@@ -12006,7 +12044,9 @@ export const ClientAddressFieldsFragmentDoc = gql`
     postalCode
     notes
     use
-    type
+    addressType
+    dateCreated
+    dateUpdated
   }
 `;
 export const ClientContactPointFieldsFragmentDoc = gql`
@@ -12016,6 +12056,8 @@ export const ClientContactPointFieldsFragmentDoc = gql`
     notes
     use
     system
+    dateCreated
+    dateUpdated
   }
 `;
 export const ClientFieldsFragmentDoc = gql`

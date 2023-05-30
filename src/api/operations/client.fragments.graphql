@@ -54,6 +54,8 @@ fragment ClientNameObjectFields on ClientName {
   use
   notes
   primary
+  dateCreated
+  dateUpdated
 }
 fragment ClientAddressFields on ClientAddress {
   id
@@ -66,7 +68,9 @@ fragment ClientAddressFields on ClientAddress {
   postalCode
   notes
   use
-  type
+  addressType
+  dateCreated
+  dateUpdated
 }
 
 fragment ClientContactPointFields on ClientContactPoint {
@@ -75,6 +79,8 @@ fragment ClientContactPointFields on ClientContactPoint {
   notes
   use
   system
+  dateCreated
+  dateUpdated
 }
 
 fragment ClientImage on Client {
