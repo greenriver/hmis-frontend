@@ -61,7 +61,7 @@ const NameInput = ({
         </Grid>
       </Grid>
       <Box>{radioElement}</Box>
-      <Grid container spacing={6}>
+      <Grid container columnSpacing={6}>
         <Grid item xs>
           <FormSelect
             value={dqValue}
