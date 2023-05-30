@@ -40,7 +40,6 @@ fragment ClientFields on Client {
 fragment ClientName on Client {
   firstName
   middleName
-  preferredName
   lastName
   nameSuffix
 }

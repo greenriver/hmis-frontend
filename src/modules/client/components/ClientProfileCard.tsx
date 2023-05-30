@@ -27,7 +27,7 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import { ClientSafeSsn } from '@/modules/hmis/components/ClientSsn';
 import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
-  clientNameWithoutPreferred,
+  clientNameAllParts,
   lastUpdated,
   pronouns,
 } from '@/modules/hmis/hmisUtil';
@@ -326,11 +326,6 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
   } = useGetClientImageQuery({
     variables: { id: client.id },
   });
-  const primaryName =
-    client.preferredName || clientNameWithoutPreferred(client);
-  const secondaryName = client.preferredName
-    ? clientNameWithoutPreferred(client)
-    : null;
 
   const [canViewSsn] = useHasRootPermissions([
     'canViewFullSsn',
@@ -349,12 +344,7 @@ const ClientProfileCard: React.FC<Props> = ({ client, onlyCard = false }) => {
       >
         <Grid container spacing={2}>
           <Grid item xs={12}>
-            <Typography variant='h4'>{primaryName}</Typography>
-            {secondaryName && (
-              <Typography color='GrayText'>
-                <em>{secondaryName}</em>
-              </Typography>
-            )}
+            <Typography variant='h4'>{clientNameAllParts(client)}</Typography>
           </Grid>
           <Grid item xs={12} sx={{ display: 'flex', gap: 2 }}>
             {imageLoading ? (

@@ -309,7 +309,6 @@ export type Client = {
   nameSuffix?: Maybe<Scalars['String']>;
   names: Array<ClientName>;
   personalId: Scalars['String'];
-  preferredName?: Maybe<Scalars['String']>;
   pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   services: ServicesPaginated;
@@ -563,7 +562,6 @@ export type ClientSearchInput = {
   lastName?: InputMaybe<Scalars['String']>;
   organizations?: InputMaybe<Array<Scalars['ID']>>;
   personalId?: InputMaybe<Scalars['String']>;
-  preferredName?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<Array<Scalars['ID']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']>;
@@ -6133,7 +6131,6 @@ export type ClientFieldsFragment = {
   ssn?: string | null;
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
   externalIds: Array<{
@@ -6242,7 +6239,6 @@ export type ClientNameFragment = {
   __typename?: 'Client';
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
 };
@@ -6333,7 +6329,6 @@ export type ClientOmniSearchFieldsFragment = {
   personalId: string;
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
 };
@@ -6348,7 +6343,6 @@ export type HouseholdClientFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
@@ -6396,7 +6390,6 @@ export type HouseholdFieldsFragment = {
       veteranStatus: NoYesReasonsForMissingData;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       dob?: string | null;
@@ -6444,7 +6437,6 @@ export type ProjectEnrollmentsHouseholdFieldsFragment = {
       id: string;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       dob?: string | null;
@@ -6476,7 +6468,6 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
     id: string;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
@@ -6527,7 +6518,6 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
@@ -6623,7 +6613,6 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         veteranStatus: NoYesReasonsForMissingData;
         firstName?: string | null;
         middleName?: string | null;
-        preferredName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
         dob?: string | null;
@@ -6929,7 +6918,6 @@ export type SearchClientsQuery = {
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
@@ -7062,7 +7050,6 @@ export type GetClientQuery = {
     ssn?: string | null;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     externalIds: Array<{
@@ -7179,7 +7166,6 @@ export type GetClientNameQuery = {
     id: string;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
   } | null;
@@ -7579,7 +7565,6 @@ export type UpdateRelationshipToHoHMutation = {
             veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
-            preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
@@ -7777,7 +7762,6 @@ export type AddHouseholdMembersMutation = {
             veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
-            preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
@@ -7870,7 +7854,6 @@ export type DeleteClientMutation = {
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
@@ -8174,7 +8157,6 @@ export type GetEnrollmentWithHouseholdQuery = {
           veteranStatus: NoYesReasonsForMissingData;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
@@ -8322,7 +8304,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               veteranStatus: NoYesReasonsForMissingData;
               firstName?: string | null;
               middleName?: string | null;
-              preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
               dob?: string | null;
@@ -9757,7 +9738,6 @@ export type SubmitFormMutation = {
           ssn?: string | null;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           externalIds: Array<{
@@ -10320,7 +10300,6 @@ export type OmniSearchClientsQuery = {
       personalId: string;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
     }>;
@@ -10364,7 +10343,6 @@ export type GetRecentItemsQuery = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -10398,7 +10376,6 @@ export type AddRecentItemMutation = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -10429,7 +10406,6 @@ export type ClearRecentItemsMutation = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -10953,7 +10929,6 @@ export type GetProjectEnrollmentsQuery = {
           id: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
@@ -11017,7 +10992,6 @@ export type GetProjectHouseholdsQuery = {
             id: string;
             firstName?: string | null;
             middleName?: string | null;
-            preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
@@ -11928,7 +11902,6 @@ export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     firstName
     middleName
-    preferredName
     lastName
     nameSuffix
   }

@@ -385,10 +385,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'preferredName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'pronouns',
         type: {
           kind: 'NON_NULL',
@@ -3744,10 +3740,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'personalId',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'preferredName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
