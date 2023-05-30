@@ -3712,32 +3712,8 @@
             "deprecationReason": null
           },
           {
-            "name": "fax",
-            "description": "Fax",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "other",
-            "description": "Other",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pager",
-            "description": "Pager",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "phone",
             "description": "Phone",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "sms",
-            "description": "Sms",
             "isDeprecated": false,
             "deprecationReason": null
           },

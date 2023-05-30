@@ -46,15 +46,7 @@ export const HmisEnums = {
     temp: 'Temp',
     work: 'Work',
   },
-  ClientContactPointSystem: {
-    email: 'Email',
-    fax: 'Fax',
-    other: 'Other',
-    pager: 'Pager',
-    phone: 'Phone',
-    sms: 'Sms',
-    url: 'Url',
-  },
+  ClientContactPointSystem: { email: 'Email', phone: 'Phone', url: 'Url' },
   ClientContactPointUse: {
     home: 'Home',
     mobile: 'Mobile',

@@ -482,16 +482,8 @@ export type ClientContactPoint = {
 export enum ClientContactPointSystem {
   /** Email */
   Email = 'email',
-  /** Fax */
-  Fax = 'fax',
-  /** Other */
-  Other = 'other',
-  /** Pager */
-  Pager = 'pager',
   /** Phone */
   Phone = 'phone',
-  /** Sms */
-  Sms = 'sms',
   /** Url */
   Url = 'url',
 }
