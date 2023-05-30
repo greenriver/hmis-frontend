@@ -119,7 +119,7 @@ const GenericTableWithData = <
   columns,
   recordType,
   filterInputType: filterInputTypeProp,
-  fetchPolicy,
+  fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
   header,
@@ -172,7 +172,7 @@ const GenericTableWithData = <
 
   if (error) throw error;
 
-  const rows = useMemo(() => {
+  const rows = useMemo<RowDataType[]>(() => {
     if (pagePath) return get(data, `${pagePath}.nodes`) || [];
     if (rowsPath) {
       const all = get(data, rowsPath) || [];
@@ -182,7 +182,7 @@ const GenericTableWithData = <
     return data;
   }, [data, pagePath, rowsPath, rowsPerPage, page]);
 
-  const nodesCount = useMemo(() => {
+  const nodesCount = useMemo<number>(() => {
     if (pagePath) return get(data, `${pagePath}.nodesCount`) || 0;
     if (rowsPath) return (get(data, rowsPath) || []).length;
     return rows.length;
@@ -254,9 +254,9 @@ const GenericTableWithData = <
   );
 
   // If this is the first time loading, return loading (hide search headers)
-  if (loading && !hasRefetched) return <Loading />;
+  if (loading && !hasRefetched && !data) return <Loading />;
 
-  const noResults = !loading && data && nodesCount === 0;
+  const noResults = data && nodesCount === 0;
   const noResultsOnFirstLoad = noResults && !hasRefetched;
 
   // Hide pagination when possible
@@ -312,7 +312,7 @@ const GenericTableWithData = <
         ) : (
           <>
             <GenericTable<RowDataType>
-              loading={loading}
+              loading={loading && !data}
               rows={rows}
               paginated={!nonTablePagination && !hidePagination}
               tablePaginationProps={
