@@ -19,7 +19,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
-    width: '30%',
+    width: '45%',
     render: 'projectName',
     linkTreatment: true,
     ariaLabel: (row) => row.projectName,
@@ -33,7 +33,7 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   },
   {
     header: 'Operating Period',
-    width: '30%',
+    width: '25%',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,
