@@ -3077,7 +3077,7 @@ export type ReferralPosting = {
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
-  postingIdentifier: Scalars['ID'];
+  postingIdentifier?: Maybe<Scalars['ID']>;
   referralDate: Scalars['ISO8601Date'];
   referralIdentifier?: Maybe<Scalars['ID']>;
   referralNotes?: Maybe<Scalars['String']>;
@@ -3097,16 +3097,27 @@ export type ReferralPosting = {
 
 /** Referral Posting Status */
 export enum ReferralPostingStatus {
+  /** Accepted By Other Program */
   AcceptedByOtherProgramStatus = 'accepted_by_other_program_status',
+  /** Accepted Pending */
   AcceptedPendingStatus = 'accepted_pending_status',
+  /** Accepted */
   AcceptedStatus = 'accepted_status',
+  /** Assigned */
   AssignedStatus = 'assigned_status',
+  /** Assigned To Other Program */
   AssignedToOtherProgramStatus = 'assigned_to_other_program_status',
+  /** Closed */
   ClosedStatus = 'closed_status',
+  /** Denied Pending */
   DeniedPendingStatus = 'denied_pending_status',
+  /** Denied */
   DeniedStatus = 'denied_status',
+  /** New */
   NewStatus = 'new_status',
+  /** Not Selected */
   NotSelectedStatus = 'not_selected_status',
+  /** Void */
   VoidStatus = 'void_status',
 }
 

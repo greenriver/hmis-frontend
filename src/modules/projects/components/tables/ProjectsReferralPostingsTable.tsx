@@ -3,6 +3,7 @@ import { Chip } from '@mui/material';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectReferralPostingsDocument,
   GetProjectReferralPostingsQuery,
@@ -16,7 +17,7 @@ const StatusDisplay: React.FC<{ status: ReferralPostingStatus }> = ({
 }) => {
   return (
     <Chip
-      label={status.replace(/_status$/, '').replace(/_/g, ' ')}
+      label={HmisEnums.ReferralPostingStatus[status]}
       size='small'
       variant='outlined'
       sx={{ cursor: 'inherit' }}

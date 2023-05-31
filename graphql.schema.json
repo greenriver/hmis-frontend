@@ -20445,13 +20445,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -20668,67 +20664,67 @@
         "enumValues": [
           {
             "name": "accepted_by_other_program_status",
-            "description": null,
+            "description": "Accepted By Other Program",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "accepted_pending_status",
-            "description": null,
+            "description": "Accepted Pending",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "accepted_status",
-            "description": null,
+            "description": "Accepted",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "assigned_status",
-            "description": null,
+            "description": "Assigned",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "assigned_to_other_program_status",
-            "description": null,
+            "description": "Assigned To Other Program",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "closed_status",
-            "description": null,
+            "description": "Closed",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "denied_pending_status",
-            "description": null,
+            "description": "Denied Pending",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "denied_status",
-            "description": null,
+            "description": "Denied",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "new_status",
-            "description": null,
+            "description": "New",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "not_selected_status",
-            "description": null,
+            "description": "Not Selected",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "void_status",
-            "description": null,
+            "description": "Void",
             "isDeprecated": false,
             "deprecationReason": null
           }
