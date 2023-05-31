@@ -2,6 +2,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import ClientDobAge from './ClientDobAge';
 
+import { RITA_ACKROYD } from '@/test/__mocks__/requests';
 import { ClientFieldsFragment } from '@/types/gqlTypes';
 
 export default {
@@ -15,5 +16,5 @@ const Template: ComponentStory<typeof ClientDobAge> = (args) => (
 
 export const Default = Template.bind({});
 Default.args = {
-  client: { dob: '1980-02-02' } as ClientFieldsFragment,
+  client: RITA_ACKROYD as ClientFieldsFragment,
 };
