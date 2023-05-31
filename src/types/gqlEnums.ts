@@ -231,7 +231,7 @@ export const HmisEnums = {
   EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
   EnrollmentSortOption: {
     HOUSEHOLD_ID: 'Household ID',
-    MOST_RECENT: 'Most Recent First',
+    MOST_RECENT: 'Most Recent',
   },
   EnrollmentStatus: {
     ACTIVE: 'Active',
@@ -702,6 +702,19 @@ export const HmisEnums = {
     BED_NIGHT: 'Bed Night',
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
+  },
+  ReferralPostingStatus: {
+    accepted_by_other_program_status: 'Accepted By Other Program',
+    accepted_pending_status: 'Accepted Pending',
+    accepted_status: 'Accepted',
+    assigned_status: 'Assigned',
+    assigned_to_other_program_status: 'Assigned To Other Program',
+    closed_status: 'Closed',
+    denied_pending_status: 'Denied Pending',
+    denied_status: 'Denied',
+    new_status: 'New',
+    not_selected_status: 'Not Selected',
+    void_status: 'Void',
   },
   ReferralResult: {
     INVALID: 'Invalid Value',

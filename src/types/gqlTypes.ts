@@ -1328,7 +1328,7 @@ export enum EnrollmentLimit {
 export enum EnrollmentSortOption {
   /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
-  /** Most Recent First */
+  /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
 
@@ -2693,6 +2693,7 @@ export type Project = {
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID'];
   id: Scalars['ID'];
+  incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']>;
   operatingStartDate: Scalars['ISO8601Date'];
@@ -2728,6 +2729,11 @@ export type ProjectHouseholdsArgs = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+export type ProjectIncomingReferralPostingsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type ProjectInventoriesArgs = {
@@ -3079,6 +3085,71 @@ export enum RecordType {
   /** (144) SSVF Service */
   SsvfService = 'SSVF_SERVICE',
 }
+
+export type ReferralPosting = {
+  __typename?: 'ReferralPosting';
+  assignedDate: Scalars['ISO8601Date'];
+  chronic?: Maybe<Scalars['Boolean']>;
+  denialNote?: Maybe<Scalars['String']>;
+  denialReason?: Maybe<Scalars['String']>;
+  hohName: Scalars['String'];
+  householdSize: Scalars['Int'];
+  id: Scalars['ID'];
+  needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
+  postingIdentifier?: Maybe<Scalars['ID']>;
+  referralDate: Scalars['ISO8601Date'];
+  referralIdentifier?: Maybe<Scalars['ID']>;
+  referralNotes?: Maybe<Scalars['String']>;
+  referralRequest?: Maybe<ReferralRequest>;
+  referralResult?: Maybe<ReferralResult>;
+  referredBy: Scalars['String'];
+  referredFrom: Scalars['String'];
+  resourceCoordinatorNotes?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Int']>;
+  status: ReferralPostingStatus;
+  statusNote?: Maybe<Scalars['String']>;
+  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusNoteUpdatedBy?: Maybe<Scalars['String']>;
+  statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusUpdatedBy?: Maybe<Scalars['String']>;
+};
+
+/** Referral Posting Status */
+export enum ReferralPostingStatus {
+  /** Accepted By Other Program */
+  AcceptedByOtherProgramStatus = 'accepted_by_other_program_status',
+  /** Accepted Pending */
+  AcceptedPendingStatus = 'accepted_pending_status',
+  /** Accepted */
+  AcceptedStatus = 'accepted_status',
+  /** Assigned */
+  AssignedStatus = 'assigned_status',
+  /** Assigned To Other Program */
+  AssignedToOtherProgramStatus = 'assigned_to_other_program_status',
+  /** Closed */
+  ClosedStatus = 'closed_status',
+  /** Denied Pending */
+  DeniedPendingStatus = 'denied_pending_status',
+  /** Denied */
+  DeniedStatus = 'denied_status',
+  /** New */
+  NewStatus = 'new_status',
+  /** Not Selected */
+  NotSelectedStatus = 'not_selected_status',
+  /** Void */
+  VoidStatus = 'void_status',
+}
+
+export type ReferralPostingsPaginated = {
+  __typename?: 'ReferralPostingsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<ReferralPosting>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
