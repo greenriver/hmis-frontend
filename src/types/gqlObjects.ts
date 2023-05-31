@@ -1525,11 +1525,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'fileBlobId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -1556,6 +1552,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'redacted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'tags',
         type: {
           kind: 'NON_NULL',
@@ -1571,14 +1575,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
-      {
-        name: 'url',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
+      { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {

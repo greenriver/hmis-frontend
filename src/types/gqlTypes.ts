@@ -1501,14 +1501,15 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']>;
-  fileBlobId: Scalars['ID'];
+  fileBlobId?: Maybe<Scalars['ID']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   ownFile: Scalars['Boolean'];
+  redacted: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
   updatedBy?: Maybe<ApplicationUser>;
   uploadedBy?: Maybe<ApplicationUser>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -6940,10 +6941,11 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
-  fileBlobId: string;
-  url: string;
+  fileBlobId?: string | null;
+  url?: string | null;
   tags: Array<string>;
   ownFile: boolean;
+  redacted: boolean;
   enrollmentId?: string | null;
   dateCreated: string;
   dateUpdated: string;
@@ -7813,10 +7815,11 @@ export type DeleteClientFileMutation = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId: string;
-      url: string;
+      fileBlobId?: string | null;
+      url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
+      redacted: boolean;
       enrollmentId?: string | null;
       dateCreated: string;
       dateUpdated: string;
@@ -8689,10 +8692,11 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
-    fileBlobId: string;
-    url: string;
+    fileBlobId?: string | null;
+    url?: string | null;
     tags: Array<string>;
     ownFile: boolean;
+    redacted: boolean;
     enrollmentId?: string | null;
     dateCreated: string;
     dateUpdated: string;
@@ -8735,10 +8739,11 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId: string;
-        url: string;
+        fileBlobId?: string | null;
+        url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
+        redacted: boolean;
         enrollmentId?: string | null;
         dateCreated: string;
         dateUpdated: string;
@@ -10000,10 +10005,11 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId: string;
-          url: string;
+          fileBlobId?: string | null;
+          url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
+          redacted: boolean;
           enrollmentId?: string | null;
           dateCreated: string;
           dateUpdated: string;
@@ -12611,6 +12617,7 @@ export const FileFieldsFragmentDoc = gql`
     url
     tags
     ownFile
+    redacted
     enrollmentId
     enrollment {
       id
