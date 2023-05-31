@@ -72,7 +72,7 @@ export const ProjectReferralPostingsTable: React.FC<Props> = ({
       queryVariables={{ id: projectId }}
       queryDocument={GetProjectReferralPostingsDocument}
       columns={columns}
-      noData='No referral postings'
+      noData='No referrals'
       pagePath='project.incomingReferralPostings'
     />
   );
