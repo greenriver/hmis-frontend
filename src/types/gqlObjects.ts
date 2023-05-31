@@ -4062,7 +4062,28 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'EnrollmentFilterOptions',
+    name: 'EnrollmentHouseholdMemberInput',
+    args: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoH',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentsForClientFilterOptions',
     args: [
       {
         name: 'openOnDate',
@@ -4079,10 +4100,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
           },
         },
-      },
-      {
-        name: 'searchTerm',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'statuses',
@@ -4103,22 +4120,30 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
-    name: 'EnrollmentHouseholdMemberInput',
+    name: 'EnrollmentsForProjectFilterOptions',
     args: [
       {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        name: 'openOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'relationshipToHoH',
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'statuses',
         type: {
-          kind: 'NON_NULL',
+          kind: 'LIST',
           name: null,
-          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionStatus',
+              ofType: null,
+            },
+          },
         },
       },
     ],

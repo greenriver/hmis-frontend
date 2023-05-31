@@ -51,7 +51,7 @@ query GetClientEnrollments(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $filters: EnrollmentFilterOptions
+  $filters: EnrollmentsForClientFilterOptions
 ) {
   client(id: $id) {
     id

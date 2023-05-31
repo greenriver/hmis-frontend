@@ -343,7 +343,7 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  filters?: InputMaybe<EnrollmentFilterOptions>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -1313,13 +1313,6 @@ export enum EnrollmentFilterOptionStatus {
   Incomplete = 'INCOMPLETE',
 }
 
-export type EnrollmentFilterOptions = {
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
-};
-
 /** HMIS Enrollment household member input */
 export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
@@ -1354,6 +1347,18 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentsForClientFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
+export type EnrollmentsForProjectFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
 
 export type EnrollmentsPaginated = {
   __typename?: 'EnrollmentsPaginated';
@@ -2704,7 +2709,7 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  filters?: InputMaybe<EnrollmentFilterOptions>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
@@ -7284,7 +7289,7 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  filters?: InputMaybe<EnrollmentFilterOptions>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -13625,7 +13630,7 @@ export const GetClientEnrollmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $filters: EnrollmentFilterOptions
+    $filters: EnrollmentsForClientFilterOptions
   ) {
     client(id: $id) {
       id
