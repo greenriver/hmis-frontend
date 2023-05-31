@@ -21,7 +21,6 @@ import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
-  getDefaultSortOptionForType,
   getFilter,
   getInputTypeForRecordType,
   getSortOptionForType,
@@ -54,6 +53,8 @@ export interface Props<
   defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
   showFilters?: boolean;
+  noSort?: boolean;
+  noFilter?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -122,6 +123,8 @@ const GenericTableWithData = <
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
+  noSort,
+  noFilter,
   header,
   ...props
 }: Props<
@@ -136,10 +139,7 @@ const GenericTableWithData = <
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
-    defaultSortOptionProp ||
-      (recordType
-        ? (getDefaultSortOptionForType(recordType) as keyof SortOptionsType)
-        : undefined)
+    defaultSortOptionProp
   );
 
   const offset = page * rowsPerPage;
@@ -279,6 +279,8 @@ const GenericTableWithData = <
           })}
         >
           <TableFilters
+            noSort={noSort}
+            noFilter={noFilter}
             loading={loading}
             sorting={
               sortOptions

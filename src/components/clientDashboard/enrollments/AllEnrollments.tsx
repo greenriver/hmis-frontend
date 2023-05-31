@@ -17,6 +17,7 @@ import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters'
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
+  EnrollmentSortOption,
   GetClientEnrollmentsDocument,
   GetClientEnrollmentsQuery,
   GetClientEnrollmentsQueryVariables,
@@ -94,6 +95,9 @@ const AllEnrollments = () => {
           fetchPolicy='cache-and-network'
           showFilters
           recordType='Enrollment'
+          filterInputType='EnrollmentsForClientFilterOptions'
+          noSort
+          defaultSortOption={EnrollmentSortOption.MostRecent}
         />
       </Paper>
     </>

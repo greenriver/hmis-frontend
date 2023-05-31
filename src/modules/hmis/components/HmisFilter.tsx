@@ -6,11 +6,7 @@ import TableFilterItem from '@/components/elements/tableFilters/filters/FilterIt
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
-import {
-  AssessmentSortOption,
-  EnrollmentSortOption,
-  PickListType,
-} from '@/types/gqlTypes';
+import { PickListType } from '@/types/gqlTypes';
 
 /**
  * Component for dynamically displaying a filter
@@ -44,15 +40,6 @@ export const getSortOptionForType = (
   return null;
 };
 
-export const getDefaultSortOptionForType = (
-  recordType: string
-): string | null => {
-  if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
-  if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
-
-  return null;
-};
-
 export const getInputTypeForRecordType = (
   recordType: string
 ): string | null => {
@@ -80,15 +67,12 @@ const getFilterForType = (
   if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
   if (inputType === 'String') filter = { ...baseFields, type: 'text' };
 
-  switch (fieldName) {
-    case 'projects':
-      filter = {
-        ...baseFields,
-        type: 'picklist',
-        pickListReference: PickListType.Project,
-      };
-      break;
-  }
+  if (fieldName === 'projects')
+    filter = {
+      ...baseFields,
+      type: 'picklist',
+      pickListReference: PickListType.Project,
+    };
 
   if (inputType in HmisEnums) {
     const enumType = HmisEnums[inputType as keyof typeof HmisEnums];

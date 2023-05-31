@@ -14,6 +14,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -143,6 +144,10 @@ const ProjectClientEnrollmentsTable = ({
           : 'No clients.'
       }
       pagePath='project.enrollments'
+      recordType='Enrollment'
+      showFilters
+      filterInputType='EnrollmentsForProjectFilterOptions'
+      defaultSortOption={EnrollmentSortOption.MostRecent}
     />
   );
 };
