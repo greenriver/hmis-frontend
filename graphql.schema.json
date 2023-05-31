@@ -2162,6 +2162,18 @@
                 "deprecationReason": null
               },
               {
+                "name": "filters",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "EnrollmentFilterOptions",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "limit",
                 "description": null,
                 "type": {
@@ -8814,6 +8826,110 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "EnrollmentFilterOptionStatus",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ACTIVE",
+            "description": "Active",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXITED",
+            "description": "Exited",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INCOMPLETE",
+            "description": "Incomplete",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "EnrollmentFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "openOnDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "searchTerm",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "statuses",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "EnrollmentFilterOptionStatus",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "EnrollmentHouseholdMemberInput",
         "description": "HMIS Enrollment household member input",
@@ -8889,13 +9005,13 @@
         "enumValues": [
           {
             "name": "HOUSEHOLD_ID",
-            "description": null,
+            "description": "Household ID",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "MOST_RECENT",
-            "description": null,
+            "description": "Most Recent First",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -17422,6 +17538,18 @@
                 "type": {
                   "kind": "ENUM",
                   "name": "EnrollmentLimit",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "filters",
+                "description": null,
+                "type": {
+                  "kind": "INPUT_OBJECT",
+                  "name": "EnrollmentFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,

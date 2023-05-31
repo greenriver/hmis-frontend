@@ -1,3 +1,4 @@
+import DatePicker from '../../input/DatePicker';
 import TextInput from '../../input/TextInput';
 import LabelWithContent from '../../LabelWithContent';
 
@@ -47,6 +48,14 @@ const TableFilterItem = <T,>({
             <TextInput
               value={(value as string) || ''}
               onChange={(e) => onChange(e.target.value)}
+            />
+          );
+
+        if (filter.type === 'date')
+          return (
+            <DatePicker
+              value={value ? new Date(value) : null}
+              onChange={(val) => onChange(val)}
             />
           );
 

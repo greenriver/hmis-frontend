@@ -344,6 +344,7 @@ export type ClientDisabilitiesArgs = {
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
   enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
@@ -1306,6 +1307,22 @@ export type EnrollmentAccess = {
   id: Scalars['ID'];
 };
 
+export enum EnrollmentFilterOptionStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Exited */
+  Exited = 'EXITED',
+  /** Incomplete */
+  Incomplete = 'INCOMPLETE',
+}
+
+export type EnrollmentFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
 /** HMIS Enrollment household member input */
 export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
@@ -1319,7 +1336,9 @@ export enum EnrollmentLimit {
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
+  /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
+  /** Most Recent First */
   MostRecent = 'MOST_RECENT',
 }
 
@@ -2689,6 +2708,7 @@ export type Project = {
 
 export type ProjectEnrollmentsArgs = {
   enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
@@ -7270,6 +7290,7 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<EnrollmentFilterOptions>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -13606,10 +13627,20 @@ export type GetClientImageQueryResult = Apollo.QueryResult<
   GetClientImageQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
-  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientEnrollments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: EnrollmentFilterOptions
+  ) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -13637,6 +13668,7 @@ export const GetClientEnrollmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

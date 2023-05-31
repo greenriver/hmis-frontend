@@ -92,6 +92,8 @@ const AllEnrollments = () => {
           columns={columns}
           pagePath='client.enrollments'
           fetchPolicy='cache-and-network'
+          showFilters
+          recordType='Enrollment'
         />
       </Paper>
     </>

@@ -223,10 +223,15 @@ export const HmisEnums = {
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',
   },
+  EnrollmentFilterOptionStatus: {
+    ACTIVE: 'Active',
+    EXITED: 'Exited',
+    INCOMPLETE: 'Incomplete',
+  },
   EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
   EnrollmentSortOption: {
-    HOUSEHOLD_ID: 'HOUSEHOLD_ID',
-    MOST_RECENT: 'MOST_RECENT',
+    HOUSEHOLD_ID: 'Household ID',
+    MOST_RECENT: 'Most Recent First',
   },
   EnrollmentStatus: {
     ACTIVE: 'Active',
