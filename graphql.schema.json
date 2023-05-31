@@ -2122,6 +2122,30 @@
             "deprecationReason": null
           },
           {
+            "name": "emailAddresses",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ClientContactPoint",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "enrollments",
             "description": null,
             "args": [
@@ -2550,13 +2574,25 @@
             "deprecationReason": null
           },
           {
-            "name": "preferredName",
+            "name": "phoneNumbers",
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ClientContactPoint",
+                    "ofType": null
+                  }
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -3001,6 +3037,18 @@
         "description": null,
         "fields": [
           {
+            "name": "addressType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ClientAddressType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "city",
             "description": null,
             "args": [],
@@ -3167,18 +3215,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "type",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "ClientAddressType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3676,32 +3712,8 @@
             "deprecationReason": null
           },
           {
-            "name": "fax",
-            "description": "Fax",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "other",
-            "description": "Other",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "pager",
-            "description": "Pager",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "phone",
             "description": "Phone",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "sms",
-            "description": "Sms",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -4138,18 +4150,6 @@
           },
           {
             "name": "personalId",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "preferredName",
             "description": null,
             "type": {
               "kind": "SCALAR",

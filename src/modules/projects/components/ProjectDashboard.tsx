@@ -50,16 +50,19 @@ const ProjectNavHeader = ({
         />
       )}
       <Stack gap={0.5} sx={{ mt: 1 }}>
-        <IdDisplay prefix='HMIS' color='text.primary' value={project.id} />
         <IdDisplay
           prefix='Project'
           color='text.primary'
           value={project.hudId}
+          shortenUuid
+          withoutEmphasis
         />
         <IdDisplay
           prefix='Organization'
           color='text.primary'
           value={project.organization.hudId}
+          shortenUuid
+          withoutEmphasis
         />
       </Stack>
     </Stack>

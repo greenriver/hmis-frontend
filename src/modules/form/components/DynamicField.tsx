@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
@@ -10,7 +11,9 @@ import {
 import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
 import MultiAddressInput from './client/addresses/MultiAddressInput';
+import MultiEmailInput from './client/emails/MultiEmailInput';
 import MultiNameInput from './client/names/MultiNameInput';
+import MultiPhoneInput from './client/phones/MultiPhoneInput';
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
@@ -362,11 +365,24 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
         </InputContainer>
       );
     case ItemType.Object:
+      const objProps = {
+        value,
+        onChange: onChangeValue,
+        label: item.text ? (
+          <Typography sx={{ pb: 2 }}>{item.text}</Typography>
+        ) : undefined,
+      };
       if (item.component == Component.Name) {
-        return <MultiNameInput value={value} onChange={onChangeValue} />;
+        return <MultiNameInput {...objProps} />;
       }
       if (item.component == Component.Address) {
-        return <MultiAddressInput value={value} onChange={onChangeValue} />;
+        return <MultiAddressInput {...objProps} />;
+      }
+      if (item.component == Component.Phone) {
+        return <MultiPhoneInput {...objProps} />;
+      }
+      if (item.component == Component.Email) {
+        return <MultiEmailInput {...objProps} />;
       }
       console.warn(
         'Unable to render component for object type. Link ID:',

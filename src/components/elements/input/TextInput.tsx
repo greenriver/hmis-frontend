@@ -57,6 +57,7 @@ const TextInput = ({
       onKeyPress={(e) =>
         !props.multiline && e.key === 'Enter' && e.preventDefault()
       }
+      autoComplete='off'
       {...props}
       sx={sx}
       inputProps={{

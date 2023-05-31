@@ -68,6 +68,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
         optionId(option) === optionId(value)
       }
       value={value}
+      autoSelect
       {...props}
       textInputProps={{
         ...props.textInputProps,

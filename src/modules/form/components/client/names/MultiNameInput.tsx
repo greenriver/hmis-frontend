@@ -5,10 +5,12 @@ import { v4 } from 'uuid';
 
 import { DynamicInputCommonProps } from '../../../types';
 import RepeatedInputContainer from '../RepeatedInputContainer';
+import { NameInputType } from '../types';
+import { useRenderLastUpdated } from '../useRenderLastUpdated';
 
 import NameInput from './NameInput';
-import { NameInputType } from './types';
 
+import { ClientNameObjectFieldsFragmentDoc } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 const generateNewName = (primary = false) => ({
@@ -21,10 +23,16 @@ interface Props extends DynamicInputCommonProps {
   onChange: (value: NameInputType[]) => void;
 }
 
-const MultiNameInput = ({ id, value, onChange }: Props) => {
+const MultiNameInput = ({ id, value, onChange, label }: Props) => {
   const handleAddName = useCallback(() => {
     onChange([...value, generateNewName()]);
   }, [onChange, value]);
+
+  const { renderMetadata } = useRenderLastUpdated(
+    'ClientName',
+    ClientNameObjectFieldsFragmentDoc,
+    'ClientNameObjectFields'
+  );
 
   return (
     <RepeatedInputContainer
@@ -71,8 +79,10 @@ const MultiNameInput = ({ id, value, onChange }: Props) => {
               onChange(copied);
             }
       }
+      title={label}
       removeText='Delete name'
       addText='Add Name'
+      renderMetadata={renderMetadata}
     />
   );
 };
