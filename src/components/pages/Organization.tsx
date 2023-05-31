@@ -151,22 +151,16 @@ const Organization = () => {
               </Stack>
             </Paper>
           </OrganizationPermissionsFilter>
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Stack gap={0.5}>
+          {organization && (
+            <Paper sx={{ p: 2, mb: 2 }}>
               <IdDisplay
-                prefix='HMIS'
+                prefix='Organization'
                 color='text.secondary'
-                value={organizationId}
+                value={organization.hudId}
+                shortenUuid
               />
-              {organization && (
-                <IdDisplay
-                  prefix='Organization'
-                  color='text.secondary'
-                  value={organization.hudId}
-                />
-              )}
-            </Stack>
-          </Paper>
+            </Paper>
+          )}
         </Grid>
       </Grid>
     </OrganizationLayout>

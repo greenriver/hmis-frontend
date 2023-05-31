@@ -45,7 +45,7 @@ const TableSortMenu = <S extends Record<string, string>>({
           horizontal: 'right',
         }}
       >
-        <Typography variant='overline' px={2} mb={2} component='li'>
+        <Typography variant='overline' px={2} mb={1} component='li'>
           Sort By
         </Typography>
         {Object.entries(sortOptions).map(([k, v]) => (

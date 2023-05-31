@@ -49,7 +49,7 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
           horizontal: 'right',
         }}
       >
-        <Box p={2} maxWidth={300}>
+        <Box p={2} width={320}>
           <TableFilterContent
             {...props}
             setFilterValues={(val) => {
