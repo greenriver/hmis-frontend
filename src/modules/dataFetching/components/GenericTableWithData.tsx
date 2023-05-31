@@ -21,6 +21,7 @@ import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
+  getDefaultSortOptionForType,
   getFilter,
   getInputTypeForRecordType,
   getSortOptionForType,
@@ -139,7 +140,9 @@ const GenericTableWithData = <
   const previousQueryVariables = usePrevious(queryVariables);
   const [filterValues, setFilterValues] = useState(defaultFilters);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
-    defaultSortOptionProp
+    defaultSortOptionProp ||
+      (recordType && getDefaultSortOptionForType(recordType)) ||
+      undefined
   );
 
   const offset = page * rowsPerPage;

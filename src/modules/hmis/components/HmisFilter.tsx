@@ -6,7 +6,11 @@ import TableFilterItem from '@/components/elements/tableFilters/filters/FilterIt
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
-import { PickListType } from '@/types/gqlTypes';
+import {
+  AssessmentSortOption,
+  EnrollmentSortOption,
+  PickListType,
+} from '@/types/gqlTypes';
 
 /**
  * Component for dynamically displaying a filter
@@ -36,6 +40,15 @@ export const getSortOptionForType = (
     return HmisEnums.AssessmentSortOption as Record<string, string>;
   if (recordType === 'Enrollment')
     return HmisEnums.EnrollmentSortOption as Record<string, string>;
+
+  return null;
+};
+
+export const getDefaultSortOptionForType = (
+  recordType: string
+): string | null => {
+  if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
+  if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
 
   return null;
 };
