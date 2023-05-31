@@ -23,6 +23,6 @@ Default.args = {
 };
 
 export const NoEnrollments = Template.bind({});
-Default.args = {
+NoEnrollments.args = {
   client: RITA_ACKROYD_WITHOUT_ENROLLMENTS as ClientFieldsFragment,
 };
