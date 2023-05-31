@@ -343,12 +343,9 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   filters?: InputMaybe<EnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -2707,12 +2704,9 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   filters?: InputMaybe<EnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -13869,7 +13863,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        enrollmentLimit: NON_WIP_ONLY
+        filters: { statuses: [ACTIVE, EXITED] }
       ) {
         offset
         limit
@@ -16217,8 +16211,7 @@ export const GetProjectEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
+        filters: { openOnDate: $openOnDate, searchTerm: $searchTerm }
       ) {
         offset
         limit

@@ -2150,18 +2150,6 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
-                "description": null,
-                "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "filters",
                 "description": null,
                 "type": {
@@ -2192,38 +2180,6 @@
                   "kind": "SCALAR",
                   "name": "Int",
                   "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "projectTypes",
-                "description": null,
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "ProjectType",
-                      "ofType": null
-                    }
-                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -17533,18 +17489,6 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
-                "description": null,
-                "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "filters",
                 "description": null,
                 "type": {
@@ -17574,30 +17518,6 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "searchTerm",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null,
