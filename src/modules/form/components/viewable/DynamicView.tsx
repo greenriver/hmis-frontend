@@ -27,10 +27,10 @@ const DynamicView = ({
     viewOnly: true,
   });
 
-  const { loading: pickListsLoading } = usePreloadPicklists(
+  const { loading: pickListsLoading } = usePreloadPicklists({
     definition,
-    pickListRelationId
-  );
+    relationId: pickListRelationId,
+  });
 
   if (pickListsLoading) return <Loading />;
 

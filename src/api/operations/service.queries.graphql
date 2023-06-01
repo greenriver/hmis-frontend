@@ -1,0 +1,49 @@
+query GetService($id: ID!) {
+  service(id: $id) {
+    ...ServiceFields
+  }
+}
+
+query GetServiceType($id: ID!) {
+  serviceType(id: $id) {
+    ...ServiceTypeFields
+  }
+}
+
+mutation AddServiceToEnrollment($input: CreateServiceInput!) {
+  createService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteService($input: DeleteServiceInput!) {
+  deleteService(input: $input) {
+    clientMutationId
+    service {
+      ...ServiceFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    services(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+      }
+    }
+  }
+}

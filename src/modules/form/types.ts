@@ -7,6 +7,7 @@ import {
   FormItem,
   ItemType,
   PickListOption,
+  SubmitFormMutation,
   ValidationError,
 } from '@/types/gqlTypes';
 // BACKEND FORM PROCESSOR EXPECTS THE '_HIDDEN' STRING VALUE, DO NOT CHANGE
@@ -29,6 +30,10 @@ export type SeveralItemsChangedFn = (input: {
   values: FormValues;
   type: ChangeType;
 }) => void;
+
+export type SubmitFormAllowedTypes = NonNullable<
+  NonNullable<SubmitFormMutation['submitForm']>['record']
+>;
 
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {

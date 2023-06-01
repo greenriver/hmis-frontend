@@ -1,4 +1,4 @@
-import { useApolloClient } from '@apollo/client';
+import { QueryOptions, useApolloClient } from '@apollo/client';
 import { compact, isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
@@ -12,10 +12,16 @@ import {
   PickListType,
 } from '@/types/gqlTypes';
 
-const usePreloadPicklists = (
-  definition: FormDefinitionJson | undefined,
-  relationId?: string
-) => {
+interface Args {
+  definition: FormDefinitionJson | undefined;
+  relationId?: string;
+  queryOptions?: Omit<QueryOptions, 'query'>;
+}
+const usePreloadPicklists = ({
+  definition,
+  relationId,
+  queryOptions,
+}: Args) => {
   const client = useApolloClient();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<PickListOptionFieldsFragment[]>([]);
@@ -52,6 +58,7 @@ const usePreloadPicklists = (
           query: GetPickListDocument,
           variables: { relationId, pickListType },
           fetchPolicy: 'network-only',
+          ...queryOptions,
         })
       )
     )
@@ -64,7 +71,7 @@ const usePreloadPicklists = (
       })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [pickListTypesToFetch, relationId, client]);
+  }, [pickListTypesToFetch, relationId, client, queryOptions]);
 
   useEffect(() => {
     fetch();

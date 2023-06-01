@@ -1,5 +1,5 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
@@ -12,6 +12,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -22,6 +23,11 @@ const ViewEnrollment = () => {
     enrollmentId: string;
     clientId: string;
   };
+
+  const { renderServiceDialog, openServiceDialog } = useServiceDialog({
+    enrollmentId,
+    projectId: enrollment?.project.id || '',
+  });
 
   if (!enrollment) return <NotFound />;
 
@@ -73,16 +79,15 @@ const ViewEnrollment = () => {
                 >
                   New Assessment
                 </ButtonLink>
-                <ButtonLink
-                  to={generateSafePath(ClientDashboardRoutes.NEW_SERVICE, {
-                    clientId,
-                    enrollmentId,
-                  })}
-                  Icon={LibraryAddIcon}
-                  leftAlign
+                <Button
+                  onClick={openServiceDialog}
+                  startIcon={<LibraryAddIcon fontSize='small' />}
+                  variant='outlined'
+                  color='secondary'
+                  sx={{ pl: 3, justifyContent: 'left' }}
                 >
                   Add Service
-                </ButtonLink>
+                </Button>
                 <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
                   Add Event
                 </ButtonLink>
@@ -115,6 +120,13 @@ const ViewEnrollment = () => {
           </Paper>
         </Grid>
       </Grid>
+      {renderServiceDialog({
+        FormActionProps: { submitButtonText: 'Add Service' },
+        // cache clear maybe
+        // onCompleted: function (data: ServiceFieldsFragment): void {
+        //   throw new Error('Function not implemented.');
+        // },
+      })}
     </>
   );
 };

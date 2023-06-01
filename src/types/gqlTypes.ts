@@ -2892,6 +2892,8 @@ export type Query = {
   projects: ProjectsPaginated;
   /** Service lookup */
   service?: Maybe<Service>;
+  /** Service type lookup */
+  serviceType?: Maybe<ServiceType>;
 };
 
 export type QueryAssessmentArgs = {
@@ -2935,8 +2937,8 @@ export type QueryGetFormDefinitionArgs = {
 };
 
 export type QueryGetServiceFormDefinitionArgs = {
-  customServiceTypeId: Scalars['ID'];
   projectId: Scalars['ID'];
+  serviceTypeId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -2975,6 +2977,10 @@ export type QueryProjectsArgs = {
 };
 
 export type QueryServiceArgs = {
+  id: Scalars['ID'];
+};
+
+export type QueryServiceTypeArgs = {
   id: Scalars['ID'];
 };
 
@@ -3387,6 +3393,18 @@ export enum ServiceSubTypeProvided {
   /** (2) Transportation services */
   SsvfServiceDirectProvisionOfOtherPublicBenefitsTransportationServices = 'SSVF_SERVICE__DIRECT_PROVISION_OF_OTHER_PUBLIC_BENEFITS__TRANSPORTATION_SERVICES',
 }
+
+export type ServiceType = {
+  __typename?: 'ServiceType';
+  category: Scalars['String'];
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  hudRecordType?: Maybe<RecordType>;
+  hudTypeProvided?: Maybe<ServiceTypeProvided>;
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  user?: Maybe<User>;
+};
 
 /** HUD Service RecordType:TypeProvided aggregate (P1.2, R14.2, W1.2, V2.2, W2.3, V3.3, P2.2, 4.14, V8.1, C2.2) */
 export enum ServiceTypeProvided {
@@ -8154,111 +8172,6 @@ export type DeleteClientMutation = {
   } | null;
 };
 
-export type GetServiceQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetServiceQuery = {
-  __typename?: 'Query';
-  service?: {
-    __typename?: 'Service';
-    id: string;
-    dateProvided: string;
-    movingOnOtherType?: string | null;
-    recordType?: RecordType | null;
-    referralOutcome?: PathReferralOutcome | null;
-    subTypeProvided?: ServiceSubTypeProvided | null;
-    typeProvided?: ServiceTypeProvided | null;
-    otherTypeProvided?: string | null;
-    FAAmount?: number | null;
-    dateCreated: string;
-    dateUpdated: string;
-    dateDeleted?: string | null;
-  } | null;
-};
-
-export type AddServiceToEnrollmentMutationVariables = Exact<{
-  input: CreateServiceInput;
-}>;
-
-export type AddServiceToEnrollmentMutation = {
-  __typename?: 'Mutation';
-  createService?: {
-    __typename?: 'CreateServicePayload';
-    clientMutationId?: string | null;
-    service?: {
-      __typename?: 'Service';
-      id: string;
-      dateProvided: string;
-      movingOnOtherType?: string | null;
-      recordType?: RecordType | null;
-      referralOutcome?: PathReferralOutcome | null;
-      subTypeProvided?: ServiceSubTypeProvided | null;
-      typeProvided?: ServiceTypeProvided | null;
-      otherTypeProvided?: string | null;
-      FAAmount?: number | null;
-      dateCreated: string;
-      dateUpdated: string;
-      dateDeleted?: string | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type DeleteServiceMutationVariables = Exact<{
-  input: DeleteServiceInput;
-}>;
-
-export type DeleteServiceMutation = {
-  __typename?: 'Mutation';
-  deleteService?: {
-    __typename?: 'DeleteServicePayload';
-    clientMutationId?: string | null;
-    service?: {
-      __typename?: 'Service';
-      id: string;
-      dateProvided: string;
-      movingOnOtherType?: string | null;
-      recordType?: RecordType | null;
-      referralOutcome?: PathReferralOutcome | null;
-      subTypeProvided?: ServiceSubTypeProvided | null;
-      typeProvided?: ServiceTypeProvided | null;
-      otherTypeProvided?: string | null;
-      FAAmount?: number | null;
-      dateCreated: string;
-      dateUpdated: string;
-      dateDeleted?: string | null;
-    } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
 export type GetEnrollmentQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -8404,41 +8317,6 @@ export type GetEnrollmentEventsQuery = {
         referralCaseManageAfter?: NoYesMissing | null;
         referralResult?: ReferralResult | null;
         resultDate?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
-        dateDeleted?: string | null;
-      }>;
-    };
-  } | null;
-};
-
-export type GetEnrollmentServicesQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-}>;
-
-export type GetEnrollmentServicesQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    services: {
-      __typename?: 'ServicesPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Service';
-        id: string;
-        dateProvided: string;
-        movingOnOtherType?: string | null;
-        recordType?: RecordType | null;
-        referralOutcome?: PathReferralOutcome | null;
-        subTypeProvided?: ServiceSubTypeProvided | null;
-        typeProvided?: ServiceTypeProvided | null;
-        otherTypeProvided?: string | null;
-        FAAmount?: number | null;
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
@@ -9464,6 +9342,451 @@ export type GetFormDefinitionQueryVariables = Exact<{
 export type GetFormDefinitionQuery = {
   __typename?: 'Query';
   getFormDefinition?: {
+    __typename?: 'FormDefinition';
+    id: string;
+    version: number;
+    role: FormRole;
+    status: string;
+    identifier: string;
+    definition: {
+      __typename: 'FormDefinitionJson';
+      item: Array<{
+        __typename: 'FormItem';
+        linkId: string;
+        type: ItemType;
+        component?: Component | null;
+        prefix?: string | null;
+        text?: string | null;
+        briefText?: string | null;
+        readonlyText?: string | null;
+        helperText?: string | null;
+        required?: boolean | null;
+        warnIfEmpty?: boolean | null;
+        hidden?: boolean | null;
+        readOnly?: boolean | null;
+        repeats?: boolean | null;
+        fieldName?: string | null;
+        customFieldKey?: string | null;
+        recordType?: RelatedRecordType | null;
+        pickListReference?: string | null;
+        serviceDetailType?: ServiceDetailType | null;
+        size?: InputSize | null;
+        assessmentDate?: boolean | null;
+        prefill?: boolean | null;
+        dataCollectedAbout?: DataCollectedAbout | null;
+        disabledDisplay?: DisabledDisplay | null;
+        enableBehavior?: EnableBehavior | null;
+        item?: Array<{
+          __typename: 'FormItem';
+          linkId: string;
+          type: ItemType;
+          component?: Component | null;
+          prefix?: string | null;
+          text?: string | null;
+          briefText?: string | null;
+          readonlyText?: string | null;
+          helperText?: string | null;
+          required?: boolean | null;
+          warnIfEmpty?: boolean | null;
+          hidden?: boolean | null;
+          readOnly?: boolean | null;
+          repeats?: boolean | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+          recordType?: RelatedRecordType | null;
+          pickListReference?: string | null;
+          serviceDetailType?: ServiceDetailType | null;
+          size?: InputSize | null;
+          assessmentDate?: boolean | null;
+          prefill?: boolean | null;
+          dataCollectedAbout?: DataCollectedAbout | null;
+          disabledDisplay?: DisabledDisplay | null;
+          enableBehavior?: EnableBehavior | null;
+          item?: Array<{
+            __typename: 'FormItem';
+            linkId: string;
+            type: ItemType;
+            component?: Component | null;
+            prefix?: string | null;
+            text?: string | null;
+            briefText?: string | null;
+            readonlyText?: string | null;
+            helperText?: string | null;
+            required?: boolean | null;
+            warnIfEmpty?: boolean | null;
+            hidden?: boolean | null;
+            readOnly?: boolean | null;
+            repeats?: boolean | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+            recordType?: RelatedRecordType | null;
+            pickListReference?: string | null;
+            serviceDetailType?: ServiceDetailType | null;
+            size?: InputSize | null;
+            assessmentDate?: boolean | null;
+            prefill?: boolean | null;
+            dataCollectedAbout?: DataCollectedAbout | null;
+            disabledDisplay?: DisabledDisplay | null;
+            enableBehavior?: EnableBehavior | null;
+            item?: Array<{
+              __typename: 'FormItem';
+              linkId: string;
+              type: ItemType;
+              component?: Component | null;
+              prefix?: string | null;
+              text?: string | null;
+              briefText?: string | null;
+              readonlyText?: string | null;
+              helperText?: string | null;
+              required?: boolean | null;
+              warnIfEmpty?: boolean | null;
+              hidden?: boolean | null;
+              readOnly?: boolean | null;
+              repeats?: boolean | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+              recordType?: RelatedRecordType | null;
+              pickListReference?: string | null;
+              serviceDetailType?: ServiceDetailType | null;
+              size?: InputSize | null;
+              assessmentDate?: boolean | null;
+              prefill?: boolean | null;
+              dataCollectedAbout?: DataCollectedAbout | null;
+              disabledDisplay?: DisabledDisplay | null;
+              enableBehavior?: EnableBehavior | null;
+              item?: Array<{
+                __typename: 'FormItem';
+                linkId: string;
+                type: ItemType;
+                component?: Component | null;
+                prefix?: string | null;
+                text?: string | null;
+                briefText?: string | null;
+                readonlyText?: string | null;
+                helperText?: string | null;
+                required?: boolean | null;
+                warnIfEmpty?: boolean | null;
+                hidden?: boolean | null;
+                readOnly?: boolean | null;
+                repeats?: boolean | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+                recordType?: RelatedRecordType | null;
+                pickListReference?: string | null;
+                serviceDetailType?: ServiceDetailType | null;
+                size?: InputSize | null;
+                assessmentDate?: boolean | null;
+                prefill?: boolean | null;
+                dataCollectedAbout?: DataCollectedAbout | null;
+                disabledDisplay?: DisabledDisplay | null;
+                enableBehavior?: EnableBehavior | null;
+                bounds?: Array<{
+                  __typename?: 'ValueBound';
+                  id?: string | null;
+                  severity: ValidationSeverity;
+                  type: BoundType;
+                  question?: string | null;
+                  valueNumber?: number | null;
+                  valueDate?: string | null;
+                  offset?: number | null;
+                }> | null;
+                pickListOptions?: Array<{
+                  __typename?: 'PickListOption';
+                  code: string;
+                  label?: string | null;
+                  secondaryLabel?: string | null;
+                  groupLabel?: string | null;
+                  groupCode?: string | null;
+                  initialSelected?: boolean | null;
+                }> | null;
+                initial?: Array<{
+                  __typename?: 'InitialValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  valueLocalConstant?: string | null;
+                  initialBehavior: InitialBehavior;
+                }> | null;
+                enableWhen?: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }> | null;
+                autofillValues?: Array<{
+                  __typename?: 'AutofillValue';
+                  valueCode?: string | null;
+                  valueBoolean?: boolean | null;
+                  valueNumber?: number | null;
+                  sumQuestions?: Array<string> | null;
+                  autofillBehavior: EnableBehavior;
+                  autofillReadonly?: boolean | null;
+                  autofillWhen: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    compareQuestion?: string | null;
+                  }>;
+                }> | null;
+              }> | null;
+              bounds?: Array<{
+                __typename?: 'ValueBound';
+                id?: string | null;
+                severity: ValidationSeverity;
+                type: BoundType;
+                question?: string | null;
+                valueNumber?: number | null;
+                valueDate?: string | null;
+                offset?: number | null;
+              }> | null;
+              pickListOptions?: Array<{
+                __typename?: 'PickListOption';
+                code: string;
+                label?: string | null;
+                secondaryLabel?: string | null;
+                groupLabel?: string | null;
+                groupCode?: string | null;
+                initialSelected?: boolean | null;
+              }> | null;
+              initial?: Array<{
+                __typename?: 'InitialValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                valueLocalConstant?: string | null;
+                initialBehavior: InitialBehavior;
+              }> | null;
+              enableWhen?: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }> | null;
+              autofillValues?: Array<{
+                __typename?: 'AutofillValue';
+                valueCode?: string | null;
+                valueBoolean?: boolean | null;
+                valueNumber?: number | null;
+                sumQuestions?: Array<string> | null;
+                autofillBehavior: EnableBehavior;
+                autofillReadonly?: boolean | null;
+                autofillWhen: Array<{
+                  __typename?: 'EnableWhen';
+                  question: string;
+                  operator: EnableOperator;
+                  answerCode?: string | null;
+                  answerCodes?: Array<string> | null;
+                  answerNumber?: number | null;
+                  answerBoolean?: boolean | null;
+                  answerGroupCode?: string | null;
+                  compareQuestion?: string | null;
+                }>;
+              }> | null;
+            }> | null;
+            bounds?: Array<{
+              __typename?: 'ValueBound';
+              id?: string | null;
+              severity: ValidationSeverity;
+              type: BoundType;
+              question?: string | null;
+              valueNumber?: number | null;
+              valueDate?: string | null;
+              offset?: number | null;
+            }> | null;
+            pickListOptions?: Array<{
+              __typename?: 'PickListOption';
+              code: string;
+              label?: string | null;
+              secondaryLabel?: string | null;
+              groupLabel?: string | null;
+              groupCode?: string | null;
+              initialSelected?: boolean | null;
+            }> | null;
+            initial?: Array<{
+              __typename?: 'InitialValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              valueLocalConstant?: string | null;
+              initialBehavior: InitialBehavior;
+            }> | null;
+            enableWhen?: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }> | null;
+            autofillValues?: Array<{
+              __typename?: 'AutofillValue';
+              valueCode?: string | null;
+              valueBoolean?: boolean | null;
+              valueNumber?: number | null;
+              sumQuestions?: Array<string> | null;
+              autofillBehavior: EnableBehavior;
+              autofillReadonly?: boolean | null;
+              autofillWhen: Array<{
+                __typename?: 'EnableWhen';
+                question: string;
+                operator: EnableOperator;
+                answerCode?: string | null;
+                answerCodes?: Array<string> | null;
+                answerNumber?: number | null;
+                answerBoolean?: boolean | null;
+                answerGroupCode?: string | null;
+                compareQuestion?: string | null;
+              }>;
+            }> | null;
+          }> | null;
+          bounds?: Array<{
+            __typename?: 'ValueBound';
+            id?: string | null;
+            severity: ValidationSeverity;
+            type: BoundType;
+            question?: string | null;
+            valueNumber?: number | null;
+            valueDate?: string | null;
+            offset?: number | null;
+          }> | null;
+          pickListOptions?: Array<{
+            __typename?: 'PickListOption';
+            code: string;
+            label?: string | null;
+            secondaryLabel?: string | null;
+            groupLabel?: string | null;
+            groupCode?: string | null;
+            initialSelected?: boolean | null;
+          }> | null;
+          initial?: Array<{
+            __typename?: 'InitialValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            valueLocalConstant?: string | null;
+            initialBehavior: InitialBehavior;
+          }> | null;
+          enableWhen?: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            compareQuestion?: string | null;
+          }> | null;
+          autofillValues?: Array<{
+            __typename?: 'AutofillValue';
+            valueCode?: string | null;
+            valueBoolean?: boolean | null;
+            valueNumber?: number | null;
+            sumQuestions?: Array<string> | null;
+            autofillBehavior: EnableBehavior;
+            autofillReadonly?: boolean | null;
+            autofillWhen: Array<{
+              __typename?: 'EnableWhen';
+              question: string;
+              operator: EnableOperator;
+              answerCode?: string | null;
+              answerCodes?: Array<string> | null;
+              answerNumber?: number | null;
+              answerBoolean?: boolean | null;
+              answerGroupCode?: string | null;
+              compareQuestion?: string | null;
+            }>;
+          }> | null;
+        }> | null;
+        bounds?: Array<{
+          __typename?: 'ValueBound';
+          id?: string | null;
+          severity: ValidationSeverity;
+          type: BoundType;
+          question?: string | null;
+          valueNumber?: number | null;
+          valueDate?: string | null;
+          offset?: number | null;
+        }> | null;
+        pickListOptions?: Array<{
+          __typename?: 'PickListOption';
+          code: string;
+          label?: string | null;
+          secondaryLabel?: string | null;
+          groupLabel?: string | null;
+          groupCode?: string | null;
+          initialSelected?: boolean | null;
+        }> | null;
+        initial?: Array<{
+          __typename?: 'InitialValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          valueLocalConstant?: string | null;
+          initialBehavior: InitialBehavior;
+        }> | null;
+        enableWhen?: Array<{
+          __typename?: 'EnableWhen';
+          question: string;
+          operator: EnableOperator;
+          answerCode?: string | null;
+          answerCodes?: Array<string> | null;
+          answerNumber?: number | null;
+          answerBoolean?: boolean | null;
+          answerGroupCode?: string | null;
+          compareQuestion?: string | null;
+        }> | null;
+        autofillValues?: Array<{
+          __typename?: 'AutofillValue';
+          valueCode?: string | null;
+          valueBoolean?: boolean | null;
+          valueNumber?: number | null;
+          sumQuestions?: Array<string> | null;
+          autofillBehavior: EnableBehavior;
+          autofillReadonly?: boolean | null;
+          autofillWhen: Array<{
+            __typename?: 'EnableWhen';
+            question: string;
+            operator: EnableOperator;
+            answerCode?: string | null;
+            answerCodes?: Array<string> | null;
+            answerNumber?: number | null;
+            answerBoolean?: boolean | null;
+            answerGroupCode?: string | null;
+            compareQuestion?: string | null;
+          }>;
+        }> | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetServiceFormDefinitionQueryVariables = Exact<{
+  serviceTypeId: Scalars['ID'];
+  projectId: Scalars['ID'];
+}>;
+
+export type GetServiceFormDefinitionQuery = {
+  __typename?: 'Query';
+  getServiceFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
     version: number;
@@ -11851,6 +12174,175 @@ export type ReferralRequestFieldsFragment = {
   };
 };
 
+export type ServiceTypeFieldsFragment = {
+  __typename?: 'ServiceType';
+  id: string;
+  name: string;
+  hudRecordType?: RecordType | null;
+  hudTypeProvided?: ServiceTypeProvided | null;
+  category: string;
+  dateCreated: string;
+  dateUpdated: string;
+};
+
+export type GetServiceQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetServiceQuery = {
+  __typename?: 'Query';
+  service?: {
+    __typename?: 'Service';
+    id: string;
+    dateProvided: string;
+    movingOnOtherType?: string | null;
+    recordType?: RecordType | null;
+    referralOutcome?: PathReferralOutcome | null;
+    subTypeProvided?: ServiceSubTypeProvided | null;
+    typeProvided?: ServiceTypeProvided | null;
+    otherTypeProvided?: string | null;
+    FAAmount?: number | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+  } | null;
+};
+
+export type GetServiceTypeQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetServiceTypeQuery = {
+  __typename?: 'Query';
+  serviceType?: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated: string;
+    dateUpdated: string;
+  } | null;
+};
+
+export type AddServiceToEnrollmentMutationVariables = Exact<{
+  input: CreateServiceInput;
+}>;
+
+export type AddServiceToEnrollmentMutation = {
+  __typename?: 'Mutation';
+  createService?: {
+    __typename?: 'CreateServicePayload';
+    clientMutationId?: string | null;
+    service?: {
+      __typename?: 'Service';
+      id: string;
+      dateProvided: string;
+      movingOnOtherType?: string | null;
+      recordType?: RecordType | null;
+      referralOutcome?: PathReferralOutcome | null;
+      subTypeProvided?: ServiceSubTypeProvided | null;
+      typeProvided?: ServiceTypeProvided | null;
+      otherTypeProvided?: string | null;
+      FAAmount?: number | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteServiceMutationVariables = Exact<{
+  input: DeleteServiceInput;
+}>;
+
+export type DeleteServiceMutation = {
+  __typename?: 'Mutation';
+  deleteService?: {
+    __typename?: 'DeleteServicePayload';
+    clientMutationId?: string | null;
+    service?: {
+      __typename?: 'Service';
+      id: string;
+      dateProvided: string;
+      movingOnOtherType?: string | null;
+      recordType?: RecordType | null;
+      referralOutcome?: PathReferralOutcome | null;
+      subTypeProvided?: ServiceSubTypeProvided | null;
+      typeProvided?: ServiceTypeProvided | null;
+      otherTypeProvided?: string | null;
+      FAAmount?: number | null;
+      dateCreated: string;
+      dateUpdated: string;
+      dateDeleted?: string | null;
+    } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type GetEnrollmentServicesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentServicesQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Service';
+        id: string;
+        dateProvided: string;
+        movingOnOtherType?: string | null;
+        recordType?: RecordType | null;
+        referralOutcome?: PathReferralOutcome | null;
+        subTypeProvided?: ServiceSubTypeProvided | null;
+        typeProvided?: ServiceTypeProvided | null;
+        otherTypeProvided?: string | null;
+        FAAmount?: number | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
+  } | null;
+};
+
 export type CreateDirectUploadMutationMutationVariables = Exact<{
   input: DirectUploadInput;
 }>;
@@ -12961,6 +13453,17 @@ export const ReferralRequestFieldsFragmentDoc = gql`
     requestorEmail
   }
   ${UnitTypeFieldsFragmentDoc}
+`;
+export const ServiceTypeFieldsFragmentDoc = gql`
+  fragment ServiceTypeFields on ServiceType {
+    id
+    name
+    hudRecordType
+    hudTypeProvided
+    category
+    dateCreated
+    dateUpdated
+  }
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -14564,179 +15067,6 @@ export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<
   DeleteClientMutation,
   DeleteClientMutationVariables
 >;
-export const GetServiceDocument = gql`
-  query GetService($id: ID!) {
-    service(id: $id) {
-      ...ServiceFields
-    }
-  }
-  ${ServiceFieldsFragmentDoc}
-`;
-
-/**
- * __useGetServiceQuery__
- *
- * To run a query within a React component, call `useGetServiceQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetServiceQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetServiceQuery,
-    GetServiceQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetServiceQuery, GetServiceQueryVariables>(
-    GetServiceDocument,
-    options
-  );
-}
-export function useGetServiceLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetServiceQuery,
-    GetServiceQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetServiceQuery, GetServiceQueryVariables>(
-    GetServiceDocument,
-    options
-  );
-}
-export type GetServiceQueryHookResult = ReturnType<typeof useGetServiceQuery>;
-export type GetServiceLazyQueryHookResult = ReturnType<
-  typeof useGetServiceLazyQuery
->;
-export type GetServiceQueryResult = Apollo.QueryResult<
-  GetServiceQuery,
-  GetServiceQueryVariables
->;
-export const AddServiceToEnrollmentDocument = gql`
-  mutation AddServiceToEnrollment($input: CreateServiceInput!) {
-    createService(input: $input) {
-      clientMutationId
-      service {
-        ...ServiceFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ServiceFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type AddServiceToEnrollmentMutationFn = Apollo.MutationFunction<
-  AddServiceToEnrollmentMutation,
-  AddServiceToEnrollmentMutationVariables
->;
-
-/**
- * __useAddServiceToEnrollmentMutation__
- *
- * To run a mutation, you first call `useAddServiceToEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddServiceToEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [addServiceToEnrollmentMutation, { data, loading, error }] = useAddServiceToEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useAddServiceToEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddServiceToEnrollmentMutation,
-    AddServiceToEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    AddServiceToEnrollmentMutation,
-    AddServiceToEnrollmentMutationVariables
-  >(AddServiceToEnrollmentDocument, options);
-}
-export type AddServiceToEnrollmentMutationHookResult = ReturnType<
-  typeof useAddServiceToEnrollmentMutation
->;
-export type AddServiceToEnrollmentMutationResult =
-  Apollo.MutationResult<AddServiceToEnrollmentMutation>;
-export type AddServiceToEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  AddServiceToEnrollmentMutation,
-  AddServiceToEnrollmentMutationVariables
->;
-export const DeleteServiceDocument = gql`
-  mutation DeleteService($input: DeleteServiceInput!) {
-    deleteService(input: $input) {
-      clientMutationId
-      service {
-        ...ServiceFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ServiceFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteServiceMutationFn = Apollo.MutationFunction<
-  DeleteServiceMutation,
-  DeleteServiceMutationVariables
->;
-
-/**
- * __useDeleteServiceMutation__
- *
- * To run a mutation, you first call `useDeleteServiceMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteServiceMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteServiceMutation, { data, loading, error }] = useDeleteServiceMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteServiceMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteServiceMutation,
-    DeleteServiceMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteServiceMutation,
-    DeleteServiceMutationVariables
-  >(DeleteServiceDocument, options);
-}
-export type DeleteServiceMutationHookResult = ReturnType<
-  typeof useDeleteServiceMutation
->;
-export type DeleteServiceMutationResult =
-  Apollo.MutationResult<DeleteServiceMutation>;
-export type DeleteServiceMutationOptions = Apollo.BaseMutationOptions<
-  DeleteServiceMutation,
-  DeleteServiceMutationVariables
->;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {
@@ -14931,75 +15261,6 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
->;
-export const GetEnrollmentServicesDocument = gql`
-  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    enrollment(id: $id) {
-      id
-      services(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...ServiceFields
-        }
-      }
-    }
-  }
-  ${ServiceFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentServicesQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentServicesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentServicesQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetEnrollmentServicesQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentServicesQuery,
-    GetEnrollmentServicesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentServicesQuery,
-    GetEnrollmentServicesQueryVariables
-  >(GetEnrollmentServicesDocument, options);
-}
-export function useGetEnrollmentServicesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentServicesQuery,
-    GetEnrollmentServicesQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentServicesQuery,
-    GetEnrollmentServicesQueryVariables
-  >(GetEnrollmentServicesDocument, options);
-}
-export type GetEnrollmentServicesQueryHookResult = ReturnType<
-  typeof useGetEnrollmentServicesQuery
->;
-export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentServicesLazyQuery
->;
-export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
-  GetEnrollmentServicesQuery,
-  GetEnrollmentServicesQueryVariables
 >;
 export const GetClientHouseholdMemberCandidatesDocument = gql`
   query GetClientHouseholdMemberCandidates(
@@ -15519,6 +15780,69 @@ export type GetFormDefinitionLazyQueryHookResult = ReturnType<
 export type GetFormDefinitionQueryResult = Apollo.QueryResult<
   GetFormDefinitionQuery,
   GetFormDefinitionQueryVariables
+>;
+export const GetServiceFormDefinitionDocument = gql`
+  query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
+    getServiceFormDefinition(
+      serviceTypeId: $serviceTypeId
+      projectId: $projectId
+    ) {
+      ...FormDefinitionWithJson
+    }
+  }
+  ${FormDefinitionWithJsonFragmentDoc}
+`;
+
+/**
+ * __useGetServiceFormDefinitionQuery__
+ *
+ * To run a query within a React component, call `useGetServiceFormDefinitionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceFormDefinitionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceFormDefinitionQuery({
+ *   variables: {
+ *      serviceTypeId: // value for 'serviceTypeId'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useGetServiceFormDefinitionQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceFormDefinitionQuery,
+    GetServiceFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetServiceFormDefinitionQuery,
+    GetServiceFormDefinitionQueryVariables
+  >(GetServiceFormDefinitionDocument, options);
+}
+export function useGetServiceFormDefinitionLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceFormDefinitionQuery,
+    GetServiceFormDefinitionQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetServiceFormDefinitionQuery,
+    GetServiceFormDefinitionQueryVariables
+  >(GetServiceFormDefinitionDocument, options);
+}
+export type GetServiceFormDefinitionQueryHookResult = ReturnType<
+  typeof useGetServiceFormDefinitionQuery
+>;
+export type GetServiceFormDefinitionLazyQueryHookResult = ReturnType<
+  typeof useGetServiceFormDefinitionLazyQuery
+>;
+export type GetServiceFormDefinitionQueryResult = Apollo.QueryResult<
+  GetServiceFormDefinitionQuery,
+  GetServiceFormDefinitionQueryVariables
 >;
 export const SubmitFormDocument = gql`
   mutation SubmitForm($input: SubmitFormInput!) {
@@ -17538,6 +17862,307 @@ export type UpdateUnitsMutationResult =
 export type UpdateUnitsMutationOptions = Apollo.BaseMutationOptions<
   UpdateUnitsMutation,
   UpdateUnitsMutationVariables
+>;
+export const GetServiceDocument = gql`
+  query GetService($id: ID!) {
+    service(id: $id) {
+      ...ServiceFields
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceQuery__
+ *
+ * To run a query within a React component, call `useGetServiceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceQuery,
+    GetServiceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetServiceQuery, GetServiceQueryVariables>(
+    GetServiceDocument,
+    options
+  );
+}
+export function useGetServiceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceQuery,
+    GetServiceQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetServiceQuery, GetServiceQueryVariables>(
+    GetServiceDocument,
+    options
+  );
+}
+export type GetServiceQueryHookResult = ReturnType<typeof useGetServiceQuery>;
+export type GetServiceLazyQueryHookResult = ReturnType<
+  typeof useGetServiceLazyQuery
+>;
+export type GetServiceQueryResult = Apollo.QueryResult<
+  GetServiceQuery,
+  GetServiceQueryVariables
+>;
+export const GetServiceTypeDocument = gql`
+  query GetServiceType($id: ID!) {
+    serviceType(id: $id) {
+      ...ServiceTypeFields
+    }
+  }
+  ${ServiceTypeFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetServiceTypeQuery__
+ *
+ * To run a query within a React component, call `useGetServiceTypeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetServiceTypeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetServiceTypeQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetServiceTypeQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetServiceTypeQuery,
+    GetServiceTypeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetServiceTypeQuery, GetServiceTypeQueryVariables>(
+    GetServiceTypeDocument,
+    options
+  );
+}
+export function useGetServiceTypeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetServiceTypeQuery,
+    GetServiceTypeQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetServiceTypeQuery, GetServiceTypeQueryVariables>(
+    GetServiceTypeDocument,
+    options
+  );
+}
+export type GetServiceTypeQueryHookResult = ReturnType<
+  typeof useGetServiceTypeQuery
+>;
+export type GetServiceTypeLazyQueryHookResult = ReturnType<
+  typeof useGetServiceTypeLazyQuery
+>;
+export type GetServiceTypeQueryResult = Apollo.QueryResult<
+  GetServiceTypeQuery,
+  GetServiceTypeQueryVariables
+>;
+export const AddServiceToEnrollmentDocument = gql`
+  mutation AddServiceToEnrollment($input: CreateServiceInput!) {
+    createService(input: $input) {
+      clientMutationId
+      service {
+        ...ServiceFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type AddServiceToEnrollmentMutationFn = Apollo.MutationFunction<
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables
+>;
+
+/**
+ * __useAddServiceToEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useAddServiceToEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddServiceToEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addServiceToEnrollmentMutation, { data, loading, error }] = useAddServiceToEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useAddServiceToEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddServiceToEnrollmentMutation,
+    AddServiceToEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddServiceToEnrollmentMutation,
+    AddServiceToEnrollmentMutationVariables
+  >(AddServiceToEnrollmentDocument, options);
+}
+export type AddServiceToEnrollmentMutationHookResult = ReturnType<
+  typeof useAddServiceToEnrollmentMutation
+>;
+export type AddServiceToEnrollmentMutationResult =
+  Apollo.MutationResult<AddServiceToEnrollmentMutation>;
+export type AddServiceToEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  AddServiceToEnrollmentMutation,
+  AddServiceToEnrollmentMutationVariables
+>;
+export const DeleteServiceDocument = gql`
+  mutation DeleteService($input: DeleteServiceInput!) {
+    deleteService(input: $input) {
+      clientMutationId
+      service {
+        ...ServiceFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteServiceMutationFn = Apollo.MutationFunction<
+  DeleteServiceMutation,
+  DeleteServiceMutationVariables
+>;
+
+/**
+ * __useDeleteServiceMutation__
+ *
+ * To run a mutation, you first call `useDeleteServiceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteServiceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteServiceMutation, { data, loading, error }] = useDeleteServiceMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteServiceMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteServiceMutation,
+    DeleteServiceMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteServiceMutation,
+    DeleteServiceMutationVariables
+  >(DeleteServiceDocument, options);
+}
+export type DeleteServiceMutationHookResult = ReturnType<
+  typeof useDeleteServiceMutation
+>;
+export type DeleteServiceMutationResult =
+  Apollo.MutationResult<DeleteServiceMutation>;
+export type DeleteServiceMutationOptions = Apollo.BaseMutationOptions<
+  DeleteServiceMutation,
+  DeleteServiceMutationVariables
+>;
+export const GetEnrollmentServicesDocument = gql`
+  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      services(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentServicesQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export function useGetEnrollmentServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentServicesQuery,
+    GetEnrollmentServicesQueryVariables
+  >(GetEnrollmentServicesDocument, options);
+}
+export type GetEnrollmentServicesQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesQuery
+>;
+export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentServicesLazyQuery
+>;
+export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
+  GetEnrollmentServicesQuery,
+  GetEnrollmentServicesQueryVariables
 >;
 export const CreateDirectUploadMutationDocument = gql`
   mutation CreateDirectUploadMutation($input: DirectUploadInput!) {

@@ -1,0 +1,24 @@
+fragment ServiceFields on Service {
+  id
+  dateProvided
+  movingOnOtherType
+  recordType
+  referralOutcome
+  subTypeProvided
+  typeProvided
+  otherTypeProvided
+  FAAmount
+  dateCreated
+  dateUpdated
+  dateDeleted
+}
+
+fragment ServiceTypeFields on ServiceType {
+  id
+  name
+  hudRecordType
+  hudTypeProvided
+  category
+  dateCreated
+  dateUpdated
+}

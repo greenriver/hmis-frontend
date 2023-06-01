@@ -1,13 +1,13 @@
 import { Box, Grid } from '@mui/material';
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
 
 import useFormDefinition from '../hooks/useFormDefinition';
-import { LocalConstants } from '../types';
+import useInitialFormValues from '../hooks/useInitialFormValues';
+import { LocalConstants, SubmitFormAllowedTypes } from '../types';
 import {
   createHudValuesForSubmit,
   createValuesForSubmit,
   debugFormValues,
-  getInitialValues,
   shouldEnableItem,
 } from '../util/formUtil';
 
@@ -28,13 +28,12 @@ import {
 import DynamicForm, {
   DynamicFormOnSubmit,
   DynamicFormProps,
+  DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import { createInitialValuesFromRecord } from '@/modules/form/util/formUtil';
 import {
   FormInput,
   FormRole,
   ItemType,
-  SubmitFormMutation,
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
 
@@ -59,16 +58,14 @@ export interface Props<RecordType>
   title: ReactNode;
   FormNavigationProps?: Omit<FormNavigationProps, 'items' | 'children'>;
   top?: number;
+  minGroupsForLeftNav?: number;
+  formRef?: Ref<DynamicFormRef>;
 }
-
-type AllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
->;
 
 /**
  * Renders a form for creating or updating a record
  */
-const EditRecord = <RecordType extends AllowedTypes>({
+const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   formRole,
   record,
   onCompleted,
@@ -77,6 +74,8 @@ const EditRecord = <RecordType extends AllowedTypes>({
   inputVariables = {},
   localConstants = {},
   top = STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT,
+  minGroupsForLeftNav = 3,
+  formRef,
   ...props
 }: Props<RecordType>) => {
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
@@ -106,25 +105,12 @@ const EditRecord = <RecordType extends AllowedTypes>({
     },
   });
 
-  const initialValues = useMemo(() => {
-    if (!itemMap || !formDefinition) return {};
-    const initialValuesFromDefinition = getInitialValues(
-      formDefinition.definition,
-      localConstants
-    );
-    if (!record) return initialValuesFromDefinition;
-
-    const initialValuesFromRecord = createInitialValuesFromRecord(
-      itemMap,
-      record
-    );
-    const values = {
-      ...initialValuesFromDefinition,
-      ...initialValuesFromRecord,
-    };
-    console.debug('Initial form values:', values, 'from', record);
-    return values;
-  }, [record, formDefinition, itemMap, localConstants]);
+  const initialValues = useInitialFormValues({
+    record,
+    itemMap,
+    formDefinition,
+    localConstants,
+  });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
     ({ event, values, confirmed = false }) => {
@@ -164,7 +150,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
       (i) => i.type === ItemType.Group && !i.hidden
     );
 
-    if (topLevelItems.length < 3) return false;
+    if (topLevelItems.length < minGroupsForLeftNav) return false;
 
     // Remove disabled groups
     topLevelItems = topLevelItems.filter((item) =>
@@ -172,7 +158,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
     );
     if (topLevelItems.length < 3) return false;
     return topLevelItems;
-  }, [itemMap, formDefinition, initialValues]);
+  }, [itemMap, formDefinition, initialValues, minGroupsForLeftNav]);
 
   if (definitionLoading) return <Loading />;
   if (!formDefinition) return <NotFound text='Form definition not found.' />;
@@ -180,6 +166,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   const form = (
     <>
       <DynamicForm
+        ref={formRef}
         definition={formDefinition.definition}
         onSubmit={submitHandler}
         initialValues={initialValues}
@@ -225,7 +212,7 @@ const EditRecord = <RecordType extends AllowedTypes>({
   return (
     <>
       {title}
-      <Grid container spacing={2} sx={{ pb: 20, mt: 0 }}>
+      <Grid container spacing={2} sx={{ mb: props.hideSubmit ? 2 : 20, mt: 0 }}>
         <Grid item xs>
           {form}
         </Grid>
