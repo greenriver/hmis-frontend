@@ -24698,6 +24698,18 @@
             "deprecationReason": null
           },
           {
+            "name": "offset",
+            "description": "Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "question",
             "description": "Link ID of dependent question, if this items value should be compared to another items value",
             "args": [],

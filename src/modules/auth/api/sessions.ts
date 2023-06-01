@@ -6,6 +6,7 @@ import { getCsrfToken } from '@/utils/csrf';
 export interface HmisUser {
   email: string;
   name: string;
+  phone?: string;
 }
 interface HmisError {
   type: string;

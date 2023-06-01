@@ -3668,6 +3668,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ValueBound',
     fields: [
       { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'offset', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
       {
         name: 'question',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
