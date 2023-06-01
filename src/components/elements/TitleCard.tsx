@@ -1,18 +1,36 @@
-import { Paper, PaperProps, Typography } from '@mui/material';
+import { Paper, PaperProps, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props extends PaperProps {
-  title?: string;
+  title: string;
   children: ReactNode;
+  actions?: ReactNode;
   'data-testid'?: string;
 }
-const TitleCard: React.FC<Props> = ({ title, children, sx, ...props }) => (
-  <Paper sx={{ pt: 2, mb: 2, ...sx }} data-testid={props['data-testid']}>
-    {title && (
-      <Typography variant='h5' sx={{ mx: 2, mb: 2 }}>
-        {title}
-      </Typography>
-    )}
+const TitleCard: React.FC<Props> = ({
+  title,
+  children,
+  actions,
+  sx,
+  ...props
+}) => (
+  <Paper data-testid={props['data-testid']}>
+    <Stack
+      justifyContent={'space-between'}
+      direction='row'
+      sx={{
+        px: 2,
+        py: 2,
+        alignItems: 'center',
+        borderBottomColor: 'borders.light',
+        borderBottomWidth: 1,
+        borderBottomStyle: 'solid',
+      }}
+    >
+      <Typography variant='h5'>{title}</Typography>
+      {actions}
+    </Stack>
+
     {children}
   </Paper>
 );

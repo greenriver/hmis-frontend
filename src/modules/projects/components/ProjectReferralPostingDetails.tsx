@@ -1,4 +1,4 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 import { ReferralPostingStatusDisplay } from './ReferralPostingStatusDisplay';
@@ -35,21 +35,21 @@ export const ProjectReferralPostingDetails: React.FC<Props> = ({
     ],
   ];
   return (
-    <Grid container columnSpacing={6}>
+    <Grid container columnSpacing={6} rowSpacing={2}>
       {[col1, col2].map((list) => (
         <Grid item key={list[0][0]}>
           <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
             {list.map(([label, value]) => (
-              <li key={label}>
-                <Typography
+              <Typography component='li' key={label} variant='body2'>
+                <Box
                   sx={({ typography }) => ({
                     fontWeight: typography.fontWeightBold,
                   })}
                 >
                   {label}
-                </Typography>
-                {value || <NotCollectedText />}
-              </li>
+                </Box>
+                {value || <NotCollectedText variant='body2' />}
+              </Typography>
             ))}
           </Stack>
         </Grid>
