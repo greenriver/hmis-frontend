@@ -1,4 +1,5 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
+import { omit } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -146,6 +147,7 @@ const ProjectClientEnrollmentsTable = ({
       pagePath='project.enrollments'
       recordType='Enrollment'
       showFilters
+      filters={(f) => omit(f, 'searchTerm')}
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
     />

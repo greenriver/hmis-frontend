@@ -239,11 +239,13 @@ const GenericTableWithData = <
       filterInputType && recordType
         ? allFieldFilters(recordType, filterInputType)
         : {};
+
+    if (typeof filters === 'function') {
+      return filters(derivedFilters);
+    }
     return {
       ...derivedFilters,
-      ...(typeof filters === 'function'
-        ? filters(derivedFilters)
-        : filters || {}),
+      ...(filters || {}),
     };
   }, [filters, recordType, filterInputTypeProp]);
 
