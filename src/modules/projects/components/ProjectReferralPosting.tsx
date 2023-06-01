@@ -6,14 +6,14 @@ import { ProjectReferralHouseholdMembersTable } from './tables/ProjectReferralHo
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
+import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { useGetReferralPostingQuery } from '@/types/gqlTypes';
 
-const ProjectReferralPostingDetails: React.FC = () => {
+const ProjectReferralPosting: React.FC = () => {
   const { referralPostingId } = useParams<{ referralPostingId: string }>();
-  console.info(referralPostingId);
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
   });
@@ -40,11 +40,11 @@ const ProjectReferralPostingDetails: React.FC = () => {
         }
       />
       <Stack spacing={4}>
-        <CommonCard title='Referred Household'>
+        <TitleCard title='Referred Household'>
           <ProjectReferralHouseholdMembersTable
             rows={referralPosting.householdMembers}
           />
-        </CommonCard>
+        </TitleCard>
         <CommonCard title='Referral Notes'>
           <Stack spacing={4}>
             <CommonLabeledTextBlock title='Provider Notes'>
@@ -59,4 +59,4 @@ const ProjectReferralPostingDetails: React.FC = () => {
     </>
   );
 };
-export default ProjectReferralPostingDetails;
+export default ProjectReferralPosting;
