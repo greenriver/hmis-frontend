@@ -3864,6 +3864,8 @@ export type ValueBound = {
   __typename?: 'ValueBound';
   /** Unique identifier for this bound */
   id?: Maybe<Scalars['String']>;
+  /** Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days. */
+  offset?: Maybe<Scalars['Int']>;
   /** Link ID of dependent question, if this items value should be compared to another items value */
   question?: Maybe<Scalars['String']>;
   /** Severity of bound. If error, user will be unable to submit a value that does not meet this condition. */
@@ -4239,6 +4241,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4297,6 +4300,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4355,6 +4359,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4413,6 +4418,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -4471,6 +4477,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -4755,6 +4762,7 @@ export type GetAssessmentQuery = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -4813,6 +4821,7 @@ export type GetAssessmentQuery = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4871,6 +4880,7 @@ export type GetAssessmentQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4929,6 +4939,7 @@ export type GetAssessmentQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4987,6 +4998,7 @@ export type GetAssessmentQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -5272,6 +5284,7 @@ export type SaveAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5330,6 +5343,7 @@ export type SaveAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5388,6 +5402,7 @@ export type SaveAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5446,6 +5461,7 @@ export type SaveAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5504,6 +5520,7 @@ export type SaveAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -5751,6 +5768,7 @@ export type SubmitAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5809,6 +5827,7 @@ export type SubmitAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5867,6 +5886,7 @@ export type SubmitAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5925,6 +5945,7 @@ export type SubmitAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5983,6 +6004,7 @@ export type SubmitAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -8910,6 +8932,7 @@ export type ItemFieldsFragment = {
     question?: string | null;
     valueNumber?: number | null;
     valueDate?: string | null;
+    offset?: number | null;
   }> | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
@@ -9108,6 +9131,7 @@ export type FormDefinitionWithJsonFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -9166,6 +9190,7 @@ export type FormDefinitionWithJsonFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -9224,6 +9249,7 @@ export type FormDefinitionWithJsonFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -9282,6 +9308,7 @@ export type FormDefinitionWithJsonFragment = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -9340,6 +9367,7 @@ export type FormDefinitionWithJsonFragment = {
         question?: string | null;
         valueNumber?: number | null;
         valueDate?: string | null;
+        offset?: number | null;
       }> | null;
       pickListOptions?: Array<{
         __typename?: 'PickListOption';
@@ -9577,6 +9605,7 @@ export type GetFormDefinitionQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -9635,6 +9664,7 @@ export type GetFormDefinitionQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -9693,6 +9723,7 @@ export type GetFormDefinitionQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -9751,6 +9782,7 @@ export type GetFormDefinitionQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -9809,6 +9841,7 @@ export type GetFormDefinitionQuery = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -11975,6 +12008,7 @@ export const ItemFieldsFragmentDoc = gql`
       question
       valueNumber
       valueDate
+      offset
     }
     pickListOptions {
       ...PickListOptionFields

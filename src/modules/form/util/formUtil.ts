@@ -1,4 +1,4 @@
-import { getYear, isDate, isValid, max, min } from 'date-fns';
+import { add, getYear, isDate, isValid, max, min } from 'date-fns';
 import {
   compact,
   isArray,
@@ -427,11 +427,24 @@ export const getBoundValue = (
   return bound.valueNumber;
 };
 
-const compareNumOrDate = (
-  boundType: BoundType,
-  value: number | Date,
-  comparison: number | Date | undefined
-) => {
+const compareNumOrDate = ({
+  boundType,
+  value,
+  comparison,
+  offset = 0,
+}: {
+  boundType: BoundType;
+  value: number | Date;
+  comparison?: number | Date;
+  offset?: number;
+}) => {
+  // Add offset to value
+  if (isDate(value)) {
+    value = add(value, { days: offset });
+  } else {
+    value = (value as number) + offset;
+  }
+
   if (isNil(comparison)) return value;
   if (isDate(comparison) && isDate(value)) {
     // do inverse operation to choose the tightest bound
@@ -459,10 +472,21 @@ export const buildCommonInputProps = (
     const value = getBoundValue(bound, values);
     if (isNil(value)) return;
 
+    const args = {
+      boundType: bound.type,
+      value,
+      offset: bound.offset || undefined,
+    };
     if (bound.type === BoundType.Min) {
-      inputProps.min = compareNumOrDate(bound.type, value, inputProps.min);
+      inputProps.min = compareNumOrDate({
+        comparison: inputProps.min,
+        ...args,
+      });
     } else if (bound.type === BoundType.Max) {
-      inputProps.max = compareNumOrDate(bound.type, value, inputProps.max);
+      inputProps.max = compareNumOrDate({
+        comparison: inputProps.max,
+        ...args,
+      });
     } else {
       console.warn('Unrecognized bound type', bound.type);
     }
