@@ -15,6 +15,9 @@ fragment OrganizationDetailFields on Organization {
   user {
     ...UserFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }
 
 fragment OrganizationFields on Organization {

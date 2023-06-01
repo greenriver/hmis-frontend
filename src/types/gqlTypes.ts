@@ -73,6 +73,7 @@ export type Assessment = {
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -263,6 +264,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -634,6 +636,31 @@ export type CreateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   units?: Maybe<Array<Unit>>;
+};
+
+export type CustomDataElement = {
+  __typename?: 'CustomDataElement';
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  label: Scalars['String'];
+  repeats: Scalars['Boolean'];
+  value?: Maybe<CustomDataElementValue>;
+  values?: Maybe<Array<CustomDataElementValue>>;
+};
+
+export type CustomDataElementValue = {
+  __typename?: 'CustomDataElementValue';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueFloat?: Maybe<Scalars['Float']>;
+  valueInteger?: Maybe<Scalars['Int']>;
+  valueJson?: Maybe<Scalars['JsonObject']>;
+  valueString?: Maybe<Scalars['String']>;
+  valueText?: Maybe<Scalars['String']>;
 };
 
 /** CustomForm */
@@ -1499,6 +1526,8 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  /** Key of CustomDataElement to save record as. Use record_type to specify type. */
+  customFieldKey?: Maybe<Scalars['String']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -1597,6 +1626,7 @@ export enum FormRole {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2030,6 +2060,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']>;
   chYouthBedInventory?: Maybe<Scalars['Int']>;
   cocCode: Scalars['String'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2459,6 +2490,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2532,6 +2564,7 @@ export type PickListOption = {
 
 export enum PickListType {
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
+  AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Unoccupied units in the specified project */
   AvailableUnits = 'AVAILABLE_UNITS',
   /** Unit types that have unoccupied units in the specified project */
@@ -2579,6 +2612,7 @@ export type Project = {
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<NoYesMissing>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2767,6 +2801,8 @@ export type Query = {
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
   getFormDefinition?: Maybe<FormDefinition>;
+  /** Get most relevant form definition for the specified service type */
+  getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
@@ -2821,6 +2857,11 @@ export type QueryGetFormDefinitionArgs = {
   enrollmentId?: InputMaybe<Scalars['ID']>;
   projectId?: InputMaybe<Scalars['ID']>;
   role: FormRole;
+};
+
+export type QueryGetServiceFormDefinitionArgs = {
+  customServiceTypeId: Scalars['ID'];
+  projectId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -3106,6 +3147,7 @@ export type Service = {
   __typename?: 'Service';
   FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateProvided: Scalars['ISO8601Date'];
@@ -3936,6 +3978,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -3961,6 +4004,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -3986,6 +4030,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4011,6 +4056,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4036,6 +4082,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4447,6 +4494,7 @@ export type GetAssessmentQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -4472,6 +4520,7 @@ export type GetAssessmentQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4497,6 +4546,7 @@ export type GetAssessmentQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4522,6 +4572,7 @@ export type GetAssessmentQuery = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4547,6 +4598,7 @@ export type GetAssessmentQuery = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -4958,6 +5010,7 @@ export type SaveAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4983,6 +5036,7 @@ export type SaveAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -5008,6 +5062,7 @@ export type SaveAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5033,6 +5088,7 @@ export type SaveAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5058,6 +5114,7 @@ export type SaveAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -5432,6 +5489,7 @@ export type SubmitAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -5457,6 +5515,7 @@ export type SubmitAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -5482,6 +5541,7 @@ export type SubmitAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5507,6 +5567,7 @@ export type SubmitAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5532,6 +5593,7 @@ export type SubmitAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -6041,6 +6103,41 @@ export type ClientFieldsFragment = {
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
   };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6731,6 +6828,41 @@ export type SearchClientsQuery = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -6795,6 +6927,41 @@ export type GetClientQuery = {
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
     };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -7532,6 +7699,41 @@ export type DeleteClientMutation = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -8208,6 +8410,57 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type CustomDataElementValueFieldsFragment = {
+  __typename?: 'CustomDataElementValue';
+  id: string;
+  valueBoolean?: boolean | null;
+  valueDate?: string | null;
+  valueFloat?: number | null;
+  valueInteger?: number | null;
+  valueJson?: any | null;
+  valueString?: string | null;
+  valueText?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type CustomDataElementFieldsFragment = {
+  __typename?: 'CustomDataElement';
+  id: string;
+  key: string;
+  label: string;
+  repeats: boolean;
+  value?: {
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  } | null;
+  values?: Array<{
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  }> | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -8270,6 +8523,7 @@ export type ItemFieldsFragment = {
   readOnly?: boolean | null;
   repeats?: boolean | null;
   fieldName?: string | null;
+  customFieldKey?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
@@ -8363,6 +8617,7 @@ export type FormDefinitionWithJsonFragment = {
       readOnly?: boolean | null;
       repeats?: boolean | null;
       fieldName?: string | null;
+      customFieldKey?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
@@ -8388,6 +8643,7 @@ export type FormDefinitionWithJsonFragment = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8413,6 +8669,7 @@ export type FormDefinitionWithJsonFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8438,6 +8695,7 @@ export type FormDefinitionWithJsonFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8463,6 +8721,7 @@ export type FormDefinitionWithJsonFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8827,6 +9086,7 @@ export type GetFormDefinitionQuery = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8852,6 +9112,7 @@ export type GetFormDefinitionQuery = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8877,6 +9138,7 @@ export type GetFormDefinitionQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8902,6 +9164,7 @@ export type GetFormDefinitionQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8927,6 +9190,7 @@ export type GetFormDefinitionQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -9288,6 +9552,41 @@ export type SubmitFormMutation = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
           image?: {
             __typename?: 'ClientImage';
             id: string;
@@ -9358,6 +9657,41 @@ export type SubmitFormMutation = {
           youthBedInventory?: number | null;
           youthVetBedInventory?: number | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Organization';
@@ -9371,6 +9705,41 @@ export type SubmitFormMutation = {
           dateUpdated: string;
           dateDeleted?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Project';
@@ -9413,6 +9782,41 @@ export type SubmitFormMutation = {
             canManageOutgoingReferrals: boolean;
           };
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'ProjectCoc';
@@ -9503,6 +9907,41 @@ export type InventoryFieldsFragment = {
   youthBedInventory?: number | null;
   youthVetBedInventory?: number | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type UnitTypeFieldsFragment = {
@@ -9595,6 +10034,7 @@ export type ClearMciMutation = {
 
 export type OmniSearchClientsQueryVariables = Exact<{
   textSearch: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchClientsQuery = {
@@ -9621,6 +10061,7 @@ export type OmniSearchClientsQuery = {
 
 export type OmniSearchProjectsQueryVariables = Exact<{
   searchTerm: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchProjectsQuery = {
@@ -9751,6 +10192,41 @@ export type OrganizationDetailFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type OrganizationFieldsFragment = {
@@ -9765,6 +10241,41 @@ export type OrganizationFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
@@ -9807,6 +10318,41 @@ export type GetOrganizationQuery = {
       canDeleteOrganization: boolean;
     };
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -9921,6 +10467,41 @@ export type ProjectAllFieldsFragment = {
     canManageOutgoingReferrals: boolean;
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type ProjectCocFieldsFragment = {
@@ -10001,6 +10582,41 @@ export type GetProjectQuery = {
       canManageOutgoingReferrals: boolean;
     };
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -10231,6 +10847,41 @@ export type GetInventoryQuery = {
     youthBedInventory?: number | null;
     youthVetBedInventory?: number | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -10338,6 +10989,41 @@ export type GetProjectInventoriesQuery = {
         youthBedInventory?: number | null;
         youthVetBedInventory?: number | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -10844,6 +11530,7 @@ export const ItemFieldsFragmentDoc = gql`
     readOnly
     repeats
     fieldName
+    customFieldKey
     recordType
     pickListReference
     serviceDetailType
@@ -11042,6 +11729,39 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewAnyNonconfidentialClientFiles
   }
 `;
+export const CustomDataElementValueFieldsFragmentDoc = gql`
+  fragment CustomDataElementValueFields on CustomDataElementValue {
+    id
+    valueBoolean
+    valueDate
+    valueFloat
+    valueInteger
+    valueJson
+    valueString
+    valueText
+    user {
+      ...UserFields
+    }
+    dateCreated
+    dateUpdated
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const CustomDataElementFieldsFragmentDoc = gql`
+  fragment CustomDataElementFields on CustomDataElement {
+    id
+    key
+    label
+    repeats
+    value {
+      ...CustomDataElementValueFields
+    }
+    values {
+      ...CustomDataElementValueFields
+    }
+  }
+  ${CustomDataElementValueFieldsFragmentDoc}
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -11068,6 +11788,9 @@ export const ClientFieldsFragmentDoc = gql`
     access {
       ...ClientAccessFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
@@ -11075,6 +11798,7 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
@@ -11492,8 +12216,12 @@ export const InventoryFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UnitTypeFieldsFragmentDoc = gql`
   fragment UnitTypeFields on UnitTypeObject {
@@ -11559,8 +12287,12 @@ export const OrganizationDetailFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
@@ -11627,12 +12359,16 @@ export const ProjectAllFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {
@@ -14365,8 +15101,8 @@ export type ClearMciMutationOptions = Apollo.BaseMutationOptions<
   ClearMciMutationVariables
 >;
 export const OmniSearchClientsDocument = gql`
-  query OmniSearchClients($textSearch: String!) {
-    clientOmniSearch(textSearch: $textSearch, limit: 5) {
+  query OmniSearchClients($textSearch: String!, $limit: Int) {
+    clientOmniSearch(textSearch: $textSearch, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -14391,6 +15127,7 @@ export const OmniSearchClientsDocument = gql`
  * const { data, loading, error } = useOmniSearchClientsQuery({
  *   variables: {
  *      textSearch: // value for 'textSearch'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -14429,8 +15166,8 @@ export type OmniSearchClientsQueryResult = Apollo.QueryResult<
   OmniSearchClientsQueryVariables
 >;
 export const OmniSearchProjectsDocument = gql`
-  query OmniSearchProjects($searchTerm: String!) {
-    projects(searchTerm: $searchTerm, limit: 5) {
+  query OmniSearchProjects($searchTerm: String!, $limit: Int) {
+    projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -14454,6 +15191,7 @@ export const OmniSearchProjectsDocument = gql`
  * const { data, loading, error } = useOmniSearchProjectsQuery({
  *   variables: {
  *      searchTerm: // value for 'searchTerm'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

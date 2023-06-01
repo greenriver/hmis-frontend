@@ -15,6 +15,7 @@ import {
 
 import {
   age,
+  customDataElementValueForKey,
   formatDateForGql,
   INVALID_ENUM,
   parseHmisDateString,
@@ -862,10 +863,11 @@ export const transformSubmitValues = ({
       if (Array.isArray(item.item)) {
         rescursiveFillMap(item.item, result, recordType);
       }
-      if (!item.fieldName) return;
+      const fieldName = item.fieldName || item.customFieldKey;
+      if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
 
       // Build key for result map
-      let key = keyByFieldName ? item.fieldName : item.linkId;
+      let key = keyByFieldName ? fieldName : item.linkId;
       // Prefix key like "Enrollment.livingSituation"
       if (keyByFieldName && recordType) key = `${recordType}.${key}`;
 
@@ -921,6 +923,14 @@ export const createInitialValuesFromRecord = (
   const initialValues: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item) => {
+    if (item.customFieldKey && record.hasOwnProperty('customDataElements')) {
+      const customValue = customDataElementValueForKey(
+        item.customFieldKey,
+        record.customDataElements
+      );
+      initialValues[item.linkId] = gqlValueToFormValue(customValue, item);
+      return;
+    }
     // Skip: this question doesn't map to a field
     if (!item.fieldName) return;
 

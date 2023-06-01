@@ -607,6 +607,7 @@ export const HmisEnums = {
   },
   PickListType: {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
+    AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS: 'Unoccupied units in the specified project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
