@@ -286,7 +286,7 @@ const GenericTableWithData = <
           <TableFilters
             noSort={noSort}
             noFilter={noFilter}
-            loading={loading}
+            loading={loading && !data}
             sorting={
               sortOptions
                 ? {
