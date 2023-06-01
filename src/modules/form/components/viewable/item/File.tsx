@@ -21,7 +21,7 @@ const Image: React.FC<ImageProps> = ({ id }) => {
         const file = data?.file;
 
         return {
-          url: file?.url,
+          url: file?.url || '',
           name: file?.name,
           contentType: file?.contentType,
         };

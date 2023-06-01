@@ -42,6 +42,8 @@ const LoadingPreview: React.FC = () => (
 const ImagePreview: React.FC<{ file: FileFieldsFragment }> = ({ file }) => {
   const [loaded, setLoaded] = useState<boolean>(false);
 
+  if (!file.url) return null;
+
   return (
     <Box p={2}>
       {!loaded && <LoadingPreview />}
@@ -157,13 +159,15 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           >
             No Preview Available
           </Typography>
-          <Typography align='center'>
-            Please{' '}
-            <Link href={file.url} target='_blank' variant='inherit'>
-              download the file
-            </Link>{' '}
-            to view
-          </Typography>
+          {file.url && (
+            <Typography align='center'>
+              Please{' '}
+              <Link href={file.url} target='_blank' variant='inherit'>
+                download the file
+              </Link>{' '}
+              to view
+            </Typography>
+          )}
         </Box>
       );
     }
