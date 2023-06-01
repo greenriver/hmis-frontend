@@ -2,8 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Paper, Stack, Typography } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectReferralPostingsTable } from './tables/ProjectsReferralPostingsTable';
-import ProjectReferralRequestsTable from './tables/ProjectsReferralRequestsTable';
+import { ProjectReferralPostingsTable } from './tables/ProjectReferralPostingsTable';
+import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';

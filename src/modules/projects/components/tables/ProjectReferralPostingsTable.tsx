@@ -1,8 +1,10 @@
 import { Chip } from '@mui/material';
+import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectReferralPostingsDocument,
@@ -11,6 +13,7 @@ import {
   ReferralPostingFieldsFragment,
   ReferralPostingStatus,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const StatusDisplay: React.FC<{ status: ReferralPostingStatus }> = ({
   status,
@@ -63,6 +66,16 @@ interface Props {
 export const ProjectReferralPostingsTable: React.FC<Props> = ({
   projectId,
 }) => {
+  const rowLinkTo = useCallback(
+    (row: ReferralPostingFieldsFragment): string => {
+      return generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+        projectId,
+        referralPostingId: row.id,
+      });
+    },
+    [projectId]
+  );
+
   return (
     <GenericTableWithData<
       GetProjectReferralPostingsQuery,
@@ -74,6 +87,7 @@ export const ProjectReferralPostingsTable: React.FC<Props> = ({
       columns={columns}
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
+      rowLinkTo={rowLinkTo}
     />
   );
 };
