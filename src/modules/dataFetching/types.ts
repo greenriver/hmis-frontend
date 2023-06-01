@@ -1,3 +1,4 @@
+import { HmisEnums } from '@/types/gqlEnums';
 import { PickListType } from '@/types/gqlTypes';
 
 export interface BaseFilter<I> {
@@ -30,7 +31,7 @@ export interface SelectFilter<I> extends BaseFilter<I> {
 
 export interface EnumFilter<I> extends BaseFilter<I> {
   type: 'enum';
-  enumType: Record<string, string>;
+  enumType: keyof typeof HmisEnums;
   variant?: SelectElementVariant;
 }
 

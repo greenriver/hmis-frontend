@@ -7,6 +7,7 @@ import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/Select';
 
 import { FilterType, SelectElementVariant } from '@/modules/dataFetching/types';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export interface TableFilterItemSelectorProps {
@@ -63,10 +64,7 @@ const TableFilterItem = <T,>({
           return (
             <TableFilterItemSelector
               variant={filter.variant}
-              options={Object.entries(filter.enumType).map(([key, val]) => ({
-                code: key,
-                label: val,
-              }))}
+              options={localResolvePickList(filter.enumType, true) || []}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
             />

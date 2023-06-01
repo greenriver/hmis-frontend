@@ -88,10 +88,9 @@ const getFilterForType = (
     };
 
   if (inputType in HmisEnums) {
-    const enumType = HmisEnums[inputType as keyof typeof HmisEnums];
     filter = {
       ...baseFields,
-      enumType,
+      enumType: inputType as keyof typeof HmisEnums,
       variant: 'select',
       type: 'enum',
     };

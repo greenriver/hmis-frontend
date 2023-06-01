@@ -224,9 +224,9 @@ export const HmisEnums = {
     NOT_EQUAL: 'NOT_EQUAL',
   },
   EnrollmentFilterOptionStatus: {
+    INCOMPLETE: 'Incomplete',
     ACTIVE: 'Active',
     EXITED: 'Exited',
-    INCOMPLETE: 'Incomplete',
   },
   EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
   EnrollmentSortOption: {
