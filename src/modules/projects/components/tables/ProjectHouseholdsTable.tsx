@@ -40,6 +40,7 @@ export const HOUSEHOLD_COLUMNS: {
   hohIndicator: {
     header: ' ',
     width: '0%',
+    key: 'hoh-indicator',
     render: (hh) => (
       <TableCellConatiner>
         {hh.householdClients.map((c) =>
@@ -71,7 +72,6 @@ export const HOUSEHOLD_COLUMNS: {
               clientId: c.client.id,
               enrollmentId: c.enrollment.id,
             })}
-            target='_blank'
           >
             <ClientName client={c.client} />
             <ClientDobAge client={c.client} noDob />
