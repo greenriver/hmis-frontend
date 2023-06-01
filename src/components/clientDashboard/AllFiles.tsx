@@ -1,5 +1,5 @@
 import UploadIcon from '@mui/icons-material/Upload';
-import { Box, Chip, Link, Paper } from '@mui/material';
+import { Box, Chip, Link, Paper, Typography } from '@mui/material';
 import { useMemo, useState } from 'react';
 
 import PageTitle from '../layout/PageTitle';
@@ -74,16 +74,19 @@ const AllFiles = () => {
     return [
       {
         header: 'Name',
-        render: (file) => (
-          <Link
-            component='button'
-            onClick={() => setViewingFile(file)}
-            align='left'
-            tabIndex={-1}
-          >
-            {file.name}
-          </Link>
-        ),
+        render: (file) =>
+          file.redacted ? (
+            <Typography variant='inherit'>{file.name}</Typography>
+          ) : (
+            <Link
+              component='button'
+              onClick={() => setViewingFile(file)}
+              align='left'
+              tabIndex={-1}
+            >
+              {file.name}
+            </Link>
+          ),
       },
       {
         header: 'Tags',
@@ -151,7 +154,7 @@ const AllFiles = () => {
           queryDocument={GetClientFilesDocument}
           columns={columns}
           pagePath='client.files'
-          handleRowClick={(file) => setViewingFile(file)}
+          handleRowClick={(file) => !file.redacted && setViewingFile(file)}
         />
       </Paper>
       {viewingFile && (

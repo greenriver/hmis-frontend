@@ -37,7 +37,7 @@ const useFileActions = ({ onDeleteFile = () => {} }: UseFileActionsArgs) => {
           key='download'
           data-testid='downloadFile'
           component='a'
-          href={file.url}
+          href={file.url || ''}
           target='_blank'
           size='small'
           variant='outlined'
