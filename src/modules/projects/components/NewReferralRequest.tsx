@@ -19,7 +19,6 @@ const NewReferralRequest: React.FC = () => {
   const { project } = useProjectDashboardContext();
   const title = `Request a Referral`;
   const { user } = useAuth();
-  console.log(user);
 
   const onCompleted = useCallback(() => {
     cache.evict({
