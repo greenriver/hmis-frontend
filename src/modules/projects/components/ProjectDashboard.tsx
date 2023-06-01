@@ -151,7 +151,7 @@ const ProjectDashboard: React.FC = () => {
     [project]
   );
 
-  if (loading || !navItems) return <Loading />;
+  if ((loading && !project) || !navItems) return <Loading />;
   if (!project || !outletContext) return <NotFound />;
 
   return (

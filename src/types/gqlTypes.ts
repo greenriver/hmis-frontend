@@ -343,11 +343,9 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -1306,6 +1304,15 @@ export type EnrollmentAccess = {
   id: Scalars['ID'];
 };
 
+export enum EnrollmentFilterOptionStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Exited */
+  Exited = 'EXITED',
+  /** Incomplete */
+  Incomplete = 'INCOMPLETE',
+}
+
 /** HMIS Enrollment household member input */
 export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
@@ -1319,7 +1326,9 @@ export enum EnrollmentLimit {
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
+  /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
+  /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
 
@@ -1338,6 +1347,18 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentsForClientFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
+export type EnrollmentsForProjectFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
 
 export type EnrollmentsPaginated = {
   __typename?: 'EnrollmentsPaginated';
@@ -1501,14 +1522,15 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']>;
-  fileBlobId: Scalars['ID'];
+  fileBlobId?: Maybe<Scalars['ID']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   ownFile: Scalars['Boolean'];
+  redacted: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
   updatedBy?: Maybe<ApplicationUser>;
   uploadedBy?: Maybe<ApplicationUser>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -2689,11 +2711,9 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -3861,6 +3881,8 @@ export type ValueBound = {
   __typename?: 'ValueBound';
   /** Unique identifier for this bound */
   id?: Maybe<Scalars['String']>;
+  /** Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days. */
+  offset?: Maybe<Scalars['Int']>;
   /** Link ID of dependent question, if this items value should be compared to another items value */
   question?: Maybe<Scalars['String']>;
   /** Severity of bound. If error, user will be unable to submit a value that does not meet this condition. */
@@ -4236,6 +4258,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4294,6 +4317,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4352,6 +4376,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4410,6 +4435,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -4468,6 +4494,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -4752,6 +4779,7 @@ export type GetAssessmentQuery = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -4810,6 +4838,7 @@ export type GetAssessmentQuery = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4868,6 +4897,7 @@ export type GetAssessmentQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4926,6 +4956,7 @@ export type GetAssessmentQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4984,6 +5015,7 @@ export type GetAssessmentQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -5269,6 +5301,7 @@ export type SaveAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5327,6 +5360,7 @@ export type SaveAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5385,6 +5419,7 @@ export type SaveAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5443,6 +5478,7 @@ export type SaveAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5501,6 +5537,7 @@ export type SaveAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -5748,6 +5785,7 @@ export type SubmitAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5806,6 +5844,7 @@ export type SubmitAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5864,6 +5903,7 @@ export type SubmitAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5922,6 +5962,7 @@ export type SubmitAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5980,6 +6021,7 @@ export type SubmitAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -6956,10 +6998,11 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
-  fileBlobId: string;
-  url: string;
+  fileBlobId?: string | null;
+  url?: string | null;
   tags: Array<string>;
   ownFile: boolean;
+  redacted: boolean;
   enrollmentId?: string | null;
   dateCreated: string;
   dateUpdated: string;
@@ -7357,6 +7400,7 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -7829,10 +7873,11 @@ export type DeleteClientFileMutation = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId: string;
-      url: string;
+      fileBlobId?: string | null;
+      url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
+      redacted: boolean;
       enrollmentId?: string | null;
       dateCreated: string;
       dateUpdated: string;
@@ -8705,10 +8750,11 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
-    fileBlobId: string;
-    url: string;
+    fileBlobId?: string | null;
+    url?: string | null;
     tags: Array<string>;
     ownFile: boolean;
+    redacted: boolean;
     enrollmentId?: string | null;
     dateCreated: string;
     dateUpdated: string;
@@ -8751,10 +8797,11 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId: string;
-        url: string;
+        fileBlobId?: string | null;
+        url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
+        redacted: boolean;
         enrollmentId?: string | null;
         dateCreated: string;
         dateUpdated: string;
@@ -8906,6 +8953,7 @@ export type ItemFieldsFragment = {
     question?: string | null;
     valueNumber?: number | null;
     valueDate?: string | null;
+    offset?: number | null;
   }> | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
@@ -9104,6 +9152,7 @@ export type FormDefinitionWithJsonFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -9162,6 +9211,7 @@ export type FormDefinitionWithJsonFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -9220,6 +9270,7 @@ export type FormDefinitionWithJsonFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -9278,6 +9329,7 @@ export type FormDefinitionWithJsonFragment = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -9336,6 +9388,7 @@ export type FormDefinitionWithJsonFragment = {
         question?: string | null;
         valueNumber?: number | null;
         valueDate?: string | null;
+        offset?: number | null;
       }> | null;
       pickListOptions?: Array<{
         __typename?: 'PickListOption';
@@ -9573,6 +9626,7 @@ export type GetFormDefinitionQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -9631,6 +9685,7 @@ export type GetFormDefinitionQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -9689,6 +9744,7 @@ export type GetFormDefinitionQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -9747,6 +9803,7 @@ export type GetFormDefinitionQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -9805,6 +9862,7 @@ export type GetFormDefinitionQuery = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -10016,10 +10074,11 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId: string;
-          url: string;
+          fileBlobId?: string | null;
+          url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
+          redacted: boolean;
           enrollmentId?: string | null;
           dateCreated: string;
           dateUpdated: string;
@@ -11067,8 +11126,7 @@ export type GetProjectPermissionsQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -12109,6 +12167,7 @@ export const ItemFieldsFragmentDoc = gql`
       question
       valueNumber
       valueDate
+      offset
     }
     pickListOptions {
       ...PickListOptionFields
@@ -12764,6 +12823,7 @@ export const FileFieldsFragmentDoc = gql`
     url
     tags
     ownFile
+    redacted
     enrollmentId
     enrollment {
       id
@@ -13928,10 +13988,20 @@ export type GetClientImageQueryResult = Apollo.QueryResult<
   GetClientImageQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
-  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientEnrollments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: EnrollmentsForClientFilterOptions
+  ) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -13959,6 +14029,7 @@ export const GetClientEnrollmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -14159,7 +14230,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        enrollmentLimit: NON_WIP_ONLY
+        filters: { statuses: [ACTIVE, EXITED] }
       ) {
         offset
         limit
@@ -16496,8 +16567,7 @@ export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
+    $filters: EnrollmentsForProjectFilterOptions
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -16507,8 +16577,7 @@ export const GetProjectEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
+        filters: $filters
       ) {
         offset
         limit
@@ -16542,8 +16611,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

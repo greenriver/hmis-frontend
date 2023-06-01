@@ -15,6 +15,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentSortOption,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
@@ -86,6 +87,7 @@ const AllAssessments = () => {
           fetchPolicy='cache-and-network'
           noData='No assessments.'
           recordType='Assessment'
+          defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>
     </>

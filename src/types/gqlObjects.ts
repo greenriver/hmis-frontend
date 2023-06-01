@@ -1525,11 +1525,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'fileBlobId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'id',
@@ -1556,6 +1552,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'redacted',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'tags',
         type: {
           kind: 'NON_NULL',
@@ -1571,14 +1575,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
           },
         },
       },
-      {
-        name: 'url',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
+      { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },
     ],
   },
   {
@@ -3692,6 +3689,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'ValueBound',
     fields: [
       { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      { name: 'offset', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
       {
         name: 'question',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
@@ -4225,6 +4223,72 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentsForClientFilterOptions',
+    args: [
+      {
+        name: 'openOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'projectTypes',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'statuses',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionStatus',
+              ofType: null,
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'EnrollmentsForProjectFilterOptions',
+    args: [
+      {
+        name: 'openOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'statuses',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionStatus',
+              ofType: null,
+            },
+          },
         },
       },
     ],

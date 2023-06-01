@@ -2150,11 +2150,11 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
+                "name": "filters",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
+                  "kind": "INPUT_OBJECT",
+                  "name": "EnrollmentsForClientFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -2180,38 +2180,6 @@
                   "kind": "SCALAR",
                   "name": "Int",
                   "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "projectTypes",
-                "description": null,
-                "type": {
-                  "kind": "LIST",
-                  "name": null,
-                  "ofType": {
-                    "kind": "NON_NULL",
-                    "name": null,
-                    "ofType": {
-                      "kind": "ENUM",
-                      "name": "ProjectType",
-                      "ofType": null
-                    }
-                  }
                 },
                 "defaultValue": null,
                 "isDeprecated": false,
@@ -8814,6 +8782,35 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "EnrollmentFilterOptionStatus",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "ACTIVE",
+            "description": "Active",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EXITED",
+            "description": "Exited",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INCOMPLETE",
+            "description": "Incomplete",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "EnrollmentHouseholdMemberInput",
         "description": "HMIS Enrollment household member input",
@@ -8889,13 +8886,13 @@
         "enumValues": [
           {
             "name": "HOUSEHOLD_ID",
-            "description": null,
+            "description": "Household ID",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "MOST_RECENT",
-            "description": null,
+            "description": "Most Recent",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -8947,6 +8944,124 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "EnrollmentsForClientFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "openOnDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "projectTypes",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "statuses",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "EnrollmentFilterOptionStatus",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "EnrollmentsForProjectFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "openOnDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "searchTerm",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "statuses",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "EnrollmentFilterOptionStatus",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -10016,13 +10131,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "ID",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -10061,6 +10172,22 @@
           },
           {
             "name": "ownFile",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "redacted",
             "description": null,
             "args": [],
             "type": {
@@ -10128,13 +10255,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -17417,11 +17540,11 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
+                "name": "filters",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
+                  "kind": "INPUT_OBJECT",
+                  "name": "EnrollmentsForProjectFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -17446,30 +17569,6 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "searchTerm",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -24721,6 +24820,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "offset",
+            "description": "Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
               "ofType": null
             },
             "isDeprecated": false,
