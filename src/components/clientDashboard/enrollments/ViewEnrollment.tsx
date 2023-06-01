@@ -122,10 +122,6 @@ const ViewEnrollment = () => {
       </Grid>
       {renderServiceDialog({
         FormActionProps: { submitButtonText: 'Add Service' },
-        // cache clear maybe
-        // onCompleted: function (data: ServiceFieldsFragment): void {
-        //   throw new Error('Function not implemented.');
-        // },
       })}
     </>
   );

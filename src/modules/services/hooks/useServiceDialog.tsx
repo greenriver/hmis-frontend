@@ -32,6 +32,7 @@ import {
   createValuesForSubmit,
   getItemMap,
 } from '@/modules/form/util/formUtil';
+import { cache } from '@/providers/apolloClient';
 import {
   ItemType,
   PickListOption,
@@ -94,6 +95,10 @@ export function useServiceDialog({
       if (errors.length > 0) {
         setErrors(partitionValidations(errors));
       } else {
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'services',
+        });
         closeDialog();
       }
     },
