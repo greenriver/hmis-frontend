@@ -154,7 +154,10 @@ const GenericTableWithData = <
   >(queryDocument, {
     variables: {
       ...queryVariables,
-      filters: filterValues,
+      filters: {
+        ...get(queryVariables, 'filters'),
+        ...filterValues,
+      },
       sortOrder,
       ...(!rowsPath && {
         offset,
@@ -240,13 +243,10 @@ const GenericTableWithData = <
         ? allFieldFilters(recordType, filterInputType)
         : {};
 
-    if (typeof filters === 'function') {
-      return filters(derivedFilters);
-    }
-    return {
-      ...derivedFilters,
-      ...(filters || {}),
-    };
+    if (filters)
+      return typeof filters === 'function' ? filters(derivedFilters) : filters;
+
+    return derivedFilters;
   }, [filters, recordType, filterInputTypeProp]);
 
   const sortOptions = useMemo(

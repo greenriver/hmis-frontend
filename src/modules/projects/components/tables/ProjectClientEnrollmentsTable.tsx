@@ -133,8 +133,10 @@ const ProjectClientEnrollmentsTable = ({
     >
       queryVariables={{
         id: projectId,
-        searchTerm,
-        openOnDate: openOnDateString,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
       }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns || defaultColumns}

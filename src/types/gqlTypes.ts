@@ -11071,8 +11071,7 @@ export type GetProjectPermissionsQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -16328,8 +16327,7 @@ export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
+    $filters: EnrollmentsForProjectFilterOptions
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -16339,7 +16337,7 @@ export const GetProjectEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        filters: { openOnDate: $openOnDate, searchTerm: $searchTerm }
+        filters: $filters
       ) {
         offset
         limit
@@ -16373,8 +16371,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

@@ -15,8 +15,7 @@ query GetProjectPermissions($id: ID!) {
 
 query GetProjectEnrollments(
   $id: ID!
-  $searchTerm: String
-  $openOnDate: ISO8601Date
+  $filters: EnrollmentsForProjectFilterOptions
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -26,7 +25,7 @@ query GetProjectEnrollments(
       limit: $limit
       offset: $offset
       sortOrder: MOST_RECENT
-      filters: { openOnDate: $openOnDate, searchTerm: $searchTerm }
+      filters: $filters
     ) {
       offset
       limit
