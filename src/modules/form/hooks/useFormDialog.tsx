@@ -11,9 +11,10 @@ import { PartialPick } from '@/utils/typeUtil';
 export function useFormDialog<T extends SubmitFormAllowedTypes>() {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
-  const renderFormDialog = (
-    props: PartialPick<EditRecordProps<T>, 'onCompleted' | 'title'>
-  ) => {
+  const renderFormDialog = ({
+    title,
+    ...props
+  }: PartialPick<EditRecordProps<T>, 'onCompleted' | 'title'>) => {
     return (
       <Dialog
         open={!!dialogOpen}
@@ -25,7 +26,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>() {
           sx={{ textTransform: 'none', mb: 2 }}
           color='text.primary'
         >
-          This is a lil form
+          {title}
         </DialogTitle>
         <DialogContent>
           <EditRecord<T>
