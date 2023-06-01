@@ -22,12 +22,13 @@ const TableFilterItemSelect: React.FC<
         }
         loading={loading}
         label={null}
+        autoSelect={false}
       />
     );
   }
   return (
     <FormSelect
-      value={options.find((opt) => value === opt.code)}
+      value={options.find((opt) => value === opt.code) || null}
       options={options || []}
       onChange={(e, val) =>
         onChange(val ? (typeof val === 'string' ? val : val.code) : val)

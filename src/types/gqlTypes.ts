@@ -343,11 +343,9 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -1306,6 +1304,15 @@ export type EnrollmentAccess = {
   id: Scalars['ID'];
 };
 
+export enum EnrollmentFilterOptionStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Exited */
+  Exited = 'EXITED',
+  /** Incomplete */
+  Incomplete = 'INCOMPLETE',
+}
+
 /** HMIS Enrollment household member input */
 export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
@@ -1319,7 +1326,9 @@ export enum EnrollmentLimit {
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
+  /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
+  /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
 
@@ -1338,6 +1347,18 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentsForClientFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
+export type EnrollmentsForProjectFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
 
 export type EnrollmentsPaginated = {
   __typename?: 'EnrollmentsPaginated';
@@ -2689,11 +2710,9 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -7341,6 +7360,7 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -11051,8 +11071,7 @@ export type GetProjectPermissionsQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -13729,10 +13748,20 @@ export type GetClientImageQueryResult = Apollo.QueryResult<
   GetClientImageQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
-  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientEnrollments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: EnrollmentsForClientFilterOptions
+  ) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -13760,6 +13789,7 @@ export const GetClientEnrollmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -13960,7 +13990,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        enrollmentLimit: NON_WIP_ONLY
+        filters: { statuses: [ACTIVE, EXITED] }
       ) {
         offset
         limit
@@ -16297,8 +16327,7 @@ export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
+    $filters: EnrollmentsForProjectFilterOptions
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -16308,8 +16337,7 @@ export const GetProjectEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
+        filters: $filters
       ) {
         offset
         limit
@@ -16343,8 +16371,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

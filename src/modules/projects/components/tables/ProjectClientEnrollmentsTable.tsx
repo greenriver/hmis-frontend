@@ -1,4 +1,5 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
+import { omit } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -14,6 +15,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -131,8 +133,10 @@ const ProjectClientEnrollmentsTable = ({
     >
       queryVariables={{
         id: projectId,
-        searchTerm,
-        openOnDate: openOnDateString,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
       }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns || defaultColumns}
@@ -143,6 +147,11 @@ const ProjectClientEnrollmentsTable = ({
           : 'No clients.'
       }
       pagePath='project.enrollments'
+      recordType='Enrollment'
+      showFilters
+      filters={(f) => omit(f, 'searchTerm')}
+      filterInputType='EnrollmentsForProjectFilterOptions'
+      defaultSortOption={EnrollmentSortOption.MostRecent}
     />
   );
 };

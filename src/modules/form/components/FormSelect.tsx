@@ -64,9 +64,7 @@ const FormSelect = <Multiple extends boolean | undefined>({
       options={options}
       renderOption={renderOption}
       groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
-      isOptionEqualToValue={(option, value) =>
-        optionId(option) === optionId(value)
-      }
+      isOptionEqualToValue={(option, val) => optionId(option) === optionId(val)}
       value={value}
       autoSelect
       {...props}

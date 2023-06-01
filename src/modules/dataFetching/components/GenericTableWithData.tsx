@@ -54,6 +54,8 @@ export interface Props<
   defaultSortOption?: keyof SortOptionsType;
   defaultFilters?: Partial<FilterOptionsType>;
   showFilters?: boolean;
+  noSort?: boolean;
+  noFilter?: boolean;
   queryVariables: QueryVariables;
   queryDocument: TypedDocumentNode<Query, QueryVariables>;
   fetchPolicy?: WatchQueryFetchPolicy;
@@ -122,6 +124,8 @@ const GenericTableWithData = <
   fetchPolicy = 'cache-and-network',
   nonTablePagination = false,
   fullHeight = false,
+  noSort,
+  noFilter,
   header,
   ...props
 }: Props<
@@ -137,9 +141,8 @@ const GenericTableWithData = <
   const [filterValues, setFilterValues] = useState(defaultFilters);
   const [sortOrder, setSortOrder] = useState<typeof defaultSortOptionProp>(
     defaultSortOptionProp ||
-      (recordType
-        ? (getDefaultSortOptionForType(recordType) as keyof SortOptionsType)
-        : undefined)
+      (recordType && getDefaultSortOptionForType(recordType)) ||
+      undefined
   );
 
   const offset = page * rowsPerPage;
@@ -151,7 +154,10 @@ const GenericTableWithData = <
   >(queryDocument, {
     variables: {
       ...queryVariables,
-      filters: filterValues,
+      filters: {
+        ...get(queryVariables, 'filters'),
+        ...filterValues,
+      },
       sortOrder,
       ...(!rowsPath && {
         offset,
@@ -236,12 +242,11 @@ const GenericTableWithData = <
       filterInputType && recordType
         ? allFieldFilters(recordType, filterInputType)
         : {};
-    return {
-      ...derivedFilters,
-      ...(typeof filters === 'function'
-        ? filters(derivedFilters)
-        : filters || {}),
-    };
+
+    if (filters)
+      return typeof filters === 'function' ? filters(derivedFilters) : filters;
+
+    return derivedFilters;
   }, [filters, recordType, filterInputTypeProp]);
 
   const sortOptions = useMemo(
@@ -279,6 +284,8 @@ const GenericTableWithData = <
           })}
         >
           <TableFilters
+            noSort={noSort}
+            noFilter={noFilter}
             loading={loading}
             sorting={
               sortOptions

@@ -25,6 +25,7 @@ const SORT_LAST = {
 const SORT_FIRST = {
   ResidencePriorLengthOfStay: ['TWO_TO_SIX_NIGHTS', 'ONE_NIGHT_OR_LESS'],
   NoYesReasonsForMissingData: ['YES'],
+  EnrollmentFilterOptionStatus: ['INCOMPLETE'],
 };
 
 const DESCRIPTIONS_OVERRIDES = {
