@@ -63,7 +63,7 @@ const MultiPhoneInputWrapper = ({
   value,
   ...props
 }: PartialPick<Props, 'value'>) => (
-  <MultiPhoneInput {...props} value={value || [createInitialValue()]} />
+  <MultiPhoneInput {...props} value={value || []} />
 );
 
 export default MultiPhoneInputWrapper;
