@@ -20,6 +20,7 @@ const ProjectReferrals = () => {
       <Stack spacing={4}>
         <TitleCard
           title='Referral Request'
+          headerVariant='border'
           actions={
             project.access.canManageIncomingReferrals && (
               <ButtonLink
@@ -38,7 +39,7 @@ const ProjectReferrals = () => {
         >
           <ProjectReferralRequestsTable projectId={project.id} />
         </TitleCard>
-        <TitleCard title='Incoming Referrals'>
+        <TitleCard title='Incoming Referrals' headerVariant='border'>
           <ProjectReferralPostingsTable projectId={project.id} />
         </TitleCard>
       </Stack>

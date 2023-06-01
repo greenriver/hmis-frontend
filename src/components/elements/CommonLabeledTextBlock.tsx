@@ -10,7 +10,6 @@ interface Props {
   variant?: TypographyProps['variant'];
 }
 
-// extracted from ViewCard
 export const CommonLabeledTextBlock: React.FC<Props> = ({
   title,
   children,
