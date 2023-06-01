@@ -1,6 +1,7 @@
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
+import ClientName from '@/modules/client/components/ClientName';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { clientBriefName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 
@@ -17,7 +18,12 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'Member Name',
-    render: ({ client }: Row) => clientBriefName(client),
+    render: ({ client }: Row) => (
+      <ClientName
+        client={client}
+        linkToProfile={client.access.canViewEnrollmentDetails}
+      />
+    ),
   },
   {
     header: 'Relationship to HoH',
