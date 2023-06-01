@@ -1,32 +1,18 @@
-import { Chip } from '@mui/material';
 import { useCallback } from 'react';
+
+import { ReferralPostingStatusDisplay } from '../ReferralPostingStatusDisplay';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectReferralPostingsDocument,
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
-  ReferralPostingStatus,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
-
-const StatusDisplay: React.FC<{ status: ReferralPostingStatus }> = ({
-  status,
-}) => {
-  return (
-    <Chip
-      label={HmisEnums.ReferralPostingStatus[status]}
-      size='small'
-      variant='outlined'
-      sx={{ cursor: 'inherit' }}
-    />
-  );
-};
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
@@ -49,7 +35,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Status',
     render: (row: ReferralPostingFieldsFragment) => (
-      <StatusDisplay status={row.status} />
+      <ReferralPostingStatusDisplay status={row.status} />
     ),
   },
   {

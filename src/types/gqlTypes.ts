@@ -3108,6 +3108,7 @@ export type ReferralPosting = {
   statusNoteUpdatedBy?: Maybe<Scalars['String']>;
   statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
+  unitType: UnitTypeObject;
 };
 
 /** Referral Posting Status */
@@ -11538,6 +11539,11 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
+    unitType: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      bedType?: InventoryBedType | null;
+    };
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
       id: string;
@@ -11879,6 +11885,11 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
+  unitType: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    bedType?: InventoryBedType | null;
+  };
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
     id: string;
@@ -13053,6 +13064,10 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusNoteUpdatedBy
     statusUpdatedAt
     statusUpdatedBy
+    unitType {
+      id
+      bedType
+    }
     householdMembers {
       id
       relationshipToHoH

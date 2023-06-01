@@ -30,7 +30,8 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'Gender',
-    render: ({ client }: Row) => client.gender,
+    render: ({ client }: Row) =>
+      client.gender.map((g) => HmisEnums.Gender[g]).join(', '),
   },
 ];
 

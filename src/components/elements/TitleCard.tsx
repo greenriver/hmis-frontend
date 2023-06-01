@@ -1,16 +1,13 @@
-import { Paper, Typography } from '@mui/material';
+import { Paper, PaperProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-const TitleCard = ({
-  title,
-  children,
-  ...props
-}: {
+interface Props extends PaperProps {
   title?: string;
   children: ReactNode;
   'data-testid'?: string;
-}) => (
-  <Paper sx={{ pt: 2, mb: 2 }} data-testid={props['data-testid']}>
+}
+const TitleCard: React.FC<Props> = ({ title, children, sx, ...props }) => (
+  <Paper sx={{ pt: 2, mb: 2, ...sx }} data-testid={props['data-testid']}>
     {title && (
       <Typography variant='h5' sx={{ mx: 2, mb: 2 }}>
         {title}

@@ -30,6 +30,10 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   statusNoteUpdatedBy
   statusUpdatedAt
   statusUpdatedBy
+  unitType {
+    id
+    bedType
+  }
   householdMembers {
     id
     relationshipToHoH
