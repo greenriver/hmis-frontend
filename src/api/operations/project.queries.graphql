@@ -154,6 +154,20 @@ query GetProjectReferralRequests($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetProjectReferralPostings($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    incomingReferralPostings(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ReferralPostingFields
+      }
+    }
+  }
+}
+
 query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   project(id: $id) {
     id
