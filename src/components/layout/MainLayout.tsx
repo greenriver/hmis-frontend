@@ -27,12 +27,20 @@ interface Props {
 }
 
 const MainLayout: React.FC<Props> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading: userLoading } = useAuth();
   const { appName } = useHmisAppSettings();
   const isPrint = useIsPrintView();
+
   // Load root permissions into the cache before loading the page
-  const { loading: permissionsLoading } = useGetRootPermissionsQuery();
-  if (loading || permissionsLoading || !user) return <Loading />;
+  const {
+    data,
+    loading: permissionLoading,
+    error,
+  } = useGetRootPermissionsQuery();
+  if (error) throw error;
+
+  if (userLoading && !user) return <Loading />;
+  if (permissionLoading && !data) return <Loading />;
 
   if (isPrint)
     return (

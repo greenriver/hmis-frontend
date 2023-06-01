@@ -33,7 +33,7 @@ export const PermissionsFilter = <T,>({
   otherwise,
 }: EntityPermissionsFilterProps<T>): JSX.Element => {
   const hasPermission = useHasPermissions(object, permissions, mode);
-  if (loading) return <></>;
+  if (loading && !object) return <></>;
   if (hasPermission) return <>{children}</>;
   if (otherwise) return <>{otherwise}</>;
   return <></>;

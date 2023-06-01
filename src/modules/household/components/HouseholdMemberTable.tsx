@@ -1,5 +1,6 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { Box, Typography } from '@mui/material';
+import { isEmpty } from 'lodash-es';
 import { useMemo } from 'react';
 
 import HouseholdActionButtons from './HouseholdActionButtons';
@@ -32,7 +33,7 @@ const HouseholdMemberTable = ({
   clientId: string;
   enrollmentId: string;
 }) => {
-  const [householdMembers, { loading, error }] =
+  const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);
 
   const { loading: assessmentsLoading, ...assessments } =
@@ -132,7 +133,8 @@ const HouseholdMemberTable = ({
   }, [clientId, assessments]);
 
   if (error) throw error;
-  if (loading || assessmentsLoading) return <Loading />;
+  if (householdMembersLoading && !householdMembers) return <Loading />;
+  if (assessmentsLoading && isEmpty(assessments)) return <Loading />;
 
   return (
     <>
