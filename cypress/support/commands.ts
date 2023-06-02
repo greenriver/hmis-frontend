@@ -41,8 +41,8 @@ Cypress.Commands.add('login', (email, password) => {
 
 Cypress.Commands.add('createClient', (firstName, lastName) => {
   cy.visit('/client/new');
-  cy.get('input[id="first-name"]').type(firstName);
-  cy.get('input[id="last-name"]').type(lastName);
+  cy.testId('first-name').find('input').type(firstName);
+  cy.testId('last-name').find('input').type(lastName);
   cy.get('button[type="submit"]').click();
 });
 
@@ -67,6 +67,10 @@ Cypress.Commands.add('cancelDialog', () => {
 
 Cypress.Commands.add('exitModal', () => {
   cy.get('body').type('{esc}');
+});
+
+Cypress.Commands.add('tableRows', (id) => {
+  return cy.get(`[data-testid="${id}"] table tbody tr`);
 });
 
 Cypress.Commands.add('choose', (id, optionCode, optionName = 'option') => {
@@ -198,6 +202,7 @@ declare global {
       // Selectors
       testId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
       findTestId(id: string, pseudo?: string): Chainable<JQuery<Element>>;
+      tableRows(id: string): Chainable<JQuery<Element>>;
       navItem(id: string): Chainable<JQuery<Element>>;
       getById(id: string): Chainable<JQuery<Element>>;
       inputId(id: string): Chainable<JQuery<Element>>;

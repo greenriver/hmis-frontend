@@ -23,14 +23,67 @@ fragment ClientFields on Client {
   access {
     ...ClientAccessFields
   }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+  names {
+    ...ClientNameObjectFields
+  }
+  addresses {
+    ...ClientAddressFields
+  }
+  phoneNumbers {
+    ...ClientContactPointFields
+  }
+  emailAddresses {
+    ...ClientContactPointFields
+  }
 }
 
 fragment ClientName on Client {
   firstName
   middleName
-  preferredName
   lastName
   nameSuffix
+}
+
+fragment ClientNameObjectFields on ClientName {
+  id
+  first
+  middle
+  last
+  suffix
+  nameDataQuality
+  use
+  notes
+  primary
+  dateCreated
+  dateUpdated
+}
+fragment ClientAddressFields on ClientAddress {
+  id
+  line1
+  line2
+  city
+  state
+  district
+  country
+  postalCode
+  notes
+  use
+  addressType
+  dateCreated
+  dateUpdated
+}
+
+fragment ClientContactPointFields on ClientContactPoint {
+  id
+  value
+  notes
+  use
+  system
+  dateCreated
+  dateUpdated
 }
 
 fragment ClientImage on Client {
@@ -85,6 +138,40 @@ fragment HouseholdClientFields on HouseholdClient {
     access {
       ...ClientAccessFields
     }
+  }
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+  }
+}
+
+fragment HouseholdFields on Household {
+  id
+  householdSize
+  shortId
+  householdClients {
+    ...HouseholdClientFields
+  }
+}
+
+fragment ProjectEnrollmentsHouseholdFields on Household {
+  id
+  householdSize
+  shortId
+  householdClients {
+    ...ProjectEnrollmentsHouseholdClientFields
+  }
+}
+
+fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
+  id
+  relationshipToHoH
+  client {
+    id
+    ...ClientName
+    ...ClientIdentificationFields
   }
   enrollment {
     id
@@ -368,6 +455,7 @@ fragment FileFields on File {
   url
   tags
   ownFile
+  redacted
   enrollmentId
   enrollment {
     id

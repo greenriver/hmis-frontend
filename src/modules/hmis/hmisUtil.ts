@@ -9,14 +9,16 @@ import {
   isYesterday,
   parseISO,
 } from 'date-fns';
-import { isNil, sortBy, startCase } from 'lodash-es';
+import { find, isNil, sortBy, startCase } from 'lodash-es';
 
 import { HmisEnums } from '@/types/gqlEnums';
-import { HmisObjectSchemas } from '@/types/gqlObjects';
+import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
   AssessmentFieldsFragment,
   ClientFieldsFragment,
   ClientNameFragment,
+  CustomDataElementFieldsFragment,
+  CustomDataElementValueFieldsFragment,
   EnrollmentFieldsFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
@@ -153,19 +155,8 @@ export const formatCurrency = (number?: number | null) => {
   return currencyFormatter.format(number);
 };
 
-export const clientNameWithoutPreferred = (
-  client: ClientNameFragment,
-  full = true
-) => {
-  const nameComponents = full
-    ? [client.firstName, client.middleName, client.lastName, client.nameSuffix]
-    : [client.firstName, client.lastName];
-  return nameComponents.filter(Boolean).join(' ');
-};
-
 export const clientNameAllParts = (client: ClientNameFragment) => {
   return [
-    client.preferredName,
     client.firstName,
     client.middleName,
     client.lastName,
@@ -176,11 +167,10 @@ export const clientNameAllParts = (client: ClientNameFragment) => {
 };
 
 export const clientBriefName = (client: ClientNameFragment) =>
-  client.preferredName ||
   [client.firstName, client.lastName].filter(Boolean).join(' ');
 
 export const clientInitials = (client: ClientNameFragment) =>
-  [client.preferredName || client.firstName, client.lastName]
+  [client.firstName, client.lastName]
     .filter(Boolean)
     .map((s) => (s ? s[0] : ''))
     .join('');
@@ -380,9 +370,41 @@ export const getSchemaForType = (type: string) => {
   return HmisObjectSchemas.find((t: any) => t.name === type);
 };
 
+export const getSchemaForInputType = (type: string) => {
+  return HmisInputObjectSchemas.find((t: any) => t.name === type);
+};
+
 export const briefProjectType = (projectType: ProjectType) => {
   if (projectType.length > 3) {
     return startCase(projectType.toLowerCase());
   }
   return projectType;
+};
+
+const customDataElementValue = (
+  val: CustomDataElementValueFieldsFragment
+): any => {
+  return [
+    val.valueBoolean,
+    val.valueDate,
+    val.valueFloat,
+    val.valueInteger,
+    val.valueJson,
+    val.valueString,
+    val.valueText,
+  ].filter((e) => !isNil(e))[0];
+};
+
+export const customDataElementValueForKey = (
+  key: string,
+  elements: CustomDataElementFieldsFragment[]
+) => {
+  const element = find(elements, { key: key });
+  if (!element) return;
+
+  if (element.value) {
+    return customDataElementValue(element.value);
+  } else if (element.values) {
+    return element.values.map((val) => customDataElementValue(val));
+  }
 };

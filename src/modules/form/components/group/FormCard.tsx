@@ -154,6 +154,8 @@ const FormCard = ({
           sx={{
             '& .MuiGrid-item:first-of-type': !item.text ? { pt: 0 } : undefined,
             mt: 0,
+            // hide last pseudo element (assuming its a divider)
+            '& .MuiGrid-item:last-of-type::after': { display: 'none' },
           }}
         >
           {renderChildItem &&

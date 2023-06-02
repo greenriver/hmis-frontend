@@ -15,8 +15,7 @@ query GetProjectPermissions($id: ID!) {
 
 query GetProjectEnrollments(
   $id: ID!
-  $searchTerm: String
-  $openOnDate: ISO8601Date
+  $filters: EnrollmentsForProjectFilterOptions
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -26,8 +25,7 @@ query GetProjectEnrollments(
       limit: $limit
       offset: $offset
       sortOrder: MOST_RECENT
-      openOnDate: $openOnDate
-      searchTerm: $searchTerm
+      filters: $filters
     ) {
       offset
       limit
@@ -39,6 +37,34 @@ query GetProjectEnrollments(
           ...ClientName
           ...ClientIdentificationFields
         }
+      }
+    }
+  }
+}
+
+query GetProjectHouseholds(
+  $id: ID!
+  $searchTerm: String
+  $openOnDate: ISO8601Date
+  $enrollmentLimit: EnrollmentLimit
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  project(id: $id) {
+    id
+    households(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      openOnDate: $openOnDate
+      searchTerm: $searchTerm
+      enrollmentLimit: $enrollmentLimit
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ProjectEnrollmentsHouseholdFields
       }
     }
   }
@@ -122,6 +148,20 @@ query GetProjectReferralRequests($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodesCount
       nodes {
         ...ReferralRequestFields
+      }
+    }
+  }
+}
+
+query GetProjectReferralPostings($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  project(id: $id) {
+    id
+    incomingReferralPostings(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ReferralPostingFields
       }
     }
   }

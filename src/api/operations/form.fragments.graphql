@@ -55,6 +55,7 @@ fragment ItemFields on FormItem {
   readOnly
   repeats
   fieldName
+  customFieldKey
   recordType
   pickListReference
   serviceDetailType
@@ -68,6 +69,7 @@ fragment ItemFields on FormItem {
     question
     valueNumber
     valueDate
+    offset
   }
   pickListOptions {
     ...PickListOptionFields

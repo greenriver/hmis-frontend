@@ -5,10 +5,20 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { ProjectFormTitle } from './ProjectOverview';
 
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EditRecord from '@/modules/form/components/EditRecord';
+import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
-import { FormRole, ProjectAllFieldsFragment } from '@/types/gqlTypes';
+import {
+  DeleteProjectDocument,
+  DeleteProjectMutation,
+  DeleteProjectMutationVariables,
+  FormRole,
+  PickListType,
+  ProjectAllFieldsFragment,
+} from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditProject = () => {
@@ -31,6 +41,16 @@ const EditProject = () => {
     [navigate, project]
   );
 
+  const onSuccessfulDelete = useCallback(() => {
+    const organizationId = project.organization.id;
+    cache.evict({
+      id: `Organization:${organizationId}`,
+      fieldName: 'projects',
+    });
+    evictPickList(PickListType.Project);
+    navigate(generateSafePath(Routes.ORGANIZATION, { organizationId }));
+  }, [project, navigate]);
+
   return (
     <EditRecord<ProjectAllFieldsFragment>
       formRole={FormRole.Project}
@@ -49,6 +69,30 @@ const EditProject = () => {
           />
         </Box>
       }
+      FormNavigationProps={{
+        contentsBelowNavigation: (
+          <Box sx={{ mt: 3 }}>
+            <ProjectPermissionsFilter
+              id={project.id}
+              permissions={'canDeleteProject'}
+            >
+              <DeleteMutationButton<
+                DeleteProjectMutation,
+                DeleteProjectMutationVariables
+              >
+                queryDocument={DeleteProjectDocument}
+                variables={{ input: { id: project.id } }}
+                idPath='deleteProject.project.id'
+                recordName='Project'
+                onSuccess={onSuccessfulDelete}
+                ButtonProps={{ fullWidth: true }}
+              >
+                Delete Project
+              </DeleteMutationButton>
+            </ProjectPermissionsFilter>
+          </Box>
+        ),
+      }}
     />
   );
 };

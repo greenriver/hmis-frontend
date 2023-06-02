@@ -22,4 +22,17 @@ const RequiredLabel = ({
     </Stack>
   );
 };
+
+export const getRequiredLabel = (text: string, required?: boolean) => {
+  return (
+    <RequiredLabel
+      text={text}
+      required={required}
+      TypographyProps={{
+        fontWeight: 600,
+      }}
+    />
+  );
+};
+
 export default RequiredLabel;

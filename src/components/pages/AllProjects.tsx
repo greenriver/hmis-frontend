@@ -13,7 +13,7 @@ import generateSafePath from '@/utils/generateSafePath';
 const AllProjects = () => {
   const { data, loading, error } = useGetAllOrganizationsQuery();
 
-  if (loading) return <Loading />;
+  if (loading && !data) return <Loading />;
   if (error) throw error;
 
   const numOrganizations = data?.organizations?.nodesCount || 0;

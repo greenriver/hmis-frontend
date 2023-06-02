@@ -73,6 +73,7 @@ export type Assessment = {
   access: AssessmentAccess;
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -94,6 +95,10 @@ export type AssessmentAccess = {
   canDeleteEnrollments: Scalars['Boolean'];
   canEditEnrollments: Scalars['Boolean'];
   id: Scalars['ID'];
+};
+
+export type AssessmentFilterOptions = {
+  roles?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -123,9 +128,26 @@ export enum AssessmentLevel {
   Invalid = 'INVALID',
 }
 
+export enum AssessmentRole {
+  /** (ANNUAL) Annual Assessment */
+  Annual = 'ANNUAL',
+  /** (CE) Coordinated Entry */
+  Ce = 'CE',
+  /** (EXIT) Exit Assessment */
+  Exit = 'EXIT',
+  /** (INTAKE) Intake Assessment */
+  Intake = 'INTAKE',
+  /** (POST_EXIT) Post-Exit Assessment */
+  PostExit = 'POST_EXIT',
+  /** (UPDATE) Update Assessment */
+  Update = 'UPDATE',
+}
+
 /** HUD Assessment Sorting Options */
 export enum AssessmentSortOption {
+  /** Assessment Date: Most Recent First */
   AssessmentDate = 'ASSESSMENT_DATE',
+  /** Last Updated: Most Recent First */
   DateUpdated = 'DATE_UPDATED',
 }
 
@@ -263,6 +285,7 @@ export type Client = {
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
   contactPoints: Array<ClientContactPoint>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -270,6 +293,7 @@ export type Client = {
   disabilityGroups: Array<DisabilityGroup>;
   dob?: Maybe<Scalars['ISO8601Date']>;
   dobDataQuality: DobDataQuality;
+  emailAddresses: Array<ClientContactPoint>;
   enrollments: EnrollmentsPaginated;
   ethnicity: Ethnicity;
   externalIds: Array<ExternalIdentifier>;
@@ -286,7 +310,7 @@ export type Client = {
   nameSuffix?: Maybe<Scalars['String']>;
   names: Array<ClientName>;
   personalId: Scalars['String'];
-  preferredName?: Maybe<Scalars['String']>;
+  phoneNumbers: Array<ClientContactPoint>;
   pronouns: Array<Scalars['String']>;
   race: Array<Race>;
   services: ServicesPaginated;
@@ -298,10 +322,10 @@ export type Client = {
 
 /** HUD Client */
 export type ClientAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -319,11 +343,9 @@ export type ClientDisabilitiesArgs = {
 
 /** HUD Client */
 export type ClientEnrollmentsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
@@ -376,6 +398,7 @@ export type ClientAccess = {
 
 export type ClientAddress = {
   __typename?: 'ClientAddress';
+  addressType?: Maybe<ClientAddressType>;
   city?: Maybe<Scalars['String']>;
   client: Client;
   country?: Maybe<Scalars['String']>;
@@ -389,24 +412,31 @@ export type ClientAddress = {
   notes?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
   state?: Maybe<Scalars['String']>;
-  type?: Maybe<ClientAddressType>;
   use?: Maybe<ClientAddressUse>;
   user?: Maybe<User>;
 };
 
 /** Allowed values for ClientAddress.type */
 export enum ClientAddressType {
+  /** Both */
   Both = 'both',
+  /** Physical */
   Physical = 'physical',
+  /** Postal */
   Postal = 'postal',
 }
 
 /** Allowed values for ClientAddress.use */
 export enum ClientAddressUse {
+  /** Home */
   Home = 'home',
+  /** Mail */
   Mail = 'mail',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -448,21 +478,25 @@ export type ClientContactPoint = {
 
 /** Allowed values for ClientContactPoint.system */
 export enum ClientContactPointSystem {
+  /** Email */
   Email = 'email',
-  Fax = 'fax',
-  Other = 'other',
-  Pager = 'pager',
+  /** Phone */
   Phone = 'phone',
-  Sms = 'sms',
+  /** Url */
   Url = 'url',
 }
 
 /** Allowed values for ClientContactPoint.use */
 export enum ClientContactPointUse {
+  /** Home */
   Home = 'home',
+  /** Mobile */
   Mobile = 'mobile',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Work */
   Work = 'work',
 }
 
@@ -494,12 +528,19 @@ export type ClientName = {
 
 /** Allowed values for ClientName.use */
 export enum ClientNameUse {
+  /** Anonymous */
   Anonymous = 'anonymous',
+  /** Maiden */
   Maiden = 'maiden',
+  /** Nickname */
   Nickname = 'nickname',
+  /** Official */
   Official = 'official',
+  /** Old */
   Old = 'old',
+  /** Temp */
   Temp = 'temp',
+  /** Usual */
   Usual = 'usual',
 }
 
@@ -513,7 +554,6 @@ export type ClientSearchInput = {
   lastName?: InputMaybe<Scalars['String']>;
   organizations?: InputMaybe<Array<Scalars['ID']>>;
   personalId?: InputMaybe<Scalars['String']>;
-  preferredName?: InputMaybe<Scalars['String']>;
   projects?: InputMaybe<Array<Scalars['ID']>>;
   /** Last 4 digits of SSN */
   ssnSerial?: InputMaybe<Scalars['String']>;
@@ -550,6 +590,8 @@ export type ClientsPaginated = {
 };
 
 export enum Component {
+  /** Client Address input */
+  Address = 'ADDRESS',
   /** Display text as an error alert */
   AlertError = 'ALERT_ERROR',
   /** Display text as an info alert */
@@ -562,6 +604,8 @@ export enum Component {
   Checkbox = 'CHECKBOX',
   /** Specialized component for rendering disabilities in a table */
   DisabilityTable = 'DISABILITY_TABLE',
+  /** Email address input for ContactPoint */
+  Email = 'EMAIL',
   /** Render a group of inputs horizontally */
   HorizontalGroup = 'HORIZONTAL_GROUP',
   /** Render contents in an info box */
@@ -570,6 +614,10 @@ export enum Component {
   InputGroup = 'INPUT_GROUP',
   /** MCI linking component */
   Mci = 'MCI',
+  /** Client Name input */
+  Name = 'NAME',
+  /** Phone number input for ContactPoint */
+  Phone = 'PHONE',
   /** Render a choice input item as radio buttons */
   RadioButtons = 'RADIO_BUTTONS',
   /** Render a choice input item as vertical radio buttons */
@@ -634,6 +682,31 @@ export type CreateUnitsPayload = {
   clientMutationId?: Maybe<Scalars['String']>;
   errors: Array<ValidationError>;
   units?: Maybe<Array<Unit>>;
+};
+
+export type CustomDataElement = {
+  __typename?: 'CustomDataElement';
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  label: Scalars['String'];
+  repeats: Scalars['Boolean'];
+  value?: Maybe<CustomDataElementValue>;
+  values?: Maybe<Array<CustomDataElementValue>>;
+};
+
+export type CustomDataElementValue = {
+  __typename?: 'CustomDataElementValue';
+  dateCreated: Scalars['ISO8601DateTime'];
+  dateUpdated: Scalars['ISO8601DateTime'];
+  id: Scalars['ID'];
+  user?: Maybe<User>;
+  valueBoolean?: Maybe<Scalars['Boolean']>;
+  valueDate?: Maybe<Scalars['ISO8601Date']>;
+  valueFloat?: Maybe<Scalars['Float']>;
+  valueInteger?: Maybe<Scalars['Int']>;
+  valueJson?: Maybe<Scalars['JsonObject']>;
+  valueString?: Maybe<Scalars['String']>;
+  valueText?: Maybe<Scalars['String']>;
 };
 
 /** CustomForm */
@@ -1168,10 +1241,10 @@ export type Enrollment = {
 
 /** HUD Enrollment */
 export type EnrollmentAssessmentsArgs = {
+  filters?: InputMaybe<AssessmentFilterOptions>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole>>;
   sortOrder?: InputMaybe<AssessmentSortOption>;
 };
 
@@ -1231,6 +1304,15 @@ export type EnrollmentAccess = {
   id: Scalars['ID'];
 };
 
+export enum EnrollmentFilterOptionStatus {
+  /** Active */
+  Active = 'ACTIVE',
+  /** Exited */
+  Exited = 'EXITED',
+  /** Incomplete */
+  Incomplete = 'INCOMPLETE',
+}
+
 /** HMIS Enrollment household member input */
 export type EnrollmentHouseholdMemberInput = {
   id: Scalars['ID'];
@@ -1244,7 +1326,9 @@ export enum EnrollmentLimit {
 
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
+  /** Household ID */
   HouseholdId = 'HOUSEHOLD_ID',
+  /** Most Recent */
   MostRecent = 'MOST_RECENT',
 }
 
@@ -1263,6 +1347,18 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentsForClientFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
+export type EnrollmentsForProjectFilterOptions = {
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
 
 export type EnrollmentsPaginated = {
   __typename?: 'EnrollmentsPaginated';
@@ -1426,14 +1522,15 @@ export type File = {
   enrollment?: Maybe<Enrollment>;
   enrollmentId?: Maybe<Scalars['ID']>;
   expirationDate?: Maybe<Scalars['ISO8601Date']>;
-  fileBlobId: Scalars['ID'];
+  fileBlobId?: Maybe<Scalars['ID']>;
   id: Scalars['ID'];
   name: Scalars['String'];
   ownFile: Scalars['Boolean'];
+  redacted: Scalars['Boolean'];
   tags: Array<Scalars['String']>;
   updatedBy?: Maybe<ApplicationUser>;
   uploadedBy?: Maybe<ApplicationUser>;
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -1499,6 +1596,8 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
+  /** Key of CustomDataElement to save record as. Use record_type to specify type. */
+  customFieldKey?: Maybe<Scalars['String']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
@@ -1597,6 +1696,7 @@ export enum FormRole {
 export type Funder = {
   __typename?: 'Funder';
   active: Scalars['Boolean'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -1840,6 +1940,7 @@ export enum HealthStatus {
 export type Household = {
   __typename?: 'Household';
   householdClients: Array<HouseholdClient>;
+  householdSize: Scalars['Int'];
   id: Scalars['ID'];
   shortId: Scalars['ID'];
 };
@@ -1864,6 +1965,17 @@ export enum HouseholdType {
   /** Invalid Value */
   Invalid = 'INVALID',
 }
+
+export type HouseholdsPaginated = {
+  __typename?: 'HouseholdsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<Household>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
 
 /** 2.02.D */
 export enum HousingType {
@@ -2018,6 +2130,7 @@ export type Inventory = {
   chVetBedInventory?: Maybe<Scalars['Int']>;
   chYouthBedInventory?: Maybe<Scalars['Int']>;
   cocCode: Scalars['String'];
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2067,6 +2180,7 @@ export enum ItemType {
   Group = 'GROUP',
   Image = 'IMAGE',
   Integer = 'INTEGER',
+  Object = 'OBJECT',
   OpenChoice = 'OPEN_CHOICE',
   String = 'STRING',
   Text = 'TEXT',
@@ -2447,6 +2561,7 @@ export type Organization = {
   __typename?: 'Organization';
   access: OrganizationAccess;
   contactInformation?: Maybe<Scalars['String']>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
@@ -2520,6 +2635,7 @@ export type PickListOption = {
 
 export enum PickListType {
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
+  AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Unoccupied units in the specified project */
   AvailableUnits = 'AVAILABLE_UNITS',
   /** Unit types that have unoccupied units in the specified project */
@@ -2567,15 +2683,18 @@ export type Project = {
   active: Scalars['Boolean'];
   contactInformation?: Maybe<Scalars['String']>;
   continuumProject?: Maybe<NoYesMissing>;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   description?: Maybe<Scalars['String']>;
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
+  households: HouseholdsPaginated;
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID'];
   id: Scalars['ID'];
+  incomingReferralPostings: ReferralPostingsPaginated;
   inventories: InventoriesPaginated;
   operatingEndDate?: Maybe<Scalars['ISO8601Date']>;
   operatingStartDate: Scalars['ISO8601Date'];
@@ -2592,6 +2711,19 @@ export type Project = {
 };
 
 export type ProjectEnrollmentsArgs = {
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<EnrollmentSortOption>;
+};
+
+export type ProjectFundersArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<FunderSortOption>;
+};
+
+export type ProjectHouseholdsArgs = {
   enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -2600,10 +2732,9 @@ export type ProjectEnrollmentsArgs = {
   sortOrder?: InputMaybe<EnrollmentSortOption>;
 };
 
-export type ProjectFundersArgs = {
+export type ProjectIncomingReferralPostingsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  sortOrder?: InputMaybe<FunderSortOption>;
 };
 
 export type ProjectInventoriesArgs = {
@@ -2745,6 +2876,8 @@ export type Query = {
   funder?: Maybe<Funder>;
   /** Get most relevant/recent form definition for the specified Role and project (optionally) */
   getFormDefinition?: Maybe<FormDefinition>;
+  /** Get most relevant form definition for the specified service type */
+  getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
@@ -2799,6 +2932,11 @@ export type QueryGetFormDefinitionArgs = {
   enrollmentId?: InputMaybe<Scalars['ID']>;
   projectId?: InputMaybe<Scalars['ID']>;
   role: FormRole;
+};
+
+export type QueryGetServiceFormDefinitionArgs = {
+  customServiceTypeId: Scalars['ID'];
+  projectId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -2949,6 +3087,71 @@ export enum RecordType {
   SsvfService = 'SSVF_SERVICE',
 }
 
+export type ReferralPosting = {
+  __typename?: 'ReferralPosting';
+  assignedDate: Scalars['ISO8601Date'];
+  chronic?: Maybe<Scalars['Boolean']>;
+  denialNote?: Maybe<Scalars['String']>;
+  denialReason?: Maybe<Scalars['String']>;
+  hohName: Scalars['String'];
+  householdSize: Scalars['Int'];
+  id: Scalars['ID'];
+  needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
+  postingIdentifier?: Maybe<Scalars['ID']>;
+  referralDate: Scalars['ISO8601Date'];
+  referralIdentifier?: Maybe<Scalars['ID']>;
+  referralNotes?: Maybe<Scalars['String']>;
+  referralRequest?: Maybe<ReferralRequest>;
+  referralResult?: Maybe<ReferralResult>;
+  referredBy: Scalars['String'];
+  referredFrom: Scalars['String'];
+  resourceCoordinatorNotes?: Maybe<Scalars['String']>;
+  score?: Maybe<Scalars['Int']>;
+  status: ReferralPostingStatus;
+  statusNote?: Maybe<Scalars['String']>;
+  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusNoteUpdatedBy?: Maybe<Scalars['String']>;
+  statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusUpdatedBy?: Maybe<Scalars['String']>;
+};
+
+/** Referral Posting Status */
+export enum ReferralPostingStatus {
+  /** Accepted By Other Program */
+  AcceptedByOtherProgramStatus = 'accepted_by_other_program_status',
+  /** Accepted Pending */
+  AcceptedPendingStatus = 'accepted_pending_status',
+  /** Accepted */
+  AcceptedStatus = 'accepted_status',
+  /** Assigned */
+  AssignedStatus = 'assigned_status',
+  /** Assigned To Other Program */
+  AssignedToOtherProgramStatus = 'assigned_to_other_program_status',
+  /** Closed */
+  ClosedStatus = 'closed_status',
+  /** Denied Pending */
+  DeniedPendingStatus = 'denied_pending_status',
+  /** Denied */
+  DeniedStatus = 'denied_status',
+  /** New */
+  NewStatus = 'new_status',
+  /** Not Selected */
+  NotSelectedStatus = 'not_selected_status',
+  /** Void */
+  VoidStatus = 'void_status',
+}
+
+export type ReferralPostingsPaginated = {
+  __typename?: 'ReferralPostingsPaginated';
+  hasMoreAfter: Scalars['Boolean'];
+  hasMoreBefore: Scalars['Boolean'];
+  limit: Scalars['Int'];
+  nodes: Array<ReferralPosting>;
+  nodesCount: Scalars['Int'];
+  offset: Scalars['Int'];
+  pagesCount: Scalars['Int'];
+};
+
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
   id: Scalars['ID'];
@@ -3084,6 +3287,7 @@ export type Service = {
   __typename?: 'Service';
   FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateProvided: Scalars['ISO8601Date'];
@@ -3661,6 +3865,8 @@ export type ValueBound = {
   __typename?: 'ValueBound';
   /** Unique identifier for this bound */
   id?: Maybe<Scalars['String']>;
+  /** Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days. */
+  offset?: Maybe<Scalars['Int']>;
   /** Link ID of dependent question, if this items value should be compared to another items value */
   question?: Maybe<Scalars['String']>;
   /** Severity of bound. If error, user will be unable to submit a value that does not meet this condition. */
@@ -3914,6 +4120,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -3939,6 +4146,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -3964,6 +4172,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -3989,6 +4198,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4014,6 +4224,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4031,6 +4242,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4089,6 +4301,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4147,6 +4360,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4205,6 +4419,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -4263,6 +4478,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -4425,6 +4641,7 @@ export type GetAssessmentQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -4450,6 +4667,7 @@ export type GetAssessmentQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4475,6 +4693,7 @@ export type GetAssessmentQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4500,6 +4719,7 @@ export type GetAssessmentQuery = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -4525,6 +4745,7 @@ export type GetAssessmentQuery = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -4542,6 +4763,7 @@ export type GetAssessmentQuery = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -4600,6 +4822,7 @@ export type GetAssessmentQuery = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -4658,6 +4881,7 @@ export type GetAssessmentQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -4716,6 +4940,7 @@ export type GetAssessmentQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -4774,6 +4999,7 @@ export type GetAssessmentQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -4842,8 +5068,9 @@ export type GetEnrollmentAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
 }>;
 
 export type GetEnrollmentAssessmentsQuery = {
@@ -4936,6 +5163,7 @@ export type SaveAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -4961,6 +5189,7 @@ export type SaveAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -4986,6 +5215,7 @@ export type SaveAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5011,6 +5241,7 @@ export type SaveAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5036,6 +5267,7 @@ export type SaveAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -5053,6 +5285,7 @@ export type SaveAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5111,6 +5344,7 @@ export type SaveAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5169,6 +5403,7 @@ export type SaveAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5227,6 +5462,7 @@ export type SaveAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5285,6 +5521,7 @@ export type SaveAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -5410,6 +5647,7 @@ export type SubmitAssessmentMutation = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -5435,6 +5673,7 @@ export type SubmitAssessmentMutation = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -5460,6 +5699,7 @@ export type SubmitAssessmentMutation = {
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
                   fieldName?: string | null;
+                  customFieldKey?: string | null;
                   recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
@@ -5485,6 +5725,7 @@ export type SubmitAssessmentMutation = {
                     readOnly?: boolean | null;
                     repeats?: boolean | null;
                     fieldName?: string | null;
+                    customFieldKey?: string | null;
                     recordType?: RelatedRecordType | null;
                     pickListReference?: string | null;
                     serviceDetailType?: ServiceDetailType | null;
@@ -5510,6 +5751,7 @@ export type SubmitAssessmentMutation = {
                       readOnly?: boolean | null;
                       repeats?: boolean | null;
                       fieldName?: string | null;
+                      customFieldKey?: string | null;
                       recordType?: RelatedRecordType | null;
                       pickListReference?: string | null;
                       serviceDetailType?: ServiceDetailType | null;
@@ -5527,6 +5769,7 @@ export type SubmitAssessmentMutation = {
                         question?: string | null;
                         valueNumber?: number | null;
                         valueDate?: string | null;
+                        offset?: number | null;
                       }> | null;
                       pickListOptions?: Array<{
                         __typename?: 'PickListOption';
@@ -5585,6 +5828,7 @@ export type SubmitAssessmentMutation = {
                       question?: string | null;
                       valueNumber?: number | null;
                       valueDate?: string | null;
+                      offset?: number | null;
                     }> | null;
                     pickListOptions?: Array<{
                       __typename?: 'PickListOption';
@@ -5643,6 +5887,7 @@ export type SubmitAssessmentMutation = {
                     question?: string | null;
                     valueNumber?: number | null;
                     valueDate?: string | null;
+                    offset?: number | null;
                   }> | null;
                   pickListOptions?: Array<{
                     __typename?: 'PickListOption';
@@ -5701,6 +5946,7 @@ export type SubmitAssessmentMutation = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -5759,6 +6005,7 @@ export type SubmitAssessmentMutation = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -5872,7 +6119,7 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  roles?: InputMaybe<Array<FormRole> | FormRole>;
+  roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
   inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
@@ -5991,7 +6238,6 @@ export type ClientFieldsFragment = {
   ssn?: string | null;
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
   externalIds: Array<{
@@ -6019,6 +6265,91 @@ export type ClientFieldsFragment = {
     canViewAnyConfidentialClientFiles: boolean;
     canViewAnyNonconfidentialClientFiles: boolean;
   };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+  names: Array<{
+    __typename?: 'ClientName';
+    id: string;
+    first?: string | null;
+    middle?: string | null;
+    last?: string | null;
+    suffix?: string | null;
+    nameDataQuality?: NameDataQuality | null;
+    use?: ClientNameUse | null;
+    notes?: string | null;
+    primary?: boolean | null;
+    dateCreated: string;
+    dateUpdated: string;
+  }>;
+  addresses: Array<{
+    __typename?: 'ClientAddress';
+    id: string;
+    line1?: string | null;
+    line2?: string | null;
+    city?: string | null;
+    state?: string | null;
+    district?: string | null;
+    country?: string | null;
+    postalCode?: string | null;
+    notes?: string | null;
+    use?: ClientAddressUse | null;
+    addressType?: ClientAddressType | null;
+    dateCreated: string;
+    dateUpdated: string;
+  }>;
+  phoneNumbers: Array<{
+    __typename?: 'ClientContactPoint';
+    id: string;
+    value?: string | null;
+    notes?: string | null;
+    use?: ClientContactPointUse | null;
+    system?: ClientContactPointSystem | null;
+    dateCreated: string;
+    dateUpdated: string;
+  }>;
+  emailAddresses: Array<{
+    __typename?: 'ClientContactPoint';
+    id: string;
+    value?: string | null;
+    notes?: string | null;
+    use?: ClientContactPointUse | null;
+    system?: ClientContactPointSystem | null;
+    dateCreated: string;
+    dateUpdated: string;
+  }>;
   image?: {
     __typename?: 'ClientImage';
     id: string;
@@ -6031,9 +6362,51 @@ export type ClientNameFragment = {
   __typename?: 'Client';
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
+};
+
+export type ClientNameObjectFieldsFragment = {
+  __typename?: 'ClientName';
+  id: string;
+  first?: string | null;
+  middle?: string | null;
+  last?: string | null;
+  suffix?: string | null;
+  nameDataQuality?: NameDataQuality | null;
+  use?: ClientNameUse | null;
+  notes?: string | null;
+  primary?: boolean | null;
+  dateCreated: string;
+  dateUpdated: string;
+};
+
+export type ClientAddressFieldsFragment = {
+  __typename?: 'ClientAddress';
+  id: string;
+  line1?: string | null;
+  line2?: string | null;
+  city?: string | null;
+  state?: string | null;
+  district?: string | null;
+  country?: string | null;
+  postalCode?: string | null;
+  notes?: string | null;
+  use?: ClientAddressUse | null;
+  addressType?: ClientAddressType | null;
+  dateCreated: string;
+  dateUpdated: string;
+};
+
+export type ClientContactPointFieldsFragment = {
+  __typename?: 'ClientContactPoint';
+  id: string;
+  value?: string | null;
+  notes?: string | null;
+  use?: ClientContactPointUse | null;
+  system?: ClientContactPointSystem | null;
+  dateCreated: string;
+  dateUpdated: string;
 };
 
 export type ClientImageFragment = {
@@ -6085,7 +6458,6 @@ export type ClientOmniSearchFieldsFragment = {
   personalId: string;
   firstName?: string | null;
   middleName?: string | null;
-  preferredName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
 };
@@ -6100,7 +6472,6 @@ export type HouseholdClientFieldsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
@@ -6122,6 +6493,120 @@ export type HouseholdClientFieldsFragment = {
       canManageOwnClientFiles: boolean;
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
+    };
+  };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+  };
+};
+
+export type HouseholdFieldsFragment = {
+  __typename?: 'Household';
+  id: string;
+  householdSize: number;
+  shortId: string;
+  householdClients: Array<{
+    __typename?: 'HouseholdClient';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      veteranStatus: NoYesReasonsForMissingData;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+        canEditClient: boolean;
+        canDeleteClient: boolean;
+        canViewDob: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
+      };
+    };
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      inProgress: boolean;
+    };
+  }>;
+};
+
+export type ProjectEnrollmentsHouseholdFieldsFragment = {
+  __typename?: 'Household';
+  id: string;
+  householdSize: number;
+  shortId: string;
+  householdClients: Array<{
+    __typename?: 'HouseholdClient';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+      };
+    };
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      inProgress: boolean;
+    };
+  }>;
+};
+
+export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
+  __typename?: 'HouseholdClient';
+  id: string;
+  relationshipToHoH: RelationshipToHoH;
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+    dob?: string | null;
+    age?: number | null;
+    ssn?: string | null;
+    access: {
+      __typename?: 'ClientAccess';
+      id: string;
+      canViewFullSsn: boolean;
+      canViewPartialSsn: boolean;
     };
   };
   enrollment: {
@@ -6162,7 +6647,6 @@ export type HouseholdClientFieldsWithAssessmentsFragment = {
     veteranStatus: NoYesReasonsForMissingData;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     dob?: string | null;
@@ -6258,7 +6742,6 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         veteranStatus: NoYesReasonsForMissingData;
         firstName?: string | null;
         middleName?: string | null;
-        preferredName?: string | null;
         lastName?: string | null;
         nameSuffix?: string | null;
         dob?: string | null;
@@ -6499,10 +6982,11 @@ export type FileFieldsFragment = {
   expirationDate?: string | null;
   id: string;
   name: string;
-  fileBlobId: string;
-  url: string;
+  fileBlobId?: string | null;
+  url?: string | null;
   tags: Array<string>;
   ownFile: boolean;
+  redacted: boolean;
   enrollmentId?: string | null;
   dateCreated: string;
   dateUpdated: string;
@@ -6564,7 +7048,6 @@ export type SearchClientsQuery = {
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
@@ -6592,6 +7075,91 @@ export type SearchClientsQuery = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+      names: Array<{
+        __typename?: 'ClientName';
+        id: string;
+        first?: string | null;
+        middle?: string | null;
+        last?: string | null;
+        suffix?: string | null;
+        nameDataQuality?: NameDataQuality | null;
+        use?: ClientNameUse | null;
+        notes?: string | null;
+        primary?: boolean | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        addressType?: ClientAddressType | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      phoneNumbers: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      emailAddresses: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -6628,7 +7196,6 @@ export type GetClientQuery = {
     ssn?: string | null;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
     externalIds: Array<{
@@ -6656,6 +7223,91 @@ export type GetClientQuery = {
       canViewAnyConfidentialClientFiles: boolean;
       canViewAnyNonconfidentialClientFiles: boolean;
     };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+    names: Array<{
+      __typename?: 'ClientName';
+      id: string;
+      first?: string | null;
+      middle?: string | null;
+      last?: string | null;
+      suffix?: string | null;
+      nameDataQuality?: NameDataQuality | null;
+      use?: ClientNameUse | null;
+      notes?: string | null;
+      primary?: boolean | null;
+      dateCreated: string;
+      dateUpdated: string;
+    }>;
+    addresses: Array<{
+      __typename?: 'ClientAddress';
+      id: string;
+      line1?: string | null;
+      line2?: string | null;
+      city?: string | null;
+      state?: string | null;
+      district?: string | null;
+      country?: string | null;
+      postalCode?: string | null;
+      notes?: string | null;
+      use?: ClientAddressUse | null;
+      addressType?: ClientAddressType | null;
+      dateCreated: string;
+      dateUpdated: string;
+    }>;
+    phoneNumbers: Array<{
+      __typename?: 'ClientContactPoint';
+      id: string;
+      value?: string | null;
+      notes?: string | null;
+      use?: ClientContactPointUse | null;
+      system?: ClientContactPointSystem | null;
+      dateCreated: string;
+      dateUpdated: string;
+    }>;
+    emailAddresses: Array<{
+      __typename?: 'ClientContactPoint';
+      id: string;
+      value?: string | null;
+      notes?: string | null;
+      use?: ClientContactPointUse | null;
+      system?: ClientContactPointSystem | null;
+      dateCreated: string;
+      dateUpdated: string;
+    }>;
     image?: {
       __typename?: 'ClientImage';
       id: string;
@@ -6676,7 +7328,6 @@ export type GetClientNameQuery = {
     id: string;
     firstName?: string | null;
     middleName?: string | null;
-    preferredName?: string | null;
     lastName?: string | null;
     nameSuffix?: string | null;
   } | null;
@@ -6733,6 +7384,7 @@ export type GetClientEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<EnrollmentsForClientFilterOptions>;
 }>;
 
 export type GetClientEnrollmentsQuery = {
@@ -6809,6 +7461,8 @@ export type GetClientAssessmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
 }>;
 
 export type GetClientAssessmentsQuery = {
@@ -7074,7 +7728,6 @@ export type UpdateRelationshipToHoHMutation = {
             veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
-            preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
@@ -7204,10 +7857,11 @@ export type DeleteClientFileMutation = {
       expirationDate?: string | null;
       id: string;
       name: string;
-      fileBlobId: string;
-      url: string;
+      fileBlobId?: string | null;
+      url?: string | null;
       tags: Array<string>;
       ownFile: boolean;
+      redacted: boolean;
       enrollmentId?: string | null;
       dateCreated: string;
       dateUpdated: string;
@@ -7272,7 +7926,6 @@ export type AddHouseholdMembersMutation = {
             veteranStatus: NoYesReasonsForMissingData;
             firstName?: string | null;
             middleName?: string | null;
-            preferredName?: string | null;
             lastName?: string | null;
             nameSuffix?: string | null;
             dob?: string | null;
@@ -7365,7 +8018,6 @@ export type DeleteClientMutation = {
       ssn?: string | null;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
       externalIds: Array<{
@@ -7393,6 +8045,91 @@ export type DeleteClientMutation = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+      names: Array<{
+        __typename?: 'ClientName';
+        id: string;
+        first?: string | null;
+        middle?: string | null;
+        last?: string | null;
+        suffix?: string | null;
+        nameDataQuality?: NameDataQuality | null;
+        use?: ClientNameUse | null;
+        notes?: string | null;
+        primary?: boolean | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      addresses: Array<{
+        __typename?: 'ClientAddress';
+        id: string;
+        line1?: string | null;
+        line2?: string | null;
+        city?: string | null;
+        state?: string | null;
+        district?: string | null;
+        country?: string | null;
+        postalCode?: string | null;
+        notes?: string | null;
+        use?: ClientAddressUse | null;
+        addressType?: ClientAddressType | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      phoneNumbers: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
+      emailAddresses: Array<{
+        __typename?: 'ClientContactPoint';
+        id: string;
+        value?: string | null;
+        notes?: string | null;
+        use?: ClientContactPointUse | null;
+        system?: ClientContactPointSystem | null;
+        dateCreated: string;
+        dateUpdated: string;
+      }>;
       image?: {
         __typename?: 'ClientImage';
         id: string;
@@ -7600,7 +8337,6 @@ export type GetEnrollmentWithHouseholdQuery = {
           veteranStatus: NoYesReasonsForMissingData;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
@@ -7748,7 +8484,6 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               veteranStatus: NoYesReasonsForMissingData;
               firstName?: string | null;
               middleName?: string | null;
-              preferredName?: string | null;
               lastName?: string | null;
               nameSuffix?: string | null;
               dob?: string | null;
@@ -7999,10 +8734,11 @@ export type GetFileQuery = {
     expirationDate?: string | null;
     id: string;
     name: string;
-    fileBlobId: string;
-    url: string;
+    fileBlobId?: string | null;
+    url?: string | null;
     tags: Array<string>;
     ownFile: boolean;
+    redacted: boolean;
     enrollmentId?: string | null;
     dateCreated: string;
     dateUpdated: string;
@@ -8045,10 +8781,11 @@ export type GetClientFilesQuery = {
         expirationDate?: string | null;
         id: string;
         name: string;
-        fileBlobId: string;
-        url: string;
+        fileBlobId?: string | null;
+        url?: string | null;
         tags: Array<string>;
         ownFile: boolean;
+        redacted: boolean;
         enrollmentId?: string | null;
         dateCreated: string;
         dateUpdated: string;
@@ -8067,6 +8804,57 @@ export type GetClientFilesQuery = {
       }>;
     };
   } | null;
+};
+
+export type CustomDataElementValueFieldsFragment = {
+  __typename?: 'CustomDataElementValue';
+  id: string;
+  valueBoolean?: boolean | null;
+  valueDate?: string | null;
+  valueFloat?: number | null;
+  valueInteger?: number | null;
+  valueJson?: any | null;
+  valueString?: string | null;
+  valueText?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
+export type CustomDataElementFieldsFragment = {
+  __typename?: 'CustomDataElement';
+  id: string;
+  key: string;
+  label: string;
+  repeats: boolean;
+  value?: {
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  } | null;
+  values?: Array<{
+    __typename?: 'CustomDataElementValue';
+    id: string;
+    valueBoolean?: boolean | null;
+    valueDate?: string | null;
+    valueFloat?: number | null;
+    valueInteger?: number | null;
+    valueJson?: any | null;
+    valueString?: string | null;
+    valueText?: string | null;
+    dateCreated: string;
+    dateUpdated: string;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+  }> | null;
 };
 
 export type ValidationErrorFieldsFragment = {
@@ -8131,6 +8919,7 @@ export type ItemFieldsFragment = {
   readOnly?: boolean | null;
   repeats?: boolean | null;
   fieldName?: string | null;
+  customFieldKey?: string | null;
   recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
@@ -8148,6 +8937,7 @@ export type ItemFieldsFragment = {
     question?: string | null;
     valueNumber?: number | null;
     valueDate?: string | null;
+    offset?: number | null;
   }> | null;
   pickListOptions?: Array<{
     __typename?: 'PickListOption';
@@ -8224,6 +9014,7 @@ export type FormDefinitionWithJsonFragment = {
       readOnly?: boolean | null;
       repeats?: boolean | null;
       fieldName?: string | null;
+      customFieldKey?: string | null;
       recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
@@ -8249,6 +9040,7 @@ export type FormDefinitionWithJsonFragment = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8274,6 +9066,7 @@ export type FormDefinitionWithJsonFragment = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8299,6 +9092,7 @@ export type FormDefinitionWithJsonFragment = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8324,6 +9118,7 @@ export type FormDefinitionWithJsonFragment = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8341,6 +9136,7 @@ export type FormDefinitionWithJsonFragment = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -8399,6 +9195,7 @@ export type FormDefinitionWithJsonFragment = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -8457,6 +9254,7 @@ export type FormDefinitionWithJsonFragment = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -8515,6 +9313,7 @@ export type FormDefinitionWithJsonFragment = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -8573,6 +9372,7 @@ export type FormDefinitionWithJsonFragment = {
         question?: string | null;
         valueNumber?: number | null;
         valueDate?: string | null;
+        offset?: number | null;
       }> | null;
       pickListOptions?: Array<{
         __typename?: 'PickListOption';
@@ -8688,6 +9488,7 @@ export type GetFormDefinitionQuery = {
         readOnly?: boolean | null;
         repeats?: boolean | null;
         fieldName?: string | null;
+        customFieldKey?: string | null;
         recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
@@ -8713,6 +9514,7 @@ export type GetFormDefinitionQuery = {
           readOnly?: boolean | null;
           repeats?: boolean | null;
           fieldName?: string | null;
+          customFieldKey?: string | null;
           recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
@@ -8738,6 +9540,7 @@ export type GetFormDefinitionQuery = {
             readOnly?: boolean | null;
             repeats?: boolean | null;
             fieldName?: string | null;
+            customFieldKey?: string | null;
             recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
@@ -8763,6 +9566,7 @@ export type GetFormDefinitionQuery = {
               readOnly?: boolean | null;
               repeats?: boolean | null;
               fieldName?: string | null;
+              customFieldKey?: string | null;
               recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
@@ -8788,6 +9592,7 @@ export type GetFormDefinitionQuery = {
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
                 fieldName?: string | null;
+                customFieldKey?: string | null;
                 recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
@@ -8805,6 +9610,7 @@ export type GetFormDefinitionQuery = {
                   question?: string | null;
                   valueNumber?: number | null;
                   valueDate?: string | null;
+                  offset?: number | null;
                 }> | null;
                 pickListOptions?: Array<{
                   __typename?: 'PickListOption';
@@ -8863,6 +9669,7 @@ export type GetFormDefinitionQuery = {
                 question?: string | null;
                 valueNumber?: number | null;
                 valueDate?: string | null;
+                offset?: number | null;
               }> | null;
               pickListOptions?: Array<{
                 __typename?: 'PickListOption';
@@ -8921,6 +9728,7 @@ export type GetFormDefinitionQuery = {
               question?: string | null;
               valueNumber?: number | null;
               valueDate?: string | null;
+              offset?: number | null;
             }> | null;
             pickListOptions?: Array<{
               __typename?: 'PickListOption';
@@ -8979,6 +9787,7 @@ export type GetFormDefinitionQuery = {
             question?: string | null;
             valueNumber?: number | null;
             valueDate?: string | null;
+            offset?: number | null;
           }> | null;
           pickListOptions?: Array<{
             __typename?: 'PickListOption';
@@ -9037,6 +9846,7 @@ export type GetFormDefinitionQuery = {
           question?: string | null;
           valueNumber?: number | null;
           valueDate?: string | null;
+          offset?: number | null;
         }> | null;
         pickListOptions?: Array<{
           __typename?: 'PickListOption';
@@ -9121,7 +9931,6 @@ export type SubmitFormMutation = {
           ssn?: string | null;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           externalIds: Array<{
@@ -9149,6 +9958,91 @@ export type SubmitFormMutation = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
+          names: Array<{
+            __typename?: 'ClientName';
+            id: string;
+            first?: string | null;
+            middle?: string | null;
+            last?: string | null;
+            suffix?: string | null;
+            nameDataQuality?: NameDataQuality | null;
+            use?: ClientNameUse | null;
+            notes?: string | null;
+            primary?: boolean | null;
+            dateCreated: string;
+            dateUpdated: string;
+          }>;
+          addresses: Array<{
+            __typename?: 'ClientAddress';
+            id: string;
+            line1?: string | null;
+            line2?: string | null;
+            city?: string | null;
+            state?: string | null;
+            district?: string | null;
+            country?: string | null;
+            postalCode?: string | null;
+            notes?: string | null;
+            use?: ClientAddressUse | null;
+            addressType?: ClientAddressType | null;
+            dateCreated: string;
+            dateUpdated: string;
+          }>;
+          phoneNumbers: Array<{
+            __typename?: 'ClientContactPoint';
+            id: string;
+            value?: string | null;
+            notes?: string | null;
+            use?: ClientContactPointUse | null;
+            system?: ClientContactPointSystem | null;
+            dateCreated: string;
+            dateUpdated: string;
+          }>;
+          emailAddresses: Array<{
+            __typename?: 'ClientContactPoint';
+            id: string;
+            value?: string | null;
+            notes?: string | null;
+            use?: ClientContactPointUse | null;
+            system?: ClientContactPointSystem | null;
+            dateCreated: string;
+            dateUpdated: string;
+          }>;
           image?: {
             __typename?: 'ClientImage';
             id: string;
@@ -9164,10 +10058,11 @@ export type SubmitFormMutation = {
           expirationDate?: string | null;
           id: string;
           name: string;
-          fileBlobId: string;
-          url: string;
+          fileBlobId?: string | null;
+          url?: string | null;
           tags: Array<string>;
           ownFile: boolean;
+          redacted: boolean;
           enrollmentId?: string | null;
           dateCreated: string;
           dateUpdated: string;
@@ -9219,12 +10114,47 @@ export type SubmitFormMutation = {
           youthBedInventory?: number | null;
           youthVetBedInventory?: number | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Organization';
           id: string;
-          organizationName: string;
           hudId: string;
+          organizationName: string;
           description?: string | null;
           contactInformation?: string | null;
           victimServiceProvider: NoYesMissing;
@@ -9232,6 +10162,41 @@ export type SubmitFormMutation = {
           dateUpdated: string;
           dateDeleted?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'Project';
@@ -9253,6 +10218,7 @@ export type SubmitFormMutation = {
           organization: {
             __typename?: 'Organization';
             id: string;
+            hudId: string;
             organizationName: string;
           };
           access: {
@@ -9274,6 +10240,41 @@ export type SubmitFormMutation = {
             canManageOutgoingReferrals: boolean;
           };
           user?: { __typename: 'User'; id: string; name: string } | null;
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | {
           __typename?: 'ProjectCoc';
@@ -9364,6 +10365,41 @@ export type InventoryFieldsFragment = {
   youthBedInventory?: number | null;
   youthVetBedInventory?: number | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type UnitTypeFieldsFragment = {
@@ -9456,6 +10492,7 @@ export type ClearMciMutation = {
 
 export type OmniSearchClientsQueryVariables = Exact<{
   textSearch: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchClientsQuery = {
@@ -9473,7 +10510,6 @@ export type OmniSearchClientsQuery = {
       personalId: string;
       firstName?: string | null;
       middleName?: string | null;
-      preferredName?: string | null;
       lastName?: string | null;
       nameSuffix?: string | null;
     }>;
@@ -9482,6 +10518,7 @@ export type OmniSearchClientsQuery = {
 
 export type OmniSearchProjectsQueryVariables = Exact<{
   searchTerm: Scalars['String'];
+  limit?: InputMaybe<Scalars['Int']>;
 }>;
 
 export type OmniSearchProjectsQuery = {
@@ -9516,7 +10553,6 @@ export type GetRecentItemsQuery = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -9550,7 +10586,6 @@ export type AddRecentItemMutation = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -9581,7 +10616,6 @@ export type ClearRecentItemsMutation = {
           personalId: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
         }
@@ -9598,6 +10632,7 @@ export type ClearRecentItemsMutation = {
 export type OrganizationNameFieldsFragment = {
   __typename?: 'Organization';
   id: string;
+  hudId: string;
   organizationName: string;
 };
 
@@ -9612,13 +10647,48 @@ export type OrganizationDetailFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type OrganizationFieldsFragment = {
   __typename?: 'Organization';
   id: string;
-  organizationName: string;
   hudId: string;
+  organizationName: string;
   description?: string | null;
   contactInformation?: string | null;
   victimServiceProvider: NoYesMissing;
@@ -9626,6 +10696,41 @@ export type OrganizationFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type GetAllOrganizationsQueryVariables = Exact<{ [key: string]: never }>;
@@ -9638,6 +10743,7 @@ export type GetAllOrganizationsQuery = {
     nodes: Array<{
       __typename?: 'Organization';
       id: string;
+      hudId: string;
       organizationName: string;
       projects: { __typename?: 'ProjectsPaginated'; nodesCount: number };
     }>;
@@ -9653,8 +10759,8 @@ export type GetOrganizationQuery = {
   organization?: {
     __typename?: 'Organization';
     id: string;
-    organizationName: string;
     hudId: string;
+    organizationName: string;
     description?: string | null;
     contactInformation?: string | null;
     victimServiceProvider: NoYesMissing;
@@ -9668,6 +10774,41 @@ export type GetOrganizationQuery = {
       canDeleteOrganization: boolean;
     };
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -9761,6 +10902,7 @@ export type ProjectAllFieldsFragment = {
   organization: {
     __typename?: 'Organization';
     id: string;
+    hudId: string;
     organizationName: string;
   };
   access: {
@@ -9782,6 +10924,41 @@ export type ProjectAllFieldsFragment = {
     canManageOutgoingReferrals: boolean;
   };
   user?: { __typename: 'User'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
 };
 
 export type ProjectCocFieldsFragment = {
@@ -9841,6 +11018,7 @@ export type GetProjectQuery = {
     organization: {
       __typename?: 'Organization';
       id: string;
+      hudId: string;
       organizationName: string;
     };
     access: {
@@ -9862,6 +11040,41 @@ export type GetProjectQuery = {
       canManageOutgoingReferrals: boolean;
     };
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -9897,8 +11110,7 @@ export type GetProjectPermissionsQuery = {
 
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -9926,7 +11138,6 @@ export type GetProjectEnrollmentsQuery = {
           id: string;
           firstName?: string | null;
           middleName?: string | null;
-          preferredName?: string | null;
           lastName?: string | null;
           nameSuffix?: string | null;
           dob?: string | null;
@@ -9952,6 +11163,64 @@ export type GetProjectEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectHouseholdsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  searchTerm?: InputMaybe<Scalars['String']>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectHouseholdsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    households: {
+      __typename?: 'HouseholdsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Household';
+        id: string;
+        householdSize: number;
+        shortId: string;
+        householdClients: Array<{
+          __typename?: 'HouseholdClient';
+          id: string;
+          relationshipToHoH: RelationshipToHoH;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+            dob?: string | null;
+            age?: number | null;
+            ssn?: string | null;
+            access: {
+              __typename?: 'ClientAccess';
+              id: string;
+              canViewFullSsn: boolean;
+              canViewPartialSsn: boolean;
+            };
+          };
+          enrollment: {
+            __typename?: 'Enrollment';
+            id: string;
+            entryDate: string;
+            exitDate?: string | null;
+            inProgress: boolean;
+          };
+        }>;
       }>;
     };
   } | null;
@@ -10033,6 +11302,41 @@ export type GetInventoryQuery = {
     youthBedInventory?: number | null;
     youthVetBedInventory?: number | null;
     user?: { __typename: 'User'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -10140,6 +11444,41 @@ export type GetProjectInventoriesQuery = {
         youthBedInventory?: number | null;
         youthVetBedInventory?: number | null;
         user?: { __typename: 'User'; id: string; name: string } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -10178,6 +11517,36 @@ export type GetProjectReferralRequestsQuery = {
           dateUpdated: string;
           dateCreated: string;
         };
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectReferralPostingsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectReferralPostingsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    incomingReferralPostings: {
+      __typename?: 'ReferralPostingsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ReferralPosting';
+        id: string;
+        referralDate: string;
+        hohName: string;
+        householdSize: number;
+        referredBy: string;
+        status: ReferralPostingStatus;
+        assignedDate: string;
       }>;
     };
   } | null;
@@ -10452,6 +11821,36 @@ export type UpdateUnitsMutation = {
   } | null;
 };
 
+export type ReferralPostingFieldsFragment = {
+  __typename?: 'ReferralPosting';
+  id: string;
+  referralDate: string;
+  hohName: string;
+  householdSize: number;
+  referredBy: string;
+  status: ReferralPostingStatus;
+  assignedDate: string;
+};
+
+export type ReferralRequestFieldsFragment = {
+  __typename?: 'ReferralRequest';
+  id: string;
+  requestedOn: string;
+  neededBy: string;
+  requestorName: string;
+  requestorPhone: string;
+  requestorEmail: string;
+  unitType: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+    bedType?: InventoryBedType | null;
+    unitSize?: number | null;
+    dateUpdated: string;
+    dateCreated: string;
+  };
+};
+
 export type VoidReferralRequestMutationVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -10476,25 +11875,6 @@ export type VoidReferralRequestMutation = {
       data?: any | null;
     }>;
   } | null;
-};
-
-export type ReferralRequestFieldsFragment = {
-  __typename?: 'ReferralRequest';
-  id: string;
-  requestedOn: string;
-  neededBy: string;
-  requestorName: string;
-  requestorPhone: string;
-  requestorEmail: string;
-  unitType: {
-    __typename?: 'UnitTypeObject';
-    id: string;
-    description?: string | null;
-    bedType?: InventoryBedType | null;
-    unitSize?: number | null;
-    dateUpdated: string;
-    dateCreated: string;
-  };
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -10646,6 +12026,7 @@ export const ItemFieldsFragmentDoc = gql`
     readOnly
     repeats
     fieldName
+    customFieldKey
     recordType
     pickListReference
     serviceDetailType
@@ -10659,6 +12040,7 @@ export const ItemFieldsFragmentDoc = gql`
       question
       valueNumber
       valueDate
+      offset
     }
     pickListOptions {
       ...PickListOptionFields
@@ -10797,7 +12179,6 @@ export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     firstName
     middleName
-    preferredName
     lastName
     nameSuffix
   }
@@ -10844,6 +12225,82 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewAnyNonconfidentialClientFiles
   }
 `;
+export const CustomDataElementValueFieldsFragmentDoc = gql`
+  fragment CustomDataElementValueFields on CustomDataElementValue {
+    id
+    valueBoolean
+    valueDate
+    valueFloat
+    valueInteger
+    valueJson
+    valueString
+    valueText
+    user {
+      ...UserFields
+    }
+    dateCreated
+    dateUpdated
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const CustomDataElementFieldsFragmentDoc = gql`
+  fragment CustomDataElementFields on CustomDataElement {
+    id
+    key
+    label
+    repeats
+    value {
+      ...CustomDataElementValueFields
+    }
+    values {
+      ...CustomDataElementValueFields
+    }
+  }
+  ${CustomDataElementValueFieldsFragmentDoc}
+`;
+export const ClientNameObjectFieldsFragmentDoc = gql`
+  fragment ClientNameObjectFields on ClientName {
+    id
+    first
+    middle
+    last
+    suffix
+    nameDataQuality
+    use
+    notes
+    primary
+    dateCreated
+    dateUpdated
+  }
+`;
+export const ClientAddressFieldsFragmentDoc = gql`
+  fragment ClientAddressFields on ClientAddress {
+    id
+    line1
+    line2
+    city
+    state
+    district
+    country
+    postalCode
+    notes
+    use
+    addressType
+    dateCreated
+    dateUpdated
+  }
+`;
+export const ClientContactPointFieldsFragmentDoc = gql`
+  fragment ClientContactPointFields on ClientContactPoint {
+    id
+    value
+    notes
+    use
+    system
+    dateCreated
+    dateUpdated
+  }
+`;
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
@@ -10870,6 +12327,21 @@ export const ClientFieldsFragmentDoc = gql`
     access {
       ...ClientAccessFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+    names {
+      ...ClientNameObjectFields
+    }
+    addresses {
+      ...ClientAddressFields
+    }
+    phoneNumbers {
+      ...ClientContactPointFields
+    }
+    emailAddresses {
+      ...ClientContactPointFields
+    }
   }
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
@@ -10877,6 +12349,10 @@ export const ClientFieldsFragmentDoc = gql`
   ${ClientIdentifierFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+  ${ClientNameObjectFieldsFragmentDoc}
+  ${ClientAddressFieldsFragmentDoc}
+  ${ClientContactPointFieldsFragmentDoc}
 `;
 export const ClientOmniSearchFieldsFragmentDoc = gql`
   fragment ClientOmniSearchFields on Client {
@@ -10912,6 +12388,47 @@ export const HouseholdClientFieldsFragmentDoc = gql`
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+`;
+export const HouseholdFieldsFragmentDoc = gql`
+  fragment HouseholdFields on Household {
+    id
+    householdSize
+    shortId
+    householdClients {
+      ...HouseholdClientFields
+    }
+  }
+  ${HouseholdClientFieldsFragmentDoc}
+`;
+export const ProjectEnrollmentsHouseholdClientFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+    }
+    enrollment {
+      id
+      entryDate
+      exitDate
+      inProgress
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+`;
+export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
+  fragment ProjectEnrollmentsHouseholdFields on Household {
+    id
+    householdSize
+    shortId
+    householdClients {
+      ...ProjectEnrollmentsHouseholdClientFields
+    }
+  }
+  ${ProjectEnrollmentsHouseholdClientFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
   fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
@@ -11179,6 +12696,7 @@ export const FileFieldsFragmentDoc = gql`
     url
     tags
     ownFile
+    redacted
     enrollmentId
     enrollment {
       id
@@ -11253,8 +12771,12 @@ export const InventoryFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const UnitTypeFieldsFragmentDoc = gql`
   fragment UnitTypeFields on UnitTypeObject {
@@ -11304,6 +12826,7 @@ export const MciMatchFieldsFragmentDoc = gql`
 export const OrganizationNameFieldsFragmentDoc = gql`
   fragment OrganizationNameFields on Organization {
     id
+    hudId
     organizationName
   }
 `;
@@ -11320,8 +12843,12 @@ export const OrganizationDetailFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const OrganizationFieldsFragmentDoc = gql`
   fragment OrganizationFields on Organization {
@@ -11388,12 +12915,16 @@ export const ProjectAllFieldsFragmentDoc = gql`
     user {
       ...UserFields
     }
+    customDataElements {
+      ...CustomDataElementFields
+    }
   }
   ${ProjectNameAndTypeFragmentDoc}
   ${ProjectOperatingPeriodFragmentDoc}
   ${OrganizationNameFieldsFragmentDoc}
   ${ProjectAccessFieldsFragmentDoc}
   ${UserFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ProjectCocFieldsFragmentDoc = gql`
   fragment ProjectCocFields on ProjectCoc {
@@ -11431,6 +12962,17 @@ export const FunderFieldsFragmentDoc = gql`
     }
   }
   ${UserFieldsFragmentDoc}
+`;
+export const ReferralPostingFieldsFragmentDoc = gql`
+  fragment ReferralPostingFields on ReferralPosting {
+    id
+    referralDate
+    hohName
+    householdSize
+    referredBy
+    status
+    assignedDate
+  }
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
@@ -11568,17 +13110,18 @@ export const GetEnrollmentAssessmentsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
     $inProgress: Boolean
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions
   ) {
     enrollment(id: $id) {
       id
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
         inProgress: $inProgress
-        sortOrder: ASSESSMENT_DATE
+        sortOrder: $sortOrder
+        filters: $filters
       ) {
         offset
         limit
@@ -11607,8 +13150,9 @@ export const GetEnrollmentAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
- *      roles: // value for 'roles'
  *      inProgress: // value for 'inProgress'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -11825,7 +13369,7 @@ export const GetAssessmentsForPopulationDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $roles: [FormRole!]
+    $roles: [AssessmentRole!]
     $inProgress: Boolean
   ) {
     client(id: $id) {
@@ -11833,7 +13377,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        roles: $roles
+        filters: { roles: $roles }
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -12271,10 +13815,20 @@ export type GetClientImageQueryResult = Apollo.QueryResult<
   GetClientImageQueryVariables
 >;
 export const GetClientEnrollmentsDocument = gql`
-  query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientEnrollments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: EnrollmentsForClientFilterOptions
+  ) {
     client(id: $id) {
       id
-      enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+      enrollments(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -12302,6 +13856,7 @@ export const GetClientEnrollmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -12409,10 +13964,21 @@ export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
   GetClientAuditEventsQueryVariables
 >;
 export const GetClientAssessmentsDocument = gql`
-  query GetClientAssessments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetClientAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions = null
+  ) {
     client(id: $id) {
       id
-      assessments(limit: $limit, offset: $offset, sortOrder: ASSESSMENT_DATE) {
+      assessments(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
         offset
         limit
         nodesCount
@@ -12444,6 +14010,8 @@ export const GetClientAssessmentsDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
  *   },
  * });
  */
@@ -12489,7 +14057,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        enrollmentLimit: NON_WIP_ONLY
+        filters: { statuses: [ACTIVE, EXITED] }
       ) {
         offset
         limit
@@ -14126,8 +15694,8 @@ export type ClearMciMutationOptions = Apollo.BaseMutationOptions<
   ClearMciMutationVariables
 >;
 export const OmniSearchClientsDocument = gql`
-  query OmniSearchClients($textSearch: String!) {
-    clientOmniSearch(textSearch: $textSearch, limit: 5) {
+  query OmniSearchClients($textSearch: String!, $limit: Int) {
+    clientOmniSearch(textSearch: $textSearch, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -14152,6 +15720,7 @@ export const OmniSearchClientsDocument = gql`
  * const { data, loading, error } = useOmniSearchClientsQuery({
  *   variables: {
  *      textSearch: // value for 'textSearch'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -14190,8 +15759,8 @@ export type OmniSearchClientsQueryResult = Apollo.QueryResult<
   OmniSearchClientsQueryVariables
 >;
 export const OmniSearchProjectsDocument = gql`
-  query OmniSearchProjects($searchTerm: String!) {
-    projects(searchTerm: $searchTerm, limit: 5) {
+  query OmniSearchProjects($searchTerm: String!, $limit: Int) {
+    projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -14215,6 +15784,7 @@ export const OmniSearchProjectsDocument = gql`
  * const { data, loading, error } = useOmniSearchProjectsQuery({
  *   variables: {
  *      searchTerm: // value for 'searchTerm'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
@@ -14824,8 +16394,7 @@ export type GetProjectPermissionsQueryResult = Apollo.QueryResult<
 export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
+    $filters: EnrollmentsForProjectFilterOptions
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -14835,8 +16404,7 @@ export const GetProjectEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
+        filters: $filters
       ) {
         offset
         limit
@@ -14870,8 +16438,7 @@ export const GetProjectEnrollmentsDocument = gql`
  * const { data, loading, error } = useGetProjectEnrollmentsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
+ *      filters: // value for 'filters'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
@@ -14910,6 +16477,92 @@ export type GetProjectEnrollmentsLazyQueryHookResult = ReturnType<
 export type GetProjectEnrollmentsQueryResult = Apollo.QueryResult<
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables
+>;
+export const GetProjectHouseholdsDocument = gql`
+  query GetProjectHouseholds(
+    $id: ID!
+    $searchTerm: String
+    $openOnDate: ISO8601Date
+    $enrollmentLimit: EnrollmentLimit
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      households(
+        limit: $limit
+        offset: $offset
+        sortOrder: MOST_RECENT
+        openOnDate: $openOnDate
+        searchTerm: $searchTerm
+        enrollmentLimit: $enrollmentLimit
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ProjectEnrollmentsHouseholdFields
+        }
+      }
+    }
+  }
+  ${ProjectEnrollmentsHouseholdFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectHouseholdsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectHouseholdsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectHouseholdsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectHouseholdsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      searchTerm: // value for 'searchTerm'
+ *      openOnDate: // value for 'openOnDate'
+ *      enrollmentLimit: // value for 'enrollmentLimit'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectHouseholdsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectHouseholdsQuery,
+    GetProjectHouseholdsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectHouseholdsQuery,
+    GetProjectHouseholdsQueryVariables
+  >(GetProjectHouseholdsDocument, options);
+}
+export function useGetProjectHouseholdsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectHouseholdsQuery,
+    GetProjectHouseholdsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectHouseholdsQuery,
+    GetProjectHouseholdsQueryVariables
+  >(GetProjectHouseholdsDocument, options);
+}
+export type GetProjectHouseholdsQueryHookResult = ReturnType<
+  typeof useGetProjectHouseholdsQuery
+>;
+export type GetProjectHouseholdsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectHouseholdsLazyQuery
+>;
+export type GetProjectHouseholdsQueryResult = Apollo.QueryResult<
+  GetProjectHouseholdsQuery,
+  GetProjectHouseholdsQueryVariables
 >;
 export const DeleteProjectDocument = gql`
   mutation DeleteProject($input: DeleteProjectInput!) {
@@ -15358,6 +17011,79 @@ export type GetProjectReferralRequestsLazyQueryHookResult = ReturnType<
 export type GetProjectReferralRequestsQueryResult = Apollo.QueryResult<
   GetProjectReferralRequestsQuery,
   GetProjectReferralRequestsQueryVariables
+>;
+export const GetProjectReferralPostingsDocument = gql`
+  query GetProjectReferralPostings(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      incomingReferralPostings(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ReferralPostingFields
+        }
+      }
+    }
+  }
+  ${ReferralPostingFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectReferralPostingsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectReferralPostingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectReferralPostingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectReferralPostingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectReferralPostingsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >(GetProjectReferralPostingsDocument, options);
+}
+export function useGetProjectReferralPostingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectReferralPostingsQuery,
+    GetProjectReferralPostingsQueryVariables
+  >(GetProjectReferralPostingsDocument, options);
+}
+export type GetProjectReferralPostingsQueryHookResult = ReturnType<
+  typeof useGetProjectReferralPostingsQuery
+>;
+export type GetProjectReferralPostingsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectReferralPostingsLazyQuery
+>;
+export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
+  GetProjectReferralPostingsQuery,
+  GetProjectReferralPostingsQueryVariables
 >;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {

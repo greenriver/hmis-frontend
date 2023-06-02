@@ -40,7 +40,7 @@ const YesNoRadio = ({ value, onChange, ...props }: Props) => {
     <RadioGroupInput
       value={fromBoolean(value)}
       onChange={handleChange}
-      options={[TRUE_OPT, FALSE_OPT]}
+      options={[FALSE_OPT, TRUE_OPT]}
       row
       clearable
       checkbox

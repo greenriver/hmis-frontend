@@ -32,8 +32,7 @@ const UserMenu: React.FC = () => {
       <Button
         startIcon={<AccountCircleIcon />}
         variant='text'
-        color='secondary'
-        sx={{ fontSize: '1rem' }}
+        sx={{ fontSize: '1rem', color: 'text.primary' }}
         {...bindTrigger(popupState)}
       >
         {user.name}

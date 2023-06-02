@@ -3,6 +3,7 @@ import { Paper, Stack, Typography } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
+import { ProjectReferralPostingsTable } from './tables/ProjectsReferralPostingsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -46,7 +47,24 @@ const ProjectReferrals = () => {
         </Stack>
         <ProjectReferralRequestsTable project={project} />
       </Paper>
-      {/* TODO: Render a GenericTableWithData for Referrals */}
+      <Paper sx={{ my: 4 }}>
+        <Stack
+          justifyContent={'space-between'}
+          direction='row'
+          sx={{
+            px: 2,
+            pt: 2,
+            pb: 3,
+            alignItems: 'center',
+            borderBottomColor: 'borders.light',
+            borderBottomWidth: 1,
+            borderBottomStyle: 'solid',
+          }}
+        >
+          <Typography variant='h5'>Incoming Referrals</Typography>
+        </Stack>
+        <ProjectReferralPostingsTable projectId={project.id} />
+      </Paper>
     </>
   );
 };

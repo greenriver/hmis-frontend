@@ -9,6 +9,7 @@ import { FormValues, ItemChangedFn, SeveralItemsChangedFn } from '../types';
 import {
   addDescendants,
   autofillValues,
+  dropUnderscorePrefixedKeys,
   isShown,
   setDisabledLinkIdsBase,
 } from '../util/formUtil';
@@ -47,7 +48,9 @@ const useDynamicFields = ({
   const getCleanedValues = useCallback(() => {
     if (!definition) return values;
     const excluded = addDescendants(disabledLinkIds, definition);
-    return omit(values, excluded);
+    // Drop "hidden" fields and their children
+    const cleaned = omit(values, excluded);
+    return dropUnderscorePrefixedKeys(cleaned);
   }, [definition, disabledLinkIds, values]);
 
   const shouldShowItem = useCallback(

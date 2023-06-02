@@ -7,6 +7,7 @@ import {
   GetClientDocument,
   GetClientEnrollmentsDocument,
   GetClientImageDocument,
+  GetClientPermissionsDocument,
   GetEnrollmentWithHouseholdDocument,
   GetFileDocument,
   GetPickListDocument,
@@ -19,32 +20,40 @@ import {
   SsnDataQuality,
 } from '@/types/gqlTypes';
 
+const CLIENT_ACCESS_MOCK = {
+  id: '9999:1',
+  canEditClient: true,
+  canDeleteClient: true,
+  canViewDob: true,
+  canViewFullSsn: true,
+  canViewPartialSsn: true,
+  canEditEnrollments: true,
+  canDeleteEnrollments: true,
+  canViewEnrollmentDetails: true,
+  canDeleteAssessments: true,
+  canManageAnyClientFiles: true,
+  canManageOwnClientFiles: true,
+  canViewAnyConfidentialClientFiles: true,
+  canViewAnyNonconfidentialClientFiles: true,
+};
+
 export const RITA_ACKROYD = {
   __typename: 'Client',
   id: '9999',
   personalId: '9999',
   ssn: '0001',
   firstName: 'Rita',
-  preferredName: null,
   lastName: 'Ackroyd',
   dob: '1980-03-20',
+  age: 43,
   nameSuffix: null,
-  access: {
-    id: '9999:1',
-    canEditClient: true,
-    canDeleteClient: true,
-    canViewDob: true,
-    canViewFullSsn: true,
-    canViewPartialSsn: true,
-    canEditEnrollments: true,
-    canDeleteEnrollments: true,
-    canViewEnrollmentDetails: true,
-    canDeleteAssessments: true,
-    canManageAnyClientFiles: true,
-    canManageOwnClientFiles: true,
-    canViewAnyConfidentialClientFiles: true,
-    canViewAnyNonconfidentialClientFiles: true,
-  },
+  access: CLIENT_ACCESS_MOCK,
+  customDataElements: [],
+  names: [],
+  addresses: [],
+  contactPoints: [],
+  phoneNumbers: [],
+  emailAddresses: [],
   gender: [Gender.Male, Gender.NoSingleGender],
   race: [Race.ClientRefused],
   dobDataQuality: DobDataQuality.ApproximateOrPartialDobReported,
@@ -186,6 +195,7 @@ const projectsForSelectMock = {
       ].map((p: PickListOption) => {
         p.__typename = 'PickListOption';
         p.initialSelected = false;
+        p.groupCode = null;
         return p;
       }),
     },
@@ -216,7 +226,6 @@ const clientSearchMock = {
           personalId: '9999',
           ssnSerial: '0002',
           firstName: 'Lennart',
-          preferredName: 'Leo',
           lastName: 'Acker',
           dob: '1980-03-20',
           dateUpdated: '2022-07-27T15:14:29.062',
@@ -226,7 +235,6 @@ const clientSearchMock = {
           personalId: '9999',
           ssnSerial: '0003',
           firstName: 'Jane',
-          preferredName: 'Jay',
           lastName: 'Ackman',
           dob: '1980-03-20',
           dateUpdated: '2022-07-27T15:14:29.062',
@@ -259,7 +267,6 @@ const clientSearchMockNextPage = {
           personalId: '9999',
           ssnSerial: '0004',
           firstName: 'Rita',
-          preferredName: null,
           lastName: 'Acker',
           dob: '1980-03-20',
           enrollments: null,
@@ -378,7 +385,6 @@ const enrollmentWithHoHMock = {
                 __typename: 'Client',
                 id: '9998',
                 firstName: 'Lennart',
-                preferredName: 'Leo',
                 lastName: 'Acker',
                 nameSuffix: null,
               },
@@ -456,6 +462,22 @@ const getFileMock = {
   },
 };
 
+const getClientPermissionMocks = {
+  request: {
+    query: GetClientPermissionsDocument,
+    variables: {
+      id: RITA_ACKROYD.id,
+    },
+  },
+  result: {
+    data: {
+      client: {
+        id: RITA_ACKROYD.id,
+        access: CLIENT_ACCESS_MOCK,
+      },
+    },
+  },
+};
 const mocks: any[] = [
   projectsForSelectMock,
   clientSearchMock,
@@ -473,6 +495,9 @@ const mocks: any[] = [
   enrollmentWithHoHMock,
   createDirectUploadMock,
   getFileMock,
+  getClientPermissionMocks,
+  getClientPermissionMocks,
+  getClientPermissionMocks,
 ];
 
 export default mocks;

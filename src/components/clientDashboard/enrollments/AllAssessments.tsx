@@ -15,6 +15,7 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentSortOption,
   GetClientAssessmentsDocument,
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables,
@@ -77,6 +78,7 @@ const AllAssessments = () => {
           GetClientAssessmentsQueryVariables,
           AssessmentType
         >
+          showFilters
           queryVariables={{ id: clientId }}
           queryDocument={GetClientAssessmentsDocument}
           rowLinkTo={rowLinkTo}
@@ -84,6 +86,8 @@ const AllAssessments = () => {
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
           noData='No assessments.'
+          recordType='Assessment'
+          defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
       </Paper>
     </>

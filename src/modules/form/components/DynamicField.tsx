@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
@@ -9,6 +10,10 @@ import {
 } from '../types';
 import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
 
+import MultiAddressInput from './client/addresses/MultiAddressInput';
+import MultiEmailInput from './client/emails/MultiEmailInput';
+import MultiNameInput from './client/names/MultiNameInput';
+import MultiPhoneInput from './client/phones/MultiPhoneInput';
 import CreatableFormSelect from './CreatableFormSelect';
 import DynamicDisplay from './DynamicDisplay';
 import FormSelect from './FormSelect';
@@ -44,7 +49,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
 };
 
 const MAX_INPUT_AND_LABEL_WIDTH = 600; // allow label to extend past input before wrapping
-const MAX_INPUT_WIDTH = 430;
+export const MAX_INPUT_WIDTH = 430;
 const FIXED_WIDTH_SMALL = 200;
 const FIXED_WIDTH_X_SMALL = 100;
 
@@ -292,7 +297,11 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else if (
         item.component === Component.RadioButtons ||
         item.component === Component.RadioButtonsVertical ||
-        (isLocalPickList && options && options.length > 0 && options.length < 4)
+        (isLocalPickList &&
+          options &&
+          options.length > 0 &&
+          options.length < 4 &&
+          !item.repeats)
       ) {
         inputComponent = (
           <RadioGroupInput
@@ -355,6 +364,32 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         </InputContainer>
       );
+    case ItemType.Object:
+      const objProps = {
+        value,
+        onChange: onChangeValue,
+        label: item.text ? (
+          <Typography sx={{ pb: 2 }}>{item.text}</Typography>
+        ) : undefined,
+      };
+      if (item.component == Component.Name) {
+        return <MultiNameInput {...objProps} />;
+      }
+      if (item.component == Component.Address) {
+        return <MultiAddressInput {...objProps} />;
+      }
+      if (item.component == Component.Phone) {
+        return <MultiPhoneInput {...objProps} />;
+      }
+      if (item.component == Component.Email) {
+        return <MultiEmailInput {...objProps} />;
+      }
+      console.warn(
+        'Unable to render component for object type. Link ID:',
+        item.linkId
+      );
+      return <></>;
+
     default:
       console.warn('Unrecognized item type:', item.type);
       return <></>;

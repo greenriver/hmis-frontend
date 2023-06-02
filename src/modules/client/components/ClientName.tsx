@@ -2,7 +2,7 @@ import { Stack, StackProps, Typography, TypographyProps } from '@mui/material';
 import { forwardRef } from 'react';
 
 import RouterLink, { RouterLinkProps } from '@/components/elements/RouterLink';
-import { clientNameWithoutPreferred } from '@/modules/hmis/hmisUtil';
+import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { ClientNameFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -30,11 +30,7 @@ const ClientName = forwardRef<Props, any>(
     },
     ref
   ) => {
-    const primaryName =
-      client.preferredName || clientNameWithoutPreferred(client);
-    const secondaryName = client.preferredName
-      ? clientNameWithoutPreferred(client)
-      : null;
+    const primaryName = clientNameAllParts(client);
 
     const primaryNameText = (
       <Typography
@@ -68,16 +64,6 @@ const ClientName = forwardRef<Props, any>(
     return (
       <Stack direction='row' gap={1} {...stackProps}>
         {primaryNameComponent}
-        {secondaryName && (
-          <Typography
-            variant={variant}
-            color='text.secondary'
-            fontStyle='italic'
-            {...secondaryNameProps}
-          >
-            {secondaryName}
-          </Typography>
-        )}
       </Stack>
     );
   }

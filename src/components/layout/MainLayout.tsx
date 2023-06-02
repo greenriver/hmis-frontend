@@ -27,12 +27,20 @@ interface Props {
 }
 
 const MainLayout: React.FC<Props> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading: userLoading } = useAuth();
   const { appName } = useHmisAppSettings();
   const isPrint = useIsPrintView();
+
   // Load root permissions into the cache before loading the page
-  const { loading: permissionsLoading } = useGetRootPermissionsQuery();
-  if (loading || permissionsLoading || !user) return <Loading />;
+  const {
+    data,
+    loading: permissionLoading,
+    error,
+  } = useGetRootPermissionsQuery();
+  if (error) throw error;
+
+  if (userLoading && !user) return <Loading />;
+  if (permissionLoading && !data) return <Loading />;
 
   if (isPrint)
     return (
@@ -60,6 +68,13 @@ const MainLayout: React.FC<Props> = ({ children }) => {
       </>
     );
 
+  const navItemSx = {
+    fontSize: '1rem',
+    fontWeight: 400,
+    px: 2,
+    ml: 1,
+    color: 'text.primary',
+  };
   return (
     <React.Fragment>
       {SHOW_OP_LINK_BAR && <WarehouseLinkBar />}
@@ -90,9 +105,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             <ButtonLink
               variant='text'
               to='/'
-              color='secondary'
               data-testid='navToClients'
-              sx={{ fontSize: '1rem' }}
+              sx={navItemSx}
             >
               Clients
             </ButtonLink>
@@ -100,9 +114,8 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           <ButtonLink
             variant='text'
             to={Routes.ALL_PROJECTS}
-            color='secondary'
             data-testid='navToProjects'
-            sx={{ fontSize: '1rem' }}
+            sx={navItemSx}
           >
             Projects
           </ButtonLink>
