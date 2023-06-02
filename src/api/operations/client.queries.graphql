@@ -3,12 +3,14 @@ query SearchClients(
   $limit: Int
   $offset: Int
   $sortOrder: ClientSortOption = LAST_NAME_A_TO_Z
+  $filters: ClientFilterOptions
 ) {
   clientSearch(
     input: $input
     limit: $limit
     offset: $offset
     sortOrder: $sortOrder
+    filters: $filters
   ) {
     offset
     limit
