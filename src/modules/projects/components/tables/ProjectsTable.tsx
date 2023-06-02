@@ -1,3 +1,4 @@
+import { omit } from 'lodash-es';
 import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
@@ -13,6 +14,7 @@ import {
   GetOrganizationProjectsQuery,
   GetOrganizationProjectsQueryVariables,
   ProjectAllFieldsFragment,
+  ProjectFilterOptionStatus,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -79,12 +81,22 @@ const ProjectsTable = ({
           />
         )
       }
-      queryVariables={{ id: organizationId, searchTerm: debouncedSearch }}
+      queryVariables={{
+        id: organizationId,
+        filters: { searchTerm: debouncedSearch },
+      }}
       queryDocument={GetOrganizationProjectsDocument}
       columns={columns}
       rowLinkTo={rowLinkTo}
       noData='No projects.'
       pagePath='organization.projects'
+      showFilters
+      recordType='Project'
+      defaultFilters={{ statuses: [ProjectFilterOptionStatus.Open] }}
+      filters={(filters) =>
+        hideSearch ? filters : omit(filters, 'searchTerm')
+      }
+      noSort
     />
   );
 };
