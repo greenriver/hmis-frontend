@@ -1577,6 +1577,7 @@ export type FormInput = {
   organizationId?: InputMaybe<Scalars['ID']>;
   projectId?: InputMaybe<Scalars['ID']>;
   recordId?: InputMaybe<Scalars['ID']>;
+  serviceTypeId?: InputMaybe<Scalars['ID']>;
   values?: InputMaybe<Scalars['JsonObject']>;
 };
 

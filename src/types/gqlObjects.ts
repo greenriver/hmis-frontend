@@ -4356,6 +4356,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       { name: 'recordId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
+        name: 'serviceTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'values',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },

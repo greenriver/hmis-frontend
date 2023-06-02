@@ -151,11 +151,12 @@ export function useServiceDialog({
         hudValues: createHudValuesForSubmit(values, formDefinition.definition),
         confirmed,
         enrollmentId,
+        serviceTypeId: selectedService?.code,
       };
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });
     },
-    [formDefinition, submitForm, enrollmentId]
+    [formDefinition, submitForm, enrollmentId, selectedService]
   );
 
   const serviceTypeInfoLoading =
