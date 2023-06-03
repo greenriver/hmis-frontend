@@ -28,7 +28,6 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     },
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
-  console.info(referralPosting);
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {
       const input = transformSubmitValues({

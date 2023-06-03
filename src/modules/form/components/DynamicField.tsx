@@ -315,7 +315,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         );
       } else {
-        console.info('choice', item, value, currentValue, options);
         inputComponent = (
           <FormSelect
             value={
