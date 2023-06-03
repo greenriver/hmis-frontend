@@ -1,0 +1,16 @@
+query GetReferralPosting($id: ID!) {
+  referralPosting(id: $id) {
+    ...ReferralPostingDetailFields
+  }
+}
+
+mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
+  updateReferralPosting(id: $id, input: $input) {
+    record {
+      ...ReferralPostingDetailFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

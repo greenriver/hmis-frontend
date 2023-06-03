@@ -2,6 +2,7 @@ import { Button, Grid, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import { ProjectReferralPostingDetails } from './ProjectReferralPostingDetails';
+import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 import { ProjectReferralHouseholdMembersTable } from './tables/ProjectReferralHouseholdMembersTable';
 
 import { CommonCard } from '@/components/elements/CommonCard';
@@ -70,6 +71,9 @@ const ProjectReferralPosting: React.FC = () => {
                   {referralPosting.resourceCoordinatorNotes}
                 </CommonLabeledTextBlock>
               </Stack>
+            </CommonCard>
+            <CommonCard title='Update Referral Status'>
+              <ProjectReferralPostingForm referralPosting={referralPosting} />
             </CommonCard>
           </Stack>
         </Grid>

@@ -632,6 +632,8 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
+    REFERRAL_POSTING_DENIAL_REASON_TYPES: 'Referral Posting Status',
+    REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',

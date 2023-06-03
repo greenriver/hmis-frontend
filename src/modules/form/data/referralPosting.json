@@ -1,0 +1,27 @@
+{
+  "item": [
+    {
+      "type": "STRING",
+      "linkId": "statusNote",
+      "required": false,
+      "text": "Notes",
+      "fieldName": "statusNote"
+    },
+    {
+      "type": "CHOICE",
+      "linkId": "status",
+      "required": false,
+      "text": "Status",
+      "fieldName": "status",
+      "pickListReference": "REFERRAL_POSTING_STATUSES"
+    },
+    {
+      "type": "CHOICE",
+      "linkId": "denialReasonId",
+      "required": false,
+      "text": "Denial Reason",
+      "fieldName": "denialReasonId",
+      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
+    }
+  ]
+}
