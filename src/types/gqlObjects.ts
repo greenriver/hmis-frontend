@@ -4379,7 +4379,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ReferralPostingInput',
     args: [
       {
-        name: 'denialReasonId',
+        name: 'denialNote',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'denialReason',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       { name: 'status', type: { kind: 'SCALAR', name: 'ID', ofType: null } },

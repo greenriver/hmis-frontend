@@ -20941,7 +20941,19 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "denialReasonId",
+            "name": "denialNote",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "denialReason",
             "description": null,
             "type": {
               "kind": "SCALAR",

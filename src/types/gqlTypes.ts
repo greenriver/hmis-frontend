@@ -3143,7 +3143,8 @@ export type ReferralPosting = {
 };
 
 export type ReferralPostingInput = {
-  denialReasonId?: InputMaybe<Scalars['ID']>;
+  denialNote?: InputMaybe<Scalars['String']>;
+  denialReason?: InputMaybe<Scalars['ID']>;
   status?: InputMaybe<Scalars['ID']>;
   statusNote?: InputMaybe<Scalars['String']>;
 };
