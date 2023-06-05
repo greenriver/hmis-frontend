@@ -2,8 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Paper, Stack, Typography } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
+import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 import { ProjectReferralPostingsTable } from './tables/ProjectsReferralPostingsTable';
-import ProjectReferralRequestsTable from './tables/ProjectsReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import PageTitle from '@/components/layout/PageTitle';
@@ -45,7 +45,7 @@ const ProjectReferrals = () => {
             </ButtonLink>
           )}
         </Stack>
-        <ProjectReferralRequestsTable projectId={project.id} />
+        <ProjectReferralRequestsTable project={project} />
       </Paper>
       <Paper sx={{ my: 4 }}>
         <Stack
