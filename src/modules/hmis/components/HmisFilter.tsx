@@ -9,6 +9,7 @@ import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
   AssessmentSortOption,
   EnrollmentSortOption,
+  HouseholdSortOption,
   PickListType,
 } from '@/types/gqlTypes';
 
@@ -40,6 +41,8 @@ export const getSortOptionForType = (
     return HmisEnums.AssessmentSortOption as Record<string, string>;
   if (recordType === 'Enrollment')
     return HmisEnums.EnrollmentSortOption as Record<string, string>;
+  if (recordType === 'Household')
+    return HmisEnums.HouseholdSortOption as Record<string, string>;
 
   return null;
 };
@@ -49,6 +52,7 @@ export const getDefaultSortOptionForType = (
 ): string | null => {
   if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
   if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
+  if (recordType === 'Household') return HouseholdSortOption.MostRecent;
 
   return null;
 };

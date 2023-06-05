@@ -1,4 +1,5 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
+import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -16,10 +17,12 @@ import {
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  EnrollmentFilterOptionStatus,
   EnrollmentLimit,
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
+  HouseholdFilterOptions,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -170,7 +173,8 @@ const ProjectHouseholdsTable = ({
     <GenericTableWithData<
       GetProjectHouseholdsQuery,
       GetProjectHouseholdsQueryVariables,
-      HouseholdFields
+      HouseholdFields,
+      HouseholdFilterOptions
     >
       queryVariables={{
         id: projectId,
@@ -188,6 +192,15 @@ const ProjectHouseholdsTable = ({
           : 'No clients.'
       }
       pagePath='project.households'
+      showFilters
+      recordType='Household'
+      filters={(filters) => omit(filters, 'searchTerm')}
+      defaultFilters={{
+        statuses: [
+          EnrollmentFilterOptionStatus.Active,
+          EnrollmentFilterOptionStatus.Incomplete,
+        ],
+      }}
     />
   );
 };

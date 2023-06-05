@@ -1,6 +1,19 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AgeRange: {
+    Age62Plus: '62+',
+    Age65Plus: '65+',
+    Ages5to12: '5-12',
+    Ages13to17: '13-17',
+    Ages18to24: '18-24',
+    Ages25to34: '25-34',
+    Ages35to44: '35-44',
+    Ages45to54: '45-54',
+    Ages55to61: '55-61',
+    Ages55to64: '55-64',
+    Under5: 'Under 5',
+  },
   AssessmentLevel: {
     INVALID: 'Invalid Value',
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
@@ -435,6 +448,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  HouseholdSortOption: { MOST_RECENT: 'Most Recent' },
   HouseholdType: {
     INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
