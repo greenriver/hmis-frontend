@@ -2905,6 +2905,7 @@ export type Query = {
   /** Project CoC lookup */
   projectCoc?: Maybe<ProjectCoc>;
   projects: ProjectsPaginated;
+  referralPosting?: Maybe<ReferralPosting>;
   /** Service lookup */
   service?: Maybe<Service>;
 };
@@ -2986,6 +2987,10 @@ export type QueryProjectsArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
+};
+
+export type QueryReferralPostingArgs = {
+  id: Scalars['ID'];
 };
 
 export type QueryServiceArgs = {
@@ -3101,6 +3106,15 @@ export enum RecordType {
   SsvfService = 'SSVF_SERVICE',
 }
 
+/** HUD Client within a Referral Household */
+export type ReferralHouseholdMember = {
+  __typename?: 'ReferralHouseholdMember';
+  client: Client;
+  id: Scalars['ID'];
+  relationshipToHoH: RelationshipToHoH;
+};
+
+/** A referral for a household of one or more clients */
 export type ReferralPosting = {
   __typename?: 'ReferralPosting';
   assignedDate: Scalars['ISO8601Date'];
@@ -3108,6 +3122,7 @@ export type ReferralPosting = {
   denialNote?: Maybe<Scalars['String']>;
   denialReason?: Maybe<Scalars['String']>;
   hohName: Scalars['String'];
+  householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
@@ -3127,6 +3142,7 @@ export type ReferralPosting = {
   statusNoteUpdatedBy?: Maybe<Scalars['String']>;
   statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
+  unitType: UnitTypeObject;
 };
 
 /** Referral Posting Status */
@@ -11566,6 +11582,78 @@ export type GetProjectReferralPostingsQuery = {
   } | null;
 };
 
+export type GetReferralPostingQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetReferralPostingQuery = {
+  __typename?: 'Query';
+  referralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    assignedDate: string;
+    chronic?: boolean | null;
+    denialNote?: string | null;
+    denialReason?: string | null;
+    needsWheelchairAccessibleUnit?: boolean | null;
+    postingIdentifier?: string | null;
+    referralDate: string;
+    referralIdentifier?: string | null;
+    referralNotes?: string | null;
+    referralResult?: ReferralResult | null;
+    referredBy: string;
+    referredFrom: string;
+    resourceCoordinatorNotes?: string | null;
+    score?: number | null;
+    status: ReferralPostingStatus;
+    statusNote?: string | null;
+    statusNoteUpdatedAt?: string | null;
+    statusNoteUpdatedBy?: string | null;
+    statusUpdatedAt?: string | null;
+    statusUpdatedBy?: string | null;
+    unitType: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    };
+    householdMembers: Array<{
+      __typename?: 'ReferralHouseholdMember';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        veteranStatus: NoYesReasonsForMissingData;
+        gender: Array<Gender>;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+        };
+      };
+    }>;
+  } | null;
+};
+
 export type GetProjectProjectCocsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -11846,6 +11934,71 @@ export type ReferralPostingFieldsFragment = {
   assignedDate: string;
 };
 
+export type ReferralPostingDetailFieldsFragment = {
+  __typename?: 'ReferralPosting';
+  id: string;
+  assignedDate: string;
+  chronic?: boolean | null;
+  denialNote?: string | null;
+  denialReason?: string | null;
+  needsWheelchairAccessibleUnit?: boolean | null;
+  postingIdentifier?: string | null;
+  referralDate: string;
+  referralIdentifier?: string | null;
+  referralNotes?: string | null;
+  referralResult?: ReferralResult | null;
+  referredBy: string;
+  referredFrom: string;
+  resourceCoordinatorNotes?: string | null;
+  score?: number | null;
+  status: ReferralPostingStatus;
+  statusNote?: string | null;
+  statusNoteUpdatedAt?: string | null;
+  statusNoteUpdatedBy?: string | null;
+  statusUpdatedAt?: string | null;
+  statusUpdatedBy?: string | null;
+  unitType: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+  };
+  householdMembers: Array<{
+    __typename?: 'ReferralHouseholdMember';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      veteranStatus: NoYesReasonsForMissingData;
+      gender: Array<Gender>;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+      dob?: string | null;
+      age?: number | null;
+      ssn?: string | null;
+      access: {
+        __typename?: 'ClientAccess';
+        id: string;
+        canViewFullSsn: boolean;
+        canViewPartialSsn: boolean;
+        canEditClient: boolean;
+        canDeleteClient: boolean;
+        canViewDob: boolean;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+        canViewEnrollmentDetails: boolean;
+        canDeleteAssessments: boolean;
+        canManageAnyClientFiles: boolean;
+        canManageOwnClientFiles: boolean;
+        canViewAnyConfidentialClientFiles: boolean;
+        canViewAnyNonconfidentialClientFiles: boolean;
+      };
+    };
+  }>;
+};
+
 export type ReferralRequestFieldsFragment = {
   __typename?: 'ReferralRequest';
   id: string;
@@ -11863,6 +12016,32 @@ export type ReferralRequestFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   };
+};
+
+export type VoidReferralRequestMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type VoidReferralRequestMutation = {
+  __typename?: 'Mutation';
+  voidReferralRequest?: {
+    __typename?: 'VoidReferralRequestPayload';
+    record?: { __typename?: 'ReferralRequest'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -12961,6 +13140,52 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     status
     assignedDate
   }
+`;
+export const ReferralPostingDetailFieldsFragmentDoc = gql`
+  fragment ReferralPostingDetailFields on ReferralPosting {
+    id
+    assignedDate
+    chronic
+    denialNote
+    denialReason
+    needsWheelchairAccessibleUnit
+    postingIdentifier
+    referralDate
+    referralIdentifier
+    referralNotes
+    referralResult
+    referredBy
+    referredFrom
+    resourceCoordinatorNotes
+    score
+    status
+    statusNote
+    statusNoteUpdatedAt
+    statusNoteUpdatedBy
+    statusUpdatedAt
+    statusUpdatedBy
+    unitType {
+      id
+      description
+    }
+    householdMembers {
+      id
+      relationshipToHoH
+      client {
+        id
+        ...ClientName
+        ...ClientIdentificationFields
+        veteranStatus
+        gender
+        access {
+          ...ClientAccessFields
+        }
+      }
+    }
+  }
+  ${ClientNameFragmentDoc}
+  ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientAccessFieldsFragmentDoc}
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
@@ -17073,6 +17298,65 @@ export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables
 >;
+export const GetReferralPostingDocument = gql`
+  query GetReferralPosting($id: ID!) {
+    referralPosting(id: $id) {
+      ...ReferralPostingDetailFields
+    }
+  }
+  ${ReferralPostingDetailFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetReferralPostingQuery__
+ *
+ * To run a query within a React component, call `useGetReferralPostingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReferralPostingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReferralPostingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetReferralPostingQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export function useGetReferralPostingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export type GetReferralPostingQueryHookResult = ReturnType<
+  typeof useGetReferralPostingQuery
+>;
+export type GetReferralPostingLazyQueryHookResult = ReturnType<
+  typeof useGetReferralPostingLazyQuery
+>;
+export type GetReferralPostingQueryResult = Apollo.QueryResult<
+  GetReferralPostingQuery,
+  GetReferralPostingQueryVariables
+>;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     project(id: $id) {
@@ -17552,6 +17836,62 @@ export type UpdateUnitsMutationResult =
 export type UpdateUnitsMutationOptions = Apollo.BaseMutationOptions<
   UpdateUnitsMutation,
   UpdateUnitsMutationVariables
+>;
+export const VoidReferralRequestDocument = gql`
+  mutation VoidReferralRequest($id: ID!) {
+    voidReferralRequest(referralRequestId: $id) {
+      record {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type VoidReferralRequestMutationFn = Apollo.MutationFunction<
+  VoidReferralRequestMutation,
+  VoidReferralRequestMutationVariables
+>;
+
+/**
+ * __useVoidReferralRequestMutation__
+ *
+ * To run a mutation, you first call `useVoidReferralRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoidReferralRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voidReferralRequestMutation, { data, loading, error }] = useVoidReferralRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useVoidReferralRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    VoidReferralRequestMutation,
+    VoidReferralRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    VoidReferralRequestMutation,
+    VoidReferralRequestMutationVariables
+  >(VoidReferralRequestDocument, options);
+}
+export type VoidReferralRequestMutationHookResult = ReturnType<
+  typeof useVoidReferralRequestMutation
+>;
+export type VoidReferralRequestMutationResult =
+  Apollo.MutationResult<VoidReferralRequestMutation>;
+export type VoidReferralRequestMutationOptions = Apollo.BaseMutationOptions<
+  VoidReferralRequestMutation,
+  VoidReferralRequestMutationVariables
 >;
 export const CreateDirectUploadMutationDocument = gql`
   mutation CreateDirectUploadMutation($input: DirectUploadInput!) {
