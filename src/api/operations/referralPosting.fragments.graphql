@@ -7,3 +7,45 @@ fragment ReferralPostingFields on ReferralPosting {
   status
   assignedDate
 }
+
+fragment ReferralPostingDetailFields on ReferralPosting {
+  id
+  assignedDate
+  chronic
+  denialNote
+  denialReason
+  needsWheelchairAccessibleUnit
+  postingIdentifier
+  referralDate
+  referralIdentifier
+  referralNotes
+  referralResult
+  referredBy
+  referredFrom
+  resourceCoordinatorNotes
+  score
+  status
+  statusNote
+  statusNoteUpdatedAt
+  statusNoteUpdatedBy
+  statusUpdatedAt
+  statusUpdatedBy
+  unitType {
+    id
+    description
+  }
+  householdMembers {
+    id
+    relationshipToHoH
+    client {
+      id
+      ...ClientName
+      ...ClientIdentificationFields
+      veteranStatus
+      gender
+      access {
+        ...ClientAccessFields
+      }
+    }
+  }
+}
