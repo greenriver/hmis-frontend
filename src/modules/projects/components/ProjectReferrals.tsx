@@ -37,7 +37,7 @@ const ProjectReferrals = () => {
             )
           }
         >
-          <ProjectReferralRequestsTable projectId={project.id} />
+          <ProjectReferralRequestsTable project={project} />
         </TitleCard>
         <TitleCard title='Incoming Referrals' headerVariant='border'>
           <ProjectReferralPostingsTable projectId={project.id} />
