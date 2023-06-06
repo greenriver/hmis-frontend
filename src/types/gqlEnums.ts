@@ -648,9 +648,10 @@ export const HmisEnums = {
     PLACED_ON_PRIORITIZATION_LIST: 'Placed on prioritization list',
     NOT_PLACED_ON_PRIORITIZATION_LIST: 'Not placed on prioritization list',
   },
+  ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
-    NAME: 'NAME',
-    ORGANIZATION_AND_NAME: 'ORGANIZATION_AND_NAME',
+    NAME: 'Name',
+    ORGANIZATION_AND_NAME: 'Organization and Name',
   },
   ProjectType: {
     CE: 'Coordinated Entry',

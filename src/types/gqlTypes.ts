@@ -2582,10 +2582,9 @@ export type Organization = {
 };
 
 export type OrganizationProjectsArgs = {
+  filters?: InputMaybe<ProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -2819,9 +2818,25 @@ export type ProjectCocsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+export enum ProjectFilterOptionStatus {
+  /** Closed */
+  Closed = 'CLOSED',
+  /** Open */
+  Open = 'OPEN',
+}
+
+export type ProjectFilterOptions = {
+  funders?: InputMaybe<Array<FundingSource>>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<ProjectFilterOptionStatus>>;
+};
+
 /** HUD Project Sorting Options */
 export enum ProjectSortOption {
+  /** Name */
   Name = 'NAME',
+  /** Organization and Name */
   OrganizationAndName = 'ORGANIZATION_AND_NAME',
 }
 
@@ -2979,10 +2994,9 @@ export type QueryProjectCocArgs = {
 };
 
 export type QueryProjectsArgs = {
+  filters?: InputMaybe<ProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -10855,9 +10869,10 @@ export type GetOrganizationQuery = {
 
 export type GetOrganizationProjectsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<ProjectFilterOptions>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
 export type GetOrganizationProjectsQuery = {
@@ -11593,6 +11608,78 @@ export type GetProjectReferralPostingsQuery = {
   } | null;
 };
 
+export type GetReferralPostingQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetReferralPostingQuery = {
+  __typename?: 'Query';
+  referralPosting?: {
+    __typename?: 'ReferralPosting';
+    id: string;
+    assignedDate: string;
+    chronic?: boolean | null;
+    denialNote?: string | null;
+    denialReason?: string | null;
+    needsWheelchairAccessibleUnit?: boolean | null;
+    postingIdentifier?: string | null;
+    referralDate: string;
+    referralIdentifier?: string | null;
+    referralNotes?: string | null;
+    referralResult?: ReferralResult | null;
+    referredBy: string;
+    referredFrom: string;
+    resourceCoordinatorNotes?: string | null;
+    score?: number | null;
+    status: ReferralPostingStatus;
+    statusNote?: string | null;
+    statusNoteUpdatedAt?: string | null;
+    statusNoteUpdatedBy?: string | null;
+    statusUpdatedAt?: string | null;
+    statusUpdatedBy?: string | null;
+    unitType: {
+      __typename?: 'UnitTypeObject';
+      id: string;
+      description?: string | null;
+    };
+    householdMembers: Array<{
+      __typename?: 'ReferralHouseholdMember';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        veteranStatus: NoYesReasonsForMissingData;
+        gender: Array<Gender>;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+        };
+      };
+    }>;
+  } | null;
+};
+
 export type GetProjectProjectCocsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -11884,78 +11971,6 @@ export type VoidReferralRequestMutation = {
       linkId?: string | null;
       section?: string | null;
       data?: any | null;
-    }>;
-  } | null;
-};
-
-export type GetReferralPostingQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetReferralPostingQuery = {
-  __typename?: 'Query';
-  referralPosting?: {
-    __typename?: 'ReferralPosting';
-    id: string;
-    assignedDate: string;
-    chronic?: boolean | null;
-    denialNote?: string | null;
-    denialReason?: string | null;
-    needsWheelchairAccessibleUnit?: boolean | null;
-    postingIdentifier?: string | null;
-    referralDate: string;
-    referralIdentifier?: string | null;
-    referralNotes?: string | null;
-    referralResult?: ReferralResult | null;
-    referredBy: string;
-    referredFrom: string;
-    resourceCoordinatorNotes?: string | null;
-    score?: number | null;
-    status: ReferralPostingStatus;
-    statusNote?: string | null;
-    statusNoteUpdatedAt?: string | null;
-    statusNoteUpdatedBy?: string | null;
-    statusUpdatedAt?: string | null;
-    statusUpdatedBy?: string | null;
-    unitType: {
-      __typename?: 'UnitTypeObject';
-      id: string;
-      description?: string | null;
-    };
-    householdMembers: Array<{
-      __typename?: 'ReferralHouseholdMember';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        veteranStatus: NoYesReasonsForMissingData;
-        gender: Array<Gender>;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-        };
-      };
     }>;
   } | null;
 };
@@ -16074,7 +16089,7 @@ export type OmniSearchClientsQueryResult = Apollo.QueryResult<
 >;
 export const OmniSearchProjectsDocument = gql`
   query OmniSearchProjects($searchTerm: String!, $limit: Int) {
-    projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
+    projects(filters: { searchTerm: $searchTerm }, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -16454,13 +16469,19 @@ export type GetOrganizationQueryResult = Apollo.QueryResult<
 export const GetOrganizationProjectsDocument = gql`
   query GetOrganizationProjects(
     $id: ID!
-    $searchTerm: String
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ProjectFilterOptions
+    $sortOrder: ProjectSortOption
   ) {
     organization(id: $id) {
       id
-      projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
+      projects(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
         offset
         limit
         nodesCount
@@ -16489,9 +16510,10 @@ export const GetOrganizationProjectsDocument = gql`
  * const { data, loading, error } = useGetOrganizationProjectsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
@@ -17399,6 +17421,65 @@ export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables
 >;
+export const GetReferralPostingDocument = gql`
+  query GetReferralPosting($id: ID!) {
+    referralPosting(id: $id) {
+      ...ReferralPostingDetailFields
+    }
+  }
+  ${ReferralPostingDetailFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetReferralPostingQuery__
+ *
+ * To run a query within a React component, call `useGetReferralPostingQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReferralPostingQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReferralPostingQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetReferralPostingQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export function useGetReferralPostingLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetReferralPostingQuery,
+    GetReferralPostingQueryVariables
+  >(GetReferralPostingDocument, options);
+}
+export type GetReferralPostingQueryHookResult = ReturnType<
+  typeof useGetReferralPostingQuery
+>;
+export type GetReferralPostingLazyQueryHookResult = ReturnType<
+  typeof useGetReferralPostingLazyQuery
+>;
+export type GetReferralPostingQueryResult = Apollo.QueryResult<
+  GetReferralPostingQuery,
+  GetReferralPostingQueryVariables
+>;
 export const GetProjectProjectCocsDocument = gql`
   query GetProjectProjectCocs($id: ID!, $limit: Int = 10, $offset: Int = 0) {
     project(id: $id) {
@@ -17934,65 +18015,6 @@ export type VoidReferralRequestMutationResult =
 export type VoidReferralRequestMutationOptions = Apollo.BaseMutationOptions<
   VoidReferralRequestMutation,
   VoidReferralRequestMutationVariables
->;
-export const GetReferralPostingDocument = gql`
-  query GetReferralPosting($id: ID!) {
-    referralPosting(id: $id) {
-      ...ReferralPostingDetailFields
-    }
-  }
-  ${ReferralPostingDetailFieldsFragmentDoc}
-`;
-
-/**
- * __useGetReferralPostingQuery__
- *
- * To run a query within a React component, call `useGetReferralPostingQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetReferralPostingQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetReferralPostingQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetReferralPostingQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetReferralPostingQuery,
-    GetReferralPostingQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetReferralPostingQuery,
-    GetReferralPostingQueryVariables
-  >(GetReferralPostingDocument, options);
-}
-export function useGetReferralPostingLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetReferralPostingQuery,
-    GetReferralPostingQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetReferralPostingQuery,
-    GetReferralPostingQueryVariables
-  >(GetReferralPostingDocument, options);
-}
-export type GetReferralPostingQueryHookResult = ReturnType<
-  typeof useGetReferralPostingQuery
->;
-export type GetReferralPostingLazyQueryHookResult = ReturnType<
-  typeof useGetReferralPostingLazyQuery
->;
-export type GetReferralPostingQueryResult = Apollo.QueryResult<
-  GetReferralPostingQuery,
-  GetReferralPostingQueryVariables
 >;
 export const UpdateReferralPostingDocument = gql`
   mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {

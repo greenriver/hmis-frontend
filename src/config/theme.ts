@@ -28,10 +28,12 @@ declare module '@mui/material/styles' {
   interface Palette {
     borders: PaletteColor;
     alerts: Record<string, string>;
+    links: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
+    links: string;
   }
 }
 
@@ -61,6 +63,7 @@ export const baseThemeDef: ThemeOptions = {
     alerts: {
       lightWarningBackground: '#fffde0',
     },
+    links: '#1976D2',
   },
 };
 
@@ -142,6 +145,8 @@ const createThemeOptions = (theme: Theme) => ({
       },
       styleOverrides: {
         root: theme.unstable_sx({
+          color: theme.palette.links,
+          textDecorationColor: theme.palette.links,
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
