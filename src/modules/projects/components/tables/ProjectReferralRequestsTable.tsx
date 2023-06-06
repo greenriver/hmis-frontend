@@ -32,7 +32,6 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
     () => [
       {
         header: 'Requested Date',
-        linkTreatment: true,
         render: (row: ReferralRequestFieldsFragment) =>
           parseAndFormatDate(row.requestedOn),
       },
@@ -58,6 +57,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       },
       {
         header: 'Action',
+        linkTreatment: true,
         render: (referralRequest: ReferralRequestFieldsFragment) => (
           <DeleteMutationButton<
             VoidReferralRequestMutation,
