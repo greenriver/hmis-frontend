@@ -1,29 +1,18 @@
-import { Chip } from '@mui/material';
+import { useCallback } from 'react';
+
+import { ReferralPostingStatusDisplay } from '../ReferralPostingStatusDisplay';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { HmisEnums } from '@/types/gqlEnums';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
-  ReferralPostingStatus,
 } from '@/types/gqlTypes';
-
-const StatusDisplay: React.FC<{ status: ReferralPostingStatus }> = ({
-  status,
-}) => {
-  return (
-    <Chip
-      label={HmisEnums.ReferralPostingStatus[status]}
-      size='small'
-      variant='outlined'
-      sx={{ cursor: 'inherit' }}
-    />
-  );
-};
+import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
@@ -34,6 +23,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'HoH',
     render: 'hohName',
+    linkTreatment: true,
   },
   {
     header: 'Household Size',
@@ -46,7 +36,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Status',
     render: (row: ReferralPostingFieldsFragment) => (
-      <StatusDisplay status={row.status} />
+      <ReferralPostingStatusDisplay status={row.status} />
     ),
   },
   {
@@ -63,6 +53,16 @@ interface Props {
 export const ProjectReferralPostingsTable: React.FC<Props> = ({
   projectId,
 }) => {
+  const rowLinkTo = useCallback(
+    (row: ReferralPostingFieldsFragment): string => {
+      return generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
+        projectId,
+        referralPostingId: row.id,
+      });
+    },
+    [projectId]
+  );
+
   return (
     <GenericTableWithData<
       GetProjectReferralPostingsQuery,
@@ -74,6 +74,7 @@ export const ProjectReferralPostingsTable: React.FC<Props> = ({
       columns={columns}
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
+      rowLinkTo={rowLinkTo}
     />
   );
 };

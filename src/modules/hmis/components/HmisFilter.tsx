@@ -11,6 +11,7 @@ import {
   EnrollmentSortOption,
   HouseholdSortOption,
   PickListType,
+  ProjectSortOption,
 } from '@/types/gqlTypes';
 
 /**
@@ -43,6 +44,8 @@ export const getSortOptionForType = (
     return HmisEnums.EnrollmentSortOption as Record<string, string>;
   if (recordType === 'Household')
     return HmisEnums.HouseholdSortOption as Record<string, string>;
+  if (recordType === 'Project')
+    return HmisEnums.ProjectSortOption as Record<string, string>;
 
   return null;
 };
@@ -53,6 +56,7 @@ export const getDefaultSortOptionForType = (
   if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
   if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
   if (recordType === 'Household') return HouseholdSortOption.MostRecent;
+  if (recordType === 'Project') return ProjectSortOption.Name;
 
   return null;
 };

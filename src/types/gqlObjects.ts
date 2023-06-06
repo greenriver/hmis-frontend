@@ -3232,6 +3232,27 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'ReferralHouseholdMember',
+    fields: [
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoH',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'ReferralPosting',
     fields: [
       {
@@ -4385,6 +4406,55 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       { name: 'ssn', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+    ],
+  },
+  {
+    name: 'ProjectFilterOptions',
+    args: [
+      {
+        name: 'funders',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'FundingSource', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectTypes',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'statuses',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'ProjectFilterOptionStatus',
+              ofType: null,
+            },
+          },
+        },
+      },
     ],
   },
   {

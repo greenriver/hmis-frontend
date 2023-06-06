@@ -46,6 +46,7 @@ const projectClientDashboardRoutes = {
   REFERRALS: 'referrals',
   NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
   NEW_REFERRAL: 'referrals/new-referral',
+  REFERRAL_POSTING: 'referrals/:referralPostingId',
 
   // Project setup
   FUNDERS: 'funder',

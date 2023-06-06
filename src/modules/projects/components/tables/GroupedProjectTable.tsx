@@ -110,7 +110,11 @@ const GroupedProjectTable = ({
             }}
           >
             <Stack spacing={2}>
-              <ProjectsTable organizationId={organization.id} hideSearch />
+              <ProjectsTable
+                organizationId={organization.id}
+                hideSearch
+                hideFilters
+              />
             </Stack>
           </AccordionDetails>
         </Accordion>

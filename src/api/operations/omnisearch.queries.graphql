@@ -10,7 +10,7 @@ query OmniSearchClients($textSearch: String!, $limit: Int) {
 }
 
 query OmniSearchProjects($searchTerm: String!, $limit: Int) {
-  projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
+  projects(filters: { searchTerm: $searchTerm }, limit: $limit, offset: 0) {
     limit
     nodesCount
     nodes {
