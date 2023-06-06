@@ -1345,11 +1345,6 @@ export type EnrollmentHouseholdMemberInput = {
   relationshipToHoH: RelationshipToHoH;
 };
 
-export enum EnrollmentLimit {
-  NonWipOnly = 'NON_WIP_ONLY',
-  WipOnly = 'WIP_ONLY',
-}
-
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
   /** Household ID */
@@ -1981,7 +1976,7 @@ export type HouseholdClient = {
 };
 
 export type HouseholdFilterOptions = {
-  ageRange?: InputMaybe<AgeRange>;
+  hohAgeRange?: InputMaybe<AgeRange>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   searchTerm?: InputMaybe<Scalars['String']>;
   statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
@@ -2762,12 +2757,9 @@ export type ProjectFundersArgs = {
 };
 
 export type ProjectHouseholdsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   filters?: InputMaybe<HouseholdFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<HouseholdSortOption>;
 };
 
@@ -11241,9 +11233,6 @@ export type GetProjectEnrollmentsQuery = {
 
 export type GetProjectHouseholdsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
   filters?: InputMaybe<HouseholdFilterOptions>;
   sortOrder?: InputMaybe<HouseholdSortOption>;
   limit?: InputMaybe<Scalars['Int']>;
@@ -16744,9 +16733,6 @@ export type GetProjectEnrollmentsQueryResult = Apollo.QueryResult<
 export const GetProjectHouseholdsDocument = gql`
   query GetProjectHouseholds(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
-    $enrollmentLimit: EnrollmentLimit
     $filters: HouseholdFilterOptions
     $sortOrder: HouseholdSortOption
     $limit: Int = 10
@@ -16758,9 +16744,6 @@ export const GetProjectHouseholdsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: $sortOrder
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
-        enrollmentLimit: $enrollmentLimit
         filters: $filters
       ) {
         offset
@@ -16788,9 +16771,6 @@ export const GetProjectHouseholdsDocument = gql`
  * const { data, loading, error } = useGetProjectHouseholdsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
- *      enrollmentLimit: // value for 'enrollmentLimit'
  *      filters: // value for 'filters'
  *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'

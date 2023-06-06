@@ -79,7 +79,7 @@ const getFilterForType = (
 
   const baseFields: BaseFilter<any> = {
     key: fieldName,
-    label: startCase(fieldName),
+    label: startCase(fieldName).replace(/\bHoh\b/, 'HoH'),
     multi: type.kind === 'LIST',
   };
 

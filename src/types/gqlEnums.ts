@@ -2,8 +2,7 @@
 
 export const HmisEnums = {
   AgeRange: {
-    Age62Plus: '62+',
-    Age65Plus: '65+',
+    Under5: 'Under 5',
     Ages5to12: '5-12',
     Ages13to17: '13-17',
     Ages18to24: '18-24',
@@ -12,7 +11,8 @@ export const HmisEnums = {
     Ages45to54: '45-54',
     Ages55to61: '55-61',
     Ages55to64: '55-64',
-    Under5: 'Under 5',
+    Age62Plus: '62+',
+    Age65Plus: '65+',
   },
   AssessmentLevel: {
     INVALID: 'Invalid Value',
@@ -241,7 +241,6 @@ export const HmisEnums = {
     ACTIVE: 'Active',
     EXITED: 'Exited',
   },
-  EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
   EnrollmentSortOption: {
     HOUSEHOLD_ID: 'Household ID',
     MOST_RECENT: 'Most Recent',

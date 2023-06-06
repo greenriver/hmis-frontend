@@ -8932,29 +8932,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "EnrollmentLimit",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "NON_WIP_ONLY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "WIP_ONLY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "EnrollmentSortOption",
         "description": "HUD Enrollment Sorting Options",
         "fields": null,
@@ -12843,7 +12820,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "ageRange",
+            "name": "hohAgeRange",
             "description": null,
             "type": {
               "kind": "ENUM",
@@ -17799,18 +17776,6 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
-                "description": null,
-                "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "filters",
                 "description": null,
                 "type": {
@@ -17840,30 +17805,6 @@
                 "type": {
                   "kind": "SCALAR",
                   "name": "Int",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "searchTerm",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null,

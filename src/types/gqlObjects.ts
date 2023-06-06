@@ -4333,7 +4333,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'HouseholdFilterOptions',
     args: [
       {
-        name: 'ageRange',
+        name: 'hohAgeRange',
         type: { kind: 'ENUM', name: 'AgeRange', ofType: null },
       },
       {

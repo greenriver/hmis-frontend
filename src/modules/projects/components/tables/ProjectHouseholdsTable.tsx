@@ -18,7 +18,6 @@ import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnrollmentFilterOptionStatus,
-  EnrollmentLimit,
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
@@ -156,13 +155,11 @@ const ProjectHouseholdsTable = ({
   columns,
   openOnDate,
   searchTerm,
-  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   openOnDate?: Date;
   searchTerm?: string;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
@@ -178,11 +175,10 @@ const ProjectHouseholdsTable = ({
     >
       queryVariables={{
         id: projectId,
-        searchTerm,
-        openOnDate: openOnDateString,
-        enrollmentLimit: wipEnrollmentsOnly
-          ? EnrollmentLimit.WipOnly
-          : undefined,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
       }}
       queryDocument={GetProjectHouseholdsDocument}
       columns={columns || defaultColumns}

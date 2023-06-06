@@ -103,16 +103,12 @@ const ProjectClientEnrollmentsTable = ({
   openOnDate,
   linkRowToEnrollment = false,
   searchTerm,
-  // TODO: implement, needs a backend flag
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const rowLinkTo = useCallback(
     (en: EnrollmentFields) =>
