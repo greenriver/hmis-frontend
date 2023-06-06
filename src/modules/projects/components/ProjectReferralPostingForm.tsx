@@ -36,7 +36,6 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         keyByFieldName: true,
       }) as ReferralPostingInput;
 
-      console.debug('submitting', input);
       mutate({
         variables: {
           id: referralPosting.id,

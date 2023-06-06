@@ -3,18 +3,26 @@
     {
       "type": "CHOICE",
       "linkId": "status",
-      "required": false,
-      "text": "Select Referral Status",
+      "required": true,
+      "text": "Referral Status",
       "fieldName": "status",
       "pickListReference": "REFERRAL_POSTING_STATUSES"
     },
     {
       "type": "CHOICE",
       "linkId": "denialReasonId",
-      "required": false,
+      "required": true,
       "text": "Reason for Denial",
       "fieldName": "denialReasonId",
-      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
+      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES",
+      "enableBehavior": "ALL",
+      "enableWhen": [
+        {
+          "question": "status",
+          "operator": "EQUAL",
+          "answerCode": "denied_pending_status"
+        }
+      ]
     },
     {
       "type": "TEXT",
