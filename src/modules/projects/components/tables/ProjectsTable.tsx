@@ -47,9 +47,11 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
 const ProjectsTable = ({
   organizationId,
   hideSearch = false,
+  hideFilters = false,
 }: {
   organizationId: string;
   hideSearch?: boolean;
+  hideFilters?: boolean;
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined
@@ -90,9 +92,11 @@ const ProjectsTable = ({
       rowLinkTo={rowLinkTo}
       noData='No projects.'
       pagePath='organization.projects'
-      showFilters
+      showFilters={!hideFilters}
       recordType='Project'
-      defaultFilters={{ statuses: [ProjectFilterOptionStatus.Open] }}
+      defaultFilters={
+        hideFilters ? undefined : { statuses: [ProjectFilterOptionStatus.Open] }
+      }
       filters={(filters) =>
         hideSearch ? filters : omit(filters, 'searchTerm')
       }
