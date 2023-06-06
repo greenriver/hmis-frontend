@@ -25,6 +25,7 @@ interface DeleteMutationButtonProps<MutationVariables> {
   children: ReactNode;
   recordName?: string;
   confirmationDialogContent?: ReactNode;
+  verb?: string;
 }
 
 const DeleteMutationButton = <Mutation, MutationVariables>({
@@ -37,6 +38,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
   recordName = 'record',
   onSuccess,
   confirmationDialogContent,
+  verb = 'delete',
 }: DeleteMutationButtonProps<MutationVariables>) => {
   const [showDialog, setShowDialog] = useState(false);
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
@@ -80,8 +82,9 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
-        title={`Delete ${recordName}`}
-        confirmText={`Yes, delete ${recordName}`}
+        title={`${verb} ${recordName}`}
+        confirmText={`Yes, ${verb} ${recordName}`}
+        cancelText='Close'
         onConfirm={handleDelete}
         onCancel={() => setShowDialog(false)}
         loading={loading}
@@ -89,16 +92,18 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
         color='error'
         {...ConfirmationDialogProps}
       >
-        {confirmationDialogContent ? (
-          confirmationDialogContent
-        ) : (
-          <>
-            <Typography>
-              {`Are you sure you want to delete this ${recordName}?`}
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
+        <>
+          {confirmationDialogContent ? (
+            confirmationDialogContent
+          ) : (
+            <>
+              <Typography>
+                {`Are you sure you want to ${verb} this ${recordName}?`}
+              </Typography>
+              <Typography>This action cannot be undone.</Typography>
+            </>
+          )}
+        </>
       </ConfirmationDialog>
     </>
   );

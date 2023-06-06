@@ -11899,7 +11899,7 @@ export type ReferralPostingDetailFieldsFragment = {
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
-    bedType?: InventoryBedType | null;
+    description?: string | null;
   };
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -11970,7 +11970,7 @@ export type GetReferralPostingQuery = {
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
-      bedType?: InventoryBedType | null;
+      description?: string | null;
     };
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -12045,7 +12045,7 @@ export type UpdateReferralPostingMutation = {
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
-        bedType?: InventoryBedType | null;
+        description?: string | null;
       };
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
@@ -12117,6 +12117,32 @@ export type ReferralRequestFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   };
+};
+
+export type VoidReferralRequestMutationVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type VoidReferralRequestMutation = {
+  __typename?: 'Mutation';
+  voidReferralRequest?: {
+    __typename?: 'VoidReferralRequestPayload';
+    record?: { __typename?: 'ReferralRequest'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
 };
 
 export type CreateDirectUploadMutationMutationVariables = Exact<{
@@ -13241,7 +13267,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusUpdatedBy
     unitType {
       id
-      bedType
+      description
     }
     householdMembers {
       id
@@ -17969,6 +17995,62 @@ export type UpdateReferralPostingMutationResult =
 export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutation,
   UpdateReferralPostingMutationVariables
+>;
+export const VoidReferralRequestDocument = gql`
+  mutation VoidReferralRequest($id: ID!) {
+    voidReferralRequest(referralRequestId: $id) {
+      record {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type VoidReferralRequestMutationFn = Apollo.MutationFunction<
+  VoidReferralRequestMutation,
+  VoidReferralRequestMutationVariables
+>;
+
+/**
+ * __useVoidReferralRequestMutation__
+ *
+ * To run a mutation, you first call `useVoidReferralRequestMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoidReferralRequestMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voidReferralRequestMutation, { data, loading, error }] = useVoidReferralRequestMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useVoidReferralRequestMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    VoidReferralRequestMutation,
+    VoidReferralRequestMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    VoidReferralRequestMutation,
+    VoidReferralRequestMutationVariables
+  >(VoidReferralRequestDocument, options);
+}
+export type VoidReferralRequestMutationHookResult = ReturnType<
+  typeof useVoidReferralRequestMutation
+>;
+export type VoidReferralRequestMutationResult =
+  Apollo.MutationResult<VoidReferralRequestMutation>;
+export type VoidReferralRequestMutationOptions = Apollo.BaseMutationOptions<
+  VoidReferralRequestMutation,
+  VoidReferralRequestMutationVariables
 >;
 export const CreateDirectUploadMutationDocument = gql`
   mutation CreateDirectUploadMutation($input: DirectUploadInput!) {

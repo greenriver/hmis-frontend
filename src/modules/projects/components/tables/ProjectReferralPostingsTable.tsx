@@ -23,6 +23,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'HoH',
     render: 'hohName',
+    linkTreatment: true,
   },
   {
     header: 'Household Size',
