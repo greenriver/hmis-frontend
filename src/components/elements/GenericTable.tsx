@@ -216,6 +216,14 @@ const GenericTable = <T extends { id: string }>({
                   const isFirstLinkWithTreatment =
                     columns.findIndex((c) => c.linkTreatment) === index;
                   const isLinked = rowLinkTo && !dontLink;
+                  const onClickLinkTreatment =
+                    handleRowClick && !dontLink && linkTreatment
+                      ? {
+                          color: 'links',
+                          textDecoration: 'underline',
+                          textDecorationColor: 'links',
+                        }
+                      : undefined;
                   return (
                     <TableCell
                       key={key(def) || index}
@@ -224,6 +232,7 @@ const GenericTable = <T extends { id: string }>({
                         minWidth,
                         ...(isLinked ? { p: 0 } : undefined),
                         textAlign,
+                        ...onClickLinkTreatment,
                       }}
                     >
                       {isLinked ? (

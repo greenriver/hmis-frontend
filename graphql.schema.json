@@ -21825,18 +21825,6 @@
         "description": "HUD or Custom Service rendered",
         "fields": [
           {
-            "name": "FAAmount",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "Float",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "client",
             "description": null,
             "args": [],
@@ -21953,6 +21941,18 @@
             "deprecationReason": null
           },
           {
+            "name": "faAmount",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -21993,18 +21993,6 @@
             "deprecationReason": null
           },
           {
-            "name": "recordType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RecordType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "referralOutcome",
             "description": null,
             "args": [],
@@ -22017,24 +22005,28 @@
             "deprecationReason": null
           },
           {
+            "name": "serviceType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ServiceType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "subTypeProvided",
             "description": null,
             "args": [],
             "type": {
               "kind": "ENUM",
               "name": "ServiceSubTypeProvided",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "typeProvided",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "ServiceTypeProvided",
               "ofType": null
             },
             "isDeprecated": false,

@@ -3435,10 +3435,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Service',
     fields: [
       {
-        name: 'FAAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',
@@ -3467,6 +3463,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'faAmount',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -3483,20 +3483,12 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
-      },
-      {
         name: 'referralOutcome',
         type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
       },
       {
         name: 'subTypeProvided',
         type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
-      },
-      {
-        name: 'typeProvided',
-        type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
       },
     ],
   },

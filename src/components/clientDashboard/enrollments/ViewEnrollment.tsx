@@ -120,9 +120,7 @@ const ViewEnrollment = () => {
           </Paper>
         </Grid>
       </Grid>
-      {renderServiceDialog({
-        FormActionProps: { submitButtonText: 'Add Service' },
-      })}
+      {renderServiceDialog()}
     </>
   );
 };

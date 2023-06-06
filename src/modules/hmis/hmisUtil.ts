@@ -11,6 +11,8 @@ import {
 } from 'date-fns';
 import { find, isNil, sortBy, startCase } from 'lodash-es';
 
+import { hasMeaningfulValue } from '../form/util/formUtil';
+
 import { HmisEnums } from '@/types/gqlEnums';
 import { HmisInputObjectSchemas, HmisObjectSchemas } from '@/types/gqlObjects';
 import {
@@ -25,9 +27,8 @@ import {
   HouseholdClientFieldsFragment,
   HouseholdClientFieldsWithAssessmentsFragment,
   ProjectType,
-  RecordType,
   ServiceFieldsFragment,
-  ServiceTypeProvided,
+  ServiceTypeFieldsFragment,
 } from '@/types/gqlTypes';
 
 /**
@@ -309,49 +310,6 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
   return result;
 };
 
-export const serviceDetails = (e: ServiceFieldsFragment): string[] => {
-  // TODO figure out display for services
-  if (!e.typeProvided || !e.recordType) return ['Custom service'];
-
-  let typeProvided: string | null =
-    HmisEnums.ServiceTypeProvided[e.typeProvided];
-
-  // Don't show bed night because it's redundant
-  if (e.typeProvided === ServiceTypeProvided.BedNightBedNight)
-    typeProvided = null;
-
-  const isOtherSsvf =
-    e.recordType === RecordType.SsvfService &&
-    e.typeProvided ===
-      ServiceTypeProvided.SsvfServiceOtherNonTfaSupportiveServiceApprovedByVa;
-  const isOtherHudVash =
-    e.recordType === RecordType.HudVashOthVoucherTracking &&
-    e.typeProvided === ServiceTypeProvided.HudVashOthVoucherTrackingOther;
-  const isOtherMovingOn =
-    e.recordType === RecordType.MovingOnAssistance &&
-    e.typeProvided === ServiceTypeProvided.MovingOnAssistanceOther;
-
-  // Don't show 'other' if we have the other value
-  if ((isOtherSsvf || isOtherHudVash) && e.otherTypeProvided)
-    typeProvided = null;
-
-  // Don't show 'other' if we have the other value
-  if (isOtherMovingOn && e.movingOnOtherType) typeProvided = null;
-
-  return [
-    typeProvided,
-    e.otherTypeProvided,
-    e.movingOnOtherType,
-    e.subTypeProvided
-      ? HmisEnums.ServiceSubTypeProvided[e.subTypeProvided]
-      : null,
-    formatCurrency(e.FAAmount),
-    e.referralOutcome ? HmisEnums.PATHReferralOutcome[e.referralOutcome] : null,
-  ].filter(
-    (s) => s !== null && s !== '' && typeof s !== 'undefined'
-  ) as string[];
-};
-
 export const sortHouseholdMembers = (
   members?:
     | HouseholdClientFieldsFragment[]
@@ -407,4 +365,37 @@ export const customDataElementValueForKey = (
   } else if (element.values) {
     return element.values.map((val) => customDataElementValue(val));
   }
+};
+
+export const serviceTypeSummary = (st: ServiceTypeFieldsFragment) => {
+  if (st.category == st.name) return st.name;
+  return [st.category, st.name].join(': ');
+};
+
+export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
+  const detailRows = [
+    service.otherTypeProvided,
+    service.movingOnOtherType,
+    service.subTypeProvided
+      ? HmisEnums.ServiceSubTypeProvided[service.subTypeProvided]
+      : null,
+    formatCurrency(service.faAmount),
+    service.referralOutcome
+      ? HmisEnums.PATHReferralOutcome[service.referralOutcome]
+      : null,
+  ].filter((s) => hasMeaningfulValue(s)) as string[];
+
+  if (service.customDataElements) {
+    service.customDataElements.map((cde) => {
+      if (cde.value) detailRows.push(customDataElementValue(cde.value));
+      if (cde.values)
+        return detailRows.push(
+          cde.values
+            .map((val) => customDataElementValue(val))
+            .filter((s) => hasMeaningfulValue(s))
+            .join(', ')
+        );
+    });
+  }
+  return detailRows;
 };

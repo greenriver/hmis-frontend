@@ -23,6 +23,7 @@ interface RecordDialogProps<RecordType> extends DialogProps {
   pickListRelationId?: string;
   actions?: ReactNode;
   children?: ReactNode;
+  hideRecordContents?: boolean;
 }
 
 type AllowedTypes = NonNullable<
@@ -37,6 +38,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   title,
   children,
   pickListRelationId,
+  hideRecordContents = false,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -103,11 +105,13 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
             gap: 2,
           })}
         >
-          <ViewRecord
-            record={record}
-            formRole={formRole}
-            pickListRelationId={pickListRelationId}
-          />
+          {!hideRecordContents && (
+            <ViewRecord
+              record={record}
+              formRole={formRole}
+              pickListRelationId={pickListRelationId}
+            />
+          )}
           {children}
         </Box>
       </DialogContent>

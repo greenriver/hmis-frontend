@@ -3322,7 +3322,6 @@ export type SaveAssessmentPayload = {
 /** HUD or Custom Service rendered */
 export type Service = {
   __typename?: 'Service';
-  FAAmount?: Maybe<Scalars['Float']>;
   client: Client;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -3330,13 +3329,13 @@ export type Service = {
   dateProvided: Scalars['ISO8601Date'];
   dateUpdated: Scalars['ISO8601DateTime'];
   enrollment: Enrollment;
+  faAmount?: Maybe<Scalars['Float']>;
   id: Scalars['ID'];
   movingOnOtherType?: Maybe<Scalars['String']>;
   otherTypeProvided?: Maybe<Scalars['String']>;
-  recordType?: Maybe<RecordType>;
   referralOutcome?: Maybe<PathReferralOutcome>;
+  serviceType: ServiceType;
   subTypeProvided?: Maybe<ServiceSubTypeProvided>;
-  typeProvided?: Maybe<ServiceTypeProvided>;
   user?: Maybe<User>;
 };
 
@@ -6848,22 +6847,6 @@ export type EventFieldsFragment = {
   referralCaseManageAfter?: NoYesMissing | null;
   referralResult?: ReferralResult | null;
   resultDate?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
-  dateDeleted?: string | null;
-};
-
-export type ServiceFieldsFragment = {
-  __typename?: 'Service';
-  id: string;
-  dateProvided: string;
-  movingOnOtherType?: string | null;
-  recordType?: RecordType | null;
-  referralOutcome?: PathReferralOutcome | null;
-  subTypeProvided?: ServiceSubTypeProvided | null;
-  typeProvided?: ServiceTypeProvided | null;
-  otherTypeProvided?: string | null;
-  FAAmount?: number | null;
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
@@ -10668,16 +10651,60 @@ export type SubmitFormMutation = {
           __typename?: 'Service';
           id: string;
           dateProvided: string;
+          faAmount?: number | null;
           movingOnOtherType?: string | null;
-          recordType?: RecordType | null;
           referralOutcome?: PathReferralOutcome | null;
           subTypeProvided?: ServiceSubTypeProvided | null;
-          typeProvided?: ServiceTypeProvided | null;
           otherTypeProvided?: string | null;
-          FAAmount?: number | null;
           dateCreated: string;
           dateUpdated: string;
           dateDeleted?: string | null;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+          serviceType: {
+            __typename?: 'ServiceType';
+            id: string;
+            name: string;
+            hudRecordType?: RecordType | null;
+            hudTypeProvided?: ServiceTypeProvided | null;
+            category: string;
+            dateCreated: string;
+            dateUpdated: string;
+          };
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
+            id: string;
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         }
       | null;
     errors: Array<{
@@ -12380,6 +12407,66 @@ export type ServiceTypeFieldsFragment = {
   dateUpdated: string;
 };
 
+export type ServiceFieldsFragment = {
+  __typename?: 'Service';
+  id: string;
+  dateProvided: string;
+  faAmount?: number | null;
+  movingOnOtherType?: string | null;
+  referralOutcome?: PathReferralOutcome | null;
+  subTypeProvided?: ServiceSubTypeProvided | null;
+  otherTypeProvided?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  serviceType: {
+    __typename?: 'ServiceType';
+    id: string;
+    name: string;
+    hudRecordType?: RecordType | null;
+    hudTypeProvided?: ServiceTypeProvided | null;
+    category: string;
+    dateCreated: string;
+    dateUpdated: string;
+  };
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+};
+
 export type GetServiceQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -12390,16 +12477,60 @@ export type GetServiceQuery = {
     __typename?: 'Service';
     id: string;
     dateProvided: string;
+    faAmount?: number | null;
     movingOnOtherType?: string | null;
-    recordType?: RecordType | null;
     referralOutcome?: PathReferralOutcome | null;
     subTypeProvided?: ServiceSubTypeProvided | null;
-    typeProvided?: ServiceTypeProvided | null;
     otherTypeProvided?: string | null;
-    FAAmount?: number | null;
     dateCreated: string;
     dateUpdated: string;
     dateDeleted?: string | null;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+    serviceType: {
+      __typename?: 'ServiceType';
+      id: string;
+      name: string;
+      hudRecordType?: RecordType | null;
+      hudTypeProvided?: ServiceTypeProvided | null;
+      category: string;
+      dateCreated: string;
+      dateUpdated: string;
+    };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
   } | null;
 };
 
@@ -12434,16 +12565,60 @@ export type AddServiceToEnrollmentMutation = {
       __typename?: 'Service';
       id: string;
       dateProvided: string;
+      faAmount?: number | null;
       movingOnOtherType?: string | null;
-      recordType?: RecordType | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
-      typeProvided?: ServiceTypeProvided | null;
       otherTypeProvided?: string | null;
-      FAAmount?: number | null;
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+      serviceType: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated: string;
+        dateUpdated: string;
+      };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -12475,16 +12650,60 @@ export type DeleteServiceMutation = {
       __typename?: 'Service';
       id: string;
       dateProvided: string;
+      faAmount?: number | null;
       movingOnOtherType?: string | null;
-      recordType?: RecordType | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
-      typeProvided?: ServiceTypeProvided | null;
       otherTypeProvided?: string | null;
-      FAAmount?: number | null;
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+      serviceType: {
+        __typename?: 'ServiceType';
+        id: string;
+        name: string;
+        hudRecordType?: RecordType | null;
+        hudTypeProvided?: ServiceTypeProvided | null;
+        category: string;
+        dateCreated: string;
+        dateUpdated: string;
+      };
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -12523,16 +12742,60 @@ export type GetEnrollmentServicesQuery = {
         __typename?: 'Service';
         id: string;
         dateProvided: string;
+        faAmount?: number | null;
         movingOnOtherType?: string | null;
-        recordType?: RecordType | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
-        typeProvided?: ServiceTypeProvided | null;
         otherTypeProvided?: string | null;
-        FAAmount?: number | null;
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        serviceType: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated: string;
+          dateUpdated: string;
+        };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
       }>;
     };
   } | null;
@@ -13169,22 +13432,6 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
-export const ServiceFieldsFragmentDoc = gql`
-  fragment ServiceFields on Service {
-    id
-    dateProvided
-    movingOnOtherType
-    recordType
-    referralOutcome
-    subTypeProvided
-    typeProvided
-    otherTypeProvided
-    FAAmount
-    dateCreated
-    dateUpdated
-    dateDeleted
-  }
-`;
 export const IncomeBenefitFieldsFragmentDoc = gql`
   fragment IncomeBenefitFields on IncomeBenefit {
     __typename
@@ -13705,6 +13952,32 @@ export const ServiceTypeFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
   }
+`;
+export const ServiceFieldsFragmentDoc = gql`
+  fragment ServiceFields on Service {
+    id
+    dateProvided
+    faAmount
+    movingOnOtherType
+    referralOutcome
+    subTypeProvided
+    otherTypeProvided
+    dateCreated
+    dateUpdated
+    dateDeleted
+    user {
+      ...UserFields
+    }
+    serviceType {
+      ...ServiceTypeFields
+    }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${UserFieldsFragmentDoc}
+  ${ServiceTypeFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {

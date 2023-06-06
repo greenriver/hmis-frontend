@@ -10,7 +10,8 @@ import {
   Skeleton,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { find } from 'lodash-es';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   emptyErrorState,
@@ -26,18 +27,18 @@ import FormSelect from '@/modules/form/components/FormSelect';
 import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { usePickList } from '@/modules/form/hooks/usePickList';
+import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
 import { isPickListOption } from '@/modules/form/types';
 import {
   createHudValuesForSubmit,
   createValuesForSubmit,
-  getItemMap,
 } from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   ItemType,
   PickListOption,
   PickListType,
-  useGetServiceFormDefinitionQuery,
+  ServiceFieldsFragment,
   useGetServiceTypeQuery,
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
@@ -46,9 +47,11 @@ import { PartialPick } from '@/utils/typeUtil';
 export function useServiceDialog({
   projectId,
   enrollmentId,
+  service,
 }: {
   projectId: string;
   enrollmentId: string;
+  service?: ServiceFieldsFragment;
 }) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<PickListOption | null>(
@@ -65,21 +68,14 @@ export function useServiceDialog({
     });
 
   const {
-    data: { getServiceFormDefinition: formDefinition } = {},
+    formDefinition,
+    itemMap,
     loading: definitionLoading,
-  } = useGetServiceFormDefinitionQuery({
-    variables: { projectId, serviceTypeId: selectedService?.code || '' },
-    skip: !selectedService,
+  } = useServiceFormDefinition({
+    projectId,
+    serviceTypeId: selectedService?.code,
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
-
-  const itemMap = useMemo(
-    () =>
-      formDefinition ? getItemMap(formDefinition.definition, false) : undefined,
-    [formDefinition]
-  );
-
-  console.log(serviceType);
 
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
@@ -119,6 +115,15 @@ export function useServiceDialog({
     projectId,
     { fetchPolicy: 'network-only' }
   );
+  useEffect(() => {
+    if (!service) return;
+    if (!serviceList) return;
+
+    const serviceTypeOption = find(serviceList, {
+      code: service.serviceType.id,
+    });
+    if (serviceTypeOption) setSelectedService(serviceTypeOption);
+  }, [serviceList, service]);
 
   // const displayCategory = useMemo(() => {
   //   if (!selectedService) return null;
@@ -140,6 +145,7 @@ export function useServiceDialog({
     itemMap,
     formDefinition: formDefinition || undefined,
     localConstants,
+    record: service,
   });
 
   const submitHandler: DynamicFormOnSubmit = useCallback(
@@ -165,7 +171,7 @@ export function useServiceDialog({
       (!serviceType && serviceTypeLoading));
 
   const renderServiceDialog = (
-    props: PartialPick<DynamicFormProps, 'onSubmit' | 'definition' | 'errors'>
+    props?: PartialPick<DynamicFormProps, 'onSubmit' | 'definition' | 'errors'>
   ) => {
     return (
       <Dialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
@@ -181,7 +187,7 @@ export function useServiceDialog({
           }}
           color='text.primary'
         >
-          Add Service
+          {service ? 'Update Service' : 'Add Service'}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mb: 2 }}>
@@ -194,6 +200,7 @@ export function useServiceDialog({
               loading={serviceListLoading}
               label={getRequiredLabel('Service Type', true)}
               placeholder='Select a service..'
+              disabled={!!(service && selectedService)}
             />
           </Box>
 
@@ -214,10 +221,6 @@ export function useServiceDialog({
               loadingElement={
                 <Skeleton variant='rectangular' sx={{ height: 60, pt: 2 }} />
               }
-              FormActionProps={{
-                onDiscard: closeDialog,
-                ...props.FormActionProps,
-              }}
               picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
             />
           )}
@@ -226,7 +229,6 @@ export function useServiceDialog({
           sx={{
             px: 4,
             py: 2,
-            // justifyContent: 'center',
             borderTopWidth: 1,
             borderTopStyle: 'solid',
             borderTopColor: 'borders.light',
@@ -243,7 +245,6 @@ export function useServiceDialog({
             <LoadingButton
               disabled={!selectedService}
               onClick={() => {
-                console.log('xx', formRef.current);
                 if (!formRef.current) return;
                 setSubmitLoading(true);
                 const values = formRef.current.GetValuesForSubmit();
@@ -254,7 +255,7 @@ export function useServiceDialog({
               data-testid='confirmDialogAction'
               sx={{ minWidth: '120px' }}
             >
-              Add Service
+              {service ? 'Save Changes' : 'Add Service'}
             </LoadingButton>
           </Stack>
         </DialogActions>
@@ -276,5 +277,6 @@ export function useServiceDialog({
   return {
     openServiceDialog,
     renderServiceDialog,
+    serviceDialogOpen: dialogOpen,
   };
 }

@@ -1,18 +1,3 @@
-fragment ServiceFields on Service {
-  id
-  dateProvided
-  movingOnOtherType
-  recordType
-  referralOutcome
-  subTypeProvided
-  typeProvided
-  otherTypeProvided
-  FAAmount
-  dateCreated
-  dateUpdated
-  dateDeleted
-}
-
 fragment ServiceTypeFields on ServiceType {
   id
   name
@@ -21,4 +6,26 @@ fragment ServiceTypeFields on ServiceType {
   category
   dateCreated
   dateUpdated
+}
+
+fragment ServiceFields on Service {
+  id
+  dateProvided
+  faAmount
+  movingOnOtherType
+  referralOutcome
+  subTypeProvided
+  otherTypeProvided
+  dateCreated
+  dateUpdated
+  dateDeleted
+  user {
+    ...UserFields
+  }
+  serviceType {
+    ...ServiceTypeFields
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
 }

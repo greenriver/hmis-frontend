@@ -275,21 +275,6 @@ fragment EventFields on Event {
   dateDeleted
 }
 
-fragment ServiceFields on Service {
-  id
-  dateProvided
-  movingOnOtherType
-  recordType
-  referralOutcome
-  subTypeProvided
-  typeProvided
-  otherTypeProvided
-  FAAmount
-  dateCreated
-  dateUpdated
-  dateDeleted
-}
-
 fragment IncomeBenefitFields on IncomeBenefit {
   __typename
   user {
