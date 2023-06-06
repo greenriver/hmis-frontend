@@ -11,6 +11,7 @@ import {
 const columns: ColumnDef<ReferralRequestFieldsFragment>[] = [
   {
     header: 'Requested Date',
+    linkTreatment: true,
     render: (row: ReferralRequestFieldsFragment) =>
       parseAndFormatDate(row.requestedOn),
   },

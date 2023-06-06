@@ -32,7 +32,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   statusUpdatedBy
   unitType {
     id
-    bedType
+    description
   }
   householdMembers {
     id

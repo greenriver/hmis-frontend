@@ -5,7 +5,7 @@ import { ReferralPostingStatusDisplay } from './ReferralPostingStatusDisplay';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
-import { HmisEnums } from '@/types/gqlEnums';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 
 interface Props {
@@ -14,20 +14,19 @@ interface Props {
 export const ProjectReferralPostingDetails: React.FC<Props> = ({
   referralPosting,
 }) => {
-  const bedType = referralPosting?.unitType?.bedType;
   const col1: Array<[string, ReactNode]> = [
     [
       'Referral Status',
       <ReferralPostingStatusDisplay status={referralPosting.status} />,
     ],
     ['Referral Project Name', referralPosting.referredFrom],
-    ['Referral Date', referralPosting.referralDate],
+    ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
     ['Referred By', referralPosting.referredBy],
     ['Score', referralPosting.score],
   ];
   const col2: Array<[string, ReactNode]> = [
     ['Referral ID', referralPosting.referralIdentifier],
-    ['Unit Type', bedType ? HmisEnums.InventoryBedType[bedType] : ''],
+    ['Unit Type', referralPosting?.unitType?.description],
     ['Chronically Homeless', referralPosting.chronic],
     [
       'Needs Wheelchair Accessible Unit',

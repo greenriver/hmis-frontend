@@ -1,7 +1,8 @@
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
+import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 
@@ -27,12 +28,16 @@ const columns: ColumnDef<Row>[] = [
   },
   {
     header: 'Relationship to HoH',
-    render: (row: Row) => HmisEnums.RelationshipToHoH[row.relationshipToHoH],
+    render: (row: Row) => (
+      <HmisEnum
+        value={row.relationshipToHoH}
+        enumMap={HmisEnums.RelationshipToHoH}
+      />
+    ),
   },
   {
-    header: 'Birth Date',
-    render: ({ client }: Row) =>
-      client.dob ? parseAndFormatDate(client.dob) : '',
+    header: 'DOB / Age',
+    render: ({ client }: Row) => <ClientDobAge client={client} reveal />,
   },
   {
     header: 'Gender',

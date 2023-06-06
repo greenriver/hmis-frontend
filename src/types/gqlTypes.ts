@@ -11600,7 +11600,7 @@ export type GetReferralPostingQuery = {
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
-      bedType?: InventoryBedType | null;
+      description?: string | null;
     };
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
@@ -11946,7 +11946,7 @@ export type ReferralPostingDetailFieldsFragment = {
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
-    bedType?: InventoryBedType | null;
+    description?: string | null;
   };
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
@@ -13126,7 +13126,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusUpdatedBy
     unitType {
       id
-      bedType
+      description
     }
     householdMembers {
       id
