@@ -1,11 +1,16 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
 import { ReferralPostingDefinition } from '@/modules/form/data';
-import { transformSubmitValues } from '@/modules/form/util/formUtil';
+import {
+  createInitialValuesFromRecord,
+  getInitialValues,
+  getItemMap,
+  transformSubmitValues,
+} from '@/modules/form/util/formUtil';
 import {
   ReferralPostingDetailFieldsFragment,
   ReferralPostingInput,
@@ -46,6 +51,24 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     [mutate, referralPosting.id]
   );
 
+  // hook copied from Edit Record
+  const initialValues = useMemo(() => {
+    const initialValuesFromDefinition = getInitialValues(
+      ReferralPostingDefinition
+    );
+    const itemMap = getItemMap(ReferralPostingDefinition);
+
+    const initialValuesFromRecord = createInitialValuesFromRecord(
+      itemMap,
+      referralPosting
+    );
+    const values = {
+      ...initialValuesFromDefinition,
+      ...initialValuesFromRecord,
+    };
+    return values;
+  }, [referralPosting]);
+
   return (
     <DynamicForm
       definition={ReferralPostingDefinition}
@@ -53,7 +76,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         submitButtonText: 'Update Referral',
         discardButtonText: 'Cancel',
       }}
-      initialValues={referralPosting}
+      initialValues={initialValues}
       onSubmit={handleSubmit}
       loading={loading}
       errors={errors}

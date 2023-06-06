@@ -1,5 +1,5 @@
 import { Typography } from '@mui/material';
-import { isNil, isString } from 'lodash-es';
+import { isNil } from 'lodash-es';
 import React, { useCallback } from 'react';
 
 import { getValueFromPickListData, usePickList } from '../hooks/usePickList';
@@ -317,11 +317,8 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else {
         inputComponent = (
           <FormSelect
-            value={
-              isString(currentValue)
-                ? (options || []).find((o) => o.code == currentValue)
-                : currentValue
-            }
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            value={currentValue}
             options={options || []}
             onChange={onChangeEventValue}
             multiple={!!item.repeats}
