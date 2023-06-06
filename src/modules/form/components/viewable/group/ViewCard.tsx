@@ -1,7 +1,8 @@
-import { Grid, Paper, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { ViewGroupItemComponentProps } from '../../../types';
 
+import { CommonCard } from '@/components/elements/CommonCard';
 import { ItemType } from '@/types/gqlTypes';
 
 const ViewCard = ({
@@ -16,17 +17,7 @@ const ViewCard = ({
     !(item.item || []).find((item) => item.type === ItemType.Group);
   return (
     <Grid id={anchor} item>
-      <Paper
-        sx={{
-          py: 2,
-          px: 2.5,
-          pageBreakInside: 'avoid',
-        }}
-      >
-        <Typography variant='body1' sx={{ pb: 0.5, mb: 1.5 }}>
-          {item.text}
-        </Typography>
-
+      <CommonCard title={item.text}>
         {/* Dynamically render child items */}
         <Grid
           container
@@ -41,7 +32,7 @@ const ViewCard = ({
           {renderChildItem &&
             item.item?.map((childItem) => renderChildItem(childItem))}
         </Grid>
-      </Paper>
+      </CommonCard>
     </Grid>
   );
 };
