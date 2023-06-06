@@ -2575,10 +2575,9 @@ export type Organization = {
 };
 
 export type OrganizationProjectsArgs = {
+  filters?: InputMaybe<ProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -2808,9 +2807,25 @@ export type ProjectCocsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+export enum ProjectFilterOptionStatus {
+  /** Closed */
+  Closed = 'CLOSED',
+  /** Open */
+  Open = 'OPEN',
+}
+
+export type ProjectFilterOptions = {
+  funders?: InputMaybe<Array<FundingSource>>;
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<ProjectFilterOptionStatus>>;
+};
+
 /** HUD Project Sorting Options */
 export enum ProjectSortOption {
+  /** Name */
   Name = 'NAME',
+  /** Organization and Name */
   OrganizationAndName = 'ORGANIZATION_AND_NAME',
 }
 
@@ -2968,10 +2983,9 @@ export type QueryProjectCocArgs = {
 };
 
 export type QueryProjectsArgs = {
+  filters?: InputMaybe<ProjectFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  searchTerm?: InputMaybe<Scalars['String']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 };
 
@@ -10830,9 +10844,10 @@ export type GetOrganizationQuery = {
 
 export type GetOrganizationProjectsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<ProjectFilterOptions>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
 export type GetOrganizationProjectsQuery = {
@@ -15959,7 +15974,7 @@ export type OmniSearchClientsQueryResult = Apollo.QueryResult<
 >;
 export const OmniSearchProjectsDocument = gql`
   query OmniSearchProjects($searchTerm: String!, $limit: Int) {
-    projects(searchTerm: $searchTerm, limit: $limit, offset: 0) {
+    projects(filters: { searchTerm: $searchTerm }, limit: $limit, offset: 0) {
       limit
       nodesCount
       nodes {
@@ -16339,13 +16354,19 @@ export type GetOrganizationQueryResult = Apollo.QueryResult<
 export const GetOrganizationProjectsDocument = gql`
   query GetOrganizationProjects(
     $id: ID!
-    $searchTerm: String
     $limit: Int = 10
     $offset: Int = 0
+    $filters: ProjectFilterOptions
+    $sortOrder: ProjectSortOption
   ) {
     organization(id: $id) {
       id
-      projects(searchTerm: $searchTerm, limit: $limit, offset: $offset) {
+      projects(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
         offset
         limit
         nodesCount
@@ -16374,9 +16395,10 @@ export const GetOrganizationProjectsDocument = gql`
  * const { data, loading, error } = useGetOrganizationProjectsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
