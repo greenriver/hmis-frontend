@@ -12,6 +12,8 @@ fragment ServiceFields on Service {
   id
   dateProvided
   faAmount
+  faStartDate
+  faEndDate
   movingOnOtherType
   referralOutcome
   subTypeProvided

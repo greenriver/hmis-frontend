@@ -12,6 +12,8 @@ export interface PaginationProps {
   limit: number;
   offset: number;
 }
+// # bug: referal not preesent in read only
+// # bug: saving edit creates a new one
 
 export interface TableFiltersProps<T, S> {
   filters?: {
@@ -37,7 +39,7 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
 }): JSX.Element => {
   return (
     <Typography variant='body2'>
-      Displaying{' '}
+      Displaying {/* fix */}
       <strong>
         {compact([
           limit < totalEntries ? offset + 1 : undefined,

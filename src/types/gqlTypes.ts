@@ -3330,6 +3330,8 @@ export type Service = {
   dateUpdated: Scalars['ISO8601DateTime'];
   enrollment: Enrollment;
   faAmount?: Maybe<Scalars['Float']>;
+  faEndDate?: Maybe<Scalars['ISO8601Date']>;
+  faStartDate?: Maybe<Scalars['ISO8601Date']>;
   id: Scalars['ID'];
   movingOnOtherType?: Maybe<Scalars['String']>;
   otherTypeProvided?: Maybe<Scalars['String']>;
@@ -10652,6 +10654,8 @@ export type SubmitFormMutation = {
           id: string;
           dateProvided: string;
           faAmount?: number | null;
+          faStartDate?: string | null;
+          faEndDate?: string | null;
           movingOnOtherType?: string | null;
           referralOutcome?: PathReferralOutcome | null;
           subTypeProvided?: ServiceSubTypeProvided | null;
@@ -12412,6 +12416,8 @@ export type ServiceFieldsFragment = {
   id: string;
   dateProvided: string;
   faAmount?: number | null;
+  faStartDate?: string | null;
+  faEndDate?: string | null;
   movingOnOtherType?: string | null;
   referralOutcome?: PathReferralOutcome | null;
   subTypeProvided?: ServiceSubTypeProvided | null;
@@ -12478,6 +12484,8 @@ export type GetServiceQuery = {
     id: string;
     dateProvided: string;
     faAmount?: number | null;
+    faStartDate?: string | null;
+    faEndDate?: string | null;
     movingOnOtherType?: string | null;
     referralOutcome?: PathReferralOutcome | null;
     subTypeProvided?: ServiceSubTypeProvided | null;
@@ -12566,6 +12574,8 @@ export type AddServiceToEnrollmentMutation = {
       id: string;
       dateProvided: string;
       faAmount?: number | null;
+      faStartDate?: string | null;
+      faEndDate?: string | null;
       movingOnOtherType?: string | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
@@ -12651,6 +12661,8 @@ export type DeleteServiceMutation = {
       id: string;
       dateProvided: string;
       faAmount?: number | null;
+      faStartDate?: string | null;
+      faEndDate?: string | null;
       movingOnOtherType?: string | null;
       referralOutcome?: PathReferralOutcome | null;
       subTypeProvided?: ServiceSubTypeProvided | null;
@@ -12743,6 +12755,8 @@ export type GetEnrollmentServicesQuery = {
         id: string;
         dateProvided: string;
         faAmount?: number | null;
+        faStartDate?: string | null;
+        faEndDate?: string | null;
         movingOnOtherType?: string | null;
         referralOutcome?: PathReferralOutcome | null;
         subTypeProvided?: ServiceSubTypeProvided | null;
@@ -13958,6 +13972,8 @@ export const ServiceFieldsFragmentDoc = gql`
     id
     dateProvided
     faAmount
+    faStartDate
+    faEndDate
     movingOnOtherType
     referralOutcome
     subTypeProvided

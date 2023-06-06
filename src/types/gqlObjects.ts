@@ -3467,6 +3467,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
+        name: 'faEndDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'faStartDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',

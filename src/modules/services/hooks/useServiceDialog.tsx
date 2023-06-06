@@ -11,8 +11,16 @@ import {
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
 import { find } from 'lodash-es';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   emptyErrorState,
   ErrorState,
@@ -35,6 +43,9 @@ import {
 } from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import {
+  DeleteServiceDocument,
+  DeleteServiceMutation,
+  DeleteServiceMutationVariables,
   ItemType,
   PickListOption,
   PickListType,
@@ -43,6 +54,13 @@ import {
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
+
+type RenderServiceDialogProps = PartialPick<
+  DynamicFormProps,
+  'onSubmit' | 'definition' | 'errors'
+> & {
+  dialogContent?: ReactNode;
+};
 
 export function useServiceDialog({
   projectId,
@@ -158,21 +176,26 @@ export function useServiceDialog({
         confirmed,
         enrollmentId,
         serviceTypeId: selectedService?.code,
+        recordId: service?.id,
       };
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });
     },
-    [formDefinition, submitForm, enrollmentId, selectedService]
+    [formDefinition, submitForm, enrollmentId, selectedService, service]
   );
+
+  const onSuccessfulDelete = useCallback(() => {
+    cache.evict({ id: `Enrollment:${enrollmentId}`, fieldName: 'services' });
+    closeDialog();
+  }, [enrollmentId, closeDialog]);
 
   const serviceTypeInfoLoading =
     selectedService &&
     ((!formDefinition && definitionLoading) ||
       (!serviceType && serviceTypeLoading));
 
-  const renderServiceDialog = (
-    props?: PartialPick<DynamicFormProps, 'onSubmit' | 'definition' | 'errors'>
-  ) => {
+  const renderServiceDialog = (args?: RenderServiceDialogProps) => {
+    const { dialogContent, ...props } = args || {};
     return (
       <Dialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
         <DialogTitle
@@ -190,20 +213,21 @@ export function useServiceDialog({
           {service ? 'Update Service' : 'Add Service'}
         </DialogTitle>
         <DialogContent>
+          {dialogContent}
           <Box sx={{ mb: 2 }}>
-            <FormSelect
-              options={serviceList || []}
-              value={selectedService}
-              onChange={(e, val) =>
-                setSelectedService(isPickListOption(val) ? val : null)
-              }
-              loading={serviceListLoading}
-              label={getRequiredLabel('Service Type', true)}
-              placeholder='Select a service..'
-              disabled={!!(service && selectedService)}
-            />
+            {!service && (
+              <FormSelect
+                options={serviceList || []}
+                value={selectedService}
+                onChange={(e, val) =>
+                  setSelectedService(isPickListOption(val) ? val : null)
+                }
+                loading={serviceListLoading}
+                label={getRequiredLabel('Service Type', true)}
+                placeholder='Select a service..'
+              />
+            )}
           </Box>
-
           {serviceTypeInfoLoading && (
             <Skeleton variant='rectangular' sx={{ height: 60 }} />
           )}
@@ -234,29 +258,49 @@ export function useServiceDialog({
             borderTopColor: 'borders.light',
           }}
         >
-          <Stack gap={3} direction='row'>
-            <Button
-              onClick={closeDialog}
-              variant='gray'
-              data-testid='cancelDialogAction'
-            >
-              Cancel
-            </Button>
-            <LoadingButton
-              disabled={!selectedService}
-              onClick={() => {
-                if (!formRef.current) return;
-                setSubmitLoading(true);
-                const values = formRef.current.GetValuesForSubmit();
-                submitHandler({ values, confirmed: false });
-              }}
-              type='submit'
-              loading={submitLoading}
-              data-testid='confirmDialogAction'
-              sx={{ minWidth: '120px' }}
-            >
-              {service ? 'Save Changes' : 'Add Service'}
-            </LoadingButton>
+          <Stack
+            direction='row'
+            justifyContent={'space-between'}
+            sx={{ width: '100%' }}
+          >
+            {service && (
+              <DeleteMutationButton<
+                DeleteServiceMutation,
+                DeleteServiceMutationVariables
+              >
+                queryDocument={DeleteServiceDocument}
+                variables={{ input: { id: service.id } }}
+                idPath={'deleteService.service.id'}
+                recordName='Service'
+                onSuccess={onSuccessfulDelete}
+              >
+                Delete
+              </DeleteMutationButton>
+            )}
+            <Stack gap={3} direction='row'>
+              <Button
+                onClick={closeDialog}
+                variant='gray'
+                data-testid='cancelDialogAction'
+              >
+                Cancel
+              </Button>
+              <LoadingButton
+                disabled={!selectedService}
+                onClick={() => {
+                  if (!formRef.current) return;
+                  setSubmitLoading(true);
+                  const values = formRef.current.GetValuesForSubmit();
+                  submitHandler({ values, confirmed: false });
+                }}
+                type='submit'
+                loading={submitLoading}
+                data-testid='confirmDialogAction'
+                sx={{ minWidth: '120px' }}
+              >
+                {service ? 'Save Changes' : 'Add Service'}
+              </LoadingButton>
+            </Stack>
           </Stack>
         </DialogActions>
         <IconButton
@@ -274,6 +318,7 @@ export function useServiceDialog({
       </Dialog>
     );
   };
+
   return {
     openServiceDialog,
     renderServiceDialog,

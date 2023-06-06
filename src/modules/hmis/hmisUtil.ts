@@ -380,6 +380,12 @@ export const serviceDetails = (service: ServiceFieldsFragment): string[] => {
       ? HmisEnums.ServiceSubTypeProvided[service.subTypeProvided]
       : null,
     formatCurrency(service.faAmount),
+    parseAndFormatDateRange(
+      service.faStartDate,
+      service.faEndDate,
+      'Unknown',
+      'Unknown'
+    ),
     service.referralOutcome
       ? HmisEnums.PATHReferralOutcome[service.referralOutcome]
       : null,
