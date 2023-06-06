@@ -143,14 +143,6 @@ export function useServiceDialog({
     if (serviceTypeOption) setSelectedService(serviceTypeOption);
   }, [serviceList, service]);
 
-  // const displayCategory = useMemo(() => {
-  //   if (!selectedService) return null;
-  //   if (!selectedService.groupLabel) return null;
-  //   if (selectedService.groupLabel == selectedService.groupCode) return null;
-
-  //   return selectedService.groupLabel;
-  // }, [selectedService]);
-
   const localConstants = useMemo(
     () => ({
       hudRecordType: serviceType?.hudRecordType,

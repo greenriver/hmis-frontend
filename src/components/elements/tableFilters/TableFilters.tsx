@@ -12,8 +12,6 @@ export interface PaginationProps {
   limit: number;
   offset: number;
 }
-// # bug: referal not preesent in read only
-// # bug: saving edit creates a new one
 
 export interface TableFiltersProps<T, S> {
   filters?: {

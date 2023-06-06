@@ -12,10 +12,12 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { SubmitFormAllowedTypes } from '../types';
+
 import ViewRecord from './ViewRecord';
 
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
-import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
@@ -23,14 +25,9 @@ interface RecordDialogProps<RecordType> extends DialogProps {
   pickListRelationId?: string;
   actions?: ReactNode;
   children?: ReactNode;
-  hideRecordContents?: boolean;
 }
 
-type AllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
->;
-
-const ViewRecordDialog = <RecordType extends AllowedTypes>({
+const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   record,
   actions,
   formRole,
@@ -38,7 +35,6 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   title,
   children,
   pickListRelationId,
-  hideRecordContents = false,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -105,13 +101,11 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
             gap: 2,
           })}
         >
-          {!hideRecordContents && (
-            <ViewRecord
-              record={record}
-              formRole={formRole}
-              pickListRelationId={pickListRelationId}
-            />
-          )}
+          <ViewRecord
+            record={record}
+            formRole={formRole}
+            pickListRelationId={pickListRelationId}
+          />
           {children}
         </Box>
       </DialogContent>
