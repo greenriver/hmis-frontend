@@ -1,3 +1,14 @@
+mutation VoidReferralRequest($id: ID!) {
+  voidReferralRequest(referralRequestId: $id) {
+    record {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
 query GetReferralPosting($id: ID!) {
   referralPosting(id: $id) {
     ...ReferralPostingDetailFields
