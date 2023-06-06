@@ -10847,6 +10847,7 @@ export type GetOrganizationProjectsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   filters?: InputMaybe<ProjectFilterOptions>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
 export type GetOrganizationProjectsQuery = {
@@ -16356,10 +16357,16 @@ export const GetOrganizationProjectsDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $filters: ProjectFilterOptions
+    $sortOrder: ProjectSortOption
   ) {
     organization(id: $id) {
       id
-      projects(limit: $limit, offset: $offset, filters: $filters) {
+      projects(
+        limit: $limit
+        offset: $offset
+        filters: $filters
+        sortOrder: $sortOrder
+      ) {
         offset
         limit
         nodesCount
@@ -16391,6 +16398,7 @@ export const GetOrganizationProjectsDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *   },
  * });
  */
