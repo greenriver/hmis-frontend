@@ -750,7 +750,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "roles",
+            "name": "type",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9019,7 +9019,7 @@
             "deprecationReason": null
           },
           {
-            "name": "projectTypes",
+            "name": "projectType",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9039,7 +9039,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9082,6 +9082,26 @@
             "deprecationReason": null
           },
           {
+            "name": "projectType",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "searchTerm",
             "description": null,
             "type": {
@@ -9094,7 +9114,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -12856,7 +12876,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18915,7 +18935,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "funders",
+            "name": "funder",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18935,7 +18955,7 @@
             "deprecationReason": null
           },
           {
-            "name": "projectTypes",
+            "name": "projectType",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18967,7 +18987,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",

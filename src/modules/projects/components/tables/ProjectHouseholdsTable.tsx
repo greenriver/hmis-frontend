@@ -192,7 +192,7 @@ const ProjectHouseholdsTable = ({
       recordType='Household'
       filters={(filters) => omit(filters, 'searchTerm')}
       defaultFilters={{
-        statuses: [
+        status: [
           EnrollmentFilterOptionStatus.Active,
           EnrollmentFilterOptionStatus.Incomplete,
         ],

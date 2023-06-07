@@ -3794,7 +3794,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentFilterOptions',
     args: [
       {
-        name: 'roles',
+        name: 'type',
         type: {
           kind: 'LIST',
           name: null,
@@ -4235,7 +4235,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4247,7 +4247,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4272,11 +4272,23 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
         name: 'searchTerm',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4345,7 +4357,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4412,7 +4424,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectFilterOptions',
     args: [
       {
-        name: 'funders',
+        name: 'funder',
         type: {
           kind: 'LIST',
           name: null,
@@ -4424,7 +4436,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4440,7 +4452,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,

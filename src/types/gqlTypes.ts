@@ -124,7 +124,7 @@ export type AssessmentAccess = {
 };
 
 export type AssessmentFilterOptions = {
-  roles?: InputMaybe<Array<AssessmentRole>>;
+  type?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -1371,14 +1371,15 @@ export enum EnrollmentStatus {
 
 export type EnrollmentsForClientFilterOptions = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
 };
 
 export type EnrollmentsForProjectFilterOptions = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
-  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+  status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
 };
 
 export type EnrollmentsPaginated = {
@@ -1979,7 +1980,7 @@ export type HouseholdFilterOptions = {
   hohAgeRange?: InputMaybe<AgeRange>;
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
   searchTerm?: InputMaybe<Scalars['String']>;
-  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+  status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
 };
 
 /** HUD Household Sorting Options */
@@ -2858,10 +2859,10 @@ export enum ProjectFilterOptionStatus {
 }
 
 export type ProjectFilterOptions = {
-  funders?: InputMaybe<Array<FundingSource>>;
-  projectTypes?: InputMaybe<Array<ProjectType>>;
+  funder?: InputMaybe<Array<FundingSource>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
-  statuses?: InputMaybe<Array<ProjectFilterOptionStatus>>;
+  status?: InputMaybe<Array<ProjectFilterOptionStatus>>;
 };
 
 /** HUD Project Sorting Options */
@@ -13737,7 +13738,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        filters: { roles: $roles }
+        filters: { type: $roles }
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
@@ -14417,7 +14418,7 @@ export const GetNonWipEnrollmentsDocument = gql`
         limit: $limit
         offset: $offset
         sortOrder: MOST_RECENT
-        filters: { statuses: [ACTIVE, EXITED] }
+        filters: { status: [ACTIVE, EXITED] }
       ) {
         offset
         limit
