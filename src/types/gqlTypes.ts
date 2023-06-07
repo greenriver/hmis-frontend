@@ -56,6 +56,32 @@ export type AddRecentItemInput = {
   itemType: RecentItemType;
 };
 
+/** HUD Age Ranges */
+export enum AgeRange {
+  /** 62+ */
+  Age62Plus = 'Age62Plus',
+  /** 65+ */
+  Age65Plus = 'Age65Plus',
+  /** 5-12 */
+  Ages5to12 = 'Ages5to12',
+  /** 13-17 */
+  Ages13to17 = 'Ages13to17',
+  /** 18-24 */
+  Ages18to24 = 'Ages18to24',
+  /** 25-34 */
+  Ages25to34 = 'Ages25to34',
+  /** 35-44 */
+  Ages35to44 = 'Ages35to44',
+  /** 45-54 */
+  Ages45to54 = 'Ages45to54',
+  /** 55-61 */
+  Ages55to61 = 'Ages55to61',
+  /** 55-64 */
+  Ages55to64 = 'Ages55to64',
+  /** Under 5 */
+  Under5 = 'Under5',
+}
+
 /** User account for a user of the system */
 export type ApplicationUser = {
   __typename?: 'ApplicationUser';
@@ -1319,11 +1345,6 @@ export type EnrollmentHouseholdMemberInput = {
   relationshipToHoH: RelationshipToHoH;
 };
 
-export enum EnrollmentLimit {
-  NonWipOnly = 'NON_WIP_ONLY',
-  WipOnly = 'WIP_ONLY',
-}
-
 /** HUD Enrollment Sorting Options */
 export enum EnrollmentSortOption {
   /** Household ID */
@@ -1953,6 +1974,19 @@ export type HouseholdClient = {
   id: Scalars['ID'];
   relationshipToHoH: RelationshipToHoH;
 };
+
+export type HouseholdFilterOptions = {
+  hohAgeRange?: InputMaybe<AgeRange>;
+  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  statuses?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
+};
+
+/** HUD Household Sorting Options */
+export enum HouseholdSortOption {
+  /** Most Recent */
+  MostRecent = 'MOST_RECENT',
+}
 
 /** 2.07.4 */
 export enum HouseholdType {
@@ -2734,12 +2768,10 @@ export type ProjectFundersArgs = {
 };
 
 export type ProjectHouseholdsArgs = {
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<HouseholdFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  sortOrder?: InputMaybe<EnrollmentSortOption>;
+  sortOrder?: InputMaybe<HouseholdSortOption>;
 };
 
 export type ProjectIncomingReferralPostingsArgs = {
@@ -11226,9 +11258,8 @@ export type GetProjectEnrollmentsQuery = {
 
 export type GetProjectHouseholdsQueryVariables = Exact<{
   id: Scalars['ID'];
-  searchTerm?: InputMaybe<Scalars['String']>;
-  openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  enrollmentLimit?: InputMaybe<EnrollmentLimit>;
+  filters?: InputMaybe<HouseholdFilterOptions>;
+  sortOrder?: InputMaybe<HouseholdSortOption>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -16817,9 +16848,8 @@ export type GetProjectEnrollmentsQueryResult = Apollo.QueryResult<
 export const GetProjectHouseholdsDocument = gql`
   query GetProjectHouseholds(
     $id: ID!
-    $searchTerm: String
-    $openOnDate: ISO8601Date
-    $enrollmentLimit: EnrollmentLimit
+    $filters: HouseholdFilterOptions
+    $sortOrder: HouseholdSortOption
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -16828,10 +16858,8 @@ export const GetProjectHouseholdsDocument = gql`
       households(
         limit: $limit
         offset: $offset
-        sortOrder: MOST_RECENT
-        openOnDate: $openOnDate
-        searchTerm: $searchTerm
-        enrollmentLimit: $enrollmentLimit
+        sortOrder: $sortOrder
+        filters: $filters
       ) {
         offset
         limit
@@ -16858,9 +16886,8 @@ export const GetProjectHouseholdsDocument = gql`
  * const { data, loading, error } = useGetProjectHouseholdsQuery({
  *   variables: {
  *      id: // value for 'id'
- *      searchTerm: // value for 'searchTerm'
- *      openOnDate: // value for 'openOnDate'
- *      enrollmentLimit: // value for 'enrollmentLimit'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },

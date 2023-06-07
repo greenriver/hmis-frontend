@@ -15,7 +15,9 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  EnrollmentFilterOptionStatus,
   EnrollmentSortOption,
+  EnrollmentsForProjectFilterOptions,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -101,16 +103,12 @@ const ProjectClientEnrollmentsTable = ({
   openOnDate,
   linkRowToEnrollment = false,
   searchTerm,
-  // TODO: implement, needs a backend flag
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const rowLinkTo = useCallback(
     (en: EnrollmentFields) =>
@@ -129,7 +127,8 @@ const ProjectClientEnrollmentsTable = ({
     <GenericTableWithData<
       GetProjectEnrollmentsQuery,
       GetProjectEnrollmentsQueryVariables,
-      EnrollmentFields
+      EnrollmentFields,
+      EnrollmentsForProjectFilterOptions
     >
       queryVariables={{
         id: projectId,
@@ -152,6 +151,12 @@ const ProjectClientEnrollmentsTable = ({
       filters={(f) => omit(f, 'searchTerm')}
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
+      defaultFilters={{
+        statuses: [
+          EnrollmentFilterOptionStatus.Active,
+          EnrollmentFilterOptionStatus.Incomplete,
+        ],
+      }}
     />
   );
 };

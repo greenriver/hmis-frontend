@@ -222,6 +222,83 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "AgeRange",
+        "description": "HUD Age Ranges",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "Age62Plus",
+            "description": "62+",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Age65Plus",
+            "description": "65+",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages5to12",
+            "description": "5-12",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages13to17",
+            "description": "13-17",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages18to24",
+            "description": "18-24",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages25to34",
+            "description": "25-34",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages35to44",
+            "description": "35-44",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages45to54",
+            "description": "45-54",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages55to61",
+            "description": "55-61",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Ages55to64",
+            "description": "55-64",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "Under5",
+            "description": "Under 5",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "ApplicationUser",
         "description": "User account for a user of the system",
@@ -8855,29 +8932,6 @@
       },
       {
         "kind": "ENUM",
-        "name": "EnrollmentLimit",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "NON_WIP_ONLY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "WIP_ONLY",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
         "name": "EnrollmentSortOption",
         "description": "HUD Enrollment Sorting Options",
         "fields": null,
@@ -12757,6 +12811,90 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "HouseholdFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "hohAgeRange",
+            "description": null,
+            "type": {
+              "kind": "ENUM",
+              "name": "AgeRange",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "openOnDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "searchTerm",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "statuses",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "EnrollmentFilterOptionStatus",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "HouseholdSortOption",
+        "description": "HUD Household Sorting Options",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "MOST_RECENT",
+            "description": "Most Recent",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -17691,11 +17829,11 @@
             "description": null,
             "args": [
               {
-                "name": "enrollmentLimit",
+                "name": "filters",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "EnrollmentLimit",
+                  "kind": "INPUT_OBJECT",
+                  "name": "HouseholdFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -17727,35 +17865,11 @@
                 "deprecationReason": null
               },
               {
-                "name": "openOnDate",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "ISO8601Date",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
-                "name": "searchTerm",
-                "description": null,
-                "type": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                },
-                "defaultValue": null,
-                "isDeprecated": false,
-                "deprecationReason": null
-              },
-              {
                 "name": "sortOrder",
                 "description": null,
                 "type": {
                   "kind": "ENUM",
-                  "name": "EnrollmentSortOption",
+                  "name": "HouseholdSortOption",
                   "ofType": null
                 },
                 "defaultValue": null,

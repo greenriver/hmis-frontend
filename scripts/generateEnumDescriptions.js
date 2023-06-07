@@ -15,7 +15,7 @@ let output = `${generatedFiledHeader}\nexport const HmisEnums = {`;
 const CODE_PATTERN_NUMERIC = /^\(([0-9]*)\) /;
 const CODE_PATTERN = /^\(([a-zA-Z0-9_]*)\) /;
 
-const ALPHABETICAL = ['FundingSource', 'ServiceSubTypeProvided'];
+const ALPHABETICAL = ['FundingSource', 'ServiceSubTypeProvided', 'AgeRange'];
 
 const SORT_LAST = {
   FundingSource: ['LOCAL_OR_OTHER_FUNDING_SOURCE', 'N_A'],
@@ -26,6 +26,7 @@ const SORT_FIRST = {
   ResidencePriorLengthOfStay: ['TWO_TO_SIX_NIGHTS', 'ONE_NIGHT_OR_LESS'],
   NoYesReasonsForMissingData: ['YES'],
   EnrollmentFilterOptionStatus: ['INCOMPLETE'],
+  AgeRange: ['Ages5to12', 'Under5'],
 };
 
 const DESCRIPTIONS_OVERRIDES = {
