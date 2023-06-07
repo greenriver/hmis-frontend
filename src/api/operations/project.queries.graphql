@@ -44,9 +44,8 @@ query GetProjectEnrollments(
 
 query GetProjectHouseholds(
   $id: ID!
-  $searchTerm: String
-  $openOnDate: ISO8601Date
-  $enrollmentLimit: EnrollmentLimit
+  $filters: HouseholdFilterOptions
+  $sortOrder: HouseholdSortOption
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -55,10 +54,8 @@ query GetProjectHouseholds(
     households(
       limit: $limit
       offset: $offset
-      sortOrder: MOST_RECENT
-      openOnDate: $openOnDate
-      searchTerm: $searchTerm
-      enrollmentLimit: $enrollmentLimit
+      sortOrder: $sortOrder
+      filters: $filters
     ) {
       offset
       limit

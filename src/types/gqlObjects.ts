@@ -4387,6 +4387,39 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'HouseholdFilterOptions',
+    args: [
+      {
+        name: 'hohAgeRange',
+        type: { kind: 'ENUM', name: 'AgeRange', ofType: null },
+      },
+      {
+        name: 'openOnDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'searchTerm',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'statuses',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'EnrollmentFilterOptionStatus',
+              ofType: null,
+            },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'MciClearanceInput',
     args: [
       {
@@ -4478,6 +4511,24 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             },
           },
         },
+      },
+    ],
+  },
+  {
+    name: 'ReferralPostingInput',
+    args: [
+      {
+        name: 'denialNote',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'denialReason',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'status', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'statusNote',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

@@ -101,10 +101,9 @@ fragment ItemFields on FormItem {
 }
 
 # GQL doesnt allow recursive fragments, so we have a max nesting level here
-fragment FormDefinitionWithJson on FormDefinition {
-  ...FormDefinitionFields
-  definition {
-    __typename
+fragment FormDefinitionJsonFields on FormDefinitionJson {
+  item {
+    ...ItemFields
     item {
       ...ItemFields
       item {
@@ -113,13 +112,17 @@ fragment FormDefinitionWithJson on FormDefinition {
           ...ItemFields
           item {
             ...ItemFields
-            item {
-              ...ItemFields
-            }
           }
         }
       }
     }
+  }
+}
+
+fragment FormDefinitionWithJson on FormDefinition {
+  ...FormDefinitionFields
+  definition {
+    ...FormDefinitionJsonFields
   }
 }
 

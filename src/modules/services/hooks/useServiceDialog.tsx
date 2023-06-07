@@ -153,7 +153,7 @@ export function useServiceDialog({
   );
   const initialValues = useInitialFormValues({
     itemMap,
-    formDefinition: formDefinition || undefined,
+    definition: formDefinition?.definition,
     localConstants,
     record: service,
   });

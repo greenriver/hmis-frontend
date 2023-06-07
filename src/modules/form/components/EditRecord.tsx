@@ -108,7 +108,7 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   const initialValues = useInitialFormValues({
     record,
     itemMap,
-    formDefinition,
+    definition: formDefinition?.definition,
     localConstants,
   });
 

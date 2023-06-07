@@ -4,27 +4,33 @@ import { ItemMap, LocalConstants, SubmitFormAllowedTypes } from '../types';
 import {
   createInitialValuesFromRecord,
   getInitialValues,
+  getItemMap,
 } from '../util/formUtil';
 
-import { FormDefinitionWithJsonFragment } from '@/types/gqlTypes';
+import { FormDefinitionJsonFieldsFragment } from '@/types/gqlTypes';
 
 interface Args {
   record?: SubmitFormAllowedTypes;
   itemMap?: ItemMap;
-  formDefinition?: FormDefinitionWithJsonFragment;
+  definition?: FormDefinitionJsonFieldsFragment;
   localConstants?: LocalConstants;
 }
 
 const useInitialFormValues = ({
   record,
-  itemMap,
-  formDefinition,
+  itemMap: itemMapArg,
+  definition,
   localConstants,
 }: Args) => {
+  const itemMap = useMemo(() => {
+    if (!definition) return;
+    return itemMapArg || getItemMap(definition);
+  }, [itemMapArg, definition]);
+
   const initialValues = useMemo(() => {
-    if (!itemMap || !formDefinition) return {};
+    if (!definition || !itemMap) return {};
     const initialValuesFromDefinition = getInitialValues(
-      formDefinition.definition,
+      definition,
       localConstants
     );
     if (!record) return initialValuesFromDefinition;
@@ -39,7 +45,7 @@ const useInitialFormValues = ({
     };
     console.debug('Initial form values:', values, 'from', record);
     return values;
-  }, [record, formDefinition, itemMap, localConstants]);
+  }, [record, definition, itemMap, localConstants]);
 
   return initialValues;
 };

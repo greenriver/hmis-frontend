@@ -1,4 +1,5 @@
 import { Box, Link, Stack, Typography } from '@mui/material';
+import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -16,10 +17,11 @@ import {
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  EnrollmentLimit,
+  EnrollmentFilterOptionStatus,
   GetProjectHouseholdsDocument,
   GetProjectHouseholdsQuery,
   GetProjectHouseholdsQueryVariables,
+  HouseholdFilterOptions,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -153,13 +155,11 @@ const ProjectHouseholdsTable = ({
   columns,
   openOnDate,
   searchTerm,
-  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   openOnDate?: Date;
   searchTerm?: string;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const openOnDateString = useMemo(
     () => (openOnDate ? formatDateForGql(openOnDate) : undefined),
@@ -170,15 +170,15 @@ const ProjectHouseholdsTable = ({
     <GenericTableWithData<
       GetProjectHouseholdsQuery,
       GetProjectHouseholdsQueryVariables,
-      HouseholdFields
+      HouseholdFields,
+      HouseholdFilterOptions
     >
       queryVariables={{
         id: projectId,
-        searchTerm,
-        openOnDate: openOnDateString,
-        enrollmentLimit: wipEnrollmentsOnly
-          ? EnrollmentLimit.WipOnly
-          : undefined,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
       }}
       queryDocument={GetProjectHouseholdsDocument}
       columns={columns || defaultColumns}
@@ -188,6 +188,15 @@ const ProjectHouseholdsTable = ({
           : 'No clients.'
       }
       pagePath='project.households'
+      showFilters
+      recordType='Household'
+      filters={(filters) => omit(filters, 'searchTerm')}
+      defaultFilters={{
+        statuses: [
+          EnrollmentFilterOptionStatus.Active,
+          EnrollmentFilterOptionStatus.Incomplete,
+        ],
+      }}
     />
   );
 };

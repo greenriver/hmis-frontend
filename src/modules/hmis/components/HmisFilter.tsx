@@ -9,6 +9,7 @@ import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
 import {
   AssessmentSortOption,
   EnrollmentSortOption,
+  HouseholdSortOption,
   PickListType,
   ProjectSortOption,
 } from '@/types/gqlTypes';
@@ -41,6 +42,8 @@ export const getSortOptionForType = (
     return HmisEnums.AssessmentSortOption as Record<string, string>;
   if (recordType === 'Enrollment')
     return HmisEnums.EnrollmentSortOption as Record<string, string>;
+  if (recordType === 'Household')
+    return HmisEnums.HouseholdSortOption as Record<string, string>;
   if (recordType === 'Project')
     return HmisEnums.ProjectSortOption as Record<string, string>;
 
@@ -52,6 +55,7 @@ export const getDefaultSortOptionForType = (
 ): string | null => {
   if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
   if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
+  if (recordType === 'Household') return HouseholdSortOption.MostRecent;
   if (recordType === 'Project') return ProjectSortOption.Name;
 
   return null;
@@ -75,7 +79,7 @@ const getFilterForType = (
 
   const baseFields: BaseFilter<any> = {
     key: fieldName,
-    label: startCase(fieldName),
+    label: startCase(fieldName).replace(/\bHoh\b/, 'HoH'),
     multi: type.kind === 'LIST',
   };
 
