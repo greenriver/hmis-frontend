@@ -372,11 +372,9 @@ export type ClientIncomeBenefitsArgs = {
 
 /** HUD Client */
 export type ClientServicesArgs = {
+  filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
@@ -1291,11 +1289,9 @@ export type EnrollmentIncomeBenefitsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentServicesArgs = {
+  filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
@@ -3339,6 +3335,13 @@ export enum ServiceDetailType {
   Bulk = 'BULK',
   Client = 'CLIENT',
 }
+
+export type ServiceFilterOptions = {
+  project?: InputMaybe<Array<Scalars['ID']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  serviceCategory?: InputMaybe<Array<Scalars['ID']>>;
+  serviceType?: InputMaybe<Array<Scalars['ID']>>;
+};
 
 /** HUD Service Input */
 export type ServiceInput = {
