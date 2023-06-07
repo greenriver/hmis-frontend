@@ -1,5 +1,5 @@
 import { Box, Skeleton, Typography } from '@mui/material';
-import { compact, min } from 'lodash-es';
+import { min } from 'lodash-es';
 import React from 'react';
 
 import TableFilterMenu from './filters/FilterMenu';
@@ -35,16 +35,14 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   limit,
   offset,
 }): JSX.Element => {
+  const rangeStart = limit < totalEntries ? offset + 1 : 0;
+  const rangeEnd = min([totalEntries, offset + limit]);
+  const displayRange =
+    rangeStart === rangeEnd ? rangeStart : [rangeStart, rangeEnd].join('-');
   return (
     <Typography variant='body2'>
-      Displaying {/* fix */}
-      <strong>
-        {compact([
-          limit < totalEntries ? offset + 1 : undefined,
-          min([totalEntries, offset + limit]),
-        ]).join('-')}
-      </strong>{' '}
-      of <strong>{totalEntries}</strong> records
+      Displaying <strong>{displayRange}</strong> of{' '}
+      <strong>{totalEntries}</strong> records
     </Typography>
   );
 };
