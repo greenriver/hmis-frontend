@@ -4502,16 +4502,16 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ServiceInput',
     args: [
       {
-        name: 'FAAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
         name: 'dateProvided',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'enrollmentId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'faAmount',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
         name: 'movingOnOtherType',
@@ -4662,27 +4662,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'UpdateServiceInput',
-    args: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'ServiceInput', ofType: null },
         },
       },
     ],
