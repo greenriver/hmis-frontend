@@ -98,6 +98,8 @@ export type AssessmentAccess = {
 };
 
 export type AssessmentFilterOptions = {
+  projectTypes?: InputMaybe<Array<ProjectType>>;
+  projects?: InputMaybe<Array<Scalars['ID']>>;
   roles?: InputMaybe<Array<AssessmentRole>>;
 };
 
