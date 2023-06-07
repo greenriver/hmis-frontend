@@ -3164,6 +3164,7 @@ export type ReferralPosting = {
   chronic?: Maybe<Scalars['Boolean']>;
   denialNote?: Maybe<Scalars['String']>;
   denialReason?: Maybe<Scalars['String']>;
+  hohEnrollment?: Maybe<Enrollment>;
   hohName: Scalars['String'];
   householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int'];
@@ -11673,6 +11674,11 @@ export type GetReferralPostingQuery = {
       id: string;
       description?: string | null;
     };
+    hohEnrollment?: {
+      __typename?: 'Enrollment';
+      id: string;
+      client: { __typename?: 'Client'; id: string };
+    } | null;
     householdMembers: Array<{
       __typename?: 'ReferralHouseholdMember';
       id: string;
@@ -12043,6 +12049,11 @@ export type UpdateReferralPostingMutation = {
         id: string;
         description?: string | null;
       };
+      hohEnrollment?: {
+        __typename?: 'Enrollment';
+        id: string;
+        client: { __typename?: 'Client'; id: string };
+      } | null;
       householdMembers: Array<{
         __typename?: 'ReferralHouseholdMember';
         id: string;
@@ -12135,6 +12146,11 @@ export type ReferralPostingDetailFieldsFragment = {
     id: string;
     description?: string | null;
   };
+  hohEnrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    client: { __typename?: 'Client'; id: string };
+  } | null;
   householdMembers: Array<{
     __typename?: 'ReferralHouseholdMember';
     id: string;
@@ -13314,6 +13330,12 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     unitType {
       id
       description
+    }
+    hohEnrollment {
+      id
+      client {
+        id
+      }
     }
     householdMembers {
       id
