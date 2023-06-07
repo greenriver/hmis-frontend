@@ -373,9 +373,6 @@ export type ClientServicesArgs = {
   filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
@@ -1293,9 +1290,6 @@ export type EnrollmentServicesArgs = {
   filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
