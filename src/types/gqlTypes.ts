@@ -1377,7 +1377,6 @@ export type EnrollmentsForClientFilterOptions = {
 
 export type EnrollmentsForProjectFilterOptions = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
-  projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<EnrollmentFilterOptionStatus>>;
 };
