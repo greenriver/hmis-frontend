@@ -35,8 +35,9 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   limit,
   offset,
 }): JSX.Element => {
-  const rangeStart = limit < totalEntries ? offset + 1 : 0;
   const rangeEnd = min([totalEntries, offset + limit]);
+  const rangeStart = limit < totalEntries ? offset + 1 : rangeEnd;
+
   const displayRange =
     rangeStart === rangeEnd ? rangeStart : [rangeStart, rangeEnd].join('-');
   return (
