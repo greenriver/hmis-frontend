@@ -92,11 +92,10 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 2 }}>
           <RouterLink
             variant='h1'
-            color='secondary'
             noWrap
             underline='none'
             to='/'
-            sx={{ textTransform: 'uppercase', color: 'primary.main' }}
+            sx={{ textTransform: 'uppercase', color: 'secondary.main' }}
           >
             {appName || 'Open Path HMIS'}
           </RouterLink>
