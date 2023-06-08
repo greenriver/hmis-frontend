@@ -1,6 +1,6 @@
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { Box, Popover } from '@mui/material';
-import { isEmpty } from 'lodash-es';
+import { isEmpty, isNil } from 'lodash-es';
 import {
   usePopupState,
   bindTrigger,
@@ -24,8 +24,8 @@ const TableFilterMenu = <T,>(props: TableFilterMenuProps<T>): JSX.Element => {
     popupId: 'filterMenu',
   });
 
-  const filterCount = Object.entries(props.filterValues).filter(
-    ([, v]) => !isEmpty(v)
+  const filterCount = Object.entries(props.filterValues).filter(([, v]) =>
+    Array.isArray(v) ? !isEmpty(v) : !isNil(v)
   ).length;
 
   return (

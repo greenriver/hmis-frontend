@@ -2,6 +2,7 @@ import { Button, Grid, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import { ProjectReferralPostingDetails } from './ProjectReferralPostingDetails';
+import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 import { ProjectReferralHouseholdMembersTable } from './tables/ProjectReferralHouseholdMembersTable';
 
 import { CommonCard } from '@/components/elements/CommonCard';
@@ -11,12 +12,16 @@ import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { useGetReferralPostingQuery } from '@/types/gqlTypes';
+import {
+  ReferralPostingStatus,
+  useGetReferralPostingQuery,
+} from '@/types/gqlTypes';
 
 const ProjectReferralPosting: React.FC = () => {
   const { referralPostingId } = useParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
+    fetchPolicy: 'network-only',
   });
   const referralPosting = data?.referralPosting;
 
@@ -71,6 +76,12 @@ const ProjectReferralPosting: React.FC = () => {
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
+            {referralPosting.status ===
+              ReferralPostingStatus.AssignedStatus && (
+              <CommonCard title='Update Referral Status'>
+                <ProjectReferralPostingForm referralPosting={referralPosting} />
+              </CommonCard>
+            )}
           </Stack>
         </Grid>
       </Grid>

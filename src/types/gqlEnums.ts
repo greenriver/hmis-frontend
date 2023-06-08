@@ -1,6 +1,19 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AgeRange: {
+    Under5: 'Under 5',
+    Ages5to12: '5-12',
+    Ages13to17: '13-17',
+    Ages18to24: '18-24',
+    Ages25to34: '25-34',
+    Ages35to44: '35-44',
+    Ages45to54: '45-54',
+    Ages55to61: '55-61',
+    Ages55to64: '55-64',
+    Age62Plus: '62+',
+    Age65Plus: '65+',
+  },
   AssessmentLevel: {
     INVALID: 'Invalid Value',
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
@@ -228,7 +241,6 @@ export const HmisEnums = {
     ACTIVE: 'Active',
     EXITED: 'Exited',
   },
-  EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
   EnrollmentSortOption: {
     HOUSEHOLD_ID: 'Household ID',
     MOST_RECENT: 'Most Recent',
@@ -435,6 +447,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  HouseholdSortOption: { MOST_RECENT: 'Most Recent' },
   HouseholdType: {
     INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
@@ -632,6 +645,8 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
+    REFERRAL_POSTING_DENIAL_REASON_TYPES: 'Referral Posting Status',
+    REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
