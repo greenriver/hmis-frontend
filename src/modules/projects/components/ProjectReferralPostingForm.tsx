@@ -4,6 +4,7 @@ import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
+import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { ReferralPostingDefinition } from '@/modules/form/data';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
@@ -16,10 +17,12 @@ import {
 
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
+  readOnly?: boolean;
 }
 
 export const ProjectReferralPostingForm: React.FC<Props> = ({
   referralPosting,
+  readOnly = false,
 }) => {
   const [errors, setErrors] = useState(emptyErrorState);
   const [mutate, { loading }] = useUpdateReferralPostingMutation({
@@ -53,6 +56,15 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     definition: ReferralPostingDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
   });
+
+  if (readOnly) {
+    return (
+      <DynamicView
+        values={initialValues}
+        definition={ReferralPostingDefinition}
+      />
+    );
+  }
 
   return (
     <DynamicForm

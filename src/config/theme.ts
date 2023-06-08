@@ -41,6 +41,7 @@ declare module '@mui/material/styles' {
 export const baseThemeDef: ThemeOptions = {
   typography: {
     fontFamily: '"Open Sans", sans-serif',
+    fontWeightBold: 600,
   },
   palette: {
     primary: {

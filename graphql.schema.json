@@ -20805,6 +20805,18 @@
             "deprecationReason": null
           },
           {
+            "name": "hohEnrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "Enrollment",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "hohName",
             "description": null,
             "args": [],

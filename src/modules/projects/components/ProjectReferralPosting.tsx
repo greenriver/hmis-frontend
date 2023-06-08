@@ -40,14 +40,14 @@ const ProjectReferralPosting: React.FC = () => {
       <PageTitle
         title={
           <Typography variant='h3'>
-            {`Incoming Referral from `}
+            {`Referral from `}
             <b>{referralPosting.referredBy}</b>
           </Typography>
         }
       />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
-          <CommonCard title='Incoming Referral Details' sx={{ mb: 2 }}>
+          <CommonCard title='Referral Details' sx={{ mb: 2 }}>
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </CommonCard>
           <Button
@@ -61,7 +61,11 @@ const ProjectReferralPosting: React.FC = () => {
         </Grid>
         <Grid item lg={8} sm={12}>
           <Stack spacing={4}>
-            <TitleCard title='Referred Household' sx={{ mb: 0 }}>
+            <TitleCard
+              title='Referred Household'
+              sx={{ mb: 0 }}
+              headerVariant='border'
+            >
               <ProjectReferralHouseholdMembersTable
                 rows={referralPosting.householdMembers}
               />
@@ -76,12 +80,21 @@ const ProjectReferralPosting: React.FC = () => {
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
-            {referralPosting.status ===
-              ReferralPostingStatus.AssignedStatus && (
-              <CommonCard title='Update Referral Status'>
-                <ProjectReferralPostingForm referralPosting={referralPosting} />
-              </CommonCard>
-            )}
+            <CommonCard
+              title={
+                referralPosting.status === ReferralPostingStatus.AssignedStatus
+                  ? 'Update Referral Status'
+                  : 'Referral Status'
+              }
+            >
+              <ProjectReferralPostingForm
+                referralPosting={referralPosting}
+                readOnly={
+                  referralPosting.status !==
+                  ReferralPostingStatus.AssignedStatus
+                }
+              />
+            </CommonCard>
           </Stack>
         </Grid>
       </Grid>

@@ -1,3 +1,4 @@
+import { Grid } from '@mui/material';
 import React, { ReactNode } from 'react';
 
 import {
@@ -74,17 +75,18 @@ const DynamicViewFields: React.FC<Props> = ({
     }
 
     const itemComponent = (
-      <DynamicViewField
-        key={item.linkId}
-        item={item}
-        value={isDisabled ? undefined : values[item.linkId]}
-        nestingLevel={nestingLevel}
-        horizontal={horizontal}
-        pickListRelationId={pickListRelationId}
-        // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
-        adjustValue={itemChanged}
-        {...props}
-      />
+      <Grid item key={item.linkId}>
+        <DynamicViewField
+          item={item}
+          value={isDisabled ? undefined : values[item.linkId]}
+          nestingLevel={nestingLevel}
+          horizontal={horizontal}
+          pickListRelationId={pickListRelationId}
+          // Needed because there are some enable/disabled and autofill dependencies that depend on PickListOption.labels that are fetched (PriorLivingSituation is an example)
+          adjustValue={itemChanged}
+          {...props}
+        />
+      </Grid>
     );
     if (renderFn) {
       return renderFn(itemComponent);
