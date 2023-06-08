@@ -75,9 +75,8 @@ const DynamicViewFields: React.FC<Props> = ({
     }
 
     const itemComponent = (
-      <Grid item>
+      <Grid item key={item.linkId}>
         <DynamicViewField
-          key={item.linkId}
           item={item}
           value={isDisabled ? undefined : values[item.linkId]}
           nestingLevel={nestingLevel}
