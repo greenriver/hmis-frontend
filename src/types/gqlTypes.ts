@@ -124,9 +124,9 @@ export type AssessmentAccess = {
 };
 
 export type AssessmentFilterOptions = {
-  projectTypes?: InputMaybe<Array<ProjectType>>;
-  projects?: InputMaybe<Array<Scalars['ID']>>;
-  roles?: InputMaybe<Array<AssessmentRole>>;
+  project?: InputMaybe<Array<Scalars['ID']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  role?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -13742,7 +13742,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        filters: { roles: $roles }
+        filters: { role: $roles }
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {

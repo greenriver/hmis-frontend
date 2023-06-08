@@ -3794,19 +3794,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentFilterOptions',
     args: [
       {
-        name: 'projectTypes',
-        type: {
-          kind: 'LIST',
-          name: null,
-          ofType: {
-            kind: 'NON_NULL',
-            name: null,
-            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
-          },
-        },
-      },
-      {
-        name: 'projects',
+        name: 'project',
         type: {
           kind: 'LIST',
           name: null,
@@ -3818,7 +3806,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'roles',
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'role',
         type: {
           kind: 'LIST',
           name: null,

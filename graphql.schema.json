@@ -750,27 +750,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "projectTypes",
-            "description": null,
-            "type": {
-              "kind": "LIST",
-              "name": null,
-              "ofType": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "ENUM",
-                  "name": "ProjectType",
-                  "ofType": null
-                }
-              }
-            },
-            "defaultValue": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "projects",
+            "name": "project",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -790,7 +770,27 @@
             "deprecationReason": null
           },
           {
-            "name": "roles",
+            "name": "projectType",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "ProjectType",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "role",
             "description": null,
             "type": {
               "kind": "LIST",
