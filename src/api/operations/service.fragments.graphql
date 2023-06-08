@@ -1,0 +1,33 @@
+fragment ServiceTypeFields on ServiceType {
+  id
+  name
+  hudRecordType
+  hudTypeProvided
+  category
+  dateCreated
+  dateUpdated
+}
+
+fragment ServiceFields on Service {
+  id
+  dateProvided
+  faAmount
+  faStartDate
+  faEndDate
+  movingOnOtherType
+  referralOutcome
+  subTypeProvided
+  otherTypeProvided
+  dateCreated
+  dateUpdated
+  dateDeleted
+  user {
+    ...UserFields
+  }
+  serviceType {
+    ...ServiceTypeFields
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+}

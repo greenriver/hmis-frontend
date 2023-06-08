@@ -170,10 +170,10 @@ const AssessmentForm = ({
   const canEdit = enrollment?.access.canEditEnrollments;
 
   // Manually preload picklists here so we can prevent printing until they're fetched
-  const { loading: pickListsLoading } = usePreloadPicklists(
-    definition.definition,
-    enrollment?.project?.id
-  );
+  const { loading: pickListsLoading } = usePreloadPicklists({
+    definition: definition.definition,
+    relationId: enrollment?.project?.id,
+  });
   usePrintTrigger({
     startReady: isPrintView,
     hold: pickListsLoading,

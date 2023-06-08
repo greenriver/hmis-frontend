@@ -24,7 +24,6 @@ import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollmen
 import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
-import Service from '@/components/clientDashboard/Service';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
@@ -356,28 +355,6 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ViewAssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.NEW_SERVICE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <Service create />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.EDIT_SERVICE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <Service />
               </EnrollmentsRoute>
             ),
           },

@@ -96,7 +96,7 @@ const MainLayout: React.FC<Props> = ({ children }) => {
             noWrap
             underline='none'
             to='/'
-            sx={{ textTransform: 'uppercase' }}
+            sx={{ textTransform: 'uppercase', color: 'primary.main' }}
           >
             {appName || 'Open Path HMIS'}
           </RouterLink>

@@ -1,3 +1,4 @@
+import { QueryOptions } from '@apollo/client';
 import { Grid } from '@mui/material';
 
 import useDynamicFields from '../../hooks/useDynamicFields';
@@ -12,6 +13,7 @@ export interface DynamicViewProps {
   horizontal?: boolean;
   pickListRelationId?: string;
   visible?: boolean;
+  picklistQueryOptions?: Omit<QueryOptions, 'query'>;
 }
 
 const DynamicView = ({
@@ -20,6 +22,7 @@ const DynamicView = ({
   horizontal = false,
   visible = true,
   pickListRelationId,
+  picklistQueryOptions,
 }: DynamicViewProps): JSX.Element => {
   const { renderFields } = useDynamicFields({
     definition,
@@ -27,10 +30,11 @@ const DynamicView = ({
     viewOnly: true,
   });
 
-  const { loading: pickListsLoading } = usePreloadPicklists(
+  const { loading: pickListsLoading } = usePreloadPicklists({
     definition,
-    pickListRelationId
-  );
+    relationId: pickListRelationId,
+    queryOptions: picklistQueryOptions,
+  });
 
   if (pickListsLoading) return <Loading />;
 

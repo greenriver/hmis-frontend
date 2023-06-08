@@ -3435,10 +3435,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Service',
     fields: [
       {
-        name: 'FAAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',
@@ -3467,6 +3463,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'faAmount',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
+        name: 'faEndDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'faStartDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -3483,10 +3491,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
-      },
-      {
         name: 'referralOutcome',
         type: { kind: 'ENUM', name: 'PATHReferralOutcome', ofType: null },
       },
@@ -3494,9 +3498,58 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'subTypeProvided',
         type: { kind: 'ENUM', name: 'ServiceSubTypeProvided', ofType: null },
       },
+    ],
+  },
+  {
+    name: 'ServiceType',
+    fields: [
       {
-        name: 'typeProvided',
+        name: 'category',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'hudRecordType',
+        type: { kind: 'ENUM', name: 'RecordType', ofType: null },
+      },
+      {
+        name: 'hudTypeProvided',
         type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'name',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
       },
     ],
   },
@@ -4348,6 +4401,10 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       { name: 'recordId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
+        name: 'serviceTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
         name: 'values',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
@@ -4573,16 +4630,16 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ServiceInput',
     args: [
       {
-        name: 'FAAmount',
-        type: { kind: 'SCALAR', name: 'Float', ofType: null },
-      },
-      {
         name: 'dateProvided',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'enrollmentId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'faAmount',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
       },
       {
         name: 'movingOnOtherType',
@@ -4733,27 +4790,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
-        },
-      },
-    ],
-  },
-  {
-    name: 'UpdateServiceInput',
-    args: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'input',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'INPUT_OBJECT', name: 'ServiceInput', ofType: null },
         },
       },
     ],

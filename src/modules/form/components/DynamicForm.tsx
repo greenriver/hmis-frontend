@@ -1,3 +1,4 @@
+import { QueryOptions } from '@apollo/client';
 import { Box, Grid, Stack } from '@mui/material';
 import { isNil } from 'lodash-es';
 import React, {
@@ -31,6 +32,7 @@ interface DynamicFormSubmitInput {
   confirmed?: boolean;
   event?: React.MouseEvent<HTMLButtonElement>;
   onSuccess?: VoidFunction;
+  onError?: VoidFunction;
 }
 
 export type DynamicFormOnSubmit = (input: DynamicFormSubmitInput) => void;
@@ -61,10 +63,14 @@ export interface DynamicFormProps
     ValidationDialogProps,
     'errorState' | 'open' | 'onConfirm' | 'onCancel' | 'loading'
   >;
+  hideSubmit?: boolean;
+  loadingElement?: JSX.Element;
+  picklistQueryOptions?: Omit<QueryOptions, 'query'>;
 }
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
   SubmitIfDirty: (ignoreWarnings: boolean, callback: VoidFunction) => void;
+  GetValuesForSubmit: () => FormValues;
 }
 
 const DynamicForm = forwardRef(
@@ -85,6 +91,9 @@ const DynamicForm = forwardRef(
       pickListRelationId,
       FormActionProps = {},
       ValidationDialogProps = {},
+      hideSubmit = false,
+      loadingElement,
+      picklistQueryOptions,
     }: DynamicFormProps,
     ref: Ref<DynamicFormRef>
   ) => {
@@ -92,10 +101,11 @@ const DynamicForm = forwardRef(
       definition,
       initialValues,
     });
-    const { loading: pickListsLoading } = usePreloadPicklists(
+    const { loading: pickListsLoading } = usePreloadPicklists({
       definition,
-      pickListRelationId
-    );
+      relationId: pickListRelationId,
+      queryOptions: picklistQueryOptions,
+    });
 
     const [dirty, setDirty] = useState(false);
 
@@ -108,6 +118,7 @@ const DynamicForm = forwardRef(
     useImperativeHandle(
       ref,
       () => ({
+        GetValuesForSubmit: () => getCleanedValues(),
         SaveIfDirty: (onSuccessCallback) => {
           if (!onSaveDraft || !dirty || locked) return;
           onSaveDraft(getCleanedValues(), () => {
@@ -188,7 +199,7 @@ const DynamicForm = forwardRef(
       []
     );
 
-    if (pickListsLoading) return <Loading />;
+    if (pickListsLoading) return loadingElement || <Loading />;
 
     const saveButtons = (
       <FormActions
@@ -228,7 +239,7 @@ const DynamicForm = forwardRef(
             })}
           </DynamicFormContext.Provider>
         </Grid>
-        {!alwaysShowSaveSlide && (
+        {!alwaysShowSaveSlide && !hideSubmit && (
           <Box ref={saveButtonsRef} sx={{ mt: 3 }}>
             {saveButtons}
           </Box>

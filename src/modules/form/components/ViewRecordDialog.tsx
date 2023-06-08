@@ -12,10 +12,12 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { SubmitFormAllowedTypes } from '../types';
+
 import ViewRecord from './ViewRecord';
 
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
-import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
@@ -25,11 +27,7 @@ interface RecordDialogProps<RecordType> extends DialogProps {
   children?: ReactNode;
 }
 
-type AllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
->;
-
-const ViewRecordDialog = <RecordType extends AllowedTypes>({
+const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   record,
   actions,
   formRole,
