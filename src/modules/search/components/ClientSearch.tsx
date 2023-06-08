@@ -26,11 +26,13 @@ import SearchForm, {
   SearchFormProps,
 } from '@/modules/search/components/SearchForm';
 import SearchResultsHeader from '@/modules/search/components/SearchResultsHeader';
+import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSortOption,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const MAX_CARDS_THRESHOLD = 10;
 
@@ -223,7 +225,10 @@ const ClientSearch: React.FC<Props> = ({
   }, []);
 
   const rowLinkTo = useCallback(
-    (row: ClientFieldsFragment) => `/client/${row.id}`,
+    (row: ClientFieldsFragment) =>
+      generateSafePath(ClientDashboardRoutes.PROFILE, {
+        clientId: row.id,
+      }),
     []
   );
 
