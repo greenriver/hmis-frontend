@@ -3847,7 +3847,31 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'AssessmentFilterOptions',
     args: [
       {
-        name: 'roles',
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'type',
         type: {
           kind: 'LIST',
           name: null,
@@ -4288,7 +4312,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4300,7 +4324,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4329,7 +4353,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4402,7 +4426,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4469,7 +4493,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectFilterOptions',
     args: [
       {
-        name: 'funders',
+        name: 'funder',
         type: {
           kind: 'LIST',
           name: null,
@@ -4481,7 +4505,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4497,7 +4521,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4544,6 +4568,59 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
             kind: 'INPUT_OBJECT',
             name: 'AssessmentInput',
             ofType: null,
+          },
+        },
+      },
+    ],
+  },
+  {
+    name: 'ServiceFilterOptions',
+    args: [
+      {
+        name: 'project',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'serviceCategory',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'serviceType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
           },
         },
       },

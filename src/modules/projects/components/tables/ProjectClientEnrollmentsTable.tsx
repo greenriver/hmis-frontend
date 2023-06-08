@@ -152,7 +152,7 @@ const ProjectClientEnrollmentsTable = ({
       filterInputType='EnrollmentsForProjectFilterOptions'
       defaultSortOption={EnrollmentSortOption.MostRecent}
       defaultFilters={{
-        statuses: [
+        status: [
           EnrollmentFilterOptionStatus.Active,
           EnrollmentFilterOptionStatus.Incomplete,
         ],

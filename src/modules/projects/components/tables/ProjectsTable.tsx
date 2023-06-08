@@ -95,7 +95,7 @@ const ProjectsTable = ({
       showFilters={!hideFilters}
       recordType='Project'
       defaultFilters={
-        hideFilters ? undefined : { statuses: [ProjectFilterOptionStatus.Open] }
+        hideFilters ? undefined : { status: [ProjectFilterOptionStatus.Open] }
       }
       filters={(filters) => omit(filters, 'searchTerm')}
       noSort

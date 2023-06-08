@@ -77,7 +77,7 @@ query GetAssessmentsForPopulation(
     assessments(
       limit: $limit
       offset: $offset
-      filters: { roles: $roles }
+      filters: { type: $roles }
       inProgress: $inProgress
       sortOrder: ASSESSMENT_DATE
     ) {
