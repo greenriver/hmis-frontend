@@ -790,7 +790,7 @@
             "deprecationReason": null
           },
           {
-            "name": "role",
+            "name": "type",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9011,7 +9011,7 @@
             "deprecationReason": null
           },
           {
-            "name": "projectTypes",
+            "name": "projectType",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9031,7 +9031,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -9086,7 +9086,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -12848,7 +12848,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18907,7 +18907,7 @@
         "fields": null,
         "inputFields": [
           {
-            "name": "funders",
+            "name": "funder",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18927,7 +18927,7 @@
             "deprecationReason": null
           },
           {
-            "name": "projectTypes",
+            "name": "projectType",
             "description": null,
             "type": {
               "kind": "LIST",
@@ -18959,7 +18959,7 @@
             "deprecationReason": null
           },
           {
-            "name": "statuses",
+            "name": "status",
             "description": null,
             "type": {
               "kind": "LIST",

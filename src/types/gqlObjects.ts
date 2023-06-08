@@ -3818,7 +3818,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'role',
+        name: 'type',
         type: {
           kind: 'LIST',
           name: null,
@@ -4259,7 +4259,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4271,7 +4271,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4300,7 +4300,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4369,7 +4369,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,
@@ -4436,7 +4436,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     name: 'ProjectFilterOptions',
     args: [
       {
-        name: 'funders',
+        name: 'funder',
         type: {
           kind: 'LIST',
           name: null,
@@ -4448,7 +4448,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         },
       },
       {
-        name: 'projectTypes',
+        name: 'projectType',
         type: {
           kind: 'LIST',
           name: null,
@@ -4464,7 +4464,7 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
-        name: 'statuses',
+        name: 'status',
         type: {
           kind: 'LIST',
           name: null,

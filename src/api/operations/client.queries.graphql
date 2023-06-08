@@ -120,7 +120,7 @@ query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       limit: $limit
       offset: $offset
       sortOrder: MOST_RECENT
-      filters: { statuses: [ACTIVE, EXITED] }
+      filters: { status: [ACTIVE, EXITED] }
     ) {
       offset
       limit
