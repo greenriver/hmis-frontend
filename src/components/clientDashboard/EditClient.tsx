@@ -11,6 +11,7 @@ import { useClientDashboardContext } from '../pages/ClientDashboard';
 import DeleteClientButton from '@/modules/client/components/DeleteClientButton';
 import EditRecord from '@/modules/form/components/EditRecord';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
@@ -30,6 +31,7 @@ const Profile = () => {
 
   const onCompleted = useCallback(
     (data: ClientFieldsFragment) => {
+      cache.evict({ id: `Client:${data.id}` });
       navigate(
         generateSafePath(Routes.CLIENT_DASHBOARD, { clientId: data.id })
       );
