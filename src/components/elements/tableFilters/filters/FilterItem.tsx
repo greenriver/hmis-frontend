@@ -16,6 +16,7 @@ export interface TableFilterItemSelectorProps {
   value: string | string[] | null | undefined;
   onChange: (value: string | string[] | null | undefined) => any;
   loading?: boolean;
+  placeholder?: string;
 }
 
 const TableFilterItemSelector = ({
@@ -60,6 +61,11 @@ const TableFilterItem = <T,>({
             />
           );
 
+        const placeholder =
+          typeof filter.label === 'string'
+            ? `Select ${filter.label}...`
+            : undefined;
+
         if (filter.type === 'enum')
           return (
             <TableFilterItemSelector
@@ -67,6 +73,7 @@ const TableFilterItem = <T,>({
               options={localResolvePickList(filter.enumType, true) || []}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
+              placeholder={placeholder}
             />
           );
 
@@ -83,6 +90,7 @@ const TableFilterItem = <T,>({
                   options={options}
                   value={filter.multi ? value || [] : value}
                   onChange={onChange}
+                  placeholder={placeholder}
                 />
               )}
             </PickListWrapper>
