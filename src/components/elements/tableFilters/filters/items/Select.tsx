@@ -22,7 +22,6 @@ const TableFilterItemSelect: React.FC<
         }
         loading={loading}
         label={null}
-        autoSelect={false}
       />
     );
   }

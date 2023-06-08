@@ -66,7 +66,6 @@ const FormSelect = <Multiple extends boolean | undefined>({
       groupBy={isGrouped ? (option) => option.groupLabel || '' : undefined}
       isOptionEqualToValue={(option, val) => optionId(option) === optionId(val)}
       value={value}
-      autoSelect
       {...props}
       textInputProps={{
         ...props.textInputProps,
