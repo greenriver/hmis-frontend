@@ -124,7 +124,9 @@ export type AssessmentAccess = {
 };
 
 export type AssessmentFilterOptions = {
-  roles?: InputMaybe<Array<AssessmentRole>>;
+  project?: InputMaybe<Array<Scalars['ID']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  role?: InputMaybe<Array<AssessmentRole>>;
 };
 
 export type AssessmentInput = {
@@ -396,11 +398,9 @@ export type ClientIncomeBenefitsArgs = {
 
 /** HUD Client */
 export type ClientServicesArgs = {
+  filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
@@ -1315,11 +1315,9 @@ export type EnrollmentIncomeBenefitsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentServicesArgs = {
+  filters?: InputMaybe<ServiceFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  searchTerm?: InputMaybe<Scalars['String']>;
-  serviceCategory?: InputMaybe<Scalars['ID']>;
-  serviceType?: InputMaybe<Scalars['ID']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
 };
 
@@ -3387,6 +3385,13 @@ export enum ServiceDetailType {
   Bulk = 'BULK',
   Client = 'CLIENT',
 }
+
+export type ServiceFilterOptions = {
+  project?: InputMaybe<Array<Scalars['ID']>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  serviceCategory?: InputMaybe<Array<Scalars['ID']>>;
+  serviceType?: InputMaybe<Array<Scalars['ID']>>;
+};
 
 /** HUD Service Input */
 export type ServiceInput = {
@@ -13737,7 +13742,7 @@ export const GetAssessmentsForPopulationDocument = gql`
       assessments(
         limit: $limit
         offset: $offset
-        filters: { roles: $roles }
+        filters: { role: $roles }
         inProgress: $inProgress
         sortOrder: ASSESSMENT_DATE
       ) {
