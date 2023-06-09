@@ -1,3 +1,5 @@
+import AddIcon from '@mui/icons-material/Add';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import { Paper, Stack } from '@mui/material';
 
 import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
@@ -33,6 +35,7 @@ const ProjectEnrollments = () => {
                 to={generateSafePath(ProjectDashboardRoutes.ADD_SERVICES, {
                   projectId,
                 })}
+                Icon={LibraryAddIcon}
               >
                 Record Services
               </ButtonLink>
@@ -44,6 +47,7 @@ const ProjectEnrollments = () => {
                 to={generateSafePath(ProjectDashboardRoutes.ADD_HOUSEHOLD, {
                   projectId,
                 })}
+                Icon={AddIcon}
               >
                 Add Household
               </ButtonLink>

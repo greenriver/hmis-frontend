@@ -7,49 +7,27 @@ import {
   Skeleton,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { find } from 'lodash-es';
-import {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+
+import ServiceTypeSelect from '../components/ServiceTypeSelect';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
+import { emptyErrorState } from '@/modules/errors/util';
 import DynamicForm, {
-  DynamicFormOnSubmit,
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import FormSelect from '@/modules/form/components/FormSelect';
-import { getRequiredLabel } from '@/modules/form/components/RequiredLabel';
-import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
-import { usePickList } from '@/modules/form/hooks/usePickList';
+import { useDynamicFormHandlersForRecord } from '@/modules/form/hooks/useDynamicFormHandlersForRecord';
 import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
-import { isPickListOption } from '@/modules/form/types';
-import {
-  createHudValuesForSubmit,
-  createValuesForSubmit,
-} from '@/modules/form/util/formUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   DeleteServiceDocument,
   DeleteServiceMutation,
   DeleteServiceMutationVariables,
-  ItemType,
   PickListOption,
-  PickListType,
   ServiceFieldsFragment,
   useGetServiceTypeQuery,
-  useSubmitFormMutation,
 } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
@@ -73,106 +51,52 @@ export function useServiceDialog({
   const [selectedService, setSelectedService] = useState<PickListOption | null>(
     null
   );
-  const [submitLoading, setSubmitLoading] = useState(false);
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
   const { data: { serviceType } = {}, loading: serviceTypeLoading } =
     useGetServiceTypeQuery({
       variables: { id: selectedService?.code || '' },
       skip: !selectedService,
-      onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
     });
 
-  const {
-    formDefinition,
-    itemMap,
-    loading: definitionLoading,
-  } = useServiceFormDefinition({
-    projectId,
-    serviceTypeId: selectedService?.code,
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-  });
+  const { formDefinition, loading: definitionLoading } =
+    useServiceFormDefinition({
+      projectId,
+      serviceTypeId: selectedService?.code,
+    });
+
+  const hookArgs = useMemo(() => {
+    const localConstants = {
+      hudRecordType: serviceType?.hudRecordType,
+      hudTypeProvided: serviceType?.hudTypeProvided,
+    };
+    return {
+      formDefinition,
+      record: service,
+      localConstants,
+      inputVariables: { serviceTypeId: selectedService?.code, enrollmentId },
+      onCompleted: () => {
+        cache.evict({
+          id: `Enrollment:${enrollmentId}`,
+          fieldName: 'services',
+        });
+        setSelectedService(null);
+        setDialogOpen(false);
+      },
+    };
+  }, [serviceType, selectedService, formDefinition, service, enrollmentId]);
+
+  const { initialValues, errors, onSubmit, submitLoading, setErrors } =
+    useDynamicFormHandlersForRecord(hookArgs);
 
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
     setSelectedService(null);
     setErrors(emptyErrorState);
-    setSubmitLoading(false);
-  }, []);
-
-  const [submitForm, { loading: saveLoading }] = useSubmitFormMutation({
-    onCompleted: (data) => {
-      const errors = data.submitForm?.errors || [];
-      setSubmitLoading(false);
-      if (errors.length > 0) {
-        setErrors(partitionValidations(errors));
-      } else {
-        cache.evict({
-          id: `Enrollment:${enrollmentId}`,
-          fieldName: 'services',
-        });
-        closeDialog();
-      }
-    },
-    // loading should stop here too
-    onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
-  });
+  }, [setErrors]);
 
   const openServiceDialog = useCallback(() => setDialogOpen(true), []);
 
   const formRef = useRef<DynamicFormRef>(null);
-
-  const [serviceList, serviceListLoading] = usePickList(
-    {
-      linkId: 'fake',
-      type: ItemType.Choice,
-      pickListReference: PickListType.AvailableServiceTypes,
-    },
-    projectId,
-    { fetchPolicy: 'network-only' }
-  );
-  useEffect(() => {
-    if (!service) return;
-    if (!serviceList) return;
-
-    const serviceTypeOption = find(serviceList, {
-      code: service.serviceType.id,
-    });
-    if (serviceTypeOption) setSelectedService(serviceTypeOption);
-  }, [serviceList, service]);
-
-  const localConstants = useMemo(
-    () => ({
-      hudRecordType: serviceType?.hudRecordType,
-      hudTypeProvided: serviceType?.hudTypeProvided,
-      serviceTypeId: selectedService?.code,
-    }),
-    [serviceType, selectedService]
-  );
-  const initialValues = useInitialFormValues({
-    itemMap,
-    definition: formDefinition?.definition,
-    localConstants,
-    record: service,
-  });
-
-  const submitHandler: DynamicFormOnSubmit = useCallback(
-    ({ values, confirmed = false }) => {
-      if (!formDefinition) return;
-      const input = {
-        formDefinitionId: formDefinition.id,
-        values: createValuesForSubmit(values, formDefinition.definition),
-        hudValues: createHudValuesForSubmit(values, formDefinition.definition),
-        confirmed,
-        enrollmentId,
-        serviceTypeId: selectedService?.code,
-        recordId: service?.id,
-      };
-      setErrors(emptyErrorState);
-      void submitForm({ variables: { input: { input } } });
-    },
-    [formDefinition, submitForm, enrollmentId, selectedService, service]
-  );
 
   const onSuccessfulDelete = useCallback(() => {
     cache.evict({ id: `Enrollment:${enrollmentId}`, fieldName: 'services' });
@@ -193,15 +117,10 @@ export function useServiceDialog({
           {dialogContent}
           <Box sx={{ mb: 2 }}>
             {!service && (
-              <FormSelect
-                options={serviceList || []}
+              <ServiceTypeSelect
+                projectId={projectId}
                 value={selectedService}
-                onChange={(e, val) =>
-                  setSelectedService(isPickListOption(val) ? val : null)
-                }
-                loading={serviceListLoading}
-                label={getRequiredLabel('Service Type', true)}
-                placeholder='Select a service..'
+                onChange={setSelectedService}
               />
             )}
           </Box>
@@ -212,9 +131,9 @@ export function useServiceDialog({
             <DynamicForm
               key={selectedService.code}
               definition={formDefinition.definition}
-              onSubmit={submitHandler}
+              onSubmit={onSubmit}
               initialValues={initialValues}
-              loading={saveLoading}
+              loading={submitLoading}
               errors={errors}
               ref={formRef}
               {...props}
@@ -256,11 +175,7 @@ export function useServiceDialog({
               </Button>
               <LoadingButton
                 disabled={!selectedService}
-                onClick={() => {
-                  if (!formRef.current) return;
-                  setSubmitLoading(true);
-                  formRef.current.SubmitForm();
-                }}
+                onClick={() => formRef.current && formRef.current.SubmitForm()}
                 type='submit'
                 loading={submitLoading}
                 data-testid='confirmDialogAction'
