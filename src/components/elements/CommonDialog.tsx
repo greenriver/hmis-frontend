@@ -3,7 +3,7 @@ import { Dialog, DialogProps, IconButton } from '@mui/material';
 
 const CommonDialog = ({ children, ...props }: DialogProps) => {
   return (
-    <Dialog {...props}>
+    <Dialog {...props} sx={{ '.MuiDialogTitle-root': { mr: 2 }, ...props.sx }}>
       {children}
       {props.onClose && (
         <IconButton
