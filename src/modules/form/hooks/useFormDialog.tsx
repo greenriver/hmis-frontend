@@ -1,49 +1,197 @@
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { LoadingButton } from '@mui/lab';
+import {
+  Box,
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  Stack,
+} from '@mui/material';
+import { ReactNode, useCallback, useRef, useState } from 'react';
 
-import { SubmitFormAllowedTypes } from '../types';
+import DynamicForm, {
+  DynamicFormOnSubmit,
+  DynamicFormProps,
+  DynamicFormRef,
+} from '../components/DynamicForm';
+import { LocalConstants, SubmitFormAllowedTypes } from '../types';
+import {
+  createHudValuesForSubmit,
+  createValuesForSubmit,
+} from '../util/formUtil';
 
-import EditRecord, {
-  Props as EditRecordProps,
-} from '@/modules/form/components/EditRecord';
+import useFormDefinition from './useFormDefinition';
+import useInitialFormValues from './useInitialFormValues';
+
+import CommonDialog from '@/components/elements/CommonDialog';
+import Loading from '@/components/elements/Loading';
+import NotFound from '@/components/pages/NotFound';
+import {
+  emptyErrorState,
+  ErrorState,
+  partitionValidations,
+} from '@/modules/errors/util';
+import { FormInput, FormRole, useSubmitFormMutation } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
-export function useFormDialog<T extends SubmitFormAllowedTypes>() {
+interface Args<T> {
+  formRole: FormRole;
+  record?: T;
+  onCompleted?: (data: T) => void;
+  localConstants?: LocalConstants;
+  inputVariables?: Omit<
+    FormInput,
+    'confirmed' | 'formDefinitionId' | 'values' | 'hudValues' | 'recordId'
+  >;
+}
+
+type RenderFormDialogProps = PartialPick<
+  DynamicFormProps,
+  'onSubmit' | 'definition' | 'errors'
+> & {
+  title: ReactNode;
+};
+
+export function useFormDialog<T extends SubmitFormAllowedTypes>({
+  formRole,
+  record,
+  onCompleted,
+  localConstants,
+  inputVariables,
+}: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const openFormDialog = useCallback(() => setDialogOpen(true), []);
-  const renderFormDialog = ({
-    title,
-    ...props
-  }: PartialPick<EditRecordProps<T>, 'onCompleted' | 'title'>) => {
+  const {
+    formDefinition,
+    itemMap,
+    loading: definitionLoading,
+  } = useFormDefinition(formRole);
+  const formRef = useRef<DynamicFormRef>(null);
+  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const closeDialog = useCallback(() => {
+    setDialogOpen(false);
+    setErrors(emptyErrorState);
+    setSubmitLoading(false);
+  }, []);
+
+  const [submitForm, { loading: saveLoading }] = useSubmitFormMutation({
+    onCompleted: (data) => {
+      const errors = data.submitForm?.errors || [];
+      setSubmitLoading(false);
+      if (errors.length > 0) {
+        setErrors(partitionValidations(errors));
+      } else {
+        const record = data.submitForm?.record || undefined;
+        if (record && onCompleted) onCompleted(record as T);
+        closeDialog();
+      }
+    },
+    onError: (apolloError) => {
+      setErrors({ ...emptyErrorState, apolloError });
+      window.scrollTo(0, 0);
+    },
+  });
+
+  const initialValues = useInitialFormValues({
+    record,
+    itemMap,
+    definition: formDefinition?.definition,
+    localConstants,
+  });
+
+  const submitHandler: DynamicFormOnSubmit = useCallback(
+    ({ values, confirmed = false }) => {
+      if (!formDefinition) return;
+      const input = {
+        formDefinitionId: formDefinition.id,
+        values: createValuesForSubmit(values, formDefinition.definition),
+        hudValues: createHudValuesForSubmit(values, formDefinition.definition),
+        recordId: record?.id,
+        confirmed,
+        ...inputVariables,
+      };
+      setErrors(emptyErrorState);
+      void submitForm({ variables: { input: { input } } });
+    },
+    [formDefinition, inputVariables, submitForm, record]
+  );
+
+  const renderFormDialog = ({ title, ...props }: RenderFormDialogProps) => {
+    if (definitionLoading) return <Loading />;
+    if (!formDefinition) return <NotFound text='Form definition not found.' />;
+    if (!dialogOpen) return null;
+
     return (
-      <Dialog
+      <CommonDialog
         open={!!dialogOpen}
         fullWidth
-        onClose={() => setDialogOpen(false)}
+        onClose={closeDialog}
+        maxWidth='lg'
       >
-        <DialogTitle
-          typography='h5'
-          sx={{ textTransform: 'none', mb: 2 }}
-          color='text.primary'
+        <DialogTitle>{title}</DialogTitle>
+        <DialogContent
+          sx={{
+            backgroundColor: 'background.default',
+          }}
         >
-          {title}
-        </DialogTitle>
-        <DialogContent>
-          <EditRecord<T>
-            title={<></>}
-            {...props}
-            FormActionProps={{
-              onDiscard: () => setDialogOpen(false),
-              ...props.FormActionProps,
-            }}
-            onCompleted={(data: T) => {
-              setDialogOpen(false);
-              if (props.onCompleted) props.onCompleted(data);
-            }}
-            minGroupsForLeftNav={100}
-          />
+          <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
+            <Grid item xs>
+              {formDefinition && (
+                <DynamicForm
+                  ref={formRef}
+                  definition={formDefinition.definition}
+                  onSubmit={submitHandler}
+                  initialValues={initialValues}
+                  loading={saveLoading}
+                  errors={errors}
+                  {...props}
+                  FormActionProps={{
+                    onDiscard: () => setDialogOpen(false),
+                    ...props.FormActionProps,
+                  }}
+                  ValidationDialogProps={{
+                    ...props.ValidationDialogProps,
+                  }}
+                  hideSubmit
+                />
+              )}
+            </Grid>
+          </Grid>
         </DialogContent>
-      </Dialog>
+        <DialogActions>
+          <Stack
+            direction='row'
+            justifyContent={'space-between'}
+            sx={{ width: '100%' }}
+          >
+            <Box></Box>
+            <Stack gap={3} direction='row'>
+              <Button
+                onClick={closeDialog}
+                variant='gray'
+                data-testid='cancelDialogAction'
+              >
+                {props.discardButtonText || 'Cancel'}
+              </Button>
+              <LoadingButton
+                onClick={() => {
+                  if (!formRef.current) return;
+                  setSubmitLoading(true);
+                  formRef.current.SubmitForm();
+                }}
+                type='submit'
+                loading={submitLoading}
+                data-testid='confirmDialogAction'
+                sx={{ minWidth: '120px' }}
+              >
+                {props.submitButtonText || 'Save'}
+              </LoadingButton>
+            </Stack>
+          </Stack>
+        </DialogActions>
+      </CommonDialog>
     );
   };
   return {

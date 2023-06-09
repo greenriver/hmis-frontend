@@ -1,12 +1,9 @@
-import CloseIcon from '@mui/icons-material/Close';
 import { LoadingButton } from '@mui/lab';
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
   Skeleton,
 } from '@mui/material';
 import { Box, Stack } from '@mui/system';
@@ -20,6 +17,7 @@ import {
   useState,
 } from 'react';
 
+import CommonDialog from '@/components/elements/CommonDialog';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import {
   emptyErrorState,
@@ -189,22 +187,9 @@ export function useServiceDialog({
   const renderServiceDialog = (args?: RenderServiceDialogProps) => {
     const { dialogContent, ...props } = args || {};
     return (
-      <Dialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
-        <DialogTitle
-          typography='h5'
-          sx={{
-            textTransform: 'none',
-            pb: 2,
-            mb: 2,
-            borderBottomWidth: 1,
-            borderBottomStyle: 'solid',
-            borderBottomColor: 'borders.light',
-          }}
-          color='text.primary'
-        >
-          {service ? 'Update Service' : 'Add Service'}
-        </DialogTitle>
-        <DialogContent>
+      <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
+        <DialogTitle>{service ? 'Update Service' : 'Add Service'}</DialogTitle>
+        <DialogContent sx={{ mt: 2 }}>
           {dialogContent}
           <Box sx={{ mb: 2 }}>
             {!service && (
@@ -241,15 +226,7 @@ export function useServiceDialog({
             />
           )}
         </DialogContent>
-        <DialogActions
-          sx={{
-            px: 4,
-            py: 2,
-            borderTopWidth: 1,
-            borderTopStyle: 'solid',
-            borderTopColor: 'borders.light',
-          }}
-        >
+        <DialogActions>
           <Stack
             direction='row'
             justifyContent={'space-between'}
@@ -282,8 +259,7 @@ export function useServiceDialog({
                 onClick={() => {
                   if (!formRef.current) return;
                   setSubmitLoading(true);
-                  const values = formRef.current.GetValuesForSubmit();
-                  submitHandler({ values, confirmed: false });
+                  formRef.current.SubmitForm();
                 }}
                 type='submit'
                 loading={submitLoading}
@@ -295,19 +271,7 @@ export function useServiceDialog({
             </Stack>
           </Stack>
         </DialogActions>
-        <IconButton
-          aria-label='close'
-          onClick={closeDialog}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Dialog>
+      </CommonDialog>
     );
   };
 

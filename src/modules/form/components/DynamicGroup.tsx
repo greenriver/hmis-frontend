@@ -45,7 +45,7 @@ const DynamicGroup = ({
       <FormCard
         key={props.item.linkId}
         anchor={props.visible ? props.item.linkId : undefined}
-        debug={debug}
+        // debug={debug}
         {...props}
       />
     );

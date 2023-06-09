@@ -5,6 +5,7 @@ import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import RouterLink from '@/components/elements/RouterLink';
+import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -39,22 +40,13 @@ const ViewEnrollment = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
-            <Paper sx={{ pt: 2 }}>
-              <Stack
-                gap={3}
-                direction='row'
-                justifyContent={'space-between'}
-                sx={{ mb: 2, px: 3, alignItems: 'center' }}
-              >
-                <Typography variant='h5' sx={{ mb: 0 }}>
-                  Household
-                </Typography>
-              </Stack>
+            <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
-            </Paper>
+            </TitleCard>
+
             <Paper sx={{ pt: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>

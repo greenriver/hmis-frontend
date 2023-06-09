@@ -19,22 +19,23 @@ export function useHouseholdMembers(
       fetchPolicy: 'cache-and-network',
     });
 
-  const householdMembers: HouseholdClientFieldsWithAssessmentsFragment[] =
-    useMemo(() => {
-      if (!enrollment) return [];
-      let members = enrollment.household.householdClients;
+  const householdMembers:
+    | HouseholdClientFieldsWithAssessmentsFragment[]
+    | undefined = useMemo(() => {
+    if (!enrollment) return;
+    let members = enrollment.household.householdClients;
 
-      if (limit === 'INCOMPLETE_EXIT') {
-        members = members.filter(
-          (c) => !c.enrollment.exitDate && !c.enrollment.inProgress
-        );
-      }
-      if (limit === 'INCOMPLETE_ENTRY') {
-        members = members.filter((c) => c.enrollment.inProgress);
-      }
+    if (limit === 'INCOMPLETE_EXIT') {
+      members = members.filter(
+        (c) => !c.enrollment.exitDate && !c.enrollment.inProgress
+      );
+    }
+    if (limit === 'INCOMPLETE_ENTRY') {
+      members = members.filter((c) => c.enrollment.inProgress);
+    }
 
-      return sortHouseholdMembers(members, clientId);
-    }, [enrollment, limit, clientId]);
+    return sortHouseholdMembers(members, clientId);
+  }, [enrollment, limit, clientId]);
 
   if (status.error) throw status.error;
 

@@ -1,4 +1,5 @@
-import { Paper } from '@mui/material';
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import { Button, Paper } from '@mui/material';
 import { isEmpty, isNil, omitBy } from 'lodash-es';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useSearchParams } from 'react-router-dom';
@@ -18,6 +19,7 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
 import { SearchFormDefinition } from '@/modules/form/data';
+import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
@@ -30,6 +32,7 @@ import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSortOption,
+  FormRole,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -118,12 +121,14 @@ interface Props
   >;
   wrapperComponent?: React.ElementType;
   pageSize?: number;
+  addClientInDialog?: boolean;
 }
 const ClientSearch: React.FC<Props> = ({
   cardsEnabled,
   searchResultsTableProps,
   wrapperComponent: WrapperComponent = Paper,
   pageSize = 20,
+  addClientInDialog = false,
   ...searchFormProps
 }) => {
   // URL search parameters
@@ -232,6 +237,19 @@ const ClientSearch: React.FC<Props> = ({
     []
   );
 
+  const { openFormDialog, renderFormDialog } =
+    useFormDialog<ClientFieldsFragment>({
+      formRole: FormRole.Client,
+      onCompleted: (data: ClientFieldsFragment) => {
+        searchClients({
+          variables: { input: { id: data.id } },
+          fetchPolicy: 'cache-first',
+        });
+      },
+      // For Client creation, allow the user to input SSN and DOB
+      // even if they don't have read-access to those fields
+      localConstants: { canViewFullSsn: true, canViewDob: true },
+    });
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
@@ -258,6 +276,20 @@ const ClientSearch: React.FC<Props> = ({
           onChangeCards={handleChangeDisplayType}
           sortOrder={sortOrder}
           onChangeSortOrder={handleSetSortOrder}
+          addClientButton={
+            addClientInDialog ? (
+              <Button
+                onClick={openFormDialog}
+                data-testid='addClientButton'
+                sx={{ px: 3 }}
+                startIcon={<LibraryAddIcon />}
+                variant='outlined'
+                color='secondary'
+              >
+                Add Client
+              </Button>
+            ) : undefined
+          }
         />
       )}
       {loading && <Loading />}
@@ -272,13 +304,7 @@ const ClientSearch: React.FC<Props> = ({
           {hasResults &&
             (cards ? (
               data.clientSearch.nodes.map((client) => (
-                <ClientCard
-                  key={client.id}
-                  client={client}
-                  // TODO re-enable when we have data for it
-                  // showNotices
-                  // linkTargetBlank
-                />
+                <ClientCard key={client.id} client={client} />
               ))
             ) : (
               <WrapperComponent>
@@ -300,6 +326,10 @@ const ClientSearch: React.FC<Props> = ({
           />
         </>
       )}
+      {renderFormDialog({
+        title: 'Add client',
+        submitButtonText: 'Create Client',
+      })}
     </>
   );
 };
