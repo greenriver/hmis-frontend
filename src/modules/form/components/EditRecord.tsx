@@ -1,15 +1,10 @@
 import { Box, Grid } from '@mui/material';
-import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
+import { ReactNode, Ref, useMemo } from 'react';
 
+import { useDynamicFormHandlersForRecord } from '../hooks/useDynamicFormHandlersForRecord';
 import useFormDefinition from '../hooks/useFormDefinition';
-import useInitialFormValues from '../hooks/useInitialFormValues';
 import { LocalConstants, SubmitFormAllowedTypes } from '../types';
-import {
-  createHudValuesForSubmit,
-  createValuesForSubmit,
-  debugFormValues,
-  shouldEnableItem,
-} from '../util/formUtil';
+import { shouldEnableItem } from '../util/formUtil';
 
 import FormNavigation, { FormNavigationProps } from './FormNavigation';
 
@@ -20,22 +15,11 @@ import {
 } from '@/components/layout/layoutConstants';
 import NotFound from '@/components/pages/NotFound';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
-import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
 import DynamicForm, {
-  DynamicFormOnSubmit,
   DynamicFormProps,
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
-import {
-  FormInput,
-  FormRole,
-  ItemType,
-  useSubmitFormMutation,
-} from '@/types/gqlTypes';
+import { FormInput, FormRole, ItemType } from '@/types/gqlTypes';
 
 export interface Props<RecordType>
   extends Omit<
@@ -78,69 +62,19 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
   formRef,
   ...props
 }: Props<RecordType>) => {
-  const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
+  const { formDefinition, loading: definitionLoading } =
+    useFormDefinition(formRole);
 
-  const {
-    formDefinition,
-    itemMap,
-    loading: definitionLoading,
-  } = useFormDefinition(formRole);
+  const { initialValues, itemMap, errors, onSubmit, submitLoading } =
+    useDynamicFormHandlersForRecord({
+      inputVariables,
+      localConstants,
+      formDefinition,
+      record,
+      onCompleted,
+    });
 
   useScrollToHash(definitionLoading, top);
-
-  const [submitForm, { loading: saveLoading }] = useSubmitFormMutation({
-    onCompleted: (data) => {
-      const errors = data.submitForm?.errors || [];
-      window.scrollTo(0, 0);
-      if (errors.length > 0) {
-        setErrors(partitionValidations(errors));
-      } else {
-        const record = data.submitForm?.record || undefined;
-        if (record) onCompleted(record as RecordType);
-      }
-    },
-    onError: (apolloError) => {
-      setErrors({ ...emptyErrorState, apolloError });
-      window.scrollTo(0, 0);
-    },
-  });
-
-  const initialValues = useInitialFormValues({
-    record,
-    itemMap,
-    definition: formDefinition?.definition,
-    localConstants,
-  });
-
-  const submitHandler: DynamicFormOnSubmit = useCallback(
-    ({ event, values, confirmed = false }) => {
-      if (!formDefinition) return;
-      if (
-        event &&
-        debugFormValues(
-          event,
-          values,
-          formDefinition.definition,
-          createValuesForSubmit,
-          createHudValuesForSubmit
-        )
-      )
-        return;
-
-      const input = {
-        formDefinitionId: formDefinition.id,
-        values: createValuesForSubmit(values, formDefinition.definition),
-        hudValues: createHudValuesForSubmit(values, formDefinition.definition),
-        recordId: record?.id,
-        confirmed,
-        ...inputVariables,
-      };
-
-      setErrors(emptyErrorState);
-      void submitForm({ variables: { input: { input } } });
-    },
-    [formDefinition, inputVariables, submitForm, record]
-  );
 
   // Top-level items for the left nav (of >=3 groups)
   const leftNavItems = useMemo(() => {
@@ -168,9 +102,9 @@ const EditRecord = <RecordType extends SubmitFormAllowedTypes>({
       <DynamicForm
         ref={formRef}
         definition={formDefinition.definition}
-        onSubmit={submitHandler}
+        onSubmit={onSubmit}
         initialValues={initialValues}
-        loading={saveLoading}
+        loading={submitLoading}
         errors={errors}
         {...props}
         FormActionProps={{

@@ -16,6 +16,7 @@ import {
 } from '@/modules/errors/util';
 import DynamicField from '@/modules/form/components/DynamicField';
 import useDynamicFields from '@/modules/form/hooks/useDynamicFields';
+import useServiceFormDefinition from '@/modules/form/hooks/useServiceFormDefinition';
 import {
   DynamicFieldProps,
   FormValues,
@@ -29,8 +30,6 @@ import {
 import {
   FormDefinitionJson,
   FormItem,
-  FormRole,
-  useGetFormDefinitionQuery,
   ValidationError,
 } from '@/types/gqlTypes';
 
@@ -161,12 +160,7 @@ const BulkAdd = <
           <WarningAlert key='warnings' warnings={errors.warnings} />
         </Stack>
       )}
-      <Paper
-        sx={{
-          py: 3,
-          px: 2.5,
-        }}
-      >
+      <Paper>
         {renderList &&
           renderList(
             targetItems.map((item) => ({
@@ -211,21 +205,21 @@ const BulkAddWrapper = <
   QueryVariables extends { input: unknown }
 >(
   props: Omit<Props<TargetType, Query, QueryVariables>, 'definition'> & {
-    formRole: FormRole;
+    serviceTypeId: string;
+    projectId: string;
   }
 ) => {
-  const { formRole } = props;
+  const { serviceTypeId, projectId } = props;
 
-  const { data, loading } = useGetFormDefinitionQuery({
-    variables: { role: formRole },
+  const { formDefinition, loading } = useServiceFormDefinition({
+    projectId,
+    serviceTypeId,
   });
 
-  const definition = data?.getFormDefinition?.definition;
-
   if (loading) return <Loading />;
-  if (!definition) return <NotFound />;
+  if (!formDefinition) return <NotFound />;
 
-  return <BulkAdd {...props} definition={definition} />;
+  return <BulkAdd {...props} definition={formDefinition.definition} />;
 };
 
 export default BulkAddWrapper;

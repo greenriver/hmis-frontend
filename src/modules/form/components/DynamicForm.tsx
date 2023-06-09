@@ -70,7 +70,7 @@ export interface DynamicFormProps
 export interface DynamicFormRef {
   SaveIfDirty: (callback: VoidFunction) => void;
   SubmitIfDirty: (ignoreWarnings: boolean, callback: VoidFunction) => void;
-  GetValuesForSubmit: () => FormValues;
+  SubmitForm: VoidFunction;
 }
 
 const DynamicForm = forwardRef(
@@ -118,7 +118,12 @@ const DynamicForm = forwardRef(
     useImperativeHandle(
       ref,
       () => ({
-        GetValuesForSubmit: () => getCleanedValues(),
+        SubmitForm: () => {
+          onSubmit({
+            values: getCleanedValues(),
+            confirmed: false,
+          });
+        },
         SaveIfDirty: (onSuccessCallback) => {
           if (!onSaveDraft || !dirty || locked) return;
           onSaveDraft(getCleanedValues(), () => {

@@ -280,6 +280,38 @@ const createThemeOptions = (theme: Theme) => ({
         },
       },
     },
+    MuiDialogTitle: {
+      defaultProps: {
+        color: 'text.primary',
+        typography: 'h4',
+      },
+      styleOverrides: {
+        root: theme.unstable_sx({
+          textTransform: 'none',
+          fontWeight: 400,
+          pb: 2,
+          borderBottomWidth: 1,
+          borderBottomStyle: 'solid',
+          borderBottomColor: 'borders.light',
+        }),
+      },
+    },
+    // MuiDialogContent: {
+    //   styleOverrides: {
+    //     root: theme.unstable_sx({}),
+    //   },
+    // },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          borderTopWidth: 1,
+          borderTopStyle: 'solid',
+          borderTopColor: theme.palette.borders.light,
+          px: 4,
+          py: 2,
+        }),
+      },
+    },
   },
 });
 

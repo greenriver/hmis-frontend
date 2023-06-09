@@ -1,24 +1,19 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import ViewCompactIcon from '@mui/icons-material/ViewCompact';
 import ViewHeadlineIcon from '@mui/icons-material/ViewHeadline';
-import {
-  Box,
-  Card,
-  Grid,
-  Stack,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
+import { Box, Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { ReactNode } from 'react';
+
+import AddClientPrompt from './AddClientPrompt';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import GenericSelect from '@/components/elements/input/GenericSelect';
 import LabelWithContent from '@/components/elements/LabelWithContent';
-import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ClientSortOption } from '@/types/gqlTypes';
+
+export type NewClientCreationOptions = 'open_in_new' | 'open_in_dialog';
 
 /**
  * Component that appears above the search results
@@ -30,6 +25,7 @@ const SearchResultsHeader = ({
   onChangeCards,
   sortOrder,
   onChangeSortOrder,
+  addClientButton,
 }: {
   showCardToggle: boolean;
   disabled: boolean;
@@ -37,9 +33,8 @@ const SearchResultsHeader = ({
   onChangeCards: (event: React.MouseEvent<HTMLElement>, value: any) => void;
   sortOrder?: ClientSortOption | null | undefined;
   onChangeSortOrder: (value: ClientSortOption) => void;
+  addClientButton?: ReactNode;
 }) => {
-  const { t } = useTranslation();
-
   return (
     <Grid
       container
@@ -106,26 +101,20 @@ const SearchResultsHeader = ({
           value={sortOrder}
         />
       </Grid>
-      <RootPermissionsFilter permissions='canEditClients'>
-        <Grid item>
-          <Card sx={{ pl: 2, py: 1.5, pr: 1, mt: 1 }}>
-            <Stack direction='row' spacing={3} sx={{ alignItems: 'center' }}>
-              <Typography variant='body1'>
-                {t<string>('clientSearch.addClientPrompt')}
-              </Typography>
-              <ButtonLink
-                data-testid='addClientButton'
-                to={Routes.CREATE_CLIENT}
-                target='_blank'
-                sx={{ px: 3 }}
-                Icon={LibraryAddIcon}
-              >
-                Add Client
-              </ButtonLink>
-            </Stack>
-          </Card>
-        </Grid>
-      </RootPermissionsFilter>
+      <AddClientPrompt>
+        {addClientButton ? (
+          addClientButton
+        ) : (
+          <ButtonLink
+            data-testid='addClientButton'
+            to={Routes.CREATE_CLIENT}
+            sx={{ px: 3 }}
+            Icon={LibraryAddIcon}
+          >
+            Add Client
+          </ButtonLink>
+        )}
+      </AddClientPrompt>
     </Grid>
   );
 };

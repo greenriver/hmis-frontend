@@ -1,21 +1,20 @@
-import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {
+  Box,
   Button,
   ButtonProps,
   CircularProgress,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogProps,
   Grid,
   Typography,
-  Box,
-  IconButton,
 } from '@mui/material';
 import { omit } from 'lodash-es';
 import React, { useCallback, useState } from 'react';
 
+import CommonDialog from '../CommonDialog';
+import LoadingButton from '../LoadingButton';
 import Uploader from '../upload/UploaderBase';
 
 import { ClientCardImageElement } from '@/modules/client/components/ClientProfileCard';
@@ -80,7 +79,12 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
   if (!fetching && !client) return null;
 
   return (
-    <Dialog {...omit(props, 'children')} onClose={onClose}>
+    <CommonDialog
+      {...omit(props, 'children')}
+      onClose={onClose}
+      maxWidth='sm'
+      fullWidth
+    >
       <Box
         sx={{
           display: 'flex',
@@ -94,14 +98,6 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         <Typography sx={{ flexGrow: 1 }} variant='h5' component='p'>
           Upload Client Photo
         </Typography>
-        <Box>
-          <IconButton
-            size='small'
-            onClick={(e) => onClose && onClose(e, 'escapeKeyDown')}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
       </Box>
       <DialogContent>
         {fetching ? (
@@ -118,7 +114,7 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                     <ClientCardImageElement client={client} />
                     {client?.image && (
                       <Box>
-                        <Button
+                        <LoadingButton
                           variant='outlined'
                           color='error'
                           size='small'
@@ -126,14 +122,10 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
                           disabled={mutationLoading}
                           startIcon={<DeleteIcon />}
                           onClick={handleDelete}
-                          endIcon={
-                            deleting ? (
-                              <CircularProgress size={15} color='inherit' />
-                            ) : undefined
-                          }
+                          loading={deleting}
                         >
                           Remove Photo
-                        </Button>
+                        </LoadingButton>
                       </Box>
                     )}
                   </Grid>
@@ -163,44 +155,18 @@ const ClientImageUploadDialog: React.FC<ClientImageUploadDialogProps> = ({
         )}
       </DialogContent>
       <DialogActions sx={{ gap: 2 }}>
-        {/* {client?.image && (
-          <Box flexGrow={1}>
-            <Button
-              variant='outlined'
-              color='error'
-              disabled={mutationLoading}
-              startIcon={<DeleteIcon />}
-              onClick={handleDelete}
-              endIcon={
-                deleting ? (
-                  <CircularProgress size={15} color='inherit' />
-                ) : undefined
-              }
-            >
-              Remove Photo
-            </Button>
-          </Box>
-        )} */}
-        <Button
-          variant='outlined'
-          onClick={handleClose}
-          disabled={mutationLoading}
-        >
+        <Button variant='gray' onClick={handleClose} disabled={mutationLoading}>
           Cancel
         </Button>
-        <Button
+        <LoadingButton
+          loading={updating}
           disabled={!newBlobId || mutationLoading}
           onClick={handleSave}
-          endIcon={
-            updating ? (
-              <CircularProgress size={15} color='inherit' />
-            ) : undefined
-          }
         >
           Save
-        </Button>
+        </LoadingButton>
       </DialogActions>
-    </Dialog>
+    </CommonDialog>
   );
 };
 

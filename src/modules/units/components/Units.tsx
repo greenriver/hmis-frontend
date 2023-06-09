@@ -1,15 +1,10 @@
 import AddIcon from '@mui/icons-material/Add';
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Paper,
-} from '@mui/material';
+import { Button, DialogContent, DialogTitle, Paper } from '@mui/material';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
+import CommonDialog from '@/components/elements/CommonDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
@@ -145,15 +140,9 @@ const Units = () => {
           noData='No units.'
         />
       </Paper>
-      <Dialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
-        <DialogTitle
-          typography='h5'
-          sx={{ textTransform: 'none', mb: 2 }}
-          color='text.primary'
-        >
-          Create Units
-        </DialogTitle>
-        <DialogContent sx={{}}>
+      <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
+        <DialogTitle>Create Units</DialogTitle>
+        <DialogContent sx={{ my: 2 }}>
           {dialogOpen && (
             <DynamicForm
               definition={UnitsDefinition}
@@ -168,7 +157,7 @@ const Units = () => {
             />
           )}
         </DialogContent>
-      </Dialog>
+      </CommonDialog>
     </>
   );
 };

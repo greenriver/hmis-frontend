@@ -139,7 +139,7 @@ const HouseholdMemberTable = ({
   return (
     <>
       <GenericTable<HouseholdClientFieldsFragment>
-        rows={householdMembers}
+        rows={householdMembers || []}
         columns={columns}
         rowSx={() => ({
           td: { py: 2 },
@@ -159,7 +159,7 @@ const HouseholdMemberTable = ({
       >
         <Box sx={{ px: 3 }}>
           <HouseholdActionButtons
-            householdMembers={householdMembers}
+            householdMembers={householdMembers || []}
             clientId={clientId}
             enrollmentId={enrollmentId}
           />
