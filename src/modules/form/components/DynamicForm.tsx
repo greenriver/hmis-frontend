@@ -230,9 +230,7 @@ const DynamicForm = forwardRef(
               </Stack>
             </Grid>
           )}
-          <DynamicFormContext.Provider
-            value={{ getCleanedValues, definition, initialValues }}
-          >
+          <DynamicFormContext.Provider value={{ getCleanedValues, definition }}>
             {renderFields({
               itemChanged: handleChangeCallback,
               severalItemsChanged: handleChangeCallback,
