@@ -7,10 +7,7 @@ import {
   useGetEnrollmentWithHouseholdQuery,
 } from '@/types/gqlTypes';
 
-export function useHouseholdMembers(
-  enrollmentId: string,
-  limit?: 'INCOMPLETE_ENTRY' | 'INCOMPLETE_EXIT'
-) {
+export function useHouseholdMembers(enrollmentId: string) {
   const { clientId } = useSafeParams();
 
   const { data: { enrollment: enrollment } = {}, ...status } =
@@ -23,19 +20,11 @@ export function useHouseholdMembers(
     | HouseholdClientFieldsWithAssessmentsFragment[]
     | undefined = useMemo(() => {
     if (!enrollment) return;
-    let members = enrollment.household.householdClients;
-
-    if (limit === 'INCOMPLETE_EXIT') {
-      members = members.filter(
-        (c) => !c.enrollment.exitDate && !c.enrollment.inProgress
-      );
-    }
-    if (limit === 'INCOMPLETE_ENTRY') {
-      members = members.filter((c) => c.enrollment.inProgress);
-    }
-
-    return sortHouseholdMembers(members, clientId);
-  }, [enrollment, limit, clientId]);
+    return sortHouseholdMembers(
+      enrollment.household.householdClients,
+      clientId
+    );
+  }, [enrollment, clientId]);
 
   if (status.error) throw status.error;
 

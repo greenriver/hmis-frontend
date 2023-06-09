@@ -1,10 +1,10 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogProps, IconButton } from '@mui/material';
 
-const CommonDialog = (props: DialogProps) => {
+const CommonDialog = ({ children, ...props }: DialogProps) => {
   return (
     <Dialog {...props}>
-      {props.children}
+      {children}
       {props.onClose && (
         <IconButton
           aria-label='close'
