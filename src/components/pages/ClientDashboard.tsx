@@ -1,4 +1,5 @@
 import { Container } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
@@ -17,6 +18,7 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -108,6 +110,17 @@ export type ClientDashboardContext = {
   enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
+
+export function isClientDashboardContext(
+  value: ClientDashboardContext | ProjectDashboardContext
+): value is ClientDashboardContext {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !!value.hasOwnProperty('client')
+  );
+}
+
 export const useClientDashboardContext = () =>
   useOutletContext<ClientDashboardContext>();
 

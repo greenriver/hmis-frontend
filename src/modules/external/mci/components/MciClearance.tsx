@@ -14,7 +14,6 @@ import {
 import MciMatchSelector from './MciMatchSelector';
 
 import LoadingButton from '@/components/elements/LoadingButton';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import usePrevious from '@/hooks/usePrevious';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ErrorAlert from '@/modules/errors/components/ErrorAlert';
@@ -252,25 +251,24 @@ const MciClearanceWrapper = ({
  * Wrapper to show existing MCI ID if client already has one.
  */
 const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
-  // Dashboard context would be present only if we are editing an existing client
-  const ctx = useClientDashboardContext();
+  const { getCleanedValues } = useDynamicFormContext();
 
-  const currentMciId = useMemo(
-    () =>
-      ctx ? ctx.client.externalIds.find((c) => c.label == 'MCI ID') : undefined,
-    [ctx]
-  );
+  const [clientId, externalId] = useMemo(() => {
+    if (!getCleanedValues) return [];
+    const values = getCleanedValues();
+    return [values['client-id'], values['current-mci-id']];
+  }, [getCleanedValues]);
+
+  if (!getCleanedValues) return null;
 
   // If client already has an MCI ID, just show that.
   // Post-MVP: allow re-clear
-  if (currentMciId?.identifier) {
-    if (!props.value) props.onChange(currentMciId?.identifier);
-    return <MciSuccessAlert mci={currentMciId} />;
+  if (externalId && externalId.identifier) {
+    if (!props.value) props.onChange(externalId?.identifier);
+    return <MciSuccessAlert mci={externalId} />;
   }
 
-  return (
-    <MciClearanceWrapper {...props} existingClient={!!(ctx && ctx.client)} />
-  );
+  return <MciClearanceWrapper {...props} existingClient={!!clientId} />;
 };
 
 export default MciClearanceWrapperWithValue;

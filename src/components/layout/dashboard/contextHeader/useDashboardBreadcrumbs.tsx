@@ -57,6 +57,10 @@ export const useDashboardBreadcrumbs = (
           title: 'Add Services',
           parent: ProjectDashboardRoutes.OVERVIEW,
         },
+        [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
+          title: 'New Household',
+          parent: ProjectDashboardRoutes.ENROLLMENTS,
+        },
         [ProjectDashboardRoutes.REFERRALS]: {
           title: 'Referrals',
           parent: ProjectDashboardRoutes.OVERVIEW,

@@ -45,7 +45,11 @@ const Profile = () => {
     <EditRecord<ClientFieldsFragment>
       formRole={FormRole.Client}
       record={client}
-      localConstants={{ canViewFullSsn, canViewDob }}
+      localConstants={{
+        canViewFullSsn,
+        canViewDob,
+        mciId: client.externalIds.find((c) => c.label == 'MCI ID'),
+      }}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
       title={
