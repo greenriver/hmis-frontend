@@ -91,26 +91,23 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         >
           <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
             <Grid item xs>
-              {/* TODO GIG just add a record context here, and in EditRecord */}
-              {formDefinition && (
-                <DynamicForm
-                  ref={formRef}
-                  definition={formDefinition.definition}
-                  onSubmit={onSubmit}
-                  initialValues={initialValues}
-                  loading={submitLoading}
-                  errors={errors}
-                  {...props}
-                  FormActionProps={{
-                    onDiscard: () => setDialogOpen(false),
-                    ...props.FormActionProps,
-                  }}
-                  ValidationDialogProps={{
-                    ...props.ValidationDialogProps,
-                  }}
-                  hideSubmit
-                />
-              )}
+              <DynamicForm
+                ref={formRef}
+                definition={formDefinition.definition}
+                onSubmit={onSubmit}
+                initialValues={initialValues}
+                loading={submitLoading}
+                errors={errors}
+                {...props}
+                FormActionProps={{
+                  onDiscard: () => setDialogOpen(false),
+                  ...props.FormActionProps,
+                }}
+                ValidationDialogProps={{
+                  ...props.ValidationDialogProps,
+                }}
+                hideSubmit
+              />
             </Grid>
           </Grid>
         </DialogContent>
