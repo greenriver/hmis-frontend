@@ -1,4 +1,4 @@
-import { Paper } from '@mui/material';
+import { Paper, Stack } from '@mui/material';
 
 import ProjectEnrollmentsTable from './tables/ProjectEnrollmentsTable';
 
@@ -24,17 +24,30 @@ const ProjectEnrollments = () => {
             id={projectId}
             permissions='canEditEnrollments'
           >
-            <ButtonLink
-              data-testid='recordServicesButton'
-              variant='outlined'
-              color='secondary'
-              sx={{ pl: 3, justifyContent: 'left' }}
-              to={generateSafePath(ProjectDashboardRoutes.ADD_SERVICES, {
-                projectId,
-              })}
-            >
-              Record Services
-            </ButtonLink>
+            <Stack direction='row' gap={2}>
+              <ButtonLink
+                data-testid='recordServicesButton'
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(ProjectDashboardRoutes.ADD_SERVICES, {
+                  projectId,
+                })}
+              >
+                Record Services
+              </ButtonLink>
+              <ButtonLink
+                data-testid='addHouseholdButton'
+                variant='outlined'
+                color='secondary'
+                sx={{ pl: 3, justifyContent: 'left' }}
+                to={generateSafePath(ProjectDashboardRoutes.ADD_HOUSEHOLD, {
+                  projectId,
+                })}
+              >
+                Add Household
+              </ButtonLink>
+            </Stack>
           </ProjectPermissionsFilter>
         }
       />

@@ -43,6 +43,7 @@ const projectClientDashboardRoutes = {
   // Enrollment-related
   ENROLLMENTS: 'enrollments',
   ADD_SERVICES: 'add-services',
+  ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
   NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
   NEW_REFERRAL: 'referrals/new-referral',

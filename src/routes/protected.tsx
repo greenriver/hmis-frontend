@@ -38,6 +38,7 @@ import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -204,9 +205,20 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute
                 permissions={['canEditEnrollments']}
-                redirectRoute={Routes.PROJECT}
+                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
               >
                 <AddServices />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.ADD_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute
+                permissions={['canEditEnrollments']}
+                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
+              >
+                <CreateHouseholdPage />
               </ProjectEditRoute>
             ),
           },
