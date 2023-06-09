@@ -17,7 +17,7 @@ type AppProviderProps = {
   children: React.ReactNode;
 };
 
-export const AppProvider = ({ children }: AppProviderProps) => {
+const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
       <SentryErrorBoundary fullpage>
@@ -36,3 +36,4 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     </React.Suspense>
   );
 };
+export default AppProvider;

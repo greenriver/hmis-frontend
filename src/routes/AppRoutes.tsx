@@ -1,17 +1,12 @@
 import { useMemo } from 'react';
-import {
-  Navigate,
-  RouteObject,
-  useLocation,
-  useRoutes,
-} from 'react-router-dom';
+import { Navigate, useLocation, useRoutes } from 'react-router-dom';
 
 import { protectedRoutes } from './protected';
 
 import Login from '@/modules/auth/components/Login';
 import useAuth, { RouteLocationState } from '@/modules/auth/hooks/useAuth';
 
-export const AppRoutes = () => {
+const AppRoutes = () => {
   const { pathname, state } = useLocation();
   const { user } = useAuth();
 
@@ -35,6 +30,8 @@ export const AppRoutes = () => {
   }, [state, pathname]);
 
   const routes = user ? protectedRoutes : publicRoutes;
-  const element = useRoutes([...routes] as RouteObject[]);
-  return <>{element}</>;
+  const element = useRoutes(routes);
+  return element;
 };
+
+export default AppRoutes;

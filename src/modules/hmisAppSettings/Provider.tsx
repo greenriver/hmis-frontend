@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { fetchHmisAppSettings } from './api';
@@ -15,31 +15,38 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   const [fetched, setFetched] = useState<HmisAppSettings>();
   const [error, setError] = useState<Error>();
   const navigate = useNavigate();
+
+  const fetchAppSettings = useCallback(() => {
+    fetchHmisAppSettings()
+      .then((resp) => {
+        setFetched(resp);
+        setError(undefined);
+      })
+      .catch(setError);
+  }, []);
+
   useEffect(() => {
     const controller = new AbortController();
-    fetchHmisAppSettings().then(setFetched).catch(setError);
+    fetchAppSettings();
     return () => controller.abort();
-  }, []);
+  }, [fetchAppSettings]);
 
   useEffect(() => {
     if (fetched?.appName) document.title = fetched.appName;
   }, [fetched]);
 
   useEffect(() => {
-    if (error) {
-      const cause = error?.cause as any;
-      if (cause?.error?.type === 'timeout') {
-        // Refetch settings if the session timed out
-        fetchHmisAppSettings().then(setFetched).catch(setError);
-        navigate('/', {
-          state: { clearPrev: true },
-          replace: true,
-        });
-      } else {
-        throw error;
-      }
+    if (!error) return;
+    const cause = error?.cause as any;
+    // Refetch settings if the session timed out
+    if (cause?.error?.type === 'timeout') {
+      fetchAppSettings();
+      navigate('/', { state: { clearPrev: true }, replace: true });
+    } else {
+      // If some other error happened, reload
+      window.location.reload();
     }
-  }, [error, navigate]);
+  }, [error, fetchAppSettings, navigate]);
 
   if (!fetched) return <Loading />;
 
