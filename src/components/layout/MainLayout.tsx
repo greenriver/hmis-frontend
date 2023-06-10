@@ -118,6 +118,16 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           >
             Projects
           </ButtonLink>
+          <RootPermissionsFilter permissions={'canManageDeniedReferrals'}>
+            <ButtonLink
+              variant='text'
+              to={Routes.ADMIN}
+              data-testid='navToAdmin'
+              sx={navItemSx}
+            >
+              Admin
+            </ButtonLink>
+          </RootPermissionsFilter>
           <Box sx={{ mx: 2 }}>
             <OmniSearch />
           </Box>

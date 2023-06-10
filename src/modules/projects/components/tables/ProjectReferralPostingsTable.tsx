@@ -1,10 +1,9 @@
 import { useCallback } from 'react';
 
-import { ReferralPostingStatusDisplay } from '../ReferralPostingStatusDisplay';
-
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   GetProjectReferralPostingsDocument,

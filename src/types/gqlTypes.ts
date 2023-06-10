@@ -2921,6 +2921,7 @@ export type Query = {
   /** Search for clients */
   clientSearch: ClientsPaginated;
   currentUser?: Maybe<ApplicationUser>;
+  deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
   file?: Maybe<File>;
@@ -2969,6 +2970,11 @@ export type QueryClientSearchArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ClientSortOption>;
+};
+
+export type QueryDeniedPendingReferralPostingsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type QueryEnrollmentArgs = {
@@ -12874,6 +12880,90 @@ export type UpdateReferralPostingMutation = {
   } | null;
 };
 
+export type GetDeniedPendingReferralPostingsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetDeniedPendingReferralPostingsQuery = {
+  __typename?: 'Query';
+  deniedPendingReferralPostings: {
+    __typename?: 'ReferralPostingsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'ReferralPosting';
+      id: string;
+      assignedDate: string;
+      chronic?: boolean | null;
+      denialNote?: string | null;
+      denialReason?: string | null;
+      needsWheelchairAccessibleUnit?: boolean | null;
+      postingIdentifier?: string | null;
+      referralDate: string;
+      referralIdentifier?: string | null;
+      referralNotes?: string | null;
+      referralResult?: ReferralResult | null;
+      referredBy: string;
+      referredFrom: string;
+      resourceCoordinatorNotes?: string | null;
+      score?: number | null;
+      status: ReferralPostingStatus;
+      statusNote?: string | null;
+      statusNoteUpdatedAt?: string | null;
+      statusNoteUpdatedBy?: string | null;
+      statusUpdatedAt?: string | null;
+      statusUpdatedBy?: string | null;
+      unitType: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+      };
+      hohEnrollment?: {
+        __typename?: 'Enrollment';
+        id: string;
+        client: { __typename?: 'Client'; id: string };
+      } | null;
+      householdMembers: Array<{
+        __typename?: 'ReferralHouseholdMember';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          veteranStatus: NoYesReasonsForMissingData;
+          gender: Array<Gender>;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          dob?: string | null;
+          age?: number | null;
+          ssn?: string | null;
+          access: {
+            __typename?: 'ClientAccess';
+            id: string;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
+            canViewDob: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
+          };
+        };
+      }>;
+    }>;
+  };
+};
+
 export type ReferralPostingFieldsFragment = {
   __typename?: 'ReferralPosting';
   id: string;
@@ -19153,6 +19243,71 @@ export type UpdateReferralPostingMutationResult =
 export type UpdateReferralPostingMutationOptions = Apollo.BaseMutationOptions<
   UpdateReferralPostingMutation,
   UpdateReferralPostingMutationVariables
+>;
+export const GetDeniedPendingReferralPostingsDocument = gql`
+  query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
+    deniedPendingReferralPostings(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ReferralPostingDetailFields
+      }
+    }
+  }
+  ${ReferralPostingDetailFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetDeniedPendingReferralPostingsQuery__
+ *
+ * To run a query within a React component, call `useGetDeniedPendingReferralPostingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeniedPendingReferralPostingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeniedPendingReferralPostingsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetDeniedPendingReferralPostingsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetDeniedPendingReferralPostingsQuery,
+    GetDeniedPendingReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetDeniedPendingReferralPostingsQuery,
+    GetDeniedPendingReferralPostingsQueryVariables
+  >(GetDeniedPendingReferralPostingsDocument, options);
+}
+export function useGetDeniedPendingReferralPostingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetDeniedPendingReferralPostingsQuery,
+    GetDeniedPendingReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetDeniedPendingReferralPostingsQuery,
+    GetDeniedPendingReferralPostingsQueryVariables
+  >(GetDeniedPendingReferralPostingsDocument, options);
+}
+export type GetDeniedPendingReferralPostingsQueryHookResult = ReturnType<
+  typeof useGetDeniedPendingReferralPostingsQuery
+>;
+export type GetDeniedPendingReferralPostingsLazyQueryHookResult = ReturnType<
+  typeof useGetDeniedPendingReferralPostingsLazyQuery
+>;
+export type GetDeniedPendingReferralPostingsQueryResult = Apollo.QueryResult<
+  GetDeniedPendingReferralPostingsQuery,
+  GetDeniedPendingReferralPostingsQueryVariables
 >;
 export const GetServiceDocument = gql`
   query GetService($id: ID!) {

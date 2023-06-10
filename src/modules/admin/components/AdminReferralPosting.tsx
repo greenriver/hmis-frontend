@@ -1,8 +1,6 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
-import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
-
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -12,12 +10,9 @@ import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import ReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
-import {
-  ReferralPostingStatus,
-  useGetReferralPostingQuery,
-} from '@/types/gqlTypes';
+import { useGetReferralPostingQuery } from '@/types/gqlTypes';
 
-const ProjectReferralPosting: React.FC = () => {
+const AdminReferralPosting: React.FC = () => {
   const { referralPostingId } = useParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
@@ -80,25 +75,10 @@ const ProjectReferralPosting: React.FC = () => {
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>
-            <CommonCard
-              title={
-                referralPosting.status === ReferralPostingStatus.AssignedStatus
-                  ? 'Update Referral Status'
-                  : 'Referral Status'
-              }
-            >
-              <ProjectReferralPostingForm
-                referralPosting={referralPosting}
-                readOnly={
-                  referralPosting.status !==
-                  ReferralPostingStatus.AssignedStatus
-                }
-              />
-            </CommonCard>
           </Stack>
         </Grid>
       </Grid>
     </>
   );
 };
-export default ProjectReferralPosting;
+export default AdminReferralPosting;

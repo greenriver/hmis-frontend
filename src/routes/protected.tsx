@@ -37,6 +37,9 @@ import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
+import AdminDashboard from '@/modules/admin/AdminDashboard';
+import AdminReferralDenials from '@/modules/admin/AdminReferralDenials';
+import AdminReferralPosting from '@/modules/admin/AdminReferralPosting';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import {
@@ -451,6 +454,24 @@ export const protectedRoutes: RouteNode[] = [
           { path: ClientDashboardRoutes.LOCATIONS, element: null },
           { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
+        ],
+      },
+      {
+        path: Routes.ADMIN,
+        element: <AdminDashboard />,
+        children: [
+          {
+            path: '',
+            element: <Navigate to={Routes.ADMIN_REFERRAL_DENIALS} replace />,
+          },
+          {
+            path: Routes.ADMIN_REFERRAL_DENIALS,
+            element: <AdminReferralDenials />,
+          },
+          {
+            path: Routes.ADMIN_REFERRAL_DENIAL,
+            element: <AdminReferralPosting />,
+          },
         ],
       },
       // Route for testing sentry errors

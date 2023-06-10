@@ -1,7 +1,7 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { ReferralPostingStatusDisplay } from './ReferralPostingStatusDisplay';
+import ReferralPostingStatusDisplay from './ReferralPostingStatusDisplay';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
 import RouterLink from '@/components/elements/RouterLink';
@@ -15,9 +15,7 @@ import generateSafePath from '@/utils/generateSafePath';
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
 }
-export const ProjectReferralPostingDetails: React.FC<Props> = ({
-  referralPosting,
-}) => {
+const ReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
   const col1: Array<[string, ReactNode]> = [
     [
       'Referral Status',
@@ -82,3 +80,5 @@ export const ProjectReferralPostingDetails: React.FC<Props> = ({
     </Grid>
   );
 };
+
+export default ReferralPostingDetails;

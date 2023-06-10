@@ -25,3 +25,14 @@ mutation UpdateReferralPosting($id: ID!, $input: ReferralPostingInput!) {
     }
   }
 }
+
+query GetDeniedPendingReferralPostings($limit: Int = 10, $offset: Int = 0) {
+  deniedPendingReferralPostings(limit: $limit, offset: $offset) {
+    offset
+    limit
+    nodesCount
+    nodes {
+      ...ReferralPostingDetailFields
+    }
+  }
+}

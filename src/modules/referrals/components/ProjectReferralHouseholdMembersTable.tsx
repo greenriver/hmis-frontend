@@ -51,8 +51,8 @@ interface Props {
   rows: ReferralPostingDetailFieldsFragment['householdMembers'];
 }
 
-export const ProjectReferralHouseholdMembersTable: React.FC<Props> = ({
-  rows,
-}) => {
+const ReferralHouseholdMembersTable: React.FC<Props> = ({ rows }) => {
   return <GenericTable<Row> rows={rows} columns={columns} />;
 };
+
+export default ReferralHouseholdMembersTable;
