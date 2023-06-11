@@ -2,6 +2,11 @@ import { Container, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { Outlet } from 'react-router-dom';
 
+import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
+import {
+  useAdminBreadcrumbConfig,
+  useDashboardBreadcrumbs,
+} from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
@@ -39,9 +44,13 @@ const AdminDashboard: React.FC = () => {
 
   const dashboardState = useDashboardState();
 
+  const breadCrumbConfig = useAdminBreadcrumbConfig();
+  const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+
   return (
     <DashboardContentContainer
       navHeader={<ProjectNavHeader />}
+      contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       sidebar={<SideNavMenu items={navItems} />}
       {...dashboardState}
     >

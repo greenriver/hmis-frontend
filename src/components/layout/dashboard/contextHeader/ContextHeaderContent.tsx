@@ -1,27 +1,18 @@
 import { Box } from '@mui/material';
 
-import { CONTEXT_HEADER_HEIGHT } from '../../layoutConstants';
-
-import { useDashboardBreadcrumbs } from './useDashboardBreadcrumbs';
-
 import Breadcrumbs from '@/components/elements/Breadcrumbs';
-import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
-import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
+import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/layoutConstants';
 
-interface Props {
-  breadcrumbOverrides?: Record<string, string>; // Path => Title
-  dashboardContext: ClientDashboardContext | ProjectDashboardContext;
+export interface Breadcrumb {
+  to: string;
+  label: string;
 }
 
-const ContextHeaderContent: React.FC<Props> = ({
-  breadcrumbOverrides,
-  dashboardContext,
-}) => {
-  const breadcrumbs = useDashboardBreadcrumbs(
-    dashboardContext,
-    breadcrumbOverrides
-  );
+interface Props {
+  breadcrumbs: Breadcrumb[];
+}
 
+const ContextHeaderContent: React.FC<Props> = ({ breadcrumbs }) => {
   // if (breadcrumbs.length < 2) return null;
   return (
     <Box

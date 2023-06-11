@@ -37,9 +37,9 @@ import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
-import AdminDashboard from '@/modules/admin/AdminDashboard';
-import AdminReferralDenials from '@/modules/admin/AdminReferralDenials';
-import AdminReferralPosting from '@/modules/admin/AdminReferralPosting';
+import AdminDashboard from '@/modules/admin/components/AdminDashboard';
+import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
+import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import {
