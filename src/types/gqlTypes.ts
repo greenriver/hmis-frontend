@@ -3171,11 +3171,13 @@ export type ReferralPosting = {
   denialNote?: Maybe<Scalars['String']>;
   denialReason?: Maybe<Scalars['String']>;
   hohEnrollment?: Maybe<Enrollment>;
+  hohMciId?: Maybe<Scalars['ID']>;
   hohName: Scalars['String'];
   householdMembers: Array<ReferralHouseholdMember>;
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
+  organizationName?: Maybe<Scalars['String']>;
   postingIdentifier?: Maybe<Scalars['ID']>;
   referralDate: Scalars['ISO8601Date'];
   referralIdentifier?: Maybe<Scalars['ID']>;
@@ -12402,12 +12404,16 @@ export type GetProjectReferralPostingsQuery = {
       nodes: Array<{
         __typename?: 'ReferralPosting';
         id: string;
+        referralIdentifier?: string | null;
         referralDate: string;
         hohName: string;
+        hohMciId?: string | null;
         householdSize: number;
         referredBy: string;
         status: ReferralPostingStatus;
         assignedDate: string;
+        statusUpdatedBy?: string | null;
+        organizationName?: string | null;
       }>;
     };
   } | null;
@@ -12895,71 +12901,16 @@ export type GetDeniedPendingReferralPostingsQuery = {
     nodes: Array<{
       __typename?: 'ReferralPosting';
       id: string;
-      assignedDate: string;
-      chronic?: boolean | null;
-      denialNote?: string | null;
-      denialReason?: string | null;
-      needsWheelchairAccessibleUnit?: boolean | null;
-      postingIdentifier?: string | null;
-      referralDate: string;
       referralIdentifier?: string | null;
-      referralNotes?: string | null;
-      referralResult?: ReferralResult | null;
+      referralDate: string;
+      hohName: string;
+      hohMciId?: string | null;
+      householdSize: number;
       referredBy: string;
-      referredFrom: string;
-      resourceCoordinatorNotes?: string | null;
-      score?: number | null;
       status: ReferralPostingStatus;
-      statusNote?: string | null;
-      statusNoteUpdatedAt?: string | null;
-      statusNoteUpdatedBy?: string | null;
-      statusUpdatedAt?: string | null;
+      assignedDate: string;
       statusUpdatedBy?: string | null;
-      unitType: {
-        __typename?: 'UnitTypeObject';
-        id: string;
-        description?: string | null;
-      };
-      hohEnrollment?: {
-        __typename?: 'Enrollment';
-        id: string;
-        client: { __typename?: 'Client'; id: string };
-      } | null;
-      householdMembers: Array<{
-        __typename?: 'ReferralHouseholdMember';
-        id: string;
-        relationshipToHoH: RelationshipToHoH;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          veteranStatus: NoYesReasonsForMissingData;
-          gender: Array<Gender>;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-          };
-        };
-      }>;
+      organizationName?: string | null;
     }>;
   };
 };
@@ -12967,12 +12918,16 @@ export type GetDeniedPendingReferralPostingsQuery = {
 export type ReferralPostingFieldsFragment = {
   __typename?: 'ReferralPosting';
   id: string;
+  referralIdentifier?: string | null;
   referralDate: string;
   hohName: string;
+  hohMciId?: string | null;
   householdSize: number;
   referredBy: string;
   status: ReferralPostingStatus;
   assignedDate: string;
+  statusUpdatedBy?: string | null;
+  organizationName?: string | null;
 };
 
 export type ReferralPostingDetailFieldsFragment = {
@@ -14557,12 +14512,16 @@ export const FunderFieldsFragmentDoc = gql`
 export const ReferralPostingFieldsFragmentDoc = gql`
   fragment ReferralPostingFields on ReferralPosting {
     id
+    referralIdentifier
     referralDate
     hohName
+    hohMciId
     householdSize
     referredBy
     status
     assignedDate
+    statusUpdatedBy
+    organizationName
   }
 `;
 export const ReferralPostingDetailFieldsFragmentDoc = gql`
@@ -19251,11 +19210,11 @@ export const GetDeniedPendingReferralPostingsDocument = gql`
       limit
       nodesCount
       nodes {
-        ...ReferralPostingDetailFields
+        ...ReferralPostingFields
       }
     }
   }
-  ${ReferralPostingDetailFieldsFragmentDoc}
+  ${ReferralPostingFieldsFragmentDoc}
 `;
 
 /**

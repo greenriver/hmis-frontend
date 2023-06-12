@@ -32,11 +32,11 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'Organization',
-    render: (row: ReferralPostingFieldsFragment) => `tbd ${row.id}`,
+    render: (row: ReferralPostingFieldsFragment) => row.organizationName,
   },
   {
     header: 'Project',
-    render: (row: ReferralPostingFieldsFragment) => `tbd ${row.id}`,
+    render: (row: ReferralPostingFieldsFragment) => row.referredBy,
   },
   {
     header: 'HOH Name',
@@ -44,11 +44,11 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'HOH MCI ID',
-    render: (row: ReferralPostingFieldsFragment) => `tbd ${row.id}`,
+    render: (row: ReferralPostingFieldsFragment) => row.hohMciId,
   },
   {
     header: 'Denied By',
-    render: (row: ReferralPostingFieldsFragment) => `tbd ${row.id}`,
+    render: (row: ReferralPostingFieldsFragment) => row.statusUpdatedBy,
   },
 ];
 

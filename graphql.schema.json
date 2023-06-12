@@ -20858,6 +20858,18 @@
             "deprecationReason": null
           },
           {
+            "name": "hohMciId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ID",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "hohName",
             "description": null,
             "args": [],
@@ -20936,6 +20948,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "organizationName",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
