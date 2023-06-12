@@ -23,7 +23,8 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Referral ID',
     linkTreatment: true,
-    render: (row: ReferralPostingFieldsFragment) => row.id,
+    render: (row: ReferralPostingFieldsFragment) =>
+      row.referralIdentifier || 'None',
   },
   {
     header: 'Requested Date',

@@ -1,5 +1,7 @@
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
+
+import AdminReferralPostingDetails from './AdminReferralPostingDetails';
 
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -9,7 +11,6 @@ import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
-import ReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
 import { useGetReferralPostingQuery } from '@/types/gqlTypes';
 
 const AdminReferralPosting: React.FC = () => {
@@ -32,27 +33,12 @@ const AdminReferralPosting: React.FC = () => {
 
   return (
     <>
-      <PageTitle
-        title={
-          <Typography variant='h3'>
-            {`Referral from `}
-            <b>{referralPosting.referredBy}</b>
-          </Typography>
-        }
-      />
+      <PageTitle title='Manage Denied Referral' />
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
           <CommonCard title='Referral Details' sx={{ mb: 2 }}>
-            <ReferralPostingDetails referralPosting={referralPosting} />
+            <AdminReferralPostingDetails referralPosting={referralPosting} />
           </CommonCard>
-          <Button
-            fullWidth
-            variant='outlined'
-            color='secondary'
-            onClick={() => alert('Not yet implemented')}
-          >
-            ESG Funding Report
-          </Button>
         </Grid>
         <Grid item lg={8} sm={12}>
           <Stack spacing={4}>
@@ -65,13 +51,10 @@ const AdminReferralPosting: React.FC = () => {
                 rows={referralPosting.householdMembers}
               />
             </TitleCard>
-            <CommonCard title='Referral Notes'>
+            <CommonCard title='Approve/Deny Referral'>
               <Stack spacing={4}>
-                <CommonLabeledTextBlock title='Provider Notes'>
-                  {referralPosting.referralNotes}
-                </CommonLabeledTextBlock>
-                <CommonLabeledTextBlock title='Resource Coordinator Notes'>
-                  {referralPosting.resourceCoordinatorNotes}
+                <CommonLabeledTextBlock title='Status Note'>
+                  {referralPosting.statusNote}
                 </CommonLabeledTextBlock>
               </Stack>
             </CommonCard>

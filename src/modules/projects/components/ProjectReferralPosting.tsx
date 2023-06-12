@@ -10,8 +10,8 @@ import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
+import ProjectReferralPostingDetails from '@/modules/projects/components/ReferralPostingDetails';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
-import ReferralPostingDetails from '@/modules/referrals/components/ReferralPostingDetails';
 import {
   ReferralPostingStatus,
   useGetReferralPostingQuery,
@@ -48,7 +48,7 @@ const ProjectReferralPosting: React.FC = () => {
       <Grid spacing={4} container>
         <Grid item lg={4} sm={12}>
           <CommonCard title='Referral Details' sx={{ mb: 2 }}>
-            <ReferralPostingDetails referralPosting={referralPosting} />
+            <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </CommonCard>
           <Button
             fullWidth

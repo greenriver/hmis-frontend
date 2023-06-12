@@ -12448,6 +12448,7 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
+    organizationName?: string | null;
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
@@ -12823,6 +12824,7 @@ export type UpdateReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
+      organizationName?: string | null;
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -12953,6 +12955,7 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
+  organizationName?: string | null;
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -14547,6 +14550,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusNoteUpdatedBy
     statusUpdatedAt
     statusUpdatedBy
+    organizationName
     unitType {
       id
       description
