@@ -1,12 +1,7 @@
 import { Box } from '@mui/material';
 
-import Breadcrumbs from '@/components/elements/Breadcrumbs';
+import Breadcrumbs, { Breadcrumb } from '@/components/elements/Breadcrumbs';
 import { CONTEXT_HEADER_HEIGHT } from '@/components/layout/layoutConstants';
-
-export interface Breadcrumb {
-  to: string;
-  label: string;
-}
 
 interface Props {
   breadcrumbs: Breadcrumb[];
