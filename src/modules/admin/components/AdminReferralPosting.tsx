@@ -1,5 +1,4 @@
 import { Grid, Stack } from '@mui/material';
-import { useParams } from 'react-router-dom';
 
 import AdminReferralPostingDetails from './AdminReferralPostingDetails';
 
@@ -9,12 +8,13 @@ import Loading from '@/components/elements/Loading';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import NotFound from '@/components/pages/NotFound';
+import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
 import { useGetReferralPostingQuery } from '@/types/gqlTypes';
 
 const AdminReferralPosting: React.FC = () => {
-  const { referralPostingId } = useParams<{ referralPostingId: string }>();
+  const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
     fetchPolicy: 'network-only',

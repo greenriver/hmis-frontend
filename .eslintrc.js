@@ -108,6 +108,14 @@ module.exports = {
     'react/display-name': 'off',
     'react/no-children-prop': 'error',
     'react/no-danger-with-children': 'error',
+    'no-restricted-imports': [
+      'warn',
+      {
+        name: 'react-router-dom',
+        importNames: ['useParams'],
+        message: 'use useSafeParams',
+      },
+    ],
   },
   ignorePatterns: [
     'jest.config.ts',
