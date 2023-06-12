@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom'; // eslint-disable-line no-restricted-imports
 
 import IdEncoder from '@/modules/hmis/IdEncoder';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -8,7 +8,13 @@ const enumParams: Record<string, string[]> = {
   formRole: Object.keys(HmisEnums.FormRole),
 };
 
-const useSafeParams = (...args: Parameters<typeof useParams>) => {
+type RouteParams<T> = {
+  readonly [key in keyof T]: string | undefined;
+};
+
+const useSafeParams = <T extends Record<string, string | undefined>>(
+  ...args: Parameters<typeof useParams>
+) => {
   const params = { ...useParams(...args) };
 
   for (const key in params) {
@@ -31,7 +37,7 @@ const useSafeParams = (...args: Parameters<typeof useParams>) => {
 
   // }
 
-  return { ...params } as const;
+  return params as RouteParams<T>;
 };
 
 export default useSafeParams;
