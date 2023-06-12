@@ -51,7 +51,7 @@ const AdminReferralPosting: React.FC = () => {
                 rows={referralPosting.householdMembers}
               />
             </TitleCard>
-            <CommonCard title='Approve/Deny Referral'>
+            <CommonCard title='Accept/Reject Denial'>
               <Stack spacing={4}>
                 <CommonLabeledTextBlock title='Status Note'>
                   {referralPosting.statusNote}

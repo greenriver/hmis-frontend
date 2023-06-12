@@ -202,7 +202,7 @@ export const useAdminBreadcrumbConfig = (): CrumbConfig => {
   return useMemo(
     () => ({
       [Routes.ADMIN_REFERRAL_DENIAL]: {
-        title: 'Approve/Deny Referral',
+        title: 'Manage Denial',
         parent: Routes.ADMIN_REFERRAL_DENIALS,
       },
       [Routes.ADMIN_REFERRAL_DENIALS]: {
