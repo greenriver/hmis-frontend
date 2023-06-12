@@ -3275,6 +3275,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'denialReason',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
+      { name: 'hohMciId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'hohName',
         type: {
@@ -3302,6 +3303,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'needsWheelchairAccessibleUnit',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'organizationName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'postingIdentifier',

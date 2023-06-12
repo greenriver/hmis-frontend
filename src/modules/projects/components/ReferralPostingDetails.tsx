@@ -1,13 +1,12 @@
 import { Box, Grid, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { ReferralPostingStatusDisplay } from './ReferralPostingStatusDisplay';
-
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
 import RouterLink from '@/components/elements/RouterLink';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -15,7 +14,7 @@ import generateSafePath from '@/utils/generateSafePath';
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
 }
-export const ProjectReferralPostingDetails: React.FC<Props> = ({
+const ProjectReferralPostingDetails: React.FC<Props> = ({
   referralPosting,
 }) => {
   const col1: Array<[string, ReactNode]> = [
@@ -82,3 +81,5 @@ export const ProjectReferralPostingDetails: React.FC<Props> = ({
     </Grid>
   );
 };
+
+export default ProjectReferralPostingDetails;

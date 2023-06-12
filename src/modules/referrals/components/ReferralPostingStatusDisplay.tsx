@@ -6,7 +6,7 @@ import { ReferralPostingStatus } from '@/types/gqlTypes';
 interface Props extends ChipProps {
   status: ReferralPostingStatus;
 }
-export const ReferralPostingStatusDisplay: React.FC<Props> = ({
+const ReferralPostingStatusDisplay: React.FC<Props> = ({
   status,
   sx,
   variant = 'outlined',
@@ -21,3 +21,5 @@ export const ReferralPostingStatusDisplay: React.FC<Props> = ({
     />
   );
 };
+
+export default ReferralPostingStatusDisplay;

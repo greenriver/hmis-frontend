@@ -13,6 +13,10 @@ import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNa
 
 import NotFound from './NotFound';
 
+import {
+  useClientBreadcrumbConfig,
+  useDashboardBreadcrumbs,
+} from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -65,6 +69,12 @@ const ClientDashboard: React.FC = () => {
     [client, enrollment, enrollmentLoading]
   );
 
+  const breadCrumbConfig = useClientBreadcrumbConfig(outletContext);
+  const breadcrumbs = useDashboardBreadcrumbs(
+    breadCrumbConfig,
+    breadcrumbOverrides
+  );
+
   if (loading || enrollmentLoading || !navItems) return <Loading />;
   if (!client || !outletContext) return <NotFound />;
   if (enrollment && enrollment.client.id !== params.clientId) {
@@ -84,12 +94,7 @@ const ClientDashboard: React.FC = () => {
     <DashboardContentContainer
       navHeader={<ClientCardMini client={client} />}
       sidebar={<SideNavMenu items={navItems} />}
-      contextHeader={
-        <ContextHeaderContent
-          breadcrumbOverrides={breadcrumbOverrides}
-          dashboardContext={outletContext}
-        />
-      }
+      contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       navLabel='Client Navigation'
       {...dashboardState}
     >

@@ -1,11 +1,15 @@
 fragment ReferralPostingFields on ReferralPosting {
   id
+  referralIdentifier
   referralDate
   hohName
+  hohMciId
   householdSize
   referredBy
   status
   assignedDate
+  statusUpdatedBy
+  organizationName
 }
 
 fragment ReferralPostingDetailFields on ReferralPosting {
@@ -30,6 +34,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   statusNoteUpdatedBy
   statusUpdatedAt
   statusUpdatedBy
+  organizationName
   unitType {
     id
     description
