@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Breadcrumbs from '../elements/Breadcrumbs';
+import { STICKY_BAR_HEIGHT } from '../layout/layoutConstants';
 
 import EditRecord from '@/modules/form/components/EditRecord';
 import { Routes } from '@/routes/routes';
@@ -37,6 +38,7 @@ const CreateClient: React.FC = () => {
         formRole={FormRole.Client}
         onCompleted={onCompleted}
         FormActionProps={{ submitButtonText: 'Create Client' }}
+        top={STICKY_BAR_HEIGHT}
         localConstants={{
           // For Client creation, allow the user to input SSN and DOB
           // even if they don't have read-access to those fields

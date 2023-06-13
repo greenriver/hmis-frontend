@@ -19,18 +19,21 @@ import generateSafePath from '@/utils/generateSafePath';
 const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   {
     header: 'Project Name',
+    width: '45%',
     render: 'projectName',
     linkTreatment: true,
     ariaLabel: (row) => row.projectName,
   },
   {
     header: 'Project Type',
+    width: '30%',
     render: (project: ProjectAllFieldsFragment) => (
       <HmisEnum value={project.projectType} enumMap={HmisEnums.ProjectType} />
     ),
   },
   {
     header: 'Operating Period',
+    width: '25%',
     render: (project: ProjectAllFieldsFragment) =>
       parseAndFormatDateRange(
         project.operatingStartDate,

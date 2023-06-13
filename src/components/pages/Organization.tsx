@@ -1,10 +1,9 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ButtonLink from '../elements/ButtonLink';
-import ConfirmationDialog from '../elements/ConfirmationDialog';
 import Loading from '../elements/Loading';
 import MultilineTypography from '../elements/MultilineTypography';
 import TitleCard from '../elements/TitleCard';
@@ -13,6 +12,7 @@ import NotFound from './NotFound';
 
 import OrganizationLayout from '@/components/layout/OrganizationLayout';
 import useSafeParams from '@/hooks/useSafeParams';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
@@ -20,7 +20,12 @@ import OrganizationDetails from '@/modules/projects/components/OrganizationDetai
 import ProjectsTable from '@/modules/projects/components/tables/ProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
-import { PickListType, useDeleteOrganizationMutation } from '@/types/gqlTypes';
+import {
+  DeleteOrganizationDocument,
+  DeleteOrganizationMutation,
+  DeleteOrganizationMutationVariables,
+  PickListType,
+} from '@/types/gqlTypes';
 import { evictPickList, evictQuery } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -34,21 +39,16 @@ const Organization = () => {
     useOrganizationCrumbs();
 
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const [deleteOrganization, { loading: deleteLoading, error: deleteError }] =
-    useDeleteOrganizationMutation({
-      variables: { input: { id: organizationId } },
-      onCompleted: () => {
-        evictPickList(PickListType.Project);
-        evictQuery('organizations');
-        navigate(generateSafePath(Routes.ALL_PROJECTS));
-      },
-    });
+
+  const onSuccessfulDelete = useCallback(() => {
+    evictPickList(PickListType.Project);
+    evictQuery('organizations');
+    navigate(generateSafePath(Routes.ALL_PROJECTS));
+  }, [navigate]);
 
   if (!loading && (!crumbs || !organization)) {
     return <NotFound />;
   }
-  if (deleteError) console.error(deleteError);
 
   const hasDetails = organization && organization?.description;
 
@@ -131,51 +131,38 @@ const Organization = () => {
                   id={organizationId}
                   permissions={['canDeleteOrganization']}
                 >
-                  <Button
-                    data-testid='deleteOrganizationButton'
-                    color='error'
-                    variant='text'
-                    onClick={() => setOpen(true)}
-                    sx={{ justifyContent: 'left' }}
+                  <DeleteMutationButton<
+                    DeleteOrganizationMutation,
+                    DeleteOrganizationMutationVariables
+                  >
+                    queryDocument={DeleteOrganizationDocument}
+                    variables={{ input: { id: organizationId } }}
+                    idPath='deleteOrganization.organization.id'
+                    recordName='Organization'
+                    onSuccess={onSuccessfulDelete}
+                    ButtonProps={{
+                      variant: 'text',
+                      sx: { justifyContent: 'left' },
+                    }}
                   >
                     Delete Organization
-                  </Button>
+                  </DeleteMutationButton>
                 </OrganizationPermissionsFilter>
               </Stack>
             </Paper>
           </OrganizationPermissionsFilter>
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Stack gap={0.5}>
+          {organization && (
+            <Paper sx={{ p: 2, mb: 2 }}>
               <IdDisplay
-                prefix='HMIS'
+                prefix='Organization'
                 color='text.secondary'
-                value={organizationId}
+                value={organization.hudId}
+                shortenUuid
               />
-              {organization && (
-                <IdDisplay
-                  prefix='Organization'
-                  color='text.secondary'
-                  value={organization.hudId}
-                />
-              )}
-            </Stack>
-          </Paper>
+            </Paper>
+          )}
         </Grid>
       </Grid>
-      <ConfirmationDialog
-        id='deleteOrgConfirmation'
-        open={open}
-        title='Delete organization'
-        onConfirm={() => deleteOrganization()}
-        onCancel={() => setOpen(false)}
-        loading={deleteLoading}
-      >
-        <Typography>
-          Are you sure you want to delete organization{' '}
-          <strong>{organization?.organizationName}</strong>?
-        </Typography>
-        <Typography>This action cannot be undone.</Typography>
-      </ConfirmationDialog>
     </OrganizationLayout>
   );
 };

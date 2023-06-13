@@ -62,10 +62,6 @@ export const CLIENT_COLUMNS: {
     header: 'Last Name',
     render: 'lastName',
   },
-  preferred: {
-    header: 'Preferred Name',
-    render: 'preferredName',
-  },
   ssn: {
     header: 'SSN',
     key: 'ssn',

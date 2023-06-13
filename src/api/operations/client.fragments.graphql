@@ -26,14 +26,64 @@ fragment ClientFields on Client {
   customDataElements {
     ...CustomDataElementFields
   }
+  names {
+    ...ClientNameObjectFields
+  }
+  addresses {
+    ...ClientAddressFields
+  }
+  phoneNumbers {
+    ...ClientContactPointFields
+  }
+  emailAddresses {
+    ...ClientContactPointFields
+  }
 }
 
 fragment ClientName on Client {
   firstName
   middleName
-  preferredName
   lastName
   nameSuffix
+}
+
+fragment ClientNameObjectFields on ClientName {
+  id
+  first
+  middle
+  last
+  suffix
+  nameDataQuality
+  use
+  notes
+  primary
+  dateCreated
+  dateUpdated
+}
+fragment ClientAddressFields on ClientAddress {
+  id
+  line1
+  line2
+  city
+  state
+  district
+  country
+  postalCode
+  notes
+  use
+  addressType
+  dateCreated
+  dateUpdated
+}
+
+fragment ClientContactPointFields on ClientContactPoint {
+  id
+  value
+  notes
+  use
+  system
+  dateCreated
+  dateUpdated
 }
 
 fragment ClientImage on Client {

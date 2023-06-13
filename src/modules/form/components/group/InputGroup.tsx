@@ -112,7 +112,15 @@ const InputGroup = ({
   if (viewOnly && !isNil(item.readonlyText)) label = item.readonlyText;
   return (
     <Box id={item.linkId}>
-      {label && <Typography sx={{ mb: 1 }}>{label}</Typography>}
+      {label && (
+        <Typography
+          sx={{ mb: 1 }}
+          variant={viewOnly ? 'body2' : undefined}
+          fontWeight={viewOnly ? 600 : undefined}
+        >
+          {label}
+        </Typography>
+      )}
       {wrappedChildren}
       {isNumeric && summaryItem && (
         <Stack
@@ -125,6 +133,7 @@ const InputGroup = ({
             mt: 1,
             borderTop: (theme) => `1px solid ${theme.palette.grey[500]}`,
             maxWidth: viewOnly ? undefined : maxWidth,
+            textAlign: viewOnly ? 'right' : undefined,
             ...rowSx,
           }}
         >

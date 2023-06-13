@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
-import { isNil } from 'lodash-es';
+import { Box, Typography } from '@mui/material';
+import { find, isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import ExternalLink from './ExternalLink';
@@ -53,6 +53,32 @@ export const externalIdColumn = (label: string) => ({
       />
     );
   },
+  dontLink: true,
 });
+
+export const LabeledExternalIdDisplay = ({
+  label,
+  externalIds,
+  ...props
+}: Omit<ExternalIdDisplayProps, 'value'> & {
+  label?: string;
+  externalIds: ExternalIdentifier[];
+}) => {
+  return (
+    <Typography
+      variant='body2'
+      sx={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: 0.8,
+      }}
+    >
+      {label}:{' '}
+      <Box component='span' sx={{ wordBreak: 'break-all' }}>
+        <ExternalIdDisplay {...props} value={find(externalIds, { label })} />
+      </Box>
+    </Typography>
+  );
+};
 
 export default ExternalIdDisplay;

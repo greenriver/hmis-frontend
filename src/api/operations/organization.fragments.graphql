@@ -1,5 +1,6 @@
 fragment OrganizationNameFields on Organization {
   id
+  hudId
   organizationName
 }
 
