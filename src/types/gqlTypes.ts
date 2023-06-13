@@ -2781,6 +2781,7 @@ export type Project = {
   residentialAffiliation?: Maybe<NoYesMissing>;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
+  unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<User>;
 };
@@ -3971,6 +3972,14 @@ export type UnitInput = {
   prefix?: InputMaybe<Scalars['String']>;
   projectId: Scalars['ID'];
   unitTypeId?: InputMaybe<Scalars['ID']>;
+};
+
+export type UnitTypeCapacity = {
+  __typename?: 'UnitTypeCapacity';
+  availability: Scalars['Int'];
+  capacity: Scalars['Int'];
+  id: Scalars['ID'];
+  unitType: Scalars['String'];
 };
 
 export type UnitTypeObject = {
@@ -12344,48 +12353,6 @@ export type GetInventoryQuery = {
   } | null;
 };
 
-export type GetUnitsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  active?: InputMaybe<Scalars['Boolean']>;
-  occupied?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-export type GetUnitsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    units: {
-      __typename?: 'UnitsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Unit';
-        id: string;
-        name?: string | null;
-        startDate: string;
-        endDate?: string | null;
-        unitSize?: number | null;
-        dateUpdated: string;
-        dateCreated: string;
-        unitType?: {
-          __typename?: 'UnitTypeObject';
-          id: string;
-          description?: string | null;
-          bedType?: InventoryBedType | null;
-          unitSize?: number | null;
-          dateUpdated: string;
-          dateCreated: string;
-        } | null;
-        user: { __typename: 'User'; id: string; name: string };
-      }>;
-    };
-  } | null;
-};
-
 export type GetProjectCocQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -13577,6 +13544,75 @@ export type GetEnrollmentServicesQuery = {
         }>;
       }>;
     };
+  } | null;
+};
+
+export type UnitTypeCapacityFieldsFragment = {
+  __typename?: 'UnitTypeCapacity';
+  id: string;
+  unitType: string;
+  capacity: number;
+  availability: number;
+};
+
+export type GetUnitsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  active?: InputMaybe<Scalars['Boolean']>;
+  occupied?: InputMaybe<Scalars['Boolean']>;
+}>;
+
+export type GetUnitsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    units: {
+      __typename?: 'UnitsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Unit';
+        id: string;
+        name?: string | null;
+        startDate: string;
+        endDate?: string | null;
+        unitSize?: number | null;
+        dateUpdated: string;
+        dateCreated: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+          bedType?: InventoryBedType | null;
+          unitSize?: number | null;
+          dateUpdated: string;
+          dateCreated: string;
+        } | null;
+        user: { __typename: 'User'; id: string; name: string };
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectUnitTypesQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectUnitTypesQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    unitTypes: Array<{
+      __typename?: 'UnitTypeCapacity';
+      id: string;
+      unitType: string;
+      capacity: number;
+      availability: number;
+    }>;
   } | null;
 };
 
@@ -14776,6 +14812,14 @@ export const ServiceFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const UnitTypeCapacityFieldsFragmentDoc = gql`
+  fragment UnitTypeCapacityFields on UnitTypeCapacity {
+    id
+    unitType
+    capacity
+    availability
+  }
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -18347,83 +18391,6 @@ export type GetInventoryQueryResult = Apollo.QueryResult<
   GetInventoryQuery,
   GetInventoryQueryVariables
 >;
-export const GetUnitsDocument = gql`
-  query GetUnits(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-    $active: Boolean
-    $occupied: Boolean
-  ) {
-    project(id: $id) {
-      id
-      units(
-        limit: $limit
-        offset: $offset
-        active: $active
-        occupied: $occupied
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...UnitFields
-        }
-      }
-    }
-  }
-  ${UnitFieldsFragmentDoc}
-`;
-
-/**
- * __useGetUnitsQuery__
- *
- * To run a query within a React component, call `useGetUnitsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUnitsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      active: // value for 'active'
- *      occupied: // value for 'occupied'
- *   },
- * });
- */
-export function useGetUnitsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetUnitsQuery, GetUnitsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetUnitsQuery, GetUnitsQueryVariables>(
-    GetUnitsDocument,
-    options
-  );
-}
-export function useGetUnitsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUnitsQuery,
-    GetUnitsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetUnitsQuery, GetUnitsQueryVariables>(
-    GetUnitsDocument,
-    options
-  );
-}
-export type GetUnitsQueryHookResult = ReturnType<typeof useGetUnitsQuery>;
-export type GetUnitsLazyQueryHookResult = ReturnType<
-  typeof useGetUnitsLazyQuery
->;
-export type GetUnitsQueryResult = Apollo.QueryResult<
-  GetUnitsQuery,
-  GetUnitsQueryVariables
->;
 export const GetProjectCocDocument = gql`
   query GetProjectCoc($id: ID!) {
     projectCoc(id: $id) {
@@ -19716,6 +19683,145 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
+>;
+export const GetUnitsDocument = gql`
+  query GetUnits(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $active: Boolean
+    $occupied: Boolean
+  ) {
+    project(id: $id) {
+      id
+      units(
+        limit: $limit
+        offset: $offset
+        active: $active
+        occupied: $occupied
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UnitFields
+        }
+      }
+    }
+  }
+  ${UnitFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUnitsQuery__
+ *
+ * To run a query within a React component, call `useGetUnitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnitsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      active: // value for 'active'
+ *      occupied: // value for 'occupied'
+ *   },
+ * });
+ */
+export function useGetUnitsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUnitsQuery, GetUnitsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetUnitsQuery, GetUnitsQueryVariables>(
+    GetUnitsDocument,
+    options
+  );
+}
+export function useGetUnitsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUnitsQuery,
+    GetUnitsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetUnitsQuery, GetUnitsQueryVariables>(
+    GetUnitsDocument,
+    options
+  );
+}
+export type GetUnitsQueryHookResult = ReturnType<typeof useGetUnitsQuery>;
+export type GetUnitsLazyQueryHookResult = ReturnType<
+  typeof useGetUnitsLazyQuery
+>;
+export type GetUnitsQueryResult = Apollo.QueryResult<
+  GetUnitsQuery,
+  GetUnitsQueryVariables
+>;
+export const GetProjectUnitTypesDocument = gql`
+  query GetProjectUnitTypes($id: ID!) {
+    project(id: $id) {
+      id
+      unitTypes {
+        ...UnitTypeCapacityFields
+      }
+    }
+  }
+  ${UnitTypeCapacityFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectUnitTypesQuery__
+ *
+ * To run a query within a React component, call `useGetProjectUnitTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectUnitTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectUnitTypesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectUnitTypesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >(GetProjectUnitTypesDocument, options);
+}
+export function useGetProjectUnitTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >(GetProjectUnitTypesDocument, options);
+}
+export type GetProjectUnitTypesQueryHookResult = ReturnType<
+  typeof useGetProjectUnitTypesQuery
+>;
+export type GetProjectUnitTypesLazyQueryHookResult = ReturnType<
+  typeof useGetProjectUnitTypesLazyQuery
+>;
+export type GetProjectUnitTypesQueryResult = Apollo.QueryResult<
+  GetProjectUnitTypesQuery,
+  GetProjectUnitTypesQueryVariables
 >;
 export const CreateDirectUploadMutationDocument = gql`
   mutation CreateDirectUploadMutation($input: DirectUploadInput!) {

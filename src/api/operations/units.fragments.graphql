@@ -1,0 +1,6 @@
+fragment UnitTypeCapacityFields on UnitTypeCapacity {
+  id
+  unitType
+  capacity
+  availability
+}

@@ -3714,6 +3714,43 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'UnitTypeCapacity',
+    fields: [
+      {
+        name: 'availability',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'capacity',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'unitType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'UnitTypeObject',
     fields: [
       {

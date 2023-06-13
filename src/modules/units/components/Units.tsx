@@ -1,11 +1,19 @@
 import AddIcon from '@mui/icons-material/Add';
-import { Button, DialogContent, DialogTitle, Paper } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@mui/material';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
+import UnitCapacityTable from './UnitCapacityTable';
+
 import CommonDialog from '@/components/elements/CommonDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -16,7 +24,9 @@ import {
 } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
+  DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
+import FormDialogActionContent from '@/modules/form/components/FormDialogActionContent';
 import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
@@ -37,7 +47,7 @@ const Units = () => {
   const { project } = useProjectDashboardContext();
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-
+  const formRef = useRef<DynamicFormRef>(null);
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
     setErrors(emptyErrorState);
@@ -108,7 +118,7 @@ const Units = () => {
   return (
     <>
       <PageTitle
-        title='Unit Management'
+        title='Units'
         actions={
           <ProjectPermissionsFilter
             id={project.id}
@@ -126,7 +136,11 @@ const Units = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <Paper data-testid='unitTableCard'>
+      <TitleCard title='Capacity' sx={{ mb: 4 }}>
+        <UnitCapacityTable projectId={project.id} />
+      </TitleCard>
+      {/* <Paper data-testid='unitTableCard'> */}
+      <TitleCard title='Unit Management' sx={{ mb: 4 }} headerVariant='border'>
         <GenericTableWithData<
           GetUnitsQuery,
           GetUnitsQueryVariables,
@@ -139,24 +153,35 @@ const Units = () => {
           pagePath='project.units'
           noData='No units.'
         />
-      </Paper>
+      </TitleCard>
       <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
-        <DialogTitle>Create Units</DialogTitle>
+        <DialogTitle>Add Units</DialogTitle>
         <DialogContent sx={{ my: 2 }}>
           {dialogOpen && (
             <DynamicForm
+              ref={formRef}
               definition={UnitsDefinition}
               FormActionProps={{
-                submitButtonText: 'Create Units',
+                submitButtonText: 'Add Units',
                 discardButtonText: 'Cancel',
                 onDiscard: closeDialog,
               }}
               onSubmit={handleCreateUnits}
               loading={createUnitsLoading}
               errors={errors}
+              hideSubmit
             />
           )}
         </DialogContent>
+        <DialogActions>
+          <FormDialogActionContent
+            onSubmit={() => formRef.current && formRef.current.SubmitForm()}
+            onDiscard={closeDialog}
+            discardButtonText='Cancel'
+            submitButtonText='Add Units'
+            submitLoading={createUnitsLoading}
+          />
+        </DialogActions>
       </CommonDialog>
     </>
   );

@@ -91,31 +91,6 @@ query GetInventory($id: ID!) {
   }
 }
 
-query GetUnits(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $active: Boolean
-  $occupied: Boolean
-) {
-  project(id: $id) {
-    id
-    units(
-      limit: $limit
-      offset: $offset
-      active: $active
-      occupied: $occupied
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...UnitFields
-      }
-    }
-  }
-}
-
 query GetProjectCoc($id: ID!) {
   projectCoc(id: $id) {
     ...ProjectCocFields
