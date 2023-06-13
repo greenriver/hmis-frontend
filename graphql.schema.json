@@ -8006,6 +8006,18 @@
             "deprecationReason": null
           },
           {
+            "name": "alcoholDrugUseDisorderFam",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "assessments",
             "description": null,
             "args": [
@@ -8136,6 +8148,30 @@
             "deprecationReason": null
           },
           {
+            "name": "childWelfareMonths",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "childWelfareYears",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RHYNumberofYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "client",
             "description": null,
             "args": [],
@@ -8147,6 +8183,30 @@
                 "name": "Client",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clientEnrolledInPath",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "countOutreachReferralApproaches",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8174,6 +8234,30 @@
             "type": {
               "kind": "SCALAR",
               "name": "ISO8601DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateOfBcpStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "dateOfPathStatus",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8279,6 +8363,30 @@
             "type": {
               "kind": "ENUM",
               "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "eligibleForRhy",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollmentCoc",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8426,6 +8534,30 @@
                 "name": "FilesPaginated",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formerWardChildWelfare",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "formerWardJuvenileJustice",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8589,6 +8721,30 @@
             "deprecationReason": null
           },
           {
+            "name": "juvenileJusticeMonths",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "juvenileJusticeYears",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RHYNumberofYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "lengthOfStay",
             "description": null,
             "args": [],
@@ -8625,12 +8781,48 @@
             "deprecationReason": null
           },
           {
+            "name": "mentalHealthDisorderFam",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "monthsHomelessPastThreeYears",
             "description": null,
             "args": [],
             "type": {
               "kind": "ENUM",
               "name": "MonthsHomelessPastThreeYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "percentAmi",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "PercentAMI",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "physicalDisabilityFam",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -8665,6 +8857,42 @@
             "deprecationReason": null
           },
           {
+            "name": "reasonNoServices",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNoServices",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "reasonNotEnrolled",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReasonNotEnrolled",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "referralSource",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "ReferralSource",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "relationshipToHoH",
             "description": null,
             "args": [],
@@ -8676,6 +8904,18 @@
                 "name": "RelationshipToHoH",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "runawayYouth",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesReasonsForMissingData",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -8746,6 +8986,30 @@
             "deprecationReason": null
           },
           {
+            "name": "sexualOrientation",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "SexualOrientation",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "sexualOrientationOther",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "status",
             "description": null,
             "args": [],
@@ -8768,6 +9032,18 @@
             "type": {
               "kind": "ENUM",
               "name": "TimesHomelessPastThreeYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "unemploymentFam",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "NoYesMissing",
               "ofType": null
             },
             "isDeprecated": false,
@@ -17252,6 +17528,47 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "PercentAMI",
+        "description": "V4.1",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GREATER_THAN_50",
+            "description": "(3) Greater than 50%",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LESS_THAN_30",
+            "description": "(1) Less than 30%",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NUM_30_TO_50",
+            "description": "(2) 30% to 50%",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "PickListOption",
         "description": null,
@@ -20495,6 +20812,47 @@
       },
       {
         "kind": "ENUM",
+        "name": "RHYNumberofYears",
+        "description": "R11.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LESS_THAN_ONE_YEAR",
+            "description": "(1) Less than one year",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NUM_1_TO_2_YEARS",
+            "description": "(2) 1 to 2 years",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NUM_3_TO_5_OR_MORE_YEARS",
+            "description": "(3) 3 to 5 or more years",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "Race",
         "description": "HUD Race (1.7)",
         "fields": null,
@@ -20546,6 +20904,82 @@
           {
             "name": "WHITE",
             "description": "(White) White",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReasonNoServices",
+        "description": "R2.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "(4) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OUT_OF_AGE_RANGE",
+            "description": "(1) Out of age range",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WARD_OF_THE_CRIMINAL_JUSTICE_SYSTEM",
+            "description": "(3) Ward of the criminal justice system",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WARD_OF_THE_STATE",
+            "description": "(2) Ward of the state",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReasonNotEnrolled",
+        "description": "P3.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CLIENT_WAS_FOUND_INELIGIBLE_FOR_PATH",
+            "description": "(1) Client was found ineligible for PATH",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S",
+            "description": "(2) Client was not enrolled for other reason(s)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -20802,7 +21236,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601Date",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
@@ -20986,7 +21420,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "ISO8601Date",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
@@ -21131,7 +21565,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "ISO8601Date",
+              "name": "ISO8601DateTime",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21155,7 +21589,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "ISO8601Date",
+              "name": "ISO8601DateTime",
               "ofType": null
             },
             "isDeprecated": false,
@@ -21484,6 +21918,22 @@
             "deprecationReason": null
           },
           {
+            "name": "identifier",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "neededBy",
             "description": null,
             "args": [],
@@ -21492,7 +21942,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ISO8601Date",
                 "ofType": null
               }
             },
@@ -21508,7 +21958,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ISO8601DateTime",
                 "ofType": null
               }
             },
@@ -21745,6 +22195,119 @@
           {
             "name": "UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED",
             "description": "(3) Unsuccessful referral: provider rejected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ReferralSource",
+        "description": "R1.1",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CHILD_WELFARE_CPS",
+            "description": "(30) Child Welfare/CPS",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HOTLINE",
+            "description": "(28) Hotline",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INDIVIDUAL_PARENT_GUARDIAN_RELATIVE_FRIEND_FOSTER_PARENT_OTHER_INDIVIDUAL",
+            "description": "(2) Individual: Parent/Guardian/Relative/Friend/Foster Parent/Other Individual",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "JUVENILE_JUSTICE",
+            "description": "(34) Juvenile Justice",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LAW_ENFORCEMENT_POLICE",
+            "description": "(35) Law Enforcement/ Police",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MENTAL_HOSPITAL",
+            "description": "(37) Mental Hospital",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER_ORGANIZATION",
+            "description": "(39) Other organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OUTREACH_PROJECT",
+            "description": "(7) Outreach Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OUTREACH_PROJECT_OTHER",
+            "description": "(10) Outreach project: other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RESIDENTIAL_PROJECT",
+            "description": "(18) Residential Project",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SCHOOL",
+            "description": "(38) School",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SELF_REFERRAL",
+            "description": "(1) Self-referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "TEMPORARY_SHELTER",
+            "description": "(11) Temporary Shelter",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -23618,6 +24181,77 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "SexualOrientation",
+        "description": "R3.1",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "BISEXUAL",
+            "description": "(4) Bisexual",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_DOESN_T_KNOW",
+            "description": "(8) Client doesn't know",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CLIENT_REFUSED",
+            "description": "(9) Client refused",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATA_NOT_COLLECTED",
+            "description": "(99) Data not collected",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GAY",
+            "description": "(2) Gay",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HETEROSEXUAL",
+            "description": "(1) Heterosexual",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "LESBIAN",
+            "description": "(3) Lesbian",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER",
+            "description": "(6) Other",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "QUESTIONING_UNSURE",
+            "description": "(5) Questioning / unsure",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
