@@ -1,6 +1,7 @@
 import { Grid, Stack } from '@mui/material';
 
 import AdminReferralPostingDetails from './AdminReferralPostingDetails';
+import AdminReferralPostingForm from './AdminReferralPostingForm';
 
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -56,6 +57,7 @@ const AdminReferralPosting: React.FC = () => {
                 <CommonLabeledTextBlock title='Status Note'>
                   {referralPosting.statusNote}
                 </CommonLabeledTextBlock>
+                <AdminReferralPostingForm referralPosting={referralPosting} />
               </Stack>
             </CommonCard>
           </Stack>

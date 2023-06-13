@@ -6,14 +6,14 @@
       "required": true,
       "text": "Referral Status",
       "fieldName": "status",
-      "pickListReference": "REFERRAL_POSTING_STATUSES"
+      "pickListReference": "ASSIGNED_REFERRAL_POSTING_STATUSES"
     },
     {
       "type": "CHOICE",
-      "linkId": "denialReasonId",
+      "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
-      "fieldName": "denialReasonId",
+      "fieldName": "denialReason",
       "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES",
       "enableBehavior": "ALL",
       "enableWhen": [

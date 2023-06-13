@@ -1,0 +1,58 @@
+{
+  "item": [
+    {
+      "type": "CHOICE",
+      "linkId": "denialReason",
+      "required": true,
+      "text": "Reason for Denial",
+      "fieldName": "denialReason",
+      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
+    },
+    {
+      "type": "CHOICE",
+      "linkId": "status",
+      "required": true,
+      "text": "Referral Status",
+      "fieldName": "status",
+      "pickListReference": "DENIED_PENDING_REFERRAL_POSTING_STATUSES"
+    },
+    {
+      "type": "BOOLEAN",
+      "linkId": "reRequest",
+      "required": false,
+      "text": "Re-Request",
+      "fieldName": "reRequest",
+      "enableBehavior": "ALL",
+      "enableWhen": [
+        {
+          "question": "status",
+          "operator": "EQUAL",
+          "answerCode": "denied_status"
+        }
+      ]
+    },
+    {
+      "type": "CHOICE",
+      "linkId": "referralResult",
+      "required": true,
+      "text": "Referral Result",
+      "fieldName": "referralResult",
+      "pickListReference": "REFERRAL_RESULT_TYPES",
+      "enableBehavior": "ALL",
+      "enableWhen": [
+        {
+          "question": "status",
+          "operator": "EQUAL",
+          "answerCode": "denied_status"
+        }
+      ]
+    },
+    {
+      "type": "TEXT",
+      "linkId": "denialNote",
+      "required": false,
+      "text": "Denial Note",
+      "fieldName": "denialNote"
+    }
+  ]
+}

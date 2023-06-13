@@ -1,3 +1,4 @@
+import adminReferralPosting from '@/modules/form/data/adminReferralPosting.json';
 import beds from '@/modules/form/data/beds.json';
 import referralPosting from '@/modules/form/data/referralPosting.json';
 import search from '@/modules/form/data/search.json';
@@ -17,3 +18,6 @@ export const UnitsDefinition: FormDefinitionJsonFieldsFragment = JSON.parse(
 
 export const ReferralPostingDefinition: FormDefinitionJsonFieldsFragment =
   JSON.parse(JSON.stringify(referralPosting));
+
+export const AdminReferralPostingDefinition: FormDefinitionJsonFieldsFragment =
+  JSON.parse(JSON.stringify(adminReferralPosting));

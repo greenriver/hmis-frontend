@@ -6,7 +6,10 @@ import NotCollectedText from '@/modules/form/components/viewable/item/NotCollect
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
+import {
+  ReferralPostingDetailFieldsFragment,
+  ReferralPostingStatus,
+} from '@/types/gqlTypes';
 
 interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
@@ -24,14 +27,20 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
       />,
     ],
     ['Referral ID', referralPosting.referralIdentifier],
-    ['Project Name', referralPosting.referredFrom],
     ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
-    ['Referred By', referralPosting.referredBy],
+    ['Project Name', referralPosting.referredFrom],
+    ['Organization Name', referralPosting.organizationName],
   ];
+  if (referralPosting.status === ReferralPostingStatus.DeniedPendingStatus) {
+    list.push([
+      'Referral denied at',
+      parseAndFormatDate(referralPosting.statusNoteUpdatedAt),
+    ]);
+    list.push(['Denied by', referralPosting.statusNoteUpdatedBy]);
+  }
 
   return (
     <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
-      <Typography variant='h5'>{referralPosting.organizationName}</Typography>
       {list
         .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
         .map(([label, value]) => (
