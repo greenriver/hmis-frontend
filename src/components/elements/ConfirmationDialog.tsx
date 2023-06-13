@@ -30,6 +30,7 @@ export interface ConfirmationDialogProps extends DialogProps {
   errorState?: ErrorState;
   hideCancelButton?: boolean;
   renderError?: ErrorRenderFn;
+  cancelText?: string;
 }
 
 const ConfirmationDialog = ({
@@ -39,6 +40,7 @@ const ConfirmationDialog = ({
   children,
   loading,
   confirmText = 'Confirm',
+  cancelText,
   color,
   errorState,
   hideCancelButton,
@@ -52,7 +54,7 @@ const ConfirmationDialog = ({
         sx={{
           py: 3,
           '&.MuiDialogTitle-root': {
-            textTransform: 'unset',
+            textTransform: 'capitalize',
             color: 'text.primary',
             fontSize: 20,
             fontWeight: 600,
@@ -91,7 +93,7 @@ const ConfirmationDialog = ({
               variant='gray'
               data-testid='cancelDialogAction'
             >
-              {unconfirmable ? 'Close' : 'Cancel'}
+              {cancelText || unconfirmable ? 'Close' : 'Cancel'}
             </Button>
           )}
           {!unconfirmable && (

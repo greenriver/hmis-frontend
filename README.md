@@ -79,14 +79,6 @@ These tests run against a real warehouse backend. Make sure you have the backend
 1. Set environment variables `CYPRESS_EMAIL` and `CYPRESS_PASSWORD` to valid local credentials for logging into the warehouse.
 2. `yarn cypress open`
 
-#### Cypress Mocked Tests
-
-Tests under `mocked/` run against a mocked server. These are the ones that run on CI.
-
-1. Start the mock server: `cd serverMock && yarn && yarn start`
-2. In another tab, `HMIS_SERVER_URL=http://localhost:4000 yarn dev`
-3. In another tab, `yarn cypress open`
-4. Only the tests under `mocked/` will work
 
 ## Backend configuration
 
