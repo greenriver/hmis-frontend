@@ -14,7 +14,6 @@
       "required": true,
       "text": "Reason for Denial",
       "fieldName": "denialReason",
-      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES",
       "enableBehavior": "ALL",
       "enableWhen": [
         {
