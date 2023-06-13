@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -15,9 +15,13 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
-    header: 'Requested Date',
+    header: 'ID',
+    render: 'referralIdentifier',
+  },
+  {
+    header: 'Referral Date',
     render: (row: ReferralPostingFieldsFragment) =>
-      parseAndFormatDate(row.referralDate),
+      parseAndFormatDateTime(row.referralDate),
   },
   {
     header: 'HoH',
@@ -41,7 +45,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Assigned Date',
     render: (row: ReferralPostingFieldsFragment) =>
-      parseAndFormatDate(row.assignedDate),
+      parseAndFormatDateTime(row.assignedDate),
   },
 ];
 

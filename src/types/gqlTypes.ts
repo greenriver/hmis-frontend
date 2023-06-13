@@ -3243,7 +3243,7 @@ export type ReferralHouseholdMember = {
 /** A referral for a household of one or more clients */
 export type ReferralPosting = {
   __typename?: 'ReferralPosting';
-  assignedDate: Scalars['ISO8601Date'];
+  assignedDate: Scalars['ISO8601DateTime'];
   chronic?: Maybe<Scalars['Boolean']>;
   denialNote?: Maybe<Scalars['String']>;
   denialReason?: Maybe<Scalars['String']>;
@@ -3256,7 +3256,7 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
   organizationName?: Maybe<Scalars['String']>;
   postingIdentifier?: Maybe<Scalars['ID']>;
-  referralDate: Scalars['ISO8601Date'];
+  referralDate: Scalars['ISO8601DateTime'];
   referralIdentifier?: Maybe<Scalars['ID']>;
   referralNotes?: Maybe<Scalars['String']>;
   referralRequest?: Maybe<ReferralRequest>;
@@ -3267,9 +3267,9 @@ export type ReferralPosting = {
   score?: Maybe<Scalars['Int']>;
   status: ReferralPostingStatus;
   statusNote?: Maybe<Scalars['String']>;
-  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   statusNoteUpdatedBy?: Maybe<Scalars['String']>;
-  statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusUpdatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
   unitType: UnitTypeObject;
 };
@@ -3321,8 +3321,9 @@ export type ReferralPostingsPaginated = {
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
   id: Scalars['ID'];
-  neededBy: Scalars['String'];
-  requestedOn: Scalars['String'];
+  identifier: Scalars['ID'];
+  neededBy: Scalars['ISO8601Date'];
+  requestedOn: Scalars['ISO8601DateTime'];
   requestorEmail: Scalars['String'];
   requestorName: Scalars['String'];
   requestorPhone: Scalars['String'];
@@ -11252,6 +11253,7 @@ export type SubmitFormMutation = {
           __typename?: 'ReferralRequest';
           id: string;
           requestedOn: string;
+          identifier: string;
           neededBy: string;
           requestorName: string;
           requestorPhone: string;
@@ -12506,6 +12508,7 @@ export type GetProjectReferralRequestsQuery = {
         __typename?: 'ReferralRequest';
         id: string;
         requestedOn: string;
+        identifier: string;
         neededBy: string;
         requestorName: string;
         requestorPhone: string;
@@ -13146,6 +13149,7 @@ export type ReferralRequestFieldsFragment = {
   __typename?: 'ReferralRequest';
   id: string;
   requestedOn: string;
+  identifier: string;
   neededBy: string;
   requestorName: string;
   requestorPhone: string;
@@ -14723,6 +14727,7 @@ export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
     id
     requestedOn
+    identifier
     unitType {
       ...UnitTypeFields
     }

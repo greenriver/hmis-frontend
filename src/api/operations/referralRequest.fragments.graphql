@@ -1,6 +1,7 @@
 fragment ReferralRequestFields on ReferralRequest {
   id
   requestedOn
+  identifier
   unitType {
     ...UnitTypeFields
   }

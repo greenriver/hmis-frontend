@@ -3,7 +3,10 @@ import { useMemo } from 'react';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import {
   GetProjectReferralRequestsDocument,
@@ -31,22 +34,16 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
   const columns = useMemo<ColumnDef<ReferralRequestFieldsFragment>[]>(
     () => [
       {
-        header: 'Requested Date',
-        render: (row: ReferralRequestFieldsFragment) =>
-          parseAndFormatDate(row.requestedOn),
+        header: 'ID',
+        render: 'identifier',
       },
       {
-        header: 'Unit Type',
+        header: 'Request Date',
         render: (row: ReferralRequestFieldsFragment) =>
-          row.unitType.description,
+          parseAndFormatDateTime(row.requestedOn),
       },
       {
-        header: 'Estimated Date Needed',
-        render: (row: ReferralRequestFieldsFragment) =>
-          parseAndFormatDate(row.neededBy),
-      },
-      {
-        header: 'Requestor Details',
+        header: 'Requested By',
         render: (row: ReferralRequestFieldsFragment) => (
           <>
             {`${row.requestorName} <${row.requestorEmail}>`}
@@ -56,7 +53,17 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
         ),
       },
       {
-        header: 'Action',
+        header: 'Estimated Date Needed',
+        render: (row: ReferralRequestFieldsFragment) =>
+          parseAndFormatDate(row.neededBy),
+      },
+      {
+        header: 'Unit Type',
+        render: (row: ReferralRequestFieldsFragment) =>
+          row.unitType.description,
+      },
+      {
+        key: 'action',
         linkTreatment: true,
         render: (referralRequest: ReferralRequestFieldsFragment) => (
           <DeleteMutationButton<
@@ -65,7 +72,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
           >
             queryDocument={VoidReferralRequestDocument}
             variables={{ id: referralRequest.id }}
-            idPath={'data.voidReferralRequest.record.id'}
+            idPath='voidReferralRequest.record.id'
             recordName='Referral Request'
             verb='cancel'
             onSuccess={() => {
@@ -76,15 +83,21 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
               cancelText: 'close',
             }}
             confirmationDialogContent={
-              <p>{`This will cancel the referral request at ${project.projectName} for ${referralRequest.unitType.description} requested by ${referralRequest.requestorName} for the estimated date needed of ${referralRequest.neededBy}.`}</p>
+              <p>
+                This will cancel the referral request for a{' '}
+                <b>{referralRequest.unitType.description}</b> requested by{' '}
+                <b>{referralRequest.requestorName}</b> on{' '}
+                <b>{parseAndFormatDateTime(referralRequest.requestedOn)}</b>.
+              </p>
             }
+            ButtonProps={{ size: 'small' }}
           >
             Cancel Request
           </DeleteMutationButton>
         ),
       },
     ],
-    [project.id, project.projectName]
+    [project.id]
   );
 
   return (
