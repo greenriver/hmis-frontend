@@ -75,7 +75,17 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   });
 
   if (readOnly) {
-    return <DynamicView values={initialValues} definition={formDefinition} />;
+    return (
+      <DynamicView
+        values={initialValues}
+        definition={formDefinition}
+        GridProps={{
+          columnSpacing: 0,
+          rowSpacing: 2,
+          spacing: 0,
+        }}
+      />
+    );
   }
 
   return (
