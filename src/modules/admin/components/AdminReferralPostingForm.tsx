@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
@@ -10,6 +10,7 @@ import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import {
+  FormDefinitionJsonFieldsFragment,
   ReferralPostingDetailFieldsFragment,
   ReferralPostingInput,
   useUpdateReferralPostingMutation,
@@ -24,6 +25,20 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   referralPosting,
   readOnly = false,
 }) => {
+  const formDefinition = useMemo<FormDefinitionJsonFieldsFragment>(() => {
+    if (referralPosting.postingIdentifier) {
+      // came from LINK, show re-request option
+      return AdminReferralPostingDefinition;
+    } else {
+      // referral request originated locally, hide re-request option
+      return {
+        ...AdminReferralPostingDefinition,
+        item: AdminReferralPostingDefinition.item.filter(
+          (i) => i.linkId !== 'reRequest'
+        ),
+      };
+    }
+  }, [referralPosting.postingIdentifier]);
   const [errors, setErrors] = useState(emptyErrorState);
   const [mutate, { loading }] = useUpdateReferralPostingMutation({
     onCompleted: (data) => {
@@ -37,7 +52,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {
       const input = transformSubmitValues({
-        definition: AdminReferralPostingDefinition,
+        definition: formDefinition,
         values,
         keyByFieldName: true,
       }) as ReferralPostingInput;
@@ -49,26 +64,23 @@ const AdminReferralPostingForm: React.FC<Props> = ({
         },
       });
     },
-    [mutate, referralPosting.id]
+    [mutate, referralPosting.id, formDefinition]
   );
 
   const initialValues = useInitialFormValues({
-    definition: AdminReferralPostingDefinition,
+    definition: formDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
+    // there may be some way to use this to set re-request
+    //localConstants: { reRequest: 'true' },
   });
 
   if (readOnly) {
-    return (
-      <DynamicView
-        values={initialValues}
-        definition={AdminReferralPostingDefinition}
-      />
-    );
+    return <DynamicView values={initialValues} definition={formDefinition} />;
   }
 
   return (
     <DynamicForm
-      definition={AdminReferralPostingDefinition}
+      definition={formDefinition}
       FormActionProps={{
         submitButtonText: 'Save',
         discardButtonText: 'Cancel',
