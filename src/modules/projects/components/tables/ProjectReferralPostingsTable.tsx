@@ -2,7 +2,10 @@ import { useCallback } from 'react';
 
 import { ColumnDef } from '@/components/elements/GenericTable';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
@@ -21,7 +24,7 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Referral Date',
     render: (row: ReferralPostingFieldsFragment) =>
-      parseAndFormatDateTime(row.referralDate),
+      parseAndFormatDate(row.referralDate),
   },
   {
     header: 'HoH',
