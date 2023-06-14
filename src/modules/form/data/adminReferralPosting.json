@@ -18,10 +18,10 @@
     },
     {
       "type": "BOOLEAN",
-      "linkId": "reRequest",
+      "linkId": "resendReferralRequest",
       "required": false,
       "text": "Re-Request",
-      "fieldName": "reRequest",
+      "fieldName": "resendReferralRequest",
       "enableBehavior": "ALL",
       "enableWhen": [
         {

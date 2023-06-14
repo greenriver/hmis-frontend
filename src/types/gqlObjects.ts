@@ -3409,10 +3409,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       {
-        name: 'organizationName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'postingIdentifier',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
@@ -4667,12 +4663,12 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
-        name: 'reRequest',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
         name: 'referralResult',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'resendReferralRequest',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'status', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {

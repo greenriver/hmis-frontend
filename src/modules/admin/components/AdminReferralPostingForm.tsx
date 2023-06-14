@@ -34,7 +34,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
       return {
         ...AdminReferralPostingDefinition,
         item: AdminReferralPostingDefinition.item.filter(
-          (i) => i.linkId !== 'reRequest'
+          (i) => i.linkId !== 'resendReferralRequest'
         ),
       };
     }
@@ -71,7 +71,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
     definition: formDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
     // there may be some way to use this to set re-request
-    //localConstants: { reRequest: 'true' },
+    //localConstants: { resendReferralRequest: 'true' },
   });
 
   if (readOnly) {

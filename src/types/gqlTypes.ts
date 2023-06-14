@@ -3258,8 +3258,9 @@ export type ReferralPosting = {
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
-  organizationName?: Maybe<Scalars['String']>;
+  organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']>;
+  project?: Maybe<Project>;
   referralDate: Scalars['ISO8601DateTime'];
   referralIdentifier?: Maybe<Scalars['ID']>;
   referralNotes?: Maybe<Scalars['String']>;
@@ -3281,8 +3282,8 @@ export type ReferralPosting = {
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']>;
   denialReason?: InputMaybe<Scalars['ID']>;
-  reRequest?: InputMaybe<Scalars['Boolean']>;
   referralResult?: InputMaybe<Scalars['ID']>;
+  resendReferralRequest?: InputMaybe<Scalars['Boolean']>;
   status?: InputMaybe<Scalars['ID']>;
   statusNote?: InputMaybe<Scalars['String']>;
 };
@@ -12561,7 +12562,11 @@ export type GetProjectReferralPostingsQuery = {
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedBy?: string | null;
-        organizationName?: string | null;
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        } | null;
       }>;
     };
   } | null;
@@ -12596,7 +12601,16 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
-    organizationName?: string | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectType?: ProjectType | null;
+    } | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    } | null;
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
@@ -12972,7 +12986,16 @@ export type UpdateReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
-      organizationName?: string | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectType?: ProjectType | null;
+      } | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -13060,7 +13083,11 @@ export type GetDeniedPendingReferralPostingsQuery = {
       status: ReferralPostingStatus;
       assignedDate: string;
       statusUpdatedBy?: string | null;
-      organizationName?: string | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
     }>;
   };
 };
@@ -13077,7 +13104,11 @@ export type ReferralPostingFieldsFragment = {
   status: ReferralPostingStatus;
   assignedDate: string;
   statusUpdatedBy?: string | null;
-  organizationName?: string | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  } | null;
 };
 
 export type ReferralPostingDetailFieldsFragment = {
@@ -13103,7 +13134,16 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
-  organizationName?: string | null;
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectType?: ProjectType | null;
+  } | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  } | null;
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -14673,7 +14713,10 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     status
     assignedDate
     statusUpdatedBy
-    organizationName
+    organization {
+      id
+      organizationName
+    }
   }
 `;
 export const ReferralPostingDetailFieldsFragmentDoc = gql`
@@ -14699,7 +14742,14 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusNoteUpdatedBy
     statusUpdatedAt
     statusUpdatedBy
-    organizationName
+    project {
+      id
+      projectType
+    }
+    organization {
+      id
+      organizationName
+    }
     unitType {
       id
       description
