@@ -1,6 +1,12 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AftercareProvided: {
+    INVALID: 'Invalid Value',
+    NO: 'No',
+    YES: 'Yes',
+    CLIENT_REFUSED: 'Client refused',
+  },
   AgeRange: {
     Under5: 'Under 5',
     Ages5to12: '5-12',
@@ -84,6 +90,28 @@ export const HmisEnums = {
     AGE_OLDEST_TO_YOUNGEST: 'Age: Oldest to Youngest',
     AGE_YOUNGEST_TO_OLDEST: 'Age: Youngest to Oldest',
   },
+  CmExitReason: {
+    INVALID: 'Invalid Value',
+    ACCOMPLISHED_GOALS_AND_OR_OBTAINED_SERVICES_AND_NO_LONGER_NEEDS_CM:
+      'Accomplished goals and/or obtained services and no longer needs CM',
+    TRANSFERRED_TO_ANOTHER_HUD_VASH_PROGRAM_SITE:
+      'Transferred to another HUD/VASH program site',
+    FOUND_CHOSE_OTHER_HOUSING: 'Found/chose other housing',
+    DID_NOT_COMPLY_WITH_HUD_VASH_CM: 'Did not comply with HUD/VASH CM',
+    EVICTION_AND_OR_OTHER_HOUSING_RELATED_ISSUES:
+      'Eviction and/or other housing related issues',
+    UNHAPPY_WITH_HUD_VASH_HOUSING: 'Unhappy with HUD/VASH housing',
+    NO_LONGER_FINANCIALLY_ELIGIBLE_FOR_HUD_VASH_VOUCHER:
+      'No longer financially eligible for HUD/VASH voucher',
+    VETERAN_TOO_ILL_TO_PARTICIPATE_AT_THIS_TIME:
+      'Veteran too ill to participate at this time',
+    VETERAN_IS_INCARCERATED: 'Veteran is incarcerated',
+    VETERAN_IS_DECEASED: 'Veteran is deceased',
+    OTHER: 'Other',
+    NO_LONGER_INTERESTED_IN_PARTICIPATING_IN_THIS_PROGRAM:
+      'No longer interested in participating in this program',
+    VETERAN_CANNOT_BE_LOCATED: 'Veteran cannot be located',
+  },
   Component: {
     ADDRESS: 'Client Address input',
     ALERT_ERROR: 'Display text as an error alert',
@@ -105,6 +133,41 @@ export const HmisEnums = {
     RADIO_BUTTONS_VERTICAL:
       'Render a choice input item as vertical radio buttons',
     SSN: 'SSN input component',
+  },
+  CountExchangeForSex: {
+    INVALID: 'Invalid Value',
+    NUM_1_3: '1-3',
+    NUM_4_7: '4-7',
+    NUM_8_11: '8-11',
+    NUM_12_OR_MORE: '12 or more',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  CurrentEdStatus: {
+    INVALID: 'Invalid Value',
+    PURSUING_A_HIGH_SCHOOL_DIPLOMA_OR_GED:
+      'Pursuing a high school diploma or GED',
+    PURSUING_ASSOCIATE_S_DEGREE: "Pursuing Associate's Degree",
+    PURSUING_BACHELOR_S_DEGREE: "Pursuing Bachelor's Degree",
+    PURSUING_GRADUATE_DEGREE: 'Pursuing Graduate Degree',
+    PURSUING_OTHER_POST_SECONDARY_CREDENTIAL:
+      'Pursuing other post-secondary credential',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  CurrentSchoolAttended: {
+    INVALID: 'Invalid Value',
+    NOT_CURRENTLY_ENROLLED_IN_ANY_SCHOOL_OR_EDUCATIONAL_COURSE:
+      'Not currently enrolled in any school or educational course',
+    CURRENTLY_ENROLLED_BUT_NOT_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+      'Currently enrolled but NOT attending regularly (when school or the course is in session)',
+    CURRENTLY_ENROLLED_AND_ATTENDING_REGULARLY_WHEN_SCHOOL_OR_THE_COURSE_IS_IN_SESSION:
+      'Currently enrolled and attending regularly (when school or the course is in session)',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   DOBDataQuality: {
     INVALID: 'Invalid Value',
@@ -222,6 +285,14 @@ export const HmisEnums = {
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
   DisabledDisplay: { HIDDEN: 'HIDDEN', PROTECTED: 'PROTECTED' },
+  EmploymentType: {
+    INVALID: 'Invalid Value',
+    FULL_TIME: 'Full-time',
+    PART_TIME: 'Part-time',
+    SEASONAL_SPORADIC_INCLUDING_DAY_LABOR:
+      'Seasonal / sporadic (including day labor)',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   EnableBehavior: { ALL: 'ALL', ANY: 'ANY' },
   EnableOperator: {
     ENABLED:
@@ -300,6 +371,18 @@ export const HmisEnums = {
       'Referral to Non-continuum services: Ineligible for continuum services',
     REFERRAL_TO_NON_CONTINUUM_SERVICES_NO_AVAILABILITY_IN_CONTINUUM_SERVICES:
       'Referral to Non-continuum services: No availability in continuum services',
+  },
+  ExpelledReason: {
+    INVALID: 'Invalid Value',
+    CRIMINAL_ACTIVITY_DESTRUCTION_OF_PROPERTY_VIOLENCE:
+      'Criminal activity/destruction of property/violence',
+    NON_COMPLIANCE_WITH_PROJECT_RULES: 'Non-compliance with project rules',
+    NON_PAYMENT_OF_RENT_OCCUPANCY_CHARGE:
+      'Non-payment of rent/occupancy charge',
+    REACHED_MAXIMUM_TIME_ALLOWED_BY_PROJECT:
+      'Reached maximum time allowed by project',
+    PROJECT_TERMINATED: 'Project terminated',
+    UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
   FeelingFrequency: {
     INVALID: 'Invalid Value',
@@ -455,6 +538,25 @@ export const HmisEnums = {
       'Households with at least one adult and one child',
     HOUSEHOLDS_WITH_ONLY_CHILDREN: 'Households with only children',
   },
+  HousingAssessmentAtExit: {
+    INVALID: 'Invalid Value',
+    ABLE_TO_MAINTAIN_THE_HOUSING_THEY_HAD_AT_PROJECT_ENTRY:
+      'Able to maintain the housing they had at project entry',
+    MOVED_TO_NEW_HOUSING_UNIT: 'Moved to new housing unit',
+    MOVED_IN_WITH_FAMILY_FRIENDS_ON_A_TEMPORARY_BASIS:
+      'Moved in with family/friends on a temporary basis',
+    MOVED_IN_WITH_FAMILY_FRIENDS_ON_A_PERMANENT_BASIS:
+      'Moved in with family/friends on a permanent basis',
+    MOVED_TO_A_TRANSITIONAL_OR_TEMPORARY_HOUSING_FACILITY_OR_PROGRAM:
+      'Moved to a transitional or temporary housing facility or program',
+    CLIENT_BECAME_HOMELESS_MOVING_TO_A_SHELTER_OR_OTHER_PLACE_UNFIT_FOR_HUMAN_HABITATION:
+      'Client became homeless - moving to a shelter or other place unfit for human habitation',
+    CLIENT_WENT_TO_JAIL_PRISON: 'Client went to jail/prison',
+    CLIENT_DIED: 'Client died',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   HousingType: {
     INVALID: 'Invalid Value',
     SITE_BASED_SINGLE_SITE: 'Site-based - single site',
@@ -498,6 +600,25 @@ export const HmisEnums = {
     OPEN_CHOICE: 'OPEN_CHOICE',
     STRING: 'STRING',
     TEXT: 'TEXT',
+  },
+  LastGradeCompleted: {
+    INVALID: 'Invalid Value',
+    LESS_THAN_GRADE_5: 'Less than grade 5',
+    GRADES_5_6: 'Grades 5-6',
+    GRADES_7_8: 'Grades 7-8',
+    GRADES_9_11: 'Grades 9-11',
+    GRADE_12: 'Grade 12',
+    SCHOOL_PROGRAM_DOES_NOT_HAVE_GRADE_LEVELS:
+      'School program does not have grade levels',
+    GED: 'GED',
+    SOME_COLLEGE: 'Some college',
+    ASSOCIATE_S_DEGREE: "Associate's degree",
+    BACHELOR_S_DEGREE: "Bachelor's degree",
+    GRADUATE_DEGREE: 'Graduate degree',
+    VOCATIONAL_CERTIFICATION: 'Vocational certification',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   LivingSituation: {
     INVALID: 'Invalid Value',
@@ -587,6 +708,22 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  MostRecentEdStatus: {
+    INVALID: 'Invalid Value',
+    K12_GRADUATED_FROM_HIGH_SCHOOL: 'K12: Graduated from high school',
+    K12_OBTAINED_GED: 'K12: Obtained GED',
+    K12_DROPPED_OUT: 'K12: Dropped out',
+    K12_SUSPENDED: 'K12: Suspended',
+    K12_EXPELLED: 'K12: Expelled',
+    HIGHER_EDUCATION_PURSUING_A_CREDENTIAL_BUT_NOT_CURRENTLY_ATTENDING:
+      'Higher education: Pursuing a credential but not currently attending',
+    HIGHER_EDUCATION_DROPPED_OUT: 'Higher education: Dropped out',
+    HIGHER_EDUCATION_OBTAINED_A_CREDENTIAL_DEGREE:
+      'Higher education: Obtained a credential/degree',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   NameDataQuality: {
     INVALID: 'Invalid Value',
     FULL_NAME_REPORTED: 'Full name',
@@ -619,6 +756,13 @@ export const HmisEnums = {
     NO: 'No',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  NotEmployedReason: {
+    INVALID: 'Invalid Value',
+    LOOKING_FOR_WORK: 'Looking for work',
+    UNABLE_TO_WORK: 'Unable to work',
+    NOT_LOOKING_FOR_WORK: 'Not looking for work',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   OrganizationSortOption: { NAME: 'NAME' },
@@ -667,6 +811,13 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     PLACED_ON_PRIORITIZATION_LIST: 'Placed on prioritization list',
     NOT_PLACED_ON_PRIORITIZATION_LIST: 'Not placed on prioritization list',
+  },
+  ProjectCompletionStatus: {
+    INVALID: 'Invalid Value',
+    COMPLETED_PROJECT: 'Completed project',
+    YOUTH_VOLUNTARILY_LEFT_EARLY: 'Youth voluntarily left early',
+    YOUTH_WAS_EXPELLED_OR_OTHERWISE_INVOLUNTARILY_DISCHARGED_FROM_PROJECT:
+      'Youth was expelled or otherwise involuntarily discharged from project',
   },
   ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
@@ -809,6 +960,20 @@ export const HmisEnums = {
     UNRELATED_HOUSEHOLD_MEMBER: 'Unrelated household member',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  RentalSubsidyType: {
+    EHV: 'Emergency Housing Voucher',
+    FUP: 'Family Unification Program Voucher (FUP)',
+    FYI: 'Foster Youth to Independence Initiative (FYI)',
+    GDP_TIP: 'GPD TIP housing subsidy',
+    HCV: 'HCV voucher (tenant or project based) (not dedicated)',
+    INVALID: 'Invalid Value',
+    OTHER: 'Other permanent housing dedicated for formerly homeless persons',
+    PHU: 'Public housing unit',
+    PSH: 'Permanent Supportive Housing',
+    RBC: 'Rental by client, with other ongoing housing subsidy',
+    RRH: 'RRH or equivalent subsidy',
+    VASH: 'VASH housing subsidy',
+  },
   ResidencePriorLengthOfStay: {
     ONE_NIGHT_OR_LESS: 'One night or less',
     TWO_TO_SIX_NIGHTS: 'Two to six nights',
@@ -828,6 +993,19 @@ export const HmisEnums = {
     INVALID: 'Invalid Value',
     FULL_SSN_REPORTED: 'Full SSN',
     APPROXIMATE_OR_PARTIAL_SSN_REPORTED: 'Partial SSN',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  SchoolStatus: {
+    INVALID: 'Invalid Value',
+    ATTENDING_SCHOOL_REGULARLY: 'Attending school regularly',
+    ATTENDING_SCHOOL_IRREGULARLY: 'Attending school irregularly',
+    GRADUATED_FROM_HIGH_SCHOOL: 'Graduated from high school',
+    OBTAINED_GED: 'Obtained GED',
+    DROPPED_OUT: 'Dropped out',
+    SUSPENDED: 'Suspended',
+    EXPELLED: 'Expelled',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
@@ -1045,6 +1223,18 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  SubsidyInformation: {
+    INVALID: 'Invalid Value',
+    WITHOUT_A_SUBSIDY_1: 'Without a subsidy 1',
+    WITH_THE_SUBSIDY_THEY_HAD_AT_PROJECT_ENTRY_1:
+      'With the subsidy they had at project entry 1',
+    WITH_AN_ON_GOING_SUBSIDY_ACQUIRED_SINCE_PROJECT_ENTRY_1:
+      'With an on-going subsidy acquired since project entry 1',
+    BUT_ONLY_WITH_OTHER_FINANCIAL_ASSISTANCE_1:
+      'But only with other financial assistance 1',
+    WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
+    WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
+  },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
@@ -1099,5 +1289,11 @@ export const HmisEnums = {
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  WorkerResponse: {
+    INVALID: 'Invalid Value',
+    NO: 'No',
+    YES: 'Yes',
+    WORKER_DOES_NOT_KNOW: 'Worker does not know',
   },
 };
