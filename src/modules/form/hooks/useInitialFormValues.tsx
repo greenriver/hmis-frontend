@@ -43,7 +43,7 @@ const useInitialFormValues = ({
       ...initialValuesFromDefinition,
       ...initialValuesFromRecord,
     };
-    console.debug('Initial form values:', values, 'from', record);
+    // console.debug('Initial form values:', values, 'from', record);
     return values;
   }, [record, definition, itemMap, localConstants]);
 

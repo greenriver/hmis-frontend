@@ -10,11 +10,10 @@
     },
     {
       "type": "CHOICE",
-      "linkId": "denialReason",
+      "linkId": "denialReasonId",
       "required": true,
       "text": "Reason for Denial",
       "fieldName": "denialReason",
-      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES",
       "enableBehavior": "ALL",
       "enableWhen": [
         {
@@ -22,7 +21,8 @@
           "operator": "EQUAL",
           "answerCode": "denied_pending_status"
         }
-      ]
+      ],
+      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
     },
     {
       "type": "TEXT",

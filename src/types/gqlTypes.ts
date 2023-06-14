@@ -1230,21 +1230,32 @@ export type EnableWhen = {
 export type Enrollment = {
   __typename?: 'Enrollment';
   access: EnrollmentAccess;
+  alcoholDrugUseDisorderFam?: Maybe<NoYesMissing>;
   assessments: AssessmentsPaginated;
   ceAssessments: CeAssessmentsPaginated;
+  childWelfareMonths?: Maybe<Scalars['Int']>;
+  childWelfareYears?: Maybe<RhyNumberofYears>;
   client: Client;
+  clientEnrolledInPath?: Maybe<NoYesMissing>;
+  countOutreachReferralApproaches?: Maybe<Scalars['Int']>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
+  dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']>;
+  dateOfPathStatus?: Maybe<Scalars['ISO8601Date']>;
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']>;
   dateUpdated: Scalars['ISO8601DateTime'];
   disabilities: DisabilitiesPaginated;
   disabilityGroups: Array<DisabilityGroup>;
   disablingCondition?: Maybe<NoYesReasonsForMissingData>;
+  eligibleForRhy?: Maybe<NoYesMissing>;
+  enrollmentCoc?: Maybe<Scalars['String']>;
   entryDate: Scalars['ISO8601Date'];
   events: EventsPaginated;
   exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']>;
   files: FilesPaginated;
+  formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
+  formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
   healthAndDvs: HealthAndDvsPaginated;
   household: Household;
   householdSize: Scalars['Int'];
@@ -1252,16 +1263,28 @@ export type Enrollment = {
   inProgress: Scalars['Boolean'];
   incomeBenefits: IncomeBenefitsPaginated;
   intakeAssessment?: Maybe<Assessment>;
+  juvenileJusticeMonths?: Maybe<Scalars['Int']>;
+  juvenileJusticeYears?: Maybe<RhyNumberofYears>;
   lengthOfStay?: Maybe<ResidencePriorLengthOfStay>;
   livingSituation?: Maybe<LivingSituation>;
   losUnderThreshold?: Maybe<NoYesMissing>;
+  mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  percentAmi?: Maybe<PercentAmi>;
+  physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
   project: Project;
+  reasonNoServices?: Maybe<ReasonNoServices>;
+  reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
+  referralSource?: Maybe<ReferralSource>;
   relationshipToHoH: RelationshipToHoH;
+  runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
+  sexualOrientation?: Maybe<SexualOrientation>;
+  sexualOrientationOther?: Maybe<Scalars['String']>;
   status: EnrollmentStatus;
   timesHomelessPastThreeYears?: Maybe<TimesHomelessPastThreeYears>;
+  unemploymentFam?: Maybe<NoYesMissing>;
   user?: Maybe<User>;
 };
 
@@ -2651,6 +2674,20 @@ export enum PathReferralOutcome {
   Unknown = 'UNKNOWN',
 }
 
+/** V4.1 */
+export enum PercentAmi {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (3) Greater than 50% */
+  GreaterThan_50 = 'GREATER_THAN_50',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (1) Less than 30% */
+  LessThan_30 = 'LESS_THAN_30',
+  /** (2) 30% to 50% */
+  Num_30To_50 = 'NUM_30_TO_50',
+}
+
 export type PickListOption = {
   __typename?: 'PickListOption';
   /** Code for the option */
@@ -2668,6 +2705,8 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  /** Referral Posting Status */
+  AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Unoccupied units in the specified project */
@@ -2678,6 +2717,8 @@ export enum PickListType {
   ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Referral Posting Status */
+  DeniedPendingReferralPostingStatuses = 'DENIED_PENDING_REFERRAL_POSTING_STATUSES',
   Destination = 'DESTINATION',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
@@ -2690,8 +2731,8 @@ export enum PickListType {
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Referral Posting Status */
   ReferralPostingDenialReasonTypes = 'REFERRAL_POSTING_DENIAL_REASON_TYPES',
-  /** Referral Posting Status */
-  ReferralPostingStatuses = 'REFERRAL_POSTING_STATUSES',
+  /** Referral Result  */
+  ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
   ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
@@ -3077,6 +3118,20 @@ export type QueryAccess = {
   id: Scalars['ID'];
 };
 
+/** R11.A */
+export enum RhyNumberofYears {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (1) Less than one year */
+  LessThanOneYear = 'LESS_THAN_ONE_YEAR',
+  /** (2) 1 to 2 years */
+  Num_1To_2Years = 'NUM_1_TO_2_YEARS',
+  /** (3) 3 to 5 or more years */
+  Num_3To_5OrMoreYears = 'NUM_3_TO_5_OR_MORE_YEARS',
+}
+
 /** HUD Race (1.7) */
 export enum Race {
   /** (AmIndAKNative) American Indian, Alaska Native, or Indigenous */
@@ -3095,6 +3150,32 @@ export enum Race {
   NativeHiPacific = 'NATIVE_HI_PACIFIC',
   /** (White) White */
   White = 'WHITE',
+}
+
+/** R2.A */
+export enum ReasonNoServices {
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (4) Other */
+  Other = 'OTHER',
+  /** (1) Out of age range */
+  OutOfAgeRange = 'OUT_OF_AGE_RANGE',
+  /** (3) Ward of the criminal justice system */
+  WardOfTheCriminalJusticeSystem = 'WARD_OF_THE_CRIMINAL_JUSTICE_SYSTEM',
+  /** (2) Ward of the state */
+  WardOfTheState = 'WARD_OF_THE_STATE',
+}
+
+/** P3.A */
+export enum ReasonNotEnrolled {
+  /** (1) Client was found ineligible for PATH */
+  ClientWasFoundIneligibleForPath = 'CLIENT_WAS_FOUND_INELIGIBLE_FOR_PATH',
+  /** (2) Client was not enrolled for other reason(s) */
+  ClientWasNotEnrolledForOtherReasonS = 'CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S',
+  /** Invalid Value */
+  Invalid = 'INVALID',
 }
 
 /** 4.04.A */
@@ -3166,7 +3247,7 @@ export type ReferralHouseholdMember = {
 /** A referral for a household of one or more clients */
 export type ReferralPosting = {
   __typename?: 'ReferralPosting';
-  assignedDate: Scalars['ISO8601Date'];
+  assignedDate: Scalars['ISO8601DateTime'];
   chronic?: Maybe<Scalars['Boolean']>;
   denialNote?: Maybe<Scalars['String']>;
   denialReason?: Maybe<Scalars['String']>;
@@ -3179,7 +3260,7 @@ export type ReferralPosting = {
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
   organizationName?: Maybe<Scalars['String']>;
   postingIdentifier?: Maybe<Scalars['ID']>;
-  referralDate: Scalars['ISO8601Date'];
+  referralDate: Scalars['ISO8601DateTime'];
   referralIdentifier?: Maybe<Scalars['ID']>;
   referralNotes?: Maybe<Scalars['String']>;
   referralRequest?: Maybe<ReferralRequest>;
@@ -3190,9 +3271,9 @@ export type ReferralPosting = {
   score?: Maybe<Scalars['Int']>;
   status: ReferralPostingStatus;
   statusNote?: Maybe<Scalars['String']>;
-  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusNoteUpdatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   statusNoteUpdatedBy?: Maybe<Scalars['String']>;
-  statusUpdatedAt?: Maybe<Scalars['ISO8601Date']>;
+  statusUpdatedAt?: Maybe<Scalars['ISO8601DateTime']>;
   statusUpdatedBy?: Maybe<Scalars['String']>;
   unitType: UnitTypeObject;
 };
@@ -3200,6 +3281,8 @@ export type ReferralPosting = {
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']>;
   denialReason?: InputMaybe<Scalars['ID']>;
+  reRequest?: InputMaybe<Scalars['Boolean']>;
+  referralResult?: InputMaybe<Scalars['ID']>;
   status?: InputMaybe<Scalars['ID']>;
   statusNote?: InputMaybe<Scalars['String']>;
 };
@@ -3244,8 +3327,9 @@ export type ReferralPostingsPaginated = {
 export type ReferralRequest = {
   __typename?: 'ReferralRequest';
   id: Scalars['ID'];
-  neededBy: Scalars['String'];
-  requestedOn: Scalars['String'];
+  identifier: Scalars['ID'];
+  neededBy: Scalars['ISO8601Date'];
+  requestedOn: Scalars['ISO8601DateTime'];
   requestorEmail: Scalars['String'];
   requestorName: Scalars['String'];
   requestorPhone: Scalars['String'];
@@ -3273,6 +3357,44 @@ export enum ReferralResult {
   UnsuccessfulReferralClientRejected = 'UNSUCCESSFUL_REFERRAL_CLIENT_REJECTED',
   /** (3) Unsuccessful referral: provider rejected */
   UnsuccessfulReferralProviderRejected = 'UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED',
+}
+
+/** R1.1 */
+export enum ReferralSource {
+  /** (30) Child Welfare/CPS */
+  ChildWelfareCps = 'CHILD_WELFARE_CPS',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (28) Hotline */
+  Hotline = 'HOTLINE',
+  /** (2) Individual: Parent/Guardian/Relative/Friend/Foster Parent/Other Individual */
+  IndividualParentGuardianRelativeFriendFosterParentOtherIndividual = 'INDIVIDUAL_PARENT_GUARDIAN_RELATIVE_FRIEND_FOSTER_PARENT_OTHER_INDIVIDUAL',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (34) Juvenile Justice */
+  JuvenileJustice = 'JUVENILE_JUSTICE',
+  /** (35) Law Enforcement/ Police */
+  LawEnforcementPolice = 'LAW_ENFORCEMENT_POLICE',
+  /** (37) Mental Hospital */
+  MentalHospital = 'MENTAL_HOSPITAL',
+  /** (39) Other organization */
+  OtherOrganization = 'OTHER_ORGANIZATION',
+  /** (7) Outreach Project */
+  OutreachProject = 'OUTREACH_PROJECT',
+  /** (10) Outreach project: other */
+  OutreachProjectOther = 'OUTREACH_PROJECT_OTHER',
+  /** (18) Residential Project */
+  ResidentialProject = 'RESIDENTIAL_PROJECT',
+  /** (38) School */
+  School = 'SCHOOL',
+  /** (1) Self-referral */
+  SelfReferral = 'SELF_REFERRAL',
+  /** (11) Temporary Shelter */
+  TemporaryShelter = 'TEMPORARY_SHELTER',
 }
 
 /** Related record type for a group of questions in an assessment */
@@ -3703,6 +3825,30 @@ export type ServicesPaginated = {
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
 };
+
+/** R3.1 */
+export enum SexualOrientation {
+  /** (4) Bisexual */
+  Bisexual = 'BISEXUAL',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (2) Gay */
+  Gay = 'GAY',
+  /** (1) Heterosexual */
+  Heterosexual = 'HETEROSEXUAL',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (3) Lesbian */
+  Lesbian = 'LESBIAN',
+  /** (6) Other */
+  Other = 'OTHER',
+  /** (5) Questioning / unsure */
+  QuestioningUnsure = 'QUESTIONING_UNSURE',
+}
 
 /** Autogenerated input type of SubmitAssessment */
 export type SubmitAssessmentInput = {
@@ -11113,6 +11259,7 @@ export type SubmitFormMutation = {
           __typename?: 'ReferralRequest';
           id: string;
           requestedOn: string;
+          identifier: string;
           neededBy: string;
           requestorName: string;
           requestorPhone: string;
@@ -12367,6 +12514,7 @@ export type GetProjectReferralRequestsQuery = {
         __typename?: 'ReferralRequest';
         id: string;
         requestedOn: string;
+        identifier: string;
         neededBy: string;
         requestorName: string;
         requestorPhone: string;
@@ -13007,6 +13155,7 @@ export type ReferralRequestFieldsFragment = {
   __typename?: 'ReferralRequest';
   id: string;
   requestedOn: string;
+  identifier: string;
   neededBy: string;
   requestorName: string;
   requestorPhone: string;
@@ -14584,6 +14733,7 @@ export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
     id
     requestedOn
+    identifier
     unitType {
       ...UnitTypeFields
     }
