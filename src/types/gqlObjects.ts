@@ -779,10 +779,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CurrentLivingSituation',
     fields: [
       {
-        name: 'clsSubsidyType',
-        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
-      },
-      {
         name: 'currentLivingSituation',
         type: {
           kind: 'NON_NULL',
@@ -1544,10 +1540,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'rentalSubsidyType',
-        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
-      },
-      {
         name: 'runawayYouth',
         type: {
           kind: 'ENUM',
@@ -1771,10 +1763,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
       },
       {
-        name: 'destinationSubsidyType',
-        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
-      },
-      {
         name: 'earlyExitReason',
         type: { kind: 'ENUM', name: 'ExpelledReason', ofType: null },
       },
@@ -1887,7 +1875,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
       },
       {
-        name: 'workplacePromiseDifference',
+        name: 'workPlaceViolenceThreats',
         type: {
           kind: 'ENUM',
           name: 'NoYesReasonsForMissingData',
@@ -1895,7 +1883,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'workplaceViolenceThreats',
+        name: 'workplacePromiseDifference',
         type: {
           kind: 'ENUM',
           name: 'NoYesReasonsForMissingData',

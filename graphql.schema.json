@@ -5373,18 +5373,6 @@
             "deprecationReason": null
           },
           {
-            "name": "clsSubsidyType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RentalSubsidyType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "currentLivingSituation",
             "description": null,
             "args": [],
@@ -10174,18 +10162,6 @@
             "deprecationReason": null
           },
           {
-            "name": "rentalSubsidyType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RentalSubsidyType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "runawayYouth",
             "description": null,
             "args": [],
@@ -11564,18 +11540,6 @@
             "deprecationReason": null
           },
           {
-            "name": "destinationSubsidyType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RentalSubsidyType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "earlyExitReason",
             "description": null,
             "args": [],
@@ -11888,7 +11852,7 @@
             "deprecationReason": null
           },
           {
-            "name": "workplacePromiseDifference",
+            "name": "workPlaceViolenceThreats",
             "description": null,
             "args": [],
             "type": {
@@ -11900,7 +11864,7 @@
             "deprecationReason": null
           },
           {
-            "name": "workplaceViolenceThreats",
+            "name": "workplacePromiseDifference",
             "description": null,
             "args": [],
             "type": {
@@ -24542,89 +24506,6 @@
           {
             "name": "UNRELATED_HOUSEHOLD_MEMBER",
             "description": "(5) Unrelated household member",
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "RentalSubsidyType",
-        "description": "HUD Rental Subsidy Types",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "EHV",
-            "description": "Emergency Housing Voucher",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FUP",
-            "description": "Family Unification Program Voucher (FUP)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "FYI",
-            "description": "Foster Youth to Independence Initiative (FYI)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "GDP_TIP",
-            "description": "GPD TIP housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "HCV",
-            "description": "HCV voucher (tenant or project based) (not dedicated)",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "INVALID",
-            "description": "Invalid Value",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "OTHER",
-            "description": "Other permanent housing dedicated for formerly homeless persons",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PHU",
-            "description": "Public housing unit",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PSH",
-            "description": "Permanent Supportive Housing",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RBC",
-            "description": "Rental by client, with other ongoing housing subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "RRH",
-            "description": "RRH or equivalent subsidy",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "VASH",
-            "description": "VASH housing subsidy",
             "isDeprecated": false,
             "deprecationReason": null
           }

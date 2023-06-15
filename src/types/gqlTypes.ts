@@ -821,7 +821,6 @@ export enum CurrentEdStatus {
 export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
   client: Client;
-  clsSubsidyType?: Maybe<RentalSubsidyType>;
   currentLivingSituation: LivingSituation;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -1482,7 +1481,6 @@ export type Enrollment = {
   reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
   referralSource?: Maybe<ReferralSource>;
   relationshipToHoH: RelationshipToHoH;
-  rentalSubsidyType?: Maybe<RentalSubsidyType>;
   runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
   sexualOrientation?: Maybe<SexualOrientation>;
@@ -1747,7 +1745,6 @@ export type Exit = {
   destination: Destination;
   destinationSafeClient?: Maybe<NoYesReasonsForMissingData>;
   destinationSafeWorker?: Maybe<WorkerResponse>;
-  destinationSubsidyType?: Maybe<RentalSubsidyType>;
   earlyExitReason?: Maybe<ExpelledReason>;
   emailSocialMedia?: Maybe<NoYesMissing>;
   enrollment: Enrollment;
@@ -1773,8 +1770,8 @@ export type Exit = {
   subsidyInformation?: Maybe<SubsidyInformation>;
   telephone?: Maybe<NoYesMissing>;
   user?: Maybe<User>;
+  workPlaceViolenceThreats?: Maybe<NoYesReasonsForMissingData>;
   workplacePromiseDifference?: Maybe<NoYesReasonsForMissingData>;
-  workplaceViolenceThreats?: Maybe<NoYesReasonsForMissingData>;
 };
 
 /** R17.A */
@@ -3822,34 +3819,6 @@ export enum RelationshipToHoH {
   SpouseOrPartner = 'SPOUSE_OR_PARTNER',
   /** (5) Unrelated household member */
   UnrelatedHouseholdMember = 'UNRELATED_HOUSEHOLD_MEMBER',
-}
-
-/** HUD Rental Subsidy Types */
-export enum RentalSubsidyType {
-  /** Emergency Housing Voucher */
-  Ehv = 'EHV',
-  /** Family Unification Program Voucher (FUP) */
-  Fup = 'FUP',
-  /** Foster Youth to Independence Initiative (FYI) */
-  Fyi = 'FYI',
-  /** GPD TIP housing subsidy */
-  GdpTip = 'GDP_TIP',
-  /** HCV voucher (tenant or project based) (not dedicated) */
-  Hcv = 'HCV',
-  /** Invalid Value */
-  Invalid = 'INVALID',
-  /** Other permanent housing dedicated for formerly homeless persons */
-  Other = 'OTHER',
-  /** Public housing unit */
-  Phu = 'PHU',
-  /** Permanent Supportive Housing */
-  Psh = 'PSH',
-  /** Rental by client, with other ongoing housing subsidy */
-  Rbc = 'RBC',
-  /** RRH or equivalent subsidy */
-  Rrh = 'RRH',
-  /** VASH housing subsidy */
-  Vash = 'VASH',
 }
 
 /** 3.917.2 */
