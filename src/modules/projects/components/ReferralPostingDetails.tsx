@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
 import RouterLink from '@/components/elements/RouterLink';
+import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -50,10 +51,19 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
   const col2: Array<[string, ReactNode]> = [
     ['Referral ID', referralPosting.referralIdentifier],
     ['Unit Type', referralPosting?.unitType?.description],
-    ['Chronically Homeless', referralPosting.chronic],
+    [
+      'Chronically Homeless',
+      <YesNoDisplay
+        booleanValue={referralPosting.chronic}
+        fallback={<NotCollectedText variant='body2' />}
+      />,
+    ],
     [
       'Needs Wheelchair Accessible Unit',
-      referralPosting.needsWheelchairAccessibleUnit,
+      <YesNoDisplay
+        booleanValue={referralPosting.needsWheelchairAccessibleUnit}
+        fallback={<NotCollectedText variant='body2' />}
+      />,
     ],
   ];
   return (
@@ -72,7 +82,11 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
                   >
                     {label}
                   </Box>
-                  {value || <NotCollectedText variant='body2' />}
+                  {hasMeaningfulValue(value) ? (
+                    value
+                  ) : (
+                    <NotCollectedText variant='body2' />
+                  )}
                 </Typography>
               ))}
           </Stack>

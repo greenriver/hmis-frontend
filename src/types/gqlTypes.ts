@@ -12634,6 +12634,13 @@ export type GetReferralPostingQuery = {
           canViewAnyConfidentialClientFiles: boolean;
           canViewAnyNonconfidentialClientFiles: boolean;
         };
+        externalIds: Array<{
+          __typename?: 'ExternalIdentifier';
+          id: string;
+          identifier?: string | null;
+          url?: string | null;
+          label: string;
+        }>;
       };
     }>;
   } | null;
@@ -13010,6 +13017,13 @@ export type UpdateReferralPostingMutation = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+          externalIds: Array<{
+            __typename?: 'ExternalIdentifier';
+            id: string;
+            identifier?: string | null;
+            url?: string | null;
+            label: string;
+          }>;
         };
       }>;
     } | null;
@@ -13141,6 +13155,13 @@ export type ReferralPostingDetailFieldsFragment = {
         canViewAnyConfidentialClientFiles: boolean;
         canViewAnyNonconfidentialClientFiles: boolean;
       };
+      externalIds: Array<{
+        __typename?: 'ExternalIdentifier';
+        id: string;
+        identifier?: string | null;
+        url?: string | null;
+        label: string;
+      }>;
     };
   }>;
 };
@@ -14716,12 +14737,16 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
         access {
           ...ClientAccessFields
         }
+        externalIds {
+          ...ClientIdentifierFields
+        }
       }
     }
   }
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
+  ${ClientIdentifierFieldsFragmentDoc}
 `;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
