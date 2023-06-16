@@ -289,7 +289,7 @@ const GenericTable = <T extends { id: string }>({
     rows.length > 0 ? null : (
       <TableRow>
         <TableCell
-          colSpan={columns.length}
+          colSpan={columns.length + (selectable ? 1 : 0)}
           sx={{
             py: 4,
             textAlign: 'center',

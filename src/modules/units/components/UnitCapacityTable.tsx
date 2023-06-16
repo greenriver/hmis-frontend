@@ -1,4 +1,5 @@
-import { Box, lighten, Stack } from '@mui/material';
+import { Box, lighten, Stack, Typography } from '@mui/material';
+import pluralize from 'pluralize';
 import { useMemo } from 'react';
 
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
@@ -8,28 +9,46 @@ import {
   useGetProjectUnitTypesQuery,
 } from '@/types/gqlTypes';
 
-const CapacityProgressBar = ({
-  percentAvailable,
+const LabeledNumber = ({
+  number,
+  label,
 }: {
-  percentAvailable: number;
+  number: number;
+  label: string;
 }) => {
+  return (
+    <Stack direction='row' gap={0.75} alignItems='end'>
+      <Typography>
+        <b>{number}</b>
+      </Typography>
+      <Typography variant='caption' color='text.secondary'>
+        {label}
+      </Typography>
+    </Stack>
+  );
+};
+
+const CapacityProgressBar = ({ percentFilled }: { percentFilled: number }) => {
   const baseColor = useMemo(() => {
-    if (percentAvailable == 100) return '#F9F9F9'; // gray
-    if (percentAvailable >= 50) return '#8BC34A'; // green
+    if (percentFilled === 0) return '#c9c9c9'; // gray
+    if (percentFilled <= 25) return '#8BC34A'; // green
+    if (percentFilled <= 80) return '#1976D2'; // blue
     return '#FB8C00'; // orange
-  }, [percentAvailable]);
+  }, [percentFilled]);
 
   return (
     <Stack
       direction='row'
       sx={{
-        backgroundColor: lighten(baseColor, 0.5),
+        backgroundColor: lighten(baseColor, 0.7),
         height: '14px',
-        width: '200px',
+        minWidth: '200px',
+        maxWidth: '350px',
+        mr: 3,
       }}
     >
       <Box
-        sx={{ backgroundColor: baseColor, width: `${percentAvailable}%` }}
+        sx={{ backgroundColor: baseColor, width: `${percentFilled}%` }}
       ></Box>
     </Stack>
   );
@@ -43,7 +62,7 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
     {
       key: 'unitType',
       render: (row: UnitTypeCapacityFieldsFragment) => (
-        <Box sx={{ py: 1 }}>
+        <Box sx={{ py: 1, pl: 2 }}>
           <b>{row.unitType}</b>
         </Box>
       ),
@@ -51,16 +70,36 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
     {
       key: 'capacity',
       render: (row: UnitTypeCapacityFieldsFragment) => (
-        <Stack>
-          {row.availability}/{row.capacity} units available
-        </Stack>
+        <LabeledNumber
+          number={row.capacity}
+          label={pluralize('unit', row.capacity)}
+        />
       ),
     },
     {
-      key: 'availability',
+      key: 'filled',
+      render: (row: UnitTypeCapacityFieldsFragment) => (
+        <>
+          <LabeledNumber
+            number={row.capacity - row.availability}
+            label='filled'
+          />
+        </>
+      ),
+    },
+    {
+      key: 'available',
+      render: (row: UnitTypeCapacityFieldsFragment) => (
+        <LabeledNumber number={row.availability} label='available' />
+      ),
+    },
+    {
+      key: 'progress',
       render: (row: UnitTypeCapacityFieldsFragment) => (
         <CapacityProgressBar
-          percentAvailable={(row.availability / row.capacity) * 100}
+          percentFilled={
+            ((row.capacity - row.availability) / row.capacity) * 100
+          }
         />
       ),
     },
@@ -69,9 +108,17 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
   if (loading && !data) return <Loading />;
   if (error) throw error;
 
+  const rows = data?.project?.unitTypes || [];
+  if (rows.length === 0) {
+    return (
+      <Typography pl={3} pb={3}>
+        No unit types.
+      </Typography>
+    );
+  }
   return (
     <GenericTable<UnitTypeCapacityFieldsFragment>
-      rows={data?.project?.unitTypes || []}
+      rows={rows}
       columns={columns}
     />
   );

@@ -34,43 +34,52 @@ const UnitManagementTable = ({
       )}`;
 
       return (
-        <DeleteMutationButton<DeleteUnitsMutation, DeleteUnitsMutationVariables>
-          variables={{
-            input: { unitIds },
-          }}
-          idPath={'deleteUnits.unitIds[0]'}
-          recordName='unit'
-          queryDocument={DeleteUnitsDocument}
-          onSuccess={() => evictUnitsQuery(projectId)}
-          ButtonProps={{
-            size: 'small',
-            variant: 'text',
-            color: 'info',
-            disabled,
-          }}
-          confirmationDialogContent={
-            unitIds.length > 1 ? (
-              <>
-                <Typography>
-                  {`Are you sure you want to delete ${pluralUnits}?`}
-                </Typography>
-                <Typography>This action cannot be undone.</Typography>
-              </>
-            ) : undefined
-          }
-          ConfirmationDialogProps={
-            unitIds.length > 1
-              ? {
-                  confirmText: `Yes, delete ${pluralUnits}`,
-                  title: 'Delete units',
-                }
-              : undefined
+        <ButtonTooltipContainer
+          title={
+            disabled ? 'Currently assigned units can not be deleted' : null
           }
         >
-          <DeleteIcon
-            sx={{ color: disabled ? 'text.disabled' : 'text.secondary' }}
-          />
-        </DeleteMutationButton>
+          <DeleteMutationButton<
+            DeleteUnitsMutation,
+            DeleteUnitsMutationVariables
+          >
+            variables={{
+              input: { unitIds },
+            }}
+            idPath={'deleteUnits.unitIds[0]'}
+            recordName='unit'
+            queryDocument={DeleteUnitsDocument}
+            onSuccess={() => evictUnitsQuery(projectId)}
+            ButtonProps={{
+              size: 'small',
+              variant: 'text',
+              color: 'info',
+              disabled,
+            }}
+            confirmationDialogContent={
+              unitIds.length > 1 ? (
+                <>
+                  <Typography>
+                    {`Are you sure you want to delete ${pluralUnits}?`}
+                  </Typography>
+                  <Typography>This action cannot be undone.</Typography>
+                </>
+              ) : undefined
+            }
+            ConfirmationDialogProps={
+              unitIds.length > 1
+                ? {
+                    confirmText: `Yes, delete ${pluralUnits}`,
+                    title: 'Delete units',
+                  }
+                : undefined
+            }
+          >
+            <DeleteIcon
+              sx={{ color: disabled ? 'text.disabled' : 'text.secondary' }}
+            />
+          </DeleteMutationButton>
+        </ButtonTooltipContainer>
       );
     },
     [projectId]
@@ -91,7 +100,7 @@ const UnitManagementTable = ({
         render: (unit) => (unit.occupants.length > 0 ? 'Filled' : 'Available'),
       },
       {
-        header: 'Occupants',
+        header: 'Occupant',
         render: (unit) => unit.occupants.map((u) => clientBriefName(u.client)),
       },
       ...(allowDeleteUnits

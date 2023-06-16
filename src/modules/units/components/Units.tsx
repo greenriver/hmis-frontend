@@ -93,7 +93,7 @@ const Units = () => {
         }
       />
       <Stack gap={4}>
-        <TitleCard title='Capacity'>
+        <TitleCard title='Capacity' headerSx={{ p: 3 }}>
           <UnitCapacityTable projectId={project.id} />
         </TitleCard>
         <Paper>
