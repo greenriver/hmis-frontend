@@ -2,17 +2,11 @@ query GetUnits(
   $id: ID!
   $limit: Int = 10
   $offset: Int = 0
-  $active: Boolean
-  $occupied: Boolean
+  $filters: UnitFilterOptions
 ) {
   project(id: $id) {
     id
-    units(
-      limit: $limit
-      offset: $offset
-      active: $active
-      occupied: $occupied
-    ) {
+    units(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount
@@ -28,6 +22,40 @@ query GetProjectUnitTypes($id: ID!) {
     id
     unitTypes {
       ...UnitTypeCapacityFields
+    }
+  }
+}
+
+mutation CreateUnits($input: CreateUnitsInput!) {
+  createUnits(input: $input) {
+    clientMutationId
+    units {
+      ...UnitFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteUnits($input: DeleteUnitsInput!) {
+  deleteUnits(input: $input) {
+    clientMutationId
+    unitIds
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation UpdateUnits($input: UpdateUnitsInput!) {
+  updateUnits(input: $input) {
+    clientMutationId
+    units {
+      ...UnitFields
+    }
+    errors {
+      ...ValidationErrorFields
     }
   }
 }

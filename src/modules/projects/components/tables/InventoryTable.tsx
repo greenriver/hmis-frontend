@@ -100,7 +100,7 @@ const InventoryTable = () => {
         queryDocument={GetProjectInventoriesDocument}
         columns={tableColumns}
         pagePath='project.inventories'
-        noData='No inventory.'
+        noData='No inventory'
         handleRowClick={(record) => setViewingRecord(record)}
       />
       {viewingRecord && (

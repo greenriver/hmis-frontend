@@ -184,8 +184,8 @@ const ProjectHouseholdsTable = ({
       columns={columns || defaultColumns}
       noData={
         openOnDate
-          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-          : 'No clients.'
+          ? `No households open on ${formatDateForDisplay(openOnDate)}`
+          : 'No households'
       }
       pagePath='project.households'
       showFilters

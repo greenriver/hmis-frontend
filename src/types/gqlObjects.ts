@@ -5276,6 +5276,39 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'UnitFilterOptions',
+    args: [
+      {
+        name: 'status',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: {
+              kind: 'ENUM',
+              name: 'UnitFilterOptionStatus',
+              ofType: null,
+            },
+          },
+        },
+      },
+      {
+        name: 'unitType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+    ],
+  },
+  {
     name: 'UnitInput',
     args: [
       { name: 'count', type: { kind: 'SCALAR', name: 'Int', ofType: null } },

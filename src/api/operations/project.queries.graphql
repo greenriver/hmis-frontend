@@ -208,37 +208,3 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
     }
   }
 }
-
-mutation CreateUnits($input: CreateUnitsInput!) {
-  createUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteUnits($input: DeleteUnitsInput!) {
-  deleteUnits(input: $input) {
-    clientMutationId
-    unitIds
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateUnits($input: UpdateUnitsInput!) {
-  updateUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}

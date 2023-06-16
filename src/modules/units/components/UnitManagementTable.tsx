@@ -7,6 +7,7 @@ import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import { evictUnitsQuery } from '@/modules/units/util';
 import {
   DeleteUnitsDocument,
@@ -26,7 +27,7 @@ const UnitManagementTable = ({
   allowDeleteUnits: boolean;
 }) => {
   const renderDeleteButton = useCallback(
-    (unitIds: string[]) => {
+    (unitIds: string[], disabled?: boolean) => {
       const pluralUnits = `${unitIds.length} ${pluralize(
         'unit',
         unitIds.length
@@ -45,6 +46,7 @@ const UnitManagementTable = ({
             size: 'small',
             variant: 'text',
             color: 'info',
+            disabled,
           }}
           confirmationDialogContent={
             unitIds.length > 1 ? (
@@ -65,7 +67,9 @@ const UnitManagementTable = ({
               : undefined
           }
         >
-          <DeleteIcon sx={{ color: 'text.secondary' }} />
+          <DeleteIcon
+            sx={{ color: disabled ? 'text.disabled' : 'text.secondary' }}
+          />
         </DeleteMutationButton>
       );
     },
@@ -75,20 +79,20 @@ const UnitManagementTable = ({
   const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
     return [
       {
-        header: 'Unit Type',
-        render: (unit) => unit.unitType?.description,
-      },
-      {
         header: 'Unit ID',
         render: 'id',
       },
       {
-        header: 'Status',
-        render: 'id',
+        header: 'Unit Type',
+        render: (unit) => unit.unitType?.description,
       },
       {
-        header: 'Occupant',
-        render: 'id',
+        header: 'Status',
+        render: (unit) => (unit.occupants.length > 0 ? 'Filled' : 'Available'),
+      },
+      {
+        header: 'Occupants',
+        render: (unit) => unit.occupants.map((u) => clientBriefName(u.client)),
       },
       ...(allowDeleteUnits
         ? [
@@ -96,7 +100,7 @@ const UnitManagementTable = ({
               key: 'delete',
               width: '1%',
               render: (unit: UnitFieldsFragment) =>
-                renderDeleteButton([unit.id]),
+                renderDeleteButton([unit.id], unit.occupants.length > 0),
             },
           ]
         : []),
@@ -114,10 +118,11 @@ const UnitManagementTable = ({
       queryDocument={GetUnitsDocument}
       columns={columns}
       pagePath='project.units'
-      noData='No units.'
+      noData='No units'
       selectable={allowDeleteUnits}
-      // FIXME assignment
-      isRowSelectable={(row) => !!row.name}
+      isRowSelectable={(row) => row.occupants.length === 0}
+      showFilters
+      recordType='Unit'
       EnhancedTableToolbarProps={{
         title: 'Unit Management',
         renderBulkAction: allowDeleteUnits

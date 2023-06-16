@@ -70,7 +70,7 @@ const ProjectCocTable = (props: Props) => {
         queryDocument={GetProjectProjectCocsDocument}
         columns={columns}
         pagePath='project.projectCocs'
-        noData='No Project CoC records.'
+        noData='No Project CoC records'
         rowLinkTo={
           project.access.canEditProjectDetails
             ? (record) =>

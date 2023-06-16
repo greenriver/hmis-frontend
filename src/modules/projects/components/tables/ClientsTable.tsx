@@ -33,7 +33,7 @@ const ClientsTable = ({ projectId }: { projectId: string }) => {
       queryDocument={SearchClientsDocument}
       columns={columns}
       rowLinkTo={rowLinkTo}
-      noData='No clients.'
+      noData='No enrollments'
       pagePath='clientSearch'
     />
   );

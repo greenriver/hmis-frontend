@@ -46,7 +46,7 @@ const EventsTable = ({
     queryDocument={GetEnrollmentEventsDocument}
     columns={columns}
     pagePath='enrollment.events'
-    noData='No events.'
+    noData='No events'
     headerCellSx={() => ({ color: 'text.secondary' })}
   />
 );

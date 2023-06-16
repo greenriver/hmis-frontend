@@ -92,7 +92,7 @@ const FunderTable = () => {
           columns={columns}
           recordType='Funder'
           pagePath='project.funders'
-          noData='No funding sources.'
+          noData='No funding sources'
           rowLinkTo={
             canEditProject
               ? (record) =>

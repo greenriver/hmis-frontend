@@ -80,7 +80,7 @@ const ServicesTable: React.FC<Props> = ({ enrollmentId, enrollment }) => {
         queryDocument={GetEnrollmentServicesDocument}
         columns={baseColumns}
         pagePath='enrollment.services'
-        noData='No services.'
+        noData='No services'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />
 

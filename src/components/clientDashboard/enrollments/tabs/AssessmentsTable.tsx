@@ -98,7 +98,7 @@ const AssessmentsTable = ({
         rowLinkTo={rowLinkTo}
         columns={columns}
         pagePath='enrollment.assessments'
-        noData='No assessments.'
+        noData='No assessments'
         recordType='Assessment'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />

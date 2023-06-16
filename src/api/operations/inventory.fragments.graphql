@@ -25,28 +25,3 @@ fragment InventoryFields on Inventory {
     ...CustomDataElementFields
   }
 }
-
-fragment UnitTypeFields on UnitTypeObject {
-  id
-  description
-  bedType
-  unitSize
-  dateUpdated
-  dateCreated
-}
-
-fragment UnitFields on Unit {
-  id
-  name
-  startDate
-  endDate
-  unitSize
-  dateUpdated
-  dateCreated
-  unitType {
-    ...UnitTypeFields
-  }
-  user {
-    ...UserFields
-  }
-}

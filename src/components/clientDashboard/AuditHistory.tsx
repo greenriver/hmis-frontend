@@ -151,7 +151,7 @@ const AuditHistory = () => {
           columns={columns}
           pagePath='client.auditHistory'
           fetchPolicy='cache-and-network'
-          noData='No audit history.'
+          noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
         />
       </Paper>

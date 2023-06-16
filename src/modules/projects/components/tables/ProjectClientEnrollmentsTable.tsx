@@ -143,7 +143,7 @@ const ProjectClientEnrollmentsTable = ({
       noData={
         openOnDate
           ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-          : 'No clients.'
+          : 'No enrollments'
       }
       pagePath='project.enrollments'
       recordType='Enrollment'

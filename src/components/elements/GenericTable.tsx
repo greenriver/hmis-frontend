@@ -2,6 +2,7 @@ import {
   alpha,
   Box,
   Checkbox,
+  lighten,
   Stack,
   SxProps,
   Table,
@@ -19,8 +20,8 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { get, includes, isNil } from 'lodash-es';
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { get, includes, isNil, without } from 'lodash-es';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from './Loading';
@@ -81,6 +82,8 @@ export interface Props<T> {
   isRowSelectable?: (row: T) => boolean;
   getSelectedRowIds?: () => string[];
   EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
+  filterToolbar?: ReactNode;
+  noData?: ReactNode;
 }
 
 const clickableRowStyles = {
@@ -177,44 +180,38 @@ const GenericTable = <T extends { id: string }>({
   selectable = false,
   isRowSelectable,
   EnhancedTableToolbarProps,
+  filterToolbar,
+  noData = 'No data',
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
 
   const [selected, setSelected] = useState<readonly string[]>([]);
 
+  const selectableRowIds = useMemo(() => {
+    if (!selectable) return [];
+    if (!isRowSelectable) return rows.map((r) => r.id);
+    return rows.filter(isRowSelectable).map((r) => r.id);
+  }, [rows, selectable, isRowSelectable]);
+
   const handleSelectAllClick = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       if (event.target.checked) {
-        const newSelected = rows.filter(isRowSelectable).map((r) => r.id);
-        setSelected(newSelected);
-        return;
+        setSelected(selectableRowIds);
+      } else {
+        setSelected([]);
       }
-      setSelected([]);
     },
-    [isRowSelectable, rows]
+    [selectableRowIds]
   );
 
   const handleSelectRow = useCallback(
-    (row: T) => {
-      const selectedIndex = selected.indexOf(row.id);
-      let newSelected: readonly string[] = [];
-
-      if (selectedIndex === -1) {
-        newSelected = newSelected.concat(selected, row.id);
-      } else if (selectedIndex === 0) {
-        newSelected = newSelected.concat(selected.slice(1));
-      } else if (selectedIndex === selected.length - 1) {
-        newSelected = newSelected.concat(selected.slice(0, -1));
-      } else if (selectedIndex > 0) {
-        newSelected = newSelected.concat(
-          selected.slice(0, selectedIndex),
-          selected.slice(selectedIndex + 1)
-        );
-      }
-      setSelected(newSelected);
-    },
-    [selected]
+    (row: T) =>
+      setSelected((old) =>
+        old.includes(row.id) ? without(old, row.id) : [...old, row.id]
+      ),
+    []
   );
+
   // Clear selection when data changes
   useEffect(() => setSelected([]), [rows]);
 
@@ -260,9 +257,13 @@ const GenericTable = <T extends { id: string }>({
               <Checkbox
                 color='primary'
                 indeterminate={
-                  selected.length > 0 && selected.length < rows.length
+                  selected.length > 0 &&
+                  selected.length < selectableRowIds.length
                 }
-                checked={rows.length > 0 && selected.length === rows.length}
+                checked={
+                  selectableRowIds.length > 0 &&
+                  selected.length === selectableRowIds.length
+                }
                 onChange={handleSelectAllClick}
                 inputProps={{ 'aria-label': 'select all' }}
               />
@@ -284,6 +285,24 @@ const GenericTable = <T extends { id: string }>({
     </TableHead>
   );
 
+  const noResultsRow =
+    rows.length > 0 ? null : (
+      <TableRow>
+        <TableCell
+          colSpan={columns.length}
+          sx={{
+            py: 4,
+            textAlign: 'center',
+            backgroundColor: (theme) =>
+              lighten(theme.palette.background.default, 0.6),
+            typography: 'body1',
+          }}
+        >
+          {noData}
+        </TableCell>
+      </TableRow>
+    );
+
   return (
     <>
       {EnhancedTableToolbarProps && (
@@ -292,6 +311,7 @@ const GenericTable = <T extends { id: string }>({
           {...EnhancedTableToolbarProps}
         />
       )}
+      {filterToolbar}
       <TableContainer sx={{ height: '100%', overflow: 'auto' }}>
         <Table
           size='medium'
@@ -319,10 +339,13 @@ const GenericTable = <T extends { id: string }>({
               ))}
             {!vertical &&
               rows.map((row) => {
+                const isSelectable =
+                  selectable && (isRowSelectable ? isRowSelectable(row) : true);
+
                 const onClickHandler = handleRowClick
                   ? handleRowClick
                   : selectable
-                  ? handleSelectRow
+                  ? isSelectable && handleSelectRow
                   : undefined;
 
                 const isClickable = !!onClickHandler || !!rowLinkTo;
@@ -350,9 +373,7 @@ const GenericTable = <T extends { id: string }>({
                       <TableCell padding='checkbox'>
                         <Checkbox
                           color='primary'
-                          disabled={
-                            isRowSelectable ? !isRowSelectable(row) : false
-                          }
+                          disabled={!isSelectable}
                           checked={includes(selected, row.id)}
                           inputProps={{ 'aria-label': `Select ${row.id} ` }}
                         />
@@ -430,6 +451,8 @@ const GenericTable = <T extends { id: string }>({
                 );
               })}
             {actionRow}
+            {/* dont show "no data" row if there is an action row, which may be for adding new elements or making another selection (MCI uses it) */}
+            {!actionRow && noResultsRow}
           </TableBody>
           {paginated && tablePaginationProps && (
             <TableFooter>

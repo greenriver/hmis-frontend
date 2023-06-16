@@ -85,7 +85,7 @@ const AllAssessments = () => {
           columns={columns}
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
-          noData='No assessments.'
+          noData='No assessments'
           recordType='Assessment'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />
