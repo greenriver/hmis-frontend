@@ -101,7 +101,8 @@ const UnitManagementTable = ({
       },
       {
         header: 'Occupant',
-        render: (unit) => unit.occupants.map((u) => clientBriefName(u.client)),
+        render: (unit) =>
+          unit.occupants.map((u) => clientBriefName(u.client)).join(', '),
       },
       ...(allowDeleteUnits
         ? [
