@@ -260,7 +260,6 @@ const GenericTableWithData = <
   );
 
   const noDataValue = useMemo(() => {
-    if (noData && typeof noData !== 'string') return noData;
     if (!showFilters) return noData;
 
     const isFiltered = some(Object.values(filterValues), hasMeaningfulValue);
