@@ -1,3 +1,4 @@
+import { startOfToday } from 'date-fns';
 import { useMemo } from 'react';
 
 import { ItemMap, LocalConstants, SubmitFormAllowedTypes } from '../types';
@@ -16,6 +17,10 @@ interface Args {
   localConstants?: LocalConstants;
 }
 
+export const AlwaysPresentLocalConstants = {
+  today: startOfToday(),
+};
+
 const useInitialFormValues = ({
   record,
   itemMap: itemMapArg,
@@ -29,10 +34,10 @@ const useInitialFormValues = ({
 
   const initialValues = useMemo(() => {
     if (!definition || !itemMap) return {};
-    const initialValuesFromDefinition = getInitialValues(
-      definition,
-      localConstants
-    );
+    const initialValuesFromDefinition = getInitialValues(definition, {
+      ...localConstants,
+      ...AlwaysPresentLocalConstants,
+    });
     if (!record) return initialValuesFromDefinition;
 
     const initialValuesFromRecord = createInitialValuesFromRecord(

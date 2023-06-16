@@ -1,4 +1,3 @@
-import { startOfToday } from 'date-fns';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,7 +36,6 @@ const NewReferralRequest: React.FC = () => {
       pickListRelationId={projectId}
       title={<ProjectFormTitle title={title} project={project} />}
       localConstants={{
-        today: startOfToday(),
         userName: user?.name,
         userEmail: user?.email,
         userPhone: user?.phone,

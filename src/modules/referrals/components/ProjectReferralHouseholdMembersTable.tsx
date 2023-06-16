@@ -1,7 +1,8 @@
+import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import HmisEnum, { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { HmisEnums } from '@/types/gqlEnums';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
@@ -18,11 +19,19 @@ const columns: ColumnDef<Row>[] = [
     ),
   },
   {
-    header: 'Member Name',
+    header: 'Name',
     render: ({ client }: Row) => (
       <ClientName
         client={client}
         linkToProfile={client.access.canViewEnrollmentDetails}
+      />
+    ),
+  },
+  {
+    header: 'MCI ID',
+    render: ({ client }: Row) => (
+      <ExternalIdDisplay
+        value={client.externalIds.find((c) => c.label == 'MCI ID')}
       />
     ),
   },
@@ -39,12 +48,12 @@ const columns: ColumnDef<Row>[] = [
     header: 'DOB / Age',
     render: ({ client }: Row) => <ClientDobAge client={client} reveal />,
   },
-  {
-    header: 'Gender',
-    render: ({ client }: Row) => (
-      <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
-    ),
-  },
+  // {
+  //   header: 'Gender',
+  //   render: ({ client }: Row) => (
+  //     <MultiHmisEnum values={client.gender} enumMap={HmisEnums.Gender} />
+  //   ),
+  // },
 ];
 
 interface Props {

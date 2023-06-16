@@ -67,6 +67,9 @@ fragment ReferralPostingDetailFields on ReferralPosting {
       access {
         ...ClientAccessFields
       }
+      externalIds {
+        ...ClientIdentifierFields
+      }
     }
   }
 }

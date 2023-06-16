@@ -25,6 +25,7 @@ import DynamicForm, {
 import FormStepper from '@/modules/form/components/FormStepper';
 import RecordPickerDialog from '@/modules/form/components/RecordPickerDialog';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
+import { AlwaysPresentLocalConstants } from '@/modules/form/hooks/useInitialFormValues';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
   createInitialValuesFromSavedValues,
@@ -108,6 +109,7 @@ const AssessmentForm = ({
     const localConstants = {
       entryDate: enrollment.entryDate,
       exitDate: enrollment.exitDate,
+      ...AlwaysPresentLocalConstants,
     };
 
     const source = sourceAssessment || assessment;
@@ -115,6 +117,7 @@ const AssessmentForm = ({
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
+      // TODO: if submitted assessment, initials should be constructed from related records, not saved values
       const sourceValues = source.customForm?.values;
       if (sourceValues) {
         // Overlay initial values from source Assessment
