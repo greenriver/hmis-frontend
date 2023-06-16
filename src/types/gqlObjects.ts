@@ -776,6 +776,103 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'CurrentLivingSituation',
+    fields: [
+      {
+        name: 'currentLivingSituation',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'LivingSituation', ofType: null },
+        },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'informationDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'leaseOwn60Day',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'leaveSituation14Days',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'locationDetails',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'movedTwoOrMore',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'resourcesToObtain',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'subsequentResidence',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'verifiedBy',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'CustomDataElement',
     fields: [
       {
@@ -1122,6 +1219,79 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
+      },
+    ],
+  },
+  {
+    name: 'EmploymentEducation',
+    fields: [
+      {
+        name: 'dataCollectionStage',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DataCollectionStage', ofType: null },
+        },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'employed',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'employmentType',
+        type: { kind: 'ENUM', name: 'EmploymentType', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'informationDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'lastGradeCompleted',
+        type: { kind: 'ENUM', name: 'LastGradeCompleted', ofType: null },
+      },
+      {
+        name: 'notEmployedReason',
+        type: { kind: 'ENUM', name: 'NotEmployedReason', ofType: null },
+      },
+      {
+        name: 'schoolStatus',
+        type: { kind: 'ENUM', name: 'SchoolStatus', ofType: null },
       },
     ],
   },
@@ -1509,6 +1679,50 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'Exit',
     fields: [
       {
+        name: 'aftercareDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'aftercareProvided',
+        type: { kind: 'ENUM', name: 'AftercareProvided', ofType: null },
+      },
+      {
+        name: 'askedOrForcedToExchangeForSex',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'askedOrForcedToExchangeForSexPastThreeMonths',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'cmExitReason',
+        type: { kind: 'ENUM', name: 'CmExitReason', ofType: null },
+      },
+      {
+        name: 'coercedToContinueWork',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'counselingReceived',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'countOfExchangeForSex',
+        type: { kind: 'ENUM', name: 'CountExchangeForSex', ofType: null },
+      },
+      {
         name: 'dateCreated',
         type: {
           kind: 'NON_NULL',
@@ -1537,12 +1751,60 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'destinationSafeClient',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'destinationSafeWorker',
+        type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
+      },
+      {
+        name: 'earlyExitReason',
+        type: { kind: 'ENUM', name: 'ExpelledReason', ofType: null },
+      },
+      {
+        name: 'emailSocialMedia',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'exchangeForSex',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'exchangeForSexPastThreeMonths',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'exitDate',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
         },
+      },
+      {
+        name: 'familyCounseling',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'groupCounseling',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'housingAssessment',
+        type: { kind: 'ENUM', name: 'HousingAssessmentAtExit', ofType: null },
       },
       {
         name: 'id',
@@ -1553,8 +1815,80 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'inPersonGroup',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'inPersonIndividual',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'individualCounseling',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'laborExploitPastThreeMonths',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'otherDestination',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'posAdultConnections',
+        type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
+      },
+      {
+        name: 'posCommunityConnections',
+        type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
+      },
+      {
+        name: 'posPeerConnections',
+        type: { kind: 'ENUM', name: 'WorkerResponse', ofType: null },
+      },
+      {
+        name: 'postExitCounselingPlan',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'projectCompletionStatus',
+        type: { kind: 'ENUM', name: 'ProjectCompletionStatus', ofType: null },
+      },
+      {
+        name: 'sessionCountAtExit',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'sessionsInPlan',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'subsidyInformation',
+        type: { kind: 'ENUM', name: 'SubsidyInformation', ofType: null },
+      },
+      {
+        name: 'telephone',
+        type: { kind: 'ENUM', name: 'NoYesMissing', ofType: null },
+      },
+      {
+        name: 'workPlaceViolenceThreats',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'workplacePromiseDifference',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
     ],
   },
@@ -3887,6 +4221,67 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'valueNumber',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'YouthEducationStatus',
+    fields: [
+      {
+        name: 'currentEdStatus',
+        type: { kind: 'ENUM', name: 'CurrentEdStatus', ofType: null },
+      },
+      {
+        name: 'currentSchoolAttend',
+        type: { kind: 'ENUM', name: 'CurrentSchoolAttended', ofType: null },
+      },
+      {
+        name: 'dataCollectionStage',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'DataCollectionStage', ofType: null },
+        },
+      },
+      {
+        name: 'dateCreated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'dateDeleted',
+        type: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+      },
+      {
+        name: 'dateUpdated',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'informationDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'mostRecentEdStatus',
+        type: { kind: 'ENUM', name: 'MostRecentEdStatus', ofType: null },
       },
     ],
   },
