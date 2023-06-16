@@ -108,6 +108,7 @@ const UnitManagementTable = ({
             {
               key: 'delete',
               width: '1%',
+              dontLink: true,
               render: (unit: UnitFieldsFragment) =>
                 renderDeleteButton([unit.id], unit.occupants.length > 0),
             },

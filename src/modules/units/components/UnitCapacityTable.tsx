@@ -111,8 +111,8 @@ const UnitCapacityTable = ({ projectId }: { projectId: string }) => {
   const rows = data?.project?.unitTypes || [];
   if (rows.length === 0) {
     return (
-      <Typography pl={3} pb={3}>
-        No unit types.
+      <Typography pb={3} textAlign='center'>
+        No units
       </Typography>
     );
   }

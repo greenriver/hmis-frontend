@@ -2,7 +2,6 @@ import {
   alpha,
   Box,
   Checkbox,
-  lighten,
   Stack,
   SxProps,
   Table,
@@ -293,8 +292,8 @@ const GenericTable = <T extends { id: string }>({
           sx={{
             py: 4,
             textAlign: 'center',
-            backgroundColor: (theme) =>
-              lighten(theme.palette.background.default, 0.6),
+            // backgroundColor: (theme) =>
+            //   lighten(theme.palette.background.default, 0.6),
             typography: 'body1',
           }}
         >
@@ -361,6 +360,7 @@ const GenericTable = <T extends { id: string }>({
                     onClick={
                       onClickHandler ? () => onClickHandler(row) : undefined
                     }
+                    selected={includes(selected, row.id)}
                     onKeyUp={
                       !!handleRowClick
                         ? (event) =>
