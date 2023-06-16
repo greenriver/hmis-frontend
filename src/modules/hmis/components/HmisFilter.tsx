@@ -65,8 +65,6 @@ export const getInputTypeForRecordType = (
   recordType: string
 ): string | null => {
   return `${recordType}FilterOptions`;
-
-  return null;
 };
 
 const getFilterForType = (
@@ -88,7 +86,7 @@ const getFilterForType = (
   if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
   if (inputType === 'String') filter = { ...baseFields, type: 'text' };
 
-  if (fieldName === 'projects')
+  if (fieldName === 'project')
     filter = {
       ...baseFields,
       type: 'picklist',

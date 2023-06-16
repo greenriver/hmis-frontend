@@ -1,7 +1,7 @@
-import { Box, TypographyProps, Typography } from '@mui/material';
+import { Box, Typography, TypographyProps } from '@mui/material';
 import { ReactNode } from 'react';
 
-import NotSpecified from './NotSpecified';
+import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 
 interface Props {
   children: string | null | undefined;
@@ -21,7 +21,7 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
       {title}
     </Box>
     <Box sx={{ whiteSpace: 'pre-wrap', overflowWrap: 'break-word' }}>
-      {children ? children : <NotSpecified />}
+      {children ? children : <NotCollectedText variant={variant} />}
     </Box>
   </Typography>
 );
