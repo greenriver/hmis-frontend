@@ -4,19 +4,19 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
+  Stack,
 } from '@mui/material';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
 import UnitCapacityTable from './UnitCapacityTable';
+import UnitManagementTable from './UnitManagementTable';
 
 import CommonDialog from '@/components/elements/CommonDialog';
-import { ColumnDef } from '@/components/elements/GenericTable';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
-import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
-import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   emptyErrorState,
   ErrorState,
@@ -31,17 +31,7 @@ import { UnitsDefinition } from '@/modules/form/data';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import { ProjectPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { evictUnitsQuery } from '@/modules/units/util';
-import {
-  CreateUnitsInput,
-  DeleteUnitsDocument,
-  DeleteUnitsMutation,
-  DeleteUnitsMutationVariables,
-  GetUnitsDocument,
-  GetUnitsQuery,
-  GetUnitsQueryVariables,
-  UnitFieldsFragment,
-  useCreateUnitsMutation,
-} from '@/types/gqlTypes';
+import { CreateUnitsInput, useCreateUnitsMutation } from '@/types/gqlTypes';
 
 const Units = () => {
   const { project } = useProjectDashboardContext();
@@ -58,7 +48,6 @@ const Units = () => {
         if (data.createUnits?.errors?.length) {
           setErrors(partitionValidations(data.createUnits?.errors));
         } else {
-          // evictBedsQuery(inventoryId);
           evictUnitsQuery(project.id);
           closeDialog();
         }
@@ -82,39 +71,6 @@ const Units = () => {
     [createUnits, project]
   );
 
-  const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
-    return [
-      // TODO: maybe add back live input from UnitsTable
-      { header: 'Name', render: 'name' },
-      {
-        header: 'Unit Type',
-        render: (unit) => unit.unitType?.description,
-      },
-      ...(project.access.canManageInventory
-        ? [
-            {
-              key: 'delete',
-              width: '1%',
-              render: (unit: UnitFieldsFragment) => (
-                <DeleteMutationButton<
-                  DeleteUnitsMutation,
-                  DeleteUnitsMutationVariables
-                >
-                  variables={{ input: { unitIds: [unit.id] } }}
-                  idPath={'deleteUnits.unitIds[0]'}
-                  recordName='unit'
-                  queryDocument={DeleteUnitsDocument}
-                  ButtonProps={{ size: 'small' }}
-                  onSuccess={() => evictUnitsQuery(project.id)}
-                >
-                  Delete
-                </DeleteMutationButton>
-              ),
-            },
-          ]
-        : []),
-    ];
-  }, [project]);
   return (
     <>
       <PageTitle
@@ -136,24 +92,17 @@ const Units = () => {
           </ProjectPermissionsFilter>
         }
       />
-      <TitleCard title='Capacity' sx={{ mb: 4 }}>
-        <UnitCapacityTable projectId={project.id} />
-      </TitleCard>
-      {/* <Paper data-testid='unitTableCard'> */}
-      <TitleCard title='Unit Management' sx={{ mb: 4 }} headerVariant='border'>
-        <GenericTableWithData<
-          GetUnitsQuery,
-          GetUnitsQueryVariables,
-          UnitFieldsFragment
-        >
-          defaultPageSize={10}
-          queryVariables={{ id: project.id }}
-          queryDocument={GetUnitsDocument}
-          columns={columns}
-          pagePath='project.units'
-          noData='No units.'
-        />
-      </TitleCard>
+      <Stack gap={4}>
+        <TitleCard title='Capacity'>
+          <UnitCapacityTable projectId={project.id} />
+        </TitleCard>
+        <Paper>
+          <UnitManagementTable
+            projectId={project.id}
+            allowDeleteUnits={project.access.canManageInventory}
+          />
+        </Paper>
+      </Stack>
       <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
         <DialogTitle>Add Units</DialogTitle>
         <DialogContent sx={{ my: 2 }}>

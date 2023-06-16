@@ -1,9 +1,13 @@
 import {
+  alpha,
   Box,
+  Checkbox,
+  Stack,
   SxProps,
   Table,
   TableBody,
   TableCell,
+  TableCellProps,
   TableContainer,
   TableFooter,
   TableHead,
@@ -12,9 +16,11 @@ import {
   TableProps,
   TableRow,
   Theme,
+  Toolbar,
+  Typography,
 } from '@mui/material';
-import { get, isNil } from 'lodash-es';
-import { ReactNode } from 'react';
+import { get, includes, isNil } from 'lodash-es';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import { To } from 'react-router-dom';
 
 import Loading from './Loading';
@@ -50,6 +56,12 @@ export interface ColumnDef<T> {
   ariaLabel?: (row: T) => string;
   textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
 }
+
+interface EnhancedTableToolbarProps {
+  title?: string;
+  selectedIds?: readonly string[];
+  renderBulkAction?: (selectedIds: readonly string[]) => ReactNode;
+}
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
@@ -65,6 +77,10 @@ export interface Props<T> {
   renderVerticalHeaderCell?: RenderFunction<T>;
   rowSx?: (row: T) => SxProps<Theme>;
   headerCellSx?: (def: ColumnDef<T>) => SxProps<Theme>;
+  selectable?: boolean;
+  isRowSelectable?: (row: T) => boolean;
+  getSelectedRowIds?: () => string[];
+  EnhancedTableToolbarProps?: Omit<EnhancedTableToolbarProps, 'selectedIds'>;
 }
 
 const clickableRowStyles = {
@@ -72,14 +88,65 @@ const clickableRowStyles = {
   cursor: 'pointer',
 };
 
+const EnhancedTableToolbar = ({
+  selectedIds = [],
+  title,
+  renderBulkAction,
+}: EnhancedTableToolbarProps) => {
+  return (
+    <Toolbar
+      sx={{
+        pl: { sm: 2 },
+        pr: { xs: 1, sm: 1 },
+        borderBottomColor: 'borders.light',
+        borderBottomWidth: 1,
+        borderBottomStyle: 'solid',
+        ...(selectedIds.length > 0 && {
+          bgcolor: (theme) =>
+            alpha(
+              theme.palette.primary.main,
+              theme.palette.action.activatedOpacity
+            ),
+        }),
+      }}
+    >
+      <Stack
+        justifyContent='space-between'
+        alignItems={'center'}
+        direction={'row'}
+        sx={{
+          width: '100%',
+          pr: 1,
+        }}
+      >
+        {selectedIds.length > 0 ? (
+          <Typography variant='subtitle1' component='div'>
+            {selectedIds.length} selected
+          </Typography>
+        ) : (
+          <Typography variant='h5' component='div'>
+            {title}
+          </Typography>
+        )}
+        {selectedIds.length > 0 &&
+          renderBulkAction &&
+          renderBulkAction(selectedIds)}
+      </Stack>
+    </Toolbar>
+  );
+};
+
 const HeaderCell = ({
-  columnDef: { header },
+  children,
   sx,
+  padding,
 }: {
-  columnDef: ColumnDef<any>;
+  children: ReactNode;
+  padding?: TableCellProps['padding'];
   sx?: SxProps<Theme>;
 }) => (
   <TableCell
+    padding={padding}
     sx={{
       borderBottomColor: 'borders.dark',
       borderBottomWidth: 2,
@@ -88,7 +155,7 @@ const HeaderCell = ({
       ...sx,
     }}
   >
-    {header}
+    {children}
   </TableCell>
 );
 
@@ -107,8 +174,50 @@ const GenericTable = <T extends { id: string }>({
   noHead = false,
   rowSx,
   headerCellSx,
+  selectable = false,
+  isRowSelectable,
+  EnhancedTableToolbarProps,
 }: Props<T>) => {
   const hasHeaders = columns.find((c) => !!c.header);
+
+  const [selected, setSelected] = useState<readonly string[]>([]);
+
+  const handleSelectAllClick = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (event.target.checked) {
+        const newSelected = rows.filter(isRowSelectable).map((r) => r.id);
+        setSelected(newSelected);
+        return;
+      }
+      setSelected([]);
+    },
+    [isRowSelectable, rows]
+  );
+
+  const handleSelectRow = useCallback(
+    (row: T) => {
+      const selectedIndex = selected.indexOf(row.id);
+      let newSelected: readonly string[] = [];
+
+      if (selectedIndex === -1) {
+        newSelected = newSelected.concat(selected, row.id);
+      } else if (selectedIndex === 0) {
+        newSelected = newSelected.concat(selected.slice(1));
+      } else if (selectedIndex === selected.length - 1) {
+        newSelected = newSelected.concat(selected.slice(0, -1));
+      } else if (selectedIndex > 0) {
+        newSelected = newSelected.concat(
+          selected.slice(0, selectedIndex),
+          selected.slice(selectedIndex + 1)
+        );
+      }
+      setSelected(newSelected);
+    },
+    [selected]
+  );
+  // Clear selection when data changes
+  useEffect(() => setSelected([]), [rows]);
+
   if (loading) return <Loading />;
 
   const renderCellContents = (row: T, render: ColumnDef<T>['render']) => {
@@ -146,15 +255,29 @@ const GenericTable = <T extends { id: string }>({
     <TableHead>
       {hasHeaders && (
         <TableRow>
+          {selectable && (
+            <HeaderCell padding='checkbox'>
+              <Checkbox
+                color='primary'
+                indeterminate={
+                  selected.length > 0 && selected.length < rows.length
+                }
+                checked={rows.length > 0 && selected.length === rows.length}
+                onChange={handleSelectAllClick}
+                inputProps={{ 'aria-label': 'select all' }}
+              />
+            </HeaderCell>
+          )}
           {columns.map((def, i) => (
             <HeaderCell
-              columnDef={def}
               key={key(def) || i}
               sx={{
                 ...(headerCellSx ? headerCellSx(def) : undefined),
                 textAlign: def.textAlign,
               }}
-            />
+            >
+              {def.header}
+            </HeaderCell>
           ))}
         </TableRow>
       )}
@@ -162,138 +285,172 @@ const GenericTable = <T extends { id: string }>({
   );
 
   return (
-    <TableContainer sx={{ height: '100%', overflow: 'auto' }}>
-      <Table
-        size='medium'
-        sx={{ height: vertical ? '100%' : '1px' }}
-        {...tableProps}
-      >
-        {tableHead}
-        <TableBody>
-          {vertical &&
-            columns.map((def, i) => (
-              <TableRow key={key(def) || i}>
-                <HeaderCell
-                  columnDef={def}
-                  sx={{ ...verticalCellSx(1), width: '350px' }}
-                  key={key(def)}
-                />
-                {rows.map((row, idx) => (
-                  <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
-                    {renderCellContents(row, def.render)}
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          {!vertical &&
-            rows.map((row) => (
-              <TableRow
-                key={row.id}
-                sx={{
-                  // '&:last-child td, &:last-child th': { border: 0 },
-                  ...(!!(handleRowClick || rowLinkTo) && clickableRowStyles),
-                  ...(!!rowSx && rowSx(row)),
-                }}
-                hover={!!(handleRowClick || rowLinkTo)}
-                onClick={handleRowClick ? () => handleRowClick(row) : undefined}
-                onKeyUp={
-                  handleRowClick
-                    ? (event) => event.key === 'Enter' && handleRowClick(row)
-                    : undefined
-                }
-                tabIndex={handleRowClick ? 0 : undefined}
-              >
-                {columns.map((def, index) => {
-                  const {
-                    render,
-                    width,
-                    minWidth,
-                    linkTreatment,
-                    ariaLabel,
-                    dontLink = false,
-                    textAlign,
-                  } = def;
-                  const isFirstLinkWithTreatment =
-                    columns.findIndex((c) => c.linkTreatment) === index;
-                  const isLinked = rowLinkTo && !dontLink;
-                  const onClickLinkTreatment =
-                    handleRowClick && !dontLink && linkTreatment
-                      ? {
-                          color: 'links',
-                          textDecoration: 'underline',
-                          textDecorationColor: 'links',
-                        }
-                      : undefined;
-                  return (
-                    <TableCell
-                      key={key(def) || index}
-                      sx={{
+    <>
+      {EnhancedTableToolbarProps && (
+        <EnhancedTableToolbar
+          selectedIds={selected}
+          {...EnhancedTableToolbarProps}
+        />
+      )}
+      <TableContainer sx={{ height: '100%', overflow: 'auto' }}>
+        <Table
+          size='medium'
+          sx={{ height: vertical ? '100%' : '1px' }}
+          {...tableProps}
+        >
+          {tableHead}
+          <TableBody>
+            {vertical &&
+              columns.map((def, i) => (
+                <TableRow key={key(def) || i}>
+                  <HeaderCell
+                    sx={{ ...verticalCellSx(1), width: '350px' }}
+                    key={key(def)}
+                  >
+                    {' '}
+                    {def.header}
+                  </HeaderCell>
+                  {rows.map((row, idx) => (
+                    <TableCell key={row.id} sx={{ ...verticalCellSx(idx) }}>
+                      {renderCellContents(row, def.render)}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))}
+            {!vertical &&
+              rows.map((row) => {
+                const onClickHandler = handleRowClick
+                  ? handleRowClick
+                  : selectable
+                  ? handleSelectRow
+                  : undefined;
+
+                const isClickable = !!onClickHandler || !!rowLinkTo;
+
+                return (
+                  <TableRow
+                    key={row.id}
+                    sx={{
+                      ...(isClickable && clickableRowStyles),
+                      ...(!!rowSx && rowSx(row)),
+                    }}
+                    hover={isClickable}
+                    onClick={
+                      onClickHandler ? () => onClickHandler(row) : undefined
+                    }
+                    onKeyUp={
+                      !!handleRowClick
+                        ? (event) =>
+                            event.key === 'Enter' && handleRowClick(row)
+                        : undefined
+                    }
+                    tabIndex={handleRowClick ? 0 : undefined}
+                  >
+                    {selectable && (
+                      <TableCell padding='checkbox'>
+                        <Checkbox
+                          color='primary'
+                          disabled={
+                            isRowSelectable ? !isRowSelectable(row) : false
+                          }
+                          checked={includes(selected, row.id)}
+                          inputProps={{ 'aria-label': `Select ${row.id} ` }}
+                        />
+                      </TableCell>
+                    )}
+                    {columns.map((def, index) => {
+                      const {
+                        render,
                         width,
                         minWidth,
-                        ...(isLinked ? { p: 0 } : undefined),
+                        linkTreatment,
+                        ariaLabel,
+                        dontLink = false,
                         textAlign,
-                        ...onClickLinkTreatment,
-                      }}
-                    >
-                      {isLinked ? (
-                        <RouterLink
-                          to={rowLinkTo(row)}
-                          aria-label={ariaLabel && ariaLabel(row)}
-                          plain={!linkTreatment}
-                          data-testid={linkTreatment && 'table-linkedCell'}
+                      } = def;
+                      const isFirstLinkWithTreatment =
+                        columns.findIndex((c) => c.linkTreatment) === index;
+                      const isLinked = rowLinkTo && !dontLink;
+                      const onClickLinkTreatment =
+                        handleRowClick && !dontLink && linkTreatment
+                          ? {
+                              color: 'links',
+                              textDecoration: 'underline',
+                              textDecorationColor: 'links',
+                            }
+                          : undefined;
+                      return (
+                        <TableCell
+                          key={key(def) || index}
                           sx={{
-                            height: '100%',
-                            verticalAlign: 'middle',
-                            display: 'block',
-                            '&.Mui-focusVisible': {
-                              outlineOffset: '-2px',
-                            },
+                            width,
+                            minWidth,
+                            ...(isLinked ? { p: 0 } : undefined),
+                            textAlign,
+                            ...onClickLinkTreatment,
                           }}
-                          tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
                         >
-                          <Box
-                            component='span'
-                            sx={{
-                              display: 'flex',
-                              height: '100%',
-                              alignItems: 'center',
-                              // TODO may want to adjust for small table size
-                              px: 2,
-                              py: 1,
-                            }}
-                          >
-                            {renderCellContents(row, render)}
-                          </Box>
-                        </RouterLink>
-                      ) : (
-                        renderCellContents(row, render)
-                      )}
-                    </TableCell>
-                  );
-                })}
+                          {isLinked ? (
+                            <RouterLink
+                              to={rowLinkTo(row)}
+                              aria-label={ariaLabel && ariaLabel(row)}
+                              plain={!linkTreatment}
+                              data-testid={linkTreatment && 'table-linkedCell'}
+                              sx={{
+                                height: '100%',
+                                verticalAlign: 'middle',
+                                display: 'block',
+                                '&.Mui-focusVisible': {
+                                  outlineOffset: '-2px',
+                                },
+                              }}
+                              tabIndex={isFirstLinkWithTreatment ? 0 : '-1'}
+                            >
+                              <Box
+                                component='span'
+                                sx={{
+                                  display: 'flex',
+                                  height: '100%',
+                                  alignItems: 'center',
+                                  // TODO may want to adjust for small table size
+                                  px: 2,
+                                  py: 1,
+                                }}
+                              >
+                                {renderCellContents(row, render)}
+                              </Box>
+                            </RouterLink>
+                          ) : (
+                            renderCellContents(row, render)
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+            {actionRow}
+          </TableBody>
+          {paginated && tablePaginationProps && (
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[5, 10, 25, 50]}
+                  SelectProps={{
+                    inputProps: {
+                      'aria-label': 'rows per page',
+                    },
+                    native: true,
+                  }}
+                  sx={{ borderBottom: 'none' }}
+                  {...tablePaginationProps}
+                />
               </TableRow>
-            ))}
-          {actionRow}
-        </TableBody>
-        {paginated && tablePaginationProps && (
-          <TableFooter>
-            <TableRow>
-              <TablePagination
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                SelectProps={{
-                  inputProps: {
-                    'aria-label': 'rows per page',
-                  },
-                  native: true,
-                }}
-                sx={{ borderBottom: 'none' }}
-                {...tablePaginationProps}
-              />
-            </TableRow>
-          </TableFooter>
-        )}
-      </Table>
-    </TableContainer>
+            </TableFooter>
+          )}
+        </Table>
+      </TableContainer>
+    </>
   );
 };
 

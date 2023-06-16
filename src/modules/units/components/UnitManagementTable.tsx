@@ -1,0 +1,134 @@
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Typography } from '@mui/material';
+import pluralize from 'pluralize';
+import { useCallback, useMemo } from 'react';
+
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
+import { ColumnDef } from '@/components/elements/GenericTable';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
+import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { evictUnitsQuery } from '@/modules/units/util';
+import {
+  DeleteUnitsDocument,
+  DeleteUnitsMutation,
+  DeleteUnitsMutationVariables,
+  GetUnitsDocument,
+  GetUnitsQuery,
+  GetUnitsQueryVariables,
+  UnitFieldsFragment,
+} from '@/types/gqlTypes';
+
+const UnitManagementTable = ({
+  projectId,
+  allowDeleteUnits,
+}: {
+  projectId: string;
+  allowDeleteUnits: boolean;
+}) => {
+  const renderDeleteButton = useCallback(
+    (unitIds: string[]) => {
+      const pluralUnits = `${unitIds.length} ${pluralize(
+        'unit',
+        unitIds.length
+      )}`;
+
+      return (
+        <DeleteMutationButton<DeleteUnitsMutation, DeleteUnitsMutationVariables>
+          variables={{
+            input: { unitIds },
+          }}
+          idPath={'deleteUnits.unitIds[0]'}
+          recordName='unit'
+          queryDocument={DeleteUnitsDocument}
+          onSuccess={() => evictUnitsQuery(projectId)}
+          ButtonProps={{
+            size: 'small',
+            variant: 'text',
+            color: 'info',
+          }}
+          confirmationDialogContent={
+            unitIds.length > 1 ? (
+              <>
+                <Typography>
+                  {`Are you sure you want to delete ${pluralUnits}?`}
+                </Typography>
+                <Typography>This action cannot be undone.</Typography>
+              </>
+            ) : undefined
+          }
+          ConfirmationDialogProps={
+            unitIds.length > 1
+              ? {
+                  confirmText: `Yes, delete ${pluralUnits}`,
+                  title: 'Delete units',
+                }
+              : undefined
+          }
+        >
+          <DeleteIcon sx={{ color: 'text.secondary' }} />
+        </DeleteMutationButton>
+      );
+    },
+    [projectId]
+  );
+
+  const columns: ColumnDef<UnitFieldsFragment>[] = useMemo(() => {
+    return [
+      {
+        header: 'Unit Type',
+        render: (unit) => unit.unitType?.description,
+      },
+      {
+        header: 'Unit ID',
+        render: 'id',
+      },
+      {
+        header: 'Status',
+        render: 'id',
+      },
+      {
+        header: 'Occupant',
+        render: 'id',
+      },
+      ...(allowDeleteUnits
+        ? [
+            {
+              key: 'delete',
+              width: '1%',
+              render: (unit: UnitFieldsFragment) =>
+                renderDeleteButton([unit.id]),
+            },
+          ]
+        : []),
+    ];
+  }, [allowDeleteUnits, renderDeleteButton]);
+
+  return (
+    <GenericTableWithData<
+      GetUnitsQuery,
+      GetUnitsQueryVariables,
+      UnitFieldsFragment
+    >
+      defaultPageSize={10}
+      queryVariables={{ id: projectId }}
+      queryDocument={GetUnitsDocument}
+      columns={columns}
+      pagePath='project.units'
+      noData='No units.'
+      selectable={allowDeleteUnits}
+      // FIXME assignment
+      isRowSelectable={(row) => !!row.name}
+      EnhancedTableToolbarProps={{
+        title: 'Unit Management',
+        renderBulkAction: allowDeleteUnits
+          ? (selectedUnitIds) => (
+              <ButtonTooltipContainer title='Delete Selected Units'>
+                {renderDeleteButton(selectedUnitIds as string[])}
+              </ButtonTooltipContainer>
+            )
+          : undefined,
+      }}
+    />
+  );
+};
+export default UnitManagementTable;
