@@ -10,7 +10,6 @@ import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import {
-  FormDefinitionJsonFieldsFragment,
   ReferralPostingDetailFieldsFragment,
   ReferralPostingInput,
   useUpdateReferralPostingMutation,
@@ -22,23 +21,19 @@ interface Props {
 }
 
 const AdminReferralPostingForm: React.FC<Props> = ({
-  referralPosting,
   readOnly = false,
+  ...props
 }) => {
-  const formDefinition = useMemo<FormDefinitionJsonFieldsFragment>(() => {
-    if (referralPosting.postingIdentifier) {
-      // came from LINK, show re-request option
-      return AdminReferralPostingDefinition;
-    } else {
-      // referral request originated locally, hide re-request option
-      return {
-        ...AdminReferralPostingDefinition,
-        item: AdminReferralPostingDefinition.item.filter(
-          (i) => i.linkId !== 'resendReferralRequest'
-        ),
-      };
-    }
-  }, [referralPosting.postingIdentifier]);
+  const referralPosting = useMemo(() => {
+    const record = props.referralPosting;
+    // the status is denied pending status but we don't allow this option in the form. Set it to null instead
+    return {
+      ...record,
+      status: record.status == 'denied_pending_status' ? null : record.status,
+    };
+  }, [props.referralPosting]);
+
+  const formDefinition = AdminReferralPostingDefinition;
   const [errors, setErrors] = useState(emptyErrorState);
   const [mutate, { loading }] = useUpdateReferralPostingMutation({
     onCompleted: (data) => {
@@ -70,8 +65,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   const initialValues = useInitialFormValues({
     definition: formDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
-    // there may be some way to use this to set re-request
-    //localConstants: { resendReferralRequest: 'true' },
+    localConstants: { hasReferralRequest: !!referralPosting.postingIdentifier },
   });
 
   if (readOnly) {

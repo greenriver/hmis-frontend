@@ -40,6 +40,7 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   project {
     id
     projectType
+    projectName
   }
   organization {
     id

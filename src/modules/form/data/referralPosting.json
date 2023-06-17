@@ -10,7 +10,7 @@
     },
     {
       "type": "CHOICE",
-      "linkId": "denialReasonId",
+      "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
       "fieldName": "denialReason",
@@ -22,12 +22,12 @@
           "answerCode": "denied_pending_status"
         }
       ],
-      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
+      "pickListReference": "ReferralPostingDenialReasonType"
     },
     {
       "type": "TEXT",
       "linkId": "statusNote",
-      "required": false,
+      "required": true,
       "text": "Notes",
       "fieldName": "statusNote"
     }

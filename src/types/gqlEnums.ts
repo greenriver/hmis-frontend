@@ -798,7 +798,6 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
-    REFERRAL_POSTING_DENIAL_REASON_TYPES: 'Referral Posting Status',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
     SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
@@ -900,6 +899,15 @@ export const HmisEnums = {
     BED_NIGHT: 'Bed Night',
     HUD_VASH_OTH_VOUCHER_TRACKING: 'HUD-VASH OTH Voucher Tracking',
     MOVING_ON_ASSISTANCE: 'Moving On Assistance',
+  },
+  ReferralPostingDenialReasonType: {
+    DoesNotMeetEligibilityCriteria: 'Does not meet eligibility criteria',
+    EnrolledButDeclinedHMISDataEntry: 'Enrolled, but declined HMIS data entry',
+    EstimatedVacancyNoLongerAvailable: 'Estimated vacancy no longer available',
+    HMISUserError: 'HMIS user error',
+    InabilityToCompleteIntake: 'Inability to complete intake',
+    NoLongerExperiencingHomelessness: 'No longer experiencing homelessness',
+    NoLongerInterestedInThisProgram: 'No longer interested in this program',
   },
   ReferralPostingStatus: {
     accepted_by_other_program_status: 'Accepted By Other Program',

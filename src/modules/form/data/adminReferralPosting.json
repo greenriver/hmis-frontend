@@ -1,12 +1,23 @@
 {
   "item": [
     {
+      "type": "STRING",
+      "linkId": "has-referral-request",
+      "hidden": true,
+      "initial": [
+        {
+          "initialBehavior": "OVERWRITE",
+          "valueLocalConstant": "$hasReferralRequest"
+        }
+      ]
+    },
+    {
       "type": "CHOICE",
       "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
       "fieldName": "denialReason",
-      "pickListReference": "REFERRAL_POSTING_DENIAL_REASON_TYPES"
+      "pickListReference": "ReferralPostingDenialReasonType"
     },
     {
       "type": "CHOICE",
@@ -28,6 +39,12 @@
           "question": "status",
           "operator": "EQUAL",
           "answerCode": "denied_status"
+        },
+        {
+          "_comment": "re-requests are only allowed if the referral came from a request",
+          "question": "has-referral-request",
+          "operator": "EQUAL",
+          "answerBoolean": true
         }
       ]
     },
@@ -50,7 +67,7 @@
     {
       "type": "TEXT",
       "linkId": "denialNote",
-      "required": false,
+      "required": true,
       "text": "Denial Note",
       "fieldName": "denialNote"
     }

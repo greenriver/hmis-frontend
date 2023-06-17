@@ -3107,8 +3107,6 @@ export enum PickListType {
   /** All Projects that the User can see */
   Project = 'PROJECT',
   ReferralOutcome = 'REFERRAL_OUTCOME',
-  /** Referral Posting Status */
-  ReferralPostingDenialReasonTypes = 'REFERRAL_POSTING_DENIAL_REASON_TYPES',
   /** Referral Result  */
   ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
   ServiceType = 'SERVICE_TYPE',
@@ -3640,7 +3638,7 @@ export type ReferralPosting = {
   assignedDate: Scalars['ISO8601DateTime'];
   chronic?: Maybe<Scalars['Boolean']>;
   denialNote?: Maybe<Scalars['String']>;
-  denialReason?: Maybe<Scalars['String']>;
+  denialReason?: Maybe<ReferralPostingDenialReasonType>;
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']>;
   hohName: Scalars['String'];
@@ -3669,10 +3667,28 @@ export type ReferralPosting = {
   unitType: UnitTypeObject;
 };
 
+/** Referral Posting Denial Reason */
+export enum ReferralPostingDenialReasonType {
+  /** Does not meet eligibility criteria */
+  DoesNotMeetEligibilityCriteria = 'DoesNotMeetEligibilityCriteria',
+  /** Enrolled, but declined HMIS data entry */
+  EnrolledButDeclinedHmisDataEntry = 'EnrolledButDeclinedHMISDataEntry',
+  /** Estimated vacancy no longer available */
+  EstimatedVacancyNoLongerAvailable = 'EstimatedVacancyNoLongerAvailable',
+  /** HMIS user error */
+  HmisUserError = 'HMISUserError',
+  /** Inability to complete intake */
+  InabilityToCompleteIntake = 'InabilityToCompleteIntake',
+  /** No longer experiencing homelessness */
+  NoLongerExperiencingHomelessness = 'NoLongerExperiencingHomelessness',
+  /** No longer interested in this program */
+  NoLongerInterestedInThisProgram = 'NoLongerInterestedInThisProgram',
+}
+
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']>;
-  denialReason?: InputMaybe<Scalars['ID']>;
-  referralResult?: InputMaybe<Scalars['ID']>;
+  denialReason?: InputMaybe<ReferralPostingDenialReasonType>;
+  referralResult?: InputMaybe<ReferralResult>;
   resendReferralRequest?: InputMaybe<Scalars['Boolean']>;
   status?: InputMaybe<Scalars['ID']>;
   statusNote?: InputMaybe<Scalars['String']>;
@@ -13058,7 +13074,7 @@ export type GetReferralPostingQuery = {
     assignedDate: string;
     chronic?: boolean | null;
     denialNote?: string | null;
-    denialReason?: string | null;
+    denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
     postingIdentifier?: string | null;
     referralDate: string;
@@ -13079,6 +13095,7 @@ export type GetReferralPostingQuery = {
       __typename?: 'Project';
       id: string;
       projectType?: ProjectType | null;
+      projectName: string;
     } | null;
     organization?: {
       __typename?: 'Organization';
@@ -13450,7 +13467,7 @@ export type UpdateReferralPostingMutation = {
       assignedDate: string;
       chronic?: boolean | null;
       denialNote?: string | null;
-      denialReason?: string | null;
+      denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
       postingIdentifier?: string | null;
       referralDate: string;
@@ -13471,6 +13488,7 @@ export type UpdateReferralPostingMutation = {
         __typename?: 'Project';
         id: string;
         projectType?: ProjectType | null;
+        projectName: string;
       } | null;
       organization?: {
         __typename?: 'Organization';
@@ -13605,7 +13623,7 @@ export type ReferralPostingDetailFieldsFragment = {
   assignedDate: string;
   chronic?: boolean | null;
   denialNote?: string | null;
-  denialReason?: string | null;
+  denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
   postingIdentifier?: string | null;
   referralDate: string;
@@ -13626,6 +13644,7 @@ export type ReferralPostingDetailFieldsFragment = {
     __typename?: 'Project';
     id: string;
     projectType?: ProjectType | null;
+    projectName: string;
   } | null;
   organization?: {
     __typename?: 'Organization';
@@ -15240,6 +15259,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     project {
       id
       projectType
+      projectName
     }
     organization {
       id

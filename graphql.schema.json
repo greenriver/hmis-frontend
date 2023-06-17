@@ -19805,12 +19805,6 @@
             "deprecationReason": null
           },
           {
-            "name": "REFERRAL_POSTING_DENIAL_REASON_TYPES",
-            "description": "Referral Posting Status",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "REFERRAL_RESULT_TYPES",
             "description": "Referral Result ",
             "isDeprecated": false,
@@ -23364,8 +23358,8 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
+              "kind": "ENUM",
+              "name": "ReferralPostingDenialReasonType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -23734,6 +23728,59 @@
         "possibleTypes": null
       },
       {
+        "kind": "ENUM",
+        "name": "ReferralPostingDenialReasonType",
+        "description": "Referral Posting Denial Reason",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "DoesNotMeetEligibilityCriteria",
+            "description": "Does not meet eligibility criteria",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EnrolledButDeclinedHMISDataEntry",
+            "description": "Enrolled, but declined HMIS data entry",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "EstimatedVacancyNoLongerAvailable",
+            "description": "Estimated vacancy no longer available",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HMISUserError",
+            "description": "HMIS user error",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "InabilityToCompleteIntake",
+            "description": "Inability to complete intake",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NoLongerExperiencingHomelessness",
+            "description": "No longer experiencing homelessness",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "NoLongerInterestedInThisProgram",
+            "description": "No longer interested in this program",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
         "kind": "INPUT_OBJECT",
         "name": "ReferralPostingInput",
         "description": null,
@@ -23755,8 +23802,8 @@
             "name": "denialReason",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "ID",
+              "kind": "ENUM",
+              "name": "ReferralPostingDenialReasonType",
               "ofType": null
             },
             "defaultValue": null,
@@ -23767,8 +23814,8 @@
             "name": "referralResult",
             "description": null,
             "type": {
-              "kind": "SCALAR",
-              "name": "ID",
+              "kind": "ENUM",
+              "name": "ReferralResult",
               "ofType": null
             },
             "defaultValue": null,
