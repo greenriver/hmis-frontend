@@ -19,13 +19,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A base64 encoded string */
   Base64: string;
-  /** An ISO 8601-encoded date */
   ISO8601Date: string;
-  /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
-  /** Arbitrary JSON Type */
   JsonObject: any;
 };
 
@@ -13091,6 +13087,7 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
+    referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
     project?: {
       __typename?: 'Project';
       id: string;
@@ -13484,6 +13481,7 @@ export type UpdateReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
+      referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
       project?: {
         __typename?: 'Project';
         id: string;
@@ -13640,6 +13638,7 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
+  referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
   project?: {
     __typename?: 'Project';
     id: string;
@@ -15256,6 +15255,9 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusNoteUpdatedBy
     statusUpdatedAt
     statusUpdatedBy
+    referralRequest {
+      id
+    }
     project {
       id
       projectType

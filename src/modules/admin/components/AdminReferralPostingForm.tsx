@@ -65,7 +65,11 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   const initialValues = useInitialFormValues({
     definition: formDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
-    localConstants: { hasReferralRequest: !!referralPosting.postingIdentifier },
+    localConstants: {
+      hasReferralRequest:
+        !!referralPosting.postingIdentifier &&
+        !!referralPosting.referralRequest,
+    },
   });
 
   if (readOnly) {

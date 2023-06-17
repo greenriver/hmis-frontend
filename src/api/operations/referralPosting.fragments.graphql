@@ -37,6 +37,9 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   statusNoteUpdatedBy
   statusUpdatedAt
   statusUpdatedBy
+  referralRequest {
+    id
+  }
   project {
     id
     projectType
