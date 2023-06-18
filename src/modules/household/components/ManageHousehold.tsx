@@ -8,8 +8,8 @@ import EditHouseholdMemberTable from './EditHouseholdMemberTable';
 import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 
 import { CommonCard } from '@/components/elements/CommonCard';
-import { ColumnDef } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
