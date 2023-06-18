@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es';
 
 import { useProjectDashboardContext } from '../ProjectDashboard';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';
@@ -70,7 +70,7 @@ const ProjectCocTable = (props: Props) => {
         queryDocument={GetProjectProjectCocsDocument}
         columns={columns}
         pagePath='project.projectCocs'
-        noData='No Project CoC records.'
+        noData='No Project CoC records'
         rowLinkTo={
           project.access.canEditProjectDetails
             ? (record) =>

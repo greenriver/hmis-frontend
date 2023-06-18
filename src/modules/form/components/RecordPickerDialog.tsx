@@ -23,8 +23,8 @@ import EnrollmentsTable from '@/components/clientDashboard/enrollments/tables/En
 import HealthAndDvsTable from '@/components/clientDashboard/enrollments/tables/HealthAndDvsTable';
 import IncomeBenefitsTable from '@/components/clientDashboard/enrollments/tables/IncomeBenefitsTable';
 import CommonDialog from '@/components/elements/CommonDialog';
-import { ColumnDef } from '@/components/elements/GenericTable';
 import RelativeDate from '@/components/elements/RelativeDate';
+import { ColumnDef } from '@/components/elements/table/types';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';

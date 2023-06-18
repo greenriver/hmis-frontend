@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
@@ -109,7 +109,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
       queryVariables={{ id: project.id }}
       queryDocument={GetProjectReferralRequestsDocument}
       columns={columns}
-      noData='No referral requests.'
+      noData='No referral requests'
       pagePath='project.referralRequests'
     />
   );

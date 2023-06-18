@@ -11,5 +11,9 @@ export const evictUnitsQuery = (id: string) => {
     id: `Project:${id}`,
     fieldName: 'units',
   });
+  cache.evict({
+    id: `Project:${id}`,
+    fieldName: 'unitTypes',
+  });
   evictUnitPickList(id);
 };

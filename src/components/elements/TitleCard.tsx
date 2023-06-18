@@ -1,4 +1,4 @@
-import { Paper, PaperProps, Stack, Typography } from '@mui/material';
+import { Paper, PaperProps, Stack, SxProps, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 
 interface Props extends PaperProps {
@@ -7,12 +7,14 @@ interface Props extends PaperProps {
   actions?: ReactNode;
   headerVariant?: 'border';
   'data-testid'?: string;
+  headerSx?: SxProps;
 }
 const TitleCard: React.FC<Props> = ({
   title,
   children,
   actions,
   headerVariant,
+  headerSx,
   ...props
 }) => (
   <Paper data-testid={props['data-testid']} {...props}>
@@ -22,7 +24,6 @@ const TitleCard: React.FC<Props> = ({
       sx={{
         px: 2,
         py: 2,
-        //alignItems: 'center',
         ...(headerVariant === 'border'
           ? {
               borderBottomColor: 'borders.light',
@@ -30,6 +31,7 @@ const TitleCard: React.FC<Props> = ({
               borderBottomStyle: 'solid',
             }
           : {}),
+        ...headerSx,
       }}
     >
       <Typography variant='h5'>{title}</Typography>

@@ -1,4 +1,4 @@
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import { enrollmentName, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   DataCollectionStage,

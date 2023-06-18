@@ -10,8 +10,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import RelationshipToHoHInput from './RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
 
-import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
-import GenericTable from '@/components/elements/GenericTable';
+import GenericTable from '@/components/elements/table/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
 import ClientName from '@/modules/client/components/ClientName';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -21,6 +20,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';

@@ -1,5 +1,6 @@
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

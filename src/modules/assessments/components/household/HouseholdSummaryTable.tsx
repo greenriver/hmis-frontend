@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction, useMemo } from 'react';
 
 import { AssessmentStatus, TabDefinition } from './util';
 
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { FormRole } from '@/types/gqlTypes';

@@ -3160,6 +3160,7 @@ export type Project = {
   residentialAffiliation?: Maybe<NoYesMissing>;
   targetPopulation?: Maybe<TargetPopulation>;
   trackingMethod?: Maybe<TrackingMethod>;
+  unitTypes: Array<UnitTypeCapacity>;
   units: UnitsPaginated;
   user?: Maybe<User>;
 };
@@ -3206,9 +3207,8 @@ export type ProjectReferralRequestsArgs = {
 };
 
 export type ProjectUnitsArgs = {
-  active?: InputMaybe<Scalars['Boolean']>;
+  filters?: InputMaybe<UnitFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
-  occupied?: InputMaybe<Scalars['Boolean']>;
   offset?: InputMaybe<Scalars['Int']>;
 };
 
@@ -4419,11 +4419,24 @@ export type Unit = {
   endDate?: Maybe<Scalars['ISO8601Date']>;
   id: Scalars['ID'];
   name?: Maybe<Scalars['String']>;
+  occupants: Array<Enrollment>;
   project?: Maybe<Project>;
   startDate: Scalars['ISO8601Date'];
   unitSize?: Maybe<Scalars['Int']>;
   unitType?: Maybe<UnitTypeObject>;
   user: User;
+};
+
+export enum UnitFilterOptionStatus {
+  /** Available */
+  Available = 'AVAILABLE',
+  /** Filled */
+  Filled = 'FILLED',
+}
+
+export type UnitFilterOptions = {
+  status?: InputMaybe<Array<UnitFilterOptionStatus>>;
+  unitType?: InputMaybe<Array<Scalars['ID']>>;
 };
 
 export type UnitInput = {
@@ -4433,6 +4446,14 @@ export type UnitInput = {
   prefix?: InputMaybe<Scalars['String']>;
   projectId: Scalars['ID'];
   unitTypeId?: InputMaybe<Scalars['ID']>;
+};
+
+export type UnitTypeCapacity = {
+  __typename?: 'UnitTypeCapacity';
+  availability: Scalars['Int'];
+  capacity: Scalars['Int'];
+  id: Scalars['ID'];
+  unitType: Scalars['String'];
 };
 
 export type UnitTypeObject = {
@@ -11942,37 +11963,6 @@ export type InventoryFieldsFragment = {
   }>;
 };
 
-export type UnitTypeFieldsFragment = {
-  __typename?: 'UnitTypeObject';
-  id: string;
-  description?: string | null;
-  bedType?: InventoryBedType | null;
-  unitSize?: number | null;
-  dateUpdated: string;
-  dateCreated: string;
-};
-
-export type UnitFieldsFragment = {
-  __typename?: 'Unit';
-  id: string;
-  name?: string | null;
-  startDate: string;
-  endDate?: string | null;
-  unitSize?: number | null;
-  dateUpdated: string;
-  dateCreated: string;
-  unitType?: {
-    __typename?: 'UnitTypeObject';
-    id: string;
-    description?: string | null;
-    bedType?: InventoryBedType | null;
-    unitSize?: number | null;
-    dateUpdated: string;
-    dateCreated: string;
-  } | null;
-  user: { __typename: 'User'; id: string; name: string };
-};
-
 export type MciMatchFieldsFragment = {
   __typename?: 'MciClearanceMatch';
   id: string;
@@ -12880,48 +12870,6 @@ export type GetInventoryQuery = {
   } | null;
 };
 
-export type GetUnitsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  active?: InputMaybe<Scalars['Boolean']>;
-  occupied?: InputMaybe<Scalars['Boolean']>;
-}>;
-
-export type GetUnitsQuery = {
-  __typename?: 'Query';
-  project?: {
-    __typename?: 'Project';
-    id: string;
-    units: {
-      __typename?: 'UnitsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Unit';
-        id: string;
-        name?: string | null;
-        startDate: string;
-        endDate?: string | null;
-        unitSize?: number | null;
-        dateUpdated: string;
-        dateCreated: string;
-        unitType?: {
-          __typename?: 'UnitTypeObject';
-          id: string;
-          description?: string | null;
-          bedType?: InventoryBedType | null;
-          unitSize?: number | null;
-          dateUpdated: string;
-          dateCreated: string;
-        } | null;
-        user: { __typename: 'User'; id: string; name: string };
-      }>;
-    };
-  } | null;
-};
-
 export type GetProjectCocQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -13330,125 +13278,6 @@ export type DeleteProjectCocMutation = {
     __typename?: 'DeleteProjectCocPayload';
     clientMutationId?: string | null;
     projectCoc?: { __typename?: 'ProjectCoc'; id: string } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type CreateUnitsMutationVariables = Exact<{
-  input: CreateUnitsInput;
-}>;
-
-export type CreateUnitsMutation = {
-  __typename?: 'Mutation';
-  createUnits?: {
-    __typename?: 'CreateUnitsPayload';
-    clientMutationId?: string | null;
-    units?: Array<{
-      __typename?: 'Unit';
-      id: string;
-      name?: string | null;
-      startDate: string;
-      endDate?: string | null;
-      unitSize?: number | null;
-      dateUpdated: string;
-      dateCreated: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        id: string;
-        description?: string | null;
-        bedType?: InventoryBedType | null;
-        unitSize?: number | null;
-        dateUpdated: string;
-        dateCreated: string;
-      } | null;
-      user: { __typename: 'User'; id: string; name: string };
-    }> | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type DeleteUnitsMutationVariables = Exact<{
-  input: DeleteUnitsInput;
-}>;
-
-export type DeleteUnitsMutation = {
-  __typename?: 'Mutation';
-  deleteUnits?: {
-    __typename?: 'DeleteUnitsPayload';
-    clientMutationId?: string | null;
-    unitIds?: Array<string> | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type UpdateUnitsMutationVariables = Exact<{
-  input: UpdateUnitsInput;
-}>;
-
-export type UpdateUnitsMutation = {
-  __typename?: 'Mutation';
-  updateUnits?: {
-    __typename?: 'UpdateUnitsPayload';
-    clientMutationId?: string | null;
-    units: Array<{
-      __typename?: 'Unit';
-      id: string;
-      name?: string | null;
-      startDate: string;
-      endDate?: string | null;
-      unitSize?: number | null;
-      dateUpdated: string;
-      dateCreated: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        id: string;
-        description?: string | null;
-        bedType?: InventoryBedType | null;
-        unitSize?: number | null;
-        dateUpdated: string;
-        dateCreated: string;
-      } | null;
-      user: { __typename: 'User'; id: string; name: string };
-    }>;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -14179,6 +14008,256 @@ export type GetEnrollmentServicesQuery = {
         }>;
       }>;
     };
+  } | null;
+};
+
+export type UnitTypeCapacityFieldsFragment = {
+  __typename?: 'UnitTypeCapacity';
+  id: string;
+  unitType: string;
+  capacity: number;
+  availability: number;
+};
+
+export type UnitTypeFieldsFragment = {
+  __typename?: 'UnitTypeObject';
+  id: string;
+  description?: string | null;
+  bedType?: InventoryBedType | null;
+  unitSize?: number | null;
+  dateUpdated: string;
+  dateCreated: string;
+};
+
+export type UnitFieldsFragment = {
+  __typename?: 'Unit';
+  id: string;
+  startDate: string;
+  endDate?: string | null;
+  unitSize?: number | null;
+  unitType?: {
+    __typename?: 'UnitTypeObject';
+    id: string;
+    description?: string | null;
+    bedType?: InventoryBedType | null;
+    unitSize?: number | null;
+    dateUpdated: string;
+    dateCreated: string;
+  } | null;
+  occupants: Array<{
+    __typename?: 'Enrollment';
+    id: string;
+    client: {
+      __typename?: 'Client';
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+  }>;
+};
+
+export type GetUnitsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<UnitFilterOptions>;
+}>;
+
+export type GetUnitsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    units: {
+      __typename?: 'UnitsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Unit';
+        id: string;
+        startDate: string;
+        endDate?: string | null;
+        unitSize?: number | null;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          id: string;
+          description?: string | null;
+          bedType?: InventoryBedType | null;
+          unitSize?: number | null;
+          dateUpdated: string;
+          dateCreated: string;
+        } | null;
+        occupants: Array<{
+          __typename?: 'Enrollment';
+          id: string;
+          client: {
+            __typename?: 'Client';
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
+        }>;
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectUnitTypesQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetProjectUnitTypesQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    unitTypes: Array<{
+      __typename?: 'UnitTypeCapacity';
+      id: string;
+      unitType: string;
+      capacity: number;
+      availability: number;
+    }>;
+  } | null;
+};
+
+export type CreateUnitsMutationVariables = Exact<{
+  input: CreateUnitsInput;
+}>;
+
+export type CreateUnitsMutation = {
+  __typename?: 'Mutation';
+  createUnits?: {
+    __typename?: 'CreateUnitsPayload';
+    clientMutationId?: string | null;
+    units?: Array<{
+      __typename?: 'Unit';
+      id: string;
+      startDate: string;
+      endDate?: string | null;
+      unitSize?: number | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+        bedType?: InventoryBedType | null;
+        unitSize?: number | null;
+        dateUpdated: string;
+        dateCreated: string;
+      } | null;
+      occupants: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+      }>;
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteUnitsMutationVariables = Exact<{
+  input: DeleteUnitsInput;
+}>;
+
+export type DeleteUnitsMutation = {
+  __typename?: 'Mutation';
+  deleteUnits?: {
+    __typename?: 'DeleteUnitsPayload';
+    clientMutationId?: string | null;
+    unitIds?: Array<string> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type UpdateUnitsMutationVariables = Exact<{
+  input: UpdateUnitsInput;
+}>;
+
+export type UpdateUnitsMutation = {
+  __typename?: 'Mutation';
+  updateUnits?: {
+    __typename?: 'UpdateUnitsPayload';
+    clientMutationId?: string | null;
+    units: Array<{
+      __typename?: 'Unit';
+      id: string;
+      startDate: string;
+      endDate?: string | null;
+      unitSize?: number | null;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        id: string;
+        description?: string | null;
+        bedType?: InventoryBedType | null;
+        unitSize?: number | null;
+        dateUpdated: string;
+        dateCreated: string;
+      } | null;
+      occupants: Array<{
+        __typename?: 'Enrollment';
+        id: string;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
+      }>;
+    }>;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -15072,35 +15151,6 @@ export const InventoryFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
 `;
-export const UnitTypeFieldsFragmentDoc = gql`
-  fragment UnitTypeFields on UnitTypeObject {
-    id
-    description
-    bedType
-    unitSize
-    dateUpdated
-    dateCreated
-  }
-`;
-export const UnitFieldsFragmentDoc = gql`
-  fragment UnitFields on Unit {
-    id
-    name
-    startDate
-    endDate
-    unitSize
-    dateUpdated
-    dateCreated
-    unitType {
-      ...UnitTypeFields
-    }
-    user {
-      ...UserFields
-    }
-  }
-  ${UnitTypeFieldsFragmentDoc}
-  ${UserFieldsFragmentDoc}
-`;
 export const MciMatchFieldsFragmentDoc = gql`
   fragment MciMatchFields on MciClearanceMatch {
     id
@@ -15343,6 +15393,16 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
   ${ClientAccessFieldsFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
 `;
+export const UnitTypeFieldsFragmentDoc = gql`
+  fragment UnitTypeFields on UnitTypeObject {
+    id
+    description
+    bedType
+    unitSize
+    dateUpdated
+    dateCreated
+  }
+`;
 export const ReferralRequestFieldsFragmentDoc = gql`
   fragment ReferralRequestFields on ReferralRequest {
     id
@@ -15396,6 +15456,34 @@ export const ServiceFieldsFragmentDoc = gql`
   ${UserFieldsFragmentDoc}
   ${ServiceTypeFieldsFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+`;
+export const UnitTypeCapacityFieldsFragmentDoc = gql`
+  fragment UnitTypeCapacityFields on UnitTypeCapacity {
+    id
+    unitType
+    capacity
+    availability
+  }
+`;
+export const UnitFieldsFragmentDoc = gql`
+  fragment UnitFields on Unit {
+    id
+    startDate
+    endDate
+    unitSize
+    unitType {
+      ...UnitTypeFields
+    }
+    occupants {
+      id
+      client {
+        id
+        ...ClientName
+      }
+    }
+  }
+  ${UnitTypeFieldsFragmentDoc}
+  ${ClientNameFragmentDoc}
 `;
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
@@ -19026,83 +19114,6 @@ export type GetInventoryQueryResult = Apollo.QueryResult<
   GetInventoryQuery,
   GetInventoryQueryVariables
 >;
-export const GetUnitsDocument = gql`
-  query GetUnits(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-    $active: Boolean
-    $occupied: Boolean
-  ) {
-    project(id: $id) {
-      id
-      units(
-        limit: $limit
-        offset: $offset
-        active: $active
-        occupied: $occupied
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...UnitFields
-        }
-      }
-    }
-  }
-  ${UnitFieldsFragmentDoc}
-`;
-
-/**
- * __useGetUnitsQuery__
- *
- * To run a query within a React component, call `useGetUnitsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetUnitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetUnitsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      active: // value for 'active'
- *      occupied: // value for 'occupied'
- *   },
- * });
- */
-export function useGetUnitsQuery(
-  baseOptions: Apollo.QueryHookOptions<GetUnitsQuery, GetUnitsQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetUnitsQuery, GetUnitsQueryVariables>(
-    GetUnitsDocument,
-    options
-  );
-}
-export function useGetUnitsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetUnitsQuery,
-    GetUnitsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetUnitsQuery, GetUnitsQueryVariables>(
-    GetUnitsDocument,
-    options
-  );
-}
-export type GetUnitsQueryHookResult = ReturnType<typeof useGetUnitsQuery>;
-export type GetUnitsLazyQueryHookResult = ReturnType<
-  typeof useGetUnitsLazyQuery
->;
-export type GetUnitsQueryResult = Apollo.QueryResult<
-  GetUnitsQuery,
-  GetUnitsQueryVariables
->;
 export const GetProjectCocDocument = gql`
   query GetProjectCoc($id: ID!) {
     projectCoc(id: $id) {
@@ -19745,177 +19756,6 @@ export type DeleteProjectCocMutationOptions = Apollo.BaseMutationOptions<
   DeleteProjectCocMutation,
   DeleteProjectCocMutationVariables
 >;
-export const CreateUnitsDocument = gql`
-  mutation CreateUnits($input: CreateUnitsInput!) {
-    createUnits(input: $input) {
-      clientMutationId
-      units {
-        ...UnitFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${UnitFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateUnitsMutationFn = Apollo.MutationFunction<
-  CreateUnitsMutation,
-  CreateUnitsMutationVariables
->;
-
-/**
- * __useCreateUnitsMutation__
- *
- * To run a mutation, you first call `useCreateUnitsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateUnitsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createUnitsMutation, { data, loading, error }] = useCreateUnitsMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateUnitsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateUnitsMutation,
-    CreateUnitsMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<CreateUnitsMutation, CreateUnitsMutationVariables>(
-    CreateUnitsDocument,
-    options
-  );
-}
-export type CreateUnitsMutationHookResult = ReturnType<
-  typeof useCreateUnitsMutation
->;
-export type CreateUnitsMutationResult =
-  Apollo.MutationResult<CreateUnitsMutation>;
-export type CreateUnitsMutationOptions = Apollo.BaseMutationOptions<
-  CreateUnitsMutation,
-  CreateUnitsMutationVariables
->;
-export const DeleteUnitsDocument = gql`
-  mutation DeleteUnits($input: DeleteUnitsInput!) {
-    deleteUnits(input: $input) {
-      clientMutationId
-      unitIds
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteUnitsMutationFn = Apollo.MutationFunction<
-  DeleteUnitsMutation,
-  DeleteUnitsMutationVariables
->;
-
-/**
- * __useDeleteUnitsMutation__
- *
- * To run a mutation, you first call `useDeleteUnitsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteUnitsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteUnitsMutation, { data, loading, error }] = useDeleteUnitsMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteUnitsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteUnitsMutation,
-    DeleteUnitsMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<DeleteUnitsMutation, DeleteUnitsMutationVariables>(
-    DeleteUnitsDocument,
-    options
-  );
-}
-export type DeleteUnitsMutationHookResult = ReturnType<
-  typeof useDeleteUnitsMutation
->;
-export type DeleteUnitsMutationResult =
-  Apollo.MutationResult<DeleteUnitsMutation>;
-export type DeleteUnitsMutationOptions = Apollo.BaseMutationOptions<
-  DeleteUnitsMutation,
-  DeleteUnitsMutationVariables
->;
-export const UpdateUnitsDocument = gql`
-  mutation UpdateUnits($input: UpdateUnitsInput!) {
-    updateUnits(input: $input) {
-      clientMutationId
-      units {
-        ...UnitFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${UnitFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type UpdateUnitsMutationFn = Apollo.MutationFunction<
-  UpdateUnitsMutation,
-  UpdateUnitsMutationVariables
->;
-
-/**
- * __useUpdateUnitsMutation__
- *
- * To run a mutation, you first call `useUpdateUnitsMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateUnitsMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateUnitsMutation, { data, loading, error }] = useUpdateUnitsMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useUpdateUnitsMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    UpdateUnitsMutation,
-    UpdateUnitsMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<UpdateUnitsMutation, UpdateUnitsMutationVariables>(
-    UpdateUnitsDocument,
-    options
-  );
-}
-export type UpdateUnitsMutationHookResult = ReturnType<
-  typeof useUpdateUnitsMutation
->;
-export type UpdateUnitsMutationResult =
-  Apollo.MutationResult<UpdateUnitsMutation>;
-export type UpdateUnitsMutationOptions = Apollo.BaseMutationOptions<
-  UpdateUnitsMutation,
-  UpdateUnitsMutationVariables
->;
 export const VoidReferralRequestDocument = gql`
   mutation VoidReferralRequest($id: ID!) {
     voidReferralRequest(referralRequestId: $id) {
@@ -20395,6 +20235,309 @@ export type GetEnrollmentServicesLazyQueryHookResult = ReturnType<
 export type GetEnrollmentServicesQueryResult = Apollo.QueryResult<
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables
+>;
+export const GetUnitsDocument = gql`
+  query GetUnits(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: UnitFilterOptions
+  ) {
+    project(id: $id) {
+      id
+      units(limit: $limit, offset: $offset, filters: $filters) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...UnitFields
+        }
+      }
+    }
+  }
+  ${UnitFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetUnitsQuery__
+ *
+ * To run a query within a React component, call `useGetUnitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUnitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUnitsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetUnitsQuery(
+  baseOptions: Apollo.QueryHookOptions<GetUnitsQuery, GetUnitsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetUnitsQuery, GetUnitsQueryVariables>(
+    GetUnitsDocument,
+    options
+  );
+}
+export function useGetUnitsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetUnitsQuery,
+    GetUnitsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetUnitsQuery, GetUnitsQueryVariables>(
+    GetUnitsDocument,
+    options
+  );
+}
+export type GetUnitsQueryHookResult = ReturnType<typeof useGetUnitsQuery>;
+export type GetUnitsLazyQueryHookResult = ReturnType<
+  typeof useGetUnitsLazyQuery
+>;
+export type GetUnitsQueryResult = Apollo.QueryResult<
+  GetUnitsQuery,
+  GetUnitsQueryVariables
+>;
+export const GetProjectUnitTypesDocument = gql`
+  query GetProjectUnitTypes($id: ID!) {
+    project(id: $id) {
+      id
+      unitTypes {
+        ...UnitTypeCapacityFields
+      }
+    }
+  }
+  ${UnitTypeCapacityFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectUnitTypesQuery__
+ *
+ * To run a query within a React component, call `useGetProjectUnitTypesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectUnitTypesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectUnitTypesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProjectUnitTypesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >(GetProjectUnitTypesDocument, options);
+}
+export function useGetProjectUnitTypesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectUnitTypesQuery,
+    GetProjectUnitTypesQueryVariables
+  >(GetProjectUnitTypesDocument, options);
+}
+export type GetProjectUnitTypesQueryHookResult = ReturnType<
+  typeof useGetProjectUnitTypesQuery
+>;
+export type GetProjectUnitTypesLazyQueryHookResult = ReturnType<
+  typeof useGetProjectUnitTypesLazyQuery
+>;
+export type GetProjectUnitTypesQueryResult = Apollo.QueryResult<
+  GetProjectUnitTypesQuery,
+  GetProjectUnitTypesQueryVariables
+>;
+export const CreateUnitsDocument = gql`
+  mutation CreateUnits($input: CreateUnitsInput!) {
+    createUnits(input: $input) {
+      clientMutationId
+      units {
+        ...UnitFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${UnitFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateUnitsMutationFn = Apollo.MutationFunction<
+  CreateUnitsMutation,
+  CreateUnitsMutationVariables
+>;
+
+/**
+ * __useCreateUnitsMutation__
+ *
+ * To run a mutation, you first call `useCreateUnitsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUnitsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUnitsMutation, { data, loading, error }] = useCreateUnitsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUnitsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUnitsMutation,
+    CreateUnitsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateUnitsMutation, CreateUnitsMutationVariables>(
+    CreateUnitsDocument,
+    options
+  );
+}
+export type CreateUnitsMutationHookResult = ReturnType<
+  typeof useCreateUnitsMutation
+>;
+export type CreateUnitsMutationResult =
+  Apollo.MutationResult<CreateUnitsMutation>;
+export type CreateUnitsMutationOptions = Apollo.BaseMutationOptions<
+  CreateUnitsMutation,
+  CreateUnitsMutationVariables
+>;
+export const DeleteUnitsDocument = gql`
+  mutation DeleteUnits($input: DeleteUnitsInput!) {
+    deleteUnits(input: $input) {
+      clientMutationId
+      unitIds
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteUnitsMutationFn = Apollo.MutationFunction<
+  DeleteUnitsMutation,
+  DeleteUnitsMutationVariables
+>;
+
+/**
+ * __useDeleteUnitsMutation__
+ *
+ * To run a mutation, you first call `useDeleteUnitsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUnitsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUnitsMutation, { data, loading, error }] = useDeleteUnitsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteUnitsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteUnitsMutation,
+    DeleteUnitsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeleteUnitsMutation, DeleteUnitsMutationVariables>(
+    DeleteUnitsDocument,
+    options
+  );
+}
+export type DeleteUnitsMutationHookResult = ReturnType<
+  typeof useDeleteUnitsMutation
+>;
+export type DeleteUnitsMutationResult =
+  Apollo.MutationResult<DeleteUnitsMutation>;
+export type DeleteUnitsMutationOptions = Apollo.BaseMutationOptions<
+  DeleteUnitsMutation,
+  DeleteUnitsMutationVariables
+>;
+export const UpdateUnitsDocument = gql`
+  mutation UpdateUnits($input: UpdateUnitsInput!) {
+    updateUnits(input: $input) {
+      clientMutationId
+      units {
+        ...UnitFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${UnitFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateUnitsMutationFn = Apollo.MutationFunction<
+  UpdateUnitsMutation,
+  UpdateUnitsMutationVariables
+>;
+
+/**
+ * __useUpdateUnitsMutation__
+ *
+ * To run a mutation, you first call `useUpdateUnitsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUnitsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUnitsMutation, { data, loading, error }] = useUpdateUnitsMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateUnitsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateUnitsMutation,
+    UpdateUnitsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateUnitsMutation, UpdateUnitsMutationVariables>(
+    UpdateUnitsDocument,
+    options
+  );
+}
+export type UpdateUnitsMutationHookResult = ReturnType<
+  typeof useUpdateUnitsMutation
+>;
+export type UpdateUnitsMutationResult =
+  Apollo.MutationResult<UpdateUnitsMutation>;
+export type UpdateUnitsMutationOptions = Apollo.BaseMutationOptions<
+  UpdateUnitsMutation,
+  UpdateUnitsMutationVariables
 >;
 export const CreateDirectUploadMutationDocument = gql`
   mutation CreateDirectUploadMutation($input: DirectUploadInput!) {

@@ -91,31 +91,6 @@ query GetInventory($id: ID!) {
   }
 }
 
-query GetUnits(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $active: Boolean
-  $occupied: Boolean
-) {
-  project(id: $id) {
-    id
-    units(
-      limit: $limit
-      offset: $offset
-      active: $active
-      occupied: $occupied
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...UnitFields
-      }
-    }
-  }
-}
-
 query GetProjectCoc($id: ID!) {
   projectCoc(id: $id) {
     ...ProjectCocFields
@@ -227,40 +202,6 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
     clientMutationId
     projectCoc {
       id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateUnits($input: CreateUnitsInput!) {
-  createUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteUnits($input: DeleteUnitsInput!) {
-  deleteUnits(input: $input) {
-    clientMutationId
-    unitIds
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateUnits($input: UpdateUnitsInput!) {
-  updateUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
     }
     errors {
       ...ValidationErrorFields

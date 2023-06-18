@@ -1,10 +1,10 @@
 import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 
-import AssessmentStatus from '@/components/elements/AssessmentStatus';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
+import AssessmentStatus from '@/modules/assessments/components/AssessmentStatus';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import {
   assessmentDescription,
@@ -85,7 +85,7 @@ const AllAssessments = () => {
           columns={columns}
           pagePath='client.assessments'
           fetchPolicy='cache-and-network'
-          noData='No assessments.'
+          noData='No assessments'
           recordType='Assessment'
           defaultSortOption={AssessmentSortOption.AssessmentDate}
         />

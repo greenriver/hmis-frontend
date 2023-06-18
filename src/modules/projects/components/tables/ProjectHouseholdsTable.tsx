@@ -2,11 +2,11 @@ import { Box, Link, Stack, Typography } from '@mui/material';
 import { omit } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
-import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
+import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import {
@@ -181,8 +181,8 @@ const ProjectHouseholdsTable = ({
       columns={columns || defaultColumns}
       noData={
         openOnDate
-          ? `No enrollments open on ${formatDateForDisplay(openOnDate)}`
-          : 'No clients.'
+          ? `No households open on ${formatDateForDisplay(openOnDate)}`
+          : 'No households'
       }
       pagePath='project.households'
       showFilters
