@@ -4,7 +4,7 @@ import { capitalize, isNil } from 'lodash-es';
 
 import SimpleTable from '../elements/SimpleTable';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisField from '@/modules/hmis/components/HmisField';
@@ -151,7 +151,7 @@ const AuditHistory = () => {
           columns={columns}
           pagePath='client.auditHistory'
           fetchPolicy='cache-and-network'
-          noData='No audit history.'
+          noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
         />
       </Paper>

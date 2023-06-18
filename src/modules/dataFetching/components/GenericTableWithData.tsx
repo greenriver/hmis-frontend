@@ -3,22 +3,23 @@ import {
   useQuery,
   WatchQueryFetchPolicy,
 } from '@apollo/client';
-import { Box, Stack, Typography } from '@mui/material';
-import { get, isEmpty, isEqual, startCase } from 'lodash-es';
+import { Box, Stack } from '@mui/material';
+import { get, isEmpty, isEqual, some, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import Pagination from '../../../components/elements/Pagination';
+import Pagination from '../../../components/elements/table/Pagination';
 import { FilterType } from '../types';
 
-import GenericTable, {
-  ColumnDef,
-  Props as GenericTableProps,
-} from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import GenericTable, {
+  Props as GenericTableProps,
+} from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import TableFilters from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import {
   getDefaultSortOptionForType,
@@ -116,7 +117,6 @@ const GenericTableWithData = <
   queryDocument,
   pagePath,
   rowsPath,
-  noData = 'None found',
   defaultPageSize = DEFAULT_ROWS_PER_PAGE,
   columns,
   recordType,
@@ -127,6 +127,7 @@ const GenericTableWithData = <
   noSort,
   noFilter,
   header,
+  noData,
   ...props
 }: Props<
   Query,
@@ -258,6 +259,14 @@ const GenericTableWithData = <
     [sortOptionsProp, recordType]
   );
 
+  const noDataValue = useMemo(() => {
+    if (!showFilters) return noData;
+
+    const isFiltered = some(Object.values(filterValues), hasMeaningfulValue);
+    if (isFiltered) return `No results for selected filters`;
+    return noData;
+  }, [noData, showFilters, filterValues]);
+
   // If this is the first time loading, return loading (hide search headers)
   if (loading && !hasRefetched && !data) return <Loading />;
 
@@ -268,6 +277,7 @@ const GenericTableWithData = <
   const hidePagination = !hasRefetched && nodesCount <= defaultPageSize;
 
   const containerSx = fullHeight ? { height: '100%' } : undefined;
+
   return (
     <Stack spacing={1} sx={containerSx}>
       {header && !noResultsOnFirstLoad && (
@@ -275,75 +285,72 @@ const GenericTableWithData = <
           {header}
         </Box>
       )}
-      {showFilters && !noResultsOnFirstLoad && (
-        <Box
-          px={2}
-          py={1}
-          sx={(theme) => ({
-            borderBottom: `1px solid ${theme.palette.divider}`,
-          })}
-        >
-          <TableFilters
-            noSort={noSort}
-            noFilter={noFilter}
-            loading={loading && !data}
-            sorting={
-              sortOptions
-                ? {
-                    sortOptions,
-                    sortOptionValue: sortOrder,
-                    setSortOptionValue: setSortOrder,
+      <Box sx={containerSx}>
+        <GenericTable<RowDataType>
+          loading={loading && !data}
+          rows={rows}
+          paginated={!nonTablePagination && !hidePagination}
+          tablePaginationProps={
+            nonTablePagination ? undefined : tablePaginationProps
+          }
+          columns={columnDefs}
+          noData={noDataValue}
+          filterToolbar={
+            showFilters &&
+            !noResultsOnFirstLoad && (
+              <Box
+                px={2}
+                py={1}
+                sx={(theme) => ({
+                  borderBottom: `1px solid ${theme.palette.divider}`,
+                })}
+              >
+                <TableFilters
+                  noSort={noSort}
+                  noFilter={noFilter}
+                  loading={loading && !data}
+                  sorting={
+                    sortOptions
+                      ? {
+                          sortOptions,
+                          sortOptionValue: sortOrder,
+                          setSortOptionValue: setSortOrder,
+                        }
+                      : undefined
                   }
-                : undefined
-            }
-            filters={
-              !isEmpty(filterDefs)
-                ? {
-                    filters: filterDefs,
-                    filterValues,
-                    setFilterValues,
+                  filters={
+                    !isEmpty(filterDefs)
+                      ? {
+                          filters: filterDefs,
+                          filterValues,
+                          setFilterValues,
+                        }
+                      : undefined
                   }
-                : undefined
-            }
-            pagination={{
-              limit,
-              offset,
-              totalEntries: nodesCount,
+                  pagination={{
+                    limit,
+                    offset,
+                    totalEntries: nodesCount,
+                  }}
+                />
+              </Box>
+            )
+          }
+          {...props}
+        />
+        {nonTablePagination && nonTablePaginationProps && !hidePagination && (
+          <Pagination
+            {...nonTablePaginationProps}
+            shape='rounded'
+            size='small'
+            gridProps={{
+              sx: {
+                py: 2,
+                px: 1,
+                borderTop: (theme) => `1px solid ${theme.palette.grey[200]}`,
+              },
             }}
           />
-        </Box>
-      )}
-      <Box sx={containerSx}>
-        {noResults ? (
-          <Typography sx={{ px: 2, py: 2 }}>{noData}</Typography>
-        ) : (
-          <>
-            <GenericTable<RowDataType>
-              loading={loading && !data}
-              rows={rows}
-              paginated={!nonTablePagination && !hidePagination}
-              tablePaginationProps={
-                nonTablePagination ? undefined : tablePaginationProps
-              }
-              columns={columnDefs}
-              {...props}
-            />
-            {nonTablePagination && nonTablePaginationProps && !hidePagination && (
-              <Pagination
-                {...nonTablePaginationProps}
-                shape='rounded'
-                size='small'
-                gridProps={{
-                  sx: {
-                    py: 2,
-                    px: 1,
-                    borderTop: (theme) =>
-                      `1px solid ${theme.palette.grey[200]}`,
-                  },
-                }}
-              />
-            )}
-          </>
         )}
       </Box>
     </Stack>

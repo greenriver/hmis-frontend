@@ -8,7 +8,7 @@ import FileDialog from './files/FileModal';
 import useFileActions from './files/useFileActions';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDateTime } from '@/modules/hmis/hmisUtil';

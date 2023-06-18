@@ -1,0 +1,32 @@
+fragment UnitTypeCapacityFields on UnitTypeCapacity {
+  id
+  unitType
+  capacity
+  availability
+}
+
+fragment UnitTypeFields on UnitTypeObject {
+  id
+  description
+  bedType
+  unitSize
+  dateUpdated
+  dateCreated
+}
+
+fragment UnitFields on Unit {
+  id
+  startDate
+  endDate
+  unitSize
+  unitType {
+    ...UnitTypeFields
+  }
+  occupants {
+    id
+    client {
+      id
+      ...ClientName
+    }
+  }
+}

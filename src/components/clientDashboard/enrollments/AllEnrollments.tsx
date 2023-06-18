@@ -3,11 +3,11 @@ import { Paper } from '@mui/material';
 import { useCallback } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import ProjectTypeChip from '@/modules/hmis/components/ProjectTypeChip';
 import {
   enrollmentName,

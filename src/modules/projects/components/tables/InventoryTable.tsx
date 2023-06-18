@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useProjectDashboardContext } from '../ProjectDashboard';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import ViewRecordDialog from '@/modules/form/components/ViewRecordDialog';
@@ -100,7 +100,7 @@ const InventoryTable = () => {
         queryDocument={GetProjectInventoriesDocument}
         columns={tableColumns}
         pagePath='project.inventories'
-        noData='No inventory.'
+        noData='No inventory'
         handleRowClick={(record) => setViewingRecord(record)}
       />
       {viewingRecord && (

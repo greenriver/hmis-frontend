@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { Paper } from '@mui/material';
 
 import ButtonLink from '@/components/elements/ButtonLink';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
@@ -92,7 +92,7 @@ const FunderTable = () => {
           columns={columns}
           recordType='Funder'
           pagePath='project.funders'
-          noData='No funding sources.'
+          noData='No funding sources'
           rowLinkTo={
             canEditProject
               ? (record) =>

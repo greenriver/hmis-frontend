@@ -1252,6 +1252,7 @@ export const HmisEnums = {
     ENTRY_EXIT_DATE: 'Entry/Exit Date',
     NIGHT_BY_NIGHT: 'Night-by-Night',
   },
+  UnitFilterOptionStatus: { AVAILABLE: 'Available', FILLED: 'Filled' },
   ValidationSeverity: { error: 'error', warning: 'warning' },
   ValidationType: {
     data_not_collected: 'data_not_collected',
