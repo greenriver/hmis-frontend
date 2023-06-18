@@ -16,8 +16,8 @@ mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
   }
 }
 
-mutation CreateOrUpdateHousehold($input: CreateOrUpdateHouseholdInput!) {
-  createOrUpdateHousehold(input: $input) {
+mutation AddToHousehold($input: AddToHouseholdInput!) {
+  addToHousehold(input: $input) {
     clientMutationId
     household {
       ...HouseholdFields

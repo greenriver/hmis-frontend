@@ -13,7 +13,7 @@ import { formatDateForGql } from '@/modules/hmis/hmisUtil';
 import {
   HouseholdFieldsFragment,
   RelationshipToHoH,
-  useCreateOrUpdateHouseholdMutation,
+  useAddToHouseholdMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
@@ -40,10 +40,10 @@ const AddToHouseholdButton = ({
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  const [addHouseholdMember, { loading }] = useCreateOrUpdateHouseholdMutation({
+  const [addHouseholdMember, { loading }] = useAddToHouseholdMutation({
     onCompleted: (data) => {
-      if (!data.createOrUpdateHousehold) return;
-      const { household, errors } = data.createOrUpdateHousehold;
+      if (!data.addToHousehold) return;
+      const { household, errors } = data.addToHousehold;
       if (errors && errors.length > 0) {
         setErrorState(partitionValidations(errors));
       } else if (household) {
