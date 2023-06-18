@@ -19,13 +19,9 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A base64 encoded string */
   Base64: string;
-  /** An ISO 8601-encoded date */
   ISO8601Date: string;
-  /** An ISO 8601-encoded datetime */
   ISO8601DateTime: string;
-  /** Arbitrary JSON Type */
   JsonObject: any;
 };
 
@@ -3083,6 +3079,8 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  /** Referral Posting Status */
+  AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Unoccupied units in the specified project */
@@ -3093,6 +3091,8 @@ export enum PickListType {
   ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
+  /** Referral Posting Status */
+  DeniedPendingReferralPostingStatuses = 'DENIED_PENDING_REFERRAL_POSTING_STATUSES',
   Destination = 'DESTINATION',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
@@ -3103,10 +3103,8 @@ export enum PickListType {
   /** All Projects that the User can see */
   Project = 'PROJECT',
   ReferralOutcome = 'REFERRAL_OUTCOME',
-  /** Referral Posting Status */
-  ReferralPostingDenialReasonTypes = 'REFERRAL_POSTING_DENIAL_REASON_TYPES',
-  /** Referral Posting Status */
-  ReferralPostingStatuses = 'REFERRAL_POSTING_STATUSES',
+  /** Referral Result  */
+  ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
   ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
@@ -3636,7 +3634,7 @@ export type ReferralPosting = {
   assignedDate: Scalars['ISO8601DateTime'];
   chronic?: Maybe<Scalars['Boolean']>;
   denialNote?: Maybe<Scalars['String']>;
-  denialReason?: Maybe<Scalars['String']>;
+  denialReason?: Maybe<ReferralPostingDenialReasonType>;
   hohEnrollment?: Maybe<Enrollment>;
   hohMciId?: Maybe<Scalars['ID']>;
   hohName: Scalars['String'];
@@ -3644,8 +3642,9 @@ export type ReferralPosting = {
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   needsWheelchairAccessibleUnit?: Maybe<Scalars['Boolean']>;
-  organizationName?: Maybe<Scalars['String']>;
+  organization?: Maybe<Organization>;
   postingIdentifier?: Maybe<Scalars['ID']>;
+  project?: Maybe<Project>;
   referralDate: Scalars['ISO8601DateTime'];
   referralIdentifier?: Maybe<Scalars['ID']>;
   referralNotes?: Maybe<Scalars['String']>;
@@ -3664,9 +3663,29 @@ export type ReferralPosting = {
   unitType: UnitTypeObject;
 };
 
+/** Referral Posting Denial Reason */
+export enum ReferralPostingDenialReasonType {
+  /** Does not meet eligibility criteria */
+  DoesNotMeetEligibilityCriteria = 'DoesNotMeetEligibilityCriteria',
+  /** Enrolled, but declined HMIS data entry */
+  EnrolledButDeclinedHmisDataEntry = 'EnrolledButDeclinedHMISDataEntry',
+  /** Estimated vacancy no longer available */
+  EstimatedVacancyNoLongerAvailable = 'EstimatedVacancyNoLongerAvailable',
+  /** HMIS user error */
+  HmisUserError = 'HMISUserError',
+  /** Inability to complete intake */
+  InabilityToCompleteIntake = 'InabilityToCompleteIntake',
+  /** No longer experiencing homelessness */
+  NoLongerExperiencingHomelessness = 'NoLongerExperiencingHomelessness',
+  /** No longer interested in this program */
+  NoLongerInterestedInThisProgram = 'NoLongerInterestedInThisProgram',
+}
+
 export type ReferralPostingInput = {
   denialNote?: InputMaybe<Scalars['String']>;
-  denialReason?: InputMaybe<Scalars['ID']>;
+  denialReason?: InputMaybe<ReferralPostingDenialReasonType>;
+  referralResult?: InputMaybe<ReferralResult>;
+  resendReferralRequest?: InputMaybe<Scalars['Boolean']>;
   status?: InputMaybe<Scalars['ID']>;
   statusNote?: InputMaybe<Scalars['String']>;
 };
@@ -13029,7 +13048,11 @@ export type GetProjectReferralPostingsQuery = {
         status: ReferralPostingStatus;
         assignedDate: string;
         statusUpdatedBy?: string | null;
-        organizationName?: string | null;
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        } | null;
       }>;
     };
   } | null;
@@ -13047,7 +13070,7 @@ export type GetReferralPostingQuery = {
     assignedDate: string;
     chronic?: boolean | null;
     denialNote?: string | null;
-    denialReason?: string | null;
+    denialReason?: ReferralPostingDenialReasonType | null;
     needsWheelchairAccessibleUnit?: boolean | null;
     postingIdentifier?: string | null;
     referralDate: string;
@@ -13064,7 +13087,18 @@ export type GetReferralPostingQuery = {
     statusNoteUpdatedBy?: string | null;
     statusUpdatedAt?: string | null;
     statusUpdatedBy?: string | null;
-    organizationName?: string | null;
+    referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
+    project?: {
+      __typename?: 'Project';
+      id: string;
+      projectType?: ProjectType | null;
+      projectName: string;
+    } | null;
+    organization?: {
+      __typename?: 'Organization';
+      id: string;
+      organizationName: string;
+    } | null;
     unitType: {
       __typename?: 'UnitTypeObject';
       id: string;
@@ -13430,7 +13464,7 @@ export type UpdateReferralPostingMutation = {
       assignedDate: string;
       chronic?: boolean | null;
       denialNote?: string | null;
-      denialReason?: string | null;
+      denialReason?: ReferralPostingDenialReasonType | null;
       needsWheelchairAccessibleUnit?: boolean | null;
       postingIdentifier?: string | null;
       referralDate: string;
@@ -13447,7 +13481,18 @@ export type UpdateReferralPostingMutation = {
       statusNoteUpdatedBy?: string | null;
       statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
-      organizationName?: string | null;
+      referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectType?: ProjectType | null;
+        projectName: string;
+      } | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
       unitType: {
         __typename?: 'UnitTypeObject';
         id: string;
@@ -13542,7 +13587,11 @@ export type GetDeniedPendingReferralPostingsQuery = {
       status: ReferralPostingStatus;
       assignedDate: string;
       statusUpdatedBy?: string | null;
-      organizationName?: string | null;
+      organization?: {
+        __typename?: 'Organization';
+        id: string;
+        organizationName: string;
+      } | null;
     }>;
   };
 };
@@ -13559,7 +13608,11 @@ export type ReferralPostingFieldsFragment = {
   status: ReferralPostingStatus;
   assignedDate: string;
   statusUpdatedBy?: string | null;
-  organizationName?: string | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  } | null;
 };
 
 export type ReferralPostingDetailFieldsFragment = {
@@ -13568,7 +13621,7 @@ export type ReferralPostingDetailFieldsFragment = {
   assignedDate: string;
   chronic?: boolean | null;
   denialNote?: string | null;
-  denialReason?: string | null;
+  denialReason?: ReferralPostingDenialReasonType | null;
   needsWheelchairAccessibleUnit?: boolean | null;
   postingIdentifier?: string | null;
   referralDate: string;
@@ -13585,7 +13638,18 @@ export type ReferralPostingDetailFieldsFragment = {
   statusNoteUpdatedBy?: string | null;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
-  organizationName?: string | null;
+  referralRequest?: { __typename?: 'ReferralRequest'; id: string } | null;
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectType?: ProjectType | null;
+    projectName: string;
+  } | null;
+  organization?: {
+    __typename?: 'Organization';
+    id: string;
+    organizationName: string;
+  } | null;
   unitType: {
     __typename?: 'UnitTypeObject';
     id: string;
@@ -15162,7 +15226,10 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     status
     assignedDate
     statusUpdatedBy
-    organizationName
+    organization {
+      id
+      organizationName
+    }
   }
 `;
 export const ReferralPostingDetailFieldsFragmentDoc = gql`
@@ -15188,7 +15255,18 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     statusNoteUpdatedBy
     statusUpdatedAt
     statusUpdatedBy
-    organizationName
+    referralRequest {
+      id
+    }
+    project {
+      id
+      projectType
+      projectName
+    }
+    organization {
+      id
+      organizationName
+    }
     unitType {
       id
       description

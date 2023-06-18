@@ -3711,7 +3711,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'denialReason',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'ReferralPostingDenialReasonType',
+          ofType: null,
+        },
       },
       { name: 'hohMciId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
@@ -3741,10 +3745,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'needsWheelchairAccessibleUnit',
         type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'organizationName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'postingIdentifier',
@@ -5059,7 +5059,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'denialReason',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        type: {
+          kind: 'ENUM',
+          name: 'ReferralPostingDenialReasonType',
+          ofType: null,
+        },
+      },
+      {
+        name: 'referralResult',
+        type: { kind: 'ENUM', name: 'ReferralResult', ofType: null },
+      },
+      {
+        name: 'resendReferralRequest',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
       },
       { name: 'status', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
