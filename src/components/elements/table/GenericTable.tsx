@@ -1,8 +1,6 @@
 import {
-  alpha,
   Box,
   Checkbox,
-  Stack,
   SxProps,
   Table,
   TableBody,
@@ -16,52 +14,24 @@ import {
   TableProps,
   TableRow,
   Theme,
-  Toolbar,
-  Typography,
 } from '@mui/material';
 import { get, includes, isNil, without } from 'lodash-es';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { To } from 'react-router-dom';
 
-import Loading from './Loading';
-import RouterLink from './RouterLink';
+import Loading from '../Loading';
+import RouterLink from '../RouterLink';
 
-type AttributeName<T> = keyof T;
-type RenderFunction<T> = (value: T) => React.ReactNode;
+import EnhancedTableToolbar, {
+  EnhancedTableToolbarProps,
+} from './EnhancedTableToolbar';
+import {
+  ColumnDef,
+  isPrimitive,
+  isRenderFunction,
+  RenderFunction,
+} from './types';
 
-function isPrimitive<T>(value: any): value is AttributeName<T> {
-  return (
-    typeof value === 'string' ||
-    typeof value === 'number' ||
-    typeof value === 'boolean'
-  );
-}
-
-function isRenderFunction<T>(value: any): value is RenderFunction<T> {
-  return typeof value === 'function';
-}
-
-export interface ColumnDef<T> {
-  header?: string | ReactNode;
-  render: AttributeName<T> | RenderFunction<T>;
-  width?: string;
-  minWidth?: string;
-  // unique key for element. if not provided, header is used.
-  key?: string;
-  // whether to show link treatment for this cell. rowLinkTo must be provided.
-  linkTreatment?: boolean;
-  // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.
-  dontLink?: boolean;
-  // aria label, for use with linkTreatment
-  ariaLabel?: (row: T) => string;
-  textAlign?: 'center' | 'end' | 'justify' | 'left' | 'right' | 'start';
-}
-
-interface EnhancedTableToolbarProps {
-  title?: string;
-  selectedIds?: readonly string[];
-  renderBulkAction?: (selectedIds: readonly string[]) => ReactNode;
-}
 export interface Props<T> {
   rows: T[];
   handleRowClick?: (row: T) => void;
@@ -88,54 +58,6 @@ export interface Props<T> {
 const clickableRowStyles = {
   '&:focus': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
   cursor: 'pointer',
-};
-
-const EnhancedTableToolbar = ({
-  selectedIds = [],
-  title,
-  renderBulkAction,
-}: EnhancedTableToolbarProps) => {
-  return (
-    <Toolbar
-      sx={{
-        pl: { sm: 2 },
-        pr: { xs: 1, sm: 1 },
-        borderBottomColor: 'borders.light',
-        borderBottomWidth: 1,
-        borderBottomStyle: 'solid',
-        ...(selectedIds.length > 0 && {
-          bgcolor: (theme) =>
-            alpha(
-              theme.palette.primary.main,
-              theme.palette.action.activatedOpacity
-            ),
-        }),
-      }}
-    >
-      <Stack
-        justifyContent='space-between'
-        alignItems={'center'}
-        direction={'row'}
-        sx={{
-          width: '100%',
-          pr: 1,
-        }}
-      >
-        {selectedIds.length > 0 ? (
-          <Typography variant='subtitle1' component='div'>
-            {selectedIds.length} selected
-          </Typography>
-        ) : (
-          <Typography variant='h5' component='div'>
-            {title}
-          </Typography>
-        )}
-        {selectedIds.length > 0 &&
-          renderBulkAction &&
-          renderBulkAction(selectedIds)}
-      </Stack>
-    </Toolbar>
-  );
 };
 
 const HeaderCell = ({

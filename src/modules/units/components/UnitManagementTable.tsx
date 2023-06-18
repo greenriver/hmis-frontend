@@ -4,7 +4,7 @@ import pluralize from 'pluralize';
 import { useCallback, useMemo } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';

@@ -1,8 +1,8 @@
 import { omit } from 'lodash-es';
 import { useCallback } from 'react';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
+import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

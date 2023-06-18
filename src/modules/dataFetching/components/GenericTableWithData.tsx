@@ -7,14 +7,14 @@ import { Box, Stack } from '@mui/material';
 import { get, isEmpty, isEqual, some, startCase } from 'lodash-es';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import Pagination from '../../../components/elements/Pagination';
+import Pagination from '../../../components/elements/table/Pagination';
 import { FilterType } from '../types';
 
-import GenericTable, {
-  ColumnDef,
-  Props as GenericTableProps,
-} from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import GenericTable, {
+  Props as GenericTableProps,
+} from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import TableFilters from '@/components/elements/tableFilters/TableFilters';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import usePrevious from '@/hooks/usePrevious';

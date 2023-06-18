@@ -7,8 +7,8 @@ import HouseholdActionButtons from './HouseholdActionButtons';
 import HouseholdMemberActionButton from './HouseholdMemberActionButton';
 import { useHouseholdMembers } from './useHouseholdMembers';
 
-import GenericTable from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import GenericTable from '@/components/elements/table/GenericTable';
 import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
 import ClientName from '@/modules/client/components/ClientName';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';

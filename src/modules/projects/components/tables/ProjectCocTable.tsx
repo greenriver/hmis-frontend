@@ -3,7 +3,7 @@ import { isNil } from 'lodash-es';
 
 import { useProjectDashboardContext } from '../ProjectDashboard';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData, {
   Props as GenericTableWithDataProps,
 } from '@/modules/dataFetching/components/GenericTableWithData';

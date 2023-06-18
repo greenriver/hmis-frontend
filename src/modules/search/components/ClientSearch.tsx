@@ -7,14 +7,14 @@ import { createSearchParams, useSearchParams } from 'react-router-dom';
 import { searchParamsToState, searchParamsToVariables } from '../searchUtil';
 
 import { externalIdColumn } from '@/components/elements/ExternalIdDisplay';
-import GenericTable, {
-  ColumnDef,
-  Props as GenericTableProps,
-} from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import GenericTable, {
+  Props as GenericTableProps,
+} from '@/components/elements/table/GenericTable';
 import Pagination, {
   PaginationSummary,
-} from '@/components/elements/Pagination';
+} from '@/components/elements/table/Pagination';
+import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';

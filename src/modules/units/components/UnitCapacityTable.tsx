@@ -2,8 +2,9 @@ import { Box, lighten, Stack, Typography } from '@mui/material';
 import pluralize from 'pluralize';
 import { useMemo } from 'react';
 
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import Loading from '@/components/elements/Loading';
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import {
   UnitTypeCapacityFieldsFragment,
   useGetProjectUnitTypesQuery,

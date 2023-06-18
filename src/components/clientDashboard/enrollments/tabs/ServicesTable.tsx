@@ -1,8 +1,8 @@
 import { Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';

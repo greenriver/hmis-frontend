@@ -8,9 +8,9 @@ import ProjectClientEnrollmentsTable, {
 } from './ProjectClientEnrollmentsTable';
 import ProjectHouseholdsTable from './ProjectHouseholdsTable';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
 import TextInput from '@/components/elements/input/TextInput';
 import LabelWithContent from '@/components/elements/LabelWithContent';
+import { ColumnDef } from '@/components/elements/table/types';
 import useDebouncedState from '@/hooks/useDebouncedState';
 
 type Mode = 'clients' | 'households';

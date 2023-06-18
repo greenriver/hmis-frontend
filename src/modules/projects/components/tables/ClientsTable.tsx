@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { CLIENT_COLUMNS } from '@/modules/search/components/ClientSearch';
 import { ClientDashboardRoutes } from '@/routes/routes';
