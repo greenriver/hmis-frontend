@@ -1,8 +1,8 @@
 import { NetworkStatus } from '@apollo/client';
 import { useCallback, useMemo, useState } from 'react';
 
-import AddToHouseholdButton from '../components/AddToHouseholdButton';
-import RelationshipToHohSelect from '../components/RelationshipToHohSelect';
+import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
+import RelationshipToHohSelect from '../components/elements/RelationshipToHohSelect';
 import { isHouseholdClient, RecentHouseholdMember } from '../types';
 
 import DatePicker from '@/components/elements/input/DatePicker';

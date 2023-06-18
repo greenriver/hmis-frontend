@@ -7,8 +7,8 @@ import {
 } from '@mui/material';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import RelationshipToHoHInput from './RelationshipToHoHInput';
-import RemoveFromHouseholdButton from './RemoveFromHouseholdButton';
+import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
+import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import usePrevious from '@/hooks/usePrevious';

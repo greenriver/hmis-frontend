@@ -3,9 +3,9 @@ import { Stack } from '@mui/system';
 import { ReactNode, useEffect, useState } from 'react';
 
 import useAddToHouseholdColumns from '../hooks/useAddToHouseholdColumns';
+import { useRecentHouseholdMembers } from '../hooks/useRecentHouseholdMembers';
 
 import EditHouseholdMemberTable from './EditHouseholdMemberTable';
-import { useRecentHouseholdMembers } from './useRecentHouseholdMembers';
 
 import { CommonCard } from '@/components/elements/CommonCard';
 import Loading from '@/components/elements/Loading';

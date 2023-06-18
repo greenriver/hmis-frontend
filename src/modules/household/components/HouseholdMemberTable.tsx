@@ -3,9 +3,10 @@ import { Box, Typography } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { useMemo } from 'react';
 
-import HouseholdActionButtons from './HouseholdActionButtons';
-import HouseholdMemberActionButton from './HouseholdMemberActionButton';
-import { useHouseholdMembers } from './useHouseholdMembers';
+import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
+
+import HouseholdActionButtons from './elements/HouseholdActionButtons';
+import HouseholdMemberActionButton from './elements/HouseholdMemberActionButton';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';

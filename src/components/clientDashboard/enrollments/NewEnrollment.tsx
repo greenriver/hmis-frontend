@@ -23,7 +23,7 @@ import {
 import RequiredLabel from '@/modules/form/components/RequiredLabel';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import QuickAddHouseholdMembers from '@/modules/household/components/QuickAddHouseholdMembers';
-import { useRecentHouseholdMembers } from '@/modules/household/components/useRecentHouseholdMembers';
+import { useRecentHouseholdMembers } from '@/modules/household/hooks/useRecentHouseholdMembers';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   CreateEnrollmentInput,
