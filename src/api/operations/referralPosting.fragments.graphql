@@ -9,7 +9,10 @@ fragment ReferralPostingFields on ReferralPosting {
   status
   assignedDate
   statusUpdatedBy
-  organizationName
+  organization {
+    id
+    organizationName
+  }
 }
 
 fragment ReferralPostingDetailFields on ReferralPosting {
@@ -34,7 +37,18 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   statusNoteUpdatedBy
   statusUpdatedAt
   statusUpdatedBy
-  organizationName
+  referralRequest {
+    id
+  }
+  project {
+    id
+    projectType
+    projectName
+  }
+  organization {
+    id
+    organizationName
+  }
   unitType {
     id
     description

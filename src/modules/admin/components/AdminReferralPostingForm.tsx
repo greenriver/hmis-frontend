@@ -1,11 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
 } from '@/modules/form/components/DynamicForm';
 import DynamicView from '@/modules/form/components/viewable/DynamicView';
-import { ReferralPostingDefinition } from '@/modules/form/data';
+import { AdminReferralPostingDefinition } from '@/modules/form/data';
 import useInitialFormValues from '@/modules/form/hooks/useInitialFormValues';
 import { SubmitFormAllowedTypes } from '@/modules/form/types';
 import { transformSubmitValues } from '@/modules/form/util/formUtil';
@@ -20,10 +20,20 @@ interface Props {
   readOnly?: boolean;
 }
 
-export const ProjectReferralPostingForm: React.FC<Props> = ({
-  referralPosting,
+const AdminReferralPostingForm: React.FC<Props> = ({
   readOnly = false,
+  ...props
 }) => {
+  const referralPosting = useMemo(() => {
+    const record = props.referralPosting;
+    // the status is denied pending status but we don't allow this option in the form. Set it to null instead
+    return {
+      ...record,
+      status: record.status == 'denied_pending_status' ? null : record.status,
+    };
+  }, [props.referralPosting]);
+
+  const formDefinition = AdminReferralPostingDefinition;
   const [errors, setErrors] = useState(emptyErrorState);
   const [mutate, { loading }] = useUpdateReferralPostingMutation({
     onCompleted: (data) => {
@@ -37,7 +47,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {
       const input = transformSubmitValues({
-        definition: ReferralPostingDefinition,
+        definition: formDefinition,
         values,
         keyByFieldName: true,
       }) as ReferralPostingInput;
@@ -49,29 +59,38 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         },
       });
     },
-    [mutate, referralPosting.id]
+    [mutate, referralPosting.id, formDefinition]
   );
 
   const initialValues = useInitialFormValues({
-    definition: ReferralPostingDefinition,
+    definition: formDefinition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
+    localConstants: {
+      hasReferralRequest:
+        !!referralPosting.postingIdentifier &&
+        !!referralPosting.referralRequest,
+    },
   });
 
   if (readOnly) {
     return (
       <DynamicView
         values={initialValues}
-        definition={ReferralPostingDefinition}
-        GridProps={{ columnSpacing: 0, rowSpacing: 2, spacing: 0 }}
+        definition={formDefinition}
+        GridProps={{
+          columnSpacing: 0,
+          rowSpacing: 2,
+          spacing: 0,
+        }}
       />
     );
   }
 
   return (
     <DynamicForm
-      definition={ReferralPostingDefinition}
+      definition={formDefinition}
       FormActionProps={{
-        submitButtonText: 'Update Referral',
+        submitButtonText: 'Save',
         discardButtonText: 'Cancel',
       }}
       initialValues={initialValues}
@@ -81,3 +100,5 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     />
   );
 };
+
+export default AdminReferralPostingForm;
