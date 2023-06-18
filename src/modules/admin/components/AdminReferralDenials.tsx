@@ -33,7 +33,8 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   },
   {
     header: 'Organization',
-    render: (row: ReferralPostingFieldsFragment) => row.organizationName,
+    render: (row: ReferralPostingFieldsFragment) =>
+      row.organization?.organizationName,
   },
   {
     header: 'Project',

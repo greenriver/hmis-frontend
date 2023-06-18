@@ -103,8 +103,10 @@ export const parseHmisDateString = (
   return isValid(date) ? date : null;
 };
 
-export const parseAndFormatDate = (dateString: string): string => {
-  if (!dateString) return dateString;
+export const parseAndFormatDate = (
+  dateString: string | null | undefined
+): string | null => {
+  if (!dateString) return null;
   const parsed = parseHmisDateString(dateString);
   if (!parsed) return dateString;
   return formatDateForDisplay(parsed) || dateString;

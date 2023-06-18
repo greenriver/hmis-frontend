@@ -1,6 +1,7 @@
 import { Grid, Stack } from '@mui/material';
 
 import AdminReferralPostingDetails from './AdminReferralPostingDetails';
+import AdminReferralPostingForm from './AdminReferralPostingForm';
 
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
@@ -11,7 +12,10 @@ import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
-import { useGetReferralPostingQuery } from '@/types/gqlTypes';
+import {
+  ReferralPostingStatus,
+  useGetReferralPostingQuery,
+} from '@/types/gqlTypes';
 
 const AdminReferralPosting: React.FC = () => {
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
@@ -56,6 +60,13 @@ const AdminReferralPosting: React.FC = () => {
                 <CommonLabeledTextBlock title='Status Note'>
                   {referralPosting.statusNote}
                 </CommonLabeledTextBlock>
+                <AdminReferralPostingForm
+                  referralPosting={referralPosting}
+                  readOnly={
+                    referralPosting.status !=
+                    ReferralPostingStatus.DeniedPendingStatus
+                  }
+                />
               </Stack>
             </CommonCard>
           </Stack>
