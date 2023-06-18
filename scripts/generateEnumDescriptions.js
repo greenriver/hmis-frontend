@@ -43,6 +43,9 @@ const DESCRIPTIONS_OVERRIDES = {
     PARTIAL_STREET_NAME_OR_CODE_NAME_REPORTED:
       'Partial, street name, or code name',
   },
+  RelationshipToHoH: {
+    SELF_HEAD_OF_HOUSEHOLD: 'Self (HoH)',
+  },
 };
 
 const POSITION_MAPS = {

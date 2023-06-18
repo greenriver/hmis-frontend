@@ -953,7 +953,7 @@ export const HmisEnums = {
   },
   RelationshipToHoH: {
     INVALID: 'Invalid Value',
-    SELF_HEAD_OF_HOUSEHOLD: 'Self (head of household)',
+    SELF_HEAD_OF_HOUSEHOLD: 'Self (HoH)',
     CHILD: 'Child',
     SPOUSE_OR_PARTNER: 'Spouse or partner',
     OTHER_RELATIVE: 'Other relative',

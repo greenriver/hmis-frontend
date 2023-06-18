@@ -218,7 +218,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.ADD_HOUSEHOLD,
             element: (
               <ProjectEditRoute
-                permissions={['canEditEnrollments']}
+                permissions={['canEnrollClients']}
                 redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
               >
                 <CreateHouseholdPage />

@@ -1,6 +1,6 @@
-import { format } from 'date-fns';
 import { useCallback, useEffect, useState } from 'react';
 
+import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
@@ -9,16 +9,19 @@ import {
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
+import { formatDateForGql } from '@/modules/hmis/hmisUtil';
 import {
+  HouseholdFieldsFragment,
   RelationshipToHoH,
-  useAddHouseholdMembersMutation,
+  useCreateOrUpdateHouseholdMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
   clientId: string;
   isMember: boolean;
-  householdId: string;
-  onSuccess: () => void;
+  householdId?: string; // if omitted, a new household will be created
+  projectId: string;
+  onSuccess: (household: HouseholdFieldsFragment) => void;
   relationshipToHoH?: RelationshipToHoH | null;
   startDate?: Date | null;
 }
@@ -30,22 +33,23 @@ const AddToHouseholdButton = ({
   relationshipToHoH,
   startDate,
   onSuccess,
+  projectId,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
 
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
 
-  const [addHouseholdMember, { loading }] = useAddHouseholdMembersMutation({
+  const [addHouseholdMember, { loading }] = useCreateOrUpdateHouseholdMutation({
     onCompleted: (data) => {
-      const errors = data.addHouseholdMembersToEnrollment?.errors || [];
-
-      if (errors.length > 0) {
+      if (!data.createOrUpdateHousehold) return;
+      const { household, errors } = data.createOrUpdateHousehold;
+      if (errors && errors.length > 0) {
         setErrorState(partitionValidations(errors));
-      } else {
+      } else if (household) {
         setErrorState(emptyErrorState);
         setAdded(true);
-        onSuccess();
+        onSuccess(household);
       }
     },
     onError: (apolloError) =>
@@ -73,39 +77,57 @@ const AddToHouseholdButton = ({
   // }
 
   const handleSubmit = useCallback(
-    (confirmed: boolean) => () =>
+    (confirmed: boolean) => () => {
+      if (!startDate) return;
+
       addHouseholdMember({
         variables: {
           input: {
+            projectId,
             householdId,
-            householdMembers: [
-              {
-                id: clientId,
-                relationshipToHoH:
-                  relationshipToHoH || RelationshipToHoH.DataNotCollected,
-              },
-            ],
-            entryDate: format(startDate || new Date(), 'yyyy-MM-dd'),
+            clientId,
+            relationshipToHoh: householdId
+              ? relationshipToHoH || RelationshipToHoH.DataNotCollected
+              : RelationshipToHoH.SelfHeadOfHousehold,
+            entryDate: formatDateForGql(startDate) || '',
             confirmed,
           },
         },
-      }),
-    [addHouseholdMember, clientId, relationshipToHoH, startDate, householdId]
+      });
+    },
+    [
+      addHouseholdMember,
+      clientId,
+      relationshipToHoH,
+      startDate,
+      householdId,
+      projectId,
+    ]
   );
 
   return (
     <>
-      <LoadingButton
-        disabled={added || loading}
-        color={color}
-        fullWidth
-        size='small'
-        onClick={handleSubmit(false)}
-        sx={{ maxWidth: '180px' }}
-        loading={loading}
+      <ButtonTooltipContainer
+        title={
+          added
+            ? 'Client is already a member of this household'
+            : !startDate
+            ? 'Select Entry Date before adding client'
+            : null
+        }
       >
-        {text}
-      </LoadingButton>
+        <LoadingButton
+          disabled={added || !startDate || loading}
+          color={color}
+          fullWidth
+          size='small'
+          onClick={handleSubmit(false)}
+          sx={{ maxWidth: '180px' }}
+          loading={loading}
+        >
+          {text}
+        </LoadingButton>
+      </ButtonTooltipContainer>
       {renderValidationDialog({
         onConfirm: handleSubmit(true),
         loading,

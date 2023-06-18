@@ -22,27 +22,39 @@ import {
 } from '@/modules/errors/util';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
+import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
   HouseholdClientFieldsFragment,
+  HouseholdFieldsFragment,
   RelationshipToHoH,
   useUpdateRelationshipToHoHMutation,
 } from '@/types/gqlTypes';
 
 interface Props {
-  currentMembers: HouseholdClientFieldsFragment[];
-  clientId: string;
-  refetch: any;
+  household: HouseholdFieldsFragment;
+  currentDashboardClientId?: string;
+  refetchHousehold: any;
 }
 
 const EditHouseholdMemberTable = ({
-  currentMembers,
-  clientId,
-  refetch,
+  household,
+  refetchHousehold,
+  currentDashboardClientId,
 }: Props) => {
   const [proposedHoH, setProposedHoH] =
     useState<HouseholdClientFieldsFragment | null>(null);
   const [errorState, setErrors] = useState<ErrorState>(emptyErrorState);
+
+  const currentMembers = useMemo(
+    () =>
+      sortHouseholdMembers(
+        household.householdClients,
+        currentDashboardClientId
+      ),
+    [household, currentDashboardClientId]
+  );
+
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
@@ -71,7 +83,7 @@ const EditHouseholdMemberTable = ({
         setProposedHoH(null);
         setErrors(emptyErrorState);
         // refetch, so that all relationships-to-HoH to reload
-        refetch();
+        refetchHousehold();
       } else if (data.updateRelationshipToHoH.errors.length > 0) {
         const errors = data.updateRelationshipToHoH.errors;
         setErrors(partitionValidations(errors));
@@ -150,8 +162,11 @@ const EditHouseholdMemberTable = ({
           <ClientName
             client={hc.client}
             routerLinkProps={{ target: '_blank' }}
-            linkToProfile={hc.client.id !== clientId}
-            bold={hc.client.id === clientId}
+            linkToProfile={
+              !currentDashboardClientId ||
+              hc.client.id !== currentDashboardClientId
+            }
+            bold={hc.client.id === currentDashboardClientId}
           />
         ),
       },
@@ -234,18 +249,18 @@ const EditHouseholdMemberTable = ({
             permissions={['canDeleteEnrollments']}
           >
             <RemoveFromHouseholdButton
-              clientId={clientId}
+              currentDashboardClientId={currentDashboardClientId}
               householdClient={hc}
-              onSuccess={refetch}
+              onSuccess={refetchHousehold}
             />
           </ClientPermissionsFilter>
         ),
       },
     ];
   }, [
-    clientId,
+    currentDashboardClientId,
     hoh,
-    refetch,
+    refetchHousehold,
     onChangeHoH,
     setHighlight,
     loading,

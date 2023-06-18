@@ -48,7 +48,7 @@ const RelationshipToHohSelect = ({
   if (isHoH) {
     return (
       <Typography variant='body2' sx={{ pl: 0.5 }}>
-        Self
+        {HmisEnums.RelationshipToHoH[value]}
       </Typography>
     );
   }
@@ -57,7 +57,9 @@ const RelationshipToHohSelect = ({
       options={relationshipToHohOptions}
       disabled={isDisabled}
       textInputProps={{
-        placeholder: isHoH ? '(1) Self' : 'Select relationship',
+        placeholder: isHoH
+          ? HmisEnums.RelationshipToHoH[value]
+          : 'Select relationship',
       }}
       value={
         value && !isHoH

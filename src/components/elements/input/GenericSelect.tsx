@@ -34,6 +34,7 @@ const GenericSelect = <
   ...rest
 }: GenericSelectProps<T, Multiple, Creatable>) => {
   const { placeholder, ...inputProps } = textInputProps || {};
+  console.log(placeholder);
   // Show a loading indicator if we have a value but the picklist is still loading
   const startAdornment =
     rest.loading && hasMeaningfulValue(value) ? (

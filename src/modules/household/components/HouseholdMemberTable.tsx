@@ -17,10 +17,7 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  HouseholdClientFieldsFragment,
-  RelationshipToHoH,
-} from '@/types/gqlTypes';
+import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 /**
@@ -101,10 +98,7 @@ const HouseholdMemberTable = ({
         render: (hc: HouseholdClientFieldsFragment) => (
           <HmisEnum
             value={hc.relationshipToHoH}
-            enumMap={{
-              ...HmisEnums.RelationshipToHoH,
-              [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
-            }}
+            enumMap={HmisEnums.RelationshipToHoH}
           />
         ),
       },
