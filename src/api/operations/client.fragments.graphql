@@ -391,9 +391,8 @@ fragment ClientAuditEventFields on ClientAuditEvent {
   createdAt
   event
   objectChanges
-  item {
-    id
-  }
+  recordName
+  recordId
   user {
     id
     name

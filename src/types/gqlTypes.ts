@@ -510,6 +510,8 @@ export type ClientAuditEvent = {
   item: Client;
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']>;
+  recordId: Scalars['ID'];
+  recordName: Scalars['String'];
   user?: Maybe<ApplicationUser>;
 };
 
@@ -7550,7 +7552,8 @@ export type ClientAuditEventFieldsFragment = {
   createdAt: string;
   event: AuditEventType;
   objectChanges?: any | null;
-  item: { __typename?: 'Client'; id: string };
+  recordName: string;
+  recordId: string;
   user?: { __typename?: 'ApplicationUser'; id: string; name: string } | null;
 };
 
@@ -7986,7 +7989,8 @@ export type GetClientAuditEventsQuery = {
         createdAt: string;
         event: AuditEventType;
         objectChanges?: any | null;
-        item: { __typename?: 'Client'; id: string };
+        recordName: string;
+        recordId: string;
         user?: {
           __typename?: 'ApplicationUser';
           id: string;
@@ -15037,9 +15041,8 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     createdAt
     event
     objectChanges
-    item {
-      id
-    }
+    recordName
+    recordId
     user {
       id
       name
