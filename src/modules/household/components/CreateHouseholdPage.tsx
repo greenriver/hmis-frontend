@@ -1,39 +1,15 @@
 import { Grid } from '@mui/material';
-import { Box } from '@mui/system';
 
-import { CommonCard } from '@/components/elements/CommonCard';
-import ClientSearch, {
-  SEARCH_RESULT_COLUMNS,
-} from '@/modules/search/components/ClientSearch';
+import ManageHousehold from './ManageHousehold';
+
+import { useProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 
 const CreateHouseholdPage = () => {
-  // const { project } = useProjectDashboardContext();
+  const { project } = useProjectDashboardContext();
   return (
-    <Grid container spacing={4} sx={{ pb: 10 }}>
+    <Grid container spacing={4} sx={{ pt: 2, pb: 10 }}>
       <Grid item xs={12}>
-        <CommonCard
-          sx={{ my: 2, py: 4, textAlign: 'center', color: 'text.secondary' }}
-        >
-          No Members, Add Clients to Household
-        </CommonCard>
-
-        <CommonCard title='Client Search'>
-          {/* TODO: implement action column for adding to household / creating household */}
-          <ClientSearch
-            hideInstructions
-            hideProject
-            hideAdvanced
-            cardsEnabled={false}
-            pageSize={10}
-            wrapperComponent={Box}
-            addClientInDialog
-            searchResultsTableProps={{
-              rowLinkTo: undefined,
-              tableProps: { size: 'small' },
-              columns: SEARCH_RESULT_COLUMNS,
-            }}
-          />
-        </CommonCard>
+        <ManageHousehold projectId={project.id} />
       </Grid>
     </Grid>
   );

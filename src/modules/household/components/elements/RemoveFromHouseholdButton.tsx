@@ -10,12 +10,12 @@ import {
 
 const RemoveFromHouseholdButton = ({
   householdClient,
-  clientId,
+  currentDashboardClientId,
   onSuccess,
   disabled,
 }: {
   householdClient: HouseholdClientFieldsFragment;
-  clientId: string;
+  currentDashboardClientId?: string;
   onSuccess: () => void;
   disabled?: boolean;
 }) => {
@@ -35,10 +35,10 @@ const RemoveFromHouseholdButton = ({
       RelationshipToHoH.SelfHeadOfHousehold
     ) {
       return 'Head of Household cannot be removed.';
-    } else if (householdClient.client.id === clientId) {
+    } else if (householdClient.client.id === currentDashboardClientId) {
       return "Currently active client cannot be removed. Go to another member's profile to remove them.";
     }
-  }, [householdClient, clientId]);
+  }, [householdClient, currentDashboardClientId]);
 
   const onClick = useMemo(
     () => () => {

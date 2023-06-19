@@ -47,7 +47,9 @@ const ConfirmationDialog = ({
   renderError,
   ...other
 }: ConfirmationDialogProps) => {
-  const unconfirmable = errorState && hasErrors(errorState);
+  const unconfirmable =
+    errorState && (hasErrors(errorState) || errorState.apolloError);
+
   return (
     <CommonDialog keepMounted={false} onClose={onCancel} {...other}>
       <DialogTitle>{title}</DialogTitle>

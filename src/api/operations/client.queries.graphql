@@ -168,18 +168,6 @@ mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   }
 }
 
-mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
-  updateRelationshipToHoH(input: $input) {
-    clientMutationId
-    enrollment {
-      ...EnrollmentWithHouseholdFragment
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   deleteEnrollment(input: $input) {
     clientMutationId
@@ -197,18 +185,6 @@ mutation DeleteClientFile($input: DeleteClientFileInput!) {
     clientMutationId
     file {
       ...FileFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation AddHouseholdMembers($input: AddHouseholdMembersToEnrollmentInput!) {
-  addHouseholdMembersToEnrollment(input: $input) {
-    clientMutationId
-    enrollments {
-      ...EnrollmentWithHouseholdFragment
     }
     errors {
       ...ValidationErrorFields

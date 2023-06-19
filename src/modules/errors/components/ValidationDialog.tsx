@@ -88,9 +88,9 @@ const ValidationDialog = ({
   ...props
 }: ValidationDialogProps) => {
   if (!hasAnyValue(errorState)) return null;
-  const { errors, warnings } = errorState;
+  const { errors, warnings, apolloError } = errorState;
 
-  const hasErrors = errors.length > 0;
+  const hasErrors = errors.length > 0 || !!apolloError;
 
   let warningContent;
   if (!hasErrors && warnings.length > 0) {

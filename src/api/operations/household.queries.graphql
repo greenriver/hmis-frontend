@@ -1,0 +1,29 @@
+query GetHousehold($id: ID!) {
+  household(id: $id) {
+    ...HouseholdFields
+  }
+}
+
+mutation UpdateRelationshipToHoH($input: UpdateRelationshipToHoHInput!) {
+  updateRelationshipToHoH(input: $input) {
+    clientMutationId
+    enrollment {
+      ...EnrollmentWithHouseholdFragment
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation AddToHousehold($input: AddToHouseholdInput!) {
+  addToHousehold(input: $input) {
+    clientMutationId
+    household {
+      ...HouseholdFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

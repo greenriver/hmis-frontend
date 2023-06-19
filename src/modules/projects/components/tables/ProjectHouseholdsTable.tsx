@@ -93,10 +93,7 @@ export const HOUSEHOLD_COLUMNS: {
             <HmisEnum
               key={c.id}
               value={c.relationshipToHoH}
-              enumMap={{
-                ...HmisEnums.RelationshipToHoH,
-                [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
-              }}
+              enumMap={HmisEnums.RelationshipToHoH}
               whiteSpace='nowrap'
             />
           )

@@ -4327,51 +4327,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
 // Partial schema introspection for input object types.
 export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
   {
-    name: 'AddHouseholdMembersToEnrollmentInput',
-    args: [
-      {
-        name: 'confirmed',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
-      },
-      {
-        name: 'entryDate',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
-        },
-      },
-      {
-        name: 'householdId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'householdMembers',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: {
-            kind: 'LIST',
-            name: null,
-            ofType: {
-              kind: 'NON_NULL',
-              name: null,
-              ofType: {
-                kind: 'INPUT_OBJECT',
-                name: 'EnrollmentHouseholdMemberInput',
-                ofType: null,
-              },
-            },
-          },
-        },
-      },
-    ],
-  },
-  {
     name: 'AddRecentItemInput',
     args: [
       {
@@ -4388,6 +4343,51 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'RecentItemType', ofType: null },
+        },
+      },
+    ],
+  },
+  {
+    name: 'AddToHouseholdInput',
+    args: [
+      {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'confirmed',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'entryDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'householdId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'relationshipToHoh',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'RelationshipToHoH', ofType: null },
         },
       },
     ],

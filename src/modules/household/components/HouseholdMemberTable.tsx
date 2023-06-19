@@ -3,9 +3,10 @@ import { Box, Typography } from '@mui/material';
 import { isEmpty } from 'lodash-es';
 import { useMemo } from 'react';
 
-import HouseholdActionButtons from './HouseholdActionButtons';
-import HouseholdMemberActionButton from './HouseholdMemberActionButton';
-import { useHouseholdMembers } from './useHouseholdMembers';
+import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
+
+import HouseholdActionButtons from './elements/HouseholdActionButtons';
+import HouseholdMemberActionButton from './elements/HouseholdMemberActionButton';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -17,10 +18,7 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  HouseholdClientFieldsFragment,
-  RelationshipToHoH,
-} from '@/types/gqlTypes';
+import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 /**
@@ -101,10 +99,7 @@ const HouseholdMemberTable = ({
         render: (hc: HouseholdClientFieldsFragment) => (
           <HmisEnum
             value={hc.relationshipToHoH}
-            enumMap={{
-              ...HmisEnums.RelationshipToHoH,
-              [RelationshipToHoH.SelfHeadOfHousehold]: 'Self (HoH)',
-            }}
+            enumMap={HmisEnums.RelationshipToHoH}
           />
         ),
       },

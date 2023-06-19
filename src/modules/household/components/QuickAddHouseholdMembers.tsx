@@ -10,7 +10,7 @@ import { SyntheticEvent, useState } from 'react';
 import { RecentHouseholdMember } from '../types';
 
 import AssociatedHouseholdMembers from './AssociatedHouseholdMembers';
-import RelationshipToHohSelect from './RelationshipToHohSelect';
+import RelationshipToHohSelect from './elements/RelationshipToHohSelect';
 
 import { ColumnDef } from '@/components/elements/table/types';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
