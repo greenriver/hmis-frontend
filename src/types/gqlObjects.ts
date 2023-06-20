@@ -645,6 +645,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'objectChanges',
         type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
+      {
+        name: 'recordId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'recordName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
     ],
   },
   {
