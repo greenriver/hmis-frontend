@@ -16,6 +16,7 @@ query GetProjectPermissions($id: ID!) {
 query GetProjectEnrollments(
   $id: ID!
   $filters: EnrollmentsForProjectFilterOptions
+  $sortOrder: EnrollmentSortOption
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -24,7 +25,7 @@ query GetProjectEnrollments(
     enrollments(
       limit: $limit
       offset: $offset
-      sortOrder: MOST_RECENT
+      sortOrder: $sortOrder
       filters: $filters
     ) {
       offset
