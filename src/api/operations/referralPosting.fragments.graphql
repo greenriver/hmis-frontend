@@ -8,7 +8,12 @@ fragment ReferralPostingFields on ReferralPosting {
   referredBy
   status
   assignedDate
+  statusUpdatedAt
   statusUpdatedBy
+  project {
+    id
+    projectName
+  }
   organization {
     id
     organizationName

@@ -507,7 +507,6 @@ export type ClientAuditEvent = {
   createdAt: Scalars['ISO8601DateTime'];
   event: AuditEventType;
   id: Scalars['ID'];
-  item: Client;
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']>;
   recordId: Scalars['ID'];
@@ -13046,7 +13045,13 @@ export type GetProjectReferralPostingsQuery = {
         referredBy: string;
         status: ReferralPostingStatus;
         assignedDate: string;
+        statusUpdatedAt?: string | null;
         statusUpdatedBy?: string | null;
+        project?: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+        } | null;
         organization?: {
           __typename?: 'Organization';
           id: string;
@@ -13466,7 +13471,13 @@ export type GetDeniedPendingReferralPostingsQuery = {
       referredBy: string;
       status: ReferralPostingStatus;
       assignedDate: string;
+      statusUpdatedAt?: string | null;
       statusUpdatedBy?: string | null;
+      project?: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+      } | null;
       organization?: {
         __typename?: 'Organization';
         id: string;
@@ -13487,7 +13498,9 @@ export type ReferralPostingFieldsFragment = {
   referredBy: string;
   status: ReferralPostingStatus;
   assignedDate: string;
+  statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
+  project?: { __typename?: 'Project'; id: string; projectName: string } | null;
   organization?: {
     __typename?: 'Organization';
     id: string;
@@ -15325,7 +15338,12 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     referredBy
     status
     assignedDate
+    statusUpdatedAt
     statusUpdatedBy
+    project {
+      id
+      projectName
+    }
     organization {
       id
       organizationName
