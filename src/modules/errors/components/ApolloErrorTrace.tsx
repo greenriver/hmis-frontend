@@ -5,6 +5,8 @@ import { GraphQLError } from 'graphql';
 import { isServerError } from '../util';
 
 const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
+  if (import.meta.env.MODE !== 'development') return null;
+
   let graphQLErrors = error.graphQLErrors;
   if (graphQLErrors.length < 1 && isServerError(error.networkError)) {
     graphQLErrors = error.networkError?.result?.errors || [];
@@ -21,10 +23,8 @@ const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
           >
             {e.message}
           </Typography>
-          {import.meta.env.MODE === 'development' &&
-            (
-              (e as GraphQLError & { backtrace: string[] })?.backtrace || []
-            ).map((line) => (
+          {((e as GraphQLError & { backtrace: string[] })?.backtrace || []).map(
+            (line) => (
               <Typography
                 key={line}
                 variant='caption'
@@ -32,7 +32,8 @@ const ApolloErrorTrace = ({ error }: { error: ApolloError }) => {
               >
                 {line}
               </Typography>
-            ))}
+            )
+          )}
         </>
       ))}
     </>

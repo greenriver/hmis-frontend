@@ -38,9 +38,11 @@ export const alertErrorFallback: FallbackRender = ({
       {isApolloError(error) && <ApolloErrorTrace error={error} />}
       {!isApolloError(error) && (
         <>
-          <Typography variant='body2' sx={{ fontFamily: 'Monospace', my: 2 }}>
-            {error.toString()}
-          </Typography>
+          {import.meta.env.MODE === 'development' && (
+            <Typography variant='body2' sx={{ fontFamily: 'Monospace', my: 2 }}>
+              {error.toString()}
+            </Typography>
+          )}
           {import.meta.env.MODE === 'development' &&
             componentStack &&
             componentStack.split('\n').map((s, i) => (
