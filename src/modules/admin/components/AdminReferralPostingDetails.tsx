@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
+import { startCase } from 'lodash-es';
 import { ReactNode, useMemo } from 'react';
 
 import { CommonUntyledList } from '@/components/CommonUnstyledList';
@@ -6,7 +7,10 @@ import RouterLink from '@/components/elements/RouterLink';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -26,15 +30,13 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
       'Referral Status',
       <ReferralPostingStatusDisplay
         status={referralPosting.status}
-        size='small'
-        variant='filled'
-        color='secondary'
         sx={{ mt: 0.5 }}
       />,
     ],
     ['Referral ID', referralPosting.referralIdentifier],
     ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
     ['Referred From', referralPosting.referredFrom],
+    ['Organization Name', referralPosting.organization?.organizationName],
     [
       'Project Name',
       project ? (
@@ -55,7 +57,6 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
         enumMap={HmisEnums.ProjectType}
       />,
     ],
-    ['Organization Name', referralPosting.organization?.organizationName],
   ];
 
   const verb = useMemo<string>(() => {
@@ -76,10 +77,12 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
   }, [referralPosting.status]);
 
   list.push([
-    `Referral ${verb} at`,
-    parseAndFormatDate(referralPosting.statusNoteUpdatedAt),
+    `${startCase(verb)} at`,
+    referralPosting.statusUpdatedAt
+      ? parseAndFormatDateTime(referralPosting.statusUpdatedAt)
+      : null,
   ]);
-  list.push([`${verb} by`, referralPosting.statusNoteUpdatedBy]);
+  list.push([`${verb} by`, referralPosting.statusUpdatedBy]);
 
   return (
     <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
