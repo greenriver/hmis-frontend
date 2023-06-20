@@ -507,7 +507,6 @@ export type ClientAuditEvent = {
   createdAt: Scalars['ISO8601DateTime'];
   event: AuditEventType;
   id: Scalars['ID'];
-  item: Client;
   /** Format is { field: { fieldName: "GQL field name", displayName: "Human readable name", values: [old, new] } } */
   objectChanges?: Maybe<Scalars['JsonObject']>;
   recordId: Scalars['ID'];
@@ -12650,6 +12649,7 @@ export type GetProjectPermissionsQuery = {
 export type GetProjectEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   filters?: InputMaybe<EnrollmentsForProjectFilterOptions>;
+  sortOrder?: InputMaybe<EnrollmentSortOption>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
 }>;
@@ -18786,6 +18786,7 @@ export const GetProjectEnrollmentsDocument = gql`
   query GetProjectEnrollments(
     $id: ID!
     $filters: EnrollmentsForProjectFilterOptions
+    $sortOrder: EnrollmentSortOption
     $limit: Int = 10
     $offset: Int = 0
   ) {
@@ -18794,7 +18795,7 @@ export const GetProjectEnrollmentsDocument = gql`
       enrollments(
         limit: $limit
         offset: $offset
-        sortOrder: MOST_RECENT
+        sortOrder: $sortOrder
         filters: $filters
       ) {
         offset
@@ -18830,6 +18831,7 @@ export const GetProjectEnrollmentsDocument = gql`
  *   variables: {
  *      id: // value for 'id'
  *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *   },
