@@ -48,6 +48,14 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                     params
                   ),
                 },
+                {
+                  id: 'services',
+                  title: 'Services',
+                  path: generateSafePath(
+                    ClientDashboardRoutes.SERVICES,
+                    params
+                  ),
+                },
               ]
             : []),
           /*

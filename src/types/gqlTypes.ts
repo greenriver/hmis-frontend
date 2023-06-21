@@ -8075,6 +8075,112 @@ export type GetClientAssessmentsQuery = {
   } | null;
 };
 
+export type GetClientServicesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<ServiceSortOption>;
+  filters?: InputMaybe<ServiceFilterOptions>;
+}>;
+
+export type GetClientServicesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Service';
+        id: string;
+        dateProvided: string;
+        faAmount?: number | null;
+        faStartDate?: string | null;
+        faEndDate?: string | null;
+        movingOnOtherType?: string | null;
+        referralOutcome?: PathReferralOutcome | null;
+        subTypeProvided?: ServiceSubTypeProvided | null;
+        otherTypeProvided?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string; shortId: string };
+          client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        serviceType: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated: string;
+          dateUpdated: string;
+        };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
 export type GetNonWipEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -16571,6 +16677,92 @@ export type GetClientAssessmentsLazyQueryHookResult = ReturnType<
 export type GetClientAssessmentsQueryResult = Apollo.QueryResult<
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables
+>;
+export const GetClientServicesDocument = gql`
+  query GetClientServices(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: ServiceSortOption = DATE_PROVIDED
+    $filters: ServiceFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      services(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+          enrollment {
+            ...EnrollmentFields
+          }
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientServicesQuery__
+ *
+ * To run a query within a React component, call `useGetClientServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >(GetClientServicesDocument, options);
+}
+export function useGetClientServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >(GetClientServicesDocument, options);
+}
+export type GetClientServicesQueryHookResult = ReturnType<
+  typeof useGetClientServicesQuery
+>;
+export type GetClientServicesLazyQueryHookResult = ReturnType<
+  typeof useGetClientServicesLazyQuery
+>;
+export type GetClientServicesQueryResult = Apollo.QueryResult<
+  GetClientServicesQuery,
+  GetClientServicesQueryVariables
 >;
 export const GetNonWipEnrollmentsDocument = gql`
   query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
