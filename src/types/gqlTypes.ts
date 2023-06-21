@@ -1558,7 +1558,7 @@ export type EnrollmentIncomeBenefitsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentServicesArgs = {
-  filters?: InputMaybe<ServiceFilterOptions>;
+  filters?: InputMaybe<ServicesForEnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
@@ -4258,6 +4258,11 @@ export enum ServiceTypeProvided {
   /** (1) Outreach services */
   SsvfServiceOutreachServices = 'SSVF_SERVICE__OUTREACH_SERVICES',
 }
+
+export type ServicesForEnrollmentFilterOptions = {
+  serviceCategory?: InputMaybe<Array<Scalars['ID']>>;
+  serviceType?: InputMaybe<Array<Scalars['ID']>>;
+};
 
 export type ServicesPaginated = {
   __typename?: 'ServicesPaginated';
@@ -14063,6 +14068,7 @@ export type GetEnrollmentServicesQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<ServicesForEnrollmentFilterOptions>;
 }>;
 
 export type GetEnrollmentServicesQuery = {
@@ -20389,10 +20395,15 @@ export type DeleteServiceMutationOptions = Apollo.BaseMutationOptions<
   DeleteServiceMutationVariables
 >;
 export const GetEnrollmentServicesDocument = gql`
-  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetEnrollmentServices(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ServicesForEnrollmentFilterOptions = null
+  ) {
     enrollment(id: $id) {
       id
-      services(limit: $limit, offset: $offset) {
+      services(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -20420,6 +20431,7 @@ export const GetEnrollmentServicesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

@@ -53,36 +53,48 @@ const baseColumns: ColumnDef<ServiceType>[] = [
     ),
   },
   {
+    key: 'enrollmentPeriod',
     header: 'Enrollment Period',
     render: (a) =>
       parseAndFormatDateRange(a.enrollment.entryDate, a.enrollment.exitDate),
   },
 ];
 
-const AllServices = () => {
+const ClientServices: React.FC<{
+  omitColumns?: string[];
+  enrollmentId?: string;
+}> = ({ omitColumns = [] }) => {
   const { clientId } = useSafeParams() as { clientId: string };
 
   const columns = useMemo(
-    () => [
-      ...baseColumns,
-      {
-        header: 'Project',
-        render: (row) => (
-          <RouterLink
-            to={[
-              generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
-                enrollmentId: row.enrollment.id,
-                clientId,
-              }),
-              'services',
-            ].join('#')}
-          >
-            {enrollmentName(row.enrollment)}
-          </RouterLink>
-        ),
-      },
-    ],
-    [clientId]
+    () =>
+      (
+        [
+          ...baseColumns,
+          {
+            key: 'project',
+            header: 'Project',
+            render: (row) => (
+              <RouterLink
+                to={[
+                  generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+                    enrollmentId: row.enrollment.id,
+                    clientId,
+                  }),
+                  'services',
+                ].join('#')}
+              >
+                {enrollmentName(row.enrollment)}
+              </RouterLink>
+            ),
+          },
+        ] as ColumnDef<ServiceType>[]
+      ).filter((col) => {
+        if (omitColumns.includes(col.key || '')) return false;
+
+        return true;
+      }),
+    [clientId, omitColumns]
   );
 
   return (
@@ -110,4 +122,4 @@ const AllServices = () => {
   );
 };
 
-export default AllServices;
+export default ClientServices;

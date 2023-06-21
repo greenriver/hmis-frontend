@@ -16,7 +16,7 @@ import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
-import AllServices from '@/components/clientDashboard/enrollments/AllServices';
+import ClientServices from '@/components/clientDashboard/enrollments/ClientServices';
 import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
 import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
@@ -414,7 +414,7 @@ export const protectedRoutes: RouteNode[] = [
                 view
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <AllServices />
+                <ClientServices />
               </EnrollmentsRoute>
             ),
           },
