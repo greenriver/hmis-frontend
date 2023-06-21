@@ -13,7 +13,6 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
-import { fromPairs } from 'lodash-es';
 import { useCallback, useRef, useState } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -54,7 +53,9 @@ interface Props {
 export const ClientProfileCardTextTable = ({
   content,
 }: {
-  content: Record<string, React.ReactNode>;
+  content:
+    | Record<string, React.ReactNode>
+    | Readonly<[React.ReactNode, React.ReactNode]>[];
 }) => {
   return (
     <SimpleTable
@@ -76,12 +77,14 @@ export const ClientProfileCardTextTable = ({
         {
           name: 'key',
           render: (row) => (
-            <strong style={{ fontWeight: 600 }}>{row.id}</strong>
+            <strong style={{ fontWeight: 600 }}>{row.label}</strong>
           ),
         },
         { name: 'value', render: (row) => row.value },
       ]}
-      rows={Object.entries(content).map(([id, value]) => ({ id, value }))}
+      rows={(Array.isArray(content) ? content : Object.entries(content)).map(
+        ([id, value], index) => ({ id: String(index), label: id, value })
+      )}
     />
   );
 };
@@ -107,14 +110,12 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
             key: 'IDs',
             content: (
               <ClientProfileCardTextTable
-                content={fromPairs(
-                  client.externalIds.map((externalId) => {
-                    return [
-                      externalId.label,
-                      <ExternalIdDisplay value={externalId} />,
-                    ];
-                  })
-                )}
+                content={client.externalIds.map((externalId) => {
+                  return [
+                    externalId.label,
+                    <ExternalIdDisplay value={externalId} />,
+                  ] as const;
+                })}
               />
             ),
           },
