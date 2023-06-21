@@ -70,16 +70,23 @@ const ProjectReferralPosting: React.FC = () => {
                 rows={referralPosting.householdMembers}
               />
             </TitleCard>
-            <CommonCard title='Referral Notes'>
-              <Stack spacing={4}>
-                <CommonLabeledTextBlock title='Provider Notes'>
-                  {referralPosting.referralNotes}
-                </CommonLabeledTextBlock>
-                <CommonLabeledTextBlock title='Resource Coordinator Notes'>
-                  {referralPosting.resourceCoordinatorNotes}
-                </CommonLabeledTextBlock>
-              </Stack>
-            </CommonCard>
+            {(referralPosting.referralNotes ||
+              referralPosting.resourceCoordinatorNotes) && (
+              <CommonCard title='Referral Notes'>
+                <Stack spacing={4}>
+                  {referralPosting.referralNotes && (
+                    <CommonLabeledTextBlock title='Referral Notes'>
+                      {referralPosting.referralNotes}
+                    </CommonLabeledTextBlock>
+                  )}
+                  {referralPosting.resourceCoordinatorNotes && (
+                    <CommonLabeledTextBlock title='Resource Coordinator Notes'>
+                      {referralPosting.resourceCoordinatorNotes}
+                    </CommonLabeledTextBlock>
+                  )}
+                </Stack>
+              </CommonCard>
+            )}
             <CommonCard
               title={
                 referralPosting.status === ReferralPostingStatus.AssignedStatus
