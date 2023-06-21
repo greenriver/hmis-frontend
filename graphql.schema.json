@@ -19737,6 +19737,18 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "ALL_SERVICE_CATEGORIES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALL_SERVICE_TYPES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ASSIGNED_REFERRAL_POSTING_STATUSES",
             "description": "Referral Posting Status",
             "isDeprecated": false,
@@ -19835,12 +19847,6 @@
           {
             "name": "REFERRAL_RESULT_TYPES",
             "description": "Referral Result ",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICE_TYPE",
-            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },

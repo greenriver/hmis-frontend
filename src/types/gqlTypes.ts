@@ -3087,6 +3087,8 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  AllServiceCategories = 'ALL_SERVICE_CATEGORIES',
+  AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** Referral Posting Status */
   AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
@@ -3113,7 +3115,6 @@ export enum PickListType {
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Referral Result  */
   ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
-  ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
