@@ -34,7 +34,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
   const columns = useMemo<ColumnDef<ReferralRequestFieldsFragment>[]>(
     () => [
       {
-        header: 'ID',
+        header: 'Referral Request ID',
         render: 'identifier',
       },
       {

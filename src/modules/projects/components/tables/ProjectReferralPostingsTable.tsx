@@ -18,8 +18,8 @@ import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
-    header: 'ID',
-    render: 'referralIdentifier',
+    header: 'Referral ID',
+    render: (row) => row.referralIdentifier || 'N/A',
   },
   {
     header: 'Referral Date',
