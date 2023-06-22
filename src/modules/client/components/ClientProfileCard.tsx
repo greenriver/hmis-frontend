@@ -112,7 +112,11 @@ export const ClientProfileCardAccordion = ({ client }: Props): JSX.Element => {
               <ClientProfileCardTextTable
                 content={client.externalIds.map((externalId) => {
                   return [
-                    externalId.label,
+                    <HmisEnum
+                      enumMap={HmisEnums.ExternalIdentifierType}
+                      value={externalId.type}
+                      fontWeight={600}
+                    />,
                     <ExternalIdDisplay value={externalId} />,
                   ] as const;
                 })}

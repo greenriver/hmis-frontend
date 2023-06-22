@@ -384,6 +384,12 @@ export const HmisEnums = {
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
+  ExternalIdentifierType: {
+    CLIENT_ID: 'HMIS ID',
+    MCI_ID: 'MCI ID',
+    PERSONAL_ID: 'Personal ID',
+    WAREHOUSE_ID: 'Warehouse ID',
+  },
   FeelingFrequency: {
     INVALID: 'Invalid Value',
     NOT_AT_ALL: 'Not at all',
