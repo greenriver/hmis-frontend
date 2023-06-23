@@ -1639,6 +1639,32 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+/** AC ESG Funding Report */
+export type EsgFundingReport = {
+  __typename?: 'EsgFundingReport';
+  esgFundingServices: Array<EsgFundingService>;
+};
+
+/** AC ESG Funding Service */
+export type EsgFundingService = {
+  __typename?: 'EsgFundingService';
+  client: Client;
+  clientId: Scalars['ID'];
+  customDataElements: Array<CustomDataElement>;
+  dateProvided: Scalars['ISO8601Date'];
+  faAmount?: Maybe<Scalars['Float']>;
+  faEndDate?: Maybe<Scalars['ISO8601Date']>;
+  faStartDate?: Maybe<Scalars['ISO8601Date']>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  mciIds: Array<ExternalIdentifier>;
+  organizationId: Scalars['ID'];
+  organizationName: Scalars['String'];
+  projectId: Scalars['ID'];
+  projectName: Scalars['String'];
+};
+
 /** 3.05.1 */
 export enum Ethnicity {
   /** (8) Client doesn't know */
@@ -3357,6 +3383,7 @@ export type Query = {
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  esgFundingReport: EsgFundingReport;
   file?: Maybe<File>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
@@ -3414,6 +3441,10 @@ export type QueryDeniedPendingReferralPostingsArgs = {
 
 export type QueryEnrollmentArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryEsgFundingReportArgs = {
+  clientIds: Array<Scalars['ID']>;
 };
 
 export type QueryFileArgs = {
