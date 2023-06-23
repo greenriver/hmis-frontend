@@ -1,0 +1,45 @@
+fragment EsgFundingServiceFields on EsgFundingService {
+  id
+  clientId
+  mciIds {
+    id
+    identifier
+    label
+    url
+  }
+  firstName
+  lastName
+  projectId
+  projectName
+  organizationId
+  organizationName
+  faAmount
+  faStartDate
+  faEndDate
+  customDataElements {
+    id
+    key
+    label
+    repeats
+    value {
+      id
+      valueBoolean
+      valueDate
+      valueFloat
+      valueInteger
+      valueJson
+      valueString
+      valueText
+    }
+    values {
+      id
+      valueBoolean
+      valueDate
+      valueFloat
+      valueInteger
+      valueJson
+      valueString
+      valueText
+    }
+  }
+}
