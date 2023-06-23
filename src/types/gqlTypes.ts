@@ -1648,7 +1648,7 @@ export type EsgFundingReport = {
 /** AC ESG Funding Service */
 export type EsgFundingService = {
   __typename?: 'EsgFundingService';
-  client: Client;
+  clientDob?: Maybe<Scalars['ISO8601Date']>;
   clientId: Scalars['ID'];
   customDataElements: Array<CustomDataElement>;
   dateProvided: Scalars['ISO8601Date'];
@@ -13653,6 +13653,7 @@ export type EsgFundingServiceFieldsFragment = {
   __typename?: 'EsgFundingService';
   id: string;
   clientId: string;
+  clientDob?: string | null;
   firstName?: string | null;
   lastName?: string | null;
   projectId: string;
@@ -13712,6 +13713,7 @@ export type GetEsgFundingReportQuery = {
       __typename?: 'EsgFundingService';
       id: string;
       clientId: string;
+      clientDob?: string | null;
       firstName?: string | null;
       lastName?: string | null;
       projectId: string;
@@ -15591,6 +15593,7 @@ export const EsgFundingServiceFieldsFragmentDoc = gql`
   fragment EsgFundingServiceFields on EsgFundingService {
     id
     clientId
+    clientDob
     mciIds {
       id
       identifier

@@ -1627,6 +1627,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'EsgFundingService',
     fields: [
       {
+        name: 'clientDob',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'clientId',
         type: {
           kind: 'NON_NULL',

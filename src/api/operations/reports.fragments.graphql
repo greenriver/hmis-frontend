@@ -1,6 +1,7 @@
 fragment EsgFundingServiceFields on EsgFundingService {
   id
   clientId
+  clientDob
   mciIds {
     id
     identifier

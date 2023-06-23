@@ -10880,17 +10880,13 @@
         "description": "AC ESG Funding Service",
         "fields": [
           {
-            "name": "client",
+            "name": "clientDob",
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "OBJECT",
-                "name": "Client",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

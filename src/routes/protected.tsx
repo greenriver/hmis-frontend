@@ -49,6 +49,7 @@ import {
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
+import EsgFundingReport from '@/modules/projects/components/EsgFundingReport';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
@@ -119,6 +120,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.REFERRAL_POSTING,
             element: <ProjectReferralPosting />,
+          },
+          {
+            path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+            element: <EsgFundingReport />,
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,

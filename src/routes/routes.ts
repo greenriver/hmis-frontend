@@ -51,6 +51,7 @@ const projectClientDashboardRoutes = {
   NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
   NEW_REFERRAL: 'referrals/new-referral',
   REFERRAL_POSTING: 'referrals/:referralPostingId',
+  ESG_FUNDING_REPORT: 'referrals/:referralPostingId/esg-funding-report',
 
   // Project setup
   FUNDERS: 'funder',
@@ -104,4 +105,7 @@ export const FOCUS_MODE_ROUTES = [
   },
 ];
 
-export const PRINTABLE_ROUTES = [ClientDashboardRoutes.VIEW_ASSESSMENT];
+export const PRINTABLE_ROUTES = [
+  ClientDashboardRoutes.VIEW_ASSESSMENT,
+  ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+];
