@@ -8249,29 +8249,7 @@ export type DeleteEnrollmentMutation = {
   deleteEnrollment?: {
     __typename?: 'DeleteEnrollmentPayload';
     clientMutationId?: string | null;
-    enrollment?: {
-      __typename?: 'Enrollment';
-      id: string;
-      entryDate: string;
-      exitDate?: string | null;
-      inProgress: boolean;
-      relationshipToHoH: RelationshipToHoH;
-      householdSize: number;
-      project: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      };
-      household: { __typename?: 'Household'; id: string; shortId: string };
-      client: { __typename?: 'Client'; id: string };
-      access: {
-        __typename?: 'EnrollmentAccess';
-        id: string;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-      };
-    } | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
     errors: Array<{
       __typename?: 'ValidationError';
       type: ValidationType;
@@ -16828,14 +16806,13 @@ export const DeleteEnrollmentDocument = gql`
     deleteEnrollment(input: $input) {
       clientMutationId
       enrollment {
-        ...EnrollmentFields
+        id
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${EnrollmentFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type DeleteEnrollmentMutationFn = Apollo.MutationFunction<
