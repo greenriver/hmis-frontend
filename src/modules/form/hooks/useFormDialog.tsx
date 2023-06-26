@@ -49,8 +49,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       ...args,
       formDefinition,
       onCompleted: (data: T) => {
-        if (onCompleted) onCompleted(data);
         setDialogOpen(false);
+        if (onCompleted) onCompleted(data);
       },
     };
   }, [args, onCompleted, formDefinition]);

@@ -1986,6 +1986,8 @@ export enum FormRole {
   Client = 'CLIENT',
   /** (CUSTOM) Custom Assessment */
   Custom = 'CUSTOM',
+  /** (ENROLLMENT) Enrollment */
+  Enrollment = 'ENROLLMENT',
   /** (EXIT) Exit Assessment */
   Exit = 'EXIT',
   /** (FILE) File */
@@ -4328,6 +4330,7 @@ export type SubmitFormPayload = {
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
   | Client
+  | Enrollment
   | File
   | Funder
   | Inventory
@@ -11118,6 +11121,29 @@ export type SubmitFormMutation = {
           } | null;
         }
       | {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string; shortId: string };
+          client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
+        }
+      | {
           __typename?: 'File';
           confidential?: boolean | null;
           contentType: string;
@@ -17783,6 +17809,9 @@ export const SubmitFormDocument = gql`
         ... on File {
           ...FileFields
         }
+        ... on Enrollment {
+          ...EnrollmentFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -17798,6 +17827,7 @@ export const SubmitFormDocument = gql`
   ${ReferralRequestFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<

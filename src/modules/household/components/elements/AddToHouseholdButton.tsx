@@ -1,65 +1,30 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Button } from '@mui/material';
+import { useEffect, useState } from 'react';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import LoadingButton from '@/components/elements/LoadingButton';
 import usePrevious from '@/hooks/usePrevious';
-import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
-import {
-  emptyErrorState,
-  ErrorState,
-  partitionValidations,
-} from '@/modules/errors/util';
-import { formatDateForGql } from '@/modules/hmis/hmisUtil';
-import {
-  HouseholdFieldsFragment,
-  RelationshipToHoH,
-  useAddToHouseholdMutation,
-} from '@/types/gqlTypes';
+import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
+import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface Props {
   clientId: string;
+  clientName: string;
   isMember: boolean;
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
-  onSuccess: (household: HouseholdFieldsFragment) => void;
-  relationshipToHoH?: RelationshipToHoH | null;
-  startDate?: Date | null;
+  onSuccess: (householdId: string) => void;
 }
 
 const AddToHouseholdButton = ({
   clientId,
+  clientName,
   isMember,
   householdId,
-  relationshipToHoH,
-  startDate,
   onSuccess,
   projectId,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
-
-  const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
-
-  const [addHouseholdMember, { loading }] = useAddToHouseholdMutation({
-    onCompleted: (data) => {
-      if (!data.addToHousehold) return;
-      const { household, errors } = data.addToHousehold;
-      if (errors && errors.length > 0) {
-        setErrorState(partitionValidations(errors));
-      } else if (household) {
-        setErrorState(emptyErrorState);
-        setAdded(true);
-        onSuccess(household);
-      }
-    },
-    onError: (apolloError) =>
-      setErrorState({ ...emptyErrorState, apolloError }),
-  });
-
-  const { renderValidationDialog } = useValidationDialog({
-    errorState,
-    includeErrors: true,
-  });
 
   useEffect(() => {
     // If client was previously added but has since been removed
@@ -71,66 +36,36 @@ const AddToHouseholdButton = ({
   let text = 'Add to Enrollment';
   const color: 'secondary' | 'error' = 'secondary';
   if (added) text = 'Added';
-  // if (hasErrors(errorState)) {
-  //   text = 'Error';
-  //   color = 'error';
-  // }
 
-  const handleSubmit = useCallback(
-    (confirmed: boolean) => () => {
-      if (!startDate) return;
-
-      addHouseholdMember({
-        variables: {
-          input: {
-            projectId,
-            householdId,
-            clientId,
-            relationshipToHoh: householdId
-              ? relationshipToHoH || RelationshipToHoH.DataNotCollected
-              : RelationshipToHoH.SelfHeadOfHousehold,
-            entryDate: formatDateForGql(startDate) || '',
-            confirmed,
-          },
-        },
-      });
-    },
-    [
-      addHouseholdMember,
-      clientId,
-      relationshipToHoH,
-      startDate,
-      householdId,
-      projectId,
-    ]
-  );
+  const { openFormDialog, renderFormDialog } =
+    useFormDialog<EnrollmentFieldsFragment>({
+      formRole: FormRole.Enrollment,
+      onCompleted: (data: EnrollmentFieldsFragment) => {
+        onSuccess(data.household.id);
+      },
+      inputVariables: { projectId, clientId },
+      localConstants: { householdId },
+    });
 
   return (
     <>
       <ButtonTooltipContainer
-        title={
-          added
-            ? 'Client is already a member of this household'
-            : !startDate
-            ? 'Select Entry Date before adding client'
-            : null
-        }
+        title={added ? 'Client is already a member of this household' : null}
       >
-        <LoadingButton
-          disabled={added || !startDate || loading}
+        <Button
+          disabled={added}
           color={color}
           fullWidth
           size='small'
-          onClick={handleSubmit(false)}
+          onClick={openFormDialog}
           sx={{ maxWidth: '180px' }}
-          loading={loading}
         >
           {text}
-        </LoadingButton>
+        </Button>
       </ButtonTooltipContainer>
-      {renderValidationDialog({
-        onConfirm: handleSubmit(true),
-        loading,
+      {renderFormDialog({
+        title: <>Enroll {clientName}</>,
+        submitButtonText: `Enroll`,
       })}
     </>
   );
