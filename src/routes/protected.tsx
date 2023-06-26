@@ -16,7 +16,6 @@ import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
-import ClientServices from '@/components/clientDashboard/enrollments/ClientServices';
 import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
 import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
@@ -61,6 +60,7 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import ClientServices from '@/modules/services/components/ClientServices';
 import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
 
