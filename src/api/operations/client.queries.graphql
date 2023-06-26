@@ -172,7 +172,7 @@ mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   deleteEnrollment(input: $input) {
     clientMutationId
     enrollment {
-      ...EnrollmentFields
+      id
     }
     errors {
       ...ValidationErrorFields
