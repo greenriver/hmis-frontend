@@ -1804,8 +1804,21 @@ export type ExternalIdentifier = {
   /** The identifier value */
   identifier?: Maybe<Scalars['ID']>;
   label: Scalars['String'];
+  type: ExternalIdentifierType;
   url?: Maybe<Scalars['String']>;
 };
+
+/** External Identifier Type */
+export enum ExternalIdentifierType {
+  /** HMIS ID */
+  ClientId = 'CLIENT_ID',
+  /** MCI ID */
+  MciId = 'MCI_ID',
+  /** Personal ID */
+  PersonalId = 'PERSONAL_ID',
+  /** Warehouse ID */
+  WarehouseId = 'WAREHOUSE_ID',
+}
 
 /** C1.2 */
 export enum FeelingFrequency {
@@ -7013,6 +7026,7 @@ export type ClientFieldsFragment = {
     identifier?: string | null;
     url?: string | null;
     label: string;
+    type: ExternalIdentifierType;
   }>;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
@@ -7207,6 +7221,7 @@ export type ClientIdentifierFieldsFragment = {
   identifier?: string | null;
   url?: string | null;
   label: string;
+  type: ExternalIdentifierType;
 };
 
 export type ClientImageFieldsFragment = {
@@ -7598,6 +7613,7 @@ export type SearchClientsQuery = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
@@ -7746,6 +7762,7 @@ export type GetClientQuery = {
       identifier?: string | null;
       url?: string | null;
       label: string;
+      type: ExternalIdentifierType;
     }>;
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
@@ -8359,6 +8376,7 @@ export type DeleteClientMutation = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
@@ -11006,6 +11024,7 @@ export type SubmitFormMutation = {
             identifier?: string | null;
             url?: string | null;
             label: string;
+            type: ExternalIdentifierType;
           }>;
           user?: { __typename: 'User'; id: string; name: string } | null;
           access: {
@@ -13131,6 +13150,7 @@ export type GetReferralPostingQuery = {
           identifier?: string | null;
           url?: string | null;
           label: string;
+          type: ExternalIdentifierType;
         }>;
       };
     }>;
@@ -13406,6 +13426,7 @@ export type UpdateReferralPostingMutation = {
             identifier?: string | null;
             url?: string | null;
             label: string;
+            type: ExternalIdentifierType;
           }>;
         };
       }>;
@@ -13571,6 +13592,7 @@ export type ReferralPostingDetailFieldsFragment = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
     };
   }>;
@@ -14594,6 +14616,7 @@ export const ClientIdentifierFieldsFragmentDoc = gql`
     identifier
     url
     label
+    type
   }
 `;
 export const ClientAccessFieldsFragmentDoc = gql`

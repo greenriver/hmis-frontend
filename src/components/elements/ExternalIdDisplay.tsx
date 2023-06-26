@@ -1,10 +1,14 @@
-import { Box, Typography } from '@mui/material';
-import { find, isNil } from 'lodash-es';
+import { Box, Stack, Typography } from '@mui/material';
+import { filter, isNil } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import ExternalLink from './ExternalLink';
 
-import { ClientFieldsFragment, ExternalIdentifier } from '@/types/gqlTypes';
+import {
+  ClientFieldsFragment,
+  ExternalIdentifier,
+  ExternalIdentifierType,
+} from '@/types/gqlTypes';
 
 export interface ExternalIdDisplayProps {
   value?: ExternalIdentifier;
@@ -42,42 +46,50 @@ const ExternalIdDisplay = ({
   return missingDisplay;
 };
 
-export const externalIdColumn = (label: string) => ({
+export const externalIdColumn = (
+  type: ExternalIdentifierType,
+  label: string
+) => ({
   header: label,
   width: '5%',
-  render: (client: ClientFieldsFragment, props?: ExternalIdDisplayProps) => {
-    return (
-      <ExternalIdDisplay
-        value={client.externalIds.find((c) => c.label == label)}
-        {...props}
-      />
-    );
-  },
+  render: (client: ClientFieldsFragment, props?: ExternalIdDisplayProps) => (
+    <Stack gap={0.8}>
+      {filter(client.externalIds, { type }).map((val) => (
+        <ExternalIdDisplay value={val} {...props} />
+      ))}
+    </Stack>
+  ),
   dontLink: true,
 });
 
 export const LabeledExternalIdDisplay = ({
-  label,
+  type,
   externalIds,
   ...props
 }: Omit<ExternalIdDisplayProps, 'value'> & {
-  label?: string;
+  type?: ExternalIdentifierType;
   externalIds: ExternalIdentifier[];
 }) => {
+  const filtered = filter(externalIds, { type });
+  if (!filtered || filtered.length === 0) return null;
   return (
-    <Typography
-      variant='body2'
-      sx={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 0.8,
-      }}
-    >
-      {label}:{' '}
-      <Box component='span' sx={{ wordBreak: 'break-all' }}>
-        <ExternalIdDisplay {...props} value={find(externalIds, { label })} />
-      </Box>
-    </Typography>
+    <Stack>
+      {filtered.map((externalId) => (
+        <Typography
+          variant='body2'
+          sx={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 0.8,
+          }}
+        >
+          {externalId.label}:{' '}
+          <Box component='span' sx={{ wordBreak: 'break-all' }}>
+            <ExternalIdDisplay {...props} value={externalId} />
+          </Box>
+        </Typography>
+      ))}
+    </Stack>
   );
 };
 

@@ -36,6 +36,7 @@ import {
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  ExternalIdentifierType,
   GetClientEnrollmentsQuery,
   useGetClientEnrollmentsQuery,
   useGetClientImageQuery,
@@ -181,7 +182,7 @@ const ClientCard: React.FC<Props> = ({
               <Stack spacing={0.5} sx={{ pr: 1 }}>
                 {globalFeatureFlags?.mciId && (
                   <LabeledExternalIdDisplay
-                    label='MCI ID'
+                    type={ExternalIdentifierType.MciId}
                     externalIds={client.externalIds}
                   />
                 )}

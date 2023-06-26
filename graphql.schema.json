@@ -12012,6 +12012,22 @@
             "deprecationReason": null
           },
           {
+            "name": "type",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "ExternalIdentifierType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "url",
             "description": null,
             "args": [],
@@ -12027,6 +12043,41 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "ExternalIdentifierType",
+        "description": "External Identifier Type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "CLIENT_ID",
+            "description": "HMIS ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "MCI_ID",
+            "description": "MCI ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PERSONAL_ID",
+            "description": "Personal ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "WAREHOUSE_ID",
+            "description": "Warehouse ID",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
