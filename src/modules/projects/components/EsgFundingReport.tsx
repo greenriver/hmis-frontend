@@ -83,7 +83,7 @@ const EsgFundingReport: React.FC = () => {
           render: (row) => parseAndFormatDate(row.clientDob),
         },
         {
-          header: 'MCI_ID',
+          header: 'MCI ID',
           render: (row) => row.mciIds.map((id) => id.identifier).join('\n'),
         },
         {
