@@ -18,29 +18,6 @@ fragment EsgFundingServiceFields on EsgFundingService {
   faStartDate
   faEndDate
   customDataElements {
-    id
-    key
-    label
-    repeats
-    value {
-      id
-      valueBoolean
-      valueDate
-      valueFloat
-      valueInteger
-      valueJson
-      valueString
-      valueText
-    }
-    values {
-      id
-      valueBoolean
-      valueDate
-      valueFloat
-      valueInteger
-      valueJson
-      valueString
-      valueText
-    }
+    ...CustomDataElementFields
   }
 }
