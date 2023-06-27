@@ -61,11 +61,17 @@ const EsgFundingReport: React.FC = () => {
     return <NotFound />;
   }
 
+  const verticalBorder = {
+    borderRight: '1px solid white',
+    borderColor: 'borders.light',
+  };
+
   const table = (
     <GenericTable<EsgFundingServiceFieldsFragment>
       tableContainerProps={
         isPrint ? { sx: { overflow: 'initial', width: 'auto' } } : undefined
       }
+      tableProps={{ sx: { td: verticalBorder, th: verticalBorder } }}
       rows={report}
       noData={
         <Typography color='textSecondary'>
@@ -140,7 +146,7 @@ const EsgFundingReport: React.FC = () => {
   return (
     <>
       <PageTitle
-        title={<Typography variant='h3'>ESG Funding Report</Typography>}
+        title='ESG Funding Report'
         actions={
           !isPrint && (
             <PrintViewButton color='secondary' variant='outlined'>
