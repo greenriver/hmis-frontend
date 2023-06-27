@@ -28,6 +28,9 @@ const RemoveFromHouseholdButton = ({
   });
 
   const disabledReason = useMemo(() => {
+    // If household is being created in the project context, any enrollment can be removed
+    if (!currentDashboardClientId) return;
+
     if (!householdClient.enrollment.inProgress) {
       return 'Client with completed enrollment cannot be removed. Exit the client instead.';
     } else if (

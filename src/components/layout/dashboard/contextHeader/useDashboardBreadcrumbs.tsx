@@ -59,7 +59,7 @@ export const useProjectBreadcrumbConfig = (
         parent: ProjectDashboardRoutes.OVERVIEW,
       },
       [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
-        title: 'New Household',
+        title: 'Add Enrollment',
         parent: ProjectDashboardRoutes.ENROLLMENTS,
       },
       [ProjectDashboardRoutes.REFERRALS]: {

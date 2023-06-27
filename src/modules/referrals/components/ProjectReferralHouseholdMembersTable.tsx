@@ -1,3 +1,6 @@
+import { Stack } from '@mui/material';
+import { filter } from 'lodash-es';
+
 import ExternalIdDisplay from '@/components/elements/ExternalIdDisplay';
 import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -6,7 +9,10 @@ import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { HmisEnums } from '@/types/gqlEnums';
-import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
+import {
+  ExternalIdentifierType,
+  ReferralPostingDetailFieldsFragment,
+} from '@/types/gqlTypes';
 
 type Row = ReferralPostingDetailFieldsFragment['householdMembers'][number];
 
@@ -31,9 +37,13 @@ const columns: ColumnDef<Row>[] = [
   {
     header: 'MCI ID',
     render: ({ client }: Row) => (
-      <ExternalIdDisplay
-        value={client.externalIds.find((c) => c.label == 'MCI ID')}
-      />
+      <Stack gap={0.8}>
+        {filter(client.externalIds, { type: ExternalIdentifierType.MciId }).map(
+          (val) => (
+            <ExternalIdDisplay value={val} />
+          )
+        )}
+      </Stack>
     ),
   },
   {
