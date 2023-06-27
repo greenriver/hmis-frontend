@@ -110,8 +110,7 @@ const EsgFundingReport: React.FC = () => {
         {
           header: 'Payment Type',
           render: (row) =>
-            row.customDataElements?.find((e) => e.key === 'payment_type')?.value
-              ?.valueString,
+            customDataElementValueForKey('payment_type', row)
         },
         {
           header: 'Amount',
