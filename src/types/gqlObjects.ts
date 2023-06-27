@@ -1622,7 +1622,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
     ],
   },
-  { name: 'EsgFundingReport', fields: [] },
   {
     name: 'EsgFundingService',
     fields: [
@@ -2015,6 +2014,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'type',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ExternalIdentifierType',
+            ofType: null,
+          },
         },
       },
       { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },

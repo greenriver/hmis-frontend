@@ -1639,12 +1639,6 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-/** AC ESG Funding Report */
-export type EsgFundingReport = {
-  __typename?: 'EsgFundingReport';
-  esgFundingServices: Array<EsgFundingService>;
-};
-
 /** AC ESG Funding Service */
 export type EsgFundingService = {
   __typename?: 'EsgFundingService';
@@ -1830,8 +1824,21 @@ export type ExternalIdentifier = {
   /** The identifier value */
   identifier?: Maybe<Scalars['ID']>;
   label: Scalars['String'];
+  type: ExternalIdentifierType;
   url?: Maybe<Scalars['String']>;
 };
+
+/** External Identifier Type */
+export enum ExternalIdentifierType {
+  /** HMIS ID */
+  ClientId = 'CLIENT_ID',
+  /** MCI ID */
+  MciId = 'MCI_ID',
+  /** Personal ID */
+  PersonalId = 'PERSONAL_ID',
+  /** Warehouse ID */
+  WarehouseId = 'WAREHOUSE_ID',
+}
 
 /** C1.2 */
 export enum FeelingFrequency {
@@ -3383,7 +3390,7 @@ export type Query = {
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
-  esgFundingReport: EsgFundingReport;
+  esgFundingReport: Array<EsgFundingService>;
   file?: Maybe<File>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
@@ -13667,8 +13674,8 @@ export type EsgFundingServiceFieldsFragment = {
     __typename?: 'ExternalIdentifier';
     id: string;
     identifier?: string | null;
-    label: string;
     url?: string | null;
+    label: string;
   }>;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -13686,6 +13693,9 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
     } | null;
     values?: Array<{
       __typename?: 'CustomDataElementValue';
@@ -13697,6 +13707,9 @@ export type EsgFundingServiceFieldsFragment = {
       valueJson?: any | null;
       valueString?: string | null;
       valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
 };
@@ -13707,60 +13720,63 @@ export type GetEsgFundingReportQueryVariables = Exact<{
 
 export type GetEsgFundingReportQuery = {
   __typename?: 'Query';
-  esgFundingReport: {
-    __typename?: 'EsgFundingReport';
-    esgFundingServices: Array<{
-      __typename?: 'EsgFundingService';
+  esgFundingReport: Array<{
+    __typename?: 'EsgFundingService';
+    id: string;
+    clientId: string;
+    clientDob?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    projectId: string;
+    projectName: string;
+    organizationId: string;
+    organizationName: string;
+    faAmount?: number | null;
+    faStartDate?: string | null;
+    faEndDate?: string | null;
+    mciIds: Array<{
+      __typename?: 'ExternalIdentifier';
       id: string;
-      clientId: string;
-      clientDob?: string | null;
-      firstName?: string | null;
-      lastName?: string | null;
-      projectId: string;
-      projectName: string;
-      organizationId: string;
-      organizationName: string;
-      faAmount?: number | null;
-      faStartDate?: string | null;
-      faEndDate?: string | null;
-      mciIds: Array<{
-        __typename?: 'ExternalIdentifier';
-        id: string;
-        identifier?: string | null;
-        label: string;
-        url?: string | null;
-      }>;
-      customDataElements: Array<{
-        __typename?: 'CustomDataElement';
-        id: string;
-        key: string;
-        label: string;
-        repeats: boolean;
-        value?: {
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-        } | null;
-        values?: Array<{
-          __typename?: 'CustomDataElementValue';
-          id: string;
-          valueBoolean?: boolean | null;
-          valueDate?: string | null;
-          valueFloat?: number | null;
-          valueInteger?: number | null;
-          valueJson?: any | null;
-          valueString?: string | null;
-          valueText?: string | null;
-        }> | null;
-      }>;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
     }>;
-  };
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  }>;
 };
 
 export type ServiceTypeFieldsFragment = {
@@ -15595,10 +15611,7 @@ export const EsgFundingServiceFieldsFragmentDoc = gql`
     clientId
     clientDob
     mciIds {
-      id
-      identifier
-      label
-      url
+      ...ClientIdentifierFields
     }
     firstName
     lastName
@@ -15610,32 +15623,11 @@ export const EsgFundingServiceFieldsFragmentDoc = gql`
     faStartDate
     faEndDate
     customDataElements {
-      id
-      key
-      label
-      repeats
-      value {
-        id
-        valueBoolean
-        valueDate
-        valueFloat
-        valueInteger
-        valueJson
-        valueString
-        valueText
-      }
-      values {
-        id
-        valueBoolean
-        valueDate
-        valueFloat
-        valueInteger
-        valueJson
-        valueString
-        valueText
-      }
+      ...CustomDataElementFields
     }
   }
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ServiceTypeFieldsFragmentDoc = gql`
   fragment ServiceTypeFields on ServiceType {
@@ -20159,9 +20151,7 @@ export type GetDeniedPendingReferralPostingsQueryResult = Apollo.QueryResult<
 export const GetEsgFundingReportDocument = gql`
   query GetEsgFundingReport($clientIds: [ID!]!) {
     esgFundingReport(clientIds: $clientIds) {
-      esgFundingServices {
-        ...EsgFundingServiceFields
-      }
+      ...EsgFundingServiceFields
     }
   }
   ${EsgFundingServiceFieldsFragmentDoc}

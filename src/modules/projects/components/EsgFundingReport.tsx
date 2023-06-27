@@ -11,7 +11,11 @@ import useIsPrintView from '@/hooks/useIsPrintView';
 import usePrintTrigger from '@/hooks/usePrintTrigger';
 import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
-import { formatCurrency, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  customDataElementValueForKey,
+  formatCurrency,
+  parseAndFormatDate,
+} from '@/modules/hmis/hmisUtil';
 import {
   EsgFundingServiceFieldsFragment,
   useGetEsgFundingReportQuery,
@@ -22,7 +26,6 @@ const EsgFundingReport: React.FC = () => {
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
   const { data, loading, error } = useGetReferralPostingQuery({
     variables: { id: referralPostingId as any as string },
-    fetchPolicy: 'network-only',
   });
 
   const isPrint = useIsPrintView();
@@ -63,7 +66,7 @@ const EsgFundingReport: React.FC = () => {
       tableContainerProps={
         isPrint ? { sx: { overflow: 'initial', width: 'auto' } } : undefined
       }
-      rows={report.esgFundingServices}
+      rows={report}
       noData={
         <Typography color='textSecondary'>
           No ESG Funding Assistance services for this household
@@ -105,12 +108,18 @@ const EsgFundingReport: React.FC = () => {
         {
           header: 'Funding Source',
           render: (row) =>
-            customDataElementValueForKey('funding_source', row)
+            customDataElementValueForKey(
+              'funding_source',
+              row.customDataElements
+            ),
         },
         {
           header: 'Payment Type',
           render: (row) =>
-            customDataElementValueForKey('payment_type', row)
+            customDataElementValueForKey(
+              'payment_type',
+              row.customDataElements
+            ),
         },
         {
           header: 'Amount',

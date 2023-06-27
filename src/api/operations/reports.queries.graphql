@@ -1,7 +1,5 @@
 query GetEsgFundingReport($clientIds: [ID!]!) {
   esgFundingReport(clientIds: $clientIds) {
-    esgFundingServices {
-      ...EsgFundingServiceFields
-    }
+    ...EsgFundingServiceFields
   }
 }
