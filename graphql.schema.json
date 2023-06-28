@@ -10210,7 +10210,7 @@
                 "description": null,
                 "type": {
                   "kind": "INPUT_OBJECT",
-                  "name": "ServiceFilterOptions",
+                  "name": "ServicesForEnrollmentFilterOptions",
                   "ofType": null
                 },
                 "defaultValue": null,
@@ -19788,6 +19788,18 @@
         "interfaces": null,
         "enumValues": [
           {
+            "name": "ALL_SERVICE_CATEGORIES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "ALL_SERVICE_TYPES",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ASSIGNED_REFERRAL_POSTING_STATUSES",
             "description": "Referral Posting Status",
             "isDeprecated": false,
@@ -19886,12 +19898,6 @@
           {
             "name": "REFERRAL_RESULT_TYPES",
             "description": "Referral Result ",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICE_TYPE",
-            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -26422,6 +26428,57 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "ServicesForEnrollmentFilterOptions",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "serviceCategory",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "serviceType",
+            "description": null,
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
         "possibleTypes": null
       },
       {

@@ -81,6 +81,9 @@ const ServicesTable: React.FC<Props> = ({ enrollmentId, enrollment }) => {
         columns={baseColumns}
         pagePath='enrollment.services'
         noData='No services'
+        recordType='Service'
+        showFilters
+        filterInputType='ServicesForEnrollmentFilterOptions'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />
 

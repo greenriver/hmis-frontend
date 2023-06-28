@@ -140,6 +140,10 @@ export const useClientBreadcrumbConfig = (
         title: 'Enrollments',
         parent: ClientDashboardRoutes.PROFILE,
       },
+      [ClientDashboardRoutes.SERVICES]: {
+        title: 'Services',
+        parent: ClientDashboardRoutes.PROFILE,
+      },
       [ClientDashboardRoutes.NEW_ENROLLMENT]: {
         title: 'Add Enrollment',
         parent: ClientDashboardRoutes.ALL_ENROLLMENTS,

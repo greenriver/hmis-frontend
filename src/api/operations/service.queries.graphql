@@ -34,10 +34,15 @@ mutation DeleteService($input: DeleteServiceInput!) {
   }
 }
 
-query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetEnrollmentServices(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: ServicesForEnrollmentFilterOptions = null
+) {
   enrollment(id: $id) {
     id
-    services(limit: $limit, offset: $offset) {
+    services(limit: $limit, offset: $offset, filters: $filters) {
       offset
       limit
       nodesCount

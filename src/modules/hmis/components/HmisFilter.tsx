@@ -93,6 +93,20 @@ const getFilterForType = (
       pickListReference: PickListType.Project,
     };
 
+  if (fieldName === 'serviceType')
+    filter = {
+      ...baseFields,
+      type: 'picklist',
+      pickListReference: PickListType.AllServiceTypes,
+    };
+
+  if (fieldName === 'serviceCategory')
+    filter = {
+      ...baseFields,
+      type: 'picklist',
+      pickListReference: PickListType.AllServiceCategories,
+    };
+
   if (inputType in HmisEnums) {
     filter = {
       ...baseFields,

@@ -60,6 +60,7 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import ClientServices from '@/modules/services/components/ClientServices';
 import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -403,6 +404,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllAssessments />
+              </EnrollmentsRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.SERVICES,
+            element: (
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientServices />
               </EnrollmentsRoute>
             ),
           },

@@ -24,6 +24,7 @@ const clientClientDashboardRoutes = {
   HOUSEHOLD_INTAKE: 'enrollments/:enrollmentId/household-intake',
   NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/new',
   VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
+  SERVICES: 'services',
   NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
   EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
   ALL_ENROLLMENTS: 'enrollments',
