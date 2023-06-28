@@ -1,7 +1,8 @@
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Grid, Stack, Typography } from '@mui/material';
 
 import { ProjectReferralPostingForm } from './ProjectReferralPostingForm';
 
+import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonCard } from '@/components/elements/CommonCard';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import Loading from '@/components/elements/Loading';
@@ -12,10 +13,12 @@ import useSafeParams from '@/hooks/useSafeParams';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import ProjectReferralPostingDetails from '@/modules/projects/components/ReferralPostingDetails';
 import ReferralHouseholdMembersTable from '@/modules/referrals/components/ProjectReferralHouseholdMembersTable';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import {
   ReferralPostingStatus,
   useGetReferralPostingQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 const ProjectReferralPosting: React.FC = () => {
   const { referralPostingId } = useSafeParams<{ referralPostingId: string }>();
@@ -50,14 +53,17 @@ const ProjectReferralPosting: React.FC = () => {
           <CommonCard title='Referral Details' sx={{ mb: 2 }}>
             <ProjectReferralPostingDetails referralPosting={referralPosting} />
           </CommonCard>
-          <Button
+          <ButtonLink
             fullWidth
             variant='outlined'
             color='secondary'
-            onClick={() => alert('Not yet implemented')}
+            to={generateSafePath(ProjectDashboardRoutes.ESG_FUNDING_REPORT, {
+              projectId: referralPosting.project?.id,
+              referralPostingId,
+            })}
           >
             ESG Funding Report
-          </Button>
+          </ButtonLink>
         </Grid>
         <Grid item lg={8} sm={12}>
           <Stack spacing={4}>

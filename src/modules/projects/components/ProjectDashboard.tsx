@@ -14,6 +14,7 @@ import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
 import NotFound from '@/components/pages/NotFound';
 import { useDashboardState } from '@/hooks/useDashboardState';
+import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -83,6 +84,9 @@ const ProjectDashboard: React.FC = () => {
   } = useGetProjectQuery({
     variables: { id: params.projectId },
   });
+
+  const isPrint = useIsPrintView();
+
   if (error) throw error;
 
   const navItems: NavItem[] = useMemo(() => {
@@ -160,6 +164,14 @@ const ProjectDashboard: React.FC = () => {
 
   if ((loading && !project) || !navItems) return <Loading />;
   if (!project || !outletContext) return <NotFound />;
+
+  if (isPrint) {
+    return (
+      <>
+        <Outlet context={outletContext} />
+      </>
+    );
+  }
 
   return (
     <DashboardContentContainer

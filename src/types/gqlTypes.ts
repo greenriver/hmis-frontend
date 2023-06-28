@@ -1639,6 +1639,26 @@ export type EnrollmentsPaginated = {
   pagesCount: Scalars['Int'];
 };
 
+/** AC ESG Funding Service */
+export type EsgFundingService = {
+  __typename?: 'EsgFundingService';
+  clientDob?: Maybe<Scalars['ISO8601Date']>;
+  clientId: Scalars['ID'];
+  customDataElements: Array<CustomDataElement>;
+  dateProvided: Scalars['ISO8601Date'];
+  faAmount?: Maybe<Scalars['Float']>;
+  faEndDate?: Maybe<Scalars['ISO8601Date']>;
+  faStartDate?: Maybe<Scalars['ISO8601Date']>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  mciIds: Array<ExternalIdentifier>;
+  organizationId: Scalars['ID'];
+  organizationName: Scalars['String'];
+  projectId: Scalars['ID'];
+  projectName: Scalars['String'];
+};
+
 /** 3.05.1 */
 export enum Ethnicity {
   /** (8) Client doesn't know */
@@ -3371,6 +3391,7 @@ export type Query = {
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  esgFundingReport: Array<EsgFundingService>;
   file?: Maybe<File>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
@@ -3428,6 +3449,10 @@ export type QueryDeniedPendingReferralPostingsArgs = {
 
 export type QueryEnrollmentArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryEsgFundingReportArgs = {
+  clientIds: Array<Scalars['ID']>;
 };
 
 export type QueryFileArgs = {
@@ -13730,6 +13755,129 @@ export type ReferralRequestFieldsFragment = {
   };
 };
 
+export type EsgFundingServiceFieldsFragment = {
+  __typename?: 'EsgFundingService';
+  id: string;
+  clientId: string;
+  clientDob?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  projectId: string;
+  projectName: string;
+  organizationId: string;
+  organizationName: string;
+  faAmount?: number | null;
+  faStartDate?: string | null;
+  faEndDate?: string | null;
+  mciIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+  }>;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+};
+
+export type GetEsgFundingReportQueryVariables = Exact<{
+  clientIds: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+export type GetEsgFundingReportQuery = {
+  __typename?: 'Query';
+  esgFundingReport: Array<{
+    __typename?: 'EsgFundingService';
+    id: string;
+    clientId: string;
+    clientDob?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    projectId: string;
+    projectName: string;
+    organizationId: string;
+    organizationName: string;
+    faAmount?: number | null;
+    faStartDate?: string | null;
+    faEndDate?: string | null;
+    mciIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+    }>;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  }>;
+};
+
 export type ServiceTypeFieldsFragment = {
   __typename?: 'ServiceType';
   id: string;
@@ -15557,6 +15705,30 @@ export const ReferralRequestFieldsFragmentDoc = gql`
     requestorEmail
   }
   ${UnitTypeFieldsFragmentDoc}
+`;
+export const EsgFundingServiceFieldsFragmentDoc = gql`
+  fragment EsgFundingServiceFields on EsgFundingService {
+    id
+    clientId
+    clientDob
+    mciIds {
+      ...ClientIdentifierFields
+    }
+    firstName
+    lastName
+    projectId
+    projectName
+    organizationId
+    organizationName
+    faAmount
+    faStartDate
+    faEndDate
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ServiceTypeFieldsFragmentDoc = gql`
   fragment ServiceTypeFields on ServiceType {
@@ -20161,6 +20333,65 @@ export type GetDeniedPendingReferralPostingsLazyQueryHookResult = ReturnType<
 export type GetDeniedPendingReferralPostingsQueryResult = Apollo.QueryResult<
   GetDeniedPendingReferralPostingsQuery,
   GetDeniedPendingReferralPostingsQueryVariables
+>;
+export const GetEsgFundingReportDocument = gql`
+  query GetEsgFundingReport($clientIds: [ID!]!) {
+    esgFundingReport(clientIds: $clientIds) {
+      ...EsgFundingServiceFields
+    }
+  }
+  ${EsgFundingServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEsgFundingReportQuery__
+ *
+ * To run a query within a React component, call `useGetEsgFundingReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEsgFundingReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEsgFundingReportQuery({
+ *   variables: {
+ *      clientIds: // value for 'clientIds'
+ *   },
+ * });
+ */
+export function useGetEsgFundingReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >(GetEsgFundingReportDocument, options);
+}
+export function useGetEsgFundingReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >(GetEsgFundingReportDocument, options);
+}
+export type GetEsgFundingReportQueryHookResult = ReturnType<
+  typeof useGetEsgFundingReportQuery
+>;
+export type GetEsgFundingReportLazyQueryHookResult = ReturnType<
+  typeof useGetEsgFundingReportLazyQuery
+>;
+export type GetEsgFundingReportQueryResult = Apollo.QueryResult<
+  GetEsgFundingReportQuery,
+  GetEsgFundingReportQueryVariables
 >;
 export const GetServiceDocument = gql`
   query GetService($id: ID!) {
