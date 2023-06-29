@@ -238,6 +238,8 @@ export type AutofillValue = {
   valueCode?: Maybe<Scalars['String']>;
   /** Value to autofill if condition is met */
   valueNumber?: Maybe<Scalars['Int']>;
+  /** Link ID whos value to autofill if condition is met */
+  valueQuestion?: Maybe<Scalars['String']>;
 };
 
 /** 2.07.6 */
@@ -699,6 +701,8 @@ export enum Component {
   Checkbox = 'CHECKBOX',
   /** Specialized component for rendering disabilities in a table */
   DisabilityTable = 'DISABILITY_TABLE',
+  /** Render a choice input item as a dropdown */
+  Dropdown = 'DROPDOWN',
   /** Email address input for ContactPoint */
   Email = 'EMAIL',
   /** Render a group of inputs horizontally */
@@ -4635,7 +4639,7 @@ export enum ValidationType {
 export type ValueBound = {
   __typename?: 'ValueBound';
   /** Unique identifier for this bound */
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
   /** Value to offset the comparison value. Can be positive or negative. If date, offset is applied as number of days. */
   offset?: Maybe<Scalars['Int']>;
   /** Link ID of dependent question, if this items value should be compared to another items value */
@@ -5047,7 +5051,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   enableBehavior?: EnableBehavior | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
-                    id?: string | null;
+                    id: string;
                     severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
@@ -5086,6 +5090,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -5106,7 +5111,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -5145,6 +5150,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -5165,7 +5171,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -5204,6 +5210,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -5224,7 +5231,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -5263,6 +5270,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -5283,7 +5291,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
-            id?: string | null;
+            id: string;
             severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
@@ -5322,6 +5330,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -5568,7 +5577,7 @@ export type GetAssessmentQuery = {
                     enableBehavior?: EnableBehavior | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
-                      id?: string | null;
+                      id: string;
                       severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
@@ -5607,6 +5616,7 @@ export type GetAssessmentQuery = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -5627,7 +5637,7 @@ export type GetAssessmentQuery = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
-                    id?: string | null;
+                    id: string;
                     severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
@@ -5666,6 +5676,7 @@ export type GetAssessmentQuery = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -5686,7 +5697,7 @@ export type GetAssessmentQuery = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -5725,6 +5736,7 @@ export type GetAssessmentQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -5745,7 +5757,7 @@ export type GetAssessmentQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -5784,6 +5796,7 @@ export type GetAssessmentQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -5804,7 +5817,7 @@ export type GetAssessmentQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -5843,6 +5856,7 @@ export type GetAssessmentQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -6090,7 +6104,7 @@ export type SaveAssessmentMutation = {
                       enableBehavior?: EnableBehavior | null;
                       bounds?: Array<{
                         __typename?: 'ValueBound';
-                        id?: string | null;
+                        id: string;
                         severity: ValidationSeverity;
                         type: BoundType;
                         question?: string | null;
@@ -6129,6 +6143,7 @@ export type SaveAssessmentMutation = {
                       autofillValues?: Array<{
                         __typename?: 'AutofillValue';
                         valueCode?: string | null;
+                        valueQuestion?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
@@ -6149,7 +6164,7 @@ export type SaveAssessmentMutation = {
                     }> | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
-                      id?: string | null;
+                      id: string;
                       severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
@@ -6188,6 +6203,7 @@ export type SaveAssessmentMutation = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -6208,7 +6224,7 @@ export type SaveAssessmentMutation = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
-                    id?: string | null;
+                    id: string;
                     severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
@@ -6247,6 +6263,7 @@ export type SaveAssessmentMutation = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -6267,7 +6284,7 @@ export type SaveAssessmentMutation = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -6306,6 +6323,7 @@ export type SaveAssessmentMutation = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -6326,7 +6344,7 @@ export type SaveAssessmentMutation = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -6365,6 +6383,7 @@ export type SaveAssessmentMutation = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -6574,7 +6593,7 @@ export type SubmitAssessmentMutation = {
                       enableBehavior?: EnableBehavior | null;
                       bounds?: Array<{
                         __typename?: 'ValueBound';
-                        id?: string | null;
+                        id: string;
                         severity: ValidationSeverity;
                         type: BoundType;
                         question?: string | null;
@@ -6613,6 +6632,7 @@ export type SubmitAssessmentMutation = {
                       autofillValues?: Array<{
                         __typename?: 'AutofillValue';
                         valueCode?: string | null;
+                        valueQuestion?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
@@ -6633,7 +6653,7 @@ export type SubmitAssessmentMutation = {
                     }> | null;
                     bounds?: Array<{
                       __typename?: 'ValueBound';
-                      id?: string | null;
+                      id: string;
                       severity: ValidationSeverity;
                       type: BoundType;
                       question?: string | null;
@@ -6672,6 +6692,7 @@ export type SubmitAssessmentMutation = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -6692,7 +6713,7 @@ export type SubmitAssessmentMutation = {
                   }> | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
-                    id?: string | null;
+                    id: string;
                     severity: ValidationSeverity;
                     type: BoundType;
                     question?: string | null;
@@ -6731,6 +6752,7 @@ export type SubmitAssessmentMutation = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -6751,7 +6773,7 @@ export type SubmitAssessmentMutation = {
                 }> | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -6790,6 +6812,7 @@ export type SubmitAssessmentMutation = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -6810,7 +6833,7 @@ export type SubmitAssessmentMutation = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -6849,6 +6872,7 @@ export type SubmitAssessmentMutation = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -9279,7 +9303,7 @@ export type ItemFieldsFragment = {
   enableBehavior?: EnableBehavior | null;
   bounds?: Array<{
     __typename?: 'ValueBound';
-    id?: string | null;
+    id: string;
     severity: ValidationSeverity;
     type: BoundType;
     question?: string | null;
@@ -9318,6 +9342,7 @@ export type ItemFieldsFragment = {
   autofillValues?: Array<{
     __typename?: 'AutofillValue';
     valueCode?: string | null;
+    valueQuestion?: string | null;
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     sumQuestions?: Array<string> | null;
@@ -9471,7 +9496,7 @@ export type FormDefinitionJsonFieldsFragment = {
             enableBehavior?: EnableBehavior | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -9510,6 +9535,7 @@ export type FormDefinitionJsonFieldsFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -9530,7 +9556,7 @@ export type FormDefinitionJsonFieldsFragment = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
-            id?: string | null;
+            id: string;
             severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
@@ -9569,6 +9595,7 @@ export type FormDefinitionJsonFieldsFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -9589,7 +9616,7 @@ export type FormDefinitionJsonFieldsFragment = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
-          id?: string | null;
+          id: string;
           severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
@@ -9628,6 +9655,7 @@ export type FormDefinitionJsonFieldsFragment = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -9648,7 +9676,7 @@ export type FormDefinitionJsonFieldsFragment = {
       }> | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
-        id?: string | null;
+        id: string;
         severity: ValidationSeverity;
         type: BoundType;
         question?: string | null;
@@ -9687,6 +9715,7 @@ export type FormDefinitionJsonFieldsFragment = {
       autofillValues?: Array<{
         __typename?: 'AutofillValue';
         valueCode?: string | null;
+        valueQuestion?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
@@ -9707,7 +9736,7 @@ export type FormDefinitionJsonFieldsFragment = {
     }> | null;
     bounds?: Array<{
       __typename?: 'ValueBound';
-      id?: string | null;
+      id: string;
       severity: ValidationSeverity;
       type: BoundType;
       question?: string | null;
@@ -9746,6 +9775,7 @@ export type FormDefinitionJsonFieldsFragment = {
     autofillValues?: Array<{
       __typename?: 'AutofillValue';
       valueCode?: string | null;
+      valueQuestion?: string | null;
       valueBoolean?: boolean | null;
       valueNumber?: number | null;
       sumQuestions?: Array<string> | null;
@@ -9907,7 +9937,7 @@ export type FormDefinitionWithJsonFragment = {
               enableBehavior?: EnableBehavior | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -9946,6 +9976,7 @@ export type FormDefinitionWithJsonFragment = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -9966,7 +9997,7 @@ export type FormDefinitionWithJsonFragment = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -10005,6 +10036,7 @@ export type FormDefinitionWithJsonFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -10025,7 +10057,7 @@ export type FormDefinitionWithJsonFragment = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
-            id?: string | null;
+            id: string;
             severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
@@ -10064,6 +10096,7 @@ export type FormDefinitionWithJsonFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -10084,7 +10117,7 @@ export type FormDefinitionWithJsonFragment = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
-          id?: string | null;
+          id: string;
           severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
@@ -10123,6 +10156,7 @@ export type FormDefinitionWithJsonFragment = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -10143,7 +10177,7 @@ export type FormDefinitionWithJsonFragment = {
       }> | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
-        id?: string | null;
+        id: string;
         severity: ValidationSeverity;
         type: BoundType;
         question?: string | null;
@@ -10182,6 +10216,7 @@ export type FormDefinitionWithJsonFragment = {
       autofillValues?: Array<{
         __typename?: 'AutofillValue';
         valueCode?: string | null;
+        valueQuestion?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
@@ -10381,7 +10416,7 @@ export type GetFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -10420,6 +10455,7 @@ export type GetFormDefinitionQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -10440,7 +10476,7 @@ export type GetFormDefinitionQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -10479,6 +10515,7 @@ export type GetFormDefinitionQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -10499,7 +10536,7 @@ export type GetFormDefinitionQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -10538,6 +10575,7 @@ export type GetFormDefinitionQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -10558,7 +10596,7 @@ export type GetFormDefinitionQuery = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
-            id?: string | null;
+            id: string;
             severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
@@ -10597,6 +10635,7 @@ export type GetFormDefinitionQuery = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -10617,7 +10656,7 @@ export type GetFormDefinitionQuery = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
-          id?: string | null;
+          id: string;
           severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
@@ -10656,6 +10695,7 @@ export type GetFormDefinitionQuery = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -10826,7 +10866,7 @@ export type GetServiceFormDefinitionQuery = {
                 enableBehavior?: EnableBehavior | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
-                  id?: string | null;
+                  id: string;
                   severity: ValidationSeverity;
                   type: BoundType;
                   question?: string | null;
@@ -10865,6 +10905,7 @@ export type GetServiceFormDefinitionQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -10885,7 +10926,7 @@ export type GetServiceFormDefinitionQuery = {
               }> | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
-                id?: string | null;
+                id: string;
                 severity: ValidationSeverity;
                 type: BoundType;
                 question?: string | null;
@@ -10924,6 +10965,7 @@ export type GetServiceFormDefinitionQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -10944,7 +10986,7 @@ export type GetServiceFormDefinitionQuery = {
             }> | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
-              id?: string | null;
+              id: string;
               severity: ValidationSeverity;
               type: BoundType;
               question?: string | null;
@@ -10983,6 +11025,7 @@ export type GetServiceFormDefinitionQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -11003,7 +11046,7 @@ export type GetServiceFormDefinitionQuery = {
           }> | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
-            id?: string | null;
+            id: string;
             severity: ValidationSeverity;
             type: BoundType;
             question?: string | null;
@@ -11042,6 +11085,7 @@ export type GetServiceFormDefinitionQuery = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -11062,7 +11106,7 @@ export type GetServiceFormDefinitionQuery = {
         }> | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
-          id?: string | null;
+          id: string;
           severity: ValidationSeverity;
           type: BoundType;
           question?: string | null;
@@ -11101,6 +11145,7 @@ export type GetServiceFormDefinitionQuery = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -13775,6 +13820,7 @@ export type EsgFundingServiceFieldsFragment = {
     identifier?: string | null;
     url?: string | null;
     label: string;
+    type: ExternalIdentifierType;
   }>;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -13839,6 +13885,7 @@ export type GetEsgFundingReportQuery = {
       identifier?: string | null;
       url?: string | null;
       label: string;
+      type: ExternalIdentifierType;
     }>;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -14727,6 +14774,7 @@ export const ItemFieldsFragmentDoc = gql`
     }
     autofillValues {
       valueCode
+      valueQuestion
       valueBoolean
       valueNumber
       sumQuestions
