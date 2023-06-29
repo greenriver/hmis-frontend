@@ -9,11 +9,8 @@ fragment AssessmentFields on Assessment {
   user {
     ...UserFields
   }
-  customForm {
-    ...CustomFormFields
-    definition {
-      ...FormDefinitionFields
-    }
+  definition {
+    ...FormDefinitionFields
   }
   access {
     ...AssessmentAccessFields
@@ -23,22 +20,16 @@ fragment AssessmentFields on Assessment {
 # contains big JSON definition & form values
 fragment AssessmentWithDefinitionAndValues on Assessment {
   ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-    definition {
-      ...FormDefinitionWithJson
-    }
+  values
+  definition {
+    ...FormDefinitionWithJson
   }
 }
 
 # contains form values
 fragment AssessmentWithValues on Assessment {
   ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-  }
+  values
   enrollment {
     id
     ...EnrollmentFields

@@ -31,4 +31,4 @@ export const assessmentDate = (
 };
 
 export const assessmentRole = (assessment: AssessmentFieldsFragment) =>
-  assessment?.customForm?.definition?.role;
+  assessment?.definition?.role;

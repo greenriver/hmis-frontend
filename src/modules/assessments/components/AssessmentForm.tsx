@@ -118,7 +118,7 @@ const AssessmentForm = ({
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
       // TODO: if submitted assessment, initials should be constructed from related records, not saved values
-      const sourceValues = source.customForm?.values;
+      const sourceValues = source.values;
       if (sourceValues) {
         // Overlay initial values from source Assessment
         const initialFromSourceAssessment = createInitialValuesFromSavedValues(
@@ -244,7 +244,7 @@ const AssessmentForm = ({
             // dont use `initialValues` because we don't want the OVERWRITE fields
             values={createInitialValuesFromSavedValues(
               definition.definition,
-              assessment.customForm?.values
+              assessment.values
             )}
             definition={definition.definition}
             pickListRelationId={enrollment.project.id}

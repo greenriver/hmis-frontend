@@ -143,6 +143,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
       },
+      {
+        name: 'values',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+      },
     ],
   },
   {
@@ -979,23 +983,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'valueText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'CustomForm',
-    fields: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'values',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },

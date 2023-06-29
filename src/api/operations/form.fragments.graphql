@@ -126,10 +126,6 @@ fragment FormDefinitionWithJson on FormDefinition {
   }
 }
 
-fragment CustomFormFields on CustomForm {
-  id
-}
-
 fragment UserFields on User {
   __typename
   id
