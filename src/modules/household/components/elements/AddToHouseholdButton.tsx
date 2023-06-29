@@ -41,6 +41,7 @@ const AddToHouseholdButton = ({
     useFormDialog<EnrollmentFieldsFragment>({
       formRole: FormRole.Enrollment,
       onCompleted: (data: EnrollmentFieldsFragment) => {
+        setAdded(true);
         onSuccess(data.household.id);
       },
       inputVariables: { projectId, clientId },

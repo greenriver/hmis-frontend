@@ -133,7 +133,8 @@ export const resolveOptionList = (
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
-      includeDataNotCollected
+      // always show DNC for relationship to hoh
+      includeDataNotCollected || item.pickListReference === 'RelationshipToHoH'
     );
   }
   return null;
@@ -310,7 +311,7 @@ const evaluateEnableWhen = (
       console.warn('Unsupported enableWhen operator', en.operator);
   }
 
-  // console.log(
+  // console.debug(
   //   'COMPARING:',
   //   currentValue,
   //   en.operator,
@@ -336,7 +337,7 @@ export const shouldEnableItem = (
     evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
   );
 
-  // console.log(item.linkId, booleans);
+  // console.debug(item.linkId, booleans);
   if (item.enableBehavior === EnableBehavior.Any) {
     return booleans.some(Boolean);
   } else {
@@ -400,7 +401,7 @@ export const autofillValues = (
     const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
-      // console.log(
+      // console.debug(
       //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
       //     values[item.linkId]
       //   )} to ${JSON.stringify(newValue)}`,
@@ -1058,11 +1059,11 @@ export const debugFormValues = (
   if (import.meta.env.MODE === 'production') return false;
   if (!event.ctrlKey && !event.metaKey) return false;
 
-  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  console.debug('%c FORM STATE:', 'color: #BB7AFF');
   if (transformValuesFn) {
-    console.log(transformValuesFn(values, definition));
+    console.debug(transformValuesFn(values, definition));
   } else {
-    console.log(values);
+    console.debug(values);
   }
 
   let hudValues = transformSubmitValues({
@@ -1078,8 +1079,8 @@ export const debugFormValues = (
   }
 
   window.debug = { hudValues };
-  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  console.log(hudValues);
+  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  console.debug(hudValues);
 
   return true;
 };
