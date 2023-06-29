@@ -1558,7 +1558,7 @@ export type EnrollmentIncomeBenefitsArgs = {
 
 /** HUD Enrollment */
 export type EnrollmentServicesArgs = {
-  filters?: InputMaybe<ServiceFilterOptions>;
+  filters?: InputMaybe<ServicesForEnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ServiceSortOption>;
@@ -1637,6 +1637,26 @@ export type EnrollmentsPaginated = {
   nodesCount: Scalars['Int'];
   offset: Scalars['Int'];
   pagesCount: Scalars['Int'];
+};
+
+/** AC ESG Funding Service */
+export type EsgFundingService = {
+  __typename?: 'EsgFundingService';
+  clientDob?: Maybe<Scalars['ISO8601Date']>;
+  clientId: Scalars['ID'];
+  customDataElements: Array<CustomDataElement>;
+  dateProvided: Scalars['ISO8601Date'];
+  faAmount?: Maybe<Scalars['Float']>;
+  faEndDate?: Maybe<Scalars['ISO8601Date']>;
+  faStartDate?: Maybe<Scalars['ISO8601Date']>;
+  firstName?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  lastName?: Maybe<Scalars['String']>;
+  mciIds: Array<ExternalIdentifier>;
+  organizationId: Scalars['ID'];
+  organizationName: Scalars['String'];
+  projectId: Scalars['ID'];
+  projectName: Scalars['String'];
 };
 
 /** 3.05.1 */
@@ -1804,8 +1824,21 @@ export type ExternalIdentifier = {
   /** The identifier value */
   identifier?: Maybe<Scalars['ID']>;
   label: Scalars['String'];
+  type: ExternalIdentifierType;
   url?: Maybe<Scalars['String']>;
 };
+
+/** External Identifier Type */
+export enum ExternalIdentifierType {
+  /** HMIS ID */
+  ClientId = 'CLIENT_ID',
+  /** MCI ID */
+  MciId = 'MCI_ID',
+  /** Personal ID */
+  PersonalId = 'PERSONAL_ID',
+  /** Warehouse ID */
+  WarehouseId = 'WAREHOUSE_ID',
+}
 
 /** C1.2 */
 export enum FeelingFrequency {
@@ -3089,6 +3122,8 @@ export type PickListOption = {
 };
 
 export enum PickListType {
+  AllServiceCategories = 'ALL_SERVICE_CATEGORIES',
+  AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** Referral Posting Status */
   AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
@@ -3115,7 +3150,6 @@ export enum PickListType {
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Referral Result  */
   ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
-  ServiceType = 'SERVICE_TYPE',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
@@ -3359,6 +3393,7 @@ export type Query = {
   deniedPendingReferralPostings: ReferralPostingsPaginated;
   /** Enrollment lookup */
   enrollment?: Maybe<Enrollment>;
+  esgFundingReport: Array<EsgFundingService>;
   file?: Maybe<File>;
   /** Funder lookup */
   funder?: Maybe<Funder>;
@@ -3416,6 +3451,10 @@ export type QueryDeniedPendingReferralPostingsArgs = {
 
 export type QueryEnrollmentArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryEsgFundingReportArgs = {
+  clientIds: Array<Scalars['ID']>;
 };
 
 export type QueryFileArgs = {
@@ -4259,6 +4298,11 @@ export enum ServiceTypeProvided {
   /** (1) Outreach services */
   SsvfServiceOutreachServices = 'SSVF_SERVICE__OUTREACH_SERVICES',
 }
+
+export type ServicesForEnrollmentFilterOptions = {
+  serviceCategory?: InputMaybe<Array<Scalars['ID']>>;
+  serviceType?: InputMaybe<Array<Scalars['ID']>>;
+};
 
 export type ServicesPaginated = {
   __typename?: 'ServicesPaginated';
@@ -7016,6 +7060,7 @@ export type ClientFieldsFragment = {
     identifier?: string | null;
     url?: string | null;
     label: string;
+    type: ExternalIdentifierType;
   }>;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
@@ -7210,6 +7255,7 @@ export type ClientIdentifierFieldsFragment = {
   identifier?: string | null;
   url?: string | null;
   label: string;
+  type: ExternalIdentifierType;
 };
 
 export type ClientImageFieldsFragment = {
@@ -7601,6 +7647,7 @@ export type SearchClientsQuery = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
@@ -7749,6 +7796,7 @@ export type GetClientQuery = {
       identifier?: string | null;
       url?: string | null;
       label: string;
+      type: ExternalIdentifierType;
     }>;
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
@@ -8078,6 +8126,112 @@ export type GetClientAssessmentsQuery = {
   } | null;
 };
 
+export type GetClientServicesQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<ServiceSortOption>;
+  filters?: InputMaybe<ServiceFilterOptions>;
+}>;
+
+export type GetClientServicesQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    services: {
+      __typename?: 'ServicesPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Service';
+        id: string;
+        dateProvided: string;
+        faAmount?: number | null;
+        faStartDate?: string | null;
+        faEndDate?: string | null;
+        movingOnOtherType?: string | null;
+        referralOutcome?: PathReferralOutcome | null;
+        subTypeProvided?: ServiceSubTypeProvided | null;
+        otherTypeProvided?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string; shortId: string };
+          client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        serviceType: {
+          __typename?: 'ServiceType';
+          id: string;
+          name: string;
+          hudRecordType?: RecordType | null;
+          hudTypeProvided?: ServiceTypeProvided | null;
+          category: string;
+          dateCreated: string;
+          dateUpdated: string;
+        };
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
+      }>;
+    };
+  } | null;
+};
+
 export type GetNonWipEnrollmentsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -8362,6 +8516,7 @@ export type DeleteClientMutation = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
@@ -11009,6 +11164,7 @@ export type SubmitFormMutation = {
             identifier?: string | null;
             url?: string | null;
             label: string;
+            type: ExternalIdentifierType;
           }>;
           user?: { __typename: 'User'; id: string; name: string } | null;
           access: {
@@ -13157,6 +13313,7 @@ export type GetReferralPostingQuery = {
           identifier?: string | null;
           url?: string | null;
           label: string;
+          type: ExternalIdentifierType;
         }>;
       };
     }>;
@@ -13432,6 +13589,7 @@ export type UpdateReferralPostingMutation = {
             identifier?: string | null;
             url?: string | null;
             label: string;
+            type: ExternalIdentifierType;
           }>;
         };
       }>;
@@ -13597,6 +13755,7 @@ export type ReferralPostingDetailFieldsFragment = {
         identifier?: string | null;
         url?: string | null;
         label: string;
+        type: ExternalIdentifierType;
       }>;
     };
   }>;
@@ -13620,6 +13779,129 @@ export type ReferralRequestFieldsFragment = {
     dateUpdated: string;
     dateCreated: string;
   };
+};
+
+export type EsgFundingServiceFieldsFragment = {
+  __typename?: 'EsgFundingService';
+  id: string;
+  clientId: string;
+  clientDob?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  projectId: string;
+  projectName: string;
+  organizationId: string;
+  organizationName: string;
+  faAmount?: number | null;
+  faStartDate?: string | null;
+  faEndDate?: string | null;
+  mciIds: Array<{
+    __typename?: 'ExternalIdentifier';
+    id: string;
+    identifier?: string | null;
+    url?: string | null;
+    label: string;
+  }>;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+};
+
+export type GetEsgFundingReportQueryVariables = Exact<{
+  clientIds: Array<Scalars['ID']> | Scalars['ID'];
+}>;
+
+export type GetEsgFundingReportQuery = {
+  __typename?: 'Query';
+  esgFundingReport: Array<{
+    __typename?: 'EsgFundingService';
+    id: string;
+    clientId: string;
+    clientDob?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    projectId: string;
+    projectName: string;
+    organizationId: string;
+    organizationName: string;
+    faAmount?: number | null;
+    faStartDate?: string | null;
+    faEndDate?: string | null;
+    mciIds: Array<{
+      __typename?: 'ExternalIdentifier';
+      id: string;
+      identifier?: string | null;
+      url?: string | null;
+      label: string;
+    }>;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  }>;
 };
 
 export type ServiceTypeFieldsFragment = {
@@ -13960,6 +14242,7 @@ export type GetEnrollmentServicesQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<ServicesForEnrollmentFilterOptions>;
 }>;
 
 export type GetEnrollmentServicesQuery = {
@@ -14620,6 +14903,7 @@ export const ClientIdentifierFieldsFragmentDoc = gql`
     identifier
     url
     label
+    type
   }
 `;
 export const ClientAccessFieldsFragmentDoc = gql`
@@ -15447,6 +15731,30 @@ export const ReferralRequestFieldsFragmentDoc = gql`
     requestorEmail
   }
   ${UnitTypeFieldsFragmentDoc}
+`;
+export const EsgFundingServiceFieldsFragmentDoc = gql`
+  fragment EsgFundingServiceFields on EsgFundingService {
+    id
+    clientId
+    clientDob
+    mciIds {
+      ...ClientIdentifierFields
+    }
+    firstName
+    lastName
+    projectId
+    projectName
+    organizationId
+    organizationName
+    faAmount
+    faStartDate
+    faEndDate
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${ClientIdentifierFieldsFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
 `;
 export const ServiceTypeFieldsFragmentDoc = gql`
   fragment ServiceTypeFields on ServiceType {
@@ -16575,6 +16883,92 @@ export type GetClientAssessmentsLazyQueryHookResult = ReturnType<
 export type GetClientAssessmentsQueryResult = Apollo.QueryResult<
   GetClientAssessmentsQuery,
   GetClientAssessmentsQueryVariables
+>;
+export const GetClientServicesDocument = gql`
+  query GetClientServices(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: ServiceSortOption = DATE_PROVIDED
+    $filters: ServiceFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      services(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ServiceFields
+          enrollment {
+            ...EnrollmentFields
+          }
+        }
+      }
+    }
+  }
+  ${ServiceFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetClientServicesQuery__
+ *
+ * To run a query within a React component, call `useGetClientServicesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientServicesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientServicesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientServicesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >(GetClientServicesDocument, options);
+}
+export function useGetClientServicesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientServicesQuery,
+    GetClientServicesQueryVariables
+  >(GetClientServicesDocument, options);
+}
+export type GetClientServicesQueryHookResult = ReturnType<
+  typeof useGetClientServicesQuery
+>;
+export type GetClientServicesLazyQueryHookResult = ReturnType<
+  typeof useGetClientServicesLazyQuery
+>;
+export type GetClientServicesQueryResult = Apollo.QueryResult<
+  GetClientServicesQuery,
+  GetClientServicesQueryVariables
 >;
 export const GetNonWipEnrollmentsDocument = gql`
   query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
@@ -19970,6 +20364,65 @@ export type GetDeniedPendingReferralPostingsQueryResult = Apollo.QueryResult<
   GetDeniedPendingReferralPostingsQuery,
   GetDeniedPendingReferralPostingsQueryVariables
 >;
+export const GetEsgFundingReportDocument = gql`
+  query GetEsgFundingReport($clientIds: [ID!]!) {
+    esgFundingReport(clientIds: $clientIds) {
+      ...EsgFundingServiceFields
+    }
+  }
+  ${EsgFundingServiceFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEsgFundingReportQuery__
+ *
+ * To run a query within a React component, call `useGetEsgFundingReportQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEsgFundingReportQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEsgFundingReportQuery({
+ *   variables: {
+ *      clientIds: // value for 'clientIds'
+ *   },
+ * });
+ */
+export function useGetEsgFundingReportQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >(GetEsgFundingReportDocument, options);
+}
+export function useGetEsgFundingReportLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEsgFundingReportQuery,
+    GetEsgFundingReportQueryVariables
+  >(GetEsgFundingReportDocument, options);
+}
+export type GetEsgFundingReportQueryHookResult = ReturnType<
+  typeof useGetEsgFundingReportQuery
+>;
+export type GetEsgFundingReportLazyQueryHookResult = ReturnType<
+  typeof useGetEsgFundingReportLazyQuery
+>;
+export type GetEsgFundingReportQueryResult = Apollo.QueryResult<
+  GetEsgFundingReportQuery,
+  GetEsgFundingReportQueryVariables
+>;
 export const GetServiceDocument = gql`
   query GetService($id: ID!) {
     service(id: $id) {
@@ -20203,10 +20656,15 @@ export type DeleteServiceMutationOptions = Apollo.BaseMutationOptions<
   DeleteServiceMutationVariables
 >;
 export const GetEnrollmentServicesDocument = gql`
-  query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  query GetEnrollmentServices(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ServicesForEnrollmentFilterOptions = null
+  ) {
     enrollment(id: $id) {
       id
-      services(limit: $limit, offset: $offset) {
+      services(limit: $limit, offset: $offset, filters: $filters) {
         offset
         limit
         nodesCount
@@ -20234,6 +20692,7 @@ export const GetEnrollmentServicesDocument = gql`
  *      id: // value for 'id'
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
  *   },
  * });
  */

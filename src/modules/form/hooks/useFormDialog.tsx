@@ -16,7 +16,6 @@ import useFormDefinition from './useFormDefinition';
 
 import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
-import NotFound from '@/components/pages/NotFound';
 import { emptyErrorState } from '@/modules/errors/util';
 import { FormRole } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
@@ -64,9 +63,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   }, [setErrors]);
 
   const renderFormDialog = ({ title, ...props }: RenderFormDialogProps) => {
-    if (definitionLoading) return <Loading />;
-    if (!formDefinition) return <NotFound text='Form definition not found.' />;
     if (!dialogOpen) return null;
+    if (!definitionLoading && !formDefinition) {
+      throw new Error(`Form not found: ${formRole} `);
+    }
 
     return (
       <CommonDialog
@@ -81,27 +81,31 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
             backgroundColor: 'background.default',
           }}
         >
-          <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
-            <Grid item xs>
-              <DynamicForm
-                ref={formRef}
-                definition={formDefinition.definition}
-                onSubmit={onSubmit}
-                initialValues={initialValues}
-                loading={submitLoading}
-                errors={errors}
-                {...props}
-                FormActionProps={{
-                  onDiscard: () => setDialogOpen(false),
-                  ...props.FormActionProps,
-                }}
-                ValidationDialogProps={{
-                  ...props.ValidationDialogProps,
-                }}
-                hideSubmit
-              />
+          {definitionLoading ? (
+            <Loading />
+          ) : formDefinition ? (
+            <Grid container spacing={2} sx={{ mb: 2, mt: 0 }}>
+              <Grid item xs>
+                <DynamicForm
+                  ref={formRef}
+                  definition={formDefinition.definition}
+                  onSubmit={onSubmit}
+                  initialValues={initialValues}
+                  loading={submitLoading}
+                  errors={errors}
+                  {...props}
+                  FormActionProps={{
+                    onDiscard: () => setDialogOpen(false),
+                    ...props.FormActionProps,
+                  }}
+                  ValidationDialogProps={{
+                    ...props.ValidationDialogProps,
+                  }}
+                  hideSubmit
+                />
+              </Grid>
             </Grid>
-          </Grid>
+          ) : null}
         </DialogContent>
         <DialogActions>
           <FormDialogActionContent
@@ -110,6 +114,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
             discardButtonText={props.discardButtonText}
             submitButtonText={props.submitButtonText}
             submitLoading={submitLoading}
+            disabled={definitionLoading}
           />
         </DialogActions>
       </CommonDialog>

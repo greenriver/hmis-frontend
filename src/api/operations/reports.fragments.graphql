@@ -1,0 +1,20 @@
+fragment EsgFundingServiceFields on EsgFundingService {
+  id
+  clientId
+  clientDob
+  mciIds {
+    ...ClientIdentifierFields
+  }
+  firstName
+  lastName
+  projectId
+  projectName
+  organizationId
+  organizationName
+  faAmount
+  faStartDate
+  faEndDate
+  customDataElements {
+    ...CustomDataElementFields
+  }
+}

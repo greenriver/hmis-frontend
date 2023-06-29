@@ -384,6 +384,12 @@ export const HmisEnums = {
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
   },
+  ExternalIdentifierType: {
+    CLIENT_ID: 'HMIS ID',
+    MCI_ID: 'MCI ID',
+    PERSONAL_ID: 'Personal ID',
+    WAREHOUSE_ID: 'Warehouse ID',
+  },
   FeelingFrequency: {
     INVALID: 'Invalid Value',
     NOT_AT_ALL: 'Not at all',
@@ -781,6 +787,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   PickListType: {
+    ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
+    ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -800,7 +808,6 @@ export const HmisEnums = {
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
-    SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',

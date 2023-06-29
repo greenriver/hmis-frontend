@@ -33,6 +33,7 @@ import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ClientSortOption,
+  ExternalIdentifierType,
   FormRole,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
@@ -158,7 +159,10 @@ const ClientSearch: React.FC<Props> = ({
       ? MOBILE_SEARCH_RESULT_COLUMNS
       : SEARCH_RESULT_COLUMNS;
     if (globalFeatureFlags?.mciId) {
-      baseColumns = [externalIdColumn('MCI ID'), ...baseColumns];
+      baseColumns = [
+        externalIdColumn(ExternalIdentifierType.MciId, 'MCI ID'),
+        ...baseColumns,
+      ];
     }
     return baseColumns;
   }, [isMobile, globalFeatureFlags]);

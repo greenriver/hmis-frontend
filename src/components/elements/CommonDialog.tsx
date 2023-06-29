@@ -1,10 +1,12 @@
 import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogProps, IconButton } from '@mui/material';
 
+import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+
 const CommonDialog = ({ children, ...props }: DialogProps) => {
   return (
     <Dialog {...props} sx={{ '.MuiDialogTitle-root': { mr: 2 }, ...props.sx }}>
-      {children}
+      <SentryErrorBoundary>{children}</SentryErrorBoundary>
       {props.onClose && (
         <IconButton
           aria-label='close'
