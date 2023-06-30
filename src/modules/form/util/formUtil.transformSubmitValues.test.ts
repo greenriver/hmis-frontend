@@ -7,6 +7,7 @@ import { transformSubmitValues } from './formUtil';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   FormDefinitionJson,
+  FormItem,
   ItemType,
   RelatedRecordType,
 } from '@/types/gqlTypes';
@@ -110,7 +111,9 @@ describe('transformSubmitValues', () => {
 
   it('prepends record type', () => {
     const clone = JSON.parse(JSON.stringify(definition));
-    clone.item[0].recordType = RelatedRecordType.Exit;
+    clone.item[0].item.forEach((i: FormItem) =>
+      i.mapping ? (i.mapping.recordType = RelatedRecordType.Exit) : null
+    );
     const values = {
       '1.1': true,
       '1.2': 'foo',
