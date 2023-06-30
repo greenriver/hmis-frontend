@@ -7115,6 +7115,12 @@ export type GetAssessmentsForPopulationQuery = {
           mentalHealthDisorderFam?: NoYesMissing | null;
           physicalDisabilityFam?: NoYesMissing | null;
           alcoholDrugUseDisorderFam?: NoYesMissing | null;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
           customDataElements: Array<{
             __typename?: 'CustomDataElement';
             id: string;
@@ -16865,11 +16871,20 @@ export const GetAssessmentsForPopulationDocument = gql`
         nodesCount
         nodes {
           ...AssessmentWithRecords
+          enrollment {
+            id
+            entryDate
+            exitDate
+            project {
+              ...ProjectNameAndType
+            }
+          }
         }
       }
     }
   }
   ${AssessmentWithRecordsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
 `;
 
 /**

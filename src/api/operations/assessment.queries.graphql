@@ -122,6 +122,14 @@ query GetAssessmentsForPopulation(
       nodesCount
       nodes {
         ...AssessmentWithRecords
+        enrollment {
+          id
+          entryDate
+          exitDate
+          project {
+            ...ProjectNameAndType
+          }
+        }
       }
     }
   }
