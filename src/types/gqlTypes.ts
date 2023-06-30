@@ -6535,7 +6535,6 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
-  inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type GetAssessmentsForPopulationQuery = {
@@ -16313,7 +16312,6 @@ export const GetAssessmentsForPopulationDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $roles: [AssessmentRole!]
-    $inProgress: Boolean
   ) {
     client(id: $id) {
       id
@@ -16321,7 +16319,7 @@ export const GetAssessmentsForPopulationDocument = gql`
         limit: $limit
         offset: $offset
         filters: { type: $roles }
-        inProgress: $inProgress
+        inProgress: false
         sortOrder: ASSESSMENT_DATE
       ) {
         offset
@@ -16361,7 +16359,6 @@ export const GetAssessmentsForPopulationDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      roles: // value for 'roles'
- *      inProgress: // value for 'inProgress'
  *   },
  * });
  */

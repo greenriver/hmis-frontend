@@ -28,12 +28,7 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  AssessmentRole,
-  FormItem,
-  FormRole,
-  RelatedRecordType,
-} from '@/types/gqlTypes';
+import { FormItem, FormRole, RelatedRecordType } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
   open: boolean;
@@ -112,7 +107,7 @@ const RecordPickerDialog = ({
     return null;
   }
   // Need to set height on the dialog in order for the scrolling to work
-  const height = `${Math.min(columns.length * 60 + 250, 850)}px`;
+  const height = `${Math.min(Math.max(columns.length * 60 + 250, 550), 850)}px`;
 
   return (
     <CommonDialog
@@ -146,15 +141,7 @@ const RecordPickerDialog = ({
       >
         {description}
         <TableComponent
-          queryVariables={{
-            id: client.id,
-            ...(role
-              ? {
-                  roles: [role as unknown as AssessmentRole],
-                  inProgress: false,
-                }
-              : undefined),
-          }}
+          queryVariables={{ id: client.id }}
           defaultPageSize={5}
           columns={columns}
           nonTablePagination
