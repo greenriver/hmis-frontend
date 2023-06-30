@@ -1,6 +1,42 @@
 query GetAssessment($id: ID!) {
   assessment(id: $id) {
-    ...AssessmentWithDefinitionAndValues
+    ...FullAssessment
+    definition {
+      ...FormDefinitionWithJson
+    }
+  }
+}
+
+query GetClientAssessments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+  $filters: AssessmentFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    assessments(
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...AssessmentFields
+        enrollment {
+          id
+          entryDate
+          exitDate
+          project {
+            ...ProjectNameAndType
+          }
+        }
+      }
+    }
   }
 }
 
@@ -34,7 +70,7 @@ query GetEnrollmentAssessments(
 mutation SaveAssessment($input: SaveAssessmentInput!) {
   saveAssessment(input: $input) {
     assessment {
-      ...AssessmentWithDefinitionAndValues
+      ...AssessmentWithValues
     }
     errors {
       ...ValidationErrorFields
@@ -45,7 +81,7 @@ mutation SaveAssessment($input: SaveAssessmentInput!) {
 mutation SubmitAssessment($input: SubmitAssessmentInput!) {
   submitAssessment(input: $input) {
     assessment {
-      ...AssessmentWithDefinitionAndValues
+      ...AssessmentWithRecords
     }
     errors {
       ...ValidationErrorFields
@@ -85,7 +121,7 @@ query GetAssessmentsForPopulation(
       limit
       nodesCount
       nodes {
-        ...AssessmentWithValues
+        ...AssessmentWithRecords
       }
     }
   }

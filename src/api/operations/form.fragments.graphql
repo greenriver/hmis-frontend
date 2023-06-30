@@ -54,9 +54,11 @@ fragment ItemFields on FormItem {
   hidden
   readOnly
   repeats
-  fieldName
-  customFieldKey
-  recordType
+  mapping {
+    recordType
+    fieldName
+    customFieldKey
+  }
   pickListReference
   serviceDetailType
   size

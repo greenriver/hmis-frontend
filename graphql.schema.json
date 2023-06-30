@@ -9397,6 +9397,30 @@
             "deprecationReason": null
           },
           {
+            "name": "customDataElements",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "CustomDataElement",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dateCreated",
             "description": null,
             "args": [],
@@ -12335,6 +12359,53 @@
       },
       {
         "kind": "OBJECT",
+        "name": "FieldMapping",
+        "description": null,
+        "fields": [
+          {
+            "name": "customFieldKey",
+            "description": "Key of CustomDataElement where field is stored",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fieldName",
+            "description": "Field name that this field is stored as",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "recordType",
+            "description": "Type of record that this field is tied to",
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RelatedRecordType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "File",
         "description": "File",
         "fields": [
@@ -13123,18 +13194,6 @@
             "deprecationReason": null
           },
           {
-            "name": "customFieldKey",
-            "description": "Key of CustomDataElement to save record as. Use record_type to specify type.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "dataCollectedAbout",
             "description": "Include this item only if the Client meets this HUD DataCollectedAbout condition",
             "args": [],
@@ -13186,18 +13245,6 @@
                   "ofType": null
                 }
               }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "fieldName",
-            "description": "Name of the field on the record (or on the query input type). Used for record\ncreation/update forms, for assessment population, and for assessment extraction.",
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -13303,6 +13350,18 @@
             "deprecationReason": null
           },
           {
+            "name": "mapping",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "OBJECT",
+              "name": "FieldMapping",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "pickListOptions",
             "description": "Permitted answers, for choice items",
             "args": [],
@@ -13336,11 +13395,11 @@
           },
           {
             "name": "prefill",
-            "description": "Whether to allow pre-filling section from recent records. Should only be\nenabled in conjunction with record_type and for top-level group items.",
+            "description": "Whether to allow pre-filling section from a recent records",
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "Boolean",
+              "kind": "ENUM",
+              "name": "RelatedRecordType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -13417,18 +13476,6 @@
             "type": {
               "kind": "SCALAR",
               "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "recordType",
-            "description": "Record type to use for population and extraction",
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RelatedRecordType",
               "ofType": null
             },
             "isDeprecated": false,
@@ -24860,6 +24907,12 @@
         "inputFields": null,
         "interfaces": null,
         "enumValues": [
+          {
+            "name": "ASSESSMENT",
+            "description": "Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
           {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "CurrentLivingSituation",

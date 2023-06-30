@@ -2019,6 +2019,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'FieldMapping',
+    fields: [
+      {
+        name: 'customFieldKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'fieldName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'recordType',
+        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'File',
     fields: [
       {
@@ -2178,10 +2195,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'Component', ofType: null },
       },
       {
-        name: 'customFieldKey',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
       },
@@ -2192,10 +2205,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'enableBehavior',
         type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
-      },
-      {
-        name: 'fieldName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'funders',
@@ -2231,7 +2240,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'prefill',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
       },
       {
         name: 'prefix',
@@ -2268,10 +2277,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'readonlyText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
       },
       {
         name: 'repeats',

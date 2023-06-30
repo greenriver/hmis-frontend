@@ -17,18 +17,42 @@ const definition: FormDefinitionJson = {
       type: ItemType.Group,
       linkId: '1',
       item: [
-        { linkId: '1.1', type: ItemType.Boolean, fieldName: 'boolField' },
-        { linkId: '1.2', type: ItemType.String, fieldName: 'strField' },
-        { linkId: '1.3', type: ItemType.Date, fieldName: 'dateField' },
-        { linkId: '1.4', type: ItemType.Integer, fieldName: 'numField' },
-        { linkId: '1.5', type: ItemType.Currency, fieldName: 'numField2' },
+        {
+          linkId: '1.1',
+          type: ItemType.Boolean,
+          mapping: { fieldName: 'boolField' },
+        },
+        {
+          linkId: '1.2',
+          type: ItemType.String,
+          mapping: { fieldName: 'strField' },
+        },
+        {
+          linkId: '1.3',
+          type: ItemType.Date,
+          mapping: { fieldName: 'dateField' },
+        },
+        {
+          linkId: '1.4',
+          type: ItemType.Integer,
+          mapping: { fieldName: 'numField' },
+        },
+        {
+          linkId: '1.5',
+          type: ItemType.Currency,
+          mapping: { fieldName: 'numField2' },
+        },
         {
           linkId: '1.6',
           type: ItemType.Choice,
-          fieldName: 'choiceField',
+          mapping: { fieldName: 'choiceField' },
           pickListReference: 'NoYesReasonsForMissingData',
         },
-        { linkId: '1.7', type: ItemType.Text, fieldName: 'textField' },
+        {
+          linkId: '1.7',
+          type: ItemType.Text,
+          mapping: { fieldName: 'textField' },
+        },
       ],
     },
   ],
@@ -117,7 +141,6 @@ describe('transformSubmitValues', () => {
         {
           type: ItemType.Group,
           linkId: '1',
-          recordType: RelatedRecordType.Exit,
           item: [
             {
               linkId: '1.1',
@@ -126,7 +149,10 @@ describe('transformSubmitValues', () => {
                 {
                   linkId: '1.1.1',
                   type: ItemType.Boolean,
-                  fieldName: 'boolField',
+                  mapping: {
+                    recordType: RelatedRecordType.Exit,
+                    fieldName: 'boolField',
+                  },
                 },
               ],
             },

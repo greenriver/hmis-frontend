@@ -28,18 +28,18 @@ import DynamicView from '@/modules/form/components/viewable/DynamicView';
 import { AlwaysPresentLocalConstants } from '@/modules/form/hooks/useInitialFormValues';
 import usePreloadPicklists from '@/modules/form/hooks/usePreloadPicklists';
 import {
-  createInitialValuesFromSavedValues,
   getInitialValues,
+  getItemMap,
+  initialValuesFromAssessment,
 } from '@/modules/form/util/formUtil';
 import { RelatedRecord } from '@/modules/form/util/recordPickerUtil';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
-  AssessmentWithDefinitionAndValuesFragment,
-  AssessmentWithValuesFragment,
   EnrollmentFieldsFragment,
   FormDefinition,
   FormRole,
+  FullAssessmentFragment,
   InitialBehavior,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -49,7 +49,7 @@ interface Props {
   // assessmentTitle: string;
   formRole?: FormRole;
   definition: FormDefinition;
-  assessment?: AssessmentWithDefinitionAndValuesFragment;
+  assessment?: FullAssessmentFragment;
   top?: number;
   navigationTitle: ReactNode;
   embeddedInWorkflow?: boolean;
@@ -80,14 +80,14 @@ const AssessmentForm = ({
 
   // Most recently selected "source" assesment for autofill
   const [sourceAssessment, setSourceAssessment] = useState<
-    AssessmentWithValuesFragment | undefined
+    FullAssessmentFragment | undefined
   >();
   // Trigger for reloading initial values and form if a source assesment is chosen for autofill.
   // This is needed to support re-selecting the same assessment (which should clear and reload the form again)
   const [reloadInitialValues, setReloadInitialValues] = useState(false);
 
   const onSelectAutofillRecord = useCallback((record: RelatedRecord) => {
-    setSourceAssessment(record as AssessmentWithValuesFragment);
+    setSourceAssessment(record as unknown as FullAssessmentFragment);
     setDialogOpen(false);
     setReloadInitialValues((old) => !old);
   }, []);
@@ -100,10 +100,16 @@ const AssessmentForm = ({
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
     });
+
+  const itemMap = useMemo(
+    () => getItemMap(definition.definition),
+    [definition]
+  );
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
     if (mutationLoading || !definition || !enrollment) return;
+    if (locked && assessment) return {};
 
     // Local values that may be referenced by the FormDefinition
     const localConstants = {
@@ -117,16 +123,9 @@ const AssessmentForm = ({
     // Set initial values based solely on FormDefinition
     const init = getInitialValues(definition.definition, localConstants);
     if (source) {
-      // TODO: if submitted assessment, initials should be constructed from related records, not saved values
-      const sourceValues = source.values;
-      if (sourceValues) {
-        // Overlay initial values from source Assessment
-        const initialFromSourceAssessment = createInitialValuesFromSavedValues(
-          definition.definition,
-          sourceValues
-        );
-        assign(init, initialFromSourceAssessment);
-      }
+      // Overlay with values from Assessment
+      const initFromAssessment = initialValuesFromAssessment(itemMap, source);
+      assign(init, initFromAssessment);
 
       // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
       const initialsToOverwrite = getInitialValues(
@@ -137,12 +136,12 @@ const AssessmentForm = ({
       assign(init, initialsToOverwrite);
     }
 
-    // console.debug(
-    //   'Initial Form State',
-    //   init,
-    //   'from source:',
-    //   source?.id || 'none'
-    // );
+    console.debug(
+      'Initial Form State',
+      init,
+      'from source:',
+      source?.id || 'none'
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
@@ -154,6 +153,8 @@ const AssessmentForm = ({
     enrollment,
     sourceAssessment,
     reloadInitialValues,
+    itemMap,
+    locked,
   ]);
 
   const navigate = useNavigate();
@@ -242,10 +243,7 @@ const AssessmentForm = ({
         {locked && assessment ? (
           <DynamicView
             // dont use `initialValues` because we don't want the OVERWRITE fields
-            values={createInitialValuesFromSavedValues(
-              definition.definition,
-              assessment.values
-            )}
+            values={initialValuesFromAssessment(itemMap, assessment)}
             definition={definition.definition}
             pickListRelationId={enrollment.project.id}
           />

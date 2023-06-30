@@ -27,11 +27,34 @@ fragment AssessmentWithDefinitionAndValues on Assessment {
 }
 
 # contains form values
+fragment AssessmentWithRecords on Assessment {
+  ...AssessmentFields
+  enrollment {
+    ...EnrollmentValues
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  incomeBenefit {
+    ...IncomeBenefitValues
+  }
+  disabilityGroup {
+    ...DisabilityGroupValues
+  }
+  healthAndDv {
+    ...HealthAndDvValues
+  }
+  customDataElements {
+    ...CustomDataElementFields
+  }
+}
+
 fragment AssessmentWithValues on Assessment {
   ...AssessmentFields
   values
-  enrollment {
-    id
-    ...EnrollmentFields
-  }
+}
+
+fragment FullAssessment on Assessment {
+  ...AssessmentWithRecords
+  ...AssessmentWithValues
 }
