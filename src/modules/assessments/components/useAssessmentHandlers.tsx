@@ -13,7 +13,6 @@ import {
   transformSubmitValues,
 } from '@/modules/form/util/formUtil';
 import {
-  FormDefinition,
   FormDefinitionJson,
   SaveAssessmentMutation,
   SubmitAssessmentMutation,
@@ -22,7 +21,8 @@ import {
 } from '@/types/gqlTypes';
 
 type Args = {
-  definition: FormDefinition;
+  definitionId: string;
+  definition: FormDefinitionJson;
   enrollmentId: string;
   assessmentId?: string;
 };
@@ -45,10 +45,11 @@ export const createHudValuesForSubmit = (
 
 export function useAssessmentHandlers({
   definition,
+  definitionId,
   enrollmentId,
   assessmentId,
 }: Args) {
-  const formDefinitionId = definition.id;
+  const formDefinitionId = definitionId;
 
   const [errors, setErrors] = useState<ErrorState>(emptyErrorState);
 
@@ -91,7 +92,7 @@ export function useAssessmentHandlers({
         debugFormValues(
           event,
           values,
-          definition.definition,
+          definition,
           createValuesForSubmit,
           createHudValuesForSubmit
         )
@@ -102,8 +103,8 @@ export function useAssessmentHandlers({
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
+        values: createValuesForSubmit(values, definition),
+        hudValues: createHudValuesForSubmit(values, definition),
         confirmed,
       };
       console.debug('Submitting', input, confirmed);
@@ -135,8 +136,8 @@ export function useAssessmentHandlers({
         assessmentId,
         enrollmentId,
         formDefinitionId,
-        values: createValuesForSubmit(values, definition.definition),
-        hudValues: createHudValuesForSubmit(values, definition.definition),
+        values: createValuesForSubmit(values, definition),
+        hudValues: createHudValuesForSubmit(values, definition),
       };
       console.debug('Saving', input);
       void saveAssessmentMutation({

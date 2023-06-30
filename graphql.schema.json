@@ -598,7 +598,23 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "FormDefinition",
+                "name": "FormDefinitionJson",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "definitionId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
                 "ofType": null
               }
             },
@@ -702,6 +718,22 @@
             "deprecationReason": null
           },
           {
+            "name": "role",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "AssessmentRole",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "user",
             "description": null,
             "args": [],
@@ -714,7 +746,7 @@
             "deprecationReason": null
           },
           {
-            "name": "values",
+            "name": "wipValues",
             "description": null,
             "args": [],
             "type": {

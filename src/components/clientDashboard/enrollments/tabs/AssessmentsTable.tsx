@@ -48,8 +48,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Type',
     width: '10%',
-    render: (assessment) =>
-      startCase(assessment.definition?.role?.toLowerCase()),
+    render: (assessment) => startCase(assessment.role?.toLowerCase()),
   },
   {
     header: 'Status',

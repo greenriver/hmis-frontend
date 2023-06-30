@@ -1,18 +1,16 @@
 import { Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-import { assessmentRole } from '../util';
-
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
+  AssessmentRole,
   DeleteAssessmentDocument,
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
-  FormRole,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -35,7 +33,7 @@ const DeleteAssessmentButton = ({
   if (!canEditEnrollments) return null;
 
   const isSubmitted = !assessment.inProgress;
-  const deletesEnrollment = assessmentRole(assessment) === FormRole.Intake;
+  const deletesEnrollment = assessment.role === AssessmentRole.Intake;
   if (isSubmitted) {
     // canDeleteAssessments is required for deleting submitted assessments
     if (!canDeleteAssessments) return null;
@@ -86,7 +84,7 @@ const DeleteAssessmentButton = ({
           <Typography>
             Are you sure you want to delete this intake assessment?
           </Typography>
-          {assessmentRole(assessment) === FormRole.Intake && (
+          {assessment.role === AssessmentRole.Intake && (
             <>
               <Typography fontWeight={600}>
                 This will delete the enrollment.

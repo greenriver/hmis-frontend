@@ -37,7 +37,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
-  FormDefinition,
+  FormDefinitionJson,
   FormRole,
   FullAssessmentFragment,
   InitialBehavior,
@@ -48,7 +48,8 @@ interface Props {
   enrollment: EnrollmentFieldsFragment;
   // assessmentTitle: string;
   formRole?: FormRole;
-  definition: FormDefinition;
+  definition: FormDefinitionJson;
+  definitionId: string;
   assessment?: FullAssessmentFragment;
   top?: number;
   navigationTitle: ReactNode;
@@ -62,6 +63,7 @@ interface Props {
 const AssessmentForm = ({
   assessment,
   formRole,
+  definitionId,
   definition,
   navigationTitle,
   enrollment,
@@ -97,14 +99,12 @@ const AssessmentForm = ({
   const { submitHandler, saveDraftHandler, mutationLoading, errors } =
     useAssessmentHandlers({
       definition,
+      definitionId,
       enrollmentId: enrollment.id,
       assessmentId: assessment?.id,
     });
 
-  const itemMap = useMemo(
-    () => getItemMap(definition.definition),
-    [definition]
-  );
+  const itemMap = useMemo(() => getItemMap(definition), [definition]);
   // Set initial values for the assessment. This happens on initial load,
   // and any time the user selects an assessment for autofilling the entire form.
   const initialValues = useMemo(() => {
@@ -121,7 +121,7 @@ const AssessmentForm = ({
     const source = sourceAssessment || assessment;
 
     // Set initial values based solely on FormDefinition
-    const init = getInitialValues(definition.definition, localConstants);
+    const init = getInitialValues(definition, localConstants);
     if (source) {
       // Overlay with values from Assessment
       const initFromAssessment = initialValuesFromAssessment(itemMap, source);
@@ -129,7 +129,7 @@ const AssessmentForm = ({
 
       // Overlay initial values that have "OVERWRITE" specification type ("linked" fields)
       const initialsToOverwrite = getInitialValues(
-        definition.definition,
+        definition,
         localConstants,
         InitialBehavior.Overwrite
       );
@@ -175,7 +175,7 @@ const AssessmentForm = ({
 
   // Manually preload picklists here so we can prevent printing until they're fetched
   const { loading: pickListsLoading } = usePreloadPicklists({
-    definition: definition.definition,
+    definition: definition,
     relationId: enrollment?.project?.id,
   });
   usePrintTrigger({
@@ -194,7 +194,7 @@ const AssessmentForm = ({
         <Paper sx={{ p: 2 }}>
           {navigationTitle}
           <FormStepper
-            items={definition.definition.item}
+            items={definition.item}
             scrollOffset={top}
             useUrlHash={!embeddedInWorkflow}
           />
@@ -244,14 +244,14 @@ const AssessmentForm = ({
           <DynamicView
             // dont use `initialValues` because we don't want the OVERWRITE fields
             values={initialValuesFromAssessment(itemMap, assessment)}
-            definition={definition.definition}
+            definition={definition}
             pickListRelationId={enrollment.project.id}
           />
         ) : (
           <DynamicForm
             // Remount component if a source assessment has been selected
             key={`${assessment?.id}-${sourceAssessment?.id}-${reloadInitialValues}`}
-            definition={definition.definition}
+            definition={definition}
             ref={formRef}
             onSubmit={submitHandler}
             onSaveDraft={

@@ -6,23 +6,13 @@ fragment AssessmentFields on Assessment {
   dateCreated
   dateUpdated
   dateDeleted
+  role
+  definitionId
   user {
     ...UserFields
   }
-  definition {
-    ...FormDefinitionFields
-  }
   access {
     ...AssessmentAccessFields
-  }
-}
-
-# contains big JSON definition & form values
-fragment AssessmentWithDefinitionAndValues on Assessment {
-  ...AssessmentFields
-  values
-  definition {
-    ...FormDefinitionWithJson
   }
 }
 
@@ -51,7 +41,7 @@ fragment AssessmentWithRecords on Assessment {
 
 fragment AssessmentWithValues on Assessment {
   ...AssessmentFields
-  values
+  wipValues
 }
 
 fragment FullAssessment on Assessment {

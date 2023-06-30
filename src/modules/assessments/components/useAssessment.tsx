@@ -6,7 +6,7 @@ import {
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
 import {
-  FormDefinition,
+  FormDefinitionJson,
   FormRole,
   FullAssessmentFragment,
   RelationshipToHoH,
@@ -57,12 +57,12 @@ export function useAssessment({
   // I.E. drop irrelevant item groups for children, non-HOH, non-Veterans, etc
   const definition = useMemo(() => {
     const formDef =
-      formDefinitionData?.getFormDefinition ||
+      formDefinitionData?.getFormDefinition?.definition ||
       assessmentData?.assessment?.definition;
     if (!formDef) return;
-    const mutable = { ...formDef, definition: { ...formDef.definition } };
-    mutable.definition.item = applyDataCollectedAbout(
-      formDef.definition.item,
+    const mutable = { ...formDef };
+    mutable.item = applyDataCollectedAbout(
+      formDef.item,
       client,
       relationshipToHoH
     );
@@ -70,7 +70,7 @@ export function useAssessment({
   }, [formDefinitionData, assessmentData, client, relationshipToHoH]);
 
   const [formRole, assessmentTitle] = useMemo(() => {
-    const arole = assessmentData?.assessment?.definition?.role || formRoleParam;
+    const arole = assessmentData?.assessment?.role || formRoleParam;
     return [arole, `${arole ? startCase(arole.toLowerCase()) : ''} Assessment`];
   }, [assessmentData, formRoleParam]);
 
@@ -81,12 +81,16 @@ export function useAssessment({
     assessmentTitle,
     formRole,
     definition,
+    definitionId:
+      assessmentData?.assessment?.definitionId ||
+      formDefinitionData?.getFormDefinition?.id,
     assessment: assessmentData?.assessment,
     loading: formDefinitionLoading || assessmentLoading,
   } as {
     assessmentTitle: string;
     formRole?: FormRole;
-    definition?: FormDefinition;
+    definitionId?: string;
+    definition?: FormDefinitionJson;
     assessment?: FullAssessmentFragment;
     loading: boolean;
   };

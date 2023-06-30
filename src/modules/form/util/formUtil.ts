@@ -1053,10 +1053,10 @@ export const initialValuesFromAssessment = (
     return createInitialValuesFromRecord(itemMap, assessment);
   }
   // If WIP, construt based on stored JSON values
-  if (!assessment.values)
+  if (!assessment.wipValues)
     throw Error(`WIP assessment without values: ${assessment.id}`);
 
-  return createInitialValuesFromSavedValues(itemMap, assessment.values);
+  return createInitialValuesFromSavedValues(itemMap, assessment.wipValues);
 };
 
 export const createValuesForSubmit = (
