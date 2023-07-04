@@ -2,7 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectReferralPostingsTable } from './tables/ProjectReferralPostingsTable';
+import ProjectOutgoingReferralPostingsTable from './tables/ProjectOutgoingReferralPostingsTable';
+import ProjectReferralPostingsTable from './tables/ProjectReferralPostingsTable';
 import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -54,7 +55,7 @@ const ProjectReferrals = () => {
               </ButtonLink>
             }
           >
-            {/* TODO: outgoing referral table */}
+            <ProjectOutgoingReferralPostingsTable projectId={project.id} />
           </TitleCard>
         )}
       </Stack>

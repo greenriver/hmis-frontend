@@ -3192,6 +3192,7 @@ export type Project = {
   operatingEndDate?: Maybe<Scalars['ISO8601Date']>;
   operatingStartDate: Scalars['ISO8601Date'];
   organization: Organization;
+  outgoingReferralPostings: ReferralPostingsPaginated;
   projectCocs: ProjectCocsPaginated;
   projectName: Scalars['String'];
   projectType?: Maybe<ProjectType>;
@@ -3233,6 +3234,11 @@ export type ProjectInventoriesArgs = {
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<InventorySortOption>;
+};
+
+export type ProjectOutgoingReferralPostingsArgs = {
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
 };
 
 export type ProjectProjectCocsArgs = {
@@ -13186,6 +13192,52 @@ export type GetProjectReferralPostingsQuery = {
           __typename?: 'Project';
           id: string;
           projectName: string;
+          projectType?: ProjectType | null;
+        } | null;
+        organization?: {
+          __typename?: 'Organization';
+          id: string;
+          organizationName: string;
+        } | null;
+      }>;
+    };
+  } | null;
+};
+
+export type GetProjectOutgoingReferralPostingsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetProjectOutgoingReferralPostingsQuery = {
+  __typename?: 'Query';
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    outgoingReferralPostings: {
+      __typename?: 'ReferralPostingsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'ReferralPosting';
+        id: string;
+        referralIdentifier?: string | null;
+        referralDate: string;
+        hohName: string;
+        hohMciId?: string | null;
+        householdSize: number;
+        referredBy: string;
+        status: ReferralPostingStatus;
+        assignedDate: string;
+        statusUpdatedAt?: string | null;
+        statusUpdatedBy?: string | null;
+        project?: {
+          __typename?: 'Project';
+          id: string;
+          projectName: string;
+          projectType?: ProjectType | null;
         } | null;
         organization?: {
           __typename?: 'Organization';
@@ -13614,6 +13666,7 @@ export type GetDeniedPendingReferralPostingsQuery = {
         __typename?: 'Project';
         id: string;
         projectName: string;
+        projectType?: ProjectType | null;
       } | null;
       organization?: {
         __typename?: 'Organization';
@@ -13637,7 +13690,12 @@ export type ReferralPostingFieldsFragment = {
   assignedDate: string;
   statusUpdatedAt?: string | null;
   statusUpdatedBy?: string | null;
-  project?: { __typename?: 'Project'; id: string; projectName: string } | null;
+  project?: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  } | null;
   organization?: {
     __typename?: 'Organization';
     id: string;
@@ -13775,6 +13833,7 @@ export type EsgFundingServiceFieldsFragment = {
     identifier?: string | null;
     url?: string | null;
     label: string;
+    type: ExternalIdentifierType;
   }>;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -13839,6 +13898,7 @@ export type GetEsgFundingReportQuery = {
       identifier?: string | null;
       url?: string | null;
       label: string;
+      type: ExternalIdentifierType;
     }>;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
@@ -15606,6 +15666,7 @@ export const ReferralPostingFieldsFragmentDoc = gql`
     project {
       id
       projectName
+      projectType
     }
     organization {
       id
@@ -19786,6 +19847,79 @@ export type GetProjectReferralPostingsLazyQueryHookResult = ReturnType<
 export type GetProjectReferralPostingsQueryResult = Apollo.QueryResult<
   GetProjectReferralPostingsQuery,
   GetProjectReferralPostingsQueryVariables
+>;
+export const GetProjectOutgoingReferralPostingsDocument = gql`
+  query GetProjectOutgoingReferralPostings(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    project(id: $id) {
+      id
+      outgoingReferralPostings(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...ReferralPostingFields
+        }
+      }
+    }
+  }
+  ${ReferralPostingFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectOutgoingReferralPostingsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectOutgoingReferralPostingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectOutgoingReferralPostingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectOutgoingReferralPostingsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetProjectOutgoingReferralPostingsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetProjectOutgoingReferralPostingsQuery,
+    GetProjectOutgoingReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetProjectOutgoingReferralPostingsQuery,
+    GetProjectOutgoingReferralPostingsQueryVariables
+  >(GetProjectOutgoingReferralPostingsDocument, options);
+}
+export function useGetProjectOutgoingReferralPostingsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectOutgoingReferralPostingsQuery,
+    GetProjectOutgoingReferralPostingsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetProjectOutgoingReferralPostingsQuery,
+    GetProjectOutgoingReferralPostingsQueryVariables
+  >(GetProjectOutgoingReferralPostingsDocument, options);
+}
+export type GetProjectOutgoingReferralPostingsQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingReferralPostingsQuery
+>;
+export type GetProjectOutgoingReferralPostingsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectOutgoingReferralPostingsLazyQuery
+>;
+export type GetProjectOutgoingReferralPostingsQueryResult = Apollo.QueryResult<
+  GetProjectOutgoingReferralPostingsQuery,
+  GetProjectOutgoingReferralPostingsQueryVariables
 >;
 export const GetReferralPostingDocument = gql`
   query GetReferralPosting($id: ID!) {

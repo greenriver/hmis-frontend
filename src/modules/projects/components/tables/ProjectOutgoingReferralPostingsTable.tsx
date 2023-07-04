@@ -1,39 +1,44 @@
-import { useCallback } from 'react';
-
+import RouterLink from '@/components/elements/RouterLink';
 import { ColumnDef } from '@/components/elements/table/types';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import {
-  parseAndFormatDate,
-  parseAndFormatDateTime,
-} from '@/modules/hmis/hmisUtil';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
+import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { ProjectDashboardRoutes } from '@/routes/routes';
+import { Routes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
+  GetProjectOutgoingReferralPostingsQuery,
+  GetProjectOutgoingReferralPostingsQueryVariables,
   GetProjectReferralPostingsDocument,
-  GetProjectReferralPostingsQuery,
-  GetProjectReferralPostingsQueryVariables,
   ReferralPostingFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
-    header: 'Referral ID',
-    render: (row) => row.referralIdentifier || 'N/A',
-  },
-  {
     header: 'Referral Date',
     render: (row: ReferralPostingFieldsFragment) =>
       parseAndFormatDate(row.referralDate),
   },
   {
-    header: 'HoH',
-    render: 'hohName',
+    header: 'Project Referred To',
     linkTreatment: true,
-  },
-  {
-    header: 'Household Size',
-    render: 'householdSize',
+    render: ({ project }: ReferralPostingFieldsFragment) =>
+      project ? (
+        <>
+          <RouterLink
+            to={generateSafePath(Routes.PROJECT, {
+              projectId: project.id,
+            })}
+          >
+            {project.projectName}
+          </RouterLink>
+          <HmisEnum
+            value={project.projectType}
+            enumMap={HmisEnums.ProjectType}
+          />
+        </>
+      ) : null,
   },
   {
     header: 'Referred By',
@@ -46,9 +51,13 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Assigned Date',
-    render: (row: ReferralPostingFieldsFragment) =>
-      parseAndFormatDateTime(row.assignedDate),
+    header: 'HoH',
+    render: 'hohName',
+    linkTreatment: true,
+  },
+  {
+    header: 'Household Size',
+    render: 'householdSize',
   },
 ];
 
@@ -56,21 +65,13 @@ interface Props {
   projectId: string;
 }
 
-const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
-  const rowLinkTo = useCallback(
-    (row: ReferralPostingFieldsFragment): string => {
-      return generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
-        projectId,
-        referralPostingId: row.id,
-      });
-    },
-    [projectId]
-  );
-
+const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
+  projectId,
+}) => {
   return (
     <GenericTableWithData<
-      GetProjectReferralPostingsQuery,
-      GetProjectReferralPostingsQueryVariables,
+      GetProjectOutgoingReferralPostingsQuery,
+      GetProjectOutgoingReferralPostingsQueryVariables,
       ReferralPostingFieldsFragment
     >
       queryVariables={{ id: projectId }}
@@ -78,9 +79,8 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
       columns={columns}
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
-      rowLinkTo={rowLinkTo}
     />
   );
 };
 
-export default ProjectReferralPostingsTable;
+export default ProjectOutgoingReferralPostingsTable;
