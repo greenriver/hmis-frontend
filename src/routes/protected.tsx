@@ -54,6 +54,7 @@ import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
+import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
@@ -134,6 +135,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={Routes.PROJECT}
               >
                 <NewReferralRequest />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageOutgoingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <NewOutgoingReferral />
               </ProjectEditRoute>
             ),
           },

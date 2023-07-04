@@ -50,8 +50,16 @@ const ProjectReferrals = () => {
             title='Outgoing Referrals'
             headerVariant='border'
             actions={
-              <ButtonLink to='' Icon={AddIcon}>
-                New Referral
+              <ButtonLink
+                to={generateSafePath(
+                  ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
+                  {
+                    projectId: project.id,
+                  }
+                )}
+                Icon={AddIcon}
+              >
+                New Referral Request
               </ButtonLink>
             }
           >

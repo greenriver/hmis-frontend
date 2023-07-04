@@ -2037,6 +2037,8 @@ export enum FormRole {
   Project = 'PROJECT',
   /** (PROJECT_COC) Project CoC */
   ProjectCoc = 'PROJECT_COC',
+  /** (REFERRAL_POSTING) Referral */
+  ReferralPosting = 'REFERRAL_POSTING',
   /** (REFERRAL_REQUEST) Referral Request */
   ReferralRequest = 'REFERRAL_REQUEST',
   /** (SERVICE) Service */
@@ -3145,6 +3147,8 @@ export enum PickListType {
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
+  /** Project HOH Enrollments, including WIP and exited, for the client. */
+  ProjectHohEnrollments = 'PROJECT_HOH_ENROLLMENTS',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Referral Result  */
   ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
@@ -4384,6 +4388,7 @@ export type SubmitFormResult =
   | Organization
   | Project
   | ProjectCoc
+  | ReferralPosting
   | ReferralRequest
   | Service;
 
@@ -11521,6 +11526,7 @@ export type SubmitFormMutation = {
           zip?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
+      | { __typename?: 'ReferralPosting' }
       | {
           __typename?: 'ReferralRequest';
           id: string;

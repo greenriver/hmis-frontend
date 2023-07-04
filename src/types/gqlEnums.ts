@@ -419,6 +419,7 @@ export const HmisEnums = {
     POST_EXIT: 'Post-Exit Assessment',
     PROJECT: 'Project',
     PROJECT_COC: 'Project CoC',
+    REFERRAL_POSTING: 'Referral',
     REFERRAL_REQUEST: 'Referral Request',
     SERVICE: 'Service',
     UPDATE: 'Update Assessment',
@@ -805,6 +806,8 @@ export const HmisEnums = {
     ORGANIZATION: 'All Organizations that the User can see',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
+    PROJECT_HOH_ENROLLMENTS:
+      'Project HOH Enrollments, including WIP and exited, for the client.',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
     STATE: 'STATE',

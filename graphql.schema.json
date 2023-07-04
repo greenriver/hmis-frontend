@@ -13670,6 +13670,12 @@
             "deprecationReason": null
           },
           {
+            "name": "REFERRAL_POSTING",
+            "description": "(REFERRAL_POSTING) Referral",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "REFERRAL_REQUEST",
             "description": "(REFERRAL_REQUEST) Referral Request",
             "isDeprecated": false,
@@ -20129,6 +20135,12 @@
           {
             "name": "PROJECT",
             "description": "All Projects that the User can see",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PROJECT_HOH_ENROLLMENTS",
+            "description": "Project HOH Enrollments, including WIP and exited, for the client.",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -27264,6 +27276,11 @@
           {
             "kind": "OBJECT",
             "name": "ProjectCoc",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "ReferralPosting",
             "ofType": null
           },
           {
