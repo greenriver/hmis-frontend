@@ -11526,7 +11526,7 @@ export type SubmitFormMutation = {
           zip?: string | null;
           user?: { __typename: 'User'; id: string; name: string } | null;
         }
-      | { __typename?: 'ReferralPosting' }
+      | { __typename?: 'ReferralPosting'; id: string }
       | {
           __typename?: 'ReferralRequest';
           id: string;
@@ -18237,6 +18237,9 @@ export const SubmitFormDocument = gql`
         }
         ... on ReferralRequest {
           ...ReferralRequestFields
+        }
+        ... on ReferralPosting {
+          id
         }
         ... on Service {
           ...ServiceFields

@@ -48,6 +48,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on ReferralRequest {
         ...ReferralRequestFields
       }
+      ... on ReferralPosting {
+        id
+      }
       ... on Service {
         ...ServiceFields
       }
