@@ -953,11 +953,15 @@
           },
           {
             "name": "formDefinitionId",
-            "description": "Required if saving a new assessment",
+            "description": "Form Definition that was used to perform this assessment",
             "type": {
-              "kind": "SCALAR",
-              "name": "ID",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -967,9 +971,13 @@
             "name": "hudValues",
             "description": "Transformed HUD values as JSON",
             "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "JsonObject",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,
@@ -991,9 +999,13 @@
             "name": "values",
             "description": "Raw form state as JSON",
             "type": {
-              "kind": "SCALAR",
-              "name": "JsonObject",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "JsonObject",
+                "ofType": null
+              }
             },
             "defaultValue": null,
             "isDeprecated": false,

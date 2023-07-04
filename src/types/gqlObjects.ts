@@ -4571,11 +4571,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'formDefinitionId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'hudValues',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
       },
       {
         name: 'validateOnly',
@@ -4583,7 +4591,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'values',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
       },
     ],
   },

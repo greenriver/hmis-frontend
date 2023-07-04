@@ -154,14 +154,14 @@ export type AssessmentInput = {
   confirmed?: InputMaybe<Scalars['Boolean']>;
   /** Required if saving a new assessment */
   enrollmentId?: InputMaybe<Scalars['ID']>;
-  /** Required if saving a new assessment */
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
+  /** Form Definition that was used to perform this assessment */
+  formDefinitionId: Scalars['ID'];
   /** Transformed HUD values as JSON */
-  hudValues?: InputMaybe<Scalars['JsonObject']>;
+  hudValues: Scalars['JsonObject'];
   /** Validate assessment but don't submit it */
   validateOnly?: InputMaybe<Scalars['Boolean']>;
   /** Raw form state as JSON */
-  values?: InputMaybe<Scalars['JsonObject']>;
+  values: Scalars['JsonObject'];
 };
 
 /** 4.19.4 */
