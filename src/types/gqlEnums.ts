@@ -411,6 +411,7 @@ export const HmisEnums = {
     CE: 'Coordinated Entry',
     CLIENT: 'Client',
     CUSTOM: 'Custom Assessment',
+    ENROLLMENT: 'Enrollment',
     EXIT: 'Exit Assessment',
     FILE: 'File',
     FUNDER: 'Funder',

@@ -13681,6 +13681,12 @@
             "deprecationReason": null
           },
           {
+            "name": "ENROLLMENT",
+            "description": "(ENROLLMENT) Enrollment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "EXIT",
             "description": "(EXIT) Exit Assessment",
             "isDeprecated": false,
@@ -27383,6 +27389,11 @@
           {
             "kind": "OBJECT",
             "name": "Client",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "Enrollment",
             "ofType": null
           },
           {

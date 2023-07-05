@@ -56,8 +56,7 @@ const ServicesTable: React.FC<Props> = ({ enrollmentId, enrollment }) => {
   >();
 
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
-    enrollmentId,
-    projectId: enrollment?.project.id || '',
+    enrollment,
     service: viewingRecord,
   });
 

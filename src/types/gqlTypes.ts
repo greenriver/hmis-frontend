@@ -2030,6 +2030,8 @@ export enum FormRole {
   Client = 'CLIENT',
   /** (CUSTOM) Custom Assessment */
   Custom = 'CUSTOM',
+  /** (ENROLLMENT) Enrollment */
+  Enrollment = 'ENROLLMENT',
   /** (EXIT) Exit Assessment */
   Exit = 'EXIT',
   /** (FILE) File */
@@ -4405,6 +4407,7 @@ export type SubmitFormPayload = {
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
   | Client
+  | Enrollment
   | File
   | Funder
   | Inventory
@@ -5119,6 +5122,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -5178,6 +5182,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -5237,6 +5242,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -5296,6 +5302,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -5355,6 +5362,7 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -5640,6 +5648,7 @@ export type GetAssessmentQuery = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -5699,6 +5708,7 @@ export type GetAssessmentQuery = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -5758,6 +5768,7 @@ export type GetAssessmentQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -5817,6 +5828,7 @@ export type GetAssessmentQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -5876,6 +5888,7 @@ export type GetAssessmentQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -6162,6 +6175,7 @@ export type SaveAssessmentMutation = {
                       autofillValues?: Array<{
                         __typename?: 'AutofillValue';
                         valueCode?: string | null;
+                        valueQuestion?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
@@ -6221,6 +6235,7 @@ export type SaveAssessmentMutation = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -6280,6 +6295,7 @@ export type SaveAssessmentMutation = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -6339,6 +6355,7 @@ export type SaveAssessmentMutation = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -6398,6 +6415,7 @@ export type SaveAssessmentMutation = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -6646,6 +6664,7 @@ export type SubmitAssessmentMutation = {
                       autofillValues?: Array<{
                         __typename?: 'AutofillValue';
                         valueCode?: string | null;
+                        valueQuestion?: string | null;
                         valueBoolean?: boolean | null;
                         valueNumber?: number | null;
                         sumQuestions?: Array<string> | null;
@@ -6705,6 +6724,7 @@ export type SubmitAssessmentMutation = {
                     autofillValues?: Array<{
                       __typename?: 'AutofillValue';
                       valueCode?: string | null;
+                      valueQuestion?: string | null;
                       valueBoolean?: boolean | null;
                       valueNumber?: number | null;
                       sumQuestions?: Array<string> | null;
@@ -6764,6 +6784,7 @@ export type SubmitAssessmentMutation = {
                   autofillValues?: Array<{
                     __typename?: 'AutofillValue';
                     valueCode?: string | null;
+                    valueQuestion?: string | null;
                     valueBoolean?: boolean | null;
                     valueNumber?: number | null;
                     sumQuestions?: Array<string> | null;
@@ -6823,6 +6844,7 @@ export type SubmitAssessmentMutation = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -6882,6 +6904,7 @@ export type SubmitAssessmentMutation = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -9351,6 +9374,7 @@ export type ItemFieldsFragment = {
   autofillValues?: Array<{
     __typename?: 'AutofillValue';
     valueCode?: string | null;
+    valueQuestion?: string | null;
     valueBoolean?: boolean | null;
     valueNumber?: number | null;
     sumQuestions?: Array<string> | null;
@@ -9543,6 +9567,7 @@ export type FormDefinitionJsonFieldsFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -9602,6 +9627,7 @@ export type FormDefinitionJsonFieldsFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -9661,6 +9687,7 @@ export type FormDefinitionJsonFieldsFragment = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -9720,6 +9747,7 @@ export type FormDefinitionJsonFieldsFragment = {
       autofillValues?: Array<{
         __typename?: 'AutofillValue';
         valueCode?: string | null;
+        valueQuestion?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
@@ -9779,6 +9807,7 @@ export type FormDefinitionJsonFieldsFragment = {
     autofillValues?: Array<{
       __typename?: 'AutofillValue';
       valueCode?: string | null;
+      valueQuestion?: string | null;
       valueBoolean?: boolean | null;
       valueNumber?: number | null;
       sumQuestions?: Array<string> | null;
@@ -9979,6 +10008,7 @@ export type FormDefinitionWithJsonFragment = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -10038,6 +10068,7 @@ export type FormDefinitionWithJsonFragment = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -10097,6 +10128,7 @@ export type FormDefinitionWithJsonFragment = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -10156,6 +10188,7 @@ export type FormDefinitionWithJsonFragment = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -10215,6 +10248,7 @@ export type FormDefinitionWithJsonFragment = {
       autofillValues?: Array<{
         __typename?: 'AutofillValue';
         valueCode?: string | null;
+        valueQuestion?: string | null;
         valueBoolean?: boolean | null;
         valueNumber?: number | null;
         sumQuestions?: Array<string> | null;
@@ -10453,6 +10487,7 @@ export type GetFormDefinitionQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -10512,6 +10547,7 @@ export type GetFormDefinitionQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -10571,6 +10607,7 @@ export type GetFormDefinitionQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -10630,6 +10667,7 @@ export type GetFormDefinitionQuery = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -10689,6 +10727,7 @@ export type GetFormDefinitionQuery = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -10898,6 +10937,7 @@ export type GetServiceFormDefinitionQuery = {
                 autofillValues?: Array<{
                   __typename?: 'AutofillValue';
                   valueCode?: string | null;
+                  valueQuestion?: string | null;
                   valueBoolean?: boolean | null;
                   valueNumber?: number | null;
                   sumQuestions?: Array<string> | null;
@@ -10957,6 +10997,7 @@ export type GetServiceFormDefinitionQuery = {
               autofillValues?: Array<{
                 __typename?: 'AutofillValue';
                 valueCode?: string | null;
+                valueQuestion?: string | null;
                 valueBoolean?: boolean | null;
                 valueNumber?: number | null;
                 sumQuestions?: Array<string> | null;
@@ -11016,6 +11057,7 @@ export type GetServiceFormDefinitionQuery = {
             autofillValues?: Array<{
               __typename?: 'AutofillValue';
               valueCode?: string | null;
+              valueQuestion?: string | null;
               valueBoolean?: boolean | null;
               valueNumber?: number | null;
               sumQuestions?: Array<string> | null;
@@ -11075,6 +11117,7 @@ export type GetServiceFormDefinitionQuery = {
           autofillValues?: Array<{
             __typename?: 'AutofillValue';
             valueCode?: string | null;
+            valueQuestion?: string | null;
             valueBoolean?: boolean | null;
             valueNumber?: number | null;
             sumQuestions?: Array<string> | null;
@@ -11134,6 +11177,7 @@ export type GetServiceFormDefinitionQuery = {
         autofillValues?: Array<{
           __typename?: 'AutofillValue';
           valueCode?: string | null;
+          valueQuestion?: string | null;
           valueBoolean?: boolean | null;
           valueNumber?: number | null;
           sumQuestions?: Array<string> | null;
@@ -11305,6 +11349,29 @@ export type SubmitFormMutation = {
             contentType: string;
             base64: string;
           } | null;
+        }
+      | {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          relationshipToHoH: RelationshipToHoH;
+          householdSize: number;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+          household: { __typename?: 'Household'; id: string; shortId: string };
+          client: { __typename?: 'Client'; id: string };
+          access: {
+            __typename?: 'EnrollmentAccess';
+            id: string;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+          };
         }
       | {
           __typename?: 'File';
@@ -14928,6 +14995,7 @@ export const ItemFieldsFragmentDoc = gql`
     }
     autofillValues {
       valueCode
+      valueQuestion
       valueBoolean
       valueNumber
       sumQuestions
@@ -18379,6 +18447,9 @@ export const SubmitFormDocument = gql`
         ... on File {
           ...FileFields
         }
+        ... on Enrollment {
+          ...EnrollmentFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -18394,6 +18465,7 @@ export const SubmitFormDocument = gql`
   ${ReferralRequestFieldsFragmentDoc}
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
+  ${EnrollmentFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<
