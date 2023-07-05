@@ -45,7 +45,7 @@ import {
   EnableWhen,
   FieldMapping,
   FormDefinitionJson,
-  FormDefinitionWithJsonFragment,
+  FormDefinitionFieldsFragment,
   FormItem,
   FullAssessmentFragment,
   InitialBehavior,
@@ -819,7 +819,7 @@ export type ClientNameDobVeteranFields = {
  * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
-  items: FormDefinitionWithJsonFragment['definition']['item'],
+  items: FormDefinitionFieldsFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
 ) => {

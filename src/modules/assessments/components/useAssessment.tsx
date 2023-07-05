@@ -57,12 +57,12 @@ export function useAssessment({
   // I.E. drop irrelevant item groups for children, non-HOH, non-Veterans, etc
   const definition = useMemo(() => {
     const formDef =
-      formDefinitionData?.getFormDefinition?.definition ||
+      formDefinitionData?.getFormDefinition ||
       assessmentData?.assessment?.definition;
     if (!formDef) return;
-    const mutable = { ...formDef };
-    mutable.item = applyDataCollectedAbout(
-      formDef.item,
+    const mutable = { ...formDef, definition: { ...formDef.definition } };
+    mutable.definition.item = applyDataCollectedAbout(
+      formDef.definition.item,
       client,
       relationshipToHoH
     );
@@ -81,9 +81,7 @@ export function useAssessment({
     assessmentTitle,
     formRole,
     definition,
-    definitionId:
-      assessmentData?.assessment?.definitionId ||
-      formDefinitionData?.getFormDefinition?.id,
+    definitionId: definition?.id,
     assessment: assessmentData?.assessment,
     loading: formDefinitionLoading || assessmentLoading,
   } as {

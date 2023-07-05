@@ -119,11 +119,11 @@ export type Assessment = {
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
-  definition: FormDefinitionJson;
-  definitionId: Scalars['ID'];
+  definition: FormDefinition;
   disabilityGroup?: Maybe<DisabilityGroup>;
   employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  enrollmentCoc?: Maybe<Scalars['String']>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID'];
@@ -1918,10 +1918,7 @@ export type FormDefinition = {
   __typename?: 'FormDefinition';
   definition: FormDefinitionJson;
   id: Scalars['ID'];
-  identifier: Scalars['String'];
   role: FormRole;
-  status: Scalars['String'];
-  version: Scalars['Int'];
 };
 
 export type FormDefinitionJson = {
@@ -4877,7 +4874,6 @@ export type AssessmentFieldsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  definitionId: string;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
     __typename?: 'AssessmentAccess';
@@ -4898,7 +4894,6 @@ export type AssessmentWithRecordsFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  definitionId: string;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -5144,7 +5139,6 @@ export type AssessmentWithValuesFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  definitionId: string;
   user?: { __typename: 'User'; id: string; name: string } | null;
   access: {
     __typename?: 'AssessmentAccess';
@@ -5166,7 +5160,6 @@ export type FullAssessmentFragment = {
   dateUpdated: string;
   dateDeleted?: string | null;
   role: AssessmentRole;
-  definitionId: string;
   enrollment: {
     __typename?: 'Enrollment';
     id: string;
@@ -5418,33 +5411,13 @@ export type GetAssessmentQuery = {
     dateUpdated: string;
     dateDeleted?: string | null;
     role: AssessmentRole;
-    definitionId: string;
     definition: {
-      __typename?: 'FormDefinitionJson';
-      item: Array<{
-        __typename: 'FormItem';
-        linkId: string;
-        type: ItemType;
-        component?: Component | null;
-        prefix?: string | null;
-        text?: string | null;
-        briefText?: string | null;
-        readonlyText?: string | null;
-        helperText?: string | null;
-        required?: boolean | null;
-        warnIfEmpty?: boolean | null;
-        hidden?: boolean | null;
-        readOnly?: boolean | null;
-        repeats?: boolean | null;
-        pickListReference?: string | null;
-        serviceDetailType?: ServiceDetailType | null;
-        size?: InputSize | null;
-        assessmentDate?: boolean | null;
-        prefill?: RelatedRecordType | null;
-        dataCollectedAbout?: DataCollectedAbout | null;
-        disabledDisplay?: DisabledDisplay | null;
-        enableBehavior?: EnableBehavior | null;
-        item?: Array<{
+      __typename?: 'FormDefinition';
+      id: string;
+      role: FormRole;
+      definition: {
+        __typename?: 'FormDefinitionJson';
+        item: Array<{
           __typename: 'FormItem';
           linkId: string;
           type: ItemType;
@@ -5536,6 +5509,95 @@ export type GetAssessmentQuery = {
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                item?: Array<{
+                  __typename: 'FormItem';
+                  linkId: string;
+                  type: ItemType;
+                  component?: Component | null;
+                  prefix?: string | null;
+                  text?: string | null;
+                  briefText?: string | null;
+                  readonlyText?: string | null;
+                  helperText?: string | null;
+                  required?: boolean | null;
+                  warnIfEmpty?: boolean | null;
+                  hidden?: boolean | null;
+                  readOnly?: boolean | null;
+                  repeats?: boolean | null;
+                  pickListReference?: string | null;
+                  serviceDetailType?: ServiceDetailType | null;
+                  size?: InputSize | null;
+                  assessmentDate?: boolean | null;
+                  prefill?: RelatedRecordType | null;
+                  dataCollectedAbout?: DataCollectedAbout | null;
+                  disabledDisplay?: DisabledDisplay | null;
+                  enableBehavior?: EnableBehavior | null;
+                  mapping?: {
+                    __typename?: 'FieldMapping';
+                    recordType?: RelatedRecordType | null;
+                    fieldName?: string | null;
+                    customFieldKey?: string | null;
+                  } | null;
+                  bounds?: Array<{
+                    __typename?: 'ValueBound';
+                    id: string;
+                    severity: ValidationSeverity;
+                    type: BoundType;
+                    question?: string | null;
+                    valueNumber?: number | null;
+                    valueDate?: string | null;
+                    offset?: number | null;
+                  }> | null;
+                  pickListOptions?: Array<{
+                    __typename?: 'PickListOption';
+                    code: string;
+                    label?: string | null;
+                    secondaryLabel?: string | null;
+                    groupLabel?: string | null;
+                    groupCode?: string | null;
+                    initialSelected?: boolean | null;
+                  }> | null;
+                  initial?: Array<{
+                    __typename?: 'InitialValue';
+                    valueCode?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    valueLocalConstant?: string | null;
+                    initialBehavior: InitialBehavior;
+                  }> | null;
+                  enableWhen?: Array<{
+                    __typename?: 'EnableWhen';
+                    question: string;
+                    operator: EnableOperator;
+                    answerCode?: string | null;
+                    answerCodes?: Array<string> | null;
+                    answerNumber?: number | null;
+                    answerBoolean?: boolean | null;
+                    answerGroupCode?: string | null;
+                    compareQuestion?: string | null;
+                  }> | null;
+                  autofillValues?: Array<{
+                    __typename?: 'AutofillValue';
+                    valueCode?: string | null;
+                    valueQuestion?: string | null;
+                    valueBoolean?: boolean | null;
+                    valueNumber?: number | null;
+                    sumQuestions?: Array<string> | null;
+                    autofillBehavior: EnableBehavior;
+                    autofillReadonly?: boolean | null;
+                    autofillWhen: Array<{
+                      __typename?: 'EnableWhen';
+                      question: string;
+                      operator: EnableOperator;
+                      answerCode?: string | null;
+                      answerCodes?: Array<string> | null;
+                      answerNumber?: number | null;
+                      answerBoolean?: boolean | null;
+                      answerGroupCode?: string | null;
+                      compareQuestion?: string | null;
+                    }>;
+                  }> | null;
+                }> | null;
                 mapping?: {
                   __typename?: 'FieldMapping';
                   recordType?: RelatedRecordType | null;
@@ -5799,73 +5861,8 @@ export type GetAssessmentQuery = {
               compareQuestion?: string | null;
             }>;
           }> | null;
-        }> | null;
-        mapping?: {
-          __typename?: 'FieldMapping';
-          recordType?: RelatedRecordType | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-        } | null;
-        bounds?: Array<{
-          __typename?: 'ValueBound';
-          id: string;
-          severity: ValidationSeverity;
-          type: BoundType;
-          question?: string | null;
-          valueNumber?: number | null;
-          valueDate?: string | null;
-          offset?: number | null;
-        }> | null;
-        pickListOptions?: Array<{
-          __typename?: 'PickListOption';
-          code: string;
-          label?: string | null;
-          secondaryLabel?: string | null;
-          groupLabel?: string | null;
-          groupCode?: string | null;
-          initialSelected?: boolean | null;
-        }> | null;
-        initial?: Array<{
-          __typename?: 'InitialValue';
-          valueCode?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          valueLocalConstant?: string | null;
-          initialBehavior: InitialBehavior;
-        }> | null;
-        enableWhen?: Array<{
-          __typename?: 'EnableWhen';
-          question: string;
-          operator: EnableOperator;
-          answerCode?: string | null;
-          answerCodes?: Array<string> | null;
-          answerNumber?: number | null;
-          answerBoolean?: boolean | null;
-          answerGroupCode?: string | null;
-          compareQuestion?: string | null;
-        }> | null;
-        autofillValues?: Array<{
-          __typename?: 'AutofillValue';
-          valueCode?: string | null;
-          valueQuestion?: string | null;
-          valueBoolean?: boolean | null;
-          valueNumber?: number | null;
-          sumQuestions?: Array<string> | null;
-          autofillBehavior: EnableBehavior;
-          autofillReadonly?: boolean | null;
-          autofillWhen: Array<{
-            __typename?: 'EnableWhen';
-            question: string;
-            operator: EnableOperator;
-            answerCode?: string | null;
-            answerCodes?: Array<string> | null;
-            answerNumber?: number | null;
-            answerBoolean?: boolean | null;
-            answerGroupCode?: string | null;
-            compareQuestion?: string | null;
-          }>;
-        }> | null;
-      }>;
+        }>;
+      };
     };
     enrollment: {
       __typename?: 'Enrollment';
@@ -6130,7 +6127,6 @@ export type GetClientAssessmentsQuery = {
         dateUpdated: string;
         dateDeleted?: string | null;
         role: AssessmentRole;
-        definitionId: string;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -6185,7 +6181,6 @@ export type GetEnrollmentAssessmentsQuery = {
         dateUpdated: string;
         dateDeleted?: string | null;
         role: AssessmentRole;
-        definitionId: string;
         user?: { __typename: 'User'; id: string; name: string } | null;
         access: {
           __typename?: 'AssessmentAccess';
@@ -6218,7 +6213,6 @@ export type SaveAssessmentMutation = {
       dateUpdated: string;
       dateDeleted?: string | null;
       role: AssessmentRole;
-      definitionId: string;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'AssessmentAccess';
@@ -6263,7 +6257,6 @@ export type SubmitAssessmentMutation = {
       dateUpdated: string;
       dateDeleted?: string | null;
       role: AssessmentRole;
-      definitionId: string;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -6571,7 +6564,6 @@ export type GetAssessmentsForPopulationQuery = {
         dateUpdated: string;
         dateDeleted?: string | null;
         role: AssessmentRole;
-        definitionId: string;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -7448,144 +7440,6 @@ export type ClientOmniSearchFieldsFragment = {
   nameSuffix?: string | null;
 };
 
-export type EnrollmentFieldsFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  householdSize: number;
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  household: { __typename?: 'Household'; id: string; shortId: string };
-  client: { __typename?: 'Client'; id: string };
-  access: {
-    __typename?: 'EnrollmentAccess';
-    id: string;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-  };
-};
-
-export type EnrollmentWithHouseholdFragmentFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  householdSize: number;
-  household: {
-    __typename?: 'Household';
-    id: string;
-    shortId: string;
-    householdClients: Array<{
-      __typename?: 'HouseholdClient';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        veteranStatus: NoYesReasonsForMissingData;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-        };
-      };
-      enrollment: {
-        __typename?: 'Enrollment';
-        id: string;
-        entryDate: string;
-        exitDate?: string | null;
-        inProgress: boolean;
-      };
-    }>;
-  };
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  client: { __typename?: 'Client'; id: string };
-  access: {
-    __typename?: 'EnrollmentAccess';
-    id: string;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-  };
-};
-
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
-  dateDeleted?: string | null;
-};
-
-export type FileFieldsFragment = {
-  __typename?: 'File';
-  confidential?: boolean | null;
-  contentType: string;
-  effectiveDate?: string | null;
-  expirationDate?: string | null;
-  id: string;
-  name: string;
-  fileBlobId?: string | null;
-  url?: string | null;
-  tags: Array<string>;
-  ownFile: boolean;
-  redacted: boolean;
-  enrollmentId?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
-  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-  uploadedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
-  updatedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
-};
-
 export type ClientAuditEventFieldsFragment = {
   __typename?: 'ClientAuditEvent';
   id: string;
@@ -7989,6 +7843,7 @@ export type GetClientEnrollmentsQuery = {
         exitDate?: string | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
+        enrollmentCoc?: string | null;
         householdSize: number;
         project: {
           __typename?: 'Project';
@@ -8082,6 +7937,7 @@ export type GetClientServicesQuery = {
           exitDate?: string | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -8305,6 +8161,7 @@ export type CreateEnrollmentMutation = {
       exitDate?: string | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -8599,6 +8456,7 @@ export type GetEnrollmentQuery = {
     exitDate?: string | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -8630,6 +8488,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     exitDate?: string | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
     householdSize: number;
     household: {
       __typename?: 'Household';
@@ -9149,6 +9008,146 @@ export type CustomDataElementFieldsFragment = {
   }> | null;
 };
 
+export type EnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdSize: number;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  household: { __typename?: 'Household'; id: string; shortId: string };
+  client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+};
+
+export type EnrollmentWithHouseholdFragmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdSize: number;
+  household: {
+    __typename?: 'Household';
+    id: string;
+    shortId: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        veteranStatus: NoYesReasonsForMissingData;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+        };
+      };
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate: string;
+        exitDate?: string | null;
+        inProgress: boolean;
+      };
+    }>;
+  };
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+};
+
+export type FileFieldsFragment = {
+  __typename?: 'File';
+  confidential?: boolean | null;
+  contentType: string;
+  effectiveDate?: string | null;
+  expirationDate?: string | null;
+  id: string;
+  name: string;
+  fileBlobId?: string | null;
+  url?: string | null;
+  tags: Array<string>;
+  ownFile: boolean;
+  redacted: boolean;
+  enrollmentId?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  uploadedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -9162,15 +9161,6 @@ export type ValidationErrorFieldsFragment = {
   linkId?: string | null;
   section?: string | null;
   data?: any | null;
-};
-
-export type FormDefinitionFieldsFragment = {
-  __typename?: 'FormDefinition';
-  id: string;
-  version: number;
-  role: FormRole;
-  status: string;
-  identifier: string;
 };
 
 export type PickListOptionFieldsFragment = {
@@ -9734,13 +9724,10 @@ export type FormDefinitionJsonFieldsFragment = {
   }>;
 };
 
-export type FormDefinitionWithJsonFragment = {
+export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
   id: string;
-  version: number;
   role: FormRole;
-  status: string;
-  identifier: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -10226,10 +10213,7 @@ export type GetFormDefinitionQuery = {
   getFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
-    version: number;
     role: FormRole;
-    status: string;
-    identifier: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -10691,10 +10675,7 @@ export type GetServiceFormDefinitionQuery = {
   getServiceFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
-    version: number;
     role: FormRole;
-    status: string;
-    identifier: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -11303,6 +11284,7 @@ export type SubmitFormMutation = {
           exitDate?: string | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -11940,6 +11922,7 @@ export type UpdateRelationshipToHoHMutation = {
       exitDate?: string | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -12851,6 +12834,7 @@ export type GetProjectEnrollmentsQuery = {
         exitDate?: string | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
+        enrollmentCoc?: string | null;
         householdSize: number;
         client: {
           __typename?: 'Client';
@@ -14671,7 +14655,6 @@ export const AssessmentFieldsFragmentDoc = gql`
     dateUpdated
     dateDeleted
     role
-    definitionId
     user {
       ...UserFields
     }
@@ -15168,6 +15151,20 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
+export const ClientAuditEventFieldsFragmentDoc = gql`
+  fragment ClientAuditEventFields on ClientAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    recordId
+    user {
+      id
+      name
+    }
+  }
+`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -15187,6 +15184,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     }
     inProgress
     relationshipToHoH
+    enrollmentCoc
     household {
       id
       shortId
@@ -15287,20 +15285,6 @@ export const FileFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const ClientAuditEventFieldsFragmentDoc = gql`
-  fragment ClientAuditEventFields on ClientAuditEvent {
-    id
-    createdAt
-    event
-    objectChanges
-    recordName
-    recordId
-    user {
-      id
-      name
-    }
-  }
-`;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -15314,15 +15298,6 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     linkId
     section
     data
-  }
-`;
-export const FormDefinitionFieldsFragmentDoc = gql`
-  fragment FormDefinitionFields on FormDefinition {
-    id
-    version
-    role
-    status
-    identifier
   }
 `;
 export const PickListOptionFieldsFragmentDoc = gql`
@@ -15434,14 +15409,14 @@ export const FormDefinitionJsonFieldsFragmentDoc = gql`
   }
   ${ItemFieldsFragmentDoc}
 `;
-export const FormDefinitionWithJsonFragmentDoc = gql`
-  fragment FormDefinitionWithJson on FormDefinition {
-    ...FormDefinitionFields
+export const FormDefinitionFieldsFragmentDoc = gql`
+  fragment FormDefinitionFields on FormDefinition {
+    id
+    role
     definition {
       ...FormDefinitionJsonFields
     }
   }
-  ${FormDefinitionFieldsFragmentDoc}
   ${FormDefinitionJsonFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
@@ -15957,12 +15932,12 @@ export const GetAssessmentDocument = gql`
     assessment(id: $id) {
       ...FullAssessment
       definition {
-        ...FormDefinitionJsonFields
+        ...FormDefinitionFields
       }
     }
   }
   ${FullAssessmentFragmentDoc}
-  ${FormDefinitionJsonFieldsFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**
@@ -18137,10 +18112,10 @@ export const GetFormDefinitionDocument = gql`
       enrollmentId: $enrollmentId
       projectId: $projectId
     ) {
-      ...FormDefinitionWithJson
+      ...FormDefinitionFields
     }
   }
-  ${FormDefinitionWithJsonFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**
@@ -18201,10 +18176,10 @@ export const GetServiceFormDefinitionDocument = gql`
       serviceTypeId: $serviceTypeId
       projectId: $projectId
     ) {
-      ...FormDefinitionWithJson
+      ...FormDefinitionFields
     }
   }
-  ${FormDefinitionWithJsonFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**

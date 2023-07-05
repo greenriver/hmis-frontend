@@ -7,7 +7,6 @@ fragment AssessmentFields on Assessment {
   dateUpdated
   dateDeleted
   role
-  definitionId
   user {
     ...UserFields
   }

@@ -12,14 +12,6 @@ fragment ValidationErrorFields on ValidationError {
   data
 }
 
-fragment FormDefinitionFields on FormDefinition {
-  id
-  version
-  role
-  status
-  identifier
-}
-
 fragment PickListOptionFields on PickListOption {
   code
   label
@@ -122,8 +114,9 @@ fragment FormDefinitionJsonFields on FormDefinitionJson {
   }
 }
 
-fragment FormDefinitionWithJson on FormDefinition {
-  ...FormDefinitionFields
+fragment FormDefinitionFields on FormDefinition {
+  id
+  role
   definition {
     ...FormDefinitionJsonFields
   }

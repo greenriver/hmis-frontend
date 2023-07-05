@@ -128,12 +128,8 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'definitionId',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
+        name: 'enrollmentCoc',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'id',
@@ -2165,35 +2161,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'identifier',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
         name: 'role',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
-        },
-      },
-      {
-        name: 'status',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'version',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
     ],
