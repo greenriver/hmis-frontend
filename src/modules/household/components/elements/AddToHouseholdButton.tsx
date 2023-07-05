@@ -67,6 +67,7 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientName}</>,
         submitButtonText: `Enroll`,
+        pickListRelationId: projectId,
       })}
     </>
   );
