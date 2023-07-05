@@ -7,9 +7,9 @@ import ReferralPostingStatusDisplay from '@/modules/referrals/components/Referra
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
+  GetProjectOutgoingReferralPostingsDocument,
   GetProjectOutgoingReferralPostingsQuery,
   GetProjectOutgoingReferralPostingsQueryVariables,
-  GetProjectReferralPostingsDocument,
   ReferralPostingFieldsFragment,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -75,10 +75,10 @@ const ProjectOutgoingReferralPostingsTable: React.FC<Props> = ({
       ReferralPostingFieldsFragment
     >
       queryVariables={{ id: projectId }}
-      queryDocument={GetProjectReferralPostingsDocument}
+      queryDocument={GetProjectOutgoingReferralPostingsDocument}
       columns={columns}
       noData='No referrals'
-      pagePath='project.incomingReferralPostings'
+      pagePath='project.outgoingReferralPostings'
     />
   );
 };
