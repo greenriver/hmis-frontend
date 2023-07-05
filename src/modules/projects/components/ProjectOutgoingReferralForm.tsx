@@ -17,8 +17,12 @@ import {
 const defaultValues = {};
 interface Props {
   project: ProjectAllFieldsFragment;
+  onComplete: VoidFunction;
 }
-const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
+const ProjectOutgoingReferralForm: React.FC<Props> = ({
+  project,
+  onComplete,
+}) => {
   const formDefinition = OutgoingReferralPostingDefinition;
   const [errors, setErrors] = useState(emptyErrorState);
   const [mutate, { loading }] = useCreateOutgoingReferralPostingMutation({
@@ -27,6 +31,8 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
         data.createOutgoingReferralPosting || {};
       if (remoteErrors.length) {
         setErrors(partitionValidations(remoteErrors));
+      } else {
+        onComplete();
       }
     },
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),

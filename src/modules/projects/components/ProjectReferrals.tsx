@@ -59,7 +59,7 @@ const ProjectReferrals = () => {
                 )}
                 Icon={AddIcon}
               >
-                New Referral Request
+                New Referral
               </ButtonLink>
             }
           >
