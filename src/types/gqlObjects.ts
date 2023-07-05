@@ -5152,6 +5152,20 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
     ],
   },
   {
+    name: 'OutgoingReferralPostingInput',
+    args: [
+      {
+        name: 'enrollmentId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+      { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
+      {
+        name: 'unitTypeId',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'ProjectFilterOptions',
     args: [
       {
