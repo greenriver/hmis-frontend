@@ -1,4 +1,10 @@
-import { DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
+import {
+  DialogActions,
+  DialogContent,
+  DialogProps,
+  DialogTitle,
+  Grid,
+} from '@mui/material';
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 
 import DynamicForm, {
@@ -25,6 +31,7 @@ type RenderFormDialogProps = PartialPick<
   'onSubmit' | 'definition' | 'errors'
 > & {
   title: ReactNode;
+  DialogProps?: Omit<DialogProps, 'open'>;
 };
 
 interface Args<T> extends DynamicFormHandlerArgs<T> {
@@ -48,8 +55,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       ...args,
       formDefinition,
       onCompleted: (data: T) => {
-        if (onCompleted) onCompleted(data);
         setDialogOpen(false);
+        if (onCompleted) onCompleted(data);
       },
     };
   }, [args, onCompleted, formDefinition]);
@@ -62,7 +69,11 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     setErrors(emptyErrorState);
   }, [setErrors]);
 
-  const renderFormDialog = ({ title, ...props }: RenderFormDialogProps) => {
+  const renderFormDialog = ({
+    title,
+    DialogProps,
+    ...props
+  }: RenderFormDialogProps) => {
     if (!dialogOpen) return null;
     if (!definitionLoading && !formDefinition) {
       throw new Error(`Form not found: ${formRole} `);
@@ -73,7 +84,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         open={!!dialogOpen}
         fullWidth
         onClose={closeDialog}
-        maxWidth='lg'
+        {...DialogProps}
       >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent
@@ -102,6 +113,7 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
                     ...props.ValidationDialogProps,
                   }}
                   hideSubmit
+                  picklistQueryOptions={{ fetchPolicy: 'cache-first' }}
                 />
               </Grid>
             </Grid>

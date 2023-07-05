@@ -54,6 +54,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       ... on File {
         ...FileFields
       }
+      ... on Enrollment {
+        ...EnrollmentFields
+      }
     }
     errors {
       ...ValidationErrorFields

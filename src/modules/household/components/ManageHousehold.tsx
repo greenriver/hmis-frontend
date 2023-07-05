@@ -39,8 +39,9 @@ const ManageHousehold = ({
     addToEnrollmentColumns,
     refetchHousehold,
     household,
-    refetchLoading,
-    householdLoading,
+    loading,
+    // refetchLoading,
+    // householdLoading,
   } = useAddToHouseholdColumns({
     householdId: initialHouseholdId,
     projectId,
@@ -55,7 +56,7 @@ const ManageHousehold = ({
 
   useEffect(() => {
     if (!currentDashboardClientId) return;
-    if (refetchLoading || !recentMembers) return;
+    if (loading || !recentMembers) return;
 
     const hc = household?.householdClients || [];
     const currentMembersMap = new Set(hc.map((c) => c.client.id));
@@ -63,21 +64,22 @@ const ManageHousehold = ({
     setRecentEligibleMembers(
       recentMembers.filter(({ client }) => !currentMembersMap.has(client.id))
     );
-  }, [currentDashboardClientId, recentMembers, household, refetchLoading]);
+  }, [currentDashboardClientId, recentMembers, household, loading]);
 
-  useScrollToHash(householdLoading || recentMembersLoading);
+  useScrollToHash(loading || recentMembersLoading);
 
   const columns: ColumnDef<ClientFieldsFragment | RecentHouseholdMember>[] = [
     ...householdMemberColumns,
     ...addToEnrollmentColumns,
   ];
 
-  if (initialHouseholdId && !household && householdLoading) {
+  if (initialHouseholdId && !household && loading) {
     return <Loading />;
   }
   return (
     <Stack gap={4}>
-      {!household && (
+      {!household && loading && <Loading />}
+      {!household && !loading && (
         <CommonCard
           sx={{ py: 4, textAlign: 'center', color: 'text.secondary' }}
         >

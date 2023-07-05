@@ -336,6 +336,7 @@ const ClientSearch: React.FC<Props> = ({
       {renderFormDialog({
         title: 'Add client',
         submitButtonText: 'Create Client',
+        DialogProps: { maxWidth: 'lg' },
       })}
     </>
   );

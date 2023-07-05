@@ -252,6 +252,7 @@ const EditHouseholdMemberTable = ({
               currentDashboardClientId={currentDashboardClientId}
               householdClient={hc}
               onSuccess={refetchHousehold}
+              householdSize={currentMembers.length}
             />
           </ClientPermissionsFilter>
         ),
@@ -266,6 +267,7 @@ const EditHouseholdMemberTable = ({
     loading,
     proposedHoH,
     highlight,
+    currentMembers,
   ]);
 
   return (
