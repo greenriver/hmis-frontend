@@ -75,9 +75,6 @@ export function usePickList(
       Object.values<string>(PickListType).includes(item.pickListReference),
     [item]
   );
-  if (isKnownType) {
-    console.info('b', item.linkId, relationId);
-  }
 
   const { data, loading, error } = useGetPickListQuery({
     variables: {
