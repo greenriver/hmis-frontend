@@ -26,8 +26,7 @@ const ViewEnrollment = () => {
   };
 
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
-    enrollmentId,
-    projectId: enrollment?.project.id || '',
+    enrollment,
   });
 
   if (!enrollment) return <NotFound />;

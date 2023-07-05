@@ -1362,6 +1362,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "valueQuestion",
+            "description": "Link ID whos value to autofill if condition is met",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -4788,6 +4800,12 @@
           {
             "name": "DISABILITY_TABLE",
             "description": "Specialized component for rendering disabilities in a table",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DROPDOWN",
+            "description": "Render a choice input item as a dropdown",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -28950,9 +28968,13 @@
             "description": "Unique identifier for this bound",
             "args": [],
             "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
