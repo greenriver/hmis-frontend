@@ -21,7 +21,7 @@
       "required": false,
       "linkId": "unitTypeId",
       "text": "Unit Type",
-      "pickListReference": "AVAILABLE_UNIT_TYPES",
+      "pickListReference": "ALL_UNIT_TYPES",
       "fieldName": "unitTypeId"
     }
   ]

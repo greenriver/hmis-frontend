@@ -7,7 +7,7 @@ const NewOutgoingReferral: React.FC = () => {
   const { project } = useProjectDashboardContext();
   return (
     <CommonCard title='Create Referral' sx={{ mb: 2 }}>
-      <ProjectOutgoingReferralForm project={project} />;
+      <ProjectOutgoingReferralForm project={project} />
     </CommonCard>
   );
 };

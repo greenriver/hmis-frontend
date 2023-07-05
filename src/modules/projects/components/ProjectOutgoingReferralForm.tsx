@@ -51,14 +51,13 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({ project }) => {
   const initialValues = useInitialFormValues({
     definition: formDefinition,
     record: defaultValues as unknown as SubmitFormAllowedTypes,
-    // localConstants: { projectId: '71' },
   });
 
   return (
     <DynamicForm
       definition={formDefinition}
       FormActionProps={{
-        submitButtonText: 'Save',
+        submitButtonText: 'Create Referral',
         discardButtonText: 'Cancel',
       }}
       initialValues={initialValues}

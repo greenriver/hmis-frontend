@@ -3141,6 +3141,8 @@ export type PickListOption = {
 export enum PickListType {
   AllServiceCategories = 'ALL_SERVICE_CATEGORIES',
   AllServiceTypes = 'ALL_SERVICE_TYPES',
+  /** All unit types. */
+  AllUnitTypes = 'ALL_UNIT_TYPES',
   /** Referral Posting Status */
   AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
