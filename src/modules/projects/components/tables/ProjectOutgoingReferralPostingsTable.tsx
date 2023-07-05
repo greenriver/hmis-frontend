@@ -4,7 +4,7 @@ import GenericTableWithData from '@/modules/dataFetching/components/GenericTable
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { Routes } from '@/routes/routes';
+import { ProjectDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   GetProjectOutgoingReferralPostingsDocument,
@@ -23,12 +23,13 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'Project Referred To',
     linkTreatment: true,
-    render: ({ project }: ReferralPostingFieldsFragment) =>
+    render: ({ id, project }: ReferralPostingFieldsFragment) =>
       project ? (
         <>
           <RouterLink
-            to={generateSafePath(Routes.PROJECT, {
+            to={generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
               projectId: project.id,
+              referralPostingId: id,
             })}
           >
             {project.projectName}
@@ -53,7 +54,6 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
   {
     header: 'HoH',
     render: 'hohName',
-    linkTreatment: true,
   },
   {
     header: 'Household Size',
