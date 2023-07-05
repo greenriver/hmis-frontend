@@ -37,6 +37,7 @@ import { HmisEnums } from '@/types/gqlEnums';
 import {
   AutofillValue,
   BoundType,
+  Component,
   DataCollectedAbout,
   DisabledDisplay,
   EnableBehavior,
@@ -137,7 +138,8 @@ export const resolveOptionList = (
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
-      includeDataNotCollected
+      // always show DNC for relationship to hoh
+      includeDataNotCollected || item.pickListReference === 'RelationshipToHoH'
     );
   }
   return null;
@@ -314,7 +316,7 @@ const evaluateEnableWhen = (
       console.warn('Unsupported enableWhen operator', en.operator);
   }
 
-  // console.log(
+  // console.debug(
   //   'COMPARING:',
   //   currentValue,
   //   en.operator,
@@ -340,7 +342,7 @@ export const shouldEnableItem = (
     evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
   );
 
-  // console.log(item.linkId, booleans);
+  // console.debug(item.linkId, booleans);
   if (item.enableBehavior === EnableBehavior.Any) {
     return booleans.some(Boolean);
   } else {
@@ -366,6 +368,7 @@ export const getAutofillComparisonValue = (
   if (!isNil(av.valueBoolean)) return av.valueBoolean;
   if (!isNil(av.valueNumber)) return av.valueNumber;
   if (!isNil(av.valueCode)) return getOptionValue(av.valueCode, targetItem);
+  if (!isNil(av.valueQuestion)) return values[av.valueQuestion];
 };
 
 /**
@@ -404,7 +407,7 @@ export const autofillValues = (
     const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
-      // console.log(
+      // console.debug(
       //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
       //     values[item.linkId]
       //   )} to ${JSON.stringify(newValue)}`,
@@ -418,10 +421,7 @@ export const autofillValues = (
   });
 };
 
-export const getBoundValue = (
-  bound: ValueBound,
-  values: Record<string, any>
-) => {
+export const getBoundValue = (bound: ValueBound, values: FormValues) => {
   if (bound.question) {
     return values[bound.question];
   }
@@ -465,7 +465,7 @@ const compareNumOrDate = ({
 
 export const buildCommonInputProps = (
   item: FormItem,
-  values: Record<string, any>
+  values: FormValues
 ): DynamicInputCommonProps => {
   const inputProps: DynamicInputCommonProps = {};
   if (item.readOnly) {
@@ -1091,11 +1091,11 @@ export const debugFormValues = (
   if (import.meta.env.MODE === 'production') return false;
   if (!event.ctrlKey && !event.metaKey) return false;
 
-  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  console.debug('%c FORM STATE:', 'color: #BB7AFF');
   if (transformValuesFn) {
-    console.log(transformValuesFn(values, definition));
+    console.debug(transformValuesFn(values, definition));
   } else {
-    console.log(values);
+    console.debug(values);
   }
 
   let hudValues = transformSubmitValues({
@@ -1111,8 +1111,8 @@ export const debugFormValues = (
   }
 
   window.debug = { hudValues };
-  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  console.log(hudValues);
+  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  console.debug(hudValues);
 
   return true;
 };
@@ -1167,4 +1167,16 @@ export const dropUnderscorePrefixedKeys = (
       ? v.map((item) => (isObject(item) ? omitBy(item, underscoreKey) : item))
       : v
   );
+};
+
+export const chooseSelectComponentType = (
+  item: FormItem,
+  picklistLength: number,
+  isLocalPickList: boolean
+): Component => {
+  if (item.component) return item.component;
+  if (item.repeats) return Component.Dropdown;
+  if (picklistLength === 0) return Component.Dropdown;
+  if (picklistLength < 4 && isLocalPickList) return Component.RadioButtons;
+  return Component.Dropdown;
 };

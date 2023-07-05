@@ -91,6 +91,7 @@ fragment ItemFields on FormItem {
   }
   autofillValues {
     valueCode
+    valueQuestion
     valueBoolean
     valueNumber
     sumQuestions
