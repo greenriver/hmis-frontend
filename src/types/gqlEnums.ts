@@ -121,6 +121,7 @@ export const HmisEnums = {
     CHECKBOX: 'Render a boolean input item as a checkbox',
     DISABILITY_TABLE:
       'Specialized component for rendering disabilities in a table',
+    DROPDOWN: 'Render a choice input item as a dropdown',
     EMAIL: 'Email address input for ContactPoint',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
