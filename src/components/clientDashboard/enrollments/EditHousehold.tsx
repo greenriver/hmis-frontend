@@ -1,12 +1,14 @@
 import { NetworkStatus } from '@apollo/client';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Box, Button, Grid, Paper, Typography } from '@mui/material';
+import { Box, Button, Grid, Typography } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { CommonCard } from '@/components/elements/CommonCard';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import DatePicker from '@/components/elements/input/DatePicker';
 import Loading from '@/components/elements/Loading';
+import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
@@ -202,21 +204,18 @@ const EditHousehold = () => {
           </Typography>
           {currentMembers && (
             <>
-              <Paper sx={{ pt: 2, mb: 2 }}>
-                <Typography variant='h5' sx={{ px: 3, mb: 2 }}>
-                  Current Household
-                </Typography>
+              <TitleCard title='Current Household' headerVariant='border'>
                 <EditHouseholdMemberTable
                   currentMembers={currentMembers}
                   clientId={clientId}
                   refetch={refetch}
                 />
-              </Paper>
+              </TitleCard>
               <Button
                 startIcon={<ArrowBackIcon />}
                 variant='gray'
                 size='small'
-                sx={{ mb: 6 }}
+                sx={{ mt: 4, mb: 6 }}
                 onClick={navigateToEnrollment}
               >
                 Back to Enrollment
@@ -227,21 +226,19 @@ const EditHousehold = () => {
             Add Clients to Household
           </Typography>
           {recentEligibleMembers && recentEligibleMembers.length > 0 && (
-            <Paper sx={{ pt: 2, mb: 2 }}>
-              <Typography variant='h5' sx={{ px: 3, mb: 2 }}>
-                Previously Associated Members
-              </Typography>
+            <TitleCard
+              title='Previously Associated Members'
+              headerVariant='border'
+              sx={{ mb: 4 }}
+            >
               <AssociatedHouseholdMembers
                 recentMembers={recentEligibleMembers}
                 additionalColumns={addToEnrollmentColumns}
               />
-            </Paper>
+            </TitleCard>
           )}
 
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Typography variant='h5' sx={{ mb: 2 }}>
-              Client Search
-            </Typography>
+          <CommonCard title='Client Search'>
             <ClientSearch
               hideInstructions
               hideProject
@@ -249,13 +246,14 @@ const EditHousehold = () => {
               cardsEnabled={false}
               pageSize={10}
               wrapperComponent={Box}
+              addClientInDialog
               searchResultsTableProps={{
                 rowLinkTo: undefined,
                 tableProps: { size: 'small' },
                 columns: SEARCH_RESULT_COLUMNS,
               }}
             />
-          </Paper>
+          </CommonCard>
         </Grid>
       </Grid>
     </>

@@ -1,16 +1,19 @@
 import beds from '@/modules/form/data/beds.json';
+import referralPosting from '@/modules/form/data/referralPosting.json';
 import search from '@/modules/form/data/search.json';
 import units from '@/modules/form/data/units.json';
-import { FormDefinitionJson } from '@/types/gqlTypes';
+import { FormDefinitionJsonFieldsFragment } from '@/types/gqlTypes';
 
-export const SearchFormDefinition: FormDefinitionJson = JSON.parse(
-  JSON.stringify(search)
-);
+export const SearchFormDefinition: FormDefinitionJsonFieldsFragment =
+  JSON.parse(JSON.stringify(search));
 
-export const BedsDefinition: FormDefinitionJson = JSON.parse(
+export const BedsDefinition: FormDefinitionJsonFieldsFragment = JSON.parse(
   JSON.stringify(beds)
 );
 
-export const UnitsDefinition: FormDefinitionJson = JSON.parse(
+export const UnitsDefinition: FormDefinitionJsonFieldsFragment = JSON.parse(
   JSON.stringify(units)
 );
+
+export const ReferralPostingDefinition: FormDefinitionJsonFieldsFragment =
+  JSON.parse(JSON.stringify(referralPosting));

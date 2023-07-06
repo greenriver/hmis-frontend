@@ -28,10 +28,12 @@ declare module '@mui/material/styles' {
   interface Palette {
     borders: PaletteColor;
     alerts: Record<string, string>;
+    links: string;
   }
   interface PaletteOptions {
     borders: SimplePaletteColorOptions;
     alerts: { lightWarningBackground?: string };
+    links: string;
   }
 }
 
@@ -39,6 +41,7 @@ declare module '@mui/material/styles' {
 export const baseThemeDef: ThemeOptions = {
   typography: {
     fontFamily: '"Open Sans", sans-serif',
+    fontWeightBold: 600,
   },
   palette: {
     primary: {
@@ -61,6 +64,7 @@ export const baseThemeDef: ThemeOptions = {
     alerts: {
       lightWarningBackground: '#fffde0',
     },
+    links: '#1976D2',
   },
 };
 
@@ -142,6 +146,8 @@ const createThemeOptions = (theme: Theme) => ({
       },
       styleOverrides: {
         root: theme.unstable_sx({
+          color: theme.palette.links,
+          textDecorationColor: theme.palette.links,
           cursor: 'pointer',
           '&.Mui-focusVisible': {
             outlineOffset: '4px',
@@ -272,6 +278,38 @@ const createThemeOptions = (theme: Theme) => ({
         root: {
           marginLeft: 0,
         },
+      },
+    },
+    MuiDialogTitle: {
+      defaultProps: {
+        color: 'text.primary',
+        typography: 'h4',
+      },
+      styleOverrides: {
+        root: theme.unstable_sx({
+          textTransform: 'none',
+          fontWeight: 400,
+          pb: 2,
+          borderBottomWidth: 1,
+          borderBottomStyle: 'solid',
+          borderBottomColor: 'borders.light',
+        }),
+      },
+    },
+    // MuiDialogContent: {
+    //   styleOverrides: {
+    //     root: theme.unstable_sx({}),
+    //   },
+    // },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: theme.unstable_sx({
+          borderTopWidth: 1,
+          borderTopStyle: 'solid',
+          borderTopColor: theme.palette.borders.light,
+          px: 4,
+          py: 2,
+        }),
       },
     },
   },

@@ -1,6 +1,19 @@
 // **** THIS FILE IS GENERATED, DO NOT EDIT DIRECTLY ****
 
 export const HmisEnums = {
+  AgeRange: {
+    Under5: 'Under 5',
+    Ages5to12: '5-12',
+    Ages13to17: '13-17',
+    Ages18to24: '18-24',
+    Ages25to34: '25-34',
+    Ages35to44: '35-44',
+    Ages45to54: '45-54',
+    Ages55to61: '55-61',
+    Ages55to64: '55-64',
+    Age62Plus: '62+',
+    Age65Plus: '65+',
+  },
   AssessmentLevel: {
     INVALID: 'Invalid Value',
     CRISIS_NEEDS_ASSESSMENT: 'Crisis Needs Assessment',
@@ -223,10 +236,14 @@ export const HmisEnums = {
     LESS_THAN_EQUAL: 'LESS_THAN_EQUAL',
     NOT_EQUAL: 'NOT_EQUAL',
   },
-  EnrollmentLimit: { NON_WIP_ONLY: 'NON_WIP_ONLY', WIP_ONLY: 'WIP_ONLY' },
+  EnrollmentFilterOptionStatus: {
+    INCOMPLETE: 'Incomplete',
+    ACTIVE: 'Active',
+    EXITED: 'Exited',
+  },
   EnrollmentSortOption: {
-    HOUSEHOLD_ID: 'HOUSEHOLD_ID',
-    MOST_RECENT: 'MOST_RECENT',
+    HOUSEHOLD_ID: 'Household ID',
+    MOST_RECENT: 'Most Recent',
   },
   EnrollmentStatus: {
     ACTIVE: 'Active',
@@ -430,6 +447,7 @@ export const HmisEnums = {
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  HouseholdSortOption: { MOST_RECENT: 'Most Recent' },
   HouseholdType: {
     INVALID: 'Invalid Value',
     HOUSEHOLDS_WITHOUT_CHILDREN: 'Households without children',
@@ -610,6 +628,13 @@ export const HmisEnums = {
     NOT_ATTAINED: 'Not attained',
     UNKNOWN: 'Unknown',
   },
+  PercentAMI: {
+    INVALID: 'Invalid Value',
+    LESS_THAN_30: 'Less than 30%',
+    NUM_30_TO_50: '30% to 50%',
+    GREATER_THAN_50: 'Greater than 50%',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   PickListType: {
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -627,6 +652,8 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
+    REFERRAL_POSTING_DENIAL_REASON_TYPES: 'Referral Posting Status',
+    REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
@@ -641,9 +668,10 @@ export const HmisEnums = {
     PLACED_ON_PRIORITIZATION_LIST: 'Placed on prioritization list',
     NOT_PLACED_ON_PRIORITIZATION_LIST: 'Not placed on prioritization list',
   },
+  ProjectFilterOptionStatus: { CLOSED: 'Closed', OPEN: 'Open' },
   ProjectSortOption: {
-    NAME: 'NAME',
-    ORGANIZATION_AND_NAME: 'ORGANIZATION_AND_NAME',
+    NAME: 'Name',
+    ORGANIZATION_AND_NAME: 'Organization and Name',
   },
   ProjectType: {
     CE: 'Coordinated Entry',
@@ -661,6 +689,13 @@ export const HmisEnums = {
     TH: 'Transitional Housing',
     OTHER: 'Other',
   },
+  RHYNumberofYears: {
+    INVALID: 'Invalid Value',
+    LESS_THAN_ONE_YEAR: 'Less than one year',
+    NUM_1_TO_2_YEARS: '1 to 2 years',
+    NUM_3_TO_5_OR_MORE_YEARS: '3 to 5 or more years',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   Race: {
     AM_IND_AK_NATIVE: 'American Indian, Alaska Native, or Indigenous',
     ASIAN: 'Asian or Asian American',
@@ -670,6 +705,21 @@ export const HmisEnums = {
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  ReasonNoServices: {
+    INVALID: 'Invalid Value',
+    OUT_OF_AGE_RANGE: 'Out of age range',
+    WARD_OF_THE_STATE: 'Ward of the state',
+    WARD_OF_THE_CRIMINAL_JUSTICE_SYSTEM: 'Ward of the criminal justice system',
+    OTHER: 'Other',
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  ReasonNotEnrolled: {
+    INVALID: 'Invalid Value',
+    CLIENT_WAS_FOUND_INELIGIBLE_FOR_PATH:
+      'Client was found ineligible for PATH',
+    CLIENT_WAS_NOT_ENROLLED_FOR_OTHER_REASON_S:
+      'Client was not enrolled for other reason(s)',
   },
   ReasonNotInsured: {
     INVALID: 'Invalid Value',
@@ -718,6 +768,26 @@ export const HmisEnums = {
       'Unsuccessful referral: client rejected',
     UNSUCCESSFUL_REFERRAL_PROVIDER_REJECTED:
       'Unsuccessful referral: provider rejected',
+  },
+  ReferralSource: {
+    INVALID: 'Invalid Value',
+    SELF_REFERRAL: 'Self-referral',
+    INDIVIDUAL_PARENT_GUARDIAN_RELATIVE_FRIEND_FOSTER_PARENT_OTHER_INDIVIDUAL:
+      'Individual: Parent/Guardian/Relative/Friend/Foster Parent/Other Individual',
+    OUTREACH_PROJECT: 'Outreach Project',
+    OUTREACH_PROJECT_OTHER: 'Outreach project: other',
+    TEMPORARY_SHELTER: 'Temporary Shelter',
+    RESIDENTIAL_PROJECT: 'Residential Project',
+    HOTLINE: 'Hotline',
+    CHILD_WELFARE_CPS: 'Child Welfare/CPS',
+    JUVENILE_JUSTICE: 'Juvenile Justice',
+    LAW_ENFORCEMENT_POLICE: 'Law Enforcement/ Police',
+    MENTAL_HOSPITAL: 'Mental Hospital',
+    SCHOOL: 'School',
+    OTHER_ORGANIZATION: 'Other organization',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   RelatedRecordType: {
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
@@ -962,6 +1032,18 @@ export const HmisEnums = {
     PATH_SERVICE__HOUSING_MOVING_ASSISTANCE: 'Housing moving assistance',
     SSVF_FINANCIAL_ASSISTANCE__TRANSPORTATION_SERVICES_VEHICLE_REPAIR_MAINTENANCE:
       'Transportation services: vehicle repair/maintenance',
+  },
+  SexualOrientation: {
+    INVALID: 'Invalid Value',
+    HETEROSEXUAL: 'Heterosexual',
+    GAY: 'Gay',
+    LESBIAN: 'Lesbian',
+    BISEXUAL: 'Bisexual',
+    QUESTIONING_UNSURE: 'Questioning / unsure',
+    OTHER: 'Other',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   TargetPopulation: {
     INVALID: 'Invalid Value',

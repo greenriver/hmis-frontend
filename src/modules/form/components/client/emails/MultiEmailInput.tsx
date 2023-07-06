@@ -63,7 +63,7 @@ const MultiEmailInputWrapper = ({
   value,
   ...props
 }: PartialPick<Props, 'value'>) => (
-  <MultiEmailInput {...props} value={value || [createInitialValue()]} />
+  <MultiEmailInput {...props} value={value || []} />
 );
 
 export default MultiEmailInputWrapper;

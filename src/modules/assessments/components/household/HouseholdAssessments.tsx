@@ -59,6 +59,7 @@ const HouseholdAssessments = ({
   const hasRefetched = useHasRefetched(networkStatus);
 
   useEffect(() => {
+    if (!householdMembers) return;
     setTabs((oldTabs) => {
       const newTabs: TabDefinition[] = householdMembers.map(
         ({ client, enrollment, relationshipToHoH }, index) => {

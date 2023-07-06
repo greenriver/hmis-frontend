@@ -5,7 +5,11 @@ import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ClientDashboardRoutes, ProjectDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  ProjectDashboardRoutes,
+  Routes,
+} from '@/routes/routes';
 
 type CrumbConfig = {
   [x: string]: {
@@ -13,6 +17,11 @@ type CrumbConfig = {
     parent?: string;
   };
 };
+
+interface Breadcrumb {
+  to: string;
+  label: string;
+}
 
 const buildParentPaths = (
   currentRoute: string,
@@ -26,86 +35,95 @@ const buildParentPaths = (
   }
 };
 
-function isProjectContext(
-  ctx: ClientDashboardContext | ProjectDashboardContext
-): ctx is ProjectDashboardContext {
-  return !!(
-    typeof ctx === 'object' &&
-    typeof (ctx as ProjectDashboardContext).project === 'object'
-  );
-}
+export const useProjectBreadcrumbConfig = (
+  context: ProjectDashboardContext | undefined
+): CrumbConfig => {
+  return useMemo(() => {
+    if (context == undefined) {
+      return {};
+    }
+    return {
+      [ProjectDashboardRoutes.OVERVIEW]: {
+        title: context.project.projectName,
+      },
+      [ProjectDashboardRoutes.EDIT_PROJECT]: {
+        title: 'Edit Project',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.ENROLLMENTS]: {
+        title: 'Enrollments',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.ADD_SERVICES]: {
+        title: 'Add Services',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.ADD_HOUSEHOLD]: {
+        title: 'New Household',
+        parent: ProjectDashboardRoutes.ENROLLMENTS,
+      },
+      [ProjectDashboardRoutes.REFERRALS]: {
+        title: 'Referrals',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.REFERRAL_POSTING]: {
+        title: 'Incoming Referral',
+        parent: ProjectDashboardRoutes.REFERRALS,
+      },
+      [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {
+        title: 'Request a Referral',
+        parent: ProjectDashboardRoutes.REFERRALS,
+      },
+      [ProjectDashboardRoutes.FUNDERS]: {
+        title: 'Funders',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.NEW_FUNDER]: {
+        title: 'Add Funder',
+        parent: ProjectDashboardRoutes.FUNDERS,
+      },
+      [ProjectDashboardRoutes.EDIT_FUNDER]: {
+        title: 'Edit Funder',
+        parent: ProjectDashboardRoutes.FUNDERS,
+      },
+      [ProjectDashboardRoutes.COCS]: {
+        title: 'Project CoCs',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.NEW_COC]: {
+        title: 'Add CoC',
+        parent: ProjectDashboardRoutes.COCS,
+      },
+      [ProjectDashboardRoutes.EDIT_COC]: {
+        title: 'Edit CoC',
+        parent: ProjectDashboardRoutes.COCS,
+      },
+      [ProjectDashboardRoutes.INVENTORY]: {
+        title: 'Inventory',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+      [ProjectDashboardRoutes.NEW_INVENTORY]: {
+        title: 'Add Inventory',
+        parent: ProjectDashboardRoutes.INVENTORY,
+      },
+      [ProjectDashboardRoutes.EDIT_INVENTORY]: {
+        title: 'Update Inventory',
+        parent: ProjectDashboardRoutes.INVENTORY,
+      },
+      [ProjectDashboardRoutes.UNITS]: {
+        title: 'Units',
+        parent: ProjectDashboardRoutes.OVERVIEW,
+      },
+    };
+  }, [context]);
+};
 
-export const useDashboardBreadcrumbs = (
-  context: ClientDashboardContext | ProjectDashboardContext,
-  breadcrumbOverrides?: Record<string, string>
-) => {
-  const crumbConfig: CrumbConfig = useMemo(() => {
-    if (isProjectContext(context)) {
-      return {
-        [ProjectDashboardRoutes.OVERVIEW]: {
-          title: context.project.projectName,
-        },
-        [ProjectDashboardRoutes.EDIT_PROJECT]: {
-          title: 'Edit Project',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.ENROLLMENTS]: {
-          title: 'Enrollments',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.ADD_SERVICES]: {
-          title: 'Add Services',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.REFERRALS]: {
-          title: 'Referrals',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {
-          title: 'Request a Referral',
-          parent: ProjectDashboardRoutes.REFERRALS,
-        },
-        [ProjectDashboardRoutes.FUNDERS]: {
-          title: 'Funders',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.NEW_FUNDER]: {
-          title: 'Add Funder',
-          parent: ProjectDashboardRoutes.FUNDERS,
-        },
-        [ProjectDashboardRoutes.EDIT_FUNDER]: {
-          title: 'Edit Funder',
-          parent: ProjectDashboardRoutes.FUNDERS,
-        },
-        [ProjectDashboardRoutes.COCS]: {
-          title: 'Project CoCs',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.NEW_COC]: {
-          title: 'Add CoC',
-          parent: ProjectDashboardRoutes.COCS,
-        },
-        [ProjectDashboardRoutes.EDIT_COC]: {
-          title: 'Edit CoC',
-          parent: ProjectDashboardRoutes.COCS,
-        },
-        [ProjectDashboardRoutes.INVENTORY]: {
-          title: 'Inventory',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-        [ProjectDashboardRoutes.NEW_INVENTORY]: {
-          title: 'Add Inventory',
-          parent: ProjectDashboardRoutes.INVENTORY,
-        },
-        [ProjectDashboardRoutes.EDIT_INVENTORY]: {
-          title: 'Update Inventory',
-          parent: ProjectDashboardRoutes.INVENTORY,
-        },
-        [ProjectDashboardRoutes.UNITS]: {
-          title: 'Units',
-          parent: ProjectDashboardRoutes.OVERVIEW,
-        },
-      };
+export const useClientBreadcrumbConfig = (
+  context: ClientDashboardContext | undefined
+): CrumbConfig => {
+  return useMemo(() => {
+    if (context == undefined) {
+      return {};
     }
     return {
       /**
@@ -178,6 +196,31 @@ export const useDashboardBreadcrumbs = (
       },
     };
   }, [context]);
+};
+
+export const useAdminBreadcrumbConfig = (): CrumbConfig => {
+  return useMemo(
+    () => ({
+      [Routes.ADMIN_REFERRAL_DENIAL]: {
+        title: 'Manage Denial',
+        parent: Routes.ADMIN_REFERRAL_DENIALS,
+      },
+      [Routes.ADMIN_REFERRAL_DENIALS]: {
+        title: 'Denials',
+        parent: Routes.ADMIN,
+      },
+      [Routes.ADMIN]: {
+        title: 'Admin',
+      },
+    }),
+    []
+  );
+};
+
+export const useDashboardBreadcrumbs = (
+  crumbConfig: CrumbConfig,
+  breadcrumbOverrides?: Record<string, string>
+): Array<Breadcrumb> => {
   const { pathname } = useLocation();
 
   const currentPath = useCurrentPath();

@@ -1,5 +1,5 @@
 import { Box, Skeleton, Typography } from '@mui/material';
-import { compact, min } from 'lodash-es';
+import { min } from 'lodash-es';
 import React from 'react';
 
 import TableFilterMenu from './filters/FilterMenu';
@@ -26,6 +26,8 @@ export interface TableFiltersProps<T, S> {
   };
   pagination?: PaginationProps;
   loading?: boolean;
+  noSort?: boolean;
+  noFilter?: boolean;
 }
 
 const PaginationDisplay: React.FC<PaginationProps> = ({
@@ -33,16 +35,15 @@ const PaginationDisplay: React.FC<PaginationProps> = ({
   limit,
   offset,
 }): JSX.Element => {
+  const rangeEnd = min([totalEntries, offset + limit]);
+  const rangeStart = limit < totalEntries ? offset + 1 : rangeEnd;
+
+  const displayRange =
+    rangeStart === rangeEnd ? rangeStart : [rangeStart, rangeEnd].join('-');
   return (
     <Typography variant='body2'>
-      Displaying{' '}
-      <strong>
-        {compact([
-          limit < totalEntries ? offset + 1 : undefined,
-          min([totalEntries, offset + limit]),
-        ]).join('-')}
-      </strong>{' '}
-      of <strong>{totalEntries}</strong> records
+      Displaying <strong>{displayRange}</strong> of{' '}
+      <strong>{totalEntries}</strong> records
     </Typography>
   );
 };
@@ -52,6 +53,8 @@ const TableFilters = <T, S extends Record<string, string>>({
   sorting,
   pagination,
   loading,
+  noSort = false,
+  noFilter = false,
 }: TableFiltersProps<T, S>) => {
   return (
     <Box display='flex' alignItems='center' gap={1}>
@@ -64,12 +67,12 @@ const TableFilters = <T, S extends Record<string, string>>({
           pagination && <PaginationDisplay {...pagination} />
         )}
       </Box>
-      {filters && (
+      {filters && !noFilter && (
         <Box>
           <TableFilterMenu {...filters} />
         </Box>
       )}
-      {sorting && (
+      {sorting && !noSort && (
         <Box>
           <TableSortMenu {...sorting} />
         </Box>

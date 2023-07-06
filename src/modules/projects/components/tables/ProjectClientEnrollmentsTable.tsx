@@ -1,4 +1,5 @@
 import { Stack, Tooltip, Typography } from '@mui/material';
+import { omit } from 'lodash-es';
 import { useCallback, useMemo } from 'react';
 
 import EnrollmentStatus from '@/components/elements/EnrollmentStatus';
@@ -14,6 +15,9 @@ import {
 } from '@/modules/hmis/hmisUtil';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import {
+  EnrollmentFilterOptionStatus,
+  EnrollmentSortOption,
+  EnrollmentsForProjectFilterOptions,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -99,16 +103,12 @@ const ProjectClientEnrollmentsTable = ({
   openOnDate,
   linkRowToEnrollment = false,
   searchTerm,
-  // TODO: implement, needs a backend flag
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  wipEnrollmentsOnly = false,
 }: {
   projectId: string;
   columns?: typeof defaultColumns;
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchTerm?: string;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const rowLinkTo = useCallback(
     (en: EnrollmentFields) =>
@@ -127,12 +127,15 @@ const ProjectClientEnrollmentsTable = ({
     <GenericTableWithData<
       GetProjectEnrollmentsQuery,
       GetProjectEnrollmentsQueryVariables,
-      EnrollmentFields
+      EnrollmentFields,
+      EnrollmentsForProjectFilterOptions
     >
       queryVariables={{
         id: projectId,
-        searchTerm,
-        openOnDate: openOnDateString,
+        filters: {
+          searchTerm,
+          openOnDate: openOnDateString,
+        },
       }}
       queryDocument={GetProjectEnrollmentsDocument}
       columns={columns || defaultColumns}
@@ -143,6 +146,17 @@ const ProjectClientEnrollmentsTable = ({
           : 'No clients.'
       }
       pagePath='project.enrollments'
+      recordType='Enrollment'
+      showFilters
+      filters={(f) => omit(f, 'searchTerm')}
+      filterInputType='EnrollmentsForProjectFilterOptions'
+      defaultSortOption={EnrollmentSortOption.MostRecent}
+      defaultFilters={{
+        status: [
+          EnrollmentFilterOptionStatus.Active,
+          EnrollmentFilterOptionStatus.Incomplete,
+        ],
+      }}
     />
   );
 };

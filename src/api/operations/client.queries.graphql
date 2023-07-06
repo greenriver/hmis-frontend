@@ -47,10 +47,20 @@ query GetClientImage($id: ID!) {
   }
 }
 
-query GetClientEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+query GetClientEnrollments(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $filters: EnrollmentsForClientFilterOptions
+) {
   client(id: $id) {
     id
-    enrollments(limit: $limit, offset: $offset, sortOrder: MOST_RECENT) {
+    enrollments(
+      limit: $limit
+      offset: $offset
+      sortOrder: MOST_RECENT
+      filters: $filters
+    ) {
       offset
       limit
       nodesCount
@@ -110,7 +120,7 @@ query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       limit: $limit
       offset: $offset
       sortOrder: MOST_RECENT
-      enrollmentLimit: NON_WIP_ONLY
+      filters: { status: [ACTIVE, EXITED] }
     ) {
       offset
       limit
@@ -218,36 +228,6 @@ mutation DeleteClient($input: DeleteClientInput!) {
   }
 }
 
-query GetService($id: ID!) {
-  service(id: $id) {
-    ...ServiceFields
-  }
-}
-
-mutation AddServiceToEnrollment($input: CreateServiceInput!) {
-  createService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteService($input: DeleteServiceInput!) {
-  deleteService(input: $input) {
-    clientMutationId
-    service {
-      ...ServiceFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 query GetEnrollment($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields
@@ -276,20 +256,6 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
       nodesCount
       nodes {
         ...EventFields
-      }
-    }
-  }
-}
-
-query GetEnrollmentServices($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  enrollment(id: $id) {
-    id
-    services(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...ServiceFields
       }
     }
   }

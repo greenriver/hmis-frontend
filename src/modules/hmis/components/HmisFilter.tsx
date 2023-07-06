@@ -6,7 +6,13 @@ import TableFilterItem from '@/components/elements/tableFilters/filters/FilterIt
 import { BaseFilter, FilterType } from '@/modules/dataFetching/types';
 import { HmisEnums } from '@/types/gqlEnums';
 import { GqlInputObjectSchemaType } from '@/types/gqlObjects';
-import { AssessmentSortOption, PickListType } from '@/types/gqlTypes';
+import {
+  AssessmentSortOption,
+  EnrollmentSortOption,
+  HouseholdSortOption,
+  PickListType,
+  ProjectSortOption,
+} from '@/types/gqlTypes';
 
 /**
  * Component for dynamically displaying a filter
@@ -29,26 +35,17 @@ const getType = (
   return getType(type.ofType);
 };
 
-const getFilterValuesForRecordType = <T,>(
-  recordType: string,
-  fieldName: string,
-  baseFilter: FilterType<T>
-): FilterType<T> => {
-  if (recordType === 'Assessment') {
-    if (fieldName === 'roles' && baseFilter.type === 'enum')
-      return { ...baseFilter, multi: true };
-    if (fieldName === 'projects' && baseFilter.type === 'picklist')
-      return { ...baseFilter, multi: true };
-  }
-
-  return baseFilter;
-};
-
 export const getSortOptionForType = (
   recordType: string
 ): Record<string, string> | null => {
   if (recordType === 'Assessment')
     return HmisEnums.AssessmentSortOption as Record<string, string>;
+  if (recordType === 'Enrollment')
+    return HmisEnums.EnrollmentSortOption as Record<string, string>;
+  if (recordType === 'Household')
+    return HmisEnums.HouseholdSortOption as Record<string, string>;
+  if (recordType === 'Project')
+    return HmisEnums.ProjectSortOption as Record<string, string>;
 
   return null;
 };
@@ -57,6 +54,9 @@ export const getDefaultSortOptionForType = (
   recordType: string
 ): string | null => {
   if (recordType === 'Assessment') return AssessmentSortOption.AssessmentDate;
+  if (recordType === 'Enrollment') return EnrollmentSortOption.MostRecent;
+  if (recordType === 'Household') return HouseholdSortOption.MostRecent;
+  if (recordType === 'Project') return ProjectSortOption.Name;
 
   return null;
 };
@@ -64,7 +64,7 @@ export const getDefaultSortOptionForType = (
 export const getInputTypeForRecordType = (
   recordType: string
 ): string | null => {
-  if (recordType === 'Assessment') return 'AssessmentFilterOptions';
+  return `${recordType}FilterOptions`;
 
   return null;
 };
@@ -72,44 +72,39 @@ export const getInputTypeForRecordType = (
 const getFilterForType = (
   recordType: string,
   fieldName: any,
-  type: GqlInputObjectSchemaType['name']
+  type: GqlInputObjectSchemaType
 ): FilterType<any> | null => {
-  if (!type) return null;
+  const inputType = getType(type);
+  if (!inputType) return null;
 
   const baseFields: BaseFilter<any> = {
     key: fieldName,
-    label: startCase(fieldName),
+    label: startCase(fieldName).replace(/\bHoh\b/, 'HoH'),
+    multi: type.kind === 'LIST',
   };
 
   let filter: FilterType<any> | null = null;
 
-  switch (fieldName) {
-    case 'textSearch':
-      filter = { ...baseFields, type: 'text' };
-      break;
-    case 'projects':
-      filter = {
-        ...baseFields,
-        type: 'picklist',
-        pickListReference: PickListType.Project,
-      };
-      break;
-  }
+  if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
+  if (inputType === 'String') filter = { ...baseFields, type: 'text' };
 
-  if (type in HmisEnums) {
-    const enumType = HmisEnums[type as keyof typeof HmisEnums];
+  if (fieldName === 'projects')
     filter = {
       ...baseFields,
-      enumType,
+      type: 'picklist',
+      pickListReference: PickListType.Project,
+    };
+
+  if (inputType in HmisEnums) {
+    filter = {
+      ...baseFields,
+      enumType: inputType as keyof typeof HmisEnums,
       variant: 'select',
       type: 'enum',
     };
   }
 
-  if (filter)
-    return getFilterValuesForRecordType(recordType, fieldName, filter);
-
-  return null;
+  return filter || null;
 };
 
 export const getFilter = (
@@ -122,10 +117,7 @@ export const getFilter = (
   );
   if (!fieldSchema) return null;
 
-  const type = getType(fieldSchema.type);
-  if (!type) return null;
-
-  return getFilterForType(recordType, fieldName, type);
+  return getFilterForType(recordType, fieldName, fieldSchema.type);
 };
 
 const HmisFilter = ({

@@ -1,6 +1,6 @@
 import { Stack } from '@mui/material';
 import Button from '@mui/material/Button';
-import Dialog, { DialogProps } from '@mui/material/Dialog';
+import { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -22,16 +22,17 @@ import DisabilitiesTable from '@/components/clientDashboard/enrollments/tables/D
 import EnrollmentsTable from '@/components/clientDashboard/enrollments/tables/EnrollmentsTable';
 import HealthAndDvsTable from '@/components/clientDashboard/enrollments/tables/HealthAndDvsTable';
 import IncomeBenefitsTable from '@/components/clientDashboard/enrollments/tables/IncomeBenefitsTable';
+import CommonDialog from '@/components/elements/CommonDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
 import RelativeDate from '@/components/elements/RelativeDate';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import { renderHmisField } from '@/modules/hmis/components/HmisField';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  FormRole,
-  FormItem,
-  RelatedRecordType,
   AssessmentRole,
+  FormItem,
+  FormRole,
+  RelatedRecordType,
 } from '@/types/gqlTypes';
 
 interface Props extends Omit<DialogProps, 'children'> {
@@ -114,22 +115,18 @@ const RecordPickerDialog = ({
   const height = `${Math.min(columns.length * 60 + 250, 850)}px`;
 
   return (
-    <Dialog
+    <CommonDialog
       open={open}
       keepMounted={false}
       maxWidth='lg'
       fullWidth
       onClose={onCancel}
       sx={{
-        '.MuiDialog-paper': { px: 1, overflow: 'hidden', height },
+        '.MuiDialog-paper': { overflow: 'hidden', height },
       }}
       {...other}
     >
-      <DialogTitle
-        typography='h5'
-        sx={{ textTransform: 'none' }}
-        color='text.primary'
-      >
+      <DialogTitle>
         {item ? (
           <>
             Choose record for <b>{item.text}</b>
@@ -142,6 +139,7 @@ const RecordPickerDialog = ({
       <DialogContent
         sx={{
           pb: 6,
+          my: 2,
           overflow: 'hidden',
           height: '100%', // need for scrolling
         }}
@@ -207,12 +205,12 @@ const RecordPickerDialog = ({
           }}
         />
       </DialogContent>
-      <DialogActions sx={{ px: 4, py: 2, justifyContent: 'center' }}>
+      <DialogActions sx={{ justifyContent: 'center' }}>
         <Button onClick={onCancel} variant='gray'>
           Close
         </Button>
       </DialogActions>
-    </Dialog>
+    </CommonDialog>
   );
 };
 

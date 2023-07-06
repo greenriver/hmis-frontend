@@ -1,10 +1,11 @@
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import RouterLink from '@/components/elements/RouterLink';
+import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
@@ -12,6 +13,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
+import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import { ClientDashboardRoutes, Routes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -23,6 +25,11 @@ const ViewEnrollment = () => {
     clientId: string;
   };
 
+  const { renderServiceDialog, openServiceDialog } = useServiceDialog({
+    enrollmentId,
+    projectId: enrollment?.project.id || '',
+  });
+
   if (!enrollment) return <NotFound />;
 
   return (
@@ -33,22 +40,13 @@ const ViewEnrollment = () => {
       <Grid container spacing={4}>
         <Grid item xs={9}>
           <Stack spacing={2}>
-            <Paper sx={{ pt: 2 }}>
-              <Stack
-                gap={3}
-                direction='row'
-                justifyContent={'space-between'}
-                sx={{ mb: 2, px: 3, alignItems: 'center' }}
-              >
-                <Typography variant='h5' sx={{ mb: 0 }}>
-                  Household
-                </Typography>
-              </Stack>
+            <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
               />
-            </Paper>
+            </TitleCard>
+
             <Paper sx={{ pt: 2 }}>
               <EnrollmentRecordTabs enrollment={enrollment} />
             </Paper>
@@ -73,16 +71,15 @@ const ViewEnrollment = () => {
                 >
                   New Assessment
                 </ButtonLink>
-                <ButtonLink
-                  to={generateSafePath(ClientDashboardRoutes.NEW_SERVICE, {
-                    clientId,
-                    enrollmentId,
-                  })}
-                  Icon={LibraryAddIcon}
-                  leftAlign
+                <Button
+                  onClick={openServiceDialog}
+                  startIcon={<LibraryAddIcon fontSize='small' />}
+                  variant='outlined'
+                  color='secondary'
+                  sx={{ pl: 3, justifyContent: 'left' }}
                 >
                   Add Service
-                </ButtonLink>
+                </Button>
                 <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
                   Add Event
                 </ButtonLink>
@@ -115,6 +112,7 @@ const ViewEnrollment = () => {
           </Paper>
         </Grid>
       </Grid>
+      {renderServiceDialog()}
     </>
   );
 };

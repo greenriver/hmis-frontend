@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 
 import useFormDefinition from '../hooks/useFormDefinition';
+import { SubmitFormAllowedTypes } from '../types';
 import { createInitialValuesFromRecord } from '../util/formUtil';
 
 import DynamicView from './viewable/DynamicView';
 
 import Loading from '@/components/elements/Loading';
 import NotFound from '@/components/pages/NotFound';
-import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 export interface ViewRecordProps<RecordType> {
   record: RecordType;
@@ -15,15 +16,11 @@ export interface ViewRecordProps<RecordType> {
   pickListRelationId?: string;
 }
 
-type AllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
->;
-
 /**
  * Read-only version of EditRecord.
  * Displays a record using its form definition.
  */
-const ViewRecord = <RecordType extends AllowedTypes>({
+const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   record,
   formRole,
   pickListRelationId,

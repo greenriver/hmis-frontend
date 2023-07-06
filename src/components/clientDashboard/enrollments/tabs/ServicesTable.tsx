@@ -1,23 +1,18 @@
-import { Button, Stack, Typography } from '@mui/material';
-import { useCallback, useMemo, useState } from 'react';
+import { Stack, Typography } from '@mui/material';
+import { useState } from 'react';
 
-import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { ColumnDef } from '@/components/elements/GenericTable';
+import LabelWithContent from '@/components/elements/LabelWithContent';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
-import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { parseAndFormatDate, serviceDetails } from '@/modules/hmis/hmisUtil';
-import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
-import { HmisEnums } from '@/types/gqlEnums';
+import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 import {
   EnrollmentFieldsFragment,
   GetEnrollmentServicesDocument,
   GetEnrollmentServicesQuery,
   GetEnrollmentServicesQueryVariables,
   ServiceFieldsFragment,
-  useDeleteServiceMutation,
 } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
   clientId: string;
@@ -28,18 +23,16 @@ interface Props {
 const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
   {
     header: 'Date Provided',
+    linkTreatment: true,
     render: (e) => parseAndFormatDate(e.dateProvided),
   },
   {
-    header: 'Type',
-    linkTreatment: true,
-    render: (e) => (
-      <HmisEnum
-        value={e.recordType}
-        color='inherit'
-        enumMap={HmisEnums.RecordType}
-      />
-    ),
+    header: 'Category',
+    render: 'serviceType.category' as keyof ServiceFieldsFragment,
+  },
+  {
+    header: 'Service Type',
+    render: 'serviceType.name' as keyof ServiceFieldsFragment,
   },
   {
     header: 'Details',
@@ -56,107 +49,71 @@ const baseColumns: ColumnDef<ServiceFieldsFragment>[] = [
   },
 ];
 
-const ServicesTable: React.FC<Props> = ({
-  clientId,
-  enrollmentId,
-  enrollment,
-}) => {
-  const [recordToDelete, setRecordToDelete] =
-    useState<ServiceFieldsFragment | null>(null);
-  const rowLinkTo = useCallback(
-    (record: ServiceFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.EDIT_SERVICE, {
-        clientId,
-        enrollmentId,
-        serviceId: record.id,
-      }),
-    [clientId, enrollmentId]
-  );
+const ServicesTable: React.FC<Props> = ({ enrollmentId, enrollment }) => {
+  const canEditServices = enrollment.access.canEditEnrollments;
+  const [viewingRecord, setViewingRecord] = useState<
+    ServiceFieldsFragment | undefined
+  >();
 
-  const [deleteRecord, { loading: deleteLoading, error: deleteError }] =
-    useDeleteServiceMutation({
-      onCompleted: (res) => {
-        const id = res.deleteService?.service?.id;
-        if (id) {
-          setRecordToDelete(null);
-          // Force re-fetch table
-          cache.evict({
-            id: `Enrollment:${enrollmentId}`,
-            fieldName: 'services',
-          });
-        }
-      },
-    });
-  const handleDelete = useCallback(() => {
-    if (!recordToDelete) return;
-    deleteRecord({ variables: { input: { id: recordToDelete.id } } });
-  }, [recordToDelete, deleteRecord]);
-  if (deleteError) console.error(deleteError);
-
-  const columns = useMemo(
-    () =>
-      enrollment.access.canEditEnrollments
-        ? [
-            ...baseColumns,
-            {
-              header: '',
-              render: (record) => (
-                <Stack direction='row' spacing={1}>
-                  {/* FIXME: use DeleteMutationButton */}
-                  <Button
-                    data-testid='deleteService'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setRecordToDelete(record);
-                    }}
-                    size='small'
-                    variant='outlined'
-                    color='error'
-                  >
-                    Delete
-                  </Button>
-                </Stack>
-              ),
-            },
-          ]
-        : baseColumns,
-    [enrollment]
-  );
+  const { renderServiceDialog, openServiceDialog } = useServiceDialog({
+    enrollmentId,
+    projectId: enrollment?.project.id || '',
+    service: viewingRecord,
+  });
 
   return (
-    <Stack>
+    <>
       <GenericTableWithData<
         GetEnrollmentServicesQuery,
         GetEnrollmentServicesQueryVariables,
         ServiceFieldsFragment
       >
-        rowLinkTo={rowLinkTo}
+        handleRowClick={
+          canEditServices
+            ? (record) => {
+                setViewingRecord(record);
+                openServiceDialog();
+              }
+            : undefined
+        }
         queryVariables={{ id: enrollmentId }}
         queryDocument={GetEnrollmentServicesDocument}
-        columns={columns}
+        columns={baseColumns}
         pagePath='enrollment.services'
         noData='No services.'
         headerCellSx={() => ({ color: 'text.secondary' })}
       />
-      <ConfirmationDialog
-        id='deleteService'
-        open={!!recordToDelete}
-        title='Delete Service'
-        onConfirm={handleDelete}
-        onCancel={() => setRecordToDelete(null)}
-        loading={deleteLoading}
-      >
-        {recordToDelete && (
-          <>
-            <Typography>
-              Are you sure you want to delete this service?
-            </Typography>
-            <Typography>This action cannot be undone.</Typography>
-          </>
-        )}
-      </ConfirmationDialog>
-    </Stack>
+
+      {viewingRecord &&
+        renderServiceDialog({
+          dialogContent: (
+            <>
+              {viewingRecord.serviceType.category !==
+                viewingRecord.serviceType.name && (
+                <LabelWithContent
+                  label='Service Category'
+                  LabelProps={{ sx: { fontWeight: 600 } }}
+                  sx={{ mb: 2 }}
+                >
+                  <Typography variant='body2'>
+                    {viewingRecord.serviceType.category}
+                  </Typography>
+                </LabelWithContent>
+              )}
+
+              <LabelWithContent
+                label='Service Type'
+                LabelProps={{ sx: { fontWeight: 600 } }}
+                sx={{ mb: 2 }}
+              >
+                <Typography variant='body2'>
+                  {viewingRecord.serviceType.name}
+                </Typography>
+              </LabelWithContent>
+            </>
+          ),
+        })}
+    </>
   );
 };
 

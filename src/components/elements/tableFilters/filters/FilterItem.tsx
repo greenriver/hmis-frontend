@@ -1,3 +1,4 @@
+import DatePicker from '../../input/DatePicker';
 import TextInput from '../../input/TextInput';
 import LabelWithContent from '../../LabelWithContent';
 
@@ -6,6 +7,7 @@ import PickListWrapper from './items/PickListWrapper';
 import TableFilterItemSelect from './items/Select';
 
 import { FilterType, SelectElementVariant } from '@/modules/dataFetching/types';
+import { localResolvePickList } from '@/modules/form/util/formUtil';
 import { PickListOption } from '@/types/gqlTypes';
 
 export interface TableFilterItemSelectorProps {
@@ -14,6 +16,7 @@ export interface TableFilterItemSelectorProps {
   value: string | string[] | null | undefined;
   onChange: (value: string | string[] | null | undefined) => any;
   loading?: boolean;
+  placeholder?: string;
 }
 
 const TableFilterItemSelector = ({
@@ -50,16 +53,27 @@ const TableFilterItem = <T,>({
             />
           );
 
+        if (filter.type === 'date')
+          return (
+            <DatePicker
+              value={value ? new Date(value) : null}
+              onChange={(val) => onChange(val)}
+            />
+          );
+
+        const placeholder =
+          typeof filter.label === 'string'
+            ? `Select ${filter.label}...`
+            : undefined;
+
         if (filter.type === 'enum')
           return (
             <TableFilterItemSelector
               variant={filter.variant}
-              options={Object.entries(filter.enumType).map(([key, val]) => ({
-                code: key,
-                label: val,
-              }))}
+              options={localResolvePickList(filter.enumType, true) || []}
               value={filter.multi ? value || [] : value}
               onChange={onChange}
+              placeholder={placeholder}
             />
           );
 
@@ -76,6 +90,7 @@ const TableFilterItem = <T,>({
                   options={options}
                   value={filter.multi ? value || [] : value}
                   onChange={onChange}
+                  placeholder={placeholder}
                 />
               )}
             </PickListWrapper>

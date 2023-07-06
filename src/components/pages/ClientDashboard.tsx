@@ -1,4 +1,5 @@
 import { Container } from '@mui/material';
+import { isNil } from 'lodash-es';
 import { useMemo, useState } from 'react';
 import { Outlet, useOutletContext } from 'react-router-dom';
 
@@ -12,11 +13,16 @@ import { useDashboardNavItems } from '../layout/dashboard/sideNav/useDashboardNa
 
 import NotFound from './NotFound';
 
+import {
+  useClientBreadcrumbConfig,
+  useDashboardBreadcrumbs,
+} from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import { useDashboardState } from '@/hooks/useDashboardState';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import useSafeParams from '@/hooks/useSafeParams';
 import ClientCardMini from '@/modules/client/components/ClientCardMini';
 import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
+import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ClientFieldsFragment,
   EnrollmentFieldsFragment,
@@ -63,6 +69,12 @@ const ClientDashboard: React.FC = () => {
     [client, enrollment, enrollmentLoading]
   );
 
+  const breadCrumbConfig = useClientBreadcrumbConfig(outletContext);
+  const breadcrumbs = useDashboardBreadcrumbs(
+    breadCrumbConfig,
+    breadcrumbOverrides
+  );
+
   if (loading || enrollmentLoading || !navItems) return <Loading />;
   if (!client || !outletContext) return <NotFound />;
   if (enrollment && enrollment.client.id !== params.clientId) {
@@ -82,12 +94,7 @@ const ClientDashboard: React.FC = () => {
     <DashboardContentContainer
       navHeader={<ClientCardMini client={client} />}
       sidebar={<SideNavMenu items={navItems} />}
-      contextHeader={
-        <ContextHeaderContent
-          breadcrumbOverrides={breadcrumbOverrides}
-          dashboardContext={outletContext}
-        />
-      }
+      contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       navLabel='Client Navigation'
       {...dashboardState}
     >
@@ -108,6 +115,17 @@ export type ClientDashboardContext = {
   enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
+
+export function isClientDashboardContext(
+  value: ClientDashboardContext | ProjectDashboardContext
+): value is ClientDashboardContext {
+  return (
+    !isNil(value) &&
+    typeof value === 'object' &&
+    !!value.hasOwnProperty('client')
+  );
+}
+
 export const useClientDashboardContext = () =>
   useOutletContext<ClientDashboardContext>();
 

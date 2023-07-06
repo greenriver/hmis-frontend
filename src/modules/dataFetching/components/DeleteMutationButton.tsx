@@ -1,6 +1,6 @@
 import { TypedDocumentNode, useMutation } from '@apollo/client';
 import { Button, ButtonProps, Typography } from '@mui/material';
-import { camelCase, get } from 'lodash-es';
+import { camelCase, capitalize, get } from 'lodash-es';
 import { ReactNode, useCallback, useState } from 'react';
 
 import ConfirmationDialog, {
@@ -82,7 +82,7 @@ const DeleteMutationButton = <Mutation, MutationVariables>({
       <ConfirmationDialog
         id='deleteRecordDialog'
         open={showDialog}
-        title={`${verb} ${recordName}`}
+        title={`${capitalize(verb)} ${recordName}`}
         confirmText={`Yes, ${verb} ${recordName}`}
         cancelText='Close'
         onConfirm={handleDelete}

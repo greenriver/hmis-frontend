@@ -27,12 +27,20 @@ interface Props {
 }
 
 const MainLayout: React.FC<Props> = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { user, loading: userLoading } = useAuth();
   const { appName } = useHmisAppSettings();
   const isPrint = useIsPrintView();
+
   // Load root permissions into the cache before loading the page
-  const { loading: permissionsLoading } = useGetRootPermissionsQuery();
-  if (loading || permissionsLoading || !user) return <Loading />;
+  const {
+    data,
+    loading: permissionLoading,
+    error,
+  } = useGetRootPermissionsQuery();
+  if (error) throw error;
+
+  if (userLoading && !user) return <Loading />;
+  if (permissionLoading && !data) return <Loading />;
 
   if (isPrint)
     return (
@@ -84,11 +92,10 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         <Toolbar sx={{ flexWrap: 'none', overflow: 'hidden', gap: 2 }}>
           <RouterLink
             variant='h1'
-            color='secondary'
             noWrap
             underline='none'
             to='/'
-            sx={{ textTransform: 'uppercase' }}
+            sx={{ textTransform: 'uppercase', color: 'secondary.main' }}
           >
             {appName || 'Open Path HMIS'}
           </RouterLink>
@@ -111,6 +118,16 @@ const MainLayout: React.FC<Props> = ({ children }) => {
           >
             Projects
           </ButtonLink>
+          <RootPermissionsFilter permissions={'canManageDeniedReferrals'}>
+            <ButtonLink
+              variant='text'
+              to={Routes.ADMIN}
+              data-testid='navToAdmin'
+              sx={navItemSx}
+            >
+              Admin
+            </ButtonLink>
+          </RootPermissionsFilter>
           <Box sx={{ mx: 2 }}>
             <OmniSearch />
           </Box>

@@ -24,7 +24,6 @@ import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollmen
 import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
-import Service from '@/components/clientDashboard/Service';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
 import AllProjects from '@/components/pages/AllProjects';
@@ -38,7 +37,11 @@ import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
 import useSafeParams from '@/hooks/useSafeParams';
+import AdminDashboard from '@/modules/admin/components/AdminDashboard';
+import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
+import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
+import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -55,6 +58,7 @@ import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
 import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments';
 import Project from '@/modules/projects/components/ProjectOverview';
+import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
@@ -111,6 +115,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.REFERRALS,
             element: <ProjectReferrals />,
+          },
+          {
+            path: ProjectDashboardRoutes.REFERRAL_POSTING,
+            element: <ProjectReferralPosting />,
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
@@ -200,9 +208,20 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute
                 permissions={['canEditEnrollments']}
-                redirectRoute={Routes.PROJECT}
+                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
               >
                 <AddServices />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.ADD_HOUSEHOLD,
+            element: (
+              <ProjectEditRoute
+                permissions={['canEditEnrollments']}
+                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
+              >
+                <CreateHouseholdPage />
               </ProjectEditRoute>
             ),
           },
@@ -355,28 +374,6 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ClientDashboardRoutes.NEW_SERVICE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <Service create />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.EDIT_SERVICE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <Service />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
             path: ClientDashboardRoutes.ALL_ENROLLMENTS,
             element: (
               <EnrollmentsRoute
@@ -457,6 +454,24 @@ export const protectedRoutes: RouteNode[] = [
           { path: ClientDashboardRoutes.LOCATIONS, element: null },
           { path: ClientDashboardRoutes.REFERRALS, element: null },
           { path: '*', element: <Navigate to='profile' replace /> },
+        ],
+      },
+      {
+        path: Routes.ADMIN,
+        element: <AdminDashboard />,
+        children: [
+          {
+            path: '',
+            element: <Navigate to={Routes.ADMIN_REFERRAL_DENIALS} replace />,
+          },
+          {
+            path: Routes.ADMIN_REFERRAL_DENIALS,
+            element: <AdminReferralDenials />,
+          },
+          {
+            path: Routes.ADMIN_REFERRAL_DENIAL,
+            element: <AdminReferralPosting />,
+          },
         ],
       },
       // Route for testing sentry errors

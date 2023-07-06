@@ -1,12 +1,12 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { IconButton } from '@mui/material';
 import Button, { ButtonProps } from '@mui/material/Button';
-import Dialog, { DialogProps } from '@mui/material/Dialog';
+import { DialogProps } from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Stack } from '@mui/system';
 import * as React from 'react';
+
+import CommonDialog from './CommonDialog';
 
 import LoadingButton from '@/components/elements/LoadingButton';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
@@ -49,21 +49,9 @@ const ConfirmationDialog = ({
 }: ConfirmationDialogProps) => {
   const unconfirmable = errorState && hasErrors(errorState);
   return (
-    <Dialog keepMounted={false} {...other}>
-      <DialogTitle
-        sx={{
-          py: 3,
-          '&.MuiDialogTitle-root': {
-            textTransform: 'capitalize',
-            color: 'text.primary',
-            fontSize: 20,
-            fontWeight: 600,
-          },
-        }}
-      >
-        {title}
-      </DialogTitle>
-      <DialogContent sx={{ pb: 3 }}>
+    <CommonDialog keepMounted={false} onClose={onCancel} {...other}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent sx={{ mt: 2 }}>
         {children}
         {errorState && hasAnyValue(errorState) && (
           <Stack gap={1} sx={{ mt: children ? 3 : undefined }}>
@@ -75,17 +63,7 @@ const ConfirmationDialog = ({
           </Stack>
         )}
       </DialogContent>
-
-      <DialogActions
-        sx={{
-          px: 4,
-          py: 2,
-          // justifyContent: 'center',
-          borderTopWidth: 1,
-          borderTopStyle: 'solid',
-          borderTopColor: 'borders.light',
-        }}
-      >
+      <DialogActions>
         <Stack gap={3} direction='row'>
           {!hideCancelButton && (
             <Button
@@ -110,19 +88,7 @@ const ConfirmationDialog = ({
           )}
         </Stack>
       </DialogActions>
-      <IconButton
-        aria-label='close'
-        onClick={onCancel}
-        sx={{
-          position: 'absolute',
-          right: 8,
-          top: 8,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-    </Dialog>
+    </CommonDialog>
   );
 };
 

@@ -14,7 +14,7 @@ export function useRecentAssessments(enrollmentId: string) {
     variables: {
       id: enrollmentId,
       filters: {
-        roles: [
+        type: [
           AssessmentRole.Intake,
           AssessmentRole.Exit,
           AssessmentRole.Annual,

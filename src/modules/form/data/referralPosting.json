@@ -1,0 +1,52 @@
+{
+  "item": [
+    {
+      "type": "CHOICE",
+      "linkId": "status",
+      "required": true,
+      "text": "Referral Status",
+      "fieldName": "status",
+      "pickListReference": "REFERRAL_POSTING_STATUSES"
+    },
+    {
+      "type": "CHOICE",
+      "linkId": "denialReasonId",
+      "required": true,
+      "text": "Reason for Denial",
+      "fieldName": "denialReason",
+      "enableBehavior": "ALL",
+      "enableWhen": [
+        {
+          "question": "status",
+          "operator": "EQUAL",
+          "answerCode": "denied_pending_status"
+        }
+      ],
+      "pickListOptions": [
+        {
+          "code": "3",
+          "label": "No Show"
+        },
+        {
+          "code": "17",
+          "label": "Vacancy no longer exit-pending"
+        },
+        {
+          "code": "18",
+          "label": "Household Enrolled but Refused HMIS"
+        },
+        {
+          "code": "19",
+          "label": "Estimated vacancy no longer available"
+        }
+      ]
+    },
+    {
+      "type": "TEXT",
+      "linkId": "statusNote",
+      "required": false,
+      "text": "Notes",
+      "fieldName": "statusNote"
+    }
+  ]
+}

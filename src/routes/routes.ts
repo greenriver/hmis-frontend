@@ -3,6 +3,9 @@ export const Routes = {
   CREATE_CLIENT: '/client/new',
   CLIENT_DASHBOARD: '/client/:clientId',
   ALL_PROJECTS: '/projects',
+  ADMIN: '/admin',
+  ADMIN_REFERRAL_DENIALS: '/admin/referral-denials',
+  ADMIN_REFERRAL_DENIAL: '/admin/referral-denials/:referralPostingId',
   PROJECT: '/projects/:projectId',
   ORGANIZATION: '/organizations/:organizationId',
   EDIT_ORGANIZATION: '/organizations/:organizationId/edit',
@@ -43,9 +46,11 @@ const projectClientDashboardRoutes = {
   // Enrollment-related
   ENROLLMENTS: 'enrollments',
   ADD_SERVICES: 'add-services',
+  ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
   NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
   NEW_REFERRAL: 'referrals/new-referral',
+  REFERRAL_POSTING: 'referrals/:referralPostingId',
 
   // Project setup
   FUNDERS: 'funder',

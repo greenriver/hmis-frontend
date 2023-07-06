@@ -1,21 +1,21 @@
-import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
-  Dialog,
   DialogContent,
   DialogProps,
   DialogTitle,
   Divider,
-  IconButton,
   Stack,
   Typography,
 } from '@mui/material';
 import { ReactNode } from 'react';
 
+import { SubmitFormAllowedTypes } from '../types';
+
 import ViewRecord from './ViewRecord';
 
+import CommonDialog from '@/components/elements/CommonDialog';
 import HudRecordMetadata from '@/modules/hmis/components/HudRecordMetadata';
-import { FormRole, SubmitFormMutation } from '@/types/gqlTypes';
+import { FormRole } from '@/types/gqlTypes';
 
 interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
@@ -25,11 +25,7 @@ interface RecordDialogProps<RecordType> extends DialogProps {
   children?: ReactNode;
 }
 
-type AllowedTypes = NonNullable<
-  NonNullable<SubmitFormMutation['submitForm']>['record']
->;
-
-const ViewRecordDialog = <RecordType extends AllowedTypes>({
+const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   record,
   actions,
   formRole,
@@ -40,7 +36,13 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
-    <Dialog maxWidth='md' scroll='paper' fullWidth onClose={onClose} {...props}>
+    <CommonDialog
+      maxWidth='md'
+      scroll='paper'
+      fullWidth
+      onClose={onClose}
+      {...props}
+    >
       <DialogTitle>
         <Stack
           direction='row'
@@ -48,28 +50,16 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
           gap={2}
           alignItems='center'
         >
-          <Typography
-            sx={{
-              fontSize: '1.5rem',
-              color: (theme) => theme.palette.text.primary,
-              textTransform: 'none',
-            }}
-          >
+          <Typography variant='inherit'>
             {title ? title : 'Record Details'}
           </Typography>
-          {onClose && (
-            <IconButton onClick={(evt) => onClose(evt, 'escapeKeyDown')}>
-              <CloseIcon />
-            </IconButton>
-          )}
         </Stack>
       </DialogTitle>
-      <Divider />
       <Stack
         justifyContent={'space-between'}
         direction='row'
         alignItems={'center'}
-        sx={{ px: 2, py: 1.5 }}
+        sx={{ px: 4, py: 1.5 }}
       >
         <Stack gap={0.5}>
           <HudRecordMetadata
@@ -111,7 +101,7 @@ const ViewRecordDialog = <RecordType extends AllowedTypes>({
           {children}
         </Box>
       </DialogContent>
-    </Dialog>
+    </CommonDialog>
   );
 };
 

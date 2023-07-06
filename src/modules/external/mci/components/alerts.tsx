@@ -19,14 +19,14 @@ export const getClearanceAlertText = (state: ClearanceState) => {
       return {
         title: 'No Matches Found',
         subtitle: 'You can create a new MCI ID, or leave the client uncleared.',
-        buttonText: 'Search Again',
+        // buttonText: 'Search Again',
         rightAlignButton: true,
       };
     case 'auto_cleared':
       return {
         title: 'MCI ID Found',
         subtitle: 'An exact match was found.',
-        buttonText: 'Search again',
+        // buttonText: 'Search again',
         rightAlignButton: true,
       };
     case 'one_match':
@@ -39,7 +39,6 @@ export const getClearanceAlertText = (state: ClearanceState) => {
         subtitle: `This client was matched with ${
           state.candidates.length > 1 ? 'multiple MCI IDs' : 'an MCI ID'
         }. You will need to confirm whether a correct match was found.`,
-        buttonText: 'Search Again',
         rightAlignButton: true,
       };
   }

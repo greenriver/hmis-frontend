@@ -23,9 +23,6 @@ const ProjectEnrollmentsTable = ({
   searchable = true,
   mode: modeProp,
   initialMode: initialModeProp = 'households',
-  // TODO: implement, needs a backend flag
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  wipEnrollmentsOnly = false,
 }: {
   mode?: Mode;
   initialMode?: Mode;
@@ -34,7 +31,6 @@ const ProjectEnrollmentsTable = ({
   linkRowToEnrollment?: boolean;
   openOnDate?: Date;
   searchable?: boolean;
-  wipEnrollmentsOnly?: boolean;
 }) => {
   const [search, setSearch, debouncedSearch] = useDebouncedState<
     string | undefined

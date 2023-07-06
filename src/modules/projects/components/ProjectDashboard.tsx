@@ -5,6 +5,10 @@ import { Outlet, useOutletContext } from 'react-router-dom';
 import Loading from '@/components/elements/Loading';
 import RouterLink from '@/components/elements/RouterLink';
 import ContextHeaderContent from '@/components/layout/dashboard/contextHeader/ContextHeaderContent';
+import {
+  useDashboardBreadcrumbs,
+  useProjectBreadcrumbConfig,
+} from '@/components/layout/dashboard/contextHeader/useDashboardBreadcrumbs';
 import DashboardContentContainer from '@/components/layout/dashboard/DashboardContentContainer';
 import SideNavMenu from '@/components/layout/dashboard/sideNav/SideNavMenu';
 import { NavItem } from '@/components/layout/dashboard/sideNav/types';
@@ -151,7 +155,10 @@ const ProjectDashboard: React.FC = () => {
     [project]
   );
 
-  if (loading || !navItems) return <Loading />;
+  const breadCrumbConfig = useProjectBreadcrumbConfig(outletContext);
+  const breadcrumbs = useDashboardBreadcrumbs(breadCrumbConfig);
+
+  if ((loading && !project) || !navItems) return <Loading />;
   if (!project || !outletContext) return <NotFound />;
 
   return (
@@ -160,7 +167,7 @@ const ProjectDashboard: React.FC = () => {
       // TODO add back to standardize headers
       // header={header}
       sidebar={<SideNavMenu items={navItems} />}
-      contextHeader={<ContextHeaderContent dashboardContext={outletContext} />}
+      contextHeader={<ContextHeaderContent breadcrumbs={breadcrumbs} />}
       {...dashboardState}
     >
       <Container maxWidth='lg' sx={{ pb: 6 }}>
