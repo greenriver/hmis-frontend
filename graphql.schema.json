@@ -21938,19 +21938,25 @@
         "enumValues": [
           {
             "name": "CE",
-            "description": "Coordinated Entry",
+            "description": "(14) Coordinated Entry",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "DAY_SHELTER",
-            "description": "Day Shelter",
+            "description": "(11) Day Shelter",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "ES",
-            "description": "Emergency Shelter",
+            "description": "(1) Emergency Shelter",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HP",
+            "description": "(12) Homelessness Prevention",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -21961,62 +21967,56 @@
             "deprecationReason": null
           },
           {
-            "name": "OPH",
-            "description": "Permanent Housing Only",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "OTHER",
-            "description": "Other",
+            "description": "(7) Other",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PH",
-            "description": "Permanent Housing",
+            "name": "PH_OPH",
+            "description": "(10) PH - Housing with Services (no disability required for entry)",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PREVENTION",
-            "description": "Homelessness Prevention",
+            "name": "PH_PH",
+            "description": "(9) PH - Housing Only",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "PSH",
-            "description": "Permanent Supportive Housing",
+            "name": "PH_PSH",
+            "description": "(3) PH - Permanent Supportive Housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "RRH",
-            "description": "Rapid Re-Housing",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "SERVICES_ONLY",
-            "description": "Services Only",
+            "name": "PH_RRH",
+            "description": "(13) PH - Rapid Re-Housing",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SH",
-            "description": "Safe Haven",
+            "description": "(8) Safe Haven",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "SO",
-            "description": "Street Outreach",
+            "description": "(4) Street Outreach",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "SSO",
+            "description": "(6) Services Only",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "TH",
-            "description": "Transitional Housing",
+            "description": "(2) Transitional Housing",
             "isDeprecated": false,
             "deprecationReason": null
           }

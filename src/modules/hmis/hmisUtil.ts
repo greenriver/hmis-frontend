@@ -335,10 +335,14 @@ export const getSchemaForInputType = (type: string) => {
 };
 
 export const briefProjectType = (projectType: ProjectType) => {
-  if (projectType.length > 3) {
-    return startCase(projectType.toLowerCase());
+  switch (projectType) {
+    case ProjectType.DayShelter:
+    case ProjectType.Other:
+    case ProjectType.Invalid:
+      return startCase(projectType.toLowerCase());
+    default:
+      return projectType.replace('_', ' - ');
   }
-  return projectType;
 };
 
 const customDataElementValue = (

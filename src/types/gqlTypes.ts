@@ -3370,33 +3370,33 @@ export enum ProjectSortOption {
 
 /** HUD Project Types */
 export enum ProjectType {
-  /** Coordinated Entry */
+  /** (14) Coordinated Entry */
   Ce = 'CE',
-  /** Day Shelter */
+  /** (11) Day Shelter */
   DayShelter = 'DAY_SHELTER',
-  /** Emergency Shelter */
+  /** (1) Emergency Shelter */
   Es = 'ES',
+  /** (12) Homelessness Prevention */
+  Hp = 'HP',
   /** Invalid Value */
   Invalid = 'INVALID',
-  /** Permanent Housing Only */
-  Oph = 'OPH',
-  /** Other */
+  /** (7) Other */
   Other = 'OTHER',
-  /** Permanent Housing */
-  Ph = 'PH',
-  /** Homelessness Prevention */
-  Prevention = 'PREVENTION',
-  /** Permanent Supportive Housing */
-  Psh = 'PSH',
-  /** Rapid Re-Housing */
-  Rrh = 'RRH',
-  /** Services Only */
-  ServicesOnly = 'SERVICES_ONLY',
-  /** Safe Haven */
+  /** (10) PH - Housing with Services (no disability required for entry) */
+  PhOph = 'PH_OPH',
+  /** (9) PH - Housing Only */
+  PhPh = 'PH_PH',
+  /** (3) PH - Permanent Supportive Housing */
+  PhPsh = 'PH_PSH',
+  /** (13) PH - Rapid Re-Housing */
+  PhRrh = 'PH_RRH',
+  /** (8) Safe Haven */
   Sh = 'SH',
-  /** Street Outreach */
+  /** (4) Street Outreach */
   So = 'SO',
-  /** Transitional Housing */
+  /** (6) Services Only */
+  Sso = 'SSO',
+  /** (2) Transitional Housing */
   Th = 'TH',
 }
 
