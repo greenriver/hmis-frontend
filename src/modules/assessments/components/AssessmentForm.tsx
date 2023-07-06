@@ -136,12 +136,12 @@ const AssessmentForm = ({
       assign(init, initialsToOverwrite);
     }
 
-    console.debug(
-      'Initial Form State',
-      init,
-      'from source:',
-      source?.id || 'none'
-    );
+    // console.debug(
+    //   'Initial Form State',
+    //   init,
+    //   'from source:',
+    //   source?.id || 'none'
+    // );
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const unused = reloadInitialValues; // reference trigger
