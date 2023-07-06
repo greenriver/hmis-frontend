@@ -2,7 +2,8 @@ import AddIcon from '@mui/icons-material/Add';
 import { Stack } from '@mui/material';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
-import { ProjectReferralPostingsTable } from './tables/ProjectReferralPostingsTable';
+import ProjectOutgoingReferralPostingsTable from './tables/ProjectOutgoingReferralPostingsTable';
+import ProjectReferralPostingsTable from './tables/ProjectReferralPostingsTable';
 import ProjectReferralRequestsTable from './tables/ProjectReferralRequestsTable';
 
 import ButtonLink from '@/components/elements/ButtonLink';
@@ -49,12 +50,20 @@ const ProjectReferrals = () => {
             title='Outgoing Referrals'
             headerVariant='border'
             actions={
-              <ButtonLink to='' Icon={AddIcon}>
+              <ButtonLink
+                to={generateSafePath(
+                  ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
+                  {
+                    projectId: project.id,
+                  }
+                )}
+                Icon={AddIcon}
+              >
                 New Referral
               </ButtonLink>
             }
           >
-            {/* TODO: outgoing referral table */}
+            <ProjectOutgoingReferralPostingsTable projectId={project.id} />
           </TitleCard>
         )}
       </Stack>

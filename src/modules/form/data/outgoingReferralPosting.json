@@ -1,0 +1,28 @@
+{
+  "item": [
+    {
+      "type": "CHOICE",
+      "required": true,
+      "linkId": "enrollmentID",
+      "text": "HoH Enrollment",
+      "pickListReference": "PROJECT_HOH_ENROLLMENTS",
+      "fieldName": "enrollmentId"
+    },
+    {
+      "type": "CHOICE",
+      "required": true,
+      "linkId": "projectId",
+      "text": "Project",
+      "pickListReference": "PROJECT",
+      "fieldName": "projectId"
+    },
+    {
+      "type": "CHOICE",
+      "required": true,
+      "linkId": "unitTypeId",
+      "text": "Unit Type",
+      "pickListReference": "ALL_UNIT_TYPES",
+      "fieldName": "unitTypeId"
+    }
+  ]
+}
