@@ -6,9 +6,7 @@ import {
   ClientNameDobVeteranFields,
 } from '@/modules/form/util/formUtil';
 import {
-  FormDefinitionJson,
   FormRole,
-  FullAssessmentFragment,
   RelationshipToHoH,
   useGetAssessmentQuery,
   useGetFormDefinitionQuery,
@@ -79,17 +77,9 @@ export function useAssessment({
 
   return {
     assessmentTitle,
-    formRole,
+    formRole: formRole as FormRole,
     definition,
-    definitionId: definition?.id,
-    assessment: assessmentData?.assessment,
+    assessment: assessmentData?.assessment || undefined,
     loading: formDefinitionLoading || assessmentLoading,
-  } as {
-    assessmentTitle: string;
-    formRole?: FormRole;
-    definitionId?: string;
-    definition?: FormDefinitionJson;
-    assessment?: FullAssessmentFragment;
-    loading: boolean;
-  };
+  } as const;
 }

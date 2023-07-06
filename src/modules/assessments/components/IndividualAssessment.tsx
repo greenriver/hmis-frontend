@@ -80,7 +80,6 @@ const IndividualAssessment = ({
 
   const {
     definition,
-    definitionId,
     assessment,
     loading: dataLoading,
     assessmentTitle,
@@ -174,12 +173,11 @@ const IndividualAssessment = ({
         />
       )}
       {!definition && <MissingDefinitionAlert />}
-      {definition && definitionId && (
+      {definition && (
         <AssessmentForm
           key={assessment?.id}
           formRole={formRole}
           definition={definition}
-          definitionId={definitionId}
           assessment={assessment}
           enrollment={enrollment}
           top={topOffsetHeight}
