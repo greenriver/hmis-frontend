@@ -33,6 +33,9 @@ fragment AssessmentWithRecords on Assessment {
   healthAndDv {
     ...HealthAndDvValues
   }
+  exit {
+    ...ExitValues
+  }
   customDataElements {
     ...CustomDataElementFields
   }
