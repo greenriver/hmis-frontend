@@ -14,8 +14,9 @@ import { NEW_MCI_STRING, UNCLEARED_CLIENT_STRING } from '../util';
 
 import { MciClearanceProps } from './MciClearance';
 
-import GenericTable, { ColumnDef } from '@/components/elements/GenericTable';
 import RouterLink from '@/components/elements/RouterLink';
+import GenericTable from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import { MultiHmisEnum } from '@/modules/hmis/components/HmisEnum';
 import {
   clientNameAllParts,

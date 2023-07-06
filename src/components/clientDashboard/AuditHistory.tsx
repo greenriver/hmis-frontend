@@ -1,12 +1,13 @@
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import { Paper, Stack, Tooltip, Typography } from '@mui/material';
-import { capitalize, isNil } from 'lodash-es';
+import { capitalize, filter, isNil } from 'lodash-es';
 
 import SimpleTable from '../elements/SimpleTable';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import useSafeParams from '@/hooks/useSafeParams';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
+import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
 import HmisField from '@/modules/hmis/components/HmisField';
 import { formatDateTimeForDisplay } from '@/modules/hmis/hmisUtil';
 import {
@@ -61,7 +62,19 @@ const columns: ColumnDef<AssessmentType>[] = [
   {
     header: 'Action',
     width: '10%',
-    render: (e) => capitalize(e.event),
+    render: (e) => {
+      const action = `${capitalize(e.event)} ${e.recordName}`;
+      if (e.recordName === 'Client') return action;
+      return (
+        <Stack>
+          <Typography variant='inherit'>{action}</Typography>
+          <Typography
+            color='text.secondary'
+            variant='inherit'
+          >{`ID: ${e.recordId}`}</Typography>
+        </Stack>
+      );
+    },
   },
   {
     header: 'Fields Changed',
@@ -85,10 +98,12 @@ const columns: ColumnDef<AssessmentType>[] = [
           TableRowProps={{
             sx: { '.MuiTableCell-root:first-child': { width: '180px' } },
           }}
-          rows={Object.values(e.objectChanges as ChangesType).map((r) => ({
-            ...r,
-            id: r.fieldName,
-          }))}
+          rows={Object.values(e.objectChanges as ChangesType)
+            .filter((r) => filter(r.values, hasMeaningfulValue).length > 0)
+            .map((r) => ({
+              ...r,
+              id: r.fieldName,
+            }))}
           columns={[
             { name: 'field', render: (row) => <b>{row.displayName}</b> },
             {
@@ -96,6 +111,7 @@ const columns: ColumnDef<AssessmentType>[] = [
               render: ({ values, fieldName }) => {
                 if (values === 'changed') return changedText;
 
+                console.log(values);
                 const [from, to] = values.map((val) =>
                   isNil(val) ? null : (
                     <HmisField
@@ -151,7 +167,7 @@ const AuditHistory = () => {
           columns={columns}
           pagePath='client.auditHistory'
           fetchPolicy='cache-and-network'
-          noData='No audit history.'
+          noData='No audit history'
           rowSx={() => ({ whiteSpace: 'nowrap' })}
         />
       </Paper>

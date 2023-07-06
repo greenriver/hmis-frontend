@@ -1,0 +1,73 @@
+fragment HouseholdFields on Household {
+  id
+  householdSize
+  shortId
+  householdClients {
+    ...HouseholdClientFields
+  }
+}
+
+fragment ProjectEnrollmentsHouseholdFields on Household {
+  id
+  householdSize
+  shortId
+  householdClients {
+    ...ProjectEnrollmentsHouseholdClientFields
+  }
+}
+
+fragment HouseholdClientFields on HouseholdClient {
+  id
+  relationshipToHoH
+  client {
+    id
+    ...ClientName
+    ...ClientIdentificationFields
+    veteranStatus
+    access {
+      ...ClientAccessFields
+    }
+  }
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+  }
+}
+
+fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
+  id
+  relationshipToHoH
+  client {
+    id
+    ...ClientName
+    ...ClientIdentificationFields
+  }
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+  }
+}
+
+fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
+  ...HouseholdClientFields
+  enrollment {
+    id
+    entryDate
+    exitDate
+    inProgress
+    intakeAssessment {
+      id
+      inProgress
+      assessmentDate
+    }
+    exitAssessment {
+      id
+      inProgress
+      assessmentDate
+    }
+  }
+}

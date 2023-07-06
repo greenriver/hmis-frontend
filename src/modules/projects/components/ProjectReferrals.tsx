@@ -18,30 +18,45 @@ const ProjectReferrals = () => {
     <>
       <PageTitle title='Referrals' />
       <Stack spacing={4}>
-        <TitleCard
-          title='Referral Request'
-          headerVariant='border'
-          actions={
-            project.access.canManageIncomingReferrals && (
-              <ButtonLink
-                to={generateSafePath(
-                  ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
-                  {
-                    projectId: project.id,
-                  }
-                )}
-                Icon={AddIcon}
-              >
-                New Referral Request
+        {project.access.canManageIncomingReferrals && (
+          <>
+            <TitleCard
+              title='Referral Requests'
+              headerVariant='border'
+              actions={
+                <ButtonLink
+                  to={generateSafePath(
+                    ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
+                    {
+                      projectId: project.id,
+                    }
+                  )}
+                  Icon={AddIcon}
+                >
+                  New Referral Request
+                </ButtonLink>
+              }
+            >
+              <ProjectReferralRequestsTable project={project} />
+            </TitleCard>
+            <TitleCard title='Active Referrals' headerVariant='border'>
+              <ProjectReferralPostingsTable projectId={project.id} />
+            </TitleCard>
+          </>
+        )}
+        {project.access.canManageOutgoingReferrals && (
+          <TitleCard
+            title='Outgoing Referrals'
+            headerVariant='border'
+            actions={
+              <ButtonLink to='' Icon={AddIcon}>
+                New Referral
               </ButtonLink>
-            )
-          }
-        >
-          <ProjectReferralRequestsTable project={project} />
-        </TitleCard>
-        <TitleCard title='Incoming Referrals' headerVariant='border'>
-          <ProjectReferralPostingsTable projectId={project.id} />
-        </TitleCard>
+            }
+          >
+            {/* TODO: outgoing referral table */}
+          </TitleCard>
+        )}
       </Stack>
     </>
   );

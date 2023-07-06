@@ -8,7 +8,7 @@ import { useGetClientHouseholdMemberCandidatesQuery } from '@/types/gqlTypes';
  * Get a unique list of recent household members for this client
  */
 export function useRecentHouseholdMembers(
-  clientId: string,
+  clientId?: string,
   includeSourceClient?: boolean
 ) {
   const {
@@ -16,7 +16,8 @@ export function useRecentHouseholdMembers(
     loading,
     error,
   } = useGetClientHouseholdMemberCandidatesQuery({
-    variables: { id: clientId },
+    variables: { id: clientId || '' },
+    skip: !clientId,
   });
 
   const members = useMemo(() => {

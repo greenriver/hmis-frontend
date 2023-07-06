@@ -16,6 +16,7 @@ query GetProjectPermissions($id: ID!) {
 query GetProjectEnrollments(
   $id: ID!
   $filters: EnrollmentsForProjectFilterOptions
+  $sortOrder: EnrollmentSortOption
   $limit: Int = 10
   $offset: Int = 0
 ) {
@@ -24,7 +25,7 @@ query GetProjectEnrollments(
     enrollments(
       limit: $limit
       offset: $offset
-      sortOrder: MOST_RECENT
+      sortOrder: $sortOrder
       filters: $filters
     ) {
       offset
@@ -88,31 +89,6 @@ query GetFunder($id: ID!) {
 query GetInventory($id: ID!) {
   inventory(id: $id) {
     ...InventoryFields
-  }
-}
-
-query GetUnits(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $active: Boolean
-  $occupied: Boolean
-) {
-  project(id: $id) {
-    id
-    units(
-      limit: $limit
-      offset: $offset
-      active: $active
-      occupied: $occupied
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...UnitFields
-      }
-    }
   }
 }
 
@@ -227,40 +203,6 @@ mutation DeleteProjectCoc($input: DeleteProjectCocInput!) {
     clientMutationId
     projectCoc {
       id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation CreateUnits($input: CreateUnitsInput!) {
-  createUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteUnits($input: DeleteUnitsInput!) {
-  deleteUnits(input: $input) {
-    clientMutationId
-    unitIds
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation UpdateUnits($input: UpdateUnitsInput!) {
-  updateUnits(input: $input) {
-    clientMutationId
-    units {
-      ...UnitFields
     }
     errors {
       ...ValidationErrorFields

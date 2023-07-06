@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material';
 
-import { ColumnDef } from '@/components/elements/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import PageTitle from '@/components/layout/PageTitle';
 import GenericTableWithData from '@/modules/dataFetching/components/GenericTableWithData';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
@@ -32,12 +32,13 @@ const columns: ColumnDef<ReferralPostingFieldsFragment>[] = [
       parseAndFormatDate(row.referralDate),
   },
   {
-    header: 'Organization',
-    render: (row: ReferralPostingFieldsFragment) => row.organizationName,
+    header: 'Project',
+    render: (row: ReferralPostingFieldsFragment) => row.project?.projectName,
   },
   {
-    header: 'Project',
-    render: (row: ReferralPostingFieldsFragment) => row.referredBy,
+    header: 'Organization',
+    render: (row: ReferralPostingFieldsFragment) =>
+      row.organization?.organizationName,
   },
   {
     header: 'HoH Name',

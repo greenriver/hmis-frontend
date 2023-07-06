@@ -67,7 +67,7 @@ export const useProjectBreadcrumbConfig = (
         parent: ProjectDashboardRoutes.OVERVIEW,
       },
       [ProjectDashboardRoutes.REFERRAL_POSTING]: {
-        title: 'Incoming Referral',
+        title: 'Active Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
       [ProjectDashboardRoutes.NEW_REFERRAL_REQUEST]: {

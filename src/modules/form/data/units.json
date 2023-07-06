@@ -3,7 +3,7 @@
     {
       "type": "CHOICE",
       "linkId": "type",
-      "required": false,
+      "required": true,
       "text": "Unit Type",
       "fieldName": "unitTypeId",
       "pickListReference": "UNIT_TYPES"
@@ -12,16 +12,8 @@
       "type": "INTEGER",
       "linkId": "unit",
       "required": true,
-      "text": "Number of Units",
+      "text": "Number of Units to Add",
       "fieldName": "count"
-    },
-    {
-      "type": "STRING",
-      "linkId": "name",
-      "required": false,
-      "text": "Unit Name Prefix",
-      "fieldName": "prefix",
-      "helperText": "If left blank, units will be named 'Unit 1', 'Unit 2', etc."
     }
   ]
 }

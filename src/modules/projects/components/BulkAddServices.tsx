@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { compact, uniq } from 'lodash-es';
 import { useCallback, useState } from 'react';
 
-import { ColumnDef } from '../../../components/elements/GenericTable';
+import { ColumnDef } from '../../../components/elements/table/types';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
 import { InactiveChip } from './ProjectOverview';

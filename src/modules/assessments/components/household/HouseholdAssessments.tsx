@@ -30,7 +30,7 @@ import {
 } from '@/components/layout/layoutConstants';
 import useHasRefetched from '@/hooks/useHasRefetched';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
-import { useHouseholdMembers } from '@/modules/household/components/useHouseholdMembers';
+import { useHouseholdMembers } from '@/modules/household/hooks/useHouseholdMembers';
 import { router } from '@/routes/router';
 import {
   EnrollmentFieldsFragment,

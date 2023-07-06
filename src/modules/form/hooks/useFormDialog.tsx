@@ -1,19 +1,11 @@
-import { LoadingButton } from '@mui/lab';
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  Stack,
-} from '@mui/material';
+import { DialogActions, DialogContent, DialogTitle, Grid } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
 
 import DynamicForm, {
   DynamicFormProps,
   DynamicFormRef,
 } from '../components/DynamicForm';
+import FormDialogActionContent from '../components/FormDialogActionContent';
 import { SubmitFormAllowedTypes } from '../types';
 
 import {
@@ -112,31 +104,13 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Stack
-            direction='row'
-            justifyContent={'space-between'}
-            sx={{ width: '100%' }}
-          >
-            <Box></Box>
-            <Stack gap={3} direction='row'>
-              <Button
-                onClick={closeDialog}
-                variant='gray'
-                data-testid='cancelDialogAction'
-              >
-                {props.discardButtonText || 'Cancel'}
-              </Button>
-              <LoadingButton
-                onClick={() => formRef.current && formRef.current.SubmitForm()}
-                type='submit'
-                loading={submitLoading}
-                data-testid='confirmDialogAction'
-                sx={{ minWidth: '120px' }}
-              >
-                {props.submitButtonText || 'Save'}
-              </LoadingButton>
-            </Stack>
-          </Stack>
+          <FormDialogActionContent
+            onSubmit={() => formRef.current && formRef.current.SubmitForm()}
+            onDiscard={closeDialog}
+            discardButtonText={props.discardButtonText}
+            submitButtonText={props.submitButtonText}
+            submitLoading={submitLoading}
+          />
         </DialogActions>
       </CommonDialog>
     );

@@ -62,6 +62,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
       <DynamicView
         values={initialValues}
         definition={ReferralPostingDefinition}
+        GridProps={{ columnSpacing: 0, rowSpacing: 2, spacing: 0 }}
       />
     );
   }

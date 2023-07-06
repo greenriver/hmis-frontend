@@ -16,7 +16,6 @@ import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
-import EditHousehold from '@/components/clientDashboard/enrollments/EditHousehold';
 import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
 import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
 import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
@@ -42,6 +41,7 @@ import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenial
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
+import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
 import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
@@ -218,7 +218,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ProjectDashboardRoutes.ADD_HOUSEHOLD,
             element: (
               <ProjectEditRoute
-                permissions={['canEditEnrollments']}
+                permissions={['canEnrollClients']}
                 redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
               >
                 <CreateHouseholdPage />
@@ -325,7 +325,7 @@ export const protectedRoutes: RouteNode[] = [
                 edit
                 redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
               >
-                <EditHousehold />
+                <EditHouseholdPage />
               </EnrollmentsRoute>
             ),
           },

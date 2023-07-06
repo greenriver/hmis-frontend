@@ -3,9 +3,9 @@ import { useMemo } from 'react';
 import { getClientIdentification, RecentHouseholdMember } from '../types';
 
 import GenericTable, {
-  ColumnDef,
   Props as GenericTableProps,
-} from '@/components/elements/GenericTable';
+} from '@/components/elements/table/GenericTable';
+import { ColumnDef } from '@/components/elements/table/types';
 import ClientName from '@/modules/client/components/ClientName';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';

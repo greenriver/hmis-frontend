@@ -6,7 +6,10 @@ import RouterLink from '@/components/elements/RouterLink';
 import YesNoDisplay from '@/components/elements/YesNoDisplay';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import { hasMeaningfulValue } from '@/modules/form/util/formUtil';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  parseAndFormatDateTime,
+} from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
 import { ClientDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
@@ -23,9 +26,6 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
       'Referral Status',
       <ReferralPostingStatusDisplay
         status={referralPosting.status}
-        size='small'
-        variant='filled'
-        color='secondary'
         sx={{ mt: 0.5 }}
       />,
     ],
@@ -43,14 +43,15 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
         </RouterLink>
       ) : undefined,
     ],
-    ['Project Name', referralPosting.referredFrom],
     ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
+    ['Referred From', referralPosting.referredFrom],
     ['Referred By', referralPosting.referredBy],
-    ['Score', referralPosting.score],
+    ['Assigned At', parseAndFormatDateTime(referralPosting.assignedDate)],
   ];
   const col2: Array<[string, ReactNode]> = [
     ['Referral ID', referralPosting.referralIdentifier],
     ['Unit Type', referralPosting?.unitType?.description],
+    ['Score', referralPosting.score],
     [
       'Chronically Homeless',
       <YesNoDisplay
