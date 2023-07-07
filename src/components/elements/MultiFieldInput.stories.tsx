@@ -1,5 +1,5 @@
 import { Box, TextField, TextFieldProps } from '@mui/material';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 import useState from 'storybook-addon-state';
 
 import LabelWithContent from './LabelWithContent';
@@ -8,7 +8,7 @@ import MultiFieldInput, { MultiFieldInputProps } from './MultiFieldInput';
 export default {
   title: 'MultiFieldInput',
   component: MultiFieldInput,
-} as ComponentMeta<typeof MultiFieldInput>;
+} as Meta<typeof MultiFieldInput>;
 
 const Template: ComponentStory<typeof MultiFieldInput> = (args) => {
   const [values, setValues] = useState('values', args.values);

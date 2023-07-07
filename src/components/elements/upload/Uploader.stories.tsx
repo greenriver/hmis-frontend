@@ -1,6 +1,6 @@
 import { Typography, Link, Alert } from '@mui/material';
 import { Box } from '@mui/system';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 
 import MOCK_IMAGE from './MOCK_IMAGE';
 import Uploader from './UploaderBase';
@@ -8,7 +8,7 @@ import Uploader from './UploaderBase';
 export default {
   title: 'Uploader',
   component: Uploader,
-} as ComponentMeta<typeof Uploader>;
+} as Meta<typeof Uploader>;
 
 const Template: ComponentStory<typeof Uploader> = (args) => {
   return (
