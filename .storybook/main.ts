@@ -1,8 +1,7 @@
 const { mergeConfig } = require('vite');
 const { resolve } = require('path');
-import type { StorybookViteConfig } from '@storybook/builder-vite';
 
-const config: StorybookViteConfig = {
+const config = {
   async viteFinal(config) {
     return mergeConfig(config, {
       resolve: {
@@ -24,10 +23,7 @@ const config: StorybookViteConfig = {
     '@storybook/addon-interactions',
     'storybook-addon-apollo-client',
   ],
-  framework: '@storybook/react',
-  core: {
-    builder: '@storybook/builder-vite',
-  },
+  framework: '@storybook/react-vite',
   typescript: {
     check: false,
     checkOptions: {},
