@@ -18,8 +18,8 @@
     "cert": "rm -rf .cert && mkdir -p .cert && mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem 'hmis.dev.test'",
     "dedup": "yarn-deduplicate -s fewer yarn.lock",
     "postinstall": "husky install",
-    "storybook": "cross-env TS_NODE_PROJECT=.storybook/tsconfig.json NODE_OPTIONS=--openssl-legacy-provider sb dev -p 6006",
-    "build-storybook": "sb build",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
     "graphql:codegen": "graphql-codegen --config codegen.yml && node scripts/generateEnumDescriptions.js && prettier --write ./src/types/* graphql.schema.json"
   },
   "lint-staged": {
@@ -116,7 +116,7 @@
     "@storybook/addon-essentials": "^7.0.0",
     "@storybook/addon-interactions": "^7.0.0",
     "@storybook/addon-links": "^7.0.0",
-    "@storybook/builder-vite": "^7.0.0",
+    "@storybook/addons": "^7.0.0",
     "@storybook/cli": "^7.0.0",
     "@storybook/react": "^7.0.0",
     "@storybook/react-vite": "^7.0.0",
@@ -145,6 +145,7 @@
     "madge": "^6.0.0",
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
+    "storybook": "^7.0.0",
     "storybook-addon-apollo-client": "^5.0.0",
     "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",

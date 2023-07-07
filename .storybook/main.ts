@@ -1,6 +1,5 @@
 const { mergeConfig } = require('vite');
 const { resolve } = require('path');
-
 const config = {
   async viteFinal(config) {
     return mergeConfig(config, {
@@ -23,9 +22,14 @@ const config = {
     '@storybook/addon-interactions',
     'storybook-addon-apollo-client',
   ],
-  framework: '@storybook/react-vite',
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
+  },
+  core: {},
   typescript: {
     check: false,
+    skipBabel: true,
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
@@ -45,6 +49,8 @@ const config = {
   features: {
     storyStoreV7: true,
   },
+  docs: {
+    autodocs: true,
+  },
 };
-
 export default config;

@@ -3583,6 +3583,15 @@
     memoizerific "^1.11.3"
     prop-types "^15.7.2"
 
+"@storybook/addons@^7.0.0":
+  version "7.0.26"
+  resolved "https://registry.yarnpkg.com/@storybook/addons/-/addons-7.0.26.tgz#2d735158c563031544792d102aa0fb4727c22d19"
+  integrity sha512-zn7vdgXkQ4DpCJaawJsNPnh0NzXVXd2qfVtzYWWKT4eyj43VXxoVX2Z4woAD8h6G57JJg67+7hChRebUmd284A==
+  dependencies:
+    "@storybook/manager-api" "7.0.26"
+    "@storybook/preview-api" "7.0.26"
+    "@storybook/types" "7.0.26"
+
 "@storybook/blocks@7.0.26":
   version "7.0.26"
   resolved "https://registry.yarnpkg.com/@storybook/blocks/-/blocks-7.0.26.tgz#662b0868ce3eb432d0cdf49c8eb95a227bb58f75"
@@ -3633,7 +3642,7 @@
     process "^0.11.10"
     util "^0.12.4"
 
-"@storybook/builder-vite@7.0.26", "@storybook/builder-vite@^7.0.0":
+"@storybook/builder-vite@7.0.26":
   version "7.0.26"
   resolved "https://registry.yarnpkg.com/@storybook/builder-vite/-/builder-vite-7.0.26.tgz#f43f3e67bd7ec2d49dd7356f268218a2d27549a0"
   integrity sha512-PRvySwvJEBLTZcUCKIULdxeFZeoDeK5odGFN0oIJhGZlOEI7jzbAcBT9SEZUh+Cv4Pk93XFr5+ZJCm/yrmF8RA==
@@ -3686,7 +3695,7 @@
   resolved "https://registry.yarnpkg.com/@storybook/channels/-/channels-7.0.26.tgz#cc247bc4b61f271abb84e59020307a789f7b4f53"
   integrity sha512-Br3XILhrtuL5Sdp91I04kKjJzSqU/N8gGL6B6nIfnuaHUvGMDuMCHAB+g7aoiyH5dnpDZ6yBVGNwtYAyJA+0Og==
 
-"@storybook/cli@^7.0.0":
+"@storybook/cli@7.0.26", "@storybook/cli@^7.0.0":
   version "7.0.26"
   resolved "https://registry.yarnpkg.com/@storybook/cli/-/cli-7.0.26.tgz#5b6c5404a1ec45828150cd313535d953ddbda095"
   integrity sha512-sZ136wRUYTdhhm/thegFoI47wOzl2X+K9eaiTTp0ARwnIUhXAPDQ0MKOD36hKbCX5T/pBE7r++7WoEReIbUDqQ==
@@ -11986,6 +11995,13 @@ storybook-addon-state@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/storybook-addon-state/-/storybook-addon-state-1.0.3.tgz#f7657c7acfb2ac2adcbdccdd2ba6d95ebddd90a7"
   integrity sha512-0lpedSYu2xIlq4QK/8YH4Cuj6vt2p8iRCcJBb4JFxyLZ6RAMHFFkf072BKl4WrU1LfLq3/7SD4snvxRoTjvsvw==
+
+storybook@^7.0.0:
+  version "7.0.26"
+  resolved "https://registry.yarnpkg.com/storybook/-/storybook-7.0.26.tgz#70a55074644c265770cc015c576aa005dad3b2ef"
+  integrity sha512-N6+/QBIahTnOJ3mQFNh+PIimjw+yUUoBlnMq8kE1Rg6QFi8ErEK8xte6uppiTh+7ShpqeLhp9ipuDV6DwJ9Aqg==
+  dependencies:
+    "@storybook/cli" "7.0.26"
 
 stream-shift@^1.0.0:
   version "1.0.1"
