@@ -16,11 +16,8 @@ import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
-import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
-import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
-import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
+import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
-import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
@@ -348,46 +345,13 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <HouseholdExit />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <HouseholdIntake />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.NEW_ASSESSMENT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <NewAssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.VIEW_ASSESSMENT,
+            path: ClientDashboardRoutes.ASSESSMENT,
             element: (
               <EnrollmentsRoute
                 view
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ViewAssessmentPage />
+                <AssessmentPage />
               </EnrollmentsRoute>
             ),
           },

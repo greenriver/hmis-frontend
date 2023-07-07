@@ -20,10 +20,7 @@ const clientClientDashboardRoutes = {
   NEW_ENROLLMENT: 'enrollments/new',
   VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
   EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
-  HOUSEHOLD_EXIT: 'enrollments/:enrollmentId/household-exit',
-  HOUSEHOLD_INTAKE: 'enrollments/:enrollmentId/household-intake',
-  NEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/new',
-  VIEW_ASSESSMENT: 'enrollments/:enrollmentId/assessments/:assessmentId',
+  ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/:assessmentId?',
   SERVICES: 'services',
   NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
   EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
@@ -91,23 +88,20 @@ export const ProjectDashboardRoutes: {
   [k in DashboardSubRoutesType]: string;
 } = projectClientDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [
-  ClientDashboardRoutes.VIEW_ASSESSMENT,
-  ClientDashboardRoutes.NEW_ASSESSMENT,
-];
+export const HIDE_NAV_ROUTES = [ClientDashboardRoutes.ASSESSMENT];
 
 export const FOCUS_MODE_ROUTES = [
-  {
-    route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
-  },
-  {
-    route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-    previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
-  },
+  // {
+  //   route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
+  //   previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
+  // },
+  // {
+  //   route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
+  //   previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
+  // },
 ];
 
 export const PRINTABLE_ROUTES = [
-  ClientDashboardRoutes.VIEW_ASSESSMENT,
+  ClientDashboardRoutes.ASSESSMENT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

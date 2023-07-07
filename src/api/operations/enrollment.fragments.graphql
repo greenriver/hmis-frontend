@@ -10,10 +10,8 @@ fragment EnrollmentFields on Enrollment {
   inProgress
   relationshipToHoH
   enrollmentCoc
-  household {
-    id
-    shortId
-  }
+  householdId
+  householdShortId
   householdSize
   client {
     id

@@ -1,24 +1,40 @@
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '@/components/elements/Loading';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import HouseholdAssessments from '@/modules/assessments/components/household/HouseholdAssessments';
+import { isHouseholdAssesmentRole } from '@/modules/assessments/components/household/util';
 import IndividualAssessment from '@/modules/assessments/components/IndividualAssessment';
 import { FormActionTypes } from '@/modules/form/types';
 import { cache } from '@/providers/apolloClient';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { FormRole } from '@/types/gqlTypes';
+import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const NewAssessmentPage = () => {
-  const { client, enrollment } = useClientDashboardContext();
-  const { clientId, enrollmentId, formRole } = useSafeParams() as {
-    clientId: string;
-    enrollmentId: string;
-    formRole: FormRole; // If create new, we have the role.
-  };
+export const showAssessmentInHousehold = (
+  enrollment?: EnrollmentFieldsFragment,
+  role?: string
+) => {
+  return (
+    enrollment &&
+    role &&
+    enrollment.householdSize > 1 &&
+    isHouseholdAssesmentRole(role)
+  );
+};
+
+const AssessmentPage = () => {
   const navigate = useNavigate();
+  const { client, enrollment } = useClientDashboardContext();
+  const { clientId, enrollmentId, assessmentId, formRole } =
+    useSafeParams() as {
+      clientId: string;
+      enrollmentId: string;
+      formRole: FormRole;
+      assessmentId?: string;
+    };
 
   const navigateToEnrollment = useCallback(
     () =>
@@ -32,24 +48,36 @@ const NewAssessmentPage = () => {
   );
 
   const onSuccess = useCallback(() => {
+    if (assessmentId) return;
+
     // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
     cache.evict({
       id: `Enrollment:${enrollmentId}`,
       fieldName: 'assessments',
     });
     navigateToEnrollment();
-  }, [navigateToEnrollment, enrollmentId]);
+  }, [navigateToEnrollment, assessmentId, enrollmentId]);
 
-  if (!enrollment) return <Loading />;
+  if (!enrollment) return <NotFound />;
+  if (!formRole) return <NotFound />;
+
+  // If household has 2+ members and this is a household assessment, render household workflow
+  if (
+    isHouseholdAssesmentRole(formRole) &&
+    showAssessmentInHousehold(enrollment, formRole)
+  ) {
+    return <HouseholdAssessments role={formRole} enrollment={enrollment} />;
+  }
 
   return (
     <IndividualAssessment
-      enrollmentId={enrollmentId}
       formRole={formRole}
+      enrollmentId={enrollmentId}
+      assessmentId={assessmentId}
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}
       getFormActionProps={(assessment) => ({
-        onDiscard: navigateToEnrollment,
+        onDiscard: () => navigateToEnrollment,
         config: [
           {
             id: 'submit',
@@ -81,4 +109,4 @@ const NewAssessmentPage = () => {
   );
 };
 
-export default NewAssessmentPage;
+export default AssessmentPage;

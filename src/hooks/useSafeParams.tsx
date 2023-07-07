@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'; // eslint-disable-line no-restricted-imports
 
+import { NotFoundError } from '@/modules/errors/util';
 import IdEncoder from '@/modules/hmis/IdEncoder';
 import { HmisEnums } from '@/types/gqlEnums';
 import { isIdParam } from '@/utils/generateSafePath';
@@ -27,15 +28,11 @@ const useSafeParams = <T extends Record<string, string | undefined>>(
         enumParams[key] &&
         enumParams[key].indexOf(params[key] as string) === -1
       ) {
-        throw Error(`Unrecognized Parameter: ${params[key]}`);
+        // error boundary should show this is as Not Found
+        throw new NotFoundError(`Unrecognized Parameter: ${params[key]}`);
       }
     }
   }
-
-  // checkAgainstEnums(...)
-  // if (params.formRole) {
-
-  // }
 
   return params as RouteParams<T>;
 };

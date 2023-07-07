@@ -69,7 +69,7 @@ export const ENROLLMENT_COLUMNS: {
           arrow
         >
           <Typography variant='body2'>
-            {`${e.household.shortId} (${e.householdSize})`}
+            {`${e.householdShortId} (${e.householdSize})`}
           </Typography>
         </Tooltip>
         {e.householdSize > 1 && (

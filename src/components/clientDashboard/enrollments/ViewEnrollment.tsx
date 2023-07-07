@@ -60,15 +60,15 @@ const ViewEnrollment = () => {
                 permissions={['canEditEnrollments']}
               >
                 <ButtonLink
-                  to={generateSafePath(ClientDashboardRoutes.NEW_ASSESSMENT, {
+                  to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
                     clientId,
                     enrollmentId,
-                    formRole: FormRole.Update.toLowerCase(),
+                    formRole: FormRole.Update,
                   })}
                   Icon={LibraryAddIcon}
                   leftAlign
                 >
-                  New Assessment
+                  Update Assessment
                 </ButtonLink>
                 <Button
                   onClick={openServiceDialog}
@@ -105,7 +105,7 @@ const ViewEnrollment = () => {
               <IdDisplay
                 prefix='Household'
                 color='text.secondary'
-                value={enrollment.household.shortId}
+                value={enrollment.householdShortId}
               />
             </Stack>
           </Paper>

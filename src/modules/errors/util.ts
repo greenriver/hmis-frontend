@@ -52,3 +52,11 @@ export const partitionValidations: (
     warnings: split[1],
   };
 };
+
+export class NotFoundError extends Error {
+  constructor(message?: string) {
+    super(message);
+    this.name = 'NotFoundError';
+    Object.setPrototypeOf(this, new.target.prototype);
+  }
+}
