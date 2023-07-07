@@ -6,7 +6,7 @@
       "required": true,
       "text": "Unit Type",
       "fieldName": "unitTypeId",
-      "pickListReference": "UNIT_TYPES"
+      "pickListReference": "POSSIBLE_PROJECT_UNIT_TYPES"
     },
     {
       "type": "INTEGER",

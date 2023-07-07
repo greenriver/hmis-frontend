@@ -806,6 +806,7 @@ export const HmisEnums = {
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     GEOCODE: 'GEOCODE',
     ORGANIZATION: 'All Organizations that the User can see',
+    POSSIBLE_PROJECT_UNIT_TYPES: 'What are valid unit types for new units',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     PROJECT_HOH_ENROLLMENTS:

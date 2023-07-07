@@ -20270,6 +20270,12 @@
             "deprecationReason": null
           },
           {
+            "name": "POSSIBLE_PROJECT_UNIT_TYPES",
+            "description": "What are valid unit types for new units",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "PRIOR_LIVING_SITUATION",
             "description": null,
             "isDeprecated": false,
