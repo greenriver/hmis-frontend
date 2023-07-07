@@ -51,6 +51,7 @@ const projectClientDashboardRoutes = {
   REFERRALS: 'referrals',
   NEW_REFERRAL_REQUEST: 'referrals/new-referral-request',
   NEW_REFERRAL: 'referrals/new-referral',
+  NEW_OUTGOING_REFERRAL: 'referrals/new-outgoing-referral',
   REFERRAL_POSTING: 'referrals/:referralPostingId',
   ESG_FUNDING_REPORT: 'referrals/:referralPostingId/esg-funding-report',
 

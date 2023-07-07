@@ -56,9 +56,7 @@ interface Props {
   projectId: string;
 }
 
-export const ProjectReferralPostingsTable: React.FC<Props> = ({
-  projectId,
-}) => {
+const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
   const rowLinkTo = useCallback(
     (row: ReferralPostingFieldsFragment): string => {
       return generateSafePath(ProjectDashboardRoutes.REFERRAL_POSTING, {
@@ -84,3 +82,5 @@ export const ProjectReferralPostingsTable: React.FC<Props> = ({
     />
   );
 };
+
+export default ProjectReferralPostingsTable;

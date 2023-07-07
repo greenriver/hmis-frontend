@@ -70,6 +70,10 @@ export const useProjectBreadcrumbConfig = (
         title: 'ESG Funding Report',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
+      [ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL]: {
+        title: 'Create Referral',
+        parent: ProjectDashboardRoutes.REFERRALS,
+      },
       [ProjectDashboardRoutes.REFERRAL_POSTING]: {
         title: 'Active Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
