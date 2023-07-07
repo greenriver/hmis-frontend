@@ -25120,12 +25120,6 @@
         "interfaces": null,
         "enumValues": [
           {
-            "name": "ASSESSMENT",
-            "description": "Assessment",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "CURRENT_LIVING_SITUATION",
             "description": "CurrentLivingSituation",
             "isDeprecated": false,

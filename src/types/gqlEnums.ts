@@ -963,7 +963,6 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   RelatedRecordType: {
-    ASSESSMENT: 'Assessment',
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',
     EMPLOYMENT_EDUCATION: 'ExmploymentEducation',

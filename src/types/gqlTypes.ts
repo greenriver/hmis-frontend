@@ -3883,8 +3883,6 @@ export enum ReferralSource {
 
 /** Related record type for a group of questions in an assessment */
 export enum RelatedRecordType {
-  /** Assessment */
-  Assessment = 'ASSESSMENT',
   /** CurrentLivingSituation */
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** DisabilityGroup */
@@ -7433,6 +7431,49 @@ export type HealthAndDvFieldsFragment = {
   };
 };
 
+export type ExitValuesFragment = {
+  __typename?: 'Exit';
+  id: string;
+  aftercareDate?: string | null;
+  aftercareProvided?: AftercareProvided | null;
+  askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+  askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+  cmExitReason?: CmExitReason | null;
+  coercedToContinueWork?: NoYesReasonsForMissingData | null;
+  counselingReceived?: NoYesMissing | null;
+  countOfExchangeForSex?: CountExchangeForSex | null;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  destination: Destination;
+  destinationSafeClient?: NoYesReasonsForMissingData | null;
+  destinationSafeWorker?: WorkerResponse | null;
+  earlyExitReason?: ExpelledReason | null;
+  emailSocialMedia?: NoYesMissing | null;
+  exchangeForSex?: NoYesReasonsForMissingData | null;
+  exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+  exitDate: string;
+  familyCounseling?: NoYesMissing | null;
+  groupCounseling?: NoYesMissing | null;
+  housingAssessment?: HousingAssessmentAtExit | null;
+  inPersonGroup?: NoYesMissing | null;
+  inPersonIndividual?: NoYesMissing | null;
+  individualCounseling?: NoYesMissing | null;
+  laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+  otherDestination?: string | null;
+  posAdultConnections?: WorkerResponse | null;
+  posCommunityConnections?: WorkerResponse | null;
+  posPeerConnections?: WorkerResponse | null;
+  postExitCounselingPlan?: NoYesMissing | null;
+  projectCompletionStatus?: ProjectCompletionStatus | null;
+  sessionCountAtExit?: NoYesMissing | null;
+  sessionsInPlan?: number | null;
+  subsidyInformation?: SubsidyInformation | null;
+  telephone?: NoYesMissing | null;
+  workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+  workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+};
+
 export type ClientFieldsFragment = {
   __typename?: 'Client';
   dobDataQuality: DobDataQuality;
@@ -9355,49 +9396,6 @@ export type EventFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
-};
-
-export type ExitValuesFragment = {
-  __typename?: 'Exit';
-  id: string;
-  aftercareDate?: string | null;
-  aftercareProvided?: AftercareProvided | null;
-  askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
-  askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
-  cmExitReason?: CmExitReason | null;
-  coercedToContinueWork?: NoYesReasonsForMissingData | null;
-  counselingReceived?: NoYesMissing | null;
-  countOfExchangeForSex?: CountExchangeForSex | null;
-  dateCreated: string;
-  dateDeleted?: string | null;
-  dateUpdated: string;
-  destination: Destination;
-  destinationSafeClient?: NoYesReasonsForMissingData | null;
-  destinationSafeWorker?: WorkerResponse | null;
-  earlyExitReason?: ExpelledReason | null;
-  emailSocialMedia?: NoYesMissing | null;
-  exchangeForSex?: NoYesReasonsForMissingData | null;
-  exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
-  exitDate: string;
-  familyCounseling?: NoYesMissing | null;
-  groupCounseling?: NoYesMissing | null;
-  housingAssessment?: HousingAssessmentAtExit | null;
-  inPersonGroup?: NoYesMissing | null;
-  inPersonIndividual?: NoYesMissing | null;
-  individualCounseling?: NoYesMissing | null;
-  laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
-  otherDestination?: string | null;
-  posAdultConnections?: WorkerResponse | null;
-  posCommunityConnections?: WorkerResponse | null;
-  posPeerConnections?: WorkerResponse | null;
-  postExitCounselingPlan?: NoYesMissing | null;
-  projectCompletionStatus?: ProjectCompletionStatus | null;
-  sessionCountAtExit?: NoYesMissing | null;
-  sessionsInPlan?: number | null;
-  subsidyInformation?: SubsidyInformation | null;
-  telephone?: NoYesMissing | null;
-  workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
-  workplacePromiseDifference?: NoYesReasonsForMissingData | null;
 };
 
 export type FileFieldsFragment = {
