@@ -43,7 +43,7 @@ const MciClearance = ({
   currentFormValues,
 }: MciClearanceProps & {
   existingClient: boolean;
-  currentFormValues: Record<typeof MCI_CLEARANCE_FIELDS[number], any>;
+  currentFormValues: Record<(typeof MCI_CLEARANCE_FIELDS)[number], any>;
 }) => {
   const [errorState, setErrorState] = useState<ErrorState>(emptyErrorState);
   const [{ status, candidates }, setState] = useState<ClearanceState>(

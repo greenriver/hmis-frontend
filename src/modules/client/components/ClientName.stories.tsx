@@ -1,11 +1,11 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, ComponentStory } from '@storybook/react';
 
 import ClientName from './ClientName';
 
 export default {
   title: 'ClientName',
   component: ClientName,
-} as ComponentMeta<typeof ClientName>;
+} as Meta<typeof ClientName>;
 
 const Template: ComponentStory<typeof ClientName> = (args) => (
   <ClientName {...args} />
