@@ -42,7 +42,7 @@ const AddToHouseholdButton = ({
       formRole: FormRole.Enrollment,
       onCompleted: (data: EnrollmentFieldsFragment) => {
         setAdded(true);
-        onSuccess(data.household.id);
+        onSuccess(data.householdId);
       },
       inputVariables: { projectId, clientId },
       localConstants: { householdId },

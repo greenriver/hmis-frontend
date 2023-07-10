@@ -162,11 +162,7 @@ export const useClientBreadcrumbConfig = (
           : 'Enrollment',
         parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [ClientDashboardRoutes.VIEW_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.NEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.ASSESSMENT]: {
         title: 'Assessment',
         parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },

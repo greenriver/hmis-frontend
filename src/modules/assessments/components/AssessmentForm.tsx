@@ -3,11 +3,12 @@ import { assign } from 'lodash-es';
 import { ReactNode, Ref, useCallback, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAssessmentHandlers } from '../hooks/useAssessmentHandlers';
+
 import LockedAssessmentAlert from './alerts/LockedAssessmentAlert';
 import UnsavedAssessmentAlert from './alerts/UnsavedAssessmentAlert';
 import WipAssessmentAlert from './alerts/WipAssessmentAlert';
 import DeleteAssessmentButton from './DeleteAssessmentButton';
-import { useAssessmentHandlers } from './useAssessmentHandlers';
 
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import {

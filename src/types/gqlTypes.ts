@@ -1473,6 +1473,8 @@ export type Enrollment = {
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
   healthAndDvs: HealthAndDvsPaginated;
   household: Household;
+  householdId: Scalars['ID'];
+  householdShortId: Scalars['ID'];
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
@@ -3429,6 +3431,8 @@ export type Query = {
   getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Household lookup */
   household?: Maybe<Household>;
+  /** Get group of assessments that are performed together */
+  householdAssessments?: Maybe<Array<Assessment>>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
@@ -3504,6 +3508,12 @@ export type QueryGetServiceFormDefinitionArgs = {
 
 export type QueryHouseholdArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryHouseholdAssessmentsArgs = {
+  assessmentId?: InputMaybe<Scalars['ID']>;
+  assessmentRole: AssessmentRole;
+  householdId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -6347,6 +6357,302 @@ export type GetEnrollmentAssessmentsQuery = {
   } | null;
 };
 
+export type GetHouseholdAssessmentsQueryVariables = Exact<{
+  householdId: Scalars['ID'];
+  assessmentRole: AssessmentRole;
+  assessmentId?: InputMaybe<Scalars['ID']>;
+}>;
+
+export type GetHouseholdAssessmentsQuery = {
+  __typename?: 'Query';
+  householdAssessments?: Array<{
+    __typename?: 'Assessment';
+    wipValues?: any | null;
+    id: string;
+    inProgress: boolean;
+    assessmentDate: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+    role: AssessmentRole;
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      livingSituation?: LivingSituation | null;
+      lengthOfStay?: ResidencePriorLengthOfStay | null;
+      losUnderThreshold?: NoYesMissing | null;
+      previousStreetEssh?: NoYesMissing | null;
+      dateToStreetEssh?: string | null;
+      timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+      monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+      enrollmentCoc?: string | null;
+      dateOfPathStatus?: string | null;
+      clientEnrolledInPath?: NoYesMissing | null;
+      reasonNotEnrolled?: ReasonNotEnrolled | null;
+      percentAmi?: PercentAmi | null;
+      referralSource?: ReferralSource | null;
+      countOutreachReferralApproaches?: number | null;
+      dateOfBcpStatus?: string | null;
+      eligibleForRhy?: NoYesMissing | null;
+      reasonNoServices?: ReasonNoServices | null;
+      runawayYouth?: NoYesReasonsForMissingData | null;
+      sexualOrientation?: SexualOrientation | null;
+      sexualOrientationOther?: string | null;
+      formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+      childWelfareYears?: RhyNumberofYears | null;
+      childWelfareMonths?: number | null;
+      formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+      juvenileJusticeYears?: RhyNumberofYears | null;
+      juvenileJusticeMonths?: number | null;
+      unemploymentFam?: NoYesMissing | null;
+      mentalHealthDisorderFam?: NoYesMissing | null;
+      physicalDisabilityFam?: NoYesMissing | null;
+      alcoholDrugUseDisorderFam?: NoYesMissing | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+    };
+    incomeBenefit?: {
+      __typename: 'IncomeBenefit';
+      adap?: NoYesReasonsForMissingData | null;
+      alimony?: NoYesMissing | null;
+      alimonyAmount?: number | null;
+      benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+      childSupport?: NoYesMissing | null;
+      childSupportAmount?: number | null;
+      cobra?: NoYesMissing | null;
+      connectionWithSoar?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      earned?: NoYesMissing | null;
+      earnedAmount?: number | null;
+      employerProvided?: NoYesMissing | null;
+      ga?: NoYesMissing | null;
+      gaAmount?: number | null;
+      hivaidsAssistance?: NoYesReasonsForMissingData | null;
+      id: string;
+      incomeFromAnySource?: NoYesReasonsForMissingData | null;
+      indianHealthServices?: NoYesMissing | null;
+      informationDate: string;
+      insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+      medicaid?: NoYesMissing | null;
+      medicare?: NoYesMissing | null;
+      noAdapReason?: NoAssistanceReason | null;
+      noCobraReason?: ReasonNotInsured | null;
+      noEmployerProvidedReason?: ReasonNotInsured | null;
+      noHivaidsAssistanceReason?: NoAssistanceReason | null;
+      noIndianHealthServicesReason?: ReasonNotInsured | null;
+      noMedicaidReason?: ReasonNotInsured | null;
+      noMedicareReason?: ReasonNotInsured | null;
+      noPrivatePayReason?: ReasonNotInsured | null;
+      noRyanWhiteReason?: NoAssistanceReason | null;
+      noSchipReason?: ReasonNotInsured | null;
+      noStateHealthInsReason?: ReasonNotInsured | null;
+      noVaMedReason?: ReasonNotInsured | null;
+      otherBenefitsSource?: NoYesMissing | null;
+      otherBenefitsSourceIdentify?: string | null;
+      otherIncomeAmount?: number | null;
+      otherIncomeSource?: NoYesMissing | null;
+      otherIncomeSourceIdentify?: string | null;
+      otherInsurance?: NoYesMissing | null;
+      otherInsuranceIdentify?: string | null;
+      otherTanf?: NoYesMissing | null;
+      pension?: NoYesMissing | null;
+      pensionAmount?: number | null;
+      privateDisability?: NoYesMissing | null;
+      privateDisabilityAmount?: number | null;
+      privatePay?: NoYesMissing | null;
+      ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+      schip?: NoYesMissing | null;
+      snap?: NoYesMissing | null;
+      socSecRetirement?: NoYesMissing | null;
+      socSecRetirementAmount?: number | null;
+      ssdi?: NoYesMissing | null;
+      ssdiAmount?: number | null;
+      ssi?: NoYesMissing | null;
+      ssiAmount?: number | null;
+      stateHealthIns?: NoYesMissing | null;
+      tanf?: NoYesMissing | null;
+      tanfAmount?: number | null;
+      tanfChildCare?: NoYesMissing | null;
+      tanfTransportation?: NoYesMissing | null;
+      totalMonthlyIncome?: string | null;
+      unemployment?: NoYesMissing | null;
+      unemploymentAmount?: number | null;
+      vaDisabilityNonService?: NoYesMissing | null;
+      vaDisabilityNonServiceAmount?: number | null;
+      vaDisabilityService?: NoYesMissing | null;
+      vaDisabilityServiceAmount?: number | null;
+      vaMedicalServices?: NoYesMissing | null;
+      wic?: NoYesMissing | null;
+      workersComp?: NoYesMissing | null;
+      workersCompAmount?: number | null;
+    } | null;
+    disabilityGroup?: {
+      __typename: 'DisabilityGroup';
+      id: string;
+      dataCollectionStage: DataCollectionStage;
+      informationDate: string;
+      disablingCondition: NoYesReasonsForMissingData;
+      chronicHealthCondition?: NoYesReasonsForMissingData | null;
+      chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      developmentalDisability?: NoYesReasonsForMissingData | null;
+      hivAids?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      physicalDisability?: NoYesReasonsForMissingData | null;
+      physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      substanceUseDisorder?: DisabilityResponse | null;
+      substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    } | null;
+    healthAndDv?: {
+      __typename: 'HealthAndDv';
+      bounceBack?: WellbeingAgreement | null;
+      currentlyFleeing?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      dentalHealthStatus?: HealthStatus | null;
+      domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+      dueDate?: string | null;
+      feelingFrequency?: FeelingFrequency | null;
+      generalHealthStatus?: HealthStatus | null;
+      id: string;
+      informationDate: string;
+      lifeValue?: WellbeingAgreement | null;
+      mentalHealthStatus?: HealthStatus | null;
+      pregnancyStatus?: NoYesReasonsForMissingData | null;
+      supportFromOthers?: WellbeingAgreement | null;
+      whenOccurred?: WhenDvOccurred | null;
+    } | null;
+    exit?: {
+      __typename?: 'Exit';
+      id: string;
+      aftercareDate?: string | null;
+      aftercareProvided?: AftercareProvided | null;
+      askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+      askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      cmExitReason?: CmExitReason | null;
+      coercedToContinueWork?: NoYesReasonsForMissingData | null;
+      counselingReceived?: NoYesMissing | null;
+      countOfExchangeForSex?: CountExchangeForSex | null;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      destination: Destination;
+      destinationSafeClient?: NoYesReasonsForMissingData | null;
+      destinationSafeWorker?: WorkerResponse | null;
+      earlyExitReason?: ExpelledReason | null;
+      emailSocialMedia?: NoYesMissing | null;
+      exchangeForSex?: NoYesReasonsForMissingData | null;
+      exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      exitDate: string;
+      familyCounseling?: NoYesMissing | null;
+      groupCounseling?: NoYesMissing | null;
+      housingAssessment?: HousingAssessmentAtExit | null;
+      inPersonGroup?: NoYesMissing | null;
+      inPersonIndividual?: NoYesMissing | null;
+      individualCounseling?: NoYesMissing | null;
+      laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+      otherDestination?: string | null;
+      posAdultConnections?: WorkerResponse | null;
+      posCommunityConnections?: WorkerResponse | null;
+      posPeerConnections?: WorkerResponse | null;
+      postExitCounselingPlan?: NoYesMissing | null;
+      projectCompletionStatus?: ProjectCompletionStatus | null;
+      sessionCountAtExit?: NoYesMissing | null;
+      sessionsInPlan?: number | null;
+      subsidyInformation?: SubsidyInformation | null;
+      telephone?: NoYesMissing | null;
+      workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+      workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+    } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+    access: {
+      __typename?: 'AssessmentAccess';
+      id: string;
+      canDeleteAssessments: boolean;
+      canDeleteEnrollments: boolean;
+      canEditEnrollments: boolean;
+    };
+  }> | null;
+};
+
 export type SaveAssessmentMutationVariables = Exact<{
   input: SaveAssessmentInput;
 }>;
@@ -8124,6 +8430,8 @@ export type GetClientEnrollmentsQuery = {
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
+        householdId: string;
+        householdShortId: string;
         householdSize: number;
         project: {
           __typename?: 'Project';
@@ -8131,7 +8439,6 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string; shortId: string };
         client: { __typename?: 'Client'; id: string };
         access: {
           __typename?: 'EnrollmentAccess';
@@ -8218,6 +8525,8 @@ export type GetClientServicesQuery = {
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -8225,7 +8534,6 @@ export type GetClientServicesQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
           access: {
             __typename?: 'EnrollmentAccess';
@@ -8442,6 +8750,8 @@ export type CreateEnrollmentMutation = {
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -8449,7 +8759,6 @@ export type CreateEnrollmentMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
       access: {
         __typename?: 'EnrollmentAccess';
@@ -8737,6 +9046,8 @@ export type GetEnrollmentQuery = {
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -8744,7 +9055,6 @@ export type GetEnrollmentQuery = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
     access: {
       __typename?: 'EnrollmentAccess';
@@ -8769,6 +9079,8 @@ export type GetEnrollmentWithHouseholdQuery = {
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
     householdSize: number;
     household: {
       __typename?: 'Household';
@@ -8778,25 +9090,6 @@ export type GetEnrollmentWithHouseholdQuery = {
         __typename?: 'HouseholdClient';
         id: string;
         relationshipToHoH: RelationshipToHoH;
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-          intakeAssessment?: {
-            __typename?: 'Assessment';
-            id: string;
-            inProgress: boolean;
-            assessmentDate: string;
-          } | null;
-          exitAssessment?: {
-            __typename?: 'Assessment';
-            id: string;
-            inProgress: boolean;
-            assessmentDate: string;
-          } | null;
-        };
         client: {
           __typename?: 'Client';
           id: string;
@@ -8825,6 +9118,13 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
         };
       }>;
     };
@@ -9296,6 +9596,8 @@ export type EnrollmentFieldsFragment = {
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
   householdSize: number;
   project: {
     __typename?: 'Project';
@@ -9303,7 +9605,6 @@ export type EnrollmentFieldsFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  household: { __typename?: 'Household'; id: string; shortId: string };
   client: { __typename?: 'Client'; id: string };
   access: {
     __typename?: 'EnrollmentAccess';
@@ -9321,6 +9622,8 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
   householdSize: number;
   household: {
     __typename?: 'Household';
@@ -11565,6 +11868,8 @@ export type SubmitFormMutation = {
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -11572,7 +11877,6 @@ export type SubmitFormMutation = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
           access: {
             __typename?: 'EnrollmentAccess';
@@ -12077,60 +12381,6 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   };
 };
 
-export type HouseholdClientFieldsWithAssessmentsFragment = {
-  __typename?: 'HouseholdClient';
-  id: string;
-  relationshipToHoH: RelationshipToHoH;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    intakeAssessment?: {
-      __typename?: 'Assessment';
-      id: string;
-      inProgress: boolean;
-      assessmentDate: string;
-    } | null;
-    exitAssessment?: {
-      __typename?: 'Assessment';
-      id: string;
-      inProgress: boolean;
-      assessmentDate: string;
-    } | null;
-  };
-  client: {
-    __typename?: 'Client';
-    id: string;
-    veteranStatus: NoYesReasonsForMissingData;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-    dob?: string | null;
-    age?: number | null;
-    ssn?: string | null;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-      canEditClient: boolean;
-      canDeleteClient: boolean;
-      canViewDob: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-      canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-    };
-  };
-};
-
 export type GetHouseholdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -12203,6 +12453,8 @@ export type UpdateRelationshipToHoHMutation = {
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -13115,6 +13367,8 @@ export type GetProjectEnrollmentsQuery = {
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
+        householdId: string;
+        householdShortId: string;
         householdSize: number;
         client: {
           __typename?: 'Client';
@@ -13139,7 +13393,6 @@ export type GetProjectEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string; shortId: string };
         access: {
           __typename?: 'EnrollmentAccess';
           id: string;
@@ -15678,10 +15931,8 @@ export const EnrollmentFieldsFragmentDoc = gql`
     inProgress
     relationshipToHoH
     enrollmentCoc
-    household {
-      id
-      shortId
-    }
+    householdId
+    householdShortId
     householdSize
     client {
       id
@@ -15952,28 +16203,6 @@ export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
     }
   }
   ${ProjectEnrollmentsHouseholdClientFieldsFragmentDoc}
-`;
-export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
-  fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
-    ...HouseholdClientFields
-    enrollment {
-      id
-      entryDate
-      exitDate
-      inProgress
-      intakeAssessment {
-        id
-        inProgress
-        assessmentDate
-      }
-      exitAssessment {
-        id
-        inProgress
-        assessmentDate
-      }
-    }
-  }
-  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
@@ -16659,6 +16888,80 @@ export type GetEnrollmentAssessmentsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables
+>;
+export const GetHouseholdAssessmentsDocument = gql`
+  query GetHouseholdAssessments(
+    $householdId: ID!
+    $assessmentRole: AssessmentRole!
+    $assessmentId: ID
+  ) {
+    householdAssessments(
+      householdId: $householdId
+      assessmentRole: $assessmentRole
+      assessmentId: $assessmentId
+    ) {
+      ...AssessmentWithValues
+      ...AssessmentWithRecords
+      enrollment {
+        id
+      }
+    }
+  }
+  ${AssessmentWithValuesFragmentDoc}
+  ${AssessmentWithRecordsFragmentDoc}
+`;
+
+/**
+ * __useGetHouseholdAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetHouseholdAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHouseholdAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHouseholdAssessmentsQuery({
+ *   variables: {
+ *      householdId: // value for 'householdId'
+ *      assessmentRole: // value for 'assessmentRole'
+ *      assessmentId: // value for 'assessmentId'
+ *   },
+ * });
+ */
+export function useGetHouseholdAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
+}
+export function useGetHouseholdAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
+}
+export type GetHouseholdAssessmentsQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsQuery
+>;
+export type GetHouseholdAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsLazyQuery
+>;
+export type GetHouseholdAssessmentsQueryResult = Apollo.QueryResult<
+  GetHouseholdAssessmentsQuery,
+  GetHouseholdAssessmentsQueryVariables
 >;
 export const SaveAssessmentDocument = gql`
   mutation SaveAssessment($input: SaveAssessmentInput!) {
@@ -18017,13 +18320,13 @@ export const GetEnrollmentWithHouseholdDocument = gql`
         id
         shortId
         householdClients {
-          ...HouseholdClientFieldsWithAssessments
+          ...HouseholdClientFields
         }
       }
     }
   }
   ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsWithAssessmentsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 
 /**

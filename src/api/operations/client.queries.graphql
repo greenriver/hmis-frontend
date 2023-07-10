@@ -217,7 +217,7 @@ query GetEnrollmentWithHousehold($id: ID!) {
       id
       shortId
       householdClients {
-        ...HouseholdClientFieldsWithAssessments
+        ...HouseholdClientFields
       }
     }
   }

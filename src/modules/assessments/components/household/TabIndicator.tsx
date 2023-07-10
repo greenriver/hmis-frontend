@@ -4,15 +4,13 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import LockIcon from '@mui/icons-material/Lock';
 
-import { AssessmentStatus } from './util';
-
-import { FormRole } from '@/types/gqlTypes';
+import { AssessmentStatus, HouseholdAssesmentRole } from './util';
 
 const TabIndicator = ({
   status,
 }: {
   status: AssessmentStatus;
-  role: FormRole.Intake | FormRole.Exit;
+  role: HouseholdAssesmentRole;
 }) => {
   let Icon;
   let color:

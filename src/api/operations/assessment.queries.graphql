@@ -67,6 +67,24 @@ query GetEnrollmentAssessments(
   }
 }
 
+query GetHouseholdAssessments(
+  $householdId: ID!
+  $assessmentRole: AssessmentRole!
+  $assessmentId: ID
+) {
+  householdAssessments(
+    householdId: $householdId
+    assessmentRole: $assessmentRole
+    assessmentId: $assessmentId
+  ) {
+    ...AssessmentWithValues
+    ...AssessmentWithRecords
+    enrollment {
+      id
+    }
+  }
+}
+
 mutation SaveAssessment($input: SaveAssessmentInput!) {
   saveAssessment(input: $input) {
     assessment {
