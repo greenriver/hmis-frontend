@@ -128,6 +128,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'enrollmentCoc',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
         name: 'id',
         type: {
           kind: 'NON_NULL',
@@ -142,6 +146,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
         },
+      },
+      {
+        name: 'role',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'AssessmentRole', ofType: null },
+        },
+      },
+      {
+        name: 'wipValues',
+        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },
@@ -983,23 +999,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'valueText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-    ],
-  },
-  {
-    name: 'CustomForm',
-    fields: [
-      {
-        name: 'id',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
-        },
-      },
-      {
-        name: 'values',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
       },
     ],
   },
@@ -2036,6 +2035,23 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'FieldMapping',
+    fields: [
+      {
+        name: 'customFieldKey',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'fieldName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'recordType',
+        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
+      },
+    ],
+  },
+  {
     name: 'File',
     fields: [
       {
@@ -2145,35 +2161,11 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
-        name: 'identifier',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
         name: 'role',
         type: {
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'ENUM', name: 'FormRole', ofType: null },
-        },
-      },
-      {
-        name: 'status',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
-        },
-      },
-      {
-        name: 'version',
-        type: {
-          kind: 'NON_NULL',
-          name: null,
-          ofType: { kind: 'SCALAR', name: 'Int', ofType: null },
         },
       },
     ],
@@ -2195,10 +2187,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'ENUM', name: 'Component', ofType: null },
       },
       {
-        name: 'customFieldKey',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
         name: 'dataCollectedAbout',
         type: { kind: 'ENUM', name: 'DataCollectedAbout', ofType: null },
       },
@@ -2209,10 +2197,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'enableBehavior',
         type: { kind: 'ENUM', name: 'EnableBehavior', ofType: null },
-      },
-      {
-        name: 'fieldName',
-        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'funders',
@@ -2248,7 +2232,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
       },
       {
         name: 'prefill',
-        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
       },
       {
         name: 'prefix',
@@ -2285,10 +2269,6 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'readonlyText',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
-      },
-      {
-        name: 'recordType',
-        type: { kind: 'ENUM', name: 'RelatedRecordType', ofType: null },
       },
       {
         name: 'repeats',
@@ -4574,11 +4554,19 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'formDefinitionId',
-        type: { kind: 'SCALAR', name: 'ID', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
       },
       {
         name: 'hudValues',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
       },
       {
         name: 'validateOnly',
@@ -4586,7 +4574,11 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       },
       {
         name: 'values',
-        type: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'JsonObject', ofType: null },
+        },
       },
     ],
   },

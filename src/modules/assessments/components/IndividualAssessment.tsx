@@ -172,9 +172,7 @@ const IndividualAssessment = ({
           }
         />
       )}
-      {!definition && (
-        <MissingDefinitionAlert hasCustomForm={!!assessment?.customForm} />
-      )}
+      {!definition && <MissingDefinitionAlert />}
       {definition && (
         <AssessmentForm
           key={assessment?.id}

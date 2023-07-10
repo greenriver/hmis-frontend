@@ -148,7 +148,8 @@ Cypress.Commands.add('expectHudValuesSectionToDeepEqual', (values) => {
           Object.entries(win.debug.hudValues).filter(
             ([key]) =>
               key.includes(`${Object.keys(values)[0].split('.')[0]}.`) &&
-              key !== 'Enrollment.entryDate'
+              key !== 'Enrollment.entryDate' &&
+              key !== 'Enrollment.enrollmentCoc'
           )
         ),
         values

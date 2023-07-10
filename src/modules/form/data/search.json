@@ -5,49 +5,35 @@
       "required": false,
       "linkId": "1",
       "text": "Personal ID",
-
-      "fieldName": "personalId"
+      "mapping": { "fieldName": "personalId" }
     },
     {
       "type": "STRING",
       "required": false,
       "linkId": "2",
       "text": "First Name",
-
-      "fieldName": "firstName"
+      "mapping": { "fieldName": "firstName" }
     },
     {
       "type": "STRING",
       "required": false,
       "linkId": "3",
       "text": "Last Name",
-
-      "fieldName": "lastName"
+      "mapping": { "fieldName": "lastName" }
     },
     {
       "type": "STRING",
       "required": false,
       "linkId": "4",
       "text": "SSN",
-
-      "fieldName": "ssnSerial"
+      "mapping": { "fieldName": "ssnSerial" }
     },
     {
       "type": "DATE",
       "required": false,
       "linkId": "5",
       "text": "Date of Birth",
-
-      "fieldName": "dob"
-    },
-    {
-      "type": "CHOICE",
-      "required": false,
-      "linkId": "6",
-      "text": "Organizations",
-      "repeats": true,
-      "pickListReference": "ORGANIZATION",
-      "fieldName": "organizations"
+      "mapping": { "fieldName": "dob" }
     }
   ]
 }

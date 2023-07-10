@@ -85,34 +85,6 @@ query GetClientAuditEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
-query GetClientAssessments(
-  $id: ID!
-  $limit: Int = 10
-  $offset: Int = 0
-  $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-  $filters: AssessmentFilterOptions = null
-) {
-  client(id: $id) {
-    id
-    assessments(
-      limit: $limit
-      offset: $offset
-      sortOrder: $sortOrder
-      filters: $filters
-    ) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...AssessmentFields
-        enrollment {
-          ...EnrollmentFields
-        }
-      }
-    }
-  }
-}
-
 query GetClientServices(
   $id: ID!
   $limit: Int = 10

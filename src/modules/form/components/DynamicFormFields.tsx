@@ -60,9 +60,11 @@ const DynamicFormFields: React.FC<Props> = ({
   // Get errors for a particular field
   const getFieldErrors = useCallback(
     (item: FormItem) => {
-      if (!errors || !item.fieldName) return undefined;
+      if (!errors || !item.mapping) return undefined;
       return errors.filter(
-        (e) => e.attribute === item.fieldName || e.linkId === item.linkId
+        (e) =>
+          e.linkId === item.linkId ||
+          (e.attribute && e.attribute === item.mapping?.fieldName)
       );
     },
     [errors]
