@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 import { useState } from 'react';
 
 import ProjectSelect, { Option } from './ProjectSelect';
@@ -14,7 +14,7 @@ export default {
       </Box>
     ),
   ],
-} as ComponentMeta<typeof ProjectSelect>;
+} as Meta<typeof ProjectSelect>;
 
 const Template: ComponentStory<typeof ProjectSelect> = (args) => {
   const [value, setValue] = useState<Option | Option[] | null>(

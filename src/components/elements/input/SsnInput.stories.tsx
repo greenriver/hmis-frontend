@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 import { useEffect } from 'react';
 import useState from 'storybook-addon-state';
 
@@ -12,7 +12,7 @@ export default {
     onlylast4: { control: 'boolean' },
     value: { control: 'text' },
   },
-} as ComponentMeta<typeof SsnInput>;
+} as Meta<typeof SsnInput>;
 
 const Template: ComponentStory<typeof SsnInput> = (args) => {
   const [value, setValue] = useState('ssnInputValue', args.value);

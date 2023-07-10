@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, ComponentStory } from '@storybook/react';
 
 import NumberInput from './NumberInput';
 
@@ -14,7 +14,7 @@ export default {
       </Box>
     ),
   ],
-} as ComponentMeta<typeof NumberInput>;
+} as Meta<typeof NumberInput>;
 
 const Template: ComponentStory<typeof NumberInput> = (args) => (
   <NumberInput {...args} />
