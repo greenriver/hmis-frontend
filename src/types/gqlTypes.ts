@@ -3905,7 +3905,7 @@ export enum RelatedRecordType {
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** DisabilityGroup */
   DisabilityGroup = 'DISABILITY_GROUP',
-  /** ExmploymentEducation */
+  /** EmploymentEducation */
   EmploymentEducation = 'EMPLOYMENT_EDUCATION',
   /** Enrollment */
   Enrollment = 'ENROLLMENT',

@@ -965,7 +965,7 @@ export const HmisEnums = {
   RelatedRecordType: {
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',
-    EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
+    EMPLOYMENT_EDUCATION: 'EmploymentEducation',
     ENROLLMENT: 'Enrollment',
     ENROLLMENT_COC: 'EnrollmentCoc',
     EXIT: 'Exit',
