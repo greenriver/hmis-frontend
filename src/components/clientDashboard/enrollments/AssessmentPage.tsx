@@ -77,7 +77,7 @@ const AssessmentPage = () => {
       client={client}
       relationshipToHoH={enrollment.relationshipToHoH}
       getFormActionProps={(assessment) => ({
-        onDiscard: () => navigateToEnrollment,
+        onDiscard: navigateToEnrollment,
         config: [
           {
             id: 'submit',
