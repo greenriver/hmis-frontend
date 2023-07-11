@@ -48,13 +48,13 @@ const AssessmentPage = () => {
   );
 
   const onSuccess = useCallback(() => {
-    if (assessmentId) return;
-
     // We created a NEW assessment, clear assessment queries from cache before navigating so the table reloads
-    cache.evict({
-      id: `Enrollment:${enrollmentId}`,
-      fieldName: 'assessments',
-    });
+    if (!assessmentId) {
+      cache.evict({
+        id: `Enrollment:${enrollmentId}`,
+        fieldName: 'assessments',
+      });
+    }
     navigateToEnrollment();
   }, [navigateToEnrollment, assessmentId, enrollmentId]);
 
