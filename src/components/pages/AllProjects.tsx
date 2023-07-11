@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 
 import ButtonLink from '../elements/ButtonLink';
 import Loading from '../elements/Loading';
+import RouterLink from '../elements/RouterLink';
 
 import TextInput from '@/components/elements/input/TextInput';
 import { ColumnDef } from '@/components/elements/table/types';
@@ -33,8 +34,8 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
       <Chip
         label={row.organization.organizationName}
         size='small'
-        component='a'
-        href={generateSafePath(Routes.ORGANIZATION, {
+        component={RouterLink}
+        to={generateSafePath(Routes.ORGANIZATION, {
           organizationId: row.organization.id,
         })}
         icon={<OpenInNewIcon fontSize='inherit' />}
