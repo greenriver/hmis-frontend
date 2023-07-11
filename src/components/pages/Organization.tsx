@@ -17,7 +17,7 @@ import IdDisplay from '@/modules/hmis/components/IdDisplay';
 import { OrganizationPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useHasRootPermissions } from '@/modules/permissions/useHasPermissionsHooks';
 import OrganizationDetails from '@/modules/projects/components/OrganizationDetails';
-import ProjectsTable from '@/modules/projects/components/tables/ProjectsTable';
+import OrganizationProjectsTable from '@/modules/projects/components/tables/OrganizationProjectsTable';
 import { useOrganizationCrumbs } from '@/modules/projects/hooks/useOrganizationCrumbs';
 import { Routes } from '@/routes/routes';
 import {
@@ -73,7 +73,7 @@ const Organization = () => {
 
           {organization && (
             <TitleCard data-testid='projectsCard' title='Projects'>
-              <ProjectsTable organizationId={organizationId} />
+              <OrganizationProjectsTable organizationId={organizationId} />
             </TitleCard>
           )}
         </Grid>
