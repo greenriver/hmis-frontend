@@ -79,6 +79,7 @@ const ProjectReferralPostingsTable: React.FC<Props> = ({ projectId }) => {
       noData='No referrals'
       pagePath='project.incomingReferralPostings'
       rowLinkTo={rowLinkTo}
+      defaultPageSize={25}
     />
   );
 };

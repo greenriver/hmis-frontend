@@ -10,7 +10,7 @@ import {
 } from '@/types/gqlTypes';
 
 export const ALL_PROJECTS_CRUMB = {
-  label: 'All Projects & Organizations',
+  label: 'Projects',
   to: Routes.ALL_PROJECTS,
 };
 

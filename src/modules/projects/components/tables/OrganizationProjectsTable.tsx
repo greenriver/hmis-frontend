@@ -44,7 +44,7 @@ const columns: ColumnDef<ProjectAllFieldsFragment>[] = [
   },
 ];
 
-const ProjectsTable = ({
+const OrganizationProjectsTable = ({
   organizationId,
   hideSearch = false,
   hideFilters = false,
@@ -76,10 +76,10 @@ const ProjectsTable = ({
           <TextInput
             label='Search Projects'
             name='search projects'
-            placeholder='Search...'
+            placeholder='Search projects...'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
-            inputWidth='200px'
+            inputWidth='300px'
           />
         )
       }
@@ -102,4 +102,4 @@ const ProjectsTable = ({
     />
   );
 };
-export default ProjectsTable;
+export default OrganizationProjectsTable;

@@ -13225,6 +13225,37 @@ export type FunderFieldsFragment = {
   user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
+export type GetProjectsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  filters?: InputMaybe<ProjectFilterOptions>;
+  sortOrder?: InputMaybe<ProjectSortOption>;
+}>;
+
+export type GetProjectsQuery = {
+  __typename?: 'Query';
+  projects: {
+    __typename?: 'ProjectsPaginated';
+    offset: number;
+    limit: number;
+    nodesCount: number;
+    nodes: Array<{
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+      operatingEndDate?: string | null;
+      operatingStartDate: string;
+      organization: {
+        __typename?: 'Organization';
+        id: string;
+        hudId: string;
+        organizationName: string;
+      };
+    }>;
+  };
+};
+
 export type GetProjectQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -19941,6 +19972,88 @@ export type DeleteOrganizationMutationResult =
 export type DeleteOrganizationMutationOptions = Apollo.BaseMutationOptions<
   DeleteOrganizationMutation,
   DeleteOrganizationMutationVariables
+>;
+export const GetProjectsDocument = gql`
+  query GetProjects(
+    $limit: Int = 10
+    $offset: Int = 0
+    $filters: ProjectFilterOptions
+    $sortOrder: ProjectSortOption
+  ) {
+    projects(
+      limit: $limit
+      offset: $offset
+      filters: $filters
+      sortOrder: $sortOrder
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        id
+        ...ProjectNameAndType
+        ...ProjectOperatingPeriod
+        organization {
+          ...OrganizationNameFields
+        }
+      }
+    }
+  }
+  ${ProjectNameAndTypeFragmentDoc}
+  ${ProjectOperatingPeriodFragmentDoc}
+  ${OrganizationNameFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      filters: // value for 'filters'
+ *      sortOrder: // value for 'sortOrder'
+ *   },
+ * });
+ */
+export function useGetProjectsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetProjectsQuery,
+    GetProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+    GetProjectsDocument,
+    options
+  );
+}
+export function useGetProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectsQuery,
+    GetProjectsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+    GetProjectsDocument,
+    options
+  );
+}
+export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
+export type GetProjectsLazyQueryHookResult = ReturnType<
+  typeof useGetProjectsLazyQuery
+>;
+export type GetProjectsQueryResult = Apollo.QueryResult<
+  GetProjectsQuery,
+  GetProjectsQueryVariables
 >;
 export const GetProjectDocument = gql`
   query GetProject($id: ID!) {
