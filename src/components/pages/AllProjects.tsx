@@ -111,7 +111,7 @@ const AllProjects = () => {
           <TextInput
             label='Search Projects'
             name='search projects'
-            placeholder='Search...'
+            placeholder='Search projects...'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='100%'
@@ -136,6 +136,7 @@ const AllProjects = () => {
               recordType='Project'
               defaultFilters={{ status: [ProjectFilterOptionStatus.Open] }}
               filters={(filters) => omit(filters, 'searchTerm')}
+              defaultPageSize={25}
               noSort
             />
           </Paper>

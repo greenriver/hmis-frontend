@@ -76,7 +76,7 @@ const OrganizationProjectsTable = ({
           <TextInput
             label='Search Projects'
             name='search projects'
-            placeholder='Search...'
+            placeholder='Search projects...'
             value={search || ''}
             onChange={(e) => setSearch(e.target.value)}
             inputWidth='300px'
