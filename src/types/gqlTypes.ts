@@ -3164,8 +3164,6 @@ export enum PickListType {
   Geocode = 'GEOCODE',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
-  /** What are valid unit types for new units */
-  PossibleProjectUnitTypes = 'POSSIBLE_PROJECT_UNIT_TYPES',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
