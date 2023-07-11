@@ -3062,7 +3062,7 @@ export type Organization = {
 };
 
 export type OrganizationProjectsArgs = {
-  filters?: InputMaybe<ProjectFilterOptions>;
+  filters?: InputMaybe<ProjectsForEnrollmentFilterOptions>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   sortOrder?: InputMaybe<ProjectSortOption>;
@@ -3350,6 +3350,7 @@ export enum ProjectFilterOptionStatus {
 
 export type ProjectFilterOptions = {
   funder?: InputMaybe<Array<FundingSource>>;
+  organization?: InputMaybe<Array<Scalars['ID']>>;
   projectType?: InputMaybe<Array<ProjectType>>;
   searchTerm?: InputMaybe<Scalars['String']>;
   status?: InputMaybe<Array<ProjectFilterOptionStatus>>;
@@ -3394,6 +3395,13 @@ export enum ProjectType {
   /** Transitional Housing */
   Th = 'TH',
 }
+
+export type ProjectsForEnrollmentFilterOptions = {
+  funder?: InputMaybe<Array<FundingSource>>;
+  projectType?: InputMaybe<Array<ProjectType>>;
+  searchTerm?: InputMaybe<Scalars['String']>;
+  status?: InputMaybe<Array<ProjectFilterOptionStatus>>;
+};
 
 export type ProjectsPaginated = {
   __typename?: 'ProjectsPaginated';
@@ -13048,7 +13056,7 @@ export type GetOrganizationProjectsQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  filters?: InputMaybe<ProjectFilterOptions>;
+  filters?: InputMaybe<ProjectsForEnrollmentFilterOptions>;
   sortOrder?: InputMaybe<ProjectSortOption>;
 }>;
 
@@ -19836,7 +19844,7 @@ export const GetOrganizationProjectsDocument = gql`
     $id: ID!
     $limit: Int = 10
     $offset: Int = 0
-    $filters: ProjectFilterOptions
+    $filters: ProjectsForEnrollmentFilterOptions
     $sortOrder: ProjectSortOption
   ) {
     organization(id: $id) {
