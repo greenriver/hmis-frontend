@@ -36,6 +36,12 @@ fragment AssessmentWithRecords on Assessment {
   exit {
     ...ExitValues
   }
+  youthEducationStatus {
+    ...YouthEducationStatusValues
+  }
+  employmentEducation {
+    ...EmploymentEducationValues
+  }
   customDataElements {
     ...CustomDataElementFields
   }

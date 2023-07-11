@@ -5170,6 +5170,31 @@ export type AssessmentWithRecordsFragment = {
     workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
     workplacePromiseDifference?: NoYesReasonsForMissingData | null;
   } | null;
+  youthEducationStatus?: {
+    __typename?: 'YouthEducationStatus';
+    currentEdStatus?: CurrentEdStatus | null;
+    currentSchoolAttend?: CurrentSchoolAttended | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    id: string;
+    informationDate: string;
+    mostRecentEdStatus?: MostRecentEdStatus | null;
+  } | null;
+  employmentEducation?: {
+    __typename?: 'EmploymentEducation';
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    employed?: NoYesReasonsForMissingData | null;
+    employmentType?: EmploymentType | null;
+    id: string;
+    informationDate: string;
+    lastGradeCompleted?: LastGradeCompleted | null;
+    notEmployedReason?: NotEmployedReason | null;
+    schoolStatus?: SchoolStatus | null;
+  } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
     id: string;
@@ -5477,6 +5502,31 @@ export type FullAssessmentFragment = {
     telephone?: NoYesMissing | null;
     workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
     workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+  } | null;
+  youthEducationStatus?: {
+    __typename?: 'YouthEducationStatus';
+    currentEdStatus?: CurrentEdStatus | null;
+    currentSchoolAttend?: CurrentSchoolAttended | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    id: string;
+    informationDate: string;
+    mostRecentEdStatus?: MostRecentEdStatus | null;
+  } | null;
+  employmentEducation?: {
+    __typename?: 'EmploymentEducation';
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    employed?: NoYesReasonsForMissingData | null;
+    employmentType?: EmploymentType | null;
+    id: string;
+    informationDate: string;
+    lastGradeCompleted?: LastGradeCompleted | null;
+    notEmployedReason?: NotEmployedReason | null;
+    schoolStatus?: SchoolStatus | null;
   } | null;
   customDataElements: Array<{
     __typename?: 'CustomDataElement';
@@ -6224,6 +6274,31 @@ export type GetAssessmentQuery = {
       workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
       workplacePromiseDifference?: NoYesReasonsForMissingData | null;
     } | null;
+    youthEducationStatus?: {
+      __typename?: 'YouthEducationStatus';
+      currentEdStatus?: CurrentEdStatus | null;
+      currentSchoolAttend?: CurrentSchoolAttended | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      id: string;
+      informationDate: string;
+      mostRecentEdStatus?: MostRecentEdStatus | null;
+    } | null;
+    employmentEducation?: {
+      __typename?: 'EmploymentEducation';
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      employed?: NoYesReasonsForMissingData | null;
+      employmentType?: EmploymentType | null;
+      id: string;
+      informationDate: string;
+      lastGradeCompleted?: LastGradeCompleted | null;
+      notEmployedReason?: NotEmployedReason | null;
+      schoolStatus?: SchoolStatus | null;
+    } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -6615,6 +6690,31 @@ export type GetHouseholdAssessmentsQuery = {
       workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
       workplacePromiseDifference?: NoYesReasonsForMissingData | null;
     } | null;
+    youthEducationStatus?: {
+      __typename?: 'YouthEducationStatus';
+      currentEdStatus?: CurrentEdStatus | null;
+      currentSchoolAttend?: CurrentSchoolAttended | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      id: string;
+      informationDate: string;
+      mostRecentEdStatus?: MostRecentEdStatus | null;
+    } | null;
+    employmentEducation?: {
+      __typename?: 'EmploymentEducation';
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      employed?: NoYesReasonsForMissingData | null;
+      employmentType?: EmploymentType | null;
+      id: string;
+      informationDate: string;
+      lastGradeCompleted?: LastGradeCompleted | null;
+      notEmployedReason?: NotEmployedReason | null;
+      schoolStatus?: SchoolStatus | null;
+    } | null;
     customDataElements: Array<{
       __typename?: 'CustomDataElement';
       id: string;
@@ -6954,6 +7054,31 @@ export type SubmitAssessmentMutation = {
         telephone?: NoYesMissing | null;
         workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
         workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+      } | null;
+      youthEducationStatus?: {
+        __typename?: 'YouthEducationStatus';
+        currentEdStatus?: CurrentEdStatus | null;
+        currentSchoolAttend?: CurrentSchoolAttended | null;
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        id: string;
+        informationDate: string;
+        mostRecentEdStatus?: MostRecentEdStatus | null;
+      } | null;
+      employmentEducation?: {
+        __typename?: 'EmploymentEducation';
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        employed?: NoYesReasonsForMissingData | null;
+        employmentType?: EmploymentType | null;
+        id: string;
+        informationDate: string;
+        lastGradeCompleted?: LastGradeCompleted | null;
+        notEmployedReason?: NotEmployedReason | null;
+        schoolStatus?: SchoolStatus | null;
       } | null;
       customDataElements: Array<{
         __typename?: 'CustomDataElement';
@@ -7309,6 +7434,31 @@ export type GetAssessmentsForPopulationQuery = {
           telephone?: NoYesMissing | null;
           workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
           workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+        } | null;
+        youthEducationStatus?: {
+          __typename?: 'YouthEducationStatus';
+          currentEdStatus?: CurrentEdStatus | null;
+          currentSchoolAttend?: CurrentSchoolAttended | null;
+          dataCollectionStage: DataCollectionStage;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          id: string;
+          informationDate: string;
+          mostRecentEdStatus?: MostRecentEdStatus | null;
+        } | null;
+        employmentEducation?: {
+          __typename?: 'EmploymentEducation';
+          dataCollectionStage: DataCollectionStage;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          employed?: NoYesReasonsForMissingData | null;
+          employmentType?: EmploymentType | null;
+          id: string;
+          informationDate: string;
+          lastGradeCompleted?: LastGradeCompleted | null;
+          notEmployedReason?: NotEmployedReason | null;
+          schoolStatus?: SchoolStatus | null;
         } | null;
         customDataElements: Array<{
           __typename?: 'CustomDataElement';
@@ -7786,6 +7936,33 @@ export type ExitValuesFragment = {
   telephone?: NoYesMissing | null;
   workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
   workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+};
+
+export type YouthEducationStatusValuesFragment = {
+  __typename?: 'YouthEducationStatus';
+  currentEdStatus?: CurrentEdStatus | null;
+  currentSchoolAttend?: CurrentSchoolAttended | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  id: string;
+  informationDate: string;
+  mostRecentEdStatus?: MostRecentEdStatus | null;
+};
+
+export type EmploymentEducationValuesFragment = {
+  __typename?: 'EmploymentEducation';
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  employed?: NoYesReasonsForMissingData | null;
+  employmentType?: EmploymentType | null;
+  id: string;
+  informationDate: string;
+  lastGradeCompleted?: LastGradeCompleted | null;
+  notEmployedReason?: NotEmployedReason | null;
+  schoolStatus?: SchoolStatus | null;
 };
 
 export type ClientFieldsFragment = {
@@ -15640,6 +15817,33 @@ export const ExitValuesFragmentDoc = gql`
     workplacePromiseDifference
   }
 `;
+export const YouthEducationStatusValuesFragmentDoc = gql`
+  fragment YouthEducationStatusValues on YouthEducationStatus {
+    currentEdStatus
+    currentSchoolAttend
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    id
+    informationDate
+    mostRecentEdStatus
+  }
+`;
+export const EmploymentEducationValuesFragmentDoc = gql`
+  fragment EmploymentEducationValues on EmploymentEducation {
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    employed
+    employmentType
+    id
+    informationDate
+    lastGradeCompleted
+    notEmployedReason
+    schoolStatus
+  }
+`;
 export const AssessmentWithRecordsFragmentDoc = gql`
   fragment AssessmentWithRecords on Assessment {
     ...AssessmentFields
@@ -15661,6 +15865,12 @@ export const AssessmentWithRecordsFragmentDoc = gql`
     exit {
       ...ExitValues
     }
+    youthEducationStatus {
+      ...YouthEducationStatusValues
+    }
+    employmentEducation {
+      ...EmploymentEducationValues
+    }
     customDataElements {
       ...CustomDataElementFields
     }
@@ -15672,6 +15882,8 @@ export const AssessmentWithRecordsFragmentDoc = gql`
   ${DisabilityGroupValuesFragmentDoc}
   ${HealthAndDvValuesFragmentDoc}
   ${ExitValuesFragmentDoc}
+  ${YouthEducationStatusValuesFragmentDoc}
+  ${EmploymentEducationValuesFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {

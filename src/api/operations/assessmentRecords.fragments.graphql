@@ -250,3 +250,28 @@ fragment ExitValues on Exit {
   workPlaceViolenceThreats
   workplacePromiseDifference
 }
+
+fragment YouthEducationStatusValues on YouthEducationStatus {
+  currentEdStatus
+  currentSchoolAttend
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  dateUpdated
+  id
+  informationDate
+  mostRecentEdStatus
+}
+
+fragment EmploymentEducationValues on EmploymentEducation {
+  dataCollectionStage
+  dateCreated
+  dateDeleted
+  employed
+  employmentType
+  id
+  informationDate
+  lastGradeCompleted
+  notEmployedReason
+  schoolStatus
+}
