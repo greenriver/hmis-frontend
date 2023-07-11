@@ -16,7 +16,7 @@
       "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
-      "fieldName": "denialReason",
+      "mapping": { "fieldName": "denialReason" },
       "pickListReference": "ReferralPostingDenialReasonType"
     },
     {
@@ -24,7 +24,7 @@
       "linkId": "status",
       "required": true,
       "text": "Referral Status",
-      "fieldName": "status",
+      "mapping": { "fieldName": "status" },
       "pickListReference": "DENIED_PENDING_REFERRAL_POSTING_STATUSES"
     },
     {
@@ -32,7 +32,7 @@
       "linkId": "resendReferralRequest",
       "required": false,
       "text": "Re-request?",
-      "fieldName": "resendReferralRequest",
+      "mapping": { "fieldName": "resendReferralRequest" },
       "enableBehavior": "ALL",
       "enableWhen": [
         {
@@ -53,7 +53,7 @@
       "linkId": "referralResult",
       "required": true,
       "text": "Referral Result",
-      "fieldName": "referralResult",
+      "mapping": { "fieldName": "referralResult" },
       "pickListReference": "REFERRAL_RESULT_TYPES",
       "enableBehavior": "ALL",
       "enableWhen": [
@@ -69,7 +69,7 @@
       "linkId": "denialNote",
       "required": false,
       "text": "Denial Note",
-      "fieldName": "denialNote"
+      "mapping": { "fieldName": "denialNote" }
     }
   ]
 }

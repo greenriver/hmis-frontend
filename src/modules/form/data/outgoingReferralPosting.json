@@ -6,7 +6,7 @@
       "linkId": "enrollmentID",
       "text": "HoH Enrollment",
       "pickListReference": "PROJECT_HOH_ENROLLMENTS",
-      "fieldName": "enrollmentId"
+      "mapping": { "fieldName": "enrollmentId" }
     },
     {
       "type": "CHOICE",
@@ -14,7 +14,7 @@
       "linkId": "projectId",
       "text": "Project",
       "pickListReference": "PROJECT",
-      "fieldName": "projectId"
+      "mapping": { "fieldName": "projectId" }
     },
     {
       "type": "CHOICE",
@@ -22,7 +22,7 @@
       "linkId": "unitTypeId",
       "text": "Unit Type",
       "pickListReference": "ALL_UNIT_TYPES",
-      "fieldName": "unitTypeId"
+      "mapping": { "fieldName": "unitTypeId" }
     }
   ]
 }

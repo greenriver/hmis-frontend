@@ -5,7 +5,7 @@
       "linkId": "unit",
       "required": true,
       "text": "Unit",
-      "fieldName": "unitId",
+      "mapping": { "fieldName": "unitId" },
       "pickListReference": "AVAILABLE_UNITS",
       "helperText": "Beds created will be assigned to the selected unit. Beds can be re-assigned at a later step."
     },
@@ -24,43 +24,43 @@
           "type": "INTEGER",
           "linkId": "ch-beds",
           "text": "Chronic",
-          "fieldName": "chBedInventory"
+          "mapping": { "fieldName": "chBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "vet-beds",
           "text": "Veteran",
-          "fieldName": "vetBedInventory"
+          "mapping": { "fieldName": "vetBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "ch-vet-beds",
           "text": "Chronic Veteran",
-          "fieldName": "chVetBedInventory"
+          "mapping": { "fieldName": "chVetBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "youth-beds",
           "text": "Youth",
-          "fieldName": "youthBedInventory"
+          "mapping": { "fieldName": "youthBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "youth-vet-beds",
           "text": "Youth Veteran",
-          "fieldName": "youthVetBedInventory"
+          "mapping": { "fieldName": "youthVetBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "ch-youth-beds",
           "text": "Chronic Youth",
-          "fieldName": "chYouthBedInventory"
+          "mapping": { "fieldName": "chYouthBedInventory" }
         },
         {
           "type": "INTEGER",
           "linkId": "other-beds",
           "text": "Other",
-          "fieldName": "otherBedInventory"
+          "mapping": { "fieldName": "otherBedInventory" }
         },
         {
           "type": "DISPLAY",
