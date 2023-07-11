@@ -44,7 +44,7 @@ const EditHousehold = () => {
             </Box>
           </Typography>
           <ManageHousehold
-            householdId={enrollment.household.id}
+            householdId={enrollment.householdId}
             projectId={enrollment.project.id}
             BackButton={
               <Button

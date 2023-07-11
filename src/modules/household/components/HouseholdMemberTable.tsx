@@ -1,16 +1,13 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { Box, Typography } from '@mui/material';
-import { isEmpty } from 'lodash-es';
 import { useMemo } from 'react';
 
 import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
 
 import HouseholdActionButtons from './elements/HouseholdActionButtons';
-import HouseholdMemberActionButton from './elements/HouseholdMemberActionButton';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
-import { useRecentAssessments } from '@/modules/assessments/components/useRecentAssessments';
 import ClientName from '@/modules/client/components/ClientName';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
@@ -33,9 +30,6 @@ const HouseholdMemberTable = ({
 }) => {
   const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);
-
-  const { loading: assessmentsLoading, ...assessments } =
-    useRecentAssessments(enrollmentId);
 
   const columns = useMemo(() => {
     return [
@@ -103,33 +97,11 @@ const HouseholdMemberTable = ({
           />
         ),
       },
-      {
-        header: '',
-        key: 'actions',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          hc.client.id === clientId ? (
-            <ClientPermissionsFilter
-              id={clientId}
-              permissions={['canEditEnrollments']}
-            >
-              <HouseholdMemberActionButton
-                size='small'
-                variant='outlined'
-                fullWidth
-                enrollmentId={hc.enrollment.id}
-                clientId={hc.client.id}
-                enrollment={hc.enrollment}
-                {...assessments}
-              />
-            </ClientPermissionsFilter>
-          ) : null,
-      },
     ];
-  }, [clientId, assessments]);
+  }, [clientId]);
 
   if (error) throw error;
   if (householdMembersLoading && !householdMembers) return <Loading />;
-  if (assessmentsLoading && isEmpty(assessments)) return <Loading />;
 
   return (
     <>
@@ -141,11 +113,11 @@ const HouseholdMemberTable = ({
           // HoH indicator column
           'td:nth-of-type(1)': { pl: 1, pr: 0 },
           // Button column
-          'td:last-child': {
-            py: 0,
-            whiteSpace: 'nowrap',
-            width: '1%',
-          },
+          // 'td:last-child': {
+          //   py: 0,
+          //   whiteSpace: 'nowrap',
+          //   width: '1%',
+          // },
         })}
       />
       <ClientPermissionsFilter

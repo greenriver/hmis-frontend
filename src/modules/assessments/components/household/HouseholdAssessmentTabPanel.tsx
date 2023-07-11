@@ -5,7 +5,12 @@ import { memo, useCallback, useEffect, useRef } from 'react';
 import IndividualAssessment from '../IndividualAssessment';
 
 import AlwaysMountedTabPanel from './AlwaysMountedTabPanel';
-import { AssessmentStatus, TabDefinition, tabPanelA11yProps } from './util';
+import {
+  AssessmentStatus,
+  HouseholdAssesmentRole,
+  TabDefinition,
+  tabPanelA11yProps,
+} from './util';
 
 import usePrevious from '@/hooks/usePrevious';
 import { DynamicFormRef } from '@/modules/form/components/DynamicForm';
@@ -14,7 +19,7 @@ import { AssessmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
 interface HouseholdAssessmentTabPanelProps extends TabDefinition {
   active: boolean;
-  formRole: FormRole.Intake | FormRole.Exit;
+  role: HouseholdAssesmentRole;
   refetch: () => Promise<any>;
   nextTab?: string;
   previousTab?: string;
@@ -32,7 +37,7 @@ const HouseholdAssessmentTabPanel = memo(
     assessmentId,
     client,
     relationshipToHoH,
-    formRole,
+    role,
     nextTab,
     previousTab,
     navigateToTab,
@@ -148,7 +153,7 @@ const HouseholdAssessmentTabPanel = memo(
           embeddedInWorkflow
           enrollmentId={enrollmentId}
           assessmentId={assessmentId}
-          formRole={formRole}
+          formRole={role as unknown as FormRole}
           getFormActionProps={getFormActionProps}
           visible={active}
           formRef={formRef}

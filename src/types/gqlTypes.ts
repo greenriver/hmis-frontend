@@ -115,19 +115,24 @@ export type Assessment = {
   assessmentDate: Scalars['ISO8601Date'];
   client: Client;
   customDataElements: Array<CustomDataElement>;
-  customForm?: Maybe<CustomForm>;
   dataCollectionStage?: Maybe<DataCollectionStage>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateUpdated: Scalars['ISO8601DateTime'];
+  definition: FormDefinition;
   disabilityGroup?: Maybe<DisabilityGroup>;
+  employmentEducation?: Maybe<EmploymentEducation>;
   enrollment: Enrollment;
+  enrollmentCoc?: Maybe<Scalars['String']>;
   exit?: Maybe<Exit>;
   healthAndDv?: Maybe<HealthAndDv>;
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   incomeBenefit?: Maybe<IncomeBenefit>;
+  role: AssessmentRole;
   user?: Maybe<User>;
+  wipValues?: Maybe<Scalars['JsonObject']>;
+  youthEducationStatus?: Maybe<YouthEducationStatus>;
 };
 
 export type AssessmentAccess = {
@@ -151,14 +156,14 @@ export type AssessmentInput = {
   confirmed?: InputMaybe<Scalars['Boolean']>;
   /** Required if saving a new assessment */
   enrollmentId?: InputMaybe<Scalars['ID']>;
-  /** Required if saving a new assessment */
-  formDefinitionId?: InputMaybe<Scalars['ID']>;
+  /** Form Definition that was used to perform this assessment */
+  formDefinitionId: Scalars['ID'];
   /** Transformed HUD values as JSON */
-  hudValues?: InputMaybe<Scalars['JsonObject']>;
+  hudValues: Scalars['JsonObject'];
   /** Validate assessment but don't submit it */
   validateOnly?: InputMaybe<Scalars['Boolean']>;
   /** Raw form state as JSON */
-  values?: InputMaybe<Scalars['JsonObject']>;
+  values: Scalars['JsonObject'];
 };
 
 /** 4.19.4 */
@@ -907,15 +912,6 @@ export type CustomDataElementValue = {
   valueText?: Maybe<Scalars['String']>;
 };
 
-/** CustomForm */
-export type CustomForm = {
-  __typename?: 'CustomForm';
-  assessment: Assessment;
-  definition: FormDefinition;
-  id: Scalars['ID'];
-  values?: Maybe<Scalars['JsonObject']>;
-};
-
 /** 3.03.2 */
 export enum DobDataQuality {
   /** (2) Approximate or partial DOB reported */
@@ -1455,6 +1451,7 @@ export type Enrollment = {
   clientEnrolledInPath?: Maybe<NoYesMissing>;
   countOutreachReferralApproaches?: Maybe<Scalars['Int']>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']>;
@@ -1476,6 +1473,8 @@ export type Enrollment = {
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
   healthAndDvs: HealthAndDvsPaginated;
   household: Household;
+  householdId: Scalars['ID'];
+  householdShortId: Scalars['ID'];
   householdSize: Scalars['Int'];
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
@@ -1873,6 +1872,16 @@ export enum FeelingFrequency {
   SeveralTimesAWeek = 'SEVERAL_TIMES_A_WEEK',
 }
 
+export type FieldMapping = {
+  __typename?: 'FieldMapping';
+  /** Key of CustomDataElement where field is stored */
+  customFieldKey?: Maybe<Scalars['String']>;
+  /** Field name that this field is stored as */
+  fieldName?: Maybe<Scalars['String']>;
+  /** Type of record that this field is tied to */
+  recordType?: Maybe<RelatedRecordType>;
+};
+
 /** File */
 export type File = {
   __typename?: 'File';
@@ -1918,10 +1927,7 @@ export type FormDefinition = {
   __typename?: 'FormDefinition';
   definition: FormDefinitionJson;
   id: Scalars['ID'];
-  identifier: Scalars['String'];
   role: FormRole;
-  status: Scalars['String'];
-  version: Scalars['Int'];
 };
 
 export type FormDefinitionJson = {
@@ -1959,19 +1965,12 @@ export type FormItem = {
   briefText?: Maybe<Scalars['String']>;
   /** Component to use for display/input of this item */
   component?: Maybe<Component>;
-  /** Key of CustomDataElement to save record as. Use record_type to specify type. */
-  customFieldKey?: Maybe<Scalars['String']>;
   /** Include this item only if the Client meets this HUD DataCollectedAbout condition */
   dataCollectedAbout?: Maybe<DataCollectedAbout>;
   /** How to display item if it is disabled */
   disabledDisplay?: Maybe<DisabledDisplay>;
   enableBehavior?: Maybe<EnableBehavior>;
   enableWhen?: Maybe<Array<EnableWhen>>;
-  /**
-   * Name of the field on the record (or on the query input type). Used for record
-   * creation/update forms, for assessment population, and for assessment extraction.
-   */
-  fieldName?: Maybe<Scalars['String']>;
   /** Include this item only for the listed funders */
   funders?: Maybe<Array<FundingSource>>;
   /** Helper text for the item */
@@ -1984,15 +1983,13 @@ export type FormItem = {
   item?: Maybe<Array<FormItem>>;
   /** Unique identifier for item */
   linkId: Scalars['String'];
+  mapping?: Maybe<FieldMapping>;
   /** Permitted answers, for choice items */
   pickListOptions?: Maybe<Array<PickListOption>>;
   /** Reference to value set of possible answer options */
   pickListReference?: Maybe<Scalars['String']>;
-  /**
-   * Whether to allow pre-filling section from recent records. Should only be
-   * enabled in conjunction with record_type and for top-level group items.
-   */
-  prefill?: Maybe<Scalars['Boolean']>;
+  /** Whether to allow pre-filling section from a recent records */
+  prefill?: Maybe<RelatedRecordType>;
   /** Prefix for the item label */
   prefix?: Maybe<Scalars['String']>;
   /** Exclude this item for the listed project types */
@@ -2003,8 +2000,6 @@ export type FormItem = {
   readOnly?: Maybe<Scalars['Boolean']>;
   /** Text to use for the item when displayed in read-only view */
   readonlyText?: Maybe<Scalars['String']>;
-  /** Record type to use for population and extraction */
-  recordType?: Maybe<RelatedRecordType>;
   /** Whether the item may repeat (for choice types, this means multiple choice) */
   repeats?: Maybe<Scalars['Boolean']>;
   /** Whether the item must be included in data results */
@@ -3438,6 +3433,8 @@ export type Query = {
   getServiceFormDefinition?: Maybe<FormDefinition>;
   /** Household lookup */
   household?: Maybe<Household>;
+  /** Get group of assessments that are performed together */
+  householdAssessments?: Maybe<Array<Assessment>>;
   /** Inventory lookup */
   inventory?: Maybe<Inventory>;
   /** Organization lookup */
@@ -3513,6 +3510,12 @@ export type QueryGetServiceFormDefinitionArgs = {
 
 export type QueryHouseholdArgs = {
   id: Scalars['ID'];
+};
+
+export type QueryHouseholdAssessmentsArgs = {
+  assessmentId?: InputMaybe<Scalars['ID']>;
+  assessmentRole: AssessmentRole;
+  householdId: Scalars['ID'];
 };
 
 export type QueryInventoryArgs = {
@@ -4909,19 +4912,8 @@ export type AssessmentFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+  role: AssessmentRole;
   user?: { __typename: 'User'; id: string; name: string } | null;
-  customForm?: {
-    __typename?: 'CustomForm';
-    id: string;
-    definition: {
-      __typename?: 'FormDefinition';
-      id: string;
-      version: number;
-      role: FormRole;
-      status: string;
-      identifier: string;
-    };
-  } | null;
   access: {
     __typename?: 'AssessmentAccess';
     id: string;
@@ -4931,7 +4923,7 @@ export type AssessmentFieldsFragment = {
   };
 };
 
-export type AssessmentWithDefinitionAndValuesFragment = {
+export type AssessmentWithRecordsFragment = {
   __typename?: 'Assessment';
   id: string;
   inProgress: boolean;
@@ -4940,17 +4932,612 @@ export type AssessmentWithDefinitionAndValuesFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
-  customForm?: {
-    __typename?: 'CustomForm';
-    values?: any | null;
+  role: AssessmentRole;
+  enrollment: {
+    __typename?: 'Enrollment';
     id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    livingSituation?: LivingSituation | null;
+    lengthOfStay?: ResidencePriorLengthOfStay | null;
+    losUnderThreshold?: NoYesMissing | null;
+    previousStreetEssh?: NoYesMissing | null;
+    dateToStreetEssh?: string | null;
+    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+    enrollmentCoc?: string | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
+    percentAmi?: PercentAmi | null;
+    referralSource?: ReferralSource | null;
+    countOutreachReferralApproaches?: number | null;
+    dateOfBcpStatus?: string | null;
+    eligibleForRhy?: NoYesMissing | null;
+    reasonNoServices?: ReasonNoServices | null;
+    runawayYouth?: NoYesReasonsForMissingData | null;
+    sexualOrientation?: SexualOrientation | null;
+    sexualOrientationOther?: string | null;
+    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+    childWelfareYears?: RhyNumberofYears | null;
+    childWelfareMonths?: number | null;
+    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+    juvenileJusticeYears?: RhyNumberofYears | null;
+    juvenileJusticeMonths?: number | null;
+    unemploymentFam?: NoYesMissing | null;
+    mentalHealthDisorderFam?: NoYesMissing | null;
+    physicalDisabilityFam?: NoYesMissing | null;
+    alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  };
+  incomeBenefit?: {
+    __typename: 'IncomeBenefit';
+    adap?: NoYesReasonsForMissingData | null;
+    alimony?: NoYesMissing | null;
+    alimonyAmount?: number | null;
+    benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+    childSupport?: NoYesMissing | null;
+    childSupportAmount?: number | null;
+    cobra?: NoYesMissing | null;
+    connectionWithSoar?: NoYesReasonsForMissingData | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    earned?: NoYesMissing | null;
+    earnedAmount?: number | null;
+    employerProvided?: NoYesMissing | null;
+    ga?: NoYesMissing | null;
+    gaAmount?: number | null;
+    hivaidsAssistance?: NoYesReasonsForMissingData | null;
+    id: string;
+    incomeFromAnySource?: NoYesReasonsForMissingData | null;
+    indianHealthServices?: NoYesMissing | null;
+    informationDate: string;
+    insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+    medicaid?: NoYesMissing | null;
+    medicare?: NoYesMissing | null;
+    noAdapReason?: NoAssistanceReason | null;
+    noCobraReason?: ReasonNotInsured | null;
+    noEmployerProvidedReason?: ReasonNotInsured | null;
+    noHivaidsAssistanceReason?: NoAssistanceReason | null;
+    noIndianHealthServicesReason?: ReasonNotInsured | null;
+    noMedicaidReason?: ReasonNotInsured | null;
+    noMedicareReason?: ReasonNotInsured | null;
+    noPrivatePayReason?: ReasonNotInsured | null;
+    noRyanWhiteReason?: NoAssistanceReason | null;
+    noSchipReason?: ReasonNotInsured | null;
+    noStateHealthInsReason?: ReasonNotInsured | null;
+    noVaMedReason?: ReasonNotInsured | null;
+    otherBenefitsSource?: NoYesMissing | null;
+    otherBenefitsSourceIdentify?: string | null;
+    otherIncomeAmount?: number | null;
+    otherIncomeSource?: NoYesMissing | null;
+    otherIncomeSourceIdentify?: string | null;
+    otherInsurance?: NoYesMissing | null;
+    otherInsuranceIdentify?: string | null;
+    otherTanf?: NoYesMissing | null;
+    pension?: NoYesMissing | null;
+    pensionAmount?: number | null;
+    privateDisability?: NoYesMissing | null;
+    privateDisabilityAmount?: number | null;
+    privatePay?: NoYesMissing | null;
+    ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+    schip?: NoYesMissing | null;
+    snap?: NoYesMissing | null;
+    socSecRetirement?: NoYesMissing | null;
+    socSecRetirementAmount?: number | null;
+    ssdi?: NoYesMissing | null;
+    ssdiAmount?: number | null;
+    ssi?: NoYesMissing | null;
+    ssiAmount?: number | null;
+    stateHealthIns?: NoYesMissing | null;
+    tanf?: NoYesMissing | null;
+    tanfAmount?: number | null;
+    tanfChildCare?: NoYesMissing | null;
+    tanfTransportation?: NoYesMissing | null;
+    totalMonthlyIncome?: string | null;
+    unemployment?: NoYesMissing | null;
+    unemploymentAmount?: number | null;
+    vaDisabilityNonService?: NoYesMissing | null;
+    vaDisabilityNonServiceAmount?: number | null;
+    vaDisabilityService?: NoYesMissing | null;
+    vaDisabilityServiceAmount?: number | null;
+    vaMedicalServices?: NoYesMissing | null;
+    wic?: NoYesMissing | null;
+    workersComp?: NoYesMissing | null;
+    workersCompAmount?: number | null;
+  } | null;
+  disabilityGroup?: {
+    __typename: 'DisabilityGroup';
+    id: string;
+    dataCollectionStage: DataCollectionStage;
+    informationDate: string;
+    disablingCondition: NoYesReasonsForMissingData;
+    chronicHealthCondition?: NoYesReasonsForMissingData | null;
+    chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    developmentalDisability?: NoYesReasonsForMissingData | null;
+    hivAids?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    physicalDisability?: NoYesReasonsForMissingData | null;
+    physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    substanceUseDisorder?: DisabilityResponse | null;
+    substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  } | null;
+  healthAndDv?: {
+    __typename: 'HealthAndDv';
+    bounceBack?: WellbeingAgreement | null;
+    currentlyFleeing?: NoYesReasonsForMissingData | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    dentalHealthStatus?: HealthStatus | null;
+    domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+    dueDate?: string | null;
+    feelingFrequency?: FeelingFrequency | null;
+    generalHealthStatus?: HealthStatus | null;
+    id: string;
+    informationDate: string;
+    lifeValue?: WellbeingAgreement | null;
+    mentalHealthStatus?: HealthStatus | null;
+    pregnancyStatus?: NoYesReasonsForMissingData | null;
+    supportFromOthers?: WellbeingAgreement | null;
+    whenOccurred?: WhenDvOccurred | null;
+  } | null;
+  exit?: {
+    __typename?: 'Exit';
+    id: string;
+    aftercareDate?: string | null;
+    aftercareProvided?: AftercareProvided | null;
+    askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+    askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+    cmExitReason?: CmExitReason | null;
+    coercedToContinueWork?: NoYesReasonsForMissingData | null;
+    counselingReceived?: NoYesMissing | null;
+    countOfExchangeForSex?: CountExchangeForSex | null;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    destination: Destination;
+    destinationSafeClient?: NoYesReasonsForMissingData | null;
+    destinationSafeWorker?: WorkerResponse | null;
+    earlyExitReason?: ExpelledReason | null;
+    emailSocialMedia?: NoYesMissing | null;
+    exchangeForSex?: NoYesReasonsForMissingData | null;
+    exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+    exitDate: string;
+    familyCounseling?: NoYesMissing | null;
+    groupCounseling?: NoYesMissing | null;
+    housingAssessment?: HousingAssessmentAtExit | null;
+    inPersonGroup?: NoYesMissing | null;
+    inPersonIndividual?: NoYesMissing | null;
+    individualCounseling?: NoYesMissing | null;
+    laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+    otherDestination?: string | null;
+    posAdultConnections?: WorkerResponse | null;
+    posCommunityConnections?: WorkerResponse | null;
+    posPeerConnections?: WorkerResponse | null;
+    postExitCounselingPlan?: NoYesMissing | null;
+    projectCompletionStatus?: ProjectCompletionStatus | null;
+    sessionCountAtExit?: NoYesMissing | null;
+    sessionsInPlan?: number | null;
+    subsidyInformation?: SubsidyInformation | null;
+    telephone?: NoYesMissing | null;
+    workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+    workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+  } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
+};
+
+export type AssessmentWithValuesFragment = {
+  __typename?: 'Assessment';
+  wipValues?: any | null;
+  id: string;
+  inProgress: boolean;
+  assessmentDate: string;
+  dataCollectionStage?: DataCollectionStage | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  role: AssessmentRole;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
+};
+
+export type FullAssessmentFragment = {
+  __typename?: 'Assessment';
+  wipValues?: any | null;
+  id: string;
+  inProgress: boolean;
+  assessmentDate: string;
+  dataCollectionStage?: DataCollectionStage | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+  role: AssessmentRole;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    livingSituation?: LivingSituation | null;
+    lengthOfStay?: ResidencePriorLengthOfStay | null;
+    losUnderThreshold?: NoYesMissing | null;
+    previousStreetEssh?: NoYesMissing | null;
+    dateToStreetEssh?: string | null;
+    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+    enrollmentCoc?: string | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
+    percentAmi?: PercentAmi | null;
+    referralSource?: ReferralSource | null;
+    countOutreachReferralApproaches?: number | null;
+    dateOfBcpStatus?: string | null;
+    eligibleForRhy?: NoYesMissing | null;
+    reasonNoServices?: ReasonNoServices | null;
+    runawayYouth?: NoYesReasonsForMissingData | null;
+    sexualOrientation?: SexualOrientation | null;
+    sexualOrientationOther?: string | null;
+    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+    childWelfareYears?: RhyNumberofYears | null;
+    childWelfareMonths?: number | null;
+    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+    juvenileJusticeYears?: RhyNumberofYears | null;
+    juvenileJusticeMonths?: number | null;
+    unemploymentFam?: NoYesMissing | null;
+    mentalHealthDisorderFam?: NoYesMissing | null;
+    physicalDisabilityFam?: NoYesMissing | null;
+    alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  };
+  incomeBenefit?: {
+    __typename: 'IncomeBenefit';
+    adap?: NoYesReasonsForMissingData | null;
+    alimony?: NoYesMissing | null;
+    alimonyAmount?: number | null;
+    benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+    childSupport?: NoYesMissing | null;
+    childSupportAmount?: number | null;
+    cobra?: NoYesMissing | null;
+    connectionWithSoar?: NoYesReasonsForMissingData | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    earned?: NoYesMissing | null;
+    earnedAmount?: number | null;
+    employerProvided?: NoYesMissing | null;
+    ga?: NoYesMissing | null;
+    gaAmount?: number | null;
+    hivaidsAssistance?: NoYesReasonsForMissingData | null;
+    id: string;
+    incomeFromAnySource?: NoYesReasonsForMissingData | null;
+    indianHealthServices?: NoYesMissing | null;
+    informationDate: string;
+    insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+    medicaid?: NoYesMissing | null;
+    medicare?: NoYesMissing | null;
+    noAdapReason?: NoAssistanceReason | null;
+    noCobraReason?: ReasonNotInsured | null;
+    noEmployerProvidedReason?: ReasonNotInsured | null;
+    noHivaidsAssistanceReason?: NoAssistanceReason | null;
+    noIndianHealthServicesReason?: ReasonNotInsured | null;
+    noMedicaidReason?: ReasonNotInsured | null;
+    noMedicareReason?: ReasonNotInsured | null;
+    noPrivatePayReason?: ReasonNotInsured | null;
+    noRyanWhiteReason?: NoAssistanceReason | null;
+    noSchipReason?: ReasonNotInsured | null;
+    noStateHealthInsReason?: ReasonNotInsured | null;
+    noVaMedReason?: ReasonNotInsured | null;
+    otherBenefitsSource?: NoYesMissing | null;
+    otherBenefitsSourceIdentify?: string | null;
+    otherIncomeAmount?: number | null;
+    otherIncomeSource?: NoYesMissing | null;
+    otherIncomeSourceIdentify?: string | null;
+    otherInsurance?: NoYesMissing | null;
+    otherInsuranceIdentify?: string | null;
+    otherTanf?: NoYesMissing | null;
+    pension?: NoYesMissing | null;
+    pensionAmount?: number | null;
+    privateDisability?: NoYesMissing | null;
+    privateDisabilityAmount?: number | null;
+    privatePay?: NoYesMissing | null;
+    ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+    schip?: NoYesMissing | null;
+    snap?: NoYesMissing | null;
+    socSecRetirement?: NoYesMissing | null;
+    socSecRetirementAmount?: number | null;
+    ssdi?: NoYesMissing | null;
+    ssdiAmount?: number | null;
+    ssi?: NoYesMissing | null;
+    ssiAmount?: number | null;
+    stateHealthIns?: NoYesMissing | null;
+    tanf?: NoYesMissing | null;
+    tanfAmount?: number | null;
+    tanfChildCare?: NoYesMissing | null;
+    tanfTransportation?: NoYesMissing | null;
+    totalMonthlyIncome?: string | null;
+    unemployment?: NoYesMissing | null;
+    unemploymentAmount?: number | null;
+    vaDisabilityNonService?: NoYesMissing | null;
+    vaDisabilityNonServiceAmount?: number | null;
+    vaDisabilityService?: NoYesMissing | null;
+    vaDisabilityServiceAmount?: number | null;
+    vaMedicalServices?: NoYesMissing | null;
+    wic?: NoYesMissing | null;
+    workersComp?: NoYesMissing | null;
+    workersCompAmount?: number | null;
+  } | null;
+  disabilityGroup?: {
+    __typename: 'DisabilityGroup';
+    id: string;
+    dataCollectionStage: DataCollectionStage;
+    informationDate: string;
+    disablingCondition: NoYesReasonsForMissingData;
+    chronicHealthCondition?: NoYesReasonsForMissingData | null;
+    chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    developmentalDisability?: NoYesReasonsForMissingData | null;
+    hivAids?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+    mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    physicalDisability?: NoYesReasonsForMissingData | null;
+    physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    substanceUseDisorder?: DisabilityResponse | null;
+    substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+    dateCreated?: string | null;
+    dateUpdated?: string | null;
+  } | null;
+  healthAndDv?: {
+    __typename: 'HealthAndDv';
+    bounceBack?: WellbeingAgreement | null;
+    currentlyFleeing?: NoYesReasonsForMissingData | null;
+    dataCollectionStage: DataCollectionStage;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    dentalHealthStatus?: HealthStatus | null;
+    domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+    dueDate?: string | null;
+    feelingFrequency?: FeelingFrequency | null;
+    generalHealthStatus?: HealthStatus | null;
+    id: string;
+    informationDate: string;
+    lifeValue?: WellbeingAgreement | null;
+    mentalHealthStatus?: HealthStatus | null;
+    pregnancyStatus?: NoYesReasonsForMissingData | null;
+    supportFromOthers?: WellbeingAgreement | null;
+    whenOccurred?: WhenDvOccurred | null;
+  } | null;
+  exit?: {
+    __typename?: 'Exit';
+    id: string;
+    aftercareDate?: string | null;
+    aftercareProvided?: AftercareProvided | null;
+    askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+    askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+    cmExitReason?: CmExitReason | null;
+    coercedToContinueWork?: NoYesReasonsForMissingData | null;
+    counselingReceived?: NoYesMissing | null;
+    countOfExchangeForSex?: CountExchangeForSex | null;
+    dateCreated: string;
+    dateDeleted?: string | null;
+    dateUpdated: string;
+    destination: Destination;
+    destinationSafeClient?: NoYesReasonsForMissingData | null;
+    destinationSafeWorker?: WorkerResponse | null;
+    earlyExitReason?: ExpelledReason | null;
+    emailSocialMedia?: NoYesMissing | null;
+    exchangeForSex?: NoYesReasonsForMissingData | null;
+    exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+    exitDate: string;
+    familyCounseling?: NoYesMissing | null;
+    groupCounseling?: NoYesMissing | null;
+    housingAssessment?: HousingAssessmentAtExit | null;
+    inPersonGroup?: NoYesMissing | null;
+    inPersonIndividual?: NoYesMissing | null;
+    individualCounseling?: NoYesMissing | null;
+    laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+    otherDestination?: string | null;
+    posAdultConnections?: WorkerResponse | null;
+    posCommunityConnections?: WorkerResponse | null;
+    posPeerConnections?: WorkerResponse | null;
+    postExitCounselingPlan?: NoYesMissing | null;
+    projectCompletionStatus?: ProjectCompletionStatus | null;
+    sessionCountAtExit?: NoYesMissing | null;
+    sessionsInPlan?: number | null;
+    subsidyInformation?: SubsidyInformation | null;
+    telephone?: NoYesMissing | null;
+    workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+    workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+  } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  access: {
+    __typename?: 'AssessmentAccess';
+    id: string;
+    canDeleteAssessments: boolean;
+    canDeleteEnrollments: boolean;
+    canEditEnrollments: boolean;
+  };
+};
+
+export type GetAssessmentQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+export type GetAssessmentQuery = {
+  __typename?: 'Query';
+  assessment?: {
+    __typename?: 'Assessment';
+    wipValues?: any | null;
+    id: string;
+    inProgress: boolean;
+    assessmentDate: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+    role: AssessmentRole;
     definition: {
       __typename?: 'FormDefinition';
       id: string;
-      version: number;
       role: FormRole;
-      status: string;
-      identifier: string;
       definition: {
         __typename?: 'FormDefinitionJson';
         item: Array<{
@@ -4968,14 +5555,11 @@ export type AssessmentWithDefinitionAndValuesFragment = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill?: RelatedRecordType | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -4994,14 +5578,11 @@ export type AssessmentWithDefinitionAndValuesFragment = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill?: RelatedRecordType | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -5020,14 +5601,11 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill?: RelatedRecordType | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -5046,14 +5624,11 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill?: RelatedRecordType | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
@@ -5072,17 +5647,20 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   hidden?: boolean | null;
                   readOnly?: boolean | null;
                   repeats?: boolean | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                  recordType?: RelatedRecordType | null;
                   pickListReference?: string | null;
                   serviceDetailType?: ServiceDetailType | null;
                   size?: InputSize | null;
                   assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
+                  prefill?: RelatedRecordType | null;
                   dataCollectedAbout?: DataCollectedAbout | null;
                   disabledDisplay?: DisabledDisplay | null;
                   enableBehavior?: EnableBehavior | null;
+                  mapping?: {
+                    __typename?: 'FieldMapping';
+                    recordType?: RelatedRecordType | null;
+                    fieldName?: string | null;
+                    customFieldKey?: string | null;
+                  } | null;
                   bounds?: Array<{
                     __typename?: 'ValueBound';
                     id: string;
@@ -5143,6 +5721,12 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                     }>;
                   }> | null;
                 }> | null;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
                   id: string;
@@ -5203,6 +5787,12 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                   }>;
                 }> | null;
               }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
                 id: string;
@@ -5263,6 +5853,12 @@ export type AssessmentWithDefinitionAndValuesFragment = {
                 }>;
               }> | null;
             }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
               id: string;
@@ -5323,6 +5919,12 @@ export type AssessmentWithDefinitionAndValuesFragment = {
               }>;
             }> | null;
           }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
             id: string;
@@ -5385,533 +5987,272 @@ export type AssessmentWithDefinitionAndValuesFragment = {
         }>;
       };
     };
-  } | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
-  access: {
-    __typename?: 'AssessmentAccess';
-    id: string;
-    canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
-  };
-};
-
-export type AssessmentWithValuesFragment = {
-  __typename?: 'Assessment';
-  id: string;
-  inProgress: boolean;
-  assessmentDate: string;
-  dataCollectionStage?: DataCollectionStage | null;
-  dateCreated: string;
-  dateUpdated: string;
-  dateDeleted?: string | null;
-  customForm?: {
-    __typename?: 'CustomForm';
-    values?: any | null;
-    id: string;
-    definition: {
-      __typename?: 'FormDefinition';
+    enrollment: {
+      __typename?: 'Enrollment';
       id: string;
-      version: number;
-      role: FormRole;
-      status: string;
-      identifier: string;
-    };
-  } | null;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    relationshipToHoH: RelationshipToHoH;
-    householdSize: number;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-    household: { __typename?: 'Household'; id: string; shortId: string };
-    client: { __typename?: 'Client'; id: string };
-    access: {
-      __typename?: 'EnrollmentAccess';
-      id: string;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-    };
-  };
-  user?: { __typename: 'User'; id: string; name: string } | null;
-  access: {
-    __typename?: 'AssessmentAccess';
-    id: string;
-    canDeleteAssessments: boolean;
-    canDeleteEnrollments: boolean;
-    canEditEnrollments: boolean;
-  };
-};
-
-export type GetAssessmentQueryVariables = Exact<{
-  id: Scalars['ID'];
-}>;
-
-export type GetAssessmentQuery = {
-  __typename?: 'Query';
-  assessment?: {
-    __typename?: 'Assessment';
-    id: string;
-    inProgress: boolean;
-    assessmentDate: string;
-    dataCollectionStage?: DataCollectionStage | null;
-    dateCreated: string;
-    dateUpdated: string;
-    dateDeleted?: string | null;
-    customForm?: {
-      __typename?: 'CustomForm';
-      values?: any | null;
-      id: string;
-      definition: {
-        __typename?: 'FormDefinition';
+      entryDate: string;
+      exitDate?: string | null;
+      livingSituation?: LivingSituation | null;
+      lengthOfStay?: ResidencePriorLengthOfStay | null;
+      losUnderThreshold?: NoYesMissing | null;
+      previousStreetEssh?: NoYesMissing | null;
+      dateToStreetEssh?: string | null;
+      timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+      monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+      enrollmentCoc?: string | null;
+      dateOfPathStatus?: string | null;
+      clientEnrolledInPath?: NoYesMissing | null;
+      reasonNotEnrolled?: ReasonNotEnrolled | null;
+      percentAmi?: PercentAmi | null;
+      referralSource?: ReferralSource | null;
+      countOutreachReferralApproaches?: number | null;
+      dateOfBcpStatus?: string | null;
+      eligibleForRhy?: NoYesMissing | null;
+      reasonNoServices?: ReasonNoServices | null;
+      runawayYouth?: NoYesReasonsForMissingData | null;
+      sexualOrientation?: SexualOrientation | null;
+      sexualOrientationOther?: string | null;
+      formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+      childWelfareYears?: RhyNumberofYears | null;
+      childWelfareMonths?: number | null;
+      formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+      juvenileJusticeYears?: RhyNumberofYears | null;
+      juvenileJusticeMonths?: number | null;
+      unemploymentFam?: NoYesMissing | null;
+      mentalHealthDisorderFam?: NoYesMissing | null;
+      physicalDisabilityFam?: NoYesMissing | null;
+      alcoholDrugUseDisorderFam?: NoYesMissing | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
         id: string;
-        version: number;
-        role: FormRole;
-        status: string;
-        identifier: string;
-        definition: {
-          __typename?: 'FormDefinitionJson';
-          item: Array<{
-            __typename: 'FormItem';
-            linkId: string;
-            type: ItemType;
-            component?: Component | null;
-            prefix?: string | null;
-            text?: string | null;
-            briefText?: string | null;
-            readonlyText?: string | null;
-            helperText?: string | null;
-            required?: boolean | null;
-            warnIfEmpty?: boolean | null;
-            hidden?: boolean | null;
-            readOnly?: boolean | null;
-            repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
-            pickListReference?: string | null;
-            serviceDetailType?: ServiceDetailType | null;
-            size?: InputSize | null;
-            assessmentDate?: boolean | null;
-            prefill?: boolean | null;
-            dataCollectedAbout?: DataCollectedAbout | null;
-            disabledDisplay?: DisabledDisplay | null;
-            enableBehavior?: EnableBehavior | null;
-            item?: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
-              pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
-                pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                  recordType?: RelatedRecordType | null;
-                  pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                    recordType?: RelatedRecordType | null;
-                    pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question: string;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }> | null;
-            bounds?: Array<{
-              __typename?: 'ValueBound';
-              id: string;
-              severity: ValidationSeverity;
-              type: BoundType;
-              question?: string | null;
-              valueNumber?: number | null;
-              valueDate?: string | null;
-              offset?: number | null;
-            }> | null;
-            pickListOptions?: Array<{
-              __typename?: 'PickListOption';
-              code: string;
-              label?: string | null;
-              secondaryLabel?: string | null;
-              groupLabel?: string | null;
-              groupCode?: string | null;
-              initialSelected?: boolean | null;
-            }> | null;
-            initial?: Array<{
-              __typename?: 'InitialValue';
-              valueCode?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              valueLocalConstant?: string | null;
-              initialBehavior: InitialBehavior;
-            }> | null;
-            enableWhen?: Array<{
-              __typename?: 'EnableWhen';
-              question: string;
-              operator: EnableOperator;
-              answerCode?: string | null;
-              answerCodes?: Array<string> | null;
-              answerNumber?: number | null;
-              answerBoolean?: boolean | null;
-              answerGroupCode?: string | null;
-              compareQuestion?: string | null;
-            }> | null;
-            autofillValues?: Array<{
-              __typename?: 'AutofillValue';
-              valueCode?: string | null;
-              valueQuestion?: string | null;
-              valueBoolean?: boolean | null;
-              valueNumber?: number | null;
-              sumQuestions?: Array<string> | null;
-              autofillBehavior: EnableBehavior;
-              autofillReadonly?: boolean | null;
-              autofillWhen: Array<{
-                __typename?: 'EnableWhen';
-                question: string;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }>;
-            }> | null;
-          }>;
-        };
-      };
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+    };
+    incomeBenefit?: {
+      __typename: 'IncomeBenefit';
+      adap?: NoYesReasonsForMissingData | null;
+      alimony?: NoYesMissing | null;
+      alimonyAmount?: number | null;
+      benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+      childSupport?: NoYesMissing | null;
+      childSupportAmount?: number | null;
+      cobra?: NoYesMissing | null;
+      connectionWithSoar?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      earned?: NoYesMissing | null;
+      earnedAmount?: number | null;
+      employerProvided?: NoYesMissing | null;
+      ga?: NoYesMissing | null;
+      gaAmount?: number | null;
+      hivaidsAssistance?: NoYesReasonsForMissingData | null;
+      id: string;
+      incomeFromAnySource?: NoYesReasonsForMissingData | null;
+      indianHealthServices?: NoYesMissing | null;
+      informationDate: string;
+      insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+      medicaid?: NoYesMissing | null;
+      medicare?: NoYesMissing | null;
+      noAdapReason?: NoAssistanceReason | null;
+      noCobraReason?: ReasonNotInsured | null;
+      noEmployerProvidedReason?: ReasonNotInsured | null;
+      noHivaidsAssistanceReason?: NoAssistanceReason | null;
+      noIndianHealthServicesReason?: ReasonNotInsured | null;
+      noMedicaidReason?: ReasonNotInsured | null;
+      noMedicareReason?: ReasonNotInsured | null;
+      noPrivatePayReason?: ReasonNotInsured | null;
+      noRyanWhiteReason?: NoAssistanceReason | null;
+      noSchipReason?: ReasonNotInsured | null;
+      noStateHealthInsReason?: ReasonNotInsured | null;
+      noVaMedReason?: ReasonNotInsured | null;
+      otherBenefitsSource?: NoYesMissing | null;
+      otherBenefitsSourceIdentify?: string | null;
+      otherIncomeAmount?: number | null;
+      otherIncomeSource?: NoYesMissing | null;
+      otherIncomeSourceIdentify?: string | null;
+      otherInsurance?: NoYesMissing | null;
+      otherInsuranceIdentify?: string | null;
+      otherTanf?: NoYesMissing | null;
+      pension?: NoYesMissing | null;
+      pensionAmount?: number | null;
+      privateDisability?: NoYesMissing | null;
+      privateDisabilityAmount?: number | null;
+      privatePay?: NoYesMissing | null;
+      ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+      schip?: NoYesMissing | null;
+      snap?: NoYesMissing | null;
+      socSecRetirement?: NoYesMissing | null;
+      socSecRetirementAmount?: number | null;
+      ssdi?: NoYesMissing | null;
+      ssdiAmount?: number | null;
+      ssi?: NoYesMissing | null;
+      ssiAmount?: number | null;
+      stateHealthIns?: NoYesMissing | null;
+      tanf?: NoYesMissing | null;
+      tanfAmount?: number | null;
+      tanfChildCare?: NoYesMissing | null;
+      tanfTransportation?: NoYesMissing | null;
+      totalMonthlyIncome?: string | null;
+      unemployment?: NoYesMissing | null;
+      unemploymentAmount?: number | null;
+      vaDisabilityNonService?: NoYesMissing | null;
+      vaDisabilityNonServiceAmount?: number | null;
+      vaDisabilityService?: NoYesMissing | null;
+      vaDisabilityServiceAmount?: number | null;
+      vaMedicalServices?: NoYesMissing | null;
+      wic?: NoYesMissing | null;
+      workersComp?: NoYesMissing | null;
+      workersCompAmount?: number | null;
     } | null;
+    disabilityGroup?: {
+      __typename: 'DisabilityGroup';
+      id: string;
+      dataCollectionStage: DataCollectionStage;
+      informationDate: string;
+      disablingCondition: NoYesReasonsForMissingData;
+      chronicHealthCondition?: NoYesReasonsForMissingData | null;
+      chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      developmentalDisability?: NoYesReasonsForMissingData | null;
+      hivAids?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      physicalDisability?: NoYesReasonsForMissingData | null;
+      physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      substanceUseDisorder?: DisabilityResponse | null;
+      substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    } | null;
+    healthAndDv?: {
+      __typename: 'HealthAndDv';
+      bounceBack?: WellbeingAgreement | null;
+      currentlyFleeing?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      dentalHealthStatus?: HealthStatus | null;
+      domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+      dueDate?: string | null;
+      feelingFrequency?: FeelingFrequency | null;
+      generalHealthStatus?: HealthStatus | null;
+      id: string;
+      informationDate: string;
+      lifeValue?: WellbeingAgreement | null;
+      mentalHealthStatus?: HealthStatus | null;
+      pregnancyStatus?: NoYesReasonsForMissingData | null;
+      supportFromOthers?: WellbeingAgreement | null;
+      whenOccurred?: WhenDvOccurred | null;
+    } | null;
+    exit?: {
+      __typename?: 'Exit';
+      id: string;
+      aftercareDate?: string | null;
+      aftercareProvided?: AftercareProvided | null;
+      askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+      askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      cmExitReason?: CmExitReason | null;
+      coercedToContinueWork?: NoYesReasonsForMissingData | null;
+      counselingReceived?: NoYesMissing | null;
+      countOfExchangeForSex?: CountExchangeForSex | null;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      destination: Destination;
+      destinationSafeClient?: NoYesReasonsForMissingData | null;
+      destinationSafeWorker?: WorkerResponse | null;
+      earlyExitReason?: ExpelledReason | null;
+      emailSocialMedia?: NoYesMissing | null;
+      exchangeForSex?: NoYesReasonsForMissingData | null;
+      exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      exitDate: string;
+      familyCounseling?: NoYesMissing | null;
+      groupCounseling?: NoYesMissing | null;
+      housingAssessment?: HousingAssessmentAtExit | null;
+      inPersonGroup?: NoYesMissing | null;
+      inPersonIndividual?: NoYesMissing | null;
+      individualCounseling?: NoYesMissing | null;
+      laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+      otherDestination?: string | null;
+      posAdultConnections?: WorkerResponse | null;
+      posCommunityConnections?: WorkerResponse | null;
+      posPeerConnections?: WorkerResponse | null;
+      postExitCounselingPlan?: NoYesMissing | null;
+      projectCompletionStatus?: ProjectCompletionStatus | null;
+      sessionCountAtExit?: NoYesMissing | null;
+      sessionsInPlan?: number | null;
+      subsidyInformation?: SubsidyInformation | null;
+      telephone?: NoYesMissing | null;
+      workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+      workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+    } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
     user?: { __typename: 'User'; id: string; name: string } | null;
     access: {
       __typename?: 'AssessmentAccess';
@@ -5919,6 +6260,59 @@ export type GetAssessmentQuery = {
       canDeleteAssessments: boolean;
       canDeleteEnrollments: boolean;
       canEditEnrollments: boolean;
+    };
+  } | null;
+};
+
+export type GetClientAssessmentsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sortOrder?: InputMaybe<AssessmentSortOption>;
+  filters?: InputMaybe<AssessmentFilterOptions>;
+}>;
+
+export type GetClientAssessmentsQuery = {
+  __typename?: 'Query';
+  client?: {
+    __typename?: 'Client';
+    id: string;
+    assessments: {
+      __typename?: 'AssessmentsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Assessment';
+        id: string;
+        inProgress: boolean;
+        assessmentDate: string;
+        dataCollectionStage?: DataCollectionStage | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+        role: AssessmentRole;
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          project: {
+            __typename?: 'Project';
+            id: string;
+            projectName: string;
+            projectType?: ProjectType | null;
+          };
+        };
+        user?: { __typename: 'User'; id: string; name: string } | null;
+        access: {
+          __typename?: 'AssessmentAccess';
+          id: string;
+          canDeleteAssessments: boolean;
+          canDeleteEnrollments: boolean;
+          canEditEnrollments: boolean;
+        };
+      }>;
     };
   } | null;
 };
@@ -5951,19 +6345,8 @@ export type GetEnrollmentAssessmentsQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
+        role: AssessmentRole;
         user?: { __typename: 'User'; id: string; name: string } | null;
-        customForm?: {
-          __typename?: 'CustomForm';
-          id: string;
-          definition: {
-            __typename?: 'FormDefinition';
-            id: string;
-            version: number;
-            role: FormRole;
-            status: string;
-            identifier: string;
-          };
-        } | null;
         access: {
           __typename?: 'AssessmentAccess';
           id: string;
@@ -5976,6 +6359,302 @@ export type GetEnrollmentAssessmentsQuery = {
   } | null;
 };
 
+export type GetHouseholdAssessmentsQueryVariables = Exact<{
+  householdId: Scalars['ID'];
+  assessmentRole: AssessmentRole;
+  assessmentId?: InputMaybe<Scalars['ID']>;
+}>;
+
+export type GetHouseholdAssessmentsQuery = {
+  __typename?: 'Query';
+  householdAssessments?: Array<{
+    __typename?: 'Assessment';
+    wipValues?: any | null;
+    id: string;
+    inProgress: boolean;
+    assessmentDate: string;
+    dataCollectionStage?: DataCollectionStage | null;
+    dateCreated: string;
+    dateUpdated: string;
+    dateDeleted?: string | null;
+    role: AssessmentRole;
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      livingSituation?: LivingSituation | null;
+      lengthOfStay?: ResidencePriorLengthOfStay | null;
+      losUnderThreshold?: NoYesMissing | null;
+      previousStreetEssh?: NoYesMissing | null;
+      dateToStreetEssh?: string | null;
+      timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+      monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+      enrollmentCoc?: string | null;
+      dateOfPathStatus?: string | null;
+      clientEnrolledInPath?: NoYesMissing | null;
+      reasonNotEnrolled?: ReasonNotEnrolled | null;
+      percentAmi?: PercentAmi | null;
+      referralSource?: ReferralSource | null;
+      countOutreachReferralApproaches?: number | null;
+      dateOfBcpStatus?: string | null;
+      eligibleForRhy?: NoYesMissing | null;
+      reasonNoServices?: ReasonNoServices | null;
+      runawayYouth?: NoYesReasonsForMissingData | null;
+      sexualOrientation?: SexualOrientation | null;
+      sexualOrientationOther?: string | null;
+      formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+      childWelfareYears?: RhyNumberofYears | null;
+      childWelfareMonths?: number | null;
+      formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+      juvenileJusticeYears?: RhyNumberofYears | null;
+      juvenileJusticeMonths?: number | null;
+      unemploymentFam?: NoYesMissing | null;
+      mentalHealthDisorderFam?: NoYesMissing | null;
+      physicalDisabilityFam?: NoYesMissing | null;
+      alcoholDrugUseDisorderFam?: NoYesMissing | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+    };
+    incomeBenefit?: {
+      __typename: 'IncomeBenefit';
+      adap?: NoYesReasonsForMissingData | null;
+      alimony?: NoYesMissing | null;
+      alimonyAmount?: number | null;
+      benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+      childSupport?: NoYesMissing | null;
+      childSupportAmount?: number | null;
+      cobra?: NoYesMissing | null;
+      connectionWithSoar?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      earned?: NoYesMissing | null;
+      earnedAmount?: number | null;
+      employerProvided?: NoYesMissing | null;
+      ga?: NoYesMissing | null;
+      gaAmount?: number | null;
+      hivaidsAssistance?: NoYesReasonsForMissingData | null;
+      id: string;
+      incomeFromAnySource?: NoYesReasonsForMissingData | null;
+      indianHealthServices?: NoYesMissing | null;
+      informationDate: string;
+      insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+      medicaid?: NoYesMissing | null;
+      medicare?: NoYesMissing | null;
+      noAdapReason?: NoAssistanceReason | null;
+      noCobraReason?: ReasonNotInsured | null;
+      noEmployerProvidedReason?: ReasonNotInsured | null;
+      noHivaidsAssistanceReason?: NoAssistanceReason | null;
+      noIndianHealthServicesReason?: ReasonNotInsured | null;
+      noMedicaidReason?: ReasonNotInsured | null;
+      noMedicareReason?: ReasonNotInsured | null;
+      noPrivatePayReason?: ReasonNotInsured | null;
+      noRyanWhiteReason?: NoAssistanceReason | null;
+      noSchipReason?: ReasonNotInsured | null;
+      noStateHealthInsReason?: ReasonNotInsured | null;
+      noVaMedReason?: ReasonNotInsured | null;
+      otherBenefitsSource?: NoYesMissing | null;
+      otherBenefitsSourceIdentify?: string | null;
+      otherIncomeAmount?: number | null;
+      otherIncomeSource?: NoYesMissing | null;
+      otherIncomeSourceIdentify?: string | null;
+      otherInsurance?: NoYesMissing | null;
+      otherInsuranceIdentify?: string | null;
+      otherTanf?: NoYesMissing | null;
+      pension?: NoYesMissing | null;
+      pensionAmount?: number | null;
+      privateDisability?: NoYesMissing | null;
+      privateDisabilityAmount?: number | null;
+      privatePay?: NoYesMissing | null;
+      ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+      schip?: NoYesMissing | null;
+      snap?: NoYesMissing | null;
+      socSecRetirement?: NoYesMissing | null;
+      socSecRetirementAmount?: number | null;
+      ssdi?: NoYesMissing | null;
+      ssdiAmount?: number | null;
+      ssi?: NoYesMissing | null;
+      ssiAmount?: number | null;
+      stateHealthIns?: NoYesMissing | null;
+      tanf?: NoYesMissing | null;
+      tanfAmount?: number | null;
+      tanfChildCare?: NoYesMissing | null;
+      tanfTransportation?: NoYesMissing | null;
+      totalMonthlyIncome?: string | null;
+      unemployment?: NoYesMissing | null;
+      unemploymentAmount?: number | null;
+      vaDisabilityNonService?: NoYesMissing | null;
+      vaDisabilityNonServiceAmount?: number | null;
+      vaDisabilityService?: NoYesMissing | null;
+      vaDisabilityServiceAmount?: number | null;
+      vaMedicalServices?: NoYesMissing | null;
+      wic?: NoYesMissing | null;
+      workersComp?: NoYesMissing | null;
+      workersCompAmount?: number | null;
+    } | null;
+    disabilityGroup?: {
+      __typename: 'DisabilityGroup';
+      id: string;
+      dataCollectionStage: DataCollectionStage;
+      informationDate: string;
+      disablingCondition: NoYesReasonsForMissingData;
+      chronicHealthCondition?: NoYesReasonsForMissingData | null;
+      chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      developmentalDisability?: NoYesReasonsForMissingData | null;
+      hivAids?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+      mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      physicalDisability?: NoYesReasonsForMissingData | null;
+      physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      substanceUseDisorder?: DisabilityResponse | null;
+      substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+      dateCreated?: string | null;
+      dateUpdated?: string | null;
+    } | null;
+    healthAndDv?: {
+      __typename: 'HealthAndDv';
+      bounceBack?: WellbeingAgreement | null;
+      currentlyFleeing?: NoYesReasonsForMissingData | null;
+      dataCollectionStage: DataCollectionStage;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      dentalHealthStatus?: HealthStatus | null;
+      domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+      dueDate?: string | null;
+      feelingFrequency?: FeelingFrequency | null;
+      generalHealthStatus?: HealthStatus | null;
+      id: string;
+      informationDate: string;
+      lifeValue?: WellbeingAgreement | null;
+      mentalHealthStatus?: HealthStatus | null;
+      pregnancyStatus?: NoYesReasonsForMissingData | null;
+      supportFromOthers?: WellbeingAgreement | null;
+      whenOccurred?: WhenDvOccurred | null;
+    } | null;
+    exit?: {
+      __typename?: 'Exit';
+      id: string;
+      aftercareDate?: string | null;
+      aftercareProvided?: AftercareProvided | null;
+      askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+      askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      cmExitReason?: CmExitReason | null;
+      coercedToContinueWork?: NoYesReasonsForMissingData | null;
+      counselingReceived?: NoYesMissing | null;
+      countOfExchangeForSex?: CountExchangeForSex | null;
+      dateCreated: string;
+      dateDeleted?: string | null;
+      dateUpdated: string;
+      destination: Destination;
+      destinationSafeClient?: NoYesReasonsForMissingData | null;
+      destinationSafeWorker?: WorkerResponse | null;
+      earlyExitReason?: ExpelledReason | null;
+      emailSocialMedia?: NoYesMissing | null;
+      exchangeForSex?: NoYesReasonsForMissingData | null;
+      exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+      exitDate: string;
+      familyCounseling?: NoYesMissing | null;
+      groupCounseling?: NoYesMissing | null;
+      housingAssessment?: HousingAssessmentAtExit | null;
+      inPersonGroup?: NoYesMissing | null;
+      inPersonIndividual?: NoYesMissing | null;
+      individualCounseling?: NoYesMissing | null;
+      laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+      otherDestination?: string | null;
+      posAdultConnections?: WorkerResponse | null;
+      posCommunityConnections?: WorkerResponse | null;
+      posPeerConnections?: WorkerResponse | null;
+      postExitCounselingPlan?: NoYesMissing | null;
+      projectCompletionStatus?: ProjectCompletionStatus | null;
+      sessionCountAtExit?: NoYesMissing | null;
+      sessionsInPlan?: number | null;
+      subsidyInformation?: SubsidyInformation | null;
+      telephone?: NoYesMissing | null;
+      workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+      workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+    } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+    user?: { __typename: 'User'; id: string; name: string } | null;
+    access: {
+      __typename?: 'AssessmentAccess';
+      id: string;
+      canDeleteAssessments: boolean;
+      canDeleteEnrollments: boolean;
+      canEditEnrollments: boolean;
+    };
+  }> | null;
+};
+
 export type SaveAssessmentMutationVariables = Exact<{
   input: SaveAssessmentInput;
 }>;
@@ -5986,6 +6665,7 @@ export type SaveAssessmentMutation = {
     __typename?: 'SaveAssessmentPayload';
     assessment?: {
       __typename?: 'Assessment';
+      wipValues?: any | null;
       id: string;
       inProgress: boolean;
       assessmentDate: string;
@@ -5993,452 +6673,7 @@ export type SaveAssessmentMutation = {
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
-      customForm?: {
-        __typename?: 'CustomForm';
-        values?: any | null;
-        id: string;
-        definition: {
-          __typename?: 'FormDefinition';
-          id: string;
-          version: number;
-          role: FormRole;
-          status: string;
-          identifier: string;
-          definition: {
-            __typename?: 'FormDefinitionJson';
-            item: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
-              pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
-                pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                  recordType?: RelatedRecordType | null;
-                  pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                    recordType?: RelatedRecordType | null;
-                    pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    item?: Array<{
-                      __typename: 'FormItem';
-                      linkId: string;
-                      type: ItemType;
-                      component?: Component | null;
-                      prefix?: string | null;
-                      text?: string | null;
-                      briefText?: string | null;
-                      readonlyText?: string | null;
-                      helperText?: string | null;
-                      required?: boolean | null;
-                      warnIfEmpty?: boolean | null;
-                      hidden?: boolean | null;
-                      readOnly?: boolean | null;
-                      repeats?: boolean | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                      recordType?: RelatedRecordType | null;
-                      pickListReference?: string | null;
-                      serviceDetailType?: ServiceDetailType | null;
-                      size?: InputSize | null;
-                      assessmentDate?: boolean | null;
-                      prefill?: boolean | null;
-                      dataCollectedAbout?: DataCollectedAbout | null;
-                      disabledDisplay?: DisabledDisplay | null;
-                      enableBehavior?: EnableBehavior | null;
-                      bounds?: Array<{
-                        __typename?: 'ValueBound';
-                        id: string;
-                        severity: ValidationSeverity;
-                        type: BoundType;
-                        question?: string | null;
-                        valueNumber?: number | null;
-                        valueDate?: string | null;
-                        offset?: number | null;
-                      }> | null;
-                      pickListOptions?: Array<{
-                        __typename?: 'PickListOption';
-                        code: string;
-                        label?: string | null;
-                        secondaryLabel?: string | null;
-                        groupLabel?: string | null;
-                        groupCode?: string | null;
-                        initialSelected?: boolean | null;
-                      }> | null;
-                      initial?: Array<{
-                        __typename?: 'InitialValue';
-                        valueCode?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        valueLocalConstant?: string | null;
-                        initialBehavior: InitialBehavior;
-                      }> | null;
-                      enableWhen?: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        compareQuestion?: string | null;
-                      }> | null;
-                      autofillValues?: Array<{
-                        __typename?: 'AutofillValue';
-                        valueCode?: string | null;
-                        valueQuestion?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        sumQuestions?: Array<string> | null;
-                        autofillBehavior: EnableBehavior;
-                        autofillReadonly?: boolean | null;
-                        autofillWhen: Array<{
-                          __typename?: 'EnableWhen';
-                          question: string;
-                          operator: EnableOperator;
-                          answerCode?: string | null;
-                          answerCodes?: Array<string> | null;
-                          answerNumber?: number | null;
-                          answerBoolean?: boolean | null;
-                          answerGroupCode?: string | null;
-                          compareQuestion?: string | null;
-                        }>;
-                      }> | null;
-                    }> | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question: string;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }>;
-          };
-        };
-      } | null;
+      role: AssessmentRole;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'AssessmentAccess';
@@ -6482,452 +6717,273 @@ export type SubmitAssessmentMutation = {
       dateCreated: string;
       dateUpdated: string;
       dateDeleted?: string | null;
-      customForm?: {
-        __typename?: 'CustomForm';
-        values?: any | null;
+      role: AssessmentRole;
+      enrollment: {
+        __typename?: 'Enrollment';
         id: string;
-        definition: {
-          __typename?: 'FormDefinition';
+        entryDate: string;
+        exitDate?: string | null;
+        livingSituation?: LivingSituation | null;
+        lengthOfStay?: ResidencePriorLengthOfStay | null;
+        losUnderThreshold?: NoYesMissing | null;
+        previousStreetEssh?: NoYesMissing | null;
+        dateToStreetEssh?: string | null;
+        timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+        monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+        enrollmentCoc?: string | null;
+        dateOfPathStatus?: string | null;
+        clientEnrolledInPath?: NoYesMissing | null;
+        reasonNotEnrolled?: ReasonNotEnrolled | null;
+        percentAmi?: PercentAmi | null;
+        referralSource?: ReferralSource | null;
+        countOutreachReferralApproaches?: number | null;
+        dateOfBcpStatus?: string | null;
+        eligibleForRhy?: NoYesMissing | null;
+        reasonNoServices?: ReasonNoServices | null;
+        runawayYouth?: NoYesReasonsForMissingData | null;
+        sexualOrientation?: SexualOrientation | null;
+        sexualOrientationOther?: string | null;
+        formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+        childWelfareYears?: RhyNumberofYears | null;
+        childWelfareMonths?: number | null;
+        formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+        juvenileJusticeYears?: RhyNumberofYears | null;
+        juvenileJusticeMonths?: number | null;
+        unemploymentFam?: NoYesMissing | null;
+        mentalHealthDisorderFam?: NoYesMissing | null;
+        physicalDisabilityFam?: NoYesMissing | null;
+        alcoholDrugUseDisorderFam?: NoYesMissing | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
           id: string;
-          version: number;
-          role: FormRole;
-          status: string;
-          identifier: string;
-          definition: {
-            __typename?: 'FormDefinitionJson';
-            item: Array<{
-              __typename: 'FormItem';
-              linkId: string;
-              type: ItemType;
-              component?: Component | null;
-              prefix?: string | null;
-              text?: string | null;
-              briefText?: string | null;
-              readonlyText?: string | null;
-              helperText?: string | null;
-              required?: boolean | null;
-              warnIfEmpty?: boolean | null;
-              hidden?: boolean | null;
-              readOnly?: boolean | null;
-              repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
-              pickListReference?: string | null;
-              serviceDetailType?: ServiceDetailType | null;
-              size?: InputSize | null;
-              assessmentDate?: boolean | null;
-              prefill?: boolean | null;
-              dataCollectedAbout?: DataCollectedAbout | null;
-              disabledDisplay?: DisabledDisplay | null;
-              enableBehavior?: EnableBehavior | null;
-              item?: Array<{
-                __typename: 'FormItem';
-                linkId: string;
-                type: ItemType;
-                component?: Component | null;
-                prefix?: string | null;
-                text?: string | null;
-                briefText?: string | null;
-                readonlyText?: string | null;
-                helperText?: string | null;
-                required?: boolean | null;
-                warnIfEmpty?: boolean | null;
-                hidden?: boolean | null;
-                readOnly?: boolean | null;
-                repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
-                pickListReference?: string | null;
-                serviceDetailType?: ServiceDetailType | null;
-                size?: InputSize | null;
-                assessmentDate?: boolean | null;
-                prefill?: boolean | null;
-                dataCollectedAbout?: DataCollectedAbout | null;
-                disabledDisplay?: DisabledDisplay | null;
-                enableBehavior?: EnableBehavior | null;
-                item?: Array<{
-                  __typename: 'FormItem';
-                  linkId: string;
-                  type: ItemType;
-                  component?: Component | null;
-                  prefix?: string | null;
-                  text?: string | null;
-                  briefText?: string | null;
-                  readonlyText?: string | null;
-                  helperText?: string | null;
-                  required?: boolean | null;
-                  warnIfEmpty?: boolean | null;
-                  hidden?: boolean | null;
-                  readOnly?: boolean | null;
-                  repeats?: boolean | null;
-                  fieldName?: string | null;
-                  customFieldKey?: string | null;
-                  recordType?: RelatedRecordType | null;
-                  pickListReference?: string | null;
-                  serviceDetailType?: ServiceDetailType | null;
-                  size?: InputSize | null;
-                  assessmentDate?: boolean | null;
-                  prefill?: boolean | null;
-                  dataCollectedAbout?: DataCollectedAbout | null;
-                  disabledDisplay?: DisabledDisplay | null;
-                  enableBehavior?: EnableBehavior | null;
-                  item?: Array<{
-                    __typename: 'FormItem';
-                    linkId: string;
-                    type: ItemType;
-                    component?: Component | null;
-                    prefix?: string | null;
-                    text?: string | null;
-                    briefText?: string | null;
-                    readonlyText?: string | null;
-                    helperText?: string | null;
-                    required?: boolean | null;
-                    warnIfEmpty?: boolean | null;
-                    hidden?: boolean | null;
-                    readOnly?: boolean | null;
-                    repeats?: boolean | null;
-                    fieldName?: string | null;
-                    customFieldKey?: string | null;
-                    recordType?: RelatedRecordType | null;
-                    pickListReference?: string | null;
-                    serviceDetailType?: ServiceDetailType | null;
-                    size?: InputSize | null;
-                    assessmentDate?: boolean | null;
-                    prefill?: boolean | null;
-                    dataCollectedAbout?: DataCollectedAbout | null;
-                    disabledDisplay?: DisabledDisplay | null;
-                    enableBehavior?: EnableBehavior | null;
-                    item?: Array<{
-                      __typename: 'FormItem';
-                      linkId: string;
-                      type: ItemType;
-                      component?: Component | null;
-                      prefix?: string | null;
-                      text?: string | null;
-                      briefText?: string | null;
-                      readonlyText?: string | null;
-                      helperText?: string | null;
-                      required?: boolean | null;
-                      warnIfEmpty?: boolean | null;
-                      hidden?: boolean | null;
-                      readOnly?: boolean | null;
-                      repeats?: boolean | null;
-                      fieldName?: string | null;
-                      customFieldKey?: string | null;
-                      recordType?: RelatedRecordType | null;
-                      pickListReference?: string | null;
-                      serviceDetailType?: ServiceDetailType | null;
-                      size?: InputSize | null;
-                      assessmentDate?: boolean | null;
-                      prefill?: boolean | null;
-                      dataCollectedAbout?: DataCollectedAbout | null;
-                      disabledDisplay?: DisabledDisplay | null;
-                      enableBehavior?: EnableBehavior | null;
-                      bounds?: Array<{
-                        __typename?: 'ValueBound';
-                        id: string;
-                        severity: ValidationSeverity;
-                        type: BoundType;
-                        question?: string | null;
-                        valueNumber?: number | null;
-                        valueDate?: string | null;
-                        offset?: number | null;
-                      }> | null;
-                      pickListOptions?: Array<{
-                        __typename?: 'PickListOption';
-                        code: string;
-                        label?: string | null;
-                        secondaryLabel?: string | null;
-                        groupLabel?: string | null;
-                        groupCode?: string | null;
-                        initialSelected?: boolean | null;
-                      }> | null;
-                      initial?: Array<{
-                        __typename?: 'InitialValue';
-                        valueCode?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        valueLocalConstant?: string | null;
-                        initialBehavior: InitialBehavior;
-                      }> | null;
-                      enableWhen?: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        compareQuestion?: string | null;
-                      }> | null;
-                      autofillValues?: Array<{
-                        __typename?: 'AutofillValue';
-                        valueCode?: string | null;
-                        valueQuestion?: string | null;
-                        valueBoolean?: boolean | null;
-                        valueNumber?: number | null;
-                        sumQuestions?: Array<string> | null;
-                        autofillBehavior: EnableBehavior;
-                        autofillReadonly?: boolean | null;
-                        autofillWhen: Array<{
-                          __typename?: 'EnableWhen';
-                          question: string;
-                          operator: EnableOperator;
-                          answerCode?: string | null;
-                          answerCodes?: Array<string> | null;
-                          answerNumber?: number | null;
-                          answerBoolean?: boolean | null;
-                          answerGroupCode?: string | null;
-                          compareQuestion?: string | null;
-                        }>;
-                      }> | null;
-                    }> | null;
-                    bounds?: Array<{
-                      __typename?: 'ValueBound';
-                      id: string;
-                      severity: ValidationSeverity;
-                      type: BoundType;
-                      question?: string | null;
-                      valueNumber?: number | null;
-                      valueDate?: string | null;
-                      offset?: number | null;
-                    }> | null;
-                    pickListOptions?: Array<{
-                      __typename?: 'PickListOption';
-                      code: string;
-                      label?: string | null;
-                      secondaryLabel?: string | null;
-                      groupLabel?: string | null;
-                      groupCode?: string | null;
-                      initialSelected?: boolean | null;
-                    }> | null;
-                    initial?: Array<{
-                      __typename?: 'InitialValue';
-                      valueCode?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      valueLocalConstant?: string | null;
-                      initialBehavior: InitialBehavior;
-                    }> | null;
-                    enableWhen?: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }> | null;
-                    autofillValues?: Array<{
-                      __typename?: 'AutofillValue';
-                      valueCode?: string | null;
-                      valueQuestion?: string | null;
-                      valueBoolean?: boolean | null;
-                      valueNumber?: number | null;
-                      sumQuestions?: Array<string> | null;
-                      autofillBehavior: EnableBehavior;
-                      autofillReadonly?: boolean | null;
-                      autofillWhen: Array<{
-                        __typename?: 'EnableWhen';
-                        question: string;
-                        operator: EnableOperator;
-                        answerCode?: string | null;
-                        answerCodes?: Array<string> | null;
-                        answerNumber?: number | null;
-                        answerBoolean?: boolean | null;
-                        answerGroupCode?: string | null;
-                        compareQuestion?: string | null;
-                      }>;
-                    }> | null;
-                  }> | null;
-                  bounds?: Array<{
-                    __typename?: 'ValueBound';
-                    id: string;
-                    severity: ValidationSeverity;
-                    type: BoundType;
-                    question?: string | null;
-                    valueNumber?: number | null;
-                    valueDate?: string | null;
-                    offset?: number | null;
-                  }> | null;
-                  pickListOptions?: Array<{
-                    __typename?: 'PickListOption';
-                    code: string;
-                    label?: string | null;
-                    secondaryLabel?: string | null;
-                    groupLabel?: string | null;
-                    groupCode?: string | null;
-                    initialSelected?: boolean | null;
-                  }> | null;
-                  initial?: Array<{
-                    __typename?: 'InitialValue';
-                    valueCode?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    valueLocalConstant?: string | null;
-                    initialBehavior: InitialBehavior;
-                  }> | null;
-                  enableWhen?: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }> | null;
-                  autofillValues?: Array<{
-                    __typename?: 'AutofillValue';
-                    valueCode?: string | null;
-                    valueQuestion?: string | null;
-                    valueBoolean?: boolean | null;
-                    valueNumber?: number | null;
-                    sumQuestions?: Array<string> | null;
-                    autofillBehavior: EnableBehavior;
-                    autofillReadonly?: boolean | null;
-                    autofillWhen: Array<{
-                      __typename?: 'EnableWhen';
-                      question: string;
-                      operator: EnableOperator;
-                      answerCode?: string | null;
-                      answerCodes?: Array<string> | null;
-                      answerNumber?: number | null;
-                      answerBoolean?: boolean | null;
-                      answerGroupCode?: string | null;
-                      compareQuestion?: string | null;
-                    }>;
-                  }> | null;
-                }> | null;
-                bounds?: Array<{
-                  __typename?: 'ValueBound';
-                  id: string;
-                  severity: ValidationSeverity;
-                  type: BoundType;
-                  question?: string | null;
-                  valueNumber?: number | null;
-                  valueDate?: string | null;
-                  offset?: number | null;
-                }> | null;
-                pickListOptions?: Array<{
-                  __typename?: 'PickListOption';
-                  code: string;
-                  label?: string | null;
-                  secondaryLabel?: string | null;
-                  groupLabel?: string | null;
-                  groupCode?: string | null;
-                  initialSelected?: boolean | null;
-                }> | null;
-                initial?: Array<{
-                  __typename?: 'InitialValue';
-                  valueCode?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  valueLocalConstant?: string | null;
-                  initialBehavior: InitialBehavior;
-                }> | null;
-                enableWhen?: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }> | null;
-                autofillValues?: Array<{
-                  __typename?: 'AutofillValue';
-                  valueCode?: string | null;
-                  valueQuestion?: string | null;
-                  valueBoolean?: boolean | null;
-                  valueNumber?: number | null;
-                  sumQuestions?: Array<string> | null;
-                  autofillBehavior: EnableBehavior;
-                  autofillReadonly?: boolean | null;
-                  autofillWhen: Array<{
-                    __typename?: 'EnableWhen';
-                    question: string;
-                    operator: EnableOperator;
-                    answerCode?: string | null;
-                    answerCodes?: Array<string> | null;
-                    answerNumber?: number | null;
-                    answerBoolean?: boolean | null;
-                    answerGroupCode?: string | null;
-                    compareQuestion?: string | null;
-                  }>;
-                }> | null;
-              }> | null;
-              bounds?: Array<{
-                __typename?: 'ValueBound';
-                id: string;
-                severity: ValidationSeverity;
-                type: BoundType;
-                question?: string | null;
-                valueNumber?: number | null;
-                valueDate?: string | null;
-                offset?: number | null;
-              }> | null;
-              pickListOptions?: Array<{
-                __typename?: 'PickListOption';
-                code: string;
-                label?: string | null;
-                secondaryLabel?: string | null;
-                groupLabel?: string | null;
-                groupCode?: string | null;
-                initialSelected?: boolean | null;
-              }> | null;
-              initial?: Array<{
-                __typename?: 'InitialValue';
-                valueCode?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                valueLocalConstant?: string | null;
-                initialBehavior: InitialBehavior;
-              }> | null;
-              enableWhen?: Array<{
-                __typename?: 'EnableWhen';
-                question: string;
-                operator: EnableOperator;
-                answerCode?: string | null;
-                answerCodes?: Array<string> | null;
-                answerNumber?: number | null;
-                answerBoolean?: boolean | null;
-                answerGroupCode?: string | null;
-                compareQuestion?: string | null;
-              }> | null;
-              autofillValues?: Array<{
-                __typename?: 'AutofillValue';
-                valueCode?: string | null;
-                valueQuestion?: string | null;
-                valueBoolean?: boolean | null;
-                valueNumber?: number | null;
-                sumQuestions?: Array<string> | null;
-                autofillBehavior: EnableBehavior;
-                autofillReadonly?: boolean | null;
-                autofillWhen: Array<{
-                  __typename?: 'EnableWhen';
-                  question: string;
-                  operator: EnableOperator;
-                  answerCode?: string | null;
-                  answerCodes?: Array<string> | null;
-                  answerNumber?: number | null;
-                  answerBoolean?: boolean | null;
-                  answerGroupCode?: string | null;
-                  compareQuestion?: string | null;
-                }>;
-              }> | null;
-            }>;
-          };
-        };
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
+      };
+      incomeBenefit?: {
+        __typename: 'IncomeBenefit';
+        adap?: NoYesReasonsForMissingData | null;
+        alimony?: NoYesMissing | null;
+        alimonyAmount?: number | null;
+        benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+        childSupport?: NoYesMissing | null;
+        childSupportAmount?: number | null;
+        cobra?: NoYesMissing | null;
+        connectionWithSoar?: NoYesReasonsForMissingData | null;
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        earned?: NoYesMissing | null;
+        earnedAmount?: number | null;
+        employerProvided?: NoYesMissing | null;
+        ga?: NoYesMissing | null;
+        gaAmount?: number | null;
+        hivaidsAssistance?: NoYesReasonsForMissingData | null;
+        id: string;
+        incomeFromAnySource?: NoYesReasonsForMissingData | null;
+        indianHealthServices?: NoYesMissing | null;
+        informationDate: string;
+        insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+        medicaid?: NoYesMissing | null;
+        medicare?: NoYesMissing | null;
+        noAdapReason?: NoAssistanceReason | null;
+        noCobraReason?: ReasonNotInsured | null;
+        noEmployerProvidedReason?: ReasonNotInsured | null;
+        noHivaidsAssistanceReason?: NoAssistanceReason | null;
+        noIndianHealthServicesReason?: ReasonNotInsured | null;
+        noMedicaidReason?: ReasonNotInsured | null;
+        noMedicareReason?: ReasonNotInsured | null;
+        noPrivatePayReason?: ReasonNotInsured | null;
+        noRyanWhiteReason?: NoAssistanceReason | null;
+        noSchipReason?: ReasonNotInsured | null;
+        noStateHealthInsReason?: ReasonNotInsured | null;
+        noVaMedReason?: ReasonNotInsured | null;
+        otherBenefitsSource?: NoYesMissing | null;
+        otherBenefitsSourceIdentify?: string | null;
+        otherIncomeAmount?: number | null;
+        otherIncomeSource?: NoYesMissing | null;
+        otherIncomeSourceIdentify?: string | null;
+        otherInsurance?: NoYesMissing | null;
+        otherInsuranceIdentify?: string | null;
+        otherTanf?: NoYesMissing | null;
+        pension?: NoYesMissing | null;
+        pensionAmount?: number | null;
+        privateDisability?: NoYesMissing | null;
+        privateDisabilityAmount?: number | null;
+        privatePay?: NoYesMissing | null;
+        ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+        schip?: NoYesMissing | null;
+        snap?: NoYesMissing | null;
+        socSecRetirement?: NoYesMissing | null;
+        socSecRetirementAmount?: number | null;
+        ssdi?: NoYesMissing | null;
+        ssdiAmount?: number | null;
+        ssi?: NoYesMissing | null;
+        ssiAmount?: number | null;
+        stateHealthIns?: NoYesMissing | null;
+        tanf?: NoYesMissing | null;
+        tanfAmount?: number | null;
+        tanfChildCare?: NoYesMissing | null;
+        tanfTransportation?: NoYesMissing | null;
+        totalMonthlyIncome?: string | null;
+        unemployment?: NoYesMissing | null;
+        unemploymentAmount?: number | null;
+        vaDisabilityNonService?: NoYesMissing | null;
+        vaDisabilityNonServiceAmount?: number | null;
+        vaDisabilityService?: NoYesMissing | null;
+        vaDisabilityServiceAmount?: number | null;
+        vaMedicalServices?: NoYesMissing | null;
+        wic?: NoYesMissing | null;
+        workersComp?: NoYesMissing | null;
+        workersCompAmount?: number | null;
       } | null;
+      disabilityGroup?: {
+        __typename: 'DisabilityGroup';
+        id: string;
+        dataCollectionStage: DataCollectionStage;
+        informationDate: string;
+        disablingCondition: NoYesReasonsForMissingData;
+        chronicHealthCondition?: NoYesReasonsForMissingData | null;
+        chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+        developmentalDisability?: NoYesReasonsForMissingData | null;
+        hivAids?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+        mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+        physicalDisability?: NoYesReasonsForMissingData | null;
+        physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+        substanceUseDisorder?: DisabilityResponse | null;
+        substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+        dateCreated?: string | null;
+        dateUpdated?: string | null;
+      } | null;
+      healthAndDv?: {
+        __typename: 'HealthAndDv';
+        bounceBack?: WellbeingAgreement | null;
+        currentlyFleeing?: NoYesReasonsForMissingData | null;
+        dataCollectionStage: DataCollectionStage;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        dentalHealthStatus?: HealthStatus | null;
+        domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+        dueDate?: string | null;
+        feelingFrequency?: FeelingFrequency | null;
+        generalHealthStatus?: HealthStatus | null;
+        id: string;
+        informationDate: string;
+        lifeValue?: WellbeingAgreement | null;
+        mentalHealthStatus?: HealthStatus | null;
+        pregnancyStatus?: NoYesReasonsForMissingData | null;
+        supportFromOthers?: WellbeingAgreement | null;
+        whenOccurred?: WhenDvOccurred | null;
+      } | null;
+      exit?: {
+        __typename?: 'Exit';
+        id: string;
+        aftercareDate?: string | null;
+        aftercareProvided?: AftercareProvided | null;
+        askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+        askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+        cmExitReason?: CmExitReason | null;
+        coercedToContinueWork?: NoYesReasonsForMissingData | null;
+        counselingReceived?: NoYesMissing | null;
+        countOfExchangeForSex?: CountExchangeForSex | null;
+        dateCreated: string;
+        dateDeleted?: string | null;
+        dateUpdated: string;
+        destination: Destination;
+        destinationSafeClient?: NoYesReasonsForMissingData | null;
+        destinationSafeWorker?: WorkerResponse | null;
+        earlyExitReason?: ExpelledReason | null;
+        emailSocialMedia?: NoYesMissing | null;
+        exchangeForSex?: NoYesReasonsForMissingData | null;
+        exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+        exitDate: string;
+        familyCounseling?: NoYesMissing | null;
+        groupCounseling?: NoYesMissing | null;
+        housingAssessment?: HousingAssessmentAtExit | null;
+        inPersonGroup?: NoYesMissing | null;
+        inPersonIndividual?: NoYesMissing | null;
+        individualCounseling?: NoYesMissing | null;
+        laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+        otherDestination?: string | null;
+        posAdultConnections?: WorkerResponse | null;
+        posCommunityConnections?: WorkerResponse | null;
+        posPeerConnections?: WorkerResponse | null;
+        postExitCounselingPlan?: NoYesMissing | null;
+        projectCompletionStatus?: ProjectCompletionStatus | null;
+        sessionCountAtExit?: NoYesMissing | null;
+        sessionsInPlan?: number | null;
+        subsidyInformation?: SubsidyInformation | null;
+        telephone?: NoYesMissing | null;
+        workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+        workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+      } | null;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        repeats: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
       user?: { __typename: 'User'; id: string; name: string } | null;
       access: {
         __typename?: 'AssessmentAccess';
@@ -6989,7 +7045,6 @@ export type GetAssessmentsForPopulationQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   roles?: InputMaybe<Array<AssessmentRole> | AssessmentRole>;
-  inProgress?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 export type GetAssessmentsForPopulationQuery = {
@@ -7011,42 +7066,279 @@ export type GetAssessmentsForPopulationQuery = {
         dateCreated: string;
         dateUpdated: string;
         dateDeleted?: string | null;
-        customForm?: {
-          __typename?: 'CustomForm';
-          values?: any | null;
-          id: string;
-          definition: {
-            __typename?: 'FormDefinition';
-            id: string;
-            version: number;
-            role: FormRole;
-            status: string;
-            identifier: string;
-          };
-        } | null;
+        role: AssessmentRole;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
           entryDate: string;
           exitDate?: string | null;
-          inProgress: boolean;
-          relationshipToHoH: RelationshipToHoH;
-          householdSize: number;
+          livingSituation?: LivingSituation | null;
+          lengthOfStay?: ResidencePriorLengthOfStay | null;
+          losUnderThreshold?: NoYesMissing | null;
+          previousStreetEssh?: NoYesMissing | null;
+          dateToStreetEssh?: string | null;
+          timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+          monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+          enrollmentCoc?: string | null;
+          dateOfPathStatus?: string | null;
+          clientEnrolledInPath?: NoYesMissing | null;
+          reasonNotEnrolled?: ReasonNotEnrolled | null;
+          percentAmi?: PercentAmi | null;
+          referralSource?: ReferralSource | null;
+          countOutreachReferralApproaches?: number | null;
+          dateOfBcpStatus?: string | null;
+          eligibleForRhy?: NoYesMissing | null;
+          reasonNoServices?: ReasonNoServices | null;
+          runawayYouth?: NoYesReasonsForMissingData | null;
+          sexualOrientation?: SexualOrientation | null;
+          sexualOrientationOther?: string | null;
+          formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+          childWelfareYears?: RhyNumberofYears | null;
+          childWelfareMonths?: number | null;
+          formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+          juvenileJusticeYears?: RhyNumberofYears | null;
+          juvenileJusticeMonths?: number | null;
+          unemploymentFam?: NoYesMissing | null;
+          mentalHealthDisorderFam?: NoYesMissing | null;
+          physicalDisabilityFam?: NoYesMissing | null;
+          alcoholDrugUseDisorderFam?: NoYesMissing | null;
           project: {
             __typename?: 'Project';
             id: string;
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string; shortId: string };
-          client: { __typename?: 'Client'; id: string };
-          access: {
-            __typename?: 'EnrollmentAccess';
+          customDataElements: Array<{
+            __typename?: 'CustomDataElement';
             id: string;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-          };
+            key: string;
+            label: string;
+            repeats: boolean;
+            value?: {
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            } | null;
+            values?: Array<{
+              __typename?: 'CustomDataElementValue';
+              id: string;
+              valueBoolean?: boolean | null;
+              valueDate?: string | null;
+              valueFloat?: number | null;
+              valueInteger?: number | null;
+              valueJson?: any | null;
+              valueString?: string | null;
+              valueText?: string | null;
+              dateCreated: string;
+              dateUpdated: string;
+              user?: { __typename: 'User'; id: string; name: string } | null;
+            }> | null;
+          }>;
         };
+        incomeBenefit?: {
+          __typename: 'IncomeBenefit';
+          adap?: NoYesReasonsForMissingData | null;
+          alimony?: NoYesMissing | null;
+          alimonyAmount?: number | null;
+          benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+          childSupport?: NoYesMissing | null;
+          childSupportAmount?: number | null;
+          cobra?: NoYesMissing | null;
+          connectionWithSoar?: NoYesReasonsForMissingData | null;
+          dataCollectionStage: DataCollectionStage;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          earned?: NoYesMissing | null;
+          earnedAmount?: number | null;
+          employerProvided?: NoYesMissing | null;
+          ga?: NoYesMissing | null;
+          gaAmount?: number | null;
+          hivaidsAssistance?: NoYesReasonsForMissingData | null;
+          id: string;
+          incomeFromAnySource?: NoYesReasonsForMissingData | null;
+          indianHealthServices?: NoYesMissing | null;
+          informationDate: string;
+          insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+          medicaid?: NoYesMissing | null;
+          medicare?: NoYesMissing | null;
+          noAdapReason?: NoAssistanceReason | null;
+          noCobraReason?: ReasonNotInsured | null;
+          noEmployerProvidedReason?: ReasonNotInsured | null;
+          noHivaidsAssistanceReason?: NoAssistanceReason | null;
+          noIndianHealthServicesReason?: ReasonNotInsured | null;
+          noMedicaidReason?: ReasonNotInsured | null;
+          noMedicareReason?: ReasonNotInsured | null;
+          noPrivatePayReason?: ReasonNotInsured | null;
+          noRyanWhiteReason?: NoAssistanceReason | null;
+          noSchipReason?: ReasonNotInsured | null;
+          noStateHealthInsReason?: ReasonNotInsured | null;
+          noVaMedReason?: ReasonNotInsured | null;
+          otherBenefitsSource?: NoYesMissing | null;
+          otherBenefitsSourceIdentify?: string | null;
+          otherIncomeAmount?: number | null;
+          otherIncomeSource?: NoYesMissing | null;
+          otherIncomeSourceIdentify?: string | null;
+          otherInsurance?: NoYesMissing | null;
+          otherInsuranceIdentify?: string | null;
+          otherTanf?: NoYesMissing | null;
+          pension?: NoYesMissing | null;
+          pensionAmount?: number | null;
+          privateDisability?: NoYesMissing | null;
+          privateDisabilityAmount?: number | null;
+          privatePay?: NoYesMissing | null;
+          ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+          schip?: NoYesMissing | null;
+          snap?: NoYesMissing | null;
+          socSecRetirement?: NoYesMissing | null;
+          socSecRetirementAmount?: number | null;
+          ssdi?: NoYesMissing | null;
+          ssdiAmount?: number | null;
+          ssi?: NoYesMissing | null;
+          ssiAmount?: number | null;
+          stateHealthIns?: NoYesMissing | null;
+          tanf?: NoYesMissing | null;
+          tanfAmount?: number | null;
+          tanfChildCare?: NoYesMissing | null;
+          tanfTransportation?: NoYesMissing | null;
+          totalMonthlyIncome?: string | null;
+          unemployment?: NoYesMissing | null;
+          unemploymentAmount?: number | null;
+          vaDisabilityNonService?: NoYesMissing | null;
+          vaDisabilityNonServiceAmount?: number | null;
+          vaDisabilityService?: NoYesMissing | null;
+          vaDisabilityServiceAmount?: number | null;
+          vaMedicalServices?: NoYesMissing | null;
+          wic?: NoYesMissing | null;
+          workersComp?: NoYesMissing | null;
+          workersCompAmount?: number | null;
+        } | null;
+        disabilityGroup?: {
+          __typename: 'DisabilityGroup';
+          id: string;
+          dataCollectionStage: DataCollectionStage;
+          informationDate: string;
+          disablingCondition: NoYesReasonsForMissingData;
+          chronicHealthCondition?: NoYesReasonsForMissingData | null;
+          chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+          developmentalDisability?: NoYesReasonsForMissingData | null;
+          hivAids?: NoYesReasonsForMissingData | null;
+          mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+          mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+          physicalDisability?: NoYesReasonsForMissingData | null;
+          physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+          substanceUseDisorder?: DisabilityResponse | null;
+          substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+          dateCreated?: string | null;
+          dateUpdated?: string | null;
+        } | null;
+        healthAndDv?: {
+          __typename: 'HealthAndDv';
+          bounceBack?: WellbeingAgreement | null;
+          currentlyFleeing?: NoYesReasonsForMissingData | null;
+          dataCollectionStage: DataCollectionStage;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          dentalHealthStatus?: HealthStatus | null;
+          domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+          dueDate?: string | null;
+          feelingFrequency?: FeelingFrequency | null;
+          generalHealthStatus?: HealthStatus | null;
+          id: string;
+          informationDate: string;
+          lifeValue?: WellbeingAgreement | null;
+          mentalHealthStatus?: HealthStatus | null;
+          pregnancyStatus?: NoYesReasonsForMissingData | null;
+          supportFromOthers?: WellbeingAgreement | null;
+          whenOccurred?: WhenDvOccurred | null;
+        } | null;
+        exit?: {
+          __typename?: 'Exit';
+          id: string;
+          aftercareDate?: string | null;
+          aftercareProvided?: AftercareProvided | null;
+          askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+          askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+          cmExitReason?: CmExitReason | null;
+          coercedToContinueWork?: NoYesReasonsForMissingData | null;
+          counselingReceived?: NoYesMissing | null;
+          countOfExchangeForSex?: CountExchangeForSex | null;
+          dateCreated: string;
+          dateDeleted?: string | null;
+          dateUpdated: string;
+          destination: Destination;
+          destinationSafeClient?: NoYesReasonsForMissingData | null;
+          destinationSafeWorker?: WorkerResponse | null;
+          earlyExitReason?: ExpelledReason | null;
+          emailSocialMedia?: NoYesMissing | null;
+          exchangeForSex?: NoYesReasonsForMissingData | null;
+          exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+          exitDate: string;
+          familyCounseling?: NoYesMissing | null;
+          groupCounseling?: NoYesMissing | null;
+          housingAssessment?: HousingAssessmentAtExit | null;
+          inPersonGroup?: NoYesMissing | null;
+          inPersonIndividual?: NoYesMissing | null;
+          individualCounseling?: NoYesMissing | null;
+          laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+          otherDestination?: string | null;
+          posAdultConnections?: WorkerResponse | null;
+          posCommunityConnections?: WorkerResponse | null;
+          posPeerConnections?: WorkerResponse | null;
+          postExitCounselingPlan?: NoYesMissing | null;
+          projectCompletionStatus?: ProjectCompletionStatus | null;
+          sessionCountAtExit?: NoYesMissing | null;
+          sessionsInPlan?: number | null;
+          subsidyInformation?: SubsidyInformation | null;
+          telephone?: NoYesMissing | null;
+          workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+          workplacePromiseDifference?: NoYesReasonsForMissingData | null;
+        } | null;
+        customDataElements: Array<{
+          __typename?: 'CustomDataElement';
+          id: string;
+          key: string;
+          label: string;
+          repeats: boolean;
+          value?: {
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          } | null;
+          values?: Array<{
+            __typename?: 'CustomDataElementValue';
+            id: string;
+            valueBoolean?: boolean | null;
+            valueDate?: string | null;
+            valueFloat?: number | null;
+            valueInteger?: number | null;
+            valueJson?: any | null;
+            valueString?: string | null;
+            valueText?: string | null;
+            dateCreated: string;
+            dateUpdated: string;
+            user?: { __typename: 'User'; id: string; name: string } | null;
+          }> | null;
+        }>;
         user?: { __typename: 'User'; id: string; name: string } | null;
         access: {
           __typename?: 'AssessmentAccess';
@@ -7085,6 +7377,409 @@ export type DeleteAssessmentMutation = {
       data?: any | null;
     }>;
   } | null;
+};
+
+export type EnrollmentValuesFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  enrollmentCoc?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+};
+
+export type EnrollmentFieldsFromAssessmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  enrollmentCoc?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  intakeAssessment?: {
+    __typename?: 'Assessment';
+    user?: { __typename?: 'User'; name: string } | null;
+  } | null;
+};
+
+export type IncomeBenefitValuesFragment = {
+  __typename: 'IncomeBenefit';
+  adap?: NoYesReasonsForMissingData | null;
+  alimony?: NoYesMissing | null;
+  alimonyAmount?: number | null;
+  benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+  childSupport?: NoYesMissing | null;
+  childSupportAmount?: number | null;
+  cobra?: NoYesMissing | null;
+  connectionWithSoar?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  earned?: NoYesMissing | null;
+  earnedAmount?: number | null;
+  employerProvided?: NoYesMissing | null;
+  ga?: NoYesMissing | null;
+  gaAmount?: number | null;
+  hivaidsAssistance?: NoYesReasonsForMissingData | null;
+  id: string;
+  incomeFromAnySource?: NoYesReasonsForMissingData | null;
+  indianHealthServices?: NoYesMissing | null;
+  informationDate: string;
+  insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+  medicaid?: NoYesMissing | null;
+  medicare?: NoYesMissing | null;
+  noAdapReason?: NoAssistanceReason | null;
+  noCobraReason?: ReasonNotInsured | null;
+  noEmployerProvidedReason?: ReasonNotInsured | null;
+  noHivaidsAssistanceReason?: NoAssistanceReason | null;
+  noIndianHealthServicesReason?: ReasonNotInsured | null;
+  noMedicaidReason?: ReasonNotInsured | null;
+  noMedicareReason?: ReasonNotInsured | null;
+  noPrivatePayReason?: ReasonNotInsured | null;
+  noRyanWhiteReason?: NoAssistanceReason | null;
+  noSchipReason?: ReasonNotInsured | null;
+  noStateHealthInsReason?: ReasonNotInsured | null;
+  noVaMedReason?: ReasonNotInsured | null;
+  otherBenefitsSource?: NoYesMissing | null;
+  otherBenefitsSourceIdentify?: string | null;
+  otherIncomeAmount?: number | null;
+  otherIncomeSource?: NoYesMissing | null;
+  otherIncomeSourceIdentify?: string | null;
+  otherInsurance?: NoYesMissing | null;
+  otherInsuranceIdentify?: string | null;
+  otherTanf?: NoYesMissing | null;
+  pension?: NoYesMissing | null;
+  pensionAmount?: number | null;
+  privateDisability?: NoYesMissing | null;
+  privateDisabilityAmount?: number | null;
+  privatePay?: NoYesMissing | null;
+  ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+  schip?: NoYesMissing | null;
+  snap?: NoYesMissing | null;
+  socSecRetirement?: NoYesMissing | null;
+  socSecRetirementAmount?: number | null;
+  ssdi?: NoYesMissing | null;
+  ssdiAmount?: number | null;
+  ssi?: NoYesMissing | null;
+  ssiAmount?: number | null;
+  stateHealthIns?: NoYesMissing | null;
+  tanf?: NoYesMissing | null;
+  tanfAmount?: number | null;
+  tanfChildCare?: NoYesMissing | null;
+  tanfTransportation?: NoYesMissing | null;
+  totalMonthlyIncome?: string | null;
+  unemployment?: NoYesMissing | null;
+  unemploymentAmount?: number | null;
+  vaDisabilityNonService?: NoYesMissing | null;
+  vaDisabilityNonServiceAmount?: number | null;
+  vaDisabilityService?: NoYesMissing | null;
+  vaDisabilityServiceAmount?: number | null;
+  vaMedicalServices?: NoYesMissing | null;
+  wic?: NoYesMissing | null;
+  workersComp?: NoYesMissing | null;
+  workersCompAmount?: number | null;
+};
+
+export type IncomeBenefitFieldsFragment = {
+  __typename: 'IncomeBenefit';
+  adap?: NoYesReasonsForMissingData | null;
+  alimony?: NoYesMissing | null;
+  alimonyAmount?: number | null;
+  benefitsFromAnySource?: NoYesReasonsForMissingData | null;
+  childSupport?: NoYesMissing | null;
+  childSupportAmount?: number | null;
+  cobra?: NoYesMissing | null;
+  connectionWithSoar?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  earned?: NoYesMissing | null;
+  earnedAmount?: number | null;
+  employerProvided?: NoYesMissing | null;
+  ga?: NoYesMissing | null;
+  gaAmount?: number | null;
+  hivaidsAssistance?: NoYesReasonsForMissingData | null;
+  id: string;
+  incomeFromAnySource?: NoYesReasonsForMissingData | null;
+  indianHealthServices?: NoYesMissing | null;
+  informationDate: string;
+  insuranceFromAnySource?: NoYesReasonsForMissingData | null;
+  medicaid?: NoYesMissing | null;
+  medicare?: NoYesMissing | null;
+  noAdapReason?: NoAssistanceReason | null;
+  noCobraReason?: ReasonNotInsured | null;
+  noEmployerProvidedReason?: ReasonNotInsured | null;
+  noHivaidsAssistanceReason?: NoAssistanceReason | null;
+  noIndianHealthServicesReason?: ReasonNotInsured | null;
+  noMedicaidReason?: ReasonNotInsured | null;
+  noMedicareReason?: ReasonNotInsured | null;
+  noPrivatePayReason?: ReasonNotInsured | null;
+  noRyanWhiteReason?: NoAssistanceReason | null;
+  noSchipReason?: ReasonNotInsured | null;
+  noStateHealthInsReason?: ReasonNotInsured | null;
+  noVaMedReason?: ReasonNotInsured | null;
+  otherBenefitsSource?: NoYesMissing | null;
+  otherBenefitsSourceIdentify?: string | null;
+  otherIncomeAmount?: number | null;
+  otherIncomeSource?: NoYesMissing | null;
+  otherIncomeSourceIdentify?: string | null;
+  otherInsurance?: NoYesMissing | null;
+  otherInsuranceIdentify?: string | null;
+  otherTanf?: NoYesMissing | null;
+  pension?: NoYesMissing | null;
+  pensionAmount?: number | null;
+  privateDisability?: NoYesMissing | null;
+  privateDisabilityAmount?: number | null;
+  privatePay?: NoYesMissing | null;
+  ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
+  schip?: NoYesMissing | null;
+  snap?: NoYesMissing | null;
+  socSecRetirement?: NoYesMissing | null;
+  socSecRetirementAmount?: number | null;
+  ssdi?: NoYesMissing | null;
+  ssdiAmount?: number | null;
+  ssi?: NoYesMissing | null;
+  ssiAmount?: number | null;
+  stateHealthIns?: NoYesMissing | null;
+  tanf?: NoYesMissing | null;
+  tanfAmount?: number | null;
+  tanfChildCare?: NoYesMissing | null;
+  tanfTransportation?: NoYesMissing | null;
+  totalMonthlyIncome?: string | null;
+  unemployment?: NoYesMissing | null;
+  unemploymentAmount?: number | null;
+  vaDisabilityNonService?: NoYesMissing | null;
+  vaDisabilityNonServiceAmount?: number | null;
+  vaDisabilityService?: NoYesMissing | null;
+  vaDisabilityServiceAmount?: number | null;
+  vaMedicalServices?: NoYesMissing | null;
+  wic?: NoYesMissing | null;
+  workersComp?: NoYesMissing | null;
+  workersCompAmount?: number | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+  };
+};
+
+export type DisabilityGroupValuesFragment = {
+  __typename: 'DisabilityGroup';
+  id: string;
+  dataCollectionStage: DataCollectionStage;
+  informationDate: string;
+  disablingCondition: NoYesReasonsForMissingData;
+  chronicHealthCondition?: NoYesReasonsForMissingData | null;
+  chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  developmentalDisability?: NoYesReasonsForMissingData | null;
+  hivAids?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  physicalDisability?: NoYesReasonsForMissingData | null;
+  physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  substanceUseDisorder?: DisabilityResponse | null;
+  substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+};
+
+export type DisabilityGroupFieldsFragment = {
+  __typename: 'DisabilityGroup';
+  id: string;
+  dataCollectionStage: DataCollectionStage;
+  informationDate: string;
+  disablingCondition: NoYesReasonsForMissingData;
+  chronicHealthCondition?: NoYesReasonsForMissingData | null;
+  chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  developmentalDisability?: NoYesReasonsForMissingData | null;
+  hivAids?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorder?: NoYesReasonsForMissingData | null;
+  mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  physicalDisability?: NoYesReasonsForMissingData | null;
+  physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  substanceUseDisorder?: DisabilityResponse | null;
+  substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
+  dateCreated?: string | null;
+  dateUpdated?: string | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+  };
+};
+
+export type HealthAndDvValuesFragment = {
+  __typename: 'HealthAndDv';
+  bounceBack?: WellbeingAgreement | null;
+  currentlyFleeing?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  dentalHealthStatus?: HealthStatus | null;
+  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+  dueDate?: string | null;
+  feelingFrequency?: FeelingFrequency | null;
+  generalHealthStatus?: HealthStatus | null;
+  id: string;
+  informationDate: string;
+  lifeValue?: WellbeingAgreement | null;
+  mentalHealthStatus?: HealthStatus | null;
+  pregnancyStatus?: NoYesReasonsForMissingData | null;
+  supportFromOthers?: WellbeingAgreement | null;
+  whenOccurred?: WhenDvOccurred | null;
+};
+
+export type HealthAndDvFieldsFragment = {
+  __typename: 'HealthAndDv';
+  bounceBack?: WellbeingAgreement | null;
+  currentlyFleeing?: NoYesReasonsForMissingData | null;
+  dataCollectionStage: DataCollectionStage;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  dentalHealthStatus?: HealthStatus | null;
+  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
+  dueDate?: string | null;
+  feelingFrequency?: FeelingFrequency | null;
+  generalHealthStatus?: HealthStatus | null;
+  id: string;
+  informationDate: string;
+  lifeValue?: WellbeingAgreement | null;
+  mentalHealthStatus?: HealthStatus | null;
+  pregnancyStatus?: NoYesReasonsForMissingData | null;
+  supportFromOthers?: WellbeingAgreement | null;
+  whenOccurred?: WhenDvOccurred | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+  };
+};
+
+export type ExitValuesFragment = {
+  __typename?: 'Exit';
+  id: string;
+  aftercareDate?: string | null;
+  aftercareProvided?: AftercareProvided | null;
+  askedOrForcedToExchangeForSex?: NoYesReasonsForMissingData | null;
+  askedOrForcedToExchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+  cmExitReason?: CmExitReason | null;
+  coercedToContinueWork?: NoYesReasonsForMissingData | null;
+  counselingReceived?: NoYesMissing | null;
+  countOfExchangeForSex?: CountExchangeForSex | null;
+  dateCreated: string;
+  dateDeleted?: string | null;
+  dateUpdated: string;
+  destination: Destination;
+  destinationSafeClient?: NoYesReasonsForMissingData | null;
+  destinationSafeWorker?: WorkerResponse | null;
+  earlyExitReason?: ExpelledReason | null;
+  emailSocialMedia?: NoYesMissing | null;
+  exchangeForSex?: NoYesReasonsForMissingData | null;
+  exchangeForSexPastThreeMonths?: NoYesReasonsForMissingData | null;
+  exitDate: string;
+  familyCounseling?: NoYesMissing | null;
+  groupCounseling?: NoYesMissing | null;
+  housingAssessment?: HousingAssessmentAtExit | null;
+  inPersonGroup?: NoYesMissing | null;
+  inPersonIndividual?: NoYesMissing | null;
+  individualCounseling?: NoYesMissing | null;
+  laborExploitPastThreeMonths?: NoYesReasonsForMissingData | null;
+  otherDestination?: string | null;
+  posAdultConnections?: WorkerResponse | null;
+  posCommunityConnections?: WorkerResponse | null;
+  posPeerConnections?: WorkerResponse | null;
+  postExitCounselingPlan?: NoYesMissing | null;
+  projectCompletionStatus?: ProjectCompletionStatus | null;
+  sessionCountAtExit?: NoYesMissing | null;
+  sessionsInPlan?: number | null;
+  subsidyInformation?: SubsidyInformation | null;
+  telephone?: NoYesMissing | null;
+  workPlaceViolenceThreats?: NoYesReasonsForMissingData | null;
+  workplacePromiseDifference?: NoYesReasonsForMissingData | null;
 };
 
 export type ClientFieldsFragment = {
@@ -7331,322 +8026,6 @@ export type ClientOmniSearchFieldsFragment = {
   middleName?: string | null;
   lastName?: string | null;
   nameSuffix?: string | null;
-};
-
-export type EnrollmentFieldsFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  householdSize: number;
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  household: { __typename?: 'Household'; id: string; shortId: string };
-  client: { __typename?: 'Client'; id: string };
-  access: {
-    __typename?: 'EnrollmentAccess';
-    id: string;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-  };
-};
-
-export type EnrollmentFieldsFromAssessmentFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  livingSituation?: LivingSituation | null;
-  lengthOfStay?: ResidencePriorLengthOfStay | null;
-  previousStreetEssh?: NoYesMissing | null;
-  dateToStreetEssh?: string | null;
-  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
-  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-  intakeAssessment?: {
-    __typename?: 'Assessment';
-    user?: { __typename?: 'User'; name: string } | null;
-  } | null;
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  user?: { __typename: 'User'; id: string; name: string } | null;
-};
-
-export type EnrollmentWithHouseholdFragmentFragment = {
-  __typename?: 'Enrollment';
-  id: string;
-  entryDate: string;
-  exitDate?: string | null;
-  inProgress: boolean;
-  relationshipToHoH: RelationshipToHoH;
-  householdSize: number;
-  household: {
-    __typename?: 'Household';
-    id: string;
-    shortId: string;
-    householdClients: Array<{
-      __typename?: 'HouseholdClient';
-      id: string;
-      relationshipToHoH: RelationshipToHoH;
-      client: {
-        __typename?: 'Client';
-        id: string;
-        veteranStatus: NoYesReasonsForMissingData;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-        dob?: string | null;
-        age?: number | null;
-        ssn?: string | null;
-        access: {
-          __typename?: 'ClientAccess';
-          id: string;
-          canViewFullSsn: boolean;
-          canViewPartialSsn: boolean;
-          canEditClient: boolean;
-          canDeleteClient: boolean;
-          canViewDob: boolean;
-          canEditEnrollments: boolean;
-          canDeleteEnrollments: boolean;
-          canViewEnrollmentDetails: boolean;
-          canDeleteAssessments: boolean;
-          canManageAnyClientFiles: boolean;
-          canManageOwnClientFiles: boolean;
-          canViewAnyConfidentialClientFiles: boolean;
-          canViewAnyNonconfidentialClientFiles: boolean;
-        };
-      };
-      enrollment: {
-        __typename?: 'Enrollment';
-        id: string;
-        entryDate: string;
-        exitDate?: string | null;
-        inProgress: boolean;
-      };
-    }>;
-  };
-  project: {
-    __typename?: 'Project';
-    id: string;
-    projectName: string;
-    projectType?: ProjectType | null;
-  };
-  client: { __typename?: 'Client'; id: string };
-  access: {
-    __typename?: 'EnrollmentAccess';
-    id: string;
-    canEditEnrollments: boolean;
-    canDeleteEnrollments: boolean;
-  };
-};
-
-export type EventFieldsFragment = {
-  __typename?: 'Event';
-  id: string;
-  event: EventType;
-  eventDate: string;
-  locationCrisisOrPhHousing?: string | null;
-  probSolDivRrResult?: NoYesMissing | null;
-  referralCaseManageAfter?: NoYesMissing | null;
-  referralResult?: ReferralResult | null;
-  resultDate?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
-  dateDeleted?: string | null;
-};
-
-export type IncomeBenefitFieldsFragment = {
-  __typename: 'IncomeBenefit';
-  adap?: NoYesReasonsForMissingData | null;
-  alimony?: NoYesMissing | null;
-  alimonyAmount?: number | null;
-  benefitsFromAnySource?: NoYesReasonsForMissingData | null;
-  childSupport?: NoYesMissing | null;
-  childSupportAmount?: number | null;
-  cobra?: NoYesMissing | null;
-  connectionWithSoar?: NoYesReasonsForMissingData | null;
-  dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
-  dateDeleted?: string | null;
-  dateUpdated: string;
-  earned?: NoYesMissing | null;
-  earnedAmount?: number | null;
-  employerProvided?: NoYesMissing | null;
-  ga?: NoYesMissing | null;
-  gaAmount?: number | null;
-  hivaidsAssistance?: NoYesReasonsForMissingData | null;
-  id: string;
-  incomeFromAnySource?: NoYesReasonsForMissingData | null;
-  indianHealthServices?: NoYesMissing | null;
-  informationDate: string;
-  insuranceFromAnySource?: NoYesReasonsForMissingData | null;
-  medicaid?: NoYesMissing | null;
-  medicare?: NoYesMissing | null;
-  noAdapReason?: NoAssistanceReason | null;
-  noCobraReason?: ReasonNotInsured | null;
-  noEmployerProvidedReason?: ReasonNotInsured | null;
-  noHivaidsAssistanceReason?: NoAssistanceReason | null;
-  noIndianHealthServicesReason?: ReasonNotInsured | null;
-  noMedicaidReason?: ReasonNotInsured | null;
-  noMedicareReason?: ReasonNotInsured | null;
-  noPrivatePayReason?: ReasonNotInsured | null;
-  noRyanWhiteReason?: NoAssistanceReason | null;
-  noSchipReason?: ReasonNotInsured | null;
-  noStateHealthInsReason?: ReasonNotInsured | null;
-  noVaMedReason?: ReasonNotInsured | null;
-  otherBenefitsSource?: NoYesMissing | null;
-  otherBenefitsSourceIdentify?: string | null;
-  otherIncomeAmount?: number | null;
-  otherIncomeSource?: NoYesMissing | null;
-  otherIncomeSourceIdentify?: string | null;
-  otherInsurance?: NoYesMissing | null;
-  otherInsuranceIdentify?: string | null;
-  otherTanf?: NoYesMissing | null;
-  pension?: NoYesMissing | null;
-  pensionAmount?: number | null;
-  privateDisability?: NoYesMissing | null;
-  privateDisabilityAmount?: number | null;
-  privatePay?: NoYesMissing | null;
-  ryanWhiteMedDent?: NoYesReasonsForMissingData | null;
-  schip?: NoYesMissing | null;
-  snap?: NoYesMissing | null;
-  socSecRetirement?: NoYesMissing | null;
-  socSecRetirementAmount?: number | null;
-  ssdi?: NoYesMissing | null;
-  ssdiAmount?: number | null;
-  ssi?: NoYesMissing | null;
-  ssiAmount?: number | null;
-  stateHealthIns?: NoYesMissing | null;
-  tanf?: NoYesMissing | null;
-  tanfAmount?: number | null;
-  tanfChildCare?: NoYesMissing | null;
-  tanfTransportation?: NoYesMissing | null;
-  totalMonthlyIncome?: string | null;
-  unemployment?: NoYesMissing | null;
-  unemploymentAmount?: number | null;
-  vaDisabilityNonService?: NoYesMissing | null;
-  vaDisabilityNonServiceAmount?: number | null;
-  vaDisabilityService?: NoYesMissing | null;
-  vaDisabilityServiceAmount?: number | null;
-  vaMedicalServices?: NoYesMissing | null;
-  wic?: NoYesMissing | null;
-  workersComp?: NoYesMissing | null;
-  workersCompAmount?: number | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-  };
-};
-
-export type DisabilityGroupFieldsFragment = {
-  __typename: 'DisabilityGroup';
-  id: string;
-  dataCollectionStage: DataCollectionStage;
-  informationDate: string;
-  disablingCondition: NoYesReasonsForMissingData;
-  chronicHealthCondition?: NoYesReasonsForMissingData | null;
-  chronicHealthConditionIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-  developmentalDisability?: NoYesReasonsForMissingData | null;
-  hivAids?: NoYesReasonsForMissingData | null;
-  mentalHealthDisorder?: NoYesReasonsForMissingData | null;
-  mentalHealthDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-  physicalDisability?: NoYesReasonsForMissingData | null;
-  physicalDisabilityIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-  substanceUseDisorder?: DisabilityResponse | null;
-  substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
-  dateCreated?: string | null;
-  dateUpdated?: string | null;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-  };
-  user?: { __typename: 'User'; id: string; name: string } | null;
-};
-
-export type HealthAndDvFieldsFragment = {
-  __typename: 'HealthAndDv';
-  bounceBack?: WellbeingAgreement | null;
-  currentlyFleeing?: NoYesReasonsForMissingData | null;
-  dataCollectionStage: DataCollectionStage;
-  dateCreated: string;
-  dateDeleted?: string | null;
-  dateUpdated: string;
-  dentalHealthStatus?: HealthStatus | null;
-  domesticViolenceVictim?: NoYesReasonsForMissingData | null;
-  dueDate?: string | null;
-  feelingFrequency?: FeelingFrequency | null;
-  generalHealthStatus?: HealthStatus | null;
-  id: string;
-  informationDate: string;
-  lifeValue?: WellbeingAgreement | null;
-  mentalHealthStatus?: HealthStatus | null;
-  pregnancyStatus?: NoYesReasonsForMissingData | null;
-  supportFromOthers?: WellbeingAgreement | null;
-  whenOccurred?: WhenDvOccurred | null;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-  };
-  user?: { __typename: 'User'; id: string; name: string } | null;
-};
-
-export type FileFieldsFragment = {
-  __typename?: 'File';
-  confidential?: boolean | null;
-  contentType: string;
-  effectiveDate?: string | null;
-  expirationDate?: string | null;
-  id: string;
-  name: string;
-  fileBlobId?: string | null;
-  url?: string | null;
-  tags: Array<string>;
-  ownFile: boolean;
-  redacted: boolean;
-  enrollmentId?: string | null;
-  dateCreated: string;
-  dateUpdated: string;
-  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-  uploadedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
-  updatedBy?: {
-    __typename?: 'ApplicationUser';
-    id: string;
-    name: string;
-  } | null;
-  user?: { __typename: 'User'; id: string; name: string } | null;
 };
 
 export type ClientAuditEventFieldsFragment = {
@@ -8052,6 +8431,9 @@ export type GetClientEnrollmentsQuery = {
         exitDate?: string | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
+        enrollmentCoc?: string | null;
+        householdId: string;
+        householdShortId: string;
         householdSize: number;
         project: {
           __typename?: 'Project';
@@ -8059,7 +8441,6 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string; shortId: string };
         client: { __typename?: 'Client'; id: string };
         access: {
           __typename?: 'EnrollmentAccess';
@@ -8106,81 +8487,6 @@ export type GetClientAuditEventsQuery = {
   } | null;
 };
 
-export type GetClientAssessmentsQueryVariables = Exact<{
-  id: Scalars['ID'];
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
-  sortOrder?: InputMaybe<AssessmentSortOption>;
-  filters?: InputMaybe<AssessmentFilterOptions>;
-}>;
-
-export type GetClientAssessmentsQuery = {
-  __typename?: 'Query';
-  client?: {
-    __typename?: 'Client';
-    id: string;
-    assessments: {
-      __typename?: 'AssessmentsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Assessment';
-        id: string;
-        inProgress: boolean;
-        assessmentDate: string;
-        dataCollectionStage?: DataCollectionStage | null;
-        dateCreated: string;
-        dateUpdated: string;
-        dateDeleted?: string | null;
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-          relationshipToHoH: RelationshipToHoH;
-          householdSize: number;
-          project: {
-            __typename?: 'Project';
-            id: string;
-            projectName: string;
-            projectType?: ProjectType | null;
-          };
-          household: { __typename?: 'Household'; id: string; shortId: string };
-          client: { __typename?: 'Client'; id: string };
-          access: {
-            __typename?: 'EnrollmentAccess';
-            id: string;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-          };
-        };
-        user?: { __typename: 'User'; id: string; name: string } | null;
-        customForm?: {
-          __typename?: 'CustomForm';
-          id: string;
-          definition: {
-            __typename?: 'FormDefinition';
-            id: string;
-            version: number;
-            role: FormRole;
-            status: string;
-            identifier: string;
-          };
-        } | null;
-        access: {
-          __typename?: 'AssessmentAccess';
-          id: string;
-          canDeleteAssessments: boolean;
-          canDeleteEnrollments: boolean;
-          canEditEnrollments: boolean;
-        };
-      }>;
-    };
-  } | null;
-};
-
 export type GetClientServicesQueryVariables = Exact<{
   id: Scalars['ID'];
   limit?: InputMaybe<Scalars['Int']>;
@@ -8220,6 +8526,9 @@ export type GetClientServicesQuery = {
           exitDate?: string | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -8227,7 +8536,6 @@ export type GetClientServicesQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
           access: {
             __typename?: 'EnrollmentAccess';
@@ -8310,21 +8618,45 @@ export type GetNonWipEnrollmentsQuery = {
         exitDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
+        losUnderThreshold?: NoYesMissing | null;
         previousStreetEssh?: NoYesMissing | null;
         dateToStreetEssh?: string | null;
         timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
         monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
-        intakeAssessment?: {
-          __typename?: 'Assessment';
-          user?: { __typename?: 'User'; name: string } | null;
-        } | null;
+        enrollmentCoc?: string | null;
+        dateOfPathStatus?: string | null;
+        clientEnrolledInPath?: NoYesMissing | null;
+        reasonNotEnrolled?: ReasonNotEnrolled | null;
+        percentAmi?: PercentAmi | null;
+        referralSource?: ReferralSource | null;
+        countOutreachReferralApproaches?: number | null;
+        dateOfBcpStatus?: string | null;
+        eligibleForRhy?: NoYesMissing | null;
+        reasonNoServices?: ReasonNoServices | null;
+        runawayYouth?: NoYesReasonsForMissingData | null;
+        sexualOrientation?: SexualOrientation | null;
+        sexualOrientationOther?: string | null;
+        formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+        childWelfareYears?: RhyNumberofYears | null;
+        childWelfareMonths?: number | null;
+        formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+        juvenileJusticeYears?: RhyNumberofYears | null;
+        juvenileJusticeMonths?: number | null;
+        unemploymentFam?: NoYesMissing | null;
+        mentalHealthDisorderFam?: NoYesMissing | null;
+        physicalDisabilityFam?: NoYesMissing | null;
+        alcoholDrugUseDisorderFam?: NoYesMissing | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
         project: {
           __typename?: 'Project';
           id: string;
           projectName: string;
           projectType?: ProjectType | null;
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
+        intakeAssessment?: {
+          __typename?: 'Assessment';
+          user?: { __typename?: 'User'; name: string } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -8419,6 +8751,9 @@ export type CreateEnrollmentMutation = {
       exitDate?: string | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
       householdSize: number;
       project: {
         __typename?: 'Project';
@@ -8426,7 +8761,6 @@ export type CreateEnrollmentMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      household: { __typename?: 'Household'; id: string; shortId: string };
       client: { __typename?: 'Client'; id: string };
       access: {
         __typename?: 'EnrollmentAccess';
@@ -8713,6 +9047,9 @@ export type GetEnrollmentQuery = {
     exitDate?: string | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
     householdSize: number;
     project: {
       __typename?: 'Project';
@@ -8720,7 +9057,6 @@ export type GetEnrollmentQuery = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    household: { __typename?: 'Household'; id: string; shortId: string };
     client: { __typename?: 'Client'; id: string };
     access: {
       __typename?: 'EnrollmentAccess';
@@ -8744,6 +9080,9 @@ export type GetEnrollmentWithHouseholdQuery = {
     exitDate?: string | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
     householdSize: number;
     household: {
       __typename?: 'Household';
@@ -8753,25 +9092,6 @@ export type GetEnrollmentWithHouseholdQuery = {
         __typename?: 'HouseholdClient';
         id: string;
         relationshipToHoH: RelationshipToHoH;
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-          intakeAssessment?: {
-            __typename?: 'Assessment';
-            id: string;
-            inProgress: boolean;
-            assessmentDate: string;
-          } | null;
-          exitAssessment?: {
-            __typename?: 'Assessment';
-            id: string;
-            inProgress: boolean;
-            assessmentDate: string;
-          } | null;
-        };
         client: {
           __typename?: 'Client';
           id: string;
@@ -8800,6 +9120,13 @@ export type GetEnrollmentWithHouseholdQuery = {
             canViewAnyConfidentialClientFiles: boolean;
             canViewAnyNonconfidentialClientFiles: boolean;
           };
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
         };
       }>;
     };
@@ -9061,6 +9388,7 @@ export type GetRecentDisabilitiesQuery = {
       substanceUseDisorderIndefiniteAndImpairs?: NoYesReasonsForMissingData | null;
       dateCreated?: string | null;
       dateUpdated?: string | null;
+      user?: { __typename: 'User'; id: string; name: string } | null;
       enrollment: {
         __typename?: 'Enrollment';
         id: string;
@@ -9071,7 +9399,6 @@ export type GetRecentDisabilitiesQuery = {
           projectType?: ProjectType | null;
         };
       };
-      user?: { __typename: 'User'; id: string; name: string } | null;
     }>;
   } | null;
 };
@@ -9110,6 +9437,7 @@ export type GetRecentHealthAndDvsQuery = {
         pregnancyStatus?: NoYesReasonsForMissingData | null;
         supportFromOthers?: WellbeingAgreement | null;
         whenOccurred?: WhenDvOccurred | null;
+        user?: { __typename: 'User'; id: string; name: string } | null;
         enrollment: {
           __typename?: 'Enrollment';
           id: string;
@@ -9120,7 +9448,6 @@ export type GetRecentHealthAndDvsQuery = {
             projectType?: ProjectType | null;
           };
         };
-        user?: { __typename: 'User'; id: string; name: string } | null;
       }>;
     };
   } | null;
@@ -9263,6 +9590,149 @@ export type CustomDataElementFieldsFragment = {
   }> | null;
 };
 
+export type EnrollmentFieldsFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+};
+
+export type EnrollmentWithHouseholdFragmentFragment = {
+  __typename?: 'Enrollment';
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  household: {
+    __typename?: 'Household';
+    id: string;
+    shortId: string;
+    householdClients: Array<{
+      __typename?: 'HouseholdClient';
+      id: string;
+      relationshipToHoH: RelationshipToHoH;
+      client: {
+        __typename?: 'Client';
+        id: string;
+        veteranStatus: NoYesReasonsForMissingData;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+        dob?: string | null;
+        age?: number | null;
+        ssn?: string | null;
+        access: {
+          __typename?: 'ClientAccess';
+          id: string;
+          canViewFullSsn: boolean;
+          canViewPartialSsn: boolean;
+          canEditClient: boolean;
+          canDeleteClient: boolean;
+          canViewDob: boolean;
+          canEditEnrollments: boolean;
+          canDeleteEnrollments: boolean;
+          canViewEnrollmentDetails: boolean;
+          canDeleteAssessments: boolean;
+          canManageAnyClientFiles: boolean;
+          canManageOwnClientFiles: boolean;
+          canViewAnyConfidentialClientFiles: boolean;
+          canViewAnyNonconfidentialClientFiles: boolean;
+        };
+      };
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        entryDate: string;
+        exitDate?: string | null;
+        inProgress: boolean;
+      };
+    }>;
+  };
+  project: {
+    __typename?: 'Project';
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
+  client: { __typename?: 'Client'; id: string };
+  access: {
+    __typename?: 'EnrollmentAccess';
+    id: string;
+    canEditEnrollments: boolean;
+    canDeleteEnrollments: boolean;
+  };
+};
+
+export type EventFieldsFragment = {
+  __typename?: 'Event';
+  id: string;
+  event: EventType;
+  eventDate: string;
+  locationCrisisOrPhHousing?: string | null;
+  probSolDivRrResult?: NoYesMissing | null;
+  referralCaseManageAfter?: NoYesMissing | null;
+  referralResult?: ReferralResult | null;
+  resultDate?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  dateDeleted?: string | null;
+};
+
+export type FileFieldsFragment = {
+  __typename?: 'File';
+  confidential?: boolean | null;
+  contentType: string;
+  effectiveDate?: string | null;
+  expirationDate?: string | null;
+  id: string;
+  name: string;
+  fileBlobId?: string | null;
+  url?: string | null;
+  tags: Array<string>;
+  ownFile: boolean;
+  redacted: boolean;
+  enrollmentId?: string | null;
+  dateCreated: string;
+  dateUpdated: string;
+  enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+  uploadedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  updatedBy?: {
+    __typename?: 'ApplicationUser';
+    id: string;
+    name: string;
+  } | null;
+  user?: { __typename: 'User'; id: string; name: string } | null;
+};
+
 export type ValidationErrorFieldsFragment = {
   __typename?: 'ValidationError';
   type: ValidationType;
@@ -9276,15 +9746,6 @@ export type ValidationErrorFieldsFragment = {
   linkId?: string | null;
   section?: string | null;
   data?: any | null;
-};
-
-export type FormDefinitionFieldsFragment = {
-  __typename?: 'FormDefinition';
-  id: string;
-  version: number;
-  role: FormRole;
-  status: string;
-  identifier: string;
 };
 
 export type PickListOptionFieldsFragment = {
@@ -9324,17 +9785,20 @@ export type ItemFieldsFragment = {
   hidden?: boolean | null;
   readOnly?: boolean | null;
   repeats?: boolean | null;
-  fieldName?: string | null;
-  customFieldKey?: string | null;
-  recordType?: RelatedRecordType | null;
   pickListReference?: string | null;
   serviceDetailType?: ServiceDetailType | null;
   size?: InputSize | null;
   assessmentDate?: boolean | null;
-  prefill?: boolean | null;
+  prefill?: RelatedRecordType | null;
   dataCollectedAbout?: DataCollectedAbout | null;
   disabledDisplay?: DisabledDisplay | null;
   enableBehavior?: EnableBehavior | null;
+  mapping?: {
+    __typename?: 'FieldMapping';
+    recordType?: RelatedRecordType | null;
+    fieldName?: string | null;
+    customFieldKey?: string | null;
+  } | null;
   bounds?: Array<{
     __typename?: 'ValueBound';
     id: string;
@@ -9413,14 +9877,11 @@ export type FormDefinitionJsonFieldsFragment = {
     hidden?: boolean | null;
     readOnly?: boolean | null;
     repeats?: boolean | null;
-    fieldName?: string | null;
-    customFieldKey?: string | null;
-    recordType?: RelatedRecordType | null;
     pickListReference?: string | null;
     serviceDetailType?: ServiceDetailType | null;
     size?: InputSize | null;
     assessmentDate?: boolean | null;
-    prefill?: boolean | null;
+    prefill?: RelatedRecordType | null;
     dataCollectedAbout?: DataCollectedAbout | null;
     disabledDisplay?: DisabledDisplay | null;
     enableBehavior?: EnableBehavior | null;
@@ -9439,14 +9900,11 @@ export type FormDefinitionJsonFieldsFragment = {
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
-      fieldName?: string | null;
-      customFieldKey?: string | null;
-      recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: boolean | null;
+      prefill?: RelatedRecordType | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -9465,14 +9923,11 @@ export type FormDefinitionJsonFieldsFragment = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        fieldName?: string | null;
-        customFieldKey?: string | null;
-        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill?: RelatedRecordType | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -9491,14 +9946,11 @@ export type FormDefinitionJsonFieldsFragment = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill?: RelatedRecordType | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -9517,17 +9969,20 @@ export type FormDefinitionJsonFieldsFragment = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill?: RelatedRecordType | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
               id: string;
@@ -9588,6 +10043,12 @@ export type FormDefinitionJsonFieldsFragment = {
               }>;
             }> | null;
           }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
             id: string;
@@ -9648,6 +10109,12 @@ export type FormDefinitionJsonFieldsFragment = {
             }>;
           }> | null;
         }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
           id: string;
@@ -9708,6 +10175,12 @@ export type FormDefinitionJsonFieldsFragment = {
           }>;
         }> | null;
       }> | null;
+      mapping?: {
+        __typename?: 'FieldMapping';
+        recordType?: RelatedRecordType | null;
+        fieldName?: string | null;
+        customFieldKey?: string | null;
+      } | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
         id: string;
@@ -9768,6 +10241,12 @@ export type FormDefinitionJsonFieldsFragment = {
         }>;
       }> | null;
     }> | null;
+    mapping?: {
+      __typename?: 'FieldMapping';
+      recordType?: RelatedRecordType | null;
+      fieldName?: string | null;
+      customFieldKey?: string | null;
+    } | null;
     bounds?: Array<{
       __typename?: 'ValueBound';
       id: string;
@@ -9830,13 +10309,10 @@ export type FormDefinitionJsonFieldsFragment = {
   }>;
 };
 
-export type FormDefinitionWithJsonFragment = {
+export type FormDefinitionFieldsFragment = {
   __typename?: 'FormDefinition';
   id: string;
-  version: number;
   role: FormRole;
-  status: string;
-  identifier: string;
   definition: {
     __typename?: 'FormDefinitionJson';
     item: Array<{
@@ -9854,14 +10330,11 @@ export type FormDefinitionWithJsonFragment = {
       hidden?: boolean | null;
       readOnly?: boolean | null;
       repeats?: boolean | null;
-      fieldName?: string | null;
-      customFieldKey?: string | null;
-      recordType?: RelatedRecordType | null;
       pickListReference?: string | null;
       serviceDetailType?: ServiceDetailType | null;
       size?: InputSize | null;
       assessmentDate?: boolean | null;
-      prefill?: boolean | null;
+      prefill?: RelatedRecordType | null;
       dataCollectedAbout?: DataCollectedAbout | null;
       disabledDisplay?: DisabledDisplay | null;
       enableBehavior?: EnableBehavior | null;
@@ -9880,14 +10353,11 @@ export type FormDefinitionWithJsonFragment = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        fieldName?: string | null;
-        customFieldKey?: string | null;
-        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill?: RelatedRecordType | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -9906,14 +10376,11 @@ export type FormDefinitionWithJsonFragment = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill?: RelatedRecordType | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -9932,14 +10399,11 @@ export type FormDefinitionWithJsonFragment = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill?: RelatedRecordType | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -9958,17 +10422,20 @@ export type FormDefinitionWithJsonFragment = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill?: RelatedRecordType | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
                 id: string;
@@ -10029,6 +10496,12 @@ export type FormDefinitionWithJsonFragment = {
                 }>;
               }> | null;
             }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
               id: string;
@@ -10089,6 +10562,12 @@ export type FormDefinitionWithJsonFragment = {
               }>;
             }> | null;
           }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
             id: string;
@@ -10149,6 +10628,12 @@ export type FormDefinitionWithJsonFragment = {
             }>;
           }> | null;
         }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
           id: string;
@@ -10209,6 +10694,12 @@ export type FormDefinitionWithJsonFragment = {
           }>;
         }> | null;
       }> | null;
+      mapping?: {
+        __typename?: 'FieldMapping';
+        recordType?: RelatedRecordType | null;
+        fieldName?: string | null;
+        customFieldKey?: string | null;
+      } | null;
       bounds?: Array<{
         __typename?: 'ValueBound';
         id: string;
@@ -10272,11 +10763,6 @@ export type FormDefinitionWithJsonFragment = {
   };
 };
 
-export type CustomFormFieldsFragment = {
-  __typename?: 'CustomForm';
-  id: string;
-};
-
 export type UserFieldsFragment = {
   __typename: 'User';
   id: string;
@@ -10312,10 +10798,7 @@ export type GetFormDefinitionQuery = {
   getFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
-    version: number;
     role: FormRole;
-    status: string;
-    identifier: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -10333,14 +10816,11 @@ export type GetFormDefinitionQuery = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        fieldName?: string | null;
-        customFieldKey?: string | null;
-        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill?: RelatedRecordType | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -10359,14 +10839,11 @@ export type GetFormDefinitionQuery = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill?: RelatedRecordType | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -10385,14 +10862,11 @@ export type GetFormDefinitionQuery = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill?: RelatedRecordType | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -10411,14 +10885,11 @@ export type GetFormDefinitionQuery = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill?: RelatedRecordType | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -10437,17 +10908,20 @@ export type GetFormDefinitionQuery = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill?: RelatedRecordType | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
                   id: string;
@@ -10508,6 +10982,12 @@ export type GetFormDefinitionQuery = {
                   }>;
                 }> | null;
               }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
                 id: string;
@@ -10568,6 +11048,12 @@ export type GetFormDefinitionQuery = {
                 }>;
               }> | null;
             }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
               id: string;
@@ -10628,6 +11114,12 @@ export type GetFormDefinitionQuery = {
               }>;
             }> | null;
           }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
             id: string;
@@ -10688,6 +11180,12 @@ export type GetFormDefinitionQuery = {
             }>;
           }> | null;
         }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
           id: string;
@@ -10762,10 +11260,7 @@ export type GetServiceFormDefinitionQuery = {
   getServiceFormDefinition?: {
     __typename?: 'FormDefinition';
     id: string;
-    version: number;
     role: FormRole;
-    status: string;
-    identifier: string;
     definition: {
       __typename?: 'FormDefinitionJson';
       item: Array<{
@@ -10783,14 +11278,11 @@ export type GetServiceFormDefinitionQuery = {
         hidden?: boolean | null;
         readOnly?: boolean | null;
         repeats?: boolean | null;
-        fieldName?: string | null;
-        customFieldKey?: string | null;
-        recordType?: RelatedRecordType | null;
         pickListReference?: string | null;
         serviceDetailType?: ServiceDetailType | null;
         size?: InputSize | null;
         assessmentDate?: boolean | null;
-        prefill?: boolean | null;
+        prefill?: RelatedRecordType | null;
         dataCollectedAbout?: DataCollectedAbout | null;
         disabledDisplay?: DisabledDisplay | null;
         enableBehavior?: EnableBehavior | null;
@@ -10809,14 +11301,11 @@ export type GetServiceFormDefinitionQuery = {
           hidden?: boolean | null;
           readOnly?: boolean | null;
           repeats?: boolean | null;
-          fieldName?: string | null;
-          customFieldKey?: string | null;
-          recordType?: RelatedRecordType | null;
           pickListReference?: string | null;
           serviceDetailType?: ServiceDetailType | null;
           size?: InputSize | null;
           assessmentDate?: boolean | null;
-          prefill?: boolean | null;
+          prefill?: RelatedRecordType | null;
           dataCollectedAbout?: DataCollectedAbout | null;
           disabledDisplay?: DisabledDisplay | null;
           enableBehavior?: EnableBehavior | null;
@@ -10835,14 +11324,11 @@ export type GetServiceFormDefinitionQuery = {
             hidden?: boolean | null;
             readOnly?: boolean | null;
             repeats?: boolean | null;
-            fieldName?: string | null;
-            customFieldKey?: string | null;
-            recordType?: RelatedRecordType | null;
             pickListReference?: string | null;
             serviceDetailType?: ServiceDetailType | null;
             size?: InputSize | null;
             assessmentDate?: boolean | null;
-            prefill?: boolean | null;
+            prefill?: RelatedRecordType | null;
             dataCollectedAbout?: DataCollectedAbout | null;
             disabledDisplay?: DisabledDisplay | null;
             enableBehavior?: EnableBehavior | null;
@@ -10861,14 +11347,11 @@ export type GetServiceFormDefinitionQuery = {
               hidden?: boolean | null;
               readOnly?: boolean | null;
               repeats?: boolean | null;
-              fieldName?: string | null;
-              customFieldKey?: string | null;
-              recordType?: RelatedRecordType | null;
               pickListReference?: string | null;
               serviceDetailType?: ServiceDetailType | null;
               size?: InputSize | null;
               assessmentDate?: boolean | null;
-              prefill?: boolean | null;
+              prefill?: RelatedRecordType | null;
               dataCollectedAbout?: DataCollectedAbout | null;
               disabledDisplay?: DisabledDisplay | null;
               enableBehavior?: EnableBehavior | null;
@@ -10887,17 +11370,20 @@ export type GetServiceFormDefinitionQuery = {
                 hidden?: boolean | null;
                 readOnly?: boolean | null;
                 repeats?: boolean | null;
-                fieldName?: string | null;
-                customFieldKey?: string | null;
-                recordType?: RelatedRecordType | null;
                 pickListReference?: string | null;
                 serviceDetailType?: ServiceDetailType | null;
                 size?: InputSize | null;
                 assessmentDate?: boolean | null;
-                prefill?: boolean | null;
+                prefill?: RelatedRecordType | null;
                 dataCollectedAbout?: DataCollectedAbout | null;
                 disabledDisplay?: DisabledDisplay | null;
                 enableBehavior?: EnableBehavior | null;
+                mapping?: {
+                  __typename?: 'FieldMapping';
+                  recordType?: RelatedRecordType | null;
+                  fieldName?: string | null;
+                  customFieldKey?: string | null;
+                } | null;
                 bounds?: Array<{
                   __typename?: 'ValueBound';
                   id: string;
@@ -10958,6 +11444,12 @@ export type GetServiceFormDefinitionQuery = {
                   }>;
                 }> | null;
               }> | null;
+              mapping?: {
+                __typename?: 'FieldMapping';
+                recordType?: RelatedRecordType | null;
+                fieldName?: string | null;
+                customFieldKey?: string | null;
+              } | null;
               bounds?: Array<{
                 __typename?: 'ValueBound';
                 id: string;
@@ -11018,6 +11510,12 @@ export type GetServiceFormDefinitionQuery = {
                 }>;
               }> | null;
             }> | null;
+            mapping?: {
+              __typename?: 'FieldMapping';
+              recordType?: RelatedRecordType | null;
+              fieldName?: string | null;
+              customFieldKey?: string | null;
+            } | null;
             bounds?: Array<{
               __typename?: 'ValueBound';
               id: string;
@@ -11078,6 +11576,12 @@ export type GetServiceFormDefinitionQuery = {
               }>;
             }> | null;
           }> | null;
+          mapping?: {
+            __typename?: 'FieldMapping';
+            recordType?: RelatedRecordType | null;
+            fieldName?: string | null;
+            customFieldKey?: string | null;
+          } | null;
           bounds?: Array<{
             __typename?: 'ValueBound';
             id: string;
@@ -11138,6 +11642,12 @@ export type GetServiceFormDefinitionQuery = {
             }>;
           }> | null;
         }> | null;
+        mapping?: {
+          __typename?: 'FieldMapping';
+          recordType?: RelatedRecordType | null;
+          fieldName?: string | null;
+          customFieldKey?: string | null;
+        } | null;
         bounds?: Array<{
           __typename?: 'ValueBound';
           id: string;
@@ -11359,6 +11869,9 @@ export type SubmitFormMutation = {
           exitDate?: string | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
+          enrollmentCoc?: string | null;
+          householdId: string;
+          householdShortId: string;
           householdSize: number;
           project: {
             __typename?: 'Project';
@@ -11366,7 +11879,6 @@ export type SubmitFormMutation = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          household: { __typename?: 'Household'; id: string; shortId: string };
           client: { __typename?: 'Client'; id: string };
           access: {
             __typename?: 'EnrollmentAccess';
@@ -11871,60 +12383,6 @@ export type ProjectEnrollmentsHouseholdClientFieldsFragment = {
   };
 };
 
-export type HouseholdClientFieldsWithAssessmentsFragment = {
-  __typename?: 'HouseholdClient';
-  id: string;
-  relationshipToHoH: RelationshipToHoH;
-  enrollment: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    intakeAssessment?: {
-      __typename?: 'Assessment';
-      id: string;
-      inProgress: boolean;
-      assessmentDate: string;
-    } | null;
-    exitAssessment?: {
-      __typename?: 'Assessment';
-      id: string;
-      inProgress: boolean;
-      assessmentDate: string;
-    } | null;
-  };
-  client: {
-    __typename?: 'Client';
-    id: string;
-    veteranStatus: NoYesReasonsForMissingData;
-    firstName?: string | null;
-    middleName?: string | null;
-    lastName?: string | null;
-    nameSuffix?: string | null;
-    dob?: string | null;
-    age?: number | null;
-    ssn?: string | null;
-    access: {
-      __typename?: 'ClientAccess';
-      id: string;
-      canViewFullSsn: boolean;
-      canViewPartialSsn: boolean;
-      canEditClient: boolean;
-      canDeleteClient: boolean;
-      canViewDob: boolean;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-      canViewEnrollmentDetails: boolean;
-      canDeleteAssessments: boolean;
-      canManageAnyClientFiles: boolean;
-      canManageOwnClientFiles: boolean;
-      canViewAnyConfidentialClientFiles: boolean;
-      canViewAnyNonconfidentialClientFiles: boolean;
-    };
-  };
-};
-
 export type GetHouseholdQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
@@ -11996,6 +12454,9 @@ export type UpdateRelationshipToHoHMutation = {
       exitDate?: string | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
       householdSize: number;
       household: {
         __typename?: 'Household';
@@ -12907,6 +13368,9 @@ export type GetProjectEnrollmentsQuery = {
         exitDate?: string | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
+        enrollmentCoc?: string | null;
+        householdId: string;
+        householdShortId: string;
         householdSize: number;
         client: {
           __typename?: 'Client';
@@ -12931,7 +13395,6 @@ export type GetProjectEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        household: { __typename?: 'Household'; id: string; shortId: string };
         access: {
           __typename?: 'EnrollmentAccess';
           id: string;
@@ -14875,20 +15338,6 @@ export const UserFieldsFragmentDoc = gql`
     name
   }
 `;
-export const CustomFormFieldsFragmentDoc = gql`
-  fragment CustomFormFields on CustomForm {
-    id
-  }
-`;
-export const FormDefinitionFieldsFragmentDoc = gql`
-  fragment FormDefinitionFields on FormDefinition {
-    id
-    version
-    role
-    status
-    identifier
-  }
-`;
 export const AssessmentAccessFieldsFragmentDoc = gql`
   fragment AssessmentAccessFields on AssessmentAccess {
     id
@@ -14906,204 +15355,378 @@ export const AssessmentFieldsFragmentDoc = gql`
     dateCreated
     dateUpdated
     dateDeleted
+    role
     user {
       ...UserFields
-    }
-    customForm {
-      ...CustomFormFields
-      definition {
-        ...FormDefinitionFields
-      }
     }
     access {
       ...AssessmentAccessFields
     }
   }
   ${UserFieldsFragmentDoc}
-  ${CustomFormFieldsFragmentDoc}
-  ${FormDefinitionFieldsFragmentDoc}
   ${AssessmentAccessFieldsFragmentDoc}
 `;
-export const PickListOptionFieldsFragmentDoc = gql`
-  fragment PickListOptionFields on PickListOption {
-    code
-    label
-    secondaryLabel
-    groupLabel
-    groupCode
-    initialSelected
-  }
-`;
-export const EnableWhenFieldsFragmentDoc = gql`
-  fragment EnableWhenFields on EnableWhen {
-    question
-    operator
-    answerCode
-    answerCodes
-    answerNumber
-    answerBoolean
-    answerGroupCode
-    compareQuestion
-  }
-`;
-export const ItemFieldsFragmentDoc = gql`
-  fragment ItemFields on FormItem {
-    __typename
-    linkId
-    type
-    component
-    prefix
-    text
-    briefText
-    readonlyText
-    helperText
-    required
-    warnIfEmpty
-    hidden
-    readOnly
-    repeats
-    fieldName
-    customFieldKey
-    recordType
-    pickListReference
-    serviceDetailType
-    size
-    assessmentDate
-    prefill
-    bounds {
-      id
-      severity
-      type
-      question
-      valueNumber
-      valueDate
-      offset
-    }
-    pickListOptions {
-      ...PickListOptionFields
-    }
-    initial {
-      valueCode
-      valueBoolean
-      valueNumber
-      valueLocalConstant
-      initialBehavior
-    }
-    dataCollectedAbout
-    disabledDisplay
-    enableBehavior
-    enableWhen {
-      ...EnableWhenFields
-    }
-    autofillValues {
-      valueCode
-      valueQuestion
-      valueBoolean
-      valueNumber
-      sumQuestions
-      autofillBehavior
-      autofillReadonly
-      autofillWhen {
-        ...EnableWhenFields
-      }
-    }
-  }
-  ${PickListOptionFieldsFragmentDoc}
-  ${EnableWhenFieldsFragmentDoc}
-`;
-export const FormDefinitionJsonFieldsFragmentDoc = gql`
-  fragment FormDefinitionJsonFields on FormDefinitionJson {
-    item {
-      ...ItemFields
-      item {
-        ...ItemFields
-        item {
-          ...ItemFields
-          item {
-            ...ItemFields
-            item {
-              ...ItemFields
-            }
-          }
-        }
-      }
-    }
-  }
-  ${ItemFieldsFragmentDoc}
-`;
-export const FormDefinitionWithJsonFragmentDoc = gql`
-  fragment FormDefinitionWithJson on FormDefinition {
-    ...FormDefinitionFields
-    definition {
-      ...FormDefinitionJsonFields
-    }
-  }
-  ${FormDefinitionFieldsFragmentDoc}
-  ${FormDefinitionJsonFieldsFragmentDoc}
-`;
-export const AssessmentWithDefinitionAndValuesFragmentDoc = gql`
-  fragment AssessmentWithDefinitionAndValues on Assessment {
-    ...AssessmentFields
-    customForm {
-      ...CustomFormFields
-      values
-      definition {
-        ...FormDefinitionWithJson
-      }
-    }
-  }
-  ${AssessmentFieldsFragmentDoc}
-  ${CustomFormFieldsFragmentDoc}
-  ${FormDefinitionWithJsonFragmentDoc}
-`;
-export const EnrollmentAccessFieldsFragmentDoc = gql`
-  fragment EnrollmentAccessFields on EnrollmentAccess {
-    id
-    canEditEnrollments
-    canDeleteEnrollments
-  }
-`;
-export const EnrollmentFieldsFragmentDoc = gql`
-  fragment EnrollmentFields on Enrollment {
+export const EnrollmentValuesFragmentDoc = gql`
+  fragment EnrollmentValues on Enrollment {
     id
     entryDate
     exitDate
-    project {
-      id
-      projectName
-      projectType
+    livingSituation
+    lengthOfStay
+    losUnderThreshold
+    previousStreetEssh
+    dateToStreetEssh
+    timesHomelessPastThreeYears
+    monthsHomelessPastThreeYears
+    enrollmentCoc
+    dateOfPathStatus
+    clientEnrolledInPath
+    reasonNotEnrolled
+    percentAmi
+    referralSource
+    countOutreachReferralApproaches
+    dateOfBcpStatus
+    eligibleForRhy
+    reasonNoServices
+    runawayYouth
+    sexualOrientation
+    sexualOrientationOther
+    formerWardChildWelfare
+    childWelfareYears
+    childWelfareMonths
+    formerWardJuvenileJustice
+    juvenileJusticeYears
+    juvenileJusticeMonths
+    unemploymentFam
+    mentalHealthDisorderFam
+    physicalDisabilityFam
+    alcoholDrugUseDisorderFam
+  }
+`;
+export const CustomDataElementValueFieldsFragmentDoc = gql`
+  fragment CustomDataElementValueFields on CustomDataElementValue {
+    id
+    valueBoolean
+    valueDate
+    valueFloat
+    valueInteger
+    valueJson
+    valueString
+    valueText
+    user {
+      ...UserFields
     }
-    inProgress
-    relationshipToHoH
-    household {
-      id
-      shortId
+    dateCreated
+    dateUpdated
+  }
+  ${UserFieldsFragmentDoc}
+`;
+export const CustomDataElementFieldsFragmentDoc = gql`
+  fragment CustomDataElementFields on CustomDataElement {
+    id
+    key
+    label
+    repeats
+    value {
+      ...CustomDataElementValueFields
     }
-    householdSize
-    client {
-      id
-    }
-    access {
-      ...EnrollmentAccessFields
+    values {
+      ...CustomDataElementValueFields
     }
   }
-  ${EnrollmentAccessFieldsFragmentDoc}
+  ${CustomDataElementValueFieldsFragmentDoc}
+`;
+export const IncomeBenefitValuesFragmentDoc = gql`
+  fragment IncomeBenefitValues on IncomeBenefit {
+    __typename
+    adap
+    alimony
+    alimonyAmount
+    benefitsFromAnySource
+    childSupport
+    childSupportAmount
+    cobra
+    connectionWithSoar
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    earned
+    earnedAmount
+    employerProvided
+    ga
+    gaAmount
+    hivaidsAssistance
+    id
+    incomeFromAnySource
+    indianHealthServices
+    informationDate
+    insuranceFromAnySource
+    medicaid
+    medicare
+    noAdapReason
+    noCobraReason
+    noEmployerProvidedReason
+    noHivaidsAssistanceReason
+    noIndianHealthServicesReason
+    noMedicaidReason
+    noMedicareReason
+    noPrivatePayReason
+    noRyanWhiteReason
+    noSchipReason
+    noStateHealthInsReason
+    noVaMedReason
+    otherBenefitsSource
+    otherBenefitsSourceIdentify
+    otherIncomeAmount
+    otherIncomeSource
+    otherIncomeSourceIdentify
+    otherInsurance
+    otherInsuranceIdentify
+    otherTanf
+    pension
+    pensionAmount
+    privateDisability
+    privateDisabilityAmount
+    privatePay
+    ryanWhiteMedDent
+    schip
+    snap
+    socSecRetirement
+    socSecRetirementAmount
+    ssdi
+    ssdiAmount
+    ssi
+    ssiAmount
+    stateHealthIns
+    tanf
+    tanfAmount
+    tanfChildCare
+    tanfTransportation
+    totalMonthlyIncome
+    unemployment
+    unemploymentAmount
+    vaDisabilityNonService
+    vaDisabilityNonServiceAmount
+    vaDisabilityService
+    vaDisabilityServiceAmount
+    vaMedicalServices
+    wic
+    workersComp
+    workersCompAmount
+  }
+`;
+export const DisabilityGroupValuesFragmentDoc = gql`
+  fragment DisabilityGroupValues on DisabilityGroup {
+    __typename
+    id
+    dataCollectionStage
+    informationDate
+    disablingCondition
+    chronicHealthCondition
+    chronicHealthConditionIndefiniteAndImpairs
+    developmentalDisability
+    hivAids
+    mentalHealthDisorder
+    mentalHealthDisorderIndefiniteAndImpairs
+    physicalDisability
+    physicalDisabilityIndefiniteAndImpairs
+    substanceUseDisorder
+    substanceUseDisorderIndefiniteAndImpairs
+    dateCreated
+    dateUpdated
+  }
+`;
+export const HealthAndDvValuesFragmentDoc = gql`
+  fragment HealthAndDvValues on HealthAndDv {
+    __typename
+    bounceBack
+    currentlyFleeing
+    dataCollectionStage
+    dateCreated
+    dateDeleted
+    dateUpdated
+    dentalHealthStatus
+    domesticViolenceVictim
+    dueDate
+    feelingFrequency
+    generalHealthStatus
+    id
+    informationDate
+    lifeValue
+    mentalHealthStatus
+    pregnancyStatus
+    supportFromOthers
+    whenOccurred
+  }
+`;
+export const ExitValuesFragmentDoc = gql`
+  fragment ExitValues on Exit {
+    id
+    aftercareDate
+    aftercareProvided
+    askedOrForcedToExchangeForSex
+    askedOrForcedToExchangeForSexPastThreeMonths
+    cmExitReason
+    coercedToContinueWork
+    counselingReceived
+    countOfExchangeForSex
+    dateCreated
+    dateDeleted
+    dateUpdated
+    destination
+    destinationSafeClient
+    destinationSafeWorker
+    earlyExitReason
+    emailSocialMedia
+    exchangeForSex
+    exchangeForSexPastThreeMonths
+    exitDate
+    familyCounseling
+    groupCounseling
+    housingAssessment
+    inPersonGroup
+    inPersonIndividual
+    individualCounseling
+    laborExploitPastThreeMonths
+    otherDestination
+    posAdultConnections
+    posCommunityConnections
+    posPeerConnections
+    postExitCounselingPlan
+    projectCompletionStatus
+    sessionCountAtExit
+    sessionsInPlan
+    subsidyInformation
+    telephone
+    workPlaceViolenceThreats
+    workplacePromiseDifference
+  }
+`;
+export const AssessmentWithRecordsFragmentDoc = gql`
+  fragment AssessmentWithRecords on Assessment {
+    ...AssessmentFields
+    enrollment {
+      ...EnrollmentValues
+      customDataElements {
+        ...CustomDataElementFields
+      }
+    }
+    incomeBenefit {
+      ...IncomeBenefitValues
+    }
+    disabilityGroup {
+      ...DisabilityGroupValues
+    }
+    healthAndDv {
+      ...HealthAndDvValues
+    }
+    exit {
+      ...ExitValues
+    }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${EnrollmentValuesFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+  ${IncomeBenefitValuesFragmentDoc}
+  ${DisabilityGroupValuesFragmentDoc}
+  ${HealthAndDvValuesFragmentDoc}
+  ${ExitValuesFragmentDoc}
 `;
 export const AssessmentWithValuesFragmentDoc = gql`
   fragment AssessmentWithValues on Assessment {
     ...AssessmentFields
-    customForm {
-      ...CustomFormFields
-      values
+    wipValues
+  }
+  ${AssessmentFieldsFragmentDoc}
+`;
+export const FullAssessmentFragmentDoc = gql`
+  fragment FullAssessment on Assessment {
+    ...AssessmentWithRecords
+    ...AssessmentWithValues
+  }
+  ${AssessmentWithRecordsFragmentDoc}
+  ${AssessmentWithValuesFragmentDoc}
+`;
+export const ProjectNameAndTypeFragmentDoc = gql`
+  fragment ProjectNameAndType on Project {
+    id
+    projectName
+    projectType
+  }
+`;
+export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
+  fragment EnrollmentFieldsFromAssessment on Enrollment {
+    ...EnrollmentValues
+    user {
+      ...UserFields
+    }
+    project {
+      ...ProjectNameAndType
+    }
+    intakeAssessment {
+      user {
+        name
+      }
+    }
+  }
+  ${EnrollmentValuesFragmentDoc}
+  ${UserFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+export const IncomeBenefitFieldsFragmentDoc = gql`
+  fragment IncomeBenefitFields on IncomeBenefit {
+    ...IncomeBenefitValues
+    user {
+      ...UserFields
     }
     enrollment {
       id
-      ...EnrollmentFields
+      project {
+        ...ProjectNameAndType
+      }
     }
   }
-  ${AssessmentFieldsFragmentDoc}
-  ${CustomFormFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
+  ${IncomeBenefitValuesFragmentDoc}
+  ${UserFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+export const DisabilityGroupFieldsFragmentDoc = gql`
+  fragment DisabilityGroupFields on DisabilityGroup {
+    ...DisabilityGroupValues
+    user {
+      ...UserFields
+    }
+    enrollment {
+      id
+      project {
+        ...ProjectNameAndType
+      }
+    }
+  }
+  ${DisabilityGroupValuesFragmentDoc}
+  ${UserFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+export const HealthAndDvFieldsFragmentDoc = gql`
+  fragment HealthAndDvFields on HealthAndDv {
+    ...HealthAndDvValues
+    user {
+      ...UserFields
+    }
+    enrollment {
+      id
+      project {
+        ...ProjectNameAndType
+      }
+    }
+  }
+  ${HealthAndDvValuesFragmentDoc}
+  ${UserFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const ClientIdentificationFieldsFragmentDoc = gql`
   fragment ClientIdentificationFields on Client {
@@ -15168,39 +15791,6 @@ export const ClientAccessFieldsFragmentDoc = gql`
     canViewAnyConfidentialClientFiles
     canViewAnyNonconfidentialClientFiles
   }
-`;
-export const CustomDataElementValueFieldsFragmentDoc = gql`
-  fragment CustomDataElementValueFields on CustomDataElementValue {
-    id
-    valueBoolean
-    valueDate
-    valueFloat
-    valueInteger
-    valueJson
-    valueString
-    valueText
-    user {
-      ...UserFields
-    }
-    dateCreated
-    dateUpdated
-  }
-  ${UserFieldsFragmentDoc}
-`;
-export const CustomDataElementFieldsFragmentDoc = gql`
-  fragment CustomDataElementFields on CustomDataElement {
-    id
-    key
-    label
-    repeats
-    value {
-      ...CustomDataElementValueFields
-    }
-    values {
-      ...CustomDataElementValueFields
-    }
-  }
-  ${CustomDataElementValueFieldsFragmentDoc}
 `;
 export const ClientNameObjectFieldsFragmentDoc = gql`
   fragment ClientNameObjectFields on ClientName {
@@ -15309,32 +15899,51 @@ export const ClientOmniSearchFieldsFragmentDoc = gql`
   }
   ${ClientNameFragmentDoc}
 `;
-export const EnrollmentFieldsFromAssessmentFragmentDoc = gql`
-  fragment EnrollmentFieldsFromAssessment on Enrollment {
+export const ClientAuditEventFieldsFragmentDoc = gql`
+  fragment ClientAuditEventFields on ClientAuditEvent {
+    id
+    createdAt
+    event
+    objectChanges
+    recordName
+    recordId
+    user {
+      id
+      name
+    }
+  }
+`;
+export const EnrollmentAccessFieldsFragmentDoc = gql`
+  fragment EnrollmentAccessFields on EnrollmentAccess {
+    id
+    canEditEnrollments
+    canDeleteEnrollments
+  }
+`;
+export const EnrollmentFieldsFragmentDoc = gql`
+  fragment EnrollmentFields on Enrollment {
     id
     entryDate
     exitDate
-    livingSituation
-    lengthOfStay
-    previousStreetEssh
-    dateToStreetEssh
-    timesHomelessPastThreeYears
-    monthsHomelessPastThreeYears
-    intakeAssessment {
-      user {
-        name
-      }
-    }
     project {
       id
       projectName
       projectType
     }
-    user {
-      ...UserFields
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    client {
+      id
+    }
+    access {
+      ...EnrollmentAccessFields
     }
   }
-  ${UserFieldsFragmentDoc}
+  ${EnrollmentAccessFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
   fragment HouseholdClientFields on HouseholdClient {
@@ -15389,166 +15998,6 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
-export const IncomeBenefitFieldsFragmentDoc = gql`
-  fragment IncomeBenefitFields on IncomeBenefit {
-    __typename
-    user {
-      ...UserFields
-    }
-    enrollment {
-      id
-      project {
-        id
-        projectName
-        projectType
-      }
-    }
-    adap
-    alimony
-    alimonyAmount
-    benefitsFromAnySource
-    childSupport
-    childSupportAmount
-    cobra
-    connectionWithSoar
-    dataCollectionStage
-    dateCreated
-    dateDeleted
-    dateUpdated
-    earned
-    earnedAmount
-    employerProvided
-    ga
-    gaAmount
-    hivaidsAssistance
-    id
-    incomeFromAnySource
-    indianHealthServices
-    informationDate
-    insuranceFromAnySource
-    medicaid
-    medicare
-    noAdapReason
-    noCobraReason
-    noEmployerProvidedReason
-    noHivaidsAssistanceReason
-    noIndianHealthServicesReason
-    noMedicaidReason
-    noMedicareReason
-    noPrivatePayReason
-    noRyanWhiteReason
-    noSchipReason
-    noStateHealthInsReason
-    noVaMedReason
-    otherBenefitsSource
-    otherBenefitsSourceIdentify
-    otherIncomeAmount
-    otherIncomeSource
-    otherIncomeSourceIdentify
-    otherInsurance
-    otherInsuranceIdentify
-    otherTanf
-    pension
-    pensionAmount
-    privateDisability
-    privateDisabilityAmount
-    privatePay
-    ryanWhiteMedDent
-    schip
-    snap
-    socSecRetirement
-    socSecRetirementAmount
-    ssdi
-    ssdiAmount
-    ssi
-    ssiAmount
-    stateHealthIns
-    tanf
-    tanfAmount
-    tanfChildCare
-    tanfTransportation
-    totalMonthlyIncome
-    unemployment
-    unemploymentAmount
-    vaDisabilityNonService
-    vaDisabilityNonServiceAmount
-    vaDisabilityService
-    vaDisabilityServiceAmount
-    vaMedicalServices
-    wic
-    workersComp
-    workersCompAmount
-  }
-  ${UserFieldsFragmentDoc}
-`;
-export const DisabilityGroupFieldsFragmentDoc = gql`
-  fragment DisabilityGroupFields on DisabilityGroup {
-    __typename
-    id
-    dataCollectionStage
-    informationDate
-    enrollment {
-      id
-      project {
-        id
-        projectName
-        projectType
-      }
-    }
-    user {
-      ...UserFields
-    }
-    disablingCondition
-    chronicHealthCondition
-    chronicHealthConditionIndefiniteAndImpairs
-    developmentalDisability
-    hivAids
-    mentalHealthDisorder
-    mentalHealthDisorderIndefiniteAndImpairs
-    physicalDisability
-    physicalDisabilityIndefiniteAndImpairs
-    substanceUseDisorder
-    substanceUseDisorderIndefiniteAndImpairs
-    dateCreated
-    dateUpdated
-  }
-  ${UserFieldsFragmentDoc}
-`;
-export const HealthAndDvFieldsFragmentDoc = gql`
-  fragment HealthAndDvFields on HealthAndDv {
-    __typename
-    bounceBack
-    currentlyFleeing
-    dataCollectionStage
-    dateCreated
-    dateDeleted
-    dateUpdated
-    dentalHealthStatus
-    domesticViolenceVictim
-    dueDate
-    enrollment {
-      id
-      project {
-        id
-        projectName
-        projectType
-      }
-    }
-    feelingFrequency
-    generalHealthStatus
-    id
-    informationDate
-    lifeValue
-    mentalHealthStatus
-    pregnancyStatus
-    supportFromOthers
-    user {
-      ...UserFields
-    }
-    whenOccurred
-  }
-  ${UserFieldsFragmentDoc}
-`;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
     confidential
@@ -15582,20 +16031,6 @@ export const FileFieldsFragmentDoc = gql`
   }
   ${UserFieldsFragmentDoc}
 `;
-export const ClientAuditEventFieldsFragmentDoc = gql`
-  fragment ClientAuditEventFields on ClientAuditEvent {
-    id
-    createdAt
-    event
-    objectChanges
-    recordName
-    recordId
-    user {
-      id
-      name
-    }
-  }
-`;
 export const ValidationErrorFieldsFragmentDoc = gql`
   fragment ValidationErrorFields on ValidationError {
     type
@@ -15610,6 +16045,125 @@ export const ValidationErrorFieldsFragmentDoc = gql`
     section
     data
   }
+`;
+export const PickListOptionFieldsFragmentDoc = gql`
+  fragment PickListOptionFields on PickListOption {
+    code
+    label
+    secondaryLabel
+    groupLabel
+    groupCode
+    initialSelected
+  }
+`;
+export const EnableWhenFieldsFragmentDoc = gql`
+  fragment EnableWhenFields on EnableWhen {
+    question
+    operator
+    answerCode
+    answerCodes
+    answerNumber
+    answerBoolean
+    answerGroupCode
+    compareQuestion
+  }
+`;
+export const ItemFieldsFragmentDoc = gql`
+  fragment ItemFields on FormItem {
+    __typename
+    linkId
+    type
+    component
+    prefix
+    text
+    briefText
+    readonlyText
+    helperText
+    required
+    warnIfEmpty
+    hidden
+    readOnly
+    repeats
+    mapping {
+      recordType
+      fieldName
+      customFieldKey
+    }
+    pickListReference
+    serviceDetailType
+    size
+    assessmentDate
+    prefill
+    bounds {
+      id
+      severity
+      type
+      question
+      valueNumber
+      valueDate
+      offset
+    }
+    pickListOptions {
+      ...PickListOptionFields
+    }
+    initial {
+      valueCode
+      valueBoolean
+      valueNumber
+      valueLocalConstant
+      initialBehavior
+    }
+    dataCollectedAbout
+    disabledDisplay
+    enableBehavior
+    enableWhen {
+      ...EnableWhenFields
+    }
+    autofillValues {
+      valueCode
+      valueQuestion
+      valueBoolean
+      valueNumber
+      sumQuestions
+      autofillBehavior
+      autofillReadonly
+      autofillWhen {
+        ...EnableWhenFields
+      }
+    }
+  }
+  ${PickListOptionFieldsFragmentDoc}
+  ${EnableWhenFieldsFragmentDoc}
+`;
+export const FormDefinitionJsonFieldsFragmentDoc = gql`
+  fragment FormDefinitionJsonFields on FormDefinitionJson {
+    item {
+      ...ItemFields
+      item {
+        ...ItemFields
+        item {
+          ...ItemFields
+          item {
+            ...ItemFields
+            item {
+              ...ItemFields
+            }
+          }
+        }
+      }
+    }
+  }
+  ${ItemFieldsFragmentDoc}
+`;
+export const FormDefinitionFieldsFragmentDoc = gql`
+  fragment FormDefinitionFields on FormDefinition {
+    id
+    role
+    definition {
+      ...FormDefinitionJsonFields
+    }
+  }
+  ${FormDefinitionJsonFieldsFragmentDoc}
 `;
 export const HouseholdFieldsFragmentDoc = gql`
   fragment HouseholdFields on Household {
@@ -15651,28 +16205,6 @@ export const ProjectEnrollmentsHouseholdFieldsFragmentDoc = gql`
     }
   }
   ${ProjectEnrollmentsHouseholdClientFieldsFragmentDoc}
-`;
-export const HouseholdClientFieldsWithAssessmentsFragmentDoc = gql`
-  fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
-    ...HouseholdClientFields
-    enrollment {
-      id
-      entryDate
-      exitDate
-      inProgress
-      intakeAssessment {
-        id
-        inProgress
-        assessmentDate
-      }
-      exitAssessment {
-        id
-        inProgress
-        assessmentDate
-      }
-    }
-  }
-  ${HouseholdClientFieldsFragmentDoc}
 `;
 export const InventoryFieldsFragmentDoc = gql`
   fragment InventoryFields on Inventory {
@@ -15755,13 +16287,6 @@ export const OrganizationFieldsFragmentDoc = gql`
   }
   ${OrganizationNameFieldsFragmentDoc}
   ${OrganizationDetailFieldsFragmentDoc}
-`;
-export const ProjectNameAndTypeFragmentDoc = gql`
-  fragment ProjectNameAndType on Project {
-    id
-    projectName
-    projectType
-  }
 `;
 export const ProjectOperatingPeriodFragmentDoc = gql`
   fragment ProjectOperatingPeriod on Project {
@@ -16130,10 +16655,14 @@ export type GetRootPermissionsQueryResult = Apollo.QueryResult<
 export const GetAssessmentDocument = gql`
   query GetAssessment($id: ID!) {
     assessment(id: $id) {
-      ...AssessmentWithDefinitionAndValues
+      ...FullAssessment
+      definition {
+        ...FormDefinitionFields
+      }
     }
   }
-  ${AssessmentWithDefinitionAndValuesFragmentDoc}
+  ${FullAssessmentFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**
@@ -16185,6 +16714,97 @@ export type GetAssessmentLazyQueryHookResult = ReturnType<
 export type GetAssessmentQueryResult = Apollo.QueryResult<
   GetAssessmentQuery,
   GetAssessmentQueryVariables
+>;
+export const GetClientAssessmentsDocument = gql`
+  query GetClientAssessments(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
+    $filters: AssessmentFilterOptions = null
+  ) {
+    client(id: $id) {
+      id
+      assessments(
+        limit: $limit
+        offset: $offset
+        sortOrder: $sortOrder
+        filters: $filters
+      ) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...AssessmentFields
+          enrollment {
+            id
+            entryDate
+            exitDate
+            project {
+              ...ProjectNameAndType
+            }
+          }
+        }
+      }
+    }
+  }
+  ${AssessmentFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
+`;
+
+/**
+ * __useGetClientAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetClientAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetClientAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetClientAssessmentsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *      sortOrder: // value for 'sortOrder'
+ *      filters: // value for 'filters'
+ *   },
+ * });
+ */
+export function useGetClientAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >(GetClientAssessmentsDocument, options);
+}
+export function useGetClientAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetClientAssessmentsQuery,
+    GetClientAssessmentsQueryVariables
+  >(GetClientAssessmentsDocument, options);
+}
+export type GetClientAssessmentsQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentsQuery
+>;
+export type GetClientAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetClientAssessmentsLazyQuery
+>;
+export type GetClientAssessmentsQueryResult = Apollo.QueryResult<
+  GetClientAssessmentsQuery,
+  GetClientAssessmentsQueryVariables
 >;
 export const GetEnrollmentAssessmentsDocument = gql`
   query GetEnrollmentAssessments(
@@ -16271,18 +16891,92 @@ export type GetEnrollmentAssessmentsQueryResult = Apollo.QueryResult<
   GetEnrollmentAssessmentsQuery,
   GetEnrollmentAssessmentsQueryVariables
 >;
+export const GetHouseholdAssessmentsDocument = gql`
+  query GetHouseholdAssessments(
+    $householdId: ID!
+    $assessmentRole: AssessmentRole!
+    $assessmentId: ID
+  ) {
+    householdAssessments(
+      householdId: $householdId
+      assessmentRole: $assessmentRole
+      assessmentId: $assessmentId
+    ) {
+      ...AssessmentWithValues
+      ...AssessmentWithRecords
+      enrollment {
+        id
+      }
+    }
+  }
+  ${AssessmentWithValuesFragmentDoc}
+  ${AssessmentWithRecordsFragmentDoc}
+`;
+
+/**
+ * __useGetHouseholdAssessmentsQuery__
+ *
+ * To run a query within a React component, call `useGetHouseholdAssessmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHouseholdAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHouseholdAssessmentsQuery({
+ *   variables: {
+ *      householdId: // value for 'householdId'
+ *      assessmentRole: // value for 'assessmentRole'
+ *      assessmentId: // value for 'assessmentId'
+ *   },
+ * });
+ */
+export function useGetHouseholdAssessmentsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
+}
+export function useGetHouseholdAssessmentsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetHouseholdAssessmentsQuery,
+    GetHouseholdAssessmentsQueryVariables
+  >(GetHouseholdAssessmentsDocument, options);
+}
+export type GetHouseholdAssessmentsQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsQuery
+>;
+export type GetHouseholdAssessmentsLazyQueryHookResult = ReturnType<
+  typeof useGetHouseholdAssessmentsLazyQuery
+>;
+export type GetHouseholdAssessmentsQueryResult = Apollo.QueryResult<
+  GetHouseholdAssessmentsQuery,
+  GetHouseholdAssessmentsQueryVariables
+>;
 export const SaveAssessmentDocument = gql`
   mutation SaveAssessment($input: SaveAssessmentInput!) {
     saveAssessment(input: $input) {
       assessment {
-        ...AssessmentWithDefinitionAndValues
+        ...AssessmentWithValues
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${AssessmentWithDefinitionAndValuesFragmentDoc}
+  ${AssessmentWithValuesFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SaveAssessmentMutationFn = Apollo.MutationFunction<
@@ -16332,14 +17026,14 @@ export const SubmitAssessmentDocument = gql`
   mutation SubmitAssessment($input: SubmitAssessmentInput!) {
     submitAssessment(input: $input) {
       assessment {
-        ...AssessmentWithDefinitionAndValues
+        ...AssessmentWithRecords
       }
       errors {
         ...ValidationErrorFields
       }
     }
   }
-  ${AssessmentWithDefinitionAndValuesFragmentDoc}
+  ${AssessmentWithRecordsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitAssessmentMutationFn = Apollo.MutationFunction<
@@ -16451,7 +17145,6 @@ export const GetAssessmentsForPopulationDocument = gql`
     $limit: Int = 10
     $offset: Int = 0
     $roles: [AssessmentRole!]
-    $inProgress: Boolean
   ) {
     client(id: $id) {
       id
@@ -16459,19 +17152,28 @@ export const GetAssessmentsForPopulationDocument = gql`
         limit: $limit
         offset: $offset
         filters: { type: $roles }
-        inProgress: $inProgress
+        inProgress: false
         sortOrder: ASSESSMENT_DATE
       ) {
         offset
         limit
         nodesCount
         nodes {
-          ...AssessmentWithValues
+          ...AssessmentWithRecords
+          enrollment {
+            id
+            entryDate
+            exitDate
+            project {
+              ...ProjectNameAndType
+            }
+          }
         }
       }
     }
   }
-  ${AssessmentWithValuesFragmentDoc}
+  ${AssessmentWithRecordsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
 `;
 
 /**
@@ -16490,7 +17192,6 @@ export const GetAssessmentsForPopulationDocument = gql`
  *      limit: // value for 'limit'
  *      offset: // value for 'offset'
  *      roles: // value for 'roles'
- *      inProgress: // value for 'inProgress'
  *   },
  * });
  */
@@ -17043,92 +17744,6 @@ export type GetClientAuditEventsLazyQueryHookResult = ReturnType<
 export type GetClientAuditEventsQueryResult = Apollo.QueryResult<
   GetClientAuditEventsQuery,
   GetClientAuditEventsQueryVariables
->;
-export const GetClientAssessmentsDocument = gql`
-  query GetClientAssessments(
-    $id: ID!
-    $limit: Int = 10
-    $offset: Int = 0
-    $sortOrder: AssessmentSortOption = ASSESSMENT_DATE
-    $filters: AssessmentFilterOptions = null
-  ) {
-    client(id: $id) {
-      id
-      assessments(
-        limit: $limit
-        offset: $offset
-        sortOrder: $sortOrder
-        filters: $filters
-      ) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...AssessmentFields
-          enrollment {
-            ...EnrollmentFields
-          }
-        }
-      }
-    }
-  }
-  ${AssessmentFieldsFragmentDoc}
-  ${EnrollmentFieldsFragmentDoc}
-`;
-
-/**
- * __useGetClientAssessmentsQuery__
- *
- * To run a query within a React component, call `useGetClientAssessmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetClientAssessmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetClientAssessmentsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *      sortOrder: // value for 'sortOrder'
- *      filters: // value for 'filters'
- *   },
- * });
- */
-export function useGetClientAssessmentsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetClientAssessmentsQuery,
-    GetClientAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetClientAssessmentsQuery,
-    GetClientAssessmentsQueryVariables
-  >(GetClientAssessmentsDocument, options);
-}
-export function useGetClientAssessmentsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetClientAssessmentsQuery,
-    GetClientAssessmentsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetClientAssessmentsQuery,
-    GetClientAssessmentsQueryVariables
-  >(GetClientAssessmentsDocument, options);
-}
-export type GetClientAssessmentsQueryHookResult = ReturnType<
-  typeof useGetClientAssessmentsQuery
->;
-export type GetClientAssessmentsLazyQueryHookResult = ReturnType<
-  typeof useGetClientAssessmentsLazyQuery
->;
-export type GetClientAssessmentsQueryResult = Apollo.QueryResult<
-  GetClientAssessmentsQuery,
-  GetClientAssessmentsQueryVariables
 >;
 export const GetClientServicesDocument = gql`
   query GetClientServices(
@@ -17707,13 +18322,13 @@ export const GetEnrollmentWithHouseholdDocument = gql`
         id
         shortId
         householdClients {
-          ...HouseholdClientFieldsWithAssessments
+          ...HouseholdClientFields
         }
       }
     }
   }
   ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsWithAssessmentsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
 `;
 
 /**
@@ -18296,10 +18911,10 @@ export const GetFormDefinitionDocument = gql`
       enrollmentId: $enrollmentId
       projectId: $projectId
     ) {
-      ...FormDefinitionWithJson
+      ...FormDefinitionFields
     }
   }
-  ${FormDefinitionWithJsonFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**
@@ -18360,10 +18975,10 @@ export const GetServiceFormDefinitionDocument = gql`
       serviceTypeId: $serviceTypeId
       projectId: $projectId
     ) {
-      ...FormDefinitionWithJson
+      ...FormDefinitionFields
     }
   }
-  ${FormDefinitionWithJsonFragmentDoc}
+  ${FormDefinitionFieldsFragmentDoc}
 `;
 
 /**

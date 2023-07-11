@@ -25,7 +25,6 @@ import {
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
-  HouseholdClientFieldsWithAssessmentsFragment,
   ProjectType,
   ServiceFieldsFragment,
   ServiceTypeFieldsFragment,
@@ -313,9 +312,7 @@ export const eventReferralResult = (e: EventFieldsFragment) => {
 };
 
 export const sortHouseholdMembers = (
-  members?:
-    | HouseholdClientFieldsFragment[]
-    | HouseholdClientFieldsWithAssessmentsFragment[],
+  members?: HouseholdClientFieldsFragment[],
   activeClientId?: string
 ) => {
   const sorted = sortBy(members || [], [

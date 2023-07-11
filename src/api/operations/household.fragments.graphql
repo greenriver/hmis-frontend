@@ -51,23 +51,3 @@ fragment ProjectEnrollmentsHouseholdClientFields on HouseholdClient {
     inProgress
   }
 }
-
-fragment HouseholdClientFieldsWithAssessments on HouseholdClient {
-  ...HouseholdClientFields
-  enrollment {
-    id
-    entryDate
-    exitDate
-    inProgress
-    intakeAssessment {
-      id
-      inProgress
-      assessmentDate
-    }
-    exitAssessment {
-      id
-      inProgress
-      assessmentDate
-    }
-  }
-}

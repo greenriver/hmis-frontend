@@ -7,6 +7,7 @@ import { transformSubmitValues } from './formUtil';
 import { parseHmisDateString } from '@/modules/hmis/hmisUtil';
 import {
   FormDefinitionJson,
+  FormItem,
   ItemType,
   RelatedRecordType,
 } from '@/types/gqlTypes';
@@ -17,18 +18,42 @@ const definition: FormDefinitionJson = {
       type: ItemType.Group,
       linkId: '1',
       item: [
-        { linkId: '1.1', type: ItemType.Boolean, fieldName: 'boolField' },
-        { linkId: '1.2', type: ItemType.String, fieldName: 'strField' },
-        { linkId: '1.3', type: ItemType.Date, fieldName: 'dateField' },
-        { linkId: '1.4', type: ItemType.Integer, fieldName: 'numField' },
-        { linkId: '1.5', type: ItemType.Currency, fieldName: 'numField2' },
+        {
+          linkId: '1.1',
+          type: ItemType.Boolean,
+          mapping: { fieldName: 'boolField' },
+        },
+        {
+          linkId: '1.2',
+          type: ItemType.String,
+          mapping: { fieldName: 'strField' },
+        },
+        {
+          linkId: '1.3',
+          type: ItemType.Date,
+          mapping: { fieldName: 'dateField' },
+        },
+        {
+          linkId: '1.4',
+          type: ItemType.Integer,
+          mapping: { fieldName: 'numField' },
+        },
+        {
+          linkId: '1.5',
+          type: ItemType.Currency,
+          mapping: { fieldName: 'numField2' },
+        },
         {
           linkId: '1.6',
           type: ItemType.Choice,
-          fieldName: 'choiceField',
+          mapping: { fieldName: 'choiceField' },
           pickListReference: 'NoYesReasonsForMissingData',
         },
-        { linkId: '1.7', type: ItemType.Text, fieldName: 'textField' },
+        {
+          linkId: '1.7',
+          type: ItemType.Text,
+          mapping: { fieldName: 'textField' },
+        },
       ],
     },
   ],
@@ -86,7 +111,9 @@ describe('transformSubmitValues', () => {
 
   it('prepends record type', () => {
     const clone = JSON.parse(JSON.stringify(definition));
-    clone.item[0].recordType = RelatedRecordType.Exit;
+    clone.item[0].item.forEach((i: FormItem) =>
+      i.mapping ? (i.mapping.recordType = RelatedRecordType.Exit) : null
+    );
     const values = {
       '1.1': true,
       '1.2': 'foo',
@@ -117,7 +144,6 @@ describe('transformSubmitValues', () => {
         {
           type: ItemType.Group,
           linkId: '1',
-          recordType: RelatedRecordType.Exit,
           item: [
             {
               linkId: '1.1',
@@ -126,7 +152,10 @@ describe('transformSubmitValues', () => {
                 {
                   linkId: '1.1.1',
                   type: ItemType.Boolean,
-                  fieldName: 'boolField',
+                  mapping: {
+                    recordType: RelatedRecordType.Exit,
+                    fieldName: 'boolField',
+                  },
                 },
               ],
             },

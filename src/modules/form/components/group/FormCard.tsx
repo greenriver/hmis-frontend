@@ -43,8 +43,7 @@ const FormCard = ({
   const [sourceRecord, setSourceRecord] = useState<RelatedRecord | undefined>();
 
   const fillable = useMemo(
-    () =>
-      item.recordType && item.prefill && tableComponentForType(item.recordType),
+    () => item.prefill && tableComponentForType(item.prefill),
     [item]
   );
 
@@ -74,9 +73,9 @@ const FormCard = ({
 
       const newFormValues: Record<string, any> = {};
       getPopulatableChildren(item).forEach((i) => {
-        if (!i.fieldName) return;
+        if (!i.mapping?.fieldName) return;
 
-        const gqlValue = record[i.fieldName as keyof RelatedRecord];
+        const gqlValue = record[i.mapping?.fieldName as keyof RelatedRecord];
         newFormValues[i.linkId] = gqlValueToFormValue(gqlValue, i);
       });
 
@@ -163,12 +162,12 @@ const FormCard = ({
         </Grid>
 
         {/* Dialog for selecting autofill record */}
-        {fillable && item.recordType && (
+        {fillable && item.prefill && (
           <>
             <RecordPickerDialog
               id={`recordPickerDialog-${item.linkId}`}
               item={item}
-              recordType={item.recordType}
+              recordType={item.prefill}
               open={fillDialogOpen}
               onSelected={onSelectAutofillRecord}
               onCancel={() => setFillDialogOpen(false)}

@@ -48,8 +48,7 @@ const columns: ColumnDef<AssessmentFieldsFragment>[] = [
   {
     header: 'Type',
     width: '10%',
-    render: (assessment) =>
-      startCase(assessment.customForm?.definition?.role?.toLowerCase()),
+    render: (assessment) => startCase(assessment.role?.toLowerCase()),
   },
   {
     header: 'Status',
@@ -77,10 +76,11 @@ const AssessmentsTable = ({
 }) => {
   const rowLinkTo = useCallback(
     (assessment: AssessmentFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ASSESSMENT, {
+      generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
         clientId,
         enrollmentId,
         assessmentId: assessment.id,
+        formRole: assessment.role,
       }),
     [clientId, enrollmentId]
   );
