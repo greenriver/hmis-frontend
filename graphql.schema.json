@@ -25333,7 +25333,7 @@
           },
           {
             "name": "EMPLOYMENT_EDUCATION",
-            "description": "ExmploymentEducation",
+            "description": "EmploymentEducation",
             "isDeprecated": false,
             "deprecationReason": null
           },
