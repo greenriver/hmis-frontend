@@ -110,6 +110,7 @@ fragment ClientIdentifierFields on ExternalIdentifier {
   identifier
   url
   label
+  type
 }
 
 fragment ClientImageFields on ClientImage {

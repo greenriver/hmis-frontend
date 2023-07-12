@@ -28,7 +28,7 @@
       "type": "TEXT",
       "linkId": "statusNote",
       "required": true,
-      "text": "Notes",
+      "text": "Provider Notes",
       "fieldName": "statusNote"
     }
   ]

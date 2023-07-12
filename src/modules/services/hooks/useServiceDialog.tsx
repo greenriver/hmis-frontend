@@ -25,6 +25,7 @@ import {
   DeleteServiceDocument,
   DeleteServiceMutation,
   DeleteServiceMutationVariables,
+  EnrollmentFieldsFragment,
   PickListOption,
   ServiceFieldsFragment,
   useGetServiceTypeQuery,
@@ -39,14 +40,15 @@ type RenderServiceDialogProps = PartialPick<
 };
 
 export function useServiceDialog({
-  projectId,
-  enrollmentId,
+  enrollment,
   service,
 }: {
-  projectId: string;
-  enrollmentId: string;
+  enrollment?: EnrollmentFieldsFragment;
   service?: ServiceFieldsFragment;
 }) {
+  const projectId = enrollment?.project?.id || '';
+  const enrollmentId = enrollment?.id || '';
+
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<PickListOption | null>(
     null
@@ -68,6 +70,7 @@ export function useServiceDialog({
     const localConstants = {
       hudRecordType: serviceType?.hudRecordType,
       hudTypeProvided: serviceType?.hudTypeProvided,
+      entryDate: enrollment?.entryDate,
     };
     return {
       formDefinition,
@@ -83,7 +86,14 @@ export function useServiceDialog({
         setDialogOpen(false);
       },
     };
-  }, [serviceType, selectedService, formDefinition, service, enrollmentId]);
+  }, [
+    serviceType,
+    selectedService,
+    formDefinition,
+    service,
+    enrollmentId,
+    enrollment,
+  ]);
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
     useDynamicFormHandlersForRecord(hookArgs);

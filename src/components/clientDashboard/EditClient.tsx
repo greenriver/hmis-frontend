@@ -15,6 +15,7 @@ import { cache } from '@/providers/apolloClient';
 import { Routes } from '@/routes/routes';
 import {
   ClientFieldsFragment,
+  ExternalIdentifierType,
   FormRole,
   useGetClientPermissionsQuery,
 } from '@/types/gqlTypes';
@@ -48,7 +49,9 @@ const Profile = () => {
       localConstants={{
         canViewFullSsn,
         canViewDob,
-        mciId: client.externalIds.find((c) => c.label == 'MCI ID'),
+        mciId: client.externalIds.find(
+          (c) => c.type == ExternalIdentifierType.MciId
+        ),
       }}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}

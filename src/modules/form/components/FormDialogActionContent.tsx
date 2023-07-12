@@ -7,12 +7,14 @@ export const FormDialogActionContent = ({
   onSubmit,
   submitButtonText,
   submitLoading,
+  disabled,
 }: {
   onDiscard: ButtonProps['onClick'];
   onSubmit: ButtonProps['onClick'];
   submitLoading?: boolean;
   discardButtonText?: string;
   submitButtonText?: string;
+  disabled?: boolean;
 }) => {
   return (
     <Stack
@@ -35,6 +37,7 @@ export const FormDialogActionContent = ({
           loading={submitLoading}
           data-testid='confirmDialogAction'
           sx={{ minWidth: '120px' }}
+          disabled={disabled}
         >
           {submitButtonText || 'Save'}
         </LoadingButton>

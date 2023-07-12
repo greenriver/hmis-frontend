@@ -1,5 +1,5 @@
 import { NetworkStatus } from '@apollo/client';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
 import RelationshipToHohSelect from '../components/elements/RelationshipToHohSelect';
@@ -34,13 +34,17 @@ export default function useAddToHouseholdColumns({
     Record<string, Date | null>
   >({});
 
-  // TODO: replace with lookup by  household id.
-  // the point is to get all the Client IDs of members.
   const { data, loading, refetch, networkStatus } = useGetHouseholdQuery({
     variables: { id: householdId || '' },
     notifyOnNetworkStatusChange: true,
     skip: !householdId,
   });
+
+  // If household ID wasn't found, clear the household ID state.
+  // This happens when the last/only member is removed.
+  useEffect(() => {
+    if (data && !data.household) setHouseholdId(undefined);
+  }, [data]);
 
   const householdLoading =
     loading && !data && networkStatus !== NetworkStatus.refetch;
@@ -55,6 +59,7 @@ export default function useAddToHouseholdColumns({
     (updatedHousehold: HouseholdFieldsFragment) => {
       setHouseholdId(updatedHousehold.id);
       refetch();
+      window.scrollTo(0, 0);
     },
     [refetch]
   );

@@ -49,7 +49,7 @@ const ProjectEnrollments = () => {
                 })}
                 Icon={AddIcon}
               >
-                Add Household
+                Add Enrollment
               </ButtonLink>
             </Stack>
           </ProjectPermissionsFilter>

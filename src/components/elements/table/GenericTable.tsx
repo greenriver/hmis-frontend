@@ -7,6 +7,7 @@ import {
   TableCell,
   TableCellProps,
   TableContainer,
+  TableContainerProps,
   TableFooter,
   TableHead,
   TablePagination,
@@ -40,6 +41,7 @@ export interface Props<T> {
   paginated?: boolean;
   loading?: boolean;
   tablePaginationProps?: TablePaginationProps;
+  tableContainerProps?: TableContainerProps;
   actionRow?: ReactNode;
   tableProps?: TableProps;
   vertical?: boolean;
@@ -93,6 +95,7 @@ const GenericTable = <T extends { id: string }>({
   vertical = false,
   renderVerticalHeaderCell,
   tablePaginationProps,
+  tableContainerProps,
   actionRow,
   tableProps,
   noHead = false,
@@ -233,7 +236,10 @@ const GenericTable = <T extends { id: string }>({
         />
       )}
       {filterToolbar}
-      <TableContainer sx={{ height: '100%', overflow: 'auto' }}>
+      <TableContainer
+        sx={{ height: '100%', overflow: 'auto' }}
+        {...tableContainerProps}
+      >
         <Table
           size='medium'
           sx={{ height: vertical ? '100%' : '1px' }}

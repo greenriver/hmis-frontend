@@ -1,4 +1,5 @@
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation';
+import PrintIcon from '@mui/icons-material/Print';
 import { Button, ButtonProps } from '@mui/material';
 import React, { useMemo } from 'react';
 import { useLocation, Link as RouterLink } from 'react-router-dom';
@@ -30,7 +31,7 @@ const PrintViewButton: React.FC<PrintViewButtonProps> = ({
 
   return (
     <Button
-      startIcon={<CancelPresentationIcon />}
+      startIcon={exit ? <CancelPresentationIcon /> : <PrintIcon />}
       variant='outlined'
       {...props}
       component={RouterLink}

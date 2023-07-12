@@ -33,7 +33,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
         sx={{ mt: 0.5 }}
       />,
     ],
-    ['Referral ID', referralPosting.referralIdentifier],
+    ['Referral ID', referralPosting.referralIdentifier || 'N/A'],
     ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
     ['Referred From', referralPosting.referredFrom],
     ['Organization Name', referralPosting.organization?.organizationName],
@@ -57,6 +57,7 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
         enumMap={HmisEnums.ProjectType}
       />,
     ],
+    ['Assigned At', parseAndFormatDateTime(referralPosting.assignedDate)],
   ];
 
   const verb = useMemo<string>(() => {

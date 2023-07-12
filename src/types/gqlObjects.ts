@@ -221,6 +221,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         name: 'valueNumber',
         type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
+      {
+        name: 'valueQuestion',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
     ],
   },
   {
@@ -1623,6 +1627,91 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'EsgFundingService',
+    fields: [
+      {
+        name: 'clientDob',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'clientId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'dateProvided',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'faAmount',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
+        name: 'faEndDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'faStartDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'firstName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'lastName',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'organizationId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'organizationName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'projectName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'Event',
     fields: [
       {
@@ -1929,6 +2018,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           kind: 'NON_NULL',
           name: null,
           ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'type',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: {
+            kind: 'ENUM',
+            name: 'ExternalIdentifierType',
+            ofType: null,
+          },
         },
       },
       { name: 'url', type: { kind: 'SCALAR', name: 'String', ofType: null } },
@@ -4245,7 +4346,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'ValueBound',
     fields: [
-      { name: 'id', type: { kind: 'SCALAR', name: 'String', ofType: null } },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
       { name: 'offset', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
       {
         name: 'question',
@@ -5241,6 +5349,35 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
       {
         name: 'typeProvided',
         type: { kind: 'ENUM', name: 'ServiceTypeProvided', ofType: null },
+      },
+    ],
+  },
+  {
+    name: 'ServicesForEnrollmentFilterOptions',
+    args: [
+      {
+        name: 'serviceCategory',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
+      },
+      {
+        name: 'serviceType',
+        type: {
+          kind: 'LIST',
+          name: null,
+          ofType: {
+            kind: 'NON_NULL',
+            name: null,
+            ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+          },
+        },
       },
     ],
   },

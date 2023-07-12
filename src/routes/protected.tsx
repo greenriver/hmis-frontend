@@ -49,6 +49,7 @@ import {
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
+import EsgFundingReport from '@/modules/projects/components/EsgFundingReport';
 import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
@@ -60,6 +61,7 @@ import ProjectEnrollments from '@/modules/projects/components/ProjectEnrollments
 import Project from '@/modules/projects/components/ProjectOverview';
 import ProjectReferralPosting from '@/modules/projects/components/ProjectReferralPosting';
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
+import ClientServices from '@/modules/services/components/ClientServices';
 import Units from '@/modules/units/components/Units';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -119,6 +121,10 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: ProjectDashboardRoutes.REFERRAL_POSTING,
             element: <ProjectReferralPosting />,
+          },
+          {
+            path: ProjectDashboardRoutes.ESG_FUNDING_REPORT,
+            element: <EsgFundingReport />,
           },
           {
             path: ProjectDashboardRoutes.NEW_REFERRAL_REQUEST,
@@ -403,6 +409,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllAssessments />
+              </EnrollmentsRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.SERVICES,
+            element: (
+              <EnrollmentsRoute
+                view
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientServices />
               </EnrollmentsRoute>
             ),
           },

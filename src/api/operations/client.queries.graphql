@@ -113,6 +113,34 @@ query GetClientAssessments(
   }
 }
 
+query GetClientServices(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+  $sortOrder: ServiceSortOption = DATE_PROVIDED
+  $filters: ServiceFilterOptions = null
+) {
+  client(id: $id) {
+    id
+    services(
+      limit: $limit
+      offset: $offset
+      sortOrder: $sortOrder
+      filters: $filters
+    ) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...ServiceFields
+        enrollment {
+          ...EnrollmentFields
+        }
+      }
+    }
+  }
+}
+
 query GetNonWipEnrollments($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   client(id: $id) {
     id
@@ -172,7 +200,7 @@ mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
   deleteEnrollment(input: $input) {
     clientMutationId
     enrollment {
-      ...EnrollmentFields
+      id
     }
     errors {
       ...ValidationErrorFields

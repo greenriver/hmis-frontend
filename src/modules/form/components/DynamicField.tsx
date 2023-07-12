@@ -8,7 +8,11 @@ import {
   DynamicFieldProps,
   DynamicInputCommonProps,
 } from '../types';
-import { hasMeaningfulValue, maxWidthAtNestingLevel } from '../util/formUtil';
+import {
+  chooseSelectComponentType,
+  hasMeaningfulValue,
+  maxWidthAtNestingLevel,
+} from '../util/formUtil';
 
 import MultiAddressInput from './client/addresses/MultiAddressInput';
 import MultiEmailInput from './client/emails/MultiEmailInput';
@@ -281,9 +285,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
     case ItemType.Choice:
       const currentValue = value ? value : item.repeats ? [] : null;
 
+      const componentType = chooseSelectComponentType(
+        item,
+        options?.length || 0,
+        isLocalPickList
+      );
+
       let inputComponent;
       if (
-        item.component === Component.Checkbox &&
+        componentType === Component.Checkbox &&
         item.pickListReference === 'NoYesMissing'
       ) {
         inputComponent = (
@@ -295,20 +305,15 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
           />
         );
       } else if (
-        item.component === Component.RadioButtons ||
-        item.component === Component.RadioButtonsVertical ||
-        (isLocalPickList &&
-          options &&
-          options.length > 0 &&
-          options.length < 4 &&
-          !item.repeats)
+        componentType === Component.RadioButtons ||
+        componentType === Component.RadioButtonsVertical
       ) {
         inputComponent = (
           <RadioGroupInput
             value={currentValue}
             onChange={onChangeValue}
             options={options || []}
-            row={item.component !== Component.RadioButtonsVertical}
+            row={componentType === Component.RadioButtons}
             clearable
             checkbox
             {...commonInputProps}
@@ -317,7 +322,6 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       } else {
         inputComponent = (
           <FormSelect
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
             value={currentValue}
             options={options || []}
             onChange={onChangeEventValue}

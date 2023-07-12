@@ -121,6 +121,7 @@ export const HmisEnums = {
     CHECKBOX: 'Render a boolean input item as a checkbox',
     DISABILITY_TABLE:
       'Specialized component for rendering disabilities in a table',
+    DROPDOWN: 'Render a choice input item as a dropdown',
     EMAIL: 'Email address input for ContactPoint',
     HORIZONTAL_GROUP: 'Render a group of inputs horizontally',
     INFO_GROUP: 'Render contents in an info box',
@@ -383,6 +384,12 @@ export const HmisEnums = {
       'Reached maximum time allowed by project',
     PROJECT_TERMINATED: 'Project terminated',
     UNKNOWN_DISAPPEARED: 'Unknown/disappeared',
+  },
+  ExternalIdentifierType: {
+    CLIENT_ID: 'HMIS ID',
+    MCI_ID: 'MCI ID',
+    PERSONAL_ID: 'Personal ID',
+    WAREHOUSE_ID: 'Warehouse ID',
   },
   FeelingFrequency: {
     INVALID: 'Invalid Value',
@@ -780,6 +787,8 @@ export const HmisEnums = {
     DATA_NOT_COLLECTED: 'Data not collected',
   },
   PickListType: {
+    ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
+    ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -799,7 +808,6 @@ export const HmisEnums = {
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
-    SERVICE_TYPE: 'SERVICE_TYPE',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
