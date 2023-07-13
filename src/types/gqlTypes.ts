@@ -4519,7 +4519,7 @@ export type Unit = {
   project?: Maybe<Project>;
   unitSize?: Maybe<Scalars['Int']>;
   unitType?: Maybe<UnitTypeObject>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export enum UnitFilterOptionStatus {
