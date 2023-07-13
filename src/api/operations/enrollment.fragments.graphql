@@ -19,6 +19,13 @@ fragment EnrollmentFields on Enrollment {
   access {
     ...EnrollmentAccessFields
   }
+  currentUnit {
+    id
+    name
+    unitType {
+      description
+    }
+  }
 }
 
 fragment EnrollmentWithHouseholdFragment on Enrollment {

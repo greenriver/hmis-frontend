@@ -4,6 +4,7 @@ import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
 import ButtonLink from '@/components/elements/ButtonLink';
+import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import TitleCard from '@/components/elements/TitleCard';
 import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
@@ -109,6 +110,13 @@ const ViewEnrollment = () => {
               />
             </Stack>
           </Paper>
+          {enrollment.currentUnit && (
+            <Paper sx={{ p: 2, mb: 2 }}>
+              <CommonLabeledTextBlock title='Unit Assignment'>
+                {enrollment.currentUnit.name}
+              </CommonLabeledTextBlock>
+            </Paper>
+          )}
         </Grid>
       </Grid>
       {renderServiceDialog()}

@@ -16,14 +16,13 @@ fragment UnitTypeFields on UnitTypeObject {
 
 fragment UnitFields on Unit {
   id
-  startDate
-  endDate
   unitSize
   unitType {
     ...UnitTypeFields
   }
   occupants {
     id
+    relationshipToHoH
     client {
       id
       ...ClientName
