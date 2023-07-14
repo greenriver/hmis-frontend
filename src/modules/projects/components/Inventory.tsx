@@ -68,7 +68,7 @@ const Inventory = ({ create = false }: { create?: boolean }) => {
       inputVariables={{ projectId }}
       record={inventory || undefined}
       localConstants={localConstants}
-      pickListRelationId={projectId}
+      pickListArgs={{ projectId }}
       title={
         !create &&
         inventory && <ProjectFormTitle title={title} project={project} />

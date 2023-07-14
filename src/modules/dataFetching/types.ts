@@ -1,3 +1,5 @@
+import { PickListArgs } from '../form/types';
+
 import { HmisEnums } from '@/types/gqlEnums';
 import { PickListType } from '@/types/gqlTypes';
 
@@ -39,7 +41,7 @@ export interface PickListFilter<I> extends BaseFilter<I> {
   type: 'picklist';
   pickListReference: PickListType;
   variant?: SelectElementVariant;
-  relationId?: string;
+  pickListArgs?: PickListArgs;
 }
 
 export type FilterType<I> =

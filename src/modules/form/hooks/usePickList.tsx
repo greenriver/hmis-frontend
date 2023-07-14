@@ -2,14 +2,18 @@ import { QueryHookOptions } from '@apollo/client';
 import { intersectionBy } from 'lodash-es';
 import { useMemo } from 'react';
 
-import { ChangeType, isPickListOption, isPickListOptionArray } from '../types';
+import {
+  ChangeType,
+  isPickListOption,
+  isPickListOptionArray,
+  PickListArgs,
+} from '../types';
 import { hasMeaningfulValue, resolveOptionList } from '../util/formUtil';
 
 import {
   FormItem,
   GetPickListQuery,
   GetPickListQueryVariables,
-  PickListOption,
   PickListType,
   useGetPickListQuery,
 } from '@/types/gqlTypes';
@@ -63,11 +67,14 @@ export const getValueFromPickListData = ({
   }
 };
 
-export function usePickList(
-  item: FormItem,
-  relationId?: string,
-  fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>
-) {
+export function usePickList({
+  item,
+  fetchOptions,
+  ...pickListArgs
+}: {
+  item: FormItem;
+  fetchOptions?: QueryHookOptions<GetPickListQuery, GetPickListQueryVariables>;
+} & PickListArgs) {
   const resolved = useMemo(() => resolveOptionList(item), [item]);
   const isKnownType = useMemo(
     () =>
@@ -79,7 +86,7 @@ export function usePickList(
   const { data, loading, error } = useGetPickListQuery({
     variables: {
       pickListType: item.pickListReference as PickListType,
-      relationId,
+      ...pickListArgs,
     },
     // Skip if it was already resolve with local enums, or if it's an unrecognized reference
     skip: !!resolved || !isKnownType,
@@ -92,9 +99,5 @@ export function usePickList(
 
   if (error) throw error;
 
-  return [pickList, loading, !!resolved] as [
-    pickList: PickListOption[] | undefined,
-    loading: boolean,
-    isLocal: boolean
-  ];
+  return { pickList, loading, isLocalPickList: !!resolved } as const;
 }

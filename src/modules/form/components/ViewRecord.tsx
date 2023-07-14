@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import useFormDefinition from '../hooks/useFormDefinition';
-import { SubmitFormAllowedTypes } from '../types';
+import { PickListArgs, SubmitFormAllowedTypes } from '../types';
 import { createInitialValuesFromRecord } from '../util/formUtil';
 
 import DynamicView from './viewable/DynamicView';
@@ -13,7 +13,7 @@ import { FormRole } from '@/types/gqlTypes';
 export interface ViewRecordProps<RecordType> {
   record: RecordType;
   formRole: FormRole;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
 }
 
 /**
@@ -23,7 +23,7 @@ export interface ViewRecordProps<RecordType> {
 const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   record,
   formRole,
-  pickListRelationId,
+  pickListArgs,
 }: ViewRecordProps<RecordType>): JSX.Element => {
   const { formDefinition, itemMap, loading } = useFormDefinition(formRole);
 
@@ -42,7 +42,7 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
     <DynamicView
       values={values}
       definition={formDefinition.definition}
-      pickListRelationId={pickListRelationId}
+      pickListArgs={pickListArgs}
     />
   );
 };
