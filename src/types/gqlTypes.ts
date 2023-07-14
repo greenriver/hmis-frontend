@@ -3160,9 +3160,9 @@ export enum PickListType {
   Destination = 'DESTINATION',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
+  /** Enrollments for the client, including WIP and Exited. */
+  EnrollmentsForClient = 'ENROLLMENTS_FOR_CLIENT',
   Geocode = 'GEOCODE',
-  /** Open enrollments for the client. */
-  OpenEnrollmentsForClient = 'OPEN_ENROLLMENTS_FOR_CLIENT',
   /** Open HoH enrollments at the project. */
   OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
   /** All Organizations that the User can see */

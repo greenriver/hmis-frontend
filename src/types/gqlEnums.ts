@@ -803,8 +803,9 @@ export const HmisEnums = {
     DENIED_PENDING_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     DESTINATION: 'DESTINATION',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
+    ENROLLMENTS_FOR_CLIENT:
+      'Enrollments for the client, including WIP and Exited.',
     GEOCODE: 'GEOCODE',
-    OPEN_ENROLLMENTS_FOR_CLIENT: 'Open enrollments for the client.',
     OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
     POSSIBLE_UNIT_TYPES_FOR_PROJECT:

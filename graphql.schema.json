@@ -20304,14 +20304,14 @@
             "deprecationReason": null
           },
           {
-            "name": "GEOCODE",
-            "description": null,
+            "name": "ENROLLMENTS_FOR_CLIENT",
+            "description": "Enrollments for the client, including WIP and Exited.",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
-            "name": "OPEN_ENROLLMENTS_FOR_CLIENT",
-            "description": "Open enrollments for the client.",
+            "name": "GEOCODE",
+            "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
