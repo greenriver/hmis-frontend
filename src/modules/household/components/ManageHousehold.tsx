@@ -76,6 +76,7 @@ const ManageHousehold = ({
   if (initialHouseholdId && !household && loading) {
     return <Loading />;
   }
+
   return (
     <Stack gap={4}>
       {!household && loading && <Loading />}

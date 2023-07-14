@@ -140,6 +140,7 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
   );
 
   // If we have a code but no label, set the label. This can happen when auto-filling a section from a record, like Prior Living Situation
+  console.log(options, value);
   if (
     options &&
     isPickListOption(value) &&

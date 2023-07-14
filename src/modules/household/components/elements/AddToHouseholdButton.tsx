@@ -13,6 +13,7 @@ interface Props {
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
   onSuccess: (householdId: string) => void;
+  hohUnitId?: string;
 }
 
 const AddToHouseholdButton = ({
@@ -22,6 +23,7 @@ const AddToHouseholdButton = ({
   householdId,
   onSuccess,
   projectId,
+  hohUnitId,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
@@ -45,7 +47,7 @@ const AddToHouseholdButton = ({
         onSuccess(data.householdId);
       },
       inputVariables: { projectId, clientId },
-      localConstants: { householdId },
+      localConstants: { householdId, hohUnitId },
     });
 
   return (

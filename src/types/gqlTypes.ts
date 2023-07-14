@@ -9345,6 +9345,7 @@ export type GetEnrollmentWithHouseholdQuery = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          currentUnit?: { __typename?: 'Unit'; id: string } | null;
         };
       }>;
     };
@@ -9473,6 +9474,7 @@ export type GetClientHouseholdMemberCandidatesQuery = {
               entryDate: string;
               exitDate?: string | null;
               inProgress: boolean;
+              currentUnit?: { __typename?: 'Unit'; id: string } | null;
             };
           }>;
         };
@@ -9906,6 +9908,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        currentUnit?: { __typename?: 'Unit'; id: string } | null;
       };
     }>;
   };
@@ -12525,6 +12528,7 @@ export type HouseholdFieldsFragment = {
       entryDate: string;
       exitDate?: string | null;
       inProgress: boolean;
+      currentUnit?: { __typename?: 'Unit'; id: string } | null;
     };
   }>;
 };
@@ -12604,6 +12608,7 @@ export type HouseholdClientFieldsFragment = {
     entryDate: string;
     exitDate?: string | null;
     inProgress: boolean;
+    currentUnit?: { __typename?: 'Unit'; id: string } | null;
   };
 };
 
@@ -12687,6 +12692,7 @@ export type GetHouseholdQuery = {
         entryDate: string;
         exitDate?: string | null;
         inProgress: boolean;
+        currentUnit?: { __typename?: 'Unit'; id: string } | null;
       };
     }>;
   } | null;
@@ -12755,6 +12761,7 @@ export type UpdateRelationshipToHoHMutation = {
             entryDate: string;
             exitDate?: string | null;
             inProgress: boolean;
+            currentUnit?: { __typename?: 'Unit'; id: string } | null;
           };
         }>;
       };
@@ -12851,6 +12858,7 @@ export type AddToHouseholdMutation = {
           entryDate: string;
           exitDate?: string | null;
           inProgress: boolean;
+          currentUnit?: { __typename?: 'Unit'; id: string } | null;
         };
       }>;
     } | null;
@@ -16304,6 +16312,9 @@ export const HouseholdClientFieldsFragmentDoc = gql`
       entryDate
       exitDate
       inProgress
+      currentUnit {
+        id
+      }
     }
   }
   ${ClientNameFragmentDoc}
