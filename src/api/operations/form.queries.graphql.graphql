@@ -1,5 +1,17 @@
-query GetPickList($pickListType: PickListType!, $relationId: ID) {
-  pickList(pickListType: $pickListType, relationId: $relationId) {
+query GetPickList(
+  $pickListType: PickListType!
+  $projectId: ID
+  $clientId: ID
+  $householdId: ID
+  $enrollmentId: ID
+) {
+  pickList(
+    pickListType: $pickListType
+    projectId: $projectId
+    clientId: $clientId
+    householdId: $householdId
+    enrollmentId: $enrollmentId
+  ) {
     ...PickListOptionFields
   }
 }

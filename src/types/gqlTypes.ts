@@ -3149,12 +3149,10 @@ export enum PickListType {
   AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
-  /** Unoccupied units in the specified project */
-  AvailableUnits = 'AVAILABLE_UNITS',
+  /** Units available for the given household at the given project */
+  AvailableUnitsForEnrollment = 'AVAILABLE_UNITS_FOR_ENROLLMENT',
   /** Unit types that have unoccupied units in the specified project */
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
-  /** All Enrollments, including WIP and exited, for the client. */
-  ClientEnrollments = 'CLIENT_ENROLLMENTS',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** Referral Posting Status */
@@ -3163,13 +3161,17 @@ export enum PickListType {
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
   Geocode = 'GEOCODE',
+  /** Open enrollments for the client. */
+  OpenEnrollmentsForClient = 'OPEN_ENROLLMENTS_FOR_CLIENT',
+  /** Open HoH enrollments at the project. */
+  OpenHohEnrollmentsForProject = 'OPEN_HOH_ENROLLMENTS_FOR_PROJECT',
   /** All Organizations that the User can see */
   Organization = 'ORGANIZATION',
+  /** Unit types that are eligible to be added to project */
+  PossibleUnitTypesForProject = 'POSSIBLE_UNIT_TYPES_FOR_PROJECT',
   PriorLivingSituation = 'PRIOR_LIVING_SITUATION',
   /** All Projects that the User can see */
   Project = 'PROJECT',
-  /** Project HOH Enrollments, including WIP and exited, for the client. */
-  ProjectHohEnrollments = 'PROJECT_HOH_ENROLLMENTS',
   ReferralOutcome = 'REFERRAL_OUTCOME',
   /** Referral Result  */
   ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
@@ -3177,10 +3179,6 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
-  /** Units in the specified project */
-  Units = 'UNITS',
-  /** Unit types. If project is specified, limited to unit types in the project. */
-  UnitTypes = 'UNIT_TYPES',
 }
 
 /** 4.19.7 */
@@ -3540,8 +3538,11 @@ export type QueryOrganizationsArgs = {
 };
 
 export type QueryPickListArgs = {
+  clientId?: InputMaybe<Scalars['ID']>;
+  enrollmentId?: InputMaybe<Scalars['ID']>;
+  householdId?: InputMaybe<Scalars['ID']>;
   pickListType: PickListType;
-  relationId?: InputMaybe<Scalars['ID']>;
+  projectId?: InputMaybe<Scalars['ID']>;
 };
 
 export type QueryProjectArgs = {
@@ -11016,7 +11017,10 @@ export type UserFieldsFragment = {
 
 export type GetPickListQueryVariables = Exact<{
   pickListType: PickListType;
-  relationId?: InputMaybe<Scalars['ID']>;
+  projectId?: InputMaybe<Scalars['ID']>;
+  clientId?: InputMaybe<Scalars['ID']>;
+  householdId?: InputMaybe<Scalars['ID']>;
+  enrollmentId?: InputMaybe<Scalars['ID']>;
 }>;
 
 export type GetPickListQuery = {
@@ -19187,8 +19191,20 @@ export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQueryVariables
 >;
 export const GetPickListDocument = gql`
-  query GetPickList($pickListType: PickListType!, $relationId: ID) {
-    pickList(pickListType: $pickListType, relationId: $relationId) {
+  query GetPickList(
+    $pickListType: PickListType!
+    $projectId: ID
+    $clientId: ID
+    $householdId: ID
+    $enrollmentId: ID
+  ) {
+    pickList(
+      pickListType: $pickListType
+      projectId: $projectId
+      clientId: $clientId
+      householdId: $householdId
+      enrollmentId: $enrollmentId
+    ) {
       ...PickListOptionFields
     }
   }
@@ -19208,7 +19224,10 @@ export const GetPickListDocument = gql`
  * const { data, loading, error } = useGetPickListQuery({
  *   variables: {
  *      pickListType: // value for 'pickListType'
- *      relationId: // value for 'relationId'
+ *      projectId: // value for 'projectId'
+ *      clientId: // value for 'clientId'
+ *      householdId: // value for 'householdId'
+ *      enrollmentId: // value for 'enrollmentId'
  *   },
  * });
  */
