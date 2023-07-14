@@ -17,8 +17,16 @@ const ValidationErrorList = ({
   errors: ValidationError[];
   renderError?: ErrorRenderFn;
 }) => {
+  const listStyle =
+    errors.length === 1 ? { pl: 0, listStyle: 'none' } : { pl: 2.5 };
   return (
-    <Box component='ul' sx={{ mt: 1, mb: 2, pl: 2.5 }}>
+    <Box
+      component='ul'
+      sx={{
+        my: 0,
+        ...listStyle,
+      }}
+    >
       {errors.map((e) => renderError(e))}
     </Box>
   );

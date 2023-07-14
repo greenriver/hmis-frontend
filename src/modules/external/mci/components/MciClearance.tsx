@@ -111,6 +111,7 @@ const MciClearance = ({
       middleName: primaryName.middle,
       lastName: primaryName.last,
     };
+    setErrorState(emptyErrorState);
     clearMci({ variables: { input: { input } } });
   }, [clearMci, onChange, currentFormValues]);
 
@@ -146,6 +147,12 @@ const MciClearance = ({
             : 'Please make a selection.'}
         </Alert>
       )}
+      {errorState && hasErrors(errorState) && (
+        <Stack gap={1}>
+          <ApolloErrorAlert error={errorState.apolloError} />
+          <ErrorAlert errors={errorState.errors} />
+        </Stack>
+      )}
       <Alert
         color='info'
         icon={false}
@@ -166,12 +173,6 @@ const MciClearance = ({
           <Box sx={{ mt: 2, mb: 1 }}>{searchButton}</Box>
         )}
       </Alert>
-      {errorState && hasErrors(errorState) && (
-        <Stack gap={1} sx={{ mt: 4 }}>
-          <ApolloErrorAlert error={errorState.apolloError} />
-          <ErrorAlert errors={errorState.errors} />
-        </Stack>
-      )}
 
       {candidates && status !== 'initial' && !loading && (
         <MciMatchSelector

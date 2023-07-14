@@ -2,9 +2,10 @@ import { ApolloError, isApolloError } from '@apollo/client';
 import { Alert, AlertTitle, Box, Button, Typography } from '@mui/material';
 import { FallbackRender } from '@sentry/react';
 
-import { NotFoundError } from '../util';
+import { NotFoundError, UNKNOWN_ERROR_HEADING } from '../util';
 
-import ApolloErrorTrace from './ApolloErrorTrace';
+import ApolloErrorAlert from './ApolloErrorAlert';
+import SentryErrorTrace from './SentryErrorTrace';
 
 const ErrorFallback = ({
   text = 'Something went wrong.',
@@ -34,35 +35,25 @@ export const alertErrorFallback: FallbackRender = ({
   eventId: string | null;
   resetError(): void;
 }) => {
+  if (isApolloError(error)) {
+    return (
+      <ApolloErrorAlert
+        error={error}
+        AlertProps={{ sx: { height: '100%' } }}
+        retry={() => resetError()}
+      />
+    );
+  }
+
   return (
     <Alert severity='error' sx={{ height: '100%' }}>
       <AlertTitle>
         {error instanceof NotFoundError
           ? 'Page not found'
-          : 'An error occurred'}
+          : UNKNOWN_ERROR_HEADING}
       </AlertTitle>
-      {isApolloError(error) && <ApolloErrorTrace error={error} />}
-      {!isApolloError(error) && (
-        <>
-          {import.meta.env.MODE === 'development' && (
-            <Typography variant='body2' sx={{ fontFamily: 'Monospace', my: 2 }}>
-              {error.toString()}
-            </Typography>
-          )}
-          {import.meta.env.MODE === 'development' &&
-            componentStack &&
-            componentStack.split('\n').map((s, i) => (
-              <Typography
-                // eslint-disable-next-line react/no-array-index-key
-                key={i}
-                variant='caption'
-                sx={{ fontFamily: 'Monospace' }}
-                display='block'
-              >
-                {s}
-              </Typography>
-            ))}
-        </>
+      {!isApolloError(error) && import.meta.env.MODE === 'development' && (
+        <SentryErrorTrace error={error} componentStack={componentStack} />
       )}
       {import.meta.env.MODE === 'development' && (
         <Box>
