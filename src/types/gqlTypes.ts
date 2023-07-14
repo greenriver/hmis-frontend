@@ -1451,6 +1451,7 @@ export type Enrollment = {
   clientEnrolledInPath?: Maybe<NoYesMissing>;
   countOutreachReferralApproaches?: Maybe<Scalars['Int']>;
   currentLivingSituations: CurrentLivingSituationsPaginated;
+  currentUnit?: Maybe<Unit>;
   customDataElements: Array<CustomDataElement>;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -4512,15 +4513,13 @@ export type Unit = {
   __typename?: 'Unit';
   dateCreated: Scalars['ISO8601DateTime'];
   dateUpdated: Scalars['ISO8601DateTime'];
-  endDate?: Maybe<Scalars['ISO8601Date']>;
   id: Scalars['ID'];
-  name?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
   occupants: Array<Enrollment>;
   project?: Maybe<Project>;
-  startDate: Scalars['ISO8601Date'];
   unitSize?: Maybe<Scalars['Int']>;
   unitType?: Maybe<UnitTypeObject>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 export enum UnitFilterOptionStatus {
@@ -8631,6 +8630,15 @@ export type GetClientEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
+        currentUnit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            description?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -8726,6 +8734,15 @@ export type GetClientServicesQuery = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
           };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+            unitType?: {
+              __typename?: 'UnitTypeObject';
+              description?: string | null;
+            } | null;
+          } | null;
         };
         user?: { __typename: 'User'; id: string; name: string } | null;
         serviceType: {
@@ -8951,6 +8968,15 @@ export type CreateEnrollmentMutation = {
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
       };
+      currentUnit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          description?: string | null;
+        } | null;
+      } | null;
     }> | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -9247,6 +9273,15 @@ export type GetEnrollmentQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
     };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
   } | null;
 };
 
@@ -9326,6 +9361,15 @@ export type GetEnrollmentWithHouseholdQuery = {
       canEditEnrollments: boolean;
       canDeleteEnrollments: boolean;
     };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
   } | null;
 };
 
@@ -9797,6 +9841,15 @@ export type EnrollmentFieldsFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
+  currentUnit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      description?: string | null;
+    } | null;
+  } | null;
 };
 
 export type EnrollmentWithHouseholdFragmentFragment = {
@@ -9869,6 +9922,15 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     canEditEnrollments: boolean;
     canDeleteEnrollments: boolean;
   };
+  currentUnit?: {
+    __typename?: 'Unit';
+    id: string;
+    name: string;
+    unitType?: {
+      __typename?: 'UnitTypeObject';
+      description?: string | null;
+    } | null;
+  } | null;
 };
 
 export type EventFieldsFragment = {
@@ -12069,6 +12131,15 @@ export type SubmitFormMutation = {
             canEditEnrollments: boolean;
             canDeleteEnrollments: boolean;
           };
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+            unitType?: {
+              __typename?: 'UnitTypeObject';
+              description?: string | null;
+            } | null;
+          } | null;
         }
       | {
           __typename?: 'File';
@@ -12700,6 +12771,15 @@ export type UpdateRelationshipToHoHMutation = {
         canEditEnrollments: boolean;
         canDeleteEnrollments: boolean;
       };
+      currentUnit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          description?: string | null;
+        } | null;
+      } | null;
     } | null;
     errors: Array<{
       __typename?: 'ValidationError';
@@ -13615,6 +13695,15 @@ export type GetProjectEnrollmentsQuery = {
           canEditEnrollments: boolean;
           canDeleteEnrollments: boolean;
         };
+        currentUnit?: {
+          __typename?: 'Unit';
+          id: string;
+          name: string;
+          unitType?: {
+            __typename?: 'UnitTypeObject';
+            description?: string | null;
+          } | null;
+        } | null;
       }>;
     };
   } | null;
@@ -15262,8 +15351,6 @@ export type UnitTypeFieldsFragment = {
 export type UnitFieldsFragment = {
   __typename?: 'Unit';
   id: string;
-  startDate: string;
-  endDate?: string | null;
   unitSize?: number | null;
   unitType?: {
     __typename?: 'UnitTypeObject';
@@ -15277,6 +15364,7 @@ export type UnitFieldsFragment = {
   occupants: Array<{
     __typename?: 'Enrollment';
     id: string;
+    relationshipToHoH: RelationshipToHoH;
     client: {
       __typename?: 'Client';
       id: string;
@@ -15308,8 +15396,6 @@ export type GetUnitsQuery = {
       nodes: Array<{
         __typename?: 'Unit';
         id: string;
-        startDate: string;
-        endDate?: string | null;
         unitSize?: number | null;
         unitType?: {
           __typename?: 'UnitTypeObject';
@@ -15323,6 +15409,7 @@ export type GetUnitsQuery = {
         occupants: Array<{
           __typename?: 'Enrollment';
           id: string;
+          relationshipToHoH: RelationshipToHoH;
           client: {
             __typename?: 'Client';
             id: string;
@@ -15368,8 +15455,6 @@ export type CreateUnitsMutation = {
     units?: Array<{
       __typename?: 'Unit';
       id: string;
-      startDate: string;
-      endDate?: string | null;
       unitSize?: number | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -15383,6 +15468,7 @@ export type CreateUnitsMutation = {
       occupants: Array<{
         __typename?: 'Enrollment';
         id: string;
+        relationshipToHoH: RelationshipToHoH;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15449,8 +15535,6 @@ export type UpdateUnitsMutation = {
     units: Array<{
       __typename?: 'Unit';
       id: string;
-      startDate: string;
-      endDate?: string | null;
       unitSize?: number | null;
       unitType?: {
         __typename?: 'UnitTypeObject';
@@ -15464,6 +15548,7 @@ export type UpdateUnitsMutation = {
       occupants: Array<{
         __typename?: 'Enrollment';
         id: string;
+        relationshipToHoH: RelationshipToHoH;
         client: {
           __typename?: 'Client';
           id: string;
@@ -16191,6 +16276,13 @@ export const EnrollmentFieldsFragmentDoc = gql`
     access {
       ...EnrollmentAccessFields
     }
+    currentUnit {
+      id
+      name
+      unitType {
+        description
+      }
+    }
   }
   ${EnrollmentAccessFieldsFragmentDoc}
 `;
@@ -16826,14 +16918,13 @@ export const UnitTypeCapacityFieldsFragmentDoc = gql`
 export const UnitFieldsFragmentDoc = gql`
   fragment UnitFields on Unit {
     id
-    startDate
-    endDate
     unitSize
     unitType {
       ...UnitTypeFields
     }
     occupants {
       id
+      relationshipToHoH
       client {
         id
         ...ClientName

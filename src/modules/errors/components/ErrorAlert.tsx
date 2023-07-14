@@ -1,5 +1,5 @@
 import { Alert, AlertProps, AlertTitle } from '@mui/material';
-import { reject } from 'lodash-es';
+import { find, reject } from 'lodash-es';
 
 import {
   ErrorRenderFn,
@@ -9,7 +9,7 @@ import {
 
 import ValidationErrorList from './ValidationErrorList';
 
-import { ValidationError } from '@/types/gqlTypes';
+import { ValidationError, ValidationType } from '@/types/gqlTypes';
 
 const ErrorAlert = ({
   errors,
@@ -24,6 +24,13 @@ const ErrorAlert = ({
 }) => {
   const filtered = reject(errors, ['severity', 'warning']);
   if (filtered.length === 0) return null;
+
+  let title = fixable ? FIXABLE_ERROR_HEADING : UNKNOWN_ERROR_HEADING;
+
+  // If error list contains a server_error, dont show the 'Please fix..' title
+  if (find(errors, { type: ValidationType.ServerError })) {
+    title = UNKNOWN_ERROR_HEADING;
+  }
   return (
     <Alert
       severity='error'
@@ -31,9 +38,7 @@ const ErrorAlert = ({
       data-testid='formErrorAlert'
       {...AlertProps}
     >
-      <AlertTitle>
-        {fixable ? FIXABLE_ERROR_HEADING : UNKNOWN_ERROR_HEADING}
-      </AlertTitle>
+      <AlertTitle>{title}</AlertTitle>
       <ValidationErrorList errors={errors} renderError={renderError} />
     </Alert>
   );
