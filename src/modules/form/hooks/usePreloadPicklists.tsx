@@ -2,7 +2,7 @@ import { QueryOptions, useApolloClient } from '@apollo/client';
 import { compact, isEmpty } from 'lodash-es';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { ItemMap } from '../types';
+import { ItemMap, PickListArgs } from '../types';
 import { getItemMap } from '../util/formUtil';
 
 import {
@@ -14,12 +14,12 @@ import {
 
 interface Args {
   definition: FormDefinitionJson | undefined;
-  relationId?: string;
+  pickListArgs?: PickListArgs;
   queryOptions?: Omit<QueryOptions, 'query'>;
 }
 const usePreloadPicklists = ({
   definition,
-  relationId,
+  pickListArgs,
   queryOptions,
 }: Args) => {
   const client = useApolloClient();
@@ -56,7 +56,7 @@ const usePreloadPicklists = ({
       pickListTypesToFetch.map((pickListType) =>
         client.query({
           query: GetPickListDocument,
-          variables: { relationId, pickListType },
+          variables: { ...pickListArgs, pickListType },
           fetchPolicy: 'network-only',
           ...queryOptions,
         })
@@ -71,7 +71,7 @@ const usePreloadPicklists = ({
       })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [pickListTypesToFetch, relationId, client, queryOptions]);
+  }, [pickListTypesToFetch, pickListArgs, client, queryOptions]);
 
   useEffect(() => {
     fetch();

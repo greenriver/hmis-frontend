@@ -20262,20 +20262,14 @@
             "deprecationReason": null
           },
           {
-            "name": "AVAILABLE_UNITS",
-            "description": "Unoccupied units in the specified project",
+            "name": "AVAILABLE_UNITS_FOR_ENROLLMENT",
+            "description": "Units available for the given household at the given project",
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
             "name": "AVAILABLE_UNIT_TYPES",
             "description": "Unit types that have unoccupied units in the specified project",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "CLIENT_ENROLLMENTS",
-            "description": "All Enrollments, including WIP and exited, for the client.",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -20310,14 +20304,32 @@
             "deprecationReason": null
           },
           {
+            "name": "ENROLLMENTS_FOR_CLIENT",
+            "description": "Enrollments for the client, including WIP and Exited.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "GEOCODE",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
           },
           {
+            "name": "OPEN_HOH_ENROLLMENTS_FOR_PROJECT",
+            "description": "Open HoH enrollments at the project.",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ORGANIZATION",
             "description": "All Organizations that the User can see",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "POSSIBLE_UNIT_TYPES_FOR_PROJECT",
+            "description": "Unit types that are eligible to be added to project",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -20330,12 +20342,6 @@
           {
             "name": "PROJECT",
             "description": "All Projects that the User can see",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "PROJECT_HOH_ENROLLMENTS",
-            "description": "Project HOH Enrollments, including WIP and exited, for the client.",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -20372,18 +20378,6 @@
           {
             "name": "SUB_TYPE_PROVIDED_5",
             "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNITS",
-            "description": "Units in the specified project",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "UNIT_TYPES",
-            "description": "Unit types. If project is specified, limited to unit types in the project.",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -23023,6 +23017,42 @@
             "description": "Get list of options for pick list",
             "args": [
               {
+                "name": "clientId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "enrollmentId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
+                "name": "householdId",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              },
+              {
                 "name": "pickListType",
                 "description": null,
                 "type": {
@@ -23039,7 +23069,7 @@
                 "deprecationReason": null
               },
               {
-                "name": "relationId",
+                "name": "projectId",
                 "description": null,
                 "type": {
                   "kind": "SCALAR",

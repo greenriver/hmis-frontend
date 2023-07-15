@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ReactNode } from 'react';
 
-import { SubmitFormAllowedTypes } from '../types';
+import { PickListArgs, SubmitFormAllowedTypes } from '../types';
 
 import ViewRecord from './ViewRecord';
 
@@ -20,7 +20,7 @@ import { FormRole } from '@/types/gqlTypes';
 interface RecordDialogProps<RecordType> extends DialogProps {
   record: RecordType;
   formRole: FormRole;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   actions?: ReactNode;
   children?: ReactNode;
 }
@@ -32,7 +32,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
   onClose,
   title,
   children,
-  pickListRelationId,
+  pickListArgs,
   ...props
 }: RecordDialogProps<RecordType>) => {
   return (
@@ -96,7 +96,7 @@ const ViewRecordDialog = <RecordType extends SubmitFormAllowedTypes>({
           <ViewRecord
             record={record}
             formRole={formRole}
-            pickListRelationId={pickListRelationId}
+            pickListArgs={pickListArgs}
           />
           {children}
         </Box>

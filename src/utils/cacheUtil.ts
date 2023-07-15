@@ -1,18 +1,19 @@
 import { Cache } from '@apollo/client';
 
+import { PickListArgs } from '@/modules/form/types';
 import { cache } from '@/providers/apolloClient';
 import { PickListType, Query } from '@/types/gqlTypes';
 
 export const evictPickList = (
   pickListType: PickListType,
-  relationId?: string
+  pickListArgs?: PickListArgs
 ) =>
   cache.evict({
     id: 'ROOT_QUERY',
     fieldName: 'pickList',
     args: {
       pickListType,
-      relationId,
+      ...pickListArgs,
     },
   });
 

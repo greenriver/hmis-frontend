@@ -794,31 +794,30 @@ export const HmisEnums = {
     ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
-    AVAILABLE_UNITS: 'Unoccupied units in the specified project',
+    AVAILABLE_UNITS_FOR_ENROLLMENT:
+      'Units available for the given household at the given project',
     AVAILABLE_UNIT_TYPES:
       'Unit types that have unoccupied units in the specified project',
-    CLIENT_ENROLLMENTS:
-      'All Enrollments, including WIP and exited, for the client.',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
     DENIED_PENDING_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     DESTINATION: 'DESTINATION',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
+    ENROLLMENTS_FOR_CLIENT:
+      'Enrollments for the client, including WIP and Exited.',
     GEOCODE: 'GEOCODE',
+    OPEN_HOH_ENROLLMENTS_FOR_PROJECT: 'Open HoH enrollments at the project.',
     ORGANIZATION: 'All Organizations that the User can see',
+    POSSIBLE_UNIT_TYPES_FOR_PROJECT:
+      'Unit types that are eligible to be added to project',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
-    PROJECT_HOH_ENROLLMENTS:
-      'Project HOH Enrollments, including WIP and exited, for the client.',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
-    UNITS: 'Units in the specified project',
-    UNIT_TYPES:
-      'Unit types. If project is specified, limited to unit types in the project.',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',
