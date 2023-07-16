@@ -35,6 +35,7 @@ fragment HouseholdClientFields on HouseholdClient {
     inProgress
     currentUnit {
       id
+      name
     }
   }
 }

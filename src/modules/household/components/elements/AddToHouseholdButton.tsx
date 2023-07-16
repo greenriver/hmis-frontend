@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  EnrollmentFieldsFragment,
+  FormRole,
+  PickListType,
+} from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 
 interface Props {
   clientId: string;
@@ -13,7 +18,6 @@ interface Props {
   householdId?: string; // if omitted, a new household will be created
   projectId: string;
   onSuccess: (householdId: string) => void;
-  hohUnitId?: string;
 }
 
 const AddToHouseholdButton = ({
@@ -23,7 +27,6 @@ const AddToHouseholdButton = ({
   householdId,
   onSuccess,
   projectId,
-  hohUnitId,
 }: Props) => {
   const prevIsMember = usePrevious(isMember);
   const [added, setAdded] = useState(isMember);
@@ -45,9 +48,13 @@ const AddToHouseholdButton = ({
       onCompleted: (data: EnrollmentFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);
+        evictPickList(PickListType.AvailableUnitsForEnrollment, {
+          projectId,
+          householdId: data.householdId,
+        });
       },
       inputVariables: { projectId, clientId },
-      localConstants: { householdId, hohUnitId },
+      localConstants: { householdId },
     });
 
   return (
@@ -69,7 +76,7 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientName}</>,
         submitButtonText: `Enroll`,
-        pickListArgs: { projectId },
+        pickListArgs: { projectId, householdId },
       })}
     </>
   );

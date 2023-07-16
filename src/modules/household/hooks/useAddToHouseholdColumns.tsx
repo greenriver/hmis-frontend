@@ -6,7 +6,6 @@ import { isHouseholdClient, RecentHouseholdMember } from '../types';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
-  RelationshipToHoH,
   useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
@@ -56,17 +55,7 @@ export default function useAddToHouseholdColumns({
     [getHousehold]
   );
 
-  const currentHoH = useMemo(
-    () =>
-      (data?.household?.householdClients || []).find(
-        (e) => e.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
-      )?.enrollment,
-    [data]
-  );
   const addToEnrollmentColumns = useMemo(() => {
-    const hohUnitId = currentHoH?.currentUnit?.id;
-
-    console.log(currentHoH, hohUnitId);
     return [
       {
         header: '',
@@ -83,13 +72,12 @@ export default function useAddToHouseholdColumns({
               projectId={projectId}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
-              hohUnitId={hohUnitId}
             />
           );
         },
       },
     ];
-  }, [currentMembersMap, householdId, projectId, onSuccess, currentHoH]);
+  }, [currentMembersMap, householdId, projectId, onSuccess]);
 
   return {
     addToEnrollmentColumns,
