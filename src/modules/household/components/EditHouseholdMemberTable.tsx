@@ -250,7 +250,8 @@ const EditHouseholdMemberTable = ({
               header: 'Unit',
               key: 'unit',
               width: '15%',
-              render: 'enrollment.currentUnit.name',
+              render:
+                'enrollment.currentUnit.name' as keyof HouseholdClientFieldsFragment,
             },
           ]
         : []),
