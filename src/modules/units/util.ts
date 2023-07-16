@@ -11,5 +11,5 @@ export const evictUnitsQuery = (id: string) => {
     id: `Project:${id}`,
     fieldName: 'unitTypes',
   });
-  evictPickList(PickListType.AvailableUnitsForEnrollment);
+  evictPickList(PickListType.AvailableUnitsForEnrollment, { projectId: id });
 };

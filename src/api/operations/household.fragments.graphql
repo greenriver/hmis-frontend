@@ -33,6 +33,10 @@ fragment HouseholdClientFields on HouseholdClient {
     entryDate
     exitDate
     inProgress
+    currentUnit {
+      id
+      name
+    }
   }
 }
 

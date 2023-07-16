@@ -4,7 +4,12 @@ import { useEffect, useState } from 'react';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import usePrevious from '@/hooks/usePrevious';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
-import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
+import {
+  EnrollmentFieldsFragment,
+  FormRole,
+  PickListType,
+} from '@/types/gqlTypes';
+import { evictPickList } from '@/utils/cacheUtil';
 
 interface Props {
   clientId: string;
@@ -43,6 +48,10 @@ const AddToHouseholdButton = ({
       onCompleted: (data: EnrollmentFieldsFragment) => {
         setAdded(true);
         onSuccess(data.householdId);
+        evictPickList(PickListType.AvailableUnitsForEnrollment, {
+          projectId,
+          householdId: data.householdId,
+        });
       },
       inputVariables: { projectId, clientId },
       localConstants: { householdId },
@@ -67,7 +76,7 @@ const AddToHouseholdButton = ({
       {renderFormDialog({
         title: <>Enroll {clientName}</>,
         submitButtonText: `Enroll`,
-        pickListArgs: { projectId },
+        pickListArgs: { projectId, householdId },
       })}
     </>
   );

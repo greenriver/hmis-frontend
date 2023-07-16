@@ -55,6 +55,11 @@ const EditHouseholdMemberTable = ({
     [household, currentDashboardClientId]
   );
 
+  const anyMemberHasUnitAssignment = useMemo(() => {
+    if (!currentMembers) return false;
+    return !!currentMembers.find((hc) => hc.enrollment.currentUnit);
+  }, [currentMembers]);
+
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
     currentMembers.find(
       (hc) => hc.relationshipToHoH === RelationshipToHoH.SelfHeadOfHousehold
@@ -239,6 +244,16 @@ const EditHouseholdMemberTable = ({
           />
         ),
       },
+      ...(anyMemberHasUnitAssignment
+        ? [
+            {
+              header: 'Unit',
+              key: 'unit',
+              width: '15%',
+              render: 'enrollment.currentUnit.name',
+            },
+          ]
+        : []),
       {
         header: '',
         key: 'action',
@@ -268,6 +283,7 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     highlight,
     currentMembers,
+    anyMemberHasUnitAssignment,
   ]);
 
   return (
