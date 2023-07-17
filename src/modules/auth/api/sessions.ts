@@ -82,7 +82,7 @@ const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
 export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   const response = await fetchWithRetry('/hmis/user.json', {
     credentials: 'include',
-    retries: 1,
+    retries: 2,
     retryOn: csrfFailure,
   });
   handleResponseAuthenticationStatus(response);
@@ -103,7 +103,7 @@ export type LoginParams = {
 
 export async function sendSessionKeepalive() {
   const response = await fetchWithRetry('/hmis/session_keepalive', {
-    retries: 1,
+    retries: 2,
     retryOn: csrfFailure,
     method: 'POST',
     headers: {
@@ -122,7 +122,7 @@ export async function login({
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
   const response = await fetchWithRetry('/hmis/login', {
-    retries: 1,
+    retries: 2,
     retryOn: csrfFailure,
     method: 'POST',
     headers: {

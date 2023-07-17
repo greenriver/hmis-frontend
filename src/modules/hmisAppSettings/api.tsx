@@ -13,7 +13,7 @@ const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
 export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
   const response = await fetchWithRetry(`/hmis/app_settings`, {
     credentials: 'include',
-    retries: 1,
+    retries: 2,
     retryOn: csrfFailure,
 
     headers: {
