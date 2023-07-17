@@ -81,7 +81,7 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
     Sentry.captureException(networkError, { user: sentryUser() });
     if ((networkError as ServerError).statusCode == 401) {
       storage.removeUser();
-      storage.clearSessionExpiry();
+      storage.clearSessionTacking();
       reloadWindow();
     }
   }

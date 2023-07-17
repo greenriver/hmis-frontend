@@ -7,7 +7,7 @@ import {
 } from '@/modules/auth/components/Session/constants';
 import { currentTimeInSeconds } from '@/utils/time';
 
-const fireEvent = (expiry: storage.SessionExpiry | undefined) => {
+const fireEvent = (expiry: storage.HmisSessionTracking | undefined) => {
   document.dispatchEvent(
     new CustomEvent(HMIS_APP_SESSION_UID_EVENT, { detail: expiry })
   );
@@ -21,7 +21,7 @@ export const useSessionExpiryTracking = () => {
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
       switch (e.key) {
-        case storage.SESSION_STORAGE_KEY:
+        case storage.SESSION_TRACKING_STORAGE_KEY:
           fireEvent(e.newValue ? JSON.parse(e.newValue) : undefined);
           break;
       }
@@ -39,10 +39,10 @@ export const useSessionExpiryTracking = () => {
         : undefined;
       if (expiry) {
         fireEvent(expiry);
-        storage.setSessionExpiry(expiry);
+        storage.setSessionTracking(expiry);
       } else {
         fireEvent(undefined);
-        storage.clearSessionExpiry();
+        storage.clearSessionTacking();
       }
     };
 

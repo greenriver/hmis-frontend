@@ -64,7 +64,8 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-const handleResponseAuthenticationStatus = (response: Response) => {
+// check header and fire events for session tracking
+const trackSessionFromResponse = (response: Response) => {
   const { headers } = response;
   if (headers) {
     const userId = headers.get(HMIS_SESSION_UID_HEADER) as string | undefined;
@@ -80,12 +81,10 @@ const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
 };
 
 export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
-  const response = await fetchWithRetry('/hmis/user.json', {
+  const response = await fetch('/hmis/user.json', {
     credentials: 'include',
-    retries: 2,
-    retryOn: csrfFailure,
   });
-  handleResponseAuthenticationStatus(response);
+  trackSessionFromResponse(response);
 
   if (response.ok) {
     const user = await response.json();
@@ -112,7 +111,7 @@ export async function sendSessionKeepalive() {
       'X-CSRF-Token': getCsrfToken(),
     },
   });
-  handleResponseAuthenticationStatus(response);
+  trackSessionFromResponse(response);
   return response;
 }
 
@@ -138,7 +137,7 @@ export async function login({
       },
     }),
   });
-  handleResponseAuthenticationStatus(response);
+  trackSessionFromResponse(response);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);
@@ -156,9 +155,9 @@ export async function logout() {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
-  handleResponseAuthenticationStatus(response);
+  trackSessionFromResponse(response);
   storage.removeUser();
-  storage.clearSessionExpiry();
+  storage.clearSessionTacking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
   return response;

@@ -4,7 +4,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
-import { getSessionExpiry, getUser } from '@/modules/auth/api/storage';
+import { getSessionTracking, getUser } from '@/modules/auth/api/storage';
 import { HmisAuthContext } from '@/modules/auth/AuthContext';
 import { useSessionExpiryTracking } from '@/modules/auth/components/Session/useSessionExpiryTracking';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
@@ -18,7 +18,7 @@ import { currentTimeInSeconds } from '@/utils/time';
 
 // if the session has expired, return undefined
 const getCurrentUserWithCache = (): Promise<HmisUser | undefined> => {
-  const expiry = getSessionExpiry();
+  const expiry = getSessionTracking();
   const storedUser = getUser();
   if (expiry && storedUser) {
     if (

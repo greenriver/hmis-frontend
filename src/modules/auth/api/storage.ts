@@ -1,7 +1,7 @@
 import { HmisUser } from './sessions';
 
 export const USER_STORAGE_KEY = '_hmis_user_info';
-export const SESSION_STORAGE_KEY = '_hmis_session_ts';
+export const SESSION_TRACKING_STORAGE_KEY = '_hmis_session_ts';
 
 const parseJson = <T>(value: string | undefined) => {
   try {
@@ -22,19 +22,19 @@ export const getUser = () => {
 
 export const removeUser = () => localStorage.removeItem(USER_STORAGE_KEY);
 
-export interface SessionExpiry {
+export interface HmisSessionTracking {
   userId: string;
   timestamp: number;
 }
-export const setSessionExpiry = (session: SessionExpiry) => {
-  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
+export const setSessionTracking = (session: HmisSessionTracking) => {
+  localStorage.setItem(SESSION_TRACKING_STORAGE_KEY, JSON.stringify(session));
 };
 
-export const clearSessionExpiry = () => {
-  localStorage.removeItem(SESSION_STORAGE_KEY);
+export const clearSessionTacking = () => {
+  localStorage.removeItem(SESSION_TRACKING_STORAGE_KEY);
 };
 
-export const getSessionExpiry = () => {
-  const value = localStorage.getItem(SESSION_STORAGE_KEY);
-  return value ? (parseJson(value) as SessionExpiry) : undefined;
+export const getSessionTracking = () => {
+  const value = localStorage.getItem(SESSION_TRACKING_STORAGE_KEY);
+  return value ? (parseJson(value) as HmisSessionTracking) : undefined;
 };

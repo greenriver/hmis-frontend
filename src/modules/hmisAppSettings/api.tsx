@@ -1,21 +1,10 @@
-import fetchRetryCb, { RequestInitRetryParams } from 'fetch-retry';
-
 import { HmisAppSettings } from './types';
 
-import { isHmisResponseError } from '@/modules/auth/api/sessions';
 import { getCsrfToken } from '@/utils/csrf';
 
-const fetchWithRetry = fetchRetryCb(window.fetch);
-const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
-  return isHmisResponseError(error) && error.type === 'unverified_request';
-};
-
 export const fetchHmisAppSettings = async (): Promise<HmisAppSettings> => {
-  const response = await fetchWithRetry(`/hmis/app_settings`, {
+  const response = await fetch(`/hmis/app_settings`, {
     credentials: 'include',
-    retries: 2,
-    retryOn: csrfFailure,
-
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
