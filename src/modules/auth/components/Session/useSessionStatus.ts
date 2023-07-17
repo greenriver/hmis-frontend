@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
 import { useSessionExpiry } from '@/modules/auth/components/Session/useSessionExpiry';
@@ -17,36 +17,36 @@ const useSessionStatus = ({
   initialUser,
   promptToExtendBefore,
 }: Props): HmisSessionStatus => {
+  // expiry will change from network events
   const expiry = useSessionExpiry();
 
-  const { sessionDuration } = initialUser;
-  const [initialUserId] = useState(initialUser.id);
+  // useState prevents user from changing underneath us
+  const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
+  // if this session has ended
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
+  // how long until the session expires
   const [timeRemaining, setTimeRemaining] = useState(
     expiry ? sessionDuration : undefined
   );
 
-  const updateTimeRemaining = useCallback(() => {
-    const timestamp = expiry?.timestamp;
-
-    if (timestamp) {
-      const timeRemaining =
-        sessionDuration - (currentTimeInSeconds() - timestamp);
-      setTimeRemaining(timeRemaining > 0 ? timeRemaining : 0);
-    }
-  }, [expiry?.timestamp, sessionDuration]);
-
-  // update time remaining
+  // update time remaining in response to timestamp changes
+  const sessionExited = !!exitStatus;
   useEffect(() => {
-    if (!expiry?.timestamp) return;
-    if (exitStatus) return;
+    const timestamp = expiry?.timestamp;
+    if (!timestamp) return;
+    if (sessionExited) return;
+
+    const updateTimeRemaining = () => {
+      const value = sessionDuration - (currentTimeInSeconds() - timestamp);
+      setTimeRemaining(value > 0 ? value : 0);
+    };
 
     updateTimeRemaining();
     const now = currentTimeInSeconds();
     const timeouts: Array<NodeJS.Timeout> = [];
 
     // when to expire the session
-    const expireTimeout = expiry.timestamp + sessionDuration - now;
+    const expireTimeout = timestamp + sessionDuration - now;
 
     // seconds relative to session start to show warning
     const warnAfter = sessionDuration - promptToExtendBefore;
@@ -71,25 +71,20 @@ const useSessionStatus = ({
 
     // cleanup events
     return () => {
-      for (const timeout in timeouts) clearTimeout(timeout);
+      for (const timeout of timeouts) clearTimeout(timeout);
     };
-  }, [
-    expiry?.timestamp,
-    promptToExtendBefore,
-    sessionDuration,
-    exitStatus,
-    updateTimeRemaining,
-  ]);
+  }, [sessionExited, expiry?.timestamp, promptToExtendBefore, sessionDuration]);
 
+  // check if the session has ended due to expiration or invalid
   useEffect(() => {
     // checking the value we are setting is normally dangerous but it's okay
     // here since it's only set once
-    if (!exitStatus) {
-      if (expiry?.userId !== initialUserId) {
-        setExitStatus('invalid');
-      } else if (timeRemaining !== undefined && timeRemaining <= 1) {
-        setExitStatus('expired');
-      }
+    if (exitStatus) return;
+
+    if (expiry?.userId !== initialUserId) {
+      setExitStatus('invalid');
+    } else if (timeRemaining !== undefined && timeRemaining <= 1) {
+      setExitStatus('expired');
     }
   }, [exitStatus, timeRemaining, expiry?.userId, initialUserId]);
 
@@ -105,14 +100,14 @@ const useSessionStatus = ({
     console.info('exit status', exitStatus, currentTimeInSeconds());
   }, [exitStatus]);
   useEffect(() => {
-    console.info('initial user id', initialUser.id, currentTimeInSeconds());
-  }, [initialUser.id]);
+    console.info('initial user id', initialUserId, currentTimeInSeconds());
+  }, [initialUserId]);
   */
 
   return useMemo<HmisSessionStatus>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };
 
-    if (timeRemaining && timeRemaining <= promptToExtendBefore) {
+    if (timeRemaining && timeRemaining - 1 <= promptToExtendBefore) {
       return { status: 'valid', promptToExtend: true };
     }
     return { status: 'valid', promptToExtend: false };
