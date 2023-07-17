@@ -14,7 +14,7 @@ import {
   bindTrigger,
   usePopupState,
 } from 'material-ui-popup-state/hooks';
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { logout } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
@@ -23,11 +23,16 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
   const { user, setUser } = useAuth();
+  const [error, setError] = useState<Error>();
   const { manageAccountUrl } = useHmisAppSettings();
 
   const logoutUser = useCallback(() => {
-    return logout().then(() => setUser(undefined));
+    return logout()
+      .then(() => setUser(undefined))
+      .catch((e) => setError(e));
   }, [setUser]);
+
+  if (error) throw error;
 
   if (!user) return null;
 
