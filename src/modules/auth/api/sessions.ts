@@ -1,7 +1,9 @@
+import fetchRetryCb, { RequestInitRetryParams } from 'fetch-retry';
+
 import * as storage from '@/modules/auth/api/storage';
 import {
-  HMIS_SESSION_UID_HEADER,
   HMIS_REMOTE_SESSION_UID_EVENT,
+  HMIS_SESSION_UID_HEADER,
 } from '@/modules/auth/components/Session/constants';
 
 import apolloClient from '@/providers/apolloClient';
@@ -72,8 +74,17 @@ const handleResponseAuthenticationStatus = (response: Response) => {
   }
 };
 
+const fetchWithRetry = fetchRetryCb(window.fetch);
+const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
+  return isHmisResponseError(error) && error.type === 'unverified_request';
+};
+
 export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
-  const response = await fetch('/hmis/user.json', { credentials: 'include' });
+  const response = await fetchWithRetry('/hmis/user.json', {
+    credentials: 'include',
+    retries: 1,
+    retryOn: csrfFailure,
+  });
   handleResponseAuthenticationStatus(response);
 
   if (response.ok) {
@@ -91,7 +102,9 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const response = await fetch('/hmis/session_keepalive', {
+  const response = await fetchWithRetry('/hmis/session_keepalive', {
+    retries: 1,
+    retryOn: csrfFailure,
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -108,7 +121,9 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
-  const response = await fetch('/hmis/login', {
+  const response = await fetchWithRetry('/hmis/login', {
+    retries: 1,
+    retryOn: csrfFailure,
     method: 'POST',
     headers: {
       Accept: 'application/json',

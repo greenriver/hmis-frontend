@@ -94,6 +94,7 @@ const useSessionStatus = ({
   }, [exitStatus, timeRemaining, expiry?.userId, initialUserId]);
 
   // debugging
+  /*
   useEffect(() => {
     console.info('expiry', expiry, currentTimeInSeconds());
   }, [expiry]);
@@ -106,6 +107,7 @@ const useSessionStatus = ({
   useEffect(() => {
     console.info('initial user id', initialUser.id, currentTimeInSeconds());
   }, [initialUser.id]);
+  */
 
   return useMemo<HmisSessionStatus>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };

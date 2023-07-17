@@ -47,8 +47,7 @@ const blankRoutes: RouteObject[] = [
 ];
 
 const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
-  // const promptToExtendBefore = 60 * 5;
-  const promptToExtendBefore = 15;
+  const promptToExtendBefore = 60 * 5; // prompt when only 5 minutes left
   const sessionStatus = useSessionStatus({
     initialUser: user,
     promptToExtendBefore,
