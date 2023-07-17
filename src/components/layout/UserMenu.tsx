@@ -3,27 +3,31 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import {
   Button,
+  Link,
   ListItemIcon,
   ListItemText,
   Menu,
   MenuItem,
-  Link,
 } from '@mui/material';
 import {
-  usePopupState,
-  bindTrigger,
   bindMenu,
+  bindTrigger,
+  usePopupState,
 } from 'material-ui-popup-state/hooks';
 import React, { useCallback } from 'react';
 
+import { logout } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
-  const { logout, user } = useAuth();
-  const logoutUser = useCallback(() => logout(true), [logout]);
+  const { user } = useAuth();
   const { manageAccountUrl } = useHmisAppSettings();
+
+  const logoutUser = useCallback(() => {
+    return logout().then(() => (window.location.href = '/'));
+  }, []);
 
   if (!user) return null;
 

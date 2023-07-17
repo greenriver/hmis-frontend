@@ -1,12 +1,18 @@
-import * as storage from './storage';
+import * as storage from '@/modules/auth/api/storage';
+import {
+  UID_HEADER_NAME,
+  USER_ID_EVENT,
+} from '@/modules/auth/components/Session/constants';
 
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';
 
 export interface HmisUser {
+  id: string;
   email: string;
   name: string;
   phone?: string;
+  sessionDuration: number;
 }
 interface HmisError {
   type: string;
@@ -56,28 +62,24 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-export async function fetchCurrentUser(): Promise<HmisUser> {
-  const response = await fetch('/hmis/user.json', {
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
-    },
-  });
-  if (response.status == 200) {
-    return response.json() as Promise<HmisUser>;
+const handleAuthenticatedResponse = (response: Response) => {
+  const { headers } = response;
+  if (headers) {
+    const userId = headers.get(UID_HEADER_NAME) as string | undefined;
+    document.dispatchEvent(new CustomEvent(USER_ID_EVENT, { detail: userId }));
+  }
+};
+
+export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
+  const response = await fetch('/hmis/user.json', { credentials: 'include' });
+  handleAuthenticatedResponse(response);
+
+  if (response.ok) {
+    const user = await response.json();
+    return user.id ? user : undefined;
   } else {
     return Promise.reject(response.status);
   }
-}
-
-export async function getCurrentUser(): Promise<HmisUser> {
-  const storedUser = storage.getUser();
-  if (storedUser) {
-    return Promise.resolve(JSON.parse(storedUser) as HmisUser);
-  }
-  return fetchCurrentUser();
 }
 
 export type LoginParams = {
@@ -85,6 +87,19 @@ export type LoginParams = {
   password?: string;
   otpAttempt?: string;
 };
+
+export async function sendSessionKeepalive() {
+  const response = await fetch('/hmis/session_keepalive', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': getCsrfToken(),
+    },
+  });
+  handleAuthenticatedResponse(response);
+  return response;
+}
 
 export async function login({
   email,
@@ -106,6 +121,7 @@ export async function login({
       },
     }),
   });
+  handleAuthenticatedResponse(response);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);
@@ -119,12 +135,13 @@ export async function login({
 }
 
 export async function logout() {
-  console.log('LOGOUT');
   const response = await fetch('/hmis/logout', {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
+  handleAuthenticatedResponse(response);
   storage.removeUser();
+  storage.clearSessionExpiry();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();
   return response;
@@ -137,9 +154,8 @@ export const sentryUser = (user?: HmisUser) => {
       username: user.name,
     };
   }
-  const storedUser = storage.getUser();
-  if (storedUser) {
-    const storedHmisUser = JSON.parse(storedUser) as HmisUser;
+  const storedHmisUser = storage.getUser();
+  if (storedHmisUser) {
     return {
       email: storedHmisUser.email,
       username: storedHmisUser.name,

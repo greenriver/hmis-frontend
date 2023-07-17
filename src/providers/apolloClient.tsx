@@ -1,4 +1,10 @@
-import { ApolloClient, InMemoryCache, from, ServerError } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  from,
+  ServerError,
+  ApolloLink,
+} from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
@@ -7,7 +13,12 @@ import fetch from 'cross-fetch';
 
 import { sentryUser } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
+import {
+  UID_HEADER_NAME,
+  USER_ID_EVENT,
+} from '@/modules/auth/components/Session/constants';
 import { getCsrfToken } from '@/utils/csrf';
+import { reloadWindow } from '@/utils/location';
 
 const batchLink = new BatchHttpLink({
   uri: '/hmis/hmis-gql',
@@ -27,6 +38,23 @@ const authLink = setContext(
     };
   }
 );
+
+const sessionExpiryLink = new ApolloLink((operation, forward) => {
+  return forward(operation).map((response) => {
+    const context = operation.getContext();
+    const {
+      response: { headers },
+    } = context;
+
+    if (headers) {
+      const userId = headers.get(UID_HEADER_NAME) as string | undefined;
+      document.dispatchEvent(
+        new CustomEvent(USER_ID_EVENT, { detail: userId })
+      );
+    }
+    return response;
+  });
+});
 
 /**
  * Handle errors on GraphQL chain.
@@ -53,7 +81,8 @@ const errorLink = onError(({ operation, graphQLErrors, networkError }) => {
     Sentry.captureException(networkError, { user: sentryUser() });
     if ((networkError as ServerError).statusCode == 401) {
       storage.removeUser();
-      location.reload();
+      storage.clearSessionExpiry();
+      reloadWindow();
     }
   }
 });
@@ -69,7 +98,7 @@ export const cache = new InMemoryCache({
 });
 
 const apolloClient = new ApolloClient({
-  link: from([errorLink, authLink, batchLink]),
+  link: from([errorLink, authLink, sessionExpiryLink, batchLink]),
   cache,
   credentials: 'same-origin',
 });

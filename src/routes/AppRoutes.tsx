@@ -1,16 +1,24 @@
 import { useMemo } from 'react';
-import { Navigate, useLocation, useRoutes } from 'react-router-dom';
+import {
+  Navigate,
+  RouteObject,
+  useLocation,
+  useRoutes,
+} from 'react-router-dom';
 
 import { protectedRoutes } from './protected';
 
+import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';
-import useAuth, { RouteLocationState } from '@/modules/auth/hooks/useAuth';
+import SessionStatusManager from '@/modules/auth/components/Session/SessionStatusManager';
+import useSessionStatus from '@/modules/auth/components/Session/useSessionStatus';
+import useAuth from '@/modules/auth/hooks/useAuth';
+import { RouteLocationState } from '@/modules/hmisAppSettings/types';
 
-const AppRoutes = () => {
+const PublicRoutes: React.FC = () => {
   const { pathname, state } = useLocation();
-  const { user } = useAuth();
 
-  const publicRoutes = useMemo(() => {
+  const publicRoutes = useMemo<RouteObject[]>(() => {
     // Pass current pathname as "prev" so we can redirect to the previous
     // page after a successful login.
     // In some cases we don't want to do that (e.g. after "Sign Out" is clicked), we use the 'clearPrev' flag for that.
@@ -28,10 +36,40 @@ const AppRoutes = () => {
       },
     ];
   }, [state, pathname]);
+  return useRoutes(publicRoutes);
+};
 
-  const routes = user ? protectedRoutes : publicRoutes;
-  const element = useRoutes(routes);
-  return element;
+const blankRoutes: RouteObject[] = [
+  {
+    path: '*',
+    element: <></>,
+  },
+];
+
+const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
+  // const warnBefore = 60 * 5; // show warning when 5 minutes remain
+  const warnBefore = 15;
+  const sessionStatus = useSessionStatus({
+    initialUser: user,
+    warnBefore,
+  });
+
+  return (
+    <>
+      <SessionStatusManager status={sessionStatus} />
+      {useRoutes(
+        sessionStatus == 'valid' || sessionStatus == 'expiresSoon'
+          ? protectedRoutes
+          : blankRoutes
+      )}
+    </>
+  );
+};
+
+const AppRoutes = () => {
+  const { user } = useAuth();
+
+  return user ? <ProtectedRoutes user={user} /> : <PublicRoutes />;
 };
 
 export default AppRoutes;

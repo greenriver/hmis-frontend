@@ -1,58 +1,101 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Typography } from '@mui/material';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { fetchHmisAppSettings } from './api';
-import { HmisAppSettingsContext } from './Context';
-import { HmisAppSettings } from './types';
-
+import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
+import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
+import { getSessionExpiry, getUser } from '@/modules/auth/api/storage';
+import { HmisAuthContext } from '@/modules/auth/AuthContext';
+import { useSessionExpiryTracking } from '@/modules/auth/components/Session/useSessionExpiryTracking';
+import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
+import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
+import {
+  HmisAppSettings,
+  HmisAuthState,
+} from '@/modules/hmisAppSettings/types';
+import { reloadWindow } from '@/utils/location';
+import { currentTimeInSeconds } from '@/utils/time';
+
+// if the session has expired, return undefined
+const getCurrentUserWithCache = (): Promise<HmisUser | undefined> => {
+  const expiry = getSessionExpiry();
+  const storedUser = getUser();
+  if (expiry && storedUser) {
+    if (
+      expiry.timestamp + storedUser.sessionDuration <
+      currentTimeInSeconds()
+    ) {
+      return Promise.resolve(storedUser);
+    }
+  }
+  return fetchCurrentUser();
+};
 
 interface Props {
   children: ReactNode;
 }
 export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
-  // TODO: use browser storage, don't need to fetch on each page load
-  const [fetched, setFetched] = useState<HmisAppSettings>();
+  const [appSettings, setAppSettings] = useState<HmisAppSettings>();
+  const [user, setUser] = useState<HmisUser>();
   const [error, setError] = useState<Error>();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
-  const fetchAppSettings = useCallback(() => {
-    fetchHmisAppSettings()
-      .then((resp) => {
-        setFetched(resp);
-        setError(undefined);
-      })
-      .catch(setError);
+  // auth state for global context
+  const authState = useMemo<HmisAuthState>(
+    () => ({
+      user: user,
+      setUser,
+    }),
+    [user]
+  );
+
+  // tracking needs to be in place before we start making API calls
+  useSessionExpiryTracking();
+
+  // fetch data from remote
+  const fetchFromRemote = useCallback(() => {
+    setLoading(true);
+    return Promise.all([
+      fetchHmisAppSettings().then(setAppSettings),
+      getCurrentUserWithCache().then(setUser),
+    ])
+      .then(() => setError(undefined))
+      .catch(setError)
+      .finally(() => setLoading(false));
   }, []);
 
+  // initial load
   useEffect(() => {
-    const controller = new AbortController();
-    fetchAppSettings();
-    return () => controller.abort();
-  }, [fetchAppSettings]);
+    fetchFromRemote();
+  }, [fetchFromRemote]);
 
+  // handle side-effects
   useEffect(() => {
-    if (fetched?.appName) document.title = fetched.appName;
-  }, [fetched]);
+    if (appSettings?.appName) document.title = appSettings.appName;
+  }, [appSettings?.appName]);
 
-  useEffect(() => {
-    if (!error) return;
-    const cause = error?.cause as any;
-    // Refetch settings if the session timed out
-    if (cause?.error?.type === 'timeout') {
-      fetchAppSettings();
-      navigate('/', { state: { clearPrev: true }, replace: true });
-    } else {
-      // If some other error happened, reload
-      window.location.reload();
-    }
-  }, [error, fetchAppSettings, navigate]);
+  if (loading) return <Loading />;
+  if (error) {
+    return (
+      <ConfirmationDialog
+        open={true}
+        confirmText='Continue'
+        title='An error occured'
+        loading={loading}
+        hideCancelButton
+        onConfirm={reloadWindow}
+      >
+        <Typography>Failed to connect to the server</Typography>
+      </ConfirmationDialog>
+    );
+  }
 
-  if (!fetched) return <Loading />;
-
+  if (!appSettings) throw new Error(); // shouldn't get here
   return (
-    <HmisAppSettingsContext.Provider value={fetched}>
-      {children}
+    <HmisAppSettingsContext.Provider value={appSettings}>
+      <HmisAuthContext.Provider value={authState}>
+        {children}
+      </HmisAuthContext.Provider>
     </HmisAppSettingsContext.Provider>
   );
 };

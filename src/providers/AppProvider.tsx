@@ -9,7 +9,6 @@ import apolloClient from './apolloClient';
 
 import Loading from '@/components/elements/Loading';
 import MergedThemeProvider from '@/config/MergedThemeProvider';
-import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { HmisAppSettingsProvider } from '@/modules/hmisAppSettings/Provider';
 
@@ -21,17 +20,17 @@ const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
       <SentryErrorBoundary fullpage>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <ApolloProvider client={apolloClient}>
+        <MergedThemeProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BrowserRouter>
               <HmisAppSettingsProvider>
-                <MergedThemeProvider>
-                  <AuthProvider>{children}</AuthProvider>
-                </MergedThemeProvider>
+                <ApolloProvider client={apolloClient}>
+                  {children}
+                </ApolloProvider>
               </HmisAppSettingsProvider>
             </BrowserRouter>
-          </ApolloProvider>
-        </LocalizationProvider>
+          </LocalizationProvider>
+        </MergedThemeProvider>
       </SentryErrorBoundary>
     </React.Suspense>
   );

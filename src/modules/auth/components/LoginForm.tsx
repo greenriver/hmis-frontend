@@ -1,13 +1,15 @@
 import { Alert, Box, Link } from '@mui/material';
 import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { isHmisResponseError } from '../api/sessions';
+import { HmisUser, isHmisResponseError, login } from '../api/sessions';
 
 import OneTimePassword from './OneTimePassword';
 
 import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import { RouteLocationState } from '@/modules/hmisAppSettings/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
 const errorMessage = (error: Error) => {
@@ -20,18 +22,49 @@ const errorMessage = (error: Error) => {
 };
 
 const LoginForm = () => {
-  const { login, prompt2fa, loading, error } = useAuth();
+  const [error, setError] = useState<Error>();
+  const [prompt2fa, setPrompt2fa] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const { setUser } = useAuth();
   const { resetPasswordUrl } = useHmisAppSettings();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  if (error) console.error(`Error logging in: ${error.message}`);
+  const navigate = useNavigate();
+  const { state } = useLocation();
+
+  const handleSuccess = useCallback(
+    (user: HmisUser) => {
+      setUser(user);
+      navigate((state as RouteLocationState)?.prev || '/');
+    },
+    [navigate, state, setUser]
+  );
 
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
-      login({ email, password });
+      login({ email, password })
+        .then((user) => {
+          setPrompt2fa(false);
+          setLoading(false);
+          handleSuccess(user);
+        })
+        .catch((error: Error) => {
+          if (isHmisResponseError(error) && error.type === 'mfa_required') {
+            setPrompt2fa(true);
+            setLoading(false);
+          } else if (
+            isHmisResponseError(error) &&
+            error.type === 'unverified_request'
+          ) {
+            console.log('CSRF token is expired, fetching a new one...');
+          } else {
+            setError(error);
+            setLoading(false);
+          }
+        });
     },
-    [email, login, password]
+    [handleSuccess, email, password]
   );
 
   const onKeyDown: KeyboardEventHandler<HTMLDivElement> = useCallback(
@@ -44,7 +77,7 @@ const LoginForm = () => {
     [handleSubmit]
   );
 
-  if (prompt2fa) return <OneTimePassword />;
+  if (prompt2fa) return <OneTimePassword onSuccess={handleSuccess} />;
 
   return (
     <Box component='form' onSubmit={handleSubmit} noValidate>
