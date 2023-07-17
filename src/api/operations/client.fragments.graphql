@@ -41,6 +41,7 @@ fragment ClientFields on Client {
 }
 
 fragment ClientName on Client {
+  id
   firstName
   middleName
   lastName

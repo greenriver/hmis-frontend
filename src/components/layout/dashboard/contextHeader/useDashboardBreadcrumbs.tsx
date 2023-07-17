@@ -1,12 +1,15 @@
+import { merge } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { ClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { EnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import useCurrentPath from '@/hooks/useCurrentPath';
 import { clientBriefName, enrollmentName } from '@/modules/hmis/hmisUtil';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
 import {
   ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
   Routes,
 } from '@/routes/routes';
@@ -203,6 +206,36 @@ export const useClientBreadcrumbConfig = (
         parent: ClientDashboardRoutes.FILES,
       },
     };
+  }, [context]);
+};
+
+export const useEnrollmentBreadcrumbConfig = (
+  context: EnrollmentDashboardContext | undefined
+): CrumbConfig => {
+  return useMemo(() => {
+    if (!context) return {};
+
+    const clientRoot = ClientDashboardRoutes.PROFILE;
+    const enrollmentRoot = EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW;
+    const defaults: CrumbConfig = {
+      [clientRoot]: { title: clientBriefName(context.client) },
+    };
+
+    Object.values(EnrollmentDashboardRoutes).forEach((path) => {
+      if (path === enrollmentRoot) {
+        defaults[path] = {
+          parent: clientRoot,
+          title: context.enrollment
+            ? enrollmentName(context.enrollment)
+            : 'Enrollment',
+        };
+      } else {
+        defaults[path] = { parent: enrollmentRoot, title: 'Page' };
+      }
+    });
+
+    const overrides = {};
+    return merge(defaults, overrides);
   }, [context]);
 };
 

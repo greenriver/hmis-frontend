@@ -3,6 +3,7 @@ import { Navigate, Outlet } from 'react-router-dom';
 
 import {
   ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
   ProjectDashboardRoutes,
   Routes,
 } from './routes';
@@ -28,6 +29,7 @@ import CreateClient from '@/components/pages/CreateClient';
 import CreateOrganization from '@/components/pages/CreateOrganization';
 import CreateProject from '@/components/pages/CreateProject';
 import EditOrganization from '@/components/pages/EditOrganization';
+import EnrollmentDashboard from '@/components/pages/EnrollmentDashboard';
 import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
@@ -272,6 +274,25 @@ export const protectedRoutes: RouteNode[] = [
         ),
       },
       {
+        path: Routes.ENROLLMENT_DASHBOARD,
+        element: (
+          <ClientRoute view>
+            <EnrollmentDashboard />
+          </ClientRoute>
+        ),
+        children: [
+          { path: '', element: <Navigate to='overview' replace /> },
+          {
+            path: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+            element: (
+              <ClientRoute view>
+                <ViewEnrollment />
+              </ClientRoute>
+            ),
+          },
+        ],
+      },
+      {
         path: Routes.CLIENT_DASHBOARD,
         element: (
           <ClientRoute view>
@@ -322,17 +343,17 @@ export const protectedRoutes: RouteNode[] = [
               </EnrollmentsRoute>
             ),
           },
-          {
-            path: ClientDashboardRoutes.VIEW_ENROLLMENT,
-            element: (
-              <EnrollmentsRoute
-                view
-                redirectRoute={ClientDashboardRoutes.PROFILE}
-              >
-                <ViewEnrollment />
-              </EnrollmentsRoute>
-            ),
-          },
+          // {
+          //   path: ClientDashboardRoutes.VIEW_ENROLLMENT,
+          //   element: (
+          //     <EnrollmentsRoute
+          //       view
+          //       redirectRoute={ClientDashboardRoutes.PROFILE}
+          //     >
+          //       <ViewEnrollment />
+          //     </EnrollmentsRoute>
+          //   ),
+          // },
           {
             path: ClientDashboardRoutes.EDIT_HOUSEHOLD,
             element: (

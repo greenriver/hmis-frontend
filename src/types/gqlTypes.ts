@@ -8107,6 +8107,7 @@ export type ClientFieldsFragment = {
 
 export type ClientNameFragment = {
   __typename?: 'Client';
+  id: string;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -8623,7 +8624,14 @@ export type GetClientEnrollmentsQuery = {
           projectName: string;
           projectType?: ProjectType | null;
         };
-        client: { __typename?: 'Client'; id: string };
+        client: {
+          __typename?: 'Client';
+          id: string;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+        };
         access: {
           __typename?: 'EnrollmentAccess';
           id: string;
@@ -8727,7 +8735,14 @@ export type GetClientServicesQuery = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          client: { __typename?: 'Client'; id: string };
+          client: {
+            __typename?: 'Client';
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
           access: {
             __typename?: 'EnrollmentAccess';
             id: string;
@@ -8961,7 +8976,14 @@ export type CreateEnrollmentMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      client: { __typename?: 'Client'; id: string };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
       access: {
         __typename?: 'EnrollmentAccess';
         id: string;
@@ -9266,7 +9288,14 @@ export type GetEnrollmentQuery = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    client: { __typename?: 'Client'; id: string };
+    client: {
+      __typename?: 'Client';
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
     access: {
       __typename?: 'EnrollmentAccess';
       id: string;
@@ -9354,7 +9383,14 @@ export type GetEnrollmentWithHouseholdQuery = {
       projectName: string;
       projectType?: ProjectType | null;
     };
-    client: { __typename?: 'Client'; id: string };
+    client: {
+      __typename?: 'Client';
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
     access: {
       __typename?: 'EnrollmentAccess';
       id: string;
@@ -9834,7 +9870,14 @@ export type EnrollmentFieldsFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  client: { __typename?: 'Client'; id: string };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
@@ -9915,7 +9958,14 @@ export type EnrollmentWithHouseholdFragmentFragment = {
     projectName: string;
     projectType?: ProjectType | null;
   };
-  client: { __typename?: 'Client'; id: string };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
   access: {
     __typename?: 'EnrollmentAccess';
     id: string;
@@ -12124,7 +12174,14 @@ export type SubmitFormMutation = {
             projectName: string;
             projectType?: ProjectType | null;
           };
-          client: { __typename?: 'Client'; id: string };
+          client: {
+            __typename?: 'Client';
+            id: string;
+            firstName?: string | null;
+            middleName?: string | null;
+            lastName?: string | null;
+            nameSuffix?: string | null;
+          };
           access: {
             __typename?: 'EnrollmentAccess';
             id: string;
@@ -12764,7 +12821,14 @@ export type UpdateRelationshipToHoHMutation = {
         projectName: string;
         projectType?: ProjectType | null;
       };
-      client: { __typename?: 'Client'; id: string };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
       access: {
         __typename?: 'EnrollmentAccess';
         id: string;
@@ -16077,6 +16141,7 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
 `;
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
+    id
     firstName
     middleName
     lastName
@@ -16271,7 +16336,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     householdShortId
     householdSize
     client {
-      id
+      ...ClientName
     }
     access {
       ...EnrollmentAccessFields
@@ -16284,6 +16349,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       }
     }
   }
+  ${ClientNameFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
