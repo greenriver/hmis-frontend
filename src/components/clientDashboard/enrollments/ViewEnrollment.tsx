@@ -7,7 +7,7 @@ import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
 import TitleCard from '@/components/elements/TitleCard';
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import IdDisplay from '@/modules/hmis/components/IdDisplay';
@@ -15,12 +15,12 @@ import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
-import { ClientDashboardRoutes, Routes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
 import { FormRole } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const ViewEnrollment = () => {
-  const { enrollment } = useClientDashboardContext();
+  const { enrollment } = useEnrollmentDashboardContext();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
     clientId: string;
@@ -61,7 +61,7 @@ const ViewEnrollment = () => {
                 permissions={['canEditEnrollments']}
               >
                 <ButtonLink
-                  to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+                  to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
                     clientId,
                     enrollmentId,
                     formRole: FormRole.Update,

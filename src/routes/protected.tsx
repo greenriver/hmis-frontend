@@ -9,7 +9,7 @@ import {
 } from './routes';
 
 import ClientRoute from '@/components/accessWrappers/ClientRoute';
-import EnrollmentsRoute from '@/components/accessWrappers/EnrollmentRoute';
+import EnrollmentRoute from '@/components/accessWrappers/EnrollmentRoute';
 import FileEditRoute from '@/components/accessWrappers/FileEditRoute';
 import ProjectEditRoute from '@/components/accessWrappers/ProjectEditRoute';
 import AllFiles from '@/components/clientDashboard/AllFiles';
@@ -34,17 +34,13 @@ import File from '@/components/pages/File';
 import NotFound from '@/components/pages/NotFound';
 import Organization from '@/components/pages/Organization';
 import Dashboard from '@/components/pages/UserDashboard';
-import useSafeParams from '@/hooks/useSafeParams';
 import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
-import {
-  ClientPermissionsFilter,
-  RootPermissionsFilter,
-} from '@/modules/permissions/PermissionsFilters';
+import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
 import EditProject from '@/modules/projects/components/EditProject';
@@ -63,7 +59,6 @@ import ProjectReferralPosting from '@/modules/projects/components/ProjectReferra
 import ProjectReferrals from '@/modules/projects/components/ProjectReferrals';
 import ClientServices from '@/modules/services/components/ClientServices';
 import Units from '@/modules/units/components/Units';
-import generateSafePath from '@/utils/generateSafePath';
 
 const App = () => {
   return (
@@ -77,18 +72,14 @@ const App = () => {
   );
 };
 
-const InternalError: React.FC = () => {
-  throw new Error('This is a test error');
-};
-
-const ParamsWrapper = <T extends { [x: string]: string } = any>({
-  children,
-}: {
-  children: (params: T) => JSX.Element;
-}): JSX.Element => {
-  const params = useSafeParams() as T;
-  return children(params);
-};
+// const ParamsWrapper = <T extends { [x: string]: string } = any>({
+//   children,
+// }: {
+//   children: (params: T) => JSX.Element;
+// }): JSX.Element => {
+//   const params = useSafeParams() as T;
+//   return children(params);
+// };
 
 interface RouteNode {
   path: string;
@@ -111,7 +102,7 @@ export const protectedRoutes: RouteNode[] = [
             element: <Project />,
           },
           {
-            path: ProjectDashboardRoutes.ENROLLMENTS,
+            path: ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
             element: <ProjectEnrollments />,
           },
           {
@@ -225,7 +216,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute
                 permissions={['canEditEnrollments']}
-                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
+                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
               >
                 <AddServices />
               </ProjectEditRoute>
@@ -236,7 +227,7 @@ export const protectedRoutes: RouteNode[] = [
             element: (
               <ProjectEditRoute
                 permissions={['canEnrollClients']}
-                redirectRoute={ProjectDashboardRoutes.ENROLLMENTS}
+                redirectRoute={ProjectDashboardRoutes.PROJECT_ENROLLMENTS}
               >
                 <CreateHouseholdPage />
               </ProjectEditRoute>
@@ -275,116 +266,99 @@ export const protectedRoutes: RouteNode[] = [
       },
       {
         path: Routes.ENROLLMENT_DASHBOARD,
-        element: (
-          <ClientRoute view>
-            <EnrollmentDashboard />
-          </ClientRoute>
-        ),
+        // No need for a permission filter on th Enrollment Dashboard.
+        // If the enrollment is not found, the EnrollmentDashboard component will render NotFound.
+        element: <EnrollmentDashboard />,
         children: [
           { path: '', element: <Navigate to='overview' replace /> },
           {
             path: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+            // No perm needed because it only requires enrollment visibility
+            element: <ViewEnrollment />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
             element: (
-              <ClientRoute view>
-                <ViewEnrollment />
-              </ClientRoute>
+              <EnrollmentRoute
+                permissions='canEditEnrollments'
+                redirectRoute={EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW}
+              >
+                <EditHouseholdPage />
+              </EnrollmentRoute>
             ),
+          },
+          {
+            path: EnrollmentDashboardRoutes.ASSESSMENT,
+            // No perm needed because it only requires enrollment visibility
+            element: <AssessmentPage />,
           },
         ],
       },
       {
         path: Routes.CLIENT_DASHBOARD,
-        element: (
-          <ClientRoute view>
-            <ClientDashboard />
-          </ClientRoute>
-        ),
+        // No need for a permission filter on th Client Dashboard.
+        // If the client is not found, the ClientDashboard component will render NotFound.
+        element: <ClientDashboard />,
         children: [
           { path: '', element: <Navigate to='profile' replace /> },
           {
             path: ClientDashboardRoutes.PROFILE,
-            element: (
-              <ClientRoute view>
-                <Profile />
-              </ClientRoute>
-            ),
+            element: <Profile />,
           },
           {
             path: ClientDashboardRoutes.EDIT,
             element: (
-              <ParamsWrapper<{ clientId: string }>>
-                {({ clientId }) => (
-                  <ClientPermissionsFilter
-                    id={clientId}
-                    permissions='canEditClient'
-                    otherwise={
-                      <Navigate
-                        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                          clientId,
-                        })}
-                        replace
-                      />
-                    }
-                  >
-                    <EditClient />
-                  </ClientPermissionsFilter>
-                )}
-              </ParamsWrapper>
+              <ClientRoute
+                permissions='canEditClient'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <EditClient />
+              </ClientRoute>
             ),
           },
           {
             path: ClientDashboardRoutes.NEW_ENROLLMENT,
             element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.ALL_ENROLLMENTS}
+              <ClientRoute
+                permissions='canEditEnrollments'
+                redirectRoute={ClientDashboardRoutes.CLIENT_ENROLLMENTS}
               >
                 <NewEnrollment />
-              </EnrollmentsRoute>
+              </ClientRoute>
             ),
           },
-          // {
-          //   path: ClientDashboardRoutes.VIEW_ENROLLMENT,
-          //   element: (
-          //     <EnrollmentsRoute
-          //       view
-          //       redirectRoute={ClientDashboardRoutes.PROFILE}
-          //     >
-          //       <ViewEnrollment />
-          //     </EnrollmentsRoute>
-          //   ),
-          // },
+
           {
-            path: ClientDashboardRoutes.EDIT_HOUSEHOLD,
+            path: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
             element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <EditHouseholdPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.ASSESSMENT,
-            element: (
-              <EnrollmentsRoute
-                view
-                redirectRoute={ClientDashboardRoutes.PROFILE}
-              >
-                <AssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.ALL_ENROLLMENTS,
-            element: (
-              <EnrollmentsRoute
-                view
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllEnrollments />
-              </EnrollmentsRoute>
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.ASSESSMENTS,
+            element: (
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <AllAssessments />
+              </ClientRoute>
+            ),
+          },
+          {
+            path: ClientDashboardRoutes.SERVICES,
+            element: (
+              <ClientRoute
+                permissions='canViewEnrollmentDetails'
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <ClientServices />
+              </ClientRoute>
             ),
           },
           {
@@ -398,54 +372,21 @@ export const protectedRoutes: RouteNode[] = [
               </RootPermissionsFilter>
             ),
           },
-          {
-            path: ClientDashboardRoutes.ASSESSMENTS,
-            element: (
-              <EnrollmentsRoute
-                view
-                redirectRoute={ClientDashboardRoutes.PROFILE}
-              >
-                <AllAssessments />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.SERVICES,
-            element: (
-              <EnrollmentsRoute
-                view
-                redirectRoute={ClientDashboardRoutes.PROFILE}
-              >
-                <ClientServices />
-              </EnrollmentsRoute>
-            ),
-          },
+
           { path: ClientDashboardRoutes.NOTES, element: null },
           {
             path: ClientDashboardRoutes.FILES,
             element: (
-              <ParamsWrapper<{ clientId: string }>>
-                {({ clientId }) => (
-                  <ClientPermissionsFilter
-                    id={clientId}
-                    permissions={[
-                      'canViewAnyConfidentialClientFiles',
-                      'canViewAnyNonconfidentialClientFiles',
-                      'canManageOwnClientFiles',
-                    ]}
-                    otherwise={
-                      <Navigate
-                        to={generateSafePath(ClientDashboardRoutes.PROFILE, {
-                          clientId,
-                        })}
-                        replace
-                      />
-                    }
-                  >
-                    <AllFiles />
-                  </ClientPermissionsFilter>
-                )}
-              </ParamsWrapper>
+              <ClientRoute
+                permissions={[
+                  'canViewAnyConfidentialClientFiles',
+                  'canViewAnyNonconfidentialClientFiles',
+                  'canManageOwnClientFiles',
+                ]}
+                redirectRoute={ClientDashboardRoutes.PROFILE}
+              >
+                <AllFiles />
+              </ClientRoute>
             ),
           },
           {
@@ -487,11 +428,6 @@ export const protectedRoutes: RouteNode[] = [
             element: <AdminReferralPosting />,
           },
         ],
-      },
-      // Route for testing sentry errors
-      {
-        path: '/internal-error',
-        element: <InternalError />,
       },
       { path: '/', element: <Dashboard /> },
       { path: '*', element: <NotFound /> },

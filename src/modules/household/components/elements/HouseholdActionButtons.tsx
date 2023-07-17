@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
@@ -63,7 +63,7 @@ const HouseholdActionButtons = ({
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
       <ButtonLink
         Icon={PeopleIcon}
-        to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
+        to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
         })}
@@ -76,7 +76,7 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             icon={PostAddIcon}
-            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
               clientId,
               enrollmentId,
               formRole: AssessmentRole.Intake,
@@ -93,7 +93,7 @@ const HouseholdActionButtons = ({
       {canIntake && (
         <ButtonLink
           icon={PostAddIcon}
-          to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+          to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
             clientId,
             enrollmentId,
             formRole: AssessmentRole.Annual,
@@ -107,7 +107,7 @@ const HouseholdActionButtons = ({
           <ButtonLink
             disabled={!canExit}
             icon={ExitToAppIcon}
-            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
               clientId,
               enrollmentId,
               formRole: AssessmentRole.Exit,

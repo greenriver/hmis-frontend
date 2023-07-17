@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   AssessmentRole,
@@ -93,10 +96,13 @@ const DeleteAssessmentButton = ({
               <Typography>
                 If there are other household members, you may need to{' '}
                 <RouterLink
-                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
-                    clientId,
-                    enrollmentId,
-                  })}
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
+                    {
+                      clientId,
+                      enrollmentId,
+                    }
+                  )}
                   variant='inherit'
                 >
                   change the Head of Household

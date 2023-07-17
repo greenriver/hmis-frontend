@@ -48,6 +48,12 @@ fragment ClientName on Client {
   nameSuffix
 }
 
+fragment ClientNameDobVet on Client {
+  ...ClientName
+  dob
+  veteranStatus
+}
+
 fragment ClientNameObjectFields on ClientName {
   id
   first

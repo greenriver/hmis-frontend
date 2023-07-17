@@ -13,7 +13,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -46,7 +46,7 @@ const HouseholdMemberTable = ({
         render: (h: HouseholdClientFieldsFragment) => {
           const isCurrentClient = h.client.id === clientId;
           const viewEnrollmentPath = generateSafePath(
-            ClientDashboardRoutes.VIEW_ENROLLMENT,
+            EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
             {
               clientId: h.client.id,
               enrollmentId: h.enrollment.id,

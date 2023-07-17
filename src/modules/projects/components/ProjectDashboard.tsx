@@ -106,7 +106,10 @@ const ProjectDashboard: React.FC = () => {
           {
             id: 'enrollments',
             title: 'Enrollments',
-            path: generateSafePath(ProjectDashboardRoutes.ENROLLMENTS, params),
+            path: generateSafePath(
+              ProjectDashboardRoutes.PROJECT_ENROLLMENTS,
+              params
+            ),
           },
           ...(globalFeatureFlags?.externalReferrals
             ? [

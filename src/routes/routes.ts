@@ -19,13 +19,8 @@ const clientDashboardRoutes = {
   PROFILE: 'profile',
   EDIT: 'profile/edit',
   NEW_ENROLLMENT: 'enrollments/new',
-  VIEW_ENROLLMENT: 'enrollments/:enrollmentId',
-  EDIT_HOUSEHOLD: 'enrollments/:enrollmentId/edit-household',
-  ASSESSMENT: 'enrollments/:enrollmentId/assessments/:formRole/:assessmentId?',
   SERVICES: 'services',
-  NEW_SERVICE: 'enrollments/:enrollmentId/services/new',
-  EDIT_SERVICE: 'enrollments/:enrollmentId/services/:serviceId/edit',
-  ALL_ENROLLMENTS: 'enrollments',
+  CLIENT_ENROLLMENTS: 'enrollments',
   AUDIT_HISTORY: 'history',
   ASSESSMENTS: 'assessments',
   NOTES: 'notes',
@@ -39,15 +34,16 @@ const clientDashboardRoutes = {
 
 const enrollmentDashboardRoutes = {
   ENROLLMENT_OVERVIEW: 'overview',
+  EDIT_HOUSEHOLD: 'edit-household',
+  ASSESSMENT: 'assessments/:formRole/:assessmentId?',
 };
 
 // Routes within the project dashboard
 const projectDashboardRoutes = {
   OVERVIEW: 'overview',
   EDIT_PROJECT: 'overview/edit',
-
   // Enrollment-related
-  ENROLLMENTS: 'enrollments',
+  PROJECT_ENROLLMENTS: 'enrollments',
   ADD_SERVICES: 'add-services',
   ADD_HOUSEHOLD: 'add-household',
   REFERRALS: 'referrals',
@@ -105,20 +101,20 @@ export const ProjectDashboardRoutes: {
   [k in ProjectSubRoutesType]: string;
 } = projectDashboardRoutes;
 
-export const HIDE_NAV_ROUTES = [ClientDashboardRoutes.ASSESSMENT];
+export const HIDE_NAV_ROUTES = [EnrollmentDashboardRoutes.ASSESSMENT];
 
 export const FOCUS_MODE_ROUTES = [
   // {
   //   route: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-  //   previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
+  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
   // },
   // {
   //   route: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-  //   previous: ClientDashboardRoutes.VIEW_ENROLLMENT,
+  //   previous: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
   // },
 ];
 
 export const PRINTABLE_ROUTES = [
-  ClientDashboardRoutes.ASSESSMENT,
+  EnrollmentDashboardRoutes.ASSESSMENT,
   ProjectDashboardRoutes.ESG_FUNDING_REPORT,
 ];

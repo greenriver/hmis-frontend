@@ -36,7 +36,7 @@ export const useDashboardNavItems = (client?: ClientFieldsFragment) => {
                   id: 'enrollments',
                   title: 'Enrollments',
                   path: generateSafePath(
-                    ClientDashboardRoutes.ALL_ENROLLMENTS,
+                    ClientDashboardRoutes.CLIENT_ENROLLMENTS,
                     params
                   ),
                 },

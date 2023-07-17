@@ -4782,7 +4782,7 @@ export type YouthEducationStatusesPaginated = {
   pagesCount: Scalars['Int'];
 };
 
-export type RootPermissionsFragmentFragment = {
+export type RootPermissionsFragment = {
   __typename?: 'QueryAccess';
   id: string;
   canAdministerHmis: boolean;
@@ -8114,6 +8114,17 @@ export type ClientNameFragment = {
   nameSuffix?: string | null;
 };
 
+export type ClientNameDobVetFragment = {
+  __typename?: 'Client';
+  dob?: string | null;
+  veteranStatus: NoYesReasonsForMissingData;
+  id: string;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  nameSuffix?: string | null;
+};
+
 export type ClientNameObjectFieldsFragment = {
   __typename?: 'ClientName';
   id: string;
@@ -8626,6 +8637,8 @@ export type GetClientEnrollmentsQuery = {
         };
         client: {
           __typename?: 'Client';
+          dob?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
           id: string;
           firstName?: string | null;
           middleName?: string | null;
@@ -8737,6 +8750,8 @@ export type GetClientServicesQuery = {
           };
           client: {
             __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
             id: string;
             firstName?: string | null;
             middleName?: string | null;
@@ -8978,6 +8993,8 @@ export type CreateEnrollmentMutation = {
       };
       client: {
         __typename?: 'Client';
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
         id: string;
         firstName?: string | null;
         middleName?: string | null;
@@ -9290,6 +9307,8 @@ export type GetEnrollmentQuery = {
     };
     client: {
       __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
       id: string;
       firstName?: string | null;
       middleName?: string | null;
@@ -9385,6 +9404,8 @@ export type GetEnrollmentWithHouseholdQuery = {
     };
     client: {
       __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
       id: string;
       firstName?: string | null;
       middleName?: string | null;
@@ -9872,6 +9893,8 @@ export type EnrollmentFieldsFragment = {
   };
   client: {
     __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
     id: string;
     firstName?: string | null;
     middleName?: string | null;
@@ -9960,6 +9983,8 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   };
   client: {
     __typename?: 'Client';
+    dob?: string | null;
+    veteranStatus: NoYesReasonsForMissingData;
     id: string;
     firstName?: string | null;
     middleName?: string | null;
@@ -12176,6 +12201,8 @@ export type SubmitFormMutation = {
           };
           client: {
             __typename?: 'Client';
+            dob?: string | null;
+            veteranStatus: NoYesReasonsForMissingData;
             id: string;
             firstName?: string | null;
             middleName?: string | null;
@@ -12823,6 +12850,8 @@ export type UpdateRelationshipToHoHMutation = {
       };
       client: {
         __typename?: 'Client';
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
         id: string;
         firstName?: string | null;
         middleName?: string | null;
@@ -13740,6 +13769,7 @@ export type GetProjectEnrollmentsQuery = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          veteranStatus: NoYesReasonsForMissingData;
           access: {
             __typename?: 'ClientAccess';
             id: string;
@@ -15656,8 +15686,8 @@ export type CreateDirectUploadMutationMutation = {
   } | null;
 };
 
-export const RootPermissionsFragmentFragmentDoc = gql`
-  fragment RootPermissionsFragment on QueryAccess {
+export const RootPermissionsFragmentDoc = gql`
+  fragment RootPermissions on QueryAccess {
     id
     canAdministerHmis
     canEditClients
@@ -16312,6 +16342,14 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientNameDobVetFragmentDoc = gql`
+  fragment ClientNameDobVet on Client {
+    ...ClientName
+    dob
+    veteranStatus
+  }
+  ${ClientNameFragmentDoc}
+`;
 export const EnrollmentAccessFieldsFragmentDoc = gql`
   fragment EnrollmentAccessFields on EnrollmentAccess {
     id
@@ -16336,7 +16374,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     householdShortId
     householdSize
     client {
-      ...ClientName
+      ...ClientNameDobVet
     }
     access {
       ...EnrollmentAccessFields
@@ -16349,7 +16387,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       }
     }
   }
-  ${ClientNameFragmentDoc}
+  ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
 `;
 export const HouseholdClientFieldsFragmentDoc = gql`
@@ -17003,10 +17041,10 @@ export const UnitFieldsFragmentDoc = gql`
 export const GetRootPermissionsDocument = gql`
   query GetRootPermissions {
     access {
-      ...RootPermissionsFragment
+      ...RootPermissions
     }
   }
-  ${RootPermissionsFragmentFragmentDoc}
+  ${RootPermissionsFragmentDoc}
 `;
 
 /**

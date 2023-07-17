@@ -28,7 +28,7 @@ import {
   DynamicFormRef,
 } from '@/modules/form/components/DynamicForm';
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentFieldsFragment,
@@ -118,7 +118,7 @@ const IndividualAssessment = ({
   useEffect(() => {
     if (!assessmentTitle || embeddedInWorkflow) return;
     overrideBreadcrumbTitles({
-      [ClientDashboardRoutes.ASSESSMENT]: assessmentTitle,
+      [EnrollmentDashboardRoutes.ASSESSMENT]: assessmentTitle,
     });
   }, [
     embeddedInWorkflow,

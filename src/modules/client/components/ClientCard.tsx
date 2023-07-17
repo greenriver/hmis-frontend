@@ -33,7 +33,10 @@ import {
   ClientPermissionsFilter,
   RootPermissionsFilter,
 } from '@/modules/permissions/PermissionsFilters';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   ClientFieldsFragment,
   ExternalIdentifierType,
@@ -68,10 +71,13 @@ const RecentEnrollments = ({
             <Grid item xs={6} lg={4}>
               <RouterLink
                 aria-label={enrollmentName(enrollment)}
-                to={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
-                  clientId: enrollment.client.id,
-                  enrollmentId: enrollment.id,
-                })}
+                to={generateSafePath(
+                  EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                  {
+                    clientId: enrollment.client.id,
+                    enrollmentId: enrollment.id,
+                  }
+                )}
                 target={linkTargetBlank ? '_blank' : undefined}
                 variant='body2'
               >

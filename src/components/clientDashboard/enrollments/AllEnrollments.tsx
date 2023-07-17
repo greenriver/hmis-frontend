@@ -14,7 +14,10 @@ import {
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  EnrollmentDashboardRoutes,
+  ClientDashboardRoutes,
+} from '@/routes/routes';
 import {
   EnrollmentFieldsFragment,
   EnrollmentSortOption,
@@ -57,7 +60,7 @@ const AllEnrollments = () => {
 
   const rowLinkTo = useCallback(
     (enrollment: EnrollmentFieldsFragment) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
         clientId,
         enrollmentId: enrollment.id,
       }),

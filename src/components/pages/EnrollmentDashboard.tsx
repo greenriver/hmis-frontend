@@ -24,8 +24,11 @@ import ClientPrintHeader from '@/modules/client/components/ClientPrintHeader';
 import EnrollmentNavHeader from '@/modules/enrollment/components/EnrollmentNavHeader';
 import { useEnrollmentDashboardNavItems } from '@/modules/enrollment/hooks/useEnrollmentDashboardNavItems';
 import { ProjectDashboardContext } from '@/modules/projects/components/ProjectDashboard';
-import { ClientDashboardRoutes } from '@/routes/routes';
-import { ClientNameFragment, EnrollmentFieldsFragment } from '@/types/gqlTypes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import {
+  ClientNameDobVetFragment,
+  EnrollmentFieldsFragment,
+} from '@/types/gqlTypes';
 
 const EnrollmentDashboard: React.FC = () => {
   const params = useSafeParams() as {
@@ -38,15 +41,6 @@ const EnrollmentDashboard: React.FC = () => {
   const [breadcrumbOverrides, overrideBreadcrumbTitles] = useState<
     Record<string, string> | undefined
   >();
-
-  // const {
-  //   data: { client } = {},
-  //   loading,
-  //   error,
-  // } = useGetClientQuery({
-  //   variables: { id: params.clientId },
-  // });
-  // if (error) throw error;
 
   const { enrollment, loading } = useEnrollment(params.enrollmentId);
   const client = enrollment?.client;
@@ -61,10 +55,10 @@ const EnrollmentDashboard: React.FC = () => {
     if (dashboardState.focusMode) return dashboardState.focusMode;
     // hacky way to set "focus" for household assessments, which depends on the household size
     if (
-      currentPath === ClientDashboardRoutes.ASSESSMENT &&
+      currentPath === EnrollmentDashboardRoutes.ASSESSMENT &&
       showAssessmentInHousehold(enrollment, params.formRole)
     ) {
-      return ClientDashboardRoutes.VIEW_ENROLLMENT;
+      return EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW;
     }
   }, [enrollment, dashboardState.focusMode, currentPath, params.formRole]);
 
@@ -81,7 +75,6 @@ const EnrollmentDashboard: React.FC = () => {
   );
 
   const breadCrumbConfig = useEnrollmentBreadcrumbConfig(outletContext);
-  console.log(breadCrumbConfig);
   const breadcrumbs = useDashboardBreadcrumbs(
     breadCrumbConfig,
     breadcrumbOverrides
@@ -124,7 +117,7 @@ const EnrollmentDashboard: React.FC = () => {
 };
 
 export type EnrollmentDashboardContext = {
-  client: ClientNameFragment;
+  client: ClientNameDobVetFragment;
   enrollment?: EnrollmentFieldsFragment;
   overrideBreadcrumbTitles: (crumbs: any) => void;
 };
