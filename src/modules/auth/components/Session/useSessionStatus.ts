@@ -4,42 +4,39 @@ import { HmisUser } from '@/modules/auth/api/sessions';
 import { useSessionExpiry } from '@/modules/auth/components/Session/useSessionExpiry';
 import { currentTimeInSeconds } from '@/utils/time';
 
-export type SessionStatus = 'expiresSoon' | 'invalid' | 'expired' | 'valid';
-
-const getTimeRemaining = (
-  timestamp: number | undefined,
-  duration: number | undefined
-) => {
-  if (!(timestamp && duration)) return undefined;
-
-  let timeRemaining = undefined;
-  timeRemaining = duration - (currentTimeInSeconds() - timestamp);
-  timeRemaining = timeRemaining > 0 ? timeRemaining : 0;
-  return timeRemaining;
+export type HmisSessionStatus = {
+  status: 'invalid' | 'expired' | 'valid';
+  promptToExtend: boolean;
 };
 
 interface Props {
   initialUser: HmisUser;
-  warnBefore: number;
+  promptToExtendBefore: number; // prompt when X seconds remain in session
 }
 const useSessionStatus = ({
   initialUser,
-  warnBefore,
-}: Props): SessionStatus => {
+  promptToExtendBefore,
+}: Props): HmisSessionStatus => {
   const expiry = useSessionExpiry();
 
   const { sessionDuration } = initialUser;
   const [initialUserId] = useState(initialUser.id);
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
-  const [timeRemaining, setTimeRemaining] = useState(sessionDuration);
+  const [timeRemaining, setTimeRemaining] = useState(
+    expiry ? sessionDuration : undefined
+  );
 
   const updateTimeRemaining = useCallback(() => {
-    const calc = getTimeRemaining(expiry?.timestamp, sessionDuration);
-    if (calc !== undefined) {
-      setTimeRemaining(calc);
+    const timestamp = expiry?.timestamp;
+
+    if (timestamp) {
+      const timeRemaining =
+        sessionDuration - (currentTimeInSeconds() - timestamp);
+      setTimeRemaining(timeRemaining > 0 ? timeRemaining : 0);
     }
   }, [expiry?.timestamp, sessionDuration]);
 
+  // update time remaining
   useEffect(() => {
     if (!expiry?.timestamp) return;
     if (exitStatus) return;
@@ -52,7 +49,7 @@ const useSessionStatus = ({
     const expireTimeout = expiry.timestamp + sessionDuration - now;
 
     // seconds relative to session start to show warning
-    const warnAfter = sessionDuration - warnBefore;
+    const warnAfter = sessionDuration - promptToExtendBefore;
     // when to show session expiration warning
     const warnTimeout =
       expiry.timestamp + (warnAfter > 0 ? warnAfter : 0) - now;
@@ -78,7 +75,7 @@ const useSessionStatus = ({
     };
   }, [
     expiry?.timestamp,
-    warnBefore,
+    promptToExtendBefore,
     sessionDuration,
     exitStatus,
     updateTimeRemaining,
@@ -88,18 +85,35 @@ const useSessionStatus = ({
     // checking the value we are setting is normally dangerous but it's okay
     // here since it's only set once
     if (!exitStatus) {
-      if (expiry?.userId !== initialUserId) setExitStatus('invalid');
-      else if (timeRemaining <= 1) setExitStatus('expired');
+      if (expiry?.userId !== initialUserId) {
+        setExitStatus('invalid');
+      } else if (timeRemaining !== undefined && timeRemaining <= 1) {
+        setExitStatus('expired');
+      }
     }
   }, [exitStatus, timeRemaining, expiry?.userId, initialUserId]);
 
-  return useMemo(() => {
-    if (exitStatus) return exitStatus;
+  // debugging
+  useEffect(() => {
+    console.info('expiry', expiry, currentTimeInSeconds());
+  }, [expiry]);
+  useEffect(() => {
+    console.info('time remaining', timeRemaining, currentTimeInSeconds());
+  }, [timeRemaining]);
+  useEffect(() => {
+    console.info('exit status', exitStatus, currentTimeInSeconds());
+  }, [exitStatus]);
+  useEffect(() => {
+    console.info('initial user id', initialUser.id, currentTimeInSeconds());
+  }, [initialUser.id]);
 
-    if (timeRemaining && timeRemaining <= warnBefore) {
-      return 'expiresSoon';
+  return useMemo<HmisSessionStatus>(() => {
+    if (exitStatus) return { status: exitStatus, promptToExtend: false };
+
+    if (timeRemaining && timeRemaining <= promptToExtendBefore) {
+      return { status: 'valid', promptToExtend: true };
     }
-    return 'valid';
-  }, [exitStatus, timeRemaining, warnBefore]);
+    return { status: 'valid', promptToExtend: false };
+  }, [exitStatus, timeRemaining, promptToExtendBefore]);
 };
 export default useSessionStatus;

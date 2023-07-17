@@ -47,20 +47,18 @@ const blankRoutes: RouteObject[] = [
 ];
 
 const ProtectedRoutes: React.FC<{ user: HmisUser }> = ({ user }) => {
-  // const warnBefore = 60 * 5; // show warning when 5 minutes remain
-  const warnBefore = 15;
+  // const promptToExtendBefore = 60 * 5;
+  const promptToExtendBefore = 15;
   const sessionStatus = useSessionStatus({
     initialUser: user,
-    warnBefore,
+    promptToExtendBefore,
   });
 
   return (
     <>
-      <SessionStatusManager status={sessionStatus} />
+      <SessionStatusManager {...sessionStatus} />
       {useRoutes(
-        sessionStatus == 'valid' || sessionStatus == 'expiresSoon'
-          ? protectedRoutes
-          : blankRoutes
+        sessionStatus.status == 'valid' ? protectedRoutes : blankRoutes
       )}
     </>
   );

@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 
 import * as storage from '@/modules/auth/api/storage';
 import {
-  EXPIRY_EVENT,
-  USER_ID_EVENT,
+  HMIS_APP_SESSION_UID_EVENT,
+  HMIS_REMOTE_SESSION_UID_EVENT,
 } from '@/modules/auth/components/Session/constants';
 import { currentTimeInSeconds } from '@/utils/time';
 
 const fireEvent = (expiry: storage.SessionExpiry | undefined) => {
-  document.dispatchEvent(new CustomEvent(EXPIRY_EVENT, { detail: expiry }));
+  document.dispatchEvent(
+    new CustomEvent(HMIS_APP_SESSION_UID_EVENT, { detail: expiry })
+  );
 };
 
 // session expiration tracker
@@ -44,8 +46,14 @@ export const useSessionExpiryTracking = () => {
       }
     };
 
-    document.addEventListener(USER_ID_EVENT, handleSessionUserIdEvent);
+    document.addEventListener(
+      HMIS_REMOTE_SESSION_UID_EVENT,
+      handleSessionUserIdEvent
+    );
     return () =>
-      document.removeEventListener(USER_ID_EVENT, handleSessionUserIdEvent);
+      document.removeEventListener(
+        HMIS_REMOTE_SESSION_UID_EVENT,
+        handleSessionUserIdEvent
+      );
   }, []);
 };

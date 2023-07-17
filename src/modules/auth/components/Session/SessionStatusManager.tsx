@@ -3,15 +3,14 @@ import React, { useCallback, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { sendSessionKeepalive } from '@/modules/auth/api/sessions';
-import { SessionStatus } from '@/modules/auth/components/Session/useSessionStatus';
+import { HmisSessionStatus } from '@/modules/auth/components/Session/useSessionStatus';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { reloadWindow } from '@/utils/location';
 
-interface Props {
-  status: SessionStatus;
-}
-
-const SessionStatusManager: React.FC<Props> = ({ status }) => {
+const SessionStatusManager: React.FC<HmisSessionStatus> = ({
+  status,
+  promptToExtend,
+}) => {
   const [loading, setLoading] = useState(false);
   const { setUser } = useAuth();
 
@@ -35,8 +34,7 @@ const SessionStatusManager: React.FC<Props> = ({ status }) => {
 
   switch (status) {
     case 'valid':
-      return null;
-    case 'expiresSoon':
+      if (!promptToExtend) return null;
       return (
         <ConfirmationDialog
           open={true}

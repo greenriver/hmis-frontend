@@ -22,12 +22,12 @@ import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings
 
 const UserMenu: React.FC = () => {
   const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const { manageAccountUrl } = useHmisAppSettings();
 
   const logoutUser = useCallback(() => {
-    return logout().then(() => (window.location.href = '/'));
-  }, []);
+    return logout().then(() => setUser(undefined));
+  }, [setUser]);
 
   if (!user) return null;
 

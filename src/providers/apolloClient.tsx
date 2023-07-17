@@ -14,8 +14,8 @@ import fetch from 'cross-fetch';
 import { sentryUser } from '@/modules/auth/api/sessions';
 import * as storage from '@/modules/auth/api/storage';
 import {
-  UID_HEADER_NAME,
-  USER_ID_EVENT,
+  HMIS_SESSION_UID_HEADER,
+  HMIS_REMOTE_SESSION_UID_EVENT,
 } from '@/modules/auth/components/Session/constants';
 import { getCsrfToken } from '@/utils/csrf';
 import { reloadWindow } from '@/utils/location';
@@ -47,9 +47,9 @@ const sessionExpiryLink = new ApolloLink((operation, forward) => {
     } = context;
 
     if (headers) {
-      const userId = headers.get(UID_HEADER_NAME) as string | undefined;
+      const userId = headers.get(HMIS_SESSION_UID_HEADER) as string | undefined;
       document.dispatchEvent(
-        new CustomEvent(USER_ID_EVENT, { detail: userId })
+        new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
       );
     }
     return response;

@@ -1,7 +1,7 @@
 import * as storage from '@/modules/auth/api/storage';
 import {
-  UID_HEADER_NAME,
-  USER_ID_EVENT,
+  HMIS_SESSION_UID_HEADER,
+  HMIS_REMOTE_SESSION_UID_EVENT,
 } from '@/modules/auth/components/Session/constants';
 
 import apolloClient from '@/providers/apolloClient';
@@ -62,17 +62,19 @@ const throwMaybeHmisError = (json: any) => {
   }
 };
 
-const handleAuthenticatedResponse = (response: Response) => {
+const handleResponseAuthenticationStatus = (response: Response) => {
   const { headers } = response;
   if (headers) {
-    const userId = headers.get(UID_HEADER_NAME) as string | undefined;
-    document.dispatchEvent(new CustomEvent(USER_ID_EVENT, { detail: userId }));
+    const userId = headers.get(HMIS_SESSION_UID_HEADER) as string | undefined;
+    document.dispatchEvent(
+      new CustomEvent(HMIS_REMOTE_SESSION_UID_EVENT, { detail: userId })
+    );
   }
 };
 
 export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   const response = await fetch('/hmis/user.json', { credentials: 'include' });
-  handleAuthenticatedResponse(response);
+  handleResponseAuthenticationStatus(response);
 
   if (response.ok) {
     const user = await response.json();
@@ -97,7 +99,7 @@ export async function sendSessionKeepalive() {
       'X-CSRF-Token': getCsrfToken(),
     },
   });
-  handleAuthenticatedResponse(response);
+  handleResponseAuthenticationStatus(response);
   return response;
 }
 
@@ -121,7 +123,7 @@ export async function login({
       },
     }),
   });
-  handleAuthenticatedResponse(response);
+  handleResponseAuthenticationStatus(response);
 
   if (!response.ok) {
     return response.json().then(throwMaybeHmisError);
@@ -139,7 +141,7 @@ export async function logout() {
     method: 'DELETE',
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
-  handleAuthenticatedResponse(response);
+  handleResponseAuthenticationStatus(response);
   storage.removeUser();
   storage.clearSessionExpiry();
   // Clear cache without re-fetching any queries

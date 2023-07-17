@@ -2,12 +2,15 @@ import { Alert, Box, Link } from '@mui/material';
 import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { HmisUser, isHmisResponseError, login } from '../api/sessions';
-
 import OneTimePassword from './OneTimePassword';
 
 import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
+import {
+  HmisUser,
+  isHmisResponseError,
+  login,
+} from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { RouteLocationState } from '@/modules/hmisAppSettings/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
@@ -53,11 +56,6 @@ const LoginForm = () => {
           if (isHmisResponseError(error) && error.type === 'mfa_required') {
             setPrompt2fa(true);
             setLoading(false);
-          } else if (
-            isHmisResponseError(error) &&
-            error.type === 'unverified_request'
-          ) {
-            console.log('CSRF token is expired, fetching a new one...');
           } else {
             setError(error);
             setLoading(false);

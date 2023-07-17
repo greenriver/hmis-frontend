@@ -1,4 +1,6 @@
-export const UID_HEADER_NAME = 'X-app-user-id';
-// custom event ID for XHR requests
-export const USER_ID_EVENT = 'AppUserIdSet';
-export const EXPIRY_EVENT = 'AppExpiry';
+// the HTTP header name we expect to contain the user id
+export const HMIS_SESSION_UID_HEADER = 'X-app-user-id';
+// event fired by request handler for HMIS_SESSION_UID_HEADER
+export const HMIS_REMOTE_SESSION_UID_EVENT = 'HmisRemoteSessionUserId';
+// event fired to update the application
+export const HMIS_APP_SESSION_UID_EVENT = 'HmisAppSessionUserId';

@@ -19,9 +19,7 @@ const OneTimePassword: React.FC<Props> = ({ onSuccess }) => {
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
       login({ otpAttempt: otpAttempt })
-        .then((user) => {
-          onSuccess(user);
-        })
+        .then((user) => onSuccess(user))
         .catch((error: Error) => {
           setError(error);
           setLoading(false);
