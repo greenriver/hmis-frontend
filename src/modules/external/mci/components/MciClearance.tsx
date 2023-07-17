@@ -273,7 +273,7 @@ const MciClearanceWrapperWithValue = (props: MciClearanceProps) => {
     return (
       <>
         <MciSuccessAlert mciIds={externalIds} />
-        {hasChanged && <MciFieldsChangedAlert changedFields={undefined} />}
+        {hasChanged && <MciFieldsChangedAlert />}
       </>
     );
   }
