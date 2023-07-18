@@ -1,4 +1,5 @@
 import { Box, Stack, Typography } from '@mui/material';
+import { filter } from 'lodash-es';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -49,9 +50,9 @@ const Profile = () => {
       localConstants={{
         canViewFullSsn,
         canViewDob,
-        mciId: client.externalIds.find(
-          (c) => c.type == ExternalIdentifierType.MciId
-        ),
+        mciIds: filter(client.externalIds, {
+          type: ExternalIdentifierType.MciId,
+        }),
       }}
       onCompleted={onCompleted}
       top={STICKY_BAR_HEIGHT + CONTEXT_HEADER_HEIGHT}
