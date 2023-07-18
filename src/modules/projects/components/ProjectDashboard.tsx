@@ -52,7 +52,7 @@ const ProjectNavHeader = ({
             {project.organization.organizationName}
           </RouterLink>
         </CommonLabeledTextBlock>
-        <Stack>
+        <Stack gap={0.5}>
           <CommonLabeledTextBlock title='Project ID' horizontal>
             <ClickToCopyId value={project.hudId} />
           </CommonLabeledTextBlock>
