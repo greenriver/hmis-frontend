@@ -20,7 +20,8 @@ import { Component, FormItem, ItemType } from '@/types/gqlTypes';
 import { ensureArray } from '@/utils/arrays';
 
 const getLabel = (item: FormItem, horizontal?: boolean) => {
-  if (!item.prefix && !item.text) return null;
+  const label = item.readonlyText || item.text;
+  if (!label) return;
 
   return (
     <Stack direction='row' spacing={1}>
@@ -30,7 +31,7 @@ const getLabel = (item: FormItem, horizontal?: boolean) => {
           item.component === Component.Checkbox || horizontal ? undefined : 600
         }
       >
-        {item.text}
+        {label}
       </Typography>
     </Stack>
   );
