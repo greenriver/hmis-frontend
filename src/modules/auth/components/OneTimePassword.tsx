@@ -18,6 +18,7 @@ const OneTimePassword: React.FC<Props> = ({ onSuccess }) => {
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
+      setLoading(true);
       login({ otpAttempt: otpAttempt })
         .then((user) => onSuccess(user))
         .catch((error: Error) => {

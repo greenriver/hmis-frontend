@@ -46,6 +46,7 @@ const LoginForm = () => {
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
+      setLoading(true);
       login({ email, password })
         .then((user) => {
           setPrompt2fa(false);
