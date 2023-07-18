@@ -16,7 +16,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
-import { get, includes, isNil, without } from 'lodash-es';
+import { filter, get, includes, isNil, without } from 'lodash-es';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { To } from 'react-router-dom';
 
@@ -89,7 +89,7 @@ const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
-  columns = [],
+  columns: columnProp,
   paginated = false,
   loading = false,
   vertical = false,
@@ -107,6 +107,10 @@ const GenericTable = <T extends { id: string }>({
   filterToolbar,
   noData = 'No data',
 }: Props<T>) => {
+  const columns = useMemo(
+    () => filter(columnProp || [], (c) => !c.hide),
+    [columnProp]
+  );
   const hasHeaders = columns.find((c) => !!c.header);
 
   const [selected, setSelected] = useState<readonly string[]>([]);

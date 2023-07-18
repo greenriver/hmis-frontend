@@ -40,6 +40,7 @@ import AdminReferralPosting from '@/modules/admin/components/AdminReferralPostin
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
+import HouseholdPage from '@/modules/household/components/HouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
@@ -277,6 +278,11 @@ export const protectedRoutes: RouteNode[] = [
             element: <ViewEnrollment />,
           },
           {
+            path: EnrollmentDashboardRoutes.HOUSEHOLD,
+            // No perm needed because it only requires enrollment visibility
+            element: <HouseholdPage />,
+          },
+          {
             path: EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
             element: (
               <EnrollmentRoute
@@ -292,6 +298,7 @@ export const protectedRoutes: RouteNode[] = [
             // No perm needed because it only requires enrollment visibility
             element: <AssessmentPage />,
           },
+          { path: '*', element: <Navigate to='overview' replace /> },
         ],
       },
       {

@@ -34,19 +34,13 @@ const EnrollmentDateRangeWithStatus = ({
     color = 'success.main';
   }
 
-  if (color) {
-    endFormatted = (
+  return (
+    <Stack direction='row' gap={0.5}>
+      <Box component='span'>{startFormatted}</Box>
+      {' - '}
       <Box component='span' sx={{ px: 0, color }}>
         {endFormatted}
       </Box>
-    );
-  }
-
-  return (
-    <Stack direction='row' gap={0}>
-      {startFormatted}
-      {' - '}
-      {endFormatted}
     </Stack>
   );
 };

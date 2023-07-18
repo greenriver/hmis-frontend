@@ -60,13 +60,14 @@ const HouseholdActionButtons = ({
   }, [householdMembers]);
 
   return (
-    <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
+    <Stack direction='row' gap={3} sx={{ mt: 4, mb: 4 }}>
       <ButtonLink
         Icon={PeopleIcon}
         to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
         })}
+        color='secondary'
       >
         Manage Household
       </ButtonLink>

@@ -23,7 +23,7 @@ const EditHousehold = () => {
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
           clientId,
           enrollmentId,
         })

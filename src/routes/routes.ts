@@ -34,7 +34,8 @@ const clientDashboardRoutes = {
 
 const enrollmentDashboardRoutes = {
   ENROLLMENT_OVERVIEW: 'overview',
-  EDIT_HOUSEHOLD: 'edit-household',
+  HOUSEHOLD: 'household',
+  EDIT_HOUSEHOLD: 'household/edit',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
 };
 

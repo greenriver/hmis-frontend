@@ -1,4 +1,5 @@
 import { Grid, Paper, Stack } from '@mui/material';
+import { useMemo } from 'react';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
@@ -10,7 +11,9 @@ import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDash
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
-import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
+import HouseholdMemberTable, {
+  HOUSEHOLD_MEMBER_COLUMNS,
+} from '@/modules/household/components/HouseholdMemberTable';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 
 const ViewEnrollment = () => {
@@ -23,6 +26,16 @@ const ViewEnrollment = () => {
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
   });
+
+  const householdColumns = useMemo(
+    () => [
+      HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
+      HOUSEHOLD_MEMBER_COLUMNS.clientName({ currentClientId: clientId }),
+      HOUSEHOLD_MEMBER_COLUMNS.relationshipToHoh,
+      HOUSEHOLD_MEMBER_COLUMNS.enrollmentStatus,
+    ],
+    [clientId]
+  );
 
   if (!enrollment) return <NotFound />;
 
@@ -44,6 +57,8 @@ const ViewEnrollment = () => {
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
+                hideActions
+                columns={householdColumns}
               />
             </TitleCard>
 

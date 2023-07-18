@@ -36,6 +36,11 @@ export const useEnrollmentDashboardNavItems = (
               params
             ),
           },
+          {
+            id: 'overview',
+            title: 'Household',
+            path: generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, params),
+          },
           // Household
           // Assessments
           // Services
