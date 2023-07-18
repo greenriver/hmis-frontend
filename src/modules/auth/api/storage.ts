@@ -2,7 +2,7 @@ import { HmisUser } from '@/modules/auth/api/sessions';
 import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 
 export const USER_STORAGE_KEY = '_hmis_user_info';
-export const SETTINGS_STORAGE_KEY = '_hmis_user_info';
+export const SETTINGS_STORAGE_KEY = '_hmis_app_settings';
 export const SESSION_TRACKING_STORAGE_KEY = '_hmis_session_ts';
 
 const parseJson = <T>(value: string | undefined) => {
@@ -14,21 +14,18 @@ const parseJson = <T>(value: string | undefined) => {
 };
 
 // Stores user name and email. No sensitive information stored!
-export const setUser = (user: HmisUser) =>
-  localStorage.setItem(USER_STORAGE_KEY, JSON.stringify({ user, ...setUser }));
+export const setUser = (value: HmisUser) =>
+  localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(value));
 
 export const getUser = () => {
   const value = localStorage.getItem(USER_STORAGE_KEY);
   return value ? parseJson<HmisUser>(value) : undefined;
 };
 
-export const removeUser = () => localStorage.removeItem(USER_STORAGE_KEY);
+export const clearUser = () => localStorage.removeItem(USER_STORAGE_KEY);
 
-export const setAppSettings = (user: HmisAppSettings) =>
-  localStorage.setItem(
-    SETTINGS_STORAGE_KEY,
-    JSON.stringify({ user, ...setUser })
-  );
+export const setAppSettings = (value: HmisAppSettings) =>
+  localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(value));
 
 export const getAppSettings = () => {
   const value = localStorage.getItem(SETTINGS_STORAGE_KEY);

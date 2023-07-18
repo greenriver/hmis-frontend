@@ -15,22 +15,35 @@ import {
   usePopupState,
 } from 'material-ui-popup-state/hooks';
 import React, { useCallback, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { logout } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 
-const UserMenu: React.FC = () => {
-  const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
-  const { user, setUser } = useAuth();
+const useLogout = () => {
+  const navigate = useNavigate();
   const [error, setError] = useState<Error>();
-  const { manageAccountUrl } = useHmisAppSettings();
-
+  const { pathname } = useLocation();
   const logoutUser = useCallback(() => {
     return logout()
-      .then(() => setUser(undefined))
+      .then(() =>
+        navigate(pathname, {
+          state: { clearPrev: true },
+          replace: true,
+        })
+      )
       .catch((e) => setError(e));
-  }, [setUser]);
+  }, [navigate, pathname]);
+
+  return [logoutUser, error] as const;
+};
+
+const UserMenu: React.FC = () => {
+  const popupState = usePopupState({ variant: 'popover', popupId: 'userMenu' });
+  const { user } = useAuth();
+  const { manageAccountUrl } = useHmisAppSettings();
+  const [logoutUser, error] = useLogout();
 
   if (error) throw error;
 

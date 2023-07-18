@@ -145,6 +145,7 @@ export async function login({
   } else {
     // Store the user info (non-sensitive) in the browser
     return response.json().then((user: HmisUser) => {
+      console.info('login', user);
       storage.setUser(user);
       return user;
     });
@@ -160,7 +161,8 @@ export async function logout() {
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   trackSessionFromResponse(response);
-  storage.removeUser();
+  storage.clearUser();
+  storage.clearAppSettings();
   storage.clearSessionTacking();
   // Clear cache without re-fetching any queries
   apolloClient.clearStore();

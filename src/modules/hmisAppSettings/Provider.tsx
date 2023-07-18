@@ -17,9 +17,10 @@ import { currentTimeInSeconds } from '@/utils/time';
 const getValidCachedUser = (): HmisUser | undefined => {
   const tracking = storage.getSessionTracking();
   const user = storage.getUser();
-  if (tracking && user && tracking.userId === tracking.userId) {
+  if (tracking && user && tracking.userId === user.id) {
     const { timestamp } = tracking;
-    if (timestamp + user.sessionDuration < currentTimeInSeconds()) {
+    const now = currentTimeInSeconds();
+    if (timestamp + user.sessionDuration > now) {
       return user;
     }
   }
@@ -49,27 +50,35 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
+    console.info('cached valid user', cachedUser);
     const promises: Array<Promise<any>> = [];
+
+    const saveSettings = (value: HmisAppSettings) => {
+      setAppSettings(value);
+      storage.setAppSettings(value);
+    };
 
     if (cachedUser) {
       setUser(cachedUser);
-      const cachedSettings = storage.getAppSettings();
-      if (cachedSettings) {
-        setAppSettings(cachedSettings);
+      const cachedAppSettings = storage.getAppSettings();
+      console.info('cached valid settings', cachedAppSettings);
+      if (cachedAppSettings) {
+        setAppSettings(cachedAppSettings);
       } else {
-        promises.push(fetchHmisAppSettings().then(setAppSettings));
+        promises.push(fetchHmisAppSettings().then(saveSettings));
       }
     } else {
+      console.info('no cached user');
       promises.push(fetchCurrentUser().then(setUser));
-      promises.push(fetchHmisAppSettings().then(setAppSettings));
+      promises.push(fetchHmisAppSettings().then(saveSettings));
     }
 
     if (promises.length) {
-      setLoading(true);
       Promise.all(promises)
-        .then(() => setError(undefined))
         .catch(setError)
         .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -84,7 +93,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
       <ConfirmationDialog
         open={true}
         confirmText='Continue'
-        title='An error occured'
+        title='An error occurred'
         loading={loading}
         hideCancelButton
         onConfirm={reloadWindow}
