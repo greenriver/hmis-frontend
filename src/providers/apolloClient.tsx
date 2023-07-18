@@ -11,12 +11,12 @@ import { onError } from '@apollo/client/link/error';
 import * as Sentry from '@sentry/react';
 import fetch from 'cross-fetch';
 
-import { sentryUser } from '@/modules/auth/api/sessions';
-import * as storage from '@/modules/auth/api/storage';
 import {
   HMIS_SESSION_UID_HEADER,
   HMIS_REMOTE_SESSION_UID_EVENT,
-} from '@/modules/auth/components/Session/constants';
+} from '@/modules/auth/api/constants';
+import { sentryUser } from '@/modules/auth/api/sessions';
+import * as storage from '@/modules/auth/api/storage';
 import { getCsrfToken } from '@/utils/csrf';
 import { reloadWindow } from '@/utils/location';
 

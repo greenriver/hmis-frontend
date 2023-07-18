@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { HMIS_APP_SESSION_UID_EVENT } from '@/modules/auth/api/constants';
 import * as storage from '@/modules/auth/api/storage';
-import { HMIS_APP_SESSION_UID_EVENT } from '@/modules/auth/components/Session/constants';
 
-export const useSessionExpiry = () => {
+export const useSessionTracking = () => {
   const [expiry, setExpiry] = useState(storage.getSessionTracking);
 
   // handle session user id changed (within the same tab)

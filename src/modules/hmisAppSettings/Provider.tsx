@@ -6,7 +6,7 @@ import Loading from '@/components/elements/Loading';
 import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
 import { getSessionTracking, getUser } from '@/modules/auth/api/storage';
 import { HmisAuthContext } from '@/modules/auth/AuthContext';
-import { useSessionExpiryTracking } from '@/modules/auth/components/Session/useSessionExpiryTracking';
+import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
 import {
@@ -50,7 +50,7 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   );
 
   // tracking needs to be in place before we start making API calls
-  useSessionExpiryTracking();
+  useSessionTrackingObserver();
 
   // fetch data from remote
   const fetchFromRemote = useCallback(() => {

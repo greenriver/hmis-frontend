@@ -3,30 +3,24 @@ import React, { useCallback, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { sendSessionKeepalive } from '@/modules/auth/api/sessions';
-import { HmisSessionStatus } from '@/modules/auth/components/Session/useSessionStatus';
-import useAuth from '@/modules/auth/hooks/useAuth';
+import { HmisSessionProps } from '@/modules/auth/hooks/useSessionStatus';
 import { reloadWindow } from '@/utils/location';
 
-const SessionStatusManager: React.FC<HmisSessionStatus> = ({
+const SessionStatusManager: React.FC<HmisSessionProps> = ({
   status,
   promptToExtend,
 }) => {
   const [loading, setLoading] = useState(false);
-  const { setUser } = useAuth();
 
   // user clicks "Keep me signed in"
   const handleKeepAlive = useCallback(() => {
     setLoading(true);
     sendSessionKeepalive()
-      .then(() => {
-        setLoading(false);
-      })
-      .catch(() => {
-        setUser(undefined);
-      });
-  }, [setUser]);
+      .then(() => setLoading(false))
+      .catch(() => reloadWindow());
+  }, []);
 
-  // current session is invalid, user clicks continue
+  // current session has ended, user clicks continue
   const handleReload = useCallback(() => {
     setLoading(true);
     reloadWindow();

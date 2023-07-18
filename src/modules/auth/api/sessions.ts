@@ -1,10 +1,10 @@
 import fetchRetryCb, { RequestInitRetryParams } from 'fetch-retry';
 
-import * as storage from '@/modules/auth/api/storage';
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
-} from '@/modules/auth/components/Session/constants';
+} from '@/modules/auth/api/constants';
+import * as storage from '@/modules/auth/api/storage';
 
 import apolloClient from '@/providers/apolloClient';
 import { getCsrfToken } from '@/utils/csrf';

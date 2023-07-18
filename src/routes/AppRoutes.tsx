@@ -10,9 +10,9 @@ import { protectedRoutes } from './protected';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
 import Login from '@/modules/auth/components/Login';
-import SessionStatusManager from '@/modules/auth/components/Session/SessionStatusManager';
-import useSessionStatus from '@/modules/auth/components/Session/useSessionStatus';
+import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
+import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
 import { RouteLocationState } from '@/modules/hmisAppSettings/types';
 
 const PublicRoutes: React.FC = () => {

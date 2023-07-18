@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 
-import * as storage from '@/modules/auth/api/storage';
 import {
   HMIS_APP_SESSION_UID_EVENT,
   HMIS_REMOTE_SESSION_UID_EVENT,
-} from '@/modules/auth/components/Session/constants';
+} from '@/modules/auth/api/constants';
+import * as storage from '@/modules/auth/api/storage';
 import { currentTimeInSeconds } from '@/utils/time';
 
-const fireEvent = (expiry: storage.HmisSessionTracking | undefined) => {
+const fireEvent = (value: storage.HmisSessionTracking | undefined) => {
   document.dispatchEvent(
-    new CustomEvent(HMIS_APP_SESSION_UID_EVENT, { detail: expiry })
+    new CustomEvent(HMIS_APP_SESSION_UID_EVENT, { detail: value })
   );
 };
 
-// session expiration tracker
 // Translate storage and user id events into one expiration event
 // Also syncs uid events to localstorage to share update with other tabs
-export const useSessionExpiryTracking = () => {
+export const useSessionTrackingObserver = () => {
   // handle changes from other tabs signaled via local storage
   useEffect(() => {
     const handleStorage = (e: StorageEvent) => {
@@ -34,12 +33,12 @@ export const useSessionExpiryTracking = () => {
   useEffect(() => {
     const handleSessionUserIdEvent = (evt: Event) => {
       const eventId = (evt as CustomEvent).detail;
-      const expiry = eventId
+      const tracking = eventId
         ? { userId: eventId, timestamp: currentTimeInSeconds() }
         : undefined;
-      if (expiry) {
-        fireEvent(expiry);
-        storage.setSessionTracking(expiry);
+      if (tracking) {
+        fireEvent(tracking);
+        storage.setSessionTracking(tracking);
       } else {
         fireEvent(undefined);
         storage.clearSessionTacking();

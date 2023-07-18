@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { HmisUser } from '@/modules/auth/api/sessions';
-import { useSessionExpiry } from '@/modules/auth/components/Session/useSessionExpiry';
+import { useSessionTracking } from '@/modules/auth/hooks/useSessionTracking';
 import { currentTimeInSeconds } from '@/utils/time';
 
-export type HmisSessionStatus = {
+export type HmisSessionProps = {
   status: 'invalid' | 'expired' | 'valid';
   promptToExtend: boolean;
 };
@@ -16,9 +16,9 @@ interface Props {
 const useSessionStatus = ({
   initialUser,
   promptToExtendBefore,
-}: Props): HmisSessionStatus => {
+}: Props): HmisSessionProps => {
   // expiry will change from network events
-  const expiry = useSessionExpiry();
+  const tracking = useSessionTracking();
 
   // useState prevents user from changing underneath us
   const [{ sessionDuration, id: initialUserId }] = useState(initialUser);
@@ -26,13 +26,13 @@ const useSessionStatus = ({
   const [exitStatus, setExitStatus] = useState<'invalid' | 'expired'>();
   // how long until the session expires
   const [timeRemaining, setTimeRemaining] = useState(
-    expiry ? sessionDuration : undefined
+    tracking ? sessionDuration : undefined
   );
 
   // update time remaining in response to timestamp changes
   const sessionExited = !!exitStatus;
   useEffect(() => {
-    const timestamp = expiry?.timestamp;
+    const timestamp = tracking?.timestamp;
     if (!timestamp) return;
     if (sessionExited) return;
 
@@ -52,7 +52,7 @@ const useSessionStatus = ({
     const warnAfter = sessionDuration - promptToExtendBefore;
     // when to show session expiration warning
     const warnTimeout =
-      expiry.timestamp + (warnAfter > 0 ? warnAfter : 0) - now;
+      tracking.timestamp + (warnAfter > 0 ? warnAfter : 0) - now;
 
     if (expireTimeout > 0) {
       timeouts.push(
@@ -73,7 +73,12 @@ const useSessionStatus = ({
     return () => {
       for (const timeout of timeouts) clearTimeout(timeout);
     };
-  }, [sessionExited, expiry?.timestamp, promptToExtendBefore, sessionDuration]);
+  }, [
+    sessionExited,
+    tracking?.timestamp,
+    promptToExtendBefore,
+    sessionDuration,
+  ]);
 
   // check if the session has ended due to expiration or invalid
   useEffect(() => {
@@ -81,12 +86,12 @@ const useSessionStatus = ({
     // here since it's only set once
     if (exitStatus) return;
 
-    if (expiry?.userId !== initialUserId) {
+    if (tracking?.userId !== initialUserId) {
       setExitStatus('invalid');
     } else if (timeRemaining !== undefined && timeRemaining <= 1) {
       setExitStatus('expired');
     }
-  }, [exitStatus, timeRemaining, expiry?.userId, initialUserId]);
+  }, [exitStatus, timeRemaining, tracking?.userId, initialUserId]);
 
   // debugging
   /*
@@ -104,7 +109,7 @@ const useSessionStatus = ({
   }, [initialUserId]);
   */
 
-  return useMemo<HmisSessionStatus>(() => {
+  return useMemo<HmisSessionProps>(() => {
     if (exitStatus) return { status: exitStatus, promptToExtend: false };
 
     if (timeRemaining && timeRemaining - 1 <= promptToExtendBefore) {
