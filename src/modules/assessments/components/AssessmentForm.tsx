@@ -174,10 +174,15 @@ const AssessmentForm = ({
 
   const canEdit = enrollment?.access.canEditEnrollments;
 
+  const pickListArgs = useMemo(
+    () => ({ projectId: enrollment?.project.id }),
+    [enrollment]
+  );
+
   // Manually preload picklists here so we can prevent printing until they're fetched
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
-    pickListArgs: { projectId: enrollment?.project?.id },
+    pickListArgs,
   });
   usePrintTrigger({
     startReady: isPrintView,
@@ -246,7 +251,7 @@ const AssessmentForm = ({
             // dont use `initialValues` because we don't want the OVERWRITE fields
             values={initialValuesFromAssessment(itemMap, assessment)}
             definition={definition.definition}
-            pickListArgs={{ projectId: enrollment.project.id }}
+            pickListArgs={pickListArgs}
           />
         ) : (
           <DynamicForm
@@ -261,7 +266,7 @@ const AssessmentForm = ({
                 : saveDraftHandler
             }
             initialValues={initialValues || undefined}
-            pickListArgs={{ projectId: enrollment?.project.id }}
+            pickListArgs={pickListArgs}
             loading={mutationLoading}
             errors={errors}
             locked={locked}
