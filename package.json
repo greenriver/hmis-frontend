@@ -45,7 +45,8 @@
   "resolutions": {
     "decode-uri-component": "^0.2.1",
     "json5": "^2.2.2",
-    "undici": "^5.19.1"
+    "undici": "^5.19.1",
+    "semver": "^5.7.2"
   },
   "dependencies": {
     "@apollo/client": "^3.6.8",
@@ -104,12 +105,12 @@
     "@babel/preset-env": "^7.17.12",
     "@babel/preset-react": "^7.17.12",
     "@babel/preset-typescript": "^7.17.12",
-    "@graphql-codegen/cli": "^2.9.1",
-    "@graphql-codegen/fragment-matcher": "^3.3.0",
-    "@graphql-codegen/introspection": "^2.2.0",
-    "@graphql-codegen/typescript": "^2.7.2",
-    "@graphql-codegen/typescript-document-nodes": "^2.3.2",
-    "@graphql-codegen/typescript-operations": "^2.5.2",
+    "@graphql-codegen/cli": "^4.0.1",
+    "@graphql-codegen/fragment-matcher": "^5.0.0",
+    "@graphql-codegen/introspection": "^4.0.0",
+    "@graphql-codegen/typescript": "^4.0.1",
+    "@graphql-codegen/typescript-document-nodes": "^4.0.1",
+    "@graphql-codegen/typescript-operations": "^4.0.1",
     "@graphql-codegen/typescript-react-apollo": "^3.3.3",
     "@sentry/vite-plugin": "^0.6.0",
     "@storybook/addon-actions": "^7.0.0",
