@@ -75,11 +75,6 @@ const trackSessionFromResponse = (response: Response) => {
   }
 };
 
-const fetchWithRetry = fetchRetryCb(window.fetch);
-const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
-  return isHmisResponseError(error) && error.type === 'unverified_request';
-};
-
 export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   const response = await fetch('/hmis/user.json', {
     credentials: 'include',
@@ -93,6 +88,11 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
     return Promise.reject(response.status);
   }
 }
+
+const fetchWithRetry = fetchRetryCb(window.fetch || global.fetch);
+const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
+  return isHmisResponseError(error) && error.type === 'unverified_request';
+};
 
 export type LoginParams = {
   email?: string;
@@ -151,8 +151,10 @@ export async function login({
 }
 
 export async function logout() {
-  const response = await fetch('/hmis/logout', {
+  const response = await fetchWithRetry('/hmis/logout', {
     method: 'DELETE',
+    retries: 2,
+    retryOn: csrfFailure,
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   trackSessionFromResponse(response);

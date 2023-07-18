@@ -12,8 +12,8 @@ import {
   login,
 } from '@/modules/auth/api/sessions';
 import useAuth from '@/modules/auth/hooks/useAuth';
-import { RouteLocationState } from '@/modules/hmisAppSettings/types';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
+import { RouteLocationState } from '@/routes/AppRoutes';
 
 const errorMessage = (error: Error) => {
   if (isHmisResponseError(error)) {

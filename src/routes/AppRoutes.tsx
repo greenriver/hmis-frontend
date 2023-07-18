@@ -13,7 +13,14 @@ import Login from '@/modules/auth/components/Login';
 import SessionStatusManager from '@/modules/auth/components/SessionStatusManager';
 import useAuth from '@/modules/auth/hooks/useAuth';
 import useSessionStatus from '@/modules/auth/hooks/useSessionStatus';
-import { RouteLocationState } from '@/modules/hmisAppSettings/types';
+
+export interface RouteLocationState {
+  /** Previous pathname, so we can redirect to it when logging back in */
+  prev?: string;
+  /** Whether to clear/ignore the previous pathname. For example when someone clicks "Sign Out," the previous location shouldn't be maintained when they log back
+  in.  */
+  clearPrev?: boolean;
+}
 
 const PublicRoutes: React.FC = () => {
   const { pathname, state } = useLocation();

@@ -20,17 +20,15 @@ const AppProvider = ({ children }: AppProviderProps) => {
   return (
     <React.Suspense fallback={<Loading />}>
       <SentryErrorBoundary fullpage>
-        <MergedThemeProvider>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <ApolloProvider client={apolloClient}>
             <BrowserRouter>
               <HmisAppSettingsProvider>
-                <ApolloProvider client={apolloClient}>
-                  {children}
-                </ApolloProvider>
+                <MergedThemeProvider>{children}</MergedThemeProvider>
               </HmisAppSettingsProvider>
             </BrowserRouter>
-          </LocalizationProvider>
-        </MergedThemeProvider>
+          </ApolloProvider>
+        </LocalizationProvider>
       </SentryErrorBoundary>
     </React.Suspense>
   );

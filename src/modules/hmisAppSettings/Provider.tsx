@@ -5,14 +5,11 @@ import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
 import { getSessionTracking, getUser } from '@/modules/auth/api/storage';
-import { HmisAuthContext } from '@/modules/auth/AuthContext';
+import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
 import { HmisAppSettingsContext } from '@/modules/hmisAppSettings/Context';
-import {
-  HmisAppSettings,
-  HmisAuthState,
-} from '@/modules/hmisAppSettings/types';
+import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 import { reloadWindow } from '@/utils/location';
 import { currentTimeInSeconds } from '@/utils/time';
 
