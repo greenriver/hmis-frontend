@@ -11,7 +11,7 @@ import {
 import { FormDefinitionJsonFieldsFragment } from '@/types/gqlTypes';
 
 interface Args {
-  record?: SubmitFormAllowedTypes;
+  record?: SubmitFormAllowedTypes | null;
   itemMap?: ItemMap;
   definition?: FormDefinitionJsonFieldsFragment;
   localConstants?: LocalConstants;

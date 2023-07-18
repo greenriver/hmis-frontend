@@ -1,29 +1,33 @@
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
-import ButtonLink from '@/components/elements/ButtonLink';
+import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
-import { EnrollmentDashboardRoutes } from '@/routes/routes';
-import { FormRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
+import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
+import { EnrollmentFieldsFragment } from '@/types/gqlTypes';
 
 const EnrollmentQuickActions = ({
-  clientId,
-  enrollmentId,
-  openServiceDialog,
+  enrollment,
 }: {
-  clientId: string;
-  enrollmentId: string;
-  openServiceDialog: VoidFunction;
+  enrollment: EnrollmentFieldsFragment;
 }) => {
+  const { renderServiceDialog, openServiceDialog } = useServiceDialog({
+    enrollment,
+  });
+
+  const { openClientFormDialog, renderClientFormDialog, clientLoading } =
+    useClientFormDialog({
+      clientId: enrollment.client.id,
+    });
+
   return (
     <Stack spacing={2}>
       <Typography variant='h6'>Quick Actions</Typography>
       <ClientPermissionsFilter
-        id={clientId}
+        id={enrollment.client.id}
         permissions={['canEditEnrollments']}
       >
-        <ButtonLink
+        {/* <ButtonLink
           to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
             clientId,
             enrollmentId,
@@ -31,21 +35,24 @@ const EnrollmentQuickActions = ({
           })}
         >
           Add Assessment
-        </ButtonLink>
+        </ButtonLink> */}
         <Button onClick={openServiceDialog} variant='outlined'>
           Record Service
         </Button>
-        <ButtonLink to=''>Update Client Details</ButtonLink>
-        <ButtonLink
-          // Icon={PeopleIcon}
-          to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
-            clientId,
-            enrollmentId,
-          })}
-        >
-          Manage Household
-        </ButtonLink>
       </ClientPermissionsFilter>
+      <ClientPermissionsFilter
+        id={enrollment.client.id}
+        permissions='canEditClient'
+      >
+        <Button
+          onClick={clientLoading ? undefined : openClientFormDialog}
+          variant='outlined'
+        >
+          Update Client Details
+        </Button>
+      </ClientPermissionsFilter>
+      {renderServiceDialog()}
+      {renderClientFormDialog()}
     </Stack>
   );
 };

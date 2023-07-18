@@ -183,7 +183,10 @@ export const useEnrollmentBreadcrumbConfig = (
       },
       [enrollmentRoot]: { parent: clientRoot, title: enrollmentTitle },
       [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
-      [EnrollmentDashboardRoutes.ASSESSMENT]: { title: 'Assessment' },
+      [EnrollmentDashboardRoutes.ASSESSMENT]: {
+        title: 'Assessment',
+        parent: EnrollmentDashboardRoutes.ASSESSMENTS,
+      },
     };
     return buildDefaultCrumbs(
       EnrollmentDashboardRoutes,

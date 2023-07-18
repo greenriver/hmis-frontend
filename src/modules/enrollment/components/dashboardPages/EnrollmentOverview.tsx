@@ -1,8 +1,6 @@
 import { Grid, Paper, Stack } from '@mui/material';
 import { useMemo } from 'react';
 
-import EnrollmentRecordTabs from './EnrollmentRecordTabs';
-
 import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import TitleCard from '@/components/elements/TitleCard';
@@ -14,18 +12,13 @@ import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQu
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
-import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
 
-const ViewEnrollment = () => {
+const EnrollmentOverview = () => {
   const { enrollment } = useEnrollmentDashboardContext();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
     clientId: string;
   };
-
-  const { renderServiceDialog, openServiceDialog } = useServiceDialog({
-    enrollment,
-  });
 
   const householdColumns = useMemo(
     () => [
@@ -43,7 +36,7 @@ const ViewEnrollment = () => {
     <>
       <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Stack spacing={2}>
             <TitleCard
               title='Household'
@@ -61,19 +54,11 @@ const ViewEnrollment = () => {
                 columns={householdColumns}
               />
             </TitleCard>
-
-            <Paper sx={{ pt: 2 }}>
-              <EnrollmentRecordTabs enrollment={enrollment} />
-            </Paper>
           </Stack>
         </Grid>
         <Grid item xs={3}>
           <Paper sx={{ p: 2, mb: 2 }}>
-            <EnrollmentQuickActions
-              clientId={clientId}
-              enrollmentId={enrollmentId}
-              openServiceDialog={openServiceDialog}
-            />
+            <EnrollmentQuickActions enrollment={enrollment} />
           </Paper>
           {enrollment.currentUnit && (
             <Paper sx={{ p: 2, mb: 2 }}>
@@ -84,9 +69,8 @@ const ViewEnrollment = () => {
           )}
         </Grid>
       </Grid>
-      {renderServiceDialog()}
     </>
   );
 };
 
-export default ViewEnrollment;
+export default EnrollmentOverview;

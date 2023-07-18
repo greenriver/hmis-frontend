@@ -83,25 +83,9 @@ const HouseholdActionButtons = ({
               formRole: AssessmentRole.Intake,
             })}
           >
-            {intakeColor === 'error'
-              ? 'Finish Intake'
-              : individual
-              ? 'Intake'
-              : 'Household Intakes'}
+            {individual ? 'Intake Assessment' : 'Household Intakes'}
           </ButtonLink>
         </ButtonTooltipContainer>
-      )}
-      {canIntake && (
-        <ButtonLink
-          icon={PostAddIcon}
-          to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-            clientId,
-            enrollmentId,
-            formRole: AssessmentRole.Annual,
-          })}
-        >
-          Annual
-        </ButtonLink>
       )}
       {(canExit || exitReason) && (
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
@@ -114,7 +98,7 @@ const HouseholdActionButtons = ({
               formRole: AssessmentRole.Exit,
             })}
           >
-            {individual ? 'Exit' : 'Household Exits'}
+            {individual ? 'Exit Assessment' : 'Household Exits'}
           </ButtonLink>
         </ButtonTooltipContainer>
       )}

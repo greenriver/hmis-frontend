@@ -36,6 +36,10 @@ const enrollmentDashboardRoutes = {
   ENROLLMENT_OVERVIEW: 'overview',
   HOUSEHOLD: 'household',
   EDIT_HOUSEHOLD: 'household/edit',
+  ASSESSMENTS: 'assessments',
+  SERVICES: 'services',
+  CURRENT_LIVING_SITUATIONS: 'current-living-situations',
+  EVENTS: 'events',
   ASSESSMENT: 'assessments/:formRole/:assessmentId?',
 };
 

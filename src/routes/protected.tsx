@@ -19,7 +19,6 @@ import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessme
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
 import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
-import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
 import MainLayout from '@/components/layout/MainLayout';
@@ -37,10 +36,15 @@ import Dashboard from '@/components/pages/UserDashboard';
 import AdminDashboard from '@/modules/admin/components/AdminDashboard';
 import AdminReferralDenials from '@/modules/admin/components/AdminReferralDenials';
 import AdminReferralPosting from '@/modules/admin/components/AdminReferralPosting';
+import EnrollmentAssessmentsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentAssessmentsPage';
+import EnrollmentCurrentLivingSituationsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentCurrentLivingSituationsPage';
+import EnrollmentEventsPage from '@/modules/enrollment/components/dashboardPages/EnrollmentEventsPage';
+import EnrollmentOverview from '@/modules/enrollment/components/dashboardPages/EnrollmentOverview';
+import EnrollmentServicesPage from '@/modules/enrollment/components/dashboardPages/EnrollmentServicesPage';
+import HouseholdPage from '@/modules/enrollment/components/dashboardPages/HouseholdPage';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import CreateHouseholdPage from '@/modules/household/components/CreateHouseholdPage';
 import EditHouseholdPage from '@/modules/household/components/EditHouseholdPage';
-import HouseholdPage from '@/modules/household/components/HouseholdPage';
 import { RootPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import AddServices from '@/modules/projects/components/BulkAddServices';
 import Cocs from '@/modules/projects/components/Cocs';
@@ -275,7 +279,7 @@ export const protectedRoutes: RouteNode[] = [
           {
             path: EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
             // No perm needed because it only requires enrollment visibility
-            element: <ViewEnrollment />,
+            element: <EnrollmentOverview />,
           },
           {
             path: EnrollmentDashboardRoutes.HOUSEHOLD,
@@ -294,9 +298,29 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
+            path: EnrollmentDashboardRoutes.ASSESSMENTS,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentAssessmentsPage />,
+          },
+          {
             path: EnrollmentDashboardRoutes.ASSESSMENT,
             // No perm needed because it only requires enrollment visibility
             element: <AssessmentPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.SERVICES,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentServicesPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentCurrentLivingSituationsPage />,
+          },
+          {
+            path: EnrollmentDashboardRoutes.EVENTS,
+            // No perm needed because it only requires enrollment visibility
+            element: <EnrollmentEventsPage />,
           },
           { path: '*', element: <Navigate to='overview' replace /> },
         ],
@@ -339,7 +363,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
             element: (
               <ClientRoute
-                permissions='canViewEnrollmentDetails'
+                permissions='canEnrollmentOverviewDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllEnrollments />
@@ -350,7 +374,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.ASSESSMENTS,
             element: (
               <ClientRoute
-                permissions='canViewEnrollmentDetails'
+                permissions='canEnrollmentOverviewDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllAssessments />
@@ -361,7 +385,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.SERVICES,
             element: (
               <ClientRoute
-                permissions='canViewEnrollmentDetails'
+                permissions='canEnrollmentOverviewDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientServices />

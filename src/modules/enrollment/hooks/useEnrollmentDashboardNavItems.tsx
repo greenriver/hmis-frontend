@@ -37,16 +37,36 @@ export const useEnrollmentDashboardNavItems = (
             ),
           },
           {
-            id: 'overview',
+            id: 'household',
             title: 'Household',
             path: generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, params),
           },
-          // Household
-          // Assessments
-          // Services
-          // CLS
-          // Case Notes
-          // Files
+          {
+            id: 'assessments',
+            title: 'Assessments',
+            path: generateSafePath(
+              EnrollmentDashboardRoutes.ASSESSMENTS,
+              params
+            ),
+          },
+          {
+            id: 'services',
+            title: 'Services',
+            path: generateSafePath(EnrollmentDashboardRoutes.SERVICES, params),
+          },
+          {
+            id: 'cls',
+            title: 'Current Living Situations',
+            path: generateSafePath(
+              EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+              params
+            ),
+          },
+          {
+            id: 'events',
+            title: 'CE Events',
+            path: generateSafePath(EnrollmentDashboardRoutes.EVENTS, params),
+          },
         ],
       },
     ];

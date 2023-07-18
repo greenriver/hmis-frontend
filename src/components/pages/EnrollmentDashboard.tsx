@@ -58,7 +58,7 @@ const EnrollmentDashboard: React.FC = () => {
       currentPath === EnrollmentDashboardRoutes.ASSESSMENT &&
       showAssessmentInHousehold(enrollment, params.formRole)
     ) {
-      return EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW;
+      return EnrollmentDashboardRoutes.ASSESSMENTS;
     }
   }, [enrollment, dashboardState.focusMode, currentPath, params.formRole]);
 

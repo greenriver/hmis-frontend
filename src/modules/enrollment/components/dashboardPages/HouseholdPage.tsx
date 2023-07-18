@@ -25,11 +25,7 @@ const HouseholdPage = () => {
         </CommonLabeledTextBlock>
       }
     >
-      <HouseholdMemberTable
-        clientId={clientId}
-        enrollmentId={enrollmentId}
-        // hideColumns={['enrollment_status']}
-      />
+      <HouseholdMemberTable clientId={clientId} enrollmentId={enrollmentId} />
     </TitleCard>
   );
 };
