@@ -1,5 +1,5 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import { useMemo } from 'react';
 
 import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
@@ -9,9 +9,9 @@ import HouseholdActionButtons from './elements/HouseholdActionButtons';
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
 import ClientName from '@/modules/client/components/ClientName';
+import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import HohIndicator from '@/modules/hmis/components/HohIndicator';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
@@ -69,33 +69,35 @@ const HouseholdMemberTable = ({
         },
       },
       {
-        header: 'Entry Date',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          hc.enrollment.entryDate
-            ? parseAndFormatDate(hc.enrollment.entryDate)
-            : 'Unknown',
-      },
-      {
-        header: 'Status',
-        render: (hc: HouseholdClientFieldsFragment) =>
-          hc.enrollment.exitDate ? (
-            `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
-          ) : hc.enrollment.inProgress ? (
-            <Typography variant='body2' color='error'>
-              Incomplete
-            </Typography>
-          ) : (
-            'Active'
-          ),
-      },
-      {
-        header: 'Relationship to HoH',
+        header: 'Relation to HoH',
         render: (hc: HouseholdClientFieldsFragment) => (
           <HmisEnum
             value={hc.relationshipToHoH}
             enumMap={HmisEnums.RelationshipToHoH}
           />
         ),
+      },
+      // {
+      //   header: 'Entry Date',
+      //   render: (hc: HouseholdClientFieldsFragment) =>
+      //     hc.enrollment.entryDate
+      //       ? parseAndFormatDate(hc.enrollment.entryDate)
+      //       : 'Unknown',
+      // },
+      {
+        header: 'Status',
+        render: (hc: HouseholdClientFieldsFragment) => (
+          <EnrollmentStatus enrollment={hc.enrollment} />
+        ),
+        // hc.enrollment.exitDate ? (
+        //   `Exited on ${parseAndFormatDate(hc.enrollment.exitDate)}`
+        // ) : hc.enrollment.inProgress ? (
+        //   <Typography variant='body2' color='error'>
+        //     Incomplete
+        //   </Typography>
+        // ) : (
+        //   'Active'
+        // ),
       },
     ];
   }, [clientId]);

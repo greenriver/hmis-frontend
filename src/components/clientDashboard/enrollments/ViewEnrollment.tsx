@@ -1,23 +1,17 @@
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
-import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Paper, Stack } from '@mui/material';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
-import ButtonLink from '@/components/elements/ButtonLink';
+import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
-import RouterLink from '@/components/elements/RouterLink';
 import TitleCard from '@/components/elements/TitleCard';
+import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
-import IdDisplay from '@/modules/hmis/components/IdDisplay';
-import { enrollmentName } from '@/modules/hmis/hmisUtil';
+import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
 import HouseholdMemberTable from '@/modules/household/components/HouseholdMemberTable';
-import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import { useServiceDialog } from '@/modules/services/hooks/useServiceDialog';
-import { EnrollmentDashboardRoutes, Routes } from '@/routes/routes';
-import { FormRole } from '@/types/gqlTypes';
-import generateSafePath from '@/utils/generateSafePath';
 
 const ViewEnrollment = () => {
   const { enrollment } = useEnrollmentDashboardContext();
@@ -34,13 +28,19 @@ const ViewEnrollment = () => {
 
   return (
     <>
-      <Stack justifyContent={'space-between'} direction='row' sx={{ mb: 3 }}>
-        <Typography variant='h4'>{enrollmentName(enrollment)}</Typography>
-      </Stack>
+      <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
-        <Grid item xs={9}>
+        <Grid item xs={8}>
           <Stack spacing={2}>
-            <TitleCard title='Household' headerVariant='border'>
+            <TitleCard
+              title='Household'
+              headerVariant='border'
+              actions={
+                <CommonLabeledTextBlock title='Household ID' horizontal>
+                  <ClickToCopyId value={enrollment.householdId} />
+                </CommonLabeledTextBlock>
+              }
+            >
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
@@ -52,63 +52,13 @@ const ViewEnrollment = () => {
             </Paper>
           </Stack>
         </Grid>
-        <Grid item xs>
+        <Grid item xs={3}>
           <Paper sx={{ p: 2, mb: 2 }}>
-            <Stack spacing={2}>
-              <Typography variant='h6'>Actions</Typography>
-              <ClientPermissionsFilter
-                id={clientId}
-                permissions={['canEditEnrollments']}
-              >
-                <ButtonLink
-                  to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
-                    clientId,
-                    enrollmentId,
-                    formRole: FormRole.Update,
-                  })}
-                  Icon={LibraryAddIcon}
-                  leftAlign
-                >
-                  Update Assessment
-                </ButtonLink>
-                <Button
-                  onClick={openServiceDialog}
-                  startIcon={<LibraryAddIcon fontSize='small' />}
-                  variant='outlined'
-                  color='secondary'
-                  sx={{ pl: 3, justifyContent: 'left' }}
-                >
-                  Add Service
-                </Button>
-                <ButtonLink to='' Icon={LibraryAddIcon} leftAlign>
-                  Add Event
-                </ButtonLink>
-              </ClientPermissionsFilter>
-            </Stack>
-          </Paper>
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <Stack gap={1}>
-              <Typography variant='body2' color='text.secondary'>
-                Project:{' '}
-                <RouterLink
-                  to={generateSafePath(Routes.PROJECT, {
-                    projectId: enrollment.project.id,
-                  })}
-                >
-                  {enrollment.project.projectName}
-                </RouterLink>
-              </Typography>
-              <IdDisplay
-                prefix='Enrollment'
-                color='text.secondary'
-                value={enrollment.id}
-              />
-              <IdDisplay
-                prefix='Household'
-                color='text.secondary'
-                value={enrollment.householdShortId}
-              />
-            </Stack>
+            <EnrollmentQuickActions
+              clientId={clientId}
+              enrollmentId={enrollmentId}
+              openServiceDialog={openServiceDialog}
+            />
           </Paper>
           {enrollment.currentUnit && (
             <Paper sx={{ p: 2, mb: 2 }}>

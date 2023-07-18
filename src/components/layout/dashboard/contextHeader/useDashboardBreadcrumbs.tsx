@@ -1,3 +1,5 @@
+import { SvgIconComponent } from '@mui/icons-material';
+import PersonIcon from '@mui/icons-material/Person';
 import { merge, startCase } from 'lodash-es';
 import { useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -18,6 +20,7 @@ type CrumbConfig = {
   [x: string]: {
     title: string;
     parent?: string;
+    icon?: SvgIconComponent;
   };
 };
 
@@ -173,8 +176,11 @@ export const useEnrollmentBreadcrumbConfig = (
       ? enrollmentName(context.enrollment)
       : 'Enrollment';
 
-    const overrides = {
-      [clientRoot]: { title: clientBriefName(context.client) },
+    const overrides: CrumbConfig = {
+      [clientRoot]: {
+        title: clientBriefName(context.client),
+        icon: PersonIcon,
+      },
       [enrollmentRoot]: { parent: clientRoot, title: enrollmentTitle },
       [EnrollmentDashboardRoutes.EDIT_HOUSEHOLD]: { title: 'Edit Household' },
       [EnrollmentDashboardRoutes.ASSESSMENT]: { title: 'Assessment' },
@@ -224,6 +230,7 @@ export const useDashboardBreadcrumbs = (
     const crumbs = paths.map((path) => ({
       to: path,
       label: breadcrumbOverrides?.[path] || crumbConfig[path]?.title || 'Page',
+      icon: crumbConfig[path]?.icon,
     }));
 
     return crumbs;

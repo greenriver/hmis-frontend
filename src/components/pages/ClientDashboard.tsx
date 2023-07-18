@@ -95,7 +95,7 @@ const ClientDashboard: React.FC = () => {
       navLabel='Client Navigation'
       {...dashboardState}
     >
-      <Container maxWidth='lg' sx={{ pb: 6 }}>
+      <Container maxWidth='xl' sx={{ pb: 6 }}>
         <Outlet context={outletContext} />
       </Container>
     </DashboardContentContainer>
