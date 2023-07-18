@@ -9,7 +9,6 @@ import apolloClient from './apolloClient';
 
 import Loading from '@/components/elements/Loading';
 import MergedThemeProvider from '@/config/MergedThemeProvider';
-import { AuthProvider } from '@/modules/auth/hooks/useAuth';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import { HmisAppSettingsProvider } from '@/modules/hmisAppSettings/Provider';
 
@@ -25,9 +24,7 @@ const AppProvider = ({ children }: AppProviderProps) => {
           <ApolloProvider client={apolloClient}>
             <BrowserRouter>
               <HmisAppSettingsProvider>
-                <MergedThemeProvider>
-                  <AuthProvider>{children}</AuthProvider>
-                </MergedThemeProvider>
+                <MergedThemeProvider>{children}</MergedThemeProvider>
               </HmisAppSettingsProvider>
             </BrowserRouter>
           </ApolloProvider>

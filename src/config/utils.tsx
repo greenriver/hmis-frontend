@@ -1,5 +1,3 @@
-import { getCsrfToken } from '@/utils/csrf';
-
 type ReturnType = { [x: string]: any };
 
 export async function fetchTheme(which: string): Promise<ReturnType> {
@@ -8,7 +6,6 @@ export async function fetchTheme(which: string): Promise<ReturnType> {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
     },
   });
   if (response.status !== 200) {
@@ -25,7 +22,6 @@ export async function fetchThemes(): Promise<ReturnType> {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
     },
   });
   if (response.status !== 200) {
