@@ -18,7 +18,7 @@ const fetchHmisAppSettingsMock = fetchHmisAppSettings as jest.MockedFunction<
 
 test('renders login page', async () => {
   fetchHmisAppSettingsMock.mockResolvedValue({});
-  fetchCurrentUserMock.mockRejectedValue(new Error('err'));
+  fetchCurrentUserMock.mockResolvedValue({});
 
   act(() => render(<App />));
   await waitFor(async () => {
