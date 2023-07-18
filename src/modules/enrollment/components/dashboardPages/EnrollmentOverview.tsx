@@ -1,10 +1,9 @@
-import { Grid, Paper, Stack } from '@mui/material';
+import { Grid, Stack } from '@mui/material';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
 
-import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -79,35 +78,34 @@ const EnrollmentOverview = () => {
           </Stack>
         </Grid>
         <Grid item xs={3}>
-          <Paper sx={{ p: 2, mb: 2 }}>
-            <EnrollmentQuickActions enrollment={enrollment} />
-          </Paper>
-          {enrollment.currentUnit && (
-            <Paper sx={{ p: 2, mb: 2 }}>
-              <CommonLabeledTextBlock title='Unit Assignment'>
-                {enrollment.currentUnit.name}
-              </CommonLabeledTextBlock>
-            </Paper>
-          )}
-          {enrollment.inProgress && (
-            <DeleteMutationButton<
-              DeleteEnrollmentMutation,
-              DeleteEnrollmentMutationVariables
-            >
-              queryDocument={DeleteEnrollmentDocument}
-              variables={{ input: { id: enrollment.id } }}
-              idPath='deleteEnrollment.enrollment.id'
-              recordName='Enrollment'
-              onSuccess={onSuccessfulDelete}
-              ButtonProps={{
-                sx: { justifyContent: 'left', float: 'right', mt: 2 },
-                size: 'small',
-              }}
-              deleteIcon
-            >
-              Delete Enrollment
-            </DeleteMutationButton>
-          )}
+          <Stack spacing={2}>
+            <TitleCard title='Quick Actions'>
+              <EnrollmentQuickActions enrollment={enrollment} />
+            </TitleCard>
+            {enrollment.inProgress && (
+              <DeleteMutationButton<
+                DeleteEnrollmentMutation,
+                DeleteEnrollmentMutationVariables
+              >
+                queryDocument={DeleteEnrollmentDocument}
+                variables={{ input: { id: enrollment.id } }}
+                idPath='deleteEnrollment.enrollment.id'
+                recordName='Enrollment'
+                onSuccess={onSuccessfulDelete}
+                ButtonProps={{
+                  sx: {
+                    justifyContent: 'left',
+                    alignSelf: 'flex-end',
+                    width: 'fit-content',
+                  },
+                  size: 'small',
+                }}
+                deleteIcon
+              >
+                Delete Enrollment
+              </DeleteMutationButton>
+            )}
+          </Stack>
         </Grid>
       </Grid>
     </>

@@ -51,7 +51,7 @@ const HouseholdActionButtons = ({
     ).length;
     // All members have completed intake
     if (numIncomplete === 0) {
-      return [true, null, 'secondary'];
+      return [true, null, undefined];
     }
 
     let message = `${numIncomplete} members have incomplete intakes.`;

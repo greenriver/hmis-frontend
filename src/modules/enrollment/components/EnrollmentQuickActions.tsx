@@ -1,4 +1,4 @@
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { Stack } from '@mui/system';
 
 import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
@@ -21,8 +21,7 @@ const EnrollmentQuickActions = ({
     });
 
   return (
-    <Stack spacing={2}>
-      <Typography variant='h6'>Quick Actions</Typography>
+    <Stack spacing={2} sx={{ px: 2, pb: 2 }}>
       <ClientPermissionsFilter
         id={enrollment.client.id}
         permissions={['canEditEnrollments']}
