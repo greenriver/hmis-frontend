@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
-import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import Loading from '@/components/elements/Loading';
 import { fetchCurrentUser, HmisUser } from '@/modules/auth/api/sessions';
-import { getSessionTracking, getUser } from '@/modules/auth/api/storage';
+import * as storage from '@/modules/auth/api/storage';
 import { HmisAuthContext, HmisAuthState } from '@/modules/auth/AuthContext';
 import { useSessionTrackingObserver } from '@/modules/auth/hooks/useSessionTrackingObserver';
 import { fetchHmisAppSettings } from '@/modules/hmisAppSettings/api';
@@ -13,19 +13,16 @@ import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 import { reloadWindow } from '@/utils/location';
 import { currentTimeInSeconds } from '@/utils/time';
 
-// if the session has expired, return undefined
-const getCurrentUserWithCache = (): Promise<HmisUser | undefined> => {
-  const expiry = getSessionTracking();
-  const storedUser = getUser();
-  if (expiry && storedUser) {
-    if (
-      expiry.timestamp + storedUser.sessionDuration <
-      currentTimeInSeconds()
-    ) {
-      return Promise.resolve(storedUser);
+// cached user if the session has not expired
+const getValidCachedUser = (): HmisUser | undefined => {
+  const tracking = storage.getSessionTracking();
+  const user = storage.getUser();
+  if (tracking && user && tracking.userId === tracking.userId) {
+    const { timestamp } = tracking;
+    if (timestamp + user.sessionDuration < currentTimeInSeconds()) {
+      return user;
     }
   }
-  return fetchCurrentUser();
 };
 
 interface Props {
@@ -50,21 +47,31 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   useSessionTrackingObserver();
 
   // fetch data from remote
-  const fetchFromRemote = useCallback(() => {
-    setLoading(true);
-    return Promise.all([
-      fetchHmisAppSettings().then(setAppSettings),
-      getCurrentUserWithCache().then(setUser),
-    ])
-      .then(() => setError(undefined))
-      .catch(setError)
-      .finally(() => setLoading(false));
-  }, []);
-
-  // initial load
   useEffect(() => {
-    fetchFromRemote();
-  }, [fetchFromRemote]);
+    const cachedUser = getValidCachedUser();
+    const promises: Array<Promise<any>> = [];
+
+    if (cachedUser) {
+      setUser(cachedUser);
+      const cachedSettings = storage.getAppSettings();
+      if (cachedSettings) {
+        setAppSettings(cachedSettings);
+      } else {
+        promises.push(fetchHmisAppSettings().then(setAppSettings));
+      }
+    } else {
+      promises.push(fetchCurrentUser().then(setUser));
+      promises.push(fetchHmisAppSettings().then(setAppSettings));
+    }
+
+    if (promises.length) {
+      setLoading(true);
+      Promise.all(promises)
+        .then(() => setError(undefined))
+        .catch(setError)
+        .finally(() => setLoading(false));
+    }
+  }, []);
 
   // handle side-effects
   useEffect(() => {

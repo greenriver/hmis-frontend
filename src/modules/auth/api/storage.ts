@@ -1,6 +1,8 @@
-import { HmisUser } from './sessions';
+import { HmisUser } from '@/modules/auth/api/sessions';
+import { HmisAppSettings } from '@/modules/hmisAppSettings/types';
 
 export const USER_STORAGE_KEY = '_hmis_user_info';
+export const SETTINGS_STORAGE_KEY = '_hmis_user_info';
 export const SESSION_TRACKING_STORAGE_KEY = '_hmis_session_ts';
 
 const parseJson = <T>(value: string | undefined) => {
@@ -21,6 +23,20 @@ export const getUser = () => {
 };
 
 export const removeUser = () => localStorage.removeItem(USER_STORAGE_KEY);
+
+export const setAppSettings = (user: HmisAppSettings) =>
+  localStorage.setItem(
+    SETTINGS_STORAGE_KEY,
+    JSON.stringify({ user, ...setUser })
+  );
+
+export const getAppSettings = () => {
+  const value = localStorage.getItem(SETTINGS_STORAGE_KEY);
+  return value ? parseJson<HmisAppSettings>(value) : undefined;
+};
+
+export const clearAppSettings = () =>
+  localStorage.removeItem(SETTINGS_STORAGE_KEY);
 
 export interface HmisSessionTracking {
   userId: string;
