@@ -33,7 +33,7 @@ const NewReferralRequest: React.FC = () => {
       onCompleted={onCompleted}
       formRole={FormRole.ReferralRequest}
       inputVariables={{ projectId }}
-      pickListRelationId={projectId}
+      pickListArgs={{ projectId }}
       title={<ProjectFormTitle title={title} project={project} />}
       localConstants={{
         userName: user?.name,

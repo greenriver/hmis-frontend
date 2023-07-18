@@ -81,7 +81,7 @@ const TableFilterItem = <T,>({
           return (
             <PickListWrapper
               pickListType={filter.pickListReference}
-              relationId={filter.relationId}
+              pickListArgs={filter.pickListArgs}
             >
               {(options, loading) => (
                 <TableFilterItemSelector

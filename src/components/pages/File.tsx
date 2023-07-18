@@ -51,7 +51,7 @@ const File = ({ create = false }: { create?: boolean }) => {
       record={data?.file || undefined}
       inputVariables={{ clientId }}
       FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}
-      pickListRelationId={clientId}
+      pickListArgs={{ clientId }}
       title={
         <Stack direction={'row'} spacing={2}>
           <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>

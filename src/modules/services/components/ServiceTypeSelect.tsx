@@ -13,15 +13,15 @@ const ServiceTypeSelect = ({
   value: PickListOption | null;
   onChange: (val: PickListOption | null) => void;
 }) => {
-  const [serviceList, serviceListLoading] = usePickList(
-    {
+  const { pickList: serviceList, loading: serviceListLoading } = usePickList({
+    item: {
       linkId: 'fake',
       type: ItemType.Choice,
       pickListReference: PickListType.AvailableServiceTypes,
     },
     projectId,
-    { fetchPolicy: 'network-only' }
-  );
+    fetchOptions: { fetchPolicy: 'network-only' },
+  });
 
   return (
     <FormSelect

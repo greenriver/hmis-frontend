@@ -182,7 +182,7 @@ const FileDialog: React.FC<FileDialogProps> = ({ file, actions, ...props }) => {
           formRole={FormRole.File}
           title={file.name}
           actions={actions}
-          pickListRelationId={clientId}
+          pickListArgs={{ clientId }}
         >
           <Stack
             width='100%'

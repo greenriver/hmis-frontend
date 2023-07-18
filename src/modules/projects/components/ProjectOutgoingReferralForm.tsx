@@ -70,7 +70,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
       onSubmit={handleSubmit}
       loading={loading}
       errors={errors}
-      pickListRelationId={project.id}
+      pickListArgs={{ projectId: project.id }}
     />
   );
 };

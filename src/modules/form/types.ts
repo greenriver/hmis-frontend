@@ -35,6 +35,12 @@ export type SubmitFormAllowedTypes = NonNullable<
   NonNullable<SubmitFormMutation['submitForm']>['record']
 >;
 
+export type PickListArgs = {
+  projectId?: string;
+  clientId?: string;
+  householdId?: string;
+  enrollmentId?: string;
+};
 // Props to DynamicField. Need to put here to avoid circular deps.
 export interface DynamicFieldProps {
   item: FormItem;
@@ -45,7 +51,7 @@ export interface DynamicFieldProps {
   errors?: ValidationError[];
   inputProps?: DynamicInputCommonProps;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   noLabel?: boolean;
   warnIfEmpty?: boolean;
 }
@@ -55,7 +61,7 @@ export interface DynamicViewFieldProps {
   nestingLevel: number;
   value: any;
   horizontal?: boolean;
-  pickListRelationId?: string;
+  pickListArgs?: PickListArgs;
   noLabel?: boolean;
   adjustValue?: ItemChangedFn;
 }
