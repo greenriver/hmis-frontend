@@ -27,7 +27,7 @@ const AddressInput = ({
   value: AddressInputType;
   onChange: (value: AddressInputType) => void;
 }) => {
-  const [stateList, loading] = usePickList(fakeStateItem);
+  const { pickList: stateList, loading } = usePickList({ item: fakeStateItem });
   const typeValue = useMemo(
     () => addressTypePicklist.find((o) => o.code == value.addressType) || null,
     [value]

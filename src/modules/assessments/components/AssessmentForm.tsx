@@ -177,7 +177,7 @@ const AssessmentForm = ({
   // Manually preload picklists here so we can prevent printing until they're fetched
   const { loading: pickListsLoading } = usePreloadPicklists({
     definition: definition.definition,
-    relationId: enrollment?.project?.id,
+    pickListArgs: { projectId: enrollment?.project?.id },
   });
   usePrintTrigger({
     startReady: isPrintView,
@@ -246,7 +246,7 @@ const AssessmentForm = ({
             // dont use `initialValues` because we don't want the OVERWRITE fields
             values={initialValuesFromAssessment(itemMap, assessment)}
             definition={definition.definition}
-            pickListRelationId={enrollment.project.id}
+            pickListArgs={{ projectId: enrollment.project.id }}
           />
         ) : (
           <DynamicForm
@@ -261,7 +261,7 @@ const AssessmentForm = ({
                 : saveDraftHandler
             }
             initialValues={initialValues || undefined}
-            pickListRelationId={enrollment?.project?.id}
+            pickListArgs={{ projectId: enrollment?.project.id }}
             loading={mutationLoading}
             errors={errors}
             locked={locked}

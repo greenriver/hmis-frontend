@@ -5,7 +5,7 @@
       "required": true,
       "linkId": "enrollmentID",
       "text": "HoH Enrollment",
-      "pickListReference": "PROJECT_HOH_ENROLLMENTS",
+      "pickListReference": "OPEN_HOH_ENROLLMENTS_FOR_PROJECT",
       "mapping": { "fieldName": "enrollmentId" }
     },
     {
