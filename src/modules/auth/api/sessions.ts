@@ -87,30 +87,16 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   }
 }
 
-const fetchWithCsrfRetry = async (url: string, opts: RequestInit) => {
-  const headers = () => ({
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-    'X-CSRF-Token': getCsrfToken(),
+const fetchWithCsrf = (url: string, { headers, ...opts }: RequestInit) => {
+  return fetch(url, {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'X-CSRF-Token': getCsrfToken(),
+      ...headers,
+    },
+    ...opts,
   });
-
-  try {
-    return await fetch(url, {
-      headers: headers(),
-      ...opts,
-    });
-  } catch (error) {
-    // check for csrf failures and crudely send
-    const csrfFailure =
-      isHmisResponseError(error) && error.type === 'unverified_request';
-    if (!csrfFailure) throw error;
-
-    // curde retry on CSRF failure
-    return await fetch(url, {
-      headers: headers(),
-      ...opts,
-    });
-  }
 };
 
 export type LoginParams = {
@@ -120,13 +106,8 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const response = await fetchWithCsrfRetry('/hmis/session_keepalive', {
+  const response = await fetchWithCsrf('/hmis/session_keepalive', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
-    },
   });
   trackSessionFromResponse(response);
   return response;
@@ -137,13 +118,8 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
-  const response = await fetchWithCsrfRetry('/hmis/login', {
+  const response = await fetchWithCsrf('/hmis/login', {
     method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'X-CSRF-Token': getCsrfToken(),
-    },
     body: JSON.stringify({
       hmis_user: {
         email,
@@ -166,9 +142,8 @@ export async function login({
 }
 
 export async function logout() {
-  const response = await fetchWithCsrfRetry('/hmis/logout', {
+  const response = await fetchWithCsrf('/hmis/logout', {
     method: 'DELETE',
-    headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   trackSessionFromResponse(response);
   storage.clearUser();

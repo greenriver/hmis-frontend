@@ -7,6 +7,7 @@ import OneTimePassword from './OneTimePassword';
 import TextInput from '@/components/elements/input/TextInput';
 import LoadingButton from '@/components/elements/LoadingButton';
 import {
+  fetchCurrentUser,
   HmisUser,
   isHmisResponseError,
   login,
@@ -14,6 +15,7 @@ import {
 import useAuth from '@/modules/auth/hooks/useAuth';
 import { useHmisAppSettings } from '@/modules/hmisAppSettings/useHmisAppSettings';
 import { RouteLocationState } from '@/routes/AppRoutes';
+import { reloadWindow } from '@/utils/location';
 
 const errorMessage = (error: Error) => {
   if (isHmisResponseError(error)) {
@@ -47,17 +49,30 @@ const LoginForm = () => {
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
       setLoading(true);
-      login({ email, password })
+
+      const handleHmisError = (error: any): boolean => {
+        if (!isHmisResponseError(error)) return false;
+
+        if (error.type === 'mfa_required') {
+          setError(undefined);
+          setPrompt2fa(true);
+          setLoading(false);
+          return true;
+        } else if (error.type === 'unverified_request') {
+          fetchCurrentUser().finally(reloadWindow);
+          return true;
+        }
+        return false;
+      };
+
+      return login({ email, password })
         .then((user) => {
           setPrompt2fa(false);
           setLoading(false);
           handleSuccess(user);
         })
-        .catch((error: Error) => {
-          if (isHmisResponseError(error) && error.type === 'mfa_required') {
-            setPrompt2fa(true);
-            setLoading(false);
-          } else {
+        .catch((error: any) => {
+          if (!handleHmisError(error)) {
             setError(error);
             setLoading(false);
           }
