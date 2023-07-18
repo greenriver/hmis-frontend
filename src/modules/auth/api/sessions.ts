@@ -89,7 +89,7 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   }
 }
 
-const fetchWithRetry = fetchRetryCb(window.fetch || global.fetch);
+const fetchWithRetry = fetchRetryCb(fetch);
 const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
   return isHmisResponseError(error) && error.type === 'unverified_request';
 };
