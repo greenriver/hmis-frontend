@@ -24,7 +24,7 @@ const TitleCard: React.FC<Props> = ({
       direction='row'
       sx={{
         px: 2,
-        py: 2,
+        py: actions ? 2 : 1,
         ...(headerVariant === 'border'
           ? {
               borderBottomColor: 'borders.light',

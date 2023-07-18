@@ -9292,193 +9292,6 @@ export type DeleteClientMutation = {
   } | null;
 };
 
-export type GetEnrollmentQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetEnrollmentQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    relationshipToHoH: RelationshipToHoH;
-    enrollmentCoc?: string | null;
-    householdId: string;
-    householdShortId: string;
-    householdSize: number;
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-    client: {
-      __typename?: 'Client';
-      dob?: string | null;
-      veteranStatus: NoYesReasonsForMissingData;
-      id: string;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    };
-    access: {
-      __typename?: 'EnrollmentAccess';
-      id: string;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-    };
-    currentUnit?: {
-      __typename?: 'Unit';
-      id: string;
-      name: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        description?: string | null;
-      } | null;
-    } | null;
-  } | null;
-};
-
-export type GetEnrollmentWithHouseholdQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-export type GetEnrollmentWithHouseholdQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    entryDate: string;
-    exitDate?: string | null;
-    inProgress: boolean;
-    relationshipToHoH: RelationshipToHoH;
-    enrollmentCoc?: string | null;
-    householdId: string;
-    householdShortId: string;
-    householdSize: number;
-    household: {
-      __typename?: 'Household';
-      id: string;
-      shortId: string;
-      householdClients: Array<{
-        __typename?: 'HouseholdClient';
-        id: string;
-        relationshipToHoH: RelationshipToHoH;
-        client: {
-          __typename?: 'Client';
-          id: string;
-          veteranStatus: NoYesReasonsForMissingData;
-          firstName?: string | null;
-          middleName?: string | null;
-          lastName?: string | null;
-          nameSuffix?: string | null;
-          dob?: string | null;
-          age?: number | null;
-          ssn?: string | null;
-          access: {
-            __typename?: 'ClientAccess';
-            id: string;
-            canViewFullSsn: boolean;
-            canViewPartialSsn: boolean;
-            canEditClient: boolean;
-            canDeleteClient: boolean;
-            canViewDob: boolean;
-            canEditEnrollments: boolean;
-            canDeleteEnrollments: boolean;
-            canViewEnrollmentDetails: boolean;
-            canDeleteAssessments: boolean;
-            canManageAnyClientFiles: boolean;
-            canManageOwnClientFiles: boolean;
-            canViewAnyConfidentialClientFiles: boolean;
-            canViewAnyNonconfidentialClientFiles: boolean;
-          };
-        };
-        enrollment: {
-          __typename?: 'Enrollment';
-          id: string;
-          entryDate: string;
-          exitDate?: string | null;
-          inProgress: boolean;
-          currentUnit?: {
-            __typename?: 'Unit';
-            id: string;
-            name: string;
-          } | null;
-        };
-      }>;
-    };
-    project: {
-      __typename?: 'Project';
-      id: string;
-      projectName: string;
-      projectType?: ProjectType | null;
-    };
-    client: {
-      __typename?: 'Client';
-      dob?: string | null;
-      veteranStatus: NoYesReasonsForMissingData;
-      id: string;
-      firstName?: string | null;
-      middleName?: string | null;
-      lastName?: string | null;
-      nameSuffix?: string | null;
-    };
-    access: {
-      __typename?: 'EnrollmentAccess';
-      id: string;
-      canEditEnrollments: boolean;
-      canDeleteEnrollments: boolean;
-    };
-    currentUnit?: {
-      __typename?: 'Unit';
-      id: string;
-      name: string;
-      unitType?: {
-        __typename?: 'UnitTypeObject';
-        description?: string | null;
-      } | null;
-    } | null;
-  } | null;
-};
-
-export type GetEnrollmentEventsQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-export type GetEnrollmentEventsQuery = {
-  __typename?: 'Query';
-  enrollment?: {
-    __typename?: 'Enrollment';
-    id: string;
-    events: {
-      __typename?: 'EventsPaginated';
-      offset: number;
-      limit: number;
-      nodesCount: number;
-      nodes: Array<{
-        __typename?: 'Event';
-        id: string;
-        event: EventType;
-        eventDate: string;
-        locationCrisisOrPhHousing?: string | null;
-        probSolDivRrResult?: NoYesMissing | null;
-        referralCaseManageAfter?: NoYesMissing | null;
-        referralResult?: ReferralResult | null;
-        resultDate?: string | null;
-        dateCreated: string;
-        dateUpdated: string;
-        dateDeleted?: string | null;
-      }>;
-    };
-  } | null;
-};
-
 export type GetClientHouseholdMemberCandidatesQueryVariables = Exact<{
   id: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -10042,6 +9855,356 @@ export type EventFieldsFragment = {
   dateCreated: string;
   dateUpdated: string;
   dateDeleted?: string | null;
+};
+
+export type AllEnrollmentDetailsFragment = {
+  __typename?: 'Enrollment';
+  inProgress: boolean;
+  relationshipToHoH: RelationshipToHoH;
+  enrollmentCoc?: string | null;
+  householdId: string;
+  householdShortId: string;
+  householdSize: number;
+  id: string;
+  entryDate: string;
+  exitDate?: string | null;
+  livingSituation?: LivingSituation | null;
+  lengthOfStay?: ResidencePriorLengthOfStay | null;
+  losUnderThreshold?: NoYesMissing | null;
+  previousStreetEssh?: NoYesMissing | null;
+  dateToStreetEssh?: string | null;
+  timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+  monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
+  percentAmi?: PercentAmi | null;
+  referralSource?: ReferralSource | null;
+  countOutreachReferralApproaches?: number | null;
+  dateOfBcpStatus?: string | null;
+  eligibleForRhy?: NoYesMissing | null;
+  reasonNoServices?: ReasonNoServices | null;
+  runawayYouth?: NoYesReasonsForMissingData | null;
+  sexualOrientation?: SexualOrientation | null;
+  sexualOrientationOther?: string | null;
+  formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+  childWelfareYears?: RhyNumberofYears | null;
+  childWelfareMonths?: number | null;
+  formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+  juvenileJusticeYears?: RhyNumberofYears | null;
+  juvenileJusticeMonths?: number | null;
+  unemploymentFam?: NoYesMissing | null;
+  mentalHealthDisorderFam?: NoYesMissing | null;
+  physicalDisabilityFam?: NoYesMissing | null;
+  alcoholDrugUseDisorderFam?: NoYesMissing | null;
+  currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+  customDataElements: Array<{
+    __typename?: 'CustomDataElement';
+    id: string;
+    key: string;
+    label: string;
+    repeats: boolean;
+    value?: {
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    } | null;
+    values?: Array<{
+      __typename?: 'CustomDataElementValue';
+      id: string;
+      valueBoolean?: boolean | null;
+      valueDate?: string | null;
+      valueFloat?: number | null;
+      valueInteger?: number | null;
+      valueJson?: any | null;
+      valueString?: string | null;
+      valueText?: string | null;
+      dateCreated: string;
+      dateUpdated: string;
+      user?: { __typename: 'User'; id: string; name: string } | null;
+    }> | null;
+  }>;
+};
+
+export type GetEnrollmentQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    client: {
+      __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetEnrollmentDetailsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentDetailsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    livingSituation?: LivingSituation | null;
+    lengthOfStay?: ResidencePriorLengthOfStay | null;
+    losUnderThreshold?: NoYesMissing | null;
+    previousStreetEssh?: NoYesMissing | null;
+    dateToStreetEssh?: string | null;
+    timesHomelessPastThreeYears?: TimesHomelessPastThreeYears | null;
+    monthsHomelessPastThreeYears?: MonthsHomelessPastThreeYears | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
+    percentAmi?: PercentAmi | null;
+    referralSource?: ReferralSource | null;
+    countOutreachReferralApproaches?: number | null;
+    dateOfBcpStatus?: string | null;
+    eligibleForRhy?: NoYesMissing | null;
+    reasonNoServices?: ReasonNoServices | null;
+    runawayYouth?: NoYesReasonsForMissingData | null;
+    sexualOrientation?: SexualOrientation | null;
+    sexualOrientationOther?: string | null;
+    formerWardChildWelfare?: NoYesReasonsForMissingData | null;
+    childWelfareYears?: RhyNumberofYears | null;
+    childWelfareMonths?: number | null;
+    formerWardJuvenileJustice?: NoYesReasonsForMissingData | null;
+    juvenileJusticeYears?: RhyNumberofYears | null;
+    juvenileJusticeMonths?: number | null;
+    unemploymentFam?: NoYesMissing | null;
+    mentalHealthDisorderFam?: NoYesMissing | null;
+    physicalDisabilityFam?: NoYesMissing | null;
+    alcoholDrugUseDisorderFam?: NoYesMissing | null;
+    currentUnit?: { __typename?: 'Unit'; id: string; name: string } | null;
+    customDataElements: Array<{
+      __typename?: 'CustomDataElement';
+      id: string;
+      key: string;
+      label: string;
+      repeats: boolean;
+      value?: {
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      } | null;
+      values?: Array<{
+        __typename?: 'CustomDataElementValue';
+        id: string;
+        valueBoolean?: boolean | null;
+        valueDate?: string | null;
+        valueFloat?: number | null;
+        valueInteger?: number | null;
+        valueJson?: any | null;
+        valueString?: string | null;
+        valueText?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        user?: { __typename: 'User'; id: string; name: string } | null;
+      }> | null;
+    }>;
+  } | null;
+};
+
+export type GetEnrollmentWithHouseholdQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentWithHouseholdQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    entryDate: string;
+    exitDate?: string | null;
+    inProgress: boolean;
+    relationshipToHoH: RelationshipToHoH;
+    enrollmentCoc?: string | null;
+    householdId: string;
+    householdShortId: string;
+    householdSize: number;
+    household: {
+      __typename?: 'Household';
+      id: string;
+      shortId: string;
+      householdClients: Array<{
+        __typename?: 'HouseholdClient';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+        client: {
+          __typename?: 'Client';
+          id: string;
+          veteranStatus: NoYesReasonsForMissingData;
+          firstName?: string | null;
+          middleName?: string | null;
+          lastName?: string | null;
+          nameSuffix?: string | null;
+          dob?: string | null;
+          age?: number | null;
+          ssn?: string | null;
+          access: {
+            __typename?: 'ClientAccess';
+            id: string;
+            canViewFullSsn: boolean;
+            canViewPartialSsn: boolean;
+            canEditClient: boolean;
+            canDeleteClient: boolean;
+            canViewDob: boolean;
+            canEditEnrollments: boolean;
+            canDeleteEnrollments: boolean;
+            canViewEnrollmentDetails: boolean;
+            canDeleteAssessments: boolean;
+            canManageAnyClientFiles: boolean;
+            canManageOwnClientFiles: boolean;
+            canViewAnyConfidentialClientFiles: boolean;
+            canViewAnyNonconfidentialClientFiles: boolean;
+          };
+        };
+        enrollment: {
+          __typename?: 'Enrollment';
+          id: string;
+          entryDate: string;
+          exitDate?: string | null;
+          inProgress: boolean;
+          currentUnit?: {
+            __typename?: 'Unit';
+            id: string;
+            name: string;
+          } | null;
+        };
+      }>;
+    };
+    project: {
+      __typename?: 'Project';
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
+    client: {
+      __typename?: 'Client';
+      dob?: string | null;
+      veteranStatus: NoYesReasonsForMissingData;
+      id: string;
+      firstName?: string | null;
+      middleName?: string | null;
+      lastName?: string | null;
+      nameSuffix?: string | null;
+    };
+    access: {
+      __typename?: 'EnrollmentAccess';
+      id: string;
+      canEditEnrollments: boolean;
+      canDeleteEnrollments: boolean;
+    };
+    currentUnit?: {
+      __typename?: 'Unit';
+      id: string;
+      name: string;
+      unitType?: {
+        __typename?: 'UnitTypeObject';
+        description?: string | null;
+      } | null;
+    } | null;
+  } | null;
+};
+
+export type GetEnrollmentEventsQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+export type GetEnrollmentEventsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    events: {
+      __typename?: 'EventsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'Event';
+        id: string;
+        event: EventType;
+        eventDate: string;
+        locationCrisisOrPhHousing?: string | null;
+        probSolDivRrResult?: NoYesMissing | null;
+        referralCaseManageAfter?: NoYesMissing | null;
+        referralResult?: ReferralResult | null;
+        resultDate?: string | null;
+        dateCreated: string;
+        dateUpdated: string;
+        dateDeleted?: string | null;
+      }>;
+    };
+  } | null;
 };
 
 export type FileFieldsFragment = {
@@ -16484,6 +16647,26 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
+export const AllEnrollmentDetailsFragmentDoc = gql`
+  fragment AllEnrollmentDetails on Enrollment {
+    ...EnrollmentValues
+    inProgress
+    relationshipToHoH
+    enrollmentCoc
+    householdId
+    householdShortId
+    householdSize
+    currentUnit {
+      id
+      name
+    }
+    customDataElements {
+      ...CustomDataElementFields
+    }
+  }
+  ${EnrollmentValuesFragmentDoc}
+  ${CustomDataElementFieldsFragmentDoc}
+`;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
     confidential
@@ -18740,201 +18923,6 @@ export type DeleteClientMutationOptions = Apollo.BaseMutationOptions<
   DeleteClientMutation,
   DeleteClientMutationVariables
 >;
-export const GetEnrollmentDocument = gql`
-  query GetEnrollment($id: ID!) {
-    enrollment(id: $id) {
-      ...EnrollmentFields
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetEnrollmentQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentQuery,
-    GetEnrollmentQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
-    GetEnrollmentDocument,
-    options
-  );
-}
-export function useGetEnrollmentLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentQuery,
-    GetEnrollmentQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
-    GetEnrollmentDocument,
-    options
-  );
-}
-export type GetEnrollmentQueryHookResult = ReturnType<
-  typeof useGetEnrollmentQuery
->;
-export type GetEnrollmentLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentLazyQuery
->;
-export type GetEnrollmentQueryResult = Apollo.QueryResult<
-  GetEnrollmentQuery,
-  GetEnrollmentQueryVariables
->;
-export const GetEnrollmentWithHouseholdDocument = gql`
-  query GetEnrollmentWithHousehold($id: ID!) {
-    enrollment(id: $id) {
-      ...EnrollmentFields
-      household {
-        id
-        shortId
-        householdClients {
-          ...HouseholdClientFields
-        }
-      }
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-  ${HouseholdClientFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentWithHouseholdQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentWithHouseholdQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentWithHouseholdQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentWithHouseholdQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetEnrollmentWithHouseholdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >(GetEnrollmentWithHouseholdDocument, options);
-}
-export function useGetEnrollmentWithHouseholdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentWithHouseholdQuery,
-    GetEnrollmentWithHouseholdQueryVariables
-  >(GetEnrollmentWithHouseholdDocument, options);
-}
-export type GetEnrollmentWithHouseholdQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHouseholdQuery
->;
-export type GetEnrollmentWithHouseholdLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentWithHouseholdLazyQuery
->;
-export type GetEnrollmentWithHouseholdQueryResult = Apollo.QueryResult<
-  GetEnrollmentWithHouseholdQuery,
-  GetEnrollmentWithHouseholdQueryVariables
->;
-export const GetEnrollmentEventsDocument = gql`
-  query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-    enrollment(id: $id) {
-      id
-      events(limit: $limit, offset: $offset) {
-        offset
-        limit
-        nodesCount
-        nodes {
-          ...EventFields
-        }
-      }
-    }
-  }
-  ${EventFieldsFragmentDoc}
-`;
-
-/**
- * __useGetEnrollmentEventsQuery__
- *
- * To run a query within a React component, call `useGetEnrollmentEventsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetEnrollmentEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetEnrollmentEventsQuery({
- *   variables: {
- *      id: // value for 'id'
- *      limit: // value for 'limit'
- *      offset: // value for 'offset'
- *   },
- * });
- */
-export function useGetEnrollmentEventsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >(GetEnrollmentEventsDocument, options);
-}
-export function useGetEnrollmentEventsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-    GetEnrollmentEventsQuery,
-    GetEnrollmentEventsQueryVariables
-  >(GetEnrollmentEventsDocument, options);
-}
-export type GetEnrollmentEventsQueryHookResult = ReturnType<
-  typeof useGetEnrollmentEventsQuery
->;
-export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
-  typeof useGetEnrollmentEventsLazyQuery
->;
-export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
-  GetEnrollmentEventsQuery,
-  GetEnrollmentEventsQueryVariables
->;
 export const GetClientHouseholdMemberCandidatesDocument = gql`
   query GetClientHouseholdMemberCandidates(
     $id: ID!
@@ -19330,6 +19318,260 @@ export type GetClientFilesLazyQueryHookResult = ReturnType<
 export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
+>;
+export const GetEnrollmentDocument = gql`
+  query GetEnrollment($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export function useGetEnrollmentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentQuery,
+    GetEnrollmentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetEnrollmentQuery, GetEnrollmentQueryVariables>(
+    GetEnrollmentDocument,
+    options
+  );
+}
+export type GetEnrollmentQueryHookResult = ReturnType<
+  typeof useGetEnrollmentQuery
+>;
+export type GetEnrollmentLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentLazyQuery
+>;
+export type GetEnrollmentQueryResult = Apollo.QueryResult<
+  GetEnrollmentQuery,
+  GetEnrollmentQueryVariables
+>;
+export const GetEnrollmentDetailsDocument = gql`
+  query GetEnrollmentDetails($id: ID!) {
+    enrollment(id: $id) {
+      ...AllEnrollmentDetails
+    }
+  }
+  ${AllEnrollmentDetailsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentDetailsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentDetailsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentDetailsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >(GetEnrollmentDetailsDocument, options);
+}
+export function useGetEnrollmentDetailsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentDetailsQuery,
+    GetEnrollmentDetailsQueryVariables
+  >(GetEnrollmentDetailsDocument, options);
+}
+export type GetEnrollmentDetailsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentDetailsQuery
+>;
+export type GetEnrollmentDetailsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentDetailsLazyQuery
+>;
+export type GetEnrollmentDetailsQueryResult = Apollo.QueryResult<
+  GetEnrollmentDetailsQuery,
+  GetEnrollmentDetailsQueryVariables
+>;
+export const GetEnrollmentWithHouseholdDocument = gql`
+  query GetEnrollmentWithHousehold($id: ID!) {
+    enrollment(id: $id) {
+      ...EnrollmentFields
+      household {
+        id
+        shortId
+        householdClients {
+          ...HouseholdClientFields
+        }
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${HouseholdClientFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentWithHouseholdQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentWithHouseholdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentWithHouseholdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentWithHouseholdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentWithHouseholdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
+}
+export function useGetEnrollmentWithHouseholdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentWithHouseholdQuery,
+    GetEnrollmentWithHouseholdQueryVariables
+  >(GetEnrollmentWithHouseholdDocument, options);
+}
+export type GetEnrollmentWithHouseholdQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdQuery
+>;
+export type GetEnrollmentWithHouseholdLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentWithHouseholdLazyQuery
+>;
+export type GetEnrollmentWithHouseholdQueryResult = Apollo.QueryResult<
+  GetEnrollmentWithHouseholdQuery,
+  GetEnrollmentWithHouseholdQueryVariables
+>;
+export const GetEnrollmentEventsDocument = gql`
+  query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+    enrollment(id: $id) {
+      id
+      events(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...EventFields
+        }
+      }
+    }
+  }
+  ${EventFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentEventsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentEventsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentEventsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentEventsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentEventsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export function useGetEnrollmentEventsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentEventsQuery,
+    GetEnrollmentEventsQueryVariables
+  >(GetEnrollmentEventsDocument, options);
+}
+export type GetEnrollmentEventsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsQuery
+>;
+export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentEventsLazyQuery
+>;
+export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
+  GetEnrollmentEventsQuery,
+  GetEnrollmentEventsQueryVariables
 >;
 export const GetPickListDocument = gql`
   query GetPickList(

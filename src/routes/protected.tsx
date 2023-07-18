@@ -363,7 +363,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.CLIENT_ENROLLMENTS,
             element: (
               <ClientRoute
-                permissions='canEnrollmentOverviewDetails'
+                permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllEnrollments />
@@ -374,7 +374,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.ASSESSMENTS,
             element: (
               <ClientRoute
-                permissions='canEnrollmentOverviewDetails'
+                permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <AllAssessments />
@@ -385,7 +385,7 @@ export const protectedRoutes: RouteNode[] = [
             path: ClientDashboardRoutes.SERVICES,
             element: (
               <ClientRoute
-                permissions='canEnrollmentOverviewDetails'
+                permissions='canViewEnrollmentDetails'
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
                 <ClientServices />

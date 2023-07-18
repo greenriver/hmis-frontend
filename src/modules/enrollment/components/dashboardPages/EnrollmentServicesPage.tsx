@@ -1,3 +1,4 @@
+import AddIcon from '@mui/icons-material/Add';
 import { Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useState } from 'react';
@@ -66,7 +67,11 @@ const EnrollmentServicesPage = () => {
       <TitleCard
         title='Services'
         actions={
-          <Button onClick={openServiceDialog} variant='outlined'>
+          <Button
+            onClick={openServiceDialog}
+            variant='outlined'
+            startIcon={<AddIcon fontSize='small' />}
+          >
             Add Service
           </Button>
         }

@@ -1,0 +1,62 @@
+query GetEnrollment($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+  }
+}
+
+query GetEnrollmentDetails($id: ID!) {
+  enrollment(id: $id) {
+    ...AllEnrollmentDetails
+  }
+}
+
+query GetEnrollmentWithHousehold($id: ID!) {
+  enrollment(id: $id) {
+    ...EnrollmentFields
+    household {
+      id
+      shortId
+      householdClients {
+        ...HouseholdClientFields
+      }
+    }
+  }
+}
+
+query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
+  enrollment(id: $id) {
+    id
+    events(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...EventFields
+      }
+    }
+  }
+}
+
+mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+  createEnrollment(input: $input) {
+    clientMutationId
+    enrollments {
+      ...EnrollmentFields
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}
+
+mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
+  deleteEnrollment(input: $input) {
+    clientMutationId
+    enrollment {
+      id
+    }
+    errors {
+      ...ValidationErrorFields
+    }
+  }
+}

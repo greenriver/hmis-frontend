@@ -39,7 +39,7 @@ const AssessmentPage = () => {
   const navigateToEnrollment = useCallback(
     () =>
       navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
           enrollmentId,
           clientId,
         })

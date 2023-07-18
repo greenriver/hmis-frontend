@@ -15,6 +15,7 @@ import {
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
 } from '@/types/gqlTypes';
+import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const DeleteAssessmentButton = ({
@@ -61,8 +62,7 @@ const DeleteAssessmentButton = ({
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
         if (deletesEnrollment) {
-          cache.evict({ id: `Enrollment:${enrollmentId}` });
-          cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
+          evictDeletedEnrollment({ enrollmentId, clientId });
           // If we deleted the enrollment, navigate back to the profile.
           // FIXME: this may result in "not found" if the user lost access to the client.
           // we should probably show a modal that says something like "Success! Go to Client|Home" depending on access

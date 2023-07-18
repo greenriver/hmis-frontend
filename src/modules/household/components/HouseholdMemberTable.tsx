@@ -175,11 +175,13 @@ const HouseholdMemberTable = ({
   enrollmentId,
   hideActions = false,
   columns: columnProp,
+  condensed,
 }: {
   clientId: string;
   enrollmentId: string;
   hideActions?: boolean;
   columns?: ColumnDef<HouseholdClientFieldsFragment>[];
+  condensed?: boolean;
 }) => {
   const [householdMembers, { loading: householdMembersLoading, error }] =
     useHouseholdMembers(enrollmentId);
@@ -207,15 +209,9 @@ const HouseholdMemberTable = ({
         rows={householdMembers || []}
         columns={columns}
         rowSx={() => ({
-          td: { py: 2 },
+          td: condensed ? { py: 1.5, border: 'unset' } : { py: 2 },
           // HoH indicator column
           'td:nth-of-type(1)': { pl: 1, pr: 0 },
-          // Button column
-          // 'td:last-child': {
-          //   py: 0,
-          //   whiteSpace: 'nowrap',
-          //   width: '1%',
-          // },
         })}
       />
       {!hideActions && (

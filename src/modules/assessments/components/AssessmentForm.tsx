@@ -162,7 +162,7 @@ const AssessmentForm = ({
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
+        generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
           clientId: enrollment.client.id,
           enrollmentId: enrollment.id,
         })

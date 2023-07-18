@@ -26,3 +26,14 @@ export const evictQuery = (
     fieldName: query,
     args,
   });
+
+export const evictDeletedEnrollment = ({
+  enrollmentId,
+  clientId,
+}: {
+  enrollmentId: string;
+  clientId: string;
+}) => {
+  cache.evict({ id: `Enrollment:${enrollmentId}` });
+  cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
+};

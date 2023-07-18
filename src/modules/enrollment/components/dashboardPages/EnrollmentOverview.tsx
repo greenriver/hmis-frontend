@@ -1,20 +1,33 @@
 import { Grid, Paper, Stack } from '@mui/material';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { ClickToCopyId } from '@/components/elements/ClickToCopyId';
+import EnrollmentDetails from '../EnrollmentDetails';
+
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
+import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import EnrollmentQuickActions from '@/modules/enrollment/components/EnrollmentQuickActions';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import HouseholdMemberTable, {
   HOUSEHOLD_MEMBER_COLUMNS,
 } from '@/modules/household/components/HouseholdMemberTable';
+import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  DeleteEnrollmentDocument,
+  DeleteEnrollmentMutation,
+  DeleteEnrollmentMutationVariables,
+} from '@/types/gqlTypes';
+import { evictDeletedEnrollment } from '@/utils/cacheUtil';
+import generateSafePath from '@/utils/generateSafePath';
 
 const EnrollmentOverview = () => {
   const { enrollment } = useEnrollmentDashboardContext();
+  const navigate = useNavigate();
   const { clientId, enrollmentId } = useSafeParams() as {
     enrollmentId: string;
     clientId: string;
@@ -30,29 +43,38 @@ const EnrollmentOverview = () => {
     [clientId]
   );
 
+  const onSuccessfulDelete = useCallback(() => {
+    evictDeletedEnrollment({ enrollmentId, clientId });
+    navigate(
+      generateSafePath(ClientDashboardRoutes.CLIENT_ENROLLMENTS, { clientId })
+    );
+  }, [navigate, clientId, enrollmentId]);
+
   if (!enrollment) return <NotFound />;
 
   return (
     <>
       <PageTitle title='Enrollment Overview' />
       <Grid container spacing={4}>
-        <Grid item xs={9}>
-          <Stack spacing={2}>
-            <TitleCard
-              title='Household'
-              headerVariant='border'
-              actions={
-                <CommonLabeledTextBlock title='Household ID' horizontal>
-                  <ClickToCopyId value={enrollment.householdId} />
-                </CommonLabeledTextBlock>
-              }
-            >
+        <Grid item xs={8}>
+          <Stack spacing={4}>
+            <TitleCard title='Household' headerVariant='border'>
               <HouseholdMemberTable
                 clientId={clientId}
                 enrollmentId={enrollmentId}
                 hideActions
                 columns={householdColumns}
+                condensed
               />
+            </TitleCard>
+            <TitleCard
+              title={`${
+                enrollment.householdSize > 1
+                  ? clientBriefName(enrollment.client)
+                  : ''
+              } Enrollment Details`}
+            >
+              <EnrollmentDetails enrollment={enrollment} />
             </TitleCard>
           </Stack>
         </Grid>
@@ -66,6 +88,25 @@ const EnrollmentOverview = () => {
                 {enrollment.currentUnit.name}
               </CommonLabeledTextBlock>
             </Paper>
+          )}
+          {enrollment.inProgress && (
+            <DeleteMutationButton<
+              DeleteEnrollmentMutation,
+              DeleteEnrollmentMutationVariables
+            >
+              queryDocument={DeleteEnrollmentDocument}
+              variables={{ input: { id: enrollment.id } }}
+              idPath='deleteEnrollment.enrollment.id'
+              recordName='Enrollment'
+              onSuccess={onSuccessfulDelete}
+              ButtonProps={{
+                sx: { justifyContent: 'left', float: 'right', mt: 2 },
+                size: 'small',
+              }}
+              deleteIcon
+            >
+              Delete Enrollment
+            </DeleteMutationButton>
           )}
         </Grid>
       </Grid>
