@@ -1,5 +1,11 @@
 import { Alert, Box, Link } from '@mui/material';
-import { FormEvent, KeyboardEventHandler, useCallback, useState } from 'react';
+import {
+  FormEvent,
+  KeyboardEventHandler,
+  useCallback,
+  useRef,
+  useState,
+} from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import OneTimePassword from './OneTimePassword';
@@ -45,10 +51,20 @@ const LoginForm = () => {
     [navigate, state, setUser]
   );
 
+  const retryCsrf = useRef(true);
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement | HTMLDivElement>) => {
       event.preventDefault();
       setLoading(true);
+
+      const sendLogin = () => {
+        // if (simulateFail) return Promise.reject( new HmisResponseError({ type: 'unverified_request' }));
+        return login({ email, password }).then((user) => {
+          setPrompt2fa(false);
+          setLoading(false);
+          handleSuccess(user);
+        });
+      };
 
       const handleHmisError = (error: any): boolean => {
         if (!isHmisResponseError(error)) return false;
@@ -58,25 +74,36 @@ const LoginForm = () => {
           setPrompt2fa(true);
           setLoading(false);
           return true;
-        } else if (error.type === 'unverified_request') {
-          fetchCurrentUser().finally(reloadWindow);
+        } else if (error.type === 'unverified_request' && retryCsrf.current) {
+          // fetch the current user to get a new csrf cookie
+          retryCsrf.current = false;
+          fetchCurrentUser()
+            .then((currentUser) => {
+              if (currentUser) return reloadWindow(); // already logged in
+
+              // retry the login
+              sendLogin().catch((error: any) => {
+                if (!handleHmisError(error)) {
+                  setError(error);
+                  setLoading(false);
+                }
+              });
+            })
+            .catch((error) => {
+              setError(error);
+              setLoading(false);
+            });
           return true;
         }
         return false;
       };
 
-      return login({ email, password })
-        .then((user) => {
-          setPrompt2fa(false);
+      return sendLogin().catch((error: any) => {
+        if (!handleHmisError(error)) {
+          setError(error);
           setLoading(false);
-          handleSuccess(user);
-        })
-        .catch((error: any) => {
-          if (!handleHmisError(error)) {
-            setError(error);
-            setLoading(false);
-          }
-        });
+        }
+      });
     },
     [handleSuccess, email, password]
   );
