@@ -89,7 +89,6 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   }
 }
 
-const fetchWithRetry = fetchRetryCb(fetch);
 const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
   return isHmisResponseError(error) && error.type === 'unverified_request';
 };
@@ -101,6 +100,7 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
+  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
   const response = await fetchWithRetry('/hmis/session_keepalive', {
     retries: 2,
     retryOn: csrfFailure,
@@ -120,6 +120,7 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
+  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
   const response = await fetchWithRetry('/hmis/login', {
     retries: 2,
     retryOn: csrfFailure,
@@ -151,6 +152,7 @@ export async function login({
 }
 
 export async function logout() {
+  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
   const response = await fetchWithRetry('/hmis/logout', {
     method: 'DELETE',
     retries: 2,
