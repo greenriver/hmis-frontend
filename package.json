@@ -45,7 +45,8 @@
   "resolutions": {
     "decode-uri-component": "^0.2.1",
     "json5": "^2.2.2",
-    "undici": "^5.19.1"
+    "undici": "^5.19.1",
+    "@storybook/cli/simple-update-notifier": "^2.0.0"
   },
   "dependencies": {
     "@apollo/client": "^3.6.8",
@@ -145,8 +146,7 @@
     "madge": "^6.0.0",
     "prettier": "^2.6.2",
     "rollup-plugin-visualizer": "^5.6.0",
-    "simple-update-notifier": "^2.0.0",
-    "storybook": "^7.0.0",
+    "storybook": "^7.1.0",
     "storybook-addon-apollo-client": "^5.0.0",
     "ts-jest": "^28.0.2",
     "ts-node": "^10.7.0",
