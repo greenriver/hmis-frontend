@@ -25,16 +25,18 @@ const useLogout = () => {
   const navigate = useNavigate();
   const [error, setError] = useState<Error>();
   const { pathname } = useLocation();
+  const { setUser } = useAuth();
   const logoutUser = useCallback(() => {
     return logout()
-      .then(() =>
+      .then(() => {
         navigate(pathname, {
           state: { clearPrev: true },
           replace: true,
-        })
-      )
+        });
+        setUser(undefined);
+      })
       .catch((e) => setError(e));
-  }, [navigate, pathname]);
+  }, [navigate, pathname, setUser]);
 
   return [logoutUser, error] as const;
 };

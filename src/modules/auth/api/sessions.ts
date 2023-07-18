@@ -1,5 +1,3 @@
-import fetchRetryCb, { RequestInitRetryParams } from 'fetch-retry';
-
 import {
   HMIS_REMOTE_SESSION_UID_EVENT,
   HMIS_SESSION_UID_HEADER,
@@ -89,8 +87,30 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   }
 }
 
-const csrfFailure: RequestInitRetryParams['retryOn'] = (_attempt, error) => {
-  return isHmisResponseError(error) && error.type === 'unverified_request';
+const fetchWithCsrfRetry = async (url: string, opts: RequestInit) => {
+  const headers = () => ({
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    'X-CSRF-Token': getCsrfToken(),
+  });
+
+  try {
+    return await fetch(url, {
+      headers: headers(),
+      ...opts,
+    });
+  } catch (error) {
+    // check for csrf failures and crudely send
+    const csrfFailure =
+      isHmisResponseError(error) && error.type === 'unverified_request';
+    if (!csrfFailure) throw error;
+
+    // curde retry on CSRF failure
+    return await fetch(url, {
+      headers: headers(),
+      ...opts,
+    });
+  }
 };
 
 export type LoginParams = {
@@ -100,10 +120,7 @@ export type LoginParams = {
 };
 
 export async function sendSessionKeepalive() {
-  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
-  const response = await fetchWithRetry('/hmis/session_keepalive', {
-    retries: 2,
-    retryOn: csrfFailure,
+  const response = await fetchWithCsrfRetry('/hmis/session_keepalive', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -120,10 +137,7 @@ export async function login({
   password,
   otpAttempt,
 }: LoginParams): Promise<HmisUser> {
-  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
-  const response = await fetchWithRetry('/hmis/login', {
-    retries: 2,
-    retryOn: csrfFailure,
+  const response = await fetchWithCsrfRetry('/hmis/login', {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -145,7 +159,6 @@ export async function login({
   } else {
     // Store the user info (non-sensitive) in the browser
     return response.json().then((user: HmisUser) => {
-      console.info('login', user);
       storage.setUser(user);
       return user;
     });
@@ -153,11 +166,8 @@ export async function login({
 }
 
 export async function logout() {
-  const fetchWithRetry = fetchRetryCb(fetch); // keep out of global scope for tests
-  const response = await fetchWithRetry('/hmis/logout', {
+  const response = await fetchWithCsrfRetry('/hmis/logout', {
     method: 'DELETE',
-    retries: 2,
-    retryOn: csrfFailure,
     headers: { 'X-CSRF-Token': getCsrfToken() },
   });
   trackSessionFromResponse(response);

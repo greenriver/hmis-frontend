@@ -50,7 +50,6 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
   // fetch data from remote
   useEffect(() => {
     const cachedUser = getValidCachedUser();
-    console.info('cached valid user', cachedUser);
     const promises: Array<Promise<any>> = [];
 
     const saveSettings = (value: HmisAppSettings) => {
@@ -61,14 +60,12 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     if (cachedUser) {
       setUser(cachedUser);
       const cachedAppSettings = storage.getAppSettings();
-      console.info('cached valid settings', cachedAppSettings);
       if (cachedAppSettings) {
         setAppSettings(cachedAppSettings);
       } else {
         promises.push(fetchHmisAppSettings().then(saveSettings));
       }
     } else {
-      console.info('no cached user');
       promises.push(fetchCurrentUser().then(setUser));
       promises.push(fetchHmisAppSettings().then(saveSettings));
     }
