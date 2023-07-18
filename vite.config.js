@@ -75,6 +75,8 @@ export default defineConfig(({ command, mode }) => {
     esbuild: {
       // https://github.com/vitejs/vite/issues/8644#issuecomment-1159308803
       logOverride: { 'this-is-undefined-in-esm': 'silent' },
+      // Drop log statements when minifying
+      pure: ['console.log', 'console.info', 'console.debug'],
     },
     build: {
       rollupOptions: {
