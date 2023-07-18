@@ -51,7 +51,12 @@ const DynamicViewGroup = (props: ViewGroupItemComponentProps) => {
       );
     default:
       return (
-        <QuestionGroup key={props.item.linkId} {...props} nestingLevel={0} />
+        <QuestionGroup
+          key={props.item.linkId}
+          {...props}
+          nestingLevel={0}
+          viewOnly
+        />
       );
   }
 };
