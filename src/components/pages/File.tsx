@@ -1,5 +1,5 @@
 import { Stack, Typography } from '@mui/material';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '../elements/Loading';
@@ -39,6 +39,8 @@ const File = ({ create = false }: { create?: boolean }) => {
     variables: { id: fileId },
     skip: create,
   });
+  const pickListArgs = useMemo(() => ({ clientId }), [clientId]);
+  const inputVariables = useMemo(() => ({ clientId }), [clientId]);
 
   if (loading) return <Loading />;
   if (error) throw error;
@@ -49,9 +51,9 @@ const File = ({ create = false }: { create?: boolean }) => {
       formRole={FormRole.File}
       onCompleted={onCompleted}
       record={data?.file || undefined}
-      inputVariables={{ clientId }}
       FormActionProps={create ? { submitButtonText: 'Upload File' } : undefined}
-      pickListArgs={{ clientId }}
+      inputVariables={inputVariables}
+      pickListArgs={pickListArgs}
       title={
         <Stack direction={'row'} spacing={2}>
           <Typography variant='h3' sx={{ pt: 0, mt: 0 }}>

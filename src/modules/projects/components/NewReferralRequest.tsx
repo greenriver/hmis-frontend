@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useProjectDashboardContext } from './ProjectDashboard';
@@ -27,13 +27,15 @@ const NewReferralRequest: React.FC = () => {
     navigate(generateSafePath(ProjectDashboardRoutes.REFERRALS, { projectId }));
   }, [navigate, projectId]);
 
+  const pickListArgs = useMemo(() => ({ projectId }), [projectId]);
+  const inputVariables = useMemo(() => ({ projectId }), [projectId]);
   return (
     <EditRecord<ReferralRequestFieldsFragment>
       FormActionProps={{ submitButtonText: 'Submit Referral Request' }}
       onCompleted={onCompleted}
       formRole={FormRole.ReferralRequest}
-      inputVariables={{ projectId }}
-      pickListArgs={{ projectId }}
+      pickListArgs={pickListArgs}
+      inputVariables={inputVariables}
       title={<ProjectFormTitle title={title} project={project} />}
       localConstants={{
         userName: user?.name,
