@@ -1,8 +1,9 @@
-import { AutocompleteValue, Box, Typography } from '@mui/material';
-import { compact } from 'lodash-es';
+import { Box, Typography } from '@mui/material';
 
+import { useCallback } from 'react';
 import GenericSelect, { GenericSelectProps } from './GenericSelect';
 
+import { getOptionLabelFromOptions } from '@/modules/form/components/FormSelect';
 import {
   PickListOption,
   PickListType,
@@ -48,19 +49,16 @@ const ProjectSelect = <Multiple extends boolean | undefined>({
 
   if (error) console.error(error);
 
-  // special case to replace value with complete option value.
-  // e.g. {id: 50} becomes {id: 50, projectName: "White Ash Home"}
-  // this is needed for cases when initially selected values are loaded from URL params
-  if (Array.isArray(value) && value[0] && !value[0].label && pickList) {
-    value = compact(
-      value.map(({ code }) => pickList.find((opt) => opt.code === code))
-    ) as AutocompleteValue<Option, Multiple, boolean, undefined>;
-  }
+  const getOptionLabel = useCallback(
+    (option: Option) =>
+      getOptionLabelFromOptions(option, pickList as PickListOption[]),
+    [pickList]
+  );
 
   return (
     <GenericSelect
       data-testid='projectSelect'
-      getOptionLabel={(option) => option.label || option.code}
+      getOptionLabel={getOptionLabel}
       groupBy={(option) => option.groupLabel || ''}
       label={label}
       loading={loading}
