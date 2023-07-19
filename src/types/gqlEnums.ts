@@ -286,6 +286,19 @@ export const HmisEnums = {
     MENTAL_HEALTH_DISORDER: 'Mental health disorder',
   },
   DisabledDisplay: { HIDDEN: 'HIDDEN', PROTECTED: 'PROTECTED' },
+  DischargeStatus: {
+    INVALID: 'Invalid Value',
+    HONORABLE: 'Honorable',
+    GENERAL_UNDER_HONORABLE_CONDITIONS: 'General under honorable conditions',
+    BAD_CONDUCT: 'Bad conduct',
+    DISHONORABLE: 'Dishonorable',
+    UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH:
+      'Under other than honorable conditions (OTH)',
+    UNCHARACTERIZED: 'Uncharacterized',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
   EmploymentType: {
     INVALID: 'Invalid Value',
     FULL_TIME: 'Full-time',
@@ -693,6 +706,17 @@ export const HmisEnums = {
     STAYING_OR_LIVING_IN_A_FRIEND_S_ROOM_APARTMENT_OR_HOUSE:
       "Staying or living in a friend's room, apartment or house",
     WORKER_UNABLE_TO_DETERMINE: 'Worker unable to determine',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
+  },
+  MilitaryBranch: {
+    INVALID: 'Invalid Value',
+    ARMY: 'Army',
+    AIR_FORCE: 'Air Force',
+    NAVY: 'Navy',
+    MARINES: 'Marines',
+    COAST_GUARD: 'Coast Guard',
     CLIENT_REFUSED: 'Client refused',
     CLIENT_DOESN_T_KNOW: "Client doesn't know",
     DATA_NOT_COLLECTED: 'Data not collected',

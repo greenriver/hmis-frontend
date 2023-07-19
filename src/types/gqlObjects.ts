@@ -307,6 +307,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'Client',
     fields: [
+      {
+        name: 'afghanistanOef',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
       { name: 'age', type: { kind: 'SCALAR', name: 'Int', ofType: null } },
       {
         name: 'dateCreated',
@@ -327,6 +335,18 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ISO8601DateTime', ofType: null },
         },
+      },
+      {
+        name: 'desertStorm',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'dischargeStatus',
+        type: { kind: 'ENUM', name: 'DischargeStatus', ofType: null },
       },
       {
         name: 'dob',
@@ -377,12 +397,40 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'iraqOif',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'iraqOnd',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'koreanWar',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'lastName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
         name: 'middleName',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'militaryBranch',
+        type: { kind: 'ENUM', name: 'MilitaryBranch', ofType: null },
       },
       {
         name: 'nameDataQuality',
@@ -395,6 +443,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'nameSuffix',
         type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'otherTheater',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
       },
       {
         name: 'personalId',
@@ -456,6 +512,30 @@ export const HmisObjectSchemas: GqlSchema[] = [
             ofType: null,
           },
         },
+      },
+      {
+        name: 'vietnamWar',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'worldWarIi',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'yearEnteredService',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'yearSeparated',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
       },
     ],
   },
