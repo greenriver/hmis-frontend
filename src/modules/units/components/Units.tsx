@@ -7,7 +7,7 @@ import {
   Paper,
   Stack,
 } from '@mui/material';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useProjectDashboardContext } from '../../projects/components/ProjectDashboard';
 
@@ -65,11 +65,11 @@ const Units = () => {
       });
       input.projectId = project.id;
       if (!input.prefix) input.prefix = 'Unit';
-      console.debug('submitting', input);
       createUnits({ variables: { input: { input } as CreateUnitsInput } });
     },
     [createUnits, project]
   );
+  const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
   return (
     <>
@@ -110,7 +110,7 @@ const Units = () => {
             <DynamicForm
               ref={formRef}
               definition={UnitsDefinition}
-              pickListArgs={{ projectId: project.id }}
+              pickListArgs={pickListArgs}
               FormActionProps={{
                 submitButtonText: 'Add Units',
                 discardButtonText: 'Cancel',
