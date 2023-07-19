@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
@@ -58,6 +58,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
     definition: formDefinition,
     record: defaultValues as unknown as SubmitFormAllowedTypes,
   });
+  const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
   return (
     <DynamicForm
@@ -70,7 +71,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
       onSubmit={handleSubmit}
       loading={loading}
       errors={errors}
-      pickListArgs={{ projectId: project.id }}
+      pickListArgs={pickListArgs}
     />
   );
 };
