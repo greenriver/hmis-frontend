@@ -92,7 +92,7 @@ const ProjectReferralRequestsTable: React.FC<Props> = ({ project }) => {
             }
             ButtonProps={{ size: 'small' }}
           >
-            Cancel Request
+            Cancel
           </DeleteMutationButton>
         ),
       },

@@ -1,7 +1,9 @@
-import { Typography, createFilterOptions } from '@mui/material';
+import { createFilterOptions, Typography } from '@mui/material';
+import { useCallback } from 'react';
 
 import { DynamicInputCommonProps } from '../types';
 
+import { getOptionLabelFromOptions } from './FormSelect';
 import GenericSelect, {
   GenericSelectProps,
 } from '@/components/elements/input/GenericSelect';
@@ -58,9 +60,27 @@ const CreatableFormSelect = <Multiple extends boolean | undefined>({
 }: GenericSelectProps<Option, Multiple, boolean> & DynamicInputCommonProps) => {
   const isGrouped = !!options[0]?.groupLabel;
   const openchoice = true;
+
+  const getOptionLabel = useCallback(
+    (option: Option | string, forMenu = false): string => {
+      // Value selected with enter, right from the input
+      if (typeof option === 'string') {
+        return option;
+      }
+      // Value select from clicking "Add 'xyz'" in menu
+      if (forMenu && option.customOptionLabel) {
+        return option.customOptionLabel;
+      }
+
+      // Value selected by clicking an existing option, or initial option
+      return getOptionLabelFromOptions(option, options);
+    },
+    [options]
+  );
+
   return (
     <GenericSelect
-      getOptionLabel={(option) => optionLabel(option)}
+      getOptionLabel={getOptionLabel}
       label={label}
       multiple={multiple}
       options={options}

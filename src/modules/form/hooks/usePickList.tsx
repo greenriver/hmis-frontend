@@ -56,7 +56,9 @@ export const getValueFromPickListData = ({
   }
 
   if (fullOption) {
-    // Update the value so that it shows the complete label
+    // Update the value so that it has the full option.
+    // This is ONLY NECESSARY BECAUSE some forms have conditional logic based on the "group_code"
+    // on the PickListOption, which would be null to start.
     return { linkId, value: fullOption, type: ChangeType.System };
   } else {
     console.warn(
