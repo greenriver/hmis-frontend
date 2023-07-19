@@ -92,6 +92,7 @@ const InventoryTable = () => {
       })
     );
   }, [project, navigate]);
+  const pickListArgs = useMemo(() => ({ projectId: project.id }), [project]);
 
   return (
     <>
@@ -110,7 +111,7 @@ const InventoryTable = () => {
           title='Inventory'
           open={!!viewingRecord}
           onClose={() => setViewingRecord(undefined)}
-          pickListArgs={{ projectId: project.id }}
+          pickListArgs={pickListArgs}
           actions={
             project.access.canEditProjectDetails && (
               <>

@@ -340,6 +340,7 @@ export type Client = {
   __typename?: 'Client';
   access: ClientAccess;
   addresses: Array<ClientAddress>;
+  afghanistanOef?: Maybe<NoYesReasonsForMissingData>;
   age?: Maybe<Scalars['Int']['output']>;
   assessments: AssessmentsPaginated;
   auditHistory: ClientAuditEventsPaginated;
@@ -349,8 +350,10 @@ export type Client = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
+  desertStorm?: Maybe<NoYesReasonsForMissingData>;
   disabilities: DisabilitiesPaginated;
   disabilityGroups: Array<DisabilityGroup>;
+  dischargeStatus?: Maybe<DischargeStatus>;
   dob?: Maybe<Scalars['ISO8601Date']['output']>;
   dobDataQuality: DobDataQuality;
   emailAddresses: Array<ClientContactPoint>;
@@ -365,11 +368,16 @@ export type Client = {
   id: Scalars['ID']['output'];
   image?: Maybe<ClientImage>;
   incomeBenefits: IncomeBenefitsPaginated;
+  iraqOif?: Maybe<NoYesReasonsForMissingData>;
+  iraqOnd?: Maybe<NoYesReasonsForMissingData>;
+  koreanWar?: Maybe<NoYesReasonsForMissingData>;
   lastName?: Maybe<Scalars['String']['output']>;
   middleName?: Maybe<Scalars['String']['output']>;
+  militaryBranch?: Maybe<MilitaryBranch>;
   nameDataQuality: NameDataQuality;
   nameSuffix?: Maybe<Scalars['String']['output']>;
   names: Array<ClientName>;
+  otherTheater?: Maybe<NoYesReasonsForMissingData>;
   personalId: Scalars['String']['output'];
   phoneNumbers: Array<ClientContactPoint>;
   pronouns: Array<Scalars['String']['output']>;
@@ -379,6 +387,10 @@ export type Client = {
   ssnDataQuality: SsnDataQuality;
   user?: Maybe<User>;
   veteranStatus: NoYesReasonsForMissingData;
+  vietnamWar?: Maybe<NoYesReasonsForMissingData>;
+  worldWarIi?: Maybe<NoYesReasonsForMissingData>;
+  yearEnteredService?: Maybe<Scalars['Int']['output']>;
+  yearSeparated?: Maybe<Scalars['Int']['output']>;
   youthEducationStatuses: YouthEducationStatusesPaginated;
 };
 
@@ -1361,6 +1373,30 @@ export enum DisabilityType {
 export enum DisabledDisplay {
   Hidden = 'HIDDEN',
   Protected = 'PROTECTED',
+}
+
+/** V1.12 */
+export enum DischargeStatus {
+  /** (4) Bad conduct */
+  BadConduct = 'BAD_CONDUCT',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** (5) Dishonorable */
+  Dishonorable = 'DISHONORABLE',
+  /** (2) General under honorable conditions */
+  GeneralUnderHonorableConditions = 'GENERAL_UNDER_HONORABLE_CONDITIONS',
+  /** (1) Honorable */
+  Honorable = 'HONORABLE',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (7) Uncharacterized */
+  Uncharacterized = 'UNCHARACTERIZED',
+  /** (6) Under other than honorable conditions (OTH) */
+  UnderOtherThanHonorableConditionsOth = 'UNDER_OTHER_THAN_HONORABLE_CONDITIONS_OTH',
 }
 
 /** HUD Employment Education */
@@ -2743,6 +2779,28 @@ export type MciClearanceMatch = {
   score: Scalars['Int']['output'];
   ssn?: Maybe<Scalars['String']['output']>;
 };
+
+/** V1.11 */
+export enum MilitaryBranch {
+  /** (2) Air Force */
+  AirForce = 'AIR_FORCE',
+  /** (1) Army */
+  Army = 'ARMY',
+  /** (8) Client doesn't know */
+  ClientDoesnTKnow = 'CLIENT_DOESN_T_KNOW',
+  /** (9) Client refused */
+  ClientRefused = 'CLIENT_REFUSED',
+  /** (6) Coast Guard */
+  CoastGuard = 'COAST_GUARD',
+  /** (99) Data not collected */
+  DataNotCollected = 'DATA_NOT_COLLECTED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (4) Marines */
+  Marines = 'MARINES',
+  /** (3) Navy */
+  Navy = 'NAVY',
+}
 
 /** 3.917.5 */
 export enum MonthsHomelessPastThreeYears {
@@ -7992,6 +8050,18 @@ export type ClientFieldsFragment = {
   dob?: string | null;
   age?: number | null;
   ssn?: string | null;
+  yearEnteredService?: number | null;
+  yearSeparated?: number | null;
+  worldWarIi?: NoYesReasonsForMissingData | null;
+  koreanWar?: NoYesReasonsForMissingData | null;
+  vietnamWar?: NoYesReasonsForMissingData | null;
+  desertStorm?: NoYesReasonsForMissingData | null;
+  afghanistanOef?: NoYesReasonsForMissingData | null;
+  iraqOif?: NoYesReasonsForMissingData | null;
+  iraqOnd?: NoYesReasonsForMissingData | null;
+  otherTheater?: NoYesReasonsForMissingData | null;
+  militaryBranch?: MilitaryBranch | null;
+  dischargeStatus?: DischargeStatus | null;
   firstName?: string | null;
   middleName?: string | null;
   lastName?: string | null;
@@ -8203,6 +8273,23 @@ export type ClientIdentificationFieldsFragment = {
   };
 };
 
+export type ClientVeteranInfoFieldsFragment = {
+  __typename?: 'Client';
+  id: string;
+  yearEnteredService?: number | null;
+  yearSeparated?: number | null;
+  worldWarIi?: NoYesReasonsForMissingData | null;
+  koreanWar?: NoYesReasonsForMissingData | null;
+  vietnamWar?: NoYesReasonsForMissingData | null;
+  desertStorm?: NoYesReasonsForMissingData | null;
+  afghanistanOef?: NoYesReasonsForMissingData | null;
+  iraqOif?: NoYesReasonsForMissingData | null;
+  iraqOnd?: NoYesReasonsForMissingData | null;
+  otherTheater?: NoYesReasonsForMissingData | null;
+  militaryBranch?: MilitaryBranch | null;
+  dischargeStatus?: DischargeStatus | null;
+};
+
 export type ClientIdentifierFieldsFragment = {
   __typename?: 'ExternalIdentifier';
   id: string;
@@ -8275,6 +8362,18 @@ export type SearchClientsQuery = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      yearEnteredService?: number | null;
+      yearSeparated?: number | null;
+      worldWarIi?: NoYesReasonsForMissingData | null;
+      koreanWar?: NoYesReasonsForMissingData | null;
+      vietnamWar?: NoYesReasonsForMissingData | null;
+      desertStorm?: NoYesReasonsForMissingData | null;
+      afghanistanOef?: NoYesReasonsForMissingData | null;
+      iraqOif?: NoYesReasonsForMissingData | null;
+      iraqOnd?: NoYesReasonsForMissingData | null;
+      otherTheater?: NoYesReasonsForMissingData | null;
+      militaryBranch?: MilitaryBranch | null;
+      dischargeStatus?: DischargeStatus | null;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -8424,6 +8523,18 @@ export type GetClientQuery = {
     dob?: string | null;
     age?: number | null;
     ssn?: string | null;
+    yearEnteredService?: number | null;
+    yearSeparated?: number | null;
+    worldWarIi?: NoYesReasonsForMissingData | null;
+    koreanWar?: NoYesReasonsForMissingData | null;
+    vietnamWar?: NoYesReasonsForMissingData | null;
+    desertStorm?: NoYesReasonsForMissingData | null;
+    afghanistanOef?: NoYesReasonsForMissingData | null;
+    iraqOif?: NoYesReasonsForMissingData | null;
+    iraqOnd?: NoYesReasonsForMissingData | null;
+    otherTheater?: NoYesReasonsForMissingData | null;
+    militaryBranch?: MilitaryBranch | null;
+    dischargeStatus?: DischargeStatus | null;
     firstName?: string | null;
     middleName?: string | null;
     lastName?: string | null;
@@ -8975,102 +9086,6 @@ export type DeleteClientImageMutation = {
   } | null;
 };
 
-export type CreateEnrollmentMutationVariables = Exact<{
-  input: CreateEnrollmentInput;
-}>;
-
-export type CreateEnrollmentMutation = {
-  __typename?: 'Mutation';
-  createEnrollment?: {
-    __typename?: 'CreateEnrollmentPayload';
-    clientMutationId?: string | null;
-    enrollments?: Array<{
-      __typename?: 'Enrollment';
-      id: string;
-      entryDate: string;
-      exitDate?: string | null;
-      inProgress: boolean;
-      relationshipToHoH: RelationshipToHoH;
-      enrollmentCoc?: string | null;
-      householdId: string;
-      householdShortId: string;
-      householdSize: number;
-      project: {
-        __typename?: 'Project';
-        id: string;
-        projectName: string;
-        projectType?: ProjectType | null;
-      };
-      client: {
-        __typename?: 'Client';
-        dob?: string | null;
-        veteranStatus: NoYesReasonsForMissingData;
-        id: string;
-        firstName?: string | null;
-        middleName?: string | null;
-        lastName?: string | null;
-        nameSuffix?: string | null;
-      };
-      access: {
-        __typename?: 'EnrollmentAccess';
-        id: string;
-        canEditEnrollments: boolean;
-        canDeleteEnrollments: boolean;
-      };
-      currentUnit?: {
-        __typename?: 'Unit';
-        id: string;
-        name: string;
-        unitType?: {
-          __typename?: 'UnitTypeObject';
-          description?: string | null;
-        } | null;
-      } | null;
-    }> | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
-export type DeleteEnrollmentMutationVariables = Exact<{
-  input: DeleteEnrollmentInput;
-}>;
-
-export type DeleteEnrollmentMutation = {
-  __typename?: 'Mutation';
-  deleteEnrollment?: {
-    __typename?: 'DeleteEnrollmentPayload';
-    clientMutationId?: string | null;
-    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
-    errors: Array<{
-      __typename?: 'ValidationError';
-      type: ValidationType;
-      attribute: string;
-      readableAttribute?: string | null;
-      message: string;
-      fullMessage: string;
-      severity: ValidationSeverity;
-      id?: string | null;
-      recordId?: string | null;
-      linkId?: string | null;
-      section?: string | null;
-      data?: any | null;
-    }>;
-  } | null;
-};
-
 export type DeleteClientFileMutationVariables = Exact<{
   input: DeleteClientFileInput;
 }>;
@@ -9153,6 +9168,18 @@ export type DeleteClientMutation = {
       dob?: string | null;
       age?: number | null;
       ssn?: string | null;
+      yearEnteredService?: number | null;
+      yearSeparated?: number | null;
+      worldWarIi?: NoYesReasonsForMissingData | null;
+      koreanWar?: NoYesReasonsForMissingData | null;
+      vietnamWar?: NoYesReasonsForMissingData | null;
+      desertStorm?: NoYesReasonsForMissingData | null;
+      afghanistanOef?: NoYesReasonsForMissingData | null;
+      iraqOif?: NoYesReasonsForMissingData | null;
+      iraqOnd?: NoYesReasonsForMissingData | null;
+      otherTheater?: NoYesReasonsForMissingData | null;
+      militaryBranch?: MilitaryBranch | null;
+      dischargeStatus?: DischargeStatus | null;
       firstName?: string | null;
       middleName?: string | null;
       lastName?: string | null;
@@ -10204,6 +10231,102 @@ export type GetEnrollmentEventsQuery = {
         dateDeleted?: string | null;
       }>;
     };
+  } | null;
+};
+
+export type CreateEnrollmentMutationVariables = Exact<{
+  input: CreateEnrollmentInput;
+}>;
+
+export type CreateEnrollmentMutation = {
+  __typename?: 'Mutation';
+  createEnrollment?: {
+    __typename?: 'CreateEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollments?: Array<{
+      __typename?: 'Enrollment';
+      id: string;
+      entryDate: string;
+      exitDate?: string | null;
+      inProgress: boolean;
+      relationshipToHoH: RelationshipToHoH;
+      enrollmentCoc?: string | null;
+      householdId: string;
+      householdShortId: string;
+      householdSize: number;
+      project: {
+        __typename?: 'Project';
+        id: string;
+        projectName: string;
+        projectType?: ProjectType | null;
+      };
+      client: {
+        __typename?: 'Client';
+        dob?: string | null;
+        veteranStatus: NoYesReasonsForMissingData;
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+      access: {
+        __typename?: 'EnrollmentAccess';
+        id: string;
+        canEditEnrollments: boolean;
+        canDeleteEnrollments: boolean;
+      };
+      currentUnit?: {
+        __typename?: 'Unit';
+        id: string;
+        name: string;
+        unitType?: {
+          __typename?: 'UnitTypeObject';
+          description?: string | null;
+        } | null;
+      } | null;
+    }> | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
+export type DeleteEnrollmentMutationVariables = Exact<{
+  input: DeleteEnrollmentInput;
+}>;
+
+export type DeleteEnrollmentMutation = {
+  __typename?: 'Mutation';
+  deleteEnrollment?: {
+    __typename?: 'DeleteEnrollmentPayload';
+    clientMutationId?: string | null;
+    enrollment?: { __typename?: 'Enrollment'; id: string } | null;
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
   } | null;
 };
 
@@ -12247,6 +12370,18 @@ export type SubmitFormMutation = {
           dob?: string | null;
           age?: number | null;
           ssn?: string | null;
+          yearEnteredService?: number | null;
+          yearSeparated?: number | null;
+          worldWarIi?: NoYesReasonsForMissingData | null;
+          koreanWar?: NoYesReasonsForMissingData | null;
+          vietnamWar?: NoYesReasonsForMissingData | null;
+          desertStorm?: NoYesReasonsForMissingData | null;
+          afghanistanOef?: NoYesReasonsForMissingData | null;
+          iraqOif?: NoYesReasonsForMissingData | null;
+          iraqOnd?: NoYesReasonsForMissingData | null;
+          otherTheater?: NoYesReasonsForMissingData | null;
+          militaryBranch?: MilitaryBranch | null;
+          dischargeStatus?: DischargeStatus | null;
           firstName?: string | null;
           middleName?: string | null;
           lastName?: string | null;
@@ -16369,6 +16504,23 @@ export const ClientIdentificationFieldsFragmentDoc = gql`
     }
   }
 `;
+export const ClientVeteranInfoFieldsFragmentDoc = gql`
+  fragment ClientVeteranInfoFields on Client {
+    id
+    yearEnteredService
+    yearSeparated
+    worldWarIi
+    koreanWar
+    vietnamWar
+    desertStorm
+    afghanistanOef
+    iraqOif
+    iraqOnd
+    otherTheater
+    militaryBranch
+    dischargeStatus
+  }
+`;
 export const ClientNameFragmentDoc = gql`
   fragment ClientName on Client {
     id
@@ -16467,6 +16619,7 @@ export const ClientContactPointFieldsFragmentDoc = gql`
 export const ClientFieldsFragmentDoc = gql`
   fragment ClientFields on Client {
     ...ClientIdentificationFields
+    ...ClientVeteranInfoFields
     dobDataQuality
     ethnicity
     gender
@@ -16507,6 +16660,7 @@ export const ClientFieldsFragmentDoc = gql`
     }
   }
   ${ClientIdentificationFieldsFragmentDoc}
+  ${ClientVeteranInfoFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientImageFragmentDoc}
   ${ClientIdentifierFieldsFragmentDoc}
@@ -18692,121 +18846,6 @@ export type DeleteClientImageMutationOptions = Apollo.BaseMutationOptions<
   DeleteClientImageMutation,
   DeleteClientImageMutationVariables
 >;
-export const CreateEnrollmentDocument = gql`
-  mutation CreateEnrollment($input: CreateEnrollmentInput!) {
-    createEnrollment(input: $input) {
-      clientMutationId
-      enrollments {
-        ...EnrollmentFields
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${EnrollmentFieldsFragmentDoc}
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
-  CreateEnrollmentMutation,
-  CreateEnrollmentMutationVariables
->;
-
-/**
- * __useCreateEnrollmentMutation__
- *
- * To run a mutation, you first call `useCreateEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createEnrollmentMutation, { data, loading, error }] = useCreateEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useCreateEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    CreateEnrollmentMutation,
-    CreateEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    CreateEnrollmentMutation,
-    CreateEnrollmentMutationVariables
-  >(CreateEnrollmentDocument, options);
-}
-export type CreateEnrollmentMutationHookResult = ReturnType<
-  typeof useCreateEnrollmentMutation
->;
-export type CreateEnrollmentMutationResult =
-  Apollo.MutationResult<CreateEnrollmentMutation>;
-export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  CreateEnrollmentMutation,
-  CreateEnrollmentMutationVariables
->;
-export const DeleteEnrollmentDocument = gql`
-  mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
-    deleteEnrollment(input: $input) {
-      clientMutationId
-      enrollment {
-        id
-      }
-      errors {
-        ...ValidationErrorFields
-      }
-    }
-  }
-  ${ValidationErrorFieldsFragmentDoc}
-`;
-export type DeleteEnrollmentMutationFn = Apollo.MutationFunction<
-  DeleteEnrollmentMutation,
-  DeleteEnrollmentMutationVariables
->;
-
-/**
- * __useDeleteEnrollmentMutation__
- *
- * To run a mutation, you first call `useDeleteEnrollmentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteEnrollmentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteEnrollmentMutation, { data, loading, error }] = useDeleteEnrollmentMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDeleteEnrollmentMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    DeleteEnrollmentMutation,
-    DeleteEnrollmentMutationVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<
-    DeleteEnrollmentMutation,
-    DeleteEnrollmentMutationVariables
-  >(DeleteEnrollmentDocument, options);
-}
-export type DeleteEnrollmentMutationHookResult = ReturnType<
-  typeof useDeleteEnrollmentMutation
->;
-export type DeleteEnrollmentMutationResult =
-  Apollo.MutationResult<DeleteEnrollmentMutation>;
-export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
-  DeleteEnrollmentMutation,
-  DeleteEnrollmentMutationVariables
->;
 export const DeleteClientFileDocument = gql`
   mutation DeleteClientFile($input: DeleteClientFileInput!) {
     deleteClientFile(input: $input) {
@@ -19572,6 +19611,121 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
+>;
+export const CreateEnrollmentDocument = gql`
+  mutation CreateEnrollment($input: CreateEnrollmentInput!) {
+    createEnrollment(input: $input) {
+      clientMutationId
+      enrollments {
+        ...EnrollmentFields
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${EnrollmentFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type CreateEnrollmentMutationFn = Apollo.MutationFunction<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
+>;
+
+/**
+ * __useCreateEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useCreateEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createEnrollmentMutation, { data, loading, error }] = useCreateEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateEnrollmentMutation,
+    CreateEnrollmentMutationVariables
+  >(CreateEnrollmentDocument, options);
+}
+export type CreateEnrollmentMutationHookResult = ReturnType<
+  typeof useCreateEnrollmentMutation
+>;
+export type CreateEnrollmentMutationResult =
+  Apollo.MutationResult<CreateEnrollmentMutation>;
+export type CreateEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  CreateEnrollmentMutation,
+  CreateEnrollmentMutationVariables
+>;
+export const DeleteEnrollmentDocument = gql`
+  mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
+    deleteEnrollment(input: $input) {
+      clientMutationId
+      enrollment {
+        id
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type DeleteEnrollmentMutationFn = Apollo.MutationFunction<
+  DeleteEnrollmentMutation,
+  DeleteEnrollmentMutationVariables
+>;
+
+/**
+ * __useDeleteEnrollmentMutation__
+ *
+ * To run a mutation, you first call `useDeleteEnrollmentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEnrollmentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEnrollmentMutation, { data, loading, error }] = useDeleteEnrollmentMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteEnrollmentMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteEnrollmentMutation,
+    DeleteEnrollmentMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteEnrollmentMutation,
+    DeleteEnrollmentMutationVariables
+  >(DeleteEnrollmentDocument, options);
+}
+export type DeleteEnrollmentMutationHookResult = ReturnType<
+  typeof useDeleteEnrollmentMutation
+>;
+export type DeleteEnrollmentMutationResult =
+  Apollo.MutationResult<DeleteEnrollmentMutation>;
+export type DeleteEnrollmentMutationOptions = Apollo.BaseMutationOptions<
+  DeleteEnrollmentMutation,
+  DeleteEnrollmentMutationVariables
 >;
 export const GetPickListDocument = gql`
   query GetPickList(
