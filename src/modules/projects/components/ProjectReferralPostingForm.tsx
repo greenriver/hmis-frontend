@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react';
-
+import { remove } from 'lodash-es';
+import { useCallback, useState, useMemo } from 'react';
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
@@ -12,6 +12,7 @@ import { transformSubmitValues } from '@/modules/form/util/formUtil';
 import {
   ReferralPostingDetailFieldsFragment,
   ReferralPostingInput,
+  ReferralPostingStatus,
   useUpdateReferralPostingMutation,
 } from '@/types/gqlTypes';
 
@@ -34,10 +35,28 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     },
     onError: (apolloError) => setErrors({ ...emptyErrorState, apolloError }),
   });
+
+  const definition = useMemo(() => {
+    // Hacky way to drop the "Assigned" option if this posting is in AcceptedPending status.
+    // This lets user change from AcceptedPending=>DeniedPending which is sometimes necessary.
+    const definitionCopy = { ...ReferralPostingDefinition };
+    if (
+      referralPosting.status === ReferralPostingStatus.AcceptedPendingStatus &&
+      definitionCopy.item[0].pickListOptions
+    ) {
+      remove(
+        definitionCopy.item[0].pickListOptions,
+        (opt) => opt.code === ReferralPostingStatus.AssignedStatus
+      );
+    }
+    return definitionCopy;
+  }, [referralPosting]);
+
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {
+      setErrors(emptyErrorState);
       const input = transformSubmitValues({
-        definition: ReferralPostingDefinition,
+        definition,
         values,
         keyByFieldName: true,
       }) as ReferralPostingInput;
@@ -49,11 +68,11 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
         },
       });
     },
-    [mutate, referralPosting.id]
+    [mutate, definition, referralPosting.id]
   );
 
   const initialValues = useInitialFormValues({
-    definition: ReferralPostingDefinition,
+    definition,
     record: referralPosting as unknown as SubmitFormAllowedTypes,
   });
 
@@ -61,7 +80,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
     return (
       <DynamicView
         values={initialValues}
-        definition={ReferralPostingDefinition}
+        definition={definition}
         GridProps={{ columnSpacing: 0, rowSpacing: 2, spacing: 0 }}
       />
     );
@@ -69,7 +88,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
 
   return (
     <DynamicForm
-      definition={ReferralPostingDefinition}
+      definition={definition}
       FormActionProps={{
         submitButtonText: 'Update Referral',
         discardButtonText: 'Cancel',

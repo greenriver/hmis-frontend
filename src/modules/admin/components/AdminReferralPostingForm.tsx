@@ -46,6 +46,7 @@ const AdminReferralPostingForm: React.FC<Props> = ({
   });
   const handleSubmit: DynamicFormOnSubmit = useCallback(
     ({ values }) => {
+      setErrors(emptyErrorState);
       const input = transformSubmitValues({
         definition: formDefinition,
         values,

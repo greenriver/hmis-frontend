@@ -3154,8 +3154,6 @@ export enum PickListType {
   AllServiceTypes = 'ALL_SERVICE_TYPES',
   /** All unit types. */
   AllUnitTypes = 'ALL_UNIT_TYPES',
-  /** Referral Posting Status */
-  AssignedReferralPostingStatuses = 'ASSIGNED_REFERRAL_POSTING_STATUSES',
   AvailableFileTypes = 'AVAILABLE_FILE_TYPES',
   AvailableServiceTypes = 'AVAILABLE_SERVICE_TYPES',
   /** Units available for the given household at the given project */
@@ -3164,8 +3162,6 @@ export enum PickListType {
   AvailableUnitTypes = 'AVAILABLE_UNIT_TYPES',
   Coc = 'COC',
   CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
-  /** Referral Posting Status */
-  DeniedPendingReferralPostingStatuses = 'DENIED_PENDING_REFERRAL_POSTING_STATUSES',
   Destination = 'DESTINATION',
   /** Projects that the User can enroll Clients in */
   EnrollableProjects = 'ENROLLABLE_PROJECTS',
@@ -3182,8 +3178,6 @@ export enum PickListType {
   /** All Projects that the User can see */
   Project = 'PROJECT',
   ReferralOutcome = 'REFERRAL_OUTCOME',
-  /** Referral Result  */
-  ReferralResultTypes = 'REFERRAL_RESULT_TYPES',
   State = 'STATE',
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
