@@ -40,7 +40,7 @@ const columns: ColumnDef<Row>[] = [
       <Stack gap={0.8}>
         {filter(client.externalIds, { type: ExternalIdentifierType.MciId }).map(
           (val) => (
-            <ExternalIdDisplay value={val} />
+            <ExternalIdDisplay key={val.id} value={val} />
           )
         )}
       </Stack>

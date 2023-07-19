@@ -76,6 +76,7 @@ export const LabeledExternalIdDisplay = ({
     <Stack>
       {filtered.map((externalId) => (
         <Typography
+          key={externalId.id}
           variant='body2'
           sx={{
             display: 'inline-flex',

@@ -24,42 +24,6 @@ interface Props {
   referralPosting: ReferralPostingDetailFieldsFragment;
 }
 const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
-  const { project } = referralPosting;
-  const list: Array<[string, ReactNode]> = [
-    [
-      'Referral Status',
-      <ReferralPostingStatusDisplay
-        status={referralPosting.status}
-        sx={{ mt: 0.5 }}
-      />,
-    ],
-    ['Referral ID', referralPosting.referralIdentifier || 'N/A'],
-    ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
-    ['Referred From', referralPosting.referredFrom],
-    ['Organization Name', referralPosting.organization?.organizationName],
-    [
-      'Project Name',
-      project ? (
-        <RouterLink
-          to={generateSafePath(Routes.PROJECT, {
-            projectId: project.id,
-          })}
-          openInNew
-        >
-          {project.projectName}
-        </RouterLink>
-      ) : undefined,
-    ],
-    [
-      'Project Type',
-      <HmisEnum
-        value={referralPosting.project?.projectType}
-        enumMap={HmisEnums.ProjectType}
-      />,
-    ],
-    ['Assigned At', parseAndFormatDateTime(referralPosting.assignedDate)],
-  ];
-
   const verb = useMemo<string>(() => {
     switch (referralPosting.status) {
       case ReferralPostingStatus.DeniedPendingStatus:
@@ -77,17 +41,55 @@ const AdminReferralPostingDetails: React.FC<Props> = ({ referralPosting }) => {
     }
   }, [referralPosting.status]);
 
-  list.push([
-    `${startCase(verb)} at`,
-    referralPosting.statusUpdatedAt
-      ? parseAndFormatDateTime(referralPosting.statusUpdatedAt)
-      : null,
-  ]);
-  list.push([`${verb} by`, referralPosting.statusUpdatedBy]);
+  const attributeList = useMemo<Array<[string, ReactNode]>>(() => {
+    const { project } = referralPosting;
+    const list: Array<[string, ReactNode]> = [
+      [
+        'Referral Status',
+        <ReferralPostingStatusDisplay
+          status={referralPosting.status}
+          sx={{ mt: 0.5 }}
+        />,
+      ],
+      ['Referral ID', referralPosting.referralIdentifier || 'N/A'],
+      ['Referral Date', parseAndFormatDate(referralPosting.referralDate)],
+      ['Referred From', referralPosting.referredFrom],
+      ['Organization Name', referralPosting.organization?.organizationName],
+      [
+        'Project Name',
+        project ? (
+          <RouterLink
+            to={generateSafePath(Routes.PROJECT, {
+              projectId: project.id,
+            })}
+            openInNew
+          >
+            {project.projectName}
+          </RouterLink>
+        ) : undefined,
+      ],
+      [
+        'Project Type',
+        <HmisEnum
+          value={referralPosting.project?.projectType}
+          enumMap={HmisEnums.ProjectType}
+        />,
+      ],
+      ['Assigned At', parseAndFormatDateTime(referralPosting.assignedDate)],
+    ];
+    list.push([
+      `${startCase(verb)} at`,
+      referralPosting.statusUpdatedAt
+        ? parseAndFormatDateTime(referralPosting.statusUpdatedAt)
+        : null,
+    ]);
+    list.push([`${verb} by`, referralPosting.statusUpdatedBy]);
+    return list;
+  }, [referralPosting, verb]);
 
   return (
     <Stack spacing={2} component={CommonUntyledList} sx={{ columns: 2 }}>
-      {list
+      {attributeList
         .filter((labelValue) => hasMeaningfulValue(labelValue[1]))
         .map(([label, value]) => (
           <Typography component='li' key={label} variant='body2'>
