@@ -3,6 +3,7 @@ import { Button, Grid, Paper, Stack, Typography } from '@mui/material';
 
 import EnrollmentRecordTabs from './EnrollmentRecordTabs';
 
+import EnrollmentReminders from '@/components/clientDashboard/enrollments/EnrollmentReminders';
 import ButtonLink from '@/components/elements/ButtonLink';
 import { CommonLabeledTextBlock } from '@/components/elements/CommonLabeledTextBlock';
 import RouterLink from '@/components/elements/RouterLink';
@@ -53,6 +54,7 @@ const ViewEnrollment = () => {
           </Stack>
         </Grid>
         <Grid item xs>
+          <EnrollmentReminders enrollmentId={enrollment.id} />
           <Paper sx={{ p: 2, mb: 2 }}>
             <Stack spacing={2}>
               <Typography variant='h6'>Actions</Typography>

@@ -1,0 +1,13 @@
+fragment ReminderFields on Reminder {
+  id
+  topic
+  dueDate
+  overdue
+  enrollment {
+    id
+  }
+  client {
+    id
+    ...ClientName
+  }
+}

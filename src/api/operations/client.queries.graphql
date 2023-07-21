@@ -210,6 +210,15 @@ query GetEnrollment($id: ID!) {
   }
 }
 
+query GetEnrollmentReminders($id: ID!) {
+  enrollment(id: $id) {
+    id
+    reminders {
+      ...ReminderFields
+    }
+  }
+}
+
 query GetEnrollmentWithHousehold($id: ID!) {
   enrollment(id: $id) {
     ...EnrollmentFields
