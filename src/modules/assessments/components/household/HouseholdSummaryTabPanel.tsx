@@ -77,8 +77,6 @@ const HouseholdSummaryTabPanel = memo(
     refetch,
     setCurrentTab,
   }: HouseholdSummaryTabPanelProps) => {
-    console.debug('Rendering summary panel');
-
     const [checkedState, setCheckedState] = useState<Record<string, boolean>>(
       fromPairs(
         tabs

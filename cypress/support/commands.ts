@@ -132,6 +132,7 @@ const getDifference = (a, b) => {
   const result = {};
   keys.forEach((k) => {
     if (a[k] !== b[k]) {
+      // eslint-disable-next-line no-console
       console.log(k, 'expected', b[k], 'got', a[k]);
       result[k] = a[k];
     }

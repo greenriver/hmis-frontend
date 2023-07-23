@@ -71,7 +71,6 @@ const MciClearance = ({
           status = 'several_matches';
         }
 
-        console.debug('Cleared MCI:', status, matches);
         setState({ status, candidates: matches });
         if (status == 'auto_cleared') {
           onChange(matches[0].mciId);
@@ -97,7 +96,6 @@ const MciClearance = ({
 
   const handleSearch = useCallback(() => {
     if (!currentMciAttributes) return;
-    console.debug('Clearing MCI with input', currentMciAttributes);
     onChange(null);
 
     const primaryName = find(currentMciAttributes.names, { primary: true });

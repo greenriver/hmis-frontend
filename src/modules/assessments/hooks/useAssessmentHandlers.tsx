@@ -106,7 +106,6 @@ export function useAssessmentHandlers({
         hudValues: createHudValuesForSubmit(values, definition.definition),
         confirmed,
       };
-      console.debug('Submitting', input, confirmed);
       void submitAssessmentMutation({
         variables: { input: { input } },
         onCompleted: (data) => {
@@ -138,7 +137,6 @@ export function useAssessmentHandlers({
         values: createValuesForSubmit(values, definition.definition),
         hudValues: createHudValuesForSubmit(values, definition.definition),
       };
-      console.debug('Saving', input);
       void saveAssessmentMutation({
         variables: { input: { input } },
         onCompleted: (data) => {
