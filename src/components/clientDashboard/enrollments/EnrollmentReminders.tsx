@@ -1,6 +1,4 @@
 import { Box } from '@mui/material';
-import { sortBy } from 'lodash-es';
-import { useMemo } from 'react';
 
 import Loading from '@/components/elements/Loading';
 import GenericTable from '@/components/elements/table/GenericTable';
@@ -97,8 +95,6 @@ const rowLinkTo = ({
   }
 };
 
-type Reminders = Array<ReminderFieldsFragment>;
-
 interface Props {
   enrollmentId: string;
 }
@@ -107,44 +103,20 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
     variables: { id: enrollmentId },
     fetchPolicy: 'cache-and-network', // always get fresh reminders
   });
-
-  const displayReminders = useMemo<Reminders>(() => {
-    const remindersByTopic: Record<string, Reminders> = {
-      [ReminderTopic.IntakeIncomplete]: [],
-      [ReminderTopic.ExitIncomplete]: [],
-    };
-    const results: Reminders = [];
-    for (const reminder of data?.enrollment?.reminders || []) {
-      const list = remindersByTopic[reminder.topic];
-      if (list) {
-        list.push(reminder);
-      } else {
-        results.push(reminder);
-      }
-    }
-    for (const topic of Object.keys(remindersByTopic)) {
-      const list = remindersByTopic[topic];
-      if (!list) break;
-      const item =
-        list.find((r) => r.enrollment.id === enrollmentId) || list[0];
-      if (item) results.push(item);
-    }
-    return sortBy(results, (r) => [r.dueDate, r.id]);
-  }, [enrollmentId, data?.enrollment?.reminders]);
-
+  const reminders = data?.enrollment?.reminders || [];
   if (error) throw error;
-  if (loading) return <Loading />;
-  if (displayReminders.length === 0) return null;
+  if (!data && loading) return <Loading />;
+  if (reminders.length === 0) return null;
 
   return (
     <TitleCard
-      title={`To Do (${displayReminders.length})`}
+      title={`To Do (${reminders.length})`}
       sx={{ mb: 2 }}
       headerVariant='border'
     >
       <GenericTable<ReminderFieldsFragment>
         noHead
-        rows={displayReminders}
+        rows={reminders}
         columns={columns}
         rowLinkTo={rowLinkTo}
       />
