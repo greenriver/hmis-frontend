@@ -98,7 +98,6 @@ export function useDynamicFormHandlersForRecord<
         confirmed,
         ...inputVariables,
       };
-      console.debug('Submitting', input);
 
       setErrors(emptyErrorState);
       void submitForm({ variables: { input: { input } } });

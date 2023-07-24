@@ -50,6 +50,7 @@ const Template: ComponentStory<typeof Uploader> = (args) => {
 export const Default = Template.bind({});
 Default.args = {
   onUpload: async (upload, file) => {
+    // eslint-disable-next-line no-console
     console.log({ upload, file });
   },
 };

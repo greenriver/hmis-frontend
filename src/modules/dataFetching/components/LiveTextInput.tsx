@@ -31,8 +31,7 @@ const LiveTextInput = <Mutation, MutationVariables>({
   const [mutate, { error, loading }] = useMutation<Mutation, MutationVariables>(
     queryDocument,
     {
-      onCompleted: (data) => {
-        console.debug('Saved:', getValueFromResponse(data));
+      onCompleted: () => {
         setCompleted(true);
       },
     }
@@ -53,7 +52,6 @@ const LiveTextInput = <Mutation, MutationVariables>({
       if (isNil(value)) return;
       if (value === initialValue) return;
       setCompleted(false);
-      console.debug('Mutating:', value);
       void mutate({
         variables: constructVariables(value),
       });

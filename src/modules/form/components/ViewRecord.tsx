@@ -31,7 +31,6 @@ const ViewRecord = <RecordType extends SubmitFormAllowedTypes>({
   const values = useMemo(() => {
     if (!itemMap) return {};
     const formValues = createInitialValuesFromRecord(itemMap, record);
-    console.debug('Display values:', formValues, 'from', record);
     return formValues;
   }, [itemMap, record]);
 
