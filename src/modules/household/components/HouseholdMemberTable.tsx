@@ -1,6 +1,5 @@
 // import PersonPinIcon from '@mui/icons-material/PersonPin';
 import { Box } from '@mui/material';
-import { some } from 'lodash-es';
 import { useMemo } from 'react';
 
 import { useHouseholdMembers } from '../hooks/useHouseholdMembers';
@@ -107,7 +106,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
   },
   exitDate: (householdMembers: HouseholdClientFieldsFragment[]) => ({
     header: 'Exit Date',
-    hide: !some(householdMembers, (m) => m.enrollment.exitDate),
+    hide: !householdMembers.some((m) => m.enrollment.exitDate),
     render: (hc: HouseholdClientFieldsFragment) =>
       parseAndFormatDate(hc.enrollment.exitDate),
   }),
@@ -122,7 +121,7 @@ export const HOUSEHOLD_MEMBER_COLUMNS = {
   },
   assignedUnit: (householdMembers: HouseholdClientFieldsFragment[]) => ({
     header: 'Assigned Unit',
-    hide: !some(householdMembers, (m) => m.enrollment.currentUnit),
+    hide: !householdMembers.some((m) => m.enrollment.currentUnit),
     render: (hc: HouseholdClientFieldsFragment) =>
       hc.enrollment.currentUnit?.name,
   }),

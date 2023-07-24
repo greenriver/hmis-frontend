@@ -12,11 +12,9 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
-    <>
-      <TitleCard title='Current Living Situations' headerVariant='border'>
-        <Box p={3}>Not yet implemented</Box>
-      </TitleCard>
-    </>
+    <TitleCard title='Current Living Situations' headerVariant='border'>
+      <Box p={3}>None</Box>
+    </TitleCard>
   );
 };
 

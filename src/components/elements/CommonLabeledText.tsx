@@ -10,7 +10,7 @@ interface Props {
   variant?: TypographyProps['variant'];
 }
 
-export const CommonLabeledTextBlock: React.FC<Props> = ({
+const CommonLabeledTextBlock: React.FC<Props> = ({
   title,
   children,
   variant = 'body2',
@@ -25,3 +25,5 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
     </Box>
   </Typography>
 );
+
+export default CommonLabeledTextBlock;

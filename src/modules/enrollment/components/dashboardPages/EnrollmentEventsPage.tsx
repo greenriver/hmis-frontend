@@ -39,22 +39,20 @@ const EnrollmentEventsPage = () => {
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 
   return (
-    <>
-      <TitleCard title='Coordinated Entry Events' headerVariant='border'>
-        <GenericTableWithData<
-          GetEnrollmentEventsQuery,
-          GetEnrollmentEventsQueryVariables,
-          EventFieldsFragment
-        >
-          queryVariables={{ id: enrollmentId }}
-          queryDocument={GetEnrollmentEventsDocument}
-          columns={columns}
-          pagePath='enrollment.events'
-          noData='No events'
-          headerCellSx={() => ({ color: 'text.secondary' })}
-        />
-      </TitleCard>
-    </>
+    <TitleCard title='Coordinated Entry Events' headerVariant='border'>
+      <GenericTableWithData<
+        GetEnrollmentEventsQuery,
+        GetEnrollmentEventsQueryVariables,
+        EventFieldsFragment
+      >
+        queryVariables={{ id: enrollmentId }}
+        queryDocument={GetEnrollmentEventsDocument}
+        columns={columns}
+        pagePath='enrollment.events'
+        noData='No events'
+        headerCellSx={() => ({ color: 'text.secondary' })}
+      />
+    </TitleCard>
   );
 };
 

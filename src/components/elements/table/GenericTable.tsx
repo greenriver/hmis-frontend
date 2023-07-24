@@ -16,7 +16,7 @@ import {
   TableRow,
   Theme,
 } from '@mui/material';
-import { filter, get, includes, isNil, without } from 'lodash-es';
+import { get, includes, isNil, without } from 'lodash-es';
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { To } from 'react-router-dom';
 
@@ -108,7 +108,7 @@ const GenericTable = <T extends { id: string }>({
   noData = 'No data',
 }: Props<T>) => {
   const columns = useMemo(
-    () => filter(columnProp || [], (c) => !c.hide),
+    () => (columnProp || []).filter((c) => !c.hide),
     [columnProp]
   );
   const hasHeaders = columns.find((c) => !!c.header);
