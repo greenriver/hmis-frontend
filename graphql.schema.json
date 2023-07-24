@@ -20524,12 +20524,6 @@
             "deprecationReason": null
           },
           {
-            "name": "ASSIGNED_REFERRAL_POSTING_STATUSES",
-            "description": "Referral Posting Status",
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "AVAILABLE_FILE_TYPES",
             "description": null,
             "isDeprecated": false,
@@ -20562,12 +20556,6 @@
           {
             "name": "CURRENT_LIVING_SITUATION",
             "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "DENIED_PENDING_REFERRAL_POSTING_STATUSES",
-            "description": "Referral Posting Status",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -20628,12 +20616,6 @@
           {
             "name": "REFERRAL_OUTCOME",
             "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "REFERRAL_RESULT_TYPES",
-            "description": "Referral Result ",
             "isDeprecated": false,
             "deprecationReason": null
           },

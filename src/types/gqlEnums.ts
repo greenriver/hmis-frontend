@@ -815,7 +815,6 @@ export const HmisEnums = {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
     ALL_UNIT_TYPES: 'All unit types.',
-    ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
     AVAILABLE_UNITS_FOR_ENROLLMENT:
@@ -824,7 +823,6 @@ export const HmisEnums = {
       'Unit types that have unoccupied units in the specified project',
     COC: 'COC',
     CURRENT_LIVING_SITUATION: 'CURRENT_LIVING_SITUATION',
-    DENIED_PENDING_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     DESTINATION: 'DESTINATION',
     ENROLLABLE_PROJECTS: 'Projects that the User can enroll Clients in',
     ENROLLMENTS_FOR_CLIENT:
@@ -837,7 +835,6 @@ export const HmisEnums = {
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
-    REFERRAL_RESULT_TYPES: 'Referral Result ',
     STATE: 'STATE',
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
