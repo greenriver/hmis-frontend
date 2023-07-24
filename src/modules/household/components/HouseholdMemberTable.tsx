@@ -208,7 +208,8 @@ const HouseholdMemberTable = ({
         rows={householdMembers || []}
         columns={columns}
         rowSx={() => ({
-          td: condensed ? { py: 1.5, border: 'unset' } : { py: 2 },
+          td: condensed ? { py: 1, border: 'unset' } : { py: 2 },
+          '&:nth-last-child(1) td': { pb: 2 },
           // HoH indicator column
           'td:nth-of-type(1)': { pl: 1, pr: 0 },
         })}

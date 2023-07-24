@@ -58,6 +58,7 @@ const EnrollmentServicesPage = () => {
   const { renderServiceDialog, openServiceDialog } = useServiceDialog({
     enrollment,
     service: viewingRecord,
+    onClose: () => setViewingRecord(null),
   });
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
 

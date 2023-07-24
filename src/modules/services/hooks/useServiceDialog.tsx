@@ -77,9 +77,11 @@ const ServiceCategoryAndType = ({
 export function useServiceDialog({
   enrollment,
   service,
+  onClose = () => null,
 }: {
   enrollment?: EnrollmentFieldsFragment;
   service?: ServiceFieldsFragment;
+  onClose?: VoidFunction;
 }) {
   const projectId = enrollment?.project?.id || '';
   const enrollmentId = enrollment?.id || '';
@@ -123,6 +125,7 @@ export function useServiceDialog({
         });
         setSelectedService(null);
         setDialogOpen(false);
+        onClose();
       },
     };
   }, [
@@ -132,6 +135,7 @@ export function useServiceDialog({
     service,
     enrollmentId,
     enrollment,
+    onClose,
   ]);
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
@@ -141,7 +145,8 @@ export function useServiceDialog({
     setDialogOpen(false);
     setSelectedService(null);
     setErrors(emptyErrorState);
-  }, [setErrors]);
+    onClose();
+  }, [setErrors, onClose]);
 
   const openServiceDialog = useCallback(() => setDialogOpen(true), []);
 
