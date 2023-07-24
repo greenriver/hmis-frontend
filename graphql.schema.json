@@ -9817,6 +9817,18 @@
             "deprecationReason": null
           },
           {
+            "name": "dateOfEngagement",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "dateOfPathStatus",
             "description": null,
             "args": [],
@@ -10086,6 +10098,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "ISO8601Date",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "exitDestination",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "Destination",
               "ofType": null
             },
             "isDeprecated": false,
@@ -10437,6 +10461,18 @@
             "type": {
               "kind": "ENUM",
               "name": "MonthsHomelessPastThreeYears",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "moveInDate",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
               "ofType": null
             },
             "isDeprecated": false,
@@ -20639,6 +20675,12 @@
           },
           {
             "name": "SUB_TYPE_PROVIDED_5",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VAMC_STATION",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
