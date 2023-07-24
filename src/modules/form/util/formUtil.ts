@@ -1091,10 +1091,13 @@ export const debugFormValues = (
   if (import.meta.env.MODE === 'production') return false;
   if (!event.ctrlKey && !event.metaKey) return false;
 
+  // eslint-disable-next-line no-console
   console.debug('%c FORM STATE:', 'color: #BB7AFF');
   if (transformValuesFn) {
+    // eslint-disable-next-line no-console
     console.debug(transformValuesFn(values, definition));
   } else {
+    // eslint-disable-next-line no-console
     console.debug(values);
   }
 
@@ -1111,7 +1114,9 @@ export const debugFormValues = (
   }
 
   window.debug = { hudValues };
+  // eslint-disable-next-line no-console
   console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  // eslint-disable-next-line no-console
   console.debug(hudValues);
 
   return true;

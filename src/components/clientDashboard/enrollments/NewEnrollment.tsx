@@ -93,7 +93,6 @@ const NewEnrollment = () => {
         })),
         confirmed,
       };
-      console.log('CreateEnrollment with input:', input);
       void mutateFunction({ variables: { input } });
     },
     [entryDate, members, project, mutateFunction]

@@ -80,8 +80,13 @@ export async function fetchCurrentUser(): Promise<HmisUser | undefined> {
   trackSessionFromResponse(response);
 
   if (response.ok) {
-    const user = await response.json();
-    return user.id ? user : undefined;
+    const user: HmisUser | undefined = await response.json();
+    if (user?.id) {
+      storage.setUser(user);
+      return user;
+    }
+    storage.clearUser();
+    return undefined;
   } else {
     return Promise.reject(response.status);
   }
