@@ -2,6 +2,8 @@ fragment EnrollmentValues on Enrollment {
   id
   entryDate
   exitDate
+  dateOfEngagement
+  moveInDate
   livingSituation
   lengthOfStay
   losUnderThreshold

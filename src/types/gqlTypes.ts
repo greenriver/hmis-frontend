@@ -1501,6 +1501,7 @@ export type Enrollment = {
   dateCreated: Scalars['ISO8601DateTime']['output'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']['output']>;
   dateOfBcpStatus?: Maybe<Scalars['ISO8601Date']['output']>;
+  dateOfEngagement?: Maybe<Scalars['ISO8601Date']['output']>;
   dateOfPathStatus?: Maybe<Scalars['ISO8601Date']['output']>;
   dateToStreetEssh?: Maybe<Scalars['ISO8601Date']['output']>;
   dateUpdated: Scalars['ISO8601DateTime']['output'];
@@ -1514,6 +1515,7 @@ export type Enrollment = {
   events: EventsPaginated;
   exitAssessment?: Maybe<Assessment>;
   exitDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  exitDestination?: Maybe<Destination>;
   files: FilesPaginated;
   formerWardChildWelfare?: Maybe<NoYesReasonsForMissingData>;
   formerWardJuvenileJustice?: Maybe<NoYesReasonsForMissingData>;
@@ -1533,6 +1535,7 @@ export type Enrollment = {
   losUnderThreshold?: Maybe<NoYesMissing>;
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
+  moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -5005,6 +5008,8 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -5338,6 +5343,8 @@ export type FullAssessmentFragment = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -6109,6 +6116,8 @@ export type GetAssessmentQuery = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      dateOfEngagement?: string | null;
+      moveInDate?: string | null;
       livingSituation?: LivingSituation | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
@@ -6525,6 +6534,8 @@ export type GetHouseholdAssessmentsQuery = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      dateOfEngagement?: string | null;
+      moveInDate?: string | null;
       livingSituation?: LivingSituation | null;
       lengthOfStay?: ResidencePriorLengthOfStay | null;
       losUnderThreshold?: NoYesMissing | null;
@@ -6890,6 +6901,8 @@ export type SubmitAssessmentMutation = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        dateOfEngagement?: string | null;
+        moveInDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
@@ -7264,6 +7277,8 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          dateOfEngagement?: string | null;
+          moveInDate?: string | null;
           livingSituation?: LivingSituation | null;
           lengthOfStay?: ResidencePriorLengthOfStay | null;
           losUnderThreshold?: NoYesMissing | null;
@@ -7601,6 +7616,8 @@ export type EnrollmentValuesFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
@@ -7638,6 +7655,8 @@ export type EnrollmentFieldsFromAssessmentFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
@@ -8931,6 +8950,8 @@ export type GetNonWipEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        dateOfEngagement?: string | null;
+        moveInDate?: string | null;
         livingSituation?: LivingSituation | null;
         lengthOfStay?: ResidencePriorLengthOfStay | null;
         losUnderThreshold?: NoYesMissing | null;
@@ -15836,6 +15857,8 @@ export const EnrollmentValuesFragmentDoc = gql`
     id
     entryDate
     exitDate
+    dateOfEngagement
+    moveInDate
     livingSituation
     lengthOfStay
     losUnderThreshold

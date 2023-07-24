@@ -1487,6 +1487,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
+        name: 'dateOfEngagement',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
         name: 'dateOfPathStatus',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
@@ -1529,6 +1533,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'exitDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'exitDestination',
+        type: { kind: 'ENUM', name: 'Destination', ofType: null },
       },
       {
         name: 'formerWardChildWelfare',
@@ -1621,6 +1629,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'MonthsHomelessPastThreeYears',
           ofType: null,
         },
+      },
+      {
+        name: 'moveInDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
       },
       {
         name: 'percentAmi',
