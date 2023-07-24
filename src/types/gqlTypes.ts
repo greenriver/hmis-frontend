@@ -3243,6 +3243,7 @@ export enum PickListType {
   SubTypeProvided_3 = 'SUB_TYPE_PROVIDED_3',
   SubTypeProvided_4 = 'SUB_TYPE_PROVIDED_4',
   SubTypeProvided_5 = 'SUB_TYPE_PROVIDED_5',
+  VamcStation = 'VAMC_STATION',
 }
 
 /** 4.19.7 */
