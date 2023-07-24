@@ -12,11 +12,11 @@ import {
   parseAndFormatDateRange,
   serviceDetails,
 } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
+  GetClientServicesDocument,
   GetClientServicesQuery,
   GetClientServicesQueryVariables,
-  GetClientServicesDocument,
   ServiceSortOption,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -77,10 +77,13 @@ const ClientServices: React.FC<{
             render: (row) => (
               <RouterLink
                 to={[
-                  generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
-                    enrollmentId: row.enrollment.id,
-                    clientId,
-                  }),
+                  generateSafePath(
+                    EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+                    {
+                      enrollmentId: row.enrollment.id,
+                      clientId,
+                    }
+                  ),
                   'services',
                 ].join('#')}
               >

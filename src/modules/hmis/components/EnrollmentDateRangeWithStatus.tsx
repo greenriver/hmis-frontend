@@ -5,6 +5,8 @@ import { formatDateForDisplay, parseHmisDateString } from '../hmisUtil';
 
 import { HouseholdClientFieldsFragment } from '@/types/gqlTypes';
 
+const ACTIVE_TEXT = 'Active';
+
 const EnrollmentDateRangeWithStatus = ({
   enrollment,
 }: {
@@ -22,20 +24,23 @@ const EnrollmentDateRangeWithStatus = ({
     : enrollment.entryDate || 'Unknown';
   let endFormatted: string | ReactNode = end
     ? formatDateForDisplay(end)
-    : enrollment.exitDate || 'Active';
+    : enrollment.exitDate || ACTIVE_TEXT;
 
+  let color;
   if (!enrollment.exitDate && enrollment.inProgress) {
-    endFormatted = (
-      <Box color='error' component='span' sx={{ color: 'error.main' }}>
-        Incomplete
-      </Box>
-    );
+    color = 'error.main';
+    endFormatted = 'Incomplete';
+  } else if (!enrollment.exitDate) {
+    color = 'success.main';
   }
+
   return (
-    <Stack direction='row' gap={0.8}>
-      {startFormatted}
+    <Stack direction='row' gap={0.5}>
+      <Box component='span'>{startFormatted}</Box>
       {' - '}
-      {endFormatted}
+      <Box component='span' sx={{ px: 0, color }}>
+        {endFormatted}
+      </Box>
     </Stack>
   );
 };

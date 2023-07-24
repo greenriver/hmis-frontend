@@ -9,19 +9,16 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import RelationshipToHoHInput from './elements/RelationshipToHoHInput';
 import RemoveFromHouseholdButton from './elements/RemoveFromHouseholdButton';
+import { HOUSEHOLD_MEMBER_COLUMNS } from './HouseholdMemberTable';
 
 import GenericTable from '@/components/elements/table/GenericTable';
 import usePrevious from '@/hooks/usePrevious';
-import ClientName from '@/modules/client/components/ClientName';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
   emptyErrorState,
   ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
-import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
-import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
-import HohIndicator from '@/modules/hmis/components/HohIndicator';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import { ClientPermissionsFilter } from '@/modules/permissions/PermissionsFilters';
 import {
@@ -54,11 +51,6 @@ const EditHouseholdMemberTable = ({
       ),
     [household, currentDashboardClientId]
   );
-
-  const anyMemberHasUnitAssignment = useMemo(() => {
-    if (!currentMembers) return false;
-    return !!currentMembers.find((hc) => hc.enrollment.currentUnit);
-  }, [currentMembers]);
 
   const [hoh, setHoH] = useState<HouseholdClientFieldsFragment | null>(
     currentMembers.find(
@@ -151,52 +143,13 @@ const EditHouseholdMemberTable = ({
 
   const columns = useMemo(() => {
     return [
-      {
-        header: '',
-        key: 'indicator',
-        width: '1%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <HohIndicator relationshipToHoh={hc.relationshipToHoH} />
-        ),
-      },
-      {
-        header: 'Name',
-        key: 'name',
-        width: '20%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <ClientName
-            client={hc.client}
-            routerLinkProps={{ target: '_blank' }}
-            linkToProfile={
-              !currentDashboardClientId ||
-              hc.client.id !== currentDashboardClientId
-            }
-            bold={hc.client.id === currentDashboardClientId}
-          />
-        ),
-      },
-      {
-        header: 'Enrollment Period',
-        key: 'status',
-        width: '20%',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <EnrollmentStatus
-            enrollment={hc.enrollment}
-            activeColor='text.primary'
-            closedColor='text.primary'
-            hideIcon
-            withActiveRange
-          />
-        ),
-      },
-      {
-        width: '15%',
-        header: 'DOB / Age',
-        key: 'dob',
-        render: (hc: HouseholdClientFieldsFragment) => (
-          <ClientDobAge client={hc.client} reveal />
-        ),
-      },
+      HOUSEHOLD_MEMBER_COLUMNS.hohIndicator,
+      HOUSEHOLD_MEMBER_COLUMNS.clientName({
+        currentClientId: currentDashboardClientId,
+        linkToProfile: !currentDashboardClientId,
+      }),
+      HOUSEHOLD_MEMBER_COLUMNS.enrollmentPeriod,
+      HOUSEHOLD_MEMBER_COLUMNS.dobAge,
       {
         header: (
           <Tooltip title='Head of Household' placement='top' arrow>
@@ -244,17 +197,7 @@ const EditHouseholdMemberTable = ({
           />
         ),
       },
-      ...(anyMemberHasUnitAssignment
-        ? [
-            {
-              header: 'Unit',
-              key: 'unit',
-              width: '15%',
-              render:
-                'enrollment.currentUnit.name' as keyof HouseholdClientFieldsFragment,
-            },
-          ]
-        : []),
+      HOUSEHOLD_MEMBER_COLUMNS.assignedUnit(currentMembers),
       {
         header: '',
         key: 'action',
@@ -284,7 +227,6 @@ const EditHouseholdMemberTable = ({
     proposedHoH,
     highlight,
     currentMembers,
-    anyMemberHasUnitAssignment,
   ]);
 
   return (

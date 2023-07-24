@@ -85,7 +85,6 @@ const Units = () => {
               onClick={() => setDialogOpen(true)}
               startIcon={<AddIcon />}
               variant='outlined'
-              color='secondary'
             >
               Add Units
             </Button>

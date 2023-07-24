@@ -1,7 +1,9 @@
+import { SvgIconComponent } from '@mui/icons-material';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import {
   Breadcrumbs as MuiBreadcrumbs,
   BreadcrumbsProps,
+  Stack,
   Typography,
   TypographyVariant,
 } from '@mui/material';
@@ -14,6 +16,7 @@ import generateSafePath from '@/utils/generateSafePath';
 export interface Breadcrumb {
   label: string;
   to: string;
+  icon?: SvgIconComponent;
 }
 interface Props extends BreadcrumbsProps {
   crumbs: Breadcrumb[];
@@ -40,7 +43,7 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
       }}
       {...rest}
     >
-      {crumbs.map(({ label, to }, index) => {
+      {crumbs.map(({ label, to, icon: Icon }, index) => {
         if (index === crumbs.length - 1) {
           return (
             <Typography variant={variant} key={to} sx={{ display: 'inline' }}>
@@ -59,7 +62,14 @@ const Breadcrumbs = ({ crumbs, variant = 'body2', sx, ...rest }: Props) => {
             variant={variant}
             data-testid={`breadcrumb-${index}`}
           >
-            {label}
+            {Icon ? (
+              <Stack direction={'row'} gap={0.75} alignItems='center'>
+                <Icon fontSize='inherit' />
+                {label}
+              </Stack>
+            ) : (
+              label
+            )}
           </RouterLink>
         );
       })}

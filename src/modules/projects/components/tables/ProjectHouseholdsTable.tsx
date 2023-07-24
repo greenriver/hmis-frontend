@@ -14,7 +14,7 @@ import {
   formatDateForGql,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
   EnrollmentFilterOptionStatus,
@@ -70,10 +70,13 @@ export const HOUSEHOLD_COLUMNS: {
             gap={0.5}
             whiteSpace='nowrap'
             component={Link}
-            href={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
-              clientId: c.client.id,
-              enrollmentId: c.enrollment.id,
-            })}
+            href={generateSafePath(
+              EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW,
+              {
+                clientId: c.client.id,
+                enrollmentId: c.enrollment.id,
+              }
+            )}
           >
             <ClientName client={c.client} />
             <ClientDobAge client={c.client} noDob />

@@ -3,8 +3,8 @@ import pluralize from 'pluralize';
 
 import RouterLink from '@/components/elements/RouterLink';
 import { clientBriefName } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
-import { UnitFieldsFragment, RelationshipToHoH } from '@/types/gqlTypes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { RelationshipToHoH, UnitFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const UnitOccupants = ({ unit }: { unit: UnitFieldsFragment }) => {
@@ -25,7 +25,7 @@ const UnitOccupants = ({ unit }: { unit: UnitFieldsFragment }) => {
     numOthers > 0 ? ` and ${numOthers} ${pluralize('other', numOthers)}` : '';
   return (
     <RouterLink
-      to={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+      to={generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
         clientId: occupant.client.id,
         enrollmentId: occupant.id,
       })}

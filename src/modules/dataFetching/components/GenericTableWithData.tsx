@@ -4,7 +4,7 @@ import {
   WatchQueryFetchPolicy,
 } from '@apollo/client';
 import { Box, Stack } from '@mui/material';
-import { get, isEmpty, isEqual, some, startCase } from 'lodash-es';
+import { get, isEmpty, isEqual, startCase } from 'lodash-es';
 import pluralize from 'pluralize';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 
@@ -263,7 +263,7 @@ const GenericTableWithData = <
   const noDataValue = useMemo(() => {
     if (!showFilters) return noData;
 
-    const isFiltered = some(Object.values(filterValues), hasMeaningfulValue);
+    const isFiltered = Object.values(filterValues).some(hasMeaningfulValue);
     if (isFiltered)
       return `No ${pluralize(
         startCase(recordType || 'record').toLowerCase()

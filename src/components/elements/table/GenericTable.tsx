@@ -89,7 +89,7 @@ const GenericTable = <T extends { id: string }>({
   rows,
   handleRowClick,
   rowLinkTo,
-  columns = [],
+  columns: columnProp,
   paginated = false,
   loading = false,
   vertical = false,
@@ -107,6 +107,10 @@ const GenericTable = <T extends { id: string }>({
   filterToolbar,
   noData = 'No data',
 }: Props<T>) => {
+  const columns = useMemo(
+    () => (columnProp || []).filter((c) => !c.hide),
+    [columnProp]
+  );
   const hasHeaders = columns.find((c) => !!c.header);
 
   const [selected, setSelected] = useState<readonly string[]>([]);

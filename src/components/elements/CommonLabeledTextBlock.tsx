@@ -4,10 +4,11 @@ import { ReactNode } from 'react';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 
 interface Props {
-  children: string | null | undefined;
+  children: ReactNode | string | null | undefined;
   title: ReactNode;
   sx?: TypographyProps['sx'];
   variant?: TypographyProps['variant'];
+  horizontal?: boolean;
 }
 
 export const CommonLabeledTextBlock: React.FC<Props> = ({
@@ -15,8 +16,17 @@ export const CommonLabeledTextBlock: React.FC<Props> = ({
   children,
   variant = 'body2',
   sx,
+  horizontal = false,
 }) => (
-  <Typography sx={sx} variant={variant} component='div'>
+  <Typography
+    sx={{
+      display: horizontal ? 'flex' : undefined,
+      gap: horizontal ? 1 : undefined,
+      ...sx,
+    }}
+    variant={variant}
+    component='div'
+  >
     <Box sx={({ typography }) => ({ fontWeight: typography.fontWeightBold })}>
       {title}
     </Box>

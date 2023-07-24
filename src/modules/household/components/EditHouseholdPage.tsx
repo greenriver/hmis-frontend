@@ -3,17 +3,17 @@ import { Box, Button, Grid, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useClientDashboardContext } from '@/components/pages/ClientDashboard';
+import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
 import NotFound from '@/components/pages/NotFound';
 import useSafeParams from '@/hooks/useSafeParams';
 import { enrollmentName } from '@/modules/hmis/hmisUtil';
 import ManageHousehold from '@/modules/household/components/ManageHousehold';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const EditHousehold = () => {
   const navigate = useNavigate();
-  const { enrollment } = useClientDashboardContext();
+  const { enrollment } = useEnrollmentDashboardContext();
 
   const { clientId, enrollmentId } = useSafeParams() as {
     clientId: string;
@@ -23,7 +23,7 @@ const EditHousehold = () => {
   const navigateToEnrollment = useMemo(
     () => () =>
       navigate(
-        generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+        generateSafePath(EnrollmentDashboardRoutes.HOUSEHOLD, {
           clientId,
           enrollmentId,
         })

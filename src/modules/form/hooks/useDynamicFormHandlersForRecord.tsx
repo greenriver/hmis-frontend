@@ -30,7 +30,7 @@ type SubmitFormInputVariables = Omit<
 export interface DynamicFormHandlerArgs<T> {
   // formRole: FormRole;
   formDefinition?: FormDefinitionFieldsFragment;
-  record?: T;
+  record?: T | null;
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;
   inputVariables?: SubmitFormInputVariables;

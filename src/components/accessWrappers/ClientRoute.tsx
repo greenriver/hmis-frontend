@@ -1,42 +1,33 @@
-import { useMemo } from 'react';
+import { Navigate } from 'react-router-dom';
 
-import Loading from '../elements/Loading';
+import { useClientDashboardContext } from '../pages/ClientDashboard';
 import NotFound from '../pages/NotFound';
 
-import useSafeParams from '@/hooks/useSafeParams';
-import {
-  useClientPermissions,
-  useRootPermissions,
-} from '@/modules/permissions/useHasPermissionsHooks';
+import { ClientPermissions } from '@/modules/permissions/types';
+import { useHasPermissions } from '@/modules/permissions/useHasPermissionsHooks';
+import generateSafePath from '@/utils/generateSafePath';
 
+/**
+ * Permission wrapper to be used for outlets of the ClientDashboard
+ */
 const ClientRoute: React.FC<
-  React.PropsWithChildren<{ param?: string; view?: boolean; edit?: boolean }>
-> = ({ view = false, edit = false, param = 'clientId', children }) => {
-  const { [param]: clientId } = useSafeParams();
-
-  const [clientPerms, clientStatus] = useClientPermissions(clientId || '');
-  const [rootPerms, rootStatus] = useRootPermissions();
-
-  const allowed = useMemo(() => {
-    if (!clientPerms || !rootPerms) return false;
-    const { canEditClient } = clientPerms;
-    const { canViewClients } = rootPerms;
-
-    if (view) return canViewClients;
-    if (edit) return canEditClient;
-  }, [clientPerms, rootPerms, view, edit]);
-
-  if (!clientId) {
-    console.error('Loaded ClientRoute without a clientId');
-    return <NotFound />;
+  React.PropsWithChildren<{
+    permissions: ClientPermissions | ClientPermissions[];
+    redirectRoute?: string;
+  }>
+> = ({ permissions, redirectRoute, children }) => {
+  const { client } = useClientDashboardContext();
+  const hasPermission = useHasPermissions(client?.access, permissions);
+  if (!hasPermission) {
+    return redirectRoute ? (
+      <Navigate
+        to={generateSafePath(redirectRoute, { clientId: client?.id })}
+        replace
+      />
+    ) : (
+      <NotFound />
+    );
   }
-
-  if (clientStatus.loading || rootStatus.loading) return <Loading />;
-  if (!(clientStatus.data && rootStatus.data)) {
-    console.error('Error loading permissions');
-    return <NotFound />;
-  }
-  if (!allowed) return <NotFound />;
 
   return <>{children}</>;
 };
