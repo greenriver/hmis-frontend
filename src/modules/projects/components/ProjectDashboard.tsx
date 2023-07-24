@@ -86,6 +86,14 @@ const ProjectDashboard: React.FC = () => {
   });
 
   const isPrint = useIsPrintView();
+  const {
+    canManageIncomingReferrals,
+    canManageOutgoingReferrals,
+    canViewEnrollmentDetails,
+  } = project?.access || {};
+  const enableReferrals =
+    globalFeatureFlags?.externalReferrals &&
+    (canManageIncomingReferrals || canManageOutgoingReferrals);
 
   if (error) throw error;
 
@@ -102,13 +110,19 @@ const ProjectDashboard: React.FC = () => {
             title: 'Overview',
             path: generateSafePath(ProjectDashboardRoutes.OVERVIEW, params),
           },
-
-          {
-            id: 'enrollments',
-            title: 'Enrollments',
-            path: generateSafePath(ProjectDashboardRoutes.ENROLLMENTS, params),
-          },
-          ...(globalFeatureFlags?.externalReferrals
+          ...(canViewEnrollmentDetails
+            ? [
+                {
+                  id: 'enrollments',
+                  title: 'Enrollments',
+                  path: generateSafePath(
+                    ProjectDashboardRoutes.ENROLLMENTS,
+                    params
+                  ),
+                },
+              ]
+            : []),
+          ...(enableReferrals
             ? [
                 {
                   id: 'referals',
@@ -150,7 +164,7 @@ const ProjectDashboard: React.FC = () => {
         ],
       },
     ];
-  }, [project, params, globalFeatureFlags]);
+  }, [project, params, enableReferrals, canViewEnrollmentDetails]);
 
   const dashboardState = useDashboardState();
 
