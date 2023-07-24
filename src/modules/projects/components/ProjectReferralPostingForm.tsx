@@ -1,5 +1,5 @@
-import { remove } from 'lodash-es';
-import { useCallback, useState, useMemo } from 'react';
+import { cloneDeep, remove } from 'lodash-es';
+import { useCallback, useMemo, useState } from 'react';
 import { emptyErrorState, partitionValidations } from '@/modules/errors/util';
 import DynamicForm, {
   DynamicFormOnSubmit,
@@ -39,7 +39,7 @@ export const ProjectReferralPostingForm: React.FC<Props> = ({
   const definition = useMemo(() => {
     // Hacky way to drop the "Assigned" option if this posting is in AcceptedPending status.
     // This lets user change from AcceptedPending=>DeniedPending which is sometimes necessary.
-    const definitionCopy = { ...ReferralPostingDefinition };
+    const definitionCopy = cloneDeep(ReferralPostingDefinition);
     if (
       referralPosting.status === ReferralPostingStatus.AcceptedPendingStatus &&
       definitionCopy.item[0].pickListOptions
