@@ -10,6 +10,8 @@ export interface ColumnDef<T> {
   minWidth?: string;
   // unique key for element. if not provided, header is used.
   key?: string;
+  // whether to hide this column
+  hide?: boolean;
   // whether to show link treatment for this cell. rowLinkTo must be provided.
   linkTreatment?: boolean;
   // whether to NOT link this cell even when the whole row is linked using rowLinkTo. Use if there are clickable elements in the cell.

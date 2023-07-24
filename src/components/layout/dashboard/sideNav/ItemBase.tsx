@@ -58,7 +58,7 @@ const ItemBase = ({
     overflowX: 'hidden',
     whiteSpace: 'nowrap',
     display: 'block',
-    color: isSelected ? 'secondary.main' : 'text.primary',
+    color: isSelected ? 'primary.main' : 'text.primary',
     fontWeight: isSelected ? 600 : 400,
     '&.Mui-focusVisible': {
       outlineOffset: '-2px',
@@ -82,9 +82,7 @@ const ItemBase = ({
                 }
               : undefined,
           backgroundColor: (theme) =>
-            isSelected
-              ? lighten(theme.palette.secondary.light, 0.85)
-              : undefined,
+            isSelected ? lighten(theme.palette.primary.light, 0.9) : undefined,
         }}
       >
         {item.title && (

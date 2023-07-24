@@ -42,10 +42,17 @@ fragment ClientFields on Client {
 }
 
 fragment ClientName on Client {
+  id
   firstName
   middleName
   lastName
   nameSuffix
+}
+
+fragment ClientNameDobVet on Client {
+  ...ClientName
+  dob
+  veteranStatus
 }
 
 fragment ClientNameObjectFields on ClientName {

@@ -6,13 +6,13 @@ import ConfirmationDialog from '@/components/elements/ConfirmationDialog';
 import { defaultRenderError } from '@/modules/errors/components/WarningAlert';
 import { useValidationDialog } from '@/modules/errors/hooks/useValidationDialog';
 import {
-  ErrorState,
   emptyErrorState,
+  ErrorState,
   partitionValidations,
 } from '@/modules/errors/util';
 import { parseAndFormatDateRange } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   DeleteClientMutation,
   useDeleteClientMutation,
@@ -127,7 +127,7 @@ const DeleteClientButton: React.FC<DeleteClientButtonProps> = ({
                     <Link
                       component={RouterLink}
                       to={generateSafePath(
-                        ClientDashboardRoutes.EDIT_HOUSEHOLD,
+                        EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
                         {
                           clientId: clientId,
                           enrollmentId: enrollment.id,

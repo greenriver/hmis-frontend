@@ -4,7 +4,7 @@ import { Stack, Typography } from '@mui/material';
 
 import { AssessmentFieldsFragment } from '@/types/gqlTypes';
 
-const EnrollmentStatus = ({
+const AssessmentStatus = ({
   assessment,
 }: {
   assessment: AssessmentFieldsFragment;
@@ -33,4 +33,4 @@ const EnrollmentStatus = ({
   );
 };
 
-export default EnrollmentStatus;
+export default AssessmentStatus;

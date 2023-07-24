@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Typography } from '@mui/material';
+import { Card, Grid, Typography } from '@mui/material';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import {
@@ -32,15 +32,10 @@ const ClientActionsCard: React.FC<Props> = ({ client }) => {
                   clientId: client.id,
                 })}
               >
-                Enroll
+                Enroll in Project
               </ButtonLink>
             </Grid>
           </RootPermissionsFilter>
-          <Grid item xs>
-            <Button fullWidth variant='outlined' color='secondary'>
-              Add Service
-            </Button>
-          </Grid>
         </Grid>
       </Card>
     </ClientPermissionsFilter>

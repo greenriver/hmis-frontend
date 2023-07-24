@@ -7,7 +7,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { enrollmentName, entryExitRange } from '@/modules/hmis/hmisUtil';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  ClientFieldsFragment,
+  ClientNameFragment,
   EnrollmentFieldsFragment,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -16,7 +16,7 @@ const ClientPrintHeader = ({
   client,
   enrollment,
 }: {
-  client: ClientFieldsFragment;
+  client: ClientNameFragment;
   enrollment?: EnrollmentFieldsFragment;
 }) => (
   <Stack

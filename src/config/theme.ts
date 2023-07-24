@@ -95,9 +95,8 @@ const createThemeOptions = (theme: Theme) => ({
     },
     h6: {
       fontFamily: "'Montserrat', sans-serif",
-      fontSize: 12,
-      textTransform: 'uppercase',
-      color: '#10182899',
+      fontSize: 14,
+      // color: '#10182899',
     },
     button: {
       textTransform: 'none',

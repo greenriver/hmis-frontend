@@ -156,30 +156,6 @@ mutation DeleteClientImage($clientId: ID!) {
   }
 }
 
-mutation CreateEnrollment($input: CreateEnrollmentInput!) {
-  createEnrollment(input: $input) {
-    clientMutationId
-    enrollments {
-      ...EnrollmentFields
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
-mutation DeleteEnrollment($input: DeleteEnrollmentInput!) {
-  deleteEnrollment(input: $input) {
-    clientMutationId
-    enrollment {
-      id
-    }
-    errors {
-      ...ValidationErrorFields
-    }
-  }
-}
-
 mutation DeleteClientFile($input: DeleteClientFileInput!) {
   deleteClientFile(input: $input) {
     clientMutationId
@@ -200,39 +176,6 @@ mutation DeleteClient($input: DeleteClientInput!) {
     }
     errors {
       ...ValidationErrorFields
-    }
-  }
-}
-
-query GetEnrollment($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-  }
-}
-
-query GetEnrollmentWithHousehold($id: ID!) {
-  enrollment(id: $id) {
-    ...EnrollmentFields
-    household {
-      id
-      shortId
-      householdClients {
-        ...HouseholdClientFields
-      }
-    }
-  }
-}
-
-query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
-  enrollment(id: $id) {
-    id
-    events(limit: $limit, offset: $offset) {
-      offset
-      limit
-      nodesCount
-      nodes {
-        ...EventFields
-      }
     }
   }
 }

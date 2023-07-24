@@ -9,7 +9,7 @@ const ButtonLink = forwardRef<ButtonLinkProps, any>(
   ({ sx, leftAlign, Icon, ...props }, ref) => (
     <Button
       variant='outlined'
-      color='secondary'
+      color='primary'
       sx={{ ...(leftAlign ? { pl: 3, justifyContent: 'left' } : {}), ...sx }}
       startIcon={Icon ? <Icon fontSize='small' /> : undefined}
       component={Link}
