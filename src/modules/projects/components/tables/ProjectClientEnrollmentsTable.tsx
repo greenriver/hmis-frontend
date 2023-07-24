@@ -13,11 +13,11 @@ import {
   formatDateForGql,
   parseAndFormatDateRange,
 } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   EnrollmentFilterOptionStatus,
-  EnrollmentSortOption,
   EnrollmentsForProjectFilterOptions,
+  EnrollmentSortOption,
   GetProjectEnrollmentsDocument,
   GetProjectEnrollmentsQuery,
   GetProjectEnrollmentsQueryVariables,
@@ -42,7 +42,7 @@ export const ENROLLMENT_COLUMNS: {
       <ClientName
         client={e.client}
         routerLinkProps={{
-          to: generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+          to: generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId: e.client.id,
             enrollmentId: e.id,
           }),
@@ -112,7 +112,7 @@ const ProjectClientEnrollmentsTable = ({
 }) => {
   const rowLinkTo = useCallback(
     (en: EnrollmentFields) =>
-      generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+      generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
         clientId: en.client.id,
         enrollmentId: en.id,
       }),

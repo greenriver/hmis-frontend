@@ -20,10 +20,11 @@ const TitleCard: React.FC<Props> = ({
   <Paper data-testid={props['data-testid']} {...props}>
     <Stack
       justifyContent={'space-between'}
+      alignItems='center'
       direction='row'
       sx={{
         px: 2,
-        py: 2,
+        py: actions ? 2 : 1,
         ...(headerVariant === 'border'
           ? {
               borderBottomColor: 'borders.light',
@@ -34,7 +35,9 @@ const TitleCard: React.FC<Props> = ({
         ...headerSx,
       }}
     >
-      <Typography variant='h5'>{title}</Typography>
+      <Typography variant='h5' sx={{ py: 1 }}>
+        {title}
+      </Typography>
       {actions}
     </Stack>
 

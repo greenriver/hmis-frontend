@@ -11,7 +11,7 @@ import {
   parseAndFormatDateTime,
 } from '@/modules/hmis/hmisUtil';
 import ReferralPostingStatusDisplay from '@/modules/referrals/components/ReferralPostingStatusDisplay';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import { ReferralPostingDetailFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
@@ -33,7 +33,7 @@ const ProjectReferralPostingDetails: React.FC<Props> = ({
       'Enrollment',
       referralPosting.hohEnrollment ? (
         <RouterLink
-          to={generateSafePath(ClientDashboardRoutes.VIEW_ENROLLMENT, {
+          to={generateSafePath(EnrollmentDashboardRoutes.ENROLLMENT_OVERVIEW, {
             clientId: referralPosting.hohEnrollment.client.id,
             enrollmentId: referralPosting.hohEnrollment.id,
           })}

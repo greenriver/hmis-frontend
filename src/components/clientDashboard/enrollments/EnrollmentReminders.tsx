@@ -7,7 +7,10 @@ import GenericTable from '@/components/elements/table/GenericTable';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 
 import {
   AssessmentRole,
@@ -59,32 +62,38 @@ const rowLinkTo = ({
 }: ReminderFieldsFragment): string => {
   switch (topic) {
     case ReminderTopic.AnnualAssessment:
-      return generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(ClientDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Annual,
       });
     case ReminderTopic.AgedIntoAdulthood:
-      return generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Update,
       });
     case ReminderTopic.IntakeIncomplete:
-      return generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Intake,
       });
     case ReminderTopic.ExitIncomplete:
-      return generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+      return generateSafePath(EnrollmentDashboardRoutes.ASSESSMENTS, {
         clientId: client.id,
         enrollmentId: enrollment.id,
         formRole: AssessmentRole.Exit,
       });
     case ReminderTopic.CurrentLivingSituation:
-      // FIXME #185511490
-      return '#fixme';
+      return generateSafePath(
+        EnrollmentDashboardRoutes.CURRENT_LIVING_SITUATIONS,
+        {
+          clientId: client.id,
+          enrollmentId: enrollment.id,
+          formRole: AssessmentRole.Exit,
+        }
+      );
   }
 };
 

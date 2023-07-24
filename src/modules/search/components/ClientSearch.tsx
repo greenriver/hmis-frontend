@@ -18,9 +18,9 @@ import { ColumnDef } from '@/components/elements/table/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ClientCard from '@/modules/client/components/ClientCard';
 import ClientName from '@/modules/client/components/ClientName';
+import { useClientFormDialog } from '@/modules/client/hooks/useClientFormDialog';
 import ApolloErrorAlert from '@/modules/errors/components/ApolloErrorAlert';
 import { SearchFormDefinition } from '@/modules/form/data';
-import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import ClientDobAge from '@/modules/hmis/components/ClientDobAge';
 import ClientSsn from '@/modules/hmis/components/ClientSsn';
 import { clientNameAllParts } from '@/modules/hmis/hmisUtil';
@@ -34,7 +34,6 @@ import {
   ClientFieldsFragment,
   ClientSortOption,
   ExternalIdentifierType,
-  FormRole,
   useSearchClientsLazyQuery,
 } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
@@ -242,19 +241,15 @@ const ClientSearch: React.FC<Props> = ({
     []
   );
 
-  const { openFormDialog, renderFormDialog } =
-    useFormDialog<ClientFieldsFragment>({
-      formRole: FormRole.Client,
-      onCompleted: (data: ClientFieldsFragment) => {
-        searchClients({
-          variables: { input: { id: data.id } },
-          fetchPolicy: 'cache-first',
-        });
-      },
-      // For Client creation, allow the user to input SSN and DOB
-      // even if they don't have read-access to those fields
-      localConstants: { canViewFullSsn: true, canViewDob: true },
-    });
+  const { openClientFormDialog, renderClientFormDialog } = useClientFormDialog({
+    onCompleted: (data: ClientFieldsFragment) => {
+      searchClients({
+        variables: { input: { id: data.id } },
+        fetchPolicy: 'cache-first',
+      });
+    },
+  });
+
   if (!initialValues) return <Loading />;
 
   const paginationProps = {
@@ -286,7 +281,7 @@ const ClientSearch: React.FC<Props> = ({
           addClientButton={
             addClientInDialog ? (
               <Button
-                onClick={openFormDialog}
+                onClick={openClientFormDialog}
                 data-testid='addClientButton'
                 sx={{ px: 3 }}
                 startIcon={<LibraryAddIcon />}
@@ -333,11 +328,7 @@ const ClientSearch: React.FC<Props> = ({
           />
         </>
       )}
-      {renderFormDialog({
-        title: 'Add client',
-        submitButtonText: 'Create Client',
-        DialogProps: { maxWidth: 'lg' },
-      })}
+      {renderClientFormDialog()}
     </>
   );
 };

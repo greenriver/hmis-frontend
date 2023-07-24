@@ -4,7 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import RouterLink from '@/components/elements/RouterLink';
 import DeleteMutationButton from '@/modules/dataFetching/components/DeleteMutationButton';
 import { cache } from '@/providers/apolloClient';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import {
+  ClientDashboardRoutes,
+  EnrollmentDashboardRoutes,
+} from '@/routes/routes';
 import {
   AssessmentFieldsFragment,
   AssessmentRole,
@@ -12,6 +15,7 @@ import {
   DeleteAssessmentMutation,
   DeleteAssessmentMutationVariables,
 } from '@/types/gqlTypes';
+import { evictDeletedEnrollment } from '@/utils/cacheUtil';
 import generateSafePath from '@/utils/generateSafePath';
 
 const DeleteAssessmentButton = ({
@@ -58,8 +62,7 @@ const DeleteAssessmentButton = ({
         });
         cache.evict({ id: `Client:${clientId}`, fieldName: 'assessments' });
         if (deletesEnrollment) {
-          cache.evict({ id: `Enrollment:${enrollmentId}` });
-          cache.evict({ id: `Client:${clientId}`, fieldName: 'enrollments' });
+          evictDeletedEnrollment({ enrollmentId, clientId });
           // If we deleted the enrollment, navigate back to the profile.
           // FIXME: this may result in "not found" if the user lost access to the client.
           // we should probably show a modal that says something like "Success! Go to Client|Home" depending on access
@@ -93,10 +96,13 @@ const DeleteAssessmentButton = ({
               <Typography>
                 If there are other household members, you may need to{' '}
                 <RouterLink
-                  to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
-                    clientId,
-                    enrollmentId,
-                  })}
+                  to={generateSafePath(
+                    EnrollmentDashboardRoutes.EDIT_HOUSEHOLD,
+                    {
+                      clientId,
+                      enrollmentId,
+                    }
+                  )}
                   variant='inherit'
                 >
                   change the Head of Household

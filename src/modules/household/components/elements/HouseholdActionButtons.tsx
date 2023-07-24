@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
-import { ClientDashboardRoutes } from '@/routes/routes';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
   AssessmentRole,
   HouseholdClientFieldsFragment,
@@ -51,7 +51,7 @@ const HouseholdActionButtons = ({
     ).length;
     // All members have completed intake
     if (numIncomplete === 0) {
-      return [true, null, 'secondary'];
+      return [true, null, undefined];
     }
 
     let message = `${numIncomplete} members have incomplete intakes.`;
@@ -60,13 +60,14 @@ const HouseholdActionButtons = ({
   }, [householdMembers]);
 
   return (
-    <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
+    <Stack direction='row' gap={3} sx={{ mt: 4, mb: 4 }}>
       <ButtonLink
         Icon={PeopleIcon}
-        to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
+        to={generateSafePath(EnrollmentDashboardRoutes.EDIT_HOUSEHOLD, {
           clientId,
           enrollmentId,
         })}
+        color='secondary'
       >
         Manage Household
       </ButtonLink>
@@ -76,44 +77,28 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             icon={PostAddIcon}
-            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
               clientId,
               enrollmentId,
               formRole: AssessmentRole.Intake,
             })}
           >
-            {intakeColor === 'error'
-              ? 'Finish Intake'
-              : individual
-              ? 'Intake'
-              : 'Household Intakes'}
+            {individual ? 'Intake Assessment' : 'Household Intakes'}
           </ButtonLink>
         </ButtonTooltipContainer>
-      )}
-      {canIntake && (
-        <ButtonLink
-          icon={PostAddIcon}
-          to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
-            clientId,
-            enrollmentId,
-            formRole: AssessmentRole.Annual,
-          })}
-        >
-          Annual
-        </ButtonLink>
       )}
       {(canExit || exitReason) && (
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
           <ButtonLink
             disabled={!canExit}
             icon={ExitToAppIcon}
-            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+            to={generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
               clientId,
               enrollmentId,
               formRole: AssessmentRole.Exit,
             })}
           >
-            {individual ? 'Exit' : 'Household Exits'}
+            {individual ? 'Exit Assessment' : 'Household Exits'}
           </ButtonLink>
         </ButtonTooltipContainer>
       )}

@@ -1,4 +1,4 @@
-fragment RootPermissionsFragment on QueryAccess {
+fragment RootPermissions on QueryAccess {
   id
   canAdministerHmis
   canEditClients

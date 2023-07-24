@@ -57,12 +57,12 @@ const HouseholdAssessmentTabPanel = memo(
         if (assessmentSubmitted) {
           formRef.current.SubmitIfDirty(true, () => {
             // TODO: Update tab status to 'error' if error?
-            console.debug(`Submitted ${clientName}!`);
+            // console.debug(`Submitted ${clientName}!`);
           });
         } else {
           formRef.current.SaveIfDirty(() => {
             // TODO: Update tab status to 'error' if error?
-            console.debug(`Saved ${clientName}!`);
+            // console.debug(`Saved ${clientName}!`);
             if (!assessmentId) {
               // This was a NEW assessment; we need to re-fetch to get it
               updateTabStatus(AssessmentStatus.Started, id);
