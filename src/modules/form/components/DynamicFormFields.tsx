@@ -107,9 +107,13 @@ const DynamicFormFields: React.FC<Props> = ({
                     values: sectionValues,
                     keyByFieldName: true,
                   });
+                  // eslint-disable-next-line no-console
                   console.group(item.text || item.linkId);
+                  // eslint-disable-next-line no-console
                   console.log(sectionValues);
+                  // eslint-disable-next-line no-console
                   console.log(valuesByKey);
+                  // eslint-disable-next-line no-console
                   console.groupEnd();
                 }
               : undefined

@@ -29,6 +29,7 @@ const MergedThemeProvider: React.FC<PropsWithChildren> = ({ children }) => {
         fetchTheme(id).then((data) => setThemeOptions(data as ThemeOptions));
       };
       window.getThemes = () => {
+        // eslint-disable-next-line no-console
         fetchThemes().then(console.log);
         return 'Fetching...';
       };
