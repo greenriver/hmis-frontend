@@ -9908,9 +9908,12 @@ export type AllEnrollmentDetailsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
+  exitDestination?: Destination | null;
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  dateOfEngagement?: string | null;
+  moveInDate?: string | null;
   livingSituation?: LivingSituation | null;
   lengthOfStay?: ResidencePriorLengthOfStay | null;
   losUnderThreshold?: NoYesMissing | null;
@@ -10043,9 +10046,12 @@ export type GetEnrollmentDetailsQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
+    exitDestination?: Destination | null;
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    dateOfEngagement?: string | null;
+    moveInDate?: string | null;
     livingSituation?: LivingSituation | null;
     lengthOfStay?: ResidencePriorLengthOfStay | null;
     losUnderThreshold?: NoYesMissing | null;
@@ -16828,6 +16834,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     householdId
     householdShortId
     householdSize
+    exitDestination
     currentUnit {
       id
       name
