@@ -24,6 +24,7 @@ export default {
 } as Meta<typeof DynamicForm>;
 
 const Template: StoryFn<typeof DynamicForm> = (args) => (
+  // eslint-disable-next-line no-console
   <DynamicForm {...args} onSubmit={(values) => console.log(values)} />
 );
 

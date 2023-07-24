@@ -9,7 +9,7 @@ const useLocalStorage = <T>(key: string, initialValue?: T) => {
       const item = localStorage.getItem(key);
       return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return initialValue;
     }
   });
@@ -29,7 +29,7 @@ const useLocalStorage = <T>(key: string, initialValue?: T) => {
           })
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     [key]
