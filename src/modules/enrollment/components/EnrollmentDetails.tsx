@@ -1,26 +1,24 @@
 import { ReactNode, useMemo } from 'react';
-
+import EditableCustomDataElement from './EditableCustomDataElement';
+import OccurrencePointValue from './EditableOccurrencePointValue';
 import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
-import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
+import {
+  parseAndFormatDate,
+  pathStatusString,
+  PERMANENT_HOUSING_PROJECT_TYPES,
+} from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentFieldsFragment,
+  FormRole,
   ProjectType,
   useGetEnrollmentDetailsQuery,
 } from '@/types/gqlTypes';
 
-// FIXME move to backend?
-const MOVE_IN_DATE_PROJECT_TYPES = [
-  ProjectType.Psh,
-  ProjectType.Ph,
-  ProjectType.Oph,
-  ProjectType.Rrh,
-];
-
-// FIXME move to backend?
-const DATE_OF_ENGAGEMENT_PROJECT_TYPES = [
+// TODO: move to backend?
+const DOE_PROJECT_TYPES = [
   ProjectType.Es, // TODO(2024) should be nbn only
   ProjectType.So,
   ProjectType.ServicesOnly,
@@ -36,40 +34,103 @@ const EnrollmentDetails = ({
   });
 
   const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
+
+  const rows = useMemo(() => {
+    if (!enrollmentWithDetails) return;
+    const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
+    const content: Record<string, ReactNode> = {
+      'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
+      'Entry Date': parseAndFormatDate(enrollment.entryDate),
+      'Exit Date': parseAndFormatDate(enrollment.exitDate) || noneText,
+    };
+    if (enrollment.exitDate) {
+      content['Exit Destination'] =
+        parseAndFormatDate(enrollmentWithDetails.exitDestination) || noneText;
+    }
+
+    // Show unit if enrollment is open, or enrollment has unit.
+    // it is unexpected for a closed enrollment to have an assigned unit.
+    if (
+      enrollmentWithDetails.project.hasUnits &&
+      (!enrollment.exitDate || enrollment.currentUnit)
+    ) {
+      content['Assigned Unit'] = (
+        <OccurrencePointValue
+          formRole={FormRole.UnitAssignment}
+          title='Change Unit Assignment'
+          icon='pencil'
+          enrollment={enrollment}
+        >
+          {enrollment.currentUnit?.name || noneText}
+        </OccurrencePointValue>
+      );
+    }
+
+    const projectType = enrollment.project.projectType;
+    if (projectType && PERMANENT_HOUSING_PROJECT_TYPES.includes(projectType)) {
+      const title = 'Move-in Date';
+      content[title] = (
+        <OccurrencePointValue
+          formRole={FormRole.MoveInDate}
+          title={title}
+          icon='calendar'
+          enrollment={enrollment}
+        >
+          {parseAndFormatDate(enrollmentWithDetails.moveInDate) || noneText}
+        </OccurrencePointValue>
+      );
+    }
+
+    if (projectType && DOE_PROJECT_TYPES.includes(projectType)) {
+      const title = 'Date of Engagement';
+      content[title] = (
+        <OccurrencePointValue
+          formRole={FormRole.DateOfEngagement}
+          title={title}
+          icon='calendar'
+          enrollment={enrollment}
+        >
+          {parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) ||
+            noneText}
+        </OccurrencePointValue>
+      );
+    }
+    if (true) {
+      //projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
+      const title = 'PATH Status';
+      content[title] = (
+        <OccurrencePointValue
+          formRole={FormRole.PathStatus}
+          title={title}
+          icon='pencil'
+          enrollment={enrollment}
+        >
+          {pathStatusString(enrollment) || noneText}
+        </OccurrencePointValue>
+      );
+    }
+    enrollmentWithDetails.customDataElements
+      .filter((cde) => cde.atOccurrence)
+      .forEach((cde) => {
+        content[cde.label] = (
+          <EditableCustomDataElement
+            element={cde}
+            enrollment={enrollment}
+            fallback={noneText}
+          />
+        );
+      });
+
+    return Object.entries(content).map(([id, value], index) => ({
+      id: String(index),
+      label: id,
+      value,
+    }));
+  }, [enrollment, enrollmentWithDetails]);
+
   if (error) throw error;
-  if (!enrollmentWithDetails) return <Loading />;
+  if (!enrollmentWithDetails || !rows) return <Loading />;
 
-  const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
-  const content: Record<string, ReactNode> = {
-    'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
-    'Entry Date': parseAndFormatDate(enrollment.entryDate),
-    'Exit Date': parseAndFormatDate(enrollment.exitDate) || noneText,
-    'Assigned Unit': enrollment.currentUnit?.name || noneText,
-  };
-
-  if (enrollment.exitDate) {
-    content['Exit Destination'] =
-      parseAndFormatDate(enrollmentWithDetails.exitDestination) || noneText;
-  }
-
-  const projectType = enrollment.project.projectType;
-  if (projectType && MOVE_IN_DATE_PROJECT_TYPES.includes(projectType)) {
-    content['Move-in Date'] =
-      parseAndFormatDate(enrollmentWithDetails.moveInDate) || noneText;
-  }
-
-  if (projectType && DATE_OF_ENGAGEMENT_PROJECT_TYPES.includes(projectType)) {
-    content['Date of Engagement'] =
-      parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) || noneText;
-  }
-
-  // FIXME: better formatting (dates) and show the right types even if enrollment/client doesn't have it
-  // enrollmentWithDetails.customDataElements.forEach((cde) => {
-  //   content[cde.label] = customDataElementValueForKey(
-  //     cde.key,
-  //     enrollmentWithDetails.customDataElements
-  //   );
-  // });
   return (
     <SimpleTable
       TableCellProps={{
@@ -79,7 +140,6 @@ const EnrollmentDetails = ({
             pr: 4,
             width: '1px',
             whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
           },
         },
       }}
@@ -92,11 +152,7 @@ const EnrollmentDetails = ({
         },
         { name: 'value', render: (row) => row.value },
       ]}
-      rows={Object.entries(content).map(([id, value], index) => ({
-        id: String(index),
-        label: id,
-        value,
-      }))}
+      rows={rows}
     />
   );
 };

@@ -972,15 +972,18 @@ export const transformSubmitValues = ({
 };
 
 const getMappedValue = (record: any, mapping: FieldMapping) => {
-  const relatedRecordAttribute = mapping.recordType
-    ? lowerFirst(HmisEnums.RelatedRecordType[mapping.recordType])
-    : null;
-
-  if (
-    relatedRecordAttribute &&
-    !record.hasOwnProperty(relatedRecordAttribute)
-  ) {
-    console.error(`Expected record to have ${relatedRecordAttribute}`, mapping);
+  let relatedRecordAttribute;
+  if (mapping.recordType) {
+    const recordType = HmisEnums.RelatedRecordType[mapping.recordType];
+    if (recordType !== record.__typename) {
+      relatedRecordAttribute = lowerFirst(recordType);
+      if (!record.hasOwnProperty(relatedRecordAttribute)) {
+        console.error(
+          `Expected record to have ${relatedRecordAttribute}`,
+          mapping
+        );
+      }
+    }
   }
 
   if (mapping.customFieldKey) {
