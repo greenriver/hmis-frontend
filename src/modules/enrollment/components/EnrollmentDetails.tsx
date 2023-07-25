@@ -9,6 +9,7 @@ import {
   parseAndFormatDate,
   pathStatusString,
   PERMANENT_HOUSING_PROJECT_TYPES,
+  STREET_OUTREACH_SERVICES_ONLY,
 } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentFieldsFragment,
@@ -95,8 +96,9 @@ const EnrollmentDetails = ({
         </OccurrencePointValue>
       );
     }
-    if (true) {
-      //projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
+
+    // FIXME: needs to check for funder
+    if (projectType && STREET_OUTREACH_SERVICES_ONLY.includes(projectType)) {
       const title = 'PATH Status';
       content[title] = (
         <OccurrencePointValue
