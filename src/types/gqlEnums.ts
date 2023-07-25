@@ -1003,6 +1003,13 @@ export const HmisEnums = {
     UNRELATED_HOUSEHOLD_MEMBER: 'Unrelated household member',
     DATA_NOT_COLLECTED: 'Data not collected',
   },
+  ReminderTopic: {
+    aged_into_adulthood: 'aged_into_adulthood',
+    annual_assessment: 'annual_assessment',
+    current_living_situation: 'current_living_situation',
+    exit_incomplete: 'exit_incomplete',
+    intake_incomplete: 'intake_incomplete',
+  },
   ResidencePriorLengthOfStay: {
     ONE_NIGHT_OR_LESS: 'One night or less',
     TWO_TO_SIX_NIGHTS: 'Two to six nights',

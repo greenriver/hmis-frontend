@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import EnrollmentDetails from '../EnrollmentDetails';
 
+import EnrollmentReminders from '@/components/clientDashboard/enrollments/EnrollmentReminders';
 import TitleCard from '@/components/elements/TitleCard';
 import PageTitle from '@/components/layout/PageTitle';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -79,6 +80,7 @@ const EnrollmentOverview = () => {
         </Grid>
         <Grid item xs={3}>
           <Stack spacing={2}>
+            <EnrollmentReminders enrollmentId={enrollment.id} />
             <TitleCard title='Quick Actions'>
               <EnrollmentQuickActions enrollment={enrollment} />
             </TitleCard>
