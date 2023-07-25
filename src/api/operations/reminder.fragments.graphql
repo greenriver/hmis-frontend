@@ -5,6 +5,7 @@ fragment ReminderFields on Reminder {
   overdue
   enrollment {
     id
+    relationshipToHoH
   }
   client {
     id

@@ -10253,7 +10253,11 @@ export type GetEnrollmentRemindersQuery = {
       topic: ReminderTopic;
       dueDate?: string | null;
       overdue: boolean;
-      enrollment: { __typename?: 'Enrollment'; id: string };
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+      };
       client: {
         __typename?: 'Client';
         id: string;
@@ -15256,7 +15260,11 @@ export type ReminderFieldsFragment = {
   topic: ReminderTopic;
   dueDate?: string | null;
   overdue: boolean;
-  enrollment: { __typename?: 'Enrollment'; id: string };
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+  };
   client: {
     __typename?: 'Client';
     id: string;
@@ -17383,6 +17391,7 @@ export const ReminderFieldsFragmentDoc = gql`
     overdue
     enrollment {
       id
+      relationshipToHoH
     }
     client {
       id
