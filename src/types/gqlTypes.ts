@@ -1557,6 +1557,7 @@ export type Enrollment = {
   reasonNotEnrolled?: Maybe<ReasonNotEnrolled>;
   referralSource?: Maybe<ReferralSource>;
   relationshipToHoH: RelationshipToHoH;
+  reminders: Array<Reminder>;
   runawayYouth?: Maybe<NoYesReasonsForMissingData>;
   services: ServicesPaginated;
   sexualOrientation?: Maybe<SexualOrientation>;
@@ -4031,6 +4032,24 @@ export enum RelationshipToHoH {
   SpouseOrPartner = 'SPOUSE_OR_PARTNER',
   /** (5) Unrelated household member */
   UnrelatedHouseholdMember = 'UNRELATED_HOUSEHOLD_MEMBER',
+}
+
+export type Reminder = {
+  __typename?: 'Reminder';
+  client: Client;
+  dueDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  enrollment: Enrollment;
+  id: Scalars['ID']['output'];
+  overdue: Scalars['Boolean']['output'];
+  topic: ReminderTopic;
+};
+
+export enum ReminderTopic {
+  AgedIntoAdulthood = 'aged_into_adulthood',
+  AnnualAssessment = 'annual_assessment',
+  CurrentLivingSituation = 'current_living_situation',
+  ExitIncomplete = 'exit_incomplete',
+  IntakeIncomplete = 'intake_incomplete',
 }
 
 /** 3.917.2 */
@@ -10456,6 +10475,38 @@ export type GetEnrollmentEventsQuery = {
   } | null;
 };
 
+export type GetEnrollmentRemindersQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+export type GetEnrollmentRemindersQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    reminders: Array<{
+      __typename?: 'Reminder';
+      id: string;
+      topic: ReminderTopic;
+      dueDate?: string | null;
+      overdue: boolean;
+      enrollment: {
+        __typename?: 'Enrollment';
+        id: string;
+        relationshipToHoH: RelationshipToHoH;
+      };
+      client: {
+        __typename?: 'Client';
+        id: string;
+        firstName?: string | null;
+        middleName?: string | null;
+        lastName?: string | null;
+        nameSuffix?: string | null;
+      };
+    }>;
+  } | null;
+};
+
 export type CreateEnrollmentMutationVariables = Exact<{
   input: CreateEnrollmentInput;
 }>;
@@ -15486,6 +15537,27 @@ export type ReferralRequestFieldsFragment = {
   };
 };
 
+export type ReminderFieldsFragment = {
+  __typename?: 'Reminder';
+  id: string;
+  topic: ReminderTopic;
+  dueDate?: string | null;
+  overdue: boolean;
+  enrollment: {
+    __typename?: 'Enrollment';
+    id: string;
+    relationshipToHoH: RelationshipToHoH;
+  };
+  client: {
+    __typename?: 'Client';
+    id: string;
+    firstName?: string | null;
+    middleName?: string | null;
+    lastName?: string | null;
+    nameSuffix?: string | null;
+  };
+};
+
 export type EsgFundingServiceFieldsFragment = {
   __typename?: 'EsgFundingService';
   id: string;
@@ -17621,6 +17693,23 @@ export const ReferralRequestFieldsFragmentDoc = gql`
     requestorEmail
   }
   ${UnitTypeFieldsFragmentDoc}
+`;
+export const ReminderFieldsFragmentDoc = gql`
+  fragment ReminderFields on Reminder {
+    id
+    topic
+    dueDate
+    overdue
+    enrollment {
+      id
+      relationshipToHoH
+    }
+    client {
+      id
+      ...ClientName
+    }
+  }
+  ${ClientNameFragmentDoc}
 `;
 export const EsgFundingServiceFieldsFragmentDoc = gql`
   fragment EsgFundingServiceFields on EsgFundingService {
@@ -19970,6 +20059,68 @@ export type GetEnrollmentEventsLazyQueryHookResult = ReturnType<
 export type GetEnrollmentEventsQueryResult = Apollo.QueryResult<
   GetEnrollmentEventsQuery,
   GetEnrollmentEventsQueryVariables
+>;
+export const GetEnrollmentRemindersDocument = gql`
+  query GetEnrollmentReminders($id: ID!) {
+    enrollment(id: $id) {
+      id
+      reminders {
+        ...ReminderFields
+      }
+    }
+  }
+  ${ReminderFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentRemindersQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentRemindersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentRemindersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentRemindersQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetEnrollmentRemindersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >(GetEnrollmentRemindersDocument, options);
+}
+export function useGetEnrollmentRemindersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentRemindersQuery,
+    GetEnrollmentRemindersQueryVariables
+  >(GetEnrollmentRemindersDocument, options);
+}
+export type GetEnrollmentRemindersQueryHookResult = ReturnType<
+  typeof useGetEnrollmentRemindersQuery
+>;
+export type GetEnrollmentRemindersLazyQueryHookResult = ReturnType<
+  typeof useGetEnrollmentRemindersLazyQuery
+>;
+export type GetEnrollmentRemindersQueryResult = Apollo.QueryResult<
+  GetEnrollmentRemindersQuery,
+  GetEnrollmentRemindersQueryVariables
 >;
 export const CreateEnrollmentDocument = gql`
   mutation CreateEnrollment($input: CreateEnrollmentInput!) {

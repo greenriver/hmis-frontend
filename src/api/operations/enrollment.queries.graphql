@@ -37,6 +37,15 @@ query GetEnrollmentEvents($id: ID!, $limit: Int = 10, $offset: Int = 0) {
   }
 }
 
+query GetEnrollmentReminders($id: ID!) {
+  enrollment(id: $id) {
+    id
+    reminders {
+      ...ReminderFields
+    }
+  }
+}
+
 mutation CreateEnrollment($input: CreateEnrollmentInput!) {
   createEnrollment(input: $input) {
     clientMutationId
