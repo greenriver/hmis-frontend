@@ -839,6 +839,7 @@ export const HmisEnums = {
     SUB_TYPE_PROVIDED_3: 'SUB_TYPE_PROVIDED_3',
     SUB_TYPE_PROVIDED_4: 'SUB_TYPE_PROVIDED_4',
     SUB_TYPE_PROVIDED_5: 'SUB_TYPE_PROVIDED_5',
+    VAMC_STATION: 'VAMC_STATION',
   },
   PrioritizationStatus: {
     INVALID: 'Invalid Value',

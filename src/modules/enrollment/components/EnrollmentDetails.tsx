@@ -7,8 +7,24 @@ import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
 import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import {
   EnrollmentFieldsFragment,
+  ProjectType,
   useGetEnrollmentDetailsQuery,
 } from '@/types/gqlTypes';
+
+// FIXME move to backend?
+const MOVE_IN_DATE_PROJECT_TYPES = [
+  ProjectType.Psh,
+  ProjectType.Ph,
+  ProjectType.Oph,
+  ProjectType.Rrh,
+];
+
+// FIXME move to backend?
+const DATE_OF_ENGAGEMENT_PROJECT_TYPES = [
+  ProjectType.Es, // TODO(2024) should be nbn only
+  ProjectType.So,
+  ProjectType.ServicesOnly,
+];
 
 const EnrollmentDetails = ({
   enrollment,
@@ -29,10 +45,23 @@ const EnrollmentDetails = ({
     'Entry Date': parseAndFormatDate(enrollment.entryDate),
     'Exit Date': parseAndFormatDate(enrollment.exitDate) || noneText,
     'Assigned Unit': enrollment.currentUnit?.name || noneText,
-    // 'Move-in Date': parseAndFormatDate(enrollmentWithDetails.moveInDate) || noneText
-    // 'Exit Destination': parseAndFormatDate(enrollmentWithDetails.exitDestination) || noneText,
-    // 'Date of Engagement': parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) || noneText,
   };
+
+  if (enrollment.exitDate) {
+    content['Exit Destination'] =
+      parseAndFormatDate(enrollmentWithDetails.exitDestination) || noneText;
+  }
+
+  const projectType = enrollment.project.projectType;
+  if (projectType && MOVE_IN_DATE_PROJECT_TYPES.includes(projectType)) {
+    content['Move-in Date'] =
+      parseAndFormatDate(enrollmentWithDetails.moveInDate) || noneText;
+  }
+
+  if (projectType && DATE_OF_ENGAGEMENT_PROJECT_TYPES.includes(projectType)) {
+    content['Date of Engagement'] =
+      parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) || noneText;
+  }
 
   // FIXME: better formatting (dates) and show the right types even if enrollment/client doesn't have it
   // enrollmentWithDetails.customDataElements.forEach((cde) => {

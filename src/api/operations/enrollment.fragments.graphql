@@ -61,6 +61,7 @@ fragment AllEnrollmentDetails on Enrollment {
   householdId
   householdShortId
   householdSize
+  exitDestination
   currentUnit {
     id
     name
