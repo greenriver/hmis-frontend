@@ -1,0 +1,12 @@
+#!/bin/sh
+
+while true
+do
+  sleep 7200
+  if [[ -e "/tmp/nginx.pid" ]]; then
+    echo gracefully reloading nginx workers then sleeping
+    kill -HUP $(cat /tmp/nginx.pid)
+  else
+    echo no nginx pid file found. sleeping for a while
+  fi
+done
