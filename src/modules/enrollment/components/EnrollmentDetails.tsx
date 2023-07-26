@@ -60,10 +60,10 @@ const EnrollmentDetails = ({
     [enrollment]
   );
 
-  const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
+  const enrollmentWithCustomElements = useMemo(() => data?.enrollment, [data]);
 
   const rows = useMemo(() => {
-    if (!enrollmentWithDetails) return;
+    if (!enrollmentWithCustomElements) return;
     const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
     const content: Record<string, ReactNode> = {
       'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
@@ -91,13 +91,13 @@ const EnrollmentDetails = ({
     };
     if (enrollment.exitDate) {
       content['Exit Destination'] =
-        parseAndFormatDate(enrollmentWithDetails.exitDestination) || noneText;
+        parseAndFormatDate(enrollment.exitDestination) || noneText;
     }
 
     // Show unit if enrollment is open, or enrollment has unit.
     // it is unexpected for a closed enrollment to have an assigned unit.
     if (
-      enrollmentWithDetails.project.hasUnits &&
+      enrollmentWithCustomElements.project.hasUnits &&
       (!enrollment.exitDate || enrollment.currentUnit)
     ) {
       content['Assigned Unit'] = (
@@ -126,7 +126,7 @@ const EnrollmentDetails = ({
           icon='calendar'
           enrollment={enrollment}
         >
-          {parseAndFormatDate(enrollmentWithDetails.moveInDate) || noneText}
+          {parseAndFormatDate(enrollment.moveInDate) || noneText}
         </OccurrencePointValue>
       );
     }
@@ -140,8 +140,7 @@ const EnrollmentDetails = ({
           icon='calendar'
           enrollment={enrollment}
         >
-          {parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) ||
-            noneText}
+          {parseAndFormatDate(enrollment.dateOfEngagement) || noneText}
         </OccurrencePointValue>
       );
     }
@@ -160,7 +159,7 @@ const EnrollmentDetails = ({
         </OccurrencePointValue>
       );
     }
-    enrollmentWithDetails.customDataElements
+    enrollmentWithCustomElements.customDataElements
       .filter((cde) => cde.atOccurrence)
       .forEach((cde) => {
         content[cde.label] = (
@@ -177,10 +176,16 @@ const EnrollmentDetails = ({
       label: id,
       value,
     }));
-  }, [enrollment, enrollmentWithDetails, intakePath, exitPath, navigate]);
+  }, [
+    enrollment,
+    enrollmentWithCustomElements,
+    intakePath,
+    exitPath,
+    navigate,
+  ]);
 
   if (error) throw error;
-  if (!enrollmentWithDetails || !rows) return <Loading />;
+  if (!enrollmentWithCustomElements || !rows) return <Loading />;
 
   return (
     <SimpleTable

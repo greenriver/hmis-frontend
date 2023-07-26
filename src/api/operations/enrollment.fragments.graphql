@@ -2,6 +2,7 @@ fragment EnrollmentFields on Enrollment {
   id
   entryDate
   exitDate
+  exitDestination
   project {
     ...ProjectNameAndType
   }
@@ -64,7 +65,6 @@ fragment AllEnrollmentDetails on Enrollment {
   householdId
   householdShortId
   householdSize
-  exitDestination
   currentUnit {
     id
     name

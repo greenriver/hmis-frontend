@@ -8857,6 +8857,7 @@ export type GetClientEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -8975,6 +8976,7 @@ export type GetClientServicesQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          exitDestination?: Destination | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
@@ -9936,6 +9938,7 @@ export type EnrollmentFieldsFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  exitDestination?: Destination | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -9985,6 +9988,7 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  exitDestination?: Destination | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
@@ -10099,7 +10103,6 @@ export type AllEnrollmentDetailsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  exitDestination?: Destination | null;
   id: string;
   entryDate: string;
   exitDate?: string | null;
@@ -10192,6 +10195,7 @@ export type GetEnrollmentQuery = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    exitDestination?: Destination | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
@@ -10251,7 +10255,6 @@ export type GetEnrollmentDetailsQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    exitDestination?: Destination | null;
     id: string;
     entryDate: string;
     exitDate?: string | null;
@@ -10345,6 +10348,7 @@ export type GetEnrollmentWithHouseholdQuery = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    exitDestination?: Destination | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
@@ -10521,6 +10525,7 @@ export type CreateEnrollmentMutation = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      exitDestination?: Destination | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
@@ -12789,6 +12794,7 @@ export type SubmitFormMutation = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          exitDestination?: Destination | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
@@ -13408,6 +13414,7 @@ export type UpdateRelationshipToHoHMutation = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      exitDestination?: Destination | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
@@ -14398,6 +14405,7 @@ export type GetProjectEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
@@ -17074,6 +17082,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
     id
     entryDate
     exitDate
+    exitDestination
     project {
       ...ProjectNameAndType
     }
@@ -17172,7 +17181,6 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     householdId
     householdShortId
     householdSize
-    exitDestination
     currentUnit {
       id
       name
