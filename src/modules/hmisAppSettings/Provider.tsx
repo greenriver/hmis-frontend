@@ -89,13 +89,13 @@ export const HmisAppSettingsProvider: React.FC<Props> = ({ children }) => {
     return (
       <ConfirmationDialog
         open={true}
-        confirmText='Continue'
+        confirmText='Try again'
         title='An error occurred'
         loading={loading}
         hideCancelButton
         onConfirm={reloadWindow}
       >
-        <Typography>Failed to connect to the server</Typography>
+        <Typography>Failed to connect to the server.</Typography>
       </ConfirmationDialog>
     );
   }
