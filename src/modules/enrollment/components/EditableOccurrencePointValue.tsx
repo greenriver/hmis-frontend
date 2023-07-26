@@ -1,7 +1,7 @@
 import DateRangeIcon from '@mui/icons-material/DateRange';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton, Stack } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
+import IconButtonContainer from './IconButtonContainer';
 import { useFormDialog } from '@/modules/form/hooks/useFormDialog';
 import { EnrollmentFieldsFragment, FormRole } from '@/types/gqlTypes';
 
@@ -41,22 +41,15 @@ const EditableOccurrencePointValue = ({
     },
   });
   return (
-    <Stack direction={'row'} alignItems={'center'} gap={2}>
-      <>{children}</>
-      <IconButton
-        color='primary'
+    <>
+      <IconButtonContainer
         onClick={openFormDialog}
-        sx={{ padding: 0.5 }}
-        size='small'
+        Icon={icon === 'calendar' ? DateRangeIcon : EditIcon}
       >
-        {icon === 'calendar' ? (
-          <DateRangeIcon fontSize='small' />
-        ) : (
-          <EditIcon fontSize='small' />
-        )}
-      </IconButton>
+        {children}
+      </IconButtonContainer>
       {renderFormDialog(formDialogArgs)}
-    </Stack>
+    </>
   );
 };
 

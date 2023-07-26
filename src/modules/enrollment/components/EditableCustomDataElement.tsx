@@ -5,10 +5,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  Stack,
 } from '@mui/material';
 import { ReactNode, useCallback, useMemo, useRef, useState } from 'react';
+import IconButtonContainer from './IconButtonContainer';
 import CommonDialog from '@/components/elements/CommonDialog';
 import {
   emptyErrorState,
@@ -117,21 +116,16 @@ const EditableCustomDataElement = ({
 
   return (
     <>
-      <Stack direction={'row'} alignItems={'center'} gap={2}>
+      <IconButtonContainer
+        onClick={() => setDialogOpen(true)}
+        Icon={
+          element.fieldType === CustomDataElementType.Date
+            ? DateRangeIcon
+            : EditIcon
+        }
+      >
         <DisplayValue element={element} fallback={fallback} />
-        <IconButton
-          color='primary'
-          sx={{ padding: 0.5 }}
-          onClick={() => setDialogOpen(true)}
-          size='small'
-        >
-          {element.fieldType === CustomDataElementType.Date ? (
-            <DateRangeIcon fontSize='small' />
-          ) : (
-            <EditIcon fontSize='small' />
-          )}
-        </IconButton>
-      </Stack>
+      </IconButtonContainer>
       <CommonDialog open={!!dialogOpen} fullWidth onClose={closeDialog}>
         <DialogTitle>{element.label}</DialogTitle>
         <DialogContent sx={{ my: 2 }}>

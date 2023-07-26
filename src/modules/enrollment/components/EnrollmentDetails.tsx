@@ -1,6 +1,9 @@
+import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import EditableCustomDataElement from './EditableCustomDataElement';
 import OccurrencePointValue from './EditableOccurrencePointValue';
+import IconButtonContainer from './IconButtonContainer';
 import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
@@ -11,12 +14,15 @@ import {
   PERMANENT_HOUSING_PROJECT_TYPES,
   STREET_OUTREACH_SERVICES_ONLY,
 } from '@/modules/hmis/hmisUtil';
+import { EnrollmentDashboardRoutes } from '@/routes/routes';
 import {
+  AssessmentRole,
   EnrollmentFieldsFragment,
   FormRole,
   ProjectType,
   useGetEnrollmentDetailsQuery,
 } from '@/types/gqlTypes';
+import generateSafePath from '@/utils/generateSafePath';
 
 // TODO: move to backend?
 const DOE_PROJECT_TYPES = [
@@ -34,6 +40,26 @@ const EnrollmentDetails = ({
     variables: { id: enrollment.id },
   });
 
+  const navigate = useNavigate();
+  const intakePath = useMemo(
+    () =>
+      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+        clientId: enrollment.client.id,
+        enrollmentId: enrollment.id,
+        formRole: AssessmentRole.Intake,
+      }),
+    [enrollment]
+  );
+  const exitPath = useMemo(
+    () =>
+      generateSafePath(EnrollmentDashboardRoutes.ASSESSMENT, {
+        clientId: enrollment.client.id,
+        enrollmentId: enrollment.id,
+        formRole: AssessmentRole.Exit,
+      }),
+    [enrollment]
+  );
+
   const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
 
   const rows = useMemo(() => {
@@ -41,8 +67,27 @@ const EnrollmentDetails = ({
     const noneText = <NotCollectedText variant='body2'>None</NotCollectedText>;
     const content: Record<string, ReactNode> = {
       'Enrollment Status': <EnrollmentStatus enrollment={enrollment} />,
-      'Entry Date': parseAndFormatDate(enrollment.entryDate),
-      'Exit Date': parseAndFormatDate(enrollment.exitDate) || noneText,
+      'Entry Date': (
+        // For now, only allow editing Entry Date via Intake Assessment. Link to it.
+        <IconButtonContainer
+          Icon={DescriptionIcon}
+          onClick={() => navigate(intakePath)}
+          tooltip='Go to  Intake Assessment'
+        >
+          {parseAndFormatDate(enrollment.entryDate)}
+        </IconButtonContainer>
+      ),
+      'Exit Date': enrollment.exitDate ? (
+        <IconButtonContainer
+          Icon={DescriptionIcon}
+          onClick={() => navigate(exitPath)}
+          tooltip='Go to Exit Assessment'
+        >
+          {parseAndFormatDate(enrollment.exitDate)}
+        </IconButtonContainer>
+      ) : (
+        noneText
+      ),
     };
     if (enrollment.exitDate) {
       content['Exit Destination'] =
@@ -58,7 +103,11 @@ const EnrollmentDetails = ({
       content['Assigned Unit'] = (
         <OccurrencePointValue
           formRole={FormRole.UnitAssignment}
-          title='Change Unit Assignment'
+          title={
+            enrollment.currentUnit
+              ? 'Change Unit Assignment'
+              : 'Unit Assignment'
+          }
           icon='pencil'
           enrollment={enrollment}
         >
@@ -128,7 +177,7 @@ const EnrollmentDetails = ({
       label: id,
       value,
     }));
-  }, [enrollment, enrollmentWithDetails]);
+  }, [enrollment, enrollmentWithDetails, intakePath, exitPath, navigate]);
 
   if (error) throw error;
   if (!enrollmentWithDetails || !rows) return <Loading />;

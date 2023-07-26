@@ -21,9 +21,12 @@ import {
   isHmisEnum,
   isPickListOption,
   isQuestionItem,
+  isTypedObject,
+  isTypedObjectWithId,
   ItemMap,
   LinkIdMap,
   LocalConstants,
+  TypedObject,
 } from '../types';
 
 import {
@@ -149,14 +152,22 @@ export const resolveOptionList = (
  * Convert string value to option value ({ code: "something" })
  */
 export const getOptionValue = (
-  value: string | null | undefined,
+  value: object | string | null | undefined,
   item: FormItem
 ) => {
   if (!value) return null;
   if (isPickListOption(value)) return value;
-  if (isDataNotCollected(value)) {
+
+  // Allow convertying object (like a Unit or Project) into a
+  // pick list option; assuming 'id' is the code.
+  if (isTypedObjectWithId(value)) {
+    return { code: value.id };
+  }
+  if (typeof value !== 'string') {
+    console.error(`Can't get option value for ${value}`);
     return null;
   }
+  if (isDataNotCollected(value)) return null;
   if (item.pickListReference) {
     // This is a value for a choice item, like 'PSH', so transform it to the option object
     const option = (localResolvePickList(item.pickListReference) || []).find(
@@ -499,10 +510,6 @@ export const buildCommonInputProps = (
   return inputProps;
 };
 
-type TypedObject = { __typename: string };
-const isTypedObject = (o: any): o is TypedObject => {
-  return isObject(o) && o.hasOwnProperty('__typename');
-};
 const cleanTypedObject = (o: TypedObject) => {
   return omit(
     o,
