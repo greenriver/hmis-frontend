@@ -1,5 +1,7 @@
+import { Link } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
+import useEnrollmentSummaryDialog from '../hooks/useEnrollmentSummaryDialog';
 import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
@@ -36,6 +38,11 @@ const EnrollmentDetails = ({
   });
 
   const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
+  const { openDialog, renderDialog } = useEnrollmentSummaryDialog({
+    enrollment: enrollmentWithDetails,
+    clientId: enrollment.client.id,
+  });
+
   if (error) throw error;
   if (!enrollmentWithDetails) return <Loading />;
 
@@ -63,6 +70,14 @@ const EnrollmentDetails = ({
       parseAndFormatDate(enrollmentWithDetails.dateOfEngagement) || noneText;
   }
 
+  if (enrollmentWithDetails.openEnrollmentSummary.length > 0) {
+    content['Other Open Enrollments'] = (
+      <Link component='button' onClick={openDialog}>
+        {enrollmentWithDetails.openEnrollmentSummary.length}
+      </Link>
+    );
+  }
+
   // FIXME: better formatting (dates) and show the right types even if enrollment/client doesn't have it
   // enrollmentWithDetails.customDataElements.forEach((cde) => {
   //   content[cde.label] = customDataElementValueForKey(
@@ -71,33 +86,36 @@ const EnrollmentDetails = ({
   //   );
   // });
   return (
-    <SimpleTable
-      TableCellProps={{
-        sx: {
-          py: 2,
-          '&:first-of-type': {
-            pr: 4,
-            width: '1px',
-            whiteSpace: 'nowrap',
-            verticalAlign: 'baseline',
+    <>
+      <SimpleTable
+        TableCellProps={{
+          sx: {
+            py: 2,
+            '&:first-of-type': {
+              pr: 4,
+              width: '1px',
+              whiteSpace: 'nowrap',
+              verticalAlign: 'baseline',
+            },
           },
-        },
-      }}
-      columns={[
-        {
-          name: 'key',
-          render: (row) => (
-            <strong style={{ fontWeight: 600 }}>{row.label}</strong>
-          ),
-        },
-        { name: 'value', render: (row) => row.value },
-      ]}
-      rows={Object.entries(content).map(([id, value], index) => ({
-        id: String(index),
-        label: id,
-        value,
-      }))}
-    />
+        }}
+        columns={[
+          {
+            name: 'key',
+            render: (row) => (
+              <strong style={{ fontWeight: 600 }}>{row.label}</strong>
+            ),
+          },
+          { name: 'value', render: (row) => row.value },
+        ]}
+        rows={Object.entries(content).map(([id, value], index) => ({
+          id: String(index),
+          label: id,
+          value,
+        }))}
+      />
+      {renderDialog()}
+    </>
   );
 };
 export default EnrollmentDetails;

@@ -53,6 +53,18 @@ fragment EventFields on Event {
   dateDeleted
 }
 
+fragment EnrollmentSummaryFieldsFragment on EnrollmentSummary {
+  id
+  entryDate
+  inProgress
+  moveInDate
+  projectId
+  projectName
+  projectType
+  canViewEnrollment
+  primaryKey
+}
+
 fragment AllEnrollmentDetails on Enrollment {
   ...EnrollmentValues
   inProgress
@@ -68,5 +80,8 @@ fragment AllEnrollmentDetails on Enrollment {
   }
   customDataElements {
     ...CustomDataElementFields
+  }
+  openEnrollmentSummary {
+    ...EnrollmentSummaryFieldsFragment
   }
 }

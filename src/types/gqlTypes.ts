@@ -1527,6 +1527,7 @@ export type Enrollment = {
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInDate?: Maybe<Scalars['ISO8601Date']>;
+  openEnrollmentSummary: Array<EnrollmentSummary>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -1666,6 +1667,19 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentSummary = {
+  __typename?: 'EnrollmentSummary';
+  canViewEnrollment: Scalars['Boolean'];
+  entryDate: Scalars['ISO8601Date'];
+  id: Scalars['ID'];
+  inProgress: Scalars['Boolean'];
+  moveInDate?: Maybe<Scalars['ISO8601Date']>;
+  primaryKey?: Maybe<Scalars['ID']>;
+  projectId: Scalars['String'];
+  projectName: Scalars['String'];
+  projectType: ProjectType;
+};
 
 export type EnrollmentsForClientFilterOptions = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']>;
@@ -3656,6 +3670,7 @@ export type QueryAccess = {
   canViewDob: Scalars['Boolean'];
   canViewEnrollmentDetails: Scalars['Boolean'];
   canViewFullSsn: Scalars['Boolean'];
+  canViewOpenEnrollmentSummary: Scalars['Boolean'];
   canViewPartialSsn: Scalars['Boolean'];
   id: Scalars['ID'];
 };
@@ -9910,6 +9925,19 @@ export type EventFieldsFragment = {
   dateDeleted?: string | null;
 };
 
+export type EnrollmentSummaryFieldsFragmentFragment = {
+  __typename?: 'EnrollmentSummary';
+  id: string;
+  entryDate: string;
+  inProgress: boolean;
+  moveInDate?: string | null;
+  projectId: string;
+  projectName: string;
+  projectType: ProjectType;
+  canViewEnrollment: boolean;
+  primaryKey?: string | null;
+};
+
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
   inProgress: boolean;
@@ -9988,6 +10016,18 @@ export type AllEnrollmentDetailsFragment = {
       dateUpdated: string;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
+  }>;
+  openEnrollmentSummary: Array<{
+    __typename?: 'EnrollmentSummary';
+    id: string;
+    entryDate: string;
+    inProgress: boolean;
+    moveInDate?: string | null;
+    projectId: string;
+    projectName: string;
+    projectType: ProjectType;
+    canViewEnrollment: boolean;
+    primaryKey?: string | null;
   }>;
 };
 
@@ -10126,6 +10166,18 @@ export type GetEnrollmentDetailsQuery = {
         dateUpdated: string;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
+    }>;
+    openEnrollmentSummary: Array<{
+      __typename?: 'EnrollmentSummary';
+      id: string;
+      entryDate: string;
+      inProgress: boolean;
+      moveInDate?: string | null;
+      projectId: string;
+      projectName: string;
+      projectType: ProjectType;
+      canViewEnrollment: boolean;
+      primaryKey?: string | null;
     }>;
   } | null;
 };
@@ -16888,6 +16940,19 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
+export const EnrollmentSummaryFieldsFragmentFragmentDoc = gql`
+  fragment EnrollmentSummaryFieldsFragment on EnrollmentSummary {
+    id
+    entryDate
+    inProgress
+    moveInDate
+    projectId
+    projectName
+    projectType
+    canViewEnrollment
+    primaryKey
+  }
+`;
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentValues
@@ -16905,9 +16970,13 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    openEnrollmentSummary {
+      ...EnrollmentSummaryFieldsFragment
+    }
   }
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${EnrollmentSummaryFieldsFragmentFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {

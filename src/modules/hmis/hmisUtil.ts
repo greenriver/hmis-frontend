@@ -22,6 +22,7 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   EnrollmentFieldsFragment,
+  EnrollmentSummaryFieldsFragmentFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
@@ -232,12 +233,13 @@ export const pronouns = (client: ClientFieldsFragment): React.ReactNode =>
 export const entryExitRange = (
   enrollment:
     | EnrollmentFieldsFragment
-    | HouseholdClientFieldsFragment['enrollment'],
+    | HouseholdClientFieldsFragment['enrollment']
+    | EnrollmentSummaryFieldsFragmentFragment,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(
     enrollment.entryDate,
-    enrollment.exitDate,
+    'exitDate' in enrollment ? enrollment.exitDate : undefined,
     undefined,
     endPlaceholder
   );
