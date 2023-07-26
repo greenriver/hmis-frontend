@@ -2,7 +2,7 @@
 
 while true
 do
-  sleep 3600
+  sleep 7200
   if [[ -e "/tmp/nginx.pid" ]]; then
     echo gracefully reloading nginx workers then sleeping
     kill -HUP $(cat /tmp/nginx.pid)
