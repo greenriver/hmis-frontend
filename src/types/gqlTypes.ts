@@ -852,6 +852,7 @@ export enum CurrentEdStatus {
 /** HUD Current Living Situation */
 export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
+  CLSSubsidyType?: Maybe<RentalSubsidyType>;
   client: Client;
   currentLivingSituation: LivingSituation;
   dateCreated: Scalars['ISO8601DateTime'];
@@ -2064,6 +2065,8 @@ export enum FormRole {
   Ce = 'CE',
   /** (CLIENT) Client */
   Client = 'CLIENT',
+  /** (CURRENT_LIVING_SITUATION) Current Living Situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** (CUSTOM) Custom Assessment */
   Custom = 'CUSTOM',
   /** (ENROLLMENT) Enrollment */
@@ -4016,6 +4019,34 @@ export enum ReminderTopic {
   IntakeIncomplete = 'intake_incomplete',
 }
 
+/** 3.12.A */
+export enum RentalSubsidyType {
+  /** (436) Emergency Housing Voucher */
+  EmergencyHousingVoucher = 'EMERGENCY_HOUSING_VOUCHER',
+  /** (437) Family Unification Program Voucher (FUP) */
+  FamilyUnificationProgramVoucherFup = 'FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP',
+  /** (438) Foster Youth to Independence Initiative (FYI) */
+  FosterYouthToIndependenceInitiativeFyi = 'FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI',
+  /** (428) GPD TIP housing subsidy */
+  GpdTipHousingSubsidy = 'GPD_TIP_HOUSING_SUBSIDY',
+  /** (433) HCV voucher (tenant or project based) (not dedicated) */
+  HcvVoucherTenantOrProjectBasedNotDedicated = 'HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (440) Other permanent housing dedicated for formerly homeless persons */
+  OtherPermanentHousingDedicatedForFormerlyHomelessPersons = 'OTHER_PERMANENT_HOUSING_DEDICATED_FOR_FORMERLY_HOMELESS_PERSONS',
+  /** (439) Permanent Supportive Housing */
+  PermanentSupportiveHousing = 'PERMANENT_SUPPORTIVE_HOUSING',
+  /** (434) Public housing unit */
+  PublicHousingUnit = 'PUBLIC_HOUSING_UNIT',
+  /** (420) Rental by client, with other ongoing housing subsidy */
+  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
+  /** (431) RRH or equivalent subsidy */
+  RrhOrEquivalentSubsidy = 'RRH_OR_EQUIVALENT_SUBSIDY',
+  /** (419) VASH housing subsidy */
+  VashHousingSubsidy = 'VASH_HOUSING_SUBSIDY',
+}
+
 /** 3.917.2 */
 export enum ResidencePriorLengthOfStay {
   /** (8) Client doesn't know */
@@ -4495,6 +4526,7 @@ export type SubmitFormPayload = {
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
   | Client
+  | CurrentLivingSituation
   | Enrollment
   | File
   | Funder
@@ -9709,6 +9741,53 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type CurrentLivingSituationFieldsFragment = {
+  __typename?: 'CurrentLivingSituation';
+  id: string;
+  CLSSubsidyType?: RentalSubsidyType | null;
+  currentLivingSituation: LivingSituation;
+  informationDate: string;
+  leaseOwn60Day?: NoYesReasonsForMissingData | null;
+  leaveSituation14Days?: NoYesReasonsForMissingData | null;
+  locationDetails?: string | null;
+  movedTwoOrMore?: NoYesReasonsForMissingData | null;
+  resourcesToObtain?: NoYesReasonsForMissingData | null;
+  subsequentResidence?: NoYesReasonsForMissingData | null;
+};
+
+export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentCurrentLivingSituationsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    currentLivingSituations: {
+      __typename?: 'CurrentLivingSituationsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CurrentLivingSituation';
+        id: string;
+        CLSSubsidyType?: RentalSubsidyType | null;
+        currentLivingSituation: LivingSituation;
+        informationDate: string;
+        leaseOwn60Day?: NoYesReasonsForMissingData | null;
+        leaveSituation14Days?: NoYesReasonsForMissingData | null;
+        locationDetails?: string | null;
+        movedTwoOrMore?: NoYesReasonsForMissingData | null;
+        resourcesToObtain?: NoYesReasonsForMissingData | null;
+        subsequentResidence?: NoYesReasonsForMissingData | null;
+      }>;
+    };
+  } | null;
+};
+
 export type CustomDataElementValueFieldsFragment = {
   __typename?: 'CustomDataElementValue';
   id: string;
@@ -12567,6 +12646,19 @@ export type SubmitFormMutation = {
             contentType: string;
             base64: string;
           } | null;
+        }
+      | {
+          __typename?: 'CurrentLivingSituation';
+          id: string;
+          CLSSubsidyType?: RentalSubsidyType | null;
+          currentLivingSituation: LivingSituation;
+          informationDate: string;
+          leaseOwn60Day?: NoYesReasonsForMissingData | null;
+          leaveSituation14Days?: NoYesReasonsForMissingData | null;
+          locationDetails?: string | null;
+          movedTwoOrMore?: NoYesReasonsForMissingData | null;
+          resourcesToObtain?: NoYesReasonsForMissingData | null;
+          subsequentResidence?: NoYesReasonsForMissingData | null;
         }
       | {
           __typename?: 'Enrollment';
@@ -16783,6 +16875,20 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CurrentLivingSituationFieldsFragmentDoc = gql`
+  fragment CurrentLivingSituationFields on CurrentLivingSituation {
+    id
+    CLSSubsidyType
+    currentLivingSituation
+    informationDate
+    leaseOwn60Day
+    leaveSituation14Days
+    locationDetails
+    movedTwoOrMore
+    resourcesToObtain
+    subsequentResidence
+  }
+`;
 export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
     ...ClientName
@@ -19463,6 +19569,79 @@ export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
 >;
+export const GetEnrollmentCurrentLivingSituationsDocument = gql`
+  query GetEnrollmentCurrentLivingSituations(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    enrollment(id: $id) {
+      id
+      currentLivingSituations(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CurrentLivingSituationFields
+        }
+      }
+    }
+  }
+  ${CurrentLivingSituationFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentCurrentLivingSituationsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentCurrentLivingSituationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentCurrentLivingSituationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentCurrentLivingSituationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentCurrentLivingSituationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >(GetEnrollmentCurrentLivingSituationsDocument, options);
+}
+export function useGetEnrollmentCurrentLivingSituationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >(GetEnrollmentCurrentLivingSituationsDocument, options);
+}
+export type GetEnrollmentCurrentLivingSituationsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCurrentLivingSituationsQuery
+>;
+export type GetEnrollmentCurrentLivingSituationsLazyQueryHookResult =
+  ReturnType<typeof useGetEnrollmentCurrentLivingSituationsLazyQuery>;
+export type GetEnrollmentCurrentLivingSituationsQueryResult =
+  Apollo.QueryResult<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {
@@ -20130,6 +20309,9 @@ export const SubmitFormDocument = gql`
         ... on Enrollment {
           ...EnrollmentFields
         }
+        ... on CurrentLivingSituation {
+          ...CurrentLivingSituationFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -20146,6 +20328,7 @@ export const SubmitFormDocument = gql`
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
+  ${CurrentLivingSituationFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<
