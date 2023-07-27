@@ -23,7 +23,7 @@ import useFormDefinition from './useFormDefinition';
 import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
-import { FormRole } from '@/types/gqlTypes';
+import { FormRole, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 type RenderFormDialogProps = PartialPick<
@@ -78,6 +78,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     if (!definitionLoading && !formDefinition) {
       throw new Error(`Form not found: ${formRole} `);
     }
+    const hasTopLevelGroup =
+      formDefinition &&
+      formDefinition.definition.item[0]?.type === ItemType.Group;
 
     return (
       <CommonDialog
@@ -89,7 +92,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         <DialogTitle>{title}</DialogTitle>
         <DialogContent
           sx={{
-            backgroundColor: 'background.default',
+            backgroundColor: hasTopLevelGroup
+              ? 'background.default'
+              : undefined,
           }}
         >
           {definitionLoading ? (

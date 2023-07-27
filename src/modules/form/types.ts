@@ -1,5 +1,5 @@
 import { SxProps } from '@mui/system';
-import { isNil } from 'lodash-es';
+import { isNil, isObject } from 'lodash-es';
 import { ReactNode } from 'react';
 
 import { HmisEnums } from '@/types/gqlEnums';
@@ -133,6 +133,7 @@ export type FormValues = Record<string, any | null | undefined>;
 export type ItemMap = Record<string, FormItem>;
 export type LinkIdMap = Record<string, string[]>;
 export type LocalConstants = Record<string, any>;
+export type TypedObject = { __typename: string };
 
 export const isHmisEnum = (k: string): k is keyof typeof HmisEnums => {
   return k in HmisEnums;
@@ -173,3 +174,13 @@ export function isPickListOptionArray(
     isPickListOption(value[0])
   );
 }
+
+export const isTypedObject = (o: any): o is TypedObject => {
+  return isObject(o) && o.hasOwnProperty('__typename');
+};
+
+export const isTypedObjectWithId = (
+  o: any
+): o is TypedObject & { id: string } => {
+  return isTypedObject(o) && o.hasOwnProperty('id');
+};
