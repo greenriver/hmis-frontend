@@ -1,6 +1,7 @@
 import AddIcon from '@mui/icons-material/Add';
 import { Button } from '@mui/material';
 
+import { useState } from 'react';
 import { ColumnDef } from '@/components/elements/table/types';
 import TitleCard from '@/components/elements/TitleCard';
 import { useEnrollmentDashboardContext } from '@/components/pages/EnrollmentDashboard';
@@ -12,7 +13,6 @@ import { parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { cache } from '@/providers/apolloClient';
 import { HmisEnums } from '@/types/gqlEnums';
 import {
-  CurrentLivingSituation,
   CurrentLivingSituationFieldsFragment,
   FormRole,
   GetEnrollmentCurrentLivingSituationsDocument,
@@ -22,11 +22,11 @@ import {
 
 const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
   {
-    header: 'Date Provided',
+    header: 'Information Date',
     render: (e) => parseAndFormatDate(e.informationDate),
   },
   {
-    header: 'Current Living Situation',
+    header: 'Living Situation',
     render: (e) => (
       <HmisEnum
         value={e.currentLivingSituation}
@@ -35,7 +35,7 @@ const baseColumns: ColumnDef<CurrentLivingSituationFieldsFragment>[] = [
     ),
   },
   {
-    header: 'Details',
+    header: 'Location Details',
     width: '40%',
     render: (e) => e.locationDetails,
   },
@@ -46,8 +46,12 @@ const EnrollmentCurrentLivingSituationsPage = () => {
   const enrollmentId = enrollment?.id;
   const clientId = enrollment?.client.id;
 
+  const [viewingRecord, setViewingRecord] = useState<
+    CurrentLivingSituationFieldsFragment | undefined
+  >();
+
   const { openFormDialog, renderFormDialog } =
-    useFormDialog<CurrentLivingSituation>({
+    useFormDialog<CurrentLivingSituationFieldsFragment>({
       formRole: FormRole.CurrentLivingSituation,
       onCompleted: () => {
         cache.evict({
@@ -56,9 +60,12 @@ const EnrollmentCurrentLivingSituationsPage = () => {
         });
       },
       inputVariables: { enrollmentId },
+      record: viewingRecord,
+      onClose: () => setViewingRecord(undefined),
     });
 
   if (!enrollment || !enrollmentId || !clientId) return <NotFound />;
+  const canEditCls = enrollment.access.canEditEnrollments;
 
   return (
     <>
@@ -66,13 +73,15 @@ const EnrollmentCurrentLivingSituationsPage = () => {
         title='Current Living Situations'
         headerVariant='border'
         actions={
-          <Button
-            onClick={openFormDialog}
-            variant='outlined'
-            startIcon={<AddIcon fontSize='small' />}
-          >
-            Add Current Living Situation
-          </Button>
+          canEditCls ? (
+            <Button
+              onClick={openFormDialog}
+              variant='outlined'
+              startIcon={<AddIcon fontSize='small' />}
+            >
+              Add Current Living Situation
+            </Button>
+          ) : null
         }
       >
         <GenericTableWithData<
@@ -87,6 +96,14 @@ const EnrollmentCurrentLivingSituationsPage = () => {
           noData='No current living situations'
           recordType='CurrentLivingSituation'
           headerCellSx={() => ({ color: 'text.secondary' })}
+          handleRowClick={
+            canEditCls
+              ? (record) => {
+                  setViewingRecord(record);
+                  openFormDialog();
+                }
+              : undefined
+          }
         />
       </TitleCard>
       {renderFormDialog({

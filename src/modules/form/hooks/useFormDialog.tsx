@@ -36,10 +36,12 @@ type RenderFormDialogProps = PartialPick<
 
 interface Args<T> extends DynamicFormHandlerArgs<T> {
   formRole: FormRole;
+  onClose?: VoidFunction;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
   formRole,
+  onClose = () => null,
   ...args
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -57,9 +59,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       onCompleted: (data: T) => {
         setDialogOpen(false);
         if (onCompleted) onCompleted(data);
+        onClose();
       },
     };
-  }, [args, onCompleted, formDefinition]);
+  }, [args, onCompleted, formDefinition, onClose]);
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
     useDynamicFormHandlersForRecord(hookArgs);
@@ -67,7 +70,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
     setErrors(emptyErrorState);
-  }, [setErrors]);
+    onClose();
+  }, [setErrors, onClose]);
 
   const renderFormDialog = ({
     title,
