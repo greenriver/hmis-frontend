@@ -15,6 +15,7 @@ fragment RootPermissions on QueryAccess {
   canEnrollClients
   canEditEnrollments
   canViewEnrollmentDetails
+  canViewOpenEnrollmentSummary
   canDeleteEnrollments
   canDeleteAssessments
   canEditProjectDetails

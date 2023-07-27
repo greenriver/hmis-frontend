@@ -4892,6 +4892,7 @@ export type RootPermissionsFragment = {
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
+  canViewOpenEnrollmentSummary: boolean;
   canDeleteEnrollments: boolean;
   canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
@@ -4986,6 +4987,7 @@ export type GetRootPermissionsQuery = {
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canViewOpenEnrollmentSummary: boolean;
     canDeleteEnrollments: boolean;
     canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
@@ -16225,6 +16227,7 @@ export const RootPermissionsFragmentDoc = gql`
     canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
+    canViewOpenEnrollmentSummary
     canDeleteEnrollments
     canDeleteAssessments
     canEditProjectDetails
