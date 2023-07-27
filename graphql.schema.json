@@ -5690,6 +5690,18 @@
             "deprecationReason": null
           },
           {
+            "name": "clsSubsidyType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RentalSubsidyType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "currentLivingSituation",
             "description": null,
             "args": [],
@@ -14083,6 +14095,12 @@
           {
             "name": "CLIENT",
             "description": "(CLIENT) Client",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": "(CURRENT_LIVING_SITUATION) Current Living Situation",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -26099,6 +26117,89 @@
       },
       {
         "kind": "ENUM",
+        "name": "RentalSubsidyType",
+        "description": "3.12.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "EMERGENCY_HOUSING_VOUCHER",
+            "description": "(436) Emergency Housing Voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP",
+            "description": "(437) Family Unification Program Voucher (FUP)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI",
+            "description": "(438) Foster Youth to Independence Initiative (FYI)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GPD_TIP_HOUSING_SUBSIDY",
+            "description": "(428) GPD TIP housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED",
+            "description": "(433) HCV voucher (tenant or project based) (not dedicated)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER_PERMANENT_HOUSING_DEDICATED_FOR_FORMERLY_HOMELESS_PERSONS",
+            "description": "(440) Other permanent housing dedicated for formerly homeless persons",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PERMANENT_SUPPORTIVE_HOUSING",
+            "description": "(439) Permanent Supportive Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PUBLIC_HOUSING_UNIT",
+            "description": "(434) Public housing unit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY",
+            "description": "(420) Rental by client, with other ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RRH_OR_EQUIVALENT_SUBSIDY",
+            "description": "(431) RRH or equivalent subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VASH_HOUSING_SUBSIDY",
+            "description": "(419) VASH housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "ResidencePriorLengthOfStay",
         "description": "3.917.2",
         "fields": null,
@@ -28265,6 +28366,11 @@
           {
             "kind": "OBJECT",
             "name": "Client",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
+            "name": "CurrentLivingSituation",
             "ofType": null
           },
           {
