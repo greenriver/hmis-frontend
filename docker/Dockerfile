@@ -42,6 +42,7 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder --chown=app:app /app/dist .
 COPY ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=app:app ./docker/nginx-reload ./docker/docker-entrypoint.sh /
 COPY ./docker/templates/*.template /etc/nginx/templates/
 
 RUN addgroup --gid ${GROUPID} --system app \
