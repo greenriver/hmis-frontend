@@ -163,9 +163,11 @@ export const getOptionValue = (
   if (isTypedObjectWithId(value)) {
     return { code: value.id };
   }
+
   if (typeof value !== 'string') {
-    console.error(`Can't get option value for ${value}`);
-    return null;
+    throw Error(
+      `Can't get option value for ${value}, unexpected type ${typeof value}`
+    );
   }
   if (isDataNotCollected(value)) return null;
   if (item.pickListReference) {
