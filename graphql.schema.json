@@ -5674,18 +5674,6 @@
         "description": "HUD Current Living Situation",
         "fields": [
           {
-            "name": "CLSSubsidyType",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "ENUM",
-              "name": "RentalSubsidyType",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "client",
             "description": null,
             "args": [],
@@ -5697,6 +5685,18 @@
                 "name": "Client",
                 "ofType": null
               }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "clsSubsidyType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RentalSubsidyType",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

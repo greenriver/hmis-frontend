@@ -852,8 +852,8 @@ export enum CurrentEdStatus {
 /** HUD Current Living Situation */
 export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
-  CLSSubsidyType?: Maybe<RentalSubsidyType>;
   client: Client;
+  clsSubsidyType?: Maybe<RentalSubsidyType>;
   currentLivingSituation: LivingSituation;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -9840,7 +9840,7 @@ export type GetClientFilesQuery = {
 export type CurrentLivingSituationFieldsFragment = {
   __typename?: 'CurrentLivingSituation';
   id: string;
-  CLSSubsidyType?: RentalSubsidyType | null;
+  clsSubsidyType?: RentalSubsidyType | null;
   currentLivingSituation: LivingSituation;
   informationDate: string;
   leaseOwn60Day?: NoYesReasonsForMissingData | null;
@@ -9870,7 +9870,7 @@ export type GetEnrollmentCurrentLivingSituationsQuery = {
       nodes: Array<{
         __typename?: 'CurrentLivingSituation';
         id: string;
-        CLSSubsidyType?: RentalSubsidyType | null;
+        clsSubsidyType?: RentalSubsidyType | null;
         currentLivingSituation: LivingSituation;
         informationDate: string;
         leaseOwn60Day?: NoYesReasonsForMissingData | null;
@@ -12862,7 +12862,7 @@ export type SubmitFormMutation = {
       | {
           __typename?: 'CurrentLivingSituation';
           id: string;
-          CLSSubsidyType?: RentalSubsidyType | null;
+          clsSubsidyType?: RentalSubsidyType | null;
           currentLivingSituation: LivingSituation;
           informationDate: string;
           leaseOwn60Day?: NoYesReasonsForMissingData | null;
@@ -17148,7 +17148,7 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
 export const CurrentLivingSituationFieldsFragmentDoc = gql`
   fragment CurrentLivingSituationFields on CurrentLivingSituation {
     id
-    CLSSubsidyType
+    clsSubsidyType
     currentLivingSituation
     informationDate
     leaseOwn60Day

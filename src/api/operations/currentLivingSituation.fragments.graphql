@@ -1,6 +1,6 @@
 fragment CurrentLivingSituationFields on CurrentLivingSituation {
   id
-  CLSSubsidyType
+  clsSubsidyType
   currentLivingSituation
   informationDate
   leaseOwn60Day

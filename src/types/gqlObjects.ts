@@ -895,7 +895,7 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CurrentLivingSituation',
     fields: [
       {
-        name: 'CLSSubsidyType',
+        name: 'clsSubsidyType',
         type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
       },
       {
