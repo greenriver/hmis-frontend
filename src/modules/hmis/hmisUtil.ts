@@ -22,7 +22,7 @@ import {
   CustomDataElementFieldsFragment,
   CustomDataElementValueFieldsFragment,
   EnrollmentFieldsFragment,
-  EnrollmentSummaryFieldsFragmentFragment,
+  EnrollmentSummaryFieldsFragment,
   EventFieldsFragment,
   GetClientAssessmentsQuery,
   HouseholdClientFieldsFragment,
@@ -234,7 +234,7 @@ export const entryExitRange = (
   enrollment:
     | EnrollmentFieldsFragment
     | HouseholdClientFieldsFragment['enrollment']
-    | EnrollmentSummaryFieldsFragmentFragment,
+    | EnrollmentSummaryFieldsFragment,
   endPlaceholder?: string
 ) => {
   return parseAndFormatDateRange(

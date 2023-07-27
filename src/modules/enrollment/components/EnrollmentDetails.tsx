@@ -1,7 +1,6 @@
-import { Link } from '@mui/material';
 import { ReactNode, useMemo } from 'react';
 
-import useEnrollmentSummaryDialog from '../hooks/useEnrollmentSummaryDialog';
+import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
@@ -38,10 +37,6 @@ const EnrollmentDetails = ({
   });
 
   const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
-  const { openDialog, renderDialog } = useEnrollmentSummaryDialog({
-    enrollment: enrollmentWithDetails,
-    clientId: enrollment.client.id,
-  });
 
   if (error) throw error;
   if (!enrollmentWithDetails) return <Loading />;
@@ -72,9 +67,10 @@ const EnrollmentDetails = ({
 
   if (enrollmentWithDetails.openEnrollmentSummary.length > 0) {
     content['Other Open Enrollments'] = (
-      <Link component='button' onClick={openDialog}>
-        {enrollmentWithDetails.openEnrollmentSummary.length}
-      </Link>
+      <EnrollmentSummaryCount
+        enrollmentSummary={enrollmentWithDetails.openEnrollmentSummary}
+        clientId={enrollment.client.id}
+      />
     );
   }
 
@@ -114,7 +110,6 @@ const EnrollmentDetails = ({
           value,
         }))}
       />
-      {renderDialog()}
     </>
   );
 };

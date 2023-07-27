@@ -14,14 +14,10 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import {
-  EnrollmentSummaryFieldsFragmentFragment,
-  GetEnrollmentDetailsQuery,
-  ProjectType,
-} from '@/types/gqlTypes';
+import { EnrollmentSummaryFieldsFragment, ProjectType } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
-const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragmentFragment>[] = [
+const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   {
     header: 'Enrollment Period',
     render: (e) => entryExitRange(e),
@@ -56,11 +52,11 @@ const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragmentFragment>[] = [
 ];
 
 const useEnrollmentSummaryDialog = ({
-  enrollment,
+  enrollmentSummary,
   clientId,
 }: {
-  enrollment?: GetEnrollmentDetailsQuery['enrollment'];
-  clientId: string;
+  enrollmentSummary?: EnrollmentSummaryFieldsFragment[];
+  clientId?: string;
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -69,17 +65,17 @@ const useEnrollmentSummaryDialog = ({
 
   const renderDialog = useCallback(
     (props: Partial<DialogProps> = {}) => {
-      if (!enrollment) return null;
+      if (!enrollmentSummary) return null;
 
       return (
         <CommonDialog {...props} open={!!dialogOpen} onClose={closeDialog}>
           <DialogTitle>Open Enrollment Summary</DialogTitle>
           <DialogContent sx={{ my: 2 }}>
-            <GenericTable<EnrollmentSummaryFieldsFragmentFragment>
+            <GenericTable<EnrollmentSummaryFieldsFragment>
               columns={baseColumns}
-              rows={enrollment.openEnrollmentSummary}
+              rows={enrollmentSummary}
               rowLinkTo={(row) =>
-                row.canViewEnrollment && row.primaryKey
+                row.canViewEnrollment && row.primaryKey && clientId
                   ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
                       enrollmentId: row.primaryKey,
                       clientId,
@@ -96,7 +92,7 @@ const useEnrollmentSummaryDialog = ({
         </CommonDialog>
       );
     },
-    [closeDialog, dialogOpen, enrollment, clientId]
+    [closeDialog, dialogOpen, enrollmentSummary, clientId]
   );
 
   return useMemo(

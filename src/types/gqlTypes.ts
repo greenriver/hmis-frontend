@@ -3798,6 +3798,7 @@ export type ReferralHouseholdMember = {
   __typename?: 'ReferralHouseholdMember';
   client: Client;
   id: Scalars['ID'];
+  openEnrollmentSummary: Array<EnrollmentSummary>;
   relationshipToHoH: RelationshipToHoH;
 };
 
@@ -9925,7 +9926,7 @@ export type EventFieldsFragment = {
   dateDeleted?: string | null;
 };
 
-export type EnrollmentSummaryFieldsFragmentFragment = {
+export type EnrollmentSummaryFieldsFragment = {
   __typename?: 'EnrollmentSummary';
   id: string;
   entryDate: string;
@@ -14711,6 +14712,18 @@ export type GetReferralPostingQuery = {
       __typename?: 'ReferralHouseholdMember';
       id: string;
       relationshipToHoH: RelationshipToHoH;
+      openEnrollmentSummary: Array<{
+        __typename?: 'EnrollmentSummary';
+        id: string;
+        entryDate: string;
+        inProgress: boolean;
+        moveInDate?: string | null;
+        projectId: string;
+        projectName: string;
+        projectType: ProjectType;
+        canViewEnrollment: boolean;
+        primaryKey?: string | null;
+      }>;
       client: {
         __typename?: 'Client';
         id: string;
@@ -14987,6 +15000,18 @@ export type UpdateReferralPostingMutation = {
         __typename?: 'ReferralHouseholdMember';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        openEnrollmentSummary: Array<{
+          __typename?: 'EnrollmentSummary';
+          id: string;
+          entryDate: string;
+          inProgress: boolean;
+          moveInDate?: string | null;
+          projectId: string;
+          projectName: string;
+          projectType: ProjectType;
+          canViewEnrollment: boolean;
+          primaryKey?: string | null;
+        }>;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15101,6 +15126,18 @@ export type CreateOutgoingReferralPostingMutation = {
         __typename?: 'ReferralHouseholdMember';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        openEnrollmentSummary: Array<{
+          __typename?: 'EnrollmentSummary';
+          id: string;
+          entryDate: string;
+          inProgress: boolean;
+          moveInDate?: string | null;
+          projectId: string;
+          projectName: string;
+          projectType: ProjectType;
+          canViewEnrollment: boolean;
+          primaryKey?: string | null;
+        }>;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15273,6 +15310,18 @@ export type ReferralPostingDetailFieldsFragment = {
     __typename?: 'ReferralHouseholdMember';
     id: string;
     relationshipToHoH: RelationshipToHoH;
+    openEnrollmentSummary: Array<{
+      __typename?: 'EnrollmentSummary';
+      id: string;
+      entryDate: string;
+      inProgress: boolean;
+      moveInDate?: string | null;
+      projectId: string;
+      projectName: string;
+      projectType: ProjectType;
+      canViewEnrollment: boolean;
+      primaryKey?: string | null;
+    }>;
     client: {
       __typename?: 'Client';
       id: string;
@@ -16940,8 +16989,8 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
-export const EnrollmentSummaryFieldsFragmentFragmentDoc = gql`
-  fragment EnrollmentSummaryFieldsFragment on EnrollmentSummary {
+export const EnrollmentSummaryFieldsFragmentDoc = gql`
+  fragment EnrollmentSummaryFields on EnrollmentSummary {
     id
     entryDate
     inProgress
@@ -16971,12 +17020,12 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
       ...CustomDataElementFields
     }
     openEnrollmentSummary {
-      ...EnrollmentSummaryFieldsFragment
+      ...EnrollmentSummaryFields
     }
   }
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
-  ${EnrollmentSummaryFieldsFragmentFragmentDoc}
+  ${EnrollmentSummaryFieldsFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -17438,6 +17487,9 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     householdMembers {
       id
       relationshipToHoH
+      openEnrollmentSummary {
+        ...EnrollmentSummaryFields
+      }
       client {
         id
         ...ClientName
@@ -17453,6 +17505,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       }
     }
   }
+  ${EnrollmentSummaryFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}
