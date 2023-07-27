@@ -145,7 +145,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
 
   return (
     <TitleCard
-      title={`To Do (${displayReminders.length})`}
+      title={loading && !data ? 'To Do' : `To Do (${displayReminders.length})`}
       headerVariant='border'
     >
       {loading && !data ? (
