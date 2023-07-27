@@ -79,7 +79,7 @@ const EnrollmentOverview = () => {
           </Stack>
         </Grid>
         <Grid item xs={3}>
-          <Stack spacing={2}>
+          <Stack spacing={4}>
             <EnrollmentReminders enrollmentId={enrollment.id} />
             <TitleCard title='Quick Actions'>
               <EnrollmentQuickActions enrollment={enrollment} />
