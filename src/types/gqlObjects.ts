@@ -895,6 +895,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CurrentLivingSituation',
     fields: [
       {
+        name: 'clsSubsidyType',
+        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
+      },
+      {
         name: 'currentLivingSituation',
         type: {
           kind: 'NON_NULL',
@@ -991,6 +995,22 @@ export const HmisObjectSchemas: GqlSchema[] = [
   {
     name: 'CustomDataElement',
     fields: [
+      {
+        name: 'atOccurrence',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'fieldType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'CustomDataElementType', ofType: null },
+        },
+      },
       {
         name: 'id',
         type: {
@@ -3407,6 +3427,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
       {
+        name: 'hasUnits',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'housingType',
         type: { kind: 'ENUM', name: 'HousingType', ofType: null },
       },
@@ -5716,6 +5744,51 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
           name: null,
           ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
         },
+      },
+    ],
+  },
+  {
+    name: 'UpdateCustomEnrollmentValueInput',
+    args: [
+      {
+        name: 'customDataElementDefinitionId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'enrollmentId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'valueBoolean',
+        type: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+      },
+      {
+        name: 'valueDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'valueFloat',
+        type: { kind: 'SCALAR', name: 'Float', ofType: null },
+      },
+      {
+        name: 'valueInteger',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'valueString',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
+      },
+      {
+        name: 'valueText',
+        type: { kind: 'SCALAR', name: 'String', ofType: null },
       },
     ],
   },

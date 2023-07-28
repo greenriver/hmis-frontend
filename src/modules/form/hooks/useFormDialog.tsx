@@ -23,7 +23,7 @@ import useFormDefinition from './useFormDefinition';
 import CommonDialog from '@/components/elements/CommonDialog';
 import Loading from '@/components/elements/Loading';
 import { emptyErrorState } from '@/modules/errors/util';
-import { FormRole } from '@/types/gqlTypes';
+import { FormRole, ItemType } from '@/types/gqlTypes';
 import { PartialPick } from '@/utils/typeUtil';
 
 type RenderFormDialogProps = PartialPick<
@@ -36,10 +36,12 @@ type RenderFormDialogProps = PartialPick<
 
 interface Args<T> extends DynamicFormHandlerArgs<T> {
   formRole: FormRole;
+  onClose?: VoidFunction;
 }
 export function useFormDialog<T extends SubmitFormAllowedTypes>({
   onCompleted,
   formRole,
+  onClose = () => null,
   ...args
 }: Args<T>) {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -57,9 +59,10 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
       onCompleted: (data: T) => {
         setDialogOpen(false);
         if (onCompleted) onCompleted(data);
+        onClose();
       },
     };
-  }, [args, onCompleted, formDefinition]);
+  }, [args, onCompleted, formDefinition, onClose]);
 
   const { initialValues, errors, onSubmit, submitLoading, setErrors } =
     useDynamicFormHandlersForRecord(hookArgs);
@@ -67,7 +70,8 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
   const closeDialog = useCallback(() => {
     setDialogOpen(false);
     setErrors(emptyErrorState);
-  }, [setErrors]);
+    onClose();
+  }, [setErrors, onClose]);
 
   const renderFormDialog = ({
     title,
@@ -78,6 +82,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
     if (!definitionLoading && !formDefinition) {
       throw new Error(`Form not found: ${formRole} `);
     }
+    const hasTopLevelGroup =
+      formDefinition &&
+      formDefinition.definition.item[0]?.type === ItemType.Group;
 
     return (
       <CommonDialog
@@ -89,7 +96,9 @@ export function useFormDialog<T extends SubmitFormAllowedTypes>({
         <DialogTitle>{title}</DialogTitle>
         <DialogContent
           sx={{
-            backgroundColor: 'background.default',
+            backgroundColor: hasTopLevelGroup
+              ? 'background.default'
+              : undefined,
           }}
         >
           {definitionLoading ? (

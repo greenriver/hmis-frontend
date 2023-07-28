@@ -1,0 +1,17 @@
+query GetEnrollmentCurrentLivingSituations(
+  $id: ID!
+  $limit: Int = 10
+  $offset: Int = 0
+) {
+  enrollment(id: $id) {
+    id
+    currentLivingSituations(limit: $limit, offset: $offset) {
+      offset
+      limit
+      nodesCount
+      nodes {
+        ...CurrentLivingSituationFields
+      }
+    }
+  }
+}

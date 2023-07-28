@@ -853,6 +853,7 @@ export enum CurrentEdStatus {
 export type CurrentLivingSituation = {
   __typename?: 'CurrentLivingSituation';
   client: Client;
+  clsSubsidyType?: Maybe<RentalSubsidyType>;
   currentLivingSituation: LivingSituation;
   dateCreated: Scalars['ISO8601DateTime'];
   dateDeleted?: Maybe<Scalars['ISO8601DateTime']>;
@@ -901,6 +902,8 @@ export enum CurrentSchoolAttended {
 
 export type CustomDataElement = {
   __typename?: 'CustomDataElement';
+  atOccurrence: Scalars['Boolean'];
+  fieldType: CustomDataElementType;
   id: Scalars['ID'];
   key: Scalars['String'];
   label: Scalars['String'];
@@ -908,6 +911,17 @@ export type CustomDataElement = {
   value?: Maybe<CustomDataElementValue>;
   values?: Maybe<Array<CustomDataElementValue>>;
 };
+
+/** Allowed values for CustomDataElementDefinition.type */
+export enum CustomDataElementType {
+  Boolean = 'boolean',
+  Date = 'date',
+  Float = 'float',
+  Integer = 'integer',
+  Json = 'json',
+  String = 'string',
+  Text = 'text',
+}
 
 export type CustomDataElementValue = {
   __typename?: 'CustomDataElementValue';
@@ -2064,8 +2078,12 @@ export enum FormRole {
   Ce = 'CE',
   /** (CLIENT) Client */
   Client = 'CLIENT',
+  /** (CURRENT_LIVING_SITUATION) Current Living Situation */
+  CurrentLivingSituation = 'CURRENT_LIVING_SITUATION',
   /** (CUSTOM) Custom Assessment */
   Custom = 'CUSTOM',
+  /** (DATE_OF_ENGAGEMENT) Date of Engagement */
+  DateOfEngagement = 'DATE_OF_ENGAGEMENT',
   /** (ENROLLMENT) Enrollment */
   Enrollment = 'ENROLLMENT',
   /** (EXIT) Exit Assessment */
@@ -2078,8 +2096,12 @@ export enum FormRole {
   Intake = 'INTAKE',
   /** (INVENTORY) Inventory */
   Inventory = 'INVENTORY',
+  /** (MOVE_IN_DATE) Move-in Date */
+  MoveInDate = 'MOVE_IN_DATE',
   /** (ORGANIZATION) Organization */
   Organization = 'ORGANIZATION',
+  /** (PATH_STATUS) PATH Status */
+  PathStatus = 'PATH_STATUS',
   /** (POST_EXIT) Post-Exit Assessment */
   PostExit = 'POST_EXIT',
   /** (PROJECT) Project */
@@ -2090,6 +2112,8 @@ export enum FormRole {
   ReferralRequest = 'REFERRAL_REQUEST',
   /** (SERVICE) Service */
   Service = 'SERVICE',
+  /** (UNIT_ASSIGNMENT) Unit Assignment */
+  UnitAssignment = 'UNIT_ASSIGNMENT',
   /** (UPDATE) Update Assessment */
   Update = 'UPDATE',
 }
@@ -2897,6 +2921,7 @@ export type Mutation = {
   /** Submit multiple assessments in a household */
   submitHouseholdAssessments?: Maybe<SubmitHouseholdAssessmentsPayload>;
   updateClientImage?: Maybe<UpdateClientImagePayload>;
+  updateCustomEnrollmentValue?: Maybe<UpdateCustomEnrollmentValuePayload>;
   /** Update a referral posting */
   updateReferralPosting?: Maybe<UpdateReferralPostingPayload>;
   updateRelationshipToHoH?: Maybe<UpdateRelationshipToHoHPayload>;
@@ -3007,6 +3032,10 @@ export type MutationSubmitHouseholdAssessmentsArgs = {
 
 export type MutationUpdateClientImageArgs = {
   input: UpdateClientImageInput;
+};
+
+export type MutationUpdateCustomEnrollmentValueArgs = {
+  input: UpdateCustomEnrollmentValueInput;
 };
 
 export type MutationUpdateReferralPostingArgs = {
@@ -3263,6 +3292,7 @@ export type Project = {
   description?: Maybe<Scalars['String']>;
   enrollments: EnrollmentsPaginated;
   funders: FundersPaginated;
+  hasUnits: Scalars['Boolean'];
   households: HouseholdsPaginated;
   housingType?: Maybe<HousingType>;
   hudId: Scalars['ID'];
@@ -4016,6 +4046,34 @@ export enum ReminderTopic {
   IntakeIncomplete = 'intake_incomplete',
 }
 
+/** 3.12.A */
+export enum RentalSubsidyType {
+  /** (436) Emergency Housing Voucher */
+  EmergencyHousingVoucher = 'EMERGENCY_HOUSING_VOUCHER',
+  /** (437) Family Unification Program Voucher (FUP) */
+  FamilyUnificationProgramVoucherFup = 'FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP',
+  /** (438) Foster Youth to Independence Initiative (FYI) */
+  FosterYouthToIndependenceInitiativeFyi = 'FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI',
+  /** (428) GPD TIP housing subsidy */
+  GpdTipHousingSubsidy = 'GPD_TIP_HOUSING_SUBSIDY',
+  /** (433) HCV voucher (tenant or project based) (not dedicated) */
+  HcvVoucherTenantOrProjectBasedNotDedicated = 'HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED',
+  /** Invalid Value */
+  Invalid = 'INVALID',
+  /** (440) Other permanent housing dedicated for formerly homeless persons */
+  OtherPermanentHousingDedicatedForFormerlyHomelessPersons = 'OTHER_PERMANENT_HOUSING_DEDICATED_FOR_FORMERLY_HOMELESS_PERSONS',
+  /** (439) Permanent Supportive Housing */
+  PermanentSupportiveHousing = 'PERMANENT_SUPPORTIVE_HOUSING',
+  /** (434) Public housing unit */
+  PublicHousingUnit = 'PUBLIC_HOUSING_UNIT',
+  /** (420) Rental by client, with other ongoing housing subsidy */
+  RentalByClientWithOtherOngoingHousingSubsidy = 'RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY',
+  /** (431) RRH or equivalent subsidy */
+  RrhOrEquivalentSubsidy = 'RRH_OR_EQUIVALENT_SUBSIDY',
+  /** (419) VASH housing subsidy */
+  VashHousingSubsidy = 'VASH_HOUSING_SUBSIDY',
+}
+
 /** 3.917.2 */
 export enum ResidencePriorLengthOfStay {
   /** (8) Client doesn't know */
@@ -4495,6 +4553,7 @@ export type SubmitFormPayload = {
 /** Union type of allowed records for form submission response */
 export type SubmitFormResult =
   | Client
+  | CurrentLivingSituation
   | Enrollment
   | File
   | Funder
@@ -4662,6 +4721,29 @@ export type UpdateClientImagePayload = {
   client?: Maybe<Client>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']>;
+  errors: Array<ValidationError>;
+};
+
+/** Autogenerated input type of UpdateCustomEnrollmentValue */
+export type UpdateCustomEnrollmentValueInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']>;
+  customDataElementDefinitionId: Scalars['ID'];
+  enrollmentId: Scalars['ID'];
+  valueBoolean?: InputMaybe<Scalars['Boolean']>;
+  valueDate?: InputMaybe<Scalars['ISO8601Date']>;
+  valueFloat?: InputMaybe<Scalars['Float']>;
+  valueInteger?: InputMaybe<Scalars['Int']>;
+  valueString?: InputMaybe<Scalars['String']>;
+  valueText?: InputMaybe<Scalars['String']>;
+};
+
+/** Autogenerated return type of UpdateCustomEnrollmentValue. */
+export type UpdateCustomEnrollmentValuePayload = {
+  __typename?: 'UpdateCustomEnrollmentValuePayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']>;
+  enrollment: Enrollment;
   errors: Array<ValidationError>;
 };
 
@@ -5056,7 +5138,9 @@ export type AssessmentWithRecordsFragment = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -5277,7 +5361,9 @@ export type AssessmentWithRecordsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -5391,7 +5477,9 @@ export type FullAssessmentFragment = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -5612,7 +5700,9 @@ export type FullAssessmentFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -6164,7 +6254,9 @@ export type GetAssessmentQuery = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -6385,7 +6477,9 @@ export type GetAssessmentQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -6582,7 +6676,9 @@ export type GetHouseholdAssessmentsQuery = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -6803,7 +6899,9 @@ export type GetHouseholdAssessmentsQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -6949,7 +7047,9 @@ export type SubmitAssessmentMutation = {
           id: string;
           key: string;
           label: string;
+          fieldType: CustomDataElementType;
           repeats: boolean;
+          atOccurrence: boolean;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -7170,7 +7270,9 @@ export type SubmitAssessmentMutation = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -7331,7 +7433,9 @@ export type GetAssessmentsForPopulationQuery = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -7552,7 +7656,9 @@ export type GetAssessmentsForPopulationQuery = {
           id: string;
           key: string;
           label: string;
+          fieldType: CustomDataElementType;
           repeats: boolean;
+          atOccurrence: boolean;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -8121,7 +8227,9 @@ export type ClientFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -8433,7 +8541,9 @@ export type SearchClientsQuery = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -8594,7 +8704,9 @@ export type GetClientQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -8768,12 +8880,18 @@ export type GetClientEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
         householdId: string;
         householdShortId: string;
         householdSize: number;
+        moveInDate?: string | null;
+        dateOfEngagement?: string | null;
+        dateOfPathStatus?: string | null;
+        clientEnrolledInPath?: NoYesMissing | null;
+        reasonNotEnrolled?: ReasonNotEnrolled | null;
         project: {
           __typename?: 'Project';
           id: string;
@@ -8881,12 +8999,18 @@ export type GetClientServicesQuery = {
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          exitDestination?: Destination | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
           householdId: string;
           householdShortId: string;
           householdSize: number;
+          moveInDate?: string | null;
+          dateOfEngagement?: string | null;
+          dateOfPathStatus?: string | null;
+          clientEnrolledInPath?: NoYesMissing | null;
+          reasonNotEnrolled?: ReasonNotEnrolled | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -8935,7 +9059,9 @@ export type GetClientServicesQuery = {
           id: string;
           key: string;
           label: string;
+          fieldType: CustomDataElementType;
           repeats: boolean;
+          atOccurrence: boolean;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -9241,7 +9367,9 @@ export type DeleteClientMutation = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -9709,6 +9837,53 @@ export type GetClientFilesQuery = {
   } | null;
 };
 
+export type CurrentLivingSituationFieldsFragment = {
+  __typename?: 'CurrentLivingSituation';
+  id: string;
+  clsSubsidyType?: RentalSubsidyType | null;
+  currentLivingSituation: LivingSituation;
+  informationDate: string;
+  leaseOwn60Day?: NoYesReasonsForMissingData | null;
+  leaveSituation14Days?: NoYesReasonsForMissingData | null;
+  locationDetails?: string | null;
+  movedTwoOrMore?: NoYesReasonsForMissingData | null;
+  resourcesToObtain?: NoYesReasonsForMissingData | null;
+  subsequentResidence?: NoYesReasonsForMissingData | null;
+};
+
+export type GetEnrollmentCurrentLivingSituationsQueryVariables = Exact<{
+  id: Scalars['ID'];
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+}>;
+
+export type GetEnrollmentCurrentLivingSituationsQuery = {
+  __typename?: 'Query';
+  enrollment?: {
+    __typename?: 'Enrollment';
+    id: string;
+    currentLivingSituations: {
+      __typename?: 'CurrentLivingSituationsPaginated';
+      offset: number;
+      limit: number;
+      nodesCount: number;
+      nodes: Array<{
+        __typename?: 'CurrentLivingSituation';
+        id: string;
+        clsSubsidyType?: RentalSubsidyType | null;
+        currentLivingSituation: LivingSituation;
+        informationDate: string;
+        leaseOwn60Day?: NoYesReasonsForMissingData | null;
+        leaveSituation14Days?: NoYesReasonsForMissingData | null;
+        locationDetails?: string | null;
+        movedTwoOrMore?: NoYesReasonsForMissingData | null;
+        resourcesToObtain?: NoYesReasonsForMissingData | null;
+        subsequentResidence?: NoYesReasonsForMissingData | null;
+      }>;
+    };
+  } | null;
+};
+
 export type CustomDataElementValueFieldsFragment = {
   __typename?: 'CustomDataElementValue';
   id: string;
@@ -9729,7 +9904,9 @@ export type CustomDataElementFieldsFragment = {
   id: string;
   key: string;
   label: string;
+  fieldType: CustomDataElementType;
   repeats: boolean;
+  atOccurrence: boolean;
   value?: {
     __typename?: 'CustomDataElementValue';
     id: string;
@@ -9760,17 +9937,89 @@ export type CustomDataElementFieldsFragment = {
   }> | null;
 };
 
+export type UpdateCustomEnrollmentValueMutationVariables = Exact<{
+  input: UpdateCustomEnrollmentValueInput;
+}>;
+
+export type UpdateCustomEnrollmentValueMutation = {
+  __typename?: 'Mutation';
+  updateCustomEnrollmentValue?: {
+    __typename?: 'UpdateCustomEnrollmentValuePayload';
+    enrollment: {
+      __typename?: 'Enrollment';
+      id: string;
+      customDataElements: Array<{
+        __typename?: 'CustomDataElement';
+        id: string;
+        key: string;
+        label: string;
+        fieldType: CustomDataElementType;
+        repeats: boolean;
+        atOccurrence: boolean;
+        value?: {
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        } | null;
+        values?: Array<{
+          __typename?: 'CustomDataElementValue';
+          id: string;
+          valueBoolean?: boolean | null;
+          valueDate?: string | null;
+          valueFloat?: number | null;
+          valueInteger?: number | null;
+          valueJson?: any | null;
+          valueString?: string | null;
+          valueText?: string | null;
+          dateCreated: string;
+          dateUpdated: string;
+          user?: { __typename: 'User'; id: string; name: string } | null;
+        }> | null;
+      }>;
+    };
+    errors: Array<{
+      __typename?: 'ValidationError';
+      type: ValidationType;
+      attribute: string;
+      readableAttribute?: string | null;
+      message: string;
+      fullMessage: string;
+      severity: ValidationSeverity;
+      id?: string | null;
+      recordId?: string | null;
+      linkId?: string | null;
+      section?: string | null;
+      data?: any | null;
+    }>;
+  } | null;
+};
+
 export type EnrollmentFieldsFragment = {
   __typename?: 'Enrollment';
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  exitDestination?: Destination | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
   householdId: string;
   householdShortId: string;
   householdSize: number;
+  moveInDate?: string | null;
+  dateOfEngagement?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
   project: {
     __typename?: 'Project';
     id: string;
@@ -9809,12 +10058,18 @@ export type EnrollmentWithHouseholdFragmentFragment = {
   id: string;
   entryDate: string;
   exitDate?: string | null;
+  exitDestination?: Destination | null;
   inProgress: boolean;
   relationshipToHoH: RelationshipToHoH;
   enrollmentCoc?: string | null;
   householdId: string;
   householdShortId: string;
   householdSize: number;
+  moveInDate?: string | null;
+  dateOfEngagement?: string | null;
+  dateOfPathStatus?: string | null;
+  clientEnrolledInPath?: NoYesMissing | null;
+  reasonNotEnrolled?: ReasonNotEnrolled | null;
   household: {
     __typename?: 'Household';
     id: string;
@@ -9918,7 +10173,6 @@ export type AllEnrollmentDetailsFragment = {
   householdId: string;
   householdShortId: string;
   householdSize: number;
-  exitDestination?: Destination | null;
   id: string;
   entryDate: string;
   exitDate?: string | null;
@@ -9959,7 +10213,9 @@ export type AllEnrollmentDetailsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -9989,6 +10245,13 @@ export type AllEnrollmentDetailsFragment = {
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
   }>;
+  project: {
+    __typename?: 'Project';
+    hasUnits: boolean;
+    id: string;
+    projectName: string;
+    projectType?: ProjectType | null;
+  };
 };
 
 export type GetEnrollmentQueryVariables = Exact<{
@@ -10002,12 +10265,18 @@ export type GetEnrollmentQuery = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    exitDestination?: Destination | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
     householdId: string;
     householdShortId: string;
     householdSize: number;
+    moveInDate?: string | null;
+    dateOfEngagement?: string | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
     project: {
       __typename?: 'Project';
       id: string;
@@ -10056,7 +10325,6 @@ export type GetEnrollmentDetailsQuery = {
     householdId: string;
     householdShortId: string;
     householdSize: number;
-    exitDestination?: Destination | null;
     id: string;
     entryDate: string;
     exitDate?: string | null;
@@ -10097,7 +10365,9 @@ export type GetEnrollmentDetailsQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -10127,6 +10397,13 @@ export type GetEnrollmentDetailsQuery = {
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
     }>;
+    project: {
+      __typename?: 'Project';
+      hasUnits: boolean;
+      id: string;
+      projectName: string;
+      projectType?: ProjectType | null;
+    };
   } | null;
 };
 
@@ -10141,12 +10418,18 @@ export type GetEnrollmentWithHouseholdQuery = {
     id: string;
     entryDate: string;
     exitDate?: string | null;
+    exitDestination?: Destination | null;
     inProgress: boolean;
     relationshipToHoH: RelationshipToHoH;
     enrollmentCoc?: string | null;
     householdId: string;
     householdShortId: string;
     householdSize: number;
+    moveInDate?: string | null;
+    dateOfEngagement?: string | null;
+    dateOfPathStatus?: string | null;
+    clientEnrolledInPath?: NoYesMissing | null;
+    reasonNotEnrolled?: ReasonNotEnrolled | null;
     household: {
       __typename?: 'Household';
       id: string;
@@ -10312,12 +10595,18 @@ export type CreateEnrollmentMutation = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      exitDestination?: Destination | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
       householdId: string;
       householdShortId: string;
       householdSize: number;
+      moveInDate?: string | null;
+      dateOfEngagement?: string | null;
+      dateOfPathStatus?: string | null;
+      clientEnrolledInPath?: NoYesMissing | null;
+      reasonNotEnrolled?: ReasonNotEnrolled | null;
       project: {
         __typename?: 'Project';
         id: string;
@@ -12481,7 +12770,9 @@ export type SubmitFormMutation = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -12569,16 +12860,35 @@ export type SubmitFormMutation = {
           } | null;
         }
       | {
+          __typename?: 'CurrentLivingSituation';
+          id: string;
+          clsSubsidyType?: RentalSubsidyType | null;
+          currentLivingSituation: LivingSituation;
+          informationDate: string;
+          leaseOwn60Day?: NoYesReasonsForMissingData | null;
+          leaveSituation14Days?: NoYesReasonsForMissingData | null;
+          locationDetails?: string | null;
+          movedTwoOrMore?: NoYesReasonsForMissingData | null;
+          resourcesToObtain?: NoYesReasonsForMissingData | null;
+          subsequentResidence?: NoYesReasonsForMissingData | null;
+        }
+      | {
           __typename?: 'Enrollment';
           id: string;
           entryDate: string;
           exitDate?: string | null;
+          exitDestination?: Destination | null;
           inProgress: boolean;
           relationshipToHoH: RelationshipToHoH;
           enrollmentCoc?: string | null;
           householdId: string;
           householdShortId: string;
           householdSize: number;
+          moveInDate?: string | null;
+          dateOfEngagement?: string | null;
+          dateOfPathStatus?: string | null;
+          clientEnrolledInPath?: NoYesMissing | null;
+          reasonNotEnrolled?: ReasonNotEnrolled | null;
           project: {
             __typename?: 'Project';
             id: string;
@@ -12680,7 +12990,9 @@ export type SubmitFormMutation = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -12728,7 +13040,9 @@ export type SubmitFormMutation = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -12806,7 +13120,9 @@ export type SubmitFormMutation = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -12902,7 +13218,9 @@ export type SubmitFormMutation = {
             id: string;
             key: string;
             label: string;
+            fieldType: CustomDataElementType;
             repeats: boolean;
+            atOccurrence: boolean;
             value?: {
               __typename?: 'CustomDataElementValue';
               id: string;
@@ -13179,12 +13497,18 @@ export type UpdateRelationshipToHoHMutation = {
       id: string;
       entryDate: string;
       exitDate?: string | null;
+      exitDestination?: Destination | null;
       inProgress: boolean;
       relationshipToHoH: RelationshipToHoH;
       enrollmentCoc?: string | null;
       householdId: string;
       householdShortId: string;
       householdSize: number;
+      moveInDate?: string | null;
+      dateOfEngagement?: string | null;
+      dateOfPathStatus?: string | null;
+      clientEnrolledInPath?: NoYesMissing | null;
+      reasonNotEnrolled?: ReasonNotEnrolled | null;
       household: {
         __typename?: 'Household';
         id: string;
@@ -13390,7 +13714,9 @@ export type InventoryFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -13641,7 +13967,9 @@ export type OrganizationDetailFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -13690,7 +14018,9 @@ export type OrganizationFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -13768,7 +14098,9 @@ export type GetOrganizationQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -13919,7 +14251,9 @@ export type ProjectAllFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -14066,7 +14400,9 @@ export type GetProjectQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -14152,12 +14488,18 @@ export type GetProjectEnrollmentsQuery = {
         id: string;
         entryDate: string;
         exitDate?: string | null;
+        exitDestination?: Destination | null;
         inProgress: boolean;
         relationshipToHoH: RelationshipToHoH;
         enrollmentCoc?: string | null;
         householdId: string;
         householdShortId: string;
         householdSize: number;
+        moveInDate?: string | null;
+        dateOfEngagement?: string | null;
+        dateOfPathStatus?: string | null;
+        clientEnrolledInPath?: NoYesMissing | null;
+        reasonNotEnrolled?: ReasonNotEnrolled | null;
         client: {
           __typename?: 'Client';
           id: string;
@@ -14340,7 +14682,9 @@ export type GetInventoryQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -14440,7 +14784,9 @@ export type GetProjectInventoriesQuery = {
           id: string;
           key: string;
           label: string;
+          fieldType: CustomDataElementType;
           repeats: boolean;
+          atOccurrence: boolean;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -15330,7 +15676,9 @@ export type EsgFundingServiceFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -15395,7 +15743,9 @@ export type GetEsgFundingReportQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -15469,7 +15819,9 @@ export type ServiceFieldsFragment = {
     id: string;
     key: string;
     label: string;
+    fieldType: CustomDataElementType;
     repeats: boolean;
+    atOccurrence: boolean;
     value?: {
       __typename?: 'CustomDataElementValue';
       id: string;
@@ -15537,7 +15889,9 @@ export type GetServiceQuery = {
       id: string;
       key: string;
       label: string;
+      fieldType: CustomDataElementType;
       repeats: boolean;
+      atOccurrence: boolean;
       value?: {
         __typename?: 'CustomDataElementValue';
         id: string;
@@ -15627,7 +15981,9 @@ export type AddServiceToEnrollmentMutation = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -15714,7 +16070,9 @@ export type DeleteServiceMutation = {
         id: string;
         key: string;
         label: string;
+        fieldType: CustomDataElementType;
         repeats: boolean;
+        atOccurrence: boolean;
         value?: {
           __typename?: 'CustomDataElementValue';
           id: string;
@@ -15809,7 +16167,9 @@ export type GetEnrollmentServicesQuery = {
           id: string;
           key: string;
           label: string;
+          fieldType: CustomDataElementType;
           repeats: boolean;
+          atOccurrence: boolean;
           value?: {
             __typename?: 'CustomDataElementValue';
             id: string;
@@ -16241,7 +16601,9 @@ export const CustomDataElementFieldsFragmentDoc = gql`
     id
     key
     label
+    fieldType
     repeats
+    atOccurrence
     value {
       ...CustomDataElementValueFields
     }
@@ -16783,6 +17145,20 @@ export const ClientAuditEventFieldsFragmentDoc = gql`
     }
   }
 `;
+export const CurrentLivingSituationFieldsFragmentDoc = gql`
+  fragment CurrentLivingSituationFields on CurrentLivingSituation {
+    id
+    clsSubsidyType
+    currentLivingSituation
+    informationDate
+    leaseOwn60Day
+    leaveSituation14Days
+    locationDetails
+    movedTwoOrMore
+    resourcesToObtain
+    subsequentResidence
+  }
+`;
 export const ClientNameDobVetFragmentDoc = gql`
   fragment ClientNameDobVet on Client {
     ...ClientName
@@ -16803,10 +17179,9 @@ export const EnrollmentFieldsFragmentDoc = gql`
     id
     entryDate
     exitDate
+    exitDestination
     project {
-      id
-      projectName
-      projectType
+      ...ProjectNameAndType
     }
     inProgress
     relationshipToHoH
@@ -16814,6 +17189,11 @@ export const EnrollmentFieldsFragmentDoc = gql`
     householdId
     householdShortId
     householdSize
+    moveInDate
+    dateOfEngagement
+    dateOfPathStatus
+    clientEnrolledInPath
+    reasonNotEnrolled
     client {
       ...ClientNameDobVet
     }
@@ -16828,6 +17208,7 @@ export const EnrollmentFieldsFragmentDoc = gql`
       }
     }
   }
+  ${ProjectNameAndTypeFragmentDoc}
   ${ClientNameDobVetFragmentDoc}
   ${EnrollmentAccessFieldsFragmentDoc}
 `;
@@ -16897,7 +17278,6 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     householdId
     householdShortId
     householdSize
-    exitDestination
     currentUnit {
       id
       name
@@ -16905,9 +17285,14 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    project {
+      ...ProjectNameAndType
+      hasUnits
+    }
   }
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${ProjectNameAndTypeFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
   fragment FileFields on File {
@@ -19463,6 +19848,142 @@ export type GetClientFilesQueryResult = Apollo.QueryResult<
   GetClientFilesQuery,
   GetClientFilesQueryVariables
 >;
+export const GetEnrollmentCurrentLivingSituationsDocument = gql`
+  query GetEnrollmentCurrentLivingSituations(
+    $id: ID!
+    $limit: Int = 10
+    $offset: Int = 0
+  ) {
+    enrollment(id: $id) {
+      id
+      currentLivingSituations(limit: $limit, offset: $offset) {
+        offset
+        limit
+        nodesCount
+        nodes {
+          ...CurrentLivingSituationFields
+        }
+      }
+    }
+  }
+  ${CurrentLivingSituationFieldsFragmentDoc}
+`;
+
+/**
+ * __useGetEnrollmentCurrentLivingSituationsQuery__
+ *
+ * To run a query within a React component, call `useGetEnrollmentCurrentLivingSituationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetEnrollmentCurrentLivingSituationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetEnrollmentCurrentLivingSituationsQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetEnrollmentCurrentLivingSituationsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >(GetEnrollmentCurrentLivingSituationsDocument, options);
+}
+export function useGetEnrollmentCurrentLivingSituationsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >(GetEnrollmentCurrentLivingSituationsDocument, options);
+}
+export type GetEnrollmentCurrentLivingSituationsQueryHookResult = ReturnType<
+  typeof useGetEnrollmentCurrentLivingSituationsQuery
+>;
+export type GetEnrollmentCurrentLivingSituationsLazyQueryHookResult =
+  ReturnType<typeof useGetEnrollmentCurrentLivingSituationsLazyQuery>;
+export type GetEnrollmentCurrentLivingSituationsQueryResult =
+  Apollo.QueryResult<
+    GetEnrollmentCurrentLivingSituationsQuery,
+    GetEnrollmentCurrentLivingSituationsQueryVariables
+  >;
+export const UpdateCustomEnrollmentValueDocument = gql`
+  mutation UpdateCustomEnrollmentValue(
+    $input: UpdateCustomEnrollmentValueInput!
+  ) {
+    updateCustomEnrollmentValue(input: $input) {
+      enrollment {
+        id
+        customDataElements {
+          ...CustomDataElementFields
+        }
+      }
+      errors {
+        ...ValidationErrorFields
+      }
+    }
+  }
+  ${CustomDataElementFieldsFragmentDoc}
+  ${ValidationErrorFieldsFragmentDoc}
+`;
+export type UpdateCustomEnrollmentValueMutationFn = Apollo.MutationFunction<
+  UpdateCustomEnrollmentValueMutation,
+  UpdateCustomEnrollmentValueMutationVariables
+>;
+
+/**
+ * __useUpdateCustomEnrollmentValueMutation__
+ *
+ * To run a mutation, you first call `useUpdateCustomEnrollmentValueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCustomEnrollmentValueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCustomEnrollmentValueMutation, { data, loading, error }] = useUpdateCustomEnrollmentValueMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateCustomEnrollmentValueMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateCustomEnrollmentValueMutation,
+    UpdateCustomEnrollmentValueMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UpdateCustomEnrollmentValueMutation,
+    UpdateCustomEnrollmentValueMutationVariables
+  >(UpdateCustomEnrollmentValueDocument, options);
+}
+export type UpdateCustomEnrollmentValueMutationHookResult = ReturnType<
+  typeof useUpdateCustomEnrollmentValueMutation
+>;
+export type UpdateCustomEnrollmentValueMutationResult =
+  Apollo.MutationResult<UpdateCustomEnrollmentValueMutation>;
+export type UpdateCustomEnrollmentValueMutationOptions =
+  Apollo.BaseMutationOptions<
+    UpdateCustomEnrollmentValueMutation,
+    UpdateCustomEnrollmentValueMutationVariables
+  >;
 export const GetEnrollmentDocument = gql`
   query GetEnrollment($id: ID!) {
     enrollment(id: $id) {
@@ -20130,6 +20651,9 @@ export const SubmitFormDocument = gql`
         ... on Enrollment {
           ...EnrollmentFields
         }
+        ... on CurrentLivingSituation {
+          ...CurrentLivingSituationFields
+        }
       }
       errors {
         ...ValidationErrorFields
@@ -20146,6 +20670,7 @@ export const SubmitFormDocument = gql`
   ${ServiceFieldsFragmentDoc}
   ${FileFieldsFragmentDoc}
   ${EnrollmentFieldsFragmentDoc}
+  ${CurrentLivingSituationFieldsFragmentDoc}
   ${ValidationErrorFieldsFragmentDoc}
 `;
 export type SubmitFormMutationFn = Apollo.MutationFunction<

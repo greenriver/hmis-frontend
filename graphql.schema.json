@@ -5690,6 +5690,18 @@
             "deprecationReason": null
           },
           {
+            "name": "clsSubsidyType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "RentalSubsidyType",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "currentLivingSituation",
             "description": null,
             "args": [],
@@ -6089,6 +6101,38 @@
         "description": null,
         "fields": [
           {
+            "name": "atOccurrence",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "fieldType",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "ENUM",
+                "name": "CustomDataElementType",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "id",
             "description": null,
             "args": [],
@@ -6188,6 +6232,59 @@
         "inputFields": null,
         "interfaces": [],
         "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
+        "name": "CustomDataElementType",
+        "description": "Allowed values for CustomDataElementDefinition.type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "boolean",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "date",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "float",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "integer",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "json",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "string",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "text",
+            "description": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
         "possibleTypes": null
       },
       {
@@ -14002,8 +14099,20 @@
             "deprecationReason": null
           },
           {
+            "name": "CURRENT_LIVING_SITUATION",
+            "description": "(CURRENT_LIVING_SITUATION) Current Living Situation",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "CUSTOM",
             "description": "(CUSTOM) Custom Assessment",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "DATE_OF_ENGAGEMENT",
+            "description": "(DATE_OF_ENGAGEMENT) Date of Engagement",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14044,8 +14153,20 @@
             "deprecationReason": null
           },
           {
+            "name": "MOVE_IN_DATE",
+            "description": "(MOVE_IN_DATE) Move-in Date",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "ORGANIZATION",
             "description": "(ORGANIZATION) Organization",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PATH_STATUS",
+            "description": "(PATH_STATUS) PATH Status",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -14076,6 +14197,12 @@
           {
             "name": "SERVICE",
             "description": "(SERVICE) Service",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "UNIT_ASSIGNMENT",
+            "description": "(UNIT_ASSIGNMENT) Unit Assignment",
             "isDeprecated": false,
             "deprecationReason": null
           },
@@ -19497,6 +19624,35 @@
             "deprecationReason": null
           },
           {
+            "name": "updateCustomEnrollmentValue",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": "Parameters for UpdateCustomEnrollmentValue",
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UpdateCustomEnrollmentValueInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null,
+                "isDeprecated": false,
+                "deprecationReason": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UpdateCustomEnrollmentValuePayload",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "updateReferralPosting",
             "description": "Update a referral posting",
             "args": [
@@ -21018,6 +21174,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "FundersPaginated",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "hasUnits",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               }
             },
@@ -25945,6 +26117,89 @@
       },
       {
         "kind": "ENUM",
+        "name": "RentalSubsidyType",
+        "description": "3.12.A",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": [
+          {
+            "name": "EMERGENCY_HOUSING_VOUCHER",
+            "description": "(436) Emergency Housing Voucher",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP",
+            "description": "(437) Family Unification Program Voucher (FUP)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI",
+            "description": "(438) Foster Youth to Independence Initiative (FYI)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "GPD_TIP_HOUSING_SUBSIDY",
+            "description": "(428) GPD TIP housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED",
+            "description": "(433) HCV voucher (tenant or project based) (not dedicated)",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID",
+            "description": "Invalid Value",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "OTHER_PERMANENT_HOUSING_DEDICATED_FOR_FORMERLY_HOMELESS_PERSONS",
+            "description": "(440) Other permanent housing dedicated for formerly homeless persons",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PERMANENT_SUPPORTIVE_HOUSING",
+            "description": "(439) Permanent Supportive Housing",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "PUBLIC_HOUSING_UNIT",
+            "description": "(434) Public housing unit",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY",
+            "description": "(420) Rental by client, with other ongoing housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "RRH_OR_EQUIVALENT_SUBSIDY",
+            "description": "(431) RRH or equivalent subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "VASH_HOUSING_SUBSIDY",
+            "description": "(419) VASH housing subsidy",
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "ENUM",
         "name": "ResidencePriorLengthOfStay",
         "description": "3.917.2",
         "fields": null,
@@ -28115,6 +28370,11 @@
           },
           {
             "kind": "OBJECT",
+            "name": "CurrentLivingSituation",
+            "ofType": null
+          },
+          {
+            "kind": "OBJECT",
             "name": "Enrollment",
             "ofType": null
           },
@@ -29139,6 +29399,196 @@
               "kind": "SCALAR",
               "name": "String",
               "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "errors",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "ValidationError",
+                    "ofType": null
+                  }
+                }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "UpdateCustomEnrollmentValueInput",
+        "description": "Autogenerated input type of UpdateCustomEnrollmentValue",
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "customDataElementDefinitionId",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollmentId",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              }
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueBoolean",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueDate",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "ISO8601Date",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueFloat",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Float",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueInteger",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "Int",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueString",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "valueText",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null,
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "UpdateCustomEnrollmentValuePayload",
+        "description": "Autogenerated return type of UpdateCustomEnrollmentValue.",
+        "fields": [
+          {
+            "name": "clientMutationId",
+            "description": "A unique identifier for the client performing the mutation.",
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "enrollment",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Enrollment",
+                "ofType": null
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
