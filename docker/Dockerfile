@@ -25,7 +25,7 @@ ENV NODE_OPTIONS '--max-old-space-size=32768'
 # Copying files more specifically lets us reuse the build cache and iterate more quickly
 # COPY . .
 # RUN corepack enable \
-#   && yarn install \
+#   && yarn install --offline \
 #   && yarn format:check \
 #   && yarn lint:check \
 #   # && yarn test \
@@ -42,7 +42,7 @@ COPY .gitignore .yarnrc .prettierignore .prettierrc.json .nvmrc .eslintrc.js .en
 
 RUN corepack enable \
  && yarn cache clean \
- && yarn install
+ && yarn install --offline
 
 COPY cypress/ cypress
 COPY src/ ./src
