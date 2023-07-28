@@ -1688,7 +1688,6 @@ export type EnrollmentSummary = {
   id: Scalars['ID'];
   inProgress: Scalars['Boolean'];
   moveInDate?: Maybe<Scalars['ISO8601Date']>;
-  primaryKey?: Maybe<Scalars['ID']>;
   projectId: Scalars['String'];
   projectName: Scalars['String'];
   projectType: ProjectType;
@@ -10114,7 +10113,6 @@ export type EnrollmentSummaryFieldsFragment = {
   projectName: string;
   projectType: ProjectType;
   canViewEnrollment: boolean;
-  primaryKey?: string | null;
 };
 
 export type AllEnrollmentDetailsFragment = {
@@ -10207,7 +10205,6 @@ export type AllEnrollmentDetailsFragment = {
     projectName: string;
     projectType: ProjectType;
     canViewEnrollment: boolean;
-    primaryKey?: string | null;
   }>;
   project: {
     __typename?: 'Project';
@@ -10371,7 +10368,6 @@ export type GetEnrollmentDetailsQuery = {
       projectName: string;
       projectType: ProjectType;
       canViewEnrollment: boolean;
-      primaryKey?: string | null;
     }>;
     project: {
       __typename?: 'Project';
@@ -14978,7 +14974,6 @@ export type GetReferralPostingQuery = {
         projectName: string;
         projectType: ProjectType;
         canViewEnrollment: boolean;
-        primaryKey?: string | null;
       }>;
       client: {
         __typename?: 'Client';
@@ -15266,7 +15261,6 @@ export type UpdateReferralPostingMutation = {
           projectName: string;
           projectType: ProjectType;
           canViewEnrollment: boolean;
-          primaryKey?: string | null;
         }>;
         client: {
           __typename?: 'Client';
@@ -15392,7 +15386,6 @@ export type CreateOutgoingReferralPostingMutation = {
           projectName: string;
           projectType: ProjectType;
           canViewEnrollment: boolean;
-          primaryKey?: string | null;
         }>;
         client: {
           __typename?: 'Client';
@@ -15576,7 +15569,6 @@ export type ReferralPostingDetailFieldsFragment = {
       projectName: string;
       projectType: ProjectType;
       canViewEnrollment: boolean;
-      primaryKey?: string | null;
     }>;
     client: {
       __typename?: 'Client';
@@ -17277,7 +17269,6 @@ export const EnrollmentSummaryFieldsFragmentDoc = gql`
     projectName
     projectType
     canViewEnrollment
-    primaryKey
   }
 `;
 export const AllEnrollmentDetailsFragmentDoc = gql`

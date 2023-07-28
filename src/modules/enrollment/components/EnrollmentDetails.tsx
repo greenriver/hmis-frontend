@@ -42,7 +42,6 @@ const EnrollmentDetails = ({
     variables: { id: enrollment.id },
   });
 
-  const enrollmentWithDetails = useMemo(() => data?.enrollment, [data]);
   const navigate = useNavigate();
   const intakePath = useMemo(
     () =>
@@ -164,13 +163,13 @@ const EnrollmentDetails = ({
     }
 
     if (
-      enrollmentWithDetails &&
-      enrollmentWithDetails.openEnrollmentSummary.length > 0
+      enrollmentWithCustomElements &&
+      enrollmentWithCustomElements.openEnrollmentSummary.length > 0
     ) {
       const title = 'Other Open Enrollments';
       content[title] = (
         <EnrollmentSummaryCount
-          enrollmentSummary={enrollmentWithDetails.openEnrollmentSummary}
+          enrollmentSummary={enrollmentWithCustomElements.openEnrollmentSummary}
           clientId={enrollment.client.id}
         />
       );
@@ -195,7 +194,6 @@ const EnrollmentDetails = ({
     }));
   }, [
     enrollment,
-    enrollmentWithDetails,
     enrollmentWithCustomElements,
     intakePath,
     exitPath,

@@ -14,7 +14,7 @@ import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import { entryExitRange, parseAndFormatDate } from '@/modules/hmis/hmisUtil';
 import { Routes } from '@/routes/routes';
 import { HmisEnums } from '@/types/gqlEnums';
-import { EnrollmentSummaryFieldsFragment, ProjectType } from '@/types/gqlTypes';
+import { EnrollmentSummaryFieldsFragment } from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
@@ -35,19 +35,7 @@ const baseColumns: ColumnDef<EnrollmentSummaryFieldsFragment>[] = [
   },
   {
     header: 'Move in Date',
-    render: (e) => {
-      const projectTypes = [
-        ProjectType.Ph,
-        ProjectType.Oph,
-        ProjectType.Th,
-        ProjectType.Psh,
-      ];
-
-      if (projectTypes.includes(e.projectType))
-        return parseAndFormatDate(e.moveInDate);
-
-      return null;
-    },
+    render: (e) => parseAndFormatDate(e.moveInDate),
   },
 ];
 
@@ -68,16 +56,22 @@ const useEnrollmentSummaryDialog = ({
       if (!enrollmentSummary) return null;
 
       return (
-        <CommonDialog {...props} open={!!dialogOpen} onClose={closeDialog}>
+        <CommonDialog
+          fullWidth
+          maxWidth='md'
+          {...props}
+          open={!!dialogOpen}
+          onClose={closeDialog}
+        >
           <DialogTitle>Open Enrollment Summary</DialogTitle>
           <DialogContent sx={{ my: 2 }}>
             <GenericTable<EnrollmentSummaryFieldsFragment>
               columns={baseColumns}
               rows={enrollmentSummary}
               rowLinkTo={(row) =>
-                row.canViewEnrollment && row.primaryKey && clientId
+                row.canViewEnrollment && clientId
                   ? generateSafePath(Routes.ENROLLMENT_DASHBOARD, {
-                      enrollmentId: row.primaryKey,
+                      enrollmentId: row.id,
                       clientId,
                     })
                   : ''
