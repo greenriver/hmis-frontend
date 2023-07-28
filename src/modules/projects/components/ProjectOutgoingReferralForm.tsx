@@ -136,7 +136,7 @@ const ProjectOutgoingReferralForm: React.FC<Props> = ({
           item={{
             type: ItemType.Text,
             linkId: 'note',
-            text: 'Service Coordinator Note',
+            text: 'Resource Coordinator Notes',
           }}
           itemChanged={({ value }) =>
             setFormState((old) => ({ ...old, note: value }))
