@@ -22,34 +22,14 @@ ENV NODE_OPTIONS '--max-old-space-size=32768'
 # Use this for faster iterations on nginx config
 # RUN mkdir -p /app/dist  && echo hello > /app/dist/index.html
 
-# Copying files more specifically lets us reuse the build cache and iterate more quickly
-# COPY . .
-# RUN corepack enable \
-#   && yarn install --offline \
-#   && yarn format:check \
-#   && yarn lint:check \
-#   # && yarn test \
-#   && yarn build
+COPY . .
 
-RUN mkdir -p public src scripts .husky .yarn .storybook cypress \
-  && rm -rf node_modules
-COPY public/ public
-COPY scripts/ scripts
-COPY .yarn/ .yarn
-COPY .husky/ .husky
-COPY .storybook/ .storybook
-COPY .gitignore .yarnrc .prettierignore .prettierrc.json .nvmrc .eslintrc.js .env.development .env.production babel.config.js cypress.config.ts jest.config.ts package.json tsconfig.json vite.config.js yarn.lock index.html graphql.schema.json codegen.yml .
-
-RUN corepack enable \
- && yarn cache clean \
- && yarn install --offline
-
-COPY cypress/ cypress
-COPY src/ ./src
-
-RUN yarn format:check \
- && yarn lint:check \
- && yarn build
+RUN --mount=type=cache,target=/app/node_modules \
+     corepack enable \
+     && yarn install --offline \
+     && yarn format:check \
+     && yarn lint:check \
+     && yarn build
 
 #####################################################################
 # nginx container
