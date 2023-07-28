@@ -1,0 +1,7 @@
+docs
+__mocks__
+.git
+.github
+node_modules
+docker/Dockerfile
+docker/docker-compose.yml

@@ -1,0 +1,12 @@
+fragment CurrentLivingSituationFields on CurrentLivingSituation {
+  id
+  clsSubsidyType
+  currentLivingSituation
+  informationDate
+  leaseOwn60Day
+  leaveSituation14Days
+  locationDetails
+  movedTwoOrMore
+  resourcesToObtain
+  subsequentResidence
+}

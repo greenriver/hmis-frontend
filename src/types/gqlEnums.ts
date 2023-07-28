@@ -432,6 +432,7 @@ export const HmisEnums = {
     ANNUAL: 'Annual Assessment',
     CE: 'Coordinated Entry',
     CLIENT: 'Client',
+    CURRENT_LIVING_SITUATION: 'Current Living Situation',
     CUSTOM: 'Custom Assessment',
     DATE_OF_ENGAGEMENT: 'Date of Engagement',
     ENROLLMENT: 'Enrollment',
@@ -1022,6 +1023,25 @@ export const HmisEnums = {
     current_living_situation: 'current_living_situation',
     exit_incomplete: 'exit_incomplete',
     intake_incomplete: 'intake_incomplete',
+  },
+  RentalSubsidyType: {
+    INVALID: 'Invalid Value',
+    VASH_HOUSING_SUBSIDY: 'VASH housing subsidy',
+    RENTAL_BY_CLIENT_WITH_OTHER_ONGOING_HOUSING_SUBSIDY:
+      'Rental by client, with other ongoing housing subsidy',
+    GPD_TIP_HOUSING_SUBSIDY: 'GPD TIP housing subsidy',
+    RRH_OR_EQUIVALENT_SUBSIDY: 'RRH or equivalent subsidy',
+    HCV_VOUCHER_TENANT_OR_PROJECT_BASED_NOT_DEDICATED:
+      'HCV voucher (tenant or project based) (not dedicated)',
+    PUBLIC_HOUSING_UNIT: 'Public housing unit',
+    EMERGENCY_HOUSING_VOUCHER: 'Emergency Housing Voucher',
+    FAMILY_UNIFICATION_PROGRAM_VOUCHER_FUP:
+      'Family Unification Program Voucher (FUP)',
+    FOSTER_YOUTH_TO_INDEPENDENCE_INITIATIVE_FYI:
+      'Foster Youth to Independence Initiative (FYI)',
+    PERMANENT_SUPPORTIVE_HOUSING: 'Permanent Supportive Housing',
+    OTHER_PERMANENT_HOUSING_DEDICATED_FOR_FORMERLY_HOMELESS_PERSONS:
+      'Other permanent housing dedicated for formerly homeless persons',
   },
   ResidencePriorLengthOfStay: {
     ONE_NIGHT_OR_LESS: 'One night or less',

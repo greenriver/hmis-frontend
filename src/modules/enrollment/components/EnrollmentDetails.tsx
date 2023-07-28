@@ -10,6 +10,7 @@ import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
 import NotCollectedText from '@/modules/form/components/viewable/item/NotCollectedText';
 import EnrollmentStatus from '@/modules/hmis/components/EnrollmentStatus';
+import HmisEnum from '@/modules/hmis/components/HmisEnum';
 import {
   parseAndFormatDate,
   pathStatusString,
@@ -17,8 +18,10 @@ import {
   STREET_OUTREACH_SERVICES_ONLY,
 } from '@/modules/hmis/hmisUtil';
 import { EnrollmentDashboardRoutes } from '@/routes/routes';
+import { HmisEnums } from '@/types/gqlEnums';
 import {
   AssessmentRole,
+  Destination,
   EnrollmentFieldsFragment,
   FormRole,
   ProjectType,
@@ -92,8 +95,12 @@ const EnrollmentDetails = ({
       ),
     };
     if (enrollment.exitDate) {
-      content['Exit Destination'] =
-        parseAndFormatDate(enrollment.exitDestination) || noneText;
+      content['Exit Destination'] = (
+        <HmisEnum
+          value={enrollment.exitDestination || Destination.DataNotCollected}
+          enumMap={HmisEnums.Destination}
+        />
+      );
     }
 
     // Show unit if enrollment is open, or enrollment has unit.

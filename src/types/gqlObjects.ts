@@ -895,6 +895,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'CurrentLivingSituation',
     fields: [
       {
+        name: 'clsSubsidyType',
+        type: { kind: 'ENUM', name: 'RentalSubsidyType', ofType: null },
+      },
+      {
         name: 'currentLivingSituation',
         type: {
           kind: 'NON_NULL',
@@ -1787,6 +1791,10 @@ export const HmisObjectSchemas: GqlSchema[] = [
       {
         name: 'moveInDate',
         type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'primaryKey',
+        type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
       {
         name: 'projectId',
