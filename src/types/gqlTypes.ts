@@ -1550,6 +1550,7 @@ export type Enrollment = {
   mentalHealthDisorderFam?: Maybe<NoYesMissing>;
   monthsHomelessPastThreeYears?: Maybe<MonthsHomelessPastThreeYears>;
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  openEnrollmentSummary: Array<EnrollmentSummary>;
   percentAmi?: Maybe<PercentAmi>;
   physicalDisabilityFam?: Maybe<NoYesMissing>;
   previousStreetEssh?: Maybe<NoYesMissing>;
@@ -1689,6 +1690,18 @@ export enum EnrollmentStatus {
   /** Exit Incomplete */
   OwnExitIncomplete = 'OWN_EXIT_INCOMPLETE',
 }
+
+export type EnrollmentSummary = {
+  __typename?: 'EnrollmentSummary';
+  canViewEnrollment: Scalars['Boolean']['output'];
+  entryDate: Scalars['ISO8601Date']['output'];
+  id: Scalars['ID']['output'];
+  inProgress: Scalars['Boolean']['output'];
+  moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
+  projectId: Scalars['String']['output'];
+  projectName: Scalars['String']['output'];
+  projectType: ProjectType;
+};
 
 export type EnrollmentsForClientFilterOptions = {
   openOnDate?: InputMaybe<Scalars['ISO8601Date']['input']>;
@@ -3194,7 +3207,6 @@ export type OrganizationsPaginated = {
 
 export type OutgoingReferralPostingInput = {
   enrollmentId?: InputMaybe<Scalars['ID']['input']>;
-  note?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -3696,6 +3708,7 @@ export type QueryAccess = {
   canViewDob: Scalars['Boolean']['output'];
   canViewEnrollmentDetails: Scalars['Boolean']['output'];
   canViewFullSsn: Scalars['Boolean']['output'];
+  canViewOpenEnrollmentSummary: Scalars['Boolean']['output'];
   canViewPartialSsn: Scalars['Boolean']['output'];
   id: Scalars['ID']['output'];
 };
@@ -3823,6 +3836,7 @@ export type ReferralHouseholdMember = {
   __typename?: 'ReferralHouseholdMember';
   client: Client;
   id: Scalars['ID']['output'];
+  openEnrollmentSummary: Array<EnrollmentSummary>;
   relationshipToHoH: RelationshipToHoH;
 };
 
@@ -4968,6 +4982,7 @@ export type RootPermissionsFragment = {
   canEnrollClients: boolean;
   canEditEnrollments: boolean;
   canViewEnrollmentDetails: boolean;
+  canViewOpenEnrollmentSummary: boolean;
   canDeleteEnrollments: boolean;
   canDeleteAssessments: boolean;
   canEditProjectDetails: boolean;
@@ -5062,6 +5077,7 @@ export type GetRootPermissionsQuery = {
     canEnrollClients: boolean;
     canEditEnrollments: boolean;
     canViewEnrollmentDetails: boolean;
+    canViewOpenEnrollmentSummary: boolean;
     canDeleteEnrollments: boolean;
     canDeleteAssessments: boolean;
     canEditProjectDetails: boolean;
@@ -10175,6 +10191,18 @@ export type EventFieldsFragment = {
   dateDeleted?: string | null;
 };
 
+export type EnrollmentSummaryFieldsFragment = {
+  __typename?: 'EnrollmentSummary';
+  id: string;
+  entryDate: string;
+  inProgress: boolean;
+  moveInDate?: string | null;
+  projectId: string;
+  projectName: string;
+  projectType: ProjectType;
+  canViewEnrollment: boolean;
+};
+
 export type AllEnrollmentDetailsFragment = {
   __typename?: 'Enrollment';
   inProgress: boolean;
@@ -10254,6 +10282,17 @@ export type AllEnrollmentDetailsFragment = {
       dateUpdated: string;
       user?: { __typename: 'User'; id: string; name: string } | null;
     }> | null;
+  }>;
+  openEnrollmentSummary: Array<{
+    __typename?: 'EnrollmentSummary';
+    id: string;
+    entryDate: string;
+    inProgress: boolean;
+    moveInDate?: string | null;
+    projectId: string;
+    projectName: string;
+    projectType: ProjectType;
+    canViewEnrollment: boolean;
   }>;
   project: {
     __typename?: 'Project';
@@ -10406,6 +10445,17 @@ export type GetEnrollmentDetailsQuery = {
         dateUpdated: string;
         user?: { __typename: 'User'; id: string; name: string } | null;
       }> | null;
+    }>;
+    openEnrollmentSummary: Array<{
+      __typename?: 'EnrollmentSummary';
+      id: string;
+      entryDate: string;
+      inProgress: boolean;
+      moveInDate?: string | null;
+      projectId: string;
+      projectName: string;
+      projectType: ProjectType;
+      canViewEnrollment: boolean;
     }>;
     project: {
       __typename?: 'Project';
@@ -15015,6 +15065,17 @@ export type GetReferralPostingQuery = {
       __typename?: 'ReferralHouseholdMember';
       id: string;
       relationshipToHoH: RelationshipToHoH;
+      openEnrollmentSummary: Array<{
+        __typename?: 'EnrollmentSummary';
+        id: string;
+        entryDate: string;
+        inProgress: boolean;
+        moveInDate?: string | null;
+        projectId: string;
+        projectName: string;
+        projectType: ProjectType;
+        canViewEnrollment: boolean;
+      }>;
       client: {
         __typename?: 'Client';
         id: string;
@@ -15291,6 +15352,17 @@ export type UpdateReferralPostingMutation = {
         __typename?: 'ReferralHouseholdMember';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        openEnrollmentSummary: Array<{
+          __typename?: 'EnrollmentSummary';
+          id: string;
+          entryDate: string;
+          inProgress: boolean;
+          moveInDate?: string | null;
+          projectId: string;
+          projectName: string;
+          projectType: ProjectType;
+          canViewEnrollment: boolean;
+        }>;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15405,6 +15477,17 @@ export type CreateOutgoingReferralPostingMutation = {
         __typename?: 'ReferralHouseholdMember';
         id: string;
         relationshipToHoH: RelationshipToHoH;
+        openEnrollmentSummary: Array<{
+          __typename?: 'EnrollmentSummary';
+          id: string;
+          entryDate: string;
+          inProgress: boolean;
+          moveInDate?: string | null;
+          projectId: string;
+          projectName: string;
+          projectType: ProjectType;
+          canViewEnrollment: boolean;
+        }>;
         client: {
           __typename?: 'Client';
           id: string;
@@ -15577,6 +15660,17 @@ export type ReferralPostingDetailFieldsFragment = {
     __typename?: 'ReferralHouseholdMember';
     id: string;
     relationshipToHoH: RelationshipToHoH;
+    openEnrollmentSummary: Array<{
+      __typename?: 'EnrollmentSummary';
+      id: string;
+      entryDate: string;
+      inProgress: boolean;
+      moveInDate?: string | null;
+      projectId: string;
+      projectName: string;
+      projectType: ProjectType;
+      canViewEnrollment: boolean;
+    }>;
     client: {
       __typename?: 'Client';
       id: string;
@@ -16494,6 +16588,7 @@ export const RootPermissionsFragmentDoc = gql`
     canEnrollClients
     canEditEnrollments
     canViewEnrollmentDetails
+    canViewOpenEnrollmentSummary
     canDeleteEnrollments
     canDeleteAssessments
     canEditProjectDetails
@@ -17279,6 +17374,18 @@ export const EventFieldsFragmentDoc = gql`
     dateDeleted
   }
 `;
+export const EnrollmentSummaryFieldsFragmentDoc = gql`
+  fragment EnrollmentSummaryFields on EnrollmentSummary {
+    id
+    entryDate
+    inProgress
+    moveInDate
+    projectId
+    projectName
+    projectType
+    canViewEnrollment
+  }
+`;
 export const AllEnrollmentDetailsFragmentDoc = gql`
   fragment AllEnrollmentDetails on Enrollment {
     ...EnrollmentValues
@@ -17295,6 +17402,9 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
     customDataElements {
       ...CustomDataElementFields
     }
+    openEnrollmentSummary {
+      ...EnrollmentSummaryFields
+    }
     project {
       ...ProjectNameAndType
       hasUnits
@@ -17302,6 +17412,7 @@ export const AllEnrollmentDetailsFragmentDoc = gql`
   }
   ${EnrollmentValuesFragmentDoc}
   ${CustomDataElementFieldsFragmentDoc}
+  ${EnrollmentSummaryFieldsFragmentDoc}
   ${ProjectNameAndTypeFragmentDoc}
 `;
 export const FileFieldsFragmentDoc = gql`
@@ -17764,6 +17875,9 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
     householdMembers {
       id
       relationshipToHoH
+      openEnrollmentSummary {
+        ...EnrollmentSummaryFields
+      }
       client {
         id
         ...ClientName
@@ -17779,6 +17893,7 @@ export const ReferralPostingDetailFieldsFragmentDoc = gql`
       }
     }
   }
+  ${EnrollmentSummaryFieldsFragmentDoc}
   ${ClientNameFragmentDoc}
   ${ClientIdentificationFieldsFragmentDoc}
   ${ClientAccessFieldsFragmentDoc}

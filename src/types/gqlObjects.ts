@@ -1754,6 +1754,71 @@ export const HmisObjectSchemas: GqlSchema[] = [
     ],
   },
   {
+    name: 'EnrollmentSummary',
+    fields: [
+      {
+        name: 'canViewEnrollment',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'entryDate',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+        },
+      },
+      {
+        name: 'id',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'ID', ofType: null },
+        },
+      },
+      {
+        name: 'inProgress',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
+        name: 'moveInDate',
+        type: { kind: 'SCALAR', name: 'ISO8601Date', ofType: null },
+      },
+      {
+        name: 'projectId',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectName',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'String', ofType: null },
+        },
+      },
+      {
+        name: 'projectType',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'ENUM', name: 'ProjectType', ofType: null },
+        },
+      },
+    ],
+  },
+  {
     name: 'EsgFundingService',
     fields: [
       {
@@ -3885,6 +3950,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
         },
       },
       {
+        name: 'canViewOpenEnrollmentSummary',
+        type: {
+          kind: 'NON_NULL',
+          name: null,
+          ofType: { kind: 'SCALAR', name: 'Boolean', ofType: null },
+        },
+      },
+      {
         name: 'canViewPartialSsn',
         type: {
           kind: 'NON_NULL',
@@ -5325,7 +5398,6 @@ export const HmisInputObjectSchemas: GqlInputObjectSchema[] = [
         name: 'enrollmentId',
         type: { kind: 'SCALAR', name: 'ID', ofType: null },
       },
-      { name: 'note', type: { kind: 'SCALAR', name: 'String', ofType: null } },
       { name: 'projectId', type: { kind: 'SCALAR', name: 'ID', ofType: null } },
       {
         name: 'unitTypeId',
