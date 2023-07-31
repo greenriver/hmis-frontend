@@ -169,7 +169,7 @@ const EnrollmentReminders: React.FC<Props> = ({ enrollmentId }) => {
               gap={1}
             >
               <TaskAltIcon fontSize='small' />
-              <Typography variant='body2'>No tasks to complete.</Typography>
+              <Typography variant='body2'>All tasks complete</Typography>
             </Stack>
           }
         />

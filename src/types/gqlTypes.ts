@@ -1698,7 +1698,6 @@ export type EnrollmentSummary = {
   id: Scalars['ID']['output'];
   inProgress: Scalars['Boolean']['output'];
   moveInDate?: Maybe<Scalars['ISO8601Date']['output']>;
-  primaryKey?: Maybe<Scalars['ID']['output']>;
   projectId: Scalars['String']['output'];
   projectName: Scalars['String']['output'];
   projectType: ProjectType;
@@ -3208,6 +3207,7 @@ export type OrganizationsPaginated = {
 
 export type OutgoingReferralPostingInput = {
   enrollmentId?: InputMaybe<Scalars['ID']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
