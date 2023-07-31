@@ -68,6 +68,9 @@ fragment ReferralPostingDetailFields on ReferralPosting {
   householdMembers {
     id
     relationshipToHoH
+    openEnrollmentSummary {
+      ...EnrollmentSummaryFields
+    }
     client {
       id
       ...ClientName

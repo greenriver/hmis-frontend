@@ -1,8 +1,10 @@
 import DescriptionIcon from '@mui/icons-material/Description';
 import { ReactNode, useMemo } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import EditableCustomDataElement from './EditableCustomDataElement';
 import OccurrencePointValue from './EditableOccurrencePointValue';
+import EnrollmentSummaryCount from './EnrollmentSummaryCount';
 import IconButtonContainer from './IconButtonContainer';
 import Loading from '@/components/elements/Loading';
 import SimpleTable from '@/components/elements/SimpleTable';
@@ -166,6 +168,20 @@ const EnrollmentDetails = ({
         </OccurrencePointValue>
       );
     }
+
+    if (
+      enrollmentWithCustomElements &&
+      enrollmentWithCustomElements.openEnrollmentSummary.length > 0
+    ) {
+      const title = 'Other Open Enrollments';
+      content[title] = (
+        <EnrollmentSummaryCount
+          enrollmentSummary={enrollmentWithCustomElements.openEnrollmentSummary}
+          clientId={enrollment.client.id}
+        />
+      );
+    }
+
     enrollmentWithCustomElements.customDataElements
       .filter((cde) => cde.atOccurrence)
       .forEach((cde) => {
