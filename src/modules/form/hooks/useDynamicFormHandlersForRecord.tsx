@@ -17,7 +17,7 @@ import {
   partitionValidations,
 } from '@/modules/errors/util';
 import {
-  FormDefinitionWithJsonFragment,
+  FormDefinitionFieldsFragment,
   FormInput,
   useSubmitFormMutation,
 } from '@/types/gqlTypes';
@@ -29,7 +29,7 @@ type SubmitFormInputVariables = Omit<
 
 export interface DynamicFormHandlerArgs<T> {
   // formRole: FormRole;
-  formDefinition?: FormDefinitionWithJsonFragment;
+  formDefinition?: FormDefinitionFieldsFragment;
   record?: T;
   onCompleted?: (data: T) => void;
   localConstants?: LocalConstants;

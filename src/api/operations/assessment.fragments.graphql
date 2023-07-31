@@ -6,41 +6,53 @@ fragment AssessmentFields on Assessment {
   dateCreated
   dateUpdated
   dateDeleted
+  role
   user {
     ...UserFields
-  }
-  customForm {
-    ...CustomFormFields
-    definition {
-      ...FormDefinitionFields
-    }
   }
   access {
     ...AssessmentAccessFields
   }
 }
 
-# contains big JSON definition & form values
-fragment AssessmentWithDefinitionAndValues on Assessment {
+# contains form values
+fragment AssessmentWithRecords on Assessment {
   ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-    definition {
-      ...FormDefinitionWithJson
+  enrollment {
+    ...EnrollmentValues
+    customDataElements {
+      ...CustomDataElementFields
     }
+  }
+  incomeBenefit {
+    ...IncomeBenefitValues
+  }
+  disabilityGroup {
+    ...DisabilityGroupValues
+  }
+  healthAndDv {
+    ...HealthAndDvValues
+  }
+  exit {
+    ...ExitValues
+  }
+  youthEducationStatus {
+    ...YouthEducationStatusValues
+  }
+  employmentEducation {
+    ...EmploymentEducationValues
+  }
+  customDataElements {
+    ...CustomDataElementFields
   }
 }
 
-# contains form values
 fragment AssessmentWithValues on Assessment {
   ...AssessmentFields
-  customForm {
-    ...CustomFormFields
-    values
-  }
-  enrollment {
-    id
-    ...EnrollmentFields
-  }
+  wipValues
+}
+
+fragment FullAssessment on Assessment {
+  ...AssessmentWithRecords
+  ...AssessmentWithValues
 }

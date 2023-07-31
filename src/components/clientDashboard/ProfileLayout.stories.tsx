@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from '@storybook/react';
+import { Meta, ComponentStory } from '@storybook/react';
 
 import ProfileLayout from './ProfileLayout';
 
@@ -8,7 +8,7 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export default {
   title: 'ClientProfile',
   component: ProfileLayout,
-} as ComponentMeta<typeof ProfileLayout>;
+} as Meta<typeof ProfileLayout>;
 
 const Template: ComponentStory<typeof ProfileLayout> = (args) => (
   <ProfileLayout {...args} />

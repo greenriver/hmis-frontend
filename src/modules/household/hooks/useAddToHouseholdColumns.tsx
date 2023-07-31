@@ -1,16 +1,12 @@
-import { NetworkStatus } from '@apollo/client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import AddToHouseholdButton from '../components/elements/AddToHouseholdButton';
-import RelationshipToHohSelect from '../components/elements/RelationshipToHohSelect';
 import { isHouseholdClient, RecentHouseholdMember } from '../types';
 
-import DatePicker from '@/components/elements/input/DatePicker';
+import { clientBriefName } from '@/modules/hmis/hmisUtil';
 import {
   ClientFieldsFragment,
-  HouseholdFieldsFragment,
-  RelationshipToHoH,
-  useGetHouseholdQuery,
+  useGetHouseholdLazyQuery,
 } from '@/types/gqlTypes';
 
 interface Args {
@@ -23,22 +19,17 @@ export default function useAddToHouseholdColumns({
   projectId,
 }: Args) {
   const [householdId, setHouseholdId] = useState(initialHouseholdId);
-
-  // map candidate client id -> relationship-to-hoh
-  const [candidateRelationships, setCandidateRelationships] = useState<
-    Record<string, RelationshipToHoH | null>
-  >({});
-
-  // map candidate client id -> entry date
-  const [candidateEntryDates, setCandidateEntryDates] = useState<
-    Record<string, Date | null>
-  >({});
-
-  const { data, loading, refetch, networkStatus } = useGetHouseholdQuery({
-    variables: { id: householdId || '' },
-    notifyOnNetworkStatusChange: true,
-    skip: !householdId,
+  const [getHousehold, { data, loading }] = useGetHouseholdLazyQuery({
+    fetchPolicy: 'network-only',
   });
+
+  const refetchHousehold = useCallback(() => {
+    if (!householdId) return;
+    getHousehold({ variables: { id: householdId } });
+  }, [getHousehold, householdId]);
+
+  // Refetch household when household ID changes
+  useEffect(() => refetchHousehold(), [refetchHousehold, householdId]);
 
   // If household ID wasn't found, clear the household ID state.
   // This happens when the last/only member is removed.
@@ -46,84 +37,26 @@ export default function useAddToHouseholdColumns({
     if (data && !data.household) setHouseholdId(undefined);
   }, [data]);
 
-  const householdLoading =
-    loading && !data && networkStatus !== NetworkStatus.refetch;
-  const refetchLoading = loading && networkStatus === NetworkStatus.refetch;
-
   const currentMembersMap = useMemo(() => {
     const hc = data?.household?.householdClients || [];
     return new Set(hc.map((c) => c.client.id));
   }, [data]);
 
+  // workaround to scroll to top if refetching household
+  useEffect(() => {
+    if (loading) window.scrollTo(0, 0);
+  }, [data, loading]);
+
   const onSuccess = useCallback(
-    (updatedHousehold: HouseholdFieldsFragment) => {
-      setHouseholdId(updatedHousehold.id);
-      refetch();
-      window.scrollTo(0, 0);
+    (updatedHouseholdId: string) => {
+      setHouseholdId(updatedHouseholdId);
+      getHousehold({ variables: { id: updatedHouseholdId } });
     },
-    [refetch]
+    [getHousehold]
   );
 
   const addToEnrollmentColumns = useMemo(() => {
     return [
-      {
-        header: 'Relationship to HoH',
-        key: 'relationship',
-        width: '20%',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
-          const client = isHouseholdClient(record) ? record.client : record;
-          if (currentMembersMap.has(client.id)) return null; // FIXME return actual value
-          const value = householdId
-            ? candidateRelationships[client.id] || null
-            : RelationshipToHoH.SelfHeadOfHousehold;
-
-          return (
-            <RelationshipToHohSelect
-              disabled={currentMembersMap.has(client.id)}
-              value={value}
-              onChange={(_, selected) => {
-                setCandidateRelationships((current) => {
-                  const copy = { ...current };
-                  if (!selected) {
-                    copy[client.id] = null;
-                  } else {
-                    copy[client.id] = selected.value;
-                  }
-                  return copy;
-                });
-              }}
-            />
-          );
-        },
-      },
-      {
-        header: 'Entry Date',
-        key: 'entry',
-        width: '1%',
-        render: (record: ClientFieldsFragment | RecentHouseholdMember) => {
-          const client = isHouseholdClient(record) ? record.client : record;
-          if (currentMembersMap.has(client.id)) return null; // FIXME return actual value
-          return (
-            <DatePicker
-              disabled={currentMembersMap.has(client.id)}
-              value={candidateEntryDates[client.id] || null}
-              disableFuture
-              sx={{ width: 150 }}
-              onChange={(value) => {
-                setCandidateEntryDates((current) => {
-                  const copy = { ...current };
-                  if (!value) {
-                    copy[client.id] = null;
-                  } else {
-                    copy[client.id] = value;
-                  }
-                  return copy;
-                });
-              }}
-            />
-          );
-        },
-      },
       {
         header: '',
         key: 'add',
@@ -134,32 +67,23 @@ export default function useAddToHouseholdColumns({
           return (
             <AddToHouseholdButton
               clientId={client.id}
+              clientName={clientBriefName(client)}
               householdId={householdId}
               projectId={projectId}
               isMember={currentMembersMap.has(client.id)}
               onSuccess={onSuccess}
-              startDate={candidateEntryDates[client.id]}
-              relationshipToHoH={candidateRelationships[client.id]}
             />
           );
         },
       },
     ];
-  }, [
-    candidateEntryDates,
-    candidateRelationships,
-    currentMembersMap,
-    householdId,
-    projectId,
-    onSuccess,
-  ]);
+  }, [currentMembersMap, householdId, projectId, onSuccess]);
 
   return {
     addToEnrollmentColumns,
     householdId,
     household: data?.household,
-    refetchHousehold: refetch,
-    refetchLoading,
-    householdLoading,
+    refetchHousehold,
+    loading,
   };
 }

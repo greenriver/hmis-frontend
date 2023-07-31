@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 
 import ClientActionsCard from './ClientActionsCard';
 
@@ -8,7 +8,7 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export default {
   title: 'ClientActionsCard',
   component: ClientActionsCard,
-} as ComponentMeta<typeof ClientActionsCard>;
+} as Meta<typeof ClientActionsCard>;
 
 const Template: ComponentStory<typeof ClientActionsCard> = (args) => (
   <ClientActionsCard {...args} />

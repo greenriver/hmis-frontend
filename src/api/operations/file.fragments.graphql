@@ -1,0 +1,30 @@
+fragment FileFields on File {
+  confidential
+  contentType
+  effectiveDate
+  expirationDate
+  id
+  name
+  fileBlobId
+  url
+  tags
+  ownFile
+  redacted
+  enrollmentId
+  enrollment {
+    id
+  }
+  uploadedBy {
+    id
+    name
+  }
+  updatedBy {
+    id
+    name
+  }
+  dateCreated
+  dateUpdated
+  user {
+    ...UserFields
+  }
+}

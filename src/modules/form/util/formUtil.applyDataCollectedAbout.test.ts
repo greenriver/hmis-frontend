@@ -2,7 +2,7 @@ import { applyDataCollectedAbout } from './formUtil';
 
 import {
   DataCollectedAbout,
-  FormDefinitionWithJsonFragment,
+  FormDefinitionFieldsFragment,
   NoYesReasonsForMissingData,
   RelationshipToHoH,
 } from '@/types/gqlTypes';
@@ -17,7 +17,7 @@ describe('applyDataCollectedAbout', () => {
     const items = [{ linkId: '1' }];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         client,
         RelationshipToHoH.DataNotCollected
       )
@@ -30,7 +30,7 @@ describe('applyDataCollectedAbout', () => {
     ];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         { ...client, dob: '1960-01-01' },
         RelationshipToHoH.DataNotCollected
       )
@@ -42,7 +42,7 @@ describe('applyDataCollectedAbout', () => {
     ];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         {
           ...client,
           dob: '2022-01-01',
@@ -57,7 +57,7 @@ describe('applyDataCollectedAbout', () => {
     ];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         client,
         RelationshipToHoH.DataNotCollected
       )
@@ -69,7 +69,7 @@ describe('applyDataCollectedAbout', () => {
     ];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         {
           ...client,
           dob: '2022-01-01',
@@ -83,7 +83,7 @@ describe('applyDataCollectedAbout', () => {
     const items = [{ linkId: '1', dataCollectedAbout: DataCollectedAbout.Hoh }];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         client,
         RelationshipToHoH.SelfHeadOfHousehold
       )
@@ -91,7 +91,7 @@ describe('applyDataCollectedAbout', () => {
 
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         client,
         RelationshipToHoH.OtherRelative
       )
@@ -104,7 +104,7 @@ describe('applyDataCollectedAbout', () => {
     ];
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         { ...client, veteranStatus: NoYesReasonsForMissingData.Yes },
         RelationshipToHoH.SelfHeadOfHousehold
       )
@@ -112,7 +112,7 @@ describe('applyDataCollectedAbout', () => {
 
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         { ...client, veteranStatus: NoYesReasonsForMissingData.Yes },
         RelationshipToHoH.SpouseOrPartner
       )
@@ -120,7 +120,7 @@ describe('applyDataCollectedAbout', () => {
 
     expect(
       applyDataCollectedAbout(
-        items as FormDefinitionWithJsonFragment['definition']['item'],
+        items as FormDefinitionFieldsFragment['definition']['item'],
         client,
         RelationshipToHoH.SelfHeadOfHousehold
       )

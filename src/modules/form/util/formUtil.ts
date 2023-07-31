@@ -1,10 +1,12 @@
 import { add, getYear, isDate, isValid, max, min } from 'date-fns';
 import {
   compact,
+  get,
   isArray,
   isNil,
   isObject,
   isUndefined,
+  lowerFirst,
   mapValues,
   omit,
   omitBy,
@@ -41,9 +43,11 @@ import {
   EnableBehavior,
   EnableOperator,
   EnableWhen,
+  FieldMapping,
   FormDefinitionJson,
-  FormDefinitionWithJsonFragment,
+  FormDefinitionFieldsFragment,
   FormItem,
+  FullAssessmentFragment,
   InitialBehavior,
   ItemType,
   NoYesReasonsForMissingData,
@@ -134,7 +138,8 @@ export const resolveOptionList = (
   if (item.pickListReference) {
     return localResolvePickList(
       item.pickListReference,
-      includeDataNotCollected
+      // always show DNC for relationship to hoh
+      includeDataNotCollected || item.pickListReference === 'RelationshipToHoH'
     );
   }
   return null;
@@ -311,7 +316,7 @@ const evaluateEnableWhen = (
       console.warn('Unsupported enableWhen operator', en.operator);
   }
 
-  // console.log(
+  // console.debug(
   //   'COMPARING:',
   //   currentValue,
   //   en.operator,
@@ -337,7 +342,7 @@ export const shouldEnableItem = (
     evaluateEnableWhen(en, values, itemMap, shouldEnableItem)
   );
 
-  // console.log(item.linkId, booleans);
+  // console.debug(item.linkId, booleans);
   if (item.enableBehavior === EnableBehavior.Any) {
     return booleans.some(Boolean);
   } else {
@@ -402,12 +407,12 @@ export const autofillValues = (
     const newValue = getAutofillComparisonValue(av, values, item);
 
     if (!areEqualValues(values[item.linkId], newValue)) {
-      console.log(
-        `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
-          values[item.linkId]
-        )} to ${JSON.stringify(newValue)}`,
-        av
-      );
+      // console.debug(
+      //   `AUTOFILL: Changing ${item.linkId} from ${JSON.stringify(
+      //     values[item.linkId]
+      //   )} to ${JSON.stringify(newValue)}`,
+      //   av
+      // );
       values[item.linkId] = newValue;
     }
 
@@ -625,8 +630,8 @@ export const getInitialValues = (
         recursiveFillInValues(item.item, values);
       }
       if (!item.initial) {
-        // Make sure all HUD fields are present in values to begin
-        if (item.fieldName && behavior !== InitialBehavior.Overwrite)
+        // Make sure all linked fields are present in values to begin
+        if (item.mapping && behavior !== InitialBehavior.Overwrite)
           values[item.linkId] = null;
 
         return;
@@ -666,7 +671,7 @@ export const getPopulatableChildren = (item: FormItem): FormItem[] => {
       if (Array.isArray(item.item)) {
         recursiveFind(item.item, fields);
       }
-      if (item.fieldName) {
+      if (item.mapping) {
         fields.push(item);
       }
     });
@@ -814,7 +819,7 @@ export type ClientNameDobVeteranFields = {
  * Only checks at 2 levels of nesting.
  */
 export const applyDataCollectedAbout = (
-  items: FormDefinitionWithJsonFragment['definition']['item'],
+  items: FormDefinitionFieldsFragment['definition']['item'],
   client: ClientNameDobVeteranFields,
   relationshipToHoH: RelationshipToHoH
 ) => {
@@ -914,14 +919,15 @@ export const transformSubmitValues = ({
     parentRecordType?: string
   ) {
     items.forEach((item: FormItem) => {
-      const recordType = item.recordType
-        ? HmisEnums.RelatedRecordType[item.recordType]
+      const mapping = item.mapping || {};
+      const recordType = mapping.recordType
+        ? HmisEnums.RelatedRecordType[mapping.recordType]
         : parentRecordType;
 
       if (Array.isArray(item.item)) {
         rescursiveFillMap(item.item, result, recordType);
       }
-      const fieldName = item.fieldName || item.customFieldKey;
+      const fieldName = mapping.fieldName || mapping.customFieldKey;
       if (!fieldName) return; // If there is no field name, it can't be extracted so don't bother sending it
 
       // Build key for result map
@@ -965,6 +971,29 @@ export const transformSubmitValues = ({
   return result;
 };
 
+const getMappedValue = (record: any, mapping: FieldMapping) => {
+  const relatedRecordAttribute = mapping.recordType
+    ? lowerFirst(HmisEnums.RelatedRecordType[mapping.recordType])
+    : null;
+
+  if (
+    relatedRecordAttribute &&
+    !record.hasOwnProperty(relatedRecordAttribute)
+  ) {
+    console.error(`Expected record to have ${relatedRecordAttribute}`, mapping);
+  }
+
+  if (mapping.customFieldKey) {
+    const cdes = get(
+      record,
+      compact([relatedRecordAttribute, 'customDataElements'])
+    );
+    return customDataElementValueForKey(mapping.customFieldKey, cdes);
+  } else if (mapping.fieldName) {
+    return get(record, compact([relatedRecordAttribute, mapping.fieldName]));
+  }
+};
+
 /**
  * Create initial form values based on a record.
  * This is only used for forms that edit a record directly, like the Client, Project, and Organization edit screens.
@@ -975,30 +1004,21 @@ export const transformSubmitValues = ({
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
 export const createInitialValuesFromRecord = (
-  itemMap: Record<string, FormItem>,
-  record: any
+  itemMap: ItemMap,
+  record: any // could be assmt
 ): Record<string, any> => {
   const initialValues: Record<string, any> = {};
 
   Object.values(itemMap).forEach((item) => {
-    if (item.customFieldKey && record.hasOwnProperty('customDataElements')) {
-      const customValue = customDataElementValueForKey(
-        item.customFieldKey,
-        record.customDataElements
-      );
-      initialValues[item.linkId] = gqlValueToFormValue(customValue, item);
-      return;
+    if (!item.mapping) return;
+    if (!item.mapping.customFieldKey && !item.mapping.fieldName) return;
+
+    const value = getMappedValue(record, item.mapping);
+    if (hasMeaningfulValue(value)) {
+      // console.log('transforming', value, item);
+      // console.log(gqlValueToFormValue(value, item));
+      initialValues[item.linkId] = gqlValueToFormValue(value, item);
     }
-    // Skip: this question doesn't map to a field
-    if (!item.fieldName) return;
-
-    // Skip: the record doesn't have a value for this property
-    if (!record.hasOwnProperty(item.fieldName)) return;
-
-    initialValues[item.linkId] = gqlValueToFormValue(
-      record[item.fieldName],
-      item
-    );
   });
 
   return initialValues;
@@ -1013,16 +1033,30 @@ export const createInitialValuesFromRecord = (
  * @returns initial form state, ready to pass to DynamicForm as initialValues
  */
 export const createInitialValuesFromSavedValues = (
-  definition: FormDefinitionJson,
+  itemMap: ItemMap,
   values: FormValues
 ): FormValues => {
-  const itemMap = getItemMap(definition, false);
   const initialValues: FormValues = {};
   Object.values(itemMap).forEach((item) => {
     if (!values.hasOwnProperty(item.linkId)) return;
     initialValues[item.linkId] = gqlValueToFormValue(values[item.linkId], item);
   });
   return initialValues;
+};
+
+export const initialValuesFromAssessment = (
+  itemMap: ItemMap,
+  assessment: FullAssessmentFragment
+) => {
+  // If non-WIP, construct based on related records
+  if (!assessment.inProgress) {
+    return createInitialValuesFromRecord(itemMap, assessment);
+  }
+  // If WIP, construt based on stored JSON values
+  if (!assessment.wipValues)
+    throw Error(`WIP assessment without values: ${assessment.id}`);
+
+  return createInitialValuesFromSavedValues(itemMap, assessment.wipValues);
 };
 
 export const createValuesForSubmit = (
@@ -1057,11 +1091,11 @@ export const debugFormValues = (
   if (import.meta.env.MODE === 'production') return false;
   if (!event.ctrlKey && !event.metaKey) return false;
 
-  console.log('%c FORM STATE:', 'color: #BB7AFF');
+  console.debug('%c FORM STATE:', 'color: #BB7AFF');
   if (transformValuesFn) {
-    console.log(transformValuesFn(values, definition));
+    console.debug(transformValuesFn(values, definition));
   } else {
-    console.log(values);
+    console.debug(values);
   }
 
   let hudValues = transformSubmitValues({
@@ -1077,8 +1111,8 @@ export const debugFormValues = (
   }
 
   window.debug = { hudValues };
-  console.log('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
-  console.log(hudValues);
+  console.debug('%c HUD VALUES BY FIELD NAME:', 'color: #BB7AFF');
+  console.debug(hudValues);
 
   return true;
 };

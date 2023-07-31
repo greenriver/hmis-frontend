@@ -1,0 +1,47 @@
+fragment EnrollmentFields on Enrollment {
+  id
+  entryDate
+  exitDate
+  project {
+    id
+    projectName
+    projectType
+  }
+  inProgress
+  relationshipToHoH
+  enrollmentCoc
+  householdId
+  householdShortId
+  householdSize
+  client {
+    id
+  }
+  access {
+    ...EnrollmentAccessFields
+  }
+}
+
+fragment EnrollmentWithHouseholdFragment on Enrollment {
+  ...EnrollmentFields
+  household {
+    id
+    shortId
+    householdClients {
+      ...HouseholdClientFields
+    }
+  }
+}
+
+fragment EventFields on Event {
+  id
+  event
+  eventDate
+  locationCrisisOrPhHousing
+  probSolDivRrResult
+  referralCaseManageAfter
+  referralResult
+  resultDate
+  dateCreated
+  dateUpdated
+  dateDeleted
+}

@@ -1,4 +1,4 @@
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import { ComponentStory, Meta } from '@storybook/react';
 
 import ClientCardMini from './ClientCardMini';
 
@@ -8,7 +8,7 @@ import { ClientFieldsFragment } from '@/types/gqlTypes';
 export default {
   title: 'ClientCardMini',
   component: ClientCardMini,
-} as ComponentMeta<typeof ClientCardMini>;
+} as Meta<typeof ClientCardMini>;
 
 const Template: ComponentStory<typeof ClientCardMini> = (args) => (
   <ClientCardMini {...args} />

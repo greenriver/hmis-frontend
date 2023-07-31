@@ -16,11 +16,8 @@ import AuditHistory from '@/components/clientDashboard/AuditHistory';
 import EditClient from '@/components/clientDashboard/EditClient';
 import AllAssessments from '@/components/clientDashboard/enrollments/AllAssessments';
 import AllEnrollments from '@/components/clientDashboard/enrollments/AllEnrollments';
-import HouseholdExit from '@/components/clientDashboard/enrollments/HouseholdExit';
-import HouseholdIntake from '@/components/clientDashboard/enrollments/HouseholdIntake';
-import NewAssessmentPage from '@/components/clientDashboard/enrollments/NewAssessmentPage';
+import AssessmentPage from '@/components/clientDashboard/enrollments/AssessmentPage';
 import NewEnrollment from '@/components/clientDashboard/enrollments/NewEnrollment';
-import ViewAssessmentPage from '@/components/clientDashboard/enrollments/ViewAssessmentPage';
 import ViewEnrollment from '@/components/clientDashboard/enrollments/ViewEnrollment';
 import Profile from '@/components/clientDashboard/Profile';
 import Loading from '@/components/elements/Loading';
@@ -54,6 +51,7 @@ import Funder from '@/modules/projects/components/Funder';
 import Funders from '@/modules/projects/components/Funders';
 import Inventories from '@/modules/projects/components/Inventories';
 import Inventory from '@/modules/projects/components/Inventory';
+import NewOutgoingReferral from '@/modules/projects/components/NewOutgoingReferral';
 import NewReferralRequest from '@/modules/projects/components/NewReferralRequest';
 import ProjectCoc from '@/modules/projects/components/ProjectCoc';
 import ProjectDashboard from '@/modules/projects/components/ProjectDashboard';
@@ -134,6 +132,17 @@ export const protectedRoutes: RouteNode[] = [
                 redirectRoute={Routes.PROJECT}
               >
                 <NewReferralRequest />
+              </ProjectEditRoute>
+            ),
+          },
+          {
+            path: ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL,
+            element: (
+              <ProjectEditRoute
+                permissions={['canManageOutgoingReferrals']}
+                redirectRoute={Routes.PROJECT}
+              >
+                <NewOutgoingReferral />
               </ProjectEditRoute>
             ),
           },
@@ -336,46 +345,13 @@ export const protectedRoutes: RouteNode[] = [
             ),
           },
           {
-            path: ClientDashboardRoutes.HOUSEHOLD_EXIT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <HouseholdExit />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.HOUSEHOLD_INTAKE,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <HouseholdIntake />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.NEW_ASSESSMENT,
-            element: (
-              <EnrollmentsRoute
-                edit
-                redirectRoute={ClientDashboardRoutes.VIEW_ENROLLMENT}
-              >
-                <NewAssessmentPage />
-              </EnrollmentsRoute>
-            ),
-          },
-          {
-            path: ClientDashboardRoutes.VIEW_ASSESSMENT,
+            path: ClientDashboardRoutes.ASSESSMENT,
             element: (
               <EnrollmentsRoute
                 view
                 redirectRoute={ClientDashboardRoutes.PROFILE}
               >
-                <ViewAssessmentPage />
+                <AssessmentPage />
               </EnrollmentsRoute>
             ),
           },

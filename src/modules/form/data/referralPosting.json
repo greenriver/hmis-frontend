@@ -5,7 +5,7 @@
       "linkId": "status",
       "required": true,
       "text": "Referral Status",
-      "fieldName": "status",
+      "mapping": { "fieldName": "status" },
       "pickListReference": "ASSIGNED_REFERRAL_POSTING_STATUSES"
     },
     {
@@ -13,7 +13,7 @@
       "linkId": "denialReason",
       "required": true,
       "text": "Reason for Denial",
-      "fieldName": "denialReason",
+      "mapping": { "fieldName": "denialReason" },
       "enableBehavior": "ALL",
       "enableWhen": [
         {
@@ -29,7 +29,7 @@
       "linkId": "statusNote",
       "required": true,
       "text": "Provider Notes",
-      "fieldName": "statusNote"
+      "mapping": { "fieldName": "statusNote" }
     }
   ]
 }

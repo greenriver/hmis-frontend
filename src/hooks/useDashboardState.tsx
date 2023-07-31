@@ -2,12 +2,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 import useCurrentPath from './useCurrentPath';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FOCUS_MODE_ROUTES, HIDE_NAV_ROUTES } from '@/routes/routes';
 
 export function useDashboardState() {
   const currentPath = useCurrentPath();
   const [desktopNavIsOpen, setDesktopNavState] = useState(true);
   const [mobileNavIsOpen, setMobileNavState] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [focusMode, setFocusMode] = useState<string | undefined>();
 
   useEffect(() => {
@@ -17,15 +19,15 @@ export function useDashboardState() {
       setDesktopNavState(false);
     }
     // Auto-enable focus mode for certain pages, like household exit
-    const focused = FOCUS_MODE_ROUTES.find(
-      ({ route }) => route === currentPath
-    );
-    if (focused) {
-      // Path that you go "back" to when exiting focus mode
-      setFocusMode(focused.previous);
-    } else {
-      setFocusMode(undefined);
-    }
+    // const focused = FOCUS_MODE_ROUTES.find(
+    //   ({ route }) => route === currentPath
+    // );
+    // if (focused) {
+    //   // Path that you go "back" to when exiting focus mode
+    //   setFocusMode(focused.previous);
+    // } else {
+    //   setFocusMode(undefined);
+    // }
   }, [currentPath]);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export function useDashboardState() {
   }, []);
 
   return {
+    currentPath,
     focusMode,
     desktopNavIsOpen,
     mobileNavIsOpen,

@@ -10,7 +10,7 @@ query GetFormDefinition($role: FormRole!, $enrollmentId: ID, $projectId: ID) {
     enrollmentId: $enrollmentId
     projectId: $projectId
   ) {
-    ...FormDefinitionWithJson
+    ...FormDefinitionFields
   }
 }
 
@@ -19,7 +19,7 @@ query GetServiceFormDefinition($serviceTypeId: ID!, $projectId: ID!) {
     serviceTypeId: $serviceTypeId
     projectId: $projectId
   ) {
-    ...FormDefinitionWithJson
+    ...FormDefinitionFields
   }
 }
 
@@ -53,6 +53,9 @@ mutation SubmitForm($input: SubmitFormInput!) {
       }
       ... on File {
         ...FileFields
+      }
+      ... on Enrollment {
+        ...EnrollmentFields
       }
     }
     errors {

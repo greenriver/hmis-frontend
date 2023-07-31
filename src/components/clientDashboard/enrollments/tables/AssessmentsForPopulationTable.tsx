@@ -20,7 +20,7 @@ type Props = Omit<
   'queryDocument' | 'pagePath'
 >;
 
-const AssessmentsTable = (props: Props) => {
+const AssessmentsForPopulationTable = (props: Props) => {
   return (
     <GenericTableWithData<
       GetAssessmentsForPopulationQuery,
@@ -34,4 +34,4 @@ const AssessmentsTable = (props: Props) => {
     />
   );
 };
-export default AssessmentsTable;
+export default AssessmentsForPopulationTable;

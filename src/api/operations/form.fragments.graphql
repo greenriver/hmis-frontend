@@ -12,14 +12,6 @@ fragment ValidationErrorFields on ValidationError {
   data
 }
 
-fragment FormDefinitionFields on FormDefinition {
-  id
-  version
-  role
-  status
-  identifier
-}
-
 fragment PickListOptionFields on PickListOption {
   code
   label
@@ -54,9 +46,11 @@ fragment ItemFields on FormItem {
   hidden
   readOnly
   repeats
-  fieldName
-  customFieldKey
-  recordType
+  mapping {
+    recordType
+    fieldName
+    customFieldKey
+  }
   pickListReference
   serviceDetailType
   size
@@ -120,15 +114,12 @@ fragment FormDefinitionJsonFields on FormDefinitionJson {
   }
 }
 
-fragment FormDefinitionWithJson on FormDefinition {
-  ...FormDefinitionFields
+fragment FormDefinitionFields on FormDefinition {
+  id
+  role
   definition {
     ...FormDefinitionJsonFields
   }
-}
-
-fragment CustomFormFields on CustomForm {
-  id
 }
 
 fragment UserFields on User {

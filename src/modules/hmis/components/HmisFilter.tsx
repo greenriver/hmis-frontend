@@ -67,6 +67,19 @@ export const getInputTypeForRecordType = (
   return `${recordType}FilterOptions`;
 };
 
+const FILTER_NAME_TO_PICK_LIST = {
+  project: PickListType.Project,
+  organization: PickListType.Organization,
+  serviceType: PickListType.AllServiceTypes,
+  serviceCategory: PickListType.AllServiceCategories,
+};
+
+function isPicklistType(
+  filterName: string
+): filterName is keyof typeof FILTER_NAME_TO_PICK_LIST {
+  return Object.keys(FILTER_NAME_TO_PICK_LIST).includes(filterName);
+}
+
 const getFilterForType = (
   recordType: string,
   fieldName: any,
@@ -86,26 +99,13 @@ const getFilterForType = (
   if (inputType === 'ISO8601Date') filter = { ...baseFields, type: 'date' };
   if (inputType === 'String') filter = { ...baseFields, type: 'text' };
 
-  if (fieldName === 'project')
+  if (isPicklistType(fieldName)) {
     filter = {
       ...baseFields,
       type: 'picklist',
-      pickListReference: PickListType.Project,
+      pickListReference: FILTER_NAME_TO_PICK_LIST[fieldName],
     };
-
-  if (fieldName === 'serviceType')
-    filter = {
-      ...baseFields,
-      type: 'picklist',
-      pickListReference: PickListType.AllServiceTypes,
-    };
-
-  if (fieldName === 'serviceCategory')
-    filter = {
-      ...baseFields,
-      type: 'picklist',
-      pickListReference: PickListType.AllServiceCategories,
-    };
+  }
 
   if (inputType in HmisEnums) {
     filter = {

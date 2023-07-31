@@ -110,6 +110,7 @@ const Units = () => {
             <DynamicForm
               ref={formRef}
               definition={UnitsDefinition}
+              pickListRelationId={project.id}
               FormActionProps={{
                 submitButtonText: 'Add Units',
                 discardButtonText: 'Cancel',

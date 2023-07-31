@@ -70,6 +70,7 @@ const AdminReferralDenials = () => {
           noData='No denials'
           pagePath='deniedPendingReferralPostings'
           rowLinkTo={rowLinkTo}
+          defaultPageSize={25}
         />
       </Paper>
     </>

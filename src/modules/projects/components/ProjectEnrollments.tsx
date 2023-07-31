@@ -20,7 +20,6 @@ const ProjectEnrollments = () => {
     <>
       <PageTitle
         title='Enrollments'
-        // TODO: action button to add enrollment
         actions={
           <ProjectPermissionsFilter
             id={projectId}
@@ -39,18 +38,23 @@ const ProjectEnrollments = () => {
               >
                 Record Services
               </ButtonLink>
-              <ButtonLink
-                data-testid='addHouseholdButton'
-                variant='outlined'
-                color='secondary'
-                sx={{ pl: 3, justifyContent: 'left' }}
-                to={generateSafePath(ProjectDashboardRoutes.ADD_HOUSEHOLD, {
-                  projectId,
-                })}
-                Icon={AddIcon}
+              <ProjectPermissionsFilter
+                id={projectId}
+                permissions='canEnrollClients'
               >
-                Add Enrollment
-              </ButtonLink>
+                <ButtonLink
+                  data-testid='addHouseholdButton'
+                  variant='outlined'
+                  color='secondary'
+                  sx={{ pl: 3, justifyContent: 'left' }}
+                  to={generateSafePath(ProjectDashboardRoutes.ADD_HOUSEHOLD, {
+                    projectId,
+                  })}
+                  Icon={AddIcon}
+                >
+                  Add Enrollment
+                </ButtonLink>
+              </ProjectPermissionsFilter>
             </Stack>
           </ProjectPermissionsFilter>
         }

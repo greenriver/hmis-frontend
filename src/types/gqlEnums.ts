@@ -411,6 +411,7 @@ export const HmisEnums = {
     CE: 'Coordinated Entry',
     CLIENT: 'Client',
     CUSTOM: 'Custom Assessment',
+    ENROLLMENT: 'Enrollment',
     EXIT: 'Exit Assessment',
     FILE: 'File',
     FUNDER: 'Funder',
@@ -789,6 +790,7 @@ export const HmisEnums = {
   PickListType: {
     ALL_SERVICE_CATEGORIES: 'ALL_SERVICE_CATEGORIES',
     ALL_SERVICE_TYPES: 'ALL_SERVICE_TYPES',
+    ALL_UNIT_TYPES: 'All unit types.',
     ASSIGNED_REFERRAL_POSTING_STATUSES: 'Referral Posting Status',
     AVAILABLE_FILE_TYPES: 'AVAILABLE_FILE_TYPES',
     AVAILABLE_SERVICE_TYPES: 'AVAILABLE_SERVICE_TYPES',
@@ -806,6 +808,8 @@ export const HmisEnums = {
     ORGANIZATION: 'All Organizations that the User can see',
     PRIOR_LIVING_SITUATION: 'PRIOR_LIVING_SITUATION',
     PROJECT: 'All Projects that the User can see',
+    PROJECT_HOH_ENROLLMENTS:
+      'Project HOH Enrollments, including WIP and exited, for the client.',
     REFERRAL_OUTCOME: 'REFERRAL_OUTCOME',
     REFERRAL_RESULT_TYPES: 'Referral Result ',
     STATE: 'STATE',
@@ -961,7 +965,7 @@ export const HmisEnums = {
   RelatedRecordType: {
     CURRENT_LIVING_SITUATION: 'CurrentLivingSituation',
     DISABILITY_GROUP: 'DisabilityGroup',
-    EMPLOYMENT_EDUCATION: 'ExmploymentEducation',
+    EMPLOYMENT_EDUCATION: 'EmploymentEducation',
     ENROLLMENT: 'Enrollment',
     ENROLLMENT_COC: 'EnrollmentCoc',
     EXIT: 'Exit',

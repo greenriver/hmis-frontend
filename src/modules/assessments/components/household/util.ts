@@ -1,5 +1,5 @@
 import { ClientNameDobVeteranFields } from '@/modules/form/util/formUtil';
-import { FormRole, RelationshipToHoH } from '@/types/gqlTypes';
+import { AssessmentRole, FormRole, RelationshipToHoH } from '@/types/gqlTypes';
 
 export enum AssessmentStatus {
   NotStarted,
@@ -14,13 +14,28 @@ type LocalTabState = {
   status: AssessmentStatus;
 };
 
+export type HouseholdAssesmentRole =
+  | AssessmentRole.Intake
+  | AssessmentRole.Annual
+  | AssessmentRole.Exit;
+
+export function isHouseholdAssesmentRole(
+  keyInput: AssessmentRole | FormRole | string
+): keyInput is HouseholdAssesmentRole {
+  return [
+    AssessmentRole.Intake,
+    AssessmentRole.Annual,
+    AssessmentRole.Exit,
+  ].includes(keyInput as AssessmentRole);
+}
+
 export type TabDefinition = {
   id: string;
   clientName: string;
   client: ClientNameDobVeteranFields;
   clientId: string;
   enrollmentId: string;
-  entryOrExitCompleted: boolean;
+  entryOrExitCompleted?: boolean;
   entryDate: string;
   exitDate?: string;
   enrollmentInProgress: boolean;
@@ -45,6 +60,17 @@ export const tabPanelA11yProps = (key: string) => {
     id: `tabpanel-${key}`,
     'aria-labelledby': `tab-${key}`,
   };
+};
+
+export const householdAssesmentTitle = (role: HouseholdAssesmentRole) => {
+  switch (role) {
+    case AssessmentRole.Intake:
+      return 'Household Intake';
+    case AssessmentRole.Exit:
+      return 'Household Exit';
+    case AssessmentRole.Annual:
+      return 'Household Annual';
+  }
 };
 
 const submittedText = {

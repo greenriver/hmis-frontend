@@ -7,6 +7,7 @@ import {
   ChangeType,
   DynamicFieldProps,
   DynamicInputCommonProps,
+  isPickListOption,
 } from '../types';
 import {
   chooseSelectComponentType,
@@ -137,6 +138,17 @@ const DynamicField: React.FC<DynamicFieldProps> = ({
       },
     }
   );
+
+  // If we have a code but no label, set the label. This can happen when auto-filling a section from a record, like Prior Living Situation
+  if (
+    options &&
+    isPickListOption(value) &&
+    value.code &&
+    !value.label &&
+    !isLocalPickList
+  ) {
+    value.label = options.find((o) => o.code === value.code)?.label;
+  }
 
   const placeholder =
     item.size === InputSize.Xsmall

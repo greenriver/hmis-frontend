@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import useSafeParams from '@/hooks/useSafeParams';
 import { sortHouseholdMembers } from '@/modules/hmis/hmisUtil';
 import {
-  HouseholdClientFieldsWithAssessmentsFragment,
+  HouseholdClientFieldsFragment,
   useGetEnrollmentWithHouseholdQuery,
 } from '@/types/gqlTypes';
 
@@ -16,15 +16,14 @@ export function useHouseholdMembers(enrollmentId: string) {
       fetchPolicy: 'cache-and-network',
     });
 
-  const householdMembers:
-    | HouseholdClientFieldsWithAssessmentsFragment[]
-    | undefined = useMemo(() => {
-    if (!enrollment) return;
-    return sortHouseholdMembers(
-      enrollment.household.householdClients,
-      clientId
-    );
-  }, [enrollment, clientId]);
+  const householdMembers: HouseholdClientFieldsFragment[] | undefined =
+    useMemo(() => {
+      if (!enrollment) return;
+      return sortHouseholdMembers(
+        enrollment.household.householdClients,
+        clientId
+      );
+    }, [enrollment, clientId]);
 
   if (status.error) throw status.error;
 

@@ -70,6 +70,10 @@ export const useProjectBreadcrumbConfig = (
         title: 'ESG Funding Report',
         parent: ProjectDashboardRoutes.REFERRALS,
       },
+      [ProjectDashboardRoutes.NEW_OUTGOING_REFERRAL]: {
+        title: 'Create Referral',
+        parent: ProjectDashboardRoutes.REFERRALS,
+      },
       [ProjectDashboardRoutes.REFERRAL_POSTING]: {
         title: 'Active Referral',
         parent: ProjectDashboardRoutes.REFERRALS,
@@ -158,11 +162,7 @@ export const useClientBreadcrumbConfig = (
           : 'Enrollment',
         parent: ClientDashboardRoutes.ALL_ENROLLMENTS,
       },
-      [ClientDashboardRoutes.VIEW_ASSESSMENT]: {
-        title: 'Assessment',
-        parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
-      },
-      [ClientDashboardRoutes.NEW_ASSESSMENT]: {
+      [ClientDashboardRoutes.ASSESSMENT]: {
         title: 'Assessment',
         parent: ClientDashboardRoutes.VIEW_ENROLLMENT,
       },

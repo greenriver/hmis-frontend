@@ -2,16 +2,19 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import PeopleIcon from '@mui/icons-material/People';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import { Stack } from '@mui/material';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import ButtonLink from '@/components/elements/ButtonLink';
 import ButtonTooltipContainer from '@/components/elements/ButtonTooltipContainer';
 import { ClientDashboardRoutes } from '@/routes/routes';
-import { HouseholdClientFieldsWithAssessmentsFragment } from '@/types/gqlTypes';
+import {
+  AssessmentRole,
+  HouseholdClientFieldsFragment,
+} from '@/types/gqlTypes';
 import generateSafePath from '@/utils/generateSafePath';
 
 interface Props {
-  householdMembers: HouseholdClientFieldsWithAssessmentsFragment[];
+  householdMembers: HouseholdClientFieldsFragment[];
   enrollmentId: string;
   clientId: string;
 }
@@ -24,10 +27,11 @@ const HouseholdActionButtons = ({
   enrollmentId,
   clientId,
 }: Props) => {
+  const individual = householdMembers.length === 1;
   // TODO: should make exit red if there are exits in progress
   const [canExit, exitReason] = useMemo(() => {
     // Single-member household
-    if (householdMembers.length < 2) return [false];
+    // if (householdMembers.length < 2) return [false];
     // All members have exited
     if (!householdMembers.find((c) => !c.enrollment.exitDate)) {
       return [true];
@@ -41,7 +45,7 @@ const HouseholdActionButtons = ({
 
   const [canIntake, intakeReason, intakeColor] = useMemo(() => {
     // Single-member household
-    if (householdMembers.length < 2) return [false];
+    // if (householdMembers.length < 2) return [false];
     const numIncomplete = householdMembers.filter(
       (c) => !!c.enrollment.inProgress
     ).length;
@@ -55,16 +59,14 @@ const HouseholdActionButtons = ({
     return [true, message, 'error'];
   }, [householdMembers]);
 
-  const buildPath = useCallback(
-    (route: string) => generateSafePath(route, { clientId, enrollmentId }),
-    [clientId, enrollmentId]
-  );
-
   return (
     <Stack direction='row' gap={3} sx={{ mt: 4, mb: 2 }}>
       <ButtonLink
         Icon={PeopleIcon}
-        to={buildPath(ClientDashboardRoutes.EDIT_HOUSEHOLD)}
+        to={generateSafePath(ClientDashboardRoutes.EDIT_HOUSEHOLD, {
+          clientId,
+          enrollmentId,
+        })}
       >
         Manage Household
       </ButtonLink>
@@ -74,20 +76,44 @@ const HouseholdActionButtons = ({
             disabled={!canIntake}
             color={intakeColor}
             icon={PostAddIcon}
-            to={buildPath(ClientDashboardRoutes.HOUSEHOLD_INTAKE)}
+            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+              clientId,
+              enrollmentId,
+              formRole: AssessmentRole.Intake,
+            })}
           >
-            Household Intakes
+            {intakeColor === 'error'
+              ? 'Finish Intake'
+              : individual
+              ? 'Intake'
+              : 'Household Intakes'}
           </ButtonLink>
         </ButtonTooltipContainer>
+      )}
+      {canIntake && (
+        <ButtonLink
+          icon={PostAddIcon}
+          to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+            clientId,
+            enrollmentId,
+            formRole: AssessmentRole.Annual,
+          })}
+        >
+          Annual
+        </ButtonLink>
       )}
       {(canExit || exitReason) && (
         <ButtonTooltipContainer title={exitReason} placement='bottom'>
           <ButtonLink
             disabled={!canExit}
             icon={ExitToAppIcon}
-            to={buildPath(ClientDashboardRoutes.HOUSEHOLD_EXIT)}
+            to={generateSafePath(ClientDashboardRoutes.ASSESSMENT, {
+              clientId,
+              enrollmentId,
+              formRole: AssessmentRole.Exit,
+            })}
           >
-            Household Exits
+            {individual ? 'Exit' : 'Household Exits'}
           </ButtonLink>
         </ButtonTooltipContainer>
       )}

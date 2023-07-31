@@ -1,8 +1,6 @@
 const { mergeConfig } = require('vite');
 const { resolve } = require('path');
-import type { StorybookViteConfig } from '@storybook/builder-vite';
-
-const config: StorybookViteConfig = {
+const config = {
   async viteFinal(config) {
     return mergeConfig(config, {
       resolve: {
@@ -22,14 +20,17 @@ const config: StorybookViteConfig = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-interactions',
+    '@storybook/addon-mdx-gfm',
     'storybook-addon-apollo-client',
   ],
-  framework: '@storybook/react',
-  core: {
-    builder: '@storybook/builder-vite',
+  framework: {
+    name: '@storybook/react-vite',
+    options: {},
   },
+  core: {},
   typescript: {
     check: false,
+    skipBabel: true,
     checkOptions: {},
     reactDocgen: 'react-docgen-typescript',
     reactDocgenTypescriptOptions: {
@@ -49,6 +50,8 @@ const config: StorybookViteConfig = {
   features: {
     storyStoreV7: true,
   },
+  docs: {
+    autodocs: true,
+  },
 };
-
 export default config;

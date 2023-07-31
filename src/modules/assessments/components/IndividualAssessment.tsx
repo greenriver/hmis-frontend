@@ -20,7 +20,7 @@ import NotFound from '@/components/pages/NotFound';
 import useIsPrintView from '@/hooks/useIsPrintView';
 import { useScrollToHash } from '@/hooks/useScrollToHash';
 import AssessmentForm from '@/modules/assessments/components/AssessmentForm';
-import { useAssessment } from '@/modules/assessments/components/useAssessment';
+import { useAssessment } from '@/modules/assessments/hooks/useAssessment';
 import { useEnrollment } from '@/modules/dataFetching/hooks/useEnrollment';
 import SentryErrorBoundary from '@/modules/errors/components/SentryErrorBoundary';
 import {
@@ -117,11 +117,9 @@ const IndividualAssessment = ({
 
   useEffect(() => {
     if (!assessmentTitle || embeddedInWorkflow) return;
-    // Override breadcrumb to include the assessment type and information date
-    const currentRoute = assessment
-      ? ClientDashboardRoutes.VIEW_ASSESSMENT
-      : ClientDashboardRoutes.NEW_ASSESSMENT;
-    overrideBreadcrumbTitles({ [currentRoute]: assessmentTitle });
+    overrideBreadcrumbTitles({
+      [ClientDashboardRoutes.ASSESSMENT]: assessmentTitle,
+    });
   }, [
     embeddedInWorkflow,
     assessmentTitle,
@@ -172,9 +170,7 @@ const IndividualAssessment = ({
           }
         />
       )}
-      {!definition && (
-        <MissingDefinitionAlert hasCustomForm={!!assessment?.customForm} />
-      )}
+      {!definition && <MissingDefinitionAlert />}
       {definition && (
         <AssessmentForm
           key={assessment?.id}

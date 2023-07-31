@@ -13,11 +13,13 @@ const RemoveFromHouseholdButton = ({
   currentDashboardClientId,
   onSuccess,
   disabled,
+  householdSize,
 }: {
   householdClient: HouseholdClientFieldsFragment;
   currentDashboardClientId?: string;
   onSuccess: () => void;
   disabled?: boolean;
+  householdSize: number;
 }) => {
   const [done, setDone] = useState(false);
   const [deleteEnrollment, { loading, error }] = useDeleteEnrollmentMutation({
@@ -29,7 +31,16 @@ const RemoveFromHouseholdButton = ({
 
   const disabledReason = useMemo(() => {
     // If household is being created in the project context, any enrollment can be removed
-    if (!currentDashboardClientId) return;
+    if (!currentDashboardClientId) {
+      if (
+        householdClient.relationshipToHoH ===
+          RelationshipToHoH.SelfHeadOfHousehold &&
+        householdSize > 1
+      ) {
+        return 'HoH cannot be removed. Change HoH or remove other members first.';
+      }
+      return null;
+    }
 
     if (!householdClient.enrollment.inProgress) {
       return 'Client with completed enrollment cannot be removed. Exit the client instead.';
@@ -41,7 +52,7 @@ const RemoveFromHouseholdButton = ({
     } else if (householdClient.client.id === currentDashboardClientId) {
       return "Currently active client cannot be removed. Go to another member's profile to remove them.";
     }
-  }, [householdClient, currentDashboardClientId]);
+  }, [householdClient, householdSize, currentDashboardClientId]);
 
   const onClick = useMemo(
     () => () => {
