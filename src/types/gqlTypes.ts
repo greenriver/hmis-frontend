@@ -3207,6 +3207,7 @@ export type OrganizationsPaginated = {
 
 export type OutgoingReferralPostingInput = {
   enrollmentId?: InputMaybe<Scalars['ID']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
   projectId?: InputMaybe<Scalars['ID']['input']>;
   unitTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
