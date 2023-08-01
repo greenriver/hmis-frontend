@@ -1220,6 +1220,14 @@ export const HmisObjectSchemas: GqlSchema[] = [
     name: 'DisabilityGroup',
     fields: [
       {
+        name: 'antiRetroviral',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
         name: 'chronicHealthCondition',
         type: {
           kind: 'ENUM',
@@ -1338,6 +1346,34 @@ export const HmisObjectSchemas: GqlSchema[] = [
           name: 'NoYesReasonsForMissingData',
           ofType: null,
         },
+      },
+      {
+        name: 'tCellCount',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'tCellCountAvailable',
+        type: {
+          kind: 'ENUM',
+          name: 'NoYesReasonsForMissingData',
+          ofType: null,
+        },
+      },
+      {
+        name: 'tCellSource',
+        type: {
+          kind: 'ENUM',
+          name: 'TCellSourceViralLoadSource',
+          ofType: null,
+        },
+      },
+      {
+        name: 'viralLoad',
+        type: { kind: 'SCALAR', name: 'Int', ofType: null },
+      },
+      {
+        name: 'viralLoadAvailable',
+        type: { kind: 'ENUM', name: 'ViralLoadAvailable', ofType: null },
       },
     ],
   },

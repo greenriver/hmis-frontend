@@ -1304,6 +1304,12 @@ export const HmisEnums = {
     WITH_ON_GOING_SUBSIDY_2: 'With on-going subsidy 2',
     WITHOUT_AN_ON_GOING_SUBSIDY_2: 'Without an on-going subsidy 2',
   },
+  TCellSourceViralLoadSource: {
+    INVALID: 'Invalid Value',
+    MEDICAL_REPORT: 'Medical Report',
+    CLIENT_REPORT: 'Client Report',
+    OTHER: 'Other',
+  },
   TargetPopulation: {
     INVALID: 'Invalid Value',
     DOMESTIC_VIOLENCE_VICTIMS: 'Domestic violence victims',
@@ -1336,6 +1342,15 @@ export const HmisEnums = {
     out_of_range: 'out_of_range',
     required: 'required',
     server_error: 'server_error',
+  },
+  ViralLoadAvailable: {
+    INVALID: 'Invalid Value',
+    NOT_AVAILABLE: 'Not available',
+    AVAILABLE: 'Available',
+    UNDETECTABLE: 'Undetectable',
+    CLIENT_REFUSED: 'Client refused',
+    CLIENT_DOESN_T_KNOW: "Client doesn't know",
+    DATA_NOT_COLLECTED: 'Data not collected',
   },
   WellbeingAgreement: {
     INVALID: 'Invalid Value',
